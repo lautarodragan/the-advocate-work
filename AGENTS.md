@@ -454,8 +454,6 @@ que revela menos y da más margen. Hoy tiene:
     /extras/soundfonts  de donde salen las muestras
     /extras/msu         los reemplazos de las pistas de MSU-1
     /extras/otros-juegos       los siete juegos de RM2k además de ABL
-    /extras/otros-juegos-snes  sus proyectos como estaban hasta el
-                        2026-10-10, cuando entraron a los ports: viejos
     /extras/scratch     los temporales de cada agente, en `<nombre>/`
     /extras/capturas    donde taro deja capturas para que yo las mire
     /extras/ref/cc65    compilado acá: de ahí salen `ca65` y `ld65`
