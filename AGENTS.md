@@ -20,7 +20,7 @@ acá, y los otros repos están al lado:
                      alguien de afuera
 
 **Las rutas de este archivo son de adentro de cada repo**, y cuál es lo dice
-la sección o la ruta misma: `tools/…`, `docs/port/…` y `DITTO.md` son de
+la sección o la ruta misma: `tools/…` y `docs/port/…` son de
 `snes-rm2k`; `pruebas/…`, `parches/…`, `justfile` y `rm2k-snes.toml` sueltos,
 de `abl/` en `snes-rm2k-ports`. Adentro de `snes-rm2k`:
 
@@ -33,8 +33,6 @@ de `abl/` en `snes-rm2k-ports`. Adentro de `snes-rm2k`:
     tools/README.md  qué hace cada carpeta de `tools/`
     docs/            RM2k, la consola, cómo funciona el port hoy, y los
                      estudios fechados: su README dice qué va en cada carpeta
-    DITTO.md         qué es Ditto, por qué existe acá y en qué estado está
-                     la idea de que los JSON sean la fuente de verdad
 
 Y adentro de `abl/`, en `snes-rm2k-ports` —cada juego es un proyecto
 entero en su directorio, y todo se corre parado en él; el README de la
