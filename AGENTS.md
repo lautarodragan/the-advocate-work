@@ -8,14 +8,14 @@ fuentes mejores, y hay que ir a ellas antes que a este archivo.
 los otros tiene los suyos. Es de taro, el 2026-10-10. El CLI corre parado
 acá, y los otros repos están al lado:
 
-    snes-rm2k-work   éste: dónde quedamos —`tasks/`— de todos los
+    the-advocate-work   éste: dónde quedamos —`tasks/`— de todos los
                      repos; su README explica cada carpeta
-    snes-rm2k        las herramientas y el runtime: el conversor, el motor
+    the-advocate        las herramientas y el runtime: el conversor, el motor
                      en ensamblador, sus pruebas, y cómo funciona cada parte
-    snes-rm2k-ports  los juegos portados, uno por directorio: `abl/` —A
+    the-advocate-ports  los juegos portados, uno por directorio: `abl/` —A
                      Blurred Line, con la tanda y sus goldens— y los siete
                      del relevamiento de otros juegos
-    snes-rm2k-docs   el libro, público y en inglés, para personas y para
+    the-advocate-docs   el libro, público y en inglés, para personas y para
                      IAs: **toda la documentación** —qué es el proyecto,
                      cómo funciona por dentro, la referencia de RM2k y de
                      la consola, las decisiones, las divergencias con
@@ -23,8 +23,8 @@ acá, y los otros repos están al lado:
 
 **Las rutas de este archivo son de adentro de cada repo**, y cuál es lo dice
 la sección o la ruta misma: `tools/…` es de
-`snes-rm2k`; `pruebas/…`, `parches/…`, `justfile` y `rm2k-snes.toml` sueltos,
-de `abl/` en `snes-rm2k-ports`. Adentro de `snes-rm2k`:
+`the-advocate`; `pruebas/…`, `parches/…`, `justfile` y `rm2k-snes.toml` sueltos,
+de `abl/` en `the-advocate-ports`. Adentro de `the-advocate`:
 
     tools/justfile   qué se puede correr —probar e instalar las
                      herramientas—; los comentarios explican el porqué. Se
@@ -34,7 +34,7 @@ de `abl/` en `snes-rm2k-ports`. Adentro de `snes-rm2k`:
                      arquitectura que no tienen línea de código donde vivir
     tools/README.md  qué hace cada carpeta de `tools/`
 
-Y adentro de `abl/`, en `snes-rm2k-ports` —cada juego es un proyecto
+Y adentro de `abl/`, en `the-advocate-ports` —cada juego es un proyecto
 entero en su directorio, y todo se corre parado en él; el README de la
 raíz dice cuáles hay—:
 
@@ -50,14 +50,14 @@ raíz dice cuáles hay—:
 
 **La historia se partió dos veces.** El 2026-10-02 ABL se fue de las
 herramientas a su propio repo, sin historia: la de antes de esa fecha está
-en `snes-rm2k`, y lo que en los ports es `abl/X` allá era `rom/X` (cómo
+en `the-advocate`, y lo que en los ports es `abl/X` allá era `rom/X` (cómo
 pedir su `blame`, en "`git blame` y los cambios mecánicos"). Ese repo tuvo
 a ABL en la raíz hasta el 2026-10-10, cuando pasó a `abl/` con un `git mv`
 —`blame` lo sigue sin opciones— y entraron los otros siete juegos. El 2026-10-10
 `tasks/`, `decisiones/` y `divergencias/` salieron de la carpeta
-`workflow/` de `snes-rm2k` a este repo, **con** su historia: **un
+`workflow/` de `the-advocate` a este repo, **con** su historia: **un
 `workflow/…` citado en otro repo es la misma ruta acá**, sin el prefijo, y
-los hashes que citan las tareas son de `snes-rm2k`, o de los ports cuando
+los hashes que citan las tareas son de `the-advocate`, o de los ports cuando
 hablan de ABL. Y el mismo día `decisiones/`, `divergencias/` y todos los
 `docs/` —de las herramientas y de ABL— pasaron al libro, traducidos y con
 los mismos nombres de archivo: **una cita vieja se encuentra por nombre**,
@@ -128,7 +128,7 @@ tiene que decir; lo que el código ya dice, no.
 ## El libro: decisiones, divergencias, research
 
 Desde el 2026-10-10 **toda la documentación vive en el libro**,
-`snes-rm2k-docs`, y se escribe **en inglés**, también sus commits. Es de
+`the-advocate-docs`, y se escribe **en inglés**, también sus commits. Es de
 taro: "El libro es para personas y para IAs", y le sirve tenerlo en un solo
 lugar. Lo que eso pide al trabajar:
 
@@ -143,7 +143,7 @@ lugar. Lo que eso pide al trabajar:
   commit, en el libro.
 * **El libro es público**: no nombra el ambiente —ni `~`, ni `/shared`, ni
   el contenedor— ni enlaza a los repos, que son privados: los nombra como
-  texto ("`tools/runtime/hero.s` in snes-rm2k").
+  texto ("`tools/runtime/hero.s` in the-advocate").
 * **mdBook no avisa de los links rotos.** Antes de pushear al libro se
   revisan los links relativos de lo que se tocó. Cada push a `main` lo
   publica solo, con su workflow.
@@ -155,8 +155,8 @@ una línea donde vivir.
 ## Los proyectos independientes están en inglés
 
 Todo va en castellano —comentarios, documentación y mensajes de commit—,
-**salvo el libro, `snes-rm2k-docs`, que es para afuera y va en inglés
-entero, sus commits incluidos, y los directorios de `snes-rm2k` que son
+**salvo el libro, `the-advocate-docs`, que es para afuera y va en inglés
+entero, sus commits incluidos, y los directorios de `the-advocate` que son
 proyectos aparte**, que van en inglés
 de punta a punta: código, comentarios, nombres de pruebas y README. Desde el
 2026-09-19 viven adentro de `tools/` —ver `tools/README.md`—:
@@ -301,7 +301,7 @@ próximo que se agregue—, porque la declaración no compila con huecos.
 
 ## `git blame` y los cambios mecánicos
 
-Todo lo de esta sección es de `snes-rm2k`, salvo el último párrafo, que dice
+Todo lo de esta sección es de `the-advocate`, salvo el último párrafo, que dice
 cómo se le pide el `blame` a lo de los ports.
 
 `.git-blame-ignore-revs` lista los commits que `git blame` tiene que saltear:
@@ -341,8 +341,8 @@ líneas. Con `data/`, `parches/` y `pruebas/`, que se mudaron adentro de
 `rom/pruebas/arnes/consola.py`.
 
 **Lo de ABL se fue a su propio repo el 2026-10-02, sin historia**: en
-`snes-rm2k-ports` cada archivo nace en un solo commit. Su `blame` se pide
-en `snes-rm2k`, sobre la ruta
+`the-advocate-ports` cada archivo nace en un solo commit. Su `blame` se pide
+en `the-advocate`, sobre la ruta
 que tenía y en el padre del commit que lo borró —`git blame
 d356bfb7^ -- rom/pruebas/arnes/consola.py`—, y `git log -S` sigue
 encontrando todo lo que pasó antes de esa fecha, de los dos lados.
@@ -365,7 +365,7 @@ obligaciones, y una de ellas es nueva.
 **Las pruebas de ROM del motor viven en ABL, por ahora**: casi todo
 `pruebas/rpgmaker/` de los ports es lo que RM2k hace, usando a ABL de
 escenario. Se fueron con el juego el 2026-10-02, porque necesitan uno, y
-vuelven a `snes-rm2k` de a poco
+vuelven a `the-advocate` de a poco
 cuando exista el juego de pruebas —la fase 2 de
 `research/2026-10-02-el-juego-de-pruebas.md` del libro—. Hasta entonces **un
 cambio en `tools/` se verifica corriendo la tanda de ABL con las
@@ -413,8 +413,8 @@ cubre la tanda, el mensaje tiene que decirlo con todas las letras.
 
 Adentro de un contenedor de podman que taro levanta con `box`, una función
 suya de nushell: Arch —igual que el host—. **Los cuatro repos están clonados
-en `~/`, adentro del contenedor** —`~/snes-rm2k-work`, `~/snes-rm2k`,
-`~/snes-rm2k-ports`, `~/snes-rm2k-docs`—, y el CLI corre parado en el
+en `~/`, adentro del contenedor** —`~/the-advocate-work`, `~/the-advocate`,
+`~/the-advocate-ports`, `~/the-advocate-docs`—, y el CLI corre parado en el
 primero. Desde el 2026-10-10 no se comparte nada de git con el host: lo que
 se commitea acá llega a GitHub con un `git push` desde acá, y taro lo trae
 de ahí. `~` es un volumen con nombre y sobrevive al contenedor. Hasta ese día
@@ -438,25 +438,25 @@ es donde van los builds, las capturas y el audio para taro (ver
 la copia vieja sigue pero **no se usa**.
 
 **Las herramientas se consumen desde el PATH**: las instala `just -f
-tools/justfile install`, desde `~/snes-rm2k`, en `/usr/local/bin`, y desde
+tools/justfile install`, desde `~/the-advocate`, en `/usr/local/bin`, y desde
 ahí son del sistema, como `python3` o un core de libretro. **El runtime lo
 arma `rm2k-snes-cartridges` desde el checkout del que se instaló** —la ruta
 queda compilada en `project`—: reinstalar desde otro checkout cambia qué
 runtime entra en la ROM. Ningún script ni prueba de los ports llama a
-`cargo` ni nombra la ruta de `snes-rm2k`, y lo cuida
+`cargo` ni nombra la ruta de `the-advocate`, y lo cuida
 `pruebas/herramientas/test_lado_de_abl.py`: lo que las herramientas saben
 del proyecto —sus rutas, el `rm2k-snes.toml`— el arnés se lo pregunta a
 `rm2k-snes-project` (`pruebas/arnes/proyecto.py`).
 
 **Para correr ABL con las herramientas de un checkout que las cambia** —un
-worktree de `snes-rm2k` que toca el runtime o el conversor—: `just -f
+worktree de `the-advocate` que toca el runtime o el conversor—: `just -f
 tools/justfile install-local tools/.local-tools <proyectos de Rust>` en el
 worktree, y desde `abl/` de los ports `PATH=<worktree>/tools/.local-tools/bin:$PATH
 just pruebas`. El `justfile` de ABL arma su PATH desde el que recibe,
 y lo que no esté en ese `bin/` sale del global. **Pero arma en el `build/`
-del checkout de los ports donde corre**: el de `~/snes-rm2k-ports` es el que
+del checkout de los ports donde corre**: el de `~/the-advocate-ports` es el que
 se juega y el de la tanda principal, así que un agente que lo necesite se
-saca su propio worktree (`git -C ~/snes-rm2k-ports worktree add <dir>`).
+saca su propio worktree (`git -C ~/the-advocate-ports worktree add <dir>`).
 
 El resto del sistema es descartable, y por eso taro trabaja en auto mode y
 no aprueba comando por comando; lo que revisa es el `git diff`.
@@ -657,8 +657,8 @@ por uno salteando el `$$`.
 **Se usan, y son la forma preferida cuando dos trabajos no se pisan demasiado.**
 Siempre con `isolation: "worktree"`, que les da su copia **de este repo**:
 ahí toman, escriben y mueven su tarea. **El código lo trabajan en worktrees
-propios** de cada repo que toquen —`git -C ~/snes-rm2k worktree add
-~/scratch/<nombre>/snes-rm2k`, y lo mismo con los ports—, así el
+propios** de cada repo que toquen —`git -C ~/the-advocate worktree add
+~/scratch/<nombre>/the-advocate`, y lo mismo con los ports—, así el
 `mapdata.inc` —que es estado global— y las tandas no se mezclan. El que los
 lanza trae sus ramas con `git merge` desde esos worktrees.
 
@@ -699,7 +699,7 @@ Lo que hay que hacer siempre:
   `.inc` que genera el conversor no van —pesan ~15 MB— y lo que cae en ellos
   se ve sólo desensamblado. Por eso la receta **se niega con cambios sin
   commitear** en lo que entra en la ROM, de los dos lados —el juego y el
-  runtime del checkout de `snes-rm2k` del que se instalaron las
+  runtime del checkout de `the-advocate` del que se instalaron las
   herramientas—: el build se nombra por dos commits y tienen que ser ésos.
   Ver "Debugging with Mesen2" en el libro, `reference/snes/emulators.md`.
 
@@ -754,7 +754,7 @@ Lo que hay que hacer siempre:
 * **Que corra `just -f tools/justfile install-local tools/.local-tools`
   al empezar, si va a modificar las herramientas**, desde la raíz del
   worktree. El global —`just -f tools/justfile install`— sale de
-  `~/snes-rm2k`, y esto arma un `bin/` en el destino con los
+  `~/the-advocate`, y esto arma un `bin/` en el destino con los
   proyectos de Rust que se le nombren —scripts de Python no queda
   ninguno, desde el 2026-10-02—; `tools/justfile` lo pone adelante en el
   PATH de sus recetas, y ABL lo usa si se le pone adelante en el suyo (ver "Dónde corre esto").
@@ -819,7 +819,7 @@ Así que al mergear una rama de sub-agente:
   mergeado**, con las herramientas del merge instaladas, no sobre las ramas.
   Que cada una viniera en verde no dice nada del merge.
 * **Reinstalar en el global sólo lo de Rust que la rama tocó**: `just -f
-  tools/justfile install lz2`, desde `~/snes-rm2k`. Una rama que
+  tools/justfile install lz2`, desde `~/the-advocate`. Una rama que
   toca `rm2k-project` —`project`— cambia todos los binarios que lo
   compilan adentro, y se reinstala todo. Hasta el 2026-10-02 había
   también scripts de Python, instalados como symlinks, y una receta
@@ -852,8 +852,8 @@ que quedó a mitad de medir o de escribir casos, sí.
 Y en cualquier caso, al retomar conviene mirar, en este orden:
 
 1. **Sus ramas y sus worktrees**: `git log --oneline worktree-agent-<id>`
-   acá, para su tarea, y sus ramas `<nombre>-…` en `~/snes-rm2k` y
-   `~/snes-rm2k-ports`, para el código. Lo commiteado está entero; lo demás
+   acá, para su tarea, y sus ramas `<nombre>-…` en `~/the-advocate` y
+   `~/the-advocate-ports`, para el código. Lo commiteado está entero; lo demás
    no existe.
 2. **Los logs que haya dejado**, antes que su informe: una tanda en segundo
    plano puede haber terminado después del corte, así que su "quedó pendiente"

@@ -17,7 +17,7 @@ Tu nombre va en tres lugares, y así te encontrás a vos mismo:
 
 **Antes de empezar, mirá lo tuyo**: `nu tasks/tasks.nu ls -s "*" -a <tu
 nombre>` en tu worktree, y `git log --grep 'Agente: <Tu nombre>'` en
-`~/snes-rm2k` y `~/snes-rm2k-ports`. Si ya tocaste lo mismo
+`~/the-advocate` y `~/the-advocate-ports`. Si ya tocaste lo mismo
 antes, empezá desde ahí y no lo vuelvas a medir.
 
 ## Antes de tocar nada
@@ -30,18 +30,18 @@ antes, empezá desde ahí y no lo vuelvas a medir.
 
 ## Los repos
 
-* **Tu worktree es de `snes-rm2k-work`**: ahí está tu tarea, y ahí la
+* **Tu worktree es de `the-advocate-work`**: ahí está tu tarea, y ahí la
   escribís y la movés.
 * **El código, en worktrees tuyos** de cada repo que toques, en una rama
-  con tu nombre: `git -C ~/snes-rm2k worktree add -b <tu nombre>-<tema>
-  ~/scratch/<tu nombre>/snes-rm2k`, y lo mismo con
-  `~/snes-rm2k-ports`. Hornero trae las ramas con `git merge`.
-  **No escribas en `~/snes-rm2k-ports`** ni en los otros checkouts de
+  con tu nombre: `git -C ~/the-advocate worktree add -b <tu nombre>-<tema>
+  ~/scratch/<tu nombre>/the-advocate`, y lo mismo con
+  `~/the-advocate-ports`. Hornero trae las ramas con `git merge`.
+  **No escribas en `~/the-advocate-ports`** ni en los otros checkouts de
   `~/`: el de los ports es el que se juega y el de la tanda principal.
 * **No pushees**: lo pushea Hornero al mergear.
 * Instalá en local **sólo los crates que modifiques**: `just -f
   tools/justfile install-local tools/.local-tools <crates>` en tu worktree
-  de `snes-rm2k`, y corré ABL con `PATH=<ese
+  de `the-advocate`, y corré ABL con `PATH=<ese
   worktree>/tools/.local-tools/bin:$PATH just …` en `abl/` del de los ports. **Nunca
   reinstales en el global.**
 * Los temporales, en `~/scratch/<tu nombre>/`.
