@@ -1,22 +1,27 @@
 # Estado del Trabajo
 
-Este repo es una especie de Jira casero, con un par de cosas
-extra que no son tareas pero sí están relacionadas al output
-de tareas.
+Este repo es una especie de Jira casero: las tareas de todos los repos, y
+desde dónde se trabaja —el `AGENTS.md` y `.claude/`—.
 
-Los siguientes sub-directorios tienen la misma estructura:
-- un _item_ por directorio
-- cada directorio tiene un propósito
-
-Estos son:
-- `divergencias/` es dónde la ROM no hace lo que RM2k hace, con lo medido y cómo reproducirlo; 
-- `decisiones/` decisiones tomadas que no son "obvias" o no se pueden inferir del código y tareas
-- `tasks/` son las tareas que aún quedan pendientes de tomar, o que están en progreso
 - `tasks/todo/` tareas no empezadas
 - `tasks/doing/` tareas en progreso: quien la toma la pasa acá antes que nada
 - `tasks/testing/` hechas y a la espera de que taro las pruebe jugando
 - `tasks/done/` tareas terminadas
 - `tasks/wishlist/` es lo que nos gustaría hacer y nadie está haciendo
+
+**Las decisiones, las divergencias y los research no están acá**: viven en
+el libro, `snes-rm2k-docs`, en inglés, desde el 2026-10-10 —"el libro es
+para personas y para IAs", de taro—. Hasta ese día `decisiones/` y
+`divergencias/` eran carpetas de este repo, y los research estaban en
+`docs/research/` de las herramientas y de ABL. Los nombres de archivo se
+conservaron, así que una cita vieja se encuentra por nombre:
+
+* `decisiones/x.md` es `src/decisions/x.md` del libro, salvo dos de ABL,
+  que están en `src/ports/abl/decisions/`;
+* `divergencias/x.md` es `src/divergences/x.md`;
+* `docs/research/x.md` de las herramientas es `src/research/x.md`, y el de
+  ABL, `src/ports/abl/research/x.md`;
+* `docs/port/x.md` es `src/internals/x.md`.
 
 ## El frontmatter de una tarea
 

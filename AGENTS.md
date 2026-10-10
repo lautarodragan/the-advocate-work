@@ -8,19 +8,21 @@ fuentes mejores, y hay que ir a ellas antes que a este archivo.
 los otros tiene los suyos. Es de taro, el 2026-10-10. El CLI corre parado
 acá, y los otros repos están al lado:
 
-    snes-rm2k-work   éste: dónde quedamos —`tasks/`, `decisiones/`,
-                     `divergencias/`— de todos los repos; su README
-                     explica cada carpeta
+    snes-rm2k-work   éste: dónde quedamos —`tasks/`— de todos los
+                     repos; su README explica cada carpeta
     snes-rm2k        las herramientas y el runtime: el conversor, el motor
                      en ensamblador, sus pruebas, y cómo funciona cada parte
     snes-rm2k-ports  los juegos portados, uno por directorio: `abl/` —A
                      Blurred Line, con la tanda y sus goldens— y los siete
                      del relevamiento de otros juegos
-    snes-rm2k-docs   el libro público, en inglés: qué es el proyecto, para
-                     alguien de afuera
+    snes-rm2k-docs   el libro, público y en inglés, para personas y para
+                     IAs: **toda la documentación** —qué es el proyecto,
+                     cómo funciona por dentro, la referencia de RM2k y de
+                     la consola, las decisiones, las divergencias con
+                     RM2k, los research y una entrada por port—
 
 **Las rutas de este archivo son de adentro de cada repo**, y cuál es lo dice
-la sección o la ruta misma: `tools/…` y `docs/port/…` son de
+la sección o la ruta misma: `tools/…` es de
 `snes-rm2k`; `pruebas/…`, `parches/…`, `justfile` y `rm2k-snes.toml` sueltos,
 de `abl/` en `snes-rm2k-ports`. Adentro de `snes-rm2k`:
 
@@ -31,8 +33,6 @@ de `abl/` en `snes-rm2k-ports`. Adentro de `snes-rm2k`:
     README.md        qué es el proyecto, cómo se instala, y los porqués de
                      arquitectura que no tienen línea de código donde vivir
     tools/README.md  qué hace cada carpeta de `tools/`
-    docs/            RM2k, la consola, cómo funciona el port hoy, y los
-                     estudios fechados: su README dice qué va en cada carpeta
 
 Y adentro de `abl/`, en `snes-rm2k-ports` —cada juego es un proyecto
 entero en su directorio, y todo se corre parado en él; el README de la
@@ -41,8 +41,6 @@ raíz dice cuáles hay—:
     justfile         qué se puede correr; los comentarios explican el porqué
     README.md        qué es el juego, cómo se arma y cómo encuentra a las
                      herramientas
-    docs/            el RTP, el camino a la ROM, y los estudios fechados
-                     sobre este juego
     data/            el volcado a JSON; su README lo ve desde adentro
     pruebas/         la tanda: su README dice qué ROM hay y qué prueba
                      cubre qué
@@ -60,7 +58,10 @@ a ABL en la raíz hasta el 2026-10-10, cuando pasó a `abl/` con un `git mv`
 `workflow/` de `snes-rm2k` a este repo, **con** su historia: **un
 `workflow/…` citado en otro repo es la misma ruta acá**, sin el prefijo, y
 los hashes que citan las tareas son de `snes-rm2k`, o de los ports cuando
-hablan de ABL.
+hablan de ABL. Y el mismo día `decisiones/`, `divergencias/` y todos los
+`docs/` —de las herramientas y de ABL— pasaron al libro, traducidos y con
+los mismos nombres de archivo: **una cita vieja se encuentra por nombre**,
+y el README de este repo dice adónde fue cada carpeta.
 
 **Las pruebas de ABL son, hasta que exista el juego de pruebas, las únicas
 pruebas de ROM del motor**: ver "La regla que sostiene todo".
@@ -123,6 +124,33 @@ ahí mismo.** El ejemplo de taro: "acá la variable que se llama NUMBER es de
 tipo string y no number, por contraintuitivo que sea, pero no se puede arreglar
 porque así lo espera una API que no controlamos". Eso es lo que un comentario
 tiene que decir; lo que el código ya dice, no.
+
+## El libro: decisiones, divergencias, research
+
+Desde el 2026-10-10 **toda la documentación vive en el libro**,
+`snes-rm2k-docs`, y se escribe **en inglés**, también sus commits. Es de
+taro: "El libro es para personas y para IAs", y le sirve tenerlo en un solo
+lugar. Lo que eso pide al trabajar:
+
+* **Una decisión nueva** va a `src/decisions/<slug>.md` —o a
+  `src/ports/<juego>/decisions/` si es de un juego—, con `## What`, `## Why`
+  y, si hace falta, `## How it applies`; **una divergencia nueva**, a
+  `src/divergences/<slug>.md`; **un research**, a `src/research/<slug>.md`
+  o al de su port. Cada una, además, en `src/SUMMARY.md`, donde le toca.
+* **Un research es una foto**: arriba la fecha y el commit de lo que midió;
+  no se actualiza, se hace uno nuevo. **Una página de `internals/` tiene
+  que estar al día**: el que cambia lo que describe la cambia en el mismo
+  commit, en el libro.
+* **El libro es público**: no nombra el ambiente —ni `~`, ni `/shared`, ni
+  el contenedor— ni enlaza a los repos, que son privados: los nombra como
+  texto ("`tools/runtime/hero.s` in snes-rm2k").
+* **mdBook no avisa de los links rotos.** Antes de pushear al libro se
+  revisan los links relativos de lo que se tocó. Cada push a `main` lo
+  publica solo, con su workflow.
+
+Los porqués que protegen una línea de código **siguen yendo como
+comentario en esa línea**, en castellano: el libro es para lo que no tiene
+una línea donde vivir.
 
 ## Los proyectos independientes están en inglés
 
@@ -320,7 +348,7 @@ d356bfb7^ -- rom/pruebas/arnes/consola.py`—, y `git log -S` sigue
 encontrando todo lo que pasó antes de esa fecha, de los dos lados.
 
 Los IDE que no dejan pasarle opciones a `blame` —el annotate de JetBrains—
-necesitan configuración del lado del host: ver `docs/jetbrains.md`.
+necesitan configuración del lado del host: ver "JetBrains" en el libro, en `contributing/`.
 
 ## La regla que sostiene todo
 
@@ -339,7 +367,7 @@ obligaciones, y una de ellas es nueva.
 escenario. Se fueron con el juego el 2026-10-02, porque necesitan uno, y
 vuelven a `snes-rm2k` de a poco
 cuando exista el juego de pruebas —la fase 2 de
-`docs/research/2026-10-02-el-juego-de-pruebas.md`—. Hasta entonces **un
+`research/2026-10-02-el-juego-de-pruebas.md` del libro—. Hasta entonces **un
 cambio en `tools/` se verifica corriendo la tanda de ABL con las
 herramientas del cambio**, como dice "Dónde corre esto"; `just -f
 tools/justfile test` y las de cada crate no corren ninguna ROM. Es el riesgo
@@ -673,7 +701,7 @@ Lo que hay que hacer siempre:
   commitear** en lo que entra en la ROM, de los dos lados —el juego y el
   runtime del checkout de `snes-rm2k` del que se instalaron las
   herramientas—: el build se nombra por dos commits y tienen que ser ésos.
-  Ver "Debugging with Mesen2" en `docs/snes/emulators.md`.
+  Ver "Debugging with Mesen2" en el libro, `reference/snes/emulators.md`.
 
   **Lo demás que taro tiene que mirar o escuchar va a dos carpetas y no a la
   raíz de `/shared`**: capturas y goldens a `/shared/capturas/<fecha>-<tema>/`,
@@ -692,7 +720,7 @@ Lo que hay que hacer siempre:
 
   **El `abl.msu` sí va en el build, y además a `/shared/msu/` siempre.**
   Desde el 2026-09-25 no está vacío: lleva los fondos de batalla que la ROM
-  lee por el MSU-1 —ver `docs/port/msu-datos.md`—, así que cambia con el
+  lee por el MSU-1 —ver `internals/msu-datos.md` del libro—, así que cambia con el
   conversor y es del build, no de las pistas; y pesa 32 KB por fondo. Con el
   `abl.sfc` de otro build no se rompe nada: la ROM no encuentra su firma en
   el `.msu` y usa los fondos que lleva.
