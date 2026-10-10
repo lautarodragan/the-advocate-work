@@ -1,7 +1,7 @@
 # Lo que vale para todo sub-agente del plantel
 
 Sos uno de los sub-agentes de Hornero, la sesión que reparte el trabajo en
-estos dos repos para taro. Tu nombre es el de tu archivo en
+estos repos para taro. Tu nombre es el de tu archivo en
 `.claude/agents/`. Esto es lo que antes se repetía en cada encargo; el
 encargo te dice qué hacer, y esto, cómo.
 
@@ -15,30 +15,34 @@ Tu nombre va en tres lugares, y así te encontrás a vos mismo:
 * en cada commit tuyo, en una línea al final, junto a las que te pase el
   encargo: `Agente: <Tu nombre>`.
 
-**Antes de empezar, mirá lo tuyo**: en `tasks/` del repo `snes-rm2k-work`
-—uno solo, para todos los repos—, `nu tasks/tasks.nu ls -s "*" -a <tu
-nombre>` parado en él, y
-`git log --grep 'Agente: <Tu nombre>'` en los dos. Si ya tocaste lo mismo
+**Antes de empezar, mirá lo tuyo**: `nu tasks/tasks.nu ls -s "*" -a <tu
+nombre>` en tu worktree, y `git log --grep 'Agente: <Tu nombre>'` en
+`~/snes-rm2k` y `~/snes-rm2k-ports`. Si ya tocaste lo mismo
 antes, empezá desde ahí y no lo vuelvas a medir.
 
 ## Antes de tocar nada
 
-* Leé el `AGENTS.md` de los dos repos, entero: el de las herramientas
-  (`/host/abl-snes`, tu worktree sale de ahí) y el de A Blurred Line
-  (`/abl-snes`).
-* Si tu worktree no arrancó en el commit que dice el encargo, ponelo ahí.
+* Leé el `AGENTS.md` de la raíz de tu worktree, entero: es el único, y
+  vale para todos los repos.
+* Si tus worktrees no arrancaron en los commits que dice el encargo,
+  ponelos ahí.
 * El primer paso ante algo que parece un error es `git blame`.
 
-## Los dos repos
+## Los repos
 
-* Las herramientas y el runtime, en tu worktree.
-* ABL, en un clon tuyo: `git clone /abl-snes /extras/scratch/<tu nombre>/abl`,
-  y commiteás en una rama de ese clon; Hornero la trae con `git pull`.
-  **No escribas en `/abl-snes`**: es el que se juega y el de la tanda
-  principal.
+* **Tu worktree es de `snes-rm2k-work`**: ahí está tu tarea, y ahí la
+  escribís y la movés.
+* **El código, en worktrees tuyos** de cada repo que toques, en una rama
+  con tu nombre: `git -C ~/snes-rm2k worktree add -b <tu nombre>-<tema>
+  /extras/scratch/<tu nombre>/snes-rm2k`, y lo mismo con
+  `~/snes-rm2k-ports`. Hornero trae las ramas con `git merge`.
+  **No escribas en `~/snes-rm2k-ports`** ni en los otros checkouts de
+  `~/`: el de los ports es el que se juega y el de la tanda principal.
+* **No pushees**: lo pushea Hornero al mergear.
 * Instalá en local **sólo los crates que modifiques**: `just -f
-  tools/justfile install-local tools/.local-tools <crates>`, y corré ABL
-  con `PATH=<tu worktree>/tools/.local-tools/bin:$PATH just …`. **Nunca
+  tools/justfile install-local tools/.local-tools <crates>` en tu worktree
+  de `snes-rm2k`, y corré ABL con `PATH=<ese
+  worktree>/tools/.local-tools/bin:$PATH just …` en el de los ports. **Nunca
   reinstales en el global.**
 * Los temporales, en `/extras/scratch/<tu nombre>/`.
 
@@ -69,11 +73,11 @@ antes, empezá desde ahí y no lo vuelvas a medir.
 
 ## Al terminar
 
-* Mergeá `main` de los dos repos.
+* Mergeá `main` en cada rama tuya: la de este repo y las de los que
+  tocaste.
 * Pasá la tarea a `testing/` con `assignee: taro`, tu nombre en `agents`,
-  y qué hay que instalar al mergear. Va en `snes-rm2k-work`, sea cual sea
-  el repo del trabajo: ahí vive la tarea.
+  y qué hay que instalar al mergear, en tu worktree de este repo.
 * **No dejes nada corriendo**: tandas, esperas, Wine, Xvfb.
 * Devolvé un informe **corto y en castellano**: qué hiciste, qué no, las
-  ramas de los dos repos, la tanda y la huella de `abl.sfc`, dónde están
+  ramas de cada repo, la tanda y la huella de `abl.sfc`, dónde están
   las capturas, y lo que la tanda no cubre, dicho con todas las letras.

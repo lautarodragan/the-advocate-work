@@ -1,11 +1,28 @@
-# Cómo se trabaja en este repo
+# Cómo se trabaja en estos repos
 
 Esto es lo que **no** se deduce leyendo el código. Todo lo demás está en
-fuentes mejores, y hay que ir a ellas antes que a este archivo:
+fuentes mejores, y hay que ir a ellas antes que a este archivo.
 
-    snes-rm2k-work   otro repo: dónde quedamos —las tareas, las decisiones
-                     y las divergencias de todos los repos—; su README
+**Son cuatro repos, y éste es el único con instrucciones**: este archivo y
+`.claude/` —el plantel de sub-agentes— valen para los cuatro, y ninguno de
+los otros tiene los suyos. Es de taro, el 2026-10-10. El CLI corre parado
+acá, y los otros repos están al lado:
+
+    snes-rm2k-work   éste: dónde quedamos —`tasks/`, `decisiones/`,
+                     `divergencias/`— de todos los repos; su README
                      explica cada carpeta
+    snes-rm2k        las herramientas y el runtime: el conversor, el motor
+                     en ensamblador, sus pruebas, y cómo funciona cada parte
+    snes-rm2k-ports  los juegos portados: hoy A Blurred Line, con sus datos,
+                     sus parches, la tanda y sus goldens
+    snes-rm2k-docs   el libro público, en inglés: qué es el proyecto, para
+                     alguien de afuera
+
+**Las rutas de este archivo son de adentro de cada repo**, y cuál es lo dice
+la sección o la ruta misma: `tools/…`, `docs/port/…` y `DITTO.md` son de
+`snes-rm2k`; `pruebas/…`, `parches/…`, `justfile` y `rm2k-snes.toml` sueltos,
+de `snes-rm2k-ports`. Adentro de `snes-rm2k`:
+
     tools/justfile   qué se puede correr —probar e instalar las
                      herramientas—; los comentarios explican el porqué. Se
                      corre con `just -f tools/justfile`, o con `just`
@@ -17,23 +34,35 @@ fuentes mejores, y hay que ir a ellas antes que a este archivo:
                      estudios fechados: su README dice qué va en cada carpeta
     DITTO.md         qué es Ditto, por qué existe acá y en qué estado está
                      la idea de que los JSON sean la fuente de verdad
-    git log          los mensajes son largos a propósito: son el registro
 
-**A Blurred Line no está en este repo.** Desde el 2026-10-02 vive en el
-suyo, con sus datos, sus parches, sus pruebas y sus goldens, y consume
-estas herramientas desde el PATH; la historia de lo que era suyo se quedó
-acá. Dónde está ese repo, y cómo se corre ABL con las herramientas de un
-checkout de éste, en "Dónde corre esto".
+Y adentro de `snes-rm2k-ports`, que hoy es ABL en la raíz:
 
-**Las tareas, las decisiones y las divergencias tampoco están acá**: desde
-el 2026-10-10 viven en su propio repo, `snes-rm2k-work`, las de todos los
-repos —ésta, los ports y el libro—. Hasta ese día eran la carpeta
-`workflow/` de éste, y salieron con su historia; **un `workflow/…` citado
-en un comentario de este repo es la misma ruta allá**, sin el prefijo. **Y sus pruebas son, hasta que
-exista el juego de pruebas, las únicas pruebas de ROM del motor**: ver "La
-regla que sostiene todo".
+    justfile         qué se puede correr; los comentarios explican el porqué
+    README.md        qué es el juego, cómo se arma y cómo encuentra a las
+                     herramientas
+    docs/            el RTP, el camino a la ROM, y los estudios fechados
+                     sobre este juego
+    data/            el volcado a JSON; su README lo ve desde adentro
+    pruebas/         la tanda: su README dice qué ROM hay y qué prueba
+                     cubre qué
 
-Al empezar, mirar `tasks/doing/` y `testing/` de `snes-rm2k-work`, que es dónde quedamos. La
+    git log          en los cuatro: los mensajes son largos a propósito,
+                     son el registro
+
+**La historia se partió dos veces.** El 2026-10-02 ABL se fue de las
+herramientas a su propio repo, sin historia: la de antes de esa fecha está
+en `snes-rm2k`, y lo que en los ports es `X` allá era `rom/X` (cómo pedir
+su `blame`, en "`git blame` y los cambios mecánicos"). El 2026-10-10
+`tasks/`, `decisiones/` y `divergencias/` salieron de la carpeta
+`workflow/` de `snes-rm2k` a este repo, **con** su historia: **un
+`workflow/…` citado en otro repo es la misma ruta acá**, sin el prefijo, y
+los hashes que citan las tareas son de `snes-rm2k`, o de los ports cuando
+hablan de ABL.
+
+**Las pruebas de ABL son, hasta que exista el juego de pruebas, las únicas
+pruebas de ROM del motor**: ver "La regla que sostiene todo".
+
+Al empezar, mirar `tasks/doing/` y `testing/`, que es dónde quedamos. La
 tarea se escribe **mientras se trabaja, no al final**, y al terminar se mueve de
 carpeta.
 
@@ -93,8 +122,10 @@ tiene que decir; lo que el código ya dice, no.
 
 ## Los proyectos independientes están en inglés
 
-Todo este repo va en castellano —comentarios, documentación y mensajes de
-commit—, **salvo los directorios que son proyectos aparte**, que van en inglés
+Todo va en castellano —comentarios, documentación y mensajes de commit—,
+**salvo el libro, `snes-rm2k-docs`, que es para afuera y va en inglés
+entero, sus commits incluidos, y los directorios de `snes-rm2k` que son
+proyectos aparte**, que van en inglés
 de punta a punta: código, comentarios, nombres de pruebas y README. Desde el
 2026-09-19 viven adentro de `tools/` —ver `tools/README.md`—:
 
@@ -171,7 +202,8 @@ directorios**: son del repo.
 
 Y **lo que esas herramientas generan va en inglés también**, aunque caiga en
 `tools/` o en `tools/runtime/`: es su salida, no fuente de este árbol, y dice arriba
-que es generada y de dónde. El 2026-09-14 la regla era la contraria —"el idioma
+que es generada y de dónde; y también lo que dejan en el `build/` de un
+port, como los comentarios de los `.inc` del conversor. El 2026-09-14 la regla era la contraria —"el idioma
 del árbol donde cae"— y duró un día: al generalizar el generador para el
 segundo bytecode quedó claro que hacerlo hablar castellano lo ata a este repo.
 
@@ -237,6 +269,9 @@ próximo que se agregue—, porque la declaración no compila con huecos.
 
 ## `git blame` y los cambios mecánicos
 
+Todo lo de esta sección es de `snes-rm2k`, salvo el último párrafo, que dice
+cómo se le pide el `blame` a lo de los ports.
+
 `.git-blame-ignore-revs` lista los commits que `git blame` tiene que saltear:
 renombres masivos y reformateos, que sin esto contestan "fue el renombre" en
 cada línea que tocaron. El criterio para meter uno es que su cambio **no pueda
@@ -273,8 +308,9 @@ líneas. Con `data/`, `parches/` y `pruebas/`, que se mudaron adentro de
 `rom/` en el mismo commit, alcanzaba el `blame` sin opciones: medido sobre
 `rom/pruebas/arnes/consola.py`.
 
-**Lo de ABL se fue a su propio repo el 2026-10-02, sin historia**: allá
-cada archivo nace en un solo commit. Su `blame` se pide acá, sobre la ruta
+**Lo de ABL se fue a su propio repo el 2026-10-02, sin historia**: en
+`snes-rm2k-ports` cada archivo nace en un solo commit. Su `blame` se pide
+en `snes-rm2k`, sobre la ruta
 que tenía y en el padre del commit que lo borró —`git blame
 d356bfb7^ -- rom/pruebas/arnes/consola.py`—, y `git log -S` sigue
 encontrando todo lo que pasó antes de esa fecha, de los dos lados.
@@ -294,14 +330,18 @@ la tanda de ABL, en `pruebas/golden/tanda/` de su repo, que son lo que la ROM
 dibujaba el día que la tanda estaba en verde—. De ahí salen tres
 obligaciones, y una de ellas es nueva.
 
-**Las pruebas de ROM del motor viven en ABL, por ahora.** Se fueron con el
-juego el 2026-10-02, porque necesitan uno, y vuelven a este repo de a poco
+**Las pruebas de ROM del motor viven en ABL, por ahora**: casi todo
+`pruebas/rpgmaker/` de los ports es lo que RM2k hace, usando a ABL de
+escenario. Se fueron con el juego el 2026-10-02, porque necesitan uno, y
+vuelven a `snes-rm2k` de a poco
 cuando exista el juego de pruebas —la fase 2 de
 `docs/research/2026-10-02-el-juego-de-pruebas.md`—. Hasta entonces **un
 cambio en `tools/` se verifica corriendo la tanda de ABL con las
 herramientas del cambio**, como dice "Dónde corre esto"; `just -f
 tools/justfile test` y las de cada crate no corren ninguna ROM. Es el riesgo
-que el estudio señaló, y es el argumento para no demorar la fase 2.
+que el estudio señaló, y es el argumento para no demorar la fase 2. Y una
+golden que se mueve por un cambio de las herramientas se mira y se
+commitea en los ports, en su propio commit.
 
 **Cambiar una golden es un acto deliberado.** Va a git, se mira, y el commit
 explica por qué el render cambió. Si regenerarlas fuera automático, o si la
@@ -315,7 +355,7 @@ recorrido con un tinte pegado**, y dos de ellas **pasaban** —una con 10,3% de
 diferencia bajo un tope del 15%—. Lo que contrapesa esto es que taro juega.
 
 **Y hay una clase de error que ninguna golden puede ver, porque el emulador que
-la sacó tampoco la ve.** Para eso está `pruebas/rpgmaker/test_cores.py`, en ABL: corre el mismo
+la sacó tampoco la ve.** Para eso está `pruebas/rpgmaker/test_cores.py`, en los ports: corre el mismo
 cartucho en **snes9x y en bsnes** y compara las dos capturas entre sí. bsnes
 arranca la WRAM con basura y snes9x en cero, así que una diferencia significa
 que la ROM depende de memoria sin inicializar. Da rojo **cuatro de cada cinco
@@ -340,34 +380,59 @@ cubre la tanda, el mensaje tiene que decirlo con todas las letras.
 ## Dónde corre esto
 
 Adentro de un contenedor de podman que taro levanta con `box`, una función
-suya de nushell: Arch —igual que el host— con este repo montado en
-`/host/abl-snes`. **Los archivos del repo son los de verdad**: lo que se escribe
-acá queda escrito en su disco.
+suya de nushell: Arch —igual que el host—. **Los cuatro repos están clonados
+en `~/`, adentro del contenedor** —`~/snes-rm2k-work`, `~/snes-rm2k`,
+`~/snes-rm2k-ports`, `~/snes-rm2k-docs`—, y el CLI corre parado en el
+primero. Desde el 2026-10-10 no se comparte nada de git con el host: lo que
+se commitea acá llega a GitHub con un `git push` desde acá, y taro lo trae
+de ahí. `~` es un volumen con nombre y sobrevive al contenedor. Hasta ese día
+el repo de las herramientas estaba montado del host en `/host/abl-snes` y el
+de ABL en `/abl-snes`: son checkouts viejos y no se usan.
 
-**ABL está en `/abl-snes`**, su propio repo, desde el 2026-10-02, montado
-de un disco local del host. Hasta el 2026-10-03 vivía en `/shared/abl-snes`,
-y la copia vieja sigue ahí pero **no se usa**: `/shared` es un CIFS sobre el
-disco mecánico de un NAS, lento, sin symlinks, sin bits de ejecución y sin
-distinguir mayúsculas.
+**Cada repo tiene su clave para GitHub**, una deploy key con escritura en
+`~/.ssh/<repo>` —GitHub no deja usar la misma en dos repos—. La elige
+`~/.gitconfig` por el remote, con un `includeIf
+"hasconfig:remote.*.url:…"` por repo que apunta a `~/.ssh/git/<repo>.gitconfig`
+y su `core.sshCommand`; así vale para cualquier clon o worktree, también el
+primer `git clone`. `~/.ssh/config` sólo dice `IdentitiesOnly yes` para
+`github.com`: sin eso ssh ofrece otra clave, GitHub la acepta, y contesta un
+engañoso "Repository not found". Un repo nuevo es la clave, su `.gitconfig`
+y un `includeIf` más.
 
-**Para correr ABL con las herramientas de un checkout de éste** —un
-worktree que cambia el runtime o el conversor—: `just -f tools/justfile
-install-local tools/.local-tools <proyectos de Rust>` en el worktree, y
-desde ABL `PATH=<worktree>/tools/.local-tools/bin:$PATH just pruebas`. El
-`justfile` de ABL arma su PATH desde el que recibe, y lo que no esté en ese
-`bin/` sale del global. **Pero arma en el `build/` del checkout de ABL donde
-corre**: el de `/abl-snes` es el que se juega y el de la tanda principal,
-así que un agente que lo necesite se saca su propio clon o worktree de ABL
-(`git -C /abl-snes worktree add <dir>`). El resto del sistema es descartable, y por eso
-él trabaja en auto mode y no aprueba comando por comando; lo que revisa es el
-`git diff`.
+`/shared` es otra cosa: un CIFS montado del NAS de taro —disco mecánico,
+lento, sin symlinks, sin bits de ejecución y sin distinguir mayúsculas—, y
+es donde van los builds, las capturas y el audio para taro (ver
+"Sub-agentes"). Hasta el 2026-10-03 ABL vivía ahí, en `/shared/abl-snes`, y
+la copia vieja sigue pero **no se usa**.
+
+**Las herramientas se consumen desde el PATH**: las instala `just -f
+tools/justfile install`, desde `~/snes-rm2k`, en `/usr/local/bin`, y desde
+ahí son del sistema, como `python3` o un core de libretro. **El runtime lo
+arma `rm2k-snes-cartridges` desde el checkout del que se instaló** —la ruta
+queda compilada en `project`—: reinstalar desde otro checkout cambia qué
+runtime entra en la ROM. Ningún script ni prueba de los ports llama a
+`cargo` ni nombra la ruta de `snes-rm2k`, y lo cuida
+`pruebas/herramientas/test_lado_de_abl.py`: lo que las herramientas saben
+del proyecto —sus rutas, el `rm2k-snes.toml`— el arnés se lo pregunta a
+`rm2k-snes-project` (`pruebas/arnes/proyecto.py`).
+
+**Para correr ABL con las herramientas de un checkout que las cambia** —un
+worktree de `snes-rm2k` que toca el runtime o el conversor—: `just -f
+tools/justfile install-local tools/.local-tools <proyectos de Rust>` en el
+worktree, y desde los ports `PATH=<worktree>/tools/.local-tools/bin:$PATH
+just pruebas`. El `justfile` de los ports arma su PATH desde el que recibe,
+y lo que no esté en ese `bin/` sale del global. **Pero arma en el `build/`
+del checkout de los ports donde corre**: el de `~/snes-rm2k-ports` es el que
+se juega y el de la tanda principal, así que un agente que lo necesite se
+saca su propio worktree (`git -C ~/snes-rm2k-ports worktree add <dir>`).
+
+El resto del sistema es descartable, y por eso taro trabaja en auto mode y
+no aprueba comando por comando; lo que revisa es el `git diff`.
 
 Lo que el contenedor cambia en la práctica:
 
 * **No hay podman adentro**, y desde el 2026-09-19 ninguna receta lo usa: el
   port a Mega Drive, `audio-validar` y el `rom/Containerfile` se fueron.
-* **`.git/config` y `.git/info` están montados de sólo lectura**, y
-  `.git/hooks` es un tmpfs vacío: `git config` falla y ningún hook corre.
 * **No hay puertos publicados.** Nada que se sirva acá adentro se ve desde el
   host.
 * **`/extras` sobrevive a la sesión**, igual que los paquetes instalados:
@@ -382,6 +447,10 @@ que revela menos y da más margen. Hoy tiene:
     /extras/rtp         el RTP de Don Miguel, sin el cual faltan 22 assets
     /extras/ref         liblcf, easyrpg-player y Game-Decompilations
     /extras/soundfonts  de donde salen las muestras
+    /extras/msu         los reemplazos de las pistas de MSU-1
+    /extras/otros-juegos       los siete juegos de RM2k además de ABL
+    /extras/otros-juegos-snes  sus proyectos, uno por repo, sin remote
+    /extras/scratch     los temporales de cada agente, en `<nombre>/`
     /extras/capturas    donde taro deja capturas para que yo las mire
     /extras/ref/cc65    compilado acá: de ahí salen `ca65` y `ld65`
 
@@ -390,9 +459,13 @@ con `--rm --replace`, así que `/tmp` se muere con él y `/extras` no.
 
 Las herramientas llegan a `/extras` y a `/shared` por flags —`--game-dir`,
 `--rtp-dir`, `--soundfont`, `--replacements`, `--shared`—, y no saben de
-ningún valor de esta máquina. Los pone el `justfile` de ABL, en su repo, que
+ningún valor de esta máquina. Los pone el `justfile` de los ports, que
 traduce `ABL_GAME_DIR`, `ABL_RTP_DIR`, `ABL_SOUNDFONT` y `SHARED` con los
-valores de acá por omisión. Si el ambiente cambia, se cambia allá.
+valores de acá por omisión, y los exporta para las pruebas; los reemplazos
+de MSU-1, que no tienen variable, son su `reemplazos_msu`. Si el ambiente
+cambia, se cambia ahí. `ABL_CACHE` y `CARTUCHOS` también se traducen, pero
+sin valor de la máquina: el caché y los cartuchos de prueba viven adentro
+de `build/`, y las variables sólo los mueven.
 
 Las dos pruebas de las herramientas que leen un SoundFont de verdad —las
 de `rm2k-snes-audio`— lo reciben en `SOUNDFONT`, como Ditto su corpus en
@@ -490,7 +563,7 @@ apretado cambia, y dos veces quedó
 escrito acá y se quedó viejo: **no se escribe, se mide**, y hay que medirlos
 todos: `abl` y los que arma `cartuchos`.
 
-**Se mide con `just espacio`, en ABL**, que corre `rm2k-snes-space` e imprime para cada cartucho los bancos de
+**Se mide con `just espacio`, en los ports**, que corre `rm2k-snes-space` e imprime para cada cartucho los bancos de
 datos libres y los huecos, el banco 0, el banco 1, `BSS`, `ZEROPAGE` y el
 bloque de textos; con la ruta de una ROM armada aparte, mide ésa. Lo que
 cuenta es **cuántos bancos quedan**, no un porcentaje: los bancos `$7E` y
@@ -498,7 +571,7 @@ cuenta es **cuántos bancos quedan**, no un porcentaje: los bancos `$7E` y
 contra el `.o` de la receta; eso sigue sirviendo para lo único que la receta
 no puede, que es una ROM que no linkea: ahí `ld65` dice por cuánto se pasa.
 
-**`build/cache/`, en el proyecto, es un caché en disco** —qué pistas de MSU-1 ya están—
+**`build/cache/`, en el port, es un caché en disco** —qué pistas de MSU-1 ya están—
 y su clave lleva el hash de los fuentes **y el de los binarios que producen lo
 guardado**, así que no hay que borrarlo al tocar código. Lo único que pide es
 que cualquier cambio en lo que se cachea se verifique con `NO_CACHE=1`: las
@@ -542,8 +615,12 @@ por uno salteando el `$$`.
 ## Sub-agentes
 
 **Se usan, y son la forma preferida cuando dos trabajos no se pisan demasiado.**
-Siempre con `isolation: "worktree"`: cada uno en su copia, así el `mapdata.inc`
-—que es estado global— y las tandas no se mezclan.
+Siempre con `isolation: "worktree"`, que les da su copia **de este repo**:
+ahí toman, escriben y mueven su tarea. **El código lo trabajan en worktrees
+propios** de cada repo que toquen —`git -C ~/snes-rm2k worktree add
+/extras/scratch/<nombre>/snes-rm2k`, y lo mismo con los ports—, así el
+`mapdata.inc` —que es estado global— y las tandas no se mezclan. El que los
+lanza trae sus ramas con `git merge` desde esos worktrees.
 
 **Son un plantel fijo, desde el 2026-10-04**: un archivo por agente en
 `.claude/agents/`, con un nombre de la flora o la fauna argentina, y lo que
@@ -551,7 +628,7 @@ vale para todos en `.claude/agentes.md` —lo que antes se repetía en cada
 encargo—. Se lanzan por su nombre, no como `general-purpose`, así el mismo
 agente vuelve y se encuentra a sí mismo: cada tarea lleva en `agents` a
 todos los que trabajaron en ella —el `assignee` pasa a taro en
-`testing/`—, que `snes-rm2k-work/tasks/tasks.nu ls -a <nombre>` filtra, y cada
+`testing/`—, que `nu tasks/tasks.nu ls -a <nombre>` filtra, y cada
 commit suyo termina con `Agente: <nombre>`, que `git log --grep` encuentra.
 Lo pidió taro, el 2026-10-04. Siguen arrancando de cero cada vez: la
 continuidad es lo que dejan escrito.
@@ -559,7 +636,7 @@ continuidad es lo que dejan escrito.
 Lo que hay que hacer siempre:
 
 * **Traer los builds a `/shared`, con `just entregar "<qué mirar>"`, desde
-  ABL.** Los worktrees viven en `/extras`, que no está montado en el host, y
+  los ports.** Los worktrees viven en `/extras`, que no está montado en el host, y
   `/shared` sí: es donde taro los encuentra. Van a
   `/shared/builds/<fecha>-<commit de ABL>-<commit de las herramientas>/`, y
   el texto que se le pasa a la receta va al `LEEME.txt`: qué cambió, qué
@@ -581,8 +658,10 @@ Lo que hay que hacer siempre:
   que con `tools/runtime/` al lado lo muestra también desde `/shared/builds/`. Los
   `.inc` que genera el conversor no van —pesan ~15 MB— y lo que cae en ellos
   se ve sólo desensamblado. Por eso la receta **se niega con cambios sin
-  commitear** en lo que entra en la ROM: el build se nombra por un commit y
-  tiene que ser ése. Ver "Debugging with Mesen2" en `docs/snes/emulators.md`.
+  commitear** en lo que entra en la ROM, de los dos lados —el juego y el
+  runtime del checkout de `snes-rm2k` del que se instalaron las
+  herramientas—: el build se nombra por dos commits y tienen que ser ésos.
+  Ver "Debugging with Mesen2" en `docs/snes/emulators.md`.
 
   **Lo demás que taro tiene que mirar o escuchar va a dos carpetas y no a la
   raíz de `/shared`**: capturas y goldens a `/shared/capturas/<fecha>-<tema>/`,
@@ -634,8 +713,8 @@ Lo que hay que hacer siempre:
   hace>/…` alcanza.
 * **Que corra `just -f tools/justfile install-local tools/.local-tools`
   al empezar, si va a modificar las herramientas**, desde la raíz del
-  worktree. El global —`just -f tools/justfile install`— sale del
-  checkout principal, y esto arma un `bin/` en el destino con los
+  worktree. El global —`just -f tools/justfile install`— sale de
+  `~/snes-rm2k`, y esto arma un `bin/` en el destino con los
   proyectos de Rust que se le nombren —scripts de Python no queda
   ninguno, desde el 2026-10-02—; `tools/justfile` lo pone adelante en el
   PATH de sus recetas, y ABL lo usa si se le pone adelante en el suyo (ver "Dónde corre esto").
@@ -700,7 +779,7 @@ Así que al mergear una rama de sub-agente:
   mergeado**, con las herramientas del merge instaladas, no sobre las ramas.
   Que cada una viniera en verde no dice nada del merge.
 * **Reinstalar en el global sólo lo de Rust que la rama tocó**: `just -f
-  tools/justfile install lz2`, desde el checkout principal. Una rama que
+  tools/justfile install lz2`, desde `~/snes-rm2k`. Una rama que
   toca `rm2k-project` —`project`— cambia todos los binarios que lo
   compilan adentro, y se reinstala todo. Hasta el 2026-10-02 había
   también scripts de Python, instalados como symlinks, y una receta
@@ -732,8 +811,10 @@ que quedó a mitad de medir o de escribir casos, sí.
 
 Y en cualquier caso, al retomar conviene mirar, en este orden:
 
-1. **Su rama y su worktree**: `git log --oneline worktree-agent-<id>`. Lo
-   commiteado está entero; lo demás no existe.
+1. **Sus ramas y sus worktrees**: `git log --oneline worktree-agent-<id>`
+   acá, para su tarea, y sus ramas `<nombre>-…` en `~/snes-rm2k` y
+   `~/snes-rm2k-ports`, para el código. Lo commiteado está entero; lo demás
+   no existe.
 2. **Los logs que haya dejado**, antes que su informe: una tanda en segundo
    plano puede haber terminado después del corte, así que su "quedó pendiente"
    puede ser viejo.
@@ -741,8 +822,8 @@ Y en cualquier caso, al retomar conviene mirar, en este orden:
    `~/.claude/projects/<proyecto>/<sesión>/subagents/agent-<id>.jsonl`. Son
    megas: se lee **del final hacia atrás, una entrada por vez**, mirando qué
    herramienta usó última. Nunca entero.
-4. **Lo que dejó corriendo**: `pgrep -af "pytest|cartuchos"` y
-   `git worktree list`.
+4. **Lo que dejó corriendo**: `pgrep -af "pytest|cartuchos"`, y `git
+   worktree list` en cada repo.
 
 Y para el agente nuevo que lo reemplace: pasarle lo que el anterior dejó escrito
 —commits y su tarea— para que no vuelva a medir lo mismo.
@@ -773,5 +854,12 @@ con su porqué. Uno nuevo de ésos va ahí, diciendo qué es lo sacado.
 
 ## Git
 
-Los commits van directo a `main`. No hacemos `git push`. 
+Los commits van directo a `main`, en los cuatro repos, **y se pushean**:
+desde el 2026-10-10 los repos sólo existen acá adentro y en GitHub, así que
+un commit sin pushear es un commit que taro no ve. Lo que **nunca** se hace
+sin preguntarle es reescribir lo que ya está en GitHub: `push --force`,
+`rebase` de lo pusheado, borrar una rama de allá. Hasta ese día el push lo
+hacía taro, con una clave en una YubiKey. Los sub-agentes no pushean: lo
+suyo llega a `main` por el merge del que los lanzó, que es el que pushea.
+
 Los mensajes van en castellano y explican el porqué, no el qué —el diff ya dice el qué—.
