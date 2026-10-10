@@ -1,0 +1,3 @@
+# Lo que el CLI escribe solo y no es del repo.
+.claude/scheduled_tasks.lock
+.claude/worktrees/
