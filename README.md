@@ -1,6 +1,6 @@
 # Estado del Trabajo
 
-Esta carpeta es una especie de Jira casero, con un par de cosas
+Este repo es una especie de Jira casero, con un par de cosas
 extra que no son tareas pero sí están relacionadas al output
 de tareas.
 
@@ -32,9 +32,20 @@ las que esperan algo de él —jugar, mirar unas goldens—, y el nombre del age
 para las de `doing/`. Ver "Tomar una tarea" en `AGENTS.md`. En `todo/`, sin
 `assignee`, la toma quien llegue. Las de `done/` son de antes de estos campos y no los llevan.
 
-**Acá se trackea todo, también lo de A Blurred Line**: su contenido, sus
-pruebas, sus recetas, lo que lleva su cartucho. Del 2026-10-02 al
-2026-10-10 sus tareas y sus decisiones vivieron en su repo; ese día
-volvieron, por pedido de taro, "para trackear todo en un solo lugar", y su
-repo se quedó sin `workflow/`. Un `workflow/…` escrito en un comentario de
-ABL es éste.
+**Acá se trackea todo**: las herramientas y el runtime (`snes-rm2k`), los
+ports (`snes-rm2k-ports`: A Blurred Line y los otros juegos) y el libro
+(`snes-rm2k-docs`). Es de taro, el 2026-10-10, "para trackear todo en un
+solo lugar".
+
+Hasta ese día esto era la carpeta `workflow/` de `snes-rm2k`, y de ahí
+salió con su historia (`git subtree split`). Así que:
+
+* **un `workflow/…` escrito en otro repo es la ruta de acá**, sin el
+  `workflow/`: `workflow/tasks/todo/x.md` es `tasks/todo/x.md`;
+* **los hashes que citan las tareas y los mensajes de commit son de
+  `snes-rm2k`**, o de `snes-rm2k-ports` cuando hablan de ABL: los commits
+  de acá son copias con otro hash y el mismo mensaje.
+
+Del 2026-10-02 al 2026-10-10 las tareas y decisiones de ABL vivieron en su
+repo; ese día volvieron a `snes-rm2k`, y desde ahí vinieron con todo lo
+demás.
