@@ -106,9 +106,10 @@ Y si el error no es de los que se vuelven a cometer, no va a ningún lado: el
 `git log` ya lo tiene.
 
 **La documentación no nombra el ambiente donde corremos esto**: ni el
-contenedor, ni `box`, ni `/extras`, ni `/shared`, ni rutas de esta máquina.
-Dice qué variable o qué flag lo apunta —`ABL_GAME_DIR`, `ABL_RTP_DIR`—, y el
-ambiente queda en este archivo, que es el único que lo describe. Es de taro,
+contenedor, ni `box`, ni las carpetas de `~` que no son repos, ni `/shared`,
+ni rutas de esta máquina. Dice qué variable o qué flag lo apunta
+—`GAME_DIR`, `RTP_DIR`—, y el ambiente queda en este archivo y en
+`maquina.just` de los ports, que son los únicos que lo describen. Es de taro,
 el 2026-09-26; las tareas y los defaults del código no cuentan.
 
 **Se asume que todo el código escrito es intencional**, sabiendo que puede no
@@ -440,42 +441,50 @@ Lo que el contenedor cambia en la práctica:
   port a Mega Drive, `audio-validar` y el `rom/Containerfile` se fueron.
 * **No hay puertos publicados.** Nada que se sirva acá adentro se ve desde el
   host.
-* **`/extras` sobrevive a la sesión**, igual que los paquetes instalados:
+* **`~` sobrevive a la sesión**, igual que los paquetes instalados:
   `/root`, `/usr`, `/var` y `/etc` son volúmenes con nombre, no capas de la
-  imagen.
+  imagen. `/tmp` no: el contenedor corre con `--rm --replace`, y se muere
+  con él.
 
-`/extras` es de **uso libre**, y ésa es la manera de conseguir material de
+`~` es de **uso libre**, y ésa es la manera de conseguir material de
 referencia: se clona o se descarga acá adentro en vez de montar algo del host,
-que revela menos y da más margen. Hoy tiene:
+que revela menos y da más margen. Además de los cuatro repos tiene:
 
-    /extras/abl-rm      el juego original. Es lo que lee GAME_DIR
-    /extras/rtp         el RTP de Don Miguel, sin el cual faltan 22 assets
-    /extras/ref         liblcf, easyrpg-player y Game-Decompilations
-    /extras/soundfonts  de donde salen las muestras
-    /extras/msu         los reemplazos de las pistas de MSU-1
-    /extras/otros-juegos       los siete juegos de RM2k además de ABL
-    /extras/scratch     los temporales de cada agente, en `<nombre>/`
-    /extras/capturas    donde taro deja capturas para que yo las mire
-    /extras/ref/cc65    compilado acá: de ahí salen `ca65` y `ld65`
+    ~/juegos/      los originales de RM2k, uno por directorio: `abl-rm`, y
+                   los siete del relevamiento. Es de donde sale el
+                   `GAME_DIR` de cada port
+    ~/assets/      `rtp/`, el RTP de Don Miguel, sin el cual faltan 22
+                   assets; `rtpe/`, el RTP extendido; `soundfonts/`, de
+                   donde salen las muestras; y `msu/`, los reemplazos de las
+                   pistas de MSU-1
+    ~/ref/         lo clonado para leer: liblcf, easyrpg-player, los
+                   emuladores, Game-Decompilations; y `cc65/`, compilado
+                   acá, de donde salen `ca65` y `ld65`
+    ~/wine/        el ABL original corriendo con Wine: la receta, en
+                   `~/wine/abl/LEEME.txt`
+    ~/scratch/     los temporales, cada agente en `<nombre>/`
 
-Las capturas van ahí y no a `/tmp` por una razón concreta: el contenedor corre
-con `--rm --replace`, así que `/tmp` se muere con él y `/extras` no.
+Hasta el 2026-10-10 todo eso vivía en `/extras`, otro volumen del mismo
+disco, con 75 GB de restos de otras épocas; se limpió y se mudó acá. Lo que
+taro quiere que mire lo deja en `/shared`.
 
-Las herramientas llegan a `/extras` y a `/shared` por flags —`--game-dir`,
+Las herramientas llegan a `~` y a `/shared` por flags —`--game-dir`,
 `--rtp-dir`, `--soundfont`, `--replacements`, `--shared`—, y no saben de
-ningún valor de esta máquina. Los pone el `justfile` de cada port —el de
-ABL, y el de cada uno de los otros, con `GAME_DIR`—, que
-traduce `ABL_GAME_DIR`, `ABL_RTP_DIR`, `ABL_SOUNDFONT` y `SHARED` con los
-valores de acá por omisión, y los exporta para las pruebas; los reemplazos
-de MSU-1, que no tienen variable, son su `reemplazos_msu`. Si el ambiente
-cambia, se cambia ahí. `ABL_CACHE` y `CARTUCHOS` también se traducen, pero
-sin valor de la máquina: el caché y los cartuchos de prueba viven adentro
-de `build/`, y las variables sólo los mueven.
+ningún valor de esta máquina. Los pone `maquina.just`, en la raíz de los
+ports, que cada `justfile` de un juego importa: traduce `RTP_DIR`,
+`SOUNDFONT`, `SHARED` y `JUEGOS` con los valores de acá por omisión, y cada
+juego agrega su `GAME_DIR`; se exportan, porque las pruebas de ABL los leen
+también. Los reemplazos de MSU-1, que no tienen variable, son su
+`reemplazos_msu`. Si el ambiente cambia, se cambia ahí. Hasta el 2026-10-10
+ABL los llamaba `ABL_GAME_DIR`, `ABL_RTP_DIR` y `ABL_SOUNDFONT`, y cada
+juego repetía los suyos. `ABL_CACHE` y `CARTUCHOS` también se traducen, en
+el de ABL, pero sin valor de la máquina: el caché y los cartuchos de prueba
+viven adentro de `build/`, y las variables sólo los mueven.
 
 Las dos pruebas de las herramientas que leen un SoundFont de verdad —las
 de `rm2k-snes-audio`— lo reciben en `SOUNDFONT`, como Ditto su corpus en
 `DITTO_CORPUS`: sin la variable se saltean. Para correrlas acá,
-`SOUNDFONT="/extras/soundfonts/Microsoft GS Wavetable Synth.sf2" just -f
+`SOUNDFONT="$HOME/assets/soundfonts/Microsoft GS Wavetable Synth.sf2" just -f
 tools/justfile crate-test rm2k-snes-audio`.
 
 **`ca65` y `ld65` se compilan acá adentro, y eso fue una decisión.** No están
@@ -483,7 +492,7 @@ empaquetados en Arch, y hasta el 2026-09-15 la regla era no compilar fuentes de
 internet en la misma caja donde vive el repo: `audio-validar` corría `ca65` en un
 podman aparte, desde el host. taro dio esa regla por caduca —venía de cuando
 cada comando se envolvía en su propio contenedor— así que `cc65` se clonó y se
-compiló en `/extras/ref/cc65`, y los binarios están enlazados en
+compiló en `~/ref/cc65`, y los binarios están enlazados en
 `/usr/local/bin`. Si el contenedor se recrea desde la imagen, se rearman con
 `git clone --depth 1 https://github.com/cc65/cc65.git` y `make -j8 bin`.
 
@@ -503,14 +512,14 @@ Desde ahí `ca65` y `ld65` son los que arman, y lo que cobraría un binario
 alterado es lo mismo que cobra cualquier regresión: las goldens y
 `test_cores.py`. Recompilarlos sin mirar deja de ser inocuo.
 
-**Los repos de `/extras/ref` están clonados adentro y no son los del host.**
+**Los repos de `~/ref` están clonados adentro y no son los del host.**
 `liblcf` es de donde sale el esquema de Ditto —y con él los defaults que
 el `data/` de un juego trae ya aplicados y los nombres de los comandos de RM2k, contra los
 que se sostiene `codes.rs` del compilador de eventos—: salen de ahí y de ningún
 otro lado, porque la primera versión del filtro de puertas los puso de memoria
 y tres estaban mal. Si hace
 falta algo que no se consigue desde acá, se le pide a taro que lo copie a
-`/extras`.
+`~`.
 
 **taro no corre nada en el host**: si corre algo a mano, lo hace acá
 adentro, y lo pregunta antes. Es suyo, el 2026-10-05. Lo único que es del
@@ -623,7 +632,7 @@ por uno salteando el `$$`.
 Siempre con `isolation: "worktree"`, que les da su copia **de este repo**:
 ahí toman, escriben y mueven su tarea. **El código lo trabajan en worktrees
 propios** de cada repo que toquen —`git -C ~/snes-rm2k worktree add
-/extras/scratch/<nombre>/snes-rm2k`, y lo mismo con los ports—, así el
+~/scratch/<nombre>/snes-rm2k`, y lo mismo con los ports—, así el
 `mapdata.inc` —que es estado global— y las tandas no se mezclan. El que los
 lanza trae sus ramas con `git merge` desde esos worktrees.
 
@@ -641,7 +650,7 @@ continuidad es lo que dejan escrito.
 Lo que hay que hacer siempre:
 
 * **Traer los builds a `/shared`, con `just entregar "<qué mirar>"`, desde
-  los ports.** Los worktrees viven en `/extras`, que no está montado en el host, y
+  los ports.** Los worktrees viven en `~`, que no está montado en el host, y
   `/shared` sí: es donde taro los encuentra. Van a
   `/shared/builds/<fecha>-<commit de ABL>-<commit de las herramientas>/`, y
   el texto que se le pasa a la receta va al `LEEME.txt`: qué cambió, qué

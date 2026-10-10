@@ -34,7 +34,7 @@ antes, empezá desde ahí y no lo vuelvas a medir.
   escribís y la movés.
 * **El código, en worktrees tuyos** de cada repo que toques, en una rama
   con tu nombre: `git -C ~/snes-rm2k worktree add -b <tu nombre>-<tema>
-  /extras/scratch/<tu nombre>/snes-rm2k`, y lo mismo con
+  ~/scratch/<tu nombre>/snes-rm2k`, y lo mismo con
   `~/snes-rm2k-ports`. Hornero trae las ramas con `git merge`.
   **No escribas en `~/snes-rm2k-ports`** ni en los otros checkouts de
   `~/`: el de los ports es el que se juega y el de la tanda principal.
@@ -44,7 +44,7 @@ antes, empezá desde ahí y no lo vuelvas a medir.
   de `snes-rm2k`, y corré ABL con `PATH=<ese
   worktree>/tools/.local-tools/bin:$PATH just …` en `abl/` del de los ports. **Nunca
   reinstales en el global.**
-* Los temporales, en `/extras/scratch/<tu nombre>/`.
+* Los temporales, en `~/scratch/<tu nombre>/`.
 
 ## Mientras trabajás
 
@@ -57,7 +57,7 @@ antes, empezá desde ahí y no lo vuelvas a medir.
 * Puede haber otros agentes corriendo: dos tandas a la vez se pelean por
   CPU; tené paciencia y no mates nada que no sea tuyo.
 * **El original** corre con Wine: la receta está en
-  `/extras/abl-wine/LEEME.txt`. Usá tu propio display de Xvfb.
+  `~/wine/abl/LEEME.txt`. Usá tu propio display de Xvfb.
 
 ## Las goldens
 
