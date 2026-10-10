@@ -42,7 +42,7 @@ antes, empezá desde ahí y no lo vuelvas a medir.
 * Instalá en local **sólo los crates que modifiques**: `just -f
   tools/justfile install-local tools/.local-tools <crates>` en tu worktree
   de `snes-rm2k`, y corré ABL con `PATH=<ese
-  worktree>/tools/.local-tools/bin:$PATH just …` en el de los ports. **Nunca
+  worktree>/tools/.local-tools/bin:$PATH just …` en `abl/` del de los ports. **Nunca
   reinstales en el global.**
 * Los temporales, en `/extras/scratch/<tu nombre>/`.
 

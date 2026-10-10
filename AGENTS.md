@@ -13,15 +13,16 @@ acá, y los otros repos están al lado:
                      explica cada carpeta
     snes-rm2k        las herramientas y el runtime: el conversor, el motor
                      en ensamblador, sus pruebas, y cómo funciona cada parte
-    snes-rm2k-ports  los juegos portados: hoy A Blurred Line, con sus datos,
-                     sus parches, la tanda y sus goldens
+    snes-rm2k-ports  los juegos portados, uno por directorio: `abl/` —A
+                     Blurred Line, con la tanda y sus goldens— y los siete
+                     del relevamiento de otros juegos
     snes-rm2k-docs   el libro público, en inglés: qué es el proyecto, para
                      alguien de afuera
 
 **Las rutas de este archivo son de adentro de cada repo**, y cuál es lo dice
 la sección o la ruta misma: `tools/…`, `docs/port/…` y `DITTO.md` son de
 `snes-rm2k`; `pruebas/…`, `parches/…`, `justfile` y `rm2k-snes.toml` sueltos,
-de `snes-rm2k-ports`. Adentro de `snes-rm2k`:
+de `abl/` en `snes-rm2k-ports`. Adentro de `snes-rm2k`:
 
     tools/justfile   qué se puede correr —probar e instalar las
                      herramientas—; los comentarios explican el porqué. Se
@@ -35,7 +36,9 @@ de `snes-rm2k-ports`. Adentro de `snes-rm2k`:
     DITTO.md         qué es Ditto, por qué existe acá y en qué estado está
                      la idea de que los JSON sean la fuente de verdad
 
-Y adentro de `snes-rm2k-ports`, que hoy es ABL en la raíz:
+Y adentro de `abl/`, en `snes-rm2k-ports` —cada juego es un proyecto
+entero en su directorio, y todo se corre parado en él; el README de la
+raíz dice cuáles hay—:
 
     justfile         qué se puede correr; los comentarios explican el porqué
     README.md        qué es el juego, cómo se arma y cómo encuentra a las
@@ -51,8 +54,10 @@ Y adentro de `snes-rm2k-ports`, que hoy es ABL en la raíz:
 
 **La historia se partió dos veces.** El 2026-10-02 ABL se fue de las
 herramientas a su propio repo, sin historia: la de antes de esa fecha está
-en `snes-rm2k`, y lo que en los ports es `X` allá era `rom/X` (cómo pedir
-su `blame`, en "`git blame` y los cambios mecánicos"). El 2026-10-10
+en `snes-rm2k`, y lo que en los ports es `abl/X` allá era `rom/X` (cómo
+pedir su `blame`, en "`git blame` y los cambios mecánicos"). Ese repo tuvo
+a ABL en la raíz hasta el 2026-10-10, cuando pasó a `abl/` con un `git mv`
+—`blame` lo sigue sin opciones— y entraron los otros siete juegos. El 2026-10-10
 `tasks/`, `decisiones/` y `divergencias/` salieron de la carpeta
 `workflow/` de `snes-rm2k` a este repo, **con** su historia: **un
 `workflow/…` citado en otro repo es la misma ruta acá**, sin el prefijo, y
@@ -419,8 +424,8 @@ del proyecto —sus rutas, el `rm2k-snes.toml`— el arnés se lo pregunta a
 **Para correr ABL con las herramientas de un checkout que las cambia** —un
 worktree de `snes-rm2k` que toca el runtime o el conversor—: `just -f
 tools/justfile install-local tools/.local-tools <proyectos de Rust>` en el
-worktree, y desde los ports `PATH=<worktree>/tools/.local-tools/bin:$PATH
-just pruebas`. El `justfile` de los ports arma su PATH desde el que recibe,
+worktree, y desde `abl/` de los ports `PATH=<worktree>/tools/.local-tools/bin:$PATH
+just pruebas`. El `justfile` de ABL arma su PATH desde el que recibe,
 y lo que no esté en ese `bin/` sale del global. **Pero arma en el `build/`
 del checkout de los ports donde corre**: el de `~/snes-rm2k-ports` es el que
 se juega y el de la tanda principal, así que un agente que lo necesite se
@@ -449,7 +454,8 @@ que revela menos y da más margen. Hoy tiene:
     /extras/soundfonts  de donde salen las muestras
     /extras/msu         los reemplazos de las pistas de MSU-1
     /extras/otros-juegos       los siete juegos de RM2k además de ABL
-    /extras/otros-juegos-snes  sus proyectos, uno por repo, sin remote
+    /extras/otros-juegos-snes  sus proyectos como estaban hasta el
+                        2026-10-10, cuando entraron a los ports: viejos
     /extras/scratch     los temporales de cada agente, en `<nombre>/`
     /extras/capturas    donde taro deja capturas para que yo las mire
     /extras/ref/cc65    compilado acá: de ahí salen `ca65` y `ld65`
@@ -459,7 +465,8 @@ con `--rm --replace`, así que `/tmp` se muere con él y `/extras` no.
 
 Las herramientas llegan a `/extras` y a `/shared` por flags —`--game-dir`,
 `--rtp-dir`, `--soundfont`, `--replacements`, `--shared`—, y no saben de
-ningún valor de esta máquina. Los pone el `justfile` de los ports, que
+ningún valor de esta máquina. Los pone el `justfile` de cada port —el de
+ABL, y el de cada uno de los otros, con `GAME_DIR`—, que
 traduce `ABL_GAME_DIR`, `ABL_RTP_DIR`, `ABL_SOUNDFONT` y `SHARED` con los
 valores de acá por omisión, y los exporta para las pruebas; los reemplazos
 de MSU-1, que no tienen variable, son su `reemplazos_msu`. Si el ambiente
@@ -563,7 +570,7 @@ apretado cambia, y dos veces quedó
 escrito acá y se quedó viejo: **no se escribe, se mide**, y hay que medirlos
 todos: `abl` y los que arma `cartuchos`.
 
-**Se mide con `just espacio`, en los ports**, que corre `rm2k-snes-space` e imprime para cada cartucho los bancos de
+**Se mide con `just espacio`, en `abl/` de los ports**, que corre `rm2k-snes-space` e imprime para cada cartucho los bancos de
 datos libres y los huecos, el banco 0, el banco 1, `BSS`, `ZEROPAGE` y el
 bloque de textos; con la ruta de una ROM armada aparte, mide ésa. Lo que
 cuenta es **cuántos bancos quedan**, no un porcentaje: los bancos `$7E` y
