@@ -26,3 +26,7 @@ Medido el 2026-10-11 por Hornero, a pedido de taro ("tenemos pendiente el tema d
 Un MIDI de ABL, `dgate008.mid`, no lo pudo leer el script de la medición —el conversor sí lo lee—, y el de VD no se midió.
 
 Lo que haría falta: el largo hasta el fin de la pista, no la última nota; CC111 como punto de vuelta en los dos caminos —en el stream, una vuelta a una posición en vez de al principio; en el MSU-1, el loop point en muestras—; saltear el silencio inicial la primera vez; y en el `.pcm`, cortar la cola de fluidsynth en el punto de vuelta. Recortar eso además achica los `.pcm`.
+
+## Cómo va la cola en el `.pcm`, con taro
+
+taro, el 2026-10-11: cortar la cola de golpe sonaría feo; "tendríamos que tener una versión del inicio del tema que tenga la cola del final y loopear desde 0 + len(cola)". Así se hace: renderizar la vuelta y, sin resetear el sintetizador, el comienzo de la siguiente —fluidsynth con el MIDI dos veces y `player.reset-synth=0`—, terminar la pista en E + D y poner el loop point en L + D, con E el fin de la primera vuelta, L el punto de vuelta (CC111, o 0) y D lo que dura la cola, con margen. Pasados D segundos la cola anterior ya se apagó, así que E + D y L + D suenan igual y el salto no se oye; la cola de la primera vuelta suena entera, pegada en el comienzo de la segunda. Con el silencio inicial salteado (largo S), el loop point es `max(L + D, S)` contado desde S. Sin MSU-1 no hace falta nada: el stream es de notas, y la reverb del DSP sigue a través de la vuelta.
