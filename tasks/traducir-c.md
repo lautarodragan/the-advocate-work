@@ -1,47 +1,47 @@
 ---
-name: "Traducir las herramientas al inglés, fase 1: las capas de abajo y la prosa"
-description: "Comentarios, docstrings, mensajes y prosa al inglés, sin tocar nombres de código: tools/audio, rpgmaker, render, comun, ensamblado, emulador, pruebas, justfile, README.md y los README de cada carpeta"
+name: "Translate the tools into English, phase 1: the lower layers and the prose"
+description: "Comments, docstrings, messages and prose into English, without touching code names: tools/audio, rpgmaker, render, comun, ensamblado, emulador, pruebas, justfile, README.md and each folder's README"
 type: refactor
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-09-29: "traducir las herramientas a inglés". Es la regla de
-AGENTS.md para los proyectos aparte, que ahora alcanza a todo `tools/`
-(ver `workflow/decisiones/las-herramientas-se-separan-de-abl.md`).
+From taro, on 2026-09-29: "translate the tools into English". It's the rule in
+AGENTS.md for the separate projects, which now reaches all of `tools/`
+(see `workflow/decisiones/las-herramientas-se-separan-de-abl.md`).
 
-**Fase 1**, repartida entre cuatro agentes por área: comentarios, docstrings,
-mensajes de error, `help=` y prosa. **Los nombres de código no se tocan** —
-módulos, funciones, variables, símbolos del runtime, flags—: eso es la fase
-2, de a un área por vez, porque un nombre cambia en todos los que lo
-importan. Los términos salen de `tools/GLOSSARY.md`.
+**Phase 1**, split among four agents by area: comments, docstrings,
+error messages, `help=` and prose. **Code names aren't touched** —
+modules, functions, variables, runtime symbols, flags—: that's phase
+2, one area at a time, because a name changes in everything that
+imports it. The terms come from `tools/GLOSSARY.md`.
 
-Alcance de esta parte: tools/audio, rpgmaker, render, comun, ensamblado, emulador, pruebas, justfile, README.md y los README de cada carpeta.
+Scope of this part: tools/audio, rpgmaker, render, comun, ensamblado, emulador, pruebas, justfile, README.md and each folder's README.
 
-## Avance
+## Progress
 
-- Base: `SIN_CACHE=1 just cartuchos` sobre `66152183`, 47 `.sfc`/`.msu`/`.pcm`
-  hasheados; los `.inc` guardados para diffear comentarios.
-- `tools/README.md` y `tools/justfile`: traducidos.
-- `tools/rpgmaker/README.md` y `tools/pruebas/README.md`: traducidos. El
-  encabezado "Qué prueba cubre qué" es un dato que lee `test_indice.py`, así
-  que cambia junto con él.
-- Los `.py`, repartidos en cinco tandas por carpeta.
-- Hechos los cinco grupos de `.py`, cada uno en su commit. `SIN_CACHE=1 just
-  cartuchos`: los 47 `.sfc`/`.msu`/`.pcm` iguales a la base; de los `.inc`
-  cambia sólo `musicdata.inc` (release y special), sólo en comentarios.
-- `ensamblado/entregar.py` no se traduce: es `abl-entregar`, que según el
-  justfile se queda con el juego y en castellano. Lo decide taro.
-- Quedan en castellano por ser datos: la línea `; Temas:` de `musicdata.inc`
-  y su "sin música" (los lee `techos.py` y `rom/pruebas/arnes/consola.py`),
-  `b"mapa %dx%d"` (clave del caché), las claves de la receta del fork, de
-  `collect_npcs`, de `espacio.medir`, de `techos.toml` y `musica.json`, los
-  sufijos de los CharSets y `RESERVADO` del `.cfg`.
-- Menciones del ambiente que ya estaban y sólo se tradujeron (fuera de la
-  fase 1): `/extras/...` en `retro.py`, `ensamblar.py`, `msu.py` y
+- Baseline: `SIN_CACHE=1 just cartuchos` on `66152183`, 47 `.sfc`/`.msu`/`.pcm`
+  hashed; the `.inc` files saved to diff comments.
+- `tools/README.md` and `tools/justfile`: translated.
+- `tools/rpgmaker/README.md` and `tools/pruebas/README.md`: translated. The
+  heading "Qué prueba cubre qué" is data that `test_indice.py` reads, so
+  it changes together with it.
+- The `.py` files, split into five batches by folder.
+- The five groups of `.py` done, each in its own commit. `SIN_CACHE=1 just
+  cartuchos`: the 47 `.sfc`/`.msu`/`.pcm` identical to the baseline; of the `.inc` files
+  only `musicdata.inc` changes (release and special), only in comments.
+- `ensamblado/entregar.py` isn't translated: it's `abl-entregar`, which according to the
+  justfile stays with the game and in Spanish. taro decides.
+- Left in Spanish because they're data: the `; Temas:` line in `musicdata.inc`
+  and its "sin música" (read by `techos.py` and `rom/pruebas/arnes/consola.py`),
+  `b"mapa %dx%d"` (cache key), the keys of the fork's recipe, of
+  `collect_npcs`, of `espacio.medir`, of `techos.toml` and `musica.json`, the
+  CharSet suffixes and `RESERVADO` in the `.cfg`.
+- Mentions of the environment that were already there and were only translated (outside
+  phase 1): `/extras/...` in `retro.py`, `ensamblar.py`, `msu.py` and
   `chipset_del_fork.py`.
-- Mergeado `main` (`106484ea`, sólo un doc). Sobre el árbol mergeado:
-  `just -f tools/justfile pruebas` 132 y 2 salteadas; `just pruebas` 874.
+- Merged `main` (`106484ea`, only a doc). On the merged tree:
+  `just -f tools/justfile pruebas` 132 and 2 skipped; `just pruebas` 874.
 
-Para taro: mirar el diff por carpeta; lo que no verifica ninguna prueba es la
-calidad del inglés. Y decidir si `entregar.py` entra en la traducción.
+For taro: look at the diff per folder; what no test verifies is the
+quality of the English. And decide whether `entregar.py` goes into the translation.

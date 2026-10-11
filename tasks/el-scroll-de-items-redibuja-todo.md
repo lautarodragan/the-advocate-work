@@ -1,66 +1,66 @@
 ---
-name: "El scroll de la lista de ítems redibuja la pantalla entera"
-description: "Al bajar por la lista de ítems la pantalla queda negra un cuadro y se redibujan también los bordes de las ventanas, no sólo el texto"
+name: "Scrolling the item list redraws the whole screen"
+description: "Going down the item list the screen goes black for a frame and the window borders get redrawn too, not just the text"
 type: bug
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-09-30, jugando: "el scroll en el menú de ítems parece causar
-un redibujado completo de la pantalla, y flashea por un segundo. Creo que el
-problema principal es que queda negra por un cuadro, y que se redibujan
-también los bordes de las ventanas y no solo el texto".
+From taro, on 2026-09-30, playing: "scrolling in the item menu seems to cause
+a full redraw of the screen, and it flashes for a second. I think the
+main problem is that it goes black for a frame, and that the window borders
+get redrawn too and not just the text".
 
-Hecho es: al pasar de una página de la lista a la otra, sólo cambia el texto
-de la lista, sin ningún cuadro negro ni redibujado de los bordes, medido
-cuadro a cuadro en una prueba.
+Done means: going from one page of the list to the other, only the list's text
+changes, without any black frame or redraw of the borders, measured
+frame by frame in a test.
 
-## Lo que se hizo (Hurón, 2026-09-30)
+## What was done (Hurón, 2026-09-30)
 
-**La causa.** `move` en `items.s`, cuando el cursor se salía de las diez
-filas, apagaba la pantalla (`INIDISP = $80`), volvía a subir el banco entero
-—`items_screen_upload`: la fuente, el tilemap en blanco, las paletas, los
-tiles y el tilemap de las ventanas— y repintaba la lista letra por letra
-directo en la VRAM. Era a propósito y estaba declarado desde que nació la
-pantalla (`0b060661`, 2026-09-11: "un cuadro en negro"); las ventanas se
-sumaron a ese camino el 2026-09-28 (`f3b0cc90`), cuando `items_screen_upload`
-pasó a subirlas también. El equipo y la tienda ya no lo hacían: componen la
-pantalla entera en `text_buf` y la suben de un DMA por vblank.
+**The cause.** `move` in `items.s`, when the cursor went past the ten
+rows, turned the screen off (`INIDISP = $80`), uploaded the whole bank again
+—`items_screen_upload`: the font, the blank tilemap, the palettes, the
+tiles and the windows' tilemap— and repainted the list letter by letter
+straight into VRAM. It was on purpose and had been declared since the screen was born
+(`0b060661`, 2026-09-11: "one black frame"); the windows were
+added to that path on 2026-09-28 (`f3b0cc90`), when `items_screen_upload`
+started uploading them too. The equipment screen and the shop no longer did it: they compose the
+whole screen in `text_buf` and upload it with one DMA per vblank.
 
-**El arreglo.** La pantalla de ítems hace lo mismo que esas dos: compone el
-texto entero en `text_buf` con los escritores de `text_screens.s`
-(`scr_text`, `scr_glyph`, `scr_number`) y lo sube con `scr_upload` al
-principio de cada vblank, después de leer el control. Mover el cursor o correr
-la lista sólo recompone el búfer; la pantalla se apaga sólo al entrar y al
-volver de la elección de actor. Se fueron `glyph_pair`, `text_write`,
-`items_desc_upload` y la tabla `item_row_vram`; el conversor emite
-`ITEM_LIST_POS` en su lugar.
+**The fix.** The item screen does the same as those two: it composes the
+whole text in `text_buf` with the writers in `text_screens.s`
+(`scr_text`, `scr_glyph`, `scr_number`) and uploads it with `scr_upload` at the
+start of each vblank, after reading the controller. Moving the cursor or scrolling
+the list only recomposes the buffer; the screen is turned off only on entering and on
+returning from the actor choice. `glyph_pair`, `text_write`,
+`items_desc_upload` and the `item_row_vram` table are gone; the converter emits
+`ITEM_LIST_POS` in their place.
 
-**Lo medido** (una ROM instrumentada aparte, que leía el contador de líneas;
-snes9x y bsnes dan lo mismo ±1): el DMA de 1.792 B termina en la línea 239,
-las dos barras del cursor en la 243, y el vblank llega hasta la 261.
-Recomponer la pantalla termina hacia la línea 145–170 del cuadro siguiente:
-entra en un cuadro, así que no hizo falta repartir nada en dos.
+**What was measured** (a separate instrumented ROM, which read the line counter;
+snes9x and bsnes give the same ±1): the 1,792 B DMA ends on line 239,
+the cursor's two bars on 243, and the vblank lasts until 261.
+Recomposing the screen ends around line 145–170 of the next frame:
+it fits in one frame, so nothing needed splitting in two.
 
-**La prueba**: `test_correr_la_lista_cambia_solo_el_texto` en
-`test_menu_items_dibujo.py` mira cuadro a cuadro un scroll hacia abajo y uno
-hacia arriba, y pide que cada cuadro sea entera la pantalla de antes o la de
-después. Contra la ROM de antes da rojo: el primer cuadro después de apretar
-difiere en 7.479 pixeles —negro salvo la última fila—, en snes9x y en bsnes.
+**The test**: `test_correr_la_lista_cambia_solo_el_texto` in
+`test_menu_items_dibujo.py` looks frame by frame at a scroll down and one
+up, and requires each frame to be wholly the screen from before or the one from
+after. Against the old ROM it's red: the first frame after pressing
+differs in 7,479 pixels —black except for the last row—, in snes9x and in bsnes.
 
-**El equipo y la tienda** no tienen el problema: sólo apagan la pantalla al
-entrar (la tienda también al pasar de un modo a otro, que es cambiar de
-pantalla y no correr una lista).
+**The equipment screen and the shop** don't have the problem: they only turn the screen off on
+entering (the shop also when switching from one mode to another, which is changing
+screen and not scrolling a list).
 
-**Goldens**: ninguna cambió. La tira de cuadros, antes y después, está en
+**Goldens**: none changed. The strip of frames, before and after, is in
 `/shared/capturas/2026-09-30-scroll-de-items/`.
 
-**Espacio**: el banco 0 de `release` ganó 422 B (de 182 a 604 libres sobre la
-base `69164d82`, con `just espacio`; después de mergear `d94ec1b8`, de 159 a
-581). `NO_CACHE=1 just cartuchos` y el armado con caché dan las mismas ROMs.
+**Space**: bank 0 of `release` gained 422 B (from 182 to 604 free on the
+baseline `69164d82`, with `just espacio`; after merging `d94ec1b8`, from 159 to
+581). `NO_CACHE=1 just cartuchos` and the cached build give the same ROMs.
 
-**Al mergear**: nada de Rust para instalar por esta rama;
-`tools/port/mapdata.py` cambió de contenido, sin renombres.
+**On merging**: nothing in Rust to install for this branch;
+`tools/port/mapdata.py` changed in content, with no renames.
 
-**Para taro**: bajar y subir por una lista de más de diez ítems; la lista se
-corre sin flash.
+**For taro**: go down and up a list of more than ten items; the list
+scrolls without a flash.

@@ -1,34 +1,34 @@
 ---
-name: "La pista del título sigue al empezar"
-description: "Con MSU-1, la pista del título sigue sonando al empezar la partida si el primer mapa arranca callado"
+name: "The title track keeps playing on starting"
+description: "With MSU-1, the title track keeps playing when the game starts if the first map starts silent"
 type: bug
 status: done
 ---
 
-Encontrado el 2026-09-26 por el agente de "con MSU-1 no se suben las muestras
-del tema", sin arreglar. Con MSU-1, la pista del título
-(`Fantasia_Of_The_Wind`) sigue sonando al empezar la partida: `music_boot`
-(`rom/src/musica.s`), cuando el mapa arranca callado, calla el SPC700 pero no
-llama a `msu_parar`. La pista sigue hasta el primer `PlayBGM`, y la pelea la
-anota como el tema a reponer al salir. El arreglo parece ser llamar a
-`msu_parar` en ese camino. Cobrarlo con una prueba con `msu=True`
+Found on 2026-09-26 by the agent of "with MSU-1 the theme's samples aren't uploaded",
+not fixed. With MSU-1, the title track
+(`Fantasia_Of_The_Wind`) keeps playing when the game starts: `music_boot`
+(`rom/src/musica.s`), when the map starts silent, silences the SPC700 but doesn't
+call `msu_parar`. The track goes on until the first `PlayBGM`, and the battle
+records it as the theme to restore on leaving. The fix seems to be calling
+`msu_parar` on that path. Cover it with a test with `msu=True`
 (`pruebas/abl/test_msu.py`).
 
-## Hecho, el 2026-09-26
+## Done, on 2026-09-26
 
-`music_boot_ya` llama a `msu_parar` en su camino callado. Lo cobra
+`music_boot_ya` calls `msu_parar` on its silent path. It's covered by
 `test_con_msu_la_pista_del_titulo_no_sigue_en_la_partida`
-(`pruebas/abl/test_msu.py`): con MSU-1, mira que el título toque su pista, elige
-"Begin the Story" y pide que 120 cuadros después la pista del título ya no
-suene. Sin el arreglo da rojo: `MSU_SUENA` sigue en 1 con `tema_actual` en el
-del título.
+(`pruebas/abl/test_msu.py`): with MSU-1, it checks that the title plays its track, picks
+"Begin the Story" and asks that 120 frames later the title track is no longer
+playing. Without the fix it's red: `MSU_SUENA` stays at 1 with `tema_actual` on
+the title's.
 
-Lo que queda para taro: con las pistas al lado, empezar una partida y oír que
-`Fantasia_Of_The_Wind` se corta al entrar al pasillo.
+What's left for taro: with the tracks alongside, start a game and hear
+`Fantasia_Of_The_Wind` cut off on entering the corridor.
 
-Visto de paso y no arreglado: una partida guardada **mientras suena una pista
-del MSU-1** guarda `music_apagada` en 1 —el SPC700 está callado a
-propósito—, así que al cargarla `music_boot` toma el camino callado y la
-partida arranca muda hasta el próximo `PlayBGM` (antes de este arreglo, seguía
-la pista del título). Anotado en
+Seen in passing and not fixed: a game saved **while an MSU-1 track is
+playing** saves `music_apagada` as 1 —the SPC700 is silent on
+purpose—, so on loading it `music_boot` takes the silent path and the
+game starts mute until the next `PlayBGM` (before this fix, the title
+track kept playing). Noted in
 `tasks/la-partida-guardada-con-msu-arranca-muda.md`.

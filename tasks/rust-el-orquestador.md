@@ -1,285 +1,285 @@
 ---
-name: "Rust: el orquestador y el lector del juego en Python"
-description: "Lo último de la migración: snes_convert.py y lo que queda en tools/port/ (unas 7.000 líneas) como un binario de Rust, y los lectores del juego en Python (tools/rpgmaker/lcf.py, rm2k.py, fork.py) reemplazados por Ditto y el volcado"
+name: "Rust: the orchestrator and the game reader in Python"
+description: "The last part of the migration: snes_convert.py and what's left in tools/port/ (some 7,000 lines) as a Rust binary, and the game readers in Python (tools/rpgmaker/lcf.py, rm2k.py, fork.py) replaced by Ditto and the dump"
 type: refactor
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-10-02: el último paso de la migración, después de las
-reglas repetidas (Cachirla). Todos los dominios ya son Rust; en
-`tools/port/` queda el orquestador —que arma los pedidos de cada etapa y
-reparte lo que contestan— y algunos restos, y `tools/rpgmaker/lcf.py`,
-`rm2k.py` y `fork.py` todavía leen el juego en Python. Los usan 10 módulos
-de `tools/port/`, 2 de `tools/render/`, uno de `tools/tests/` y 15 pruebas
-de ABL.
+From taro, on 2026-10-02: the last step of the migration, after the
+repeated rules (Cachirla). All the domains are already Rust; in
+`tools/port/` what's left is the orchestrator —which builds each stage's requests and
+hands out what they answer— and some leftovers, and `tools/rpgmaker/lcf.py`,
+`rm2k.py` and `fork.py` still read the game in Python. They're used by 10 modules
+of `tools/port/`, 2 of `tools/render/`, one of `tools/tests/` and 15 ABL
+tests.
 
-Sale de `main` en `8db96253`. Ahí, `NO_CACHE=1 just cartuchos` da 1418
-archivos en `rom/build/` —sin el caché, los `.o`, `sello.txt` ni
-`conversor.log`; el `.dbg` sin `mtime`—, iguales a los de la base del
-encargo: `abl.sfc` `35c765009320d436…`. Los sha256 y los tres
-`mapdata.inc`, en `<scratchpad>/chuna/`.
+It comes from `main` at `8db96253`. There, `NO_CACHE=1 just cartuchos` gives 1418
+files in `rom/build/` —without the cache, the `.o` files, `sello.txt` or
+`conversor.log`; the `.dbg` without `mtime`—, identical to those of the brief's
+baseline: `abl.sfc` `35c765009320d436…`. The sha256 and the three
+`mapdata.inc`, in `<scratchpad>/chuna/`.
 
-## Inventario: qué hace hoy cada archivo y quién lo usa
+## Inventory: what each file does today and who uses it
 
-Medido el 2026-10-02 con un grep de los `import` de `tools/` y de
+Measured on 2026-10-02 with a grep of the `import`s in `tools/` and
 `rom/pruebas/`.
 
 ### `tools/port/`
 
-| archivo | qué hace | quién lo usa | qué es |
+| file | what it does | who uses it | what it is |
 |---|---|---|---|
-| `snes_convert.py` | `main`: el orden, los chequeos de las páginas compiladas, la segunda ronda (código de cada mapa, `draws`), los pedidos a patches y audio, las imágenes de Adeleine | el script; 8 pruebas lo importan sólo por los ganchos de `lcf` que instala, una por `SUB_MAX` | orquestación |
-| `options.py`, `cases.py`, `stage.py` | los flags, `--case`, correr una etapa | el conversor; `stage.run` también el arnés | orquestación; `stage.run` lo usa el arnés |
-| `map_convert.py`, `map_layers.py`, `sprites.py`, `obj_extras.py`, `window.py`, `vram.py` | el pedido de `wally map` y el `map_info` de su respuesta; `separate_from_hero`, `maps_per_character`; el System del cronómetro; el lector de los repartos | sólo el conversor | orquestación |
-| `game_scan.py` | líderes posibles, ítems, miembros, lluvia, alcance del cronómetro | el conversor; `test_lideres`, `test_timer_paleta`, `test_destello_paleta` | orquestación: lo que el conversor deduce para armar los pedidos |
-| `compiler.py` | los dos pedidos de `rm2k-snes-events` y su respuesta; `loose_page`, `slots`, `troop_triggers` para las pruebas | conversor; arnés (`datos`, `etapa_mapas`) y 3 pruebas | orquestación, más un cliente de la etapa para las pruebas |
-| `screen_stage.py` | el pedido de `rm2k-snes-screens convert` y su respuesta; `layout`, `render`, `equip`, `refit` para las pruebas | conversor; arnés (`pantallas`, `modelo`, `batalla`) y `test_textos_del_juego` | orquestación, más un cliente para las pruebas |
-| `image_stage.py`, `battle_stage.py`, `mapdata.py` | los pedidos de `rm2k-snes-images`, `rm2k-snes-battle model` y `rm2k-snes-mapdata emit` | sólo el conversor | orquestación |
-| `picture.py` | qué imágenes de `ShowPicture` lleva cada mapa, cortadas en objetos; las grandes, numeradas | sólo el conversor | dominio de las imágenes, en el lado del pedido |
-| `animation.py`, `battle_animations.py` | qué animaciones lleva el cartucho (se recorre el bytecode), el ancla, los cuadros en tiles | conversor; `test_parches` (`fit_size`, `BOX`), `test_animacion_cuadros` | dominio de las imágenes y de la emisión |
-| `scene.py`, `battle_scenes.py` | qué fondos y battlers lleva el cartucho, sus bytes, dónde se para cada uno; `compose` | conversor; `test_batalla_escena_dibujo`, `test_msu_datos` | dominio de la escena |
-| `fullscreen.py`, `palette.py`, `compress.py`, `snes_format.py` | título y Game Over: la imagen de la etapa, en tiles, comprimida con `lz2` | conversor; `pack_tile` en `test_msu_datos` | dominio de las imágenes y de la emisión |
-| `constants.py`, `engine.py`, `event_opcodes.py` | números del motor y opcodes | conversor y muchas pruebas | constantes |
-| `events.py` | constantes de comandos, registros, `MapEvents`, `walk_code`, `PartyState`, `Encounters`, `key_value`, `named_backdrops`, `index_animations` | conversor y 25 pruebas y módulos del arnés | mezcla: lo del conversor es orquestación; lo demás son modelos de las pruebas |
-| `experience.py` | la curva de RM2k | `lcf.py` (no), 4 pruebas, `test_rm2k_rules` | modelo de las pruebas |
+| `snes_convert.py` | `main`: the order, the checks on the compiled pages, the second round (each map's code, `draws`), the requests to patches and audio, Adeleine's images | the script; 8 tests import it only for the `lcf` hooks it installs, one for `SUB_MAX` | orchestration |
+| `options.py`, `cases.py`, `stage.py` | the flags, `--case`, running a stage | the converter; `stage.run` the harness too | orchestration; `stage.run` is used by the harness |
+| `map_convert.py`, `map_layers.py`, `sprites.py`, `obj_extras.py`, `window.py`, `vram.py` | `wally map`'s request and the `map_info` from its answer; `separate_from_hero`, `maps_per_character`; the timer's System; the layouts reader | only the converter | orchestration |
+| `game_scan.py` | possible leaders, items, members, rain, the timer's reach | the converter; `test_lideres`, `test_timer_paleta`, `test_destello_paleta` | orchestration: what the converter deduces to build the requests |
+| `compiler.py` | `rm2k-snes-events`' two requests and its answer; `loose_page`, `slots`, `troop_triggers` for the tests | converter; harness (`datos`, `etapa_mapas`) and 3 tests | orchestration, plus a client of the stage for the tests |
+| `screen_stage.py` | `rm2k-snes-screens convert`'s request and its answer; `layout`, `render`, `equip`, `refit` for the tests | converter; harness (`pantallas`, `modelo`, `batalla`) and `test_textos_del_juego` | orchestration, plus a client for the tests |
+| `image_stage.py`, `battle_stage.py`, `mapdata.py` | the requests of `rm2k-snes-images`, `rm2k-snes-battle model` and `rm2k-snes-mapdata emit` | only the converter | orchestration |
+| `picture.py` | which `ShowPicture` images each map carries, cut into objects; the large ones, numbered | only the converter | the images domain, on the request side |
+| `animation.py`, `battle_animations.py` | which animations the cartridge carries (the bytecode is walked), the anchor, the frames in tiles | converter; `test_parches` (`fit_size`, `BOX`), `test_animacion_cuadros` | the images and emission domains |
+| `scene.py`, `battle_scenes.py` | which backgrounds and battlers the cartridge carries, their bytes, where each one stands; `compose` | converter; `test_batalla_escena_dibujo`, `test_msu_datos` | the scene domain |
+| `fullscreen.py`, `palette.py`, `compress.py`, `snes_format.py` | title and Game Over: the stage's image, in tiles, compressed with `lz2` | converter; `pack_tile` in `test_msu_datos` | the images and emission domains |
+| `constants.py`, `engine.py`, `event_opcodes.py` | engine numbers and opcodes | converter and many tests | constants |
+| `events.py` | command constants, records, `MapEvents`, `walk_code`, `PartyState`, `Encounters`, `key_value`, `named_backdrops`, `index_animations` | converter and 25 tests and harness modules | mix: the converter's part is orchestration; the rest are the tests' models |
+| `experience.py` | RM2k's curve | `lcf.py` (no), 4 tests, `test_rm2k_rules` | the tests' model |
 
 ### `tools/rpgmaker/`
 
-| archivo | qué hace | quién lo usa |
+| file | what it does | who uses it |
 |---|---|---|
-| `lcf.py` | lee el volcado en Python: `Map`, `Database`, `TreeMap`; los ganchos `REFIT_TEXTS` y `DECORATE_TRANSLUCENT` | 10 módulos de `port/`, 2 de `render/`, `test_rm2k_rules` y 15 de las pruebas de ABL |
-| `rm2k.py` | las reglas en Python: pasabilidad, `page_graphic`, `collect_npcs`, los nombres decorados (`~horneado`, `~aparte`, `@tile:`) | conversor, `render/`, `test_rm2k_rules`, 6 de ABL |
-| `fork.py` | `rom/parches/manual/`: valida los forks y los mapas nuevos | `lcf`, `compiler`, `chipset_recipe`, `test_fork_mapas` |
-| `resources.py`, `event_codes.py` | dónde está el juego; los nombres de los códigos | conversor y pruebas |
+| `lcf.py` | reads the dump in Python: `Map`, `Database`, `TreeMap`; the hooks `REFIT_TEXTS` and `DECORATE_TRANSLUCENT` | 10 modules of `port/`, 2 of `render/`, `test_rm2k_rules` and 15 of ABL's tests |
+| `rm2k.py` | the rules in Python: passability, `page_graphic`, `collect_npcs`, the decorated names (`~horneado`, `~aparte`, `@tile:`) | converter, `render/`, `test_rm2k_rules`, 6 of ABL's |
+| `fork.py` | `rom/parches/manual/`: validates the forks and the new maps | `lcf`, `compiler`, `chipset_recipe`, `test_fork_mapas` |
+| `resources.py`, `event_codes.py` | where the game is; the codes' names | converter and tests |
 
-`test_dump_readers.py` mira sólo el Rust: que ningún `src/` fuera de Ditto
-nombre los archivos del volcado. `lcf.py` sigue vivo porque el conversor es
-Python, y en Python no hay Ditto: lo que lee el juego en Python es eso.
+`test_dump_readers.py` only looks at the Rust: that no `src/` outside Ditto
+names the dump's files. `lcf.py` is still alive because the converter is
+Python, and in Python there's no Ditto: what reads the game in Python is that.
 
-### `tools/render/` y `tools/emulator/`
+### `tools/render/` and `tools/emulator/`
 
-* `render_map.py` es el `Renderer`: guarda la base, el árbol y dónde se
-  buscan las imágenes, y al construirse **arma las imágenes de los ChipSets
-  del fork** (`chipset_recipe.py`) en `rom/build/parches-manual/`, que
-  `wally` lee. Es conversor.
-* `chipset_recipe.py` es la receta de `rom/parches/manual/chipsets/`: copia
-  bloques, poda, pega poses y una imagen. Es del dominio de los mapas: va a
-  Rust con el orquestador (el PNG que escribe es intermedio y entra en la
-  huella de `rom/build/`).
-* `emulator/retro.py` es el arnés del emulador, por ctypes: **se queda en
-  Python**. No es del conversor y lo usan sólo las pruebas.
+* `render_map.py` is the `Renderer`: it holds the database, the tree and where
+  images are looked for, and when constructed **builds the images of the fork's
+  ChipSets** (`chipset_recipe.py`) in `rom/build/parches-manual/`, which
+  `wally` reads. It's converter.
+* `chipset_recipe.py` is the recipe of `rom/parches/manual/chipsets/`: it copies
+  blocks, prunes, pastes poses and an image. It belongs to the maps domain: it goes to
+  Rust with the orchestrator (the PNG it writes is intermediate and goes into the
+  fingerprint of `rom/build/`).
+* `emulator/retro.py` is the emulator harness, through ctypes: **it stays in
+  Python**. It isn't the converter's and only the tests use it.
 
-## El plan
+## The plan
 
-**Cambio el orden del encargo**, y el porqué: los lectores del juego en
-Python (paso 1) existen porque el conversor es Python. Pasarlos a Ditto
-antes de pasar el conversor quiere decir que el Python le pregunte a un
-binario lo que hoy lee —las páginas de cada mapa, los nombres, la base—,
-pedidos que se tiran cuando el conversor es Rust y lee con Ditto él
-mismo. Así que:
+**I change the brief's order**, and the why: the game readers in
+Python (step 1) exist because the converter is Python. Moving them to Ditto
+before moving the converter means the Python asks a
+binary for what it reads today —each map's pages, the names, the database—,
+requests that get thrown away when the converter is Rust and reads with Ditto
+itself. So:
 
-1. **El orquestador a Rust**: un crate nuevo,
-   `tools/rm2k-snes/convert/` (`rm2k-snes-convert`), con los mismos flags,
-   que reemplaza a `snes_convert.py` sin que `rm2k-snes-cartridges` cambie
-   más que en la huella. Lee el juego con Ditto (con `Game` de
-   `rm2k-snes-events` donde alcanza), y llama a las etapas por el PATH con
-   **los mismos pedidos**: se verifica capturando cada pedido del Python y
-   del Rust y comparándolos, y después todo `rom/build/` byte por byte.
-   Con eso el conversor deja de leer con `lcf`/`rm2k`/`fork`.
-   Lo que es de un dominio y hoy hace el Python sobre la respuesta de una
-   etapa —los bytes de la escena, qué imágenes lleva un mapa, la receta del
-   ChipSet— va al crate de ese dominio cuando es una función pura que se
-   puede llamar como biblioteca sin cambiar ningún pedido, y si no, a un
-   módulo del orquestador con el nombre del dominio, anotado abajo.
-2. **Las pruebas sin los lectores de Python**: lo que leen sólo las pruebas
-   de ABL —las constantes de `events.py`, `Encounters`, `key_value`,
-   `experience.py`, `scene.compose`, los clientes de las etapas— pasa a
-   `rom/pruebas/arnes/`, leyendo el volcado en JSON (que es de ABL) o
-   preguntándole a los binarios, como ya hacen `modelo.py` y `musica.py`.
-3. **El borrado**, en su propio commit, y la prosa en otro.
+1. **The orchestrator to Rust**: a new crate,
+   `tools/rm2k-snes/convert/` (`rm2k-snes-convert`), with the same flags,
+   which replaces `snes_convert.py` without `rm2k-snes-cartridges` changing
+   anything but the fingerprint. It reads the game with Ditto (with
+   `rm2k-snes-events`' `Game` where that's enough), and calls the stages through the PATH with
+   **the same requests**: it's verified by capturing each request from the Python and
+   from the Rust and comparing them, and then all of `rom/build/` byte for byte.
+   With that the converter stops reading with `lcf`/`rm2k`/`fork`.
+   What belongs to a domain and the Python does today over a stage's
+   answer —the scene's bytes, which images a map carries, the
+   ChipSet recipe— goes to that domain's crate when it's a pure function that
+   can be called as a library without changing any request, and otherwise, to an
+   orchestrator module with the domain's name, noted below.
+2. **The tests without the Python readers**: what only ABL's tests
+   read —`events.py`'s constants, `Encounters`, `key_value`,
+   `experience.py`, `scene.compose`, the stages' clients— moves to
+   `rom/pruebas/arnes/`, reading the dump in JSON (which is ABL's) or
+   asking the binaries, as `modelo.py` and `musica.py` already do.
+3. **The deletion**, in its own commit, and the prose in another.
 
-Cada paso, con todo `rom/build/` igual con `NO_CACHE=1` y las dos tandas en
-verde. Si no entra todo, se entrega el 1 terminado.
+Each step, with all of `rom/build/` identical with `NO_CACHE=1` and both suites
+green. If it doesn't all fit, step 1 is delivered finished.
 
-## Hecho, etapa por etapa
+## Done, stage by stage
 
-### Cómo se verifica
+### How it's verified
 
-Dos redes, en `<scratchpad>/chuna/`:
+Two safety nets, in `<scratchpad>/chuna/`:
 
-* **Los pedidos**: `capture.sh` corre el conversor sobre los tres cartuchos
-  con las etapas detrás de un shim que copia cada `--request`, y
-  `compare.py` compara los pedidos de un conversor contra los del otro
-  —como JSON, con el orden de las claves— y todo lo que cada uno escribió
-  al lado de la salida. Las líneas de la llamada (`argv-*.txt`) se sacaron
-  de `rm2k-snes-cartridges` con un envoltorio que las anotaba.
-* **Todo `rom/build/`**: `base.sh`, con `NO_CACHE=1 just cartuchos`, los
-  sha256 de todo menos el caché, los `.o`, `sello.txt` y `conversor.log`
-  —el `.dbg` sin `mtime`—, y los tres `mapdata.inc` aparte.
+* **The requests**: `capture.sh` runs the converter over the three cartridges
+  with the stages behind a shim that copies each `--request`, and
+  `compare.py` compares one converter's requests against the other's
+  —as JSON, with the key order— and everything each one wrote
+  next to the output. The call lines (`argv-*.txt`) were taken
+  from `rm2k-snes-cartridges` with a wrapper that logged them.
+* **All of `rom/build/`**: `base.sh`, with `NO_CACHE=1 just cartuchos`, the
+  sha256 of everything except the cache, the `.o` files, `sello.txt` and `conversor.log`
+  —the `.dbg` without `mtime`—, and the three `mapdata.inc` separately.
 
-**La base se sacó dos veces**, por la trampa de Mara: con el ensamblador
-global los `.dbg` salen distintos que con el local, y la etapa 1 toca
-`cartridge` (la huella), así que el local es el que arma. La que vale es
-`sha-base2.txt`: el conversor de Python con el `cartridge` de la rama.
+**The baseline was taken twice**, because of Mara's trap: with the global
+assembler the `.dbg` files come out different than with the local one, and stage 1 touches
+`cartridge` (the fingerprint), so the local one is the one that builds. The one that counts is
+`sha-base2.txt`: the Python converter with the branch's `cartridge`.
 
-### 1. El orquestador a Rust
+### 1. The orchestrator to Rust
 
-`tools/rm2k-snes/convert/`, `rm2k-snes-convert`, con los mismos flags
-—menos `--charset` y `--charset-index`, que el Python asignaba y nadie
-leía desde que el gráfico del héroe sale del grupo—. Lee el juego con
-Ditto y llama a las etapas por el PATH con **los mismos pedidos**: los de
-los tres cartuchos, iguales a los del Python como JSON, salvo:
+`tools/rm2k-snes/convert/`, `rm2k-snes-convert`, with the same flags
+—except `--charset` and `--charset-index`, which the Python assigned and nobody
+read since the hero's graphic comes from the party—. It reads the game with
+Ditto and calls the stages through the PATH with **the same requests**: those of
+the three cartridges, identical to the Python's as JSON, except:
 
-* `rm2k-snes-mapdata vram` y `engine`, que ya no se llaman: los repartos,
-  los chequeos y los números del motor se leen de `rm2k-snes-mapdata`
-  como biblioteca, de donde salían;
-* `test_graphics` del pedido de `compile` va por número de mapa y no en el
-  orden en que Python recorría un `set`; la etapa lo lee a un mapa.
+* `rm2k-snes-mapdata vram` and `engine`, which are no longer called: the layouts,
+  the checks and the engine's numbers are read from `rm2k-snes-mapdata`
+  as a library, where they came from;
+* `test_graphics` in the `compile` request goes by map number and not in the
+  order in which Python walked a `set`; the stage reads it one map at a time.
 
-Lo que hacía el Python sobre las respuestas, que era de un dominio, quedó
-en módulos del crate con el nombre del dominio: `pictures.rs` (qué imágenes
-lleva cada mapa, los objetos), `animations.rs` (los cuadros en tiles, el
-ancla), `scene.rs` (qué fondos y battlers, sus bytes, dónde se para cada
-uno, quién pide cada cosa), `fullscreen.rs` (el flujo del título y del
-Game Over), `chipsets.rs` (la receta de los ChipSets del fork, que era
-`render/chipset_recipe.py`) y `fork.rs` (la validación de
-`parches/manual/`). Pasarlos a sus etapas cambia pedidos y los hashes de
-las pruebas de esos crates: queda anotado abajo.
+What the Python did over the answers, which belonged to a domain, ended up
+in modules of the crate with the domain's name: `pictures.rs` (which images
+each map carries, the objects), `animations.rs` (the frames in tiles, the
+anchor), `scene.rs` (which backgrounds and battlers, their bytes, where each one
+stands, who asks for each thing), `fullscreen.rs` (the title's and
+Game Over's stream), `chipsets.rs` (the recipe of the fork's ChipSets, which was
+`render/chipset_recipe.py`) and `fork.rs` (the validation of
+`parches/manual/`). Moving them to their stages changes requests and the hashes of
+those crates' tests: it's noted below.
 
-Medido sobre la rama, con `convert` y `cartridge` en el `bin/` local:
+Measured on the branch, with `convert` and `cartridge` in the local `bin/`:
 
-* **Todo `rom/build/` igual** a `sha-base2.txt` —1418 archivos— **menos
-  los tres PNG de `parches-manual/ChipSet/`**, que el Rust escribe con
-  otro compresor que Pillow: decodificados son iguales —modo, tamaño,
-  paleta, índices e info, `pngcmp.py`—, y `wally`, que los lee, contesta
-  lo mismo. Los tres `mapdata.inc`, iguales línea por línea: 336442,
-  63556 y 27325 líneas. Las ROMs, las de la base.
-* El `conversor.log` de `release`, igual línea por línea al del Python.
+* **All of `rom/build/` identical** to `sha-base2.txt` —1418 files— **except
+  the three PNGs in `parches-manual/ChipSet/`**, which the Rust writes with
+  a different compressor from Pillow's: decoded they're identical —mode, size,
+  palette, indices and info, `pngcmp.py`—, and `wally`, which reads them, answers
+  the same. The three `mapdata.inc`, identical line by line: 336442,
+  63556 and 27325 lines. The ROMs, the baseline's.
+* `release`'s `conversor.log`, identical line by line to the Python's.
 * `just pruebas`, 1008; `just -f tools/justfile test`, 39;
-  `cargo test` de `rm2k-snes-convert` (25), `rm2k-snes-cartridge` y
+  `cargo test` of `rm2k-snes-convert` (25), `rm2k-snes-cartridge` and
   `ditto`.
 
-Cosas que cambiaron por el camino:
+Things that changed along the way:
 
-* La huella de los cartuchos nombra `rm2k-snes-convert` y ya no `lz2`, que
-  nadie corre: el conversor comprime el título con `lz2` como biblioteca,
-  por `rm2k-snes-mapdata`.
-* Ditto ganó `dump::layers_path` y `dump::is_dump`: la validación del fork
-  necesita saber dónde van las capas de un mapa, y `test_dump_readers.py`
-  —con razón— no deja que otro crate lo escriba.
-* El chequeo del destello del héroe cuenta los NPC que contestó `wally` y
-  no un `collect_npcs` propio: el de Python contaba distinto un evento con
-  una página condicionada por el cronómetro. No cambia ningún cartucho.
+* The cartridges' fingerprint names `rm2k-snes-convert` and no longer `lz2`, which
+  nobody runs: the converter compresses the title with `lz2` as a library,
+  through `rm2k-snes-mapdata`.
+* Ditto gained `dump::layers_path` and `dump::is_dump`: the fork's validation
+  needs to know where a map's layers go, and `test_dump_readers.py`
+  —rightly— doesn't let another crate write it.
+* The hero flash check counts the NPCs `wally` answered and
+  not its own `collect_npcs`: the Python one counted differently an event with
+  a page conditioned on the timer. It doesn't change any cartridge.
 
-### 2. Lo que leen las pruebas
+### 2. What the tests read
 
-**Las preguntas del conversor.** Las pruebas de ABL le preguntaban al
-compilador y a `game_scan` por los módulos del conversor de Python
+**The converter's queries.** ABL's tests asked the
+compiler and `game_scan` through the Python converter's modules
 —`compiler.scan`, `loose_page`, `slots`, `troop_triggers`,
-`possible_leaders`, y cómo arma `etapa_mapas` el pedido de `wally`—. Ahora
-se lo preguntan al binario, que es el que decide cómo pregunta él:
+`possible_leaders`, and how `etapa_mapas` builds `wally`'s request—. Now
+they ask the binary, which is the one that decides how it asks:
 `rm2k-snes-convert scan | compile | leaders | map-context | boxes`
-(`src/queries.rs`), cada uno con su respuesta en JSON. Comparadas contra el
-Python sobre el juego (`queries_check.py`): el scan de todos los mapas, con
-una variable de más y con un caso; los líderes de la apertura; el contexto
-de los mapas 2, 11 y 32 —con forks y ChipSets del fork—; una página suelta;
-los disparadores de una tropa; las cajas. Todo igual.
+(`src/queries.rs`), each with its answer in JSON. Compared against the
+Python over the game (`queries_check.py`): the scan of all maps, with
+one extra variable and with a case; the opening's leaders; the context
+of maps 2, 11 and 32 —with forks and fork ChipSets—; a loose page;
+a troop's triggers; the boxes. All identical.
 
-**Lo que leen las pruebas, a su arnés.** Lo que del Python de `tools/` leían
-sólo las pruebas de ABL se mudó con `git mv` a `rom/pruebas/arnes/`, que es
-de ellas, sin traducirlo —está en inglés y se queda en inglés—:
+**What the tests read, to their harness.** What only ABL's tests read
+from the Python in `tools/` was moved with `git mv` to `rom/pruebas/arnes/`, which
+is theirs, without translating it —it's in English and stays in English—:
 
-* el lector del volcado (`lcf.py`), los forks (`fork.py`, ahora sólo dice
-  dónde está cada archivo: validarlos es del conversor) y las reglas que las
-  pruebas usan de oráculo (`rm2k.py`, `render_map.py`, `experience.py`),
-  sin los ganchos que les ponía el conversor —`REFIT_TEXTS`,
-  `DECORATE_TRANSLUCENT`— ni lo que sólo él usaba;
-* los modelos y las constantes (`events.py`, `engine.py`), el bytecode
-  (`event_opcodes.py`, que ahora genera una prueba de ABL desde la
-  declaración: `test_el_modulo_de_los_opcodes_esta_al_dia`), y los clientes
-  de las etapas que las pruebas usan (`stage.py`, `screen_stage.py`,
+* the dump reader (`lcf.py`), the forks (`fork.py`, which now only says
+  where each file is: validating them is the converter's job) and the rules the
+  tests use as an oracle (`rm2k.py`, `render_map.py`, `experience.py`),
+  without the hooks the converter put on them —`REFIT_TEXTS`,
+  `DECORATE_TRANSLUCENT`— or what only it used;
+* the models and constants (`events.py`, `engine.py`), the bytecode
+  (`event_opcodes.py`, which an ABL test now generates from the
+  declaration: `test_el_modulo_de_los_opcodes_esta_al_dia`), and the clients
+  of the stages the tests use (`stage.py`, `screen_stage.py`,
   `image_stage.py`, `scene.py`, `animation.py`, `snes_format.py`,
   `resources.py`, `parallel.py`).
 
-Lo que preguntaban al compilador y a `game_scan` pasó a `arnes/conversor.py`,
-que le pregunta al binario. Las pruebas que importaban `port.snes_convert`
-sólo por sus ganchos dejaron de hacerlo; la que miraba que el gancho del
-reajuste estuviera puesto ahora mira que el conversor le dé al compilador
-las cajas largas del mapa 2 rearmadas (`test_textos_del_juego.py`).
+What they asked the compiler and `game_scan` moved to `arnes/conversor.py`,
+which asks the binary. The tests that imported `port.snes_convert`
+only for its hooks stopped doing so; the one that checked that the reflow
+hook was in place now checks that the converter gives the compiler
+map 2's long boxes rebuilt (`test_textos_del_juego.py`).
 
-Pruebas que se mudaron a Rust, porque miran lo que el conversor hace con
-cualquier proyecto y no el juego:
+Tests that moved to Rust, because they look at what the converter does with
+any project and not at the game:
 
-* de `test_fork_mapas.py`, las siete del fork a medias, el id cambiado, el
-  mapa que no existe y los mapas nuevos → `fork.rs`; las tres de la receta
-  del ChipSet —podar respeta lo que sólo nombra un evento, se planta con
-  `TileSubstitution`, `desde_imagen` a quince bits y compuesto— →
+* from `test_fork_mapas.py`, the seven about the half-done fork, the changed id, the
+  map that doesn't exist and the new maps → `fork.rs`; the three about the
+  ChipSet recipe —pruning respects what only an event names, it's planted with
+  `TileSubstitution`, `desde_imagen` at fifteen bits and composed— →
   `chipsets.rs`;
-* `tools/tests/test_substitutions.py` → `convert.rs` (`SUB_MAX` contra
+* `tools/tests/test_substitutions.py` → `convert.rs` (`SUB_MAX` against
   `low_ram.s`).
 
-Y una que se fue: `tools/tests/test_rm2k_rules.py` sostenía la copia de
-Python de las reglas contra la de Rust para el conversor; las reglas del
-conversor son las de Rust, y lo que queda en Python es el oráculo de las
-pruebas, que se compara contra la ROM. `rm2k-rules` sigue sosteniendo sus
-respuestas con `tests/python.json`.
+And one that went away: `tools/tests/test_rm2k_rules.py` held the Python
+copy of the rules against the Rust one for the converter; the converter's
+rules are the Rust ones, and what's left in Python is the tests' oracle,
+which is compared against the ROM. `rm2k-rules` still holds its
+answers with `tests/python.json`.
 
-Medido después de la etapa 2: `rom/build/` como en la 1; `just pruebas`,
-999 —las diez de `test_fork_mapas.py` se fueron a Rust y entró la de los
-opcodes—; `just -f tools/justfile test`, 36 —se fueron
-`test_rm2k_rules.py` y `test_substitutions.py`, y una que miraba el
-`snes_convert.py` del protocolo—; `cargo test -p rm2k-snes-convert`, 28.
+Measured after stage 2: `rom/build/` as in 1; `just pruebas`,
+999 —the ten from `test_fork_mapas.py` went to Rust and the opcodes one
+came in—; `just -f tools/justfile test`, 36 —
+`test_rm2k_rules.py` and `test_substitutions.py` went away, and one that looked at the
+protocol's `snes_convert.py`—; `cargo test -p rm2k-snes-convert`, 28.
 
-### 3. El borrado y la prosa
+### 3. The deletion and the prose
 
-`b21352e6` borra `tools/port/`, `tools/rpgmaker/`, `tools/render/` y
-`tools/common/disk_cache.py`, más lo que en los módulos mudados al arnés
-sólo usaba el conversor. `ae217a97` arregla la prosa que los nombraba:
-AGENTS.md, README.md, DITTO.md, `tools/README.md` —la sección de las capas
-de Python pasa a ser "The Python that is left"—, `docs/port/` y los
-docstrings del arnés. `test_lado_de_abl.py` pierde cinco excepciones.
+`b21352e6` deletes `tools/port/`, `tools/rpgmaker/`, `tools/render/` and
+`tools/common/disk_cache.py`, plus whatever in the modules moved to the harness
+only the converter used. `ae217a97` fixes the prose that named them:
+AGENTS.md, README.md, DITTO.md, `tools/README.md` —the section on the
+Python layers becomes "The Python that is left"—, `docs/port/` and the
+harness's docstrings. `test_lado_de_abl.py` loses five exceptions.
 
-Medido sobre `ae217a97`, con `convert` y `cartridge` en el `bin/` local:
-`rom/build/` igual a `sha-base2.txt` salvo los tres PNG de siempre;
+Measured on `ae217a97`, with `convert` and `cartridge` in the local `bin/`:
+`rom/build/` identical to `sha-base2.txt` except the usual three PNGs;
 `abl.sfc` `35c765009320d436…`; `just pruebas`, 999;
-`just -f tools/justfile test`, 36. `main` no se movió desde `8db96253`:
-no hubo nada que mergear.
+`just -f tools/justfile test`, 36. `main` hasn't moved since `8db96253`:
+there was nothing to merge.
 
-## Lo que queda en Python
+## What's left in Python
 
 * `tools/common/` (project, settings, environment), `tools/emulator/`
-  (`retro.py`, el arnés del emulador, que se queda en Python a propósito) y
-  `tools/assembly/entregar.py`, que es de ABL.
-* El arnés de las pruebas, `rom/pruebas/arnes/`, con lo que se mudó: el
-  lector del volcado y las reglas como oráculo. Es de las pruebas, y se va
-  con ellas cuando se separen.
+  (`retro.py`, the emulator harness, which stays in Python on purpose) and
+  `tools/assembly/entregar.py`, which is ABL's.
+* The tests' harness, `rom/pruebas/arnes/`, with what moved: the
+  dump reader and the rules as an oracle. It belongs to the tests, and leaves
+  with them when they're split off.
 
-## Pendiente, a propósito
+## Pending, on purpose
 
-* Los comentarios que `rm2k-snes-mapdata` escribe adentro de `mapdata.inc`
-  todavía nombran `tools/port/snes_convert.py`, `events.py`, `scene.py` y
+* The comments `rm2k-snes-mapdata` writes inside `mapdata.inc`
+  still name `tools/port/snes_convert.py`, `events.py`, `scene.py` and
   `animation.py` (`emit/header.rs`, `record.rs`, `scene.rs`, `emit.rs`).
-  Cambiarlos cambia el `.inc` —y quizás el `.dbg`—, así que va en su
-  propio commit, con la base vuelta a sacar.
-* Los comentarios de `tools/runtime/` que citan el Python del conversor:
-  tocarlos cambia el `.dbg`.
-* Los módulos del conversor que son de un dominio —`pictures.rs`,
-  `animations.rs`, `scene.rs`, `fullscreen.rs`, `chipsets.rs`— pueden ir a
-  sus etapas (`rm2k-snes-images`, `wally`), pero eso cambia pedidos y los
-  hashes de las pruebas de esos crates.
-* Lo fechado de `docs/research/` y de `workflow/` sigue nombrando el
-  Python: es registro.
+  Changing them changes the `.inc` —and perhaps the `.dbg`—, so it goes in its
+  own commit, with the baseline taken again.
+* The comments in `tools/runtime/` that cite the converter's Python:
+  touching them changes the `.dbg`.
+* The converter's modules that belong to a domain —`pictures.rs`,
+  `animations.rs`, `scene.rs`, `fullscreen.rs`, `chipsets.rs`— can go to
+  their stages (`rm2k-snes-images`, `wally`), but that changes requests and the
+  hashes of those crates' tests.
+* The dated material in `docs/research/` and `workflow/` still names the
+  Python: it's a record.
 
-## Al mergear
+## On merging
 
-* `just -f tools/justfile install convert cartridge`: `convert` es nuevo
-  —sin él no se arma nada— y `cartridge` cambió la huella. `ditto` ganó
-  dos funciones, pero es biblioteca: entra compilado en esos dos. Los de
-  `events`, `mapdata` y `rm2k-snes-audio` cambiaron sólo comentarios: no
-  hace falta.
-* `install-scripts` aparte no hace falta: el symlink de
-  `rm2k-snes-convert` apunta a `port/snes_convert.py`, que ya no existe, y
-  `install` borra los symlinks de la suite antes de instalar, así que
-  `cargo install` escribe el binario en su lugar.
-* Con eso, `NO_CACHE=1 just cartuchos` y `just pruebas` sobre `main`.
+* `just -f tools/justfile install convert cartridge`: `convert` is new
+  —without it nothing builds— and `cartridge` changed the fingerprint. `ditto` gained
+  two functions, but it's a library: it goes in compiled into those two. Those of
+  `events`, `mapdata` and `rm2k-snes-audio` only changed comments: not
+  needed.
+* A separate `install-scripts` isn't needed: the
+  `rm2k-snes-convert` symlink points to `port/snes_convert.py`, which no longer exists, and
+  `install` deletes the suite's symlinks before installing, so
+  `cargo install` writes the binary in its place.
+* With that, `NO_CACHE=1 just cartuchos` and `just pruebas` on `main`.

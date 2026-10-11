@@ -1,513 +1,513 @@
 ---
-name: "Lashe City con auto, hasta la carrera"
-description: "Plan: de la cinemática del director y Kersh hasta el Teleport al 49, exclusive"
+name: "Lashe City with the car, up to the race"
+description: "Plan: from the director and Kersh cutscene up to the Teleport to 49, exclusive"
 type: feature
 status: done
 ---
 
-# Qué
+# What
 
-Llevar `release` desde donde termina hoy —la cinemática del director y Kersh,
-mapa 34, que teletransporta al 36— hasta el `Teleport [49, 1, 26]` del evento 3
-del mapa 36, **sin entrar a la carrera**. Lo pidió taro el 2026-09-25: "los
-mapas de Lashe City en su versión con auto, lo del mafia boss, el camino
-opcional de obtener al droide como parte de la party si fuiste por el hover
-tram… y eventualmente la carrera para escapar. Me gustaría encarar todo hasta la
-carrera, exclusive."
+Take `release` from where it ends today —the director and Kersh cutscene,
+map 34, which teleports to 36— up to the `Teleport [49, 1, 26]` of event 3
+of map 36, **without entering the race**. taro asked for it on 2026-09-25: "the
+Lashe City maps in their version with the car, the mafia boss stuff, the optional
+path of getting the droid as part of the party if you went by the hover
+tram… and eventually the race to escape. I'd like to tackle everything up to the
+race, exclusive."
 
-Esto es el plan; lo que se ejecuta son las tareas de cada hito:
+This is the plan; what gets executed are each milestone's tasks:
 
-    0. elegir-una-opcion-en-el-recorrido.md   el arnés elige la opción N
-    1. lashe-1-los-cuatro-sectores-con-auto.md  37, 38, 47, 48 (+39, 56) y el 36
-    2. lashe-2-boss-wick-y-los-vidcasts.md     40 a 45: el favor y el tobillo
-    3. lashe-3-la-planta-y-el-droide.md        57, 59 a 63, 164: AG7 entra al grupo
-    4. lashe-4-ag7-en-la-pelea.md              sus habilidades, y las de los enemigos
-    5. lashe-5-la-cola-del-auto.md             el cierre del 36 por las tres ramas
+    0. elegir-una-opcion-en-el-recorrido.md   the harness chooses option N
+    1. lashe-1-los-cuatro-sectores-con-auto.md  37, 38, 47, 48 (+39, 56) and 36
+    2. lashe-2-boss-wick-y-los-vidcasts.md     40 to 45: the favour and the ankle
+    3. lashe-3-la-planta-y-el-droide.md        57, 59 to 63, 164: AG7 joins the party
+    4. lashe-4-ag7-en-la-pelea.md              his skills, and the enemies'
+    5. lashe-5-la-cola-del-auto.md             36's closing through the three branches
 
-Todo lo medido acá es del 2026-09-25 sobre `d118bc8`, con cartuchos armados
-aparte en el scratchpad —`release` no se tocó—. Los scripts que lo midieron
-quedaron en `/extras/scratch/lashe-plan/`: `medir.py` es la cuenta de qué
-comando frena cada página (compila con el mismo andamiaje que `main()` del
-conversor, y reemplaza al culpable por un comando ignorable hasta juntar
-todos), `conv.py` es el conversor con un parche en memoria para seguir de largo
-en el error del mapa 37, `testmain.py` arma un `test-main` con mapas de más,
-`segs.py` y `banco1.py` leen el `.dbg` y el `.sym`, y `copias.py` mide cuánto
-de un mapa es copia de otro.
+Everything measured here is from 2026-09-25 on `d118bc8`, with cartridges built
+separately in the scratchpad —`release` wasn't touched—. The scripts that measured it
+were left in `/extras/scratch/lashe-plan/`: `medir.py` is the count of which
+command blocks each page (it compiles with the same scaffolding as the converter's
+`main()`, and replaces the culprit with an ignorable command until it has gathered
+them all), `conv.py` is the converter with an in-memory patch to keep going
+past the error in map 37, `testmain.py` builds a `test-main` with extra maps,
+`segs.py` and `banco1.py` read the `.dbg` and the `.sym`, and `copias.py` measures how much
+of a map is a copy of another.
 
-# El subárbol de Lashe City
+# The Lashe City subtree
 
-**"Lashe City con auto" son mapas distintos**, cada uno con su id —no páginas
-de los mismos mapas según switches—, y casi todos copian el dibujo de un mapa
-que ya está en `release`. Lo que dice el árbol (`data/maps.json`), con lo que
-se midió de cada copia (`copias.py`: el mejor desplazamiento de la grilla de
-tiles del mapa nuevo sobre el viejo, y cuántas celdas de la capa de abajo dan
-iguales):
+**"Lashe City with the car" is distinct maps**, each with its own id —not pages
+of the same maps depending on switches—, and almost all copy the drawing of a map
+that's already in `release`. What the tree says (`data/maps.json`), with what
+was measured of each copy (`copias.py`: the best offset of the new map's tile grid
+over the old one, and how many cells of the bottom layer come out
+identical):
 
-    id   nombre                        padre  release  qué es
-    15   Lashe City                     0      -       carpeta: nadie teletransporta
-     9   Lashe City 33,36               15     sí
-    13     Hover-Tram                   9      sí
-    11     Lazer Teeth HQ               9      sí      forkeado
-     8   Lashe City - 34,35             15     sí
-    12     Trash Dump 004               8      sí      el HQ de los Neon Vipers
-     7   Talan's Pad                    15     sí
-    10   Lashe City Interiors           15     sí      2 páginas saltan al 38
-    14   NV Get Talan to Work           15     sí
-    16   Running To Work Scene          15     sí
-    17   Delcentric Factory             15     sí
-    18     Auditorium                   17     sí      forkeado
-    19     Talan and the Director       17     sí
-    96       Backup                     19     -       inalcanzable
-    20   Sector 30 Back Alleys          15     sí
-    24     Sector30 Monsters            20     -       área de encuentros
-    22   The Rat Tracks                 15     -       carpeta
-    21     Rat Tracks B1                22     sí      (25: área)
-    23       Beggar's Hideout           21     sí
-    26     Rat Tracks B2                22     sí      (27: área)
-    28   Sector 27 Back Alleys          15     sí      (31: área)
-    29     Sector 27 Item Shop          28     sí
-    30     Sector 27 Workshop           28     sí
-    32   Sector 27 Warehouse            15     sí      forkeado (35: área)
-    33     Escape From 27 Scene         32     sí
-    34   AfterGettingCarCutscene        15     sí      director y Kersh
-    36     LasheCityVehicle             34     sí      el "menú" del auto
-    97     Backup                       34     -       inalcanzable
-    37   Sector 35 With Car             15     NUEVO   copia del 8: sus filas 25-74, 67%
-    39     Talan's Pad With Car         37     NUEVO   copia exacta del 7, eventos incluidos
-    40     Boss Wick's Den              37     NUEVO   el mafia boss
-    41     ScreenToneAdjuster           37     NUEVO   negro, como el 36
-    42     The Vidcasts (Factory)       37     NUEVO
-    43       Vidcasts (Office)          42     NUEVO   los tiles del 34, iguales
-    44       Talan Stats                42     NUEVO   negro, como el 36
-    45       Security Footage           42     NUEVO   el 19 entero: tiles y eventos
-    46         Security Footage 2       45     -       inalcanzable
-    98         Backup                   45     -       inalcanzable
-    38   Sector 34 With Car             15     NUEVO   filas 33-74 = filas 0-41 del 8 (100%);
-                                                        arriba, el HQ de los Vipers (53% del 12)
-    47   Sector 33 With Car             15     NUEVO   copia del 9: sus filas 21-74, 53%
-    56     Sector 33 Discount Items     47     NUEVO   65% del 29, la otra tienda
-    48   Sector 32 With Car             15     NUEVO   nuevo: 25% del 9 como mucho
-    57     Stash's Emporium             48     NUEVO
-    59     Outside Recycling Plant      48     NUEVO   (180: área)
-    60       Floor 1                    59     NUEVO   (181: área)
-    61       Floor 0                    59     NUEVO   (182: área)
-    62       Floor 2                    59     NUEVO   (183: área)
-    63     Tunnel Into Lashe City       48     NUEVO
-    55   Escape From Lashe City         15     -       carpeta de la carrera: afuera
-    49..54 la carrera                   55     -       afuera
-    64   Leaving Lashe City Scene       15     -       afuera: se llega desde el 53, después de la carrera
-    83   Dalia at the Factory           15     -       afuera: otro capítulo, se llega desde el 82
-    84     OutsideFactory               83     -       ídem
+    id   name                          parent release  what it is
+    15   Lashe City                     0      -       folder: nobody teleports there
+     9   Lashe City 33,36               15     yes
+    13     Hover-Tram                   9      yes
+    11     Lazer Teeth HQ               9      yes     forked
+     8   Lashe City - 34,35             15     yes
+    12     Trash Dump 004               8      yes     the Neon Vipers' HQ
+     7   Talan's Pad                    15     yes
+    10   Lashe City Interiors           15     yes     2 pages jump to 38
+    14   NV Get Talan to Work           15     yes
+    16   Running To Work Scene          15     yes
+    17   Delcentric Factory             15     yes
+    18     Auditorium                   17     yes     forked
+    19     Talan and the Director       17     yes
+    96       Backup                     19     -       unreachable
+    20   Sector 30 Back Alleys          15     yes
+    24     Sector30 Monsters            20     -       encounter area
+    22   The Rat Tracks                 15     -       folder
+    21     Rat Tracks B1                22     yes     (25: area)
+    23       Beggar's Hideout           21     yes
+    26     Rat Tracks B2                22     yes     (27: area)
+    28   Sector 27 Back Alleys          15     yes     (31: area)
+    29     Sector 27 Item Shop          28     yes
+    30     Sector 27 Workshop           28     yes
+    32   Sector 27 Warehouse            15     yes     forked (35: area)
+    33     Escape From 27 Scene         32     yes
+    34   AfterGettingCarCutscene        15     yes     director and Kersh
+    36     LasheCityVehicle             34     yes     the car "menu"
+    97     Backup                       34     -       unreachable
+    37   Sector 35 With Car             15     NEW     copy of 8: its rows 25-74, 67%
+    39     Talan's Pad With Car         37     NEW     exact copy of 7, events included
+    40     Boss Wick's Den              37     NEW     the mafia boss
+    41     ScreenToneAdjuster           37     NEW     black, like 36
+    42     The Vidcasts (Factory)       37     NEW
+    43       Vidcasts (Office)          42     NEW     34's tiles, identical
+    44       Talan Stats                42     NEW     black, like 36
+    45       Security Footage           42     NEW     all of 19: tiles and events
+    46         Security Footage 2       45     -       unreachable
+    98         Backup                   45     -       unreachable
+    38   Sector 34 With Car             15     NEW     rows 33-74 = rows 0-41 of 8 (100%);
+                                                        above, the Vipers' HQ (53% of 12)
+    47   Sector 33 With Car             15     NEW     copy of 9: its rows 21-74, 53%
+    56     Sector 33 Discount Items     47     NEW     65% of 29, the other shop
+    48   Sector 32 With Car             15     NEW     new: 25% of 9 at most
+    57     Stash's Emporium             48     NEW
+    59     Outside Recycling Plant      48     NEW     (180: area)
+    60       Floor 1                    59     NEW     (181: area)
+    61       Floor 0                    59     NEW     (182: area)
+    62       Floor 2                    59     NEW     (183: area)
+    63     Tunnel Into Lashe City       48     NEW
+    55   Escape From Lashe City         15     -       the race's folder: out
+    49..54 the race                     55     -       out
+    64   Leaving Lashe City Scene       15     -       out: reached from 53, after the race
+    83   Dalia at the Factory           15     -       out: another chapter, reached from 82
+    84     OutsideFactory               83     -       same
 
-Y uno que no cuelga de Lashe City pero entra: **el 164, `AG7-17 Tutorial`**
-(bajo `Tutorials`), porque la página que mete al droide en el grupo salta ahí y
-vuelve con `RecallToLocation`. Es negro como el 36.
+And one that doesn't hang from Lashe City but goes in: **164, `AG7-17 Tutorial`**
+(under `Tutorials`), because the page that puts the droid in the party jumps there and
+comes back with `RecallToLocation`. It's black like 36.
 
-Los sectores con auto heredan la música (`music_type` 0, y el padre es el 15
-que no la cambia): suena lo que puso el 36, `golden_axe-turtlevillage2`, que ya
-está en `release`.
+The sectors with the car inherit the music (`music_type` 0, and the parent is 15,
+which doesn't change it): what 36 set plays, `golden_axe-turtlevillage2`, which is already
+in `release`.
 
-# El recorrido del jugador
+# The player's path
 
-Hoy lo jugable termina **en el mapa 36**: la página 1 del evento 3 —la de la
-primera vez, switch 148, que prende el 34— tiene la elección de los cuatro
-sectores y no compila porque los cuatro destinos (37, 38, 47, 48) no están en
-el cartucho. Compila con los cuatro o con ninguno. El jugador queda en negro con
-el auto.
+Today what's playable ends **at map 36**: page 1 of event 3 —the
+first-time one, switch 148, which 34 turns on— has the choice of the four
+sectors and doesn't compile because the four destinations (37, 38, 47, 48) aren't in
+the cartridge. It compiles with all four or with none. The player is left in black with
+the car.
 
-## El eje: la elección del 36
+## The axis: 36's choice
 
-`LasheCityVehicle` es una pantalla negra con el auto. La página 1 (switch 148)
-pone el tema del auto, dice qué hay que hacer según el compañero y abre
-`Sector 32 / 33 / 34 / 35`; cada opción salta al sector —la celda depende del
-auto, switch 130 rojo o 131 azul— y **sigue corriendo allá**: saca a
-`DummyHero` (10) y mete a Talan (14), al compañero —Saldra (17) si el 56, Arden
-(15) si el 54— y a AG7-17 (18) si el 150.
+`LasheCityVehicle` is a black screen with the car. Page 1 (switch 148)
+sets the car theme, says what to do depending on the companion and opens
+`Sector 32 / 33 / 34 / 35`; each option jumps to the sector —the cell depends on the
+car, switch 130 red or 131 blue— and **keeps running there**: it removes
+`DummyHero` (10) and adds Talan (14), the companion —Saldra (17) if 56, Arden
+(15) if 54— and AG7-17 (18) if 150.
 
-En cada sector, subirse al auto (eventos 1 y 2 de 37, 38, 47 y 48) apaga el
-148, prende el **149**, saca a todos, deja a `DummyHero` y vuelve al 36. Desde
-ahí manda la **página 2** (switch 149): la misma elección, más la cola del
-auto, que es el final de este plan (ver "El cierre").
+In each sector, getting into the car (events 1 and 2 of 37, 38, 47 and 48) turns off
+148, turns on **149**, removes everyone, leaves `DummyHero` and goes back to 36. From
+there **page 2** (switch 149) is in charge: the same choice, plus the car's
+tail end, which is the end of this plan (see "The closing").
 
-## Lo que tiene que pasar antes de la carrera, por rama
+## What has to happen before the race, per branch
 
-El compañero lo decidió el jugador mucho antes: 54 (`NVAlly`, Arden, en la
-escena de los Neon Vipers del mapa 12), 56 (`LTAlly`, Saldra, en el 9) o
-ninguno. La página 2 del 36 sólo ofrece irse cuando se cumple:
+The player decided the companion much earlier: 54 (`NVAlly`, Arden, in the
+Neon Vipers scene in map 12), 56 (`LTAlly`, Saldra, in 9) or
+none. 36's page 2 only offers leaving when this is met:
 
-    Arden   161 DoneWithVidcast  +  169 Arden's Whisper   (HQ de los Vipers, en el 38)
-    Saldra  161                  +  181 SawAgencyIn33      (Sector 33, el 47)
-    solo    161                  +  150 AG7-17 In Party    (el droide, desde el 48)
+    Arden   161 DoneWithVidcast  +  169 Arden's Whisper   (the Vipers' HQ, in 38)
+    Saldra  161                  +  181 SawAgencyIn33      (Sector 33, 47)
+    alone   161                  +  150 AG7-17 In Party    (the droid, from 48)
 
-**Sin compañero el droide no es opcional**: sin el 150 la rama "solo" no llega
-nunca a la cola del auto. Con Saldra es opcional, y con Arden no se puede: la
-puerta de Stash dice "Looks like they're closed" (página 5 del evento 9 del 48,
+**Without a companion the droid isn't optional**: without 150 the "alone" branch never
+reaches the car's tail end. With Saldra it's optional, and with Arden it can't be done: the
+door of Stash says "Looks like they're closed" (page 5 of event 9 of 48,
 switch 54).
 
-## Tramo por tramo
+## Stretch by stretch
 
-**Sector 35 (37) — el tramo principal, obligatorio en las tres ramas.**
+**Sector 35 (37) — the main stretch, mandatory in the three branches.**
 
-    37  la puerta de Talan (evento 1) ................... -> 39
-    39  la computadora (evento 5) prende 151 ........... -> 37
-    37  la puerta del vecino (evento 13, pide 151): golpea, prende 155;
-        la página 3 (155, automática) funde a negro .... -> 41
-    41  ScreenToneAdjuster: tinte y paso ................. -> 40
-    40  Boss Wick, escena 1 (evento 7, página 1, automática):
-        el "fat man" y sus chicas; ChangeScreenTransitions a zoom;
-        prende 156 ....................................... -> 42
-    42  The Vidcasts (evento 2, página 1): transición a mosaico -> 43
-    43  la oficina (los tiles del 34) .................... -> 44
-    44  Talan Stats: la voz de Zed ....................... -> 45
-    45  Security Footage: la escena del director (el 19)
-        otra vez, con el "REC" parpadeando (ShowPicture 'ABLrec');
-        prende 160 ....................................... -> 40
-    40  página 3 (160): Boss Wick sobre el video ........... -> 43
-    43  página 2 (160) ...................................... -> 42
-    42  página 2 (160): prende 161 DoneWithVidcast ......... -> 40
-    40  página 4 (161): **el favor**. "Accept, and owe him a Favor" /
-        "Refuse to be healed" (y una segunda confirmación)
-          acepta:  164 WicksSurgeonDoesOper -> página 5: el cirujano,
-                   ChangeHeroTitle de Talan a 'Fugitive', 267 AnkleAllBetter -> 41
-          rechaza: 162 RefusedWicksOffer ........................... -> 41
-    41  páginas 2/3 (162/164): prende 163 ................... -> 37
-    37  evento 17 (163 + compañero): el comentario del compañero al salir
+    37  Talan's door (event 1) .......................... -> 39
+    39  the computer (event 5) turns on 151 ............. -> 37
+    37  the neighbour's door (event 13, requires 151): knocks, turns on 155;
+        page 3 (155, autorun) fades to black ............ -> 41
+    41  ScreenToneAdjuster: tint and pass-through ........ -> 40
+    40  Boss Wick, scene 1 (event 7, page 1, autorun):
+        the "fat man" and his girls; ChangeScreenTransitions to zoom;
+        turns on 156 ..................................... -> 42
+    42  The Vidcasts (event 2, page 1): transition to mosaic -> 43
+    43  the office (34's tiles) .......................... -> 44
+    44  Talan Stats: Zed's voice ......................... -> 45
+    45  Security Footage: the director's scene (19)
+        again, with "REC" blinking (ShowPicture 'ABLrec');
+        turns on 160 ..................................... -> 40
+    40  page 3 (160): Boss Wick on the video ............... -> 43
+    43  page 2 (160) ........................................ -> 42
+    42  page 2 (160): turns on 161 DoneWithVidcast ......... -> 40
+    40  page 4 (161): **the favour**. "Accept, and owe him a Favor" /
+        "Refuse to be healed" (and a second confirmation)
+          accepts: 164 WicksSurgeonDoesOper -> page 5: the surgeon,
+                   ChangeHeroTitle of Talan to 'Fugitive', 267 AnkleAllBetter -> 41
+          refuses: 162 RefusedWicksOffer ........................... -> 41
+    41  pages 2/3 (162/164): turns on 163 ................... -> 37
+    37  event 17 (163 + companion): the companion's comment on leaving
 
-**El mafia boss no es una pelea**: es Boss Wick, un NPC con un evento. Te cura
-el tobillo si aceptás deberle un favor. Lo que deja, y dónde se usa fuera de
-este alcance:
+**The mafia boss isn't a battle**: it's Boss Wick, an NPC with an event. He heals
+your ankle if you agree to owe him a favour. What it leaves, and where it's used outside
+this scope:
 
-    162 RefusedWicksOffer     el 66 (Lashe Area, mundo)
-    164 WicksSurgeonDoesOper  el 64 (después de la carrera), el 69 (Sorbe Village),
-                              el 81 (la casa del Dr. Vago)
-    165 BumTalkKnowsFavor     el Bum del 37 (página 4, pide 164)
-    267 AnkleAllBetter        el 69; si no lo operó Wick, lo prende el Dr. Vago en el 81
-    título de Talan           'Fugitive', con ChangeHeroTitle (hoy aceptado sin hacer)
+    162 RefusedWicksOffer     66 (Lashe Area, world)
+    164 WicksSurgeonDoesOper  64 (after the race), 69 (Sorbe Village),
+                              81 (Dr. Vago's house)
+    165 BumTalkKnowsFavor     the Bum in 37 (page 4, requires 164)
+    267 AnkleAllBetter        69; if Wick didn't operate, Dr. Vago turns it on in 81
+    Talan's title             'Fugitive', with ChangeHeroTitle (today accepted without being done)
 
-Todo eso son switches y viajan en la partida. El título la ROM lo acepta sin
-hacer, y no se pierde nada visible: no hay pantalla que lo muestre.
+All of those are switches and travel in the save. The title the ROM accepts without
+doing, and nothing visible is lost: there's no screen that shows it.
 
-**Sector 34 (38) — la rama de Arden.** El 38 es la calle del 8 más, arriba, una
-versión con auto del HQ de los Vipers, al que se llega por el caño: eventos 20 y
-21 (switch 54, contacto) prenden 167 y saltan a (2,10) del mismo 38; el 25
-prende 168 y después 169; el 26 vuelve a (73,65). Los eventos 17 y 18 llevan a
-Lashe City Interiors (10), que ya está.
+**Sector 34 (38) — Arden's branch.** 38 is 8's street plus, at the top, a
+car version of the Vipers' HQ, reached through the pipe: events 20 and
+21 (switch 54, touch) turn on 167 and jump to (2,10) of 38 itself; 25
+turns on 168 and then 169; 26 returns to (73,65). Events 17 and 18 lead to
+Lashe City Interiors (10), which is already there.
 
-**Sector 33 (47) — la rama de Saldra.** El evento 15 (contacto en (32,28))
-tiene una rama por compañero: guardias de la Agency en el sector de los Lazer
-Teeth, un `PanScreen`, y prende 181. Anda en las tres ramas; sólo Saldra lo
-necesita. El 56 es una tienda (`OpenShop`).
+**Sector 33 (47) — Saldra's branch.** Event 15 (touch at (32,28))
+has a branch per companion: Agency guards in the Lazer
+Teeth's sector, a `PanScreen`, and turns on 181. It works in all three branches; only Saldra
+needs it. 56 is a shop (`OpenShop`).
 
-**Sector 32 (48) — el droide.** Lo que taro llama "si fuiste por el hover
+**Sector 32 (48) — the droid.** What taro calls "if you went by the hover
 tram":
 
-    48  el cartel de Stash (evento 7): con la Business Card (ítem 91, la que da
-        Stash en el Hover-Tram, mapa 13) prende 183
-    48  la puerta (evento 9): sin condición golpea y entra; con Arden, cerrada -> 57
-    57  Stash (evento 2): la escena del "bald man" que te robó en el tram.
-        Página 1 si robó los creds (72), 2 el ídolo (71), 3 nada (186) —los
-        tres los prende el Hover-Tram—, 4 si **sobornaste al guardia** (29, el
-        mapa 8). Te manda a la planta de reciclaje .... -> 59
-    59  Outside Recycling Plant (encuentros, tienda, posada) -> 60
-    60  Floor 1: pisos que se rompen. Cada baldosa (eventos 5 a 18, contacto)
-        carga el mapa 61 en una variable y la celda del héroe más cinco filas
-        en otras dos, y hace RecallToLocation: **se cae al piso de abajo** -> 61
-    62  Floor 2: lo mismo (eventos 2 a 14)
-    61  Floor 0: el Motivator Chip (ítem 126); el evento 13 (pide el ítem)
-        prende 205 ........................................ -> 63
+    48  Stash's sign (event 7): with the Business Card (item 91, the one
+        Stash gives on the Hover-Tram, map 13) turns on 183
+    48  the door (event 9): with no condition knocks and enters; with Arden, closed -> 57
+    57  Stash (event 2): the scene of the "bald man" who robbed you on the tram.
+        Page 1 if he stole the creds (72), 2 the idol (71), 3 nothing (186) —all
+        three set by the Hover-Tram—, 4 if **you bribed the guard** (29, map
+        8). He sends you to the recycling plant ....... -> 59
+    59  Outside Recycling Plant (encounters, shop, inn) -> 60
+    60  Floor 1: floors that break. Each tile (events 5 to 18, touch)
+        loads map 61 into a variable and the hero's cell plus five rows
+        into two others, and does RecallToLocation: **you fall to the floor below** -> 61
+    62  Floor 2: the same (events 2 to 14)
+    61  Floor 0: the Motivator Chip (item 126); event 13 (requires the item)
+        turns on 205 ...................................... -> 63
     63  Tunnel Into Lashe City ........................... -> 48
-    48  la puerta, ahora por la página 2 (ítem 126) ......... -> 57
-    57  página 5 (205 + ítem 126): prende 150, ChangePartyMembers +18, saca el
-        chip, vuelve a (3,39) del 48, MemorizeLocation, y salta al tutorial -> 164
-    164 el tutorial del droide (MemorizeBGM, textos, PlayMemorizedBGM,
+    48  the door, now through page 2 (item 126) ............. -> 57
+    57  page 5 (205 + item 126): turns on 150, ChangePartyMembers +18, removes the
+        chip, returns to (3,39) of 48, MemorizeLocation, and jumps to the tutorial -> 164
+    164 the droid's tutorial (MemorizeBGM, texts, PlayMemorizedBGM,
         RecallToLocation) ................................... -> 48
 
-Los datos contestan una duda de la frase de taro: **la escena de Stash también
-se abre por el soborno** (página 4, switch 29), no sólo por el tram. Ver las
-preguntas.
+The data answers a doubt in taro's phrasing: **Stash's scene also
+opens through the bribe** (page 4, switch 29), not only through the tram. See the
+questions.
 
-## El cierre
+## The closing
 
-La página 2 del 36, con 238 apagado y la condición de la rama cumplida: el
-compañero nota el auto de la Agency, prende **238**, y "Should we stay in Lashe
-City or get out?". "Stay" sigue en la ciudad (y la próxima vez que vuelva al
-auto se lo vuelve a preguntar, rama de arriba de la página). "We've got to get
-out of here" prende **182** y hace el `Teleport [49, 1, 26]`: el límite.
+36's page 2, with 238 off and the branch's condition met: the
+companion notices the Agency car, turns on **238**, and "Should we stay in Lashe
+City or get out?". "Stay" stays in the city (and the next time you go back to the
+car it asks again, the upper branch of the page). "We've got to get
+out of here" turns on **182** and does the `Teleport [49, 1, 26]`: the limit.
 
-# Qué falta para que corra
+# What's missing for it to run
 
-## Páginas que no compilan
+## Pages that don't compile
 
-Con un cartucho `release` + los 19 mapas de arriba (el 38 incluido para contar
-páginas, aunque no convierte) y sin el 49: **336 de 397 páginas disparables
-compilan**. Por mapa: 37, 38, 39, 41, 43, 44, 47, 48, 56, 59, 61 y 63 compilan
-enteras. Lo que frena al resto, contado como lo cuenta `eventos.py` —páginas
-donde aparece / páginas que destraba él solo—:
+With a `release` cartridge + the 19 maps above (38 included to count
+pages, even though it doesn't convert) and without 49: **336 of 397 triggerable pages
+compile**. Per map: 37, 38, 39, 41, 43, 44, 47, 48, 56, 59, 61 and 63 compile
+whole. What blocks the rest, counted the way `eventos.py` counts —pages
+where it appears / pages it unblocks on its own—:
 
-    RecallToLocation          55 / 54   los pisos del 60 (28) y del 62 (26), y el 164
-    ChangeScreenTransitions    4 /  4   40 páginas 1 y 4 (las dos escenas de Wick),
-                                        42 página 1, 45 página 1
-    Teleport -> 49             1 /  1   36 página 2: el límite
-    MemorizeLocation           1 /  1   57 página 5: la que mete al droide
-    MemorizeBGM                1 /  0   164 (junto con los otros dos)
+    RecallToLocation          55 / 54   the floors of 60 (28) and 62 (26), and 164
+    ChangeScreenTransitions    4 /  4   40 pages 1 and 4 (Wick's two scenes),
+                                        42 page 1, 45 page 1
+    Teleport -> 49             1 /  1   36 page 2: the limit
+    MemorizeLocation           1 /  1   57 page 5: the one that adds the droid
+    MemorizeBGM                1 /  0   164 (together with the other two)
     PlayMemorizedBGM           1 /  0   164
 
-Sobre **el juego entero** (5324 de 5472 compilan) `RecallToLocation` es lo que
-más frena —60 páginas, 55 él solo— y `ChangeScreenTransitions` va tercero —15,
-14 solo—, así que los dos van en la dirección en que se viene priorizando.
+Over **the whole game** (5324 of 5472 compile) `RecallToLocation` is what
+blocks the most —60 pages, 55 on its own— and `ChangeScreenTransitions` comes third —15,
+14 on its own—, so both go in the direction priorities have been going.
 
-**Compilar no es andar**, y lo que compila pero no hace lo que el original:
+**Compiling isn't working**, and what compiles but doesn't do what the original does:
 
-- **`ChangeHeroTitle`** (40, el cirujano): aceptado sin hacer, y no se ve
-  porque el port no muestra el título en ninguna pantalla.
-- **`ShowPicture 'ABLrec'`** (45, un paralelo que hace parpadear "REC" sobre el
-  video): la ROM lleva un cartel solo y ya es el de "One year previously", así
-  que éste queda aceptado sin hacer.
-- **El evento común 37, `UpdateAG7 Skills`**: es **paralelo con el switch 150**
-  y es el que le da a AG7 sus habilidades según las piezas que tiene puestas
-  (`ChangeSkills` por cada arma 268 en adelante). La ROM no corre eventos
-  comunes paralelos ni automáticos —`COMUNES` sólo sirve a `CallEvent`—, así
-  que AG7 entraría sin ninguna habilidad.
-- **Los enemigos de la planta usan una habilidad**: `ShortCircuit` (188), en 5
-  de las 7 tropas (108 a 114: Scrapped Droid, Trash Hauler, Tangle Wire,
-  Junkbot). La pelea sólo hace la acción básica de atacar
-  (`acciones_de_los_enemigos`, `CreateEnemyActions` con `kind` 0).
+- **`ChangeHeroTitle`** (40, the surgeon): accepted without being done, and not visible
+  because the port doesn't show the title on any screen.
+- **`ShowPicture 'ABLrec'`** (45, a parallel that makes "REC" blink over the
+  video): the ROM carries a single sign and it's already the "One year previously" one, so
+  this one stays accepted without being done.
+- **Common event 37, `UpdateAG7 Skills`**: it's **parallel with switch 150**
+  and it's what gives AG7 his skills according to the parts he has equipped
+  (`ChangeSkills` for each weapon from 268 on). The ROM doesn't run parallel or
+  autorun common events —`COMUNES` only serves `CallEvent`—, so
+  AG7 would join without any skill.
+- **The plant's enemies use a skill**: `ShortCircuit` (188), in 5
+  of the 7 troops (108 to 114: Scrapped Droid, Trash Hauler, Tangle Wire,
+  Junkbot). The battle only does the basic attack action
+  (`acciones_de_los_enemigos`, `CreateEnemyActions` with `kind` 0).
 
-## Límites de recursos
+## Resource limits
 
-**VRAM: el 38 no entra, y es el único.** Gasta 476 tiles de fondo y 347 de
-sprite (18 ranuras, 8 paletas). Los tres repartos con ventana dan 448/448,
-480/256 y 384/512: le faltan **28 tiles de fondo** en el primero o **91 de
-sprite** en el segundo. En bytes entraría —476×64 + 347×32 son 41,5 KB de los
-42 que quedan—; lo que no deja es la alineación: el tilemap de BG1 está clavado
-en `$5800` (`VRAM_MAP`) en los cuatro repartos y corta el fondo en 448. Los
-otros 18 convierten. (Resuelto el 2026-09-25 con la opción (d) de la pregunta 2:
-ver ahí.)
+**VRAM: 38 doesn't fit, and it's the only one.** It uses 476 background tiles and 347
+sprite ones (18 slots, 8 palettes). The three layouts with a window give 448/448,
+480/256 and 384/512: it's **28 background tiles** short in the first or **91
+sprite** ones in the second. In bytes it would fit —476×64 + 347×32 is 41.5 KB of the
+42 left—; what prevents it is the alignment: BG1's tilemap is nailed
+at `$5800` (`VRAM_MAP`) in the four layouts and cuts the background at 448. The
+other 18 convert. (Solved on 2026-09-25 with option (d) of question 2:
+see there.)
 
-**El conversor se planta en el 37** antes de llegar a la VRAM: "el evento 11 se
-hornea en el mapa y además se dibujaba con una paleta ajena". Es `PawnDoorTop`,
-un tile del ChipSet, y la regla de `eventos_horneables` no mira la paleta. El
-comentario de ahí dice "ninguno de los mapas del juego lo pide hoy; si aparece,
-hay que sacarlo de la regla". Apareció.
+**The converter stops at 37** before reaching VRAM: "el evento 11 se
+hornea en el mapa y además se dibujaba con una paleta ajena". It's `PawnDoorTop`,
+a ChipSet tile, and `eventos_horneables`' rule doesn't look at the palette. The
+comment there says "ninguno de los mapas del juego lo pide hoy; si aparece,
+hay que sacarlo de la regla". It appeared.
 
-**CGRAM**: el 37 dibuja 5 gráficos con paleta ajena —las dos puertas de tile y
-tres de la gente que aparece con el 161— y el 38, 3. Es lo mismo que ya pasa en
-`release` (el 8 tiene 6); no traba.
+**CGRAM**: 37 draws 5 graphics with a foreign palette —the two tile doors and
+three of the people who appear with 161— and 38, 3. It's the same as already happens in
+`release` (8 has 6); it doesn't block.
 
-**ROM: el cartucho cruza el umbral de la decisión de 4 MB.** Del `.dbg`, bancos
-2 en adelante:
+**ROM: the cartridge crosses the threshold of the 4 MB decision.** From the `.dbg`, banks
+2 onwards:
 
-    release hoy                        2,82 MB, último banco $61
-    release + los 18 que convierten    3,34 MB (+538 KB), último $74; el techo es $7D
-    test-main hoy                      3,45 MB, último $77
-    test-main + 37 39 47 48 56         último $7B
-    test-main + los 18                 NO ENTRA: el asignador pide $7E
+    release today                      2.82 MB, last bank $61
+    release + the 18 that convert      3.34 MB (+538 KB), last $74; the ceiling is $7D
+    test-main today                    3.45 MB, last $77
+    test-main + 37 39 47 48 56         last $7B
+    test-main + the 18                 DOESN'T FIT: the allocator asks for $7E
 
-`decisiones/el-cartucho-se-queda-en-4-mb.md` dice "se revisa al llegar al 85-90%
-del cartucho": con los 18 (sin el 38) `release` ronda el 86% contando lo usado,
-y la carrera viene después. Y **`test-main` no entra**, que choca con la regla
-de `cartuchos.py` de que "cada mapa que se suma al proyecto se suma a todos los
-cartuchos". Ver las preguntas.
+`decisiones/el-cartucho-se-queda-en-4-mb.md` says "se revisa al llegar al 85-90%
+del cartucho": with the 18 (without 38) `release` is around 86% counting what's used,
+and the race comes after. And **`test-main` doesn't fit**, which clashes with the rule
+in `cartuchos.py` that "cada mapa que se suma al proyecto se suma a todos los
+cartuchos". See the questions.
 
-Lo que las copias podrían abaratar: el asignador no comparte datos entre mapas
-—el 39 es el 7 celda por celda y sus tiles salen en otra dirección del
-cartucho, con otros bytes—. Candidatos: 39≡7, 43≡34 y 45≡19 en tiles; 41, 44 y
-164 son el negro del 36; 37, 38 y 47 comparten con el 8 y el 9 entre 88 y 216 de
-sus celdas distintas. En la VRAM no se gana nada —cada mapa sube lo suyo—; en
-ROM sí, y hay que medirlo.
+What the copies could make cheaper: the allocator doesn't share data between maps
+—39 is 7 cell by cell and its tiles come out at another address in the
+cartridge, with other bytes—. Candidates: 39≡7, 43≡34 and 45≡19 in tiles; 41, 44 and
+164 are 36's black; 37, 38 and 47 share with 8 and 9 between 88 and 216 of
+their distinct cells. In VRAM nothing is gained —each map uploads its own—; in
+ROM it is, and it has to be measured.
 
-**Banco 0**: con los 18, `TABLAS` crece 72 bytes (4 por mapa); quedan unos 2,2
-KB en `release` y 1,9 en `test-main`. **Banco 1**: el último símbolo deja ~8,7 KB
-en `release` con los 18 (~11 hoy) y ~5,5 en `test-main`; crecen las páginas de
-tropa (108 a 114). **BSS**: 7700 de 7808, sin cambio; cualquier estado nuevo va a
-la RAM lejana.
+**Bank 0**: with the 18, `TABLAS` grows 72 bytes (4 per map); some 2.2
+KB are left in `release` and 1.9 in `test-main`. **Bank 1**: the last symbol leaves ~8.7 KB
+in `release` with the 18 (~11 today) and ~5.5 in `test-main`; the troop pages
+grow (108 to 114). **BSS**: 7700 of 7808, unchanged; any new state goes to
+far RAM.
 
-**ARAM**: el banco compartido no cambia (57.309 de 64.512 bytes). Los tres temas
-nuevos **no aportan muestras** y suenan con las de otros: `Kfmus5` (la guarida
-de Wick) con el 8% de sus notas, `tsmedit` (el cirujano) con el 53%, y
-`fm2bar_gs` (Stash) con el 83%. Ninguno tenía pista de MSU-1; desde el
-2026-09-26 todo tema del cartucho tiene la suya (`pista_msu` en
+**ARAM**: the shared bank doesn't change (57,309 of 64,512 bytes). The three new
+themes **don't contribute samples** and play with others': `Kfmus5` (Wick's
+den) with 8% of its notes, `tsmedit` (the surgeon) with 53%, and
+`fm2bar_gs` (Stash) with 83%. None had an MSU-1 track; since
+2026-09-26 every theme in the cartridge has its own (`pista_msu` in
 `tools/audio/snes_music.py`).
-*Desde el 2026-09-26 esto cambió*: con el presupuesto por paquete todos los
-temas aportan todas sus muestras, así que los tres entrarían enteros; lo que
-cuesta un mapa nuevo es la tasa de las muestras que comparte con los paquetes
-más llenos, y lo dice el informe del conversor ("la limita …"). Hay que
-volver a medirlo al meter los 18.
+*Since 2026-09-26 this changed*: with the per-package budget all the
+themes contribute all their samples, so the three would go in whole; what
+a new map costs is the rate of the samples it shares with the fullest
+packages, and the converter's report says so ("la limita …"). It has to be
+measured again when adding the 18.
 
-**Páginas paralelas**: uno por mapa como mucho (37, 45, 47, 48, 59); lejos de
+**Parallel pages**: one per map at most (37, 45, 47, 48, 59); far from
 `PARALELO_MAX`.
 
-## La elección del 36
+## 36's choice
 
-Compila con sus cuatro destinos, así que el hito que mete los sectores los mete
-a los cuatro: **37, 38, 47 y 48 van juntos**, y el 38 tiene que estar resuelto
-antes. Las puertas de adentro (39, 40…, 56, 57) pueden quedar muertas hasta su
-hito: una página con un `Teleport` a un mapa ausente no compila y el evento no
-hace nada, que es lo de siempre.
+It compiles with its four destinations, so the milestone that adds the sectors adds
+all four: **37, 38, 47 and 48 go together**, and 38 has to be solved
+first. The doors inside (39, 40…, 56, 57) can stay dead until their
+milestone: a page with a `Teleport` to an absent map doesn't compile and the event doesn't
+do anything, which is the usual.
 
-Y la página 2 tiene el mismo problema con el 49: **sin resolver el límite, la
-segunda visita al 36 deja al jugador trabado**. Eso va en el hito 1, no al
-final.
+And page 2 has the same problem with 49: **without solving the limit, the
+second visit to 36 leaves the player stuck**. That goes in milestone 1, not at the
+end.
 
-## Peleas nuevas
+## New battles
 
-Sólo encuentros al azar, en la planta (áreas 180 a 183, tropas 108 a 114). Ningún
-`EnemyEncounter` en estos mapas y ningún jefe. Lo que falta: la habilidad de los
-enemigos (arriba), y lo de AG7.
+Only random encounters, in the plant (areas 180 to 183, troops 108 to 114). No
+`EnemyEncounter` in these maps and no boss. What's missing: the enemies'
+skill (above), and AG7's stuff.
 
-## El droide en el grupo
+## The droid in the party
 
-El actor 18, `AG7-17`: CharSet `AG717` 4 (ya está en el cartucho: es líder
-posible y su cara ya sale en el menú), nivel 6, arma 269 (`ArmCannon-!R`) y
-armadura 282. Lo que pide:
+Actor 18, `AG7-17`: CharSet `AG717` 4 (already in the cartridge: he's a possible
+leader and his face already shows in the menu), level 6, weapon 269 (`ArmCannon-!R`) and
+armour 282. What it asks for:
 
-- **las páginas** de la planta y del 57: `RecallToLocation`, `MemorizeLocation`,
-  `MemorizeBGM`/`PlayMemorizedBGM`, y el 164 en el cartucho;
-- **sus habilidades**: el evento común 37 (arriba). Son 17 (236 a 253); con el
-  filtro de hoy (`habilidad_usable_en_batalla`) cinco quedan afuera por ser de a
-  muchos (236, 240, 244, 245, 251) y `RemoveStatus` (253) por ser de todo el
-  grupo; tres tocan estados, que no existen;
-- **el costo en SP de las armas**: el tutorial lo dice ("attacking with a
-  weapon drains a small amount of the droid's SP") y en RM2k2000 es el
-  `sp_cost` del ítem (ArmCannon 1, ArmLauncher 2, PortableNuke 5). La pelea no
-  lo cobra.
+- **the pages** of the plant and of 57: `RecallToLocation`, `MemorizeLocation`,
+  `MemorizeBGM`/`PlayMemorizedBGM`, and 164 in the cartridge;
+- **his skills**: common event 37 (above). There are 17 (236 to 253); with
+  today's filter (`habilidad_usable_en_batalla`) five are left out for being
+  multi-target (236, 240, 244, 245, 251) and `RemoveStatus` (253) for being for the whole
+  party; three touch states, which don't exist;
+- **the weapons' SP cost**: the tutorial says so ("attacking with a
+  weapon drains a small amount of the droid's SP") and in RM2k2000 it's the
+  item's `sp_cost` (ArmCannon 1, ArmLauncher 2, PortableNuke 5). The battle doesn't
+  charge it.
 
-# Hitos
+# Milestones
 
-Cada uno es jugable y se verifica por separado. El orden es el de la lista.
+Each one is playable and is verified separately. The order is the list's.
 
-**El 1 está hecho** (2026-09-27, `lashe-1-los-cuatro-sectores-con-auto.md`):
-los seis mapas en `release`, el 37 sin plantar al conversor y el 36 forkeado
-con el fin de la demo. Lo que deja para los siguientes: las puertas muertas
-del 37 al 41 y del 48 al 57, y los paquetes de audio que trajo el 38 —ver ahí—.
+**1 is done** (2026-09-27, `lashe-1-los-cuatro-sectores-con-auto.md`):
+the six maps in `release`, 37 without stopping the converter and 36 forked
+with the end of the demo. What it leaves for the next ones: the dead doors
+from 37 to 41 and from 48 to 57, and the audio packages 38 brought —see there—.
 
-**El 2 está hecho** (2026-09-27, `lashe-2-boss-wick-y-los-vidcasts.md`):
-del 40 al 45 en `release`, `ChangeScreenTransitions` con el mosaico, y el tope
-de teletransportes encadenados subido de 8 a 32, que la escena de Wick pasaba.
+**2 is done** (2026-09-27, `lashe-2-boss-wick-y-los-vidcasts.md`):
+from 40 to 45 in `release`, `ChangeScreenTransitions` with the mosaic, and the cap
+of chained teleports raised from 8 to 32, which Wick's scene exceeded.
 
-**El 3 está hecho** (2026-09-27, `lashe-3-la-planta-y-el-droide.md`):
-57, 59 a 63 y 164 en `release`, `RecallToLocation`/`MemorizeLocation` y el
-tema recordado, y AG7-17 entra al grupo. De paso la ranura de variable pasó a
-ocho bits (las del juego ya no entraban en siete). Lo que deja para el 4: AG7
-entra **sin habilidades** (el evento común 37 no corre) y los enemigos de la
-planta pelean sólo con el ataque.
+**3 is done** (2026-09-27, `lashe-3-la-planta-y-el-droide.md`):
+57, 59 to 63 and 164 in `release`, `RecallToLocation`/`MemorizeLocation` and the
+remembered theme, and AG7-17 joins the party. Along the way the variable slot became
+eight bits (the game's no longer fit in seven). What it leaves for 4: AG7
+joins **without skills** (common event 37 doesn't run) and the plant's
+enemies fight only with the attack.
 
-    0  el arnés elige la opción N          chico, en paralelo con el 1
-    1  los cuatro sectores con auto        bloquea a todos los demás
-    2  Boss Wick y los vidcasts            en paralelo con el 3, después del 1
-    3  la planta y el droide               en paralelo con el 2, después del 1
-    4  AG7 en la pelea                     la parte de enemigos, en cualquier momento;
-                                           la de AG7, después del 3
-    5  la cola del auto                    al final: junta los tres caminos
+    0  the harness chooses option N        small, in parallel with 1
+    1  the four sectors with the car       blocks all the others
+    2  Boss Wick and the vidcasts          in parallel with 3, after 1
+    3  the plant and the droid             in parallel with 2, after 1
+    4  AG7 in battle                       the enemies part, any time;
+                                           AG7's part, after 3
+    5  the car's tail end                  at the end: brings the three paths together
 
-**Lo que hay que repartir al lanzarlos en paralelo** (ver "Sub-agentes" en
-`AGENTS.md`): los números de opcode en `tools/protocol/events.toml` —el 2 pide
-uno (transición), el 3 entre uno y cuatro (lugar recordado, tema recordado)—;
-las direcciones de RAM lejana —el tema recordado (3),
-la transición elegida (2), el intérprete de eventos comunes (4)—; y la lista de
-`_DE_RELEASE` en `cartuchos.py`, que tocan todos y conviene mergear mirando.
+**What has to be handed out when launching them in parallel** (see "Sub-agentes" in
+`AGENTS.md`): the opcode numbers in `tools/protocol/events.toml` —2 asks for
+one (transition), 3 between one and four (remembered place, remembered theme)—;
+the far RAM addresses —the remembered theme (3),
+the chosen transition (2), the common events interpreter (4)—; and the
+`_DE_RELEASE` list in `cartuchos.py`, which all of them touch and is best merged while looking.
 
-Los números concretos no se escriben acá: se eligen al lanzar, mirando la
-declaración de ese momento.
+The concrete numbers aren't written here: they're chosen when launching, looking at
+the declaration at that moment.
 
-# Riesgos y preguntas para taro
+# Risks and questions for taro
 
-**Después de los hitos (taro, 2026-09-27)**: cuando terminen los hitos de
-este plan, si entra, **sumar la carrera** (49–54, y el 55 si hace falta) **y el
-64**. Si después sigue habiendo espacio, **el 83 y el 84** también, para que la
-regla de qué mapas entran deje de ser una lista: si los ids tienen orden,
-pasa a ser "los mapas con id menor a X" más un `--exclude-maps` que se
-mantenga siempre chico (la lista invertida). Avanzar sin esperar su
-confirmación entre hito e hito.
+**After the milestones (taro, 2026-09-27)**: when this plan's milestones are
+finished, if it fits, **add the race** (49–54, and 55 if needed) **and
+64**. If there's still space after that, **83 and 84** too, so that the
+rule for which maps go in stops being a list: if the ids are ordered,
+it becomes "the maps with id less than X" plus an `--exclude-maps` that's
+always kept small (the inverted list). Move forward without waiting for his
+confirmation between milestones.
 
-**Lo que taro ya contestó (2026-09-25):**
+**What taro already answered (2026-09-25):**
 
-* **(2026-09-26)** El cierre del 36 ("get out"): **un "fin de demo" con un
-  mensaje de texto**, bien simple, en vez del `Teleport` al 49.
-* **(2026-09-26)** Las transiciones de zoom: **van como fundido**.
-* **(2026-09-26)** AG7 **no puede perder habilidades**, y las armas cobran SP
-  si en el original lo hacen: **fiel al original**.
-* **(2026-09-26)** El tutorial del droide (164): **se conserva**.
-* **(2026-09-26)** El 38 ya entra en la VRAM (`el-tilemap-del-fondo-lo-elige-el-reparto.md`): no hace falta partirlo.
-* **(2026-09-26)** El cartel "REC" del 45: **queda como deuda** por ahora.
-* **(2026-09-26)** El soborno del guardia (switch 29) **se puede jugar**: el
-  `DetourOfficer` (evento 19 del mapa 8, (62,32)) ofrece el soborno en su
-  página 2 (switches 24 y 28: el 24 lo prende el evento 4 del mapa 7 al
-  empezar, el 28 lo prende la primera charla con el oficial) y pide **500
-  créditos** (`ConditionalBranch` de oro >= 500). Se juntan vendiendo el
-  Idol al Pawn Guy (evento 24 del mapa 10): 600, 700 o 1000 según cuánto se
-  regatee (si se regatea una vez más, no compra), más los 100 que da el
-  evento 4 del mapa 7. Es el camino alternativo al Hover Tram (donde el ladrón
-  roba todo: `ChangeGold -9999` en el mapa 13). Ojo: el Idol también abre el
-  mapa 14 (página 2 de la puerta del HQ, con el switch 53).
-* **(2026-09-26)** Los mapas 64, 83 y 84 **quedan afuera** (confirmado por taro). Quedaron afuera porque el 64 (`Leaving
-  Lashe City Scene`) se alcanza desde el 53, **después de la carrera**, y el 83
-  y el 84 (`Dalia at the Factory`, `OutsideFactory`) son **de otro capítulo**,
-  a los que se llega desde el 82.
+* **(2026-09-26)** 36's closing ("get out"): **an "end of demo" with a
+  text message**, very simple, instead of the `Teleport` to 49.
+* **(2026-09-26)** The zoom transitions: **they go as a fade**.
+* **(2026-09-26)** AG7 **can't lose skills**, and the weapons charge SP
+  if they do in the original: **faithful to the original**.
+* **(2026-09-26)** The droid's tutorial (164): **it's kept**.
+* **(2026-09-26)** 38 now fits in VRAM (`el-tilemap-del-fondo-lo-elige-el-reparto.md`): there's no need to split it.
+* **(2026-09-26)** The "REC" sign in 45: **stays as debt** for now.
+* **(2026-09-26)** Bribing the guard (switch 29) **can be played**: the
+  `DetourOfficer` (event 19 of map 8, (62,32)) offers the bribe on his
+  page 2 (switches 24 and 28: 24 is turned on by event 4 of map 7 at the
+  start, 28 by the first talk with the officer) and asks for **500
+  credits** (`ConditionalBranch` of gold >= 500). They're gathered by selling the
+  Idol to the Pawn Guy (event 24 of map 10): 600, 700 or 1000 depending on how much
+  you haggle (if you haggle once more, he doesn't buy), plus the 100 that
+  event 4 of map 7 gives. It's the alternative path to the Hover Tram (where the thief
+  steals everything: `ChangeGold -9999` in map 13). Careful: the Idol also opens
+  map 14 (page 2 of the HQ door, with switch 53).
+* **(2026-09-26)** Maps 64, 83 and 84 **stay out** (confirmed by taro). They were left out because 64 (`Leaving
+  Lashe City Scene`) is reached from 53, **after the race**, and 83
+  and 84 (`Dalia at the Factory`, `OutsideFactory`) are **from another chapter**,
+  reached from 82.
 
-* **Primero el espacio, después los mapas.** El orden: el tinte (si tiene
-  sentido arreglarlo), juntar `release` y `test-main`, y en paralelo mirar por
-  qué la música pesa 789 KB y un piloto de fondos de batalla leídos del MSU-1.
-  Este plan se encara cuando terminen esas mejoras, no antes.
-* **Partir mapas, mejor no** (pregunta 2): da ventajas, pero obliga a analizar
-  estáticamente los eventos del mapa y todas sus ubicaciones y cambios, y las
-  fallas no serían obvias. Para el 38 buscar primero otra salida (menos tiles,
-  cargar tiles al caminar) y partir sólo si no hay otra.
+* **Space first, then the maps.** The order: the tint (if it makes
+  sense to fix it), merging `release` and `test-main`, and in parallel looking at
+  why the music weighs 789 KB and a pilot of battle backgrounds read from the MSU-1.
+  This plan is tackled when those improvements are finished, not before.
+* **Splitting maps, better not** (question 2): it has advantages, but it forces
+  static analysis of the map's events and all their locations and changes, and the
+  failures wouldn't be obvious. For 38 first look for another way out (fewer tiles,
+  loading tiles while walking) and split only if there's no other.
 
-1. **El límite del 49.** ¿Qué hace la ROM cuando el jugador elige "We've got to
-   get out of here"? Las salidas: (a) un fork del 36 que cambie ese `Teleport`
-   por un cartel de fin de demo o por la vuelta al título, y que se borre el día
-   que entre la carrera; (b) meter el 49 como está —el auto camina libre, que es
-   lo que taro ya vio con la receta vieja—; (c) que el conversor compile todo
-   `Teleport` a un mapa ausente como fin de demo, que cambia qué hacen muchas
-   páginas del juego. **Recomendado: (a).**
-2. **El 38 no entra en la VRAM.** (a) **partirlo**: el HQ de los Vipers de
-   arriba es una isla aparte, a la que sólo se llega por los `Teleport` de los
-   eventos 20, 21 y 26, así que va a un mapa propio y la calle se queda con el
-   id 38. Estimado por celdas distintas: la calle ~71% del total y el HQ ~44%,
-   los dos lejos del tope. Pero **`fork.py` no deja agregar ids** ("un fork
-   reemplaza un mapa del juego, no agrega uno"): o se cambia esa regla, o se
-   usa un id que existe y nadie alcanza (46, 96, 97, 98), que es trampa. (b)
-   podar 28 tiles de fondo del 38 en un fork, que es artístico. (c) bajar 91 de
-   sprite. (d) mover el tilemap de BG1 por reparto, que es tocar el motor.
-   **Recomendado: (a) con la regla de `fork.py` cambiada a propósito.**
-   **(d) está hecho (2026-09-25)**: un cuarto reparto baja el tilemap de BG1 a
-   $1800 y da 480 de fondo con 384 de sprite; el 38 convierte con 4 tiles de
-   fondo y 37 de sprite de margen, sin cambiarle el reparto a ningún mapa. Ver
+1. **The limit at 49.** What does the ROM do when the player chooses "We've got to
+   get out of here"? The ways out: (a) a fork of 36 that replaces that `Teleport`
+   with an end-of-demo sign or with returning to the title, and that gets deleted the day
+   the race goes in; (b) put 49 in as it is —the car walks freely, which is
+   what taro already saw with the old recipe—; (c) have the converter compile every
+   `Teleport` to an absent map as an end of demo, which changes what many
+   pages of the game do. **Recommended: (a).**
+2. **38 doesn't fit in VRAM.** (a) **split it**: the Vipers' HQ at the
+   top is a separate island, reached only through the `Teleport`s of
+   events 20, 21 and 26, so it goes to a map of its own and the street keeps the
+   id 38. Estimated by distinct cells: the street ~71% of the total and the HQ ~44%,
+   both far from the cap. But **`fork.py` doesn't allow adding ids** ("un fork
+   reemplaza un mapa del juego, no agrega uno"): either that rule changes, or an
+   id that exists and nobody reaches is used (46, 96, 97, 98), which is cheating. (b)
+   prune 28 background tiles from 38 in a fork, which is artistic. (c) cut 91
+   sprite ones. (d) move BG1's tilemap per layout, which is touching the engine.
+   **Recommended: (a) with `fork.py`'s rule changed on purpose.**
+   **(d) is done (2026-09-25)**: a fourth layout moves BG1's tilemap down to
+   $1800 and gives 480 background with 384 sprite; 38 converts with 4
+   background tiles and 37 sprite ones to spare, without changing any map's layout. See
    `el-tilemap-del-fondo-lo-elige-el-reparto.md`.
-3. **El cartucho.** `release` con esto ronda el 86% —el umbral de revisar la
-   decisión de 4 MB— y la carrera viene después. Y `test-main` no entra con los
-   18 mapas. ¿`test-main` deja de llevar todos los mapas (y las pruebas de la
-   zona nueva corren sobre `release`, como los recorridos), se arma un tercer
-   cartucho de pruebas, o primero se hace que el asignador comparta los datos de
-   las copias (39≡7, 43≡34, 45≡19) y se mide cuánto rinde?
-4. **Las transiciones.** El 40 pide **zoom** (tipo 16) y el 42 **mosaico** (17).
-   El mosaico lo tiene la consola (`MOSAIC`); el zoom en modo 3 no. ¿Zoom como
-   fundido, declarado como deuda, y mosaico de verdad?
-5. **El "REC" del 45.** ¿Segundo cartel por ROM, o deuda? Parpadea con un
-   paralelo, así que hornearlo como el Hover Tram no sirve tal cual.
-6. **AG7 en la pelea.** Con el filtro de hoy, 6 de sus 17 habilidades quedan
-   afuera (las de a muchos y la de todo el grupo) y los estados no existen.
-   ¿Alcanza con declararlo, o este hito hace el alcance de a muchos? Y el costo
-   de SP de las armas: ¿se cobra?
-7. **"Si fuiste por el hover tram"**: los datos dicen que la escena de Stash
-   también se abre por el soborno al guardia (switch 29), que con Arden la
-   puerta está cerrada, y que sin compañero el droide es obligatorio para llegar
-   a la carrera. ¿Es lo que esperaba?
-8. **El 83 y el 84** (Dalia at the Factory) cuelgan de Lashe City pero se llega
-   desde el 82, que es de otro capítulo. **El 64** es después de la carrera.
-   ¿Los dos afuera?
-9. **El tutorial del droide** (164). Se puede conservar —pide `MemorizeLocation`
-   y `RecallToLocation`, que la planta pide igual— o saltearlo con un fork del
-   57. Recomendado conservarlo.
+3. **The cartridge.** `release` with this is around 86% —the threshold for revisiting the
+   4 MB decision— and the race comes after. And `test-main` doesn't fit with the
+   18 maps. Does `test-main` stop carrying all maps (and the tests of the
+   new area run on `release`, like the walkthroughs), is a third test
+   cartridge built, or is the allocator first made to share the data of
+   the copies (39≡7, 43≡34, 45≡19) and how much it yields measured?
+4. **The transitions.** 40 asks for **zoom** (type 16) and 42 for **mosaic** (17).
+   The console has mosaic (`MOSAIC`); zoom in mode 3 it doesn't. Zoom as a
+   fade, declared as debt, and real mosaic?
+5. **The "REC" in 45.** A second sign in ROM, or debt? It blinks with a
+   parallel, so baking it like the Hover Tram doesn't work as is.
+6. **AG7 in battle.** With today's filter, 6 of his 17 skills are left
+   out (the multi-target ones and the whole-party one) and states don't exist.
+   Is declaring it enough, or does this milestone do the multi-target scope? And the weapons'
+   SP cost: is it charged?
+7. **"If you went by the hover tram"**: the data says Stash's scene
+   also opens through bribing the guard (switch 29), that with Arden the
+   door is closed, and that without a companion the droid is mandatory to reach
+   the race. Is that what he expected?
+8. **83 and 84** (Dalia at the Factory) hang from Lashe City but are reached
+   from 82, which is from another chapter. **64** is after the race.
+   Both out?
+9. **The droid's tutorial** (164). It can be kept —it requires `MemorizeLocation`
+   and `RecallToLocation`, which the plant requires anyway— or skipped with a fork of
+   57. Recommended to keep it.
 
-# Lo que no se midió
+# What wasn't measured
 
-- **Los cuadros perdidos** caminando por el 37 (23 eventos) y el 38 (47): el 8,
-  que es de su tamaño, era de los más cargados; conviene medirlos como el 11
-  (`el-mapa-11-se-rediseno.md`) antes de dar por bueno el hito 1.
-- **Cuánto pesa el 38** en ROM: no convierte.
+- **The lost frames** walking through 37 (23 events) and 38 (47): 8,
+  which is the same size, was among the busiest; it's best to measure them like 11
+  (`el-mapa-11-se-rediseno.md`) before approving milestone 1.
+- **How much 38 weighs** in ROM: it doesn't convert.
 
-El título del héroe no es un riesgo: el comentario de `CHANGE_HERO_TITLE` en
-`eventos.py` dice que el port no lo muestra en ninguna parte, así que el
-'Fugitive' del cirujano no se pierde de la pantalla.
+The hero's title isn't a risk: the comment on `CHANGE_HERO_TITLE` in
+`eventos.py` says the port doesn't show it anywhere, so the surgeon's
+'Fugitive' isn't lost from the screen.

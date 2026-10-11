@@ -1,136 +1,136 @@
 ---
-name: "El menú como RM2k"
-description: "La experiencia en el menú, el HP de los enemigos en la pelea y el color del número que cambia al equipar"
+name: "The menu like RM2k"
+description: "The experience in the menu, the enemies' HP in battle and the colour of the number that changes when equipping"
 type: feature
 status: done
 assignee: Tero
 ---
 
-# El menú como RM2k
+# The menu like RM2k
 
-Lo que pidió taro, el 2026-09-28:
+What taro asked for, on 2026-09-28:
 
-> - el menú debería mostrar cuánta experiencia tiene cada héroe y en cuánta
->   pasa al siguiente nivel
-> - las batallas no muestran el hp de los enemigos en el original. no sé si
->   hay alguna tecnica o item que te permita verlos, o si siempre es
->   imposible. no sé si quitar la funcionalidad completamente o dejarla
->   escondida
-> - en la pantalla de equipar item, en el juego original muestra el numero
->   que subiría en otro color (amarillo, creo). puede que use rojo o algo si
->   bajaría — no lo sé
+> - the menu should show how much experience each hero has and at how much
+>   they reach the next level
+> - battles don't show the enemies' hp in the original. I don't know if
+>   there's some technique or item that lets you see them, or if it's always
+>   impossible. I don't know whether to remove the feature completely or leave it
+>   hidden
+> - on the equip item screen, the original game shows the number
+>   that would go up in another colour (yellow, I think). it may use red or something if
+>   it would go down — I don't know
 
-Las tres se miraron en easyrpg-player y en el original corriendo con Wine
-(el RPG_RT de 2015), con una copia del juego cuyo mapa 4 arranca con Kersh y
-Core en el grupo y los ítems de las pruebas en el inventario: así se llega al
-menú sin jugar la intro. Las capturas están en
+The three were looked at in easyrpg-player and in the original running under Wine
+(the 2015 RPG_RT), with a copy of the game whose map 4 starts with Kersh and
+Core in the party and the tests' items in the inventory: that way you reach the
+menu without playing the intro. The captures are in
 `/shared/capturas/2026-09-28-el-menu/`.
 
-## 1. La experiencia en el menú — hecho
+## 1. The experience in the menu — done
 
-**Dónde la muestra RM2k**: sólo en el menú principal. El 2000 no tiene
-pantalla de estado —eso es del 2003—, y la elección de actor
-(`Window_ActorTarget`) no la muestra. En la fila de cada actor es la tercera
-línea: `Ex 14522/ 16708`, el término `exp_short` en el color 1 y
-`"%6d/%6d"` —la de ahora y la acumulada que pide el nivel que sigue,
-`GetNextExp`— (`Window_Base::DrawActorExp`). En el tope, guiones: easyrpg
-los pone sólo en la segunda mitad, y su comentario dice que el RPG_RT los
-pone en las dos; seguimos al RPG_RT. El original, capturado, da Kersh
-`14522/ 16708` y Core `6473/ 7750`, y la ROM da esos números.
+**Where RM2k shows it**: only in the main menu. 2000 has no
+status screen —that's 2003's—, and the actor choice
+(`Window_ActorTarget`) doesn't show it. In each actor's row it's the third
+line: `Ex 14522/ 16708`, the term `exp_short` in colour 1 and
+`"%6d/%6d"` —the current one and the accumulated one the next level asks for,
+`GetNextExp`— (`Window_Base::DrawActorExp`). At the cap, dashes: easyrpg
+puts them only in the second half, and its comment says RPG_RT puts
+them in both; we follow RPG_RT. The original, captured, gives Kersh
+`14522/ 16708` and Core `6473/ 7750`, and the ROM gives those numbers.
 
-**Cómo va**: en sprites, doce pixeles debajo de los HP y a los seis pixeles
-de la fuente —el formato exacto de RM2k—. Es lo único de la pantalla fuera
-de la grilla de celdas, y el porqué está en `MENU_EXP_X` (titulo.py): en 256
-pixeles no caben las dos columnas de RM2k con letras de ocho, ni una cuarta
-línea de celdas en los 56 pixeles de la fila. La rutina es
+**How it goes**: in sprites, twelve pixels below the HP and in the font's
+six pixels —RM2k's exact format—. It's the only thing on the screen outside
+the cell grid, and the why is in `MENU_EXP_X` (titulo.py): in 256
+pixels RM2k's two columns with eight-pixel letters don't fit, nor a fourth
+line of cells in the row's 56 pixels. The routine is
 `rom/src/experiencia_en_el_menu.s`.
 
-Lo que sigue siendo distinto, cosmético y ya declarado en el menú: sin el
-título del actor ni los SP, y los HP debajo del nivel y no a su derecha.
+What's still different, cosmetic and already declared in the menu: without the
+actor's title or the SP, and the HP below the level and not to its right.
 
-## 2. El HP de los enemigos en la pelea — investigado, sin implementar
+## 2. The enemies' HP in battle — investigated, not implemented
 
-**RM2k no lo muestra nunca.** En el 2000 la elección de blanco es una lista
-de nombres (`Scene_Battle_Rpg2k`), y no hay comando de evento que dibuje los
-HP de un enemigo.
+**RM2k never shows it.** In 2000 the target choice is a list
+of names (`Scene_Battle_Rpg2k`), and there's no event command that draws the
+HP of an enemy.
 
-**El ABL tampoco tiene cómo verlo**, medido sobre `data/`:
+**ABL doesn't have a way to see it either**, measured over `data/`:
 
-- ningún `ControlVariables` de mapas, eventos comunes ni tropas lee los HP de
-  un enemigo (el operando 8, "enemigo", no aparece ni una vez), así que ningún
-  mensaje puede decirlos con `\V[]`;
-- ningún mensaje de tropa ni de evento común los nombra: los que dicen "HP"
-  son de ítems que se ganan o de curas del grupo;
-- la única habilidad que "mira" al enemigo, `MindProbe` (144, de Manta), es de
-  tipo switch y lo que prende es aprender sus técnicas, no ver sus HP;
-- ningún ítem lo hace.
+- no `ControlVariables` in maps, common events or troops reads the HP of
+  an enemy (operand 8, "enemy", doesn't appear even once), so no
+  message can say them with `\V[]`;
+- no troop or common event message names them: the ones that say "HP"
+  are about items you gain or party heals;
+- the only skill that "looks at" the enemy, `MindProbe` (144, Manta's), is of
+  switch type and what it turns on is learning its techniques, not seeing its HP;
+- no item does it.
 
-**Dónde lo dibuja la ROM**: en `ba_renglon` (`rom/src/batalla.s`), que escribe
-el renglón de cada combatiente: el nombre, "HP" y el número, y la barra con el
-máximo sólo si es del grupo —el bit 0 de `BA_CONMAX`—. La geometría es
-`BA_HP_COL`/`BA_HP_NUM` de `pantallas.py`, y la decisión de mostrarlo está
-escrita ahí mismo, arriba de `BA_ENEMIGO_FILA0`: *"se ven los HP de los
+**Where the ROM draws it**: in `ba_renglon` (`rom/src/batalla.s`), which writes
+each combatant's line: the name, "HP" and the number, and the bar with the
+maximum only if it's the party's —bit 0 of `BA_CONMAX`—. The geometry is
+`BA_HP_COL`/`BA_HP_NUM` in `pantallas.py`, and the decision to show it is
+written right there, above `BA_ENEMIGO_FILA0`: *"se ven los HP de los
 enemigos. RM2k no los muestra. Acá sí, porque lo que esta vuelta tiene que
 dejar ver es justamente la mecánica"*.
 
-**Propuesta**: esconderlo por defecto, como el original, con un flag de armado
-para depurar, igual que `CON_MAPA_DE_DEBUG`:
+**Proposal**: hide it by default, like the original, with a build flag
+for debugging, just like `CON_MAPA_DE_DEBUG`:
 
-- `CON_HP_DE_ENEMIGOS = False` en `tools/ensamblado/cartuchos.py`, que pasa
-  `--hp-de-enemigos` al conversor; el conversor emite `BA_HP_ENEMIGOS = 0/1`
-  junto a `BA_HP_NUM_DX`;
-- en `ba_renglon`, detrás del nombre: `.if BA_HP_ENEMIGOS = 0` / `lda
-  BA_CONMAX` / `and #$01` / `bne` al "HP" / `rts` / `.endif`. Son siete bytes
-  en el banco de la pelea con el flag apagado y cero prendido; el banco 0 no
-  se toca;
-- `pantallas.py` lo mismo en la referencia de la pantalla de pelea, con el
-  mismo flag;
-- mueve todas las goldens donde se ve la lista de enemigos —las `batalla*`
-  seguro; las demás las dice la tanda—, así que va en un commit con su
-  porqué.
+- `CON_HP_DE_ENEMIGOS = False` in `tools/ensamblado/cartuchos.py`, which passes
+  `--hp-de-enemigos` to the converter; the converter emits `BA_HP_ENEMIGOS = 0/1`
+  next to `BA_HP_NUM_DX`;
+- in `ba_renglon`, after the name: `.if BA_HP_ENEMIGOS = 0` / `lda
+  BA_CONMAX` / `and #$01` / `bne` to the "HP" / `rts` / `.endif`. It's seven bytes
+  in the battle bank with the flag off and zero with it on; bank 0 isn't
+  touched;
+- `pantallas.py` the same in the battle screen's reference, with the
+  same flag;
+- it moves all the goldens where the enemy list is visible —the `batalla*` ones
+  for sure; the rest the suite will say—, so it goes in a commit with its
+  why.
 
-Cuesta poco, pero **no lo implementé**: hay otro agente en la pelea
-(`batalla*.s`, `batalla.py`, `eventos.py`) y chocaríamos justo en esas
-goldens. Queda para después de que eso se mergee.
+It's cheap, but **I didn't implement it**: there's another agent in the battle
+(`batalla*.s`, `batalla.py`, `eventos.py`) and we'd clash precisely in those
+goldens. It's left for after that gets merged.
 
-## 3. Equipar: el valor que cambia, en color — hecho
+## 3. Equipping: the value that changes, in colour — done
 
-`Window_EquipStatus::GetNewParameterColor`: el valor que quedaría va en el
-color 0 si es igual, en el 2 si sube y en el 3 si baja. En el skin del ABL el
-2 es un durazno (no amarillo) y el 3 el gris de "no se puede". La captura del
-original lo confirma: con el Leather Jacket en vez del Trenchcoat, la defensa
-`147> 55` en gris, la agilidad `82> 85` en durazno, el ataque y la mente en
-blanco. Los colores de la ROM y los del original coinciden a 15 bits.
+`Window_EquipStatus::GetNewParameterColor`: the value it would become goes in
+colour 0 if it's equal, in 2 if it goes up and in 3 if it goes down. In ABL's skin
+2 is a peach (not yellow) and 3 the "can't" grey. The capture of the
+original confirms it: with the Leather Jacket instead of the Trenchcoat, defence
+`147> 55` in grey, agility `82> 85` in peach, attack and mind in
+white. The ROM's colours and the original's match at 15 bits.
 
-La fuente de la pantalla trae la variante 2 **sólo con cifras** (`ITEM_SUBE`
-en titulo.py): la fuente entera en un color más no entraba, porque el banco
-tiene un techo que la pelea impone —`ITEMS_TILES_MAX`—.
+The screen's font carries variant 2 **only with digits** (`ITEM_SUBE`
+in titulo.py): the whole font in one more colour didn't fit, because the bank
+has a ceiling that the battle imposes —`ITEMS_TILES_MAX`—.
 
-Lo que el original tiene y acá sigue faltando, cosmético: los términos de los
-parámetros y de las ranuras en el color 1 (rojo), y la flecha `>` también
-mientras se elige la ranura, sin el valor nuevo.
+What the original has and is still missing here, cosmetic: the terms of the
+parameters and of the slots in colour 1 (red), and the `>` arrow also
+while choosing the slot, without the new value.
 
-## Pruebas
+## Tests
 
-- `menu`, `menu-2` cambian —la línea de la experiencia—; nueva `menu-grupo`
-  (caso `menu-grupo`: Kersh, Core y Talan).
-- `equipo-lista` cambia —el 95 del Bow, que baja, en gris—; nuevas
-  `equipo-sube-baja` y `equipo-sube` (caso `equipo-colores`).
-- `test_el_menu_muestra_guiones_en_el_nivel_tope`, el camino del tope.
-- `render_menu` dibuja la experiencia, y las pruebas que comparan el menú
-  después de subir o de pelear le pasan la de la partida.
-- Los techos de la música se volvieron a medir (`just techos`): el cambio de
-  la ROM corrió el pico de `dcbest` hasta recortar, como la prueba avisa que
-  puede pasar con cualquier cambio.
-- Verificado con `just cartuchos` y `just pruebas` sobre `main` mergeado: todo
-  en verde.
+- `menu`, `menu-2` change —the experience line—; new `menu-grupo`
+  (case `menu-grupo`: Kersh, Core and Talan).
+- `equipo-lista` changes —the Bow's 95, which goes down, in grey—; new
+  `equipo-sube-baja` and `equipo-sube` (case `equipo-colores`).
+- `test_el_menu_muestra_guiones_en_el_nivel_tope`, the cap path.
+- `render_menu` draws the experience, and the tests that compare the menu
+  after levelling up or fighting pass it the game's.
+- The music ceilings were re-measured (`just techos`): the ROM
+  change shifted `dcbest`'s peak until it clipped, as the test warns
+  can happen with any change.
+- Verified with `just cartuchos` and `just pruebas` on merged `main`: all
+  green.
 
-## Qué tiene que mirar taro
+## What taro has to look at
 
-- Abrir el menú con el grupo de la intro y con más de uno: la línea "Ex"
-  debajo de los HP, que se lea y no se pegue con la fila de abajo.
-- Ganar una pelea y volver a abrirlo: la experiencia sube; si sube de nivel,
-  el segundo número cambia.
-- Equipar algo que sube y algo que baja: durazno y gris.
-- Cerrar el menú: el héroe y los NPC con sus colores de siempre (los sprites
-  del menú le toman prestada una paleta al mapa).
+- Open the menu with the intro's party and with more than one: the "Ex" line
+  below the HP, that it reads and doesn't run into the row below.
+- Win a battle and open it again: the experience goes up; if they level up,
+  the second number changes.
+- Equip something that goes up and something that goes down: peach and grey.
+- Close the menu: the hero and the NPCs with their usual colours (the menu's
+  sprites borrow a palette from the map).

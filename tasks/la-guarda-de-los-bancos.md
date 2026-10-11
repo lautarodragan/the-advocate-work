@@ -1,69 +1,69 @@
 ---
-name: "La guarda de los bancos"
-description: "Una prueba que recorra el .dbg y marque todo jsr/jmp absoluto que cae en otro banco y toda lectura absoluta de ROM fuera del banco 0: la regla de main.s que el ensamblador no revisa"
+name: "The bank guard"
+description: "A test that walks the .dbg and flags every absolute jsr/jmp that lands in another bank and every absolute ROM read outside bank 0: the rule in main.s that the assembler doesn't check"
 type: feature
 status: done
 assignee: taro
 ---
 
-Lo propuso Pepitero (`el-banco-1-se-lleno.md`), sin hacerlo: el
-script descartable con el que verificó las mudanzas a `FAR2` dio 0 antes y
-después de cada una, y la regla de dónde va el código (encabezado de
-`tools/runtime/main.s`) "nada de esto lo revisa el ensamblador". Un `jsr` a
-una rutina de otro banco salta al lugar equivocado sin ningún error.
+Pepitero proposed it (`el-banco-1-se-lleno.md`), without doing it: the
+throwaway script with which he verified the moves to `FAR2` gave 0 before and
+after each one, and the rule for where the code goes (header of
+`tools/runtime/main.s`) "nada de esto lo revisa el ensamblador". A `jsr` to
+a routine in another bank jumps to the wrong place without any error.
 
-## Lo hecho (2026-10-02, Ratona, sobre `5a93a5ca`)
+## What was done (2026-10-02, Ratona, on `5a93a5ca`)
 
-`rom/pruebas/herramientas/test_saltos_entre_bancos.py`, sobre los tres
-cartuchos. Python del arnés, sin desensamblador aparte: **el `.dbg` de
-`ld65` ya trae lo que hace falta.** Cada `sym` dice en qué líneas se lo nombra
-(`ref=`), y cada `line` qué bytes salieron de ella (`span=`, con `ooffs` en
-el `seg` para ir al archivo). Así que no se lee el operando del fuente con
-una expresión regular, como el script de Pepitero: se lee el opcode en la ROM,
-que dice el modo, y se compara adónde va la instrucción con dónde está el
-símbolo. Lo único que hubo que escribir del 65816 es la tabla de modos de los
-256 opcodes. El fuente se lee sólo para el mensaje.
+`rom/pruebas/herramientas/test_saltos_entre_bancos.py`, over the three
+cartridges. Harness Python, with no separate disassembler: **`ld65`'s `.dbg`
+already carries what's needed.** Each `sym` says on which lines it's named
+(`ref=`), and each `line` which bytes came out of it (`span=`, with `ooffs` in
+the `seg` to go to the file). So the operand isn't read from the source with
+a regular expression, like Pepitero's script: the opcode is read in the ROM,
+which says the mode, and where the instruction goes is compared with where the
+symbol is. The only thing about the 65816 that had to be written is the mode table of the
+256 opcodes. The source is read only for the message.
 
-Lo que revisa, de cada instrucción que nombra una etiqueta (o un `=` que cae
-en la ROM o en un registro):
+What it checks, for each instruction that names a label (or an `=` that lands
+in the ROM or on a register):
 
-* `jsr`/`jmp` absolutos: que el destino esté en el banco de la instrucción;
-* `jsr`/`jmp (tabla, x)`: que la tabla esté en el banco de programa, **y que
-  cada entrada caiga en una etiqueta de ese banco** —es lo que dice el
-  comentario de `opcode_handlers`—. La tabla va de su etiqueta a la
-  siguiente;
-* `jmp (abs)` y `jml [abs]`: que el puntero esté en el banco 0;
-* lo largo (`f:`, `jsl`, `jml`): que el banco escrito sea el del símbolo,
-  con los espejos `$00`/`$80` y `$01`/`$81` resueltos;
-* lo absoluto de datos —lecturas **y** escrituras—: que el banco de datos
-  con que corre ese código, más la dirección, sea el lugar del símbolo. Los
-  espejos están resueltos: la WRAM baja se ve igual desde `$7E` y desde el
-  banco 0, y los registros no se ven desde `$7E`.
+* absolute `jsr`/`jmp`: that the destination is in the instruction's bank;
+* `jsr`/`jmp (tabla, x)`: that the table is in the program bank, **and that
+  each entry lands on a label of that bank** —that's what the
+  `opcode_handlers` comment says—. The table goes from its label to the
+  next;
+* `jmp (abs)` and `jml [abs]`: that the pointer is in bank 0;
+* the long ones (`f:`, `jsl`, `jml`): that the bank written is the symbol's,
+  with the `$00`/`$80` and `$01`/`$81` mirrors resolved;
+* the absolute data ones —reads **and** writes—: that the data bank
+  that code runs with, plus the address, is the symbol's place. The
+  mirrors are resolved: low WRAM looks the same from `$7E` and from
+  bank 0, and the registers aren't visible from `$7E`.
 
-**El banco de datos no se sigue: se dice.** `BANCO_DE_DATOS` en la prueba:
-`$7E` para los ocho `battle*.s` que corren en la pelea y para
-`encounters.s` —los dos lo dicen en su encabezado—, y el 0 para todo lo
-demás. **La única excepción** es una rutina: `scene_cgram_restore` vive en
-`battle_scene.s` pero la llama `back_from_battle`, desde el banco 0, con el
-banco de datos en 0 —lo dice su comentario—, y escribe `CGADD` y el DMA con
-direcciones absolutas. Con la tabla por archivo, la prueba la marcaba (siete
-líneas, todas registros). Otra prueba del mismo archivo se fija que todo lo
-nombrado en `BANCO_DE_DATOS` exista, para que un renombre no la deje sin
-efecto callada.
+**The data bank isn't tracked: it's declared.** `BANCO_DE_DATOS` in the test:
+`$7E` for the eight `battle*.s` that run in battle and for
+`encounters.s` —both say so in their header—, and 0 for everything
+else. **The only exception** is one routine: `scene_cgram_restore` lives in
+`battle_scene.s` but it's called by `back_from_battle`, from bank 0, with the
+data bank at 0 —its comment says so—, and it writes `CGADD` and the DMA with
+absolute addresses. With the per-file table, the test flagged it (seven
+lines, all registers). Another test in the same file checks that everything
+named in `BANCO_DE_DATOS` exists, so that a rename doesn't silently leave it without
+effect.
 
-Lo que **no** ve, y lo dice su docstring: lo que cambia el banco de datos a
-mitad de camino (los puentes `ba_t_*`, el intérprete con el del bytecode), lo
-que se direcciona por un puntero, y que a lo que se entra con `jsl` se salga
-con `rtl`.
+What it **doesn't** see, and its docstring says so: what changes the data bank
+midway (the `ba_t_*` bridges, the interpreter with the bytecode's), what
+is addressed through a pointer, and that what's entered with `jsl` is left
+with `rtl`.
 
-**`FAR2` con `+ FAST` no hace falta revisarlo**: lo probé cambiando el `jsl
-f:battle_run` de `op_battle` a `+ FAST`, y `ld65` se niega a linkear —"Range
-error"—, porque `$C0 + $80` no entra en 24 bits. Queda dicho en `main.s`.
+**`FAR2` with `+ FAST` doesn't need checking**: I tested it by changing the `jsl
+f:battle_run` of `op_battle` to `+ FAST`, and `ld65` refuses to link —"Range
+error"—, because `$C0 + $80` doesn't fit in 24 bits. It's stated in `main.s`.
 
-### El rojo que vi
+### The red I saw
 
-Con cuatro roturas a la vez, cada una en los tres cartuchos (`release`,
-`test-special`, `test-encounter-every-step`), y la prueba las marcó todas:
+With four breakages at once, each one in the three cartridges (`release`,
+`test-special`, `test-encounter-every-step`), and the test flagged them all:
 
     battle_loop.s:417  jsl f:exp_add -> jsr exp_add
       "en `ba_exp_allocate` ($C01ECC): `jsr exp_add`. `exp_add` está en el
@@ -80,29 +80,29 @@ Con cuatro roturas a la vez, cada una en los tres cartuchos (`release`,
       saltan en el banco $00, y éstas no caen en una etiqueta de ahí: $8805
       (`exp_add` en $018805)."
 
-Después, con la versión final, otra vez las dos primeras. Todo vuelto atrás.
+Afterwards, with the final version, the first two again. Everything reverted.
 
-Commit: `d2cec449`. `main` no se movió mientras tanto (`5a93a5ca`): no hubo
-nada que mergear.
+Commit: `d2cec449`. `main` didn't move in the meantime (`5a93a5ca`): there was
+nothing to merge.
 
-**Un error propio que la prueba ahora cuida**: la primera versión no le
-sacaba el `\n` al último campo de cada renglón del `.dbg`, que es `type=lab`,
-así que no reconocía ninguna etiqueta y daba cero revisando casi nada. Por
-eso la prueba exige haber mirado al menos una instrucción de cada clase
-(salto, tabla, largo, datos).
+**A mistake of my own that the test now guards against**: the first version didn't strip
+the `\n` from the last field of each line of the `.dbg`, which is `type=lab`,
+so it recognised no label and gave zero while checking almost nothing. That's
+why the test requires having looked at at least one instruction of each class
+(jump, table, long, data).
 
-## Los números
+## The numbers
 
-Sobre el `main` de hoy da **cero** en los tres cartuchos. `just pruebas`: 1005
-(1001 + las cuatro nuevas: tres cartuchos y la de `BANCO_DE_DATOS`). `just -f
-tools/justfile test`: 39. `abl.sfc` de
-`release`: `35c76500…`, el mismo de Pepitero. El comentario de `main.s` no
-mueve la ROM: `NO_CACHE=1 just cartuchos` antes y después, los tres `.sfc` y
-los tres `.msu` byte por byte iguales.
+On today's `main` it gives **zero** in the three cartridges. `just pruebas`: 1005
+(1001 + the four new ones: three cartridges and the `BANCO_DE_DATOS` one). `just -f
+tools/justfile test`: 39. `abl.sfc` of
+`release`: `35c76500…`, the same as Pepitero's. The comment in `main.s` doesn't
+move the ROM: `NO_CACHE=1 just cartuchos` before and after, the three `.sfc` and
+the three `.msu` identical byte for byte.
 
-## Al mergear
+## On merging
 
-No hay nada que instalar: la prueba es Python del arnés, y `main.s` cambia
-sólo un comentario. (Para ver el rojo instalé `cartridge` en el `bin/` local
-del worktree, porque el ensamblador global arma con el runtime del checkout
-principal; eso no viaja.)
+There's nothing to install: the test is harness Python, and `main.s` changes
+only a comment. (To see the red I installed `cartridge` in the worktree's local
+`bin/`, because the global assembler builds with the main checkout's
+runtime; that doesn't travel.)

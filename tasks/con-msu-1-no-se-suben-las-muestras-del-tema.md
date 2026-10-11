@@ -1,114 +1,114 @@
 ---
-name: "Con MSU-1 no se suben las muestras del tema"
-description: "Si hay MSU-1 y el tema tiene pista, sus muestras de música no hacen falta en la ARAM: cargas más rápidas y más lugar para los efectos"
+name: "With MSU-1 the theme's samples aren't uploaded"
+description: "If there's MSU-1 and the theme has a track, its music samples aren't needed in ARAM: faster loads and more room for the sound effects"
 type: feature
 status: done
 ---
 
-Con MSU-1, un tema que tiene pista (`PISTAS_MSU`, 22 temas) suena desde el
-PCM y el SPC700 no toca su música. Pero la ROM igual sube sus muestras al
-cargar el paquete del mapa o de la pelea: tiempo y ARAM perdidos.
+With MSU-1, a theme that has a track (`PISTAS_MSU`, 22 themes) plays from the
+PCM and the SPC700 doesn't play its music. But the ROM still uploads its samples when
+loading the map's or the battle's package: wasted time and ARAM.
 
-Que la subida del paquete (`paquete_cargar_ya`, `tema_asegurar`) se saltee las
-muestras de música de los temas que van a sonar por MSU-1 cuando el MSU-1
-está presente (la ROM ya lo detecta: `rom/src/msu1.s`). Los efectos siguen
-subiendo siempre.
+Make the package upload (`paquete_cargar_ya`, `tema_asegurar`) skip the
+music samples of the themes that are going to play through MSU-1 when the MSU-1
+is present (the ROM already detects it: `rom/src/msu1.s`). The sound effects keep
+being uploaded always.
 
-Lo que gana, a medir:
-* **cuadros de carga con MSU-1**: el paso 6 dejó la pelea en 58 cuadros al
-  entrar y 63 al salir, y el mapa 3 en 84; con MSU-1 deberían bajar mucho;
-* **la ARAM entera para los efectos** mientras suena un tema por MSU-1.
+What it gains, to be measured:
+* **load frames with MSU-1**: step 6 left the battle at 58 frames on
+  entering and 63 on leaving, and map 3 at 84; with MSU-1 they should drop a lot;
+* **the whole ARAM for the sound effects** while a theme plays through MSU-1.
 
-Lo que hay que cuidar: un tema **sin** pista que suene en el mismo paquete
-(sigue necesitando sus muestras), el paso de MSU-1 a SPC700 si una pista falta
-en la tarjeta (el MSU-1 lo dice con su bit de error: ¿la ROM cae al SPC700?,
-entonces las muestras tienen que estar), y que sin MSU-1 no cambie nada (las
-goldens corren sin MSU-1). La prueba con `msu=True` de `pruebas/abl/test_msu.py`
-es el lugar para cobrarlo.
+What has to be taken care of: a theme **without** a track that plays in the same package
+(it still needs its samples), the switch from MSU-1 to SPC700 if a track is missing
+from the card (the MSU-1 says so with its error bit: does the ROM fall back to the SPC700?,
+then the samples have to be there), and that without MSU-1 nothing changes (the
+goldens run without MSU-1). The test with `msu=True` in `pruebas/abl/test_msu.py`
+is the place to cover it.
 
-Idea de taro, el 2026-09-26: en el peor caso, con MSU-1 la música va por la
-pista y los efectos entran enteros en la ARAM sin competir con la música.
+taro's idea, on 2026-09-26: in the worst case, with MSU-1 the music goes through the
+track and the sound effects fit whole in ARAM without competing with the music.
 
-## Y la otra mitad: los efectos de calidad desde el `.msu`
+## And the other half: quality sound effects from the `.msu`
 
-Hecho el 2026-09-26, pedido por taro: ver `efectos-de-calidad-con-msu-1.md`.
-Lo que sigue es cómo estaba planteado. Sin MSU-1 no se tocó: los efectos del
-cartucho son los de siempre, no más livianos.
+Done on 2026-09-26, requested by taro: see `efectos-de-calidad-con-msu-1.md`.
+What follows is how it was laid out. Without MSU-1 nothing was touched: the
+cartridge's sound effects are the usual ones, not lighter.
 
-También de taro, el mismo día: **los efectos livianos en la ROM y los de
-calidad en el `.msu`**, con el mecanismo de los fondos de batalla
-(`docs/port/msu-datos.md`: la ROM lee el `.msu` por el puerto de datos si hay
-MSU-1 y la firma coincide, y si no usa lo suyo).
+Also from taro, the same day: **the light sound effects in the ROM and the quality
+ones in the `.msu`**, with the battle backgrounds' mechanism
+(`docs/port/msu-datos.md`: the ROM reads the `.msu` through the data port if there's
+MSU-1 and the signature matches, and otherwise uses its own).
 
-Encaja con lo de arriba: con MSU-1 las muestras del tema no ocupan la ARAM, así
-que hay lugar para los efectos de calidad; sin MSU-1, los efectos más livianos
-dejan lugar para las muestras de la música, que es justo la pelea de hoy entre
-los efectos del mapa 3 y el oboe, la flauta y la batería. Y achica la ROM: los
-efectos son ~211 KB de los ~262 de `muestra`.
+It fits with the above: with MSU-1 the theme's samples don't take up ARAM, so
+there's room for the quality sound effects; without MSU-1, the lighter sound effects
+leave room for the music samples, which is exactly today's fight between
+map 3's sound effects and the oboe, the flute and the drums. And it shrinks the ROM: the
+sound effects are ~211 KB of `muestra`'s ~262.
 
-Ojo: esto no reproduce los efectos por el audio del MSU-1 (tiene un solo
-flujo de audio, que es el de la música): los sube a la ARAM desde el puerto de
-datos y los sigue tocando el SPC700. Y sin MSU-1 los efectos quedarían más
-livianos que hoy, que es lo que taro no quería perder: decidirlo con
-grabaciones de las dos versiones delante (como el trueno).
+Careful: this doesn't play the sound effects through the MSU-1's audio (it has a single
+audio stream, the music's): it uploads them to ARAM from the data
+port and the SPC700 keeps playing them. And without MSU-1 the sound effects would be lighter
+than today, which is what taro didn't want to lose: decide it with
+recordings of both versions at hand (like the thunder).
 
-## Hecho, el 2026-09-26: la primera mitad
+## Done, on 2026-09-26: the first half
 
-Sólo lo de arriba —no subir las muestras del tema—; la segunda sección es un
-plan B que taro no pidió todavía, y no se tocó.
+Only the above —not uploading the theme's samples—; the second section is a
+plan B taro hasn't asked for yet, and it wasn't touched.
 
-**Cómo**: `tema_por_msu` (`rom/src/paquete_de_audio.s`) contesta si un tema va
-a sonar por el MSU-1 —hay MSU-1, el tema tiene pista en `tema_msu` y esa pista
-no faltó nunca—, y `paquete_cargar_ya` saltea esos temas en sus listas de
-temas y de temas de salida. **El tema extra no pasa por ahí**: si se pide es
-porque va a sonar por el SPC700. Sin MSU-1 contesta siempre que no, así que
-el paquete es el de siempre.
+**How**: `tema_por_msu` (`rom/src/paquete_de_audio.s`) answers whether a theme is going
+to play through the MSU-1 —there's MSU-1, the theme has a track in `tema_msu` and that track
+never went missing—, and `paquete_cargar_ya` skips those themes in its lists of
+themes and of exit themes. **The extra theme doesn't go through there**: if it's requested it's
+because it's going to play through the SPC700. Without MSU-1 it always answers no, so
+the package is the usual one.
 
-**Lo que había que cuidar**:
+**What had to be taken care of**:
 
-* *Un tema sin pista en el mismo paquete*: no se saltea, porque la pregunta es
-  por tema. En `release` no hay ningún paquete que mezcle temas con y sin
-  pista (los sin pista son de mapas de más adelante), así que la prueba borra
-  la pista de `Gaden` en una copia del cartucho y mira el mapa 19, que prende
-  `Gaden` y comparte paquete con `3D-Galax`.
-* *Una pista que falta en la tarjeta*: la ROM **sí** cae al SPC700 —
-  `msu_arrancar` mira el bit 3 de `$2000` y los topes de espera—, y ya lo
-  hacía antes. Ahora además prende el bit del tema en `MSU_FALTA`
-  (`$7E7820`, un bit por tema), y `music_start` sigue por `tema_asegurar`,
-  que ve las muestras sin subir y rearma el paquete con el tema adelante:
-  **esa vez congela lo que tarde en subir** (una carga de paquete entera,
-  como un `PlayBGM` de un tema que el mapa no traía). De ahí en más ese tema
-  no se saltea, así que no se repite.
-* *Sin MSU-1 no cambia nada*: las goldens no se movieron, y la sonda da los
-  mismos cuadros que antes.
+* *A theme without a track in the same package*: it isn't skipped, because the question is
+  per theme. In `release` there's no package that mixes themes with and without a
+  track (the ones without are from later maps), so the test deletes
+  `Gaden`'s track in a copy of the cartridge and looks at map 19, which turns on
+  `Gaden` and shares a package with `3D-Galax`.
+* *A track missing from the card*: the ROM **does** fall back to the SPC700 —
+  `msu_arrancar` looks at bit 3 of `$2000` and the wait caps—, and it already
+  did before. Now it also sets the theme's bit in `MSU_FALTA`
+  (`$7E7820`, one bit per theme), and `music_start` continues through `tema_asegurar`,
+  which sees the samples not uploaded and rebuilds the package with the theme first:
+  **that time it freezes for as long as the upload takes** (a whole package load,
+  like a `PlayBGM` of a theme the map didn't carry). From then on that theme
+  isn't skipped, so it doesn't repeat.
+* *Without MSU-1 nothing changes*: the goldens didn't move, and the probe gives the
+  same frames as before.
 
-**Lo medido**, con la sonda del paso 6 (cuadros de `paquete_cargar_ya`),
-`release`, snes9x, con MSU-1, antes → después:
+**What was measured**, with step 6's probe (frames of `paquete_cargar_ya`),
+`release`, snes9x, with MSU-1, before → after:
 
-| | antes | después |
+| | before | after |
 |---|---:|---:|
-| mapa 3 (desde el 5) | 84 | 56 |
-| mapa 26 | 82 | 21 |
-| entrar a la pelea del droide | 82 | 20 |
-| salir de la pelea (al 2) | 82 | 48 |
+| map 3 (from 5) | 84 | 56 |
+| map 26 | 82 | 21 |
+| entering the droid battle | 82 | 20 |
+| leaving the battle (to 2) | 82 | 48 |
 
-Sin MSU-1, los cuatro iguales antes y después (84, 82, 82, 82). Lo que queda
-con MSU-1 son los efectos: el mapa 3 lleva 20 y el 2, 18.
+Without MSU-1, all four the same before and after (84, 82, 82, 82). What's left
+with MSU-1 is the sound effects: map 3 carries 20 and map 2, 18.
 
-**Lo cobran** tres pruebas nuevas en `pruebas/abl/test_msu.py`, con el
-MSU-1 encendido sobre una copia de `release`: las dos primeras fallan sin el
-cambio, y la de la pista faltante falla si el extra también se saltea y la
-falta no se anota.
+**Covered by** three new tests in `pruebas/abl/test_msu.py`, with the
+MSU-1 on over a copy of `release`: the first two fail without the
+change, and the missing-track one fails if the extra is also skipped and the
+missing track isn't recorded.
 
-**Visto de paso, y no arreglado**: con MSU-1, la pista del título **sigue
-sonando** al empezar la partida. `music_boot` (`rom/src/musica.s`), cuando
-el mapa arranca callado, pone `music_apagada` y baja el volumen del DSP pero
-no llama a `msu_parar`, así que `Fantasia_Of_The_Wind` sigue por la pista
-hasta el primer `PlayBGM`, y la pelea la anota como el tema a reponer.
+**Seen in passing, and not fixed**: with MSU-1, the title track **keeps
+playing** when the game starts. `music_boot` (`rom/src/musica.s`), when
+the map starts silent, sets `music_apagada` and lowers the DSP volume but
+doesn't call `msu_parar`, so `Fantasia_Of_The_Wind` keeps going through the track
+until the first `PlayBGM`, and the battle records it as the theme to restore.
 
-**Para taro**, con MSU-1 (FX Pak o un emulador que lo tenga) y las pistas al
-lado: que la música de los mapas y de la pelea suene como antes, que los
-efectos suenen, y que las cargas del mapa 3, el 26 y la pelea se sientan más
-cortas. Y, si quiere probar la caída: sacar de la tarjeta una pista —la de
-`KSSMKEND` es `abl-18.pcm`— y entrar al 26: el tema tiene que sonar por el
-SPC700, con un congelado más largo esa primera vez.
+**For taro**, with MSU-1 (FX Pak or an emulator that has it) and the tracks
+alongside: that the music of the maps and the battle sounds as before, that the
+sound effects play, and that the loads of map 3, 26 and the battle feel
+shorter. And, if he wants to test the fallback: remove a track from the card —
+`KSSMKEND`'s is `abl-18.pcm`— and enter 26: the theme has to play through the
+SPC700, with a longer freeze that first time.

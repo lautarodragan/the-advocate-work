@@ -1,332 +1,331 @@
 ---
-name: "Efectos de sonido sin recortes"
-description: "Los efectos enteros y a más tasa donde no le cuesta a ningún instrumento; los demás, para que taro decida escuchando"
+name: "Sound effects without cuts"
+description: "The sound effects whole and at a higher rate where it costs no instrument anything; the rest, for taro to decide by listening"
 type: feature
 status: done
 assignee: taro
 ---
 
-# Qué
+# What
 
-Mejorar cómo suenan los efectos de sonido. Los límites que tenían —ver
-`audio-sound-effects.md`— fueron intencionales, todos por la ARAM: van en
-el paquete de audio de cada mapa, a 6 kHz y a lo sumo tres cuartos de segundo
-(uno más largo repite sus últimos 0,4 s hasta durar lo que dura en RM2k).
+Improve how the sound effects sound. The limits they had —see
+`audio-sound-effects.md`— were intentional, all because of ARAM: they go in
+each map's audio package, at 6 kHz and at most three quarters of a second
+(a longer one repeats its last 0.4 s until it lasts as long as in RM2k).
 
-**La condición es de taro**, del 2026-09-26: *"No me parece aceptable que
-instrumentos pierdan calidad por un solo mapa, pero tampoco quiero perder
-calidad en los efectos de sonido."* Desde el presupuesto por paquete los
-efectos se restan antes de repartir, así que agrandar uno le baja la tasa a
-las muestras de su paquete **si ese paquete es el que las limita**. La idea
-que aprobó: elegir la calidad efecto por efecto, como con el trueno.
+**The condition is taro's**, from 2026-09-26: *"I don't find it acceptable for
+instruments to lose quality because of a single map, but I don't want to lose
+quality in the sound effects either."* Since the per-package budget, the
+sound effects are subtracted before allotting, so enlarging one lowers the rate of
+its package's samples **if that package is the one that limits them**. The idea
+he approved: choose the quality effect by effect, as with the thunder.
 
 # Status
 
-2026-09-26, en `testing/`: **hecho lo que no le cuesta nada a ningún
-instrumento** —25 efectos enteros, casi todos a 22 kHz—, y **lo que costaría
-un instrumento, medido y grabado para que taro decida escuchando**, abajo en
-"Lo que decide taro". Lo que queda para él: escuchar
-`/shared/audio/2026-09-26-efectos/` (tiene su `LEEME.txt`) y elegir.
+2026-09-26, in `testing/`: **done, what costs no instrument
+anything** —25 effects whole, almost all at 22 kHz—, and **what would cost
+an instrument, measured and recorded for taro to decide by listening**, below in
+"What taro decides". What's left for him: listen to
+`/shared/audio/2026-09-26-efectos/` (it has its `LEEME.txt`) and choose.
 
-Más tarde el mismo día taro eligió —todos enteros, a la media como mínimo—, y
-con los números de eso a la vista cambió: **enteros sí, pero la media sólo
-donde sea gratis para la música**. Está en la rama
-`worktree-agent-afa6d748ca7a9d5ab`, sin mergear: ver "Los candidatos,
-enteros" abajo. **Enteros a 6 kHz igual le cuestan a la música**; de las
-propuestas de ahí taro eligió la del trueno, que deja la lluvia entera gratis.
-Lo que les sigue costando la pelea y el mapa 3 espera a liberar entradas del
-directorio, en otra tarea.
+Later the same day taro chose —all whole, at half as a minimum—, and
+with the numbers for that in view he changed: **whole yes, but half only
+where it's free for the music**. It's in the branch
+`worktree-agent-afa6d748ca7a9d5ab`, unmerged: see "The candidates,
+whole" below. **Whole at 6 kHz still costs the music**; of the
+proposals there taro chose the thunder one, which leaves the rain whole for free.
+What the battle and map 3 still cost waits for freeing up entries in the
+directory, in another task.
 
-Hecho el mismo día, en `el-directorio-de-los-efectos.md`: de los 175 pares
-que bajaban quedan 117, y ninguno baja respecto de antes. **A los temas de
-los paquetes que se pagan los efectos no les devuelve nada** —el de batalla,
-`evilrhys`, `TF3_1_awe`, `3D-Galax` y `Gaden`—: los limita su propio
-paquete, y ninguna copia los saca de ahí. Lo que vuelve es el rebote.
+Done the same day, in `el-directorio-de-los-efectos.md`: of the 175 pairs
+that went down, 117 remain, and none goes down compared with before. **To the themes of
+the packages that pay for the sound effects it gives nothing back** —the battle one,
+`evilrhys`, `TF3_1_awe`, `3D-Galax` and `Gaden`—: they're limited by their own
+package, and no copy takes them out of there. What comes back is the knock-on effect.
 
-# Lo que estaba viejo el 2026-09-26
+# What was stale on 2026-09-26
 
-La tarea se escribió el 24, y desde entonces:
+The task was written on the 24th, and since then:
 
-* **Una sola voz: viejo.** Son dos, la 6 y la 7, desde 8c9c182 (ver
+* **A single voice: stale.** There are two, 6 and 7, since 8c9c182 (see
   `rom/src/efectos_de_sonido.s`).
-* **6 kHz, 0,75 s y el bucle de 0,4 s: seguía cierto** para todos menos el
-  trueno de la apertura, que va entero a 22 kHz
-  (`decisiones/el-trueno-va-entero-y-paga-la-lluvia.md`). El trueno **ya estaba en
-  `main`**, no sólo en la rama del experimento como decía esa decisión.
-* **El presupuesto de la ARAM** ya no es "cada efecto lo que entre": es por
-  paquete y cada paquete llena la ARAM, así que no había lugar sobrante que
-  usar sin mirar paquete por paquete. Ver `decisiones/un-solo-banco-de-muestras.md`.
-* **`SE_ARAM` sigue muerto**: `build_varios` le pasa `1 << 30` a `build_efectos`.
+* **6 kHz, 0.75 s and the 0.4 s loop: still true** for all but the
+  opening's thunder, which goes whole at 22 kHz
+  (`decisiones/el-trueno-va-entero-y-paga-la-lluvia.md`). The thunder **was already on
+  `main`**, not only in the experiment's branch as that decision said.
+* **The ARAM budget** is no longer "each effect whatever fits": it's per
+  package and each package fills ARAM, so there was no spare room to
+  use without looking package by package. See `decisiones/un-solo-banco-de-muestras.md`.
+* **`SE_ARAM` is still dead**: `build_varios` passes `1 << 30` to `build_efectos`.
 
-**El caso de prueba —los truenos de la apertura cortados— ya estaba
-resuelto.** Grabando la apertura quieta de `release` (955b186, sin MSU-1)
-3000 cuadros y anotando por cuadro qué efecto suena en cada voz: los tres
-truenos (cuadros 408, 1600 y 2638) suenan sus 144 cuadros enteros en la voz
-6, con la lluvia en la 7, y la grabación baja 9 dB desde el pico hasta el
-piso de la lluvia en vez de quedarse plana hasta el `KOF`.
+**The test case —the opening's thunderclaps cut off— was already
+solved.** Recording `release`'s idle opening (955b186, without MSU-1)
+for 3000 frames and noting per frame which effect plays on each voice: the three
+thunderclaps (frames 408, 1600 and 2638) play their 144 frames whole on voice
+6, with the rain on 7, and the recording drops 9 dB from the peak down to the
+rain's floor instead of staying flat until the `KOF`.
 
-# Los efectos que más se oyen
+# The sound effects heard the most
 
-"Usos" son los `PlaySound` de las páginas de los mapas que lleva `release`
-(un script sobre `data/maps/`); los de las animaciones de batalla y los de la
-pelea no están contados. "22 kHz" es lo que pesaría entero a la tasa del WAV.
+"Uses" are the `PlaySound`s of the pages of the maps `release` carries
+(a script over `data/maps/`); those of the battle animations and of the
+battle aren't counted. "22 kHz" is what it would weigh whole at the WAV's rate.
 
-| Efecto | Mapas | Usos | Dura | 22 kHz | Hoy |
+| Effect | Maps | Uses | Length | 22 kHz | Today |
 |---|---|---:|---:|---:|---|
-| Sword3 | 26, 255 | 61 | 0,79 s | 9,8 KB | **entero a 22 kHz** |
-| Bow2 | 2, 17, 20, 21, 26, 32, 133, 255, 261, 269 | 46 | 0,67 s | 8,4 KB | 6 kHz; espera: el 2 |
-| Darkness | 2, 3, 32 | 16 | 1,38 s | 17,1 KB | 6 kHz con bucle; espera: el 2 y el 3 |
-| Blow2 | 8, 11, 13, 19 | 12 | 0,28 s | 3,4 KB | 6 kHz; espera: el 19 |
-| Holy5 | 2 y ocho más | 10 | 0,83 s | 10,3 KB | 6 kHz con bucle; espera: el 2 |
-| Holy3 | 2, 11 | 9 | 0,54 s | 6,7 KB | 6 kHz; espera: el 2 |
-| Switch1 | 3 | 9 | 0,40 s | 4,9 KB | 6 kHz; espera: el 3 |
-| Decision1 | 2, 7, 17 | 8 | 0,25 s | 3,1 KB | 6 kHz; espera: el 2 |
-| Earth2 | 2, 3, 74 | 8 | 1,22 s | 15,2 KB | 6 kHz con bucle; espera: el 2 y el 3 |
-| Failure2 | 9 | 7 | 0,60 s | 7,4 KB | 6 kHz; el 9 no tiene lugar (herencia) |
-| Earth8 | 14, 261 | 7 | 0,51 s | 6,4 KB | **entero a 22 kHz** |
-| clap | 18 | 7 | 2,79 s | 17,3 KB (WAV a 11 kHz) | 6 kHz con bucle; el 18 no tiene lugar |
-| Rain1 | 1 | 6, en bucle | 5,00 s | 62 KB | 6 kHz con bucle; espera: el 1 |
-| Recovery4 | 23, 26 | 6 | 1,08 s | 13,4 KB | **entero a 22 kHz** |
-| Success2 | 9, 10, 12, 16 | 6 | 1,30 s | 16,1 KB | 6 kHz con bucle; el 9 no tiene lugar |
-| Item1 | 11, 13, 17, 20, 133 | 6 | 0,71 s | 8,8 KB | 6 kHz; el 20 no tiene lugar |
-| Monster2 | 21, 26 | 5 | 1,52 s | 18,8 KB | **entero a 22 kHz** |
-| Glass, Explosion4 | 3, 11, 19 | 5–6 | 1,5–1,9 s | 18–24 KB | 6 kHz con bucle; esperan: el 3 y el 19 |
-| Thunder9 | 3, 20, 32 | 4 | 1,92 s | 23,8 KB | 6 kHz con bucle; espera: el 3 |
-| La pelea: Attack2, Damage1, Evasion1, Escape, Item2, Bite, Monster1 | pelea | cada pelea | 0,4–3 s | 4,7–37 KB | 6 kHz; espera: la pelea |
+| Sword3 | 26, 255 | 61 | 0.79 s | 9.8 KB | **whole at 22 kHz** |
+| Bow2 | 2, 17, 20, 21, 26, 32, 133, 255, 261, 269 | 46 | 0.67 s | 8.4 KB | 6 kHz; waiting: 2 |
+| Darkness | 2, 3, 32 | 16 | 1.38 s | 17.1 KB | 6 kHz with loop; waiting: 2 and 3 |
+| Blow2 | 8, 11, 13, 19 | 12 | 0.28 s | 3.4 KB | 6 kHz; waiting: 19 |
+| Holy5 | 2 and eight more | 10 | 0.83 s | 10.3 KB | 6 kHz with loop; waiting: 2 |
+| Holy3 | 2, 11 | 9 | 0.54 s | 6.7 KB | 6 kHz; waiting: 2 |
+| Switch1 | 3 | 9 | 0.40 s | 4.9 KB | 6 kHz; waiting: 3 |
+| Decision1 | 2, 7, 17 | 8 | 0.25 s | 3.1 KB | 6 kHz; waiting: 2 |
+| Earth2 | 2, 3, 74 | 8 | 1.22 s | 15.2 KB | 6 kHz with loop; waiting: 2 and 3 |
+| Failure2 | 9 | 7 | 0.60 s | 7.4 KB | 6 kHz; 9 has no room (inheritance) |
+| Earth8 | 14, 261 | 7 | 0.51 s | 6.4 KB | **whole at 22 kHz** |
+| clap | 18 | 7 | 2.79 s | 17.3 KB (WAV at 11 kHz) | 6 kHz with loop; 18 has no room |
+| Rain1 | 1 | 6, looping | 5.00 s | 62 KB | 6 kHz with loop; waiting: 1 |
+| Recovery4 | 23, 26 | 6 | 1.08 s | 13.4 KB | **whole at 22 kHz** |
+| Success2 | 9, 10, 12, 16 | 6 | 1.30 s | 16.1 KB | 6 kHz with loop; 9 has no room |
+| Item1 | 11, 13, 17, 20, 133 | 6 | 0.71 s | 8.8 KB | 6 kHz; 20 has no room |
+| Monster2 | 21, 26 | 5 | 1.52 s | 18.8 KB | **whole at 22 kHz** |
+| Glass, Explosion4 | 3, 11, 19 | 5–6 | 1.5–1.9 s | 18–24 KB | 6 kHz with loop; waiting: 3 and 19 |
+| Thunder9 | 3, 20, 32 | 4 | 1.92 s | 23.8 KB | 6 kHz with loop; waiting: 3 |
+| The battle: Attack2, Damage1, Evasion1, Escape, Item2, Bite, Monster1 | battle | every battle | 0.4–3 s | 4.7–37 KB | 6 kHz; waiting: the battle |
 
-"Espera: el N" es que el paquete N limita muestras y subirlo le baja la tasa
-a algún instrumento: está en "Lo que decide taro". "No tiene lugar
-(herencia)" es que su paquete tiene lugar solo, pero con algún tema que
-puede venir sonando sus efectos **ya** no entran al lado, y agrandarlos haría
-esperar más al `PlayBGM`: ver abajo.
+"Waiting: N" means package N limits samples and raising it lowers the rate of
+some instrument: it's in "What taro decides". "No room
+(inheritance)" means its package has room on its own, but with some theme that
+may already be playing its sound effects **already** don't fit alongside, and enlarging them would
+make the `PlayBGM` wait longer: see below.
 
-# Lo hecho
+# What was done
 
-**Lo que un efecto entero ocupa de más ya no entra en el presupuesto de la
-música**: el banco se reparte contando cada efecto de `SE_ENTEROS` con el
-tamaño de siempre, y lo de más tiene que entrar en lo que la música deja
-libre en cada paquete donde está; si no, el conversor se corta diciendo cuál
-(`_enteros_entran` en `tools/audio/snes_music.py`). Así ningún instrumento lo
-paga **por construcción**, y si mañana la música crece en un paquete, el
-conversor avisa en vez de bajarle la tasa a alguien. El trueno de la apertura
-es la excepción, `SE_ENTEROS_PAGADOS`: taro lo eligió antes de esta regla, y
-en `test-special` su paquete sí limita muestras.
+**What a whole effect takes up extra no longer goes into the music's
+budget**: the bank is allotted counting each effect in `SE_ENTEROS` at its
+usual size, and the extra has to fit in what the music leaves
+free in each package where it is; otherwise, the converter stops saying which one
+(`_enteros_entran` in `tools/audio/snes_music.py`). That way no instrument pays for
+it **by construction**, and if tomorrow the music grows in a package, the
+converter warns instead of lowering someone's rate. The opening's thunder
+is the exception, `SE_ENTEROS_PAGADOS`: taro chose it before this rule, and
+in `test-special` its package does limit samples.
 
-**Qué entró**: los efectos que están sólo en paquetes que no limitan a ninguna
-muestra, los que más se oyen primero, a la tasa más alta que entra —22.050
-Hz, la de los WAV, o si no 16.000 u 11.025—, y sin que un paquete cuyos
-efectos hoy entran al lado de un tema que puede venir sonando deje de entrar.
-Primero se les sacó el bucle a todos los que lo tenían, y después se subió la
-tasa. Son 24 más el trueno:
+**What went in**: the effects that are only in packages that don't limit any
+sample, the most heard first, at the highest rate that fits —22,050
+Hz, the WAVs', or otherwise 16,000 or 11,025—, and without a package whose
+effects today fit alongside a theme that may already be playing ceasing to fit.
+First the loop was removed from all that had it, and then the
+rate was raised. That's 24 plus the thunder:
 
-| Tasa | Efectos |
+| Rate | Effects |
 |---|---|
 | 22 kHz | Sword3, Monster2, Recovery4, Flame5, Explosion5, Dark5, Cold2, Thunder6, Thunder4, Decision2, Earth8, Fall2, Buzzer1, Blow7, Failure1 |
 | 16 kHz | Holy6, Kill3 |
 | 11 kHz | Sword2, Dark1, Sword1 |
-| 6 kHz, sin bucle | Numbness3, Refer Book, Earth1, Thunder5 |
+| 6 kHz, no loop | Numbness3, Refer Book, Earth1, Thunder5 |
 
-**Lo que costó**, medido sobre `release` contra 955b186:
+**What it cost**, measured on `release` against 955b186:
 
-* **A los instrumentos, nada**: el reparto, las copias, la tasa y el tamaño de
-  cada muestra salen iguales, en `release` y en `test-special` (un script que
-  compara lo que devuelve `build_varios` en los dos commits).
-* **Al fundido de entrada**, algunos cuadros más de negro en los mapas que
-  crecieron —cuadros de hardware desde el pedido de salto hasta que termina
-  el fundido, en el orden 7, 26, 261, 13, 269, 30, 33, 52, 11—: 7 de 93 a
-  136, 261 de 131 a 165, 269 de 106 a 133, 33 de 99 a 117, 52 de 128 a 144,
-  13 de 88 a 103, 30 de 92 a 103, 11 de 134 a 144; el 26 igual (163). Ningún
-  paquete puede pasar de la ARAM, así que el peor no empeora: lo que cambia
-  es que más mapas se le acercan.
-* **Cartucho**: los efectos pasan de 211.509 B a 398.007 B.
+* **To the instruments, nothing**: the allotment, the copies, the rate and the size of
+  each sample come out identical, in `release` and in `test-special` (a script that
+  compares what `build_varios` returns in both commits).
+* **To the fade-in**, a few more frames of black in the maps that
+  grew —hardware frames from the jump request until the fade
+  ends, in the order 7, 26, 261, 13, 269, 30, 33, 52, 11—: 7 from 93 to
+  136, 261 from 131 to 165, 269 from 106 to 133, 33 from 99 to 117, 52 from 128 to 144,
+  13 from 88 to 103, 30 from 92 to 103, 11 from 134 to 144; 26 the same (163). No
+  package can exceed ARAM, so the worst doesn't get worse: what changes
+  is that more maps come close to it.
+* **Cartridge**: the sound effects go from 211,509 B to 398,007 B.
 
-Lo que se oye, contra el WAV original (la energía sobre 3 kHz, en dB contra
-el total): antes, entre −22 y −55 dB, 20 a 40 dB por debajo del WAV; los de
-22 kHz quedan a 1–6 dB de él, los de 16 a 2–3, y los de 11 más lejos (Dark1,
-−26 contra −8). Los que siguen a 6 kHz suenan como estaban, pero enteros y
-sin la meseta repetida.
+What's heard, against the original WAV (the energy above 3 kHz, in dB against
+the total): before, between −22 and −55 dB, 20 to 40 dB below the WAV; the
+22 kHz ones end up 1–6 dB from it, the 16 ones 2–3, and the 11 ones further (Dark1,
+−26 against −8). Those still at 6 kHz sound as they were, but whole and
+without the repeated plateau.
 
-**Lo que no cubre `just pruebas`**: nada de esto suena en la tanda. Lo miró un
-script aparte que salta al mapa, calla la música y graba cada efecto saliendo
-de la ROM, antes y después.
+**What `just pruebas` doesn't cover**: none of this sounds in the suite. A
+separate script looked at it, jumping to the map, silencing the music and recording each effect coming out
+of the ROM, before and after.
 
-# Lo que decide taro
+# What taro decides
 
-Cada candidato, con lo que pagarían los instrumentos. La cuenta rearma el
-reparto de `release` con el efecto más grande (copias incluidas) y compara la
-tasa de cada par (tema, instrumento); "bajan N" son los pares que pierden más
-de 0,5 kHz, y los que más pierden van nombrados. Las copias se reacomodan con
-cada cambio, así que un efecto chico puede mover muchos pares.
+Each candidate, with what the instruments would pay. The calculation rebuilds
+`release`'s allotment with the bigger effect (copies included) and compares the
+rate of each (theme, instrument) pair; "N go down" are the pairs that lose more
+than 0.5 kHz, and the ones that lose the most are named. The copies are rearranged with
+each change, so a small effect can move many pairs.
 
-| Candidato | Pesa de más | Lo que paga |
+| Candidate | Extra weight | What it pays |
 |---|---:|---|
-| **Rain1** a 11 kHz, con su bucle (mapa 1) | 2,1 KB | bajan 15: el taiko de `escape_newyork` y `vswar` 22,0 → 16,3, el polysynth 21,1 → 16,9, el piano (5 temas) 17,9 → 16,3 |
-| Rain1 a 22 kHz, con su bucle | 6,8 KB | bajan 18: el polysynth de `escape_newyork` 21,1 → 12,6, el taiko 22,0 → 14,0, el piano 17,9 → 14,0 |
-| Rain1 entera a 6 kHz, sin bucle | 14,3 KB | el polysynth de `escape_newyork` 21,1 → 8,4, el taiko → 10,4, el piano → 10,5 |
-| **La pelea**: Attack2, Damage1, Evasion1 y Escape a 16 kHz | 12,1 KB | bajan 40: el bronce del tema de batalla 21,7 → 10,8, y platillos de otros temas 22 → 13,9 |
-| Attack2 solo, a 22 kHz | 6,3 KB | bajan 42: el bronce de la batalla 21,7 → 16,3, las guitarras 19,9 → 15,2 |
-| Damage1 solo, a 22 kHz | 5,5 KB | bajan 25: los mismos, parecido |
-| Monster1 entero a 6 kHz | 7,6 KB | bajan 43: el bronce de la batalla → 16,3, las guitarras → 14,7 |
-| Bite, Item2 y Monster1 enteros a 11 kHz | 24,2 KB | las guitarras de la batalla 19,9 → 8,2 |
-| **Thunder9** entero a 6 kHz (mapas 3, 20, 32) | 3,9 KB | bajan 13, todos de `evilrhys` en el 3: arpa 12,2 → 9,5, cuerdas 12,5 → 10,0 |
-| Thunder9 entero a 11 kHz | 9,4 KB | `evilrhys` a 6,1–6,6 kHz |
-| **Darkness** entero a 6 kHz (2, 3, 32) | 2,1 KB | bajan 25: el polysynth de `TF3_1_awe` 16,9 → 12,6, `evilrhys` 12,5 → 11,1 |
-| Darkness entero a 16 kHz | 9,9 KB | `TF3_1_awe` a 8,4, `evilrhys` a 5,9 |
-| **Switch1** a 22 kHz (3) | 3,6 KB | bajan 13, `evilrhys`: 12,5 → 10,2 |
-| **Bow2** a 11 kHz | 1,9 KB | bajan 12, `TF3_1_awe`: polysynth 16,9 → 12,6 |
-| Bow2 a 22 kHz | 6,1 KB | `TF3_1_awe`: bajo 16,4 → 11,7, polysynth → 12,6 |
-| Holy5 a 16 kHz | 4,9 KB | `TF3_1_awe`: polysynth → 12,6, bajo → 12,9 |
-| Blow2 a 22 kHz (19) | 2,5 KB | bajan 41: un bajo de `hzbreach` y `vswar` 22,9 → 16,7, el polysynth → 16,9 |
-| Explosion4 o Glass a 11 kHz | 6,5 / 9,4 KB | bajan 50: platillos 22 → 13,9, `evilrhys` a 6,6 |
+| **Rain1** at 11 kHz, with its loop (map 1) | 2.1 KB | 15 go down: the taiko of `escape_newyork` and `vswar` 22.0 → 16.3, the polysynth 21.1 → 16.9, the piano (5 themes) 17.9 → 16.3 |
+| Rain1 at 22 kHz, with its loop | 6.8 KB | 18 go down: `escape_newyork`'s polysynth 21.1 → 12.6, the taiko 22.0 → 14.0, the piano 17.9 → 14.0 |
+| Rain1 whole at 6 kHz, no loop | 14.3 KB | `escape_newyork`'s polysynth 21.1 → 8.4, the taiko → 10.4, the piano → 10.5 |
+| **The battle**: Attack2, Damage1, Evasion1 and Escape at 16 kHz | 12.1 KB | 40 go down: the battle theme's brass 21.7 → 10.8, and cymbals of other themes 22 → 13.9 |
+| Attack2 alone, at 22 kHz | 6.3 KB | 42 go down: the battle's brass 21.7 → 16.3, the guitars 19.9 → 15.2 |
+| Damage1 alone, at 22 kHz | 5.5 KB | 25 go down: the same ones, similarly |
+| Monster1 whole at 6 kHz | 7.6 KB | 43 go down: the battle's brass → 16.3, the guitars → 14.7 |
+| Bite, Item2 and Monster1 whole at 11 kHz | 24.2 KB | the battle's guitars 19.9 → 8.2 |
+| **Thunder9** whole at 6 kHz (maps 3, 20, 32) | 3.9 KB | 13 go down, all from `evilrhys` in 3: harp 12.2 → 9.5, strings 12.5 → 10.0 |
+| Thunder9 whole at 11 kHz | 9.4 KB | `evilrhys` at 6.1–6.6 kHz |
+| **Darkness** whole at 6 kHz (2, 3, 32) | 2.1 KB | 25 go down: `TF3_1_awe`'s polysynth 16.9 → 12.6, `evilrhys` 12.5 → 11.1 |
+| Darkness whole at 16 kHz | 9.9 KB | `TF3_1_awe` at 8.4, `evilrhys` at 5.9 |
+| **Switch1** at 22 kHz (3) | 3.6 KB | 13 go down, `evilrhys`: 12.5 → 10.2 |
+| **Bow2** at 11 kHz | 1.9 KB | 12 go down, `TF3_1_awe`: polysynth 16.9 → 12.6 |
+| Bow2 at 22 kHz | 6.1 KB | `TF3_1_awe`: bass 16.4 → 11.7, polysynth → 12.6 |
+| Holy5 at 16 kHz | 4.9 KB | `TF3_1_awe`: polysynth → 12.6, bass → 12.9 |
+| Blow2 at 22 kHz (19) | 2.5 KB | 41 go down: a bass of `hzbreach` and `vswar` 22.9 → 16.7, the polysynth → 16.9 |
+| Explosion4 or Glass at 11 kHz | 6.5 / 9.4 KB | 50 go down: cymbals 22 → 13.9, `evilrhys` at 6.6 |
 
-**Bow2 y Holy5 tienen una trampa**: además del 2 están en el 26 y el 261, a
-los que lo hecho les dejó ~1 KB libre. Subirlos pide también bajar algo de lo
-hecho ahí (Monster2, Recovery4, Sword3 en el 26; Thunder4, Buzzer1 en el 261).
+**Bow2 and Holy5 have a catch**: besides 2 they're in 26 and 261, to
+which what was done left ~1 KB free. Raising them also requires lowering some of what
+was done there (Monster2, Recovery4, Sword3 in 26; Thunder4, Buzzer1 in 261).
 
-**Un camino más barato para los que comparten paquete**, como el trueno: un
-alias —otra entrada del directorio para la misma WAV— entero sólo en los
-paquetes que tienen lugar, y el de siempre en el que limita. Pero el
-directorio está lleno (255 entradas, el tope del SRCN), así que cada alias
-cuesta la última copia de `snes_music.copias`: **el primero, el `SPACE79` de
-`T_ProjectJustice_DiscLoad` y `dcbest`, 17,9 → 16,0 kHz**; el segundo, la
-copia de antes, y así. Liberar entradas es "darles a los efectos su propio
-lugar en el directorio" (ver "Sin el techo del mapa 3" en
-`la-calidad-de-la-musica.md`), que es rehacer `paquete_de_audio.s`.
+**A cheaper path for those that share a package**, like the thunder: an
+alias —another directory entry for the same WAV— whole only in the
+packages that have room, and the usual one in the one that limits. But the
+directory is full (255 entries, the SRCN cap), so each alias
+costs the last copy of `snes_music.copias`: **the first, the `SPACE79` of
+`T_ProjectJustice_DiscLoad` and `dcbest`, 17.9 → 16.0 kHz**; the second, the
+copy before it, and so on. Freeing up entries is "giving the sound effects their own
+place in the directory" (see "Sin el techo del mapa 3" in
+`la-calidad-de-la-musica.md`), which means redoing `paquete_de_audio.s`.
 
-**Los que no le cuestan a ningún instrumento pero sí a los efectos**: en
-los paquetes 9, 18, 20, 28 y 32, con algún tema que puede venir sonando los
-efectos del mapa **ya** no entran al lado y esperan al `PlayBGM`. Hay lugar
-para agrandarlos —Cold7 a 22 kHz en el 32, Wind8 a 11 en el 28, Kill2 y Kill4
-en el 20—, y lo que se paga es que esperen más: más efectos mudos entre la
-llegada y el `PlayBGM`, y ese `PlayBGM` congelado más tiempo. No se hizo.
+**The ones that cost no instrument but do cost the sound effects**: in
+packages 9, 18, 20, 28 and 32, with some theme that may already be playing, the
+map's sound effects **already** don't fit alongside and wait for the `PlayBGM`. There's room
+to enlarge them —Cold7 at 22 kHz in 32, Wind8 at 11 in 28, Kill2 and Kill4
+in 20—, and what's paid is that they wait longer: more mute effects between
+arrival and the `PlayBGM`, and that `PlayBGM` frozen for longer. It wasn't done.
 
-# Los candidatos, enteros (2026-09-26, en la rama, sin mergear)
+# The candidates, whole (2026-09-26, in the branch, unmerged)
 
-taro, escuchando: *"tengo cero dudas de que tienen que tener su longitud
-completa (todos)"*. Primero pidió la media (11 kHz) como mínimo; con los
-números de eso —el tema de batalla y `evilrhys` a un cuarto, 196 pares
-bajando— dijo que afectar tanto a la música no le agrada, y quedó así:
-**todos enteros, a la media sólo donde sea gratis, y si no a los 6 kHz de
-siempre**.
+taro, listening: *"I have zero doubts that they have to have their full
+length (all of them)"*. First he asked for half (11 kHz) as a minimum; with the
+numbers for that —the battle theme and `evilrhys` at a quarter, 196 pairs
+going down— he said that affecting the music so much doesn't please him, and it ended up like this:
+**all whole, at half only where it's free, and otherwise at the usual 6 kHz**.
 
-**No hubo ninguno gratis a la media**: cada candidato está en algún paquete
-que limita muestras (el 1, el 2, el 3, el 19 o la pelea), y en ésos
-cualquier byte de más le baja la tasa a alguien. Así que:
+**None was free at half**: each candidate is in some package
+that limits samples (1, 2, 3, 19 or the battle), and in those
+any extra byte lowers someone's rate. So:
 
-* **Enteros a 6 kHz** los que eran más largos que 0,75 s: Rain1, Bite,
-  Item2, Monster1, Thunder9 (el del 3, el 20 y el 32), Darkness, Explosion4,
-  Glass y Holy5 (`SE_ENTEROS_PAGADOS` en `tools/audio/snes_music.py`).
-* **Igual que en `main`** los que ya sonaban enteros: Attack2, Damage1,
-  Evasion1, Escape, Switch1, Bow2 y Blow2.
-* **Sin alias**: con todos a una sola tasa no hacen falta, y cada uno cuesta
-  una copia. `SE_DEL_MAPA` queda con el trueno del mapa 1, que ya estaba.
+* **Whole at 6 kHz** the ones that were longer than 0.75 s: Rain1, Bite,
+  Item2, Monster1, Thunder9 (the one in 3, 20 and 32), Darkness, Explosion4,
+  Glass and Holy5 (`SE_ENTEROS_PAGADOS` in `tools/audio/snes_music.py`).
+* **Same as on `main`** the ones that already played whole: Attack2, Damage1,
+  Evasion1, Escape, Switch1, Bow2 and Blow2.
+* **No aliases**: with all at a single rate they're not needed, and each one costs
+  a copy. `SE_DEL_MAPA` stays with map 1's thunder, which was already there.
 
-La primera versión —a la media, con alias en el mapa 3— está en 68c6818, y
-sus grabaciones en `/shared/audio/2026-09-26-efectos-completos/`.
+The first version —at half, with aliases in map 3— is in 68c6818, and
+its recordings in `/shared/audio/2026-09-26-efectos-completos/`.
 
-## La longitud completa sola ya le cuesta a la música
+## Full length alone already costs the music
 
-**Y no se puede evitar a 6 kHz**: los paquetes que limitan están llenos hasta
-el margen, y un efecto entero a 6 kHz pesa unos 3.400 bytes por segundo,
-contra los 2.529 del tope de 0,75 s con bucle. Para que la longitud completa
-fuera gratis, Rain1 tendría que ir a menos de 1 kHz.
+**And it can't be avoided at 6 kHz**: the packages that limit are full up to
+the margin, and a whole effect at 6 kHz weighs about 3,400 bytes per second,
+against the 2,529 of the 0.75 s cap with loop. For full length to
+be free, Rain1 would have to go at less than 1 kHz.
 
-Cada uno solo, contra `main` (rearmando el reparto con ese efecto entero y
-nada más cambiado):
+Each one alone, against `main` (rebuilding the allotment with that effect whole and
+nothing else changed):
 
-| Efecto | Paquetes | De más | Lo que paga la música, solo |
+| Effect | Packages | Extra | What the music pays, alone |
 |---|---|---:|---|
-| **Rain1** (5 s) | 1 | 14,3 KB | `escape_newyork`: polysynth 21,1 → 8,4, taiko 22 → 10,4, piano 17,9 → 10,5, y siete más de ~16 a ~10. **Con el trueno a 8,8 kHz, nada**: ver abajo |
-| Monster1 (3 s) | pelea | 7,6 KB | `T_VGFighterMAX_Masako`: bronce 21,7 → 16,3, guitarras 19,9 → 14,7 |
-| Bite (1 s) | pelea, 8 | 0,8 KB | bronce 21,7 → 16,3 (por una copia), el resto ~1 kHz |
-| Item2 (1,1 s) | pelea | 1,3 KB | bronce 21,7 → 16,3, toms 19,9 → 18,5 |
-| **Los tres de la pelea** | pelea | 9,7 KB | guitarras 19,9 → 13,6, toms → 14,1, bronce → 16,3; veinte instrumentos |
-| Thunder9 (1,9 s) | 3, 20, 32 | 3,9 KB | `evilrhys`: arpa 12,2 → 9,5, cuerdas 12,5 → 10,0 |
-| Darkness (1,4 s) | 2, 3, 32 | 2,1 KB | `TF3_1_awe`: polysynth 16,9 → 12,6; `evilrhys` → 11,1 |
-| Explosion4 (1,5 s) | 3, 19 | 2,4 KB | 54 pares por copias que se reacomodan: bajo de `hzbreach` y `vswar` 22,9 → 16,7, tuba de `Gaden` 17,2 → 14,7 |
-| Glass (1,9 s) | 3, 11, 19 | 4,0 KB | 55 pares, los mismos, y `evilrhys` → 9,5 |
-| **Los cuatro del mapa 3** | 3 | 12,4 KB | **`evilrhys` de 12,5 a 4,6**, y de rebote platillos de `Deflector1` y `Lunar_Pyramid` 22 → 13,9 |
-| Holy5 (0,8 s) | 2, 8 más | 0,3 KB | una muestra de `TF3_1_awe` 16,4 → 15,7 |
+| **Rain1** (5 s) | 1 | 14.3 KB | `escape_newyork`: polysynth 21.1 → 8.4, taiko 22 → 10.4, piano 17.9 → 10.5, and seven more from ~16 to ~10. **With the thunder at 8.8 kHz, nothing**: see below |
+| Monster1 (3 s) | battle | 7.6 KB | `T_VGFighterMAX_Masako`: brass 21.7 → 16.3, guitars 19.9 → 14.7 |
+| Bite (1 s) | battle, 8 | 0.8 KB | brass 21.7 → 16.3 (because of a copy), the rest ~1 kHz |
+| Item2 (1.1 s) | battle | 1.3 KB | brass 21.7 → 16.3, toms 19.9 → 18.5 |
+| **The battle's three** | battle | 9.7 KB | guitars 19.9 → 13.6, toms → 14.1, brass → 16.3; twenty instruments |
+| Thunder9 (1.9 s) | 3, 20, 32 | 3.9 KB | `evilrhys`: harp 12.2 → 9.5, strings 12.5 → 10.0 |
+| Darkness (1.4 s) | 2, 3, 32 | 2.1 KB | `TF3_1_awe`: polysynth 16.9 → 12.6; `evilrhys` → 11.1 |
+| Explosion4 (1.5 s) | 3, 19 | 2.4 KB | 54 pairs because of copies that get rearranged: bass of `hzbreach` and `vswar` 22.9 → 16.7, `Gaden`'s tuba 17.2 → 14.7 |
+| Glass (1.9 s) | 3, 11, 19 | 4.0 KB | 55 pairs, the same ones, and `evilrhys` → 9.5 |
+| **Map 3's four** | 3 | 12.4 KB | **`evilrhys` from 12.5 to 4.6**, and as a knock-on cymbals of `Deflector1` and `Lunar_Pyramid` 22 → 13.9 |
+| Holy5 (0.8 s) | 2, 8 more | 0.3 KB | one sample of `TF3_1_awe` 16.4 → 15.7 |
 
-**Todos juntos, como está en la rama** —con el trueno a 8,8 kHz—: bajan 175
-pares, y **ninguno por el paquete del mapa 1**. Lo que queda es de la pelea,
-el mapa 3, el 2 y el 19, y de rebote:
+**All together, as it is in the branch** —with the thunder at 8.8 kHz—: 175
+pairs go down, and **none because of map 1's package**. What remains is from the battle,
+map 3, 2 and 19, and knock-on effects:
 
-| Tema | Lo que más pierde | Lo limita | Instrumentos que bajan |
+| Theme | What it loses most | Limited by | Instruments that go down |
 |---|---|---|---:|
-| `evilrhys` | casi todo, 12,5 → ~4,5 | 3 | 13 |
-| `T_VGFighterMAX_Masako` | guitarras 19,9 → 13,6, toms → 14,1, bronce 21,7 → 16,3 | pelea | 20 |
-| `TF3_1_awe` | polysynth 16,9 → 12,6 | 2 | 12 |
-| `escape_newyork`, `vswar` | polysynth 21,1 → 12,6 (muestra compartida con `TF3_1_awe`) | 2 | 7 y 9 |
-| `hzbreach` | bajo 22,9 → 14,6 | 2 | 4 |
-| `3D-Galax`, `Gaden` | bajo 16,7 → 13,3, tuba 17,2 → 14,7 | 19 | 13 y 6 |
-| `cd2`, `Lunar_Pyramid`, `Deflector1`, `11h035` | ocarina 24,1 → 16,1, platillos 22 → 13,9 | 18+hzstream (copias que se reacomodan) | 4 a 11 |
-| los otros 18 | ~16–20 → ~13–14, sobre todo muestras que limita la pelea | pelea | 1 a 9 |
+| `evilrhys` | almost everything, 12.5 → ~4.5 | 3 | 13 |
+| `T_VGFighterMAX_Masako` | guitars 19.9 → 13.6, toms → 14.1, brass 21.7 → 16.3 | battle | 20 |
+| `TF3_1_awe` | polysynth 16.9 → 12.6 | 2 | 12 |
+| `escape_newyork`, `vswar` | polysynth 21.1 → 12.6 (sample shared with `TF3_1_awe`) | 2 | 7 and 9 |
+| `hzbreach` | bass 22.9 → 14.6 | 2 | 4 |
+| `3D-Galax`, `Gaden` | bass 16.7 → 13.3, tuba 17.2 → 14.7 | 19 | 13 and 6 |
+| `cd2`, `Lunar_Pyramid`, `Deflector1`, `11h035` | ocarina 24.1 → 16.1, cymbals 22 → 13.9 | 18+hzstream (copies that get rearranged) | 4 to 11 |
+| the other 18 | ~16–20 → ~13–14, mostly samples the battle limits | battle | 1 to 9 |
 
-Los que más pierden tienen pista de MSU-1, así que con MSU-1 no se oye.
+The ones that lose the most have an MSU-1 track, so with MSU-1 it isn't heard.
 
-## El trueno paga la lluvia (hecho)
+## The thunder pays for the rain (done)
 
-**El trueno del mapa 1 va entero a 8,8 kHz en vez de 22**, y con eso la
-lluvia entera es gratis: Rain1 entera a 6 kHz más `Thunder9@entero` a 8.800
-Hz ocupan 63 bytes más que hoy, dentro del margen. Comprobado con el
-conversor: con esos dos solos, el banco, las copias y la tasa y el tamaño de
-cada muestra salen **iguales que en `main`**. Es de taro, el 2026-09-26: ya
-había escuchado el trueno a menos calidad y le pareció bastante aceptable.
-Ver `decisiones/el-trueno-va-entero-y-paga-la-lluvia.md`.
+**Map 1's thunder goes whole at 8.8 kHz instead of 22**, and with that the
+whole rain is free: Rain1 whole at 6 kHz plus `Thunder9@entero` at 8,800
+Hz take up 63 bytes more than today, within the margin. Checked with the
+converter: with those two alone, the bank, the copies and the rate and size of
+each sample come out **identical to `main`**. It's taro's, from 2026-09-26: he'd
+already listened to the thunder at lower quality and found it quite acceptable.
+See `decisiones/el-trueno-va-entero-y-paga-la-lluvia.md`.
 
-## Propuestas que quedan, medidas (sin implementar)
+## Proposals that remain, measured (not implemented)
 
-* **Menos de 6 kHz para los largos del mapa 3 y la pelea.** A 4 kHz enteros,
-  los cuatro del mapa 3 cuestan 4,9 KB en vez de 12,4 (`evilrhys` a ~9,4 en
-  vez de 4,6), y los tres de la pelea 3,9 en vez de 9,7 (bronce y guitarras a
-  ~16,3 en vez de ~14). No es gratis ni así.
-* **Lo de fondo**: liberar entradas del directorio para que las copias
-  separen a los temas del paquete que los limita (casi todo el rebote), o
-  los efectos largos por streaming, o versiones de calidad con MSU-1 (lo
-  está haciendo otro agente).
+* **Less than 6 kHz for the long ones of map 3 and the battle.** At 4 kHz whole,
+  map 3's four cost 4.9 KB instead of 12.4 (`evilrhys` at ~9.4 instead of
+  4.6), and the battle's three 3.9 instead of 9.7 (brass and guitars at
+  ~16.3 instead of ~14). It isn't free even then.
+* **The underlying fix**: free up directory entries so the copies
+  separate the themes from the package that limits them (almost all the knock-on), or
+  the long effects by streaming, or quality versions with MSU-1 (another agent
+  is doing it).
 
-## Carga y esperas
+## Loading and waits
 
-Los paquetes que limitan no crecen: lo que ganan los efectos lo pierde la
-música. Medido saltando desde el título en el orden 1, 2, 3, 8, 11, 19, 20,
-23, 26, 32, 261, 17, 255, 13 (cuadros desde el pedido de salto hasta el fin
-del fundido), contra `main`: el 20 +13, el 32 +10, el 19 +9, el 11 +5; el 1
-−10 y el 2 −11 (el trueno a 8,8 kHz pesa 14 KB menos, y la música del 2
-bajó); los demás igual o uno menos. Cargar una partida en el mapa 1 entra en el
-tope de `test_entrar_al_juego_devuelve_las_muestras_del_tema_del_mapa`, que
-volvió a como estaba.
+The packages that limit don't grow: what the sound effects gain the
+music loses. Measured jumping from the title in the order 1, 2, 3, 8, 11, 19, 20,
+23, 26, 32, 261, 17, 255, 13 (frames from the jump request to the end
+of the fade), against `main`: 20 +13, 32 +10, 19 +9, 11 +5; 1
+−10 and 2 −11 (the thunder at 8.8 kHz weighs 14 KB less, and 2's music
+went down); the rest the same or one less. Loading a save in map 1 fits within the
+cap of `test_entrar_al_juego_devuelve_las_muestras_del_tema_del_mapa`, which
+went back to how it was.
 
-**Esperan al `PlayBGM` de más**: los efectos del 11 con `hzstream` o
-`C3classi` sonando, que antes entraban, por Glass entero (faltan 1,9 y 3,6
-KB; entero no puede pesar menos), y los del 20 con `3D-Galax` y los del 32
-con `Lunar_Pyramid`, más que antes. El 28 con `wb3shop` mejora.
+**Extra waits for the `PlayBGM`**: 11's sound effects with `hzstream` or
+`C3classi` playing, which fit before, because of Glass whole (1.9 and 3.6
+KB short; whole it can't weigh less), and 20's with `3D-Galax` and 32's
+with `Lunar_Pyramid`, more than before. 28 with `wb3shop` improves.
 
-**Lo que no cubre `just pruebas`**: que los efectos suenen enteros; lo grabó
-un script aparte, efecto por efecto, saliendo de la ROM, en
+**What `just pruebas` doesn't cover**: that the sound effects play whole; a
+separate script recorded it, effect by effect, coming out of the ROM, in
 `/shared/audio/2026-09-26-efectos-enteros/`.
 
-# Para escuchar
+# To listen
 
-`/shared/audio/2026-09-26-efectos/`, con su `LEEME.txt`: los 24 de lo hecho,
-antes y después, y los candidatos en dos o tres calidades, todos saliendo de
-la ROM sin MSU-1, con la música callada, a volumen 100, tempo 100 y al
-centro. Los candidatos salen de una ROM armada aparte que los mete en mapas
-sin tema; en el juego pagarían lo de la tabla.
+`/shared/audio/2026-09-26-efectos/`, with its `LEEME.txt`: the 24 of what was done,
+before and after, and the candidates in two or three qualities, all coming out of
+the ROM without MSU-1, with the music silenced, at volume 100, tempo 100 and
+centred. The candidates come from a ROM built separately that puts them in maps
+without a theme; in the game they'd pay what's in the table.
 
-# Encontrado de paso
+# Found in passing
 
-**Sin MSU-1, el `FadeOutBGM` calla también los efectos** hasta que arranca
-otro tema. El trueno del final del mapa 3 es uno de los que caen ahí.
-Arreglado el 2026-09-26: `tasks/el-fundido-del-tema-calla-los-efectos.md`.
+**Without MSU-1, `FadeOutBGM` also silences the sound effects** until another
+theme starts. The thunder at the end of map 3 is one of those that fall there.
+Fixed on 2026-09-26: `tasks/el-fundido-del-tema-calla-los-efectos.md`.
 
-# Lo de antes: el 2026-09-24
+# The earlier work: 2026-09-24
 
-La investigación de ese día (sobre 7303f2b) encontró las dos causas del
-trueno cortado: la lluvia le robaba la única voz —se cortaba a los 73 de sus
-144 cuadros, y una vez a los 7— y el tope con bucle le repetía el tramo más
-fuerte hasta un `KOF` seco. taro lo oyó tartamudear aun sin lluvia. Se
-arreglaron las dos: dos voces (8c9c182) y el trueno entero a 22 kHz, con los
-números en la decisión. El resto de ese plan —efectos más largos en todos
-los mapas, el fundido horneado como plan B, la tasa para todos— es lo que
-reemplaza esta tarea: **efecto por efecto, y sólo donde no paga nadie**.
+That day's investigation (on 7303f2b) found the two causes of the
+cut-off thunder: the rain stole its only voice —it cut off at 73 of its
+144 frames, and once at 7— and the cap with loop repeated its loudest
+stretch until a dry `KOF`. taro heard it stutter even without rain. Both
+were fixed: two voices (8c9c182) and the thunder whole at 22 kHz, with the
+numbers in the decision. The rest of that plan —longer effects in all
+maps, the baked fade as plan B, the rate for all— is what this
+task replaces: **effect by effect, and only where nobody pays**.

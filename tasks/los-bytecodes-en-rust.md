@@ -1,39 +1,39 @@
 ---
-name: "Los bytecodes, declarados en Rust"
-description: "Los dos bytecodes en un crate de tools/rm2k-snes/ con una macro, el .inc escrito por rm2k-snes-assemble al armar, y fuera protocol, sus TOML y los cuatro archivos generados"
+name: "The bytecodes, declared in Rust"
+description: "The two bytecodes in a crate in tools/rm2k-snes/ with a macro, the .inc written by rm2k-snes-assemble when building, and out go protocol, its TOML files and the four generated files"
 type: refactor
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-10-02. Va **después** de `las-pruebas-sin-opcodes.md`,
-para que ninguna prueba de Python necesite los números.
+From taro, on 2026-10-02. It goes **after** `las-pruebas-sin-opcodes.md`,
+so that no Python test needs the numbers.
 
-- Un crate en `tools/rm2k-snes/` (por ejemplo `rm2k-snes-bytecode`) declara
-  los dos bytecodes con una `macro_rules!` que da las constantes y una tabla
-  recorrible; las validaciones de `protocol` (números contiguos, nombres que
-  no se repiten entre los dos, tamaños) pasan a ser pruebas o `const`
-  asserts del crate.
-- `rm2k-snes-assemble` escribe `event_opcodes.inc` y `music_opcodes.inc`
-  —con la tabla del despacho— en el directorio del cartucho, al armar.
-- Se van `tools/snes/protocol/`, sus TOML, los cuatro archivos generados y
-  commiteados, `test_protocol.py` y la receta `just protocol`.
-- Verificación: las ROMs byte por byte iguales, y el `.inc` generado igual
-  línea por línea al que hoy está commiteado.
+- A crate in `tools/rm2k-snes/` (for example `rm2k-snes-bytecode`) declares
+  the two bytecodes with a `macro_rules!` that gives the constants and a
+  walkable table; `protocol`'s validations (contiguous numbers, names that
+  don't repeat across the two, sizes) become tests or `const`
+  asserts of the crate.
+- `rm2k-snes-assemble` writes `event_opcodes.inc` and `music_opcodes.inc`
+  —with the dispatch table— in the cartridge's directory, when building.
+- Out go `tools/snes/protocol/`, its TOML files, the four generated and
+  committed files, `test_protocol.py` and the `just protocol` recipe.
+- Verification: the ROMs identical byte for byte, and the generated `.inc` identical
+  line by line to the one committed today.
 
-El bytecode es el formato de este runtime, no de RM2k: agregar una feature es
-sumar opcodes (`decisiones/rm2k-plus.md`).
+The bytecode is this runtime's format, not RM2k's: adding a feature is
+adding opcodes (`decisiones/rm2k-plus.md`).
 
-## Cómo quedó (Benteveíto, 2026-10-02)
+## How it turned out (Benteveíto, 2026-10-02)
 
-**El crate es `tools/rm2k-snes/bytecode/`**, paquete `rm2k-snes-bytecode`:
-el nombre del directorio sigue a los vecinos (`events`, `battle`), y el del
-paquete al prefijo de la capa. Es una biblioteca: no se instala, entra en
-`rm2k-snes-events`, `rm2k-snes-audio`, `rm2k-snes-convert` y
+**The crate is `tools/rm2k-snes/bytecode/`**, package `rm2k-snes-bytecode`:
+the directory name follows its neighbours (`events`, `battle`), and the
+package's the layer prefix. It's a library: it isn't installed, it goes into
+`rm2k-snes-events`, `rm2k-snes-audio`, `rm2k-snes-convert` and
 `rm2k-snes-cartridge`.
 
-* `src/events.rs` y `src/music.rs` son las dos declaraciones, cada una una
-  invocación de `bytecode!`:
+* `src/events.rs` and `src/music.rs` are the two declarations, each one an
+  invocation of `bytecode!`:
 
       /// `CallEvent` inside a shared common event body: ...
       OP_CALL = 0x3F (body: byte);
@@ -41,88 +41,88 @@ paquete al prefijo de la capa. Es una biblioteca: no se instala, entra en
           repeated options (window: word, destination: word);
       OP_PAN = 0x11 (operation: byte, dx: signed word, ...);
 
-  La macro da un `pub const OP_X: u8` por opcode, con el doc comment encima,
-  y `BYTECODE`, la tabla recorrible (nombre, número, argumentos con tipo,
-  `signed` y `count`, y el grupo repetido). Los tamaños salen de ahí
-  (`fixed_size`, `size_at`): ya no hay `OPCODE_SIZE` ni `VARIABLE_SIZE`.
-* Los TOML se transcribieron con un script, no a mano: la cabecera de cada
-  uno pasó a `//!` del módulo —reescrita donde hablaba del TOML, de
-  `README.md` o del generador—, y el comentario de cada opcode a `///`. En
-  la música los comentarios eran de familia (uno cada ocho opcodes): se
-  repiten en los ocho, para que cada constante diga qué es.
-* Comprobado contra lo que había: los dos `.inc` iguales línea por línea
-  salvo las líneas 3 a 5 de la cabecera, y los tamaños de cada opcode
-  iguales a los de los `opcodes.rs` generados —con una prueba descartable
-  que los incluía a los dos—.
+  The macro gives a `pub const OP_X: u8` per opcode, with the doc comment above,
+  and `BYTECODE`, the walkable table (name, number, typed arguments,
+  `signed` and `count`, and the repeated group). The sizes come from there
+  (`fixed_size`, `size_at`): there's no longer an `OPCODE_SIZE` or `VARIABLE_SIZE`.
+* The TOML files were transcribed with a script, not by hand: the header of each
+  one became the module's `//!` —rewritten where it talked about the TOML,
+  `README.md` or the generator—, and each opcode's comment became `///`. In
+  the music ones the comments were per family (one every eight opcodes): they're
+  repeated in all eight, so that each constant says what it is.
+* Checked against what there was: the two `.inc` files identical line by line
+  except lines 3 to 5 of the header, and each opcode's sizes
+  identical to those of the generated `opcodes.rs` —with a throwaway test
+  that included both—.
 
-**Las validaciones son `const` asserts**, con el mensaje armado en un
-`const fn` porque `panic!` en una constante no formatea: un número repetido
-("OP_RETURN and OP_CALL both take 0x3F"), un hueco en el despacho de eventos
-("nothing takes 0x40, 0x41"), un nombre en los dos bytecodes ("OP_END is in
-the event bytecode and in the music one"), un grupo repetido sin `count` o
-un `count` sin grupo, y un bytecode vacío **no compilan**. Un tipo que no
-existe (`dword`) tampoco: es un token que la macro no espera. Dos opcodes
-con el mismo nombre son dos `const` con el mismo nombre. Las cuatro primeras
-las vi fallar rompiendo `events.rs` a propósito. Las pruebas del crate son
-esos mensajes —llamando a los mismos `const fn` en tiempo de ejecución—, la
-forma del `.inc` y `tests/runtime.rs`, que reemplaza a la mitad de
-`test_protocol.py` que miraba el runtime: cada `#OP_X` está declarado y
-ningún `OP_X =` está escrito a mano (visto fallar con los dos).
+**The validations are `const` asserts**, with the message built in a
+`const fn` because `panic!` in a constant doesn't format: a repeated number
+("OP_RETURN and OP_CALL both take 0x3F"), a gap in the event dispatch
+("nothing takes 0x40, 0x41"), a name in both bytecodes ("OP_END is in
+the event bytecode and in the music one"), a repeated group without `count` or
+a `count` without a group, and an empty bytecode **don't compile**. A type that doesn't
+exist (`dword`) doesn't either: it's a token the macro doesn't expect. Two opcodes
+with the same name are two `const`s with the same name. The first four
+I saw fail by breaking `events.rs` on purpose. The crate's tests are
+those messages —calling the same `const fn`s at runtime—, the
+shape of the `.inc` and `tests/runtime.rs`, which replaces the half of
+`test_protocol.py` that looked at the runtime: every `#OP_X` is declared and
+no `OP_X =` is written by hand (seen failing with both).
 
-**El ensamblador**: `rm2k-snes-assemble` escribe `event_opcodes.inc` y
-`music_opcodes.inc` en el directorio del cartucho (`-I`) antes de buscar
-los generados, así que son generados como los demás: el reparto en bancos
-los recorre —no tienen segmentos, salen iguales— y una copia vieja al lado
-de `main.s` se rechaza como la de `mapdata.inc`. `main.s` no cambió.
+**The assembler**: `rm2k-snes-assemble` writes `event_opcodes.inc` and
+`music_opcodes.inc` in the cartridge's directory (`-I`) before looking for
+the generated ones, so they're generated like the rest: the bank packing
+walks them —they have no segments, they come out the same— and a stale copy next
+to `main.s` is rejected like `mapdata.inc`'s. `main.s` didn't change.
 
-**La cabecera del `.inc` cambió** —dice que lo escribe `rm2k-snes-assemble`
-en cada build—, con las mismas cinco líneas, así que las líneas de lo demás
-no se mueven. El `.dbg` cambia: el archivo del `.inc` pasa de
-`tools/runtime/` a `rom/build/<cartucho>/`, con otro tamaño. Y `just
-entregar` ya no lleva los opcodes en el `tools/runtime/` que copia: Mesen2
-los ve como a los demás `.inc` generados.
+**The `.inc` header changed** —it says `rm2k-snes-assemble` writes it
+on each build—, with the same five lines, so the lines of the rest
+don't move. The `.dbg` changes: the `.inc` file moves from
+`tools/runtime/` to `rom/build/<cartucho>/`, with another size. And `just
+entregar` no longer carries the opcodes in the `tools/runtime/` it copies: Mesen2
+sees them like the other generated `.inc` files.
 
-**Una prueba de ABL dependía de que el `.inc` estuviera en el runtime**:
-`test_saltos_entre_bancos.py` sabía que la línea de `interpreter.s` que
-expande `EVENT_HANDLERS` son datos porque juntaba los `.addr` de la
-expansión sólo de `tools/runtime/`. Dio rojo en los tres cartuchos; ahora
-junta los datos de cualquier archivo, en su propio commit.
+**An ABL test depended on the `.inc` being in the runtime**:
+`test_saltos_entre_bancos.py` knew that the line of `interpreter.s` that
+expands `EVENT_HANDLERS` is data because it gathered the expansion's `.addr`s
+only from `tools/runtime/`. It went red in the three cartridges; now it
+gathers the data from any file, in its own commit.
 
-## Los commits
+## The commits
 
-1. `3954ce6c` el crate, los usos, el ensamblador y los cuatro generados
-   borrados —el crate los reemplaza, y los `.inc` en el runtime taparían
-   los del cartucho—;
-2. `e2baa5ef` sólo borrados: `tools/snes/protocol/`, `test_protocol.py`,
-   `conftest.py` —su único fixture lo usaba esa prueba—, las recetas, el
-   miembro y el perfil del workspace;
-3. `f6a9b6cc` la prosa, guiada por el diff del 2;
-4. `e81834de` el arreglo de `test_saltos_entre_bancos.py`.
+1. `3954ce6c` the crate, the uses, the assembler and the four generated files
+   deleted —the crate replaces them, and the `.inc` files in the runtime would cover up
+   the cartridge's—;
+2. `e2baa5ef` only deletions: `tools/snes/protocol/`, `test_protocol.py`,
+   `conftest.py` —its only fixture was used by that test—, the recipes, the
+   workspace member and profile;
+3. `f6a9b6cc` the prose, guided by the diff of 2;
+4. `e81834de` the fix to `test_saltos_entre_bancos.py`.
 
-## Verificación
+## Verification
 
-* `NO_CACHE=1 just cartuchos` después de cada uno de los tres primeros:
-  las tres ROMs iguales a la base (`abl.sfc` `35c765009320d436…`). Contra
-  la base, `rom/build/` tiene los mismos archivos más los seis `.inc`
-  nuevos, iguales a los que estaban commiteados salvo las líneas 3 a 5; los
-  tres `.dbg` cambian en las dos líneas de esos `.inc` (ruta y tamaño:
-  comparado contra el `.dbg` del checkout principal, que tenía la misma
-  ROM, son las únicas). El 2 deja todo igual al 1; el 3 cambia otra vez
-  los `.dbg`, porque los comentarios de `main.s` e `interpreter.s` corren
-  números de línea.
-* `just pruebas`: **993**, igual que antes, con el arreglo del 4.
-* `just -f tools/justfile test`: **32** (eran 36: se fueron las cuatro de
-  `test_protocol.py`).
-* `cargo test -p` de `rm2k-snes-bytecode` (19 y la del runtime),
-  `rm2k-snes-cartridge`, `rm2k-snes-events`, `rm2k-snes-convert` y,
-  con `--release`, `rm2k-snes-audio`.
+* `NO_CACHE=1 just cartuchos` after each of the first three:
+  the three ROMs identical to the baseline (`abl.sfc` `35c765009320d436…`). Against
+  the baseline, `rom/build/` has the same files plus the six new `.inc`
+  files, identical to the ones that were committed except lines 3 to 5; the
+  three `.dbg` files change in the two lines for those `.inc` files (path and size:
+  compared against the main checkout's `.dbg`, which had the same
+  ROM, they're the only ones). 2 leaves everything identical to 1; 3 changes the
+  `.dbg` files again, because the comments in `main.s` and `interpreter.s` shift
+  line numbers.
+* `just pruebas`: **993**, same as before, with the fix of 4.
+* `just -f tools/justfile test`: **32** (it was 36: the four from
+  `test_protocol.py` went away).
+* `cargo test -p` of `rm2k-snes-bytecode` (19 and the runtime one),
+  `rm2k-snes-cartridge`, `rm2k-snes-events`, `rm2k-snes-convert` and,
+  with `--release`, `rm2k-snes-audio`.
 
-## Qué instalar al mergear
+## What to install on merging
 
     just -f tools/justfile install cartridge rm2k-snes-audio events convert
     cargo uninstall --root /usr/local protocol
 
-`bytecode` es una biblioteca: entra en esos cuatro. `convert` hace falta
-aunque no cambie lo que hace, porque tomaba las constantes del módulo de
-`events` que ya no existe. El `protocol` del global queda huérfano: nada lo
-llama, y `just which` ya no lo lista.
+`bytecode` is a library: it goes into those four. `convert` is needed
+even though what it does doesn't change, because it took the constants from the
+`events` module that no longer exists. The global `protocol` is left orphaned: nothing
+calls it, and `just which` no longer lists it.

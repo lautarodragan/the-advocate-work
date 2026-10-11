@@ -1,109 +1,109 @@
 ---
-name: "Lashe 5: la cola del auto"
-description: "El cierre del 36 por las tres ramas, hasta el Teleport al 49 exclusive"
+name: "Lashe 5: the car's tail end"
+description: "The closing of 36 through the three branches, up to the Teleport to 49 exclusive"
 type: feature
 status: done
 assignee: taro
 ---
 
-# Qué
+# What
 
-El último hito de `lashe-city-hasta-la-carrera.md`. Va cuando están el 1, el 2
-y el 3 —y el 4 si se quiere jugar la rama del droide peleando con él—.
+The last milestone of `lashe-city-hasta-la-carrera.md`. It goes when 1, 2
+and 3 are in —and 4 if you want to play the droid branch fighting it—.
 
-Que las tres ramas lleguen al final: la página 2 del evento 3 del 36, con el 161
-y la condición de la rama cumplida, nota el auto de la Agency (prende el 238),
-pregunta "Should we stay in Lashe City or get out?", y con "We've got to get out
-of here" prende el 182 y llega al límite —lo que se haya decidido en el hito 1
-para el `Teleport [49, 1, 26]`—.
+Make the three branches reach the end: page 2 of event 3 of 36, with 161
+and the branch's condition met, notices the Agency car (turns on 238),
+asks "Should we stay in Lashe City or get out?", and with "We've got to get out
+of here" turns on 182 and reaches the limit —whatever was decided in milestone 1
+for the `Teleport [49, 1, 26]`—.
 
-    Arden   161 + 169   (el HQ de los Vipers, en el 38)
-    Saldra  161 + 181   (el Sector 33, el 47)
-    solo    161 + 150   (el droide)
+    Arden   161 + 169   (the Vipers' HQ, in 38)
+    Saldra  161 + 181   (Sector 33, 47)
+    alone   161 + 150   (the droid)
 
-"Stay in the city a little longer" no cierra nada: la próxima vez que se vuelve
-al auto, la rama de arriba de la misma página lo vuelve a preguntar.
+"Stay in the city a little longer" closes nothing: the next time you go back
+to the car, the upper branch of the same page asks it again.
 
-No debería pedir código nuevo: todo lo que la página usa ya compila en el hito 1.
-Lo que pide es **jugarlo de punta a punta**, porque es el único lugar donde se
-juntan los tres caminos y los switches que dejaron.
+It shouldn't need new code: everything the page uses already compiles in milestone 1.
+What it needs is **playing it end to end**, because it's the only place where
+the three paths and the switches they left come together.
 
-# Pruebas
+# Tests
 
-- **Tres recorridos**, uno por rama, desde la charla en el auto (mapa 4,
-  página 5) hasta el límite, sobre `release`. Son largos: conviene que cada uno
-  arranque con los switches de los tramos que no son de su rama ya puestos
-  —el tramo de Wick lo cubre el recorrido del hito 2— y juegue lo suyo más el
-  cierre.
-- "Stay" una vez y "get out" después.
-- Comprobar que **ninguna** rama llega al cierre sin su condición: la rama sin
-  compañero y sin droide tiene que quedarse en la ciudad, como en el original.
+- **Three walkthroughs**, one per branch, from the talk in the car (map 4,
+  page 5) to the limit, on `release`. They're long: it's best that each one
+  starts with the switches of the stretches that aren't its branch's already set
+  —Wick's stretch is covered by milestone 2's walkthrough— and plays its own plus the
+  closing.
+- "Stay" once and "get out" afterwards.
+- Check that **no** branch reaches the closing without its condition: the branch with no
+  companion and no droid has to stay in the city, as in the original.
 
 # Status
 
-2026-09-27, en `testing/`: hecho sobre `a3140f1` (hitos 1, 2 y 3), en la
-rama del agente, con `main` mergeado antes de entregar. **No pidió código
-nuevo**: las tres ramas cierran con la ROM como estaba. Lo que queda es de
-taro: jugarlo y mirar las fotos sin golden.
+2026-09-27, in `testing/`: done on `a3140f1` (milestones 1, 2 and 3), in the
+agent's branch, with `main` merged before delivering. **It didn't need new
+code**: the three branches close with the ROM as it was. What's left is
+taro's: play it and look at the photos without golden.
 
-# Lo hecho
+# What was done
 
-`pruebas/abl/test_recorrido_lashe_cierre_golden.py`, sobre `release`, un
-recorrido por rama. Cada uno arranca en la charla del auto del mapa 4 (el 132),
-pasa por la cinemática del 34, y llega al 36 con el tramo de Wick hecho (el
-161 prendido a mano: lo juega `test_recorrido_lashe_wick_golden.py`). Después:
+`pruebas/abl/test_recorrido_lashe_cierre_golden.py`, on `release`, one
+walkthrough per branch. Each one starts at the car talk in map 4 (132),
+goes through the cutscene in 34, and reaches 36 with Wick's stretch done (
+161 turned on by hand: `test_recorrido_lashe_wick_golden.py` plays it). Then:
 
-1. su sector y de vuelta al auto **sin hacer lo suyo**: el 36 no prende el 238
-   y la primera elección que abre es la de sectores (cuatro opciones, no dos);
-2. lo suyo, jugado desde el 36 y no con `ir_al_mapa`, y caminando de vuelta al
-   auto;
-3. "Stay": el 238 prendido, el 182 no; otra vuelta a un sector y al auto;
-4. "We've got to get out of here": el 182, el cartel del fin y el título.
+1. its sector and back to the car **without doing its own thing**: 36 doesn't turn on 238
+   and the first choice it opens is the sectors one (four options, not two);
+2. its own thing, played from 36 and not with `ir_al_mapa`, and walking back to the
+   car;
+3. "Stay": 238 on, 182 not; another trip to a sector and to the car;
+4. "We've got to get out of here": 182, the end sign and the title.
 
-Para que "sin su condición" no sea sólo "sin nada", cada uno arranca con el
-switch de **otra** rama que se puede tener sin ser la propia:
+So that "without its condition" isn't just "without anything", each one starts with the
+switch of **another** branch that you can have without it being your own:
 
-    Arden   con el 181 (los guardias andan en las tres ramas); juega el caño,
-            el HQ y el susurro (169) en el 38
-    Saldra  con el 150 y AG7 en el grupo (con ella el droide es opcional); juega
-            la tienda del 56 y los guardias (181) en el 47. La rama de la
-            página que mira el 150 pide que el 56 esté apagado: no alcanza
-    solo    con el 181; juega Stash, la planta, el chip, el túnel, AG7 y su
-            tutorial en el 48. Sin el 150 se queda en la ciudad, como en el
+    Arden   with 181 (the guards work in all three branches); plays the pipe,
+            the HQ and the whisper (169) in 38
+    Saldra  with 150 and AG7 in the party (with her the droid is optional); plays
+            the shop in 56 and the guards (181) in 47. The branch of the
+            page that looks at 150 requires 56 to be off: it isn't enough
+    alone   with 181; plays Stash, the plant, the chip, the tunnel, AG7 and its
+            tutorial in 48. Without 150 it stays in the city, as in the
             original
 
-Los tramos que ya jugaban los hitos 1 y 3 se reusan: en un commit aparte, el
-cuerpo de sus pruebas pasó a funciones (`el_hq_por_el_cano`,
-`la_tienda_y_los_guardias`, `irse_termina_la_demo`, `de_stash_a_ag7`), sin
-cambiar lo que juegan.
+The stretches milestones 1 and 3 already played are reused: in a separate commit, the
+body of their tests became functions (`el_hq_por_el_cano`,
+`la_tienda_y_los_guardias`, `irse_termina_la_demo`, `de_stash_a_ag7`), without
+changing what they play.
 
-Que el paso 1 caza lo que dice se comprobó a mano una vez: con el 169 prendido
-de entrada, la rama de Arden se planta ahí ("tiene 2 opciones").
+That step 1 catches what it says was checked by hand once: with 169 on
+from the start, Arden's branch stops there ("tiene 2 opciones").
 
-**Ninguna pelea obligatoria** en las tres ramas: la única zona con encuentros
-es la planta (59 a 62), y ahí Talan va solo —AG7 entra después—; el recorrido
-los apaga, como el del hito 3. Así que la rama del droide no depende del
-hito 4.
+**No mandatory battle** in the three branches: the only area with encounters
+is the plant (59 to 62), and there Talan goes alone —AG7 joins later—; the walkthrough
+turns them off, like milestone 3's. So the droid branch doesn't depend on
+milestone 4.
 
-Las fotos quedan en `pruebas/snapshots/playthrough/lashe-cierre-*/` **sin
-golden** (`arden`, `saldra`, `solo`). Lo que **no** cubren: el auto azul (130
-apagado), el tramo de Wick jugado en la misma corrida, y las peleas de la
-planta.
+The photos are left in `pruebas/snapshots/playthrough/lashe-cierre-*/` **without
+golden** (`arden`, `saldra`, `solo`). What they **don't** cover: the blue car (130
+off), Wick's stretch played in the same run, and the plant's
+battles.
 
-# Qué tiene que mirar taro jugando
+# What taro has to look at while playing
 
-El juego desde la charla en el auto hasta el límite, por la rama que elija, con
-el build que sale de `main` mergeado. Y que el límite haga lo que se decidió.
+The game from the talk in the car to the limit, along the branch of his choice, with
+the build that comes out of merged `main`. And that the limit does what was decided.
 
-Por rama, con el build de `main` mergeado: con Arden, el caño y el susurro;
-con Saldra, los guardias del 33; sin compañero, Stash, la planta y AG7. Antes
-de cumplir la condición, volver al auto no tiene que preguntar nada; después,
-"Stay" una vez (se vuelve a preguntar la próxima) y "get out": el cartel del
-fin de la demo y el título.
+Per branch, with the build of merged `main`: with Arden, the pipe and the whisper;
+with Saldra, the guards in 33; with no companion, Stash, the plant and AG7. Before
+meeting the condition, going back to the car shouldn't ask anything; afterwards,
+"Stay" once (it's asked again the next time) and "get out": the demo's end sign
+and the title.
 
-# Probado
+# Tested
 
-taro, el 2026-09-27, en la SNES con el FX Pak: anduvo todo, incluido el camino
-de vender el Idol, sobornar al guardia y llevar a AG7; la carrera sin lag ni
-bugs (el compañero al volante, también). Queda aparte el héroe negro después
-de cambiar de gráfico en el mismo mapa (HQ de Lazer Teeth, Boss Wick).
+taro, on 2026-09-27, on the SNES with the FX Pak: everything worked, including the path
+of selling the Idol, bribing the guard and taking AG7; the race with no lag or
+bugs (the companion at the wheel, too). Separate from this is the black hero after
+changing graphic in the same map (Lazer Teeth's HQ, Boss Wick).

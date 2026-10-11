@@ -1,99 +1,99 @@
 ---
-name: "Dos puertas más en el mapa de debug"
-description: "Una puerta que deja en Distant Paradise apenas se toma el control de Talan después de las cinemáticas de llegada, y otra después del minijuego de Fortitude, al terminar la charla con el Dr. Vago"
+name: "Two more doors in the debug map"
+description: "A door that drops you in Distant Paradise right when you take control of Talan after the arrival cutscenes, and another after the Fortitude minigame, when the talk with Dr. Vago ends"
 type: feature
 status: done
 assignee: taro
 agents: [Hurón]
 ---
 
-De taro, el 2026-10-04: "Podés agregar una o dos puertas más al mapa debug?
-… una que te deje en Paradise directamente — en el mismo lugar que te
-dejaría llegar normalmente, luego de todas las cinemáticas, apenas tomás
-control de Talan", y "una después del mini juego de Fortitude, después de
-retomar el control de Talan (creo que sería inmediatamente al terminar la
-charla con Dr Vago, no?)".
+From taro, on 2026-10-04: "Can you add one or two more doors to the debug map?
+… one that leaves you in Paradise directly — in the same place where arriving
+normally would leave you, after all the cutscenes, right when you take
+control of Talan", and "one after the Fortitude mini game, after
+regaining control of Talan (I think it would be right when the
+talk with Dr Vago ends, right?)".
 
-El mapa de debug es `parches/manual/nuevos/Map0900.json`; cada puerta deja
-el estado de alguien que jugó hasta ahí.
+The debug map is `parches/manual/nuevos/Map0900.json`; each door leaves
+the state of someone who played up to there.
 
-## Dónde quedaron
+## Where they ended up
 
-El cuarto pasó de 26 a 29 celdas de ancho, para que entren dos puertas
-más con el mismo paso que las otras: la 7 en (22,14), con su cartel en
-(21,11), y la 8 en (25,14), con el suyo en (24,11). Las dos piden
-compañero, como la de la carrera y la del mundo: sin ninguno el juego no
-llega, y lo dicen sin saltar.
+The room went from 26 to 29 cells wide, so that two more doors fit
+with the same spacing as the others: 7 at (22,14), with its sign at
+(21,11), and 8 at (25,14), with its own at (24,11). Both require a
+companion, like the race one and the world one: without one the game doesn't
+get there, and they say so without jumping.
 
-## El momento de cada una
+## The moment of each
 
-**Después de Fortitude, la 7: taro tenía razón**, es apenas termina la
-charla con Vago. Pero no es en la casa de Vago: la automática del 81
-(evento 6, página 5, con el 309) cierra la historia, salta a Sorbe (69,
-10,19), suma al compañero y prende el 310, y ahí termina. Desde la
-escotilla del 95 no se mueve nadie hasta ese salto. Talan queda mirando
-abajo, con el compañero en el grupo.
+**After Fortitude, 7: taro was right**, it's right when the
+talk with Vago ends. But it isn't in Vago's house: the autorun in 81
+(event 6, page 5, with 309) closes the story, jumps to Sorbe (69,
+10,19), adds the companion and turns on 310, and ends there. From the
+hatch in 95 nobody moves until that jump. Talan is left facing
+down, with the companion in the party.
 
-**Paradise, la 8: el primer control es adentro del Consejo, no en el
-pueblo.** La llegada al 108 (la automática del 5) lleva derecho al Consejo
-(110), el recuerdo de Pierson (175 a 177) vuelve ahí, y la página 2 del
-evento 11 prende el 350 y el 349 y termina: Talan en (10,14), mirando
-arriba, solo —el compañero se quedó en Mountain Path—. Ése es "apenas tomás
-control"; el pueblo (108, 25,22) viene recién al salir. Si taro la quiere
-en el pueblo, es cambiar el destino y prender el 361.
+**Paradise, 8: the first control is inside the Council, not in the
+town.** The arrival at 108 (the autorun of 5) goes straight to the Council
+(110), Pierson's memory (175 to 177) returns there, and page 2 of
+event 11 turns on 350 and 349 and ends: Talan at (10,14), facing
+up, alone —the companion stayed in Mountain Path—. That's "right when you take
+control"; the town (108, 25,22) only comes on leaving. If taro wants it
+in the town, it's a matter of changing the destination and turning on 361.
 
-## Cómo salió el estado
+## How the state came out
 
-Jugado, no inventado. Una prueba descartable entró al cuarto, sumó a cada
-compañero, cruzó la puerta del mundo y jugó con el arnés el camino de los
-recorridos —Sorbe, el capítulo, el puente (por debajo con Arden y Saldra,
-pagándole 2000 al guardia con AG7-17), Tangle, Mountain Path, el túnel y
-Paradise—, sin los `ir_al_mapa` ni los `poner_exp` de los recorridos. En
-cada punto volcó de la RAM lo que guarda `save_table`: switches,
-variables, ítems, oro, habilidades, equipo, HP, experiencia, grupo, mapa,
-celda, dirección, velocidad, tinte y música. Las dos puertas las generó un
-script desde la diferencia entre el cuarto y ese volcado, por rama.
+Played, not made up. A throwaway test entered the room, added each
+companion, crossed the world door and played with the harness the path of the
+walkthroughs —Sorbe, the chapter, the bridge (underneath with Arden and Saldra,
+paying the guard 2000 with AG7-17), Tangle, Mountain Path, the tunnel and
+Paradise—, without the walkthroughs' `ir_al_mapa` or `poner_exp`. At
+each point it dumped from RAM what `save_table` stores: switches,
+variables, items, gold, skills, equipment, HP, experience, party, map,
+cell, direction, speed, tint and music. The two doors were generated by a
+script from the difference between the room and that dump, per branch.
 
-Lo que se dejó afuera, y por qué, está en el comentario de cada página:
-los switches 298 y 806, que no los lee ninguna página, rama ni común; la
-variable 134, que el común 35 vuelve a poner antes de leerla; y **la
-experiencia: el compilador de eventos no tiene `ChangeExp` ni
-`ChangeLevel`**, y una página con un comando que no compila se cae entera.
-Jugando, después de Fortitude Talan está en el nivel 3 (Arden 4, Saldra 5,
-AG7-17 6) y en Paradise en el 7 (Arden y Saldra 7, AG7-17 8); con la
-puerta, en los del cuarto. Las habilidades que Arden aprende subiendo se le
-dan con `ChangeSkills`. Darles el nivel es trabajo de las herramientas.
+What was left out, and why, is in each page's comment:
+switches 298 and 806, which no page, branch or common event reads; the
+variable 134, which common event 35 sets again before reading it; and **the
+experience: the event compiler has no `ChangeExp` or
+`ChangeLevel`**, and a page with a command that doesn't compile falls over entirely.
+Playing, after Fortitude Talan is at level 3 (Arden 4, Saldra 5,
+AG7-17 6) and in Paradise at 7 (Arden and Saldra 7, AG7-17 8); with the
+door, at the room's. The skills Arden learns by levelling up are
+given to him with `ChangeSkills`. Giving them the level is work for the tools.
 
-**Verificado** así: la misma prueba descartable cruzó cada puerta con cada
-compañero y volcó lo mismo, y la diferencia contra lo jugado es sólo eso:
-los dos switches, la variable 134, la experiencia y los HP (lo jugado tiene
-los 999 del arnés; la puerta, `FullHeal`). Mapa, celda, dirección, grupo,
-oro, ítems, habilidades, equipo, velocidad, tinte y tema (el 26 en Sorbe,
-el 44 en el Consejo), iguales.
+**Verified** this way: the same throwaway test crossed each door with each
+companion and dumped the same, and the difference against the played state is only that:
+the two switches, variable 134, the experience and the HP (the played state has
+the harness's 999; the door, `FullHeal`). Map, cell, direction, party,
+gold, items, skills, equipment, speed, tint and theme (26 in Sorbe,
+44 in the Council), identical.
 
-## Las pruebas
+## The tests
 
-En `pruebas/abl/test_mapa_de_debug.py`, por compañero:
+In `pruebas/abl/test_mapa_de_debug.py`, per companion:
 
-* `test_la_puerta_despues_de_fortitude_sigue_el_capitulo`: mapa, celda,
-  dirección, grupo, los switches del capítulo, la rama, el oro y la
-  velocidad; la golden de la llegada; y de ahí el puente del mundo y el
-  evento de la rama que lo cruza.
-* `test_la_puerta_de_paradise_llega_a_la_granja`: lo mismo en el Consejo, y
-  el primer día entero hasta la granja.
+* `test_la_puerta_despues_de_fortitude_sigue_el_capitulo`: map, cell,
+  direction, party, the chapter's switches, the branch, the gold and the
+  speed; the arrival's golden; and from there the world's bridge and the
+  branch's event that crosses it.
+* `test_la_puerta_de_paradise_llega_a_la_granja`: the same in the Council, and
+  the whole first day up to the farm.
 
-La golden del cuarto, `mapa-de-debug-llegada`, cambió en el borde derecho:
-asoma la terminal de la puerta 7. Lado a lado, con las seis nuevas, en
+The room's golden, `mapa-de-debug-llegada`, changed on the right edge:
+door 7's terminal peeks in. Side by side, with the six new ones, in
 `/shared/capturas/2026-10-04-puertas-de-debug/`.
 
-## Lo que encontré y no es de esta tarea
+## What I found that isn't part of this task
 
-**Con la velocidad 3 el mirador deja la dirección del héroe trabada.** La
-ruta del héroe del 109 (evento 6: 26, 28, nueve pasos, 27, 29) se corta
-antes de su 27 y `hero_lock` queda en 1, con la velocidad en 4. Con la 4
-termina entera. La 3 es la del juego de verdad desde la carrera —el
-volcado la tiene así en todo el camino—, y el recorrido del primer día
-pasa porque corre con la 4 del arranque. Trabado, Talan no gira hacia
-Emily en su casa. La prueba de Paradise lo destraba a mano, con un
-comentario. No medí si RM2k lo hace igual: easyrpg no cancela la ruta del
-héroe al teletransportar, y una ruta nueva la reemplaza.
+**With speed 3 the lookout leaves the hero's direction locked.** The
+hero's route in 109 (event 6: 26, 28, nine steps, 27, 29) is cut
+before its 27 and `hero_lock` stays at 1, with the speed at 4. With 4
+it finishes entirely. 3 is the real game's from the race on —the
+dump has it like that the whole way—, and the first day's walkthrough
+passes because it runs with the 4 from the start. Locked, Talan doesn't turn towards
+Emily in her house. The Paradise test unlocks it by hand, with a
+comment. I didn't measure whether RM2k does the same: easyrpg doesn't cancel the
+hero's route on teleporting, and a new route replaces it.

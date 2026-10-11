@@ -1,57 +1,57 @@
 ---
-name: "rm2k-snes-cartridges lee el volcado con Ditto"
-description: "El tercer lector del volcado a mano: cartridges.rs lee maps.json por su cuenta para el tipo de cada nodo; que use la biblioteca de Ditto, y una prueba que impida un cuarto"
+name: "rm2k-snes-cartridges reads the dump with Ditto"
+description: "The third hand-written reader of the dump: cartridges.rs reads maps.json on its own for each node's type; make it use Ditto's library, and a test that prevents a fourth"
 type: refactor
 status: done
 assignee: taro
 ---
 
-Lo dejó anotado Zorzal el 2026-09-29 (`rust-ditto-como-biblioteca.md`):
-desde que la biblioteca de Ditto es el único lugar en Rust que sabe leer el
-volcado, queda un lector a mano en `tools/rm2k-snes/cartridge/src/cartridges.rs`,
-que lee `maps.json` para saber el tipo de cada nodo del árbol. Que pase a
-`ditto::dump::Dump`, y una prueba (en `tools/tests/`, como la de capas) que
-falle si un crate que no es Ditto lee un `.json` del volcado por su cuenta.
+Zorzal noted it on 2026-09-29 (`rust-ditto-como-biblioteca.md`):
+since Ditto's library is the only place in Rust that knows how to read the
+dump, there's one hand-written reader left in `tools/rm2k-snes/cartridge/src/cartridges.rs`,
+which reads `maps.json` to know the type of each node of the tree. Move it to
+`ditto::dump::Dump`, and a test (in `tools/tests/`, like the layers one) that
+fails if a crate that isn't Ditto reads a `.json` of the dump on its own.
 
-## Lo que se hizo (Cardenal, 2026-09-29)
+## What was done (Cardenal, 2026-09-29)
 
-**`cartridges.rs`** leía `data/maps.json` con `serde_json` y armaba un
-`HashMap<id, tipo>` a mano; el tipo 1 era "mapa". Ahora abre el volcado con
-`ditto::dump::Dump`, lee el árbol con `dump.tree()` y lo guarda como el
-`Tree` de `rm2k-rules` —el mismo que usa `battle`—; "es un mapa" es
-`TreeMapMapType::Map`. El nodo `arbol` de los mapas nuevos de
-`parches/manual/nuevos/` se sigue leyendo del JSON del parche (es del
-proyecto, no del volcado), pero se convierte con el tipo de Ditto, `MapInfo`,
-y pisa al del juego con `Tree::insert`, como antes. La prueba de
-`cartridge` tuvo que escribir un `ditto.json` en su volcado de juguete.
+**`cartridges.rs`** read `data/maps.json` with `serde_json` and built a
+`HashMap<id, tipo>` by hand; type 1 was "map". Now it opens the dump with
+`ditto::dump::Dump`, reads the tree with `dump.tree()` and stores it as the
+`Tree` of `rm2k-rules` —the same one `battle` uses—; "is a map" is
+`TreeMapMapType::Map`. The `arbol` node of the new maps in
+`parches/manual/nuevos/` is still read from the patch's JSON (it's the
+project's, not the dump's), but it's converted with Ditto's type, `MapInfo`,
+and overrides the game's with `Tree::insert`, as before. The
+`cartridge` test had to write a `ditto.json` in its toy dump.
 
-**Un cuarto lector que no estaba en la tarea**: `rm2k-snes-events`
-(`game.rs`, `Game::map`) armaba la ruta `maps/MapNNNN.json` del volcado a
-mano para dársela a `read_map`. No parseaba a mano, pero copiaba el layout;
-ahora es `Dump::map`. Es una línea en el crate de Churrinche.
+**A fourth reader that wasn't in the task**: `rm2k-snes-events`
+(`game.rs`, `Game::map`) built the dump's `maps/MapNNNN.json` path
+by hand to give it to `read_map`. It didn't parse by hand, but it copied the layout;
+now it's `Dump::map`. It's one line in Churrinche's crate.
 
-**La prueba**: `tools/tests/test_dump_readers.py`. El criterio está arriba de
-ella: ningún `src/` de un crate que no sea Ditto nombra el layout del
-volcado —`"ditto.json"`, `"maps.json"`, `"database.json"`, `.join("db")`,
-`.join("maps")`, `"Map….json"`, `.tiles"`— fuera de comentarios. Los
-`tests/` de los crates quedan afuera (escriben volcados de juguete), y los
-pedidos `--request` y los parches no usan esos nombres. Es un grep: un
-nombre armado por partes pasa.
+**The test**: `tools/tests/test_dump_readers.py`. The criterion is at the top of
+it: no `src/` of a crate that isn't Ditto names the dump's
+layout —`"ditto.json"`, `"maps.json"`, `"database.json"`, `.join("db")`,
+`.join("maps")`, `"Map….json"`, `.tiles"`— outside comments. The crates'
+`tests/` are left out (they write toy dumps), and the
+`--request` requests and the patches don't use those names. It's a grep: a
+name assembled in pieces gets through.
 
-Vista fallar: con un `read_json(&p.data()?.join("maps.json"))` metido a
-propósito en `cartridges.rs` dio rojo nombrando la línea; sacado, verde.
-Sobre el `main` de partida (`5dc54ff7`) habría marcado tres líneas: las dos
-de `cartridges.rs` y la de `events`.
+Seen failing: with a `read_json(&p.data()?.join("maps.json"))` put in on
+purpose in `cartridges.rs` it went red naming the line; removed, green.
+On the starting `main` (`5dc54ff7`) it would have flagged three lines: the two
+in `cartridges.rs` and the one in `events`.
 
-**Al mergear hay que instalar** `cartridge` y `events`:
+**On merging, install** `cartridge` and `events`:
 `just -f tools/justfile install cartridge events`.
 
-**Verificado**, con `NO_CACHE=1 just cartuchos` y el sha256 de los 999
-archivos de `rom/build/` (sin caché, `.o`, `sello.txt`, `conversor.log`, y
-el `.dbg` sin `mtime`): con los binarios de este cambio, con los del `main`
-de partida compilados igual (instalados en el `bin/` local desde `5dc54ff7`)
-y sobre el merge con `main`, las tres corridas dan **todo igual**. Contra
-la corrida con los binarios globales difieren sólo los dos `.dbg`, y
-difieren igual con los binarios locales de `5dc54ff7`: es el global contra
-el local, no este cambio. `just pruebas` y `just -f tools/justfile test` en
-verde sobre el merge; `cargo test -p` de `cartridge` y `events`, también.
+**Verified**, with `NO_CACHE=1 just cartuchos` and the sha256 of the 999
+files in `rom/build/` (without cache, `.o`, `sello.txt`, `conversor.log`, and
+the `.dbg` without `mtime`): with this change's binaries, with the starting
+`main`'s compiled the same way (installed in the local `bin/` from `5dc54ff7`)
+and on the merge with `main`, the three runs give **everything identical**. Against
+the run with the global binaries only the two `.dbg` files differ, and
+they differ the same way with the local binaries of `5dc54ff7`: it's global versus
+local, not this change. `just pruebas` and `just -f tools/justfile test`
+green on the merge; `cargo test -p` of `cartridge` and `events`, too.

@@ -1,266 +1,266 @@
 ---
-name: "Rust: la emisión"
-description: "Lo que escribe mapdata.inc (mapdata, map_record, materials, blocks, vram, map_layers, compress) a Rust, con mapdata.inc igual línea por línea y las ROMs byte por byte"
+name: "Rust: the emission"
+description: "What writes mapdata.inc (mapdata, map_record, materials, blocks, vram, map_layers, compress) to Rust, with mapdata.inc identical line by line and the ROMs byte for byte"
 type: refactor
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-10-01: "en paralelo, ¿podemos avanzar con alguna migración
-de Python a Rust?". Todos los dominios que alimentan la emisión ya son Rust
-(eventos, mapas, pantallas, pelea, imágenes, música, parches); lo que queda
-en `tools/port/` es casi todo emisión y pegamento. Era lo último del plan,
-junto con el orquestador (`snes_convert.py`), que va después.
+From taro, on 2026-10-01: "in parallel, can we move forward with some migration
+from Python to Rust?". All the domains that feed the emission are already Rust
+(events, maps, screens, battle, images, music, patches); what's left
+in `tools/port/` is almost all emission and glue. It was the last thing in the plan,
+together with the orchestrator (`snes_convert.py`), which comes after.
 
-Base: `main` en el commit que lanza la tarea, `abl.sfc` `8f8bf5b3c5facf51…`,
+Baseline: `main` at the commit that launches the task, `abl.sfc` `8f8bf5b3c5facf51…`,
 `just pruebas` 923, `just -f tools/justfile test` 46.
 
-Medido en la base, con `cartridge` instalado en el `bin/` local —la huella
-de los cartuchos va a nombrar el binario nuevo, y el `.dbg` cambia según
-qué ensamblador arma (la trampa de Mara)—: `NO_CACHE=1 just cartuchos`,
-1035 archivos en `rom/build/` sin el caché, los `.o`, `sello.txt` ni
-`conversor.log`; sus sha256 y los tres `mapdata.inc` en
+Measured on the baseline, with `cartridge` installed in the local `bin/` —the
+cartridges' fingerprint will name the new binary, and the `.dbg` changes depending on
+which assembler builds (Mara's trap)—: `NO_CACHE=1 just cartuchos`,
+1035 files in `rom/build/` without the cache, the `.o` files, `sello.txt` or
+`conversor.log`; their sha256 and the three `mapdata.inc` in
 `<scratchpad>/timbo-emision/`.
 
 * `release/abl.sfc` `8f8bf5b3c5facf517fdf3a758326d2fddafcfe9f16ab88fb3bf5c139c1b29c87`
 * `tests/special/prueba.sfc` `007c02045ba39d719dc4e8796a6f1fce8c08e0419e3410affc836dac0cda9e6e`
 * `tests/encounter-every-step/prueba.sfc` `c236bdc0e7765f8dd2f5292a6062ffe57b98da0618aaf59e867bb9e173d349c1`
 
-## Inventario: qué hace hoy el Python
+## Inventory: what the Python does today
 
-Leído el 2026-10-01:
+Read on 2026-10-01:
 
-| módulo | qué hace | qué es |
+| module | what it does | what it is |
 |---|---|---|
-| `compress.py` | corre `lz2 compress --no-increasing` por el PATH, cuenta los comandos de un flujo y se niega a los dos que `lz2_decompress` no lee | hoja; lo usa también `fullscreen.py` (título y Game Over), que es de las imágenes |
-| `materials.py` | los bloques de datos con nombre propio y su deduplicación (`Materials`), qué clases van en LZ2, en cuántos flujos y con qué topes de WRAM (`compressed_parts`, `check_streams`), el costo de descomprimir el mapa de arranque (`decompress_frames`, que va al pedido de la música) y los crudos que leen las pruebas (`write_raw`) | emisión |
-| `vram.py` | los seis repartos de la VRAM, cuál le toca a un mapa (`vram_layout`), sus chequeos de hardware (`_check_splits`), las bases de la ventana y las direcciones de la pantalla de ranuras | el contrato con el runtime: lo leen los mapas (`map_convert`, para elegir), las pantallas (`screen_stage`, los bancos del BG1) y la emisión |
-| `map_layers.py` | `layers_answer` —lee la respuesta de `rm2k-snes-maps` en la forma del `map_info`— y las constantes de la CGRAM baja (`CGRAM_RESERVED`, `PRIORITY_ABOVE`, `BACKDROP`, `window_palette`) | `layers_answer` es pegamento del orquestador; las constantes, de la emisión |
-| `blocks.py` | `Substitutions`: `TileSubstitution` traducido a bloques de 16x16, armando los que faltan antes de compilar; y `substitution_triples` | no es emisión: es el puente entre el compilador y los bloques del mapa |
-| `map_record.py` | el registro de cada mapa (`map_table`, `offsets`), la animación del ChipSet (`anim_table`, `anim_bytes`), las páginas (`page_table`), los bloques de datos de cada mapa (`map_data`), las tablas de NPC (`npc_table`, `npc_bytes`), de poses y de líderes, y las posiciones de los eventos (`ev_pos_bytes`) | emisión; `npc_table` y `ev_pos_bytes` los llama hoy `map_convert` |
-| `mapdata.py` | `emit`: el encabezado de constantes, las poses, cada mapa, la ventana y la fuente, la imagen, las animaciones, el título, las pantallas, el menú, los ítems, el equipo, la pelea, las habilidades, las tropas, la escena, y las tablas de banco 0 | emisión |
+| `compress.py` | runs `lz2 compress --no-increasing` through the PATH, counts a stream's commands and refuses the two that `lz2_decompress` doesn't read | leaf; also used by `fullscreen.py` (title and Game Over), which belongs to the images |
+| `materials.py` | the data blocks with their own name and their deduplication (`Materials`), which classes go in LZ2, in how many streams and with what WRAM caps (`compressed_parts`, `check_streams`), the cost of decompressing the starting map (`decompress_frames`, which goes to the music request) and the raw ones the tests read (`write_raw`) | emission |
+| `vram.py` | the six VRAM layouts, which one a map gets (`vram_layout`), their hardware checks (`_check_splits`), the window's bases and the slot screen's addresses | the contract with the runtime: read by the maps (`map_convert`, to choose), the screens (`screen_stage`, BG1's banks) and the emission |
+| `map_layers.py` | `layers_answer` —reads `rm2k-snes-maps`' answer in the shape of the `map_info`— and the low CGRAM constants (`CGRAM_RESERVED`, `PRIORITY_ABOVE`, `BACKDROP`, `window_palette`) | `layers_answer` is the orchestrator's glue; the constants, the emission's |
+| `blocks.py` | `Substitutions`: `TileSubstitution` translated to 16x16 blocks, building the missing ones before compiling; and `substitution_triples` | it isn't emission: it's the bridge between the compiler and the map's blocks |
+| `map_record.py` | each map's record (`map_table`, `offsets`), the ChipSet animation (`anim_table`, `anim_bytes`), the pages (`page_table`), each map's data blocks (`map_data`), the NPC tables (`npc_table`, `npc_bytes`), the pose and leader tables, and the events' positions (`ev_pos_bytes`) | emission; `npc_table` and `ev_pos_bytes` are called today by `map_convert` |
+| `mapdata.py` | `emit`: the constants header, the poses, each map, the window and the font, the picture, the animations, the title, the screens, the menu, the items, the equipment, the battle, the skills, the troops, the scene, and the bank 0 tables | emission |
 
-Y de los cuatro que el encargo pidió mirar: de `sprites.py` sólo son de la
-emisión las constantes (`OBJ_PRIORITY*`, `OBJ_COLORS`, `SPRITE_POSES`,
-`POSE_BYTES`, `block_tile`); `separate_from_hero` y `maps_per_character`
-son elección y van al pedido de los mapas. De `picture.py`, `cells` y
-`reserved_tiles` son del pedido de los mapas y `OBJ_SIDE`/`GRID` de la
-emisión. De `battle_animations.py`, `rom_animations` es elección (qué
-animaciones lleva el cartucho) y `animations_asm` emisión. De
-`battle_scenes.py`, `rom_scene` y los usos de parches son elección, y
-`scenes_asm` emisión.
+And of the four the brief asked to look at: of `sprites.py` only the
+constants are the emission's (`OBJ_PRIORITY*`, `OBJ_COLORS`, `SPRITE_POSES`,
+`POSE_BYTES`, `block_tile`); `separate_from_hero` and `maps_per_character`
+are choice and go to the maps request. Of `picture.py`, `cells` and
+`reserved_tiles` belong to the maps request and `OBJ_SIDE`/`GRID` to the
+emission. Of `battle_animations.py`, `rom_animations` is choice (which
+animations the cartridge carries) and `animations_asm` emission. Of
+`battle_scenes.py`, `rom_scene` and the uses of patches are choice, and
+`scenes_asm` emission.
 
-## La frontera
+## The boundary
 
-**Un crate nuevo, `tools/rm2k-snes/mapdata/` (`rm2k-snes-mapdata`)**, con
-la forma de "One stage of a converter": biblioteca y binario. Es la
-emisión: recibe lo que los otros dominios ya decidieron y escribe
-`mapdata.inc`. No elige nada que no sea de cómo se escribe —qué bloques se
-comparten, cómo se parten los flujos, en qué segmento va cada tabla—.
+**A new crate, `tools/rm2k-snes/mapdata/` (`rm2k-snes-mapdata`)**, with
+the shape of "One stage of a converter": library and binary. It's the
+emission: it receives what the other domains already decided and writes
+`mapdata.inc`. It doesn't choose anything that isn't about how it's written —which blocks are
+shared, how the streams are split, in which segment each table goes—.
 
-* **Recibe del orquestador**, en un pedido: lo que cada dominio contestó,
-  como datos —los mapas (tiles, CGRAM, bloques, sprites, páginas
-  compiladas), la ventana y las pantallas, la imagen, las animaciones, la
-  escena, las tablas de la pelea, el modelo de la pelea, las páginas de
-  tropas, los eventos comunes del equipo— y lo que es del cartucho —el
-  mapa de arranque, el grupo inicial, las perillas—.
-* **Lee del juego él mismo**, con Ditto, lo que hoy `emit` lee de la base:
-  ítems, habilidades, enemigos, actores y tropas (la `Db` de
-  `rm2k-snes-battle`, y sus reglas para los parámetros).
-* **Escribe** `mapdata.inc`, los crudos de `crudos/`, y un JSON con lo
-  que el resto necesita (el informe de lo compartido y comprimido).
+* **It receives from the orchestrator**, in a request: what each domain answered,
+  as data —the maps (tiles, CGRAM, blocks, sprites, compiled
+  pages), the window and the screens, the picture, the animations, the
+  scene, the battle tables, the battle model, the troop
+  pages, the equipment common events— and what belongs to the cartridge —the
+  starting map, the initial party, the knobs—.
+* **It reads from the game itself**, with Ditto, what `emit` reads today from the database:
+  items, skills, enemies, actors and troops (`rm2k-snes-battle`'s `Db`,
+  and its rules for the parameters).
+* **It writes** `mapdata.inc`, the raw files in `crudos/`, and a JSON with what
+  the rest needs (the report of what was shared and compressed).
 
-**Dónde vive cada hoja**:
+**Where each leaf lives**:
 
-* `compress` y `materials` → `rm2k-snes-mapdata`. La compresión usa `lz2`
-  como biblioteca, en hilos. `compress.py` se queda mientras lo use
-  `fullscreen.py`, que es de las imágenes.
-* `vram` → `rm2k-snes-mapdata`, que **publica** los repartos: `vram`
-  contesta la tabla, las constantes y cuál le toca a cada mapa. Es el
-  contrato con el runtime —lo que el `.inc` dice de la VRAM—, y así lo
-  leen los mapas y las pantallas de un solo lado, como pidió Mara.
-* las constantes de `map_layers` → `rm2k-snes-mapdata`; `layers_answer`
-  se queda con el orquestador.
-* `blocks` (`Substitutions`) → `rm2k-snes-maps`, la etapa del mapa: es la
-  que arma los bloques, con las mismas reglas de pasabilidad. El pedido
-  lleva los `TileSubstitution` que pueden correr en el mapa, y la
-  respuesta trae los bloques ya agrandados, la tabla para el compilador y
-  los que no se pudieron armar. Qué pares pidió una página —`SUB_MAX`— lo
-  sigue contando el orquestador con lo que contestó el compilador.
+* `compress` and `materials` → `rm2k-snes-mapdata`. Compression uses `lz2`
+  as a library, in threads. `compress.py` stays while
+  `fullscreen.py`, which belongs to the images, uses it.
+* `vram` → `rm2k-snes-mapdata`, which **publishes** the layouts: `vram`
+  answers the table, the constants and which one each map gets. It's the
+  contract with the runtime —what the `.inc` says about VRAM—, and that way
+  the maps and the screens read it from a single side, as Mara asked.
+* `map_layers`' constants → `rm2k-snes-mapdata`; `layers_answer`
+  stays with the orchestrator.
+* `blocks` (`Substitutions`) → `rm2k-snes-maps`, the map stage: it's the
+  one that builds the blocks, with the same passability rules. The request
+  carries the `TileSubstitution`s that can run on the map, and the
+  answer brings the blocks already enlarged, the table for the compiler and
+  the ones that couldn't be built. Which pairs a page asked for —`SUB_MAX`— is
+  still counted by the orchestrator with what the compiler answered.
 
-**Lo que queda en Python**: el orquestador (`snes_convert.py`,
-`map_convert.py` y `layers_answer`), que junta lo de cada dominio y arma
-el pedido; `compress.py` para `fullscreen.py`; y lo que el pedido necesita
-de otros dominios que siguen en Python (`animation.cells`, los bytes de la
-escena).
+**What stays in Python**: the orchestrator (`snes_convert.py`,
+`map_convert.py` and `layers_answer`), which gathers each domain's output and builds
+the request; `compress.py` for `fullscreen.py`; and what the request needs
+from other domains still in Python (`animation.cells`, the scene's
+bytes).
 
-## El plan
+## The plan
 
-1. **Las hojas**: `compress`, `materials` (la compresión y los flujos),
-   `vram`, las constantes de `map_layers`; y `blocks` a la etapa de mapas.
-2. **`map_record`**: lo que se emite por mapa.
-3. **`mapdata`**: el resto de las tablas y el armado del archivo.
-4. **El borrado**, en su propio commit, sólo con borrados. La prosa que
-   nombraba lo borrado, en otro.
+1. **The leaves**: `compress`, `materials` (compression and streams),
+   `vram`, `map_layers`' constants; and `blocks` to the maps stage.
+2. **`map_record`**: what's emitted per map.
+3. **`mapdata`**: the rest of the tables and assembling the file.
+4. **The deletion**, in its own commit, deletions only. The prose that
+   named what was deleted, in another.
 
-Cada etapa: `mapdata.inc` de los tres cartuchos igual línea por línea, y
-todo `rom/build/` byte por byte, con `NO_CACHE=1`.
+Each stage: `mapdata.inc` of the three cartridges identical line by line, and
+all of `rom/build/` byte for byte, with `NO_CACHE=1`.
 
-## Hecho, etapa por etapa
+## Done, stage by stage
 
-### 1. Las hojas
+### 1. The leaves
 
-* `74055585`: la compresión y los flujos (`compress.rs`, `materials.rs`), los
-  repartos de VRAM (`vram.rs`, que la etapa publica con `vram`) y las
-  constantes de la CGRAM baja (`cgram.rs`). `vram.py` queda como lector de
-  lo publicado. Las pruebas de los repartos y de los flujos se mudaron al
+* `74055585`: compression and streams (`compress.rs`, `materials.rs`), the
+  VRAM layouts (`vram.rs`, which the stage publishes with `vram`) and the
+  low CGRAM constants (`cgram.rs`). `vram.py` stays as a reader of
+  what's published. The layouts' and the streams' tests moved to the
   crate.
-* `68038577`: `Substitutions` a `rm2k-snes-maps` (`substitutions.rs`): el
-  pedido del mapa lleva los `TileSubstitution` y la respuesta trae los
-  bloques agrandados, la tabla para el compilador y los que faltan. `SUB_MAX`
-  pasó a `snes_convert.py`. `blocks.py` queda sin usar.
+* `68038577`: `Substitutions` to `rm2k-snes-maps` (`substitutions.rs`): the
+  map request carries the `TileSubstitution`s and the answer brings the
+  enlarged blocks, the table for the compiler and the missing ones. `SUB_MAX`
+  moved to `snes_convert.py`. `blocks.py` is left unused.
 
 ### 2. `map_record`
 
-* `260c36ed`: `rm2k-snes-mapdata maps` escribe todo lo que va por mapa
-  —registro, tablas, páginas, NPC, poses, bloques con su LZ2, crudos— en tres
-  pedazos que `emit` pone en su lugar. `pages` escribe una tabla de páginas
-  sola, para la prueba de ABL que la mira. Las pruebas del crate comparan
-  contra los sha256 del Python de la base, sobre un pedido armado
+* `260c36ed`: `rm2k-snes-mapdata maps` writes everything that goes per map
+  —record, tables, pages, NPCs, poses, blocks with their LZ2, raw files— in three
+  pieces that `emit` puts in their place. `pages` writes a page table
+  alone, for the ABL test that looks at it. The crate's tests compare
+  against the sha256 of the baseline's Python, over a hand-built request
   (`tests/maps.json`).
 
 ### 3. `mapdata`
 
-* `ac8b075b`: `rm2k-snes-mapdata emit` escribe el `.inc` entero —el
-  encabezado de constantes, la ventana y la fuente, la imagen, las
-  animaciones, el título y las pantallas completas, las ranuras y el menú,
-  las pantallas de texto, el equipo, la pelea, las habilidades, las tropas
-  y sus páginas, la escena, las tablas del banco 0, y `timer_mask` y
-  `CASE_SLOT`, que `snes_convert` agregaba después—. `mapdata.py` queda
-  como el armado del pedido.
-* `42332816`: las pruebas del `.inc` entero contra los hashes del Python,
-  sobre dos cartuchos armados (`tests/emit-*.json`) con la base del juego de
-  prueba de `rm2k-snes-battle`: uno pelado y uno con todo.
-* `f4544820`: merge de `main` (Tangle Forest, de Tacuarita). Chocó en
-  `mapdata.py`: sus dos constantes nuevas del encabezado, `TIMER_SLOT` y
-  `COND_TIMER`, pasaron a la plantilla de `emit/header.rs` y a `engine.rs`.
-  Los hashes de las pruebas son desde ahí los del Python de `main`
+* `ac8b075b`: `rm2k-snes-mapdata emit` writes the whole `.inc` —the
+  constants header, the window and the font, the picture, the
+  animations, the title and the complete screens, the slots and the menu,
+  the text screens, the equipment, the battle, the skills, the troops
+  and their pages, the scene, the bank 0 tables, and `timer_mask` and
+  `CASE_SLOT`, which `snes_convert` added afterwards—. `mapdata.py` stays
+  as the builder of the request.
+* `42332816`: the tests of the whole `.inc` against the Python's hashes,
+  over two built cartridges (`tests/emit-*.json`) with the database of
+  `rm2k-snes-battle`'s test game: one bare and one with everything.
+* `f4544820`: merge of `main` (Tangle Forest, by Tacuarita). It clashed in
+  `mapdata.py`: its two new header constants, `TIMER_SLOT` and
+  `COND_TIMER`, moved to the template in `emit/header.rs` and to `engine.rs`.
+  From there on the tests' hashes are those of `main`'s Python
   (`601c6f9a`).
 
-Cómo quedó, por dentro:
+How it turned out, inside:
 
-* **El pedido lleva las respuestas de los otros dominios tal cual**: la de
-  `rm2k-snes-screens convert` entera —con su geometría—, la del modelo de la
-  pelea, las páginas de tropas del compilador, las tablas de la pelea. Lo
-  que es de otro dominio que sigue en Python llega hecho bytes y números:
-  los cuadros de las animaciones con su ancla (`animations_request`) y la
-  escena con sus fondos, battlers, posiciones y orden de dibujo
+* **The request carries the other domains' answers as they are**:
+  `rm2k-snes-screens convert`'s whole one —with its geometry—, the battle
+  model's, the compiler's troop pages, the battle tables. What
+  belongs to another domain still in Python arrives as bytes and numbers:
+  the animations' frames with their anchor (`animations_request`) and the
+  scene with its backgrounds, battlers, positions and drawing order
   (`scene_request`).
-* **La base la lee la etapa**: ítems, habilidades, enemigos, actores y
-  tropas, con la `Db` y las reglas de `rm2k-snes-battle`, que es de quien
-  depende.
-* **Las plantillas largas de constantes se copiaron del Python tal cual** y
-  las llena `pyfmt.rs`, un `%` de Python: así el texto sale igual carácter
-  por carácter sin transcribir a mano ciento sesenta y seis argumentos.
-* **Un error latente del Python**, corregido: `tpage_var` y `tpage_value`
-  leían los campos `ranura` y `valor` de un `Trigger` que desde la
-  traducción se llaman `slot` y `value`. Ninguna página de un juego de RM2k
-  usa esa condición, así que nunca se evaluaba; tiene su prueba.
+* **The stage reads the database**: items, skills, enemies, actors and
+  troops, with `rm2k-snes-battle`'s `Db` and rules, which is what
+  it depends on.
+* **The long constant templates were copied from the Python as they were** and
+  are filled by `pyfmt.rs`, a Python `%`: that way the text comes out identical character
+  by character without transcribing a hundred and sixty-six arguments by hand.
+* **A latent bug in the Python**, fixed: `tpage_var` and `tpage_value`
+  read the fields `ranura` and `valor` of a `Trigger` that since the
+  translation are called `slot` and `value`. No page in any RM2k game
+  uses that condition, so it was never evaluated; it has its test.
 
-### 4. El borrado
+### 4. The deletion
 
-* `9470aba5`: antes de borrar, lo que el orquestador todavía tomaba de
-  `map_record` —la tupla de sprite del `map_info`, que ya nadie leía, y
-  `PARALLEL_MAX` y `ROUTE_EV_MAX`, que pasan a `snes_convert.py` al lado de
+* `9470aba5`: before deleting, what the orchestrator still took from
+  `map_record` —the `map_info`'s sprite tuple, which nobody read anymore, and
+  `PARALLEL_MAX` and `ROUTE_EV_MAX`, which move to `snes_convert.py` next to
   `SUB_MAX`—.
-* `36a6a8db`: **sólo borrados**. `map_record.py`, `materials.py`,
-  `blocks.py`, `asm.py` y `color.py` enteros; de `battle_animations.py` y
-  `battle_scenes.py` lo que escribían para el `.inc`; las constantes que
-  sólo leía la emisión en `map_layers.py`, `sprites.py`, `obj_extras.py` y
-  `constants.py`; `commands` de `compress.py`; de `rules.py`,
-  `equipped_params` y los términos de la pelea. 1812 líneas.
-* `40f7527a`: la prosa que nombraba lo borrado —docstrings, comentarios,
-  `README.md`, `tools/README.md`, `AGENTS.md`, `docs/port/maps.md` y
-  `vram.md`, tres pruebas de ABL, dos crates— y el README del crate.
-* `0a160c4d`: las combinaciones de bloques, que el `map_info` seguía
-  llevando sin que nadie las leyera.
-* `bf45a944`: la prueba de la huella de `cartridge`, que no sabía de
+* `36a6a8db`: **deletions only**. `map_record.py`, `materials.py`,
+  `blocks.py`, `asm.py` and `color.py` whole; from `battle_animations.py` and
+  `battle_scenes.py` what they wrote for the `.inc`; the constants that
+  only the emission read in `map_layers.py`, `sprites.py`, `obj_extras.py` and
+  `constants.py`; `commands` from `compress.py`; from `rules.py`,
+  `equipped_params` and the battle terms. 1812 lines.
+* `40f7527a`: the prose that named what was deleted —docstrings, comments,
+  `README.md`, `tools/README.md`, `AGENTS.md`, `docs/port/maps.md` and
+  `vram.md`, three ABL tests, two crates— and the crate's README.
+* `0a160c4d`: the block combinations, which the `map_info` kept
+  carrying without anyone reading them.
+* `bf45a944`: `cartridge`'s fingerprint test, which didn't know about
   `rm2k-snes-mapdata`.
 
-## Lo que quedó en Python
+## What stayed in Python
 
-* **El orquestador**: `snes_convert.py`, `map_convert.py` y `layers_answer`
-  —juntan lo de cada dominio y arman los pedidos—, `mapdata.py` —el pedido
-  de la emisión— y `vram.py` —el lector de los repartos que publica la
-  etapa—.
-* `compress.py`, que usa `fullscreen.py` para el título y el Game Over.
-* Lo que el pedido de la emisión necesita de dominios que siguen en
-  Python: los cuadros de `animation.py` y lo de la escena de `scene.py`.
+* **The orchestrator**: `snes_convert.py`, `map_convert.py` and `layers_answer`
+  —they gather each domain's output and build the requests—, `mapdata.py` —the
+  emission's request— and `vram.py` —the reader of the layouts the
+  stage publishes—.
+* `compress.py`, which `fullscreen.py` uses for the title and the Game Over.
+* What the emission's request needs from domains still in
+  Python: `animation.py`'s frames and `scene.py`'s scene stuff.
 
-## Cómo se verificó
+## How it was verified
 
-Con los scripts de `<scratchpad>/timbo-emision/` (`base.sh`, `huellas.py`):
-`NO_CACHE=1 just cartuchos` con los sellos borrados, y el sha256 de todo
-`rom/build/` —menos el caché, los `.o`, `sello.txt` y `conversor.log`; el
-`.dbg` sin `mtime`—, con los tres `mapdata.inc` aparte.
+With the scripts in `<scratchpad>/timbo-emision/` (`base.sh`, `huellas.py`):
+`NO_CACHE=1 just cartuchos` with the stamps deleted, and the sha256 of all of
+`rom/build/` —minus the cache, the `.o` files, `sello.txt` and `conversor.log`; the
+`.dbg` without `mtime`—, with the three `mapdata.inc` separately.
 
-* **Antes del merge**, después de cada commit de las etapas 1 a 3: los 1035
-  archivos y los tres `mapdata.inc` iguales a la base de `052cb999`.
-* **Después del merge**: la base se volvió a sacar sobre `main`
-  (`601c6f9a`) —su Python y sus binarios de `events`, `maps` y `cartridge`,
-  instalados en el `bin/` local—, y el árbol mergeado, con los binarios de
-  esta rama, dio **los 1075 archivos iguales**, después del merge y después
-  de cada commit del borrado. Los `mapdata.inc` de los tres cartuchos,
-  iguales línea por línea: 305476, 65718 y 28581 líneas antes del merge.
-* Las ROMs, iguales a las de `main`:
+* **Before the merge**, after each commit of stages 1 to 3: the 1035
+  files and the three `mapdata.inc` identical to `052cb999`'s baseline.
+* **After the merge**: the baseline was taken again on `main`
+  (`601c6f9a`) —its Python and its `events`, `maps` and `cartridge` binaries,
+  installed in the local `bin/`—, and the merged tree, with this
+  branch's binaries, gave **the 1075 files identical**, after the merge and after
+  each deletion commit. The `mapdata.inc` of the three cartridges,
+  identical line by line: 305476, 65718 and 28581 lines before the merge.
+* The ROMs, identical to `main`'s:
   * `release/abl.sfc` `19e771abd78b329153a2fc77717a87f521f1afc65a499c2abe1f67d5b7465b3c`
   * `tests/special/prueba.sfc` `4f091bfd8de4a5869d19b5bfe09dc9169f294bd48ec2a8feb9ac1ab64fcfefe9`
   * `tests/encounter-every-step/prueba.sfc` `555c3be1d826d01759473ec8e6d52c12639f079107095a453f3e4e5729d72ec2`
-* **Contra el Python, fuera de los cartuchos**: las pruebas del crate
-  comparan con los sha256 de lo que escribía el Python sobre entradas
-  armadas para pasar por cada camino —incluidos los que ningún cartucho
-  recorre: sin título, sin Game Over, sin imagen, sin animaciones, sin audio
-  de pelea, sin páginas de tropas—. Los sacó un script descartable
-  (`gen_record.py`, `gen_emit.py`) que corría el Python sobre lo mismo; las
-  salidas eran iguales línea por línea antes de anotar los hashes.
-* Las tandas, sobre el árbol final: `just pruebas`, 934 —eran 936 en `main`;
-  dos de `test_lz2.py` se mudaron al crate—; `just -f tools/justfile test`,
-  39 —eran 46; las siete de `test_vram_layouts.py` se mudaron al crate—;
-  `cargo test -p` de `rm2k-snes-mapdata` (38), `rm2k-snes-maps`,
-  `rm2k-snes-events`, `rm2k-snes-images` y `rm2k-snes-cartridge`, en verde.
+* **Against the Python, outside the cartridges**: the crate's tests
+  compare with the sha256 of what the Python wrote over inputs
+  built to go through each path —including those no cartridge
+  walks: no title, no Game Over, no picture, no animations, no battle
+  audio, no troop pages—. A throwaway script took them
+  (`gen_record.py`, `gen_emit.py`), running the Python over the same thing; the
+  outputs were identical line by line before noting the hashes.
+* The suites, on the final tree: `just pruebas`, 934 —it was 936 on `main`;
+  two from `test_lz2.py` moved to the crate—; `just -f tools/justfile test`,
+  39 —it was 46; the seven from `test_vram_layouts.py` moved to the crate—;
+  `cargo test -p` of `rm2k-snes-mapdata` (38), `rm2k-snes-maps`,
+  `rm2k-snes-events`, `rm2k-snes-images` and `rm2k-snes-cartridge`, green.
 
-Lo que el log del conversor cambia, y no está en la huella: el renglón "the
-map fits in N 16x16 blocks" cuenta ahora los bloques que armaron las
-sustituciones, porque la etapa los arma antes de contestar. Y `NO_CACHE=1
-just cartuchos` tarda lo mismo que antes, unos 45 s.
+What the converter's log changes, and isn't in the fingerprint: the line "the
+map fits in N 16x16 blocks" now counts the blocks the
+substitutions built, because the stage builds them before answering. And `NO_CACHE=1
+just cartuchos` takes the same as before, some 45 s.
 
-## Al mergear
+## On merging
 
-* Instalar en el global **`mapdata`** —el binario nuevo—, **`maps`** —su
-  pedido lleva las sustituciones y el `map_convert` nuevo se las manda— y
-  **`cartridge`** —la huella nombra `rm2k-snes-mapdata`—: `just -f
-  tools/justfile install mapdata maps cartridge`. Van juntos con el Python:
-  sin `rm2k-snes-mapdata` el conversor para y dice cómo instalarlo, y el
-  `maps` viejo no entiende el pedido nuevo. `events` e `images` sólo
-  cambiaron un comentario.
-* Ningún script de Python cambió de nombre: no hace falta `install-scripts`.
-* No mueve la ROM ni las goldens.
+* Install in the global **`mapdata`** —the new binary—, **`maps`** —its
+  request carries the substitutions and the new `map_convert` sends them— and
+  **`cartridge`** —the fingerprint names `rm2k-snes-mapdata`—: `just -f
+  tools/justfile install mapdata maps cartridge`. They go together with the Python:
+  without `rm2k-snes-mapdata` the converter stops and says how to install it, and the
+  old `maps` doesn't understand the new request. `events` and `images` only
+  changed a comment.
+* No Python script changed name: `install-scripts` isn't needed.
+* It doesn't move the ROM or the goldens.
 
-## Lo que falta
+## What's missing
 
-* **Las constantes del motor están dos veces**: en `engine.rs`, de donde las
-  emite el `.inc`, y en `events.py`, con sus comentarios largos, porque las
-  leen pruebas de ABL. Lo mismo `SUB_MAX`, `PARALLEL_MAX` y `ROUTE_EV_MAX`
-  (`snes_convert.py` y `record.rs`) y `OBJ_PRIORITY*` con `block_tile`
-  (`sprites.py` y `objects.rs`). Se van de Python cuando el orquestador
-  pase a Rust, o antes si las pruebas de ABL las leen del `.inc`.
-* **Lo que dibuja cada página** (`oam`, en `snes_convert`) se arma todavía
-  en Python con `where` y `block_tile`: podría armarlo la emisión, que ya
-  tiene los objetos del mapa.
-* **Lo que se emite al `.inc` sigue citando el Python** ("Generated by
+* **The engine's constants are there twice**: in `engine.rs`, from where
+  the `.inc` emits them, and in `events.py`, with their long comments, because
+  ABL tests read them. The same for `SUB_MAX`, `PARALLEL_MAX` and `ROUTE_EV_MAX`
+  (`snes_convert.py` and `record.rs`) and `OBJ_PRIORITY*` with `block_tile`
+  (`sprites.py` and `objects.rs`). They leave Python when the orchestrator
+  moves to Rust, or earlier if ABL's tests read them from the `.inc`.
+* **What each page draws** (`oam`, in `snes_convert`) is still built
+  in Python with `where` and `block_tile`: the emission could build it, since it already
+  has the map's objects.
+* **What's emitted to the `.inc` still cites the Python** ("Generated by
   tools/port/snes_convert.py", "see `anim_table` in
-  tools/port/snes_convert.py"), y comentarios del runtime nombran archivos
-  que ya no existen (`frame_without_gaps` en `battle_animation_frames.s`,
-  `Substitutions` en `interpreter_map.s`). Las dos cosas cambian el `.inc` o
-  el `.dbg`: van en su propio commit, cuando se decida tocar lo que se emite.
-* `compress.py` se va cuando `fullscreen.py` pase a usar la etapa.
+  tools/port/snes_convert.py"), and runtime comments name files
+  that no longer exist (`frame_without_gaps` in `battle_animation_frames.s`,
+  `Substitutions` in `interpreter_map.s`). Both things change the `.inc` or
+  the `.dbg`: they go in their own commit, when it's decided to touch what's emitted.
+* `compress.py` goes when `fullscreen.py` switches to using the stage.

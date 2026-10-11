@@ -1,44 +1,44 @@
 ---
-name: "Plan: el juego entero sin MSU-1, la cuenta"
-description: "Lo que faltó en la cuenta de Lechuza (las animaciones de la pelea, sus efectos) y lo que la achica (animaciones sólo en el .msu, fondos de mapa cuantizados por ChipSet, LZ2 donde va crudo, la música más chica): ¿entra en 4 MB, o en 8?"
+name: "Plan: the whole game without MSU-1, the count"
+description: "What Lechuza's count left out (the battle animations, their sound effects) and what shrinks it (animations only in the .msu, map backgrounds quantised per ChipSet, LZ2 where it goes raw, smaller music): does it fit in 4 MB, or in 8?"
 type: research
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-10-01, después de leer
-`docs/research/2026-10-01-los-mapas-por-el-msu-1.md`. La decisión nueva:
-`decisiones/el-juego-se-juega-sin-msu-1.md`. Lo que quiere saber es si,
-pasando a 8 MB si hace falta, comprimiendo lo que se pueda y bajando la
-calidad de algo en la ROM sin MSU-1, el juego entero entra.
+From taro, on 2026-10-01, after reading
+`docs/research/2026-10-01-los-mapas-por-el-msu-1.md`. The new decision:
+`decisiones/el-juego-se-juega-sin-msu-1.md`. What he wants to know is whether,
+moving to 8 MB if needed, compressing what can be compressed and lowering the
+quality of something in the ROM without MSU-1, the whole game fits.
 
-# Lo que salió (Tucu-tucu)
+# What came out (Tucu-tucu)
 
-El estudio es `docs/research/2026-10-01-el-juego-entero-sin-msu-1.md`.
-Lo corto:
+The study is `docs/research/2026-10-01-el-juego-entero-sin-msu-1.md`.
+The short version:
 
-* **En 4 MB no entra con ningún recorte**; en **8 MB (ExHiROM) entra sin
-  bajar la calidad de nada**, con ~850 KB de margen, usando sólo LZ2 donde
-  va crudo, DTE en los mensajes y saltos en las secuencias.
-* **La cuenta de Lechuza contaba las muestras de más**: compilado el audio
-  del juego entero de una vez, son 1.052 KB y no 2.120. El juego entero
-  como hoy son ~7.450 KB.
-* **Lo que faltaba**: ~630 KB (imágenes de `ShowPicture` ~430 estimado,
-  los cinco mapas ~105, los efectos de las animaciones de la pelea 92). Las
-  84 animaciones que sólo usa la pelea son 462 KB y van al `.msu`. Los
-  panoramas quedan afuera.
-* **Fondos por ChipSet**: −840 KB, 94 mapas pierden colores y casi no se
-  ve. Queda de reserva para cuando 8 MB apriete.
-* Recomienda **revisar `decisiones/el-cartucho-se-queda-en-4-mb.md`**.
+* **In 4 MB it doesn't fit with any cut**; in **8 MB (ExHiROM) it fits without
+  lowering the quality of anything**, with ~850 KB of margin, using only LZ2 where
+  it goes raw, DTE in the messages and jumps in the sequences.
+* **Lechuza's count counted the samples too many times**: compiling the audio
+  of the whole game at once, it's 1,052 KB and not 2,120. The whole game
+  as it is today is ~7,450 KB.
+* **What was missing**: ~630 KB (`ShowPicture` images ~430 estimated,
+  the five maps ~105, the sound effects of the battle animations 92). The
+  84 animations only the battle uses are 462 KB and go to the `.msu`. The
+  panoramas stay out.
+* **Backgrounds per ChipSet**: −840 KB, 94 maps lose colours and it's barely
+  noticeable. Kept in reserve for when 8 MB gets tight.
+* It recommends **revisiting `decisiones/el-cartucho-se-queda-en-4-mb.md`**.
 
-Para taro:
+For taro:
 
-* Las capturas de los fondos están en
-  `/shared/capturas/2026-10-01-fondos-por-chipset/`: hoy a la izquierda,
-  por ChipSet a la derecha, los diez mapas que más colores pierden.
-* Decidir si pasar a 8 MB, y si la pelea sin MSU-1 lleva los sonidos de
-  sus animaciones (92 KB).
+* The captures of the backgrounds are in
+  `/shared/capturas/2026-10-01-fondos-por-chipset/`: today's on the left,
+  per ChipSet on the right, the ten maps that lose the most colours.
+* Decide whether to move to 8 MB, and whether the battle without MSU-1 carries the sounds of
+  its animations (92 KB).
 
-No toca el juego: `just pruebas`, 923 en verde. **Al mergear no hay nada
-que instalar.** Los scripts descartables quedaron en el scratchpad, en
-`tucu-tucu/`, y reusan las corridas de `lechuza/`.
+It doesn't touch the game: `just pruebas`, 923 green. **On merging there's nothing
+to install.** The throwaway scripts were left in the scratchpad, in
+`tucu-tucu/`, and reuse the runs from `lechuza/`.

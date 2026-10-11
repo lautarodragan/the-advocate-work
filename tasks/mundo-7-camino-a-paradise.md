@@ -1,24 +1,24 @@
 ---
-name: "Mundo 7: el camino a Paradise"
-description: "105 Mountain Path, 106 y 107 en release, huir con escape_mode 1, el fin de la demo en el túnel del 107; el 108 no entra en la VRAM y sus opciones, medidas, esperan a taro"
+name: "World 7: the road to Paradise"
+description: "105 Mountain Path, 106 and 107 in release, fleeing with escape_mode 1, the end of the demo in 107's tunnel; 108 doesn't fit in VRAM and its options, measured, await taro"
 type: feature
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-10-01: "sumemos mapas primero". La demo termina hoy en el
-"Continue onward" del túnel a Paradise (66 ev18). Del otro lado: 105
-Mountain Path, 106 y 108 Distant Paradise, que es otro capítulo (padre 0 en
-el árbol). El 108 es uno de los cinco mapas que no entran en la VRAM
-(`docs/research/2026-10-01-los-mapas-por-el-msu-1.md`): 462 tiles de fondo y
-696 de sprite, y no queda lugar para la ventana de mensaje.
+From taro, on 2026-10-01: "let's add maps first". The demo ends today at the
+"Continue onward" of the tunnel to Paradise (66 ev18). On the other side: 105
+Mountain Path, 106 and 108 Distant Paradise, which is another chapter (parent 0 in
+the tree). 108 is one of the five maps that don't fit in VRAM
+(`docs/research/2026-10-01-los-mapas-por-el-msu-1.md`): 462 background tiles and
+696 sprite ones, and there's no room left for the message window.
 
-# El 108 no entra, y arreglarlo es una decisión para taro
+# 108 doesn't fit, and fixing it is a decision for taro
 
-Medido el 2026-10-01 sobre `2de10ea4`, con una variante de `release` más el
-105, el 106 y el 108, armada aparte (un `rm2k-snes.toml` copiado al
-scratchpad; ni `release` ni el conversor se tocaron). Con el código de hoy el
-conversor dice:
+Measured on 2026-10-01 on `2de10ea4`, with a variant of `release` plus
+105, 106 and 108, built separately (an `rm2k-snes.toml` copied to the
+scratchpad; neither `release` nor the converter were touched). With today's code the
+converter says:
 
     Map 108 'Distant Paradise': 120x120 cells of 8x8 px
       462 unique tiles
@@ -26,215 +26,215 @@ conversor dice:
                22 with their twelve poses in the cartridge
       83 NPCs with a CharSet out of 114 events
 
-(731 y no los 696 del estudio de Lechuza: no se siguió de dónde salen los 35
-de diferencia; las cuentas de abajo son sobre los 731.)
+(731 and not Lechuza's study's 696: where the 35 difference comes from
+wasn't followed up; the calculations below are on the 731.)
 
-**Qué lo come: las poses quietas, no los que caminan.** De las 42 ranuras de
-16 tiles, 1 es el héroe, 3 son eventos que caminan (los `*Running`), 1 es la
-del giro y **37 son poses quietas distintas**: hoy un quieto comparte ranura
-con los que muestran **el mismo** (CharSet, índice, pose), y el pueblo tiene
-15 personajes mirando para tres o cuatro lados. Por personaje:
+**What eats it: the still poses, not the walkers.** Of the 42 slots of
+16 tiles, 1 is the hero, 3 are events that walk (the `*Running` ones), 1 is the
+turning one and **37 are distinct still poses**: today a still one shares a slot
+with those showing **the same** (CharSet, index, pose), and the town has
+15 characters facing three or four ways. Per character:
 
     Chara1:2   1 4 7 10     Crown3:1   1 4 7 10     People3:2  1 4 7 10
     People1:3  4 7 10       People3:1  4 7 10       People3:3  4 7 10
     People4:2  1 4 10       Chara1:3   1 4          Chara4:1   1 7
-    Crown1:2   1 7          emily:4    4 10         y cinco de una pose
+    Crown1:2   1 7          emily:4    4 10         and five with one pose
 
-**Por qué no entra en ningún reparto**: con 462 de fondo sirven los que dan
-480 o 544 —"+fondo", "+ambos" y "+techo"—, que dejan a lo sumo 384 tiles de
-sprite, o sea 24 ranuras menos el cronómetro (8 tiles). Hacen falta 42. Y
-bajando el fondo a 384 o menos —que Adeleine no puede sin cambiar pixeles—
-el techo de sprites es 512, 32 ranuras: tampoco. No es un reparto nuevo: el
-hardware no tiene uno que alcance.
+**Why it doesn't fit in any layout**: with 462 background tiles, the ones giving
+480 or 544 work —"+fondo", "+ambos" and "+techo"—, which leave at most 384 sprite
+tiles, that is 24 slots minus the timer (8 tiles). 42 are needed. And
+bringing the background down to 384 or less —which Adeleine can't do without changing pixels—
+the sprite ceiling is 512, 32 slots: not enough either. It's not a new layout: the
+hardware doesn't have one that's enough.
 
-**Lo que sí alcanza es lo que se ve a la vez.** Contando, para cada lugar de
-la cámara, cuántas ranuras distintas pide lo que cae en la pantalla de 16x14
-celdas con un margen alrededor:
+**What is enough is what's seen at once.** Counting, for each camera
+position, how many distinct slots are needed by what falls on the 16x14-cell
+screen with a margin around it:
 
-    margen (celdas)               0    1    2    4
-    ranuras distintas a la vez   12   14   16   19
+    margin (cells)                0    1    2    4
+    distinct slots at once       12   14   16   19
 
-O sea que el problema del 108 es que la ROM sube **todo el pueblo** a la VRAM
-al entrar, y en pantalla nunca hay más de la mitad.
+So 108's problem is that the ROM uploads **the whole town** to VRAM
+on entering, and on screen there's never more than half of it.
 
-## Las opciones, con números
+## The options, with numbers
 
-**A. Ranuras compartidas por distancia** (recomendada). El conversor reparte
-las poses quietas como un coloreo: dos eventos quietos comparten ranura si
-muestran la misma pose **o** si nunca pueden estar los dos en pantalla —sus
-celdas están más lejos que la pantalla más un margen—. La ROM sube la pose
-que toca cuando el evento entra en pantalla, por la misma cola de `vram_queue`
-que ya usan las poses en caliente. Para el 108, contando como candidatos sólo
-los quietos con **un solo gráfico** en todas sus páginas (78 de 83; los otros
-y los que mueve un `ChangeEventLocation` quedan como hoy):
+**A. Slots shared by distance** (recommended). The converter allots
+the still poses like a colouring: two still events share a slot if
+they show the same pose **or** if they can never both be on screen —their
+cells are farther apart than the screen plus a margin—. The ROM uploads the pose
+needed when the event comes on screen, through the same `vram_queue`
+the hot-loaded poses already use. For 108, counting as candidates only
+the still ones with **a single graphic** across all their pages (78 of 83; the others
+and those moved by a `ChangeEventLocation` stay as today):
 
-    margen   ranuras compartidas (con más de una pose)   total   tiles
+    margin   shared slots (with more than one pose)      total   tiles
       0        12 (11)                                     20     320
       1        14 (14)                                     22     352
       2        16 (14)                                     24     384
       4        19 (17)                                     27     432
 
-Con margen 1 —que es lo que la ROM ya descarta como "fuera de pantalla" en
-`build_oam`— son **22 ranuras, 352 tiles más los 8 del cronómetro: entra en
-"+ambos"** (384 de sprite, 480 de fondo) con 24 de margen.
+With margin 1 —which is what the ROM already discards as "off screen" in
+`build_oam`— it's **22 slots, 352 tiles plus the timer's 8: it fits in
+"+ambos"** (384 sprite, 480 background) with 24 to spare.
 
-Lo que cuesta: es extender `decisiones/las-poses-se-suben-en-caliente.md`
+What it costs: it's extending `decisiones/las-poses-se-suben-en-caliente.md`
 ("los quietos siguen compartiendo ranura por (CharSet, índice, pose), porque
-no cambian") a los quietos. En la ROM: una tabla por mapa de qué (personaje,
-pose) quiere cada evento compartido, un byte por ranura compartida con lo que
-tiene ahora (14 para el 108: cabe en los 16 de `$25A0`), el chequeo en
-`place_npc` —que es el lazo caliente de `build_oam`—, olvidarlo en
-`npc_poses_forget` al volver de la pelea, y no dibujar el cuadro en que la
-cola está llena. En el conversor, el coloreo en `wally` y la tabla en
-`rm2k-snes-mapdata`. Y `M_*` no tiene lugar: el registro del mapa está lleno
-(128 de 128), así que la tabla va por otro lado —una tabla global por índice
-de mapa, o detrás de `npc_poses`—. Banco 0 tiene 245 bytes libres; el código
-nuevo va mejor en `FAR`.
+no cambian") to the still ones. In the ROM: a per-map table of which (character,
+pose) each shared event wants, one byte per shared slot with what
+it has now (14 for 108: fits in the 16 at `$25A0`), the check in
+`place_npc` —which is `build_oam`'s hot loop—, forgetting it in
+`npc_poses_forget` on returning from battle, and not drawing the frame in which the
+queue is full. In the converter, the colouring in `wally` and the table in
+`rm2k-snes-mapdata`. And `M_*` has no room: the map record is full
+(128 of 128), so the table goes somewhere else —a global table by map
+index, or behind `npc_poses`—. Bank 0 has 245 bytes free; the new
+code is better off in `FAR`.
 
-**B. Una pose por personaje quieto.** Todos los quietos del mismo personaje
-se dibujan mirando para el mismo lado —el más común— hasta que se les habla,
-que giran como hoy. 42 → 21 ranuras, entra. Es sólo conversor, pero **cambia
-lo que se ve**: un pueblo donde todos miran para abajo. Es de las de taro
-mirando.
+**B. One pose per still character.** All the still ones of the same character
+are drawn facing the same way —the most common— until you talk to them,
+when they turn as today. 42 → 21 slots, it fits. It's converter only, but **it changes
+what's seen**: a town where everyone faces down. It's one for taro to
+look at.
 
-**C. Espejar izquierda y derecha** con el bit de la OAM, para los CharSets
-cuyo lado izquierdo es el espejo exacto del derecho (siete de los nueve de
-arriba lo son; People1:3 y People4:2 no). 42 → 36. **No alcanza solo**, pero
-es casi gratis —el atributo ya viaja en la fila y en la página; `turn_apply`
-tendría que limpiar el bit— y le daría margen a A.
+**C. Mirror left and right** with the OAM bit, for the CharSets
+whose left side is the exact mirror of the right (seven of the nine
+above are; People1:3 and People4:2 aren't). 42 → 36. **It isn't enough on its own**, but
+it's almost free —the attribute already travels in the row and in the page; `turn_apply`
+would have to clear the bit— and it would give A some margin.
 
-**D. Una caché de ranuras de verdad**: cada evento, quieto o no, pide ranura
-al entrar en pantalla y la suelta al salir. Es lo único que cubriría también
-al 127 (ver abajo), y es la decisión grande.
+**D. A real slot cache**: each event, still or not, asks for a slot
+on coming on screen and releases it on leaving. It's the only thing that would also cover
+127 (see below), and it's the big decision.
 
-## Los otros cuatro: A no los cubre
+## The other four: A doesn't cover them
 
-* **127 ParadiseFarmland**: 138 de fondo, 731 de sprite (medido con una
-  variante de `release` más el 127). Ahí el problema son **los que caminan**:
-  22 eventos con ruta —una escena de bandidos—, una ranura cada uno, más 18
-  poses quietas. A no le sirve (no tiene candidatos: todos los quietos tienen
-  más de un gráfico o caminan). En pantalla a la vez hay 30 ranuras distintas
-  sin margen y 36 con 2: ni una caché (D) entraría holgada en las 32 de
+* **127 ParadiseFarmland**: 138 background, 731 sprite (measured with a
+  variant of `release` plus 127). There the problem is **the walkers**:
+  22 events with a route —a bandit scene—, one slot each, plus 18
+  still poses. A doesn't help (it has no candidates: all the still ones have
+  more than one graphic or walk). On screen at once there are 30 distinct slots
+  with no margin and 36 with 2: not even a cache (D) would fit comfortably in the 32 of
   "+sprite".
-* **148 y 250**: 614 y 621 tiles de fondo, por encima del techo de 544 con
-  cualquier cantidad de sprites. Es el camino 2 del plan del mundo —tiles del
-  fondo subidos en caliente—, no éste.
-* **285**: la caja de 64 tiles de las animaciones de batalla.
+* **148 and 250**: 614 and 621 background tiles, above the ceiling of 544 with
+  any number of sprites. It's path 2 of the world plan —background tiles
+  hot-loaded—, not this one.
+* **285**: the 64-tile box of the battle animations.
 
-# Lo que se hizo
+# What was done
 
-Mientras taro decide lo del 108, el capítulo llega hasta su puerta.
+While taro decides about 108, the chapter reaches its door.
 
-## Qué mapas, siguiendo las puertas
+## Which maps, following the doors
 
-    105 Mountain Path     padre 66   -> 106 (ev3, y ev7 al final de su escena)
-    106 TalanGetsAmnesty  padre 108  -> 107 (ev2, ev3, y la automática ev7)
-    107 TunnelToParadise  padre 108  -> 106 y 108 (la automática ev4; ev10 y ev11)
-    108 Distant Paradise  padre 0    -> 109, 110, 112 a 120, 126, 127, 150...
+    105 Mountain Path     parent 66  -> 106 (ev3, and ev7 at the end of its scene)
+    106 TalanGetsAmnesty  parent 108 -> 107 (ev2, ev3, and the autorun ev7)
+    107 TunnelToParadise  parent 108 -> 106 and 108 (the autorun ev4; ev10 and ev11)
+    108 Distant Paradise  parent 0   -> 109, 110, 112 to 120, 126, 127, 150...
 
-El 106 y el 107 cuelgan del 108 en el árbol: son ya de Paradise, pero son el
-camino hasta su puerta. Del 108 para adentro es otro capítulo entero —las
-casas, el Consejo, la granja (127), la cantera (150), el área (158)—, que
-sin el 108 no tiene sentido sumar.
+106 and 107 hang from 108 in the tree: they're already Paradise's, but they're the
+road to its door. From 108 inwards it's a whole other chapter —the
+houses, the Council, the farm (127), the quarry (150), the area (158)—, which
+without 108 makes no sense to add.
 
-**La regla**: `below = 108`. Los tres entran por id, y no hubo que excluir
-ni agregar nada.
+**The rule**: `below = 108`. All three go in by id, and nothing had to be excluded
+or added.
 
-## Qué no compilaba
+## What didn't compile
 
-Con el compilador instrumentado (un `eprintln` en el `scan`, en un `target/`
-del scratchpad, sin commitear), sobre el request de `release` con los tres:
+With the compiler instrumented (an `eprintln` in the `scan`, in a `target/`
+in the scratchpad, uncommitted), over `release`'s request with the three:
 
-* **105 ev5 p2 y p3, y ev7 p1**: `EnemyEncounter` con `escape_mode` 1, "huir
-  termina el evento". Es `abort_on_escape` en `CommandEnemyEncounter` de
-  easyrpg (`game_interpreter_map.cpp`), que al volver huyendo llama a
-  `EndEventProcessing`. Se compila sin tocar la ROM: huir va a un `OP_DONE`
-  justo después del opcode; con manejadores, a uno detrás de un `OP_GOTO`
-  al final del bloque. Las del 105 son el guardia que persigue —pisarlo es
-  pelear, y ganar lo vuelve a poner arriba— y la emboscada antes del túnel,
-  que es la que salta al 106.
-* El 106 y el 107 compilaban enteros. Del 107 no compilan el ev10 y el ev11,
-  la vuelta al 108 desde el túnel, porque el 108 no está.
+* **105 ev5 p2 and p3, and ev7 p1**: `EnemyEncounter` with `escape_mode` 1, "fleeing
+  ends the event". It's `abort_on_escape` in easyrpg's `CommandEnemyEncounter`
+  (`game_interpreter_map.cpp`), which on returning by fleeing calls
+  `EndEventProcessing`. It compiles without touching the ROM: fleeing goes to an `OP_DONE`
+  right after the opcode; with handlers, to one behind an `OP_GOTO`
+  at the end of the block. 105's are the guard who chases —stepping on him is
+  fighting, and winning puts him back up top— and the ambush before the tunnel,
+  which is the one that jumps to 106.
+* 106 and 107 compiled whole. Of 107, ev10 and ev11 don't compile,
+  the return to 108 from the tunnel, because 108 isn't there.
 
-## El fin de la demo
+## The end of the demo
 
-Al final de la escena de Isabella en el túnel (107 ev4): el fork del 107
-cambia el tinte a negro, el `Teleport` al 108 y la pregunta de guardar que
-venía detrás por el cartel ("END OF THE DEMO / Paradise is not in the /
-cartridge yet. Thanks for playing!") y la vuelta al título. El texto es el
-mismo de antes: sigue siendo cierto. **El fork del 66 se borró**: era sólo
-el fin de antes, y el 66 ev18 vuelve a llevar al 105.
+At the end of Isabella's scene in the tunnel (107 ev4): 107's fork
+replaces the tint to black, the `Teleport` to 108 and the save question that
+came after with the sign ("END OF THE DEMO / Paradise is not in the /
+cartridge yet. Thanks for playing!") and the return to the title. The text is the
+same as before: it's still true. **66's fork was deleted**: it was only
+the earlier end, and 66 ev18 leads to 105 again.
 
-## Pruebas
+## Tests
 
-Mulita agrandó la tabla de páginas de prueba mientras esto corría, así que
-hay un caso nuevo:
+Mulita enlarged the test page table while this was running, so
+there's a new case:
 
-* `casos/huir-corta.json` y `rpgmaker/test_batalla.py`,
-  `test_huir_con_escape_mode_1_termina_la_pagina`: pelea, huye (con
-  `BA_ESCAPE` en 100) y el `ControlSwitches` de después no corre. **Se vio en
-  rojo**: con las herramientas globales el conversor se negaba a armar ("a
-  test page's EnemyEncounter does not compile"). Las dos del compilador
-  miran los destinos con y sin manejadores.
-* `abl/test_paradise.py`: el 105, el 106 y el 107 recién llegados, con
-  golden; el 106 y el 107 con su escena ya vista (331 y 332).
-* `abl/test_recorrido_paradise_golden.py`: del 105 al título, con Talan y
-  Arden en el nivel 20: los vehículos, el guardia, la emboscada (gana la
-  pelea con la tropa 184), Arden que se queda, la amnistía, Isabella y el
-  cartel. Sus fotos no están bendecidas.
-* `abl/test_recorrido_tangle_golden.py` termina ahora al llegar al 105.
+* `casos/huir-corta.json` and `rpgmaker/test_batalla.py`,
+  `test_huir_con_escape_mode_1_termina_la_pagina`: fights, flees (with
+  `BA_ESCAPE` at 100) and the `ControlSwitches` afterwards doesn't run. **It was seen
+  red**: with the global tools the converter refused to build ("a
+  test page's EnemyEncounter does not compile"). The compiler's two
+  look at the destinations with and without handlers.
+* `abl/test_paradise.py`: 105, 106 and 107 just arrived at, with
+  golden; 106 and 107 with their scene already seen (331 and 332).
+* `abl/test_recorrido_paradise_golden.py`: from 105 to the title, with Talan and
+  Arden at level 20: the vehicles, the guard, the ambush (wins the
+  battle with troop 184), Arden staying behind, the amnesty, Isabella and the
+  sign. Its photos aren't blessed.
+* `abl/test_recorrido_tangle_golden.py` now ends on reaching 105.
 
-`just pruebas`: todo verde salvo `test_musica_techos.py` (ver abajo).
-`just -f tools/justfile test` en verde. `cargo test -p rm2k-snes-events` en
-verde. `NO_CACHE=1 just cartuchos` da las mismas huellas que con caché.
+`just pruebas`: all green except `test_musica_techos.py` (see below).
+`just -f tools/justfile test` green. `cargo test -p rm2k-snes-events`
+green. `NO_CACHE=1 just cartuchos` gives the same fingerprints as with cache.
 
 ## Goldens
 
-**Nuevas**: `paradise-105-llegada`, `paradise-106-llegada` y
-`paradise-107-llegada`, en su commit. **Ninguna existente se movió.** Las
-tres y las fotos del recorrido están en `/shared/capturas/2026-10-01-paradise/`.
-**El merge espera a taro.** El cielo del 105 sale negro: su panorama
-(Evening1) no se dibuja, como en todos los mapas con panorama
+**New**: `paradise-105-llegada`, `paradise-106-llegada` and
+`paradise-107-llegada`, in their commit. **No existing one moved.** The
+three and the walkthrough's photos are in `/shared/capturas/2026-10-01-paradise/`.
+**The merge awaits taro.** 105's sky comes out black: its panorama
+(Evening1) isn't drawn, as in every map with a panorama
 (`panorama-del-mapa-2.md`).
 
-## Espacio
+## Space
 
-`just espacio release`, antes (`a0863e9e`) y después:
+`just espacio release`, before (`a0863e9e`) and after:
 
-                   antes                 después
-    bancos         58 de 128, 50 libres  59 de 128, 49 libres
-    huecos         10.580 B              22.948 B
-    banco 0        245 B                 239 B
-    banco 1        3.828 B               3.828 B
+                   before                after
+    banks          58 of 128, 50 free    59 of 128, 49 free
+    gaps           10,580 B              22,948 B
+    bank 0         245 B                 239 B
+    bank 1         3,828 B               3,828 B
     BSS, ZEROPAGE  128 B, 4 B            128 B, 4 B
-    textos         94.417 B              96.945 B
+    texts          94,417 B              96,945 B
 
-# Lo que no está hecho
+# What isn't done
 
-* **El 108**, y con él Paradise: esperan la decisión de arriba.
-* **`test_musica_techos.py` falla**: el tema nuevo es `lf-st5`, la
-  persecución del 105. No se corrió `just techos`.
-* La música del 105 al 107 no se escuchó.
-* Huir del guardia que persigue termina su página, así que vuelve a tocar al
-  héroe enseguida: es lo que hace RM2k. La prueba del recorrido no huye.
-* La rama de Saldra (switch 56) de la emboscada no la juega ninguna prueba:
-  es la misma escena con el otro compañero.
+* **108**, and with it Paradise: they await the decision above.
+* **`test_musica_techos.py` fails**: the new theme is `lf-st5`, 105's
+  chase. `just techos` wasn't run.
+* The music from 105 to 107 wasn't listened to.
+* Fleeing from the chasing guard ends his page, so he touches the
+  hero again right away: that's what RM2k does. The walkthrough test doesn't flee.
+* Saldra's branch (switch 56) of the ambush isn't played by any test:
+  it's the same scene with the other companion.
 
-# Lo que no cubre `just pruebas`
+# What `just pruebas` doesn't cover
 
-* Huir en una pelea con manejadores y `escape_mode` 1: el juego no la usa;
-  la cobra sólo la prueba del compilador.
-* La rama de AG7 en el túnel (switch 150): Isabella lo deja afuera.
+* Fleeing in a battle with handlers and `escape_mode` 1: the game doesn't use it;
+  only the compiler's test covers it.
+* AG7's branch in the tunnel (switch 150): Isabella leaves him out.
 
-# Al mergear
+# On merging
 
-Instalar `events` (`just -f tools/justfile install events`). El `cartridge`
-de mi `bin/` local era el de `main`: no se tocó. No hay Python nuevo en
+Install `events` (`just -f tools/justfile install events`). The `cartridge`
+in my local `bin/` was `main`'s: it wasn't touched. There's no new Python in
 `tools/`.
 
-# Qué tiene que probar taro
+# What taro has to test
 
-* Desde el túnel del mundo, "Continue onward": Mountain Path, los vehículos,
-  el guardia que persigue (pelear, y huir), la emboscada y la escena de
-  Arden o Saldra, la amnistía, Isabella y el cartel.
-* Elegir qué hacer con el 108: A, B, C o D de arriba.
+* From the world's tunnel, "Continue onward": Mountain Path, the vehicles,
+  the chasing guard (fight, and flee), the ambush and Arden's or Saldra's
+  scene, the amnesty, Isabella and the sign.
+* Choose what to do with 108: A, B, C or D above.

@@ -1,191 +1,191 @@
 ---
-name: "Lashe 2: Boss Wick y los vidcasts"
-description: "Del vecino de Talan al favor de Boss Wick: mapas 40 a 45 y las transiciones"
+name: "Lashe 2: Boss Wick and the vidcasts"
+description: "From Talan's neighbour to Boss Wick's favour: maps 40 to 45 and the transitions"
 type: feature
 status: done
 assignee: taro
 ---
 
-# Qué
+# What
 
-El hito 2 de `lashe-city-hasta-la-carrera.md` —el contexto y lo medido están
-ahí—. Va después del 1 y en paralelo con el 3.
+Milestone 2 of `lashe-city-hasta-la-carrera.md` —the context and what was measured are
+there—. It goes after 1 and in parallel with 3.
 
-El tramo obligatorio de las tres ramas: la puerta del vecino en el Sector 35
-(evento 13 del 37, pide el 151 del pad de Talan) lleva a la guarida de **Boss
-Wick**, los vidcasts, el video de seguridad con la escena del director, y **el
-favor**: Wick te cura el tobillo si aceptás deberle uno. Prende el 161
-(`DoneWithVidcast`), que las tres ramas piden para irse.
+The mandatory stretch of the three branches: the neighbour's door in Sector 35
+(event 13 of 37, requires 151 from Talan's pad) leads to **Boss
+Wick**'s den, the vidcasts, the security video with the director's scene, and **the
+favour**: Wick heals your ankle if you agree to owe him one. It turns on 161
+(`DoneWithVidcast`), which the three branches require to leave.
 
-Mapas: **40** (Boss Wick's Den), **41** (ScreenToneAdjuster, negro), **42**
-(The Vidcasts), **43** (Vidcasts Office: los tiles del 34), **44** (Talan Stats,
-negro) y **45** (Security Footage: el 19 entero, tiles y eventos). El 46 y el 98
-no los alcanza nadie. El orden en que se pasa por ellos está en el plan,
+Maps: **40** (Boss Wick's Den), **41** (ScreenToneAdjuster, black), **42**
+(The Vidcasts), **43** (Vidcasts Office: 34's tiles), **44** (Talan Stats,
+black) and **45** (Security Footage: all of 19, tiles and events). 46 and 98
+nobody reaches. The order in which they're gone through is in the plan,
 "Tramo por tramo".
 
-**El mafia boss no es una pelea.** Es el evento 7 del 40: dos
-`ShowChoice` anidados; aceptar prende el 164 y corre la página 5 (el cirujano,
-`ChangeHeroTitle` a 'Fugitive', el 267); rechazar prende el 162. Los dos
-terminan en el 41 y de ahí al 37, donde el compañero comenta (evento 17, switch
+**The mafia boss isn't a battle.** It's event 7 of 40: two nested
+`ShowChoice`s; accepting turns on 164 and runs page 5 (the surgeon,
+`ChangeHeroTitle` to 'Fugitive', 267); refusing turns on 162. Both
+end in 41 and from there go to 37, where the companion comments (event 17, switch
 163).
 
 # Status
 
-2026-09-27, en `testing/`: hecho sobre `bd5b6a6`, en la rama del agente. Lo
-que queda es de taro: jugarlo (abajo, "Qué tiene que mirar taro jugando") y
-mirar las fotos sin golden de `pruebas/snapshots/playthrough/lashe-wick-*/`.
-Lo que sigue de acá abajo hasta "Lo hecho" es el plan como estaba.
+2026-09-27, in `testing/`: done on `bd5b6a6`, in the agent's branch. What's
+left is taro's: play it (below, "What taro has to look at while playing") and
+look at the photos without golden in `pruebas/snapshots/playthrough/lashe-wick-*/`.
+What follows from here down to "What was done" is the plan as it was.
 
-# Lo que faltaba
+# What was missing
 
-Con los seis mapas en el cartucho compilan todas las páginas menos cuatro, y
-las cuatro caen por lo mismo:
+With the six maps in the cartridge all pages compile except four, and
+the four fall for the same reason:
 
-**`ChangeScreenTransitions`** (10690): la página 1 del 40 (la escena 1 de
-Wick), la 4 (el favor), la 1 del 42 y la 1 del 45. Pide `[0, 16]`/`[1, 16]`
-—zoom para borrar y para mostrar en el teletransporte—, `[0, 17]`/`[1, 17]`
-—mosaico— y `[0, 0]`/`[1, 0]` —volver al fundido—. Es `SetTransition` en
-EasyRPG (`game_system.cpp`, la tabla `fades`). En todo el juego frena 15
-páginas y destraba 14 él solo.
+**`ChangeScreenTransitions`** (10690): page 1 of 40 (Wick's scene
+1), 4 (the favour), page 1 of 42 and page 1 of 45. It asks for `[0, 16]`/`[1, 16]`
+—zoom for erasing and for showing in the teleport—, `[0, 17]`/`[1, 17]`
+—mosaic— and `[0, 0]`/`[1, 0]` —back to the fade—. It's `SetTransition` in
+EasyRPG (`game_system.cpp`, the `fades` table). In the whole game it blocks 15
+pages and unblocks 14 on its own.
 
-Lo que se puede hacer y lo que no (pregunta 4 del plan):
+What can be done and what can't (question 4 of the plan):
 
-- **el mosaico es de la consola**: el registro `MOSAIC` hace los bloques, y
-  crecerlos durante el fundido es barato;
-- **el zoom no existe en modo 3**; lo razonable es fundido y declararlo en
+- **the mosaic is the console's**: the `MOSAIC` register makes the blocks, and
+  growing them during the fade is cheap;
+- **zoom doesn't exist in mode 3**; the reasonable thing is a fade and declaring it in
   `divergencias/`;
-- la transición elegida es estado que cruza el teletransporte: va a la RAM
-  lejana (la BSS tiene ~100 bytes libres), y se guarda en la partida si el
-  original la guarda.
+- the chosen transition is state that crosses the teleport: it goes to far
+  RAM (BSS has ~100 bytes free), and it's saved in the game if the
+  original saves it.
 
-Y la deuda de `las-otras-transiciones-de-rm2k.md` se achica: el
-mosaico deja de estar ahí.
+And the debt in `las-otras-transiciones-de-rm2k.md` shrinks: the
+mosaic stops being there.
 
-**Dos temas nuevos sin muestras en el banco**: `Kfmus5` (la guarida, suena
-con el 8% de las notas por el SPC700) y `tsmedit` (el cirujano, 53%). La
-pista de MSU-1 la tienen solos —desde el 2026-09-26 todo tema tiene la suya,
-con el número que da `pista_msu`—, y se mira cómo suenan sin MSU-1.
+**Two new themes without samples in the bank**: `Kfmus5` (the den, plays
+with 8% of its notes through the SPC700) and `tsmedit` (the surgeon, 53%). They
+have the MSU-1 track on their own —since 2026-09-26 every theme has its own,
+with the number `pista_msu` gives—, and how they sound without MSU-1 gets checked.
 
-**El "REC" del 45** (`ShowPicture 'ABLrec'`, un paralelo que lo hace
-parpadear): la ROM lleva un cartel solo y es el de "One year previously", así
-que queda aceptado sin hacer (pregunta 5).
+**The "REC" in 45** (`ShowPicture 'ABLrec'`, a parallel that makes it
+blink): the ROM carries a single sign and it's the "One year previously" one, so
+it's accepted without being done (question 5).
 
-# Números a repartir
+# Numbers to hand out
 
-Un opcode (la transición) y dos pistas de MSU-1. Una dirección de RAM lejana.
+One opcode (the transition) and two MSU-1 tracks. One far RAM address.
 
-# Pruebas
+# Tests
 
-- **Casos de tanda** para la transición: un `Teleport` con mosaico y uno con
-  zoom, con goldens a mitad del efecto —fuera de los primeros veinte cuadros de
-  un mensaje—.
-- **El recorrido**: desde el 37 con el 151 puesto —o entrando al 39 y tocando
-  la computadora—, hasta volver al 37 con el 161 prendido, **por las dos
-  ramas** del favor (necesita el hito 0 para "Refuse"). Comprobar 162 o 164 y
-  267, y fotos en la escena 1, el video, y el cirujano.
-- La prueba de dos núcleos (`test_cores.py`) sobre la transición nueva: el
-  estado vive en RAM que hay que inicializar.
+- **Suite cases** for the transition: a `Teleport` with mosaic and one with
+  zoom, with goldens midway through the effect —outside the first twenty frames of
+  a message—.
+- **The walkthrough**: from 37 with 151 set —or entering 39 and touching
+  the computer—, until returning to 37 with 161 on, **through both
+  branches** of the favour (needs milestone 0 for "Refuse"). Check 162 or 164 and
+  267, and photos in scene 1, the video, and the surgeon.
+- The two-core test (`test_cores.py`) on the new transition: the
+  state lives in RAM that has to be initialised.
 
-# Qué tiene que mirar taro jugando
+# What taro has to look at while playing
 
-La escena de Wick entera y las dos ramas del favor; el mosaico al entrar a los
-vidcasts; el zoom como fundido; el video de seguridad sin el "REC"; y cómo
-suenan los dos temas con y sin MSU-1.
+Wick's whole scene and both branches of the favour; the mosaic on entering the
+vidcasts; the zoom as a fade; the security video without the "REC"; and how
+the two themes sound with and without MSU-1.
 
-# Lo hecho
+# What was done
 
-**Los seis mapas en `MAPAS_DEL_JUEGO`** (`tools/ensamblado/cartuchos.py`), y
-con eso en `release`. Todas sus páginas compilan, y también la que el hito 1
-había dejado muerta: la puerta del vecino, página 3 del evento 13 del 37.
-Ninguna página de estos mapas queda sin compilar. Lo que compila y no hace lo
-del original: el "REC" del 45 (`ShowPicture 'ABLrec'`, deuda decidida) y
-`ChangeHeroTitle` a 'Fugitive' (no hay pantalla que lo muestre).
+**The six maps in `MAPAS_DEL_JUEGO`** (`tools/ensamblado/cartuchos.py`), and
+with that in `release`. All their pages compile, and also the one milestone 1
+had left dead: the neighbour's door, page 3 of event 13 of 37.
+No page of these maps is left uncompiled. What compiles and doesn't do what
+the original does: the "REC" in 45 (`ShowPicture 'ABLrec'`, decided debt) and
+`ChangeHeroTitle` to 'Fugitive' (there's no screen that shows it).
 
-**`ChangeScreenTransitions`**, con un opcode nuevo, `OP_TRANSITION` (**0x2E**),
-y dos bytes de RAM lejana, `TRANSICION_BORRAR` y `TRANSICION_MOSTRAR`
-(**$7E7920** y **$7E7921**, del tramo $7E7920-$7E793F). El conversor decide:
-el 17 es el mosaico, el resto es el fundido (el zoom incluido, como decidió
-taro); el corte (19), "ninguna" (20) y los de la pelea no compilan, y no hay
-ninguno en `release`. El mosaico se escribe en el vblank desde
-`fundido_mosaico` (`rom/src/transicion_del_teletransporte.s`), atado al brillo
-como el de la pelea; `fundido_tick` no se tocó. No viaja en la partida: entre
-la página que la pone en mosaico y la que la devuelve no hay un momento en que
-se pueda guardar (ver el comentario en `ram_lejana.s`). La divergencia
-—el mosaico oscurece, los sprites no se pixelan, el zoom es fundido— está en
+**`ChangeScreenTransitions`**, with a new opcode, `OP_TRANSITION` (**0x2E**),
+and two bytes of far RAM, `TRANSICION_BORRAR` and `TRANSICION_MOSTRAR`
+(**$7E7920** and **$7E7921**, from the $7E7920-$7E793F range). The converter decides:
+17 is the mosaic, the rest is the fade (zoom included, as taro
+decided); the cut (19), "none" (20) and the battle ones don't compile, and there are
+none in `release`. The mosaic is written in the vblank from
+`fundido_mosaico` (`rom/src/transicion_del_teletransporte.s`), tied to the brightness
+like the battle's; `fundido_tick` wasn't touched. It doesn't travel in the save: between
+the page that sets it to mosaic and the one that sets it back there's no moment when
+you can save (see the comment in `ram_lejana.s`). The divergence
+—the mosaic darkens, the sprites don't pixelate, the zoom is a fade— is in
 `divergencias/las-transiciones-del-teletransporte.md`.
 
-**El tope de teletransportes encadenados, de 8 a 32** (`SALTOS_MAX` en
-`rom/src/pagina_cero.s`). De la puerta del vecino hasta volver al 37 son doce
-saltos entre mapas sin que el jugador tome el control, y con 8 la ROM entraba
-en pánico en el segundo paso por el 43: la pantalla se congelaba con el
-mensaje de Talan.
+**The cap of chained teleports, from 8 to 32** (`SALTOS_MAX` in
+`rom/src/pagina_cero.s`). From the neighbour's door until returning to 37 there are twelve
+jumps between maps without the player taking control, and with 8 the ROM
+panicked on the second pass through 43: the screen froze with
+Talan's message.
 
-**Los líderes posibles se miran al final de cada tanda de
-`ChangePartyMembers` seguidos**, no después de cada comando
-(`_cambios_del_mapa` en `tools/port/snes_convert.py`). El 41 saca a todos
-antes de volver a meter a Talan, en dos páginas seguidas, y la simulación los
-dejaba pasar por líderes a Arden, Saldra y AG7: tres personajes más en todos
-los mapas del cartucho y dos goldens de la tanda (`tram`, `mecanico`) con los
-colores corridos. Con la regla nueva también dejan de ser líderes el 12 y el
-13 (Core y Manta) en `release`, que sólo lo eran por lo mismo —un paso
-intermedio de los grupos de prueba en el mapa 4—; la tanda no movió ninguna
+**The possible leaders are checked at the end of each run of consecutive
+`ChangePartyMembers`**, not after each command
+(`_cambios_del_mapa` in `tools/port/snes_convert.py`). 41 removes everyone
+before putting Talan back in, in two consecutive pages, and the simulation
+let Arden, Saldra and AG7 pass as leaders: three more characters in every
+map of the cartridge and two goldens of the suite (`tram`, `mecanico`) with the
+colours shifted. With the new rule 12 and
+13 (Core and Manta) also stop being leaders in `release`, which they only were for the same reason —an
+intermediate step of the test parties in map 4—; the suite didn't move any
 golden.
 
-# Lo medido
+# What was measured
 
-**Banco 0** (`TABLAS`, el método de `AGENTS.md`): `release` de 342 B libres a
-**317**; `test-special` tiene 1041. **Banco 1**: el último símbolo pasa de
-$01:F874 a $01:F8C1 (~1,85 KB libres). **BSS** y **ZEROPAGE** sin cambio.
-**Cartucho**: de 2.747.611 B (65,5%) a 2.857.944 (68,1%), +110 KB, sumando
-los segmentos del `.dbg`.
+**Bank 0** (`TABLAS`, the method in `AGENTS.md`): `release` from 342 B free to
+**317**; `test-special` has 1041. **Bank 1**: the last symbol goes from
+$01:F874 to $01:F8C1 (~1.85 KB free). **BSS** and **ZEROPAGE** unchanged.
+**Cartridge**: from 2,747,611 B (65.5%) to 2,857,944 (68.1%), +110 KB, adding up
+the segments of the `.dbg`.
 
-**Cuadros perdidos**, fuera de los fundidos, en la escena entera por la rama
-de aceptar (el jugador nunca camina por estos mapas): 40, 34 en 3390 ticks
-(el peor tramo de 10 ticks, 5); 42, 8 en 680, de una vez; 43, 44 y 45, cero; el
-41 está siempre adentro de un fundido.
+**Lost frames**, outside the fades, in the whole scene along the
+accept branch (the player never walks through these maps): 40, 34 in 3390 ticks
+(the worst stretch of 10 ticks, 5); 42, 8 in 680, all at once; 43, 44 and 45, zero;
+41 is always inside a fade.
 
-**Audio.** `Kfmus5` y `tsmedit` entran con sus muestras y con pista de MSU-1
-(la 100 y la 204). Comparando las tasas del `conversor.log` contra `main`,
-casi nada cambia: `PCKBS50A` en `TF3_1_awe` pierde su copia (15,2 -> 14,0 kHz),
-`EORG268` en `Deflector1` gana una (16,4 -> 22,9), y el resto se mueve una o dos
-décimas —los platillos de `evilrhys` de 4,6 a 4,5—. El conversor no sabe que
-`Kfmus5` sigue sonando del 41 al 45 —sale de la página del 37 y la regla de
-`temas_heredados` corta en el 41, que tiene `PlayBGM` propios— así que esos
-paquetes no le reservan lugar. Nadie lo escuchó sin MSU-1: va con la pasada
-de audio (`el-audio-despues-de-lashe-city.md`). `just techos` rehecho: ningún
-tema recorta.
+**Audio.** `Kfmus5` and `tsmedit` go in with their samples and with an MSU-1 track
+(100 and 204). Comparing the rates in `conversor.log` against `main`,
+almost nothing changes: `PCKBS50A` in `TF3_1_awe` loses its copy (15.2 -> 14.0 kHz),
+`EORG268` in `Deflector1` gains one (16.4 -> 22.9), and the rest moves one or two
+tenths —`evilrhys`'s cymbals from 4.6 to 4.5—. The converter doesn't know that
+`Kfmus5` keeps playing from 41 to 45 —it comes from 37's page and the rule in
+`temas_heredados` cuts at 41, which has its own `PlayBGM`s— so those
+packages don't reserve room for it. Nobody listened to it without MSU-1: it goes with the
+audio pass (`el-audio-despues-de-lashe-city.md`). `just techos` redone: no
+theme clips.
 
-# Pruebas
+# Tests
 
-* `pruebas/abl/test_recorrido_lashe_wick_golden.py`: desde el 37 con el 151,
-  la puerta, la escena 1, los vidcasts, el video, y el favor por las dos
-  ramas: **aceptar** con Saldra (164, el cirujano, 267, y el 41 no lo hace
-  renguear) y **rechazar** con Arden (162, sin 164 ni 267, y un punto menos de
-  velocidad). Cobra por la RAM la transición que deja cada página, el grupo al
-  volver y el comentario del compañero, que apaga el 163.
-* `test_transicion` en `pruebas/rpgmaker/test_comandos_golden.py`: los casos
-  `transicion-mosaico` y `transicion-zoom`, con goldens nuevas a mitad de cada
-  rampa, y los mismos en `test_cores.py`.
+* `pruebas/abl/test_recorrido_lashe_wick_golden.py`: from 37 with 151,
+  the door, scene 1, the vidcasts, the video, and the favour through both
+  branches: **accept** with Saldra (164, the surgeon, 267, and 41 doesn't make him
+  limp) and **refuse** with Arden (162, without 164 or 267, and one point less of
+  speed). It checks through RAM the transition each page leaves, the party on
+  returning and the companion's comment, which turns off 163.
+* `test_transicion` in `pruebas/rpgmaker/test_comandos_golden.py`: the cases
+  `transicion-mosaico` and `transicion-zoom`, with new goldens midway through each
+  ramp, and the same ones in `test_cores.py`.
 
-Las fotos, sin golden:
+The photos, without golden:
 
-    lashe-wick-acepta   la guarida, el mosaico de los vidcasts, el video,
-                        el favor, el cirujano, de vuelta en el 37
-    lashe-wick-rechaza  lo mismo sin el cirujano
+    lashe-wick-acepta   the den, the vidcasts' mosaic, the video,
+                        the favour, the surgeon, back in 37
+    lashe-wick-rechaza  the same without the surgeon
 
-Lo que **no** cubren: la segunda confirmación con "No" (que también prende el
-162), la rama sin compañero, y el Bum del 37 con el 164 (la página 4).
+What they **don't** cover: the second confirmation with "No" (which also turns on
+162), the branch with no companion, and the Bum in 37 with 164 (page 4).
 
-# Qué tiene que mirar taro jugando
+# What taro has to look at while playing
 
-La escena de Wick entera y las dos ramas del favor; el mosaico al saltar
-dentro de los vidcasts (con el héroe nítido encima); la entrada a los vidcasts
-con fundido donde el original hace zoom; el video de seguridad sin el "REC"; y
-cómo suenan `Kfmus5` y `tsmedit` con y sin MSU-1.
+Wick's whole scene and both branches of the favour; the mosaic when jumping
+inside the vidcasts (with the hero sharp on top); the entrance to the vidcasts
+with a fade where the original zooms; the security video without the "REC"; and
+how `Kfmus5` and `tsmedit` sound with and without MSU-1.
 
-# Probado
+# Tested
 
-taro, el 2026-09-27, en la SNES con el FX Pak: anduvo todo, incluido el camino
-de vender el Idol, sobornar al guardia y llevar a AG7; la carrera sin lag ni
-bugs (el compañero al volante, también). Queda aparte el héroe negro después
-de cambiar de gráfico en el mismo mapa (HQ de Lazer Teeth, Boss Wick).
+taro, on 2026-09-27, on the SNES with the FX Pak: everything worked, including the path
+of selling the Idol, bribing the guard and taking AG7; the race with no lag or
+bugs (the companion at the wheel, too). Separate from this is the black hero after
+changing graphic in the same map (Lazer Teeth's HQ, Boss Wick).
