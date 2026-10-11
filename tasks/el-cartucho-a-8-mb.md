@@ -1,98 +1,98 @@
 ---
-name: "El cartucho a 8 MB, ExHiROM"
-description: "Primero una ROM de prueba de ExHiROM para el FX Pak; después mudar release, con las goldens quietas"
+name: "The cartridge at 8 MB, ExHiROM"
+description: "First an ExHiROM test ROM for the FX Pak; then move release over, with the goldens unchanged"
 type: feature
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-10-01: `decisiones/el-cartucho-pasa-a-8-mb.md`. Lo que
-cambia, según `docs/research/2026-10-01-el-juego-entero-sin-msu-1.md`
-(Tucu-tucu): `memoria.cfg` a bancos de 64 KB (`banks.rs` ya está
-parametrizado), la cabecera en `$40FFB0`, las tablas del banco 0 vistas como
-32 KB en `$80`, lo que cruza bancos a mano (`.crossbank`, las muestras de
-`emit.rs`) porque el banco empieza en `$0000`, y la SRAM a `$20-$3F:6000`.
-No cambian la WRAM, la RAM lejana ni el `.msu`. Sin verificar: que Mednafen
-arme ExHiROM.
+From taro, on 2026-10-01: `decisiones/el-cartucho-pasa-a-8-mb.md`. What
+changes, according to `docs/research/2026-10-01-el-juego-entero-sin-msu-1.md`
+(Tucu-tucu): `memoria.cfg` to 64 KB banks (`banks.rs` is already
+parametrised), the header at `$40FFB0`, bank 0's tables seen as
+32 KB at `$80`, what crosses banks by hand (`.crossbank`, the samples of
+`emit.rs`) because the bank starts at `$0000`, and the SRAM to `$20-$3F:6000`.
+WRAM, far RAM and the `.msu` do not change. Unverified: that Mednafen
+maps ExHiROM.
 
-## Fase A: la ROM de prueba (Ceibal, 2026-10-01)
+## Phase A: the test ROM (Ceibal, 2026-10-01)
 
-`just exhirom` (`rom/experimentos/exhirom/`): un archivo de 8 MB de bytes
-pseudoaleatorios con el código dos veces, que suma tramos de todo el mapa y
-pinta nueve franjas; la SRAM se escribe por `$20:6000`, se lee por
-`$A0:6000` y deja una marca para el arranque siguiente. Entregada en
-`/shared/experimentos/2026-10-01-exhirom/`, con el `LEEME.txt` de qué
-mirar; **falta que taro la pruebe en el FX Pak**.
+`just exhirom` (`rom/experimentos/exhirom/`): an 8 MB file of
+pseudorandom bytes with the code twice, which sums stretches across the whole map and
+paints nine stripes; the SRAM is written through `$20:6000`, read through
+`$A0:6000` and leaves a mark for the next boot. Delivered in
+`/shared/experimentos/2026-10-01-exhirom/`, with the `LEEME.txt` of what
+to look at; **taro still has to test it on the FX Pak**.
 
-Lo que dieron los emuladores, dos arranques cada uno:
+What the emulators gave, two boots each:
 
-- **snes9x y bsnes**: todo como el cartucho.
-- **mesen-s** —y Mesen2 sin "strict board mappings", que es su opción por
-  omisión, y el módulo `snes` de Mednafen—: ponen la SRAM de LoROM en
-  `$70-$7D:0000-7FFF` también en ExHiROM. **Esas 14 mitades bajas, 448 KB,
-  no se pueden usar para datos.** Lo dice el código de los dos Mesen
+- **snes9x and bsnes**: everything like the cartridge.
+- **mesen-s** —and Mesen2 without "strict board mappings", which is its default
+  option, and Mednafen's `snes` module—: they put LoROM's SRAM at
+  `$70-$7D:0000-7FFF` also in ExHiROM. **Those 14 low halves, 448 KB,
+  cannot be used for data.** The code of both Mesens says so
   (`BaseCartridge.cpp`, "some old romhacks seem to depend on this").
-- **Mednafen `snes_faust`**, el que juega taro: arma ExHiROM, pero lee
-  `$80-$BF:8000-FFFF` de los segundos 4 MB (`cart.cpp` le suma 4 MB a todo
-  banco menor que `$C0`). El cartucho y el FX Pak (`address.v`:
-  `{!A23, A21:0}`) los leen de los primeros. **Por eso el código del juego
-  va dos veces**: en `$008000`/`$018000` del archivo —lo que la consola ve
-  en `$80`/`$81`— y en `$408000`/`$418000` —lo que ve Mednafen, y donde la
-  consola busca los vectores, en `$00`—. Cuesta 64 KB y deja el `FAST` y
-  los `jsl` del runtime como están.
-- FastROM anda en los cinco: el mismo bucle tarda 76 líneas desde `$C0` y
-  99 desde `$40`. **Los segundos 4 MB son siempre lentos** —MEMSEL sólo
-  acelera `$80-$FF`—: lo que la CPU lee byte a byte conviene en los
-  primeros.
+- **Mednafen `snes_faust`**, the one taro plays on: it maps ExHiROM, but reads
+  `$80-$BF:8000-FFFF` from the second 4 MB (`cart.cpp` adds 4 MB to every
+  bank below `$C0`). The cartridge and the FX Pak (`address.v`:
+  `{!A23, A21:0}`) read them from the first. **That is why the game's code
+  goes twice**: at `$008000`/`$018000` of the file —what the console sees
+  at `$80`/`$81`— and at `$408000`/`$418000` —what Mednafen sees, and where the
+  console looks for the vectors, at `$00`—. It costs 64 KB and leaves the `FAST` and
+  the runtime's `jsl` as they are.
+- FastROM works on all five: the same loop takes 76 lines from `$C0` and
+  99 from `$40`. **The second 4 MB are always slow** —MEMSEL only
+  speeds up `$80-$FF`—: what the CPU reads byte by byte is better in the
+  first.
 
-## Fase B: el juego mudado (Ceibal, 2026-10-01)
+## Phase B: the game moved over (Ceibal, 2026-10-01)
 
-Commit `ExHiROM: el cartucho pasa a 8 MB`; el porqué de cada parte está en
-la documentación de `tools/rm2k-snes/cartridge/src/banks.rs` y en la
-sección nueva del README, "El cartucho es ExHiROM, de 8 MB". En corto:
+Commit `ExHiROM: el cartucho pasa a 8 MB`; the why of each part is in
+the documentation of `tools/rm2k-snes/cartridge/src/banks.rs` and in the
+new section of the README, "El cartucho es ExHiROM, de 8 MB". In short:
 
-- Datos en bancos de 64 KB desde `$0000`: primero `$C2-$FF` (rápidos),
-  después `$42-$6F` (lentos), y las mitades que quedan para piezas de hasta
-  32 KB. Lo que cruza a mano sólo cruza entre dos bancos que se siguen.
-- Los bancos 0 y 1 siguen enlazados en `$00:8000`/`$01:8000`, como en
-  LoROM, y el armado los copia a `$408000`/`$418000`: el runtime no se
-  enteró del cambio, salvo lo que cruza bancos a mano y los `ora #^FAST`
-  sobre bancos de datos, que se fueron.
-- SRAM en `$20:6000`, 8 KB; cabecera `$35`, `$0D`, `$03`. Las partidas de
-  LoROM no cargan.
-- **Las goldens no se movieron**: la tanda pasa contra las de antes.
-- `test_musica_techos.py[dcbest]` recorta **una** muestra: no corrí
-  `just techos`, queda para medir al mergear.
-- `release` cabe en los bancos rápidos y deja libres los 46 bancos lentos
-  de 64 KB y 20 mitades: `just espacio`, medido en este commit. Ningún
-  dato va todavía a los lentos; cuando vaya, lo que la CPU lee byte a byte
-  —el stream de la música, las muestras, el bytecode— conviene que siga en
-  los rápidos, y el reparto hoy no distingue qué es cada pieza.
-- El caso `empujon` creció 32 KB: con bancos de 64 KB, el bloque de textos
-  de `test-special` tenía que pasar de un banco para que `test_texto`
-  siguiera cruzando el borde.
+- Data in 64 KB banks from `$0000`: first `$C2-$FF` (fast),
+  then `$42-$6F` (slow), and the leftover halves for pieces of up to
+  32 KB. What crosses by hand only crosses between two consecutive banks.
+- Banks 0 and 1 are still linked at `$00:8000`/`$01:8000`, as in
+  LoROM, and the build copies them to `$408000`/`$418000`: the runtime did not
+  notice the change, except what crosses banks by hand and the `ora #^FAST`
+  over data banks, which are gone.
+- SRAM at `$20:6000`, 8 KB; header `$35`, `$0D`, `$03`. LoROM saves
+  do not load.
+- **The goldens did not move**: the suite passes against the ones from before.
+- `test_musica_techos.py[dcbest]` clips **one** sample: I did not run
+  `just techos`, it is left to be measured when merging.
+- `release` fits in the fast banks and leaves free the 46 slow banks
+  of 64 KB and 20 halves: `just espacio`, measured on this commit. No
+  data goes to the slow ones yet; when it does, what the CPU reads byte by byte
+  —the music stream, the samples, the bytecode— is better kept in
+  the fast ones, and the allocation today does not distinguish what each piece is.
+- The case `empujon` grew 32 KB: with 64 KB banks, the text block
+  of `test-special` had to go past a bank so that `test_texto`
+  kept crossing the border.
 
-**Para Timbó** (ya terminó, así que no hizo falta pasarle nada): la emisión
-no tuvo que cambiar. Sólo dos comentarios de `rm2k-snes-mapdata` (`asm.rs`,
-`record.rs`) que decían que lo que sigue a un banco es el espejo de la WRAM;
-el de `map_table` que se emite al `.inc` quedó, porque cuenta lo que pasó en
-LoROM y lo dice así.
+**For Timbó** (he had already finished, so nothing needed passing on): the emission
+did not have to change. Only two comments of `rm2k-snes-mapdata` (`asm.rs`,
+`record.rs`) which said that what follows a bank is the WRAM mirror;
+the one of `map_table` that is emitted into the `.inc` stayed, because it tells what happened in
+LoROM and says so.
 
-### Al mergear
+### On merging
 
-- Instalar `cartridge` y `rm2k-snes-audio` (`rm2k-snes-volume-ceilings`
-  parcha las dos copias del código). `mapdata` cambió sólo en comentarios:
-  no hace falta.
-- Medir los techos (`dcbest`).
-- Lo que falta, y no es de esta tarea: que taro pruebe en el FX Pak la ROM
-  de prueba (`/shared/experimentos/2026-10-01-exhirom/`) y después el juego;
-  y en Mesen2, que los nombres de rutina se vean con el `.dbg` nuevo —el
-  código está en `$008000` del archivo, que Mesen2 muestra en `$80:8000`—.
-- Las partidas de antes no cargan: hay que empezar de nuevo.
+- Install `cartridge` and `rm2k-snes-audio` (`rm2k-snes-volume-ceilings`
+  patches both copies of the code). `mapdata` changed only in comments:
+  not needed.
+- Measure the ceilings (`dcbest`).
+- What is left, and is not part of this task: taro testing on the FX Pak the test
+  ROM (`/shared/experimentos/2026-10-01-exhirom/`) and then the game;
+  and in Mesen2, that the routine names show with the new `.dbg` —the
+  code is at `$008000` of the file, which Mesen2 shows at `$80:8000`—.
+- Old saves do not load: you have to start over.
 
-# Probado en la SNES
+# Tested on the SNES
 
-taro, el 2026-10-03, con el FX Pak y el build `2026-10-03-51c48ef-73980930`:
-desde el comienzo hasta salir de Lashe City, entrando a los dos pueblos y a
-algunos de sus edificios. "Todo parece seguir andando perfectamente." Es la
-primera vez que el ExHiROM corre en la consola con el juego.
+taro, on 2026-10-03, with the FX Pak and the build `2026-10-03-51c48ef-73980930`:
+from the beginning until leaving Lashe City, entering both towns and
+some of their buildings. "Everything seems to keep working perfectly." It is the
+first time ExHiROM runs on the console with the game.

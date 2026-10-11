@@ -1,159 +1,159 @@
 ---
-name: "Carrera 1: entra y se corre, a 30 cuadros"
-description: "La persecución en auto (49 a 54) y el 64 en release, el fin de la demo al final del 64, el Teleport desde un paralelo y el volante con IsPressed"
+name: "Race 1: it goes in and it runs, at 30 frames"
+description: "The car chase (49 to 54) and 64 in release, the end of the demo at the end of 64, the Teleport from a parallel page and the steering wheel with IsPressed"
 type: feature
 status: done
 assignee: taro
 ---
 
-# Qué
+# What
 
-El hito 1 de `la-carrera-y-lo-que-sigue.md`, que tiene todo lo medido
-antes de empezar: el recorrido, las faltas numeradas y el costo. Sale de `main`
-en `49f0e2f`.
+Milestone 1 of `la-carrera-y-lo-que-sigue.md`, which has everything measured
+before starting: the walkthrough, the numbered gaps and the cost. It branches from `main`
+at `49f0e2f`.
 
-* 49 a 54 y el 64 en `release`; el 52 deja de ser mapa de prueba.
-* El fin de la demo pasa al final de la escena del 64 (fork en
-  `parches/manual/mapas/Map0064.json`), y el fork del 36 se borra.
-* Falta 1: el `Teleport` desde una página paralela con el primer plano quieto.
-* Falta 2: el `KeyInputProc` sin espera lee lo apretado (`IsPressed`), y
-  `eventos.py` lo acepta sin el interruptor de medición.
-* Las pruebas: el 52 fuera de `heroe`, las goldens del 52 revisadas, los
-  recorridos de Lashe con "irse lleva a la carrera", y un recorrido de la
-  carrera entera hasta el fin de la demo en el 64.
+* 49 to 54 and 64 in `release`; 52 stops being a test map.
+* The end of the demo moves to the end of the scene on 64 (fork in
+  `parches/manual/mapas/Map0064.json`), and 36's fork is deleted.
+* Gap 1: the `Teleport` from a parallel page with the foreground still.
+* Gap 2: the `KeyInputProc` without wait reads what is pressed (`IsPressed`), and
+  `eventos.py` accepts it without the measuring switch.
+* The tests: 52 out of `heroe`, 52's goldens reviewed, the
+  Lashe walkthroughs with "leaving takes you to the race", and a walkthrough of the
+  whole race up to the end of the demo on 64.
 
-## Lo que quedó decidido
+## What was decided
 
-Las preguntas del plan las contestó quien lanzó el hito, con las
-recomendaciones del plan; taro las puede revisar:
+The plan's questions were answered by whoever launched the milestone, with the
+plan's recommendations; taro can review them:
 
-1. **X = 65**, excluidos 15, 22, 46, 55 y 58, más el 164. Hacerlo regla es el
-   hito 4; acá la lista de `MAPAS_DEL_JUEGO` tiene que dar lo mismo que esa
-   regla.
-2. **La carrera a 30 cuadros vale como paso intermedio.**
-3. **El fin de la demo va al final de la escena del 64**, en lugar del salto al
-   mundo. El fork del 36 se borra.
-4. **El 52 sale de `heroe` sin reemplazo**, y se revisan sus goldens.
-5. El cartel de los controles (falta 4) y los sonidos del puente (falta 5) **no
-   son de este hito**: van en el 3.
+1. **X = 65**, excluding 15, 22, 46, 55 and 58, plus 164. Making it a rule is
+   milestone 4; here the list of `MAPAS_DEL_JUEGO` has to give the same as that
+   rule.
+2. **The race at 30 frames is acceptable as an intermediate step.**
+3. **The end of the demo goes at the end of the scene on 64**, instead of the jump to
+   the world. 36's fork is deleted.
+4. **52 leaves `heroe` without replacement**, and its goldens are reviewed.
+5. The controls card (gap 4) and the bridge's sounds (gap 5) **are not
+   part of this milestone**: they go in milestone 3.
 
-Números reservados: opcode 0x31 (no hizo falta) y la RAM lejana
-$7E7980-$7E799F (no hizo falta).
+Reserved numbers: opcode 0x31 (not needed) and far RAM
+$7E7980-$7E799F (not needed).
 
-# Cómo quedó
+# How it turned out
 
-## El `Teleport` desde un paralelo
+## The `Teleport` from a parallel page
 
-`eventos_tick` mira `salto_hay` sólo después de correr una página de primer
-plano. El arreglo va en el lazo principal, detrás de `eventos_tick`: si quedó
-un salto pendiente, se atiende con la misma mitad de `eventos_tick`
-(`eventos_atender_salto`, un alias global de `eventos_tick::hubo_salto`,
-porque `arranque.s` va antes en el ensamblado y `ca65` no resuelve un símbolo
-de otro scope hacia adelante). Es lo que hace easyrpg en
-`Scene_Map::UpdateStage2`: el salto pendiente se atiende después de
-`Game_Map::Update`, corra lo que corra. Siete bytes de banco 0.
+`eventos_tick` looks at `salto_hay` only after running a foreground
+page. The fix goes in the main loop, after `eventos_tick`: if a
+jump was left pending, it is handled with the same half of `eventos_tick`
+(`eventos_atender_salto`, a global alias of `eventos_tick::hubo_salto`,
+because `arranque.s` comes earlier in the assembly and `ca65` does not resolve a symbol
+from another scope forwards). It is what easyrpg does in
+`Scene_Map::UpdateStage2`: the pending jump is handled after
+`Game_Map::Update`, whatever runs. Seven bytes of bank 0.
 
-## El volante
+## The steering wheel
 
-`tecla_valor` miraba flancos en las dos formas. Ahora la que no espera mira lo
-apretado: `TECLA_ESPERA` es el bit 0, un `lsr` lo pasa al acarreo, y el
-acarreo llega entero hasta la tecla de acción porque nada en el medio lo toca.
-Siete bytes. Un `.assert` en `menu.s` cuida que `TECLA_ESPERA` siga siendo el
+`tecla_valor` looked at edges in both forms. Now the one that does not wait looks at what is
+pressed: `TECLA_ESPERA` is bit 0, an `lsr` moves it to the carry, and the
+carry reaches the action key whole because nothing in between touches it.
+Seven bytes. An `.assert` in `menu.s` makes sure `TECLA_ESPERA` stays
 bit 0.
 
-El orden entre la ruta del héroe y el volante (lo que el plan dejaba para
-mirar) no dio problema: sosteniendo arriba o abajo el auto cambia de carril y
-sigue empujado a la derecha.
+The order between the hero's route and the steering wheel (what the plan left to
+look at) gave no trouble: holding up or down the car changes lane and
+keeps being pushed to the right.
 
-## Lo que se vio corriendo
+## What was seen running
 
-Con los dos arreglos, un piloto de prueba que esquiva mirando las celdas de
-los autos hace la carrera entera: 49, choque (50) y de vuelta al 49, 52, 54,
-el puente (51), el premio (53) y el 64 hasta el cartel del fin de la demo.
+With both fixes, a test pilot that dodges by looking at the cells of
+the cars does the whole race: 49, crash (50) and back to 49, 52, 54,
+the bridge (51), the prize (53) and 64 up to the end-of-demo card.
 
-Cuadros de hardware por tick manejando, con el volante corriendo (medido con
-el piloto de la prueba, contando sólo los ticks con el 170 y sin fundido ni
-mensaje):
+Hardware frames per tick while driving, with the steering wheel running (measured with
+the test's pilot, counting only the ticks with 170 and without fade or
+message):
 
     49   2,07
     52   2,04
     54   2,04
     51   1,00
 
-O sea que las tres vueltas corren a 30 cuadros, como medía el plan, y el
-puente a 60. Es el hito 2.
+So the three laps run at 30 frames, as the plan measured, and the
+bridge at 60. It is milestone 2.
 
-**El 53 sin compañero se traba**, en el original también: sus tres ramas
-piden el 54 (Arden), el 56 (Saldra) o el 150 (AG7-17), y sin ninguno la página
-termina sin saltar al 64. En el juego no pasa, porque el 36 sólo deja irse con
-la condición de alguna de las tres ramas; se nota sólo si se arranca la
-carrera a mano desde afuera.
+**53 without a companion gets stuck**, in the original too: its three branches
+ask for 54 (Arden), 56 (Saldra) or 150 (AG7-17), and without any of them the page
+ends without jumping to 64. In the game it does not happen, because 36 only lets you leave with
+the condition of one of the three branches; it shows only if the
+race is started by hand from outside.
 
-## El fin de la demo
+## The end of the demo
 
-El fork del 64 cambia el `Teleport [66, 71, 29]` y lo que viene detrás —los
-mensajes que corren en el mundo— por un cartel ("END OF THE DEMO / The world
-beyond Lashe City is not in / the cartridge yet. Thanks for playing!") y un
-`ReturntoTitleScreen`, igual que hacía el del 36. Las capas son las del
+64's fork changes the `Teleport [66, 71, 29]` and what comes after it —the
+messages that run in the world— for a card ("END OF THE DEMO / The world
+beyond Lashe City is not in / the cartridge yet. Thanks for playing!") and a
+`ReturntoTitleScreen`, just like 36's did. The layers are those of the
 original.
 
-## Espacio
+## Space
 
-Medido al final, sobre el merge con `main` (`9d6c0d3`), con el método de
+Measured at the end, on the merge with `main` (`9d6c0d3`), with the method of
 `AGENTS.md`:
 
     cartucho      banco 0   banco 1   BSS   ZEROPAGE   ROM
     release       191 B     ~10,2 KB  109   4          72,6 %
     test-special  967 B     ~11,1 KB  109   4          18,7 %
 
-Contra el plan (205 con los mapas), los dos arreglos costaron 14 bytes de
-banco 0.
+Against the plan (205 with the maps), the two fixes cost 14 bytes of
+bank 0.
 
-# Pruebas
+# Tests
 
-`just pruebas` en verde sobre el merge con `main`: lo que imprime es el
-número.
+`just pruebas` green on the merge with `main`: what it prints is the
+number.
 
-* **Nuevo: `pruebas/abl/test_recorrido_carrera_golden.py`**, con dos:
-  * `test_la_carrera_entera`: con Arden, la intro del 49, las tres vueltas
-    manejando con un piloto que mira en la RAM la celda de cada auto y
-    sostiene arriba o abajo para esquivar, el puente, el premio (el oro, y la
-    variable 38 igual a los choques que contó), la despedida del 64, el cartel
-    del fin de la demo y el título.
-  * `test_cinco_choques_y_maneja_saldra`: sin tocar el volante el auto choca
-    siempre con el de (101, 26); cada choque pasa por el 50 y vuelve a largar
-    en el 49, y al quinto Saldra se ofrece a manejar: "Yes" lleva al puente con
-    el 173, y de ahí al 64 y al título.
-  Las capturas van a `pruebas/snapshots/playthrough/carrera-*/` y no están
-  bendecidas.
-* **Los recorridos de Lashe**: "irse termina la demo" pasó a ser "irse lleva a
-  la carrera" (`irse_lleva_a_la_carrera`): el 182, el mapa 49 y la celda
-  (1, 26). La foto del fin de la demo de `lashe-fin` pasó a ser la de la
-  largada.
-* **`heroe` sin el 52**: se borraron sus cinco goldens y su plan, y el caso
-  `grupo-11-en-52`, que sólo usaba él. Las demás del 52 —`pelea-en-52`, que es
-  de estado— pasan sin tocar nada; `ev41` es del mapa 8.
-* **Ninguna golden de la tanda cambió.**
-* `Recorrido.foto` acepta una `imagen` tomada antes: el cartel del fin se
-  reconoce recién cuando el toque siguiente vuelve al título.
-* `just techos`: la mezcla cambió con los dos temas nuevos
-  (`Fire_Mustang_…` y `prepara`), y la tabla se volvió a medir.
+* **New: `pruebas/abl/test_recorrido_carrera_golden.py`**, with two:
+  * `test_la_carrera_entera`: with Arden, 49's intro, the three laps
+    driving with a pilot that looks in RAM at each car's cell and
+    holds up or down to dodge, the bridge, the prize (the gold, and
+    variable 38 equal to the crashes it counted), the farewell on 64, the end-of-demo
+    card and the title.
+  * `test_cinco_choques_y_maneja_saldra`: without touching the steering wheel the car always crashes
+    into the one at (101, 26); each crash goes through 50 and starts again
+    on 49, and on the fifth Saldra offers to drive: "Yes" leads to the bridge with
+    173, and from there to 64 and the title.
+  The captures go to `pruebas/snapshots/playthrough/carrera-*/` and are not
+  blessed.
+* **The Lashe walkthroughs**: "leaving ends the demo" became "leaving takes you to
+  the race" (`irse_lleva_a_la_carrera`): 182, map 49 and cell
+  (1, 26). The end-of-demo photo of `lashe-fin` became that of the
+  start.
+* **`heroe` without 52**: its five goldens and its plan were deleted, and the case
+  `grupo-11-en-52`, which only it used. The other 52 ones —`pelea-en-52`, which is
+  state— pass without touching anything; `ev41` is from map 8.
+* **No golden of the suite changed.**
+* `Recorrido.foto` accepts an `imagen` taken before: the end card is
+  recognised only when the next press goes back to the title.
+* `just techos`: the mix changed with the two new themes
+  (`Fire_Mustang_…` and `prepara`), and the table was measured again.
 
-# Qué tiene que probar taro jugando
+# What taro has to test by playing
 
-* Irse de Lashe City desde el 36 por cualquiera de las tres ramas y jugar la
-  carrera: la intro con la pantalla negra (el cartel de los controles no está:
-  es el hito 3; cualquier tecla arranca), el volante con arriba y abajo, que se
-  sienta a media velocidad y nada más.
-* Chocar: el 50 y la vuelta a la misma vuelta. Chocar cinco veces y dejar
-  manejar al compañero.
-* El puente (el salto va sin sus sonidos: hito 3), el premio y la despedida,
-  con cada compañero —los textos del 53 y del 64 cambian con cada uno—, hasta
-  el cartel del fin y el título.
+* Leave Lashe City from 36 through any of the three branches and play the
+  race: the intro with the black screen (the controls card is not there:
+  it is milestone 3; any key starts), the steering wheel with up and down, that it
+  feels at half speed and nothing more.
+* Crash: 50 and back to the same lap. Crash five times and let
+  the companion drive.
+* The bridge (the jump goes without its sounds: milestone 3), the prize and the farewell,
+  with each companion —the texts on 53 and 64 change with each one—, up to
+  the end card and the title.
 
-# Probado
+# Tested
 
-taro, el 2026-09-27, en la SNES con el FX Pak: anduvo todo, incluido el camino
-de vender el Idol, sobornar al guardia y llevar a AG7; la carrera sin lag ni
-bugs (el compañero al volante, también). Queda aparte el héroe negro después
-de cambiar de gráfico en el mismo mapa (HQ de Lazer Teeth, Boss Wick).
+taro, on 2026-09-27, on the SNES with the FX Pak: everything worked, including the path
+of selling the Idol, bribing the guard and taking AG7; the race without lag or
+bugs (the companion at the wheel, too). Separate is the black hero after
+changing graphic on the same map (Lazer Teeth HQ, Boss Wick).

@@ -1,80 +1,80 @@
 ---
-name: "La otra rama de la cinemática de los Neon Vipers"
-description: "Lo que el recorrido del mapa 12 dejó sin ejecutar: la rama del `no`, la reja y el mapa 14"
+name: "The other branch of the Neon Vipers cutscene"
+description: "What the map 12 walkthrough left unexecuted: the `no` branch, the fence and map 14"
 type: test
 status: done
 ---
 
-`pruebas/abl/test_recorrido_vipers_golden.py` juega el tramo entero por la
-rama de **"Yes, I'll do it!"**, que es la que sale de tocar A sin mover el cursor del
-`ShowChoice`. Quedaron sin ejecutar tres cosas, y son las tres del mismo lado:
+`pruebas/abl/test_recorrido_vipers_golden.py` plays the whole stretch through the
+**"Yes, I'll do it!"** branch, which is the one that comes out of pressing A without moving the cursor of the
+`ShowChoice`. Three things were left unexecuted, and all three are on the same side:
 
-* la rama de **"No, it's a waste of time!"**, que en vez de teletransportar baja
-  caminando y sale por la reja, con **los dos saltos de 5 celdas** del mapa 12
-  —7,3 px por cuadro, de los movimientos más rápidos del juego—;
-* el **evento 1 de (1,47)**, la reja, con su `ShowChoice` de "Climb the Fence" y
-  su salto después del `Teleport`;
-* el **mapa 14**, donde con estos switches no entra ninguna de las dos ramas.
+* the **"No, it's a waste of time!"** branch, which instead of teleporting goes down
+  walking and leaves through the fence, with **the two 5-cell jumps** of map 12
+  —7.3 px per frame, among the fastest movements in the game—;
+* **event 1 at (1,47)**, the fence, with its "Climb the Fence" `ShowChoice` and
+  its jump after the `Teleport`;
+* **map 14**, which with these switches neither branch enters.
 
-Para tomarla hay que mover el cursor del `ShowChoice`, que el arnés hoy no hace;
-ver `Recorrido.activar` y `mirar_a`. Lo demás ya está: el camino hasta la
-cinemática es el mismo, y el detalle de cada evento está escrito en
+To take it the `ShowChoice` cursor has to be moved, which the harness does not do today;
+see `Recorrido.activar` and `mirar_a`. The rest is already there: the path up to the
+cutscene is the same, and the detail of each event is written in
 `tasks/el-recorrido-de-los-neon-vipers.md`.
 
-Por qué vale: los saltos largos son el caso extremo de `salto_avanzar_heroe`, y
-el bug del salto colgado de esta semana vivía justo ahí.
+Why it is worth it: the long jumps are the extreme case of `salto_avanzar_heroe`, and
+this week's stuck-jump bug lived right there.
 
-## Y son las dos candidatas a reproducir el mapa corrido
+## And they are the two candidates to reproduce the shifted map
 
-El 2026-09-23 se midió que el tramo cubierto **no puede** reproducirlo, ni
-siquiera caminando después de volver: el peor salto de la cámara por vuelta es
-de 2 px y hacen falta más de 8. Las dos cosas de esta zona que podrían llegar
-son justamente las que quedaron afuera:
+On 2026-09-23 it was measured that the covered stretch **cannot** reproduce it, not
+even walking after coming back: the camera's worst jump per loop is
+2 px and more than 8 are needed. The two things in this area that could get there
+are precisely the ones left out:
 
-* el `PanScreen` de la escena de los chicos y el dueño del negocio —eventos 51 y
-  53 del mapa 8, en (59,23) y (59,24), que piden el switch 33— **sumado al héroe
-  caminando**, que es la receta que `pruebas/rpgmaker/test_camara.py` arma a
-  mano;
-* el salto de cinco celdas de la reja, que son 7,3 px por cuadro.
+* the `PanScreen` of the scene with the kids and the shop owner —events 51 and
+  53 of map 8, at (59,23) and (59,24), which ask for switch 33— **added to the hero
+  walking**, which is the recipe that `pruebas/rpgmaker/test_camara.py` puts together by
+  hand;
+* the fence's five-cell jump, which is 7.3 px per frame.
 
-Y lo que apareció midiendo la reja —la cámara que queda tres celdas corrida al
-salir— **ya está contestado y no es nuestro**: lo hace el `PanScreen` del Bum,
-que nadie devuelve, y el RPG_RT original queda igual de corrido. Ver
+And what showed up measuring the fence —the camera that stays three cells shifted on
+leaving— **is already answered and is not ours**: it is done by the Bum's `PanScreen`,
+which nobody returns, and the original RPG_RT stays just as shifted. See
 `workflow/decisiones/la-camara-corrida-de-la-reja-es-del-juego.md`.
 
 ---
 
-## Al 2026-09-26: cubierta
+## As of 2026-09-26: covered
 
-`pruebas/abl/test_recorrido_vipers_otras_ramas_golden.py`, con
-`Recorrido.elegir` —ver `elegir-una-opcion-en-el-recorrido.md`—. Tres
-casos, que arrancan con `ir_al_mapa` en el techo del HQ y entran por la puerta:
-el camino del caño ya lo juega el tramo del "Yes".
+`pruebas/abl/test_recorrido_vipers_otras_ramas_golden.py`, with
+`Recorrido.elegir` —see `elegir-una-opcion-en-el-recorrido.md`—. Three
+cases, which start with `ir_al_mapa` on the HQ's roof and go in through the door:
+the pipe path is already played by the "Yes" stretch.
 
-Lo que se aprendió leyendo los eventos, que la descripción de arriba tenía mal:
+What was learned reading the events, which the description above had wrong:
 
-- **Los dos saltos de cinco celdas no son del mapa 12**: son las rutas del
-  "No" y de la reja, que están escritas en el 12 pero corren **después** del
-  `Teleport` al 8, en (40,51) → (40,56). Lo que sí corre en el 12 es un salto
-  de dos celdas sobre la reja, y ése **no se da**, ni acá ni en RM2k: el
-  `through` está adentro del par `begin_jump`/`end_jump`, donde RM2k lo
-  ignora, y (1,49) no es pisable.
-- **Al 14 no lleva ninguna de las dos ramas**: lleva la página 2 de la puerta
-  del HQ, con el Idol —ítem 90— y el switch 53, que deja al héroe sobre el
-  hotplate, cuya página 2 es automática y termina en `Teleport [14, 44, 13]`.
-  La cinemática del 14 corre sola, con cinco `PanScreen`, y termina en el 16.
-- **La reja se alcanza sin la cinemática**: el camino corto de la puerta a
-  (1,47) baja por la columna 3 y el hotplate está en la 5.
-- **Aterrizar en el 8 dispara al Bum**: las dos salidas prenden el switch 36, y
-  la página automática del evento 10 lo apaga al terminar. La prueba espera eso
-  —el 36 visto prendido y después apagado— antes de mirar la celda.
+- **The two five-cell jumps are not from map 12**: they are the routes of the
+  "No" and of the fence, which are written in 12 but run **after** the
+  `Teleport` to 8, at (40,51) → (40,56). What does run in 12 is a
+  two-cell jump over the fence, and that one **does not happen**, neither here nor in RM2k: the
+  `through` is inside the `begin_jump`/`end_jump` pair, where RM2k
+  ignores it, and (1,49) is not walkable.
+- **Neither branch leads to 14**: what leads there is page 2 of the HQ's
+  door, with the Idol —item 90— and switch 53, which leaves the hero on the
+  hotplate, whose page 2 is automatic and ends in `Teleport [14, 44, 13]`.
+  The cutscene in 14 runs on its own, with five `PanScreen`, and ends in 16.
+- **The fence is reached without the cutscene**: the short path from the door to
+  (1,47) goes down column 3 and the hotplate is in column 5.
+- **Landing in 8 triggers the Bum**: both exits turn on switch 36, and
+  the automatic page of event 10 turns it off when it finishes. The test waits for that
+  —36 seen on and then off— before looking at the cell.
 
-**Lo del mapa corrido, medido**: el salto de cinco celdas, a la velocidad 4,
-son once vueltas de 7 u 8 px, con la cámara detrás a lo mismo. No llega a los
-más de 8 que hacen falta, así que esta candidata queda descartada; la que queda es el `PanScreen`
-de los chicos del mapa 8.
+**The shifted map, measured**: the five-cell jump, at speed 4,
+is eleven loops of 7 or 8 px, with the camera behind at the same rate. It does not reach the
+more than 8 that are needed, so this candidate is ruled out; the one left is the `PanScreen`
+of the kids on map 8.
 
-**Un aviso para las fotos del tramo del "Yes"**: la partida que arranca por
-"Begin the Story" tiene de líder a DummyHero, el actor 10, que no tiene gráfico.
-En `test_recorrido_vipers_golden.py` las fotos del 8 y el 12 salen **sin
-Talan**. Ésta le pone el grupo —Talan es el 14— antes de entrar.
+**A warning for the photos of the "Yes" stretch**: the save that starts through
+"Begin the Story" has DummyHero as leader, actor 10, which has no graphic.
+In `test_recorrido_vipers_golden.py` the photos of 8 and 12 come out **without
+Talan**. This one sets the party —Talan is 14— before going in.

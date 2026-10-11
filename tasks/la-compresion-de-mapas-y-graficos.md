@@ -1,52 +1,52 @@
 ---
-name: "La compresión de mapas y gráficos"
-description: "Cuánto pesa cada cosa del cartucho, cuánto comprime y cuánto cuesta descomprimirla; hechos el piloto, los tiles y las grillas en LZ2 y las poses deduplicadas"
+name: "Compression of maps and graphics"
+description: "How much each thing in the cartridge weighs, how much it compresses and how much it costs to decompress it; done: the pilot, the tiles and grids in LZ2 and the deduplicated poses"
 type: refactor
 status: done
 ---
 
-# Qué
+# What
 
-Comprimir lo que viaja en el cartucho para que entre el resto del juego —unos
-7 MB sin comprimir según `decisiones/el-cartucho-se-queda-en-4-mb.md`— sin
-pasar de 4 MB. **La música queda afuera a propósito**: hay otro trabajo en las
-muestras, y taro prefiere comprimir el audio cuando termine todo lo de audio.
+Compress what travels in the cartridge so that the rest of the game fits —some
+7 MB uncompressed according to `decisiones/el-cartucho-se-queda-en-4-mb.md`— without
+going past 4 MB. **The music is left out on purpose**: there is other work on the
+samples, and taro prefers to compress the audio when everything about audio is finished.
 
-Esta tarea **absorbe `medir-la-compresion-de-mapas.md`**, la idea de taro del
-2026-09-25 —trozos de bloques y capas separadas para las grillas—. Sus cuatro
-variantes están medidas abajo, pero la pregunta que dejaba abierta —si las
-grillas eran el 5% o el 30% del problema— sólo se contesta mirando el
-cartucho entero, y el cartucho entero cambió la respuesta: lo que más pesaba
-eran las animaciones de batalla, que eran casi todas ceros. Por eso una sola
-tarea y no dos.
+This task **absorbs `medir-la-compresion-de-mapas.md`**, taro's idea of
+2026-09-25 —chunks of blocks and separate layers for the grids—. Its four
+variants are measured below, but the question it left open —whether the
+grids were 5% or 30% of the problem— is only answered by looking at the
+whole cartridge, and the whole cartridge changed the answer: what weighed the most
+were the battle animations, which were almost all zeros. Hence a single
+task and not two.
 
-Medido el 2026-09-26 sobre `03c21fb`, con `release` recién armado. Los números
-son de ese día y del reparto de mapas de ese día: el que retome esto los
-vuelve a medir, no los copia. El método está al final.
+Measured on 2026-09-26 on `03c21fb`, with `release` freshly built. The numbers
+are from that day and from that day's allocation of maps: whoever picks this up again
+measures them again, does not copy them. The method is at the end.
 
 # Status
 
-**Hechos el piloto y los puntos 2, 3 y 4 de la recomendación.** Quedan el 5
-(las poses espejadas) y el 6 (battlers y fondos), que nadie empezó.
+**Done: the pilot and points 2, 3 and 4 of the recommendation.** Left are 5
+(the mirrored poses) and 6 (battlers and backgrounds), which nobody started.
 
-* El piloto: las animaciones de batalla sin tiles vacíos (`bb3a4fc`).
-* **2 y 3, el 2026-09-26**: los tiles del fondo, de la capa de encima, de los
-  sprites, los dibujos de la animación del ChipSet y las grillas viajan en
-  LC_LZ2 y la ROM los descomprime a la WRAM al cargar el mapa. Ver "Lo que se
-  hizo", abajo.
-* **4, el mismo día**: las poses iguales se guardan una sola vez.
+* The pilot: the battle animations without empty tiles (`bb3a4fc`).
+* **2 and 3, on 2026-09-26**: the background tiles, the upper layer's, the
+  sprites', the ChipSet animation's drawings and the grids travel in
+  LC_LZ2 and the ROM decompresses them to WRAM when loading the map. See "What was
+  done", below.
+* **4, the same day**: identical poses are stored only once.
 
-**taro tiene que jugar**: cambiar de mapa mucho —con puertas, teletransportes
-y el save point— y pelear, mirando que los mapas se dibujen enteros, que el
-agua y los tiles animados se muevan, que los personajes caminen con sus
-poses y que al volver de una pelea el mapa y las paredes sigan donde estaban.
-Lo que se ve distinto es **el negro entre mapas**, más largo: ver los cuadros
-abajo. Y taro tenía que ver una animación de batalla en el juego por el
-piloto; sigue en pie.
+**taro has to play**: change maps a lot —with doors, teleports
+and the save point— and fight, checking that the maps are drawn whole, that the
+water and animated tiles move, that the characters walk with their
+poses and that on returning from a battle the map and the walls are still where they were.
+What looks different is **the black between maps**, longer: see the frames
+below. And taro had to see a battle animation in the game because of the
+pilot; that still stands.
 
-# Lo que se hizo, el 2026-09-26
+# What was done, on 2026-09-26
 
-Medido sobre `main` con el paso 6 del audio mergeado (`2d6b665`), en
+Measured on `main` with audio step 6 merged (`2d6b665`), in
 `release`.
 
     antes de todo esto (con el piloto)   2916,5 KB usados, 71,2%, último banco $63
@@ -63,59 +63,59 @@ Medido sobre `main` con el paso 6 del audio mergeado (`2d6b665`), en
     total               1058,7    376,9   (681,8 KB menos)
     poses: 545 distintas de 732          (93,5 KB menos)
 
-El compresor es un proyecto aparte, `tools/lz2/`, con un parser óptimo: sale
-un poco más chico que el greedy de la medición (262,5 contra 266,4 en los
-tiles del fondo). No emite el relleno creciente, que la ROM no lee.
+The compressor is a separate project, `tools/lz2/`, with an optimal parser: it comes out
+a bit smaller than the measurement's greedy one (262.5 against 266.4 on the
+background tiles). It does not emit the increasing fill, which the ROM does not read.
 
-**Cuadros de carga**, la vuelta del lazo que carga cada uno de los cuarenta
-mapas, en el mismo orden antes y después y en la segunda pasada —así el
-paquete de audio de cada mapa es el mismo y lo que cambia es sólo la
-descompresión—. Incluye la subida del paquete de audio, que es lo que más
-pesa:
+**Load frames**, the loop iteration that loads each of the forty
+maps, in the same order before and after and on the second pass —so the
+audio package of each map is the same and the only thing that changes is the
+decompression—. It includes the audio package upload, which is what weighs
+the most:
 
     sin comprimir              33,9 de media, 76 el peor (mapa 26, audio)
     con todo, al final         40,3 de media, 80 el peor
     lo que suma comprimir       6,4 de media, 14 el que más (mapa 52)
 
-Contra las estimaciones que taro dio por buenas —5 de media y 12 el peor,
-sólo los tiles— queda un poco arriba porque suma la grilla, que se estimaba
-aparte (1,2 de media, 5,8 el peor). El modelo de la medición (400 ciclos por
-comando, 46 por byte) subestimaba un 40%; el que usa la cuenta del arranque es
-700 y 60, que lo medido no pasa por más de medio cuadro.
+Against the estimates taro accepted —5 on average and 12 the worst,
+only the tiles— it ends up a bit above because it adds the grid, which was estimated
+separately (1.2 on average, 5.8 the worst). The measurement's model (400 cycles per
+command, 46 per byte) underestimated by 40%; the one the startup's count uses is
+700 and 60, which what was measured does not exceed by more than half a frame.
 
-**Lo que bajaría más**: un DMA a `$2180` para los literales y los rellenos, a
-8 ciclos por byte contra unos 46 del `mvn`. Se descartó por lo mismo que en
-el piloto —el cruce de un DMA general con el HDMA en la primera revisión de
-la CPU—, aunque acá la pantalla está apagada y se podría apagar el HDMA
-mientras dura la carga. No se probó en la consola.
+**What would bring it down more**: a DMA to `$2180` for the literals and the fills, at
+8 cycles per byte against some 46 for the `mvn`. It was ruled out for the same reason as in
+the pilot —the clash of a general DMA with HDMA in the CPU's first
+revision—, even though here the screen is off and HDMA could be turned off
+while the load lasts. It was not tried on the console.
 
-**Dónde**: el descompresor es `lz2_descomprimir`, en el banco 1 (461 bytes con
-sus entradas); el banco 0 quedó en 1029 libres en `release` y 1727 en
-`test-special`. La WRAM: `$7F0000` es el buffer de carga, `$7F6000` los
-dibujos de la animación, y la grilla en `$7E8000`, que es **la decisión con
-costo**: `workflow/decisiones/la-grilla-vive-en-la-wram.md`.
+**Where**: the decompressor is `lz2_descomprimir`, in bank 1 (461 bytes with
+its entries); bank 0 was left with 1029 free in `release` and 1727 in
+`test-special`. The WRAM: `$7F0000` is the load buffer, `$7F6000` the
+animation's drawings, and the grid at `$7E8000`, which is **the decision with a
+cost**: `workflow/decisiones/la-grilla-vive-en-la-wram.md`.
 
-**La grilla y la pelea**: la escena de la pelea es la mitad alta del `$7F`, así
-que pisa el final de las grillas de más de 32 KB (hoy, sólo la del mapa 52).
-`volver_de_batalla` vuelve a descomprimir la grilla entera.
+**The grid and the battle**: the battle scene is the upper half of `$7F`, so
+it overwrites the end of grids larger than 32 KB (today, only map 52's).
+`volver_de_batalla` decompresses the whole grid again.
 
-**Cómo se verificó**: `test_lz2.py` hace la ida y vuelta de cada bloque de
-cada cartucho por el compresor y por una referencia escrita aparte;
-`test_carga_descomprimida.py` compara, en los cuarenta mapas, la VRAM recién
-cargada, la grilla y los dibujos de la animación en la WRAM contra lo que el
-conversor deja sin comprimir en `crudos/`, en snes9x y en bsnes, y la grilla
-después de pelear en el mapa 52 (caso `pelea-en-52`). Se la vio fallar
-rompiendo el relleno y sacando la segunda descompresión de la grilla; las
-poses, apuntando cada una a su vecina (46 casos de la tanda en rojo).
+**How it was verified**: `test_lz2.py` does the round trip of each block of
+each cartridge through the compressor and through a separately written reference;
+`test_carga_descomprimida.py` compares, on the forty maps, the freshly
+loaded VRAM, the grid and the animation's drawings in WRAM against what the
+converter leaves uncompressed in `crudos/`, in snes9x and in bsnes, and the grid
+after fighting on map 52 (case `pelea-en-52`). It was seen failing
+by breaking the fill and removing the second grid decompression; the
+poses, by pointing each one at its neighbour (46 cases of the suite red).
 
-# La radiografía
+# The X-ray
 
-Sumando por prefijo de símbolo los bloques de `mapdata.inc`, que es el
-contenido exacto de cada uno (la cuenta por símbolos del `.dbg` sirve para
-casi todo, pero **se equivoca con `map_celdas`**: la grilla cruza de banco, y
-restar la dirección del símbolo siguiente la corta en el borde. Por eso la
-radiografía de `juntar-release-y-test-main.md` daba 285 KB y la del `.dbg`
-208: son 278).
+Adding up by symbol prefix the blocks of `mapdata.inc`, which is the
+exact content of each one (the count by symbols from the `.dbg` works for
+almost everything, but **it gets `map_celdas` wrong**: the grid crosses banks, and
+subtracting the address of the next symbol cuts it at the border. That is why the
+X-ray in `juntar-release-y-test-main.md` gave 285 KB and the `.dbg` one
+208: it is 278).
 
     release, 03c21fb           usado 3162 KB de 4096 (77,2%), último banco $6B
 
@@ -132,19 +132,19 @@ radiografía de `juntar-release-y-test-main.md` daba 285 KB y la del `.dbg`
     paginas         39,8 KB   y evcodigo 39,2, mensajes 32,0, titulo_tiles 31,0
     above_tiles     19,3 KB   y anim_tiles 14,7, fuente_pre* 4 × 14,5
 
-Las grillas **con sus diccionarios** —`map_celdas`, `map_bloques` y
-`bloque_pass`— son 329 KB, el 10% del cartucho: ni el 5% ni el 30%.
+The grids **with their dictionaries** —`map_celdas`, `map_bloques` and
+`bloque_pass`— are 329 KB, 10% of the cartridge: neither 5% nor 30%.
 
-# Cuánto comprime cada cosa
+# How much each thing compresses
 
-Por bloque, que es la unidad que se descomprime: un mapa, un cuadro, una pose.
-**LZ2** es el LC_LZ2 de Nintendo (el de los Mario y Zelda de la consola:
-copia, relleno de byte, de palabra, creciente, y repetición con dirección
-absoluta de 16 bits en la salida), con un compresor greedy con un paso de
-lazy, verificado con su descompresor. **LZSS 4K** es un LZSS de ventana de 4 KB
-y largo de 3 a 18, como los de muchos juegos comerciales. **zlib -9** es la
-cota de referencia; "junto" es zlib sobre todos los bloques de la clase
-pegados, que dice cuánto se repite **entre** mapas.
+Per block, which is the unit that is decompressed: a map, a frame, a pose.
+**LZ2** is Nintendo's LC_LZ2 (the one in the console's Mario and Zelda games:
+copy, byte fill, word fill, increasing fill, and repeat with absolute
+16-bit address in the output), with a greedy compressor with one
+lazy step, verified with its decompressor. **LZSS 4K** is an LZSS with a 4 KB window
+and lengths from 3 to 18, like those of many commercial games. **zlib -9** is the
+reference bound; "together" is zlib over all the blocks of the class
+stuck together, which says how much repeats **between** maps.
 
     clase          crudo     RLE     LZ2   LZSS 4K   zlib -9   junto   lo del dominio
     anim_batalla   548,0    27,2    20,4    78,5     20,0     13,8    sin tiles vacíos: 36,0
@@ -161,36 +161,36 @@ pegados, que dice cuánto se repite **entre** mapas.
     above_tiles     19,3    16,0    13,1    12,9     11,2     10,6
     anim_tiles      14,6    11,7     6,7     6,7      5,6      5,5
 
-\* Por banco de doce poses. **Pose por pose**, que es como se suben, LZ2 da
-139,1 KB.
+\* Per bank of twelve poses. **Pose by pose**, which is how they are uploaded, LZ2 gives
+139.1 KB.
 
-Lo que dicen las columnas del dominio:
+What the domain columns say:
 
-* **`anim_batalla` era 94% relleno**: 1109 tiles con algo de 17.536, cuatro
-  por cuadro de media. Ya está hecho: es el piloto.
-* **Los tiles de mapa no se repiten entre mapas** —7126 únicos de 7342, y con
-  espejos igual—, porque cada mapa cuantiza su paleta: el mismo dibujo sale con
-  otros índices. Es lo que ya decía la decisión de 4 MB. Lo mismo explica que
-  las copias que encontró el plan de Lashe City (39≡7, 43≡34, 45≡19) no se
-  compartan solas; **no están medidas acá** porque esos mapas no están en el
-  cartucho de hoy, y ninguna compresión por mapa las abarata: hace falta que
-  el asignador las cuantice igual y que `Materiales` las deduplique.
-* **Los tiles de sprite sí se repiten**: 1420 únicos de 9209 —los mismos
-  personajes en muchos mapas, con la misma paleta—.
-* **Las poses tienen 93,5 KB de poses idénticas**: la mitad dentro del mismo
-  personaje (47,0: cuadros de caminata iguales) y la otra mitad entre
-  personajes (46,5). Y otros **45,5 KB son el espejo horizontal** de una pose
-  ya vista: la izquierda de muchos CharSet es la derecha dada vuelta.
+* **`anim_batalla` was 94% padding**: 1109 tiles with something out of 17,536, four
+  per frame on average. It is already done: it is the pilot.
+* **Map tiles do not repeat between maps** —7126 unique of 7342, and with
+  mirrors the same—, because each map quantises its palette: the same drawing comes out with
+  other indices. It is what the 4 MB decision already said. The same explains why
+  the copies the Lashe City plan found (39≡7, 43≡34, 45≡19) are not
+  shared on their own; **they are not measured here** because those maps are not in
+  today's cartridge, and no per-map compression makes them cheaper: it needs
+  the allocator to quantise them the same and `Materiales` to deduplicate them.
+* **Sprite tiles do repeat**: 1420 unique of 9209 —the same
+  characters on many maps, with the same palette—.
+* **The poses have 93.5 KB of identical poses**: half within the same
+  character (47.0: identical walking frames) and the other half between
+  characters (46.5). And another **45.5 KB are the horizontal mirror** of a pose
+  already seen: the left of many CharSets is the right flipped.
 
-El agente del S-DD1 midió lo mismo con el algoritmo del chip
-(`chips-sa-1-y-s-dd1.md`) y los números cruzan: `map_celdas` 278,2
-KB, zlib 22,9 contra 22,7.
+The S-DD1 agent measured the same with the chip's algorithm
+(`chips-sa-1-y-s-dd1.md`) and the numbers agree: `map_celdas` 278.2
+KB, zlib 22.9 against 22.7.
 
-## Las cuatro variantes de las grillas
+## The four grid variants
 
-Sobre los 39 mapas distintos del cartucho, grilla más diccionario más
-pasabilidad; "trozos N" son trozos de N×N bloques deduplicados, con índices de
-un byte donde entran:
+Over the cartridge's 39 distinct maps, grid plus dictionary plus
+passability; "chunks N" are deduplicated chunks of N×N blocks, with
+one-byte indices where they fit:
 
     1. como hoy                               329,1 KB   263 bloques el mapa que más
     2. trozos de 2 / 4 / 8 / 16               126,8 / 115,5 / 137,1 / 175,0 KB
@@ -198,77 +198,77 @@ un byte donde entran:
     4. capas y pasabilidad aparte, 1/2/4/8    437,2 / 162,5 / 130,7 / 180,6 KB
     LZ2 de la grilla entera                    87,8 KB (sin acceso directo)
 
-Los trozos de 4×4 son el punto dulce de las dos primeras: **-214 KB**, y con
-capas separadas **-229**. La pasabilidad aparte (4) pierde siempre: un byte
-por celda pesa más que lo que ahorra separarla. El tope de 512 bloques no se
-acerca en ninguna: el mapa con más trozos de 4×4 tiene 285.
+4×4 chunks are the sweet spot of the first two: **-214 KB**, and with
+separate layers **-229**. Separate passability (4) always loses: one byte
+per cell weighs more than what separating it saves. The 512-block cap is not
+approached in any: the map with the most 4×4 chunks has 285.
 
-Pero hay algo mejor que los trozos, y está en la recomendación: descomprimir
-la grilla entera a la WRAM al cargar el mapa.
+But there is something better than chunks, and it is in the recommendation: decompressing
+the whole grid to WRAM when loading the map.
 
-# Cuándo se descomprime cada cosa, y cuánto cuesta
+# When each thing is decompressed, and how much it costs
 
-El modelo de ciclos para LZ2, que es el que se usaría en todas las de carga:
-~400 ciclos maestros de cabecera por comando y ~46 por byte de salida (un
-`mvn` de 7 ciclos de CPU, con las lecturas de código en FastROM y la escritura
-en la WRAM a 8). Un cuadro de NTSC son 357.954 maestros. Es un modelo, no una
-medición: el piloto se midió en la consola emulada, esto no.
+The cycle model for LZ2, which is the one that would be used in all the load ones:
+~400 master cycles of header per command and ~46 per output byte (an
+`mvn` of 7 CPU cycles, with the code reads in FastROM and the write
+to WRAM at 8). An NTSC frame is 357,954 master cycles. It is a model, not a
+measurement: the pilot was measured on the emulated console, this was not.
 
-* **Los tiles del mapa, de los sprites, de la capa de encima y de la animación
-  del ChipSet** se suben una vez, en `load_map`/`load_above`/`load_sprite`,
-  con la pantalla apagada dentro del fundido: no se ven. Descomprimir LZ2 a un
-  buffer en la WRAM y subir de ahí con el mismo DMA:
+* **The tiles of the map, of the sprites, of the upper layer and of the ChipSet
+  animation** are uploaded once, in `load_map`/`load_above`/`load_sprite`,
+  with the screen off inside the fade: they are not seen. Decompressing LZ2 to a
+  buffer in WRAM and uploading from there with the same DMA:
 
       map_tiles     2,97 cuadros de media, 7,21 el peor (27.584 B)
       sprite_tiles  1,28 de media, 2,53 el peor (15.200 B)
       above_tiles   0,20 de media, 1,03 el peor
       anim_tiles    0,56 de media, 1,13 el peor
 
-  O sea **unos 5 cuadros más de negro por cambio de mapa de media, 12 el
-  peor**. El buffer: el bloque más grande son 27,5 KB, y **`$7F0000` a
-  `$7F7FFF` no lo usa nadie fuera de la pelea** —es `ESC_LIMPIO`, que la
-  escena rearma al entrar—. `volver_al_mapa` y la vuelta de la pelea pasan
-  por `load_map`, así que descomprimirían también, y la vuelta de la pelea
-  sumaría esos cuadros a los que ya tarda.
-* **Las grillas** hoy se leen del cartucho con un puntero de 24 bits, cada vez
-  que se arma una tira o se pregunta una pasabilidad: acceso directo, y por eso
-  la tarea original pedía trozos. **Pero se pueden descomprimir enteras a la
-  WRAM al cargar el mapa y dejar el acceso directo como está**: sólo
-  `ptr_mas` y `ptr_menos` saben que la grilla está en LoROM —que al pasar de
-  `$FFFF` se sigue en el `$8000` del banco de al lado—, y **la WRAM tiene esa
-  misma forma si se usa la mitad alta de los dos bancos**: `$7E8000-$7EFFFF`
-  seguido de `$7F8000-$7FFFFF`. La grilla más grande son 40.000 B (mapa 52),
-  que comprime a 1,9 KB. Descomprimir: 1,24 cuadros de media, 5,81 el peor.
-  Lo que cambia en la ROM es la carga y **las dos lecturas de
-  `M_PTR_MAP_CELDAS`** (`heroe.s` y `ventana_del_mapa.s`), que pasarían a
-  apuntar a la WRAM. Lo que cuesta: reservar `$7E8000-$7EFFFF` para siempre
-  —hoy está libre— y, en los mapas de más de 32 KB de grilla, volver a
-  descomprimirla al salir de una pelea, que pisa `$7F8000`.
-* **Las poses** se suben por DMA en el vblank, hasta cinco por cuadro, cuando
-  un personaje cambia de pose. Comprimirlas pediría descomprimirlas en tiempo
-  real —LZ2 por pose da 139 KB, pero cinco poses son 2,5 KB de salida por
-  cuadro, cerca de un tercio de un cuadro de CPU con este modelo— o precargar
-  las de un mapa en la WRAM: el mapa con más personajes animados tiene 15, o
-  sea 90 KB, que es casi toda la WRAM que queda libre fuera de la pelea y no
-  deja lugar para la grilla ni para el buffer de carga. **No entra ninguna de
-  las dos** mientras no se haga lo de abajo, que achica ese número. Lo que
-  sí entra es deduplicarlas, que no cuesta nada en la consola: las tablas de
-  poses ya llevan un puntero por pose (`npc_poses`, `actor_table`), así que
-  dos iguales pueden apuntar al mismo lugar. Los espejos piden además el bit
-  de espejo en el atributo de OAM del personaje: más riesgo.
-* **Las animaciones de batalla** no se cargan al entrar a la pelea, aunque
-  el nombre lo sugiera: se dibujan sobre el mapa y **se suben 2 KB por vblank
-  cada dos cuadros**, cuadro a cuadro. Por eso el piloto
-  las rearma en la RAM lejana fuera del vblank. Ver "El piloto".
-* **Los battlers y los fondos** se cargan al entrar a la pelea, en el
-  fundido: 1,0 y 2,1 cuadros de media. La escena ya usa el banco `$7F` entero;
-  el battler más grande descomprimido (11,5 KB) cabría en la RAM lejana. Poco
-  ahorro: -29 y -11 KB.
+  That is **some 5 more frames of black per map change on average, 12 the
+  worst**. The buffer: the largest block is 27.5 KB, and **`$7F0000` to
+  `$7F7FFF` is not used by anyone outside the battle** —it is `ESC_LIMPIO`, which the
+  scene rebuilds on entering—. `volver_al_mapa` and the return from battle go
+  through `load_map`, so they would decompress too, and the return from battle
+  would add those frames to what it already takes.
+* **The grids** today are read from the cartridge with a 24-bit pointer, every time
+  a strip is built or a passability is asked: direct access, and that is why
+  the original task asked for chunks. **But they can be decompressed whole to
+  WRAM when loading the map and the direct access left as it is**: only
+  `ptr_mas` and `ptr_menos` know that the grid is in LoROM —that on going past
+  `$FFFF` it continues at `$8000` of the next bank—, and **WRAM has that
+  same shape if the upper half of the two banks is used**: `$7E8000-$7EFFFF`
+  followed by `$7F8000-$7FFFFF`. The largest grid is 40,000 B (map 52),
+  which compresses to 1.9 KB. Decompressing: 1.24 frames on average, 5.81 the worst.
+  What changes in the ROM is the load and **the two reads of
+  `M_PTR_MAP_CELDAS`** (`heroe.s` and `ventana_del_mapa.s`), which would
+  point to WRAM. What it costs: reserving `$7E8000-$7EFFFF` forever
+  —today it is free— and, on maps with more than 32 KB of grid, decompressing
+  it again when leaving a battle, which overwrites `$7F8000`.
+* **The poses** are uploaded by DMA in the vblank, up to five per frame, when
+  a character changes pose. Compressing them would require decompressing them in real
+  time —LZ2 per pose gives 139 KB, but five poses are 2.5 KB of output per
+  frame, close to a third of a CPU frame with this model— or preloading
+  a map's ones into WRAM: the map with the most animated characters has 15, that
+  is 90 KB, which is almost all the WRAM left free outside the battle and leaves
+  no room for the grid or for the load buffer. **Neither of the two
+  fits** until what is below is done, which shrinks that number. What
+  does fit is deduplicating them, which costs nothing on the console: the pose
+  tables already carry one pointer per pose (`npc_poses`, `actor_table`), so
+  two identical ones can point to the same place. Mirrors would also need the
+  mirror bit in the character's OAM attribute: more risk.
+* **The battle animations** are not loaded on entering the battle, even though
+  the name suggests it: they are drawn over the map and **2 KB are uploaded per vblank
+  every two frames**, frame by frame. That is why the pilot
+  rebuilds them in far RAM outside the vblank. See "The pilot".
+* **The battlers and the backgrounds** are loaded on entering the battle, in the
+  fade: 1.0 and 2.1 frames on average. The scene already uses the whole `$7F` bank;
+  the largest decompressed battler (11.5 KB) would fit in far RAM. Little
+  saving: -29 and -11 KB.
 
-# La recomendación
+# The recommendation
 
-Por KB ahorrados, con el costo y el riesgo al lado. Los números de ahorro son
-contra el cartucho de hoy, después del piloto.
+By KB saved, with the cost and the risk alongside. The saving numbers are
+against today's cartridge, after the pilot.
 
     qué                                  ahorra    costo en la consola                   riesgo
     1. anim_batalla sin tiles vacíos      -512 KB   8 scanlines por cuadro nuevo, 50     HECHO
@@ -284,92 +284,92 @@ contra el cartucho de hoy, después del piloto.
     (grillas en trozos de 4×4             -214 KB   una indirección más por celda en     alto
      con capas: si no hubiera WRAM)                 cada lector de la grilla
 
-**Qué primero: el 2 y el 3 juntos**, porque son un solo trabajo —un
-descompresor LZ2 en la ROM y el compresor en el conversor— y entre los dos
-son **676 KB**. LZ2 y no otro por tres razones: en los tiles queda a un 20% de
-zlib, y en las grillas a 10 KB; su repetición con dirección
-absoluta en la salida es exactamente lo que un `mvn` dentro de un banco de la
-WRAM hace de un saque, así que el descompresor es corto y rápido; y es un
-formato que la consola ya conoce —hay descompresores de referencia y
-herramientas para mirarlo (Lunar Compress)—. El LZSS de ventana de 4 KB
-comprime igual en los tiles de mapa, algo mejor en battlers y fondos, y
-bastante peor en sprites y grillas, que es donde está el volumen.
+**What first: 2 and 3 together**, because they are a single piece of work —an
+LZ2 decompressor in the ROM and the compressor in the converter— and between the two
+they are **676 KB**. LZ2 and not another for three reasons: on the tiles it ends up within 20% of
+zlib, and on the grids within 10 KB; its repeat with absolute address
+in the output is exactly what an `mvn` inside a WRAM bank
+does in one go, so the decompressor is short and fast; and it is a
+format the console already knows —there are reference decompressors and
+tools to look at it (Lunar Compress)—. The 4 KB window LZSS
+compresses the same on map tiles, somewhat better on battlers and backgrounds, and
+quite a lot worse on sprites and grids, which is where the volume is.
 
-**El 4 es gratis y se puede hacer en cualquier momento**: sólo el conversor, y
-lo verifica la tanda tal cual —la ROM sube los mismos bytes desde otro
-lugar—.
+**4 is free and can be done at any time**: only the converter, and
+the suite verifies it as is —the ROM uploads the same bytes from another
+place—.
 
-Con el 1 al 4, `release` bajaría de unos 2650 a unos 1880 KB usados: del 65%
-al 46%. Es una estimación, suma de las columnas de arriba.
+With 1 to 4, `release` would go down from some 2650 to some 1880 KB used: from 65%
+to 46%. It is an estimate, the sum of the columns above.
 
-# El piloto
+# The pilot
 
-**Qué**: cada cuadro de animación de batalla se guarda como la lista de sus
-tiles con algo —un byte con su número en la caja y sus 32 bytes— y un `$FF`
-(`cuadro_sin_vacios` en `snes_convert.py`). Cuando el tick elige un cuadro
-nuevo, `anim_cuadro_armar` (banco 1, `animacion_de_batalla_cuadros.s`) borra
-de `ANIMB_BUF` los tiles del cuadro anterior y copia los del nuevo; el vblank
-sube los 2 KB de `ANIMB_BUF` con el mismo DMA de siempre. Se eligió éste y no
-los tiles de mapa porque ahorra más del doble y no tiene descompresor: el
-"descompresor" es una copia.
+**What**: each battle animation frame is stored as the list of its
+tiles with something —a byte with its number in the box and its 32 bytes— and an `$FF`
+(`cuadro_sin_vacios` in `snes_convert.py`). When the tick chooses a new
+frame, `anim_cuadro_armar` (bank 1, `animacion_de_batalla_cuadros.s`) erases
+from `ANIMB_BUF` the tiles of the previous frame and copies those of the new one; the vblank
+uploads the 2 KB of `ANIMB_BUF` with the same DMA as always. This one was chosen and not
+the map tiles because it saves more than twice as much and has no decompressor: the
+"decompressor" is a copy.
 
-**Cuánto ahorra**, en `release`: `anim_batalla` de 548,0 a 36,0 KB; el
-cartucho de 3162 a 2650 KB usados, y el último banco de `$6B` a `$5B`.
+**How much it saves**, in `release`: `anim_batalla` from 548.0 to 36.0 KB; the
+cartridge from 3162 to 2650 KB used, and the last bank from `$6B` to `$5B`.
 
-**Cuánto cuesta**:
+**What it costs**:
 
-* **Banco 0**: devuelve 12 bytes —el vblank ya no calcula el puntero—: 1180
-  libres en `release`, 1878 en `test-special`. **Banco 1**: 318 bytes.
-* **RAM lejana**: `$7E7000-$7E77FF`, reservado en `ram_lejana.s`, y tres
-  bytes en `$7E3616` (`ANIMB_PREV`).
-* **CPU**: medido con una ROM instrumentada —el contador vertical leído antes
-  y después de `anim_cuadro_armar`— con las catorce animaciones en el mapa 52,
-  el de más personajes que dibuja animaciones: **8 scanlines de media y 50 la
-  peor**, de 262, una vez cada dos cuadros. La peor es la 132, donde dos
-  cuadros seguidos suman 55 tiles.
-* **Cuadros perdidos** del lazo con las catorce seguidas: en el mapa 52, 2
-  antes y 4 ahora; en el 6 y en el 3 (el Emitter Room, 35 personajes), cero y
-  cero. El 52 ya perdía sin esto.
-* **Cuadros de carga**: `anim_buf_limpiar` borra los 2 KB al cargar cada mapa,
-  con la pantalla apagada: unos 10.000 ciclos de CPU, menos de un cuadro.
+* **Bank 0**: gives back 12 bytes —the vblank no longer computes the pointer—: 1180
+  free in `release`, 1878 in `test-special`. **Bank 1**: 318 bytes.
+* **Far RAM**: `$7E7000-$7E77FF`, reserved in `ram_lejana.s`, and three
+  bytes at `$7E3616` (`ANIMB_PREV`).
+* **CPU**: measured with an instrumented ROM —the vertical counter read before
+  and after `anim_cuadro_armar`— with the fourteen animations on map 52,
+  the one with the most characters that draws animations: **8 scanlines on average and 50 the
+  worst**, out of 262, once every two frames. The worst is 132, where two
+  consecutive frames add up to 55 tiles.
+* **Frames lost** in the loop with the fourteen in a row: on map 52, 2
+  before and 4 now; on 6 and on 3 (the Emitter Room, 35 characters), zero and
+  zero. 52 already lost frames without this.
+* **Load frames**: `anim_buf_limpiar` erases the 2 KB when loading each map,
+  with the screen off: some 10,000 CPU cycles, less than one frame.
 
-**Cómo se verificó**: `just pruebas` en verde sin tocar ninguna golden, y la
-prueba nueva `pruebas/rpgmaker/test_animacion_cuadros.py`, que pone a la ROM a
-dibujar cada animación del cartucho —cambiándole la fila de la animación que
-está dibujando— y compara la caja de la VRAM, cuadro por cuadro, los 274,
-contra `cuadro_de_animacion`, la cuenta sin comprimir. Corre también en
-bsnes, que enciende con la WRAM llena de basura; ahí compara `ANIMB_BUF`
-porque el core no expone la VRAM. Se la vio fallar rompiendo el rearmado de
-tres maneras: sin borrar el cuadro anterior (274 de 274 mal), leyendo los
-tiles corridos un byte (216 de 274), y sin el borrado de la carga del mapa
-(274 de 274, en los dos cores).
+**How it was verified**: `just pruebas` green without touching any golden, and the
+new test `pruebas/rpgmaker/test_animacion_cuadros.py`, which makes the ROM
+draw each animation of the cartridge —changing the row of the animation it
+is drawing— and compares the VRAM box, frame by frame, all 274,
+against `cuadro_de_animacion`, the uncompressed computation. It also runs in
+bsnes, which powers on with WRAM full of garbage; there it compares `ANIMB_BUF`
+because the core does not expose VRAM. It was seen failing by breaking the rebuild in
+three ways: without erasing the previous frame (274 of 274 wrong), reading the
+tiles shifted by one byte (216 of 274), and without the erasure on map load
+(274 of 274, on both cores).
 
-**Si hiciera falta bajar el peor caso**: no borrar los tiles del anterior que
-el nuevo pisa (en la 132 son casi todos), o un DMA a `$2180` en vez de la
-copia por CPU —cinco veces más rápido—, que se descartó por el cruce del DMA
-general con el HDMA en la primera revisión de la CPU; ver el comentario de
+**If the worst case had to be brought down**: not erasing the previous frame's tiles that
+the new one overwrites (on 132 it is almost all of them), or a DMA to `$2180` instead of the
+CPU copy —five times faster—, which was ruled out because of the clash of a general DMA
+with HDMA in the CPU's first revision; see the comment of
 `animacion_de_batalla_cuadros.s`.
 
-# Preguntas
+# Questions
 
-Las dos, contestadas por taro el 2026-09-26: reservar `$7E8000-$7EFFFF` para
-la grilla, sí, como prueba y con la decisión escrita; y los cuadros de más por
-cambio de mapa, "perfectamente aceptables".
+Both, answered by taro on 2026-09-26: reserving `$7E8000-$7EFFFF` for
+the grid, yes, as a trial and with the decision written down; and the extra frames per
+map change, "perfectly acceptable".
 
-# Método
+# Method
 
-Todo sale de `rom/build/release/`: los bloques de `mapdata.inc` leídos por
-etiqueta —`.byte` hasta la línea siguiente que no sea `.byte` ni `.segment`,
-porque la grilla cruza de banco en el medio— y agrupados por el nombre sin el
-`_N` del final; el total usado es la suma de los segmentos `ro` del `.dbg`. Los
-compresores se escribieron para esto, en Python, y cada LZ2 se verificó
-descomprimiéndolo. Los scripts eran descartables y no están en el repo; lo que
-hay que rehacer es: un lector de bloques, LZ2 greedy con lazy, y el modelo de
-ciclos de arriba.
+Everything comes from `rom/build/release/`: the blocks of `mapdata.inc` read by
+label —`.byte` until the next line that is neither `.byte` nor `.segment`,
+because the grid crosses banks in the middle— and grouped by the name without the
+trailing `_N`; the total used is the sum of the `ro` segments of the `.dbg`. The
+compressors were written for this, in Python, and each LZ2 was verified
+by decompressing it. The scripts were throwaway and are not in the repo; what
+has to be redone is: a block reader, greedy LZ2 with lazy, and the cycle
+model above.
 
-Los cuadros perdidos se cuentan con `cuadros_perdidos` del arnés alrededor de
-cada animación, puesta a dibujar escribiendo `ANIMB_FILA`, `ANIMB_N`,
-`ANIMB_T`, `ANIMB_CUADRO` y `ANIMB_ACTIVA` —lo mismo que hace la prueba—,
-después de `ir_al_mapa`. Las scanlines, con una copia de la ROM que lee
-`$213F`, `$2137` y dos veces `$213D` antes y después del `jsl`, y anota los
-cuatro bytes en `$7E7F00`.
+Lost frames are counted with the harness's `cuadros_perdidos` around
+each animation, set to draw by writing `ANIMB_FILA`, `ANIMB_N`,
+`ANIMB_T`, `ANIMB_CUADRO` and `ANIMB_ACTIVA` —the same as the test does—,
+after `ir_al_mapa`. The scanlines, with a copy of the ROM that reads
+`$213F`, `$2137` and `$213D` twice before and after the `jsl`, and notes the
+four bytes at `$7E7F00`.

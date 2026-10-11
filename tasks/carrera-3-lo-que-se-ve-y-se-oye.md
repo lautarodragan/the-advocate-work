@@ -1,34 +1,34 @@
 ---
-name: "Carrera 3: lo que se ve y se oye"
-description: "El cartel de los controles de la carrera como mensaje, y los efectos de sonido adentro de las rutas forzadas"
+name: "Race 3: what is seen and heard"
+description: "The race's controls card as a message, and the sound effects inside forced routes"
 type: feature
 status: done
 assignee: taro
 ---
 
-# Qué
+# What
 
-El hito 3 de `la-carrera-y-lo-que-sigue.md`: las faltas 4 y 5. Sale de
-`main` en `69e66ed`.
+Milestone 3 of `la-carrera-y-lo-que-sigue.md`: gaps 4 and 5. It branches from
+`main` at `69e66ed`.
 
-* **El cartel de los controles** (`EscapeInst`): decidido, la opción (a). Un
-  fork del 49 que cambia el `ShowPicture` por `ShowMessage` con el mismo
-  texto que la imagen.
-* **Los sonidos adentro de las rutas**: lo que pedía
-  `los-sonidos-adentro-de-las-rutas.md`. El caso que lo pide es el puente de
-  la carrera, pero general.
+* **The controls card** (`EscapeInst`): decided, option (a). A
+  fork of 49 that changes the `ShowPicture` for a `ShowMessage` with the same
+  text as the image.
+* **The sounds inside the routes**: what
+  `los-sonidos-adentro-de-las-rutas.md` asked for. The case that asks for it is the race's
+  bridge, but general.
 
-Números reservados: opcode 0x32 y la RAM lejana $7E79A0-$7E79BF. No hizo
-falta ninguno de los dos.
+Reserved numbers: opcode 0x32 and far RAM $7E79A0-$7E79BF. Neither
+was needed.
 
 # Status
 
-2026-09-27, en `testing/`: hecho. Lo que queda es de taro, jugando: ver
-abajo.
+2026-09-27, in `testing/`: done. What is left is taro's, playing: see
+below.
 
-# El cartel
+# The card
 
-El texto, leído de la imagen del juego:
+The text, read from the game's image:
 
     Escape from Lashe City
 
@@ -39,48 +39,48 @@ El texto, leído de la imagen del juego:
 
     Press any key to begin.
 
-No entra en una ventana de 39 columnas por cuatro renglones, así que son dos
-cuadros: el título y los controles; los choques y "Press any key to begin."
-Fork en `parches/manual/mapas/Map0049.json`, capas del original.
+It does not fit in a window of 39 columns by four rows, so it is two
+boxes: the title and the controls; the crashes and "Press any key to begin."
+Fork in `parches/manual/mapas/Map0049.json`, layers from the original.
 
-**El `KeyInputProc` que esperaba la tecla se sacó**, y el `ErasePicture` de
-la imagen que ya no está. El mensaje se cierra con A y el `KeyInputProc`
-pedía después otra tecla más, con la pantalla negra y nada que lo dijera:
-dos toques donde el original pide uno. La variable 151, donde guardaba la
-tecla, no la lee ningún mapa ni ningún evento común (medido sobre `data/`).
-Lo que se pierde: en el original cualquier tecla arranca, y acá sólo la que
-cierra el mensaje.
+**The `KeyInputProc` that waited for the key was removed**, and the `ErasePicture` of
+the image that is no longer there. The message is closed with A and the `KeyInputProc`
+then asked for yet another key, with the screen black and nothing saying so:
+two presses where the original asks for one. Variable 151, where it stored the
+key, is not read by any map nor any common event (measured over `data/`).
+What is lost: in the original any key starts, and here only the one that
+closes the message.
 
-# Los sonidos de las rutas
+# The routes' sounds
 
-## Cómo quedó
+## How it turned out
 
-La orden 35 de un `MoveEvent` va con dos bytes detrás, el índice del efecto
-en `Temas.sonidos` —el mismo de `OP_SOUND`—, y la ROM lo toca con
-`sonido_tocar`, el camino de `OP_SOUND`: con MSU-1 y sin él, sin costar un
-cuadro. `sonido_heroe` en `ruta_del_heroe.s` y `sonido_ev` en
-`rutas_de_eventos.s`. Se sigue tirando adentro de un salto (RM2k no lo
-ejecuta ahí) y en la ruta propia de una página (no hay dónde poner el
-operando; sólo la pide una, la del evento 40 del mapa 2).
+Order 35 of a `MoveEvent` goes with two bytes after it, the index of the sound effect
+in `Temas.sonidos` —the same as `OP_SOUND`—, and the ROM plays it with
+`sonido_tocar`, the `OP_SOUND` path: with MSU-1 and without it, without costing a
+frame. `sonido_heroe` in `ruta_del_heroe.s` and `sonido_ev` in
+`rutas_de_eventos.s`. It is still dropped inside a jump (RM2k does not
+execute it there) and in a page's own route (there is nowhere to put the
+operand; only one asks for it, that of event 40 on map 2).
 
-**Antes hizo falta que la ruta del héroe dejara de copiarse** a un búfer de
-32 bytes: el corte caía callado, y con operandos de dos bytes podía caer en
-el medio de uno. Ahora es un puntero al bytecode, como la de un evento. Nueve
-rutas del héroe de `release` pasaban de 32 (las seis del puente, el
-`SceneDriver` del 14, una del 19 y una del 45). Salió más barato en banco 0
-y en BSS.
+**First the hero's route had to stop being copied** to a 32-byte
+buffer: the cut fell silently, and with two-byte operands it could fall in
+the middle of one. Now it is a pointer to the bytecode, like an event's. Nine
+hero routes in `release` went over 32 (the bridge's six, the
+`SceneDriver` on 14, one on 19 and one on 45). It came out cheaper in bank 0
+and in BSS.
 
-## Qué entra en cada paquete, y qué no
+## What goes into each package, and what does not
 
-El efecto entra en el paquete de audio del mapa, como el de un `PlaySound`,
-así que compite con la música. Se aplicó la regla de taro —ningún
-instrumento pierde tasa— mapa por mapa, comparando la tasa de cada par
-tema-instrumento del reparto de `release` antes y después (un script que
-envuelve `build_varios`). Donde costaba, los efectos que sólo pide una ruta
-no entran: `SE_DE_RUTA_SIN_PAQUETE` en `tools/audio/snes_music.py`, con el
-porqué de cada mapa.
+The sound effect goes into the map's audio package, like a `PlaySound`'s,
+so it competes with the music. taro's rule was applied —no
+instrument loses rate— map by map, comparing the rate of each
+theme-instrument pair of the `release` allocation before and after (a script that
+wraps `build_varios`). Where it cost, the sound effects that only a route asks for
+do not go in: `SE_DE_RUTA_SIN_PAQUETE` in `tools/audio/snes_music.py`, with the
+why for each map.
 
-Suenan, con el reparto de la música igual par por par:
+They sound, with the music allocation identical pair by pair:
 
     mapa  efectos de ruta nuevos en el paquete
     13    Blow5
@@ -92,7 +92,7 @@ Suenan, con el reparto de la música igual par por par:
     61    Blow6
     62    Blow6
 
-y en el 8 y el 19, donde ya estaban por las páginas. No suenan:
+and on 8 and 19, where they already were because of the pages. They do not sound:
 
     3     Decision1, Blow1 a Blow6, Shot2 (la escena de evilrhys): no entran
           ni con las muestras al mínimo. Switch1 sí, por las páginas.
@@ -105,55 +105,55 @@ y en el 8 y el 19, donde ya estaban por las páginas. No suenan:
           ser tema de salida y el paquete no entra
     121   Earth8 (mapa de prueba): le baja 25 pares
 
-Todos los que entraron duran menos de tres cuartos de segundo, así que
-suenan enteros. Y **Annihilation2** —el golpe contra el borde de los
-carriles y el del final del puente— pasó a entero, a 8 kHz: sonaba recortado
-y con bucle. Más alto hace esperar a los efectos del 49 al `PlayBGM`.
+All the ones that went in last less than three quarters of a second, so
+they sound whole. And **Annihilation2** —the hit against the edge of the
+lanes and the one at the end of the bridge— became whole, at 8 kHz: it sounded clipped
+and looped. Any higher makes 49's sound effects wait for the `PlayBGM`.
 
-Lo que quedaría para un día: la primera tanda de `copias` cuenta los efectos
-del cartucho, así que cada efecto nuevo le cuesta a la música aunque su
-paquete tenga lugar. Es lo que dejó afuera a Flash1 y a Earth4. Cambiar eso
-es decisión sobre el reparto, no de esta tarea.
+What would be left for some day: the first batch of `copias` counts the
+cartridge's sound effects, so each new sound effect costs the music even if its
+package has room. It is what left out Flash1 and Earth4. Changing that
+is a decision about the allocation, not about this task.
 
-## Oído
+## Heard
 
-En la carrera entera (`test_la_carrera_entera`), en el puente arrancan seis
-Wind7 de 14 cuadros y un Annihilation2 de 87, y el golpe arranca 101 ticks
-antes del `Teleport` al 53: suena entero. El audio del puente queda en
+In the whole race (`test_la_carrera_entera`), on the bridge six
+14-frame Wind7 and one 87-frame Annihilation2 start, and the hit starts 101 ticks
+before the `Teleport` to 53: it sounds whole. The bridge's audio is in
 `pruebas/snapshots/playthrough/carrera-entera/el-puente.wav`.
 
-# Pruebas
+# Tests
 
-`just cartuchos` y `just pruebas` en verde sobre cada commit y sobre el
-merge con `main`.
+`just cartuchos` and `just pruebas` green on each commit and on the
+merge with `main`.
 
-* **Nuevo: `pruebas/rpgmaker/test_sonido_en_ruta.py`**, con los casos
-  `sonido-en-ruta`, `sonido-en-ruta-evento` y `sonido-en-ruta-salto` (mapa
-  10, `Close1`, que ya estaba en su paquete): sobre el héroe suena con el
-  tercer paso arrancando, sobre un evento suena, y adentro de un salto no
-  suena y la ruta sigue. Con el conversor tirando la orden, las dos primeras
-  dan rojo.
-* `pruebas/abl/test_msu_efectos.py`: con el `.msu`, el de la ruta suena a 22
-  kHz con la envolvente del WAV.
-* `pruebas/abl/test_recorrido_carrera_golden.py`: fotografía los dos cuadros
-  del cartel (`el-cartel-1`, `el-cartel-2`) y cuenta los efectos del puente.
-  Sus fotos siguen sin bendecir.
-* Ninguna golden de la tanda cambió.
+* **New: `pruebas/rpgmaker/test_sonido_en_ruta.py`**, with the cases
+  `sonido-en-ruta`, `sonido-en-ruta-evento` and `sonido-en-ruta-salto` (map
+  10, `Close1`, which was already in its package): on the hero it sounds with the
+  third step starting, on an event it sounds, and inside a jump it does not
+  sound and the route continues. With the converter dropping the order, the first two
+  go red.
+* `pruebas/abl/test_msu_efectos.py`: with the `.msu`, the route's one sounds at 22
+  kHz with the WAV's envelope.
+* `pruebas/abl/test_recorrido_carrera_golden.py`: photographs the card's two boxes
+  (`el-cartel-1`, `el-cartel-2`) and counts the bridge's sound effects.
+  Its photos are still unblessed.
+* No golden of the suite changed.
 
-# Qué tiene que probar taro jugando
+# What taro has to test by playing
 
-* La intro de la carrera: el cartel en dos cuadros sobre negro, que se lee
-  bien, y que un toque de A después del segundo arranca la carrera.
-* El puente: los seis vientos mientras el auto cruza y el golpe al final,
-  con MSU-1 y sin él.
-* El golpe contra el borde de los carriles (apretar hacia afuera en el carril
-  de un borde): que suene entero y no tartamudee.
-* Donde se pueda llegar, los mapas que ganaron efectos: 33 (Blow1 y Blow6),
-  21, 28, 60 a 62, 13.
+* The race's intro: the card in two boxes over black, that it reads
+  well, and that one A press after the second starts the race.
+* The bridge: the six winds while the car crosses and the hit at the end,
+  with MSU-1 and without it.
+* The hit against the edge of the lanes (pressing outwards in an edge
+  lane): that it sounds whole and does not stutter.
+* Where reachable, the maps that gained sound effects: 33 (Blow1 and Blow6),
+  21, 28, 60 to 62, 13.
 
-# Probado
+# Tested
 
-taro, el 2026-09-27, en la SNES con el FX Pak: anduvo todo, incluido el camino
-de vender el Idol, sobornar al guardia y llevar a AG7; la carrera sin lag ni
-bugs (el compañero al volante, también). Queda aparte el héroe negro después
-de cambiar de gráfico en el mismo mapa (HQ de Lazer Teeth, Boss Wick).
+taro, on 2026-09-27, on the SNES with the FX Pak: everything worked, including the path
+of selling the Idol, bribing the guard and taking AG7; the race without lag or
+bugs (the companion at the wheel, too). Separate is the black hero after
+changing graphic on the same map (Lazer Teeth HQ, Boss Wick).

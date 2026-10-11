@@ -1,75 +1,75 @@
 ---
-name: "La regla de mapas por id"
-description: "release lleva los mapas de id menor a 65, menos una exclusión corta, más los agregados: deja de ser una lista escrita a mano"
+name: "The map-by-id rule"
+description: "release carries the maps with id below 65, minus a short exclusion, plus the additions: it stops being a hand-written list"
 type: refactor
 status: done
 ---
 
-# Qué
+# What
 
-La segunda mitad del hito 4 de `la-carrera-y-lo-que-sigue.md`. La
-primera —los dos errores latentes del conversor— ya está en `main`
+The second half of milestone 4 of `la-carrera-y-lo-que-sigue.md`. The
+first —the converter's two latent bugs— is already on `main`
 (`9d6c0d3`).
 
-`release` deja de llevar la lista escrita a mano de `MAPAS_DEL_JUEGO` en
-`tools/ensamblado/cartuchos.py` y pasa a llevar **los mapas con id menor a
-X, sin los excluidos, más los agregados**. Decidido por taro: X = 65, la
-exclusión 15, 22, 46, 55 y 58 —chica, a pedido suyo— y el 164 como agregado.
-Los mapas de prueba y `test-special` quedan como estaban.
+`release` stops carrying the hand-written list of `MAPAS_DEL_JUEGO` in
+`tools/ensamblado/cartuchos.py` and goes on to carry **the maps with id below
+X, without the excluded ones, plus the additions**. Decided by taro: X = 65, the
+exclusion 15, 22, 46, 55 and 58 —small, at his request— and 164 as an addition.
+The test maps and `test-special` stay as they were.
 
-**No mueve la ROM**: la lista que sale de la regla tiene que ser la misma, en
-el mismo orden, que la escrita a mano del hito 1.
+**It does not move the ROM**: the list that comes out of the rule has to be the same, in
+the same order, as the hand-written one of milestone 1.
 
-# Cómo
+# How
 
-## "Los mapas" son los del árbol, no todos los ids
+## "The maps" are the tree's, not all ids
 
-Del 1 al 64 faltan en la lista escrita a mano, además de los cinco
-excluidos, el 24, el 25, el 27, el 31 y el 35: son **áreas** del árbol
-(`RPG_RT.lmt`, tipo 2), nodos sin `.lmu` que sólo le tapan un rectángulo a su
-padre para los encuentros. La regla cuenta los de tipo 1, que son los que
-tienen mapa: si no, la exclusión tendría diez ids y cinco serían "no es un
-mapa".
+From 1 to 64, besides the five
+excluded ones, 24, 25, 27, 31 and 35 are missing from the hand-written list: they are **areas** of the tree
+(`RPG_RT.lmt`, type 2), nodes without a `.lmu` that only cover a rectangle of their
+parent for the encounters. The rule counts those of type 1, which are the ones that
+have a map: otherwise, the exclusion would have ten ids and five would be "not a
+map".
 
-## Dónde vive cada cosa
+## Where each thing lives
 
-Los tres valores —`MENOR_A`, `EXCLUIDOS` y `AGREGADOS`— viven en
-`cartuchos.py`, y la regla se expande **ahí**, con el árbol del volcado de
-`data/`. Al conversor le sigue llegando la lista explícita en `--mapas`,
-como hasta ahora. No hay flag `--exclude-maps`, y es a propósito:
+The three values —`MENOR_A`, `EXCLUIDOS` and `AGREGADOS`— live in
+`cartuchos.py`, and the rule is expanded **there**, with the tree from the dump in
+`data/`. The converter still receives the explicit list in `--mapas`,
+as until now. There is no `--exclude-maps` flag, and that is on purpose:
 
-* **Nadie más llama al conversor**: el único que lo invoca es `cartuchos.py`
-  (grep de `snes_convert` en `justfile`, `tools/` y `pruebas/`). Un flag le
-  daría una segunda manera de recibir los mapas a un programa que ya tiene
-  una, para un solo llamador.
-* **Los que leen la lista en Python la necesitan sin correr el conversor**:
+* **Nobody else calls the converter**: the only one that invokes it is `cartuchos.py`
+  (grep for `snes_convert` in `justfile`, `tools/` and `pruebas/`). A flag would
+  give a second way of receiving the maps to a program that already has
+  one, for a single caller.
+* **Those that read the list in Python need it without running the converter**:
   `test_horneados.py` (`cartuchos.MAPAS`), `test_parches.py`
-  (`MAPAS_DEL_JUEGO`) y `parches.mapas_de_prueba`. Con la regla en el
-  conversor habría que expandirla en dos lados.
-* **El sello**: el sello del cartucho lleva sus flags, y `data/` no entra en
-  la huella. Con la lista expandida en los flags, un cambio en el árbol que
-  cambie qué mapas entran deja viejo al cartucho; con `--menores-a 65` en los
-  flags, no se enteraría.
+  (`MAPAS_DEL_JUEGO`) and `parches.mapas_de_prueba`. With the rule in the
+  converter it would have to be expanded in two places.
+* **The seal**: the cartridge's seal carries its flags, and `data/` does not go into
+  the fingerprint. With the list expanded in the flags, a change in the tree that
+  changes which maps go in leaves the cartridge stale; with `--menores-a 65` in the
+  flags, it would not notice.
 
-Y si algún día hace falta el flag, el nombre en `tools/` va en castellano
-(`--excluir-mapas`): la regla de AGENTS.md dice que los flags ingleses son
-los de los proyectos aparte.
+And if some day the flag is needed, the name in `tools/` goes in Spanish
+(`--excluir-mapas`): the AGENTS.md rule says English flags are
+those of the separate projects.
 
-Un mapa que se sale de la regla —un tutorial de otro capítulo, una
-carpeta— va a `EXCLUIDOS` **con su razón al lado**; uno de más allá de
-`MENOR_A` que haga falta, a `AGREGADOS`. `test_ensamblar.py` cobra que cada
-excluido sea un mapa que la regla metería y cada agregado uno que no: un
-número de adorno en cualquiera de las dos listas no dice nada y envejece.
+A map that falls outside the rule —a tutorial from another chapter, a
+folder— goes to `EXCLUIDOS` **with its reason next to it**; one beyond
+`MENOR_A` that is needed, to `AGREGADOS`. `test_ensamblar.py` enforces that each
+excluded one is a map the rule would put in and each addition one it would not: a
+decorative number in either list says nothing and goes stale.
 
-## Comprobación
+## Check
 
-* La lista que da la regla es la misma tupla, en el mismo orden, que la
-  escrita a mano (comparada en Python contra la vieja).
-* **Las ROMs, byte por byte**: `just cartuchos` sobre `69e66ed` y sobre el
-  cambio —los dos cartuchos se rearmaron, porque `cartuchos.py` entra en la
-  huella— y `cmp` de `rom/build/release/abl.sfc`, `abl.msu`,
-  `rom/build/tests/special/prueba.sfc` y `prueba.msu` contra las copias de
-  antes: iguales los cuatro.
-* `just pruebas` sobre el resultado: todas en verde.
+* The list the rule gives is the same tuple, in the same order, as the
+  hand-written one (compared in Python against the old one).
+* **The ROMs, byte for byte**: `just cartuchos` on `69e66ed` and on the
+  change —both cartridges were rebuilt, because `cartuchos.py` goes into the
+  fingerprint— and `cmp` of `rom/build/release/abl.sfc`, `abl.msu`,
+  `rom/build/tests/special/prueba.sfc` and `prueba.msu` against the copies from
+  before: all four identical.
+* `just pruebas` on the result: all green.
 
-No hay nada que taro tenga que jugar: la ROM es la misma.
+There is nothing taro has to play: the ROM is the same.

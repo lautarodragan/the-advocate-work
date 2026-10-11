@@ -1,124 +1,124 @@
 ---
-name: "Dos puertas más en el mapa de debug, en el mundo"
-description: "Una que deja en el Northern World / Lashe Area pasando el puente, con la historia de Eisen hecha y la charla con Vago terminada, y otra a la izquierda del EV0020 del 66, después del bosque en llamas, los agentes y el Hover Tram"
+name: "Two more doors on the debug map, in the world"
+description: "One that leaves you in the Northern World / Lashe Area past the bridge, with Eisen's story done and the talk with Vago finished, and another to the left of EV0020 on 66, after the burning forest, the agents and the Hover Tram"
 type: feature
 status: done
 assignee: taro
 agents: [Hurón]
 ---
 
-De taro, el 2026-10-10: "Podés agregar dos puertas más en el mapa debug
-del ABL?
+From taro, on 2026-10-10: "Can you add two more doors on ABL's debug
+map?
 
-1. Una que te deje justo después del puente, en el Northern World / Lashe
-   Area (Map0066, uno o dos tiles a la izquierda de EV0006, habiendo
-   completado la historia de Eisen y terminado la charla con Vago. El
-   puente es mapas 2059 y 0255)
+1. One that leaves you right after the bridge, in the Northern World / Lashe
+   Area (Map0066, one or two tiles to the left of EV0006, having
+   completed Eisen's story and finished the talk with Vago. The
+   bridge is maps 2059 and 0255)
 
-2. Otra que te deje también en Northern World / Lashe Area, pero a la
-   izquierda de EV0020, habiendo terminado la secuencia del bosque que se
-   prende fuego, luchado con los agentes y el Hover Tram."
+2. Another that also leaves you in Northern World / Lashe Area, but to the
+   left of EV0020, having finished the sequence of the forest that
+   catches fire, fought the agents and the Hover Tram."
 
-Sigue a `dos-puertas-mas-en-el-mapa-de-debug.md`: mismo método.
+It follows `dos-puertas-mas-en-el-mapa-de-debug.md`: same method.
 
-## Dónde quedaron
+## Where they ended up
 
-**Las dos nuevas caen entre la 7 y la de Paradise, no después.** El
-camino del capítulo es Sorbe (la 7), el puente, el bosque de Tangle con el
-tram y la nave, el túnel, Mountain Path y Paradise: las dos que pidió taro
-son el segundo y el tercer paso. Así que el cuarto pasó de 29 a 35 celdas
-de ancho y las puertas quedaron en el orden del juego: la 8, después del
-puente, en (25,14) con su cartel en (24,11); la 9, después del Hover Tram,
-en (28,14) con el suyo en (27,11); y la de Paradise se corrió a (31,14),
-cartel en (30,11), y pasó a ser la 10. Su evento sigue siendo el 18 y su
-página no cambió; sólo su lugar y su nombre (`Door10`). Las dos nuevas son
-los eventos 20 a 23. Si taro prefiere la de Paradise donde estaba, es
-volver a cambiarle la x y correr las otras dos.
+**The two new ones fall between door 7 and Paradise's, not after.** The
+chapter's path is Sorbe (door 7), the bridge, the Tangle forest with the
+tram and the ship, the tunnel, Mountain Path and Paradise: the two taro asked for
+are the second and third steps. So the room went from 29 to 35 cells
+wide and the doors ended up in the game's order: door 8, after the
+bridge, at (25,14) with its sign at (24,11); door 9, after the Hover Tram,
+at (28,14) with its sign at (27,11); and Paradise's moved to (31,14),
+sign at (30,11), and became door 10. Its event is still 18 and its
+page did not change; only its place and its name (`Door10`). The two new ones are
+events 20 to 23. If taro prefers Paradise's where it was, it means
+changing its x back and shifting the other two.
 
-Las dos piden compañero, como la 7: sin ninguno el juego no llega, y lo
-dicen sin saltar. Y las dos suman al compañero, porque en el juego está:
-el que se queda en Mountain Path es recién en Paradise.
+Both ask for a companion, like door 7: without one the game does not get there, and they
+say so without jumping. And both add the companion, because in the game he is there:
+the one who stays in Mountain Path only does so in Paradise.
 
-## El momento de cada una
+## The moment of each one
 
-**El puente es el 259 y el 255**, como confirmó taro: el 2059 no existe.
-El 259 es el Northern Highway Bridge y el 255, Under the Bridge.
+**The bridge is 259 and 255**, as taro confirmed: 2059 does not exist.
+259 is the Northern Highway Bridge and 255, Under the Bridge.
 
-**La 8: del otro lado del río, en (73,7) mirando a la izquierda**, a una
-celda del EV0006 (74,7) —que con el 849 ya no deja volver—. Es donde dejan
-las dos maneras de cruzar: el 255 al salir por abajo (evento 64) y el 259
-al pagarle al guardia (eventos 15 y 16). "La charla con Vago" es la que
-esperaba: la del 81 que cierra la historia de Eisen y que ya cerraba la
-puerta 7. En el puente no hay otra; el 259 no nombra a Vago.
+**Door 8: on the other side of the river, at (73,7) facing left**, one
+cell from EV0006 (74,7) —which with 849 no longer lets you go back—. It is where
+both ways of crossing leave you: 255 when leaving from below (event 64) and 259
+when paying the guard (events 15 and 16). "The talk with Vago" is the expected
+one: the one on 81 that closes Eisen's story and that already closed
+door 7. On the bridge there is no other; 259 does not name Vago.
 
-**La 9: (34,56) mirando a la izquierda, a una celda del EV0020** (35,56,
-que lleva al 312). Ahí deja la automática del 312 (evento 81, página 2,
-con el 846) después de la pelea con la nave, y termina. Antes: Tangle
-(310), el claro (311) con los agentes, el tram que prende fuego el bosque,
-la salida del 312 con el cronómetro y el Hover Tram (313).
+**Door 9: (34,56) facing left, one cell from EV0020** (35,56,
+which leads to 312). That is where the automatic page of 312 leaves you (event 81, page 2,
+with 846) after the fight with the ship, and it ends. Before: Tangle
+(310), the clearing (311) with the agents, the tram that sets the forest on fire,
+the exit from 312 with the timer and the Hover Tram (313).
 
-## Cómo salió el estado
+## How the state came out
 
-Jugado, no inventado, igual que la vez pasada: una prueba descartable
-entró al cuarto, sumó a cada compañero, cruzó la puerta del mundo (la 6) y
-jugó con el arnés el camino de los recorridos —Sorbe, el capítulo, el
-puente (por debajo con Arden y Saldra, pagando con AG7-17), Tangle, el
-tram y la nave—, sin los `ir_al_mapa` ni los `poner_exp` de los
-recorridos. Ningún tramo se rompió. En cada punto volcó lo que guarda
-`save_table`, y las páginas salen de la diferencia contra el cuarto, por
-rama, con el generador de la vez pasada.
+Played, not invented, same as last time: a throwaway test
+went into the room, added each companion, crossed the world door (door 6) and
+played with the harness the path of the walkthroughs —Sorbe, the chapter, the
+bridge (from below with Arden and Saldra, paying with AG7-17), Tangle, the
+tram and the ship—, without the walkthroughs' `ir_al_mapa` or `poner_exp`.
+No stretch broke. At each point it dumped what
+`save_table` keeps, and the pages come from the difference against the room, per
+branch, with last time's generator.
 
-Lo que se dejó afuera es lo mismo que en la 7 y la de Paradise, y lo dice
-el comentario de cada página: los switches 298 y 806, que no lee nadie, y
-la variable 134. Lo nuevo:
+What was left out is the same as in door 7 and Paradise's, and
+each page's comment says so: switches 298 and 806, which nobody reads, and
+variable 134. What is new:
 
-* **Escapar queda prohibido después del puente con Arden y con Saldra.**
-  La automática del evento 10 del 255 lo prohíbe y el juego no lo
-  devuelve hasta el claro de Tangle (311, evento 1): la puerta 8 lo
-  prohíbe igual en esas dos ramas. Con AG7-17 no se pasa por abajo.
-* **El nivel de Talan depende de la rama** en las dos: la pelea de abajo
-  del puente le da experiencia. Va adentro de cada rama, con el del
-  compañero.
+* **Escaping is forbidden after the bridge with Arden and with Saldra.**
+  The automatic page of event 10 on 255 forbids it and the game does not
+  give it back until the Tangle clearing (311, event 1): door 8
+  forbids it too in those two branches. With AG7-17 you do not go underneath.
+* **Talan's level depends on the branch** in both: the fight under
+  the bridge gives him experience. It goes inside each branch, with the
+  companion's.
 
-Los niveles jugados: después del puente, Talan en el 4 con Arden y Saldra
-y en el 3 con AG7-17; Arden en el 4, Saldra en el 5 y AG7-17 en el 6.
-Después del tram, Talan en el 7 con Arden y Saldra y en el 6 con AG7-17;
-Arden y Saldra en el 7 y AG7-17 en el 8.
+The levels played: after the bridge, Talan at 4 with Arden and Saldra
+and at 3 with AG7-17; Arden at 4, Saldra at 5 and AG7-17 at 6.
+After the tram, Talan at 7 with Arden and Saldra and at 6 with AG7-17;
+Arden and Saldra at 7 and AG7-17 at 8.
 
-**Verificado** así: la misma prueba descartable cruzó cada puerta con cada
-compañero y volcó lo mismo, y la diferencia contra lo jugado es sólo lo de
-siempre: los dos switches, la variable 134, la experiencia (la justa del
-nivel contra la jugada) y los HP y SP (lo jugado tiene los 999 del arnés;
-la puerta, `FullHeal`). Mapa, celda, dirección, grupo, oro, ítems,
-habilidades, equipo, velocidad, permisos, tinte y tema, iguales. La puerta
-7 se volvió a medir así y sigue igual.
+**Verified** like this: the same throwaway test crossed each door with each
+companion and dumped the same, and the difference against what was played is only the
+usual: the two switches, variable 134, the experience (the exact amount for the
+level against the one played) and HP and SP (the played one has the harness's 999;
+the door, `FullHeal`). Map, cell, direction, party, gold, items,
+skills, equipment, speed, permissions, tint and theme, identical. Door
+7 was measured again this way and stays the same.
 
-## Las pruebas
+## The tests
 
-En `pruebas/abl/test_mapa_de_debug.py`, por compañero, en rojo antes del
-mapa nuevo (no hay camino a (28,14) ni a (31,14), y la de (25,14) llevaba
-a Paradise):
+In `pruebas/abl/test_mapa_de_debug.py`, per companion, red before the
+new map (there is no path to (28,14) or to (31,14), and the one at (25,14) led
+to Paradise):
 
-* `test_la_puerta_despues_del_puente_sigue_al_bosque`: mapa, celda,
-  dirección, grupo, switches, rama, oro, velocidad, escapar, niveles; la
-  golden de la llegada; y de ahí caminando hasta Tangle.
-* `test_la_puerta_despues_del_tram_sigue_a_mountain_path`: lo mismo, y de
-  ahí el túnel hasta Mountain Path.
+* `test_la_puerta_despues_del_puente_sigue_al_bosque`: map, cell,
+  direction, party, switches, branch, gold, speed, escape, levels; the
+  arrival golden; and from there walking to Tangle.
+* `test_la_puerta_despues_del_tram_sigue_a_mountain_path`: the same, and from
+  there the tunnel up to Mountain Path.
 
-Las seis goldens nuevas son `mapa-de-debug-puente-*` y
-`mapa-de-debug-tram-*`. **La del cuarto, `mapa-de-debug-llegada`, no
-cambió**: desde la llegada no se ve más allá de la terminal de la 7, y lo
-que se agregó está a la derecha de eso. Las fotos de lo que sigue (el
-bosque y Mountain Path) quedan en `pendientes.txt`, como las de las otras
-puertas.
+The six new goldens are `mapa-de-debug-puente-*` and
+`mapa-de-debug-tram-*`. **The room's, `mapa-de-debug-llegada`, did not
+change**: from the arrival you cannot see beyond door 7's terminal, and what
+was added is to the right of that. The photos of what follows (the
+forest and Mountain Path) stay in `pendientes.txt`, like those of the other
+doors.
 
-## Para mergear
+## For merging
 
-Sólo ABL: no se tocaron herramientas, no hay nada que instalar. Verificado
-con la tanda entera sobre la rama (`just pruebas`, con las herramientas
-globales): todo en verde. Lado a lado en
+Only ABL: no tools were touched, there is nothing to install. Verified
+with the whole suite on the branch (`just pruebas`, with the global
+tools): all green. Side by side in
 `/shared/capturas/2026-10-10-puertas-de-debug-mundo/`.
 
-Lo que la tanda no cubre: la experiencia por encima de la justa del
-nivel, los HP y SP jugados, y que taro juegue desde las dos puertas más
-allá de Tangle y de Mountain Path.
+What the suite does not cover: experience above the exact amount for the
+level, the HP and SP played, and taro playing from both doors beyond
+Tangle and Mountain Path.

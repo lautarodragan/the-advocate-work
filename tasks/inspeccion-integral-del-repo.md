@@ -1,36 +1,36 @@
 ---
-name: "Inspección integral del repo"
-description: "Evaluar arquitectura, calidad, pruebas, documentación, riesgos y mantenibilidad del proyecto"
+name: "Full inspection of the repo"
+description: "Evaluate the project's architecture, quality, tests, documentation, risks and maintainability"
 type: docs
 status: done
 assignee: Sol
 ---
 
-Pedido del 2026-09-28: hacer una inspección y evaluación completa del repo.
+Request of 2026-09-28: do a complete inspection and evaluation of the repo.
 
-La evaluación se apoya en las fuentes del propio árbol, los comandos del
-`justfile`, el estado de las tareas y comprobaciones ejecutadas sobre el código.
-El resultado quedará en `docs/research/`, con hallazgos verificables, riesgos y
-prioridades concretas, sin fijar métricas de estado que envejezcan: cada una se
-expresa mediante el comando que la reproduce.
+The evaluation rests on the tree's own sources, the commands of the
+`justfile`, the state of the tasks and checks run against the code.
+The result will go in `docs/research/`, with verifiable findings, risks and
+concrete priorities, without fixing status metrics that go stale: each one is
+expressed through the command that reproduces it.
 
-Terminada el 2026-09-28. El resultado está en
-`docs/research/inspeccion-integral-del-repo.md`: el repo tiene una arquitectura
-y una estrategia de pruebas fuertes; las prioridades son hacer reproducible el
-ambiente, bajar el radio de impacto del conversor y aclarar licencia y
-procedencia. La tanda de ROM no pudo correrse: en este ambiente faltaban `just`,
-Pillow, cc65 y los cores de libretro; sí pasaron la sintaxis de Python, las
-pruebas de los cinco proyectos Rust y `git diff --check`. `cargo fmt --check`
-marca diferencias en los cinco proyectos con el formateador de este ambiente;
-no se mezcló ese cambio mecánico con el estudio.
+Finished on 2026-09-28. The result is in
+`docs/research/inspeccion-integral-del-repo.md`: the repo has a strong architecture
+and testing strategy; the priorities are making the environment reproducible,
+reducing the blast radius of the converter and clarifying licence and
+provenance. The ROM suite could not be run: this environment lacked `just`,
+Pillow, cc65 and the libretro cores; the Python syntax checks, the
+tests of the five Rust projects and `git diff --check` did pass. `cargo fmt --check`
+flags differences in the five projects with this environment's formatter;
+that mechanical change was not mixed with the study.
 
-Reabierta el 2026-09-28 a pedido de taro para profundizar específicamente el
-análisis de las pruebas actuales: errores, fallas de arquitectura, duplicación
-y abstracciones que sobran o faltan.
+Reopened on 2026-09-28 at taro's request to dig deeper specifically into the
+analysis of the current tests: errors, architectural flaws, duplication
+and abstractions that are superfluous or missing.
 
-Ampliada el mismo día. La inspección detallada encontró como riesgos principales
-las capturas de recorrido sin golden que no fallan, los skips dependientes de
-artefactos, los helpers importados desde módulos `test_*`, la concentración de
-dominios en `Partida`, la repetición de esperas sin distinguir reloj y la falta
-de una selección ejecutable por requisitos. También separa la duplicación que
-conviene sacar de la redundancia deliberada que protege el port.
+Expanded the same day. The detailed inspection found as main risks
+the walkthrough captures without a golden that do not fail, the skips that depend on
+artefacts, the helpers imported from `test_*` modules, the concentration of
+domains in `Partida`, the repetition of waits without telling clocks apart and the lack
+of an executable selection by requirement. It also separates the duplication that
+is worth removing from the deliberate redundancy that protects the port.

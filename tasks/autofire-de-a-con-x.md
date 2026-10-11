@@ -1,75 +1,75 @@
 ---
-name: "Autofire de A con X"
-description: "Sostener X aprieta y suelta A solo, para pasar textos y repetir elecciones sin machacar el botón"
+name: "Autofire of A with X"
+description: "Holding X presses and releases A on its own, to skip through text and repeat choices without mashing the button"
 type: feature
 status: done
 ---
 
-Idea de taro, el 2026-09-25: RM2k usa dos botones y el control de la SNES
-tiene muchos más, así que uno que sobra puede hacer de autofire, como en los
-emuladores. **Sólo A, con X.** Con B se descartó: en el mapa B abre el menú
-de pausa y adentro lo cierra, así que sostenerlo lo abriría y cerraría sin
-parar.
+taro's idea, on 2026-09-25: RM2k uses two buttons and the SNES controller
+has many more, so a spare one can act as autofire, as in the
+emulators. **Only A, with X.** B was ruled out: on the map B opens the pause
+menu and inside it closes it, so holding it would open and close it without
+stopping.
 
-**Dónde:** todo el control pasa por `read_pad` (`rom/src/control.s`), que deja
-`pad` (JOY1H) y `pad_a` una vez por cuadro; nadie más lee `JOY1H`/`JOY1L`, y X
-no lo mira nadie. Con X apretado, `pad_a` se prende y se apaga cada **cuatro
-cuadros** —unos 7,5 toques por segundo; taro pidió entre 3 y 4 para
-arrancar—, como una constante con nombre para ajustarla jugando. Como el juego
-mira el flanco de A (RM2k cierra el mensaje con `Input::IsTriggered`), cada
-vuelta a "apretado" es un toque nuevo.
+**Where:** all input goes through `read_pad` (`rom/src/control.s`), which leaves
+`pad` (JOY1H) and `pad_a` once per frame; nobody else reads `JOY1H`/`JOY1L`, and nobody
+looks at X. With X pressed, `pad_a` turns on and off every **four
+frames** —some 7.5 presses per second; taro asked for between 3 and 4 to
+start with—, as a named constant so it can be tuned while playing. Since the game
+looks at A's edge (RM2k closes the message with `Input::IsTriggered`), each
+return to "pressed" is a new press.
 
-**Cuidar:** que A apretado de verdad gane sobre el autofire; que soltar X no
-deje A trabado en apretado ni dispare un toque de más; que el contador no
-viva en memoria sin inicializar (`test_cores.py`).
+**Watch out:** that A really pressed wins over the autofire; that releasing X does not
+leave A stuck pressed nor fire an extra press; that the counter does not
+live in uninitialised memory (`test_cores.py`).
 
-**Es una divergencia de RM2k, aunque sólo suma**: va anotada en
-`workflow/divergencias/` para que nadie la tome por un error.
+**It is a divergence from RM2k, even though it only adds**: it is noted in
+`workflow/divergencias/` so that nobody takes it for a bug.
 
-**Pruebas:** ninguna golden debería cambiar —el arnés nunca aprieta X—. Una
-prueba nueva sostiene X y cuenta los toques de A que ve el juego (por ejemplo,
-cuántos mensajes seguidos cierra), y otra que soltar X no deje nada trabado.
+**Tests:** no golden should change —the harness never presses X—. A
+new test holds X and counts the A presses the game sees (for example,
+how many messages in a row it closes), and another that releasing X does not leave anything stuck.
 
-## Cómo quedó
+## How it turned out
 
-En `read_pad`: con X apretado, `pad_a` es la A de verdad OR la fase del
-autofire, que sale del bit `AUTOFIRE_CUADROS` de un contador de vueltas; con X
-suelto el contador vuelve a cero, así que el próximo X toca en su primer
-cuadro. El contador está en la RAM baja (`autofire`, al final de
-`ram_baja.s`) y no en página cero, donde quedaban tres bytes: en absoluto
-cuesta cuatro bytes más de código, y es seguro porque `read_pad` ya lee
-`JOY1L` en absoluto. `arranque` lo pone en cero.
+In `read_pad`: with X pressed, `pad_a` is the real A OR the
+autofire's phase, which comes from bit `AUTOFIRE_CUADROS` of a loop counter; with X
+released the counter goes back to zero, so the next X presses on its first
+frame. The counter is in low RAM (`autofire`, at the end of
+`ram_baja.s`) and not in zero page, where three bytes were left: in absolute addressing
+it costs four more bytes of code, and it is safe because `read_pad` already reads
+`JOY1L` in absolute. `arranque` sets it to zero.
 
-Costo, medido con el `.res` de `AGENTS.md` contra el árbol de antes: **29
-bytes** de `TABLAS`/`CODE` en los tres cartuchos (`release`, `tests/main`,
-`tests/special`), uno de BSS, nada de página cero. El caso nuevo no suma nada
-al banco 0.
+Cost, measured with the `.res` of `AGENTS.md` against the tree from before: **29
+bytes** of `TABLAS`/`CODE` in the three cartridges (`release`, `tests/main`,
+`tests/special`), one of BSS, nothing of zero page. The new case adds nothing
+to bank 0.
 
-Pruebas: `pruebas/rpgmaker/test_autofire.py` y `test_cores.py::test_autofire`,
-con el caso `autofire` —cinco mensajes seguidos, y la variable 17 cuenta los
-cerrados—. Vistas en rojo rompiendo el feature cuatro veces:
+Tests: `pruebas/rpgmaker/test_autofire.py` and `test_cores.py::test_autofire`,
+with the case `autofire` —five messages in a row, and variable 17 counts the
+closed ones—. Seen red by breaking the feature four times:
 
-* `bit #PAD_X` cambiado por `bit #0` (sin autofire): cuatro en rojo —los
-  mensajes, el ritmo, soltar X y soltar X a mitad—.
-* `sta pad_a` del camino sin X cambiado por `tsb pad_a` (soltar X deja A
-  trabado): rojo `test_soltar_x_no_deja_a_trabado_ni_toca_de_mas`, fase 1.
-* `and #PAD_A` + `sta pad_a` del camino con X cambiado por `stz pad_a` (la A
-  de verdad no gana): rojo `test_la_a_de_verdad_gana` y
+* `bit #PAD_X` changed to `bit #0` (no autofire): four red —the
+  messages, the rhythm, releasing X and releasing X halfway—.
+* `sta pad_a` of the path without X changed to `tsb pad_a` (releasing X leaves A
+  stuck): red `test_soltar_x_no_deja_a_trabado_ni_toca_de_mas`, phase 1.
+* `and #PAD_A` + `sta pad_a` of the path with X changed to `stz pad_a` (the real
+  A does not win): red `test_la_a_de_verdad_gana` and
   `test_soltar_x_con_a_apretado_no_suelta_a`.
-* sin el `stz autofire` del camino sin X: rojo la parte de "el próximo X toca
-  ya", fase 4.
+* without the `stz autofire` of the path without X: red the part of "the next X presses
+  right away", phase 4.
 
-Lo que ninguna prueba cubre: el `stz autofire` de `arranque`, que sólo importa
-con X apretado desde el encendido —el arnés aprieta después del arranque—.
+What no test covers: the `stz autofire` of `arranque`, which only matters
+with X pressed from power-on —the harness presses after startup—.
 
-## Para taro
+## For taro
 
-* Sostener X en un diálogo largo: los mensajes se pasan solos, ¿7,5 por
-  segundo es mucho? Es `AUTOFIRE_CUADROS` en `rom/src/control.s` (potencia de
-  dos: 4 da 7,5/s, 8 daría 3,75/s).
-* Sostener X frente a alguien que habla: vuelve a hablarle al cerrar.
-* En los menús, la tienda, la pelea y el título: X repite A (elige, compra).
-* A y X juntos: tiene que sentirse como A sola.
-* Soltar X a mitad: no tiene que quedar nada apretado ni salir un toque más.
+* Hold X in a long dialogue: the messages advance on their own; is 7.5 per
+  second too much? It is `AUTOFIRE_CUADROS` in `rom/src/control.s` (a power of
+  two: 4 gives 7.5/s, 8 would give 3.75/s).
+* Hold X in front of someone who talks: it talks to them again on closing.
+* In the menus, the shop, the battle and the title: X repeats A (choose, buy).
+* A and X together: it has to feel like A alone.
+* Release X halfway: nothing has to stay pressed nor an extra press come out.
 
-**Confirmado por taro jugando el 2026-09-26: anda bien.**
+**Confirmed by taro playing on 2026-09-26: it works well.**
