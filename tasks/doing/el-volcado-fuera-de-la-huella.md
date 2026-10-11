@@ -2,7 +2,8 @@
 name: "El volcado, fuera de la huella de los cartuchos"
 description: "just cartuchos dijo 'up to date' con data/maps/Map0022.json de Sunset tocado a mano: el volcado no entra en la huella, a propósito; falta confirmar que un cambio en el juego original sí rearma"
 type: chore
-agents: [Hornero]
+assignee: Cardón
+agents: [Hornero, Cardón]
 ---
 
 Visto por Mulita el 2026-10-11 (`testing/sunset-el-mapa-22-en-negro.md`): para que el cartucho se enterara de un `Map0022.json` editado tuvo que borrar su directorio.
