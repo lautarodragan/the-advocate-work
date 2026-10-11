@@ -34,13 +34,13 @@ golden: they're read with a long pointer whose bank comes from
 
 **The enemies choose what to do** (`batalla.accion_del_enemigo`,
 `ba_accion_enemiga`): the LDB's list of actions with their `rating`, and the
-weights of `SelectEnemyAiActionRpgRtCompat` —`max(0, rating - maximum + 10)`—.
+weights of `SelectEnemyAiActionRpgRtCompat` —`max(0, rating - máximo + 10)`—.
 With that **the only one in the plant that casts `ShortCircuit` is the
 Tangle Wire** (troop 113), which has it at 50 like the attack; the Scrapped
 Droid (10), the Trash Hauler and the Junkbot (30) are ten points or more below
 and weigh zero, in RM2k too. A lone weighted action doesn't roll a die, so as
 not to move the randomness of the battles that were already there. What isn't
-modelled —conditions, the other basic actions, states— in
+modeled —conditions, the other basic actions, states— in
 `divergencias/lo-que-la-ia-de-los-enemigos-no-modela.md`.
 
 **The five scopes** (`batalla.blancos_de_la_habilidad`, `ba_hab_usar`):
@@ -52,8 +52,8 @@ states— and along the way every actor's multi-target ones go in, Arden
 included.
 
 **The weapons' SP** (`batalla.sp_del_arma`, `ba_atacar`): the `sp_cost` of the
-weapon in slot 0 is charged before the hit roll, with no greying out at zero
-SP. The armours that carry `sp_cost` (NetLauncher, SpikedHelmet) don't
+weapon in slot 0 is charged before the hit roll, with no graying out at zero
+SP. The armors that carry `sp_cost` (NetLauncher, SpikedHelmet) don't
 charge: `ForEachEquipment<true, false>` only looks at weapons.
 
 **Common event 37: the tailored approach.** `eventos.COMUNES_DEL_EQUIPO`
@@ -126,12 +126,12 @@ and nothing else. What there is:
 
 * **"Components" in battle**, with ConcentratedSpray.
 * **Taking off its ArmCannon** in the equip menu and leaving: in the next
-  battle "Components" is greyed out. Putting it back on and leaving: it comes
+  battle "Components" is grayed out. Putting it back on and leaving: it comes
   back.
 * **The weapon's SP.** The battle doesn't show SP and neither does the pause
-  menu, so it's seen through the grey: with 60 SP, nine ConcentratedSpray
+  menu, so it's seen through the gray: with 60 SP, nine ConcentratedSpray
   leave 6, which is still enough; one more attack (1 SP) and the skill goes
-  grey. Without the weapon's cost it would stay available. SP carries over
+  gray. Without the weapon's cost it would stay available. SP carries over
   from one battle to the next.
 * **The Tangle Wire** —the cable, in the troop with the rat— casting
   `ShortCircuit` roughly half the time; the others in the plant only hit, as

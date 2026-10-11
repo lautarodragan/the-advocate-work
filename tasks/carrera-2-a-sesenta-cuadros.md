@@ -125,7 +125,7 @@ What each path says, as a limit:
   ticks on which four or five moving cars start their step at the same
   time**: each new step asks whether it can enter the cell (`puede_celda`: the
   grid, the tile events, who's standing there) and the car changing lane
-  jumps at once past the seven or eight of the neighbouring lane in the
+  jumps at once past the seven or eight of the neighboring lane in the
   drawing order. Steps 6 and 8 to 13 are that, and they're general: any map
   with moving events takes advantage of them.
 

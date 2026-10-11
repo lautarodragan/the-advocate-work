@@ -1,425 +1,428 @@
 ---
-name: "La música pesa 789 KB"
-description: "El stream eran escrituras crudas al DSP; el formato por nota (hecho) lo bajó al 29% sin cambiar ni una escritura, los saltos (hechos) un 23,5% más, y quedan la 3 y la 4"
+name: "The music weighs 789 KB"
+description: "The stream was raw DSP writes; the per-note format (done) brought it down to 29% without changing a single write, the jumps (done) a further 23.5%, and 3 and 4 remain"
 type: refactor
 status: done
 assignee: taro
 ---
 
-# Para taro
+# For taro
 
-**La idea 2, los saltos, está hecha** (Tijereta, 2026-10-01): lo que un tema
-repite se dice una vez. Las escrituras al DSP son las mismas, cuadro por
-cuadro, así que **no tendría que sonar nada distinto**: lo que hay que
-probar es que la música suene como antes, sobre todo los temas largos —el de
-batalla, `3D-Galax`, `patchb`— y la vuelta al principio de cada uno.
+**Idea 2, the jumps, is done** (Tijereta, 2026-10-01): what a theme repeats is
+said once. The DSP writes are the same, frame by frame, so **nothing should
+sound different**: what needs testing is that the music sounds as before,
+especially the long themes —the battle one, `3D-Galax`, `patchb`— and each
+one's loop back to the start.
 
-**Al mergear, instalar `rm2k-snes-audio`** (`just -f tools/justfile install
-rm2k-snes-audio`). `protocol` no cambió —cambió `music.toml`, y lo generado
-va commiteado—, y `cartridge` tampoco: el runtime lo lee del checkout.
+**When merging, install `rm2k-snes-audio`** (`just -f tools/justfile install
+rm2k-snes-audio`). `protocol` didn't change —`music.toml` changed, and the
+generated output is committed—, and neither did `cartridge`: it reads the
+runtime from the checkout.
 
-`test_musica_techos.py` pasa sin volver a medir: la mezcla es la misma. No
-hay goldens que se muevan.
+`test_musica_techos.py` passes without re-measuring: the mix is the same. No
+goldens move.
 
-## Lo que quedó (la idea 2)
+## What ended up (idea 2)
 
-`OP_REPEAT back events`, 4 B: vuelve `back` bytes atrás desde el final de
-sí mismo, lee `events` eventos —1 a 254— y sigue después del salto. De un
-solo nivel: lo que lee no puede ser otro salto, ni `OP_INIT` ni `OP_END`.
-Escribe lo mismo porque el estado del decodificador —el caché de registros,
-el sonido de cada voz— depende sólo de los bytes que leyó, y lo que el salto
-lee son los mismos bytes.
+`OP_REPEAT back events`, 4 B: it goes back `back` bytes from its own end,
+reads `events` events —1 to 254— and continues after the jump. Single-level:
+what it reads can't be another jump, nor `OP_INIT` nor `OP_END`. It writes the
+same because the decoder's state —the register cache, each voice's sound—
+depends only on the bytes it read, and what the jump reads are the same bytes.
 
-* **El codificador**, `fold` en `stream.rs`: de izquierda a derecha, en cada
-  evento la repetición que más ahorra, con un paso perezoso. **La más corta
-  que acepta es de 7 B**, no de 5, que es la primera que ahorra: una corta se
-  lleva lo que cubre de lo que las siguientes pueden leer. Sobre los 103
-  temas: con 5, −20%; con 6, −22,9%; con 7, −23,5%; con 8, −23,1%; con 10,
-  −21,3%. El paso perezoso suma un 0,1%.
-* **El 65816**: cuenta los eventos en `music_frame::read`, por donde pasan
-  todos —fuera de un salto, una carga y un salto condicional por evento—, y
-  `ev_repeat` guarda la vuelta y resta en 24 bits. **4 B de RAM lejana**,
-  `MUS_BACK_TO` y `MUS_LEFT`, en el rango de la música (`$6C8B`–`$6C8E`).
-  La resta en 24 bits vale porque un stream sólo se parte entre bancos que se
-  continúan (`.crossbank`); en el `release` hay 2.814 saltos, en siete temas,
-  que vuelven por encima del principio de un banco.
+* **The encoder**, `fold` in `stream.rs`: left to right, at each event the
+  repetition that saves the most, with a lazy step. **The shortest it accepts
+  is 7 B**, not 5, which is the first that saves anything: a short one takes
+  away what it covers from what the following ones could read. Over the 103
+  themes: with 5, −20%; with 6, −22.9%; with 7, −23.5%; with 8, −23.1%; with
+  10, −21.3%. The lazy step adds 0.1%.
+* **The 65816**: it counts the events in `music_frame::read`, which they all
+  go through —outside a jump, a load and a conditional branch per event—, and
+  `ev_repeat` stores the return and subtracts in 24 bits. **4 B of far RAM**,
+  `MUS_BACK_TO` and `MUS_LEFT`, in the music's range (`$6C8B`–`$6C8E`). The
+  24-bit subtraction works because a stream is only split between banks that
+  continue each other (`.crossbank`); in `release` there are 2,814 jumps, in
+  seven themes, that go back over the start of a bank.
 
-### Cuánto bajó
+### How much it dropped
 
-| | Antes | Después | |
+| | Before | After | |
 |---|---:|---:|---:|
-| `release`, 51 temas | 702.978 B | 526.487 B | −25,1% |
-| El juego entero, 103 temas | 1.432.782 B | 1.096.211 B | −23,5% |
+| `release`, 51 themes | 702,978 B | 526,487 B | −25.1% |
+| The whole game, 103 themes | 1,432,782 B | 1,096,211 B | −23.5% |
 
-El juego entero es el trabajo de audio de Tucu-tucu (la unión de las once
-corridas de Lechuza), compilado con `rm2k-snes-audio compile`: 329 KB menos.
-El estudio decía −26% y −367 KB, y la diferencia es del estimador, no de los
-temas: corrido sobre los mismos streams da −24,8%, pero cuenta en bytes —un
-salto que empieza o termina en la mitad de un evento, que el decodificador
-no puede leer como opcode— y busca sólo entre los últimos 32 candidatos.
-Restringido a bordes de evento da −23,0%, y `fold` saca −23,5%.
+The whole game is Tucu-tucu's audio job (the union of Lechuza's eleven runs),
+compiled with `rm2k-snes-audio compile`: 329 KB less. The study said −26% and
+−367 KB, and the difference is the estimator's, not the themes': run over the
+same streams it gives −24.8%, but it counts in bytes —a jump that starts or
+ends in the middle of an event, which the decoder can't read as an opcode— and
+only searches among the last 32 candidates. Restricted to event boundaries it
+gives −23.0%, and `fold` gets −23.5%.
 
-### Cómo se verificó
+### How it was verified
 
-* **Tema por tema, los 103**, con un script descartable: el stream de la
-  base, decodificado por el `rm2k-snes-audio` de la base, contra el nuevo,
-  decodificado por el nuevo siguiendo los saltos y también desplegado
-  (`decode --unfold`). **Iguales los 103**, 1.852.332 escrituras, cada una
-  con su cuadro; los sonidos de cada tema, byte por byte iguales. Los 17 que
-  Tucu-tucu no pudo leer del `.inc` entran, porque los streams salen del
-  compilador y no del `.inc`.
-* **En cada build**, el compilador decodifica cada tema plano y con saltos,
-  y los dos tienen que dar las escrituras de `writes`; y `fold` se niega si
-  desplegar lo que devuelve no da el stream que recibió.
-* **En la ROM**, `test_musica_escrituras.py`:
-  * `test_la_rom_vuelve_de_cada_repeticion` toca `wb3shop` (169 saltos) y
-    compara lo que la ROM le pide al DSP contra el stream **desplegado**, sin
-    pasar por el modelo del salto. **Vista fallar** rompiendo la ROM dos
-    veces: volviendo un byte de más, la música se calla (la prueba lo dice
-    como "`music_frame` no corre en cada cuadro"); leyendo un evento de
-    menos, da distinto en el cuadro 144. Las otras cinco del archivo
-    fallaron también las dos veces: sus temas llevan saltos.
-  * `test_la_rom_vuelve_atras_por_encima_de_un_banco` busca en el cartucho
-    el tema más corto con un salto que cruza el principio de un banco y lo
-    compara igual. **Vista fallar** con `ev_repeat` sin el préstamo al
-    banco: fallan ésta y la de `3D-Galax`.
-* **Tres pruebas cambiaron cómo miden, no lo que esperan**:
-  `test_tema_que_ya_suena`, `test_lugar_recordado` y `test_volumen_y_tempo`
-  decían "no se reinició" porque el puntero del stream no bajaba, y un salto
-  lo baja. Miran ahora `avance_del_stream` (`consola.py`), que adentro de un
-  salto es adonde vuelve. Siguen viendo un reinicio: lleva al principio.
-* El fixture de `tests/python.rs` cambió de hash: fuera de los streams, el
-  `musicdata.inc` es línea por línea igual, y cada stream, desplegado por una
-  copia aparte en Python, es byte por byte el de antes.
+* **Theme by theme, all 103**, with a throwaway script: the baseline's stream,
+  decoded by the baseline's `rm2k-snes-audio`, against the new one, decoded by
+  the new one following the jumps and also unfolded (`decode --unfold`).
+  **All 103 identical**, 1,852,332 writes, each with its frame; each theme's
+  sounds, byte for byte identical. The 17 that Tucu-tucu couldn't read from
+  the `.inc` are included, because the streams come from the compiler and not
+  from the `.inc`.
+* **On every build**, the compiler decodes each theme flat and with jumps, and
+  both have to give `writes`'s writes; and `fold` refuses if unfolding what it
+  returns doesn't give the stream it received.
+* **In the ROM**, `test_musica_escrituras.py`:
+  * `test_la_rom_vuelve_de_cada_repeticion` plays `wb3shop` (169 jumps) and
+    compares what the ROM asks of the DSP against the **unfolded** stream,
+    without going through the jump's model. **Seen failing** by breaking the
+    ROM twice: going back one byte too many, the music goes silent (the test
+    puts it as "`music_frame` no corre en cada cuadro"); reading one event too
+    few, it differs on frame 144. The other five in the file also failed both
+    times: their themes carry jumps.
+  * `test_la_rom_vuelve_atras_por_encima_de_un_banco` searches the cartridge
+    for the shortest theme with a jump that crosses the start of a bank and
+    compares it the same way. **Seen failing** with `ev_repeat` without the
+    borrow to the bank: this one and the `3D-Galax` one fail.
+* **Three tests changed how they measure, not what they expect**:
+  `test_tema_que_ya_suena`, `test_lugar_recordado` and `test_volumen_y_tempo`
+  said "it didn't restart" because the stream pointer didn't go down, and a
+  jump takes it down. They now look at `avance_del_stream` (`consola.py`),
+  which inside a jump is where it'll go back to. They still see a restart: it
+  goes to the start.
+* `tests/python.rs`'s fixture changed hash: outside the streams,
+  `musicdata.inc` is identical line by line, and each stream, unfolded by a
+  separate copy in Python, is byte for byte the earlier one.
 
-### Los ciclos
+### The cycles
 
-La sonda de `la-calidad-de-la-musica.md` —la línea de barrido al entrar y
-salir de `music_tick`—, en una copia descartable, en snes9x, los 50 temas
-del `release` con música, cada uno entero desde su vuelta al principio
-(385.910 cuadros). La IRQ cae en la línea 112.
+`la-calidad-de-la-musica.md`'s probe —the scanline on entering and leaving
+`music_tick`—, in a throwaway copy, in snes9x, the 50 `release` themes with
+music, each one whole from its loop back to the start (385,910 frames). The
+IRQ lands on line 112.
 
-| | Antes | Después |
+| | Before | After |
 |---|---:|---:|
-| El peor cuadro (la vuelta al principio del de batalla) | 109 líneas | 110 |
-| El peor a mitad de un tema (sin los últimos 31 cuadros) | 98 | 99 |
-| Todas las líneas de música | 2.263.834 | 2.309.059 (+2,0%) |
+| The worst frame (the battle theme's loop back to the start) | 109 lines | 110 |
+| The worst in the middle of a theme (without the last 31 frames) | 98 | 99 |
+| All music lines | 2,263,834 | 2,309,059 (+2.0%) |
 
-No se pierde ningún cuadro, pero **el peor termina en la línea 222**, tres
-antes del vblank. Ya era 221 antes de esto; la calidad lo había dejado en 100
-(212). Lo que lo sube es la vuelta al principio, no los saltos.
+No frame is dropped, but **the worst ends on line 222**, three before vblank.
+It was already 221 before this; the quality work had left it at 100 (212).
+What raises it is the loop back to the start, not the jumps.
 
-### El espacio
+### The space
 
-`just espacio`, antes y después:
+`just espacio`, before and after:
 
 | | `release` | `test-special` | `test-encounter-every-step` |
 |---|---|---|---|
-| Bancos de datos | 64 → 62 (2 → 0 en los 4 MB lentos) | 15 → 14 | 7 → 7 |
-| Huecos | 11.204 → 56.623 B | 19.903 → 2.938 B | 36.527 → 60.739 B |
-| Banco 0 libre | 1.165 → 1.053 B | 1.183 → 1.071 B | 1.179 → 1.067 B |
+| Data banks | 64 → 62 (2 → 0 in the slow 4 MB) | 15 → 14 | 7 → 7 |
+| Gaps | 11,204 → 56,623 B | 19,903 → 2,938 B | 36,527 → 60,739 B |
+| Bank 0 free | 1,165 → 1,053 B | 1,183 → 1,071 B | 1,179 → 1,067 B |
 
-`BSS`, `ZEROPAGE` y el banco 1, iguales. Los 112 B del banco 0 son el código
-nuevo de `music.s`.
+`BSS`, `ZEROPAGE` and bank 1, the same. The 112 B of bank 0 are the new code
+in `music.s`.
 
-### La 3 y la 4
+### 3 and 4
 
-* **La 3, LZSS con ventana de 4 KB**: no se hizo, como se pidió. No busqué la
-  RAM más allá del rango de la música: ahí quedan libres `$6C8F`–`$6DFF`,
-  unos 370 B, lejos de 4 KB.
-* **La 4, no escribir las notas que nunca suenan**: medida, y **ya no vale
-  la pena**. Sacando la preparación de una nota que otra pisa en el mismo
-  cuadro, el juego entero baja 1.592 B planos y 1.188 con saltos: el 0,1%.
-  Los 116.805 B del 2026-09-25 eran del reparto de voces de entonces; el de
-  hoy —la rampa un cuadro antes de reusar una voz, de la calidad— casi no los
-  produce.
+* **3, LZSS with a 4 KB window**: not done, as requested. I didn't look for
+  RAM beyond the music's range: `$6C8F`–`$6DFF` are free there, some 370 B,
+  far from 4 KB.
+* **4, not writing the notes that never sound**: measured, and **no longer
+  worth it**. Removing the preparation of a note that another overwrites on the
+  same frame, the whole game drops 1,592 B flat and 1,188 with jumps: 0.1%.
+  The 116,805 B of 2026-09-25 came from the voice allocation of back then;
+  today's —the ramp one frame before reusing a voice, from the quality work—
+  barely produces them.
 
-# Lo de antes
+# What came before
 
-**La idea 1, el formato por nota, está hecha desde el 2026-09-26**: es el
-paso 4 de `la-calidad-de-la-musica.md`, que tiene el formato, los bytes, los
-ciclos y cómo se verificó. Los 32 temas del `release` pasaron de 730.695 B a
-209.720 contando sus tablas, y el cartucho del 87% al 74,6%. **Quedan la 2, la
-3 y la 4**, y sus números de abajo están medidos sobre el formato del
-prototipo —con diccionario de alturas—, no sobre el que quedó: antes de hacer
-cualquiera hay que volver a medirla.
+**Idea 1, the per-note format, has been done since 2026-09-26**: it's step 4
+of `la-calidad-de-la-musica.md`, which has the format, the bytes, the cycles
+and how it was verified. The 32 `release` themes went from 730,695 B to
+209,720 counting their tables, and the cartridge from 87% to 74.6%. **2, 3 and
+4 remain**, and their numbers below are measured on the prototype's format
+—with a pitch dictionary—, not on the one that stayed: before doing any of
+them it has to be measured again.
 
-**Decisión de taro, el 2026-09-25: el formato nuevo espera a la calidad de la
-música.** Antes de armar un formato que represente el stream de hoy, van los
-cambios de audio a nivel feature (envolventes, controles de MIDI que hoy se
-tiran, muestras): si el formato se armara primero, habría que cambiarlo
-después. Mientras tanto, lo de abajo queda como medición.
+**taro's decision, on 2026-09-25: the new format waits for the music
+quality.** Before building a format that represents today's stream, the
+feature-level audio changes go first (envelopes, MIDI controllers that are
+dropped today, samples): if the format were built first, it would have to be
+changed afterwards. Meanwhile, what's below stays as a measurement.
 
 
-La radiografía de `juntar-release-y-test-main.md` pone a `tema_stream` arriba
-de todo: 789 KB en el cartucho unido, el 21%. Esto es **por qué pesa eso y qué
-se ganaría**, medido el 2026-09-25 sobre `6f1dc4a`, cuando no había nada
-implementado.
+The x-ray in `juntar-release-y-test-main.md` puts `tema_stream` at the very
+top: 789 KB in the merged cartridge, 21%. This is **why it weighs that and
+what could be gained**, measured on 2026-09-25 on `6f1dc4a`, when nothing was
+implemented.
 
-Todo lo medido sale de los `musicdata.inc` que `just cartuchos` dejó armados
-ese día: **`test-main`, 31 temas, 768.863 B de stream**. El unido son esos
-31 más el del título, `Fantasia_Of_The_Wind` —18.387 B en `release`—, y de ahí
-salen los 789 KB. Los scripts que midieron fueron descartables, así que antes
-de implementar hay que volver a medir: los números de abajo son del día.
+Everything measured comes from the `musicdata.inc` files that `just
+cartuchos` left built that day: **`test-main`, 31 themes, 768,863 B of
+stream**. The merged one is those 31 plus the title's, `Fantasia_Of_The_Wind`
+—18,387 B in `release`—, and that's where the 789 KB come from. The scripts
+that measured were throwaway, so before implementing it has to be measured
+again: the numbers below are from that day.
 
-# De qué está hecho
+# What it's made of
 
-**El stream no son notas: son escrituras crudas al DSP.** Tiene tres opcodes
-(`tools/snes/protocol/music.toml`): `OP_DSP registro valor` (3 B), `OP_WAIT cuadros`
-(2 B) y `OP_END`. Cada nota es la preparación entera de una voz —volumen
-izquierdo y derecho, altura en dos bytes, muestra, ADSR1, ADSR2— y después un
-`KON`; soltarla es apagar el ADSR1 y escribir el GAIN. `pack` saltea lo que no
-cambió, y ésa es toda la compresión que tiene.
+**The stream isn't notes: it's raw DSP writes.** It has three opcodes
+(`tools/snes/protocol/music.toml`): `OP_DSP registro valor` (3 B), `OP_WAIT
+cuadros` (2 B) and `OP_END`. Each note is a voice's whole preparation —left
+and right volume, pitch in two bytes, sample, ADSR1, ADSR2— and then a `KON`;
+releasing it means turning off ADSR1 and writing GAIN. `pack` skips what
+didn't change, and that's all the compression it has.
 
-| Qué | Bytes | % | Escrituras por nota |
+| What | Bytes | % | Writes per note |
 |---|---:|---:|---:|
-| Altura (`PITCH_L` + `PITCH_H`) | 272.061 | 35,4 | 1,00 + 0,85 |
-| ADSR1: prenderlo en cada nota y apagarlo en cada release | 182.532 | 23,7 | 0,62 + 0,62 |
-| `KON` y el `KON=0` que lo baja en el cuadro siguiente | 131.949 | 17,2 | 0,45 + 0,45 |
-| Volumen (`VOL_L` + `VOL_R`, siempre iguales) | 65.334 | 8,5 | 0,22 + 0,22 |
-| Esperas | 63.016 | 8,2 | 0,64 |
-| Muestra (`SRCN`) | 51.909 | 6,8 | 0,35 |
-| ADSR2, GAIN, KOF, arranque, fin | 2.062 | 0,3 | — |
-| **Total** | **768.863** | | **15,7 B por nota** |
+| Pitch (`PITCH_L` + `PITCH_H`) | 272,061 | 35.4 | 1.00 + 0.85 |
+| ADSR1: turning it on at each note and off at each release | 182,532 | 23.7 | 0.62 + 0.62 |
+| `KON` and the `KON=0` that lowers it on the next frame | 131,949 | 17.2 | 0.45 + 0.45 |
+| Volume (`VOL_L` + `VOL_R`, always equal) | 65,334 | 8.5 | 0.22 + 0.22 |
+| Waits | 63,016 | 8.2 | 0.64 |
+| Sample (`SRCN`) | 51,909 | 6.8 | 0.35 |
+| ADSR2, GAIN, KOF, start, end | 2,062 | 0.3 | — |
+| **Total** | **768,863** | | **15.7 B per note** |
 
-49.063 notas que suenan, 3.529 segundos de música: 218 B por segundo.
+49,063 notes that sound, 3,529 seconds of music: 218 B per second.
 
-Lo que **no** hay, y que la pregunta suponía:
+What there **isn't**, and that the question assumed:
 
-* **Ni un byte de eventos de control.** `midi.py` tira los CC, el pitch bend y
-  el aftertouch al leer; el stream no tiene volumen de canal, paneo ni bends.
-  Los MIDI sí los traen —4.427 CC11, 3.851 CC7, 1.532 CC10 y 1.058 bends entre
-  los 32—: sumarlos algún día **agrega** bytes, no los saca. (Se sumaron el
-  2026-09-26, en el paso 3 de `la-calidad-de-la-musica.md`: +2,7% de stream,
-  y la lista de lo que el stream lleva desde ahí está ahí.)
-* **Ni loops desenrollados.** Ningún MIDI trae CC111, el punto de loop que
-  respeta RM2k, así que el stream es el MIDI una vez y al terminar vuelve a
-  empezar (`music_frame`). Lo que sí hay es **música que se repite adentro del
-  MIDI** —los compases escritos dos veces—, y eso se mide abajo.
-* **Ni canales duplicados.** Pero hay algo parecido y peor: **116.805 B, el
-  15%, son notas que nunca suenan.** Cuando un canal pide más notas a la vez que
-  voces tiene, `build_events` le roba la voz a la que termina antes, y si las
-  dos arrancan en el mismo cuadro la segunda pisa la preparación de la primera
-  antes del `KON`. Son 12.881 preparaciones enteras escritas para nada.
+* **Not a byte of control events.** `midi.py` drops the CCs, the pitch bend
+  and the aftertouch when reading; the stream has no channel volume, panning
+  or bends. The MIDIs do carry them —4,427 CC11, 3,851 CC7, 1,532 CC10 and
+  1,058 bends among the 32—: adding them some day **adds** bytes, it doesn't
+  remove them. (They were added on 2026-09-26, in step 3 of
+  `la-calidad-de-la-musica.md`: +2.7% of stream, and the list of what the
+  stream carries since then is there.)
+* **No unrolled loops.** No MIDI carries CC111, the loop point RM2k honors,
+  so the stream is the MIDI once and on finishing it starts over
+  (`music_frame`). What there is, is **music that repeats inside the MIDI**
+  —bars written twice—, and that's measured below.
+* **No duplicated channels.** But there's something similar and worse:
+  **116,805 B, 15%, are notes that never sound.** When a channel asks for more
+  simultaneous notes than it has voices, `build_events` steals the voice from
+  the one that ends first, and if both start on the same frame the second
+  overwrites the first one's preparation before the `KON`. They're 12,881
+  whole preparations written for nothing.
 
-Por tema, los más pesados:
+By theme, the heaviest:
 
-| Tema | Bytes | Notas | Segundos | B/s |
+| Theme | Bytes | Notes | Seconds | B/s |
 |---|---:|---:|---:|---:|
-| `T_VGFighterMAX_Masako` (batalla) | 156.520 | 8.467 | 226 | 692 |
-| `3D-Galax` | 60.346 | 4.322 | 267 | 226 |
-| `cd4` | 50.849 | 3.127 | 149 | 341 |
-| `Lunar_Pyramid` | 37.205 | 2.401 | 183 | 203 |
-| `bubstix` | 37.137 | 2.631 | 195 | 191 |
-| `evilrhys` | 36.461 | 2.385 | 120 | 304 |
+| `T_VGFighterMAX_Masako` (battle) | 156,520 | 8,467 | 226 | 692 |
+| `3D-Galax` | 60,346 | 4,322 | 267 | 226 |
+| `cd4` | 50,849 | 3,127 | 149 | 341 |
+| `Lunar_Pyramid` | 37,205 | 2,401 | 183 | 203 |
+| `bubstix` | 37,137 | 2,631 | 195 | 191 |
+| `evilrhys` | 36,461 | 2,385 | 120 | 304 |
 
-El resto baja de 35 KB a menos de 1 KB. El de batalla es la quinta parte de
-todo el stream solo, y es el más repetitivo de todos: ver abajo.
+The rest go from 35 KB down to under 1 KB. The battle one is a fifth of the
+whole stream on its own, and it's the most repetitive of all: see below.
 
-# Por qué es así
+# Why it's like this
 
-Ninguna razón de tiempo real ni de ciclos. Es la forma más simple que funciona,
-y el tamaño no importaba cuando se eligió:
+No real-time or cycle reason. It's the simplest shape that works, and the size
+didn't matter when it was chosen:
 
-* **El PoC** (`cd11930`, 2026-09-01): "la lógica en Python y en la consola un
-  intérprete de un stream". Un opcode genérico hace que el lado del 65816 sea
-  leer dos bytes y pasarlos por los puertos; cualquier cosa que el DSP sepa
-  hacer se puede pedir sin tocar la ROM.
-* **El caché de registros** (`d8c0689`): el stream de `11h035` pesaba 35 KB,
-  "más que la ROM entera", y saltear lo que no cambia lo bajó a 19 KB. Es la
-  única compresión que se le hizo, y su argumento de por qué es seguro con el
-  loop sigue en el docstring de `pack`.
-* **El release por GAIN** (`baf4bbd`) **es a propósito y es calidad**: el
-  release del ADSR no se configura y con `KOF` la nota se corta en 8 ms.
-  Soltar apagando el bit del ADSR1 y pidiéndole una caída a GAIN es lo que hace
-  que el piano se apague en vez de cortarse. Cuesta el 24% del stream —el ADSR1
-  va y viene en cada nota— y **no hay que tocarlo**: lo que se puede tocar es
-  cuántos bytes cuesta pedirlo, no las escrituras.
-* **El `KON` nunca se cachea**, también a propósito: es un disparador y no un
-  cerrojo, y hay que bajarlo a mano. Otro 17%.
-* **"Del cartucho sobra"**: lo dice el docstring de `build_varios` —"un índice
-  no cuesta ARAM: cuesta su stream, que vive en el cartucho, y de ése sobra"— y
-  el de `Banco`. Era cierto con tres temas. Con el cartucho unido en 89,6% ya
-  no, y `el-cartucho-se-queda-en-4-mb.md` dice que se revisa al 85-90%.
+* **The PoC** (`cd11930`, 2026-09-01): "the logic in Python and on the console
+  an interpreter of a stream". A generic opcode makes the 65816 side be
+  reading two bytes and passing them through the ports; anything the DSP can
+  do can be asked for without touching the ROM.
+* **The register cache** (`d8c0689`): `11h035`'s stream weighed 35 KB, "more
+  than the whole ROM", and skipping what doesn't change brought it down to
+  19 KB. It's the only compression it got, and its argument for why it's safe
+  with the loop is still in `pack`'s docstring.
+* **The release via GAIN** (`baf4bbd`) **is on purpose and is quality**: the
+  ADSR's release isn't configurable and with `KOF` the note gets cut in 8 ms.
+  Releasing by turning off ADSR1's bit and asking GAIN for a decay is what
+  makes the piano fade out instead of being cut. It costs 24% of the stream
+  —ADSR1 goes back and forth on each note— and **mustn't be touched**: what
+  can be touched is how many bytes it costs to ask for it, not the writes.
+* **The `KON` is never cached**, also on purpose: it's a trigger and not a
+  latch, and it has to be lowered by hand. Another 17%.
+* **"The cartridge has room to spare"**: `build_varios`'s docstring says so
+  —"un índice no cuesta ARAM: cuesta su stream, que vive en el cartucho, y de
+  ése sobra"— and so does `Banco`'s. It was true with three themes. With the
+  merged cartridge at 89.6% it no longer is, and
+  `el-cartucho-se-queda-en-4-mb.md` says it gets revisited at 85-90%.
 
-Lo que se compró con la forma de hoy y hay que conservar: el `irq_musica` es
-corto, no necesita RAM propia más allá del puntero, y la sombra de los efectos
-de sonido (`dsp_musica`, `SE_SOMBRA`) recibe escritura por escritura. Todo lo
-de abajo mantiene esas escrituras idénticas.
+What was bought with today's shape and must be kept: `irq_musica` is short, it
+needs no RAM of its own beyond the pointer, and the sound effects' shadow
+(`dsp_musica`, `SE_SOMBRA`) receives write by write. Everything below keeps
+those writes identical.
 
-# Qué se podría ganar
+# What could be gained
 
-Ordenado por bytes contra riesgo. Los tamaños son sobre los 768.863 B de
-`test-main`.
+Ordered by bytes against risk. The sizes are over `test-main`'s 768,863 B.
 
-## 1. Un formato por nota, que el 65816 expande a las mismas escrituras: hecho
+## 1. A per-note format, which the 65816 expands into the same writes: done
 
-Hecho el 2026-09-26: ver el paso 4 de `la-calidad-de-la-musica.md`. No es
-exactamente el del prototipo: la altura no va en un diccionario aparte sino
-junto con el instrumento, en un *sonido* por nota, porque la batería cambia de
-instrumento en casi cada golpe; y el volumen va de a dos lados, porque desde
-el paso 3 hay paneo. Lo de abajo es el estudio de antes, tal cual.
+Done on 2026-09-26: see step 4 of `la-calidad-de-la-musica.md`. It isn't
+exactly the prototype's: the pitch doesn't go in a separate dictionary but
+together with the instrument, in a *sound* per note, because the drums change
+instrument on almost every hit; and the volume goes per side, because since
+step 3 there's panning. What's below is the earlier study, as it was.
 
-**De 768.863 a 258.639 B (−66%). Con un diccionario de alturas por tema, a
-219.794 (−71%): 549 KB menos.** Riesgo musical: ninguno, **y está medido**:
-el prototipo re-codificó los 31 temas de `test-main` y los 22 de `release`, los
-decodificó, y la secuencia de escrituras al DSP salió idéntica a la de hoy,
-cuadro por cuadro, en todos.
+**From 768,863 to 258,639 B (−66%). With a pitch dictionary per theme, to
+219,794 (−71%): 549 KB less.** Musical risk: none, **and it's measured**: the
+prototype re-encoded the 31 themes of `test-main` and the 22 of `release`,
+decoded them, and the sequence of DSP writes came out identical to today's,
+frame by frame, in all of them.
 
-Lo que se codificó:
+What was encoded:
 
-* **Una nota**: un byte de cabecera —voz, "es nota", y tres banderas: cambia el
-  volumen, cambia la parte alta de la altura, cambia el instrumento—, la parte
-  baja de la altura, y detrás sólo lo que la cabecera dice que cambió. El
-  volumen va una vez, porque izquierda y derecha son siempre iguales. El
-  instrumento es un índice a una tabla por tema de ternas `(SRCN, ADSR1,
-  ADSR2)`: ningún tema pasa de 18. El decodificador lleva la sombra de los
-  registros de cada voz y hace el mismo "saltear lo que no cambió" que hoy hace
-  `pack`, así que el ADSR1 que apaga el release vuelve solo en la nota
-  siguiente, sin gastar un byte.
-* **Un release**: un byte —voz y "suelta"—; el GAIN sólo si cambió, que es
-  115 veces en todo el cartucho.
-* **El `KON` sale implícito**: el decodificador junta las voces que recibieron
-  nota en el cuadro, escribe `KON` al cerrarlo y `KON=0` al abrir el
-  siguiente. Es exactamente la regla de hoy, y se lleva el 17% sin cambiar una
-  escritura.
-* **La espera es el cierre del cuadro**: un byte, hasta 64 cuadros; dos para
-  más.
-* Las escrituras del arranque y el `KOF` final van con un escape crudo.
+* **A note**: a header byte —voice, "is a note", and three flags: the volume
+  changes, the high part of the pitch changes, the instrument changes—, the
+  low part of the pitch, and after that only what the header says changed.
+  The volume goes once, because left and right are always equal. The
+  instrument is an index into a per-theme table of `(SRCN, ADSR1, ADSR2)`
+  triples: no theme goes over 18. The decoder keeps the shadow of each voice's
+  registers and does the same "skip what didn't change" that `pack` does
+  today, so the ADSR1 that the release turns off comes back on its own on the
+  next note, without spending a byte.
+* **A release**: one byte —voice and "release"—; GAIN only if it changed,
+  which is 115 times in the whole cartridge.
+* **The `KON` becomes implicit**: the decoder gathers the voices that received
+  a note in the frame, writes `KON` when closing it and `KON=0` when opening
+  the next. It's exactly today's rule, and it takes away the 17% without
+  changing a write.
+* **The wait is the frame's close**: one byte, up to 64 frames; two for more.
+* The start's writes and the final `KOF` go with a raw escape.
 
-Con el diccionario de alturas —un índice por tema a las alturas que usa, que no
-pasan de 103— el stream pasa de 15,7 B por nota a 4,4, contando todo. De qué
-queda hecho:
-cabeceras de nota 28,6%, índices de altura 28,6%, cierres de cuadro 14,4%,
-releases 14,1%, instrumento 8%, volumen 5%.
+With the pitch dictionary —a per-theme index into the pitches it uses, which
+don't go over 103— the stream goes from 15.7 B per note to 4.4, counting
+everything. What it ends up made of: note headers 28.6%, pitch indices 28.6%,
+frame closes 14.4%, releases 14.1%, instrument 8%, volume 5%.
 
-**Lo que cuesta**, estimado y no medido:
+**What it costs**, estimated and not measured:
 
-* **Ciclos del 65816**: por nota, comparar siete registros contra la sombra y
-  mirar dos tablas; unos cientos de ciclos. Las escrituras por cuadro siguen
-  siendo las mismas —la mediana 5, el 99% de los cuadros hasta 32, el peor
-  56—, y lo que domina hoy es la espera del testigo del SPC700 en cada una, que
-  no cambia. `musica-del-lado-del-spc700.md` pone el costo de hoy en hasta
-  veinte líneas por cuadro; esto le sumaría del orden de unas pocas.
-* **RAM**: la sombra de las ocho voces —64 B— más volumen, altura alta,
-  instrumento y GAIN corrientes por voz, unos 100 B. La `BSS` tiene 108 libres
-  y la página cero 3, así que va a `ram_lejana` con direccionamiento largo,
-  como ya hace `SE_SOMBRA`.
-* **Código**: el decodificador reemplaza a `music_frame`; `music_tick` vive en
-  el banco 0, al que en el unido le quedan ~1,9 KB.
-* **ARAM: nada.** Se decodifica del lado del 65816 y el driver del SPC700 no
-  cambia. Decodificar en el SPC700 ahorraría viajes por los puertos pero
-  crecería el driver, y la ARAM es lo más apretado que tiene el audio.
+* **65816 cycles**: per note, comparing seven registers against the shadow and
+  looking at two tables; a few hundred cycles. The writes per frame stay the
+  same —median 5, 99% of frames up to 32, the worst 56—, and what dominates
+  today is waiting for the SPC700's token on each one, which doesn't change.
+  `musica-del-lado-del-spc700.md` puts today's cost at up to twenty lines per
+  frame; this would add on the order of a few.
+* **RAM**: the shadow of the eight voices —64 B— plus current volume, high
+  pitch, instrument and GAIN per voice, about 100 B. `BSS` has 108 free and the
+  zero page 3, so it goes to `ram_lejana` with long addressing, as
+  `SE_SOMBRA` already does.
+* **Code**: the decoder replaces `music_frame`; `music_tick` lives in bank 0,
+  which has ~1.9 KB left in the merged one.
+* **ARAM: nothing.** It's decoded on the 65816 side and the SPC700 driver
+  doesn't change. Decoding on the SPC700 would save trips through the ports
+  but would grow the driver, and ARAM is the tightest thing audio has.
 
-**Qué lo cobraría si sale mal**: casi nada de la tanda, y eso es lo primero a
-resolver. No hay goldens de audio. `test_musica_paquete.py` usa
-`muestras_del_stream`, que habría que reescribir para el formato nuevo —se
-rompería fuerte, bien—; `test_tema_del_mapa.py` mira que el puntero avance, y
-sigue valiendo. `test_msu.py` compara la misma ROM con y sin pista, así que no
-ve el formato. Hacen falta dos redes:
+**What would catch it if it goes wrong**: almost nothing in the suite, and
+that's the first thing to solve. There are no audio goldens.
+`test_musica_paquete.py` uses `muestras_del_stream`, which would have to be
+rewritten for the new format —it would break loudly, which is good—;
+`test_tema_del_mapa.py` checks that the pointer advances, and still holds.
+`test_msu.py` compares the same ROM with and without a track, so it doesn't
+see the format. Two safety nets are needed:
 
-* **en Python, codificar y decodificar da las escrituras de `pack`**, para todos
-  los temas del cartucho: es lo que hizo el prototipo, y es barato;
-* **y el decodificador del 65816 contra ése**, que ninguna prueba de Python
-  cubre. Lo más directo es grabar el audio de la ROM vieja y la nueva con el
-  mismo tema y compararlo. Las escrituras son las mismas en el mismo cuadro,
-  pero el decodificador tarda distinto adentro de la IRQ, así que un `KON`
-  puede caer una o dos muestras del DSP más tarde: **hay que medir si sale
-  idéntico byte por byte** antes de proponerlo como prueba. Si no sale, la
-  alternativa es leer desde el core los registros del DSP al final de cada
-  cuadro.
+* **in Python, encoding and decoding gives `pack`'s writes**, for all the
+  cartridge's themes: it's what the prototype did, and it's cheap;
+* **and the 65816 decoder against that**, which no Python test covers. The
+  most direct way is to record the audio of the old ROM and the new one with
+  the same theme and compare it. The writes are the same on the same frame,
+  but the decoder takes a different time inside the IRQ, so a `KON` may land
+  one or two DSP samples later: **it has to be measured whether it comes out
+  byte for byte identical** before proposing it as a test. If it doesn't, the
+  alternative is to read the DSP registers from the core at the end of each
+  frame.
 
-## 2. Saltar a lo que ya se tocó: compases repetidos, sin RAM
+## 2. Jumping to what was already played: repeated bars, without RAM
 
-**Sobre el formato 1 con diccionario: de 216.290 a 121.018 B (−95 KB más).**
-Un opcode "tocar N bytes desde tal lugar del mismo tema y volver", de un solo
-nivel: la fuente tiene que ser bytes que se emitieron tal cual, no otro salto.
-Al decodificador le cuesta un puntero de vuelta y una cuenta —5 B de RAM— y
-nada de ciclos. Riesgo musical: ninguno, porque lo que se expande son los
-mismos bytes.
+**On format 1 with dictionary: from 216,290 to 121,018 B (−95 KB more).** An
+opcode "play N bytes from such a place in the same theme and come back",
+single-level: the source has to be bytes that were emitted as is, not another
+jump. It costs the decoder a return pointer and a count —5 B of RAM— and no
+cycles. Musical risk: none, because what gets expanded are the same bytes.
 
-Por qué gana tanto: las repeticiones exactas de 64 B o más cubren el 37% del
-formato 1. El de batalla tiene una de 2.638 B y 143 en total; `evilrhys`, una
-de 2.822; `C3classi`, una de 2.319. Sobre el formato de hoy rinde menos, porque
-el caché de registros hace que la segunda vuelta de un compás no escriba lo
-mismo que la primera.
+Why it gains so much: exact repetitions of 64 B or more cover 37% of format 1.
+The battle one has one of 2,638 B and 143 in total; `evilrhys`, one of 2,822;
+`C3classi`, one of 2,319. On today's format it yields less, because the
+register cache makes a bar's second pass not write the same as the first.
 
-## 3. Descomprimir con ventana en la RAM
+## 3. Decompressing with a window in RAM
 
-**Sobre el formato 1 con diccionario: LZSS con ventana de 4 KB, 64.948 B;
-de 32 KB y coincidencias de hasta 258, 60.422.** O sea 704 KB menos que hoy.
-La cota —zlib— es 43.414 sobre el formato 1 con diccionario, y 71.778 sobre el
-de hoy.
+**On format 1 with dictionary: LZSS with a 4 KB window, 64,948 B; with 32 KB
+and matches of up to 258, 60,422.** That is, 704 KB less than today. The bound
+—zlib— is 43,414 on format 1 with dictionary, and 71,778 on today's.
 
-Cuesta una ventana en la RAM lejana —4 KB a 32 KB—, del orden de cuarenta
-ciclos por byte que sale —estimado—, y el formato 1 gasta en promedio un byte por cuadro, así que el
-tiempo no es el problema; el problema es la complejidad y la RAM. Hay que
-confirmar dónde: `ram_lejana.s` no nombra nada en el banco `$7F`, pero eso hay
-que verificarlo con el mapa entero y no darlo por libre. Riesgo musical:
-ninguno, mismo argumento.
+It costs a window in far RAM —4 KB to 32 KB—, on the order of forty cycles per
+output byte —estimated—, and format 1 spends on average one byte per frame, so
+time isn't the problem; the problem is complexity and RAM. Where needs
+confirming: `ram_lejana.s` names nothing in bank `$7F`, but that has to be
+verified with the whole map and not assumed free. Musical risk: none, same
+argument.
 
-**Descomprimir el tema entero al prenderlo**, en vez de en vivo, pediría 48 KB
-de RAM para el de batalla ya en formato 1, y un `PlayBGM` pasa en medio de
-un evento: frenaría el juego ahí, no en un fundido. No lo recomiendo.
+**Decompressing the whole theme when it starts**, instead of live, would need
+48 KB of RAM for the battle one already in format 1, and a `PlayBGM` happens in
+the middle of an event: it would stall the game there, not during a fade. I
+don't recommend it.
 
-## 4. No escribir las notas que nunca suenan
+## 4. Not writing the notes that never sound
 
-**116.805 B del formato de hoy; 32.233 sobre el formato 1.** Es cambiar
-`build_events` para que la nota que pierde la voz en el mismo cuadro no emita
-su preparación. Es lo más barato de hacer —unas líneas en Python, nada en la
-ROM— pero **no deja las escrituras idénticas**: saca la preparación pisada, que
-hoy le cambia la altura y el volumen a la voz durante los microsegundos que
-tarda en llegar la siguiente. Eso no se oye, pero ya no hay comparación exacta
-que lo demuestre. Conviene hacerlo **después** del 1 y en su propio commit.
+**116,805 B of today's format; 32,233 on format 1.** It means changing
+`build_events` so the note that loses the voice on the same frame doesn't emit
+its preparation. It's the cheapest to do —a few lines in Python, nothing in the
+ROM— but **it doesn't leave the writes identical**: it removes the overwritten
+preparation, which today changes the voice's pitch and volume during the
+microseconds it takes for the next one to arrive. That can't be heard, but
+there's no longer an exact comparison that proves it. Best done **after** 1
+and in its own commit.
 
-## Resumen
+## Summary
 
-| | Bytes | Ahorro | Riesgo |
+| | Bytes | Saving | Risk |
 |---|---:|---:|---|
-| Hoy | 768.863 | | |
-| 4 solo, sobre el formato de hoy | ~652.000 | −15% | las escrituras cambian; no se oye |
-| 1, formato por nota | 258.639 | −66% | ninguno, verificado |
-| 1 con diccionario de alturas | 219.794 | −71% | ninguno, verificado |
-| 1 + 2, saltos de un nivel | ~124.500 | −84% | ninguno |
-| 1 + 3, LZSS con ventana de 4 KB | ~68.500 | −91% | ninguno; RAM y complejidad |
+| Today | 768,863 | | |
+| 4 alone, on today's format | ~652,000 | −15% | the writes change; can't be heard |
+| 1, per-note format | 258,639 | −66% | none, verified |
+| 1 with pitch dictionary | 219,794 | −71% | none, verified |
+| 1 + 2, single-level jumps | ~124,500 | −84% | none |
+| 1 + 3, LZSS with a 4 KB window | ~68,500 | −91% | none; RAM and complexity |
 
-Las tablas por tema —instrumentos y alturas, 3.504 B— están sumadas en las
-filas de 1 + 2 y 1 + 3. En el cartucho unido, el 1 con diccionario son unos
-565 KB menos: del 89,6% a algo como el 76%.
+The per-theme tables —instruments and pitches, 3,504 B— are included in the
+1 + 2 and 1 + 3 rows. In the merged cartridge, 1 with dictionary is about
+565 KB less: from 89.6% to something like 76%.
 
 # `muestra`: 269 KB
 
-**268.794 B, y el 79% son efectos de sonido, no música.**
+**268,794 B, and 79% are sound effects, not music.**
 
-* **Música: 58 muestras, 57.285 B.** Está topada por la ARAM —el banco entero
-  tiene que entrar en los 64 KB del SPC700, `un-solo-banco-de-muestras.md`—,
-  así que no crece con los temas: crecen los temas que se quedan afuera.
-  **Cinco grupos son byte por byte iguales**, 6.453 B; no miré de qué
-  programas o golpes salen. Eso
-  cuesta ARAM además de cartucho cuando dos caen en el mismo paquete, y ahí sí
-  importa: es resolución que se le podría devolver a otra muestra.
-* **Efectos: 92, 211.509 B.** 50 están en el tope, 2.529 B —0,75 s a 6 kHz,
-  `SE_MAX_SEGUNDOS` y `SE_TASA`—, y el trueno entero de la apertura son 23.760
-  (`el-trueno-va-entero-y-paga-la-lluvia.md`). Todos entran en el paquete de algún
-  mapa, así que no hay ninguno muerto. `efectos-de-sonido-sin-recortes.md`
-  quiere levantar esos topes, y eso lo va a hacer **crecer**.
-* **Nada obvio que comprimir**: BRR ya es 9 bytes por cada 16 muestras, y zlib
-  sobre todas las muestras da el 92%.
+* **Music: 58 samples, 57,285 B.** It's capped by ARAM —the whole bank has to
+  fit in the SPC700's 64 KB, `un-solo-banco-de-muestras.md`—, so it doesn't
+  grow with the themes: what grows is the themes that stay out. **Five groups
+  are byte for byte identical**, 6,453 B; I didn't look at which programs or
+  hits they come from. That costs ARAM as well as cartridge when two land in
+  the same package, and there it does matter: it's resolution that could be
+  given back to another sample.
+* **Sound effects: 92, 211,509 B.** 50 are at the cap, 2,529 B —0.75 s at 6
+  kHz, `SE_MAX_SEGUNDOS` and `SE_TASA`—, and the opening's whole thunder is
+  23,760 (`el-trueno-va-entero-y-paga-la-lluvia.md`). They all go into some
+  map's package, so none is dead. `efectos-de-sonido-sin-recortes.md` wants to
+  lift those caps, and that will make it **grow**.
+* **Nothing obvious to compress**: BRR is already 9 bytes for every 16
+  samples, and zlib over all the samples gives 92%.
 
-# El MSU-1, como contexto
+# MSU-1, as context
 
-22 temas tienen pista (`PISTAS_MSU`). Con MSU-1 la ROM calla el SPC700 y el
-stream no corre, pero **sin MSU-1 es lo único que suena**, así que tiene que
-estar igual: la pista no ahorra ni un byte de stream. El de batalla tiene
-pista, y aun así es el que manda en todo lo de arriba.
+22 themes have a track (`PISTAS_MSU`). With MSU-1 the ROM silences the SPC700
+and the stream doesn't run, but **without MSU-1 it's the only thing that
+plays**, so it has to be there just the same: the track doesn't save a single
+byte of stream. The battle one has a track, and even so it's the one that
+dominates everything above.
 
-# De paso, medido y no arreglado
+# In passing, measured and not fixed
 
-* **686 notas se sueltan antes de tiempo** —10.308 cuadros en total, 329 notas
-  en `escape_newyork`—. Cuando una nota le roba la voz a otra que termina
-  antes, el release de la robada ya quedó agendado en su cuadro final y suelta
-  a la que robó. No lo oí; es para una tarea aparte, de tipo `bug`, y taro
-  diría si se nota.
-* **Una nota cuyo programa no está en el banco ocupa la voz igual**:
-  `busy[voice]` se anota antes del `continue` de `build_events`, así que la
-  nota que no suena les quita la voz a las que sí.
+* **686 notes are released early** —10,308 frames in total, 329 notes in
+  `escape_newyork`—. When a note steals the voice from another that ends
+  sooner, the stolen one's release was already scheduled on its final frame
+  and it releases the one that stole. I didn't hear it; it's for a separate
+  `bug` task, and taro would say whether it's noticeable.
+* **A note whose program isn't in the bank takes the voice anyway**:
+  `busy[voice]` is set before `build_events`'s `continue`, so the note that
+  doesn't sound takes the voice away from the ones that do.

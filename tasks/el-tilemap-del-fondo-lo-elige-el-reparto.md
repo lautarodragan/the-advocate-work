@@ -100,7 +100,7 @@ at this copy**: when merging, check that no other branch has taken $6B80.
 
 With the accumulator in sixteen bits:
 
-* `build_column` and `build_row`: `adc #imm` (3) becomes `adc long` (6), **+3
+* `build_column` and `build_row`: `adc #imm` (3) becomes `adc largo` (6), **+3
   cycles per row or column built**, one more byte each.
 * `push_una_columna`: `clc` + `adc #` (5) becomes `and #` + `ora #` (6), **+1
   cycle per column uploaded**, in vblank.

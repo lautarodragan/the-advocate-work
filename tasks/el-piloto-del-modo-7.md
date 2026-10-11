@@ -28,7 +28,7 @@ frame, on 212 and 213, with the width of what isn't black:
 * **The photo stays still for 93 frames** on 213 (the 1.5 s `Wait` plus the
   commands' frames; on 212, 118, with the explosions animation on top) and
   **the zoom is linear**: the width drops by 1/120 per frame, from 640 to 0 in
-  exactly 120 frames, centred on the centre of the screen. There's no
+  exactly 120 frames, centered on the center of the screen. There's no
   acceleration or braking: scale = 1 − t/120. Measured the same on 212 and
   213.
 * **The crop**: the four maps are 20x15 —the whole RM2k screen—, so RM2k's
@@ -87,10 +87,10 @@ shown.
 
 * **The still photo**, pixel by pixel at 15 bits against the expected one:
   identical in all sixteen combinations and the three cores. That covers the
-  whole texture in VRAM, the matrix at scale 1 and the centre.
+  whole texture in VRAM, the matrix at scale 1 and the center.
 * **The curve**: the width and height of what isn't black, on twelve frames of
   the zoom, against 256·(1 − t/120) by 224·(1 − t/120): within one pixel and
-  centred, in all of them. For example, t = 30: 191x167 (media) and 193x168
+  centered, in all of them. For example, t = 30: 191x167 (media) and 193x168
   (vq) against 192x168; t = 60: exactly 128x112; t = 120: nothing.
 * **The hybrids** upload the mode 7 texture in **8 or 9 vblanks** of 4 KB with
   the photo on screen (the whole 128x128 map and the tiles: 30 KB), and the
@@ -123,9 +123,9 @@ shown.
   whole 320x240 photo is seen; in the ROM, the 256x224 part that was on
   screen. With the photo small it doesn't show; at 80 % it does, if one
   compares.
-* **The centre** is the ROM screen's, which isn't the centre of RM2k's photo:
-  because of the crop, the photo's centre falls 24 pixels to the right and 8
-  up from the screen's, in PhoneCallDiff. The photo shrinks towards the centre
+* **The center** is the ROM screen's, which isn't the center of RM2k's photo:
+  because of the crop, the photo's center falls 24 pixels to the right and 8
+  up from the screen's, in PhoneCallDiff. The photo shrinks towards the center
   of what's visible.
 * **Mode 7 doesn't filter**: when shrinking, the grain of the noisy photos
   flickers from one frame to the next, more with vq —which has all the grain—

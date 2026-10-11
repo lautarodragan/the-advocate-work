@@ -116,5 +116,5 @@ routines: of 683 lines, 648 give the same commit as in the origin. Of the 35
 that don't, 30 go to the cuts of `main.s` (`391930c`) and of `interprete.s`
 (`a1547b9`), which have the same text in another file —`jmp
 correr_codigo::otro`, `.endproc`, `rts`, `phb`/`phk`/`plb`—, and 5 to the move
-itself, paired with the destination's neighbours: `si_var_sigue:` and two
+itself, paired with the destination's neighbors: `si_var_sigue:` and two
 `iny` of `op_if_var`, an `rts` and `sin_espera:` of `eventos_tick`.
