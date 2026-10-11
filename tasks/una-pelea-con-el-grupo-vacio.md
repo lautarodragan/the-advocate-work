@@ -1,24 +1,24 @@
 ---
-name: "Una pelea con el grupo vacío"
-description: "RM2k pierde enseguida una pelea sin nadie en el grupo; qué hace la ROM no se miró, y los ocho ports arrancan con el grupo de la base de datos, que en varios es nadie"
+name: "A battle with the party empty"
+description: "RM2k immediately loses a battle with nobody in the party; what the ROM does wasn't looked at, and the eight ports start with the database's party, which in several of them is nobody"
 type: test
 status: draft
 ---
 
-Lo dejó Mulita el 2026-10-10 en "Lo que no cubre" de
-`el-grupo-vacio-al-empezar.md`: "Una pelea con el grupo vacío.
-RM2k la pierde enseguida (`Game_Battle::CheckLose` sin nadie que pueda
-actuar); el runtime no se miró ni se probó." Lo demás del grupo vacío
-—no dibujarse, caminar, el menú, guardar y cargar— sí lo cubre
-`test_grupo_vacio.py` de ABL, en `test-special`.
+Mulita left it on 2026-10-10 in "Lo que no cubre" of
+`el-grupo-vacio-al-empezar.md`: "A battle with the party empty.
+RM2k loses it immediately (`Game_Battle::CheckLose` with nobody who can
+act); the runtime wasn't looked at or tested." The rest of the empty party
+—not drawing itself, walking, the menu, saving and loading— is covered by
+ABL's `test_grupo_vacio.py`, in `test-special`.
 
-Por qué vale una prueba y no sólo jugarlo: desde esa tarea ningún port
-lleva la muleta `party = [1]` (los ocho `rm2k-snes.toml` dicen `party =
-[]`, ports `a85b7e3`), y RM2k deja que el héroe invisible camine, toque
-eventos y entre en encuentros al azar. Una pelea con cero actores es un
-camino del runtime (los recorridos de `party_n` en `battle.s` y
-`battle_troop.s`) que nada ejecuta hoy.
+Why it deserves a test and not just playing it: since that task no port
+carries the `party = [1]` crutch (all eight `rm2k-snes.toml` say `party =
+[]`, ports `a85b7e3`), and RM2k lets the invisible hero walk, touch
+events and run into random encounters. A battle with zero actors is a
+runtime path (the walks over `party_n` in `battle.s` and
+`battle_troop.s`) that nothing executes today.
 
-**Cómo verlo**: el caso del grupo vacío de ABL (mapa 5, en (39,34), el de
-`pelea-82-grupo-11-12`) con un `EnterBattle` o un encuentro antes de que
-entre nadie, comparado con lo que hace el original en Wine.
+**How to see it**: ABL's empty party case (map 5, at (39,34), the one from
+`pelea-82-grupo-11-12`) with an `EnterBattle` or an encounter before anyone
+joins, compared with what the original does in Wine.

@@ -1,13 +1,14 @@
 ---
-name: "Partir test_comandos_golden"
-description: "Un archivo de prueba que junta muchos comandos de RM2k distintos"
+name: "Split test_comandos_golden"
+description: "A test file that gathers many different RM2k commands"
 type: test
 status: wishlist
 ---
 
-`pruebas/rpgmaker/test_comandos_golden.py` compara contra goldens muchos
-comandos de eventos distintos en un solo archivo. Su cabecera explica que se
-agrupan por arnés, no por comando. En `ordenar-pruebas` (2026-09-25) se decidió
-no partirlo: un archivo por comando es un cambio grande para lo que rinde, y
-el índice de `pruebas/README.md` ya dice qué cubre. Vuelve a valer la pena si
-el archivo sigue creciendo o si dos ramas empiezan a chocar ahí.
+`pruebas/rpgmaker/test_comandos_golden.py` compares many different event
+commands against goldens in a single file. Its header explains that they are
+grouped by harness, not by command. In `ordenar-pruebas` (2026-09-25) it was
+decided not to split it: one file per command is a big change for what it
+yields, and the index in `pruebas/README.md` already says what it covers. It
+becomes worth it again if the file keeps growing or if two branches start
+colliding there.

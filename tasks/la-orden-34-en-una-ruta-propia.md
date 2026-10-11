@@ -1,29 +1,28 @@
 ---
-name: "La orden 34 en la ruta propia de una página"
-description: "change_graphic adentro de la ruta propia de una página, que hoy rechaza el compilador"
+name: "Order 34 in a page's own route"
+description: "change_graphic inside a page's own route, which the compiler rejects today"
 type: feature
 status: wishlist
 ---
 
-# Qué
+# What
 
-**`change_graphic` —la orden 34— en la ruta propia de una página.** El
-compilador de eventos la rechaza (`route::own`): una ruta propia es una
-lista de códigos sin lugar para el operando. Ninguna de las rutas propias de
-ABL la usa.
+**`change_graphic` —order 34— in a page's own route.** The event compiler
+rejects it (`route::own`): an own route is a list of codes with no room for
+the operand. None of ABL's own routes use it.
 
-Hasta el 2026-10-05 esto era "un evento que camina y cambia de gráfico con
-la página", y ganaba caminar: la fila se quedaba con el gráfico de su
-primera página. Eso ya está —cada página le da a la fila su banco de poses y
-su paleta, ver `walker_graphic` en `tools/runtime/event_pages.s`—, y queda
-esto, que era lo que arrastraba.
+Until 2026-10-05 this was "an event that walks and changes graphic with the
+page", and walking won: the row kept the graphic of its first page. That is
+done now —each page gives the row its bank of poses and its palette, see
+`walker_graphic` in `tools/runtime/event_pages.s`—, and this is what remains,
+which is what it was dragging along.
 
 # Status
 
-Anotado, sin empezar.
+Noted, not started.
 
-# Por qué
+# Why
 
-La orden 34 adentro de una ruta *forzada* sí se hace —sobre eventos y sobre
-el héroe—: ver "Cambiar el gráfico a mitad de una ruta (la orden 34)" en
-`docs/port/events.md` y `decisiones/la-orden-34-sobre-el-heroe.md`.
+Order 34 inside a *forced* route is done —on events and on the hero—: see
+"Cambiar el gráfico a mitad de una ruta (la orden 34)" in
+`docs/port/events.md` and `decisiones/la-orden-34-sobre-el-heroe.md`.

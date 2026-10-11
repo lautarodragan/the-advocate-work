@@ -1,36 +1,38 @@
 ---
-name: "Una prueba de screens da distinto con el workspace entero"
-description: "the_boxes_of_the_maps_and_the_common_events da 4 cajas con cargo test -p rm2k-snes-screens y 5 con cargo test --workspace, desde el merge de las caras y los escapes (3f34ca23)"
+name: "A screens test gives a different result with the whole workspace"
+description: "the_boxes_of_the_maps_and_the_common_events gives 4 boxes with cargo test -p rm2k-snes-screens and 5 with cargo test --workspace, since the merge of the faces and the escapes (3f34ca23)"
 type: bug
 status: testing
 agents: [Hornero]
 assignee: taro
 ---
 
-Visto el 2026-10-06 al mergear lo de Mulita y Carpintero. Bisectado: en
-`ea1c5beb` (el padre) pasa con el workspace entero, en `3f34ca23` falla
-(`left: 5, right: 4`, `screens/tests/python.rs:327`). Con `-p
-rm2k-snes-screens` solo, pasa. ABL no cambia (la tanda en verde, la misma
-huella), y los binarios se instalan crate por crate, así que la ROM la arma
-el comportamiento de `-p`.
+Seen on 2026-10-06 when merging Mulita's and Carpintero's work. Bisected: at
+`ea1c5beb` (the parent) it passes with the whole workspace, at `3f34ca23` it fails
+(`left: 5, right: 4`, `screens/tests/python.rs:327`). With `-p
+rm2k-snes-screens` alone, it passes. ABL doesn't change (the suite green, the same
+fingerprint), and the binaries are installed crate by crate, so the ROM is built
+by the `-p` behaviour.
 
-La diferencia entre las dos corridas es la unificación de dependencias y
-features del workspace: `serde_json` con `preserve_order` (lo piden
-`rm2k-snes-audio` y `convert`) es el sospechoso, junto con el
-`without_waits` de `text/src/refit.rs`. No se siguió, por el límite de uso.
+The difference between the two runs is the workspace's unification of
+dependencies and features: `serde_json` with `preserve_order` (requested by
+`rm2k-snes-audio` and `convert`) is the suspect, together with the
+`without_waits` in `text/src/refit.rs`. It wasn't followed up, because of the
+usage limit.
 
-## Resuelto, el 2026-10-11
+## Solved, on 2026-10-11
 
-No era el workspace. Bisectado de nuevo con `crate-test screens` —que
-prueba el proyecto solo— desde `97ddd8be`, donde nació la huella: el
-primer commit rojo es `73b263a3`, de las caras y los escapes, con `-p`
-también. Ese commit aceptó a propósito `\.`, `\!` y `\|` en mitad de
-una caja, y la caja del fixture que existía para el camino de "no
-compila" usaba justo un `\|` en el medio: pasó a compilar y la tabla dio
-5 cajas. La diferencia con `-p` que se vio el 2026-10-06 no se reproduce
-—ninguno de los proyectos tiene features—; probablemente fue un build
-viejo.
+It wasn't the workspace. Bisected again with `crate-test screens` —which
+tests the project alone— from `97ddd8be`, where the fingerprint was born: the
+first red commit is `73b263a3`, the faces and escapes one, with `-p`
+too. That commit accepted on purpose `\.`, `\!` and `\|` in the middle of
+a box, and the fixture's box that existed for the "doesn't
+compile" path used precisely a `\|` in the middle: it started compiling and
+the table gave 5 boxes. The difference with `-p` seen on 2026-10-06 doesn't
+reproduce —none of the projects has features—; it was probably an old
+build.
 
-Arreglado en `00710e92` de `the-advocate`: la caja usa `\$`, que sigue
-sin compilar, y vuelven las 4 cajas con la huella de antes, sin tocarla.
-Pasa igual con `crate-test screens` y con `cargo test --workspace`.
+Fixed in `00710e92` of `the-advocate`: the box uses `\$`, which still
+doesn't compile, and the 4 boxes come back with the previous fingerprint,
+without touching it. It passes the same with `crate-test screens` and with
+`cargo test --workspace`.

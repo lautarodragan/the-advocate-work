@@ -1,24 +1,24 @@
 ---
-name: "Las paredes invisibles que se pierden al recortar eventos"
-description: "Cuando un mapa pasa de 120 eventos, el recorte deja afuera también paredes invisibles: en ocho mapas de Desert Nightmare el héroe puede pasar por donde el original lo frena"
+name: "The invisible walls lost when trimming events"
+description: "When a map goes past 120 events, the trim also leaves out invisible walls: on eight maps of Desert Nightmare the hero can pass where the original stops them"
 type: bug
 status: draft
 ---
 
-Medido por Carpintero el 2026-10-10 (`los-eventos-que-no-entran-en-la-ram.md`):
-cuando un mapa pasa de los 120 eventos de la RAM, `Game::trim`
-(`rm2k-snes/convert/src/trim.rs`) deja afuera lo que menos pierde, y la
-tercera clase es "una pared invisible". Desert: "9 pierden decoración y 8
-de ésos paredes invisibles". Él mismo dejó anotado lo que queda: "las
-paredes invisibles podrían ir a la pasabilidad del mapa, y la decoración
-hornearse (`decorative_events`) en vez de perderse: el recorte corre antes
-que Wally, así que hoy no se hornea lo que se va".
+Measured by Carpintero on 2026-10-10 (`los-eventos-que-no-entran-en-la-ram.md`):
+when a map goes past the 120 events of RAM, `Game::trim`
+(`rm2k-snes/convert/src/trim.rs`) leaves out what loses the least, and the
+third class is "an invisible wall". Desert: "9 lose decoration and 8
+of those invisible walls". He himself left noted what remains: "the
+invisible walls could go into the map's passability, and the decoration
+be baked (`decorative_events`) instead of lost: the trim runs before
+Wally, so today what goes away isn't baked".
 
-**Comprobado hoy** (the-advocate `fc6f7456`, ports `a85b7e3`): el
-`conversor.log` del release de Desert Nightmare dice las mismas listas que
-el 2026-10-10. Pierden paredes invisibles (sólo pared, o dibujo y pared):
+**Checked today** (the-advocate `fc6f7456`, ports `a85b7e3`): the
+`conversor.log` of Desert Nightmare's release gives the same lists as on
+2026-10-10. These lose invisible walls (wall only, or drawing and wall):
 
-| mapa | eventos con pared que se van |
+| map | events with a wall that go away |
 |---|---|
 | 2 Dusty Creek | 5 |
 | 4 Werkstatt | 23 + 27 |
@@ -29,14 +29,14 @@ el 2026-10-10. Pierden paredes invisibles (sólo pared, o dibujo y pared):
 | 66 Polizeirevier-Nacht | 20 + 26 |
 | 172 Alte Minensiedlung | 12 |
 
-En Vampires Dawn, el 164 (Thessa) pierde dos con dibujo y pared, los
-eventos 253 y 254 (también comprobado hoy, en un armado de VD con su
-propio System: el recorte no depende de eso).
+In Vampires Dawn, map 164 (Thessa) loses two with drawing and wall,
+events 253 and 254 (also checked today, in a VD build with its
+own System: the trim doesn't depend on that).
 
-**Qué se ve jugando**: en esos mapas el héroe camina por celdas que en el
-original están bloqueadas. No se miró en un emulador cuáles son ni si
-dejan llegar a algún lado que no se debe.
+**What you see while playing**: on those maps the hero walks through cells that
+are blocked in the original. Which ones they are, and whether they let you reach
+somewhere you shouldn't, wasn't looked at in an emulator.
 
-**Cómo verlo**: `just cartuchos release` en `desert-nightmare/` y
+**How to see it**: `just cartuchos release` in `desert-nightmare/` and
 `grep "lose an invisible wall\|looks and a wall" build/release/conversor.log`;
-los números de evento están en cada línea.
+the event numbers are on each line.

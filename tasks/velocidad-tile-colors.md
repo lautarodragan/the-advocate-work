@@ -1,28 +1,28 @@
 ---
-name: "Velocidad: colores por tile"
-description: "Guardar los colores de cada tile en vez de recalcularlos"
+name: "Speed: colours per tile"
+description: "Keep each tile's colours instead of recomputing them"
 type: refactor
 status: wishlist
 ---
 
-# Qué
+# What
 
-Guardar los colores de cada tile del primer recorrido en vez de recalcularlos
-en el segundo: un diccionario de una línea en la conversión de la capa de
-encima.
+Keep the colours of each tile from the first pass instead of recomputing them
+in the second: a one-line dictionary in the conversion of the upper layer.
 
 # Status
 
-Anotado, sin empezar. Apareció midiendo, no buscándolo.
+Noted, not started. It turned up while measuring, not while looking for it.
 
-# Por qué
+# Why
 
-La capa de encima llamaba a `tile_colors` **894.000 veces** —medido el
-2026-09-16 sobre `abl` con `SIN_CACHE=1`, un día antes de que Voodoo se hiciera
-cargo de convertir esa capa; el recálculo sigue en `snes_convert.py`, del lado
-que decide los colores, así que el número hay que volver a medirlo— porque los colores de cada tile se
-recalculan en el segundo recorrido en vez de guardarse del primero.
+The upper layer called `tile_colors` **894,000 times** —measured on
+2026-09-16 on `abl` with `SIN_CACHE=1`, a day before Voodoo took over
+converting that layer; the recomputation is still in `snes_convert.py`, on the
+side that decides the colours, so the number has to be measured again— because
+the colours of each tile are recomputed in the second pass instead of being
+kept from the first.
 
-Es una mejora gratis: no cambia ninguna decisión de color, así que la ROM tiene
-que salir byte por byte igual. Ése es el criterio de aceptación, y con
-`SIN_CACHE=1`, que es donde se mide.
+It is a free improvement: it doesn't change any colour decision, so the ROM has
+to come out byte for byte the same. That is the acceptance criterion, and with
+`SIN_CACHE=1`, which is where it is measured.

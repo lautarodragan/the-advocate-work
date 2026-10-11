@@ -1,22 +1,23 @@
 ---
-name: "Cobertura del MSU-1"
-description: "Ninguna prueba corre bsnes ni mesen-s con las pistas al lado, ni cubre just video"
+name: "MSU-1 coverage"
+description: "No test runs bsnes or mesen-s with the tracks alongside, nor covers just video"
 type: test
 status: todo
 ---
 
-Desde el 2026-09-25 `release` lleva siempre sus pistas de MSU-1 y el arnés se
-las esconde al core (`retro.Console(..., msu=False)`, en
-`pruebas/arnes/emulator/retro.py`). Lo cobra `pruebas/abl/test_msu.py`, **sólo en
-snes9x**. Lo que quedó medido a mano y sin prueba:
+Since 2026-09-25 `release` always carries its MSU-1 tracks and the harness
+hides them from the core (`retro.Console(..., msu=False)`, in
+`pruebas/arnes/emulator/retro.py`). `pruebas/abl/test_msu.py` catches it, **only
+in snes9x**. What was measured by hand and has no test:
 
-* **bsnes y mesen-s con las pistas al lado.** Se midió a mano que bsnes da el
-  mismo audio que sin pistas; mesen-s cambia con `msu=True` pero su audio no
-  sale igual entre corridas, así que no se compara por igualdad. Una prueba
-  para bsnes es barata si `test_cores.py` ya lo levanta; mesen-s necesita otra
-  comparación (¿silencio del SPC700?, ¿los registros del MSU-1?).
-* **`just video`** (`pruebas/arnes/video.py`). No la corre ninguna prueba. Tiene
-  un bug ya arreglado que ninguna red cobraría si vuelve: usaba una tasa fija
-  de 32.040 y snes9x pasa a 44.100 con el MSU-1 encendido, así que el sonido
-  se corría del video. Una prueba chica que arme unos cuadros con y sin
-  `--sin-msu` y compare la duración del audio con la de la imagen alcanza.
+* **bsnes and mesen-s with the tracks alongside.** It was measured by hand that
+  bsnes gives the same audio as without tracks; mesen-s changes with `msu=True`
+  but its audio doesn't come out the same between runs, so it isn't compared
+  for equality. A test for bsnes is cheap if `test_cores.py` already starts it;
+  mesen-s needs another comparison (SPC700 silence? the MSU-1 registers?).
+* **`just video`** (`pruebas/arnes/video.py`). No test runs it. It has an
+  already fixed bug that no net would catch if it came back: it used a fixed
+  rate of 32,040 and snes9x switches to 44,100 with the MSU-1 on, so the sound
+  drifted from the video. A small test that builds a few frames with and
+  without `--sin-msu` and compares the length of the audio with that of the
+  picture is enough.

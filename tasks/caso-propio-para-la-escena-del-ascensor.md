@@ -1,30 +1,31 @@
 ---
-name: "La escena del ascensor"
-description: "Un caso propio en la tanda para la escena del ascensor del mapa 2"
+name: "The elevator scene"
+description: "A case of its own in the suite for the elevator scene on map 2"
 type: test
 status: wishlist
 ---
 
-# Qué
+# What
 
-Darle **caso propio** en la tanda a la escena del ascensor del mapa 2.
+Give the elevator scene on map 2 **a case of its own** in the suite.
 
 # Status
 
-Anotado y **gratis**: lo que lo bloqueaba se destrabó solo el 2026-09-16.
+Noted and **free**: what blocked it got unblocked by itself on 2026-09-16.
 
-Vale la pena probarlo **antes que cualquier otra cosa de esta carpeta**,
-justamente porque no cuesta nada: es escribir el caso y mirar si la golden sale.
+It is worth trying **before anything else in this folder**, precisely because
+it costs nothing: it is writing the case and seeing whether the golden comes
+out.
 
-# Por qué
+# Why
 
-La referencia en Python no modelaba los cuadros que el lazo pierde en sus picos,
-así que la ROM iba N cuadros atrás y sólo se la podía comparar con la pantalla
-quieta. Eso era lo único que le faltaba a esta escena para tener caso propio.
+The Python reference didn't model the frames the loop loses at its peaks, so
+the ROM ran N frames behind and could only be compared with the screen still.
+That was the only thing this scene lacked to have a case of its own.
 
-**Contra una golden no hay N**: la captura tiene los cuadros perdidos adentro.
+**Against a golden there is no N**: the capture has the lost frames inside it.
 
-Lo que sigue siendo cierto del límite que lo tuvo afuera: los picos existen, y
-la salida no es un desfase a mano —un número que se ajusta hasta que dé verde—
-sino aflojarlos, o leer `cuadros_perdidos`, que ya viaja en la salida de cada
-captura.
+What remains true of the limit that kept it out: the peaks exist, and the way
+out is not a hand-tuned offset —a number adjusted until it goes green— but
+easing them, or reading `cuadros_perdidos`, which already travels in the output
+of each capture.

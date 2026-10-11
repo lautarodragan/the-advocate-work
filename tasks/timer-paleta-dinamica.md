@@ -1,33 +1,33 @@
 ---
-name: "La paleta del cronómetro"
-description: "Reservarla sólo mientras el cronómetro corre"
+name: "The timer's palette"
+description: "Reserve it only while the timer is running"
 type: refactor
 status: wishlist
 ---
 
-# Qué
+# What
 
-Mejora timer: reservar la paleta sólo cuando el timer está corriendo, liberarla cuando no.
+Timer improvement: reserve the palette only when the timer is running, free it when it isn't.
 
 # Status
 
-Anotado, sin empezar.
+Noted, not started.
 
-# Por qué
+# Why
 
-Hoy el conversor reserva la paleta de los dígitos en **todos** los mapas del
-cartucho cuando el cronómetro está puesto, porque en RM2k el cronómetro es
-global: una vez arrancado sigue visible en cualquier mapa al que vayas, así que
-estáticamente no se sabe dónde hace falta.
+Today the converter reserves the digits' palette on **every** map of the
+cartridge when the timer is set, because in RM2k the timer is global: once
+started it stays visible on any map you go to, so statically it is not known
+where it is needed.
 
-Lo que costaba, medido el 2026-09-20 sobre `abl`: el **mapa 18 se quedaba sin
-gotas de lluvia** por no tener paleta libre después de reservar la del
-cronómetro. **Hoy no cuesta nada ahí**: desde que el público del Auditorio se
-horneó en su ChipSet, al mapa 18 le sobran paletas y llueve. Los otros siete
-mapas sin gotas —el 2, 3, 8, 9, 10, 13 y 17— lo están por otras razones, así
-que esto hoy no le devuelve la lluvia a ninguno; lo dice el conversor al armar
-`abl`, con un aviso por mapa.
+What it cost, measured on 2026-09-20 on `abl`: **map 18 was left without
+raindrops** for lack of a free palette after reserving the timer's. **Today it
+costs nothing there**: since the Auditorium's audience was baked into its
+ChipSet, map 18 has palettes to spare and it rains. The other seven maps
+without drops —2, 3, 8, 9, 10, 13 and 17— are so for other reasons, so today
+this gives the rain back to none of them; the converter says so when building
+`abl`, with one warning per map.
 
-Es trabajo de la ROM, no del conversor: reservar y liberar al arrancar y parar
-el cronómetro, con lo que eso implica para lo que ya está dibujado con esa
-paleta.
+It is work for the ROM, not the converter: reserve and free when starting and
+stopping the timer, with what that implies for what is already drawn with that
+palette.
