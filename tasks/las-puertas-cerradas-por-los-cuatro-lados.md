@@ -1,48 +1,48 @@
 ---
-name: "Las puertas cerradas por los cuatro lados se atraviesan"
-description: "Un evento de tile debajo del héroe cuyo tile cierra todo impone $00, y `pass_has` guardaba ese valor como bandera: quedaba apagada y `pass_with_event` no miraba las filas"
+name: "Doors closed on all four sides can be walked through"
+description: "A tile event under the hero whose tile closes everything imposes $00, and `pass_has` stored that value as a flag: it stayed off and `pass_with_event` didn't look at the rows"
 type: bug
 status: testing
 assignee: taro
 agents: [Hornero]
 ---
 
-De taro, el 2026-10-10: en Tasgarde Military Base (mapa 74 de ABL) la
-puerta —Door1Bottom y Door1Top, eventos 2 y 1— se atraviesa sin que
-DoorGuard la abra. En RM2k un evento debajo del héroe, no atravesable y
-con gráfico de tile impone la pasabilidad de su tile
-(`Game_Map::IsPassableTile` de easyrpg), y los tiles 109 y 115 del
-chipset 19 cierran los cuatro lados.
+From taro, on 2026-10-10: in Tasgarde Military Base (ABL's map 74) the
+door —Door1Bottom and Door1Top, events 2 and 1— can be walked through without
+DoorGuard opening it. In RM2k an event under the hero, not passable and
+with a tile graphic imposes its tile's passability
+(easyrpg's `Game_Map::IsPassableTile`), and tiles 109 and 115 of
+chipset 19 close all four sides.
 
-Medido con el arnés sobre el `release` de ABL: desde (19,40), arriba
-sostenido, Talan termina en (19,32). Las filas de los dos eventos llegan
-con +15 = $00, bien; pero `pass_has` está en 0.
+Measured with the harness on ABL's `release`: from (19,40), up
+held, Talan ends up at (19,32). The rows of the two events arrive
+with +15 = $00, correct; but `pass_has` is 0.
 
-`pass_look` (`far_npcs.s`) y el refresco de página (`event_pages.s`)
-guardaban en `pass_has` el valor de la fila, no un uno: con $00 la
-bandera dice "nadie impone". Nació en `da466bbe`, la carrera a 60
-cuadros, que agregó la bandera.
+`pass_look` (`far_npcs.s`) and the page refresh (`event_pages.s`)
+stored in `pass_has` the row's value, not a one: with $00 the
+flag says "nobody imposes". It was born in `da466bbe`, the run at 60
+frames, which added the flag.
 
-## Hecho
+## Done
 
-Las dos escrituras guardan un uno (`7dcdcfce`). La prueba es de ABL,
-`pruebas/rpgmaker/test_puerta_de_tile.py`: la puerta cerrada al cargar,
-con la página del 279 —el otro camino, el refresco— y abierta con el 279
-y el 280. Las dos primeras dieron rojo sin el arreglo, con Talan en
-(19,32). Con el 280 solo la puerta sigue cerrada, y no es error: `Door1Top`
-sigue en su página 1, con el 109; `DoorGuard` prende los dos.
+Both writes store a one (`7dcdcfce`). The test is ABL's,
+`pruebas/rpgmaker/test_puerta_de_tile.py`: the door closed on load,
+with page 279 —the other path, the refresh— and open with 279
+and 280. The first two went red without the fix, with Talan at
+(19,32). With 280 alone the door stays closed, and it isn't an error: `Door1Top`
+stays on its page 1, with 109; `DoorGuard` turns both on.
 
-**Verificado:** la tanda entera de ABL con el runtime del arreglo, sobre
-`main` de ABL con las puertas del mundo de Hurón: ninguna golden cambió, y
-todo verde menos la prueba nueva —que tenía mal el estado de "abierta"— y
-el índice que no la nombraba, las dos arregladas y corridas de nuevo.
-`just -f tools/justfile test` en verde.
+**Verified:** A Blurred Line's whole suite with the fix's runtime, on
+ABL's `main` with Hurón's world doors: no golden changed, and
+everything green except the new test —which had the "open" state wrong— and
+the index that didn't name it, both fixed and run again.
+`just -f tools/justfile test` green.
 
-**Lo que no cubre:** cualquier otra puerta del juego que estuviera abierta
-por esto. Ningún recorrido cruzaba una puerta cerrada —si no, alguno
-habría cambiado—, pero ahora todas las de un tile cerrado por los cuatro
-lados frenan, como en RM2k: a jugar.
+**What it doesn't cover:** any other door in the game that was open
+because of this. No walk crossed a closed door —otherwise, some
+would have changed—, but now all those on a tile closed on all four
+sides stop you, as in RM2k: to be played.
 
-**Al mergear:** nada que instalar. `project` encuentra el runtime en el
-checkout del que se instaló, así que el global ya lo ve, y la huella de
-los cartuchos lo rearma.
+**When merging:** nothing to install. `project` finds the runtime in the
+checkout it was installed from, so the global one already sees it, and the
+cartridges' fingerprint rebuilds it.

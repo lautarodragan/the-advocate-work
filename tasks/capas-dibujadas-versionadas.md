@@ -1,88 +1,88 @@
 ---
-name: "Capas dibujadas versionadas"
-description: "Las capas de cada mapa como artefacto que se mira en git"
+name: "Versioned drawn layers"
+description: "Each map's layers as an artifact that is looked at in git"
 type: test
 status: wishlist
 ---
 
-# Qué
+# What
 
-Que las capas dibujadas de los mapas sean un artefacto versionado, como
-`data/`: se generan cuando cambian los gráficos del juego, van a git, y el
-build sólo las lee.
+Have the maps' drawn layers be a versioned artifact, like
+`data/`: they are generated when the game's graphics change, they go to git, and the
+build only reads them.
 
 # Status
 
-Anotado y **medido**, sin empezar. Es de taro, el 2026-09-20. Lo que está hecho
-es el paso que lo hace barato: desde ese día la clave del caché de capas sale de
-los insumos, así que un build caliente ya no dibuja ningún mapa. Lo que esto
-agregaría no es velocidad sino **sacar el juego original y el RTP del build**.
+Noted and **measured**, not started. It is taro's, from 2026-09-20. What is done
+is the step that makes it cheap: since that day the layer cache key comes from
+the inputs, so a warm build no longer draws any map. What this would
+add isn't speed but **taking the original game and the RTP out of the build**.
 
-# Cuánto ocupa
+# How much it takes
 
-Medido el 2026-09-20 con Pillow, sobre los dibujos que devuelve
-`Renderer.capas_animadas`: la capa de abajo, la de encima, y un dibujo más por
-cada paso de cada familia animada —agua y tiles animados—. Todos entran en 256
-colores, así que un PNG indexado de 8 bits los guarda **sin perder un pixel**;
-la peor paleta de las dos tandas tiene 167 colores.
+Measured on 2026-09-20 with Pillow, over the drawings that
+`Renderer.capas_animadas` returns: the lower layer, the upper one, and one more drawing for
+each step of each animated family —water and animated tiles—. They all fit in 256
+colours, so an 8-bit indexed PNG keeps them **without losing a pixel**;
+the worst palette of the two batches has 167 colours.
 
-    abl (29 mapas)       78 dibujos    1,3 MB
-    pruebas (40 mapas)  102 dibujos    1,6 MB
+    abl (29 maps)        78 drawings   1.3 MB
+    pruebas (40 maps)   102 drawings   1.6 MB
 
-Los 40 del cartucho de pruebas incluyen a los 29 de `abl`, así que el artefacto
-entero son esos 1,6 MB. Los mismos pixeles crudos, a un byte cada uno, son
-114 MB: el PNG los deja en el 1,4%.
+The 40 of the test cartridge include the 29 of `abl`, so the whole artifact
+is those 1.6 MB. The same raw pixels, at one byte each, are
+114 MB: the PNG leaves them at 1.4%.
 
-El desglose dice dónde está el gordo, y es el que no hace falta guardar:
+The breakdown says where the bulk is, and it is the one that doesn't need to be kept:
 
-    base        40 dibujos    842 KB
-    encima      40 dibujos     88 KB
-    variantes   22 dibujos    680 KB
+    base        40 drawings   842 KB
+    upper       40 drawings    88 KB
+    variants    22 drawings   680 KB
 
-# Una forma más compacta que sigue siendo legible
+# A more compact form that is still readable
 
-Las variantes son el dibujo entero con **unas pocas celdas cambiadas**: son
-42% del peso y aportan 18.705 celdas de 16x16 distintas en total. Guardadas
-como una tira de sólo esas celdas —un PNG indexado más, que se abre y se mira
-igual— pasan de **680 KB a 21 KB**, y el artefacto entero de 1,6 MB a menos de
-1 MB. El costo es que hay que guardar al lado en qué celda va cada una, y que
-lo que se mira ya no es el mapa sino una tira de celdas.
+The variants are the whole drawing with **a few cells changed**: they are
+42% of the weight and contribute 18,705 distinct 16x16 cells in total. Stored
+as a strip of only those cells —one more indexed PNG, which opens and is looked at
+the same way— they go from **680 KB to 21 KB**, and the whole artifact from 1.6 MB to less than
+1 MB. The cost is that alongside it has to be stored which cell each one goes in, and that
+what you look at is no longer the map but a strip of cells.
 
-La otra forma, mucho más compacta todavía, es no guardar las capas sino **los
-17 ChipSets que las dibujan**: 518 KB, y siguen siendo las imágenes originales.
-Pero eso versiona el insumo y no el resultado, así que deja el dibujo adentro
-del build —que es justo lo que hoy ya no cuesta—. Sirve para sacar la
-dependencia, no para sacar el paso.
+The other form, much more compact still, is to store not the layers but **the
+17 ChipSets that draw them**: 518 KB, and they are still the original images.
+But that versions the input and not the result, so it leaves the drawing inside
+the build —which is precisely what no longer costs anything today—. It serves to remove the
+dependency, not to remove the step.
 
-# Qué haría falta para que el build no necesite el juego ni el RTP
+# What it would take for the build not to need the game or the RTP
 
-Las capas son **una** de las cosas que el build lee de `/extras/abl-rm` y
-`/extras/rtp`. Los datos ya no: `data/` es el volcado de Ditto y de ahí salen
-los mapas, la base y el árbol. Lo que queda son los gráficos y el audio, y cada
-uno tiene su camino propio:
+The layers are **one** of the things the build reads from `/extras/abl-rm` and
+`/extras/rtp`. The data no longer: `data/` is Ditto's dump and that is where
+the maps, the database and the tree come from. What remains is graphics and audio, and each
+one has its own path:
 
-    ChipSet        las capas de los mapas          render_map.atlas_por_nombre
-    CharSet        el héroe y los NPCs             render_map.Charsets.get
-    FaceSet        las caras del menú              titulo.cara_de
-    System         la ventana de mensaje           ventana.skin, titulo
-    Title          la pantalla de título           titulo
-    Backdrop       el fondo de las peleas          escena
-    Monster        los battlers                    escena
-    Battle/Battle2 las animaciones de batalla      animacion
-    Picture        las de `ShowPicture`            eventos.Recortes
-    Music (.mid)   los temas, y las pistas MSU-1   rm2k-snes-audio, msu
-    Sound (.wav)   los efectos                     rm2k-snes-audio
+    ChipSet        the maps' layers                render_map.atlas_por_nombre
+    CharSet        the hero and the NPCs           render_map.Charsets.get
+    FaceSet        the menu's faces                titulo.cara_de
+    System         the message window              ventana.skin, titulo
+    Title          the title screen                titulo
+    Backdrop       the battles' background         escena
+    Monster        the battlers                    escena
+    Battle/Battle2 the battle animations           animacion
+    Picture        those of `ShowPicture`          eventos.Recortes
+    Music (.mid)   the songs, and the MSU-1 tracks rm2k-snes-audio, msu
+    Sound (.wav)   the sound effects               rm2k-snes-audio
 
-Versionar las capas tacha **una sola línea** de esa lista, la primera. Las que
-quedarían afuera igual son todas las demás, y dos de ellas son las que más
-pesan: los CharSets —que son el otro gran costo del conversor hoy,
-`build_characters` y `sprite_colors`— y la carpeta `Music`, que son 230 MIDI
-del juego más 111 del RTP.
+Versioning the layers crosses off **a single line** of that list, the first. The ones
+that would stay out anyway are all the others, and two of them are the ones that weigh
+the most: the CharSets —which are the converter's other big cost today,
+`build_characters` and `sprite_colors`— and the `Music` folder, which is 230 MIDIs
+from the game plus 111 from the RTP.
 
-Y hay una que no se va nunca por esta vía: **el SoundFont**,
-`/extras/soundfonts/`, de donde salen las muestras. Ése no es del juego.
+And there is one that never goes away this way: **the SoundFont**,
+`/extras/soundfonts/`, where the samples come from. That one isn't the game's.
 
-Así que "el build no necesita el juego" es un objetivo de varios pasos, no de
-uno, y el orden que sale de lo medido es: capas (1,6 MB), personajes, y después
-el resto. La fuente ya está adentro del repo —`tools/port/fuente.py` es un
-generado de easyrpg-player— y no cuenta.
+So "the build doesn't need the game" is a goal of several steps, not of
+one, and the order that comes out of what was measured is: layers (1.6 MB), characters, and then
+the rest. The font is already inside the repo —`tools/port/fuente.py` is
+generated from easyrpg-player— and doesn't count.

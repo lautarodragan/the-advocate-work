@@ -1,20 +1,20 @@
 ---
-name: "El loop de la música, como RM2k"
-description: "Ninguno de los dos caminos hace el loop como RPG_RT: el MSU-1 vuelve a 0 después de 2-6 s de cola de fluidsynth; sin MSU-1 se corta en la última nota; ninguno saltea el silencio inicial ni lee CC111"
+name: "The music's loop, like RM2k"
+description: "Neither of the two paths loops like RPG_RT: the MSU-1 goes back to 0 after 2-6 s of fluidsynth tail; without MSU-1 it cuts at the last note; neither skips the initial silence nor reads CC111"
 type: bug
 status: todo
 agents: [Hornero]
 ---
 
-Medido el 2026-10-11 por Hornero, a pedido de taro ("tenemos pendiente el tema del loop de música en el msu, y no sé si ya lo hacemos bien sin msu o no"), con `abl.sfc` `24dd24ad…` y las herramientas de `6f933ff8`.
+Measured on 2026-10-11 by Hornero, at taro's request ("we still have the music loop issue on the msu pending, and I don't know whether we already do it right without msu or not"), with `abl.sfc` `24dd24ad…` and the tools at `6f933ff8`.
 
-**Lo que hace RPG_RT**, según easyrpg-player (`src/midisequencer.cpp`, `audio_decoder_midi.cpp`): al terminar —el último evento del MIDI, no la última nota— vuelve a la marca de loop, un Control Change 111 en cualquier canal, o al principio si no hay. La primera vez se saltea el silencio del principio y arranca en la primera nota, salvo que haya un SysEx antes; al volver, no.
+**What RPG_RT does**, according to easyrpg-player (`src/midisequencer.cpp`, `audio_decoder_midi.cpp`): on finishing —the MIDI's last event, not the last note— it goes back to the loop mark, a Control Change 111 on any channel, or to the start if there is none. The first time it skips the silence at the start and begins at the first note, unless there is a SysEx before it; on looping back, it doesn't.
 
-**Sin MSU-1** (`midi::timeline`, `stream::writes`, `music_frame` en `runtime/music.s`): el tema termina con su **última nota** y vuelve al principio, silencio incluido. Contra RM2k: no saltea el silencio inicial la primera vez, y los temas con un silencio entre la última nota y el fin de la pista lo pierden, así que el compás de la vuelta queda corto. No lee CC111.
+**Without MSU-1** (`midi::timeline`, `stream::writes`, `music_frame` in `runtime/music.s`): the song ends with its **last note** and goes back to the start, silence included. Against RM2k: it doesn't skip the initial silence the first time, and songs with a silence between the last note and the end of the track lose it, so the bar of the loop comes out short. It doesn't read CC111.
 
-**Con MSU-1** (`tracks.rs`): la pista es el MIDI entero renderizado con fluidsynth y el loop point es siempre 0. Las pistas de ABL duran **2 a 6 s más que sus notas**: la cola de release y reverb que agrega fluidsynth, que al volver queda como un hueco antes de que el tema empiece de nuevo. `escape_newyork` sobra 29 s, a mirar aparte. Tampoco saltea el silencio inicial ni lee CC111.
+**With MSU-1** (`tracks.rs`): the track is the whole MIDI rendered with fluidsynth and the loop point is always 0. ABL's tracks last **2 to 6 s longer than their notes**: the release and reverb tail that fluidsynth adds, which on looping remains as a gap before the song starts again. `escape_newyork` has 29 s extra, to be looked at separately. It doesn't skip the initial silence or read CC111 either.
 
-**Cuánto pesa en cada juego** (MIDIs con más de media negra de silencio al empezar / con más de una negra entre la última nota y el fin / con CC111):
+**How much it weighs in each game** (MIDIs with more than half a quarter note of silence at the start / with more than a quarter note between the last note and the end / with CC111):
 
     ABL              222   52   9   0
     Dooms 2           53   22   8   3
@@ -24,10 +24,10 @@ Medido el 2026-10-11 por Hornero, a pedido de taro ("tenemos pendiente el tema d
     El Dorado          3    2   0   0
     Desert Nightmare   1    0   1   0
 
-Un MIDI de ABL, `dgate008.mid`, no lo pudo leer el script de la medición —el conversor sí lo lee—, y el de VD no se midió.
+One of ABL's MIDIs, `dgate008.mid`, couldn't be read by the measurement script —the converter does read it—, and VD's wasn't measured.
 
-Lo que haría falta: el largo hasta el fin de la pista, no la última nota; CC111 como punto de vuelta en los dos caminos —en el stream, una vuelta a una posición en vez de al principio; en el MSU-1, el loop point en muestras—; saltear el silencio inicial la primera vez; y en el `.pcm`, cortar la cola de fluidsynth en el punto de vuelta. Recortar eso además achica los `.pcm`.
+What it would take: the length up to the end of the track, not the last note; CC111 as the loop point in both paths —in the stream, a jump back to a position instead of to the start; in the MSU-1, the loop point in samples—; skipping the initial silence the first time; and in the `.pcm`, cutting fluidsynth's tail at the loop point. Trimming that also shrinks the `.pcm` files.
 
-## Cómo va la cola en el `.pcm`, con taro
+## How the tail goes in the `.pcm`, with taro
 
-taro, el 2026-10-11: cortar la cola de golpe sonaría feo; "tendríamos que tener una versión del inicio del tema que tenga la cola del final y loopear desde 0 + len(cola)". Así se hace: renderizar la vuelta y, sin resetear el sintetizador, el comienzo de la siguiente —fluidsynth con el MIDI dos veces y `player.reset-synth=0`—, terminar la pista en E + D y poner el loop point en L + D, con E el fin de la primera vuelta, L el punto de vuelta (CC111, o 0) y D lo que dura la cola, con margen. Pasados D segundos la cola anterior ya se apagó, así que E + D y L + D suenan igual y el salto no se oye; la cola de la primera vuelta suena entera, pegada en el comienzo de la segunda. Con el silencio inicial salteado (largo S), el loop point es `max(L + D, S)` contado desde S. Sin MSU-1 no hace falta nada: el stream es de notas, y la reverb del DSP sigue a través de la vuelta.
+taro, on 2026-10-11: cutting the tail abruptly would sound ugly; "we'd have to have a version of the start of the song that has the tail of the end and loop from 0 + len(tail)". That's how it is done: render the pass and, without resetting the synthesiser, the beginning of the next one —fluidsynth with the MIDI twice and `player.reset-synth=0`—, end the track at E + D and put the loop point at L + D, with E the end of the first pass, L the loop point (CC111, or 0) and D how long the tail lasts, with margin. After D seconds the previous tail has already died out, so E + D and L + D sound the same and the jump isn't heard; the tail of the first pass sounds whole, stuck onto the beginning of the second. With the initial silence skipped (length S), the loop point is `max(L + D, S)` counted from S. Without MSU-1 nothing is needed: the stream is made of notes, and the DSP's reverb carries on through the loop.

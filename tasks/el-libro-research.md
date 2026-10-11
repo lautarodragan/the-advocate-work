@@ -1,44 +1,44 @@
 ---
-name: "El libro: los research de las herramientas, en inglés"
-description: "Los 9 estudios fechados de docs/research/ de snes-rm2k al libro, traducidos y sin actualizar sus números, en research/"
+name: "The book: the tools' research, in English"
+description: "The 9 dated studies in snes-rm2k's docs/research/ to the book, translated and without updating their numbers, in research/"
 type: docs
 status: testing
 assignee: taro
 agents: [Cardón]
 ---
 
-De taro, el 2026-10-10: toda la documentación en un solo lugar, el libro
-(`snes-rm2k-docs`), en inglés: "El libro es para personas y para IAs".
-Esta tarea es una de cuatro en paralelo; las convenciones comunes están en
-el encargo de Hornero, y Hornero arma el `SUMMARY.md` final, borra los
-originales y actualiza las referencias.
+From taro, on 2026-10-10: all the documentation in one place, the book
+(`snes-rm2k-docs`), in English: "The book is for people and for AIs".
+This task is one of four in parallel; the common conventions are in
+Hornero's brief, and Hornero builds the final `SUMMARY.md`, deletes the
+originals and updates the references.
 
-## Lo hecho (Cardón, 2026-10-10)
+## What was done (Cardón, 2026-10-10)
 
-Rama `cardon-research` de `snes-rm2k-docs`, sobre `149452a`, en un clon
-aparte: un commit por estudio, uno para `src/research/README.md` y uno
-aparte para el `SUMMARY.md`. Nada que instalar al mergear. Los nueve
-quedaron en `src/research/<slug>.md` con el slug en castellano y el título
-en inglés; el README explica que un research es una foto que no se toca.
-Cinco —el mapa de Python, el juego de pruebas, las herramientas hoy, las
-imágenes y los panoramas— los tradujeron forks míos; los revisé por
-muestras y buscando castellano suelto.
+Branch `cardon-research` of `snes-rm2k-docs`, on `149452a`, in a separate
+clone: one commit per study, one for `src/research/README.md` and a
+separate one for `SUMMARY.md`. Nothing to install when merging. The nine
+ended up in `src/research/<slug>.md` with the slug in Spanish and the title
+in English; the README explains that a research is a snapshot that isn't touched.
+Five —the Python map, the test game, the tools today, the
+pictures and the panoramas— were translated by forks of mine; I reviewed them by
+sampling and searching for stray Spanish.
 
-Criterios que tomé, para verlos al mergear:
+Criteria I adopted, to look at when merging:
 
-* La notación de los números pasó a la inglesa (5.601 → 5,601; 10,3% →
-  10.3%); los valores, no.
-* Las citas a `decisiones/x.md` y `divergencias/x.md` que existen pasaron
-  a links `../decisions/x.md` y `../divergences/x.md` (seis: dan rotos
-  hasta que entren las secciones de Mulita y Calandria); las citas entre
-  research, a links relativos; `docs/port/…`, `workflow/…` y `rom/…`
-  quedaron como texto, como estaban.
-* Identificadores, nombres de módulo y salidas de scripts en castellano
-  (`cartuchos`, `techos`, `## ARISTAS POR ARCHIVO`) quedaron tal cual:
-  son nombres de ese día.
-* Rutas de la máquina: una sola, "en el scratch" del juego de pruebas →
-  "in the scratch directory"; y "una ruta de esta máquina" del mapa de
-  Python → "a path on the development machine".
+* The number notation became the English one (5.601 → 5,601; 10,3% →
+  10.3%); the values didn't.
+* The citations to `decisiones/x.md` and `divergencias/x.md` that exist became
+  links `../decisions/x.md` and `../divergences/x.md` (six: they are broken
+  until Mulita's and Calandria's sections go in); the citations between
+  research, relative links; `docs/port/…`, `workflow/…` and `rom/…`
+  stayed as text, as they were.
+* Identifiers, module names and script output in Spanish
+  (`cartuchos`, `techos`, `## ARISTAS POR ARCHIVO`) stayed as is:
+  they are names of that day.
+* Machine paths: just one, "en el scratch" from the test game →
+  "in the scratch directory"; and "una ruta de esta máquina" from the Python
+  map → "a path on the development machine".
 
-Verificado: `mdbook build` sin warnings; los links entre páginas de
-research resuelven.
+Verified: `mdbook build` without warnings; the links between research
+pages resolve.

@@ -1,73 +1,73 @@
 ---
-name: "Otros juegos: el relevamiento"
-description: "Siete juegos de RM2k además de ABL —El Dorado, Sunset Over Imdahl, The Book of Three, Dooms 2, The Frozen World, Desert Nightmare, Vampires Dawn—: un proyecto para cada uno, qué compila, qué rompe y un primer cartucho sin MSU-1, para encontrar lo que comparten antes de arreglar nada"
+name: "Other games: the survey"
+description: "Seven RM2k games besides ABL —El Dorado, Sunset Over Imdahl, The Book of Three, Dooms 2, The Frozen World, Desert Nightmare, Vampires Dawn—: a project for each one, what compiles, what breaks and a first cartridge without MSU-1, to find what they share before fixing anything"
 type: research
 status: testing
 agents: [Aguará]
 assignee: taro
 ---
 
-De taro, el 2026-10-05: "Te dejé algunos juegos en /shared/otros-juegos/.
-Todos tienen distintos desafíos. Los probaría sin MSU primero, para
-simplificar todo." Copiados a disco local en `/extras/otros-juegos/`. Los
-siete son de RM2k (ninguno tiene `ldb_id` 2003). The Way Episode 1 vino
-como un .exe sin extraer y queda para después.
+From taro, on 2026-10-05: "I left you some games in /shared/otros-juegos/.
+They all have different challenges. I'd try them without MSU first, to
+simplify everything." Copied to local disk in `/extras/otros-juegos/`. The
+seven are RM2k (none has `ldb_id` 2003). The Way Episode 1 came
+as an unextracted .exe and is left for later.
 
-## Mientras se trabaja (Aguará, 2026-10-05)
+## While working (Aguará, 2026-10-05)
 
-Los proyectos van en `/extras/otros-juegos-snes/<juego>/`, cada uno su
-repo; los temporales en `/extras/scratch/aguara/`.
+The projects go in `/extras/otros-juegos-snes/<juego>/`, each one its own
+repo; the temporaries in `/extras/scratch/aguara/`.
 
-* **Ditto**: los siete vuelven byte por byte, después de buscar
-  `RPG_RT.LDB` sin mirar la caja (Sunset). Commit propio.
-* **Armar un proyecto**: la primera vez, contra "missing key", hubo que
-  llenar dieciséis secciones del `rm2k-snes.toml` de ABL con valores
-  neutros, un caso `nada.json` y un `[cases] debug_map_entry` que no
-  existe. Los otros seis salieron de un script descartable que copia el de
-  El Dorado (`nuevo.py`): es lo que haría un `rm2k-snes-project new`.
-* **Supuestos de ABL arreglados en la rama**: el mapa de debug obligatorio
-  (1), el cartucho de un solo mapa (3), el System y las caras sólo del
-  juego (5), cada uno en su commit.
-* **El barrido**: un cartucho por mapa, cada mapa solo, para ver dónde se
-  corta cada uno. `BOOT_FRAMES` subido a 255 **sólo en el árbol, sin
-  commitear**, para que el arranque de cada mapa no tape lo de atrás.
-* **Lo que tapa todo un juego**: la ventana de más de 15 colores (Dooms2,
-  Frozen World, Book of Three, Vampires Dawn), el grupo vacío al empezar
-  (Sunset, Desert), BMP (Dooms2). Para mirar detrás: una copia de enlaces
-  del juego con el System reducido a 12 colores y las BMP pasadas a PNG
-  (`juegos/granja.py`), y `party = [1]`.
-* **Ojo al instalar parcial**: cada binario lee el runtime del checkout
-  del que se instaló (`suite::runtime`). Con `cartridge` local y
-  `rm2k-snes-audio` global, `BOOT_FRAMES` salía de dos árboles distintos.
+* **Ditto**: all seven round-trip byte for byte, after looking up
+  `RPG_RT.LDB` case-insensitively (Sunset). Its own commit.
+* **Setting up a project**: the first time, against "missing key", sixteen
+  sections of ABL's `rm2k-snes.toml` had to be filled with neutral
+  values, a `nada.json` case and a `[cases] debug_map_entry` that doesn't
+  exist. The other six came from a throwaway script that copies El Dorado's
+  (`nuevo.py`): it is what a `rm2k-snes-project new` would do.
+* **ABL assumptions fixed in the branch**: the mandatory debug map
+  (1), the single-map cartridge (3), the System and the faces only from the
+  game (5), each in its own commit.
+* **The sweep**: one cartridge per map, each map alone, to see where each one
+  stops. `BOOT_FRAMES` raised to 255 **only in the tree, without
+  committing**, so that each map's boot doesn't hide what's behind it.
+* **What blocks a whole game**: the window with more than 15 colours (Dooms2,
+  Frozen World, Book of Three, Vampires Dawn), the empty party at the start
+  (Sunset, Desert), BMP (Dooms2). To look behind it: a copy of the game made of
+  links with the System reduced to 12 colours and the BMPs converted to PNG
+  (`juegos/granja.py`), and `party = [1]`.
+* **Careful with partial installs**: each binary reads the runtime from the checkout
+  it was installed from (`suite::runtime`). With local `cartridge` and
+  global `rm2k-snes-audio`, `BOOT_FRAMES` came from two different trees.
 
-## Resultado
+## Result
 
-El estudio, con la tabla y la recomendación:
-`docs/research/2026-10-05-otros-juegos.md`. Seis de los siete arman un
-cartucho que arranca; Vampires Dawn no (las variables).
+The study, with the table and the recommendation:
+`docs/research/2026-10-05-otros-juegos.md`. Six of the seven build a
+cartridge that starts; Vampires Dawn doesn't (the variables).
 
-**Dónde está cada cosa** (de esta máquina, por eso acá y no en el
-estudio):
+**Where each thing is** (on this machine, that's why here and not in the
+study):
 
-* los proyectos, cada uno su repo con un commit: `/extras/otros-juegos-snes/<juego>/`;
-* las ROMs: `/shared/builds/otros-juegos/<juego>.sfc`;
-* las hojas, original arriba y cartucho abajo:
+* the projects, each its own repo with one commit: `/extras/otros-juegos-snes/<juego>/`;
+* the ROMs: `/shared/builds/otros-juegos/<juego>.sfc`;
+* the sheets, original above and cartridge below:
   `/shared/capturas/2026-10-05-otros-juegos/<juego>.png`;
-* las copias de enlaces con el System reducido y las BMP en PNG, que los
-  cartuchos de Book of Three, Dooms 2, Frozen World y Desert necesitan para
-  armar: `/extras/scratch/aguara/juegos/<juego>/`, hechas con `granja.py`
-  de al lado. Se arman con `GAME_DIR=<copia> just cartuchos`.
+* the link copies with the reduced System and the BMPs as PNG, which the
+  cartridges of Book of Three, Dooms 2, Frozen World and Desert need to
+  build: `/extras/scratch/aguara/juegos/<juego>/`, made with the `granja.py`
+  next to them. They are built with `GAME_DIR=<copia> just cartuchos`.
 
-**Qué mirar**: que el comienzo de Book of Three, Frozen World y Dooms 2
-se parezca al original, y **el fondo de Desert Nightmare**, un panorama en
-modo 3 que sale basura celeste: es de los panoramas recién mergeados.
+**What to look at**: that the beginning of Book of Three, Frozen World and Dooms 2
+resembles the original, and **Desert Nightmare's background**, a mode 3
+panorama that comes out as light-blue garbage: it's from the newly merged panoramas.
 
-**Verificado**: las pruebas de cada crate tocado —`ditto`, `cartridge`,
-`screens`, `convert`, `wally`, `events`—, cada prueba nueva vista en rojo;
-`just -f tools/justfile test`; y la tanda de ABL (`b28864d`→`bfe49bf`,
-clon propio) con estas herramientas: 1136 en verde, `abl.sfc`
-`27e94e67039533a2…`, igual que antes. La tanda no corre ninguno de los
-siete juegos: lo que se dice de ellos sale del barrido y de las capturas.
+**Verified**: the tests of each touched crate —`ditto`, `cartridge`,
+`screens`, `convert`, `wally`, `events`—, each new test seen red;
+`just -f tools/justfile test`; and A Blurred Line's suite (`b28864d`→`bfe49bf`,
+own clone) with these tools: 1136 green, `abl.sfc`
+`27e94e67039533a2…`, same as before. The suite doesn't run any of the
+seven games: what is said about them comes from the sweep and the captures.
 
-**Al mergear, reinstalar**: `ditto cartridge screens convert wally events`.
-No toca el runtime ni la RAM.
+**When merging, reinstall**: `ditto cartridge screens convert wally events`.
+It doesn't touch the runtime or the RAM.

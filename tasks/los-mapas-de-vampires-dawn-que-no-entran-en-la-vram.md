@@ -1,43 +1,43 @@
 ---
-name: "Los mapas de Vampires Dawn que no entran en la VRAM"
-description: "Nueve mapas de Vampires Dawn —Shannar, Uruya, Melsan, Asran entre ellos— quedan afuera por la VRAM: cinco sin reparto que aguante fondo, sprites y capa de arriba, dos sin lugar para la ventana de mensajes y dos por su panorámica en modo 1"
+name: "The Vampires Dawn maps that don't fit in VRAM"
+description: "Nine Vampires Dawn maps —Shannar, Uruya, Melsan, Asran among them— are left out because of VRAM: five with no layout that holds background, sprites and upper layer, two with no room for the message window and two because of their panorama in mode 1"
 type: feature
 status: draft
 ---
 
-Lo que queda afuera de Vampires Dawn por VRAM, medido por Aguará el
-2026-10-11 (`vampires-dawn-arma-desde-su-toml.md`) y confirmado
-por Mulita al devolver los once de "la ROM"
-(`una-cuantizacion-por-personaje.md`, 10 afuera). Cada uno con su
-error en el comentario de `excluded` en `vampires-dawn/rm2k-snes.toml`
-(ports `a85b7e3`); no comprobado hoy.
+What is left out of Vampires Dawn because of VRAM, measured by Aguará on
+2026-10-11 (`vampires-dawn-arma-desde-su-toml.md`) and confirmed
+by Mulita when returning the eleven from "the ROM"
+(`una-cuantizacion-por-personaje.md`, 10 out). Each one with its
+error in the comment of `excluded` in `vampires-dawn/rm2k-snes.toml`
+(ports `a85b7e3`); not checked today.
 
-| mapa | qué dice |
+| map | what it says |
 |---|---|
-| 15 Shannar | "this map can't carry a message window": 576 de fondo, 436 de sprites, 130 de arriba, y ningún reparto deja los 8 KB de la ventana |
-| 150 Shannar danach | lo mismo, sólo en el cartucho entero (solo, entra) |
-| 57 Shannar Hinrichtung | "fits no VRAM layout": 609 de fondo, 768 de sprites, 130 de arriba |
+| 15 Shannar | "this map can't carry a message window": 576 of background, 436 of sprites, 130 of upper layer, and no layout leaves the window's 8 KB |
+| 150 Shannar danach | the same, only in the whole cartridge (alone, it fits) |
+| 57 Shannar Hinrichtung | "fits no VRAM layout": 609 of background, 768 of sprites, 130 of upper layer |
 | 99 Melsan | 451, 640, 177 |
-| 165 Uruya | 817, 768, 95 (solo, entra) |
-| 225 Asran | 780, 704, 116 (solo, entra) |
+| 165 Uruya | 817, 768, 95 (alone, it fits) |
+| 225 Asran | 780, 704, 116 (alone, it fits) |
 | 399 Wald12 | 716, 512, 136 |
 | 402, 403 Schneeklippe | "there is no layout for a panorama in mode 1 that holds … 435 panorama tiles" |
 
-**Lo que se sabe de la causa**: no es el fondo. La fusión de tiles
-(`fusionar-tiles-parecidos.md`, Cardón, 2026-10-06) baja cualquier
-fondo al tope y "ya no es lo que traba a ninguno"; lo que no entra son los
-sprites y la capa de arriba, y fusionar fondo no lo arregla. Cardón dejó
-anotado el paso siguiente posible: degradar los sprites con el mismo
-criterio, "otro tipo de fusión, más caro: son poses y paletas". La ventana
-de los 15 y 150 no es la del System: su banco es de 256 tiles fijos
-(Tijereta, `la-ventana-en-el-banco-de-tiles.md`). Que 150, 165 y
-225 entren solos y no en el cartucho entero es porque en el entero
-compilan más páginas y entran más eventos (Aguará).
+**What is known of the cause**: it isn't the background. Tile merging
+(`fusionar-tiles-parecidos.md`, Cardón, 2026-10-06) brings any
+background down to the ceiling and "it is no longer what blocks any of them"; what
+doesn't fit is the sprites and the upper layer, and merging background doesn't fix
+it. Cardón left noted the possible next step: degrade the sprites with the same
+criterion, "another kind of merging, more expensive: they are poses and palettes". The
+window of 15 and 150 isn't the System's: its bank is 256 fixed tiles
+(Tijereta, `la-ventana-en-el-banco-de-tiles.md`). That 150, 165 and
+225 fit alone and not in the whole cartridge is because in the whole one
+more pages compile and more events fit (Aguará).
 
-**Qué se ve jugando**: esos mapas no están en el cartucho, y un evento que
-lleve a ellos pierde la página entera (un `Teleport` a un mapa que no
-está no compila). Hasta dónde se puede jugar sin ellos no se miró.
+**What you see while playing**: those maps aren't in the cartridge, and an event
+that leads to them loses the whole page (a `Teleport` to a map that isn't
+there doesn't compile). How far it can be played without them wasn't looked at.
 
-**Cómo verlo**: sacar el mapa de `excluded` y `just cartuchos release` en
-`vampires-dawn/` de los ports (unos dos minutos; con el MSU-1, que el
-proyecto pide obligatorio).
+**How to see it**: remove the map from `excluded` and `just cartuchos release` in
+`vampires-dawn/` of the ports (about two minutes; with the MSU-1, which the
+project asks for as mandatory).

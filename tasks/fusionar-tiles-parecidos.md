@@ -1,56 +1,56 @@
 ---
-name: "Fusionar tiles parecidos cuando el fondo no entra"
-description: "Si el fondo de un mapa tiene más tiles distintos que los que entran en VRAM, se fusionan los más parecidos hasta que entre, con un aviso: un piso jugable algorítmico, sin intervenir a mano"
+name: "Merge similar tiles when the background doesn't fit"
+description: "If a map's background has more distinct tiles than fit in VRAM, the most similar ones are merged until it fits, with a warning: an algorithmic playable floor, without intervening by hand"
 type: feature
 status: testing
 agents: [Cardón]
 assignee: taro
 ---
 
-18 mapas de Vampires Dawn pasan el tope de unos 544 tiles de fondo (el
-mayor, Uruya, 817; el mundo, 597): medido por Hornero el 2026-10-06 con
-`wally layers` sobre los 440 mapas, en `/extras/scratch/hornero/vd-tiles/`.
+18 Vampires Dawn maps go past the ceiling of about 544 background tiles (the
+largest, Uruya, 817; the world, 597): measured by Hornero on 2026-10-06 with
+`wally layers` over the 440 maps, in `/extras/scratch/hornero/vd-tiles/`.
 
-taro, el 2026-10-06: "tal vez fusionar tiles sea un buen feature para tener,
-en general. incluso si queda feo, nos permite tener un lower bound jugable
-de forma algorítmica".
+taro, on 2026-10-06: "maybe merging tiles is a good feature to have,
+in general. even if it looks ugly, it lets us have a playable lower bound
+algorithmically".
 
-## Hecho (Cardón, 2026-10-06)
+## Done (Cardón, 2026-10-06)
 
-Va en `wally`, no en Adeleine ni en Voodoo: la decisión de qué se parece a
-qué es de Adeleine (`group_tiles`, el k-means de los fondos de modo 7) y
-se usa tal cual; lo que hay en `wally/src/background/fuse.rs` es el
-cableado —contar tiles como los cuenta Voodoo, con los espejos, y reescribir
-las celdas elegidas en la imagen del piso antes de que nadie la lea—.
+It goes in `wally`, not in Adeleine or Voodoo: the decision of what resembles
+what is Adeleine's (`group_tiles`, the k-means of the mode 7 backgrounds) and
+it is used as is; what is in `wally/src/background/fuse.rs` is the
+wiring —counting tiles the way Voodoo counts them, with the mirrors, and rewriting
+the chosen cells in the floor image before anyone reads it—.
 
-Es el **último paso** de `map::convert`, después de las imágenes, las
-ranuras compartidas, el caché y la caja de animaciones: sólo se pide si el
-mapa no entra en ningún reparto, y sólo si algún reparto aguanta sus sprites
-y su capa de arriba (si lo que sobra son sprites, fusionar no sirve). El tope
-es el fondo del reparto más grande que los aguanta; las animaciones de agua
-suman tiles después, así que si pasa se reintenta con menos (hasta 4 veces).
-Un mapa que ya entra no pasa por acá: byte por byte igual.
+It is the **last step** of `map::convert`, after the pictures, the
+shared slots, the cache and the animation box: it is only requested if the
+map doesn't fit in any layout, and only if some layout holds its sprites
+and its upper layer (if what's in excess is sprites, merging doesn't help). The ceiling
+is the background of the largest layout that holds them; the water animations
+add tiles afterwards, so if it goes over it is retried with fewer (up to 4 times).
+A map that already fits doesn't go through here: byte for byte the same.
 
-## Medido en Vampires Dawn (2026-10-06)
+## Measured on Vampires Dawn (2026-10-06)
 
-Con la fusión, **no arma**: se corta por otra cosa antes de llegar a los
-mapas que la necesitan, y no es del mismo tipo.
+With the merging, **it doesn't build**: it stops on something else before reaching
+the maps that need it, and it isn't of the same kind.
 
-* El fondo ya no es lo que traba a ninguno de los 18 mapas grandes: con el
-  tope de 544 baja cada uno a 544 (53 menos en el 1, 273 en Uruya, 260 en el
-  338; el 249 sólo 9). Capturas en `/shared/capturas/2026-10-06-fusionar-tiles/`.
-  En la conversión entera sólo se fusionaron el mapa 1 (68 tiles, al tope del
-  reparto que sus sprites dejan) y el 118 (134, a 480).
-* Lo que corta es **el banco de sprites y la capa de arriba**: mapa 15
-  (436 sprites con 576 de fondo), 57 (768), 95 (4096), 99 (832), 150 (436 con
-  609 y 130 arriba), 165 Uruya (768 con 817), 225 (832), 399 (512 con 136
-  arriba): ningún reparto aguanta esos sprites, y fusionar fondo no lo
-  arregla. Los paneles de modo 1 de los mapas 28 (3411 sprites), 402 y 403
-  tampoco entran. Y con esos afuera, `rm2k-snes-battle` se corta por una cosa
-  global: los encuentros no entran en tablas de un byte (121 registros, 136
-  zonas, 779 tropas).
-* El siguiente paso, si se quiere, es degradar los sprites con el mismo
-  criterio (otro tipo de fusión, más caro: son poses y paletas).
+* The background is no longer what blocks any of the 18 large maps: with the
+  ceiling of 544 each one goes down to 544 (53 fewer on map 1, 273 on Uruya, 260 on
+  338; 249 only 9). Captures in `/shared/capturas/2026-10-06-fusionar-tiles/`.
+  In the whole conversion only map 1 (68 tiles, to the ceiling of the
+  layout its sprites leave) and 118 (134, to 480) were merged.
+* What stops it is **the sprite bank and the upper layer**: map 15
+  (436 sprites with 576 of background), 57 (768), 95 (4096), 99 (832), 150 (436 with
+  609 and 130 upper), 165 Uruya (768 with 817), 225 (832), 399 (512 with 136
+  upper): no layout holds those sprites, and merging background doesn't
+  fix it. The mode 1 panels of maps 28 (3411 sprites), 402 and 403
+  don't fit either. And with those out, `rm2k-snes-battle` stops on something
+  global: the encounters don't fit in one-byte tables (121 records, 136
+  zones, 779 troops).
+* The next step, if wanted, is to degrade the sprites with the same
+  criterion (another kind of merging, more expensive: they are poses and palettes).
 
-Instalar al mergear: `wally` (`just -f tools/justfile install wally`).
-Tanda de ABL con `wally` local: 1150 verdes, `abl.sfc` `8bb36b99…` sin cambios.
+Install when merging: `wally` (`just -f tools/justfile install wally`).
+A Blurred Line's suite with local `wally`: 1150 green, `abl.sfc` `8bb36b99…` unchanged.
