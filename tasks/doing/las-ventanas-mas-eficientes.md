@@ -33,3 +33,21 @@ Lo que dijo taro, para tener en cuenta:
 * **Código distinto por juego** ("macros"): no lo descarta, pero sabe que
   suma superficie de bugs y quizás no aporte. Hoy ya hay algo así: el
   runtime bajo `.ifdef paint_table` y `.ifdef MSU_REQUIRED`.
+
+## El encargo (Hornero, 2026-10-11)
+
+Un research en el libro, no la implementación: las seis ideas —la perilla
+del fondo, la franja de la ventana de mensajes, el cursor en objetos, las
+caras fuera de BG1, la paleta de 16 de ABL y el código por juego—, cada
+una medida sobre los ocho juegos, con la perilla propuesta, el valor de
+cada juego y un orden de implementación en pasos chicos. Base:
+the-advocate `fc6f7456`, ports `a85b7e3`.
+
+## Cómo se mide (Tijereta)
+
+Los ocho juegos se arman en un worktree de los ports con un envoltorio de
+`rm2k-snes-screens` que guarda cada pedido; después se vuelve a correr
+`screens convert` sobre esos pedidos con Systems retocados —el fondo
+sólido, el cursor transparente— y caras en blanco, y se cuentan las
+teselas. Lo que cambia es lo que la idea ahorra. Los Systems se leen de
+los `.zip`; las copias retocadas van a `~/scratch/tijereta/`.
