@@ -1,237 +1,237 @@
 ---
-name: "Los justfile, más chicos"
-description: "Sacar de los dos justfile —el de las herramientas y el de ABL— las recetas que ya no se usan, y simplificar las que quedaron complicadas después de la migración a Rust y la separación en dos repos"
+name: "The justfiles, smaller"
+description: "Remove from the two justfiles —the tools' one and ABL's— the recipes that are no longer used, and simplify the ones that were left complicated after the migration to Rust and the split into two repos"
 type: refactor
 status: testing
 agents: [Calandria]
 assignee: taro
 ---
 
-De taro, el 2026-10-05: "creo que podemos eliminar cosas del `justfile`,
-no? Y simplificar otras?".
+From taro, on 2026-10-05: "I think we can remove things from the `justfile`,
+right? And simplify others?".
 
-## El inventario (Calandria, 2026-10-04)
+## The inventory (Calandria, 2026-10-04)
 
-Sobre `main` en `c8d5064f` y ABL en `c76157d`.
+On `main` at `c8d5064f` and ABL at `c76157d`.
 
-"Usuarios" es dónde se nombra fuera del propio `justfile`, en los dos
-repos y sin contar las tareas terminadas; "última" es el último commit que
-agregó o sacó una invocación suya fuera de los `justfile` —`git log -G
-'just… <receta>'`—, y "en `done/`" cuántas tareas terminadas cuentan
-haberla corrido. En ABL los commits del 2026-10-02 son el nacimiento del
-repo, y en éste `d356bfb7` es el borrado de lo que se fue: los dos dicen
-"se mudó", no "se usó". Y pesa una cosa que no está en git: **taro no
-corre recetas a mano** (lo dijo el 2026-09-06), así que su único usuario
-somos nosotros, y lo que se pesa es el costo de mantenerlas.
+"Users" is where it is named outside the `justfile` itself, in both
+repos and not counting finished tasks; "last" is the last commit that
+added or removed an invocation of it outside the `justfile`s —`git log -G
+'just… <recipe>'`—, and "in `done/`" is how many finished tasks report
+having run it. In ABL the commits of 2026-10-02 are the birth of the
+repo, and in this one `d356bfb7` is the deletion of what left: both say
+"it moved", not "it was used". And one thing weighs that is not in git:
+**taro does not run recipes by hand** (he said so on 2026-09-06), so its only
+user is us, and what is weighed is the cost of maintaining them.
 
-Los scripts que hicieron las cuentas, por si hay que rehacerlas, en
+The scripts that did the counting, in case they need redoing, are in
 `/extras/scratch/calandria/tmp/` (`usos.sh`, `ultimo.sh`, `done.sh`,
 `huerfanas.sh`).
 
 ### `tools/justfile`
 
-| receta | qué hace | usuarios | última | propuesta |
+| recipe | what it does | users | last | proposal |
 |---|---|---|---|---|
-| `test` | `pytest` de `tools/tests/`: capas, lectores del volcado, índices, nombres de juegos | README, `tools/tests/README.md`, AGENTS.md, la verificación de cada merge | 2026-10-04 | dejar |
-| `rust-test` | `cargo test --workspace`, en debug | README, `tools/README.md` | 2026-10-02 | dejar |
-| `gunter-test`, `rules-test`, `adeleine-test`, `voodoo-test`, `goombario-test`, `project-test`, `cartridge-test`, `patches-test`, `battle-test`, `bytecode-test`, `events-test`, `wally-test`, `screens-test`, `images-test`, `mapdata-test`, `convert-test` | `cd <crate> && cargo test` | ninguno | nunca | **pregunta 1** |
-| `lz2-test`, `render-test`, `audio-test` | lo mismo, en `--release` | `lz2-test` como ejemplo en `tools/README.md`; `audio-test` en AGENTS.md y `docs/port/audio.md`, con `SOUNDFONT` | 2026-10-02 | **pregunta 1** |
-| `ditto-test` | `cargo test` de Ditto, con `DITTO_CORPUS` | DITTO.md | 2026-09-29 | **pregunta 1** |
-| `ditto-round-trip` | Ditto en release con `--include-ignored`, y se niega sin `DITTO_CORPUS` | DITTO.md | 2026-09-29 | dejar: no es un `cargo test` pelado |
-| `install` | `cargo install` de los proyectos nombrados, o de todos, en `CARGO_ROOT` | AGENTS.md, `tools/README.md`, el error de `stage.rs` del conversor | 2026-10-04 | dejar |
-| `install-local` | lo mismo en un `bin/` de un worktree; se niega en el checkout principal | AGENTS.md, `.claude/agentes.md`, `tools/README.md` | 2026-10-04 | dejar |
-| `_not_in_main_checkout`, `_install` | privadas de las dos de arriba | `install`, `install-local` | — | dejar; la limpieza de symlinks de `_install`, **pregunta 2** |
-| `which` | qué binario resuelve este checkout para cada herramienta | una tarea (`los-bytecodes-en-rust`) | 2026-10-02 | dejar, y **arreglar**: le faltaban `rm2k-snes-mapdata` y `rm2k-snes-audio` |
+| `test` | `pytest` of `tools/tests/`: layers, dump readers, indices, game names | README, `tools/tests/README.md`, AGENTS.md, the verification of each merge | 2026-10-04 | keep |
+| `rust-test` | `cargo test --workspace`, in debug | README, `tools/README.md` | 2026-10-02 | keep |
+| `gunter-test`, `rules-test`, `adeleine-test`, `voodoo-test`, `goombario-test`, `project-test`, `cartridge-test`, `patches-test`, `battle-test`, `bytecode-test`, `events-test`, `wally-test`, `screens-test`, `images-test`, `mapdata-test`, `convert-test` | `cd <crate> && cargo test` | none | never | **question 1** |
+| `lz2-test`, `render-test`, `audio-test` | the same, in `--release` | `lz2-test` as an example in `tools/README.md`; `audio-test` in AGENTS.md and `docs/port/audio.md`, with `SOUNDFONT` | 2026-10-02 | **question 1** |
+| `ditto-test` | Ditto's `cargo test`, with `DITTO_CORPUS` | DITTO.md | 2026-09-29 | **question 1** |
+| `ditto-round-trip` | Ditto in release with `--include-ignored`, and it refuses without `DITTO_CORPUS` | DITTO.md | 2026-09-29 | keep: it is not a bare `cargo test` |
+| `install` | `cargo install` of the named projects, or of all of them, into `CARGO_ROOT` | AGENTS.md, `tools/README.md`, the converter's `stage.rs` error | 2026-10-04 | keep |
+| `install-local` | the same into a `bin/` of a worktree; refuses in the main checkout | AGENTS.md, `.claude/agentes.md`, `tools/README.md` | 2026-10-04 | keep |
+| `_not_in_main_checkout`, `_install` | private ones of the two above | `install`, `install-local` | — | keep; the symlink cleanup of `_install`, **question 2** |
+| `which` | which binary this checkout resolves for each tool | one task (`los-bytecodes-en-rust`) | 2026-10-02 | keep, and **fix**: it was missing `rm2k-snes-mapdata` and `rm2k-snes-audio` |
 
-### `justfile` de ABL
+### ABL's `justfile`
 
-| receta | qué hace | usuarios | última | propuesta |
+| recipe | what it does | users | last | proposal |
 |---|---|---|---|---|
-| `datos` | `ditto unpack` del juego a `data/` y `build/ditto-exacto/` | `rm2k-snes.toml`, `docs/port/pipeline.md`, `parches/manual/README.md`, el arnés, DITTO.md | 2026-10-02 (3 en `done/`) | dejar |
-| `ditto-volcado` | `just datos` a `/extras/volcado-ditto` | **ninguno**: ni docs, ni pruebas, ni una tarea, en ninguno de los dos repos | nunca | **borrar**: es `just datos <dir> <dir>-exacto` |
-| `datos-vuelta` | `unpack` + `pack` del juego, byte por byte contra el original | DITTO.md | 2026-09-29 (2 en `done/`) | dejar |
-| `pruebas` | la tanda, en paralelo, después de `cartuchos` | todo | 2026-10-03 | dejar |
-| `pruebas-rpgmaker`, `pruebas-abl`, `pruebas-herramientas` | la tanda de una carpeta | `pruebas/README.md` | 2026-10-02 (ninguna en `done/`) | **pregunta 3** |
-| `_xdist` | se niega si falta pytest-xdist | las cuatro de arriba | — | dejar |
-| `cartuchos` | `rm2k-snes-cartridges` con los flags de la máquina | `pruebas`, AGENTS.md, estudios | 2026-10-02 | dejar |
-| `espacio` | `rm2k-snes-space`, armando antes lo viejo | AGENTS.md, `main.s`, `emit.rs`, estudios | 2026-10-04 | dejar |
-| `parches` | copia a `parches/` las decisiones de `release` | `rm2k-snes-patches` (sus mensajes), `parches/README.md` | 2026-10-03 | dejar |
-| `parches-check` | `rm2k-snes-patches --check` | `test_parches.py`, `parches/README.md` | 2026-10-02 (7 en `done/`) | dejar; ver **pregunta 5** |
-| `techos` | `rm2k-snes-volume-ceilings` | `test_musica_techos.py`, `techos.toml`, `ceilings.rs` | 2026-10-03 | dejar |
-| `build` | `rm2k-snes-cartridges` con un nombre: **lo mismo que `cartuchos <nombre>`** | `parches`, `entregar`, `video`; `test_msu.py`, `docs/port/pipeline.md`, una tarea de la wishlist | 2026-10-02 | **pregunta 4** |
-| `entregar` | `entregar.py` después de armar `release` | AGENTS.md de los dos repos, `docs/snes/emulators.md` | 2026-10-02 | dejar |
-| `video` | `pruebas/arnes/video.py` | `test_video.py`, `pruebas/README.md` | 2026-10-02 (6 en `done/`) | dejar |
-| `menu-modo-5`, `fuentes` | ROM de prueba del menú en modo 5 y de las fuentes, y su verificación | `experimentos/` | 2026-10-02 (`una-fuente-para-la-alta-resolucion`) | **pregunta 6** |
-| `msu-puerto` | ROM de prueba del puerto de datos del MSU-1 | el estudio de los mapas por el MSU-1 (su fase 0 es medir el FX Pak) | 2026-10-02 | **pregunta 6** |
-| `exhirom` | ROM de prueba de ExHiROM | `docs/snes/emulators.md`, `experimentos/` | 2026-10-02 | **pregunta 6** |
-| `zoom-modo-7`, `zoom-modo-7-videos` | ROM de prueba del zoom en modo 7, y sus videos al lado del original | `experimentos/` | 2026-10-02 (`el-piloto-del-modo-7`) | **pregunta 6** |
+| `datos` | `ditto unpack` of the game to `data/` and `build/ditto-exacto/` | `rm2k-snes.toml`, `docs/port/pipeline.md`, `parches/manual/README.md`, the harness, DITTO.md | 2026-10-02 (3 in `done/`) | keep |
+| `ditto-volcado` | `just datos` to `/extras/volcado-ditto` | **none**: not docs, not tests, not a task, in neither of the two repos | never | **delete**: it is `just datos <dir> <dir>-exacto` |
+| `datos-vuelta` | `unpack` + `pack` of the game, byte for byte against the original | DITTO.md | 2026-09-29 (2 in `done/`) | keep |
+| `pruebas` | the suite, in parallel, after `cartuchos` | everything | 2026-10-03 | keep |
+| `pruebas-rpgmaker`, `pruebas-abl`, `pruebas-herramientas` | the suite of one folder | `pruebas/README.md` | 2026-10-02 (none in `done/`) | **question 3** |
+| `_xdist` | refuses if pytest-xdist is missing | the four above | — | keep |
+| `cartuchos` | `rm2k-snes-cartridges` with the machine's flags | `pruebas`, AGENTS.md, studies | 2026-10-02 | keep |
+| `espacio` | `rm2k-snes-space`, building what is stale first | AGENTS.md, `main.s`, `emit.rs`, studies | 2026-10-04 | keep |
+| `parches` | copies the decisions of `release` to `parches/` | `rm2k-snes-patches` (its messages), `parches/README.md` | 2026-10-03 | keep |
+| `parches-check` | `rm2k-snes-patches --check` | `test_parches.py`, `parches/README.md` | 2026-10-02 (7 in `done/`) | keep; see **question 5** |
+| `techos` | `rm2k-snes-volume-ceilings` | `test_musica_techos.py`, `techos.toml`, `ceilings.rs` | 2026-10-03 | keep |
+| `build` | `rm2k-snes-cartridges` with a name: **the same as `cartuchos <name>`** | `parches`, `entregar`, `video`; `test_msu.py`, `docs/port/pipeline.md`, a wishlist task | 2026-10-02 | **question 4** |
+| `entregar` | `entregar.py` after building `release` | AGENTS.md of both repos, `docs/snes/emulators.md` | 2026-10-02 | keep |
+| `video` | `pruebas/arnes/video.py` | `test_video.py`, `pruebas/README.md` | 2026-10-02 (6 in `done/`) | keep |
+| `menu-modo-5`, `fuentes` | test ROM of the menu in mode 5 and of the fonts, and their verification | `experimentos/` | 2026-10-02 (`una-fuente-para-la-alta-resolucion`) | **question 6** |
+| `msu-puerto` | test ROM of the MSU-1 data port | the study of maps over the MSU-1 (its phase 0 is measuring the FX Pak) | 2026-10-02 | **question 6** |
+| `exhirom` | ExHiROM test ROM | `docs/snes/emulators.md`, `experimentos/` | 2026-10-02 | **question 6** |
+| `zoom-modo-7`, `zoom-modo-7-videos` | test ROM of the mode 7 zoom, and its videos next to the original | `experimentos/` | 2026-10-02 (`el-piloto-del-modo-7`) | **question 6** |
 
-Lo que **no** encontré: ninguna receta de Python que envuelva un script
-que ya no existe, ninguna de `rom/`, y ninguna invocación `just X` en los
-docs que nombre una receta que no existe, fuera de las históricas
-(`hitos-foto`, en los dos AGENTS.md, y `diagnostico`, en un estudio
-fechado de ABL). La migración a Rust y la separación ya habían limpiado lo
-grueso.
+What I did **not** find: any Python recipe wrapping a script
+that no longer exists, any from `rom/`, and any `just X` invocation in the
+docs that names a recipe that does not exist, apart from the historical ones
+(`hitos-foto`, in both AGENTS.md, and `diagnostico`, in a dated study
+of ABL). The migration to Rust and the split had already cleaned up the
+bulk.
 
-## Lo aplicado
+## What was applied
 
-* `which` lista también `rm2k-snes-mapdata` y `rm2k-snes-audio`, que se
-  instalan y no listaba.
-* Se va `ditto-volcado`, de ABL.
-* Una línea de resumen al final del comentario de cada receta, en los dos
-  `justfile`: es la que muestra `just --list`, que hasta ahora mostraba la
-  cola de una frase. En ABL ya era la convención de la mitad de las
-  recetas.
-* La prosa del `tools/justfile` que había envejecido, en su commit: que
-  `rm2k-rules` todavía tiene una copia en Python (el conversor ya es Rust,
-  y `tests/test_rm2k_rules.py` no existe), que los nombres siguen "el repo
-  en que van a vivir cuando las herramientas se separen" y los `abl-`, y
-  que el `justfile` del juego "se niega" sin su `bin/` local (desde el
-  2026-10-02 usa el global).
+* `which` also lists `rm2k-snes-mapdata` and `rm2k-snes-audio`, which are
+  installed and it did not list.
+* `ditto-volcado` goes, from ABL.
+* A summary line at the end of each recipe's comment, in both
+  `justfile`s: it is the one `just --list` shows, which until now showed the
+  tail of a sentence. In ABL it was already the convention for half the
+  recipes.
+* The prose of `tools/justfile` that had aged, in its own commit: that
+  `rm2k-rules` still has a copy in Python (the converter is already Rust,
+  and `tests/test_rm2k_rules.py` does not exist), that the names follow "the repo
+  they will live in when the tools split" and the `abl-` ones, and
+  that the game's `justfile` "refuses" without its local `bin/` (since
+  2026-10-02 it uses the global one).
 
-## Preguntas para taro
+## Questions for taro
 
-1. **Las veinte `<crate>-test`.** Cada una es `cd <crate> && cargo
-   test` —tres en `--release`—, y casi ninguna la nombra nadie. Se podrían
-   reemplazar por una sola, `just crate-test lz2`, que haga `cargo test -p`
-   con el nombre del crate (y `--release` para los tres que lo piden), más
-   `rust-test` para todos. Lo que se perdería es el lugar de los
-   comentarios —"sus pruebas no necesitan el juego"—, que se mudarían al
-   `Cargo.toml` o al `lib.rs` de cada uno, donde los lee quien toca el
-   crate. Cambia nombres que nombran AGENTS.md, DITTO.md y
-   `docs/port/audio.md` (`audio-test`, `ditto-test`, `lz2-test`), y por
-   eso no lo apliqué. Mi propuesta: hacerlo.
-2. **La limpieza de symlinks de `_install`**: borra los `rm2k-snes-*` que
-   sean symlinks, que eran los scripts de Python hasta el 2026-10-02. En
-   `/usr/local/bin` ya no queda ninguno; en el `~/.cargo/bin` del host no
-   lo sé. Si ahí tampoco, sobra.
-3. **`pruebas-rpgmaker`, `-abl` y `-herramientas`**: tres recetas para una
-   carpeta cada una, que nadie corrió en ninguna tarea terminada. `just
-   pruebas` no sirve para eso porque le pasa `pruebas` a pytest siempre;
-   si en vez recibiera la carpeta —`just pruebas pruebas/abl`, y sin nada,
-   `pruebas`—, las tres se irían. Mi propuesta: hacerlo.
-4. **`build` es `cartuchos` con un argumento**: `just build release` y
-   `just cartuchos release` corren lo mismo. Se podría ir, con `parches`,
-   `entregar` y `video` dependiendo de `(cartuchos "release")`, y el
-   comentario largo de las pistas de MSU-1 mudándose a `cartuchos`. Cambia
-   un nombre que nombran `test_msu.py` y `docs/port/pipeline.md`. Mi
-   propuesta: hacerlo.
-5. **Las herramientas nombran recetas de ABL**: `rm2k-snes-patches` dice
-   "run `just parches`" y escribe en el encabezado de cada `parches/auto/`
-   "`just parches --check`" —que además no existe: es `just
-   parches-check`—, y `rm2k-snes-volume-ceilings` dice "`just techos`".
-   AGENTS.md dice que adentro de esos proyectos no se nombra el juego.
-   Arreglarlo cambia la salida de la herramienta y los archivos
-   versionados de `parches/` de ABL, así que no es de esta tarea: ¿va
-   una aparte?
-6. **Las seis recetas de los experimentos** (`menu-modo-5`, `fuentes`,
-   `msu-puerto`, `exhirom`, `zoom-modo-7`, `zoom-modo-7-videos`): son
-   ROMs de prueba de decisiones ya tomadas —el modo 5 y las fuentes, los
-   8 MB, el piloto del modo 7—, salvo `msu-puerto`, cuya fase 0 (medir el
-   FX Pak) sigue abierta. Cada script de `experimentos/` ya dice en su
-   encabezado cómo se corre. Se podrían ir del `justfile` y correrse
-   directo (`experimentos/exhirom/armar.py build/exhirom/exhirom.sfc && …`),
-   que es lo que hacen las recetas. Son media pantalla de `just --list`.
-   Mi propuesta: sacarlas, dejando en cada `experimentos/<x>/` las dos
-   líneas que corría la receta.
+1. **The twenty `<crate>-test`.** Each one is `cd <crate> && cargo
+   test` —three in `--release`—, and almost none is named by anyone. They could be
+   replaced by a single one, `just crate-test lz2`, that does `cargo test -p`
+   with the crate's name (and `--release` for the three that ask for it), plus
+   `rust-test` for all of them. What would be lost is the place for the
+   comments —"its tests do not need the game"—, which would move to the
+   `Cargo.toml` or the `lib.rs` of each one, where whoever touches the
+   crate reads them. It changes names that AGENTS.md, DITTO.md and
+   `docs/port/audio.md` name (`audio-test`, `ditto-test`, `lz2-test`), and
+   that is why I did not apply it. My proposal: do it.
+2. **The symlink cleanup of `_install`**: it deletes the `rm2k-snes-*` that
+   are symlinks, which were the Python scripts until 2026-10-02. In
+   `/usr/local/bin` there are none left; in the host's `~/.cargo/bin` I
+   don't know. If there are none there either, it is superfluous.
+3. **`pruebas-rpgmaker`, `-abl` and `-herramientas`**: three recipes for one
+   folder each, that nobody ran in any finished task. `just
+   pruebas` does not work for that because it always passes `pruebas` to pytest;
+   if instead it received the folder —`just pruebas pruebas/abl`, and with nothing,
+   `pruebas`—, the three would go. My proposal: do it.
+4. **`build` is `cartuchos` with an argument**: `just build release` and
+   `just cartuchos release` run the same thing. It could go, with `parches`,
+   `entregar` and `video` depending on `(cartuchos "release")`, and the
+   long comment about the MSU-1 tracks moving to `cartuchos`. It changes
+   a name that `test_msu.py` and `docs/port/pipeline.md` name. My
+   proposal: do it.
+5. **The tools name ABL recipes**: `rm2k-snes-patches` says
+   "run `just parches`" and writes in the header of each `parches/auto/`
+   "`just parches --check`" —which besides does not exist: it is `just
+   parches-check`—, and `rm2k-snes-volume-ceilings` says "`just techos`".
+   AGENTS.md says that inside those projects the game is not named.
+   Fixing it changes the tool's output and the versioned files
+   of ABL's `parches/`, so it is not for this task: does it go in
+   a separate one?
+6. **The six experiment recipes** (`menu-modo-5`, `fuentes`,
+   `msu-puerto`, `exhirom`, `zoom-modo-7`, `zoom-modo-7-videos`): they are
+   test ROMs of decisions already taken —mode 5 and the fonts, the
+   8 MB, the mode 7 pilot—, except `msu-puerto`, whose phase 0 (measuring the
+   FX Pak) is still open. Each script in `experimentos/` already says in its
+   header how it is run. They could leave the `justfile` and be run
+   directly (`experimentos/exhirom/armar.py build/exhirom/exhirom.sfc && …`),
+   which is what the recipes do. They are half a screen of `just --list`.
+   My proposal: remove them, leaving in each `experimentos/<x>/` the two
+   lines the recipe ran.
 
-Fuera del `justfile`, visto de paso: el encabezado de
-`tools/rm2k/rules/tests/python.rs` dice todavía que "las reglas existen
-también en Python, en el conversor que las sigue usando", y nombra
-`tests/test_rm2k_rules.py`, que no existe. No lo toqué: es del crate.
+Outside the `justfile`, seen in passing: the header of
+`tools/rm2k/rules/tests/python.rs` still says that "the rules exist
+also in Python, in the converter that still uses them", and names
+`tests/test_rm2k_rules.py`, which does not exist. I did not touch it: it belongs to the crate.
 
-## Verificado
+## Verified
 
-Con las herramientas globales: ninguna de las dos ramas toca Rust, así que
-al mergear no hay nada que instalar.
+With the global tools: neither of the two branches touches Rust, so
+at merge time there is nothing to install.
 
-* `just -f tools/justfile test`: 27 pasan.
-* La tanda de ABL en mi clon, con su rama (`calandria-justfile`): 1094
-  pasan. `abl.sfc` es `924c33ea3b51c958…`, la de antes.
-* `just --list` de los dos lados: veintiséis recetas en las herramientas y
-  veinte en ABL, cada una con su resumen.
-* `just entregar` con `SHARED=/extras/scratch/calandria/shared`: deja el
-  build con `abl.sfc`, `.dbg`, `abl.msu`, `tools/` y `LEEME.txt`. La
-  carpeta tiene que existir: `entregar.py` se niega si no, a propósito.
-* `cargo test --workspace --no-fail-fast`: **un rojo, que no es de esta
-  rama**: `the_layers_are_the_ones_the_python_made`, en
-  `wally/tests/background_python.rs` ("plain: the tiles"). Nació en
-  `bfa2e1c4` (la flecha del System): en su padre pasa, en él y en
-  `c8d5064f` falla —`cargo test -p wally --test background_python` en
-  cada uno—. Lo demás pasa.
+* `just -f tools/justfile test`: 27 pass.
+* ABL's suite in my clone, with its branch (`calandria-justfile`): 1094
+  pass. `abl.sfc` is `924c33ea3b51c958…`, the one from before.
+* `just --list` on both sides: twenty-six recipes in the tools and
+  twenty in ABL, each one with its summary.
+* `just entregar` with `SHARED=/extras/scratch/calandria/shared`: leaves the
+  build with `abl.sfc`, `.dbg`, `abl.msu`, `tools/` and `LEEME.txt`. The
+  folder has to exist: `entregar.py` refuses otherwise, on purpose.
+* `cargo test --workspace --no-fail-fast`: **one red, which is not from this
+  branch**: `the_layers_are_the_ones_the_python_made`, in
+  `wally/tests/background_python.rs` ("plain: the tiles"). It was born in
+  `bfa2e1c4` (the System's arrow): in its parent it passes, in it and in
+  `c8d5064f` it fails —`cargo test -p wally --test background_python` on
+  each—. Everything else passes.
 
-Lo que no corrí: las recetas de los experimentos, y `datos` y
-`datos-vuelta`, que sólo cambiaron su comentario.
+What I did not run: the experiment recipes, and `datos` and
+`datos-vuelta`, which only changed their comment.
 
-# Lo que decidió taro
+# What taro decided
 
-El 2026-10-05: "Me gustan todas tus propuestas para el justfile! Y la verdad
-que no instalo nada de esto ni lo corro en el host, así que no lo tengas en
-cuenta por ese lado. Si corro algo a mano, lo haré dentro del contenedor, y
-te preguntaré primero". O sea, las seis preguntas, sí: las `<crate>-test`
-en una, sin la limpieza de symlinks de `_install`, un solo `pruebas` con la
-carpeta, sin `build`, las herramientas que nombran recetas de ABL (que acá
-iban como tarea aparte y van en ésta), y sin las recetas de los
-experimentos cerrados, salvo `msu-puerto`.
+On 2026-10-05: "I like all your proposals for the justfile! And the truth
+is I don't install any of this or run it on the host, so don't take it into
+account from that side. If I run something by hand, I'll do it inside the container, and
+I'll ask you first". That is, the six questions, yes: the `<crate>-test`
+into one, without the symlink cleanup of `_install`, a single `pruebas` with the
+folder, without `build`, the tools that name ABL recipes (which here
+were going as a separate task and go in this one), and without the recipes of the
+closed experiments, except `msu-puerto`.
 
-## Lo aplicado después (Calandria, 2026-10-04)
+## What was applied afterwards (Calandria, 2026-10-04)
 
-Sobre `main` en `8b7766ad` y ABL en `83e4886`.
+On `main` at `8b7766ad` and ABL at `83e4886`.
 
-En las herramientas:
+In the tools:
 
-* `crate-test <proyecto> [args]` en lugar de las veinte `<crate>-test`:
-  `cargo test` parado en el proyecto, como antes, con el nombre de
-  `rust_projects`. Las tres que iban en `--release` van en debug, como
-  `rust-test`: medidas, tardan uno o dos segundos. Lo que decían sus
-  comentarios se mudó al README o al `lib.rs` de los siete crates que no
-  lo decían ya. `AGENTS.md`, `DITTO.md`, `docs/port/audio.md`,
-  `tools/README.md` y `tools/tests/README.md` nombran `crate-test`.
-* `_install` sin la limpieza de symlinks.
-* `rm2k-snes-patches` y `rm2k-snes-volume-ceilings` nombran el binario y
-  su flag en vez de `just parches`, `just parches --check` y `just
-  techos`; el encabezado de `techos.toml` tampoco nombra ya
-  `test_musica_techos.py` ni las funciones del Python que no existen. Las
-  pruebas de patches cambian hashes y tamaños: cada parche nuevo, con el
-  encabezado viejo puesto de vuelta, da el hash del Python (los diez).
-* `docs/snes/emulators.md` y una tarea de la wishlist, que nombraban
-  `just exhirom` y `just build`.
-* La prosa del host, en su commit: `CARGO_ROOT=~/.cargo`, el párrafo de la
-  simetría host-contenedor y "si taro lo va a correr desde el host".
+* `crate-test <project> [args]` instead of the twenty `<crate>-test`:
+  `cargo test` standing in the project, as before, with the name from
+  `rust_projects`. The three that ran in `--release` run in debug, like
+  `rust-test`: measured, they take one or two seconds. What their
+  comments said moved to the README or the `lib.rs` of the seven crates that
+  did not already say it. `AGENTS.md`, `DITTO.md`, `docs/port/audio.md`,
+  `tools/README.md` and `tools/tests/README.md` name `crate-test`.
+* `_install` without the symlink cleanup.
+* `rm2k-snes-patches` and `rm2k-snes-volume-ceilings` name the binary and
+  its flag instead of `just parches`, `just parches --check` and `just
+  techos`; the header of `techos.toml` no longer names
+  `test_musica_techos.py` nor the Python functions that do not exist either. The
+  patches tests change hashes and sizes: each new patch, with the
+  old header put back, gives the Python's hash (all ten).
+* `docs/snes/emulators.md` and a wishlist task, which named
+  `just exhirom` and `just build`.
+* The host prose, in its own commit: `CARGO_ROOT=~/.cargo`, the paragraph about the
+  host-container symmetry and "if taro is going to run it from the host".
 
-En ABL (rama `calandria-justfile` de `/extras/scratch/calandria/abl`):
+In ABL (branch `calandria-justfile` of `/extras/scratch/calandria/abl`):
 
-* Un solo `pruebas`, que le pasa todo a pytest; sin ruta corre `pruebas`
-  porque lo dice `testpaths` en `pytest.ini`.
-* Sin `build`: `parches`, `entregar` y `video` dependen de `cartuchos`, que
-  se quedó con su comentario.
-* Sin `menu-modo-5`, `fuentes`, `exhirom`, `zoom-modo-7` ni
-  `zoom-modo-7-videos`; cada `experimentos/<x>/` dice sus líneas.
-* Los 181 parches de `parches/auto/` con el encabezado nuevo, de `just
-  parches`, y el de `techos.toml` a mano, igual al que escribe la
-  herramienta.
-* La misma prosa del host en su `AGENTS.md`.
+* A single `pruebas`, which passes everything to pytest; with no path it runs `pruebas`
+  because `testpaths` in `pytest.ini` says so.
+* Without `build`: `parches`, `entregar` and `video` depend on `cartuchos`, which
+  kept its comment.
+* Without `menu-modo-5`, `fuentes`, `exhirom`, `zoom-modo-7` or
+  `zoom-modo-7-videos`; each `experimentos/<x>/` states its lines.
+* The 181 patches of `parches/auto/` with the new header, from `just
+  parches`, and the one of `techos.toml` by hand, equal to what the
+  tool writes.
+* The same host prose in its `AGENTS.md`.
 
-**Al mergear: reinstalar `patches` y `rm2k-snes-audio`.** Lo demás que
-cambió en Rust son comentarios.
+**At merge time: reinstall `patches` and `rm2k-snes-audio`.** Everything else that
+changed in Rust is comments.
 
-### Verificado
+### Verified
 
-Con `patches` y `rm2k-snes-audio` de esta rama instalados en local, y lo
-demás del global:
+With `patches` and `rm2k-snes-audio` from this branch installed locally, and the
+rest from the global:
 
-* `just -f tools/justfile test`: 27 pasan. `cargo test --workspace
-  --no-fail-fast`: 672 pasan y ninguna falla (el rojo de wally de la vez
-  pasada ya no está en `main`).
-* `just crate-test lz2` y `crate-test ditto` corren; `crate-test nope` se
-  niega con la lista.
-* La tanda de ABL, `just pruebas` en mi clon: **1101 pasan**. `just
-  pruebas pruebas/herramientas`: 81. `abl.sfc` es `5c50524fea3111ba…`,
-  igual que antes.
-* `just --list`: siete recetas en las herramientas y once en ABL.
-* `just entregar` con `SHARED` en una carpeta mía: deja `abl.sfc`,
-  `.dbg`, `abl.msu`, `tools/` y `LEEME.txt`.
+* `just -f tools/justfile test`: 27 pass. `cargo test --workspace
+  --no-fail-fast`: 672 pass and none fails (last time's wally red
+  is no longer in `main`).
+* `just crate-test lz2` and `crate-test ditto` run; `crate-test nope`
+  refuses with the list.
+* ABL's suite, `just pruebas` in my clone: **1101 pass**. `just
+  pruebas pruebas/herramientas`: 81. `abl.sfc` is `5c50524fea3111ba…`,
+  the same as before.
+* `just --list`: seven recipes in the tools and eleven in ABL.
+* `just entregar` with `SHARED` in a folder of mine: leaves `abl.sfc`,
+  `.dbg`, `abl.msu`, `tools/` and `LEEME.txt`.
 
-Lo que no corrí: los experimentos cuyas recetas se fueron (sólo cambió
-el encabezado de sus scripts), `techos` (cuatro minutos midiendo; su
-encabezado se cambió a mano) y `datos`.
+What I did not run: the experiments whose recipes went away (only
+the header of their scripts changed), `techos` (four minutes measuring; its
+header was changed by hand) and `datos`.

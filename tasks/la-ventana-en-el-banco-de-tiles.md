@@ -1,82 +1,82 @@
 ---
-name: "La ventana en el banco de tiles"
-description: "Un System con el fondo en degradé estirado pide un tile por tono: la ventana de mensajes pasa de 256 tiles y la elección de actor de su rango de VRAM"
+name: "The window in the tile bank"
+description: "A System with a stretched gradient background asks for one tile per shade: the message window goes over 256 tiles and the actor choice over its VRAM range"
 type: feature
 status: testing
 agents: [Tijereta]
 assignee: taro
 ---
 
-Lo que quedó detrás de `la-ventana-con-mas-colores` (Tijereta, 2026-10-05).
-Con el System original y los colores ya reducidos por Adeleine, la ventana
-de mensajes de The Frozen World pide 266 tiles de 256 y la de The Book of
-Three 267; la elección de actor de Dooms 2 se pasa de `$4800`.
+What was left behind `la-ventana-con-mas-colores` (Tijereta, 2026-10-05).
+With the original System and the colors already reduced by Adeleine, the message
+window of The Frozen World asks for 266 tiles of 256 and that of The Book of
+Three 267; Dooms 2's actor choice goes over `$4800`.
 
-Fusionar más colores hasta que entren (`adeleine::merge_until` con los tiles
-como condición) se probó y no sirve: Frozen queda en 4 colores y Book of
-Three en 2. Lo que hace falta es del lado de los tiles —agrupar los
-parecidos, como `adeleine::group_tiles` con los panoramas, o un fondo
-repetido en vez de estirado—, y es de criterio: taro tiene que verlo.
+Merging more colors until they fit (`adeleine::merge_until` with the tiles
+as the condition) was tried and doesn't work: Frozen ends up with 4 colors and Book of
+Three with 2. What's needed is on the tiles' side —grouping the
+similar ones, like `adeleine::group_tiles` with the panoramas, or a repeated
+background instead of a stretched one—, and it's a judgment call: taro has to see it.
 
-## El encargo (Hornero, 2026-10-11)
+## The assignment (Hornero, 2026-10-11)
 
-taro, el 2026-10-11, lo eligió como lo siguiente para los otros juegos:
-frena a cuatro —Book of Three (267 de 256), Frozen World (266), Vampires
-Dawn (262, el mapa 15: "this map can't carry a message window") y Dooms 2
-(la elección de actor pasa de `$4800`; con el mapa 1, las ranuras y el
-menú juntan 482–524 tiles de 448)—. Lo de criterio lo decide quien lo
-hace, con capturas antes y después en `/shared/capturas/` para que taro
-lo mire; si se ve bien, está bien. Que sea genérico: nada por juego, y
-ABL —que ya entra— no se mueve (`abl.sfc` byte por byte igual, si se
-puede; si no, goldens mostradas).
+taro, on 2026-10-11, chose it as the next thing for the other games:
+it holds back four —Book of Three (267 of 256), Frozen World (266), Vampires
+Dawn (262, map 15: "this map can't carry a message window") and Dooms 2
+(the actor choice goes over `$4800`; with map 1, the slots and the
+menu add up to 482–524 tiles of 448)—. The judgment calls are decided by whoever
+does it, with before and after captures in `/shared/capturas/` for taro
+to look at; if it looks fine, it is fine. It must be generic: nothing per game, and
+ABL —which already fits— doesn't move (`abl.sfc` byte for byte the same, if
+possible; if not, goldens shown).
 
-## Lo que se hizo (Tijereta, 2026-10-11)
+## What was done (Tijereta, 2026-10-11)
 
-Ramas `tijereta-ventana-tiles` en the-advocate, en los ports y en el libro.
-La decisión, con los dos caminos que se midieron y dónde se rompe cada uno:
-"A window with a gradient is fused until it fits" en el libro.
+Branches `tijereta-ventana-tiles` in the-advocate, in the ports and in the book.
+The decision, with the two paths that were measured and where each one breaks:
+"A window with a gradient is fused until it fits" in the book.
 
-- **Ventana de mensajes**: el área de texto ya tiene un tile por celda; lo
-  que se pasaba era el marco y la flecha (26–28 de 16). Se funde **el fondo
-  que se ve a través del marco** (`group_cells`) y el marco va encima tal
-  cual: los adornos quedan, el degradé del área de texto queda como en RM2k.
-- **Las pantallas a 8bpp** (elección de actor con la barra del menú,
-  objetos y equipo, tienda, pelea): `fit.rs` corta sus celdas como
-  `borders` y, si no entran, Adeleine (`merge_least_visible_tiles`, nuevo)
-  funde de a una la que menos se ve. Viaja en el `Skin`, así `convert` y
-  `render` dibujan lo mismo.
-- **End Game**: no eran tiles sino colores (pares que no entraban en una
-  paleta, también Desert Nightmare): `merge_until` con el negro fijo.
-- **Objetos y equipo dejan lugar a su texto**: `item_pairs` mide la lista
-  más cargada y las ventanas se funden también si entran en el banco pero
-  dejan al texto sin pares. Lo encontró la ROM de Book of Three: con las
-  ventanas fundidas hasta el tope, al volver al menú salían "L 23" y
-  "999". Y era de antes: Frozen World dejaba 82 pares de los 132.
+- **Message window**: the text area already has one tile per cell; what
+  went over was the frame and the arrow (26–28 of 16). **The background
+  seen through the frame** is fused (`group_cells`) and the frame goes on top as
+  is: the ornaments stay, the text area's gradient stays as in RM2k.
+- **The 8bpp screens** (actor choice with the menu bar,
+  items and equipment, shop, battle): `fit.rs` cuts their cells like
+  `borders` and, if they don't fit, Adeleine (`merge_least_visible_tiles`, new)
+  fuses one at a time the least visible one. It travels in the `Skin`, so `convert` and
+  `render` draw the same.
+- **End Game**: it wasn't tiles but colors (pairs that didn't fit in a
+  palette, also Desert Nightmare): `merge_until` with black fixed.
+- **Items and equipment leave room for their text**: `item_pairs` measures the most
+  loaded list and the windows are also fused if they fit in the bank but
+  leave the text without pairs. Book of Three's ROM found it: with the
+  windows fused up to the limit, on returning to the menu "L 23" and
+  "999" came out. And it was older: Frozen World left 82 pairs of the 132.
 
-Descartados, medidos: el fondo repetido (el marco seguía en 14–16 celdas
-más la flecha, y el degradé se vuelve serrucho) y fundir ventanas enteras
-por k-means (con Royal el marco y la barra solos son 85 de 64; se comía
-esquinas). Fusionar colores se había descartado el 2026-10-05.
+Discarded, measured: the repeated background (the frame was still at 14–16 cells
+plus the arrow, and the gradient turns into a sawtooth) and fusing whole windows
+by k-means (with Royal the frame and the bar alone are 85 of 64; it ate
+corners). Merging colors had been discarded on 2026-10-05.
 
-Los cinco juegos vuelven a su System, salvo Vampires Dawn: sus pantallas
-entran, pero la ROM se pasa por una pieza de 64 KB, así que conserva el de
-ABL con el comentario de por qué. Los mapas 15 y 150 de VD no son de la
-ventana: es el mapa el que no deja los 8 KB fijos de la ventana.
+The five games go back to their System, except Vampires Dawn: its screens
+fit, but the ROM goes over by one 64 KB piece, so it keeps ABL's
+with the comment of why. VD's maps 15 and 150 aren't about the
+window: it's the map that doesn't leave room for the window's fixed 8 KB.
 
-## Qué quedó
+## What's left
 
-- **Dooms 2, mapa 1**: con su System las ranuras y el menú juntan 482 de
-  448, y son caras, no ventanas. Tarea aparte.
-- **Vampires Dawn con VDBlutsys**: la ROM, no la ventana.
-- Nadie jugó las pantallas fundidas: hay capturas de la ROM de la ventana
-  en juego (BoT, Frozen, Dooms 2) y del menú y la pantalla de objetos (BoT,
-  Dooms 2); la elección de actor, el equipo y la tienda sólo por `render`.
-- La tanda de ABL no ejecuta ningún camino de éstos: ABL entra y sale byte
-  por byte igual. La prueba que sí los ejecuta es `system_gradient.rs`, en
-  `screens`, sin ROM.
+- **Dooms 2, map 1**: with its System the slots and the menu add up to 482 of
+  448, and they're faces, not windows. Separate task.
+- **Vampires Dawn with VDBlutsys**: the ROM, not the window.
+- Nobody played the fused screens: there are captures from the ROM of the window
+  in-game (BoT, Frozen, Dooms 2) and of the menu and the items screen (BoT,
+  Dooms 2); the actor choice, the equipment and the shop only through `render`.
+- ABL's suite doesn't execute any of these paths: ABL goes in and out byte
+  for byte the same. The test that does execute them is `system_gradient.rs`, in
+  `screens`, without a ROM.
 
-## Al mergear
+## On merging
 
-Reinstalar `adeleine`, `rm2k-render` y `screens` (lib en los dos primeros:
-`screens` es el binario que cambia). Capturas en
+Reinstall `adeleine`, `rm2k-render` and `screens` (lib in the first two:
+`screens` is the binary that changes). Captures in
 `/shared/capturas/2026-10-11-la-ventana-en-el-banco-de-tiles/`.

@@ -1,12 +1,12 @@
 ---
-name: "Las imágenes en BMP"
-description: "RM2k acepta BMP además de PNG (CharSet, ChipSet, System, Picture…); las herramientas leen sólo PNG, y Dooms 2 no arma por un CharSet en BMP"
+name: "Images in BMP"
+description: "RM2k accepts BMP as well as PNG (CharSet, ChipSet, System, Picture…); the tools read only PNG, and Dooms 2 doesn't build because of a CharSet in BMP"
 type: feature
 status: testing
 agents: [Chajá]
 assignee: Chajá
 ---
 
-Del relevamiento de otros juegos (`docs/research/2026-10-05-otros-juegos.md`):
-Dooms 2 tiene tres BMP (`CharSet/clown.bmp` entre ellas), y armaba sólo con
-una copia pasada a PNG. taro, el 2026-10-05: "vamos con el bmp".
+From the survey of other games (`docs/research/2026-10-05-otros-juegos.md`):
+Dooms 2 has three BMPs (`CharSet/clown.bmp` among them), and it built only with
+a copy converted to PNG. taro, on 2026-10-05: "let's go with bmp".

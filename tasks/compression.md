@@ -1,35 +1,35 @@
 ---
-name: "Compresión"
-description: "Comprimir lo que viaja en la ROM: medido, un 75% menos"
+name: "Compression"
+description: "Compress what travels in the ROM: measured, 75% less"
 type: feature
 status: wishlist
 ---
 
-Lo que se puede esperar de comprimir, medido: la parte usada de
-`abl` —3,12 MB cuando se midió; hoy es menos, desde que la escena de la pelea
-guarda cada fondo una vez— deflatea a **791 KB, un 75% menos**. El grueso del
-cartucho son gráficos, que es lo compresible, y descomprimir al cargar un
-mapa es la técnica de la consola. 
+What can be expected from compressing, measured: the used part of
+`abl` —3.12 MB when it was measured; today it is less, since the battle scene
+stores each background once— deflates to **791 KB, 75% less**. The bulk of the
+cartridge is graphics, which is what compresses, and decompressing when loading a
+map is the console's technique.
 
-Ojo con medirlo mal: el `.sfc` entero da
-97% porque el millón de ceros de relleno comprime a nada, y el `mapdata.inc`
-da 89% porque es **texto** —números decimales con comas—, no los bytes que
-viajan en la ROM.
+Careful not to measure it wrong: the whole `.sfc` gives
+97% because the million padding zeros compress to nothing, and `mapdata.inc`
+gives 89% because it is **text** —decimal numbers with commas—, not the bytes that
+travel in the ROM.
 
-Lo que el mapa ya ahorra sin comprimir, para no rehacerlo: no se guarda el
-tilemap sino la **celda de 16×16 de RM2k**, con sus cuatro celdas de fondo,
-sus cuatro de la capa de encima y su pasabilidad juntas —512 bloques
-distintos en todo el juego—. En el mapa 52 eso es 40.000 B contra 160.000, y
-**borró la tabla de colisión entera**. Medido aparte: **el 85,3% de la capa
-de encima es el tile vacío**, así que si hiciera falta más, el primer lugar
-donde mirar es un RLE sobre la grilla de bloques, no los ceros de la capa.
+What the map already saves without compressing, so as not to redo it: what is stored is not the
+tilemap but **RM2k's 16×16 cell**, with its four background cells,
+its four of the upper layer and its passability together —512 distinct
+blocks in the whole game—. On map 52 that is 40,000 B against 160,000, and
+**it erased the whole collision table**. Measured separately: **85.3% of the upper
+layer is the empty tile**, so if more were needed, the first place
+to look is an RLE over the block grid, not the zeros of the layer.
 
-Comprimir mapas tiene un desafío extra, porque los stremeamos en vivo del
-cartucho, y cambiarles el formato afectaría el acceso aleatorio.
+Compressing maps has an extra challenge, because we stream them live from the
+cartridge, and changing their format would affect random access.
 
-**Medido por clase y algoritmo, con el costo de descomprimir cada cosa y el
-orden en que conviene hacerlo**: `tasks/la-compresion-de-mapas-y-graficos.md`,
-del 2026-09-26. Las animaciones de batalla ya se guardan sin sus tiles vacíos,
-los tiles y las grillas de los mapas van en LZ2 —la grilla se descomprime
-entera a la WRAM, así que el acceso aleatorio siguió igual— y las poses
-iguales se guardan una vez.
+**Measured by class and algorithm, with the cost of decompressing each thing and the
+order in which it is best done**: `tasks/la-compresion-de-mapas-y-graficos.md`,
+from 2026-09-26. The battle animations are already stored without their empty tiles,
+the maps' tiles and grids go in LZ2 —the grid is decompressed
+whole to WRAM, so random access stayed the same— and identical poses
+are stored once.

@@ -1,63 +1,63 @@
 ---
-name: "El libro: el tablero contra RM2k, en inglés"
-description: "El artifact \"El motor contra RPG Maker 2000\" al libro como HTML tal cual, traducido al inglés, y enlazado desde una página"
+name: "The book: the board against RM2k, in English"
+description: "The artifact \"El motor contra RPG Maker 2000\" into the book as HTML as is, translated into English, and linked from a page"
 type: docs
 status: testing
 assignee: taro
 agents: [Aguará]
 ---
 
-De taro, el 2026-10-10: el tablero que Aguará inventarió y Hornero publicó
-el 2026-10-06 (`el-tablero-contra-rm2k.md`) pasa al libro "copiando
-su .html como está, y vinculándolo desde el libro, en vez de convertirlo
-todo a markdown. Sí lo traduciría a inglés." Es la quinta de las tareas en
-paralelo de la documentación al libro.
+From taro, on 2026-10-10: the board that Aguará inventoried and Hornero published
+on 2026-10-06 (`el-tablero-contra-rm2k.md`) moves into the book "copying
+its .html as is, and linking it from the book, instead of converting it
+all to markdown. I would translate it to English, though." It is the fifth of the
+parallel tasks of moving the documentation into the book.
 
-## Lo hecho
+## What was done
 
-En `snes-rm2k-docs`, rama `aguara-board` del clon `~/scratch/aguara/docs`
-(base 149452a), dos commits:
+In `snes-rm2k-docs`, branch `aguara-board` of the clone `~/scratch/aguara/docs`
+(base 149452a), two commits:
 
-* `4e24aac`: `src/engine-vs-rm2k/index.html`, el HTML publicado traducido
-  —mdBook lo copia tal cual y queda en `engine-vs-rm2k/index.html`—, y
-  `src/engine-vs-rm2k.md`, la página del libro que explica qué mide y
-  enlaza a él. Sigue diciendo que es una foto del 2026-10-06, commit
-  3d0c787c de snes-rm2k.
-* `a4f7c6e`: la entrada en `SUMMARY.md`, después de `fitting.md`, aparte
-  para que Hornero la mergee con las de los otros.
+* `4e24aac`: `src/engine-vs-rm2k/index.html`, the published HTML translated
+  —mdBook copies it as is and it ends up at `engine-vs-rm2k/index.html`—, and
+  `src/engine-vs-rm2k.md`, the book page that explains what it measures and
+  links to it. It still says it is a snapshot of 2026-10-06, commit
+  3d0c787c of snes-rm2k.
+* `a4f7c6e`: the entry in `SUMMARY.md`, after `fitting.md`, separate
+  so that Hornero merges it with the others'.
 
-Lo traducido es todo lo visible: título, encabezado, pie, las etiquetas de
-`ST` (done, partial, patch, degrades, missing, n/a) y en el JSON
-`nombre` y `nota`. Los nombres de comandos de RM2k quedan iguales (el
-script que lo armó lo verifica para las pestañas 1 a 3). **Las claves de
-estado quedan en castellano** (`hecho`, `parcial`…): son clases de CSS y
-no se ven, y un comentario en el CSS lo dice.
+What was translated is everything visible: title, header, footer, the labels of
+`ST` (done, partial, patch, degrades, missing, n/a) and in the JSON
+`nombre` and `nota`. The RM2k command names stay the same (the
+script that built it checks it for tabs 1 to 3). **The status
+keys stay in Spanish** (`hecho`, `parcial`…): they are CSS classes and
+are not seen, and a comment in the CSS says so.
 
-`donde` pasó de texto a lista: las divergencias y decisiones son links a
-`../divergences/<slug>.html` y `../decisions/<slug>.html` (slug en
-castellano, 46 links); el resto queda como texto con el repo adelante
+`donde` went from text to list: the divergences and decisions are links to
+`../divergences/<slug>.html` and `../decisions/<slug>.html` (slug in
+Spanish, 46 links); the rest stays as text with the repo in front
 —`snes-rm2k: tools/…`, `snes-rm2k: docs/…`, `snes-rm2k-work: tasks/…`,
-`snes-rm2k-ports: …` para lo que decía `ABL:`—. Ninguna nota nombraba el
-ambiente.
+`snes-rm2k-ports: …` for what said `ABL:`—. No note named the
+environment.
 
-Lo que queda para el merge, de Hornero:
+What is left for the merge, Hornero's:
 
-* las 8 decisiones citadas se ven todas del motor, así que van a
-  `../decisions/`; si alguna termina en `ports/abl/decisions/`, el link
-  cambia;
-* las rutas `snes-rm2k: docs/research/…` y `docs/port/…` quedan como
-  texto de la foto, aunque esos archivos se muden al libro;
-* `snes-rm2k-ports: menus/consola.toml` es la ruta del 2026-10-06; hoy
-  ABL está en `abl/`.
+* the 8 decisions cited all look like the engine's, so they go to
+  `../decisions/`; if any ends up in `ports/abl/decisions/`, the link
+  changes;
+* the paths `snes-rm2k: docs/research/…` and `docs/port/…` stay as
+  text of the snapshot, even though those files move to the book;
+* `snes-rm2k-ports: menus/consola.toml` is the path of 2026-10-06; today
+  ABL is in `abl/`.
 
-## Cómo se verificó
+## How it was verified
 
-* `mdbook build --dest-dir` (v0.5.4) sin warnings, y el `index.html`
-  servido es byte por byte el de `src/`.
-* El JSON del bloque `data` del HTML servido parsea con `json.loads`: 271
-  ítems.
-* En un Chromium headless (Playwright), sin errores de consola ni de
-  página, en claro y oscuro: mismos números que el original en el mismo
-  navegador —73%, 194 de 266, 97/93/4/13/59/5—, 31 filas que abren en 271
-  ítems, el filtro de la leyenda anda (sacar "done" deja 174), y las
-  capturas a 1000 y 400 de ancho se ven como el original.
+* `mdbook build --dest-dir` (v0.5.4) without warnings, and the served
+  `index.html` is byte for byte the one in `src/`.
+* The JSON of the `data` block of the served HTML parses with `json.loads`: 271
+  items.
+* In a headless Chromium (Playwright), without console or
+  page errors, in light and dark: same numbers as the original in the same
+  browser —73%, 194 of 266, 97/93/4/13/59/5—, 31 rows that open into 271
+  items, the legend's filter works (removing "done" leaves 174), and the
+  captures at 1000 and 400 width look like the original.

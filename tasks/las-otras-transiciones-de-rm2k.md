@@ -1,30 +1,30 @@
 ---
-name: "Las otras transiciones"
-description: "Bloques, persianas y demás transiciones que no son el fundido"
+name: "The other transitions"
+description: "Blocks, blinds and the other transitions that are not the fade"
 type: feature
 status: wishlist
 ---
 
-# Qué
+# What
 
-Las transiciones de RM2k que no son el fundido: las de bloques, persianas y
-barridos que un evento puede pedir con `EraseScreen` y `ShowScreen`.
+RM2k's transitions that are not the fade: the block, blind and
+wipe ones that an event can ask for with `EraseScreen` and `ShowScreen`.
 
 # Status
 
-Anotado, sin empezar.
+Noted, not started.
 
-# Por qué
+# Why
 
-El fundido está, y es **la que este juego usa** para los teletransportes:
-`transition_out` y `transition_in` valen 0 en su base. La pelea pide otras
-dos —el zoom, 16, y el mosaico, 17—: el mosaico es el del PPU, y el zoom va
-como fundido, porque acercar el mapa es modo 7. Ver `rom/src/fundido_de_pelea.s`.
-Desde el 2026-09-27 `ChangeScreenTransitions` también: el teletransporte hace
-el mosaico, y el zoom y las demás que la consola no hace van como fundido —ver
-`divergencias/las-transiciones-del-teletransporte.md`—. Pero `Transition::Type`
-tiene **38**, y un evento puede pedir cualquiera de ellas.
+The fade is there, and it is **the one this game uses** for teleports:
+`transition_out` and `transition_in` are 0 in its database. Battle asks for two
+others —the zoom, 16, and the mosaic, 17—: the mosaic is the PPU's, and the zoom goes
+as a fade, because zooming in on the map is mode 7. See `rom/src/fundido_de_pelea.s`.
+Since 2026-09-27 `ChangeScreenTransitions` too: the teleport does
+the mosaic, and the zoom and the others the console does not do go as a fade —see
+`divergencias/las-transiciones-del-teletransporte.md`—. But `Transition::Type`
+has **38**, and an event can ask for any of them.
 
-Lo que las hace caras no es la cantidad: las de bloques, persianas y barridos
-**no son un brillo maestro**, piden tapar la pantalla por regiones, que en la
-consola es otra máquina.
+What makes them expensive is not the number: the block, blind and wipe ones
+**are not a master brightness**, they ask to cover the screen by regions, which on the
+console is another machine.

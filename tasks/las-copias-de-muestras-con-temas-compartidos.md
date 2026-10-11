@@ -1,56 +1,56 @@
 ---
-name: "Las copias de muestras con temas que comparten muestras"
-description: "Un tema nuevo que comparte muestras con los viejos cambia qué copias hace rm2k-snes-audio y les baja la tasa sin MSU-1"
+name: "Sample copies with themes that share samples"
+description: "A new theme that shares samples with the old ones changes which copies rm2k-snes-audio makes and lowers their rate without MSU-1"
 type: feature
 status: wishlist
 ---
 
-Del hito 4 del mundo (2026-09-27): los cinco temas del capítulo comparten
-muestras con temas que ya estaban, y eso cambió qué copias hace
-`copies`, en `tools/rm2k-snes/rm2k-snes-audio/src/bank.rs`. Sin MSU-1 bajaron 43 pares (tema, instrumento) de 15
-temas y subieron 51. Con sólo jackalstg2 bajaban 36. taro escuchó el antes y
-el después y los aceptó, así que no hubo que frenar el capítulo, pero **va a
-volver a pasar con cada tema que se sume**.
+From milestone 4 of the world (2026-09-27): the chapter's five themes share
+samples with themes that were already there, and that changed which copies
+`copies` makes, in `tools/rm2k-snes/rm2k-snes-audio/src/bank.rs`. Without MSU-1, 43 (theme, instrument) pairs from 15
+themes went down and 51 went up. With only jackalstg2, 36 went down. taro listened to the before and
+the after and accepted them, so the chapter did not have to be held back, but **it is going to
+happen again with every theme that gets added**.
 
-Lo que se probó sin recuperarlos (ver
+What was tried without getting them back (see
 `mundo-4-el-capitulo.md`, "La música de antes, sin MSU-1"):
-`TEMAS_APARTE` (los nuevos ya van solos), `SE_DE_SIEMPRE` de 70 a 130 (lo
-mejor, 29 pares, y mueve la tanda de efectos que taro aprobó), `COPIA_HASTA`
-en 0,85 y 0,95, sin la herencia de jackalstg2, sin el paquete del 259. El
-directorio no era la causa: sin la segunda tanda para los temas nuevos queda
-con lugar libre y bajan igual 42.
+`TEMAS_APARTE` (the new ones already go alone), `SE_DE_SIEMPRE` from 70 to 130 (the
+best, 29 pairs, and it moves the batch of effects taro approved), `COPIA_HASTA`
+at 0.85 and 0.95, without jackalstg2's inheritance, without the package of 259. The
+directory was not the cause: without the second batch for the new themes it is left
+with free room and 42 go down all the same.
 
-Lo que falta: que `copias` elija qué copiar pensando en todos los temas que
-usan una muestra, no en el orden en que llegan, y medirlo par por par con
-`Banco` contra el `main` de antes del capítulo (93af39f no: el `main`
-455f9fc1). Lo que no se recupere sin perder otra cosa, grabado para que
-taro escuche.
+What is missing: that `copias` choose what to copy thinking of all the themes that
+use a sample, not of the order in which they arrive, and measure it pair by pair with
+`Banco` against the `main` from before the chapter (not 93af39f: the `main`
+455f9fc1). Whatever cannot be recovered without losing something else, recorded for
+taro to listen to.
 
-# Lo que se pensó el 2026-09-30, y por qué pasa al wishlist
+# What was thought on 2026-09-30, and why it goes to the wishlist
 
-Con la radio de las páginas de tropa (`el-comun-35-y-la-radio.md`)
-volvió a pasar: sin MSU-1, el tema de batalla bajó de 11,5 a 10 kHz y otros
-34 temas perdieron alguna muestra, las peores de 20,4 a 6,8 kHz. taro
-propuso ir más allá de "elegir mejor qué copiar", y lo que salió de la charla:
+With the radio of the troop pages (`el-comun-35-y-la-radio.md`)
+it happened again: without MSU-1, the battle theme went down from 11.5 to 10 kHz and another
+34 themes lost some sample, the worst from 20.4 to 6.8 kHz. taro
+proposed going beyond "choosing better what to copy", and what came out of the conversation:
 
-1. **La pelea como caso especial, primero.** Sus instrumentos en una calidad
-   y los del resto en otra, aunque se dupliquen muestras. Suena seguido y es
-   donde más efectos hay, así que es probablemente lo de mejor costo contra
-   lo que se oye.
-2. **Pesar cada tema por cuánto suena.** Anotar en qué cuadro cambia el tema
-   en una corrida del recorrido y contar cuadros por tema. Dos cuidados: el
-   recorrido cubre el principio del juego y no el promedio, y la pelea se
-   estima aparte, por los encuentros de cada mapa, o queda subrepresentada.
-3. **El caso general: un grafo de instrumentos y temas**, particionado
-   duplicando las muestras que más mejoran lo que se oye por byte de ROM, con
-   esos pesos. Es la generalización de "lo que falta" de arriba.
-4. **Los efectos en el mismo grafo**: sin MSU-1 comparten la ARAM con la
-   música. Fuera de la pelea, el más común debe ser el del cofre.
+1. **The battle as a special case, first.** Its instruments at one quality
+   and the rest's at another, even if samples get duplicated. It plays often and it is
+   where most effects are, so it is probably the best cost against
+   what is heard.
+2. **Weigh each theme by how much it plays.** Record at which frame the theme changes
+   in a run of the walkthrough and count frames per theme. Two caveats: the
+   walkthrough covers the beginning of the game and not the average, and the battle is
+   estimated separately, from each map's encounters, or it ends up underrepresented.
+3. **The general case: a graph of instruments and themes**, partitioned
+   by duplicating the samples that most improve what is heard per byte of ROM, with
+   those weights. It is the generalization of "what is missing" above.
+4. **The effects in the same graph**: without MSU-1 they share ARAM with the
+   music. Outside battle, the most common one must be the chest's.
 
-Por qué no ahora: con MSU-1 la música va por pistas y esto no se oye;
-duplicar muestras cuesta ROM, y a `release` le quedan pocos bancos, que va a
-pedir el mundo; y la calidad se ajusta cuando el juego entero sea jugable
+Why not now: with MSU-1 the music goes through tracks and this is not heard;
+duplicating samples costs ROM, and `release` has few banks left, which the world is going to
+ask for; and quality gets tuned when the whole game is playable
 (`decisiones/primero-el-juego-entero-despues-la-calidad.md`).
 
-**Cuando se tome**: primero un análisis y un plan —medir el grafo, los pesos
-y cuánta ROM cuesta cada opción—, y de ese plan salen las tareas.
+**When it is taken**: first an analysis and a plan —measure the graph, the weights
+and how much ROM each option costs—, and from that plan come the tasks.

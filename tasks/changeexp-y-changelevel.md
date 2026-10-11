@@ -1,77 +1,77 @@
 ---
-name: "ChangeExp y ChangeLevel"
-description: "El compilador no tiene ChangeExp ni ChangeLevel, y una página con un comando que no compila se cae entera: las puertas del mapa de debug no pueden dar experiencia"
+name: "ChangeExp and ChangeLevel"
+description: "The compiler has neither ChangeExp nor ChangeLevel, and a page with a command that doesn't compile drops entirely: the debug map's doors can't give experience"
 type: feature
 status: testing
 agents: [Hurón, Carpintero]
 assignee: taro
 ---
 
-Lo encontró Hurón el 2026-10-04, al agregar las puertas de Paradise y de
-después de Fortitude (`workflow/tasks/*/dos-puertas-mas-en-el-mapa-de-debug.md`,
-en ABL). Con los dos comandos, cada puerta podría dejar los niveles que
-tendría alguien que jugó: después de Fortitude, Talan 3, Arden 4, Saldra 5,
-AG7-17 6; en Paradise, Talan 7, Arden y Saldra 7, AG7-17 8. Fijarse si el
-juego mismo los usa en algún lado.
+Hurón found it on 2026-10-04, while adding the doors of Paradise and of
+after Fortitude (`workflow/tasks/*/dos-puertas-mas-en-el-mapa-de-debug.md`,
+in ABL). With the two commands, each door could set the levels that
+someone who played would have: after Fortitude, Talan 3, Arden 4, Saldra 5,
+AG7-17 6; in Paradise, Talan 7, Arden and Saldra 7, AG7-17 8. Check whether the
+game itself uses them anywhere.
 
 ## Carpintero, 2026-10-04
 
-**El juego no los usa.** Ningún `ChangeExp` (10410) ni `ChangeLevel`
-(10420) en los mapas, los comunes ni las tropas del volcado: sólo los
-van a usar las puertas 7 y 8 del mapa de debug.
+**The game doesn't use them.** No `ChangeExp` (10410) or `ChangeLevel`
+(10420) in the maps, the common events or the troops of the dump: only
+doors 7 and 8 of the debug map will use them.
 
-**Cómo queda.** Los dos comandos comparten un opcode, `OP_EXP` (el 0x42):
-el actor —0 el grupo—, qué hace —nivel o experiencia, restar, por
-variable, con mensaje— y la cantidad. En la ROM es `exp_change`, en
-`level.s`: el `ChangeExp` y el `ChangeLevel` de `Game_Actor`, con las
-habilidades que enseñan los niveles que pasó y el `SetLevel` que recorta
-HP y SP al máximo del nivel nuevo.
+**How it ends up.** The two commands share an opcode, `OP_EXP` (0x42):
+the actor —0 the party—, what it does —level or experience, subtract, by
+variable, with message— and the amount. In the ROM it's `exp_change`, in
+`level.s`: `Game_Actor`'s `ChangeExp` and `ChangeLevel`, with the
+skills taught by the levels it went through and the `SetLevel` that clips
+HP and SP to the new level's maximum.
 
-**El mensaje es el otro opcode, `OP_LEVEL_PAGE` (el 0x44)**, que el
-compilador pone pegado detrás cuando el comando lo pide. `OP_EXP` anota
-los renglones —el del nivel de cada uno que subió y el de cada habilidad
-que no sabía— y `OP_LEVEL_PAGE` arma una caja por vez en la RAM, con
-cuatro renglones o hasta el fin de un actor, que es el `PushPageEnd` de
-RM2k, y la abre con la ventana de siempre; se queda en sí mismo hasta que
-no queda ninguna.
+**The message is the other opcode, `OP_LEVEL_PAGE` (0x44)**, which the
+compiler puts right behind when the command asks for it. `OP_EXP` notes down
+the lines —the one for the level of each one who leveled up and the one for each skill
+they didn't know— and `OP_LEVEL_PAGE` builds one box at a time in RAM, with
+four lines or up to the end of an actor, which is RM2k's `PushPageEnd`,
+and opens it with the usual window; it stays on itself until
+none are left.
 
-**La RAM**: $7E7A50 a $7E7AFF (`LVL`, lo que trabaja `exp_change` y los
-renglones anotados) y $7E6128 a $7E61FF (`LVL_BOX`, la página). Ningún
-símbolo de `release` cae ahí.
+**The RAM**: $7E7A50 to $7E7AFF (`LVL`, what `exp_change` works on and the
+noted lines) and $7E6128 to $7E61FF (`LVL_BOX`, the page). No
+`release` symbol falls there.
 
-**El modelo** es `Standing::change_exp` y `change_level` en `rm2k-rules`, y
-`rm2k-snes-battle experience` lo contesta para las pruebas.
+**The model** is `Standing::change_exp` and `change_level` in `rm2k-rules`, and
+`rm2k-snes-battle experience` answers it for the tests.
 
-**Lo que no es igual a RM2k** está en
-`workflow/divergencias/lo-que-changeexp-y-changelevel-no-modelan.md`: el
-orden de dos habilidades del mismo nivel, nada de mensaje en una página de
-tropa, y los topes de renglones.
+**What isn't the same as RM2k** is in
+`workflow/divergencias/lo-que-changeexp-y-changelevel-no-modelan.md`: the
+order of two skills of the same level, no message in a troop
+page, and the line caps.
 
-## En ABL
+## In ABL
 
-Rama `carpintero-changeexp` del clon de Carpintero
+Branch `carpintero-changeexp` of Carpintero's clone
 (`/extras/scratch/Carpintero/abl`):
 
-* `pruebas/rpgmaker/test_experiencia_de_eventos.py` y cuatro casos: nivel,
-  experiencia, habilidades y HP contra el modelo, cada página del mensaje
-  leída de `LVL_BOX`, y una página contra el mismo texto en un
-  `ShowMessage`. Con las herramientas de `main`, los casos no compilan.
-* Las puertas 7 y 8 de `parches/manual/nuevos/Map0900.json`: Talan y el
-  compañero de la rama en los niveles que midió Hurón, con un `ChangeLevel`
-  de -49 y otro que sube; los `ChangeSkills` de Arden que suplían el subir
-  se fueron. `test_mapa_de_debug.py` lo cobra en las dos puertas, por rama.
+* `pruebas/rpgmaker/test_experiencia_de_eventos.py` and four cases: level,
+  experience, skills and HP against the model, each page of the message
+  read from `LVL_BOX`, and a page against the same text in a
+  `ShowMessage`. With `main`'s tools, the cases don't compile.
+* Doors 7 and 8 of `parches/manual/nuevos/Map0900.json`: Talan and the
+  branch's companion at the levels Hurón measured, with a `ChangeLevel`
+  of -49 and another that raises; Arden's `ChangeSkills` that stood in for leveling
+  up are gone. `test_mapa_de_debug.py` checks it on both doors, per branch.
 
-**Una trampa que apareció**: un caso con `ChangePartyMembers` le cambia al
-conversor quién puede liderar en todos los mapas (`page_party` en
-`convert.rs`), y con eso las paletas: el mecánico del 20 y el tram salían
-con otros colores. El caso del grupo pone el grupo desde la prueba.
+**A trap that showed up**: a case with `ChangePartyMembers` changes for the
+converter who can lead in all maps (`page_party` in
+`convert.rs`), and with that the palettes: the mechanic of 20 and the tram came out
+with other colors. The party case sets the party from the test.
 
-## Al mergear
+## On merging
 
-Reinstalar en el global `cartridge events convert battle`: el runtime y el
-bytecode, el compilador, y el subcomando `experience` que piden las
-pruebas. `rules` cambió sólo agregando, así que `rm2k-render` y `mapdata`,
-que lo compilan adentro, no cambian de comportamiento.
+Reinstall in the global `cartridge events convert battle`: the runtime and the
+bytecode, the compiler, and the `experience` subcommand the
+tests ask for. `rules` changed only by adding, so `rm2k-render` and `mapdata`,
+which compile it in, don't change behavior.
 
-Tanda: 1098 en verde con las herramientas de la rama, sobre los dos árboles
-mergeados con `main`. No hay goldens nuevas ni movidas.
+Suite: 1098 green with the branch's tools, on both trees
+merged with `main`. No new or moved goldens.

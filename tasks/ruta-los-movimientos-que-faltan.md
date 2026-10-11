@@ -1,52 +1,52 @@
 ---
-name: "Ruta: los movimientos que faltan"
-description: "Las órdenes de movimiento que la ROM todavía no hace: avanzar, los giros relativos, y las diagonales y los giros del héroe"
+name: "Route: the missing moves"
+description: "The move commands the ROM doesn't do yet: move forward, the relative turns, and the hero's diagonals and turns"
 type: feature
 status: wishlist
 ---
 
-# Qué
+# What
 
-Las órdenes de movimiento de una ruta forzada que la ROM no entiende. Del
-`rpg::MoveCommand::Code` ya están los cuatro sentidos, las cuatro diagonales
-**de un evento**, acercarse al héroe (9), mirarlo (21) y, desde el
-2026-10-06, el paso al azar (8), alejarse (10) y mirar para el otro lado (22):
-siempre sobre eventos.
+The move commands of a forced route that the ROM doesn't understand. Of
+`rpg::MoveCommand::Code` there are already the four directions, the four diagonals
+**of an event**, move toward the hero (9), face it (21) and, since
+2026-10-06, the random step (8), move away (10) and face away (22):
+always on events.
 
-Quedan:
+What remains:
 
-* **Las diagonales del héroe** (4 a 7), que son lo que más páginas deja afuera
-  en los otros juegos: unas 50 en Sunset y 45 en Vampires Dawn, medido el
-  2026-10-06 con `culprits`. Es lo caro: ver abajo.
-* **Los giros relativos** —90 a la derecha (16), a la izquierda (17), 180 (18),
-  90 al azar (19), mirar al azar (20)—, que en un evento se calculan con la
-  dirección de la que ya parte, como `face_diagonal`, y en el héroe con
-  `hero_heading` si está trabado y `hero_dir` si no. Sunset: unas 8 páginas.
-* **Avanzar** (11): Sunset, 3 páginas, junto con un 18 del héroe.
-* **Las de la ruta propia de una página** —9, 10, 21, 22, 8—, que su compilador
-  rechaza: ninguna de las propias de ABL las usa.
+* **The hero's diagonals** (4 to 7), which are what leaves the most pages out
+  in the other games: about 50 in Sunset and 45 in Vampires Dawn, measured on
+  2026-10-06 with `culprits`. It's the expensive one: see below.
+* **The relative turns** —90 to the right (16), to the left (17), 180 (18),
+  90 at random (19), face random (20)—, which on an event are computed from the
+  direction it already starts from, like `face_diagonal`, and on the hero with
+  `hero_heading` if it's locked and `hero_dir` if not. Sunset: about 8 pages.
+* **Move forward** (11): Sunset, 3 pages, together with an 18 on the hero.
+* **Those of a page's own route** —9, 10, 21, 22, 8—, which its compiler
+  rejects: none of ABL's own routes use them.
 
 # Status
 
-Anotado, **sin plan**. Las del héroe, por lo medido abajo.
+Noted, **with no plan**. The hero's ones, because of what's measured below.
 
-# Por qué
+# Why
 
-**En ABL las nueve juntas sumaban +1 página**, y por eso esto estuvo anotado
-como "no rinde". En los otros juegos no: 8, 10 y 22 destrabaron páginas de
-Desert Nightmare, Vampires Dawn, El Dorado y Sunset, y se hicieron.
+**In ABL the nine together added up to +1 page**, and that's why this was noted
+as "not worth it". In the other games it isn't so: 8, 10 and 22 unlocked pages of
+Desert Nightmare, Vampires Dawn, El Dorado and Sunset, and were done.
 
-**Por qué las diagonales del héroe no se hicieron**: el paso del héroe es de a
-una celda por eje. `try_up` y sus tres hermanas mueven `hero_ptr` —el puntero a
-la cuadrícula— una celda o una fila, y miran el permiso de salir y el de
-entrar con `step_dx_table` indexada por `hero_dir`, que sólo tiene cuatro
-entradas. Una diagonal pide las dos patas del permiso en L —lo que hace
-`cell_allowed_diag` para un evento, que no usa nada de esto—, el puntero en
-las dos direcciones a la vez, `hero_blocked` sobre la celda de destino y la
-regla de a dónde queda mirando, que no es "hacia la diagonal". Es un paso
-nuevo del héroe y no cuatro rutinas copiadas. **Lo que no se midió**: cuánto
-de eso toca la cámara y las franjas de la ventana de tiles; `begin_step` y el
-avance son genéricos en `step_dx` y `step_dy`, así que puede ser menos de lo
-que parece. Y no hay con qué comparar: ningún juego que tengamos mide una
-diagonal del héroe contra RM2k. Cuesta una tarea propia, y rinde unas cien
-páginas en dos juegos de siete.
+**Why the hero's diagonals weren't done**: the hero's step is one
+cell per axis. `try_up` and its three siblings move `hero_ptr` —the pointer into
+the grid— one cell or one row, and check the permission to leave and to
+enter with `step_dx_table` indexed by `hero_dir`, which only has four
+entries. A diagonal asks for both legs of the L-shaped permission —what
+`cell_allowed_diag` does for an event, which uses none of this—, the pointer in
+both directions at once, `hero_blocked` on the destination cell and the
+rule of where it ends up facing, which isn't "toward the diagonal". It's a new
+hero step and not four copied routines. **What wasn't measured**: how much
+of that touches the camera and the stripes of the tile window; `begin_step` and the
+advance are generic in `step_dx` and `step_dy`, so it may be less than
+it seems. And there's nothing to compare against: no game we have measures a
+hero diagonal against RM2k. It costs a task of its own, and yields about a hundred
+pages in two games out of seven.

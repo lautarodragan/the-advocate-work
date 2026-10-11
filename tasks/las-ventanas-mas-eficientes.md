@@ -1,99 +1,99 @@
 ---
-name: "Las ventanas más eficientes"
-description: "Analizar todas las ventanas —mensajes, menús, objetos, equipo, tienda, pelea, ranuras, elección de actor, nombre del héroe— con un fondo del System configurado por perilla (degradé o color sólido por HDMA/hblank), las caras fuera de BG1 y el cursor en objetos; medir y proponer"
+name: "The most efficient windows"
+description: "Analyze every window —messages, menus, items, equipment, shop, battle, slots, actor choice, hero name— with a System background configured by knob (gradient or solid color via HDMA/hblank), faces out of BG1 and the cursor in objects; measure and propose"
 type: research
 status: testing
 agents: [Tijereta]
 assignee: taro
 ---
 
-taro, el 2026-10-11, después de hablar de la pantalla del nombre
-(`la-pantalla-del-nombre-del-heroe.md`): que se analice para
-todas las ventanas, no sólo ésa. "Si podemos hacer las ventanas, en
-general, más eficientes, es un win por todos lados."
+taro, on 2026-10-11, after talking about the name screen
+(`la-pantalla-del-nombre-del-heroe.md`): that it be analyzed for
+all the windows, not only that one. "If we can make the windows, in
+general, more efficient, it's a win all around."
 
-Lo que dijo taro, para tener en cuenta:
+What taro said, to keep in mind:
 
-* **La cara no tiene que ser pixel perfect**: se puede achicar un poco si
-  hace falta redondear a 8 px o ahorrar una fila o columna de tiles.
-* **No hace falta detectar si el fondo es un degradé**: una perilla del
-  `rm2k-snes.toml` que reemplace el fondo del System por uno propio,
-  configurable —un degradé, o un color sólido—. Con la perilla, de un
-  System se toman sólo los números, los íconos y los bordes; el fondo se
-  ignora.
-* **La ventana de mensajes en el juego**: si tiene fondo, ocupa una franja
-  entera de la pantalla, así que se podría cambiar de modo y/o de paletas
-  en el hblank de su primera línea y de la última, si dan los ciclos.
-* **Para ABL**, otra opción de la perilla: color sólido. Aunque no cambie
-  nada de lo que se ve, tenerlo declarado permite asumir cosas y
-  optimizar en el runtime. Su pregunta: ¿alcanza una sola paleta de 16
-  colores para fondo, marco y texto en todas sus ventanas?
-* **El análisis de cada juego se hace una vez** —estático, o con IA—, no
-  en una herramienta: las herramientas sólo leen la perilla del proyecto y
-  toman el camino de runtime que corresponda.
-* **Código distinto por juego** ("macros"): no lo descarta, pero sabe que
-  suma superficie de bugs y quizás no aporte. Hoy ya hay algo así: el
-  runtime bajo `.ifdef paint_table` y `.ifdef MSU_REQUIRED`.
+* **The face does not have to be pixel perfect**: it can be shrunk a bit if
+  needed to round to 8 px or to save a row or column of tiles.
+* **There is no need to detect whether the background is a gradient**: a knob in
+  `rm2k-snes.toml` that replaces the System's background with one of our own,
+  configurable —a gradient, or a solid color—. With the knob, from a
+  System only the numbers, the icons and the borders are taken; the background is
+  ignored.
+* **The message window in the game**: if it has a background, it takes up a whole
+  strip of the screen, so the mode and/or the palettes could be changed
+  in the hblank of its first line and its last, if the cycles allow.
+* **For ABL**, another option of the knob: solid color. Even if it changes
+  nothing of what is seen, having it declared allows assuming things and
+  optimizing in the runtime. His question: is a single palette of 16
+  colors enough for background, frame and text in all its windows?
+* **Each game's analysis is done once** —statically, or with AI—, not
+  in a tool: the tools only read the project's knob and
+  take the corresponding runtime path.
+* **Different code per game** ("macros"): he does not rule it out, but knows it
+  adds bug surface and perhaps does not contribute. Today there is already something like it: the
+  runtime under `.ifdef paint_table` and `.ifdef MSU_REQUIRED`.
 
-## El encargo (Hornero, 2026-10-11)
+## The assignment (Hornero, 2026-10-11)
 
-Un research en el libro, no la implementación: las seis ideas —la perilla
-del fondo, la franja de la ventana de mensajes, el cursor en objetos, las
-caras fuera de BG1, la paleta de 16 de ABL y el código por juego—, cada
-una medida sobre los ocho juegos, con la perilla propuesta, el valor de
-cada juego y un orden de implementación en pasos chicos. Base:
+A research in the book, not the implementation: the six ideas —the background
+knob, the message window strip, the cursor in objects, the
+faces out of BG1, ABL's 16-color palette and per-game code—, each
+one measured on the eight games, with the proposed knob, each game's
+value and an implementation order in small steps. Base:
 the-advocate `fc6f7456`, ports `a85b7e3`.
 
-## Cómo se mide (Tijereta)
+## How it is measured (Tijereta)
 
-Los ocho juegos se arman en un worktree de los ports con un envoltorio de
-`rm2k-snes-screens` que guarda cada pedido; después se vuelve a correr
-`screens convert` sobre esos pedidos con Systems retocados —el fondo
-sólido, el cursor transparente— y caras en blanco, y se cuentan las
-teselas. Lo que cambia es lo que la idea ahorra. Los Systems se leen de
-los `.zip`; las copias retocadas van a `~/scratch/tijereta/`.
+The eight games are built in a worktree of the ports with a wrapper around
+`rm2k-snes-screens` that saves each request; then
+`screens convert` is run again on those requests with retouched Systems —the
+solid background, the transparent cursor— and blank faces, and the
+tiles are counted. What changes is what the idea saves. The Systems are read from
+the `.zip`s; the retouched copies go to `~/scratch/tijereta/`.
 
-## Lo que se hizo (Tijereta, 2026-10-11)
+## What was done (Tijereta, 2026-10-11)
 
-El research está en el libro, rama `tijereta-ventanas`:
+The research is in the book, branch `tijereta-ventanas`:
 `src/research/2026-10-11-las-ventanas.md`, "The windows, made cheaper".
-No se tocó código de las herramientas ni de los ports. Lo principal:
+No code of the tools or of the ports was touched. The main points:
 
-- **La perilla** (`[windows] background`, un color o una lista de paradas
-  de un degradé vertical) es lo que más rinde: con el fondo de una sola
-  entrada, Book of Three, Frozen World y Vampires Dawn con su VDBlutsys
-  dejan de fundir todas sus pantallas, y la ventana de mensajes de Frozen
-  World pasa de 15 colores a 7. Un degradé cuesta una entrada y un canal
-  de HDMA por grupo de ventanas que comparten líneas.
-- **La franja**: el prototipo escribió 8 colores por línea con 8 canales
-  sin una línea mal en snes9x, bsnes y Mesen-S; el límite son los canales
-  (en el mapa siempre están libres el 5 y el 7). No gana VRAM, y el cambio
-  de paletas lo traban las ventanas sin fondo. Sirve para el degradé y
-  para la paleta de una cara en la ventana de mensajes. IRQ no: es de
+- **The knob** (`[windows] background`, a color or a list of stops
+  of a vertical gradient) is what pays off most: with a single-entry
+  background, Book of Three, Frozen World and Vampires Dawn with its VDBlutsys
+  stop merging all their screens, and Frozen World's message window
+  goes from 15 colors to 7. A gradient costs one entry and one HDMA
+  channel per group of windows that share lines.
+- **The strip**: the prototype wrote 8 colors per line with 8 channels
+  without one bad line in snes9x, bsnes and Mesen-S; the limit is the channels
+  (on the map 5 and 7 are always free). It does not gain VRAM, and the palette
+  change is blocked by the windows without background. It serves the gradient and
+  the palette of a face in the message window. Not IRQ: that belongs to
   `irq_music`.
-- **El cursor en objetos** salva la elección de actor de Dooms 2 (69 → 27
-  teselas de 64); en la ventana de mensajes lo traba la máscara de objetos.
-- **Las caras**: lo que ocupan en el banco del menú, de 0 (Sunset) a 216
-  (Vampires Dawn) de 448. En la ventana de mensajes no se dibujan, y DN,
-  Dooms 2 y VD las piden 1848, 722 y 8195 veces: entran en las celdas del
-  área de texto que la cara deja libres.
-- **ABL en una paleta**: la ventana de mensajes sí (13, 12 con fondo
-  liso); todas las ventanas con las cuatro tintas, no (33).
-- **Código por juego**: datos, no `.ifdef`; el riesgo es el camino que
-  ninguna prueba corre.
+- **The cursor in objects** saves Dooms 2's actor choice (69 → 27
+  tiles out of 64); in the message window the object mask blocks it.
+- **The faces**: what they take in the menu bank, from 0 (Sunset) to 216
+  (Vampires Dawn) out of 448. In the message window they are not drawn, and DN,
+  Dooms 2 and VD request them 1848, 722 and 8195 times: they fit in the cells of the
+  text area that the face leaves free.
+- **ABL in one palette**: the message window yes (13, 12 with a plain
+  background); all the windows with the four inks, no (33).
+- **Per-game code**: data, not `.ifdef`; the risk is the path that
+  no test runs.
 
-Capturas en `/shared/capturas/2026-10-11-las-ventanas/`. Los guiones de
-medición quedaron en `~/scratch/tijereta/ventanas/py/` y el prototipo en
-`~/scratch/tijereta/hdma/`: descartables.
+Captures in `/shared/capturas/2026-10-11-las-ventanas/`. The
+measuring scripts stayed in `~/scratch/tijereta/ventanas/py/` and the prototype in
+`~/scratch/tijereta/hdma/`: throwaway.
 
-## Qué quedó sin medir
+## What was left unmeasured
 
-El hardware real (el FX Pak), cuánto dura `irq_music`, los grupos de
-ventanas de la pelea, el cursor de 38 colores de Dooms 2 en una paleta de
-objetos, y dónde irían las teselas de las caras en objetos.
+Real hardware (the FX Pak), how long `irq_music` takes, the battle's window
+groups, Dooms 2's 38-color cursor in an object palette,
+and where the face tiles would go in objects.
 
-## Al mergear
+## When merging
 
-Nada que instalar. Sólo el libro.
+Nothing to install. Only the book.
 
-Hallazgo sin arreglar: `el-texto-de-objetos-de-abl-no-entra.md`.
+Finding not fixed: `el-texto-de-objetos-de-abl-no-entra.md`.

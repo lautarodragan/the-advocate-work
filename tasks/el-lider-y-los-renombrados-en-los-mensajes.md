@@ -1,26 +1,26 @@
 ---
-name: "\\N[0] y los actores renombrados en los mensajes"
-description: "Una caja con \\N[0] (el líder) o con el \\N[n] de un actor que algún ChangeHeroName renombra deja afuera su página entera"
+name: "\\N[0] and renamed actors in messages"
+description: "A box with \\N[0] (the leader) or with the \\N[n] of an actor that some ChangeHeroName renames leaves out its whole page"
 type: feature
 status: draft
 ---
 
-Deuda que declaró Carpintero el 2026-10-05 al hornear los nombres
-(`el-nombre-del-heroe-en-los-mensajes.md`): `with_names`, en
-`rm2k-snes/events/src/compile.rs`, escribe el nombre de la base de datos
-en cada `\N[n]` sólo si ningún `ChangeHeroName` del juego toca a ese
-actor. `\N[0]` —el líder, que depende de quién esté en el grupo— y los
-actores renombrables quedan como están, y una caja con eso no compila: la
-página se cae entera. Sigue así en the-advocate `fc6f7456`; la prueba
-`an_actors_name_is_baked_into_the_text_unless_it_can_change` lo fija.
+Debt that Carpintero declared on 2026-10-05 when baking the names
+(`el-nombre-del-heroe-en-los-mensajes.md`): `with_names`, in
+`rm2k-snes/events/src/compile.rs`, writes the name from the database
+into each `\N[n]` only if no `ChangeHeroName` in the game touches that
+actor. `\N[0]` —the leader, which depends on who is in the party— and the
+renameable actors stay as they are, and a box with that doesn't compile: the
+page drops whole. It is still like that in the-advocate `fc6f7456`; the test
+`an_actors_name_is_baked_into_the_text_unless_it_can_change` pins it.
 
-Lo que se sabe de la causa: el compositor de la ROM no escribe un nombre
-en tiempo de ejecución. `ChangeHeroName` tampoco compila hoy, así que una
-página que renombra ya está afuera por su cuenta (la pantalla de
-`EnterHeroName` es otra cosa: `la-pantalla-del-nombre-del-heroe.md`).
+What is known about the cause: the ROM's compositor doesn't write a name
+at run time. `ChangeHeroName` doesn't compile today either, so a
+page that renames is already out on its own (the
+`EnterHeroName` screen is something else: `la-pantalla-del-nombre-del-heroe.md`).
 
-**No medido hoy**: cuántas páginas deja afuera en cada juego. El 2026-10-05
-el `\N[n]` en general afectaba a cuatro juegos —The Frozen World cortaba
-su cinemática inicial en el mapa 4— y lo horneado destrabó eso; lo que
-queda es `\N[0]` y los renombrados. `rm2k-snes-events culprits
---every-map`, sobre el pedido de `compile` de cada juego, lo dice.
+**Not measured today**: how many pages it leaves out in each game. On 2026-10-05
+`\N[n]` in general affected four games —The Frozen World cut
+its opening cutscene in map 4— and the baking unblocked that; what
+remains is `\N[0]` and the renamed ones. `rm2k-snes-events culprits
+--every-map`, on each game's `compile` request, says it.

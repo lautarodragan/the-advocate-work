@@ -1,37 +1,37 @@
 ---
-name: "Los flujos de un mapa que no entran en la WRAM"
-description: "El código de un mapa (map_code) o su grilla (map_cells) que pasan de su reserva de LZ2 en la WRAM cortan el armado: deja afuera el mapa 2 de The Frozen World y el 1 de Vampires Dawn, el mapa del mundo"
+name: "A map's streams that don't fit in WRAM"
+description: "A map's code (map_code) or its grid (map_cells) going over their LZ2 reserve in WRAM stops the build: it leaves out map 2 of The Frozen World and map 1 of Vampires Dawn, the world map"
 type: feature
 status: draft
 ---
 
-Dos mapas, el mismo tope: la reserva de LZ2 de `runtime/far_ram.s`, que
-`check_streams` (`rm2k-snes/mapdata/src/materials.rs`) hace cumplir
-cortando el armado.
+Two maps, the same limit: the LZ2 reserve of `runtime/far_ram.s`, which
+`check_streams` (`rm2k-snes/mapdata/src/materials.rs`) enforces by
+stopping the build.
 
-* **The Frozen World, mapa 2** ("Plate Placement"): "a stream of map_code
-  is 38179 bytes and 19968 fit in WRAM". Medido por Calandria el 2026-10-11
-  (`las-exclusiones-que-sobran.md`) y **comprobado hoy**
-  (the-advocate `fc6f7456`, ports `a85b7e3`): con el 2 devuelto, `just
-  cartuchos release` en `frozen-world/` corta ahí. Según el re-barrido del
-  2026-10-10, el 1 del mismo juego pide 1,8 MB de código solo.
-* **Vampires Dawn, mapa 1** ("Weltkarte", el mapa del mundo, 300x300):
-  "a stream of map_cells is 147232 bytes and 32768 fit in WRAM". Medido por
-  Aguará el 2026-10-11 (`vampires-dawn-arma-desde-su-toml.md`); lo
-  dice el comentario de `excluded` en `vampires-dawn/rm2k-snes.toml`. No
-  comprobado hoy (VD tarda unos dos minutos en armar). Antes cortaba en
-  la animación del ChipSet, que ya degrada
-  (`las-animaciones-de-tiles-en-wram.md`: "la grilla: 180.000 bytes
-  contra 64 KB de WRAM").
+* **The Frozen World, map 2** ("Plate Placement"): "a stream of map_code
+  is 38179 bytes and 19968 fit in WRAM". Measured by Calandria on 2026-10-11
+  (`las-exclusiones-que-sobran.md`) and **checked today**
+  (the-advocate `fc6f7456`, ports `a85b7e3`): with 2 brought back, `just
+  cartuchos release` in `frozen-world/` stops there. According to the re-sweep of
+  2026-10-10, map 1 of the same game asks for 1.8 MB of code alone.
+* **Vampires Dawn, map 1** ("Weltkarte", the world map, 300x300):
+  "a stream of map_cells is 147232 bytes and 32768 fit in WRAM". Measured by
+  Aguará on 2026-10-11 (`vampires-dawn-arma-desde-su-toml.md`); the
+  comment of `excluded` in `vampires-dawn/rm2k-snes.toml` says so. Not
+  checked today (VD takes about two minutes to build). Before, it stopped at
+  the ChipSet's animation, which now degrades
+  (`las-animaciones-de-tiles-en-wram.md`: "the grid: 180,000 bytes
+  against 64 KB of WRAM").
 
-Las animaciones de tiles, que tenían el mismo tipo de tope, ya degradan
-(se quedan quietas las que no entran); el código y la grilla no tienen
-qué perder sin cambiar lo que el mapa hace.
+Tile animations, which had the same kind of limit, now degrade
+(the ones that don't fit stay still); the code and the grid have nothing
+to lose without changing what the map does.
 
-**Qué se ve jugando**: esos mapas no están en el cartucho, y un evento que
-lleve a ellos pierde la página entera (un `Teleport` a un mapa que no
-está no compila). En Vampires Dawn es el mundo: no se miró hasta dónde se
-puede jugar sin él.
+**What is seen when playing**: those maps aren't in the cartridge, and an event that
+leads to them loses the whole page (a `Teleport` to a map that isn't
+there doesn't compile). In Vampires Dawn it's the world: it wasn't looked at how far
+it can be played without it.
 
-**Cómo verlo**: sacar el mapa de `excluded` en el `rm2k-snes.toml` del
-juego y `just cartuchos release` en su directorio.
+**How to see it**: remove the map from `excluded` in the game's `rm2k-snes.toml`
+and `just cartuchos release` in its directory.

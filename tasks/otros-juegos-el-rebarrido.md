@@ -1,31 +1,31 @@
 ---
-name: "Otros juegos: el re-barrido"
-description: "Volver a medir los siete juegos con las herramientas de hoy —qué arma, qué corta, qué páginas no compilan— y dejarlo como un research nuevo en el libro"
+name: "Other games: the re-sweep"
+description: "Measure the seven games again with today's tools —what builds, what cuts, which pages do not compile— and leave it as a new research in the book"
 type: research
 status: testing
 assignee: taro
 agents: [Aguará]
 ---
 
-De taro, el 2026-10-10: retomar los otros juegos "en el orden que proponés". El relevamiento es del 2026-10-05 y las tareas que lo siguieron, del 06; desde entonces entraron las paletas de Adeleine, los encuentros en dos bytes, los decorativos y más. Esto es la foto nueva, sin arreglar nada.
+From taro, on 2026-10-10: pick up the other games again "in the order you propose". The survey is from 2026-10-05 and the tasks that followed it, from the 06; since then Adeleine's palettes, the two-byte encounters, the decoratives and more came in. This is the new snapshot, without fixing anything.
 
-## Cómo se mide (Aguará, 2026-10-10)
+## How it is measured (Aguará, 2026-10-10)
 
-Con las herramientas globales (snes-rm2k 1afe6457), en un worktree propio de los ports (rama `aguara-rebarrido`, sin commits) y sin tocar código:
+With the global tools (snes-rm2k 1afe6457), in a worktree of the ports of my own (branch `aguara-rebarrido`, no commits) and without touching code:
 
-* **El cartucho entero**, como está commiteado en cada port (con sus muletas), y el request de `compile` guardado por un envoltorio en el PATH para `culprits --every-map`.
-* **Sin muletas**: el mismo toml sin `system`, sin `excluded` y con `party = []`, excluyendo de a uno el mapa que nombre el error.
-* **Cada mapa**: esta vez al lado del mapa de arranque (`maps = [arranque, m]`), en vez de solo con `BOOT_FRAMES = 255`: así no hace falta cambiar el runtime. Corre unos 2 s por mapa.
-* Vampires Dawn, para ver detrás de su primer muro: una copia del juego (symlinks) cuyo `Music/` tiene sólo las 125 canciones que nombra el volcado, y `start_map = 8`.
+* **The whole cartridge**, as committed in each port (with its crutches), and the `compile` request saved by a wrapper in the PATH for `culprits --every-map`.
+* **Without crutches**: the same toml without `system`, without `excluded` and with `party = []`, excluding one at a time the map the error names.
+* **Each map**: this time next to the boot map (`maps = [arranque, m]`), instead of alone with `BOOT_FRAMES = 255`: that way the runtime does not need changing. It runs about 2 s per map.
+* Vampires Dawn, to see behind its first wall: a copy of the game (symlinks) whose `Music/` has only the 125 songs the dump names, and `start_map = 8`.
 
-## Resultado
+## Result
 
-En el libro, rama `aguara-rebarrido` de snes-rm2k-docs: `src/research/2026-10-10-otros-juegos-de-nuevo.md` y una sección "As of 2026-10-10" en cada `src/ports/<juego>/README.md`. Las ROMs, como están commiteados los ports, en `/shared/builds/otros-juegos/` (todas menos Vampires Dawn, que no arma).
+In the book, branch `aguara-rebarrido` of snes-rm2k-docs: `src/research/2026-10-10-otros-juegos-de-nuevo.md` and an "As of 2026-10-10" section in each `src/ports/<juego>/README.md`. The ROMs, as the ports are committed, in `/shared/builds/otros-juegos/` (all except Vampires Dawn, which does not build).
 
-Lo nuevo detrás:
+What is new behind:
 
-* Vampires Dawn: `Music/` con 281 archivos y la pista en un byte (cuenta los que no se usan, también con `--without-tracks`); después, los miembros de las tropas en una tabla de un byte (470); y su mapa de arranque no entra en `BOOT_FRAMES` (46 de 44).
-* Sunset tarda ~2 h 40 min en armar: 138 imágenes grandes en el fondo, ~4 min cada una medida sola. Sospechoso no verificado: `27a28646` (Adeleine por grupo de tiles).
-* Las exclusiones commiteadas en los ports son las del relevamiento y sobran: BoT necesita sólo 46, Dooms 2 1/10/14/63, Frozen 1/2, Desert las doce del barrido.
+* Vampires Dawn: `Music/` with 281 files and the track in one byte (it counts the unused ones too, also with `--without-tracks`); after that, the troop members in a one-byte table (470); and its boot map does not fit in `BOOT_FRAMES` (46 of 44).
+* Sunset takes ~2 h 40 min to build: 138 big pictures in the background, ~4 min each measured alone. Unverified suspect: `27a28646` (Adeleine per tile group).
+* The exclusions committed in the ports are the survey's and are more than needed: BoT needs only 46, Dooms 2 1/10/14/63, Frozen 1/2, Desert the twelve from the sweep.
 
-No se miró nada en un emulador. No se tocó código; nada que instalar al mergear.
+Nothing was looked at in an emulator. No code was touched; nothing to install when merging.

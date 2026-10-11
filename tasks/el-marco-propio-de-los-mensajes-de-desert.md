@@ -1,20 +1,20 @@
 ---
-name: "El marco propio de los mensajes de Desert Nightmare"
-description: "Desert dibuja sus mensajes con dos imágenes propias, TextboxInnen y TextboxRahmen; el release de hoy no las dibuja en 157 mapas"
+name: "Desert Nightmare's own message frame"
+description: "Desert draws its messages with two pictures of its own, TextboxInnen and TextboxRahmen; today's release does not draw them in 157 maps"
 type: bug
 status: draft
 ---
 
-Visto por Calandria el 2026-10-11, de paso
-(`rescatar-los-hallazgos.md`), herramientas `fc6f7456`, ports
-`a85b7e3`: el armado del release de Desert Nightmare avisa que en 157
-mapas no dibuja las imágenes `TextboxInnen` y `TextboxRahmen`, que son el
-marco propio de sus mensajes.
+Seen by Calandria on 2026-10-11, in passing
+(`rescatar-los-hallazgos.md`), tools `fc6f7456`, ports
+`a85b7e3`: the Desert Nightmare release build warns that in 157
+maps it does not draw the pictures `TextboxInnen` and `TextboxRahmen`, which are
+its messages' own frame.
 
-**Cómo verlo**: `just cartuchos` en `desert-nightmare/` de los ports, y
-buscar esos nombres en `build/release/conversor.log`. No se miró en la
-consola qué se ve en lugar del marco.
+**How to see it**: `just cartuchos` in `desert-nightmare/` of the ports, and
+search for those names in `build/release/conversor.log`. What is seen on the
+console in place of the frame was not looked at.
 
-La página del port en el libro ya decía, más en general, que "136 maps
-don't draw some of their pictures" (del 2026-10-10); no se comparó qué
-mapas son de esos 157.
+The port's page in the book already said, more generally, that "136 maps
+don't draw some of their pictures" (from 2026-10-10); which of those 157
+maps they are was not compared.

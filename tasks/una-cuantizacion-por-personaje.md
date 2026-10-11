@@ -1,130 +1,130 @@
 ---
-name: "Una cuantización por personaje para las poses"
-description: "Un personaje cuantizado distinto en otro mapa lleva su propio banco de poses: en VD son 420 de 1.239 bancos, y las poses (4,26 MB) no pueden ir al .msu"
+name: "One quantization per character for the poses"
+description: "A character quantized differently in another map carries its own pose bank: in VD that's 420 of 1,239 banks, and the poses (4.26 MB) can't go into the .msu"
 type: feature
 status: testing
 agents: [Mulita]
 assignee: taro
 ---
 
-De `vampires-dawn-arma-desde-su-toml.md` (Aguará, 2026-10-11):
-`record.rs` de mapdata guarda un banco de doce poses por (CharSet, índice,
-datos), y un personaje que en otro mapa sale cuantizado distinto lleva un
-banco propio —506 avisos "goes with a pose bank of its own" en el armado
-de VD—. Es lo que más mapas de VD devolvería: los nueve que hoy quedan
-afuera por la ROM (95, 164, 170, 219, 221, 222, 239, 338, 429), y lugar
-para los que vuelvan con los otros arreglos. Cuánto ahorra no se midió;
-del orden del MB por cuenta gruesa.
+From `vampires-dawn-arma-desde-su-toml.md` (Aguará, 2026-10-11):
+mapdata's `record.rs` stores a bank of twelve poses per (CharSet, index,
+data), and a character that comes out quantized differently in another map
+carries a bank of its own —506 "goes with a pose bank of its own" warnings in
+VD's build—. It's what would bring back the most VD maps: the nine left out
+today because of the ROM (95, 164, 170, 219, 221, 222, 239, 338, 429), and room
+for the ones that come back with the other fixes. How much it saves wasn't
+measured; on the order of a MB by rough count.
 
-## Lo medido (Mulita, 2026-10-11)
+## What was measured (Mulita, 2026-10-11)
 
-Base: the-advocate `0bb1120a`, ports `c914245`, en worktrees propios
-(`mulita-poses-por-personaje` en los dos). La medición es sobre el pedido
-de `rm2k-snes-mapdata emit` del armado de VD **con los nueve de "poses"
-devueltos** (14 afuera), copiado con un envoltorio de `rm2k-snes-mapdata`
-en el PATH; los scripts están en `~/scratch/mulita/poses/`. (Ese armado
-corta en las tropas, 257 de 255 —lo de Hurón—, pero el pedido ya está.)
+Base: the-advocate `0bb1120a`, ports `c914245`, in own worktrees
+(`mulita-poses-por-personaje` in both). The measurement is on the request
+to `rm2k-snes-mapdata emit` of VD's build **with the nine "poses" ones
+brought back** (14 left out), copied with a wrapper of `rm2k-snes-mapdata`
+in the PATH; the scripts are in `~/scratch/mulita/poses/`. (That build
+stops at the troops, 257 of 255 —Hurón's thing—, but the request is already there.)
 
-* **985 personajes con banco, 1.498 bancos, 103 personajes con más de
-  uno: 513 bancos de más.** Poses distintas: 10.095, 4,93 MB. Con un solo
-  banco por personaje serían 5.257, 2,57 MB: **2,4 MB de techo**.
-* **Seis personajes son 367 de esos 513**: `Extra2:2` (75 bancos),
-  `F04:5` (70), `Darkages:1` (62), `Valnarposen:4` (57), `F04:1` (55) y
-  `UnPoses2:1` (54), cada uno en los 426 mapas. Son los gráficos de
-  `ChangeSpriteAssociation` —las transformaciones de Valnar y Asgar en
-  lobo y murciélago—: el compilador les reserva un lugar en la tabla de
-  gráficos de **todos** los mapas (`associations`), así que Wally los
-  reparte en cada mapa como gráficos del comando 34, "mientras entren".
-  Casi nunca entran: van **prestados** (`drawn with someone else's`) en
-  329, 224, 187, 136, 83 y 69 mapas, y prestado quiere decir cuantizado
-  al color más cercano de la paleta de otro —una distinta en cada mapa—.
-  Sólo ésos seis, con un banco cada uno: 10.095 → 6.603 poses, **1,75 MB
-  menos**.
-* **Por qué cambian**: de los 513, 432 cambian la partición de los
-  píxeles (otros colores juntados: prestado, o una paleta de 15 elegida
-  sobre otras poses, o el tope del timer) y 81 sólo los índices (el mismo
-  dibujo en otro orden dentro de una paleta compartida). La paleta del
-  mapa no reduce colores: Adeleine no interviene en los sprites salvo
-  `merge_least_visible` para el que pasa de 15.
-* **Lo que se ve hoy**: esas transformaciones se dibujan con los colores
-  de otro personaje en la mayoría de los mapas.
+* **985 characters with a bank, 1,498 banks, 103 characters with more than
+  one: 513 extra banks.** Distinct poses: 10,095, 4.93 MB. With a single
+  bank per character it would be 5,257, 2.57 MB: **2.4 MB ceiling**.
+* **Six characters are 367 of those 513**: `Extra2:2` (75 banks),
+  `F04:5` (70), `Darkages:1` (62), `Valnarposen:4` (57), `F04:1` (55) and
+  `UnPoses2:1` (54), each in the 426 maps. They are the graphics of
+  `ChangeSpriteAssociation` —Valnar's and Asgar's transformations into
+  wolf and bat—: the compiler reserves them a spot in the graphics table of
+  **every** map (`associations`), so Wally allocates
+  them in each map as graphics of command 34, "while they fit".
+  They almost never fit: they go **borrowed** (`drawn with someone else's`) in
+  329, 224, 187, 136, 83 and 69 maps, and borrowed means quantized
+  to the nearest color of someone else's palette —a different one in each map—.
+  Just those six, with one bank each: 10,095 → 6,603 poses, **1.75 MB
+  less**.
+* **Why they change**: of the 513, 432 change the partition of the
+  pixels (other colors grouped: borrowed, or a 15-color palette chosen
+  over other poses, or the timer's cap) and 81 only the indices (the same
+  drawing in another order inside a shared palette). The map's palette
+  doesn't reduce colors: Adeleine doesn't step in on sprites except
+  `merge_least_visible` for the one that goes over 15.
+* **What is seen today**: those transformations are drawn with the colors
+  of another character in most maps.
 
-## Lo elegido
+## What was chosen
 
-Los gráficos que **sólo muestra el héroe** —los de `ChangeSpriteAssociation`
-y los del comando 34 sobre el héroe, que ninguna ruta le da a un evento—
-son otra cara de un líder, y van como los líderes que comparten el lugar:
-en la paleta de los líderes, con **sus colores propios**, que la consola
-sube cuando el héroe los toma (`hero_cgram`, como con un líder). Así:
+The graphics that **only the hero shows** —those of `ChangeSpriteAssociation`
+and those of command 34 on the hero, which no route gives to an event—
+are another face of a leader, and go like the leaders that share the spot:
+in the leaders' palette, with **their own colors**, which the console
+uploads when the hero takes them (`hero_cgram`, as with a leader). So:
 
-* su banco de poses es el mismo en todos los mapas (la búsqueda de los
-  colores es la del personaje solo, ordenada);
-* no le sacan paleta al mapa: los NPCs y los tiles prestados bajan solos;
-* y se ven con sus colores, no con los de otro.
+* its pose bank is the same in all maps (the color search
+  is that of the character alone, sorted);
+* they don't take a palette from the map: the NPCs and the borrowed tiles go down on their own;
+* and they're seen with their colors, not with someone else's.
 
-Cambia en cinco lugares: `events` (qué gráficos le da una ruta a un
-evento: `graphics_on_events` en el scan), `convert` (`hero_graphics` a
-Wally), `wally` (los pone en la paleta de los líderes, y da los colores
-de cada gráfico que cae en una paleta de líderes), `mapdata` (la tabla
-`hero_colors` del cartucho, y un byte por gráfico detrás de
-`route_graphic`) y el runtime (`hero_poses_of_graphic` apunta
-`hero_cgram` ahí, y `graphic_hero` corre `apply_tint`).
+It changes in five places: `events` (which graphics a route gives to an
+event: `graphics_on_events` in the scan), `convert` (`hero_graphics` to
+Wally), `wally` (puts them in the leaders' palette, and gives the colors
+of each graphic that falls in a leaders' palette), `mapdata` (the cartridge's
+`hero_colors` table, and one byte per graphic after
+`route_graphic`) and the runtime (`hero_poses_of_graphic` points
+`hero_cgram` there, and `graphic_hero` runs `apply_tint`).
 
-**Medido con eso** (el mismo armado de VD con los nueve): 1.498 → 1.163
-bancos, 10.095 → 6.717 poses, **4,93 → 3,28 MB, 1,65 MB menos**. Los
-mapas con algo prestado, de 365 a 77. Lo que queda por cuantización:
-168 bancos de más, 714 KB de techo, repartidos (`Object1:7` 10 bancos,
+**Measured with that** (the same VD build with the nine): 1,498 → 1,163
+banks, 10,095 → 6,717 poses, **4.93 → 3.28 MB, 1.65 MB less**. The
+maps with something borrowed, from 365 to 77. What remains from quantization:
+168 extra banks, 714 KB ceiling, spread out (`Object1:7` 10 banks,
 `leuteposen3:4` 8, `chara07:4` 7…).
 
-**Por qué ésos y no todos**: los seis son 1,65 de los 2,4 MB de techo y
-tienen un arreglo que además mejora lo que se ve. Los 168 bancos que
-quedan son de personajes cuantizados distinto en pocos mapas cada uno
-(otras poses visibles, una paleta compartida en otro orden, el tope del
-timer); unificarlos pide que el reparto de paletas de Wally respete un
-orden de índices por personaje en todo el cartucho, y eso puede costar
-paletas —más prestados, que es un error visible—. No se hizo: 714 KB de
-techo, y VD ya entra.
+**Why those and not all**: the six are 1.65 of the 2.4 MB ceiling and
+have a fix that also improves what is seen. The 168 banks that
+remain are of characters quantized differently in a few maps each
+(other visible poses, a shared palette in another order, the timer's
+cap); unifying them asks Wally's palette allocation to respect an
+order of indices per character across the whole cartridge, and that can cost
+palettes —more borrowed ones, which is a visible error—. It wasn't done: 714 KB of
+ceiling, and VD already fits.
 
-## Lo hecho
+## What was done
 
-Ramas `mulita-poses-por-personaje`:
+Branches `mulita-poses-por-personaje`:
 
-* the-advocate: `d3f1c486` (events, convert, wally, mapdata y runtime) y
-  el merge de origin/main (`5d7d5601`, lo de Hurón) en `335194a8`.
-* ports: `ce6e7a7` (el caso `grafico-heroe-propio`: la orden 34 sobre el
-  héroe a `Crown7:3`, y `Crown7:3` en `test_graphics` de `release`),
-  `41bbe3a` (sus cuatro goldens), merge de origin/main `0982cf0`, y
-  `e575020` (VD: vuelven los once de "la ROM").
-* the-advocate-docs: `ff1e9ad`, la decisión
-  `decisions/los-graficos-que-solo-muestra-el-heroe.md`, y una nota en la
-  de la orden 34 sobre el héroe. Links revisados.
+* the-advocate: `d3f1c486` (events, convert, wally, mapdata and runtime) and
+  the merge of origin/main (`5d7d5601`, Hurón's thing) in `335194a8`.
+* ports: `ce6e7a7` (the `grafico-heroe-propio` case: command 34 on the
+  hero to `Crown7:3`, and `Crown7:3` in `release`'s `test_graphics`),
+  `41bbe3a` (its four goldens), merge of origin/main `0982cf0`, and
+  `e575020` (VD: the eleven from "the ROM" come back).
+* the-advocate-docs: `ff1e9ad`, the decision
+  `decisions/los-graficos-que-solo-muestra-el-heroe.md`, and a note in the
+  one about command 34 on the hero. Links checked.
 
-**Verificado**, con `just install-local .local-tools events wally mapdata
+**Verified**, with `just install-local .local-tools events wally mapdata
 convert cartridge`:
 
-* `just test` (27) y `crate-test` de events, wally, mapdata y convert en
-  verde. Las pruebas de hashes contra el Python sacan lo nuevo como ya
-  sacaban lo demás que vino después (`without_hero_colors`, y
-  `graphics_on_events` del scan), y con eso dan los mismos hashes.
-* La tanda de ABL: 1202 verdes antes del caso nuevo, sin mover una
-  golden; con el caso y sobre el merge, **1203 verdes**, `abl.sfc`
-  `27d989db75901791…`. El caso nuevo, visto en rojo sin el `apply_tint`
-  de `graphic_hero`: 212 pixeles en el cuadro 20.
-* VD con los once devueltos (**10 afuera**, de 21: 1, 15, 57,
-  99, 150, 165, 225, 399, 402, 403): `just cartuchos` rc 0, 138 s; 12.362
-  piezas en 127 bancos y 1.281 en el `.msu` (6.092.634 B). Poses: 6.744
-  distintas, 3,45 MB. Bancos libres enteros: 0 (el reparto llena la ROM
-  con lo que podría ir al `.msu`); lo que queda de margen son los
-  streams de LZ2 que todavía están en la ROM y pueden irse: ~0,64 MB.
-  En snes9x con el `.msu`: arranca en el 3 y con A pasa a la casa.
+* `just test` (27) and `crate-test` of events, wally, mapdata and convert
+  green. The hash tests against the Python strip the new stuff just as they already
+  stripped the rest that came later (`without_hero_colors`, and
+  `graphics_on_events` from the scan), and with that they give the same hashes.
+* ABL's suite: 1202 green before the new case, without moving a
+  golden; with the case and on top of the merge, **1203 green**, `abl.sfc`
+  `27d989db75901791…`. The new case, seen red without the `apply_tint`
+  of `graphic_hero`: 212 pixels in frame 20.
+* VD with the eleven brought back (**10 left out**, of 21: 1, 15, 57,
+  99, 150, 165, 225, 399, 402, 403): `just cartuchos` rc 0, 138 s; 12,362
+  pieces in 127 banks and 1,281 in the `.msu` (6,092,634 B). Poses: 6,744
+  distinct, 3.45 MB. Whole free banks: 0 (the allocation fills the ROM
+  with what could go into the `.msu`); what's left of margin are the
+  LZ2 streams that are still in the ROM and can leave: ~0.64 MB.
+  In snes9x with the `.msu`: it starts in 3 and with A goes to the house.
 
-Capturas en `/shared/capturas/2026-10-11-una-cuantizacion-por-personaje/`.
+Captures in `/shared/capturas/2026-10-11-una-cuantizacion-por-personaje/`.
 
-**Lo que no cubre nada**: un `ChangeSpriteAssociation` a un gráfico que
-no es de un líder (el de la tanda, `sprite-actor`, es `Future1`; pasa por
-la misma rutina que la orden 34); ninguna transformación de VD se miró en
-la consola, ni los once mapas devueltos. La orden 34 sobre el héroe ahora
-corre `apply_tint`, que cuesta CPU en ese cuadro: no se midió si se nota.
+**What nothing covers**: a `ChangeSpriteAssociation` to a graphic that
+isn't a leader's (the suite's one, `sprite-actor`, is `Future1`; it goes through
+the same routine as command 34); no VD transformation was looked at on
+the console, nor the eleven maps brought back. Command 34 on the hero now
+runs `apply_tint`, which costs CPU in that frame: it wasn't measured whether it shows.
 
-Al mergear: reinstalar `events`, `wally`, `mapdata`, `convert` y
-`cartridge` (el runtime cambió).
+On merging: reinstall `events`, `wally`, `mapdata`, `convert` and
+`cartridge` (the runtime changed).

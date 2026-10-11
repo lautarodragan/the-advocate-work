@@ -1,21 +1,21 @@
 ---
-name: "Portar Zounds, un juego de RPG Maker 2003"
-description: "Un estudio de cuánto de Zounds —el juego de taro, de RPG Maker 2003— anda hoy con las herramientas: el proyecto, Ditto con los campos de 2003, qué compila, qué comandos faltan, y qué harían falta las peleas de 2003 y la música en .wav"
+name: "Port Zounds, an RPG Maker 2003 game"
+description: "A study of how much of Zounds —taro's game, made in RPG Maker 2003— works today with the tools: the project, Ditto with the 2003 fields, what compiles, which commands are missing, and what 2003 battles and .wav music would need"
 type: research
 status: wishlist
 agents: [Aguará]
 ---
 
-De taro, el 2026-10-05: "me gustaría probar una cosa distinta: portar otro
-juego, y ver qué tan bien anda … tengo un juego que hice yo (en su momento).
-nunca fue terminado, pero me gustaría verlo en la SNES". Es
-https://github.com/lautarodragan/zounds, clonado en `/extras/zounds-rm`.
+From taro, on 2026-10-05: "I'd like to try something different: port another
+game, and see how well it works … I have a game I made myself (back in the day).
+it was never finished, but I'd like to see it on the SNES". It is
+https://github.com/lautarodragan/zounds, cloned in `/extras/zounds-rm`.
 
-Lo que se vio al clonarlo: la base de datos es de **RPG Maker 2003**
-(`ldb_id` 2003), con `BattleCharSet/` y `System2/`; 188 mapas; 34 MIDI y
-19 `.wav` en `Music/`. Ditto la lee, pero lo propio de 2003 —comandos de
-batalla, clases, animaciones de battlers— le cae en `unknown`.
+What was seen when cloning it: the database is **RPG Maker 2003**'s
+(`ldb_id` 2003), with `BattleCharSet/` and `System2/`; 188 maps; 34 MIDI and
+19 `.wav` in `Music/`. Ditto reads it, but what is specific to 2003 —battle
+commands, classes, battler animations— falls into `unknown`.
 
-taro, el 2026-10-05, al ver que es de 2003: "mejor probemos con otro juego
-primero, entonces … uno de rpg maker 2000". Queda para después de portar
-un segundo juego de RM2k.
+taro, on 2026-10-05, on seeing it is 2003: "better to try another game
+first, then … an rpg maker 2000 one". It stays for after porting
+a second RM2k game.

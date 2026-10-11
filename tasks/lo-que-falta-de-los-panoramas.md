@@ -1,31 +1,31 @@
 ---
-name: "Lo que falta de los panoramas"
-description: "Lo que el camino de cada panorama no cubre: ChangePBG a otra imagen, los de un evento común, el cielo en modo 1 y el grano del aplanado"
+name: "What is missing from the panoramas"
+description: "What each panorama's path does not cover: ChangePBG to another image, those of a common event, the sky in mode 1 and the grain of the flattening"
 type: feature
 status: wishlist
 ---
 
-# Qué
+# What
 
-Lo que quedó afuera de `los-panoramas.md`, para cualquier juego:
+What was left out of `los-panoramas.md`, for any game:
 
-* **Un `ChangePBG` que nombra otra imagen.** Hoy cambia los bucles y la
-  velocidad y deja la imagen. Haría falta convertir cada imagen que las
-  páginas del mapa nombran y subir sus tiles a mitad del mapa, con la
-  pantalla apagada un cuadro. En A Blurred Line no hay ninguno: los siete del
-  Hover-Tram nombran la del mapa.
-* **Un `ChangePBG` en un evento común, o en un mapa sin panorama.** Wally
-  mira las páginas del mapa para saber qué ejes van a hacer bucle; uno de un
-  evento común no lo ve, y un mapa sin panorama no tiene capa que cambiar.
-* **El cielo en modo 1.** A 2 bits un cielo del RTP queda en cuatro colores
-  (el 105, el atardecer). El estudio dejó otro camino sin probar: el
-  panorama en BG2 a 4 bits y lo de encima en BG3 a 2, con la prioridad de
-  BG3 arriba de todo y la ventana de mensajes tapándola por HDMA.
-* **El grano del aplanado.** Lo de encima va de a celdas de 8x8: una celda
-  que cubre menos de la mitad queda detrás del héroe. Lo de encima con
-  objetos, en las celdas del borde, lo arreglaría si sobran paletas.
+* **A `ChangePBG` that names another image.** Today it changes the loops and the
+  speed and leaves the image. It would require converting each image that the
+  map's pages name and uploading its tiles mid-map, with the
+  screen off for a frame. In A Blurred Line there is none: the seven of the
+  Hover-Tram name the map's own.
+* **A `ChangePBG` in a common event, or in a map without a panorama.** Wally
+  looks at the map's pages to know which axes are going to loop; one in a
+  common event it does not see, and a map without a panorama has no layer to change.
+* **The sky in mode 1.** At 2 bits an RTP sky ends up in four colors
+  (105, the sunset). The study left another path untried: the
+  panorama in BG2 at 4 bits and what is above in BG3 at 2, with BG3's
+  priority above everything and the message window covering it via HDMA.
+* **The grain of the flattening.** What is above goes in 8x8 cells: a cell
+  that covers less than half ends up behind the hero. What is above with
+  objects, in the edge cells, would fix it if there are palettes to spare.
 
-# Por qué
+# Why
 
-Ninguno frena a A Blurred Line hoy: son los bordes de la regla, y lo que
-otro juego va a pedir.
+None of them holds back A Blurred Line today: they are the edges of the rule, and what
+another game is going to ask for.

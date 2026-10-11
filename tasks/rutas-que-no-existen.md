@@ -1,35 +1,35 @@
 ---
-name: "Rutas que no existen"
-description: "Una prueba que falle si un .md o un comentario nombra un archivo que ya no está"
+name: "Paths that do not exist"
+description: "A test that fails if a .md or a comment names a file that is no longer there"
 type: test
 status: wishlist
 ---
 
-# Qué
+# What
 
-Una prueba chica que busque rutas del repo entre comillas invertidas —en los
-`.md` y en los comentarios del código— y falle si alguna no existe.
+A small test that looks for repo paths between backticks —in the
+`.md` files and in code comments— and fails if any does not exist.
 
-# Por qué
+# Why
 
-El 2026-09-24, después de mover y renombrar varias cosas, quedaron referencias
-a rutas que ya no estaban: `juego/`, `pruebas-manuales/capturas-batalla/`, una
-explicación de `cartuchos.py` que se había borrado. taro las encontró leyendo,
-y lo confundieron. Nada las cazaba.
+On 2026-09-24, after moving and renaming several things, references were left
+to paths that were no longer there: `juego/`, `pruebas-manuales/capturas-batalla/`, an
+explanation of `cartuchos.py` that had been deleted. taro found them by reading,
+and they confused him. Nothing caught them.
 
-Se miró la alternativa de un linter de markdown —markdownlint, mdformat,
-Prettier— y no ataca esto: revisan la forma, no si lo nombrado existe. Si
-algún día molesta la forma, mdformat sólo para los `.md` es lo más barato.
+The alternative of a markdown linter was looked at —markdownlint, mdformat,
+Prettier— and it does not address this: they check the form, not whether what is named exists. If
+some day the form becomes a bother, mdformat only for the `.md` files is the cheapest.
 
-Otro caso, el 2026-09-25: el índice de `README.md` enlaza a una sección
-"El MSU-1" que no existe, y el docstring de `tools/audio/msu.py` la cita.
-Un ancla de markdown es una ruta más: la prueba debería mirarlas también.
+Another case, on 2026-09-25: the index of `README.md` links to an
+"El MSU-1" section that does not exist, and the docstring of `tools/audio/msu.py` cites it.
+A markdown anchor is one more path: the test should look at them too.
 
-# Lo que no cubre
+# What it does not cover
 
-Las afirmaciones que dejaron de ser ciertas sin nombrar una ruta: ésas salen
-de leer.
+Statements that stopped being true without naming a path: those come out
+of reading.
 
 # Status
 
-Anotada el 2026-09-24 en wishlist: taro no la considera importante.
+Noted on 2026-09-24 in the wishlist: taro does not consider it important.

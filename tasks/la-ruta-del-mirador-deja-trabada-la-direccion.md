@@ -1,142 +1,142 @@
 ---
-name: "La ruta del mirador deja trabada la dirección del héroe"
-description: "A velocidad 3, la escena del sueño en el mirador (mapa 109) corta la ruta del héroe antes de que destrabe la dirección, y Talan queda sin poder girar"
+name: "The lookout's route leaves the hero's facing locked"
+description: "At speed 3, the dream scene at the lookout (map 109) cuts the hero's route before it unlocks the facing, and Talan is left unable to turn"
 type: bug
 status: testing
 agents: [Hurón]
 assignee: taro
 ---
 
-Lo encontró Hurón el 2026-10-04 (`workflow/tasks/*/dos-puertas-mas-en-el-mapa-de-debug.md`,
-en ABL). La ruta del héroe del 109, evento 6, traba la dirección y la
-destraba al final; a velocidad 3 —la del juego desde la carrera— la ruta se
-corta antes del destrabe, la traba queda y la velocidad termina en 4. Con
-la dirección trabada Talan no puede girar hacia Emily en su casa. A
-velocidad 4 la ruta termina, y por eso el recorrido del primer día, que
-corre a 4, no lo ve. La prueba de la puerta de Paradise destraba a mano,
-con un comentario para sacarlo cuando esto se arregle. Falta ver qué hace
-RM2k: si la ruta se corta en el original también, o es nuestra.
+Hurón found it on 2026-10-04 (`workflow/tasks/*/dos-puertas-mas-en-el-mapa-de-debug.md`,
+in ABL). The hero route of 109, event 6, locks the facing and
+unlocks it at the end; at speed 3 —the game's speed since the race— the route is
+cut before the unlock, the lock stays and the speed ends up at 4. With
+the facing locked Talan cannot turn toward Emily in her house. At
+speed 4 the route finishes, and that is why the walkthrough of the first day, which
+runs at 4, does not see it. The Paradise door test unlocks by hand,
+with a comment to remove it when this is fixed. Still to see what
+RM2k does: whether the route is cut in the original too, or it is ours.
 
-## Qué hace RM2k: lo mismo
+## What RM2k does: the same
 
-**La traba es de RM2k, medido en el original.** Una copia del juego,
-armada con `ditto`, arranca en el 109 debajo del evento 6 y corre su
-página sin los mensajes —los que hay antes de la ruta del héroe no la
-tocan—; la del 122 espera el movimiento y abre la pantalla de guardar
-apenas termina su ruta del héroe. Del `.lsd`, la `party_location`:
+**The lock is RM2k's, measured in the original.** A copy of the game,
+built with `ditto`, starts in 109 below event 6 and runs its
+page without the messages —the ones before the hero route do not
+touch it—; the one in 122 waits for the movement and opens the save screen
+as soon as its hero route finishes. From the `.lsd`, the `party_location`:
 
-| runtime            | velocidad al llegar | `lock_facing` | velocidad | celda  |
+| runtime            | speed on arrival    | `lock_facing` | speed     | cell   |
 |--------------------|---------------------|---------------|-----------|--------|
-| RPG_RT de 2015     | 3                   | 1             | 4         | (4, 8) |
-| RPG_RT de 2015     | 4                   | 0             | 4         | (4, 6) |
-| RPG_RT de 2000     | 3                   | 1             | 4         | (4, 8) |
+| RPG_RT of 2015     | 3                   | 1             | 4         | (4, 8) |
+| RPG_RT of 2015     | 4                   | 0             | 4         | (4, 6) |
+| RPG_RT of 2000     | 3                   | 1             | 4         | (4, 8) |
 
-Lo mismo que la ROM: la ruta del 109 no se cancela con el teletransporte,
-sigue en el 122, y la ruta del héroe del 122 la reemplaza antes de su 27.
-A velocidad 3 son 80 cuadros hasta el 26 y la página salta a los 90; los
-nueve pasos a velocidad 4 no llegan.
+The same as the ROM: the route of 109 is not cancelled by the teleport,
+it carries on in 122, and the hero route of 122 replaces it before its 27.
+At speed 3 it is 80 frames until the 26 and the page jumps at 90; the
+nine steps at speed 4 do not get there.
 
-**Y la velocidad 3 es del juego**: la pone el 64, evento 2, con un `[29]`
-dentro de una rama sobre el switch 164, y el comentario del autor dice
+**And speed 3 is the game's**: map 64, event 2, sets it with a `[29]`
+inside a branch on switch 164, and the author's comment says
 "I need to adjust Talan's walking speed based on whether he's been healed".
 
-Una cosa más que salió midiendo: con la traba puesta, un `face_left` de una
-ruta **sí** lo gira en el RPG_RT de 2000 (`facing` 3 con `lock_facing` 1),
-como ya hacía la ROM.
+One more thing that came out while measuring: with the lock on, a `face_left` from a
+route **does** turn him in the RPG_RT of 2000 (`facing` 3 with `lock_facing` 1),
+as the ROM already did.
 
-## Lo que era nuestro: hablar trabado
+## What was ours: talking while locked
 
-RM2k guarda dos direcciones del héroe, `direction` y `facing`. `Move`
-cambia siempre la primera y, trabado, no la segunda; `CheckActionEvent`
-mira la celda de `GetDirection`. Así que trabado, apretar contra Emily no
-lo gira **pero la A le habla**. La ROM tenía una sola, `hero_dir`, y
-trabado la A miraba hacia donde se dibuja: el comentario de `try_toward`
-lo declaraba, con "ningún caso del juego lo aprieta trabado". Éste lo
-aprieta.
+RM2k keeps two hero directions, `direction` and `facing`. `Move`
+always changes the first one and, when locked, not the second; `CheckActionEvent`
+looks at the cell of `GetDirection`. So when locked, pressing against Emily does not
+turn him **but A talks to her**. The ROM had only one, `hero_dir`, and
+when locked A looked where he is drawn facing: the comment on `try_toward`
+declared it, with "no case in the game presses it while locked". This one
+presses it.
 
-Arreglado con `hero_heading` (BSS, en `low_ram.s` al lado de
-`hero_lock`): el `direction` de RM2k, que se lee sólo trabado. Lo escriben
-`try_toward`, los `face_*` y el salto, y el 26 lo arranca desde
-`hero_dir`. Prueba: `test_el_heroe_trabado_habla_hacia_donde_intento_ir`
-en `pruebas/rpgmaker/test_direccion_trabada.py` de ABL, caso
-`traba-heroe-habla` (el pandillero del mapa 9): roja con `main`, verde con
-el arreglo.
+Fixed with `hero_heading` (BSS, in `low_ram.s` next to
+`hero_lock`): RM2k's `direction`, which is read only when locked. It is written by
+`try_toward`, the `face_*` and the jump, and the 26 starts it from
+`hero_dir`. Test: `test_el_heroe_trabado_habla_hacia_donde_intento_ir`
+in ABL's `pruebas/rpgmaker/test_direccion_trabada.py`, case
+`traba-heroe-habla` (the gang member on map 9): red with `main`, green with
+the fix.
 
-**Y la partida no guardaba la traba**: cargar destrababa, con la cuenta de
-que la única traba que pasaba de su ruta era la del auto de la carrera, y
-entre el 49 y el 64 no hay save point. La del mirador dura todo Distant
-Paradise, que sí tiene. Ahora `hero_lock` y `hero_heading` van en
-`save_table` —`SAVE_BYTES` crece dos y las partidas viejas dejan de
-cargar—. Prueba: `test_la_direccion_trabada_vuelve` en `test_guardar.py`,
-roja con el primer commit y verde con el segundo. `test_titulo_dibujo.py`
-resta desde el final de la partida para encontrar la música, y aprendió
-los dos bytes.
+**And the save did not keep the lock**: loading unlocked, on the reckoning
+that the only lock that outlived its route was the car's in the race, and
+between 49 and 64 there is no save point. The lookout's lasts all of Distant
+Paradise, which does have one. Now `hero_lock` and `hero_heading` go in
+`save_table` —`SAVE_BYTES` grows by two and old saves stop
+loading—. Test: `test_la_direccion_trabada_vuelve` in `test_guardar.py`,
+red with the first commit and green with the second. `test_titulo_dibujo.py`
+subtracts from the end of the save to find the music, and learned
+the two bytes.
 
-La prueba de la puerta de Paradise ya no destraba a mano: exige la traba
-y camina trabada hasta la granja. El arnés (`recorrido.mirar_a`) gira
-hacia un evento mirando lo que mira la A.
+The Paradise door test no longer unlocks by hand: it requires the lock
+and walks locked to the farm. The harness (`recorrido.mirar_a`) turns
+toward an event by looking at what A looks at.
 
-## Otras rutas que se cortan igual
+## Other routes that get cut the same way
 
-Un script descartable recorre todas las páginas y, para cada ruta del
-héroe que abre algo que cierra más adelante (26/27, 28/29), cuenta en qué
-cuadro corre el cierre a velocidad 3 y a 4 contra lo que la página espera
-antes de la ruta siguiente del héroe —o del teletransporte—. Es un modelo
-(los pasos de easyrpg: 16 cuadros a velocidad 3, 8 a 4; el salto por
-`jump_speed`; la espera de ruta, 20), no una medición. Las que salen:
+A throwaway script goes over every page and, for each hero
+route that opens something it closes later on (26/27, 28/29), counts at which
+frame the closing runs at speed 3 and at 4 against what the page waits
+before the next hero route —or the teleport—. It is a model
+(easyrpg's steps: 16 frames at speed 3, 8 at 4; the jump by
+`jump_speed`; the route wait, 20), not a measurement. The ones that come out:
 
-* **Que siguen después de un teletransporte**: sólo la del 109, y la del
-  165 al 166, que el autor destraba a mano en el 166 (`[27, 39, 14]`).
-* **La espera del tram de Lashe City** (9, evento 25, "2 minutos" y "5
-  minutos"): cada par de rutas `[28, 22 pasos, 29]` lo reemplaza el par
-  siguiente a los 90 cuadros. A velocidad 3 no llega nunca al 29: cada
-  par de más deja **un punto más de velocidad**. A velocidad 4 el modelo
-  da 88 cuadros contra 90, y eso se decide por un cuadro: no está medido,
-  ni en el original ni en la ROM. Lo intenté en el original y la copia se
-  quedó quieta: no averigüé dónde se para de verdad el héroe para hablarle
-  al oficial.
-* **A velocidad 3, tres escenas lo dejan más lento para siempre**: 128
-  evento 2 (cmd 154, `[29, 23, 23, 4 pasos, 13, 28]` contra 120 cuadros),
-  132 evento 5 (cmd 8, `[29, 4 pasos, salto, 28]` contra 120) y 142
-  evento 2 (cmd 250, `[29, 2 pasos, 28]` contra 48; y la del cmd 234 si
-  los tres mensajes se pasan rápido). Bajan a 2 y no vuelven. Con el mismo
-  mecanismo que el 109, así que RM2k tendría que hacer lo mismo, pero
-  **no lo medí** en el original.
-* La del 64 (`[26, 36, 28, 28, 8 pasos, …, 29, 29]` contra 30 cuadros) sale
-  a velocidad 3 y 4, pero ahí el héroe va a 6 —el auto— y termina en 16.
+* **That carry on after a teleport**: only the one in 109, and the one from
+  165 to 166, which the author unlocks by hand in 166 (`[27, 39, 14]`).
+* **The wait for the Lashe City tram** (9, event 25, "2 minutos" and "5
+  minutos"): each pair of routes `[28, 22 steps, 29]` is replaced by the next
+  pair after 90 frames. At speed 3 it never reaches the 29: each
+  extra pair leaves **one more point of speed**. At speed 4 the model
+  gives 88 frames against 90, and that is decided by one frame: it is not measured,
+  neither in the original nor in the ROM. I tried it in the original and the copy
+  stood still: I did not find out where the hero really stops to talk
+  to the officer.
+* **At speed 3, three scenes leave him slower forever**: 128
+  event 2 (cmd 154, `[29, 23, 23, 4 steps, 13, 28]` against 120 frames),
+  132 event 5 (cmd 8, `[29, 4 steps, jump, 28]` against 120) and 142
+  event 2 (cmd 250, `[29, 2 steps, 28]` against 48; and the one at cmd 234 if
+  the three messages are skipped quickly). They drop to 2 and do not come back. With the same
+  mechanism as 109, so RM2k would have to do the same, but
+  **I did not measure it** in the original.
+* The one in 64 (`[26, 36, 28, 28, 8 steps, …, 29, 29]` against 30 frames) comes out
+  at speed 3 and 4, but there the hero goes at 6 —the car— and ends at 16.
 
-Ninguna de ésas es un error de la ROM: hacen lo que RM2k. Si se quieren
-arreglar, es un parche del juego, en ABL.
+None of those is a ROM bug: they do what RM2k does. If they are to be
+fixed, it is a game patch, in ABL.
 
-## Para mergear
+## To merge
 
-* Herramientas: la rama de Hurón, dos commits del runtime. Reinstalar
-  `cartridge` en el global —`rm2k-snes-cartridges` arma desde el
-  `tools/runtime/` del checkout del que se instaló—.
-* ABL: la rama `huron-direccion-trabada` del clon de Hurón. Sin goldens
-  nuevas ni cambiadas.
-* Las partidas guardadas antes dejan de cargar: `SAVE_BYTES` creció dos.
+* Tools: Hurón's branch, two runtime commits. Reinstall
+  `cartridge` in the global —`rm2k-snes-cartridges` builds from the
+  `tools/runtime/` of the checkout it was installed from—.
+* ABL: the `huron-direccion-trabada` branch of Hurón's clone. No new or
+  changed goldens.
+* Saves made before stop loading: `SAVE_BYTES` grew by two.
 
-**Verificado**: la tanda de ABL entera, con `main` mergeado en las dos
-ramas y las herramientas de la rama instaladas en local, en verde. Lo que
-no cubre: que el héroe trabado se vea bien caminando por Paradise —eso es
-lo de RM2k, y la tanda lo mira sólo hasta hablarle a Emily—, y nada de lo
-de "Otras rutas", que es un modelo.
+**Verified**: the whole ABL suite, with `main` merged into both
+branches and the branch's tools installed locally, green. What it
+does not cover: that the locked hero looks right walking through Paradise —that is
+RM2k's, and the suite only looks at it up to talking to Emily—, and nothing of
+"Other routes", which is a model.
 
-## La velocidad 3 no era del juego (2026-10-05)
+## Speed 3 was not the game's (2026-10-05)
 
-Lo encontré con el tanque de Dalia (ABL, `el-tanque-de-dalia-se-vuelve-dalia.md`):
-en RM2k Talan **no** llega a Paradise a 3. El Dr. Vago le cura el tobillo
-(mapa 81, evento 6, página 1) con un `[28]` que corre durante un
-`TintScreen` con espera, y la ROM tiraba esa espera: la ruta siguiente
-reemplazaba al `[28]` sin leerlo. Arreglado en `rm2k-snes-events`; desde
-ahí Talan llega a Paradise a 4, el mirador termina su ruta y sale
-destrabado, como mide la fila "4" de la tabla de arriba. Lo de esta tarea
-—hablar trabado y guardar la traba— sigue siendo de RM2k y sigue en pie,
-pero el juego ya no lo ejercita en el mirador: lo cobran los casos de
-`test_direccion_trabada.py` y `test_guardar.py`. La puerta 8 del mapa de
-debug deja ahora la 4, y su prueba exige al héroe destrabado.
+I found it with Dalia's tank (ABL, `el-tanque-de-dalia-se-vuelve-dalia.md`):
+in RM2k Talan does **not** reach Paradise at 3. Dr. Vago heals his ankle
+(map 81, event 6, page 1) with a `[28]` that runs during a
+`TintScreen` with wait, and the ROM dropped that wait: the next route
+replaced the `[28]` without reading it. Fixed in `rm2k-snes-events`; from
+then on Talan reaches Paradise at 4, the lookout finishes its route and comes out
+unlocked, as the "4" row of the table above measures. What this task is about
+—talking while locked and saving the lock— is still RM2k's and still stands,
+but the game no longer exercises it at the lookout: the cases in
+`test_direccion_trabada.py` and `test_guardar.py` cover it. Door 8 of the
+debug map now leaves him at 4, and its test requires the hero unlocked.
 
-Y de "Otras rutas que se cortan igual": el modelo contaba sin los
-`TintScreen`, que ahora esperan; los cortes de ahí hay que volver a mirarlos
-con eso.
+And about "Other routes that get cut the same way": the model counted without the
+`TintScreen`s, which now wait; the cuts there have to be looked at again
+with that in mind.

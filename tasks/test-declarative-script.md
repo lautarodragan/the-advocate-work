@@ -1,60 +1,60 @@
 ---
-name: "Pruebas declarativas"
-description: "Un ejecutor de pruebas escritas como datos"
+name: "Declarative tests"
+description: "A runner for tests written as data"
 type: test
 status: wishlist
 ---
 
-# Qué
+# What
 
-Un ejecutor con pruebas declarativas
+A runner with declarative tests
 
-test --game … --tests …, y cada prueba es un archivo que dice qué caso, qué botones en qué cuadro, dónde capturar contra qué golden y qué memoria verificar. Los casos y las goldens ya son datos; falta el guion. 
+test --game … --tests …, and each test is a file that says which case, which buttons on which frame, where to capture against which golden and which memory to check. The cases and the goldens are already data; the script is missing. 
 
 # Status
 
-Pausado. Probablemente lo descartemos. No vale aportar complejidad si no podemos cubrir todas las pruebas,
-y probablemente siempre necesitemos esa libertad.
+Paused. We'll probably discard it. It's not worth adding complexity if we can't cover all the tests,
+and we'll probably always need that freedom.
 
-# Investigación
+# Research
 
-De ~465 pruebas, 253 ya tienen esa forma. 
+Of ~465 tests, 253 already have that shape. 
 
 ┌─────────────────────────────────────────────────────────────────────────────────────┬──────────────────────────────────┐
-│                                                                                     │             pruebas              │
+│                                                                                     │             tests                │
 ├─────────────────────────────────────────────────────────────────────────────────────┼──────────────────────────────────┤
-│ Entran tal cual en el formato                                                       │ 259: las 253 de la tanda y 6 más │
+│ Fit the format as is                                                                │ 259: the suite's 253 and 6 more  │
 ├─────────────────────────────────────────────────────────────────────────────────────┼──────────────────────────────────┤
-│ Entran con agregados chicos                                                         │ 34 (±3)                          │
+│ Fit with small additions                                                            │ 34 (±3)                          │
 ├─────────────────────────────────────────────────────────────────────────────────────┼──────────────────────────────────┤
-│ Corren la ROM y necesitan código                                                    │ 95                               │
+│ Run the ROM and need code                                                           │ 95                               │
 ├─────────────────────────────────────────────────────────────────────────────────────┼──────────────────────────────────┤
-│ No corren ninguna ROM (herramientas, conversor, cuentas sobre la tabla de símbolos) │ 78                               │
+│ Run no ROM (tools, converter, calculations on the symbol table)                     │ 78                               │
 └─────────────────────────────────────────────────────────────────────────────────────┴──────────────────────────────────┘
 
-Las 78 del final no cuentan para el ejecutor: se quedan en Python porque no hay ROM que correr.
+The 78 at the end don't count for the runner: they stay in Python because there's no ROM to run.
 
-Las 253 de la tanda entran todas. Ninguna decide nada según lo que ve. Si el chequeo automático marcó test_tanda.py y test_tanda_pantallas.py fue por costumbre, no por lógica: range() que se expanden a listas fijas, o funciones como plan() que devuelven números fijos. Para que entren, el formato base tiene que traer cuatro cosas:
-- el cartucho como la lista de flags del conversor;
-- dos relojes: ticks de juego y cuadros de hardware (este último para batalla, menú y título), con su arranque;
-- los cuatro tipos de toque del arnés, más los botones sostenidos;
-- varias capturas por prueba, cada una desde una consola nueva.
+The suite's 253 all fit. None decides anything based on what it sees. If the automatic check flagged test_tanda.py and test_tanda_pantallas.py it was out of habit, not logic: range()s that expand to fixed lists, or functions like plan() that return fixed numbers. For them to fit, the base format has to bring four things:
+- the cartridge as the converter's list of flags;
+- two clocks: game ticks and hardware frames (the latter for battle, menu and title), with their start;
+- the harness's four kinds of press, plus held buttons;
+- several captures per test, each one from a fresh console.
 
-Por qué las 95 necesitan código:
-- Esperar hasta que pase algo (35): tocar A hasta que cambie el mapa, jugar los turnos de una pelea según lo que muestra la pantalla, el recorrido hacia un destino.
-- Guardar, reiniciar y cargar (25): guardar en una ranura, reiniciar, elegir la partida y leer lo que volvió. Con dos acciones nuevas en el formato entrarían unas 19, pero eso ya es un agregado grande.
-- Lo esperado se calcula con el LDB o con un modelo en Python (15), como la pelea entera turno a turno contra batalla.Batalla.
-- Lo esperado se dibuja en Python (12), como el menú contra titulo.render_menu.
-- Otras lógicas (7): la diferencia entre dos corridas, los conjuntos de muestras en la ARAM, una medición de rendimiento.
-- Una de test_cores, que mira los niveles de los canales de audio.
+Why the 95 need code:
+- Wait until something happens (35): press A until the map changes, play a battle's turns according to what the screen shows, the walk toward a destination.
+- Save, reset and load (25): save to a slot, reset, pick the save and read what came back. With two new actions in the format about 19 would fit, but that's already a big addition.
+- The expected value is computed with the LDB or with a Python model (15), like the whole battle turn by turn against batalla.Batalla.
+- The expected image is drawn in Python (12), like the menu against titulo.render_menu.
+- Other logic (7): the difference between two runs, the sets of samples in the ARAM, a performance measurement.
+- One of test_cores, which looks at the audio channels' levels.
 
-El matiz importante: unas 30 de esas 95 se podrían congelar como "en el tick N vale esto". Pero cambiaría lo que prueban: pasarían de "coincide con RM2k" (el valor sale del LDB o del modelo) a "coincide con lo que dio la ROM el día de la foto", y una golden no caza errores de nacimiento. Es la misma pérdida que asumimos el 16 al sacar la referencia. Esas yo las dejaría en Python a propósito.
+The important nuance: about 30 of those 95 could be frozen as "at tick N this holds". But it would change what they test: they'd go from "matches RM2k" (the value comes from the LDB or the model) to "matches what the ROM gave on the day of the snapshot", and a golden doesn't catch birth errors. It's the same loss we accepted on the 16th when removing the reference. I'd leave those in Python on purpose.
 
-Los agregados chicos que suman las 34:
-1. Leer por número los datos de RM2k: switch N, ítem N, el mapa actual, variable N. La variable es la difícil, porque su ranura la calcula el conversor desde el LDB, y sin ella se caen 10 pruebas. Se resolvería sin que el ejecutor conozca el LDB si el conversor emite los símbolos (VAR_17 = ranura), como ya hace con CASO_RANURA.
-2. Un estado inicial más rico: switches, grupo, ir_al_mapa, y bytes cuyo valor es el de otro símbolo.
-3. Operadores simples, como "distinto de cero" o una máscara de bits. Casi todos se reemplazan congelando el valor exacto.
-4. Comparar contra una constante del motor, por ejemplo ORO_MAX == 999999.
-5. Correr en otro core y comparar contra la golden a 15 bits, para 4 de las 5 de test_cores.
+The small additions that make up the 34:
+1. Read RM2k data by number: switch N, item N, the current map, variable N. The variable is the hard one, because its slot is computed by the converter from the LDB, and without it 10 tests drop. It could be solved without the runner knowing the LDB if the converter emits the symbols (VAR_17 = slot), as it already does with CASO_RANURA.
+2. A richer initial state: switches, party, ir_al_mapa, and bytes whose value is that of another symbol.
+3. Simple operators, like "nonzero" or a bitmask. Almost all can be replaced by freezing the exact value.
+4. Compare against an engine constant, for example ORO_MAX == 999999.
+5. Run on another core and compare against the golden at 15 bits, for 4 of the 5 in test_cores.
 
-Mi lectura: el ejecutor vale la pena para esas ~290 pruebas, que son tres cuartos de las que corren ROM. El resto se queda en Python sin que eso sea una derrota: son justamente las que comparan contra RM2k y no contra una foto.
+My reading: the runner is worth it for those ~290 tests, which are three quarters of the ones that run a ROM. The rest stays in Python without that being a defeat: they're precisely the ones that compare against RM2k and not against a snapshot.

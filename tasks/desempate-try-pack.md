@@ -1,41 +1,41 @@
 ---
-name: "El desempate de try_pack"
-description: "Que el reparto de colores no dependa del orden de hash de CPython"
+name: "try_pack's tie-break"
+description: "That the color distribution not depend on CPython's hash order"
 type: bug
 status: wishlist
 ---
 
-# Qué
+# What
 
-Que el reparto de colores de `try_pack` desempate por algo que sea parte de la
-entrada, y no por el orden de iteración de una tabla de hash de CPython.
+That `try_pack`'s color distribution break ties by something that is part of the
+input, and not by the iteration order of a CPython hash table.
 
 # Status
 
-Anotado y sin empezar. **Es una decisión de Adeleine**, `tools/port/Adeleine.py`,
-desde el paso 8: `tools/snes/voodoo/` ya no empaqueta, y **no frena enchufar a
-Voodoo**, que está enchufado desde el paso 8c —hasta el 2026-09-22 esta tarea
-decía lo contrario—. Se arregla cambiando el desempate en Python, o cuando el
-Adeleine pase a Rust, donde el orden de hash de CPython no existe.
+Noted and not started. **It is an Adeleine decision**, `tools/port/Adeleine.py`,
+since step 8: `tools/snes/voodoo/` no longer packs, and **it does not block plugging in
+Voodoo**, which has been plugged in since step 8c —until 2026-09-22 this task
+said the opposite—. It gets fixed by changing the tie-break in Python, or when
+Adeleine moves to Rust, where CPython's hash order does not exist.
 
-# Por qué
+# Why
 
-`try_pack` reparte los colores recorriendo `sorted(sets, key=-len)` sobre un
-`set` de `frozenset`, así que los empates —que son el caso normal— los
-desempata el orden de iteración de una tabla de hash, que no es parte de la
-entrada. Medido: **156 de 200 barajadas del mismo conjunto dan otro reparto**.
+`try_pack` distributes the colors by walking `sorted(sets, key=-len)` over a
+`set` of `frozenset`, so ties —which are the normal case— are
+broken by the iteration order of a hash table, which is not part of the
+input. Measured: **156 of 200 shuffles of the same set give another distribution**.
 
-La ROM de hoy sale siempre igual porque los hashes de enteros no varían entre
-corridas, así que no es una ROM que cambie sola: es un desempate del que
-dependemos sin haberlo elegido, y tiene costo —en una llamada medida obliga a
-fusionar dos colores que con un desempate determinista no haría falta
-fusionar—.
+Today's ROM always comes out the same because integer hashes do not vary between
+runs, so it is not a ROM that changes by itself: it is a tie-break we
+depend on without having chosen it, and it has a cost —in one measured call it forces
+merging two colors that with a deterministic tie-break would not need
+merging—.
 
-Lo que se sabe de la alternativa, porque ya existió: el `tools/snes/voodoo/` de antes
-del paso 8 desempataba por los colores mismos, y de 32 llamadas dio **25
-idénticas, 1 con las mismas paletas en otro orden, 6 distintas y ninguna
-peor**. Ese código está en la historia de `tools/snes/voodoo/`, antes de `4953089`.
+What is known about the alternative, because it already existed: the `tools/snes/voodoo/` from before
+step 8 broke ties by the colors themselves, and out of 32 calls gave **25
+identical, 1 with the same palettes in another order, 6 different and none
+worse**. That code is in the history of `tools/snes/voodoo/`, before `4953089`.
 
-Lo que cuesta hacerlo: cualquiera de los dos caminos **mueve el tilemap de
-algunos mapas**, así que hay goldens que se van a mover y taro las tiene que
-rebendecir.
+What it costs to do: either of the two paths **moves the tilemap of
+some maps**, so there are goldens that are going to move and taro has to
+re-bless them.

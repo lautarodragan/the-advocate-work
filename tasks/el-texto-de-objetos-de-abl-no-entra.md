@@ -1,25 +1,25 @@
 ---
-name: "El texto de objetos de ABL no entra en lo que dejan las ventanas"
-description: "El armado de ABL avisa que la lista de objetos más cargada pide 200 pares de teselas y las ventanas de objetos y equipo dejan 167"
+name: "ABL's item text doesn't fit in what the windows leave"
+description: "ABL's build warns that the most loaded item list asks for 200 tile pairs and the item and equipment windows leave 167"
 type: bug
 status: draft
 ---
 
-Visto por Tijereta el 2026-10-11 (`las-ventanas-mas-eficientes.md`),
-herramientas `fc6f7456`, ports `a85b7e3`, armando el `release` de ABL.
+Seen by Tijereta on 2026-10-11 (`las-ventanas-mas-eficientes.md`),
+tools `fc6f7456`, ports `a85b7e3`, building ABL's `release`.
 
-**Qué se ve**: en el armado, no jugando. `rm2k-snes-screens convert` dice
-en su respuesta:
+**What is seen**: in the build, not when playing. `rm2k-snes-screens convert` says
+in its answer:
 
     WARNING, item text: its list asks for 200 pairs of tiles at most, of
     the 167 the item and equipment windows leave
 
-Ningún otro de los ocho juegos lo dice. No se comprobó qué hace la ROM
-con un inventario que llegue a esa lista —si se corta el texto, o qué
-nombres se pierden— ni con qué inventario se llega.
+No other of the eight games says it. It wasn't checked what the ROM does
+with an inventory that reaches that list —whether the text is cut, or which
+names are lost— nor with which inventory it's reached.
 
-**Cómo verlo**: `just cartuchos release` en `abl/` de los ports; el aviso
-está en lo que contesta `screens` (el `says` de su `screens.json`).
+**How to see it**: `just cartuchos release` in `abl/` of the ports; the warning
+is in what `screens` answers (the `says` of its `screens.json`).
 
-Dato medido de paso: con el fondo de las ventanas de un solo color (el
-research "The windows, made cheaper" del libro), las ventanas dejan 184.
+A fact measured in passing: with the windows' background in a single color (the
+book's research "The windows, made cheaper"), the windows leave 184.

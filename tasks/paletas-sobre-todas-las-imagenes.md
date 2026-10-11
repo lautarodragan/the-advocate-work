@@ -1,29 +1,29 @@
 ---
-name: "Paletas sobre todo el juego"
-description: "Calcular las paletas con todas las imágenes a la vez"
+name: "Palettes over the whole game"
+description: "Compute the palettes with all the images at once"
 type: feature
 status: wishlist
 ---
 
-# Qué
+# What
 
-Calcular las paletas **sobre todas las imágenes del juego a la vez** —CharSets,
-ChipSets y texto— unificando los negros y los grises casi iguales que hoy cada
-imagen tiene por su cuenta.
+Compute the palettes **over all the game's images at once** —CharSets,
+ChipSets and text— unifying the blacks and the nearly-equal grays that today each
+image has on its own.
 
 # Status
 
-Idea de taro, anotada para no perderla y **sin encarar**. Lo que la motiva es el
-límite del cartucho: son 4 MB, que es el techo de LoROM, y el acolchado que
-dejan los bloques llega a 20 KB.
+taro's idea, noted down so as not to lose it and **not tackled**. What motivates it is the
+cartridge's limit: it is 4 MB, which is LoROM's ceiling, and the padding that
+the blocks leave reaches 20 KB.
 
-# Por qué
+# Why
 
-Es una de las dos ideas que hay para **cuando haga falta apretar assets**: el
-impacto visual sería mínimo y lo que se gana es espacio de cartucho, que es lo
-que se termina llenando.
+It is one of the two ideas there are for **when assets need squeezing**: the
+visual impact would be minimal and what is gained is cartridge space, which is
+what ends up filling up.
 
-Quién decide esto es Adeleine, `tools/port/Adeleine.py`, que es el único
-lado donde se decide qué color se pierde: ver "`tools/snes/voodoo/` no decide colores"
-en `AGENTS.md`. Hacerlo pide mirar el juego entero de una vez y no un cartucho,
-que es lo que lo hace distinto de lo que Adeleine hace hoy.
+Who decides this is Adeleine, `tools/port/Adeleine.py`, which is the only
+place where it is decided which color is lost: see "`tools/snes/voodoo/` no decide colores"
+in `AGENTS.md`. Doing it requires looking at the whole game at once and not at a cartridge,
+which is what makes it different from what Adeleine does today.

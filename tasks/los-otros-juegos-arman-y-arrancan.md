@@ -1,140 +1,140 @@
 ---
-name: "Los otros juegos arman y arrancan"
-description: "Una receta que arme los siete juegos desde su toml y los arranque hasta el primer mapa, en snes9x y bsnes; y unas goldens de los mapas pintados de Sunset, el único camino del motor que ninguna prueba ejecuta"
+name: "The other games build and boot"
+description: "A recipe that builds the seven games from their toml and boots them up to the first map, in snes9x and bsnes; and some goldens of Sunset's painted maps, the only engine path that no test runs"
 type: feature
 status: testing
 agents: [Cardón]
 assignee: taro
 ---
 
-taro, el 2026-10-11, aprobó la propuesta: pruebas de los otros juegos,
-pero pocas.
+taro, on 2026-10-11, approved the proposal: tests of the other games,
+but few.
 
-1. **Que cada juego arme desde su `rm2k-snes.toml` y arranque.** Hoy un
-   cambio en las herramientas puede romper Vampires Dawn o Book of Three
-   y nadie se entera hasta el próximo relevamiento. Rojo si no arma o si
-   no llega al primer mapa; de paso, el mismo cartucho en snes9x y bsnes
-   (memoria sin inicializar en código que ABL no ejecuta). No va en
-   `just pruebas` de ABL —VD sola tarda ~2 min en armar—: es una receta
-   aparte, para antes de entregar o después de un cambio grande.
-2. **Goldens de los mapas pintados de Sunset** (`[graphics]
-   painted_maps`, `Way::Painted`): la plaza (2) y el bar (28), quieto y
-   caminando. ABL no tiene mapas pintados.
+1. **That each game builds from its `rm2k-snes.toml` and boots.** Today a
+   change in the tools can break Vampires Dawn or Book of Three
+   and nobody finds out until the next survey. Red if it does not build or if
+   it does not reach the first map; along the way, the same cartridge in snes9x and bsnes
+   (uninitialized memory in code that ABL does not run). It does not go in
+   ABL's `just pruebas` —VD alone takes ~2 min to build—: it is a separate
+   recipe, for before delivering or after a big change.
+2. **Goldens of Sunset's painted maps** (`[graphics]
+   painted_maps`, `Way::Painted`): the plaza (2) and the bar (28), still and
+   walking. ABL has no painted maps.
 
-Lo que **no**: goldens de pantallas o recorridos de cada juego (hornean
-errores de nacimiento y multiplican lo que hay que mirar), ni pruebas de
-mecanismos con un juego de escenario (eso es de los crates o del juego
-de pruebas, fase 2).
+What **not**: goldens of screens or walkthroughs of each game (they bake in
+birth errors and multiply what has to be looked at), nor tests of
+mechanisms with a game as the stage (that belongs to the crates or to the test
+game, phase 2).
 
-## Bitácora de Cardón
+## Cardón's log
 
-Base: the-advocate `fc6f7456` (herramientas globales, sin tocar), ports
-`1353abc`. Rama `cardon-otros-juegos` en `~/scratch/cardon/ports`; libro
-`cardon-otros-juegos-arrancan` en `~/scratch/cardon/docs2`. Scripts de
-exploración en `~/scratch/cardon/explorar/`.
+Base: the-advocate `fc6f7456` (global tools, untouched), ports
+`1353abc`. Branch `cardon-otros-juegos` in `~/scratch/cardon/ports`; book
+`cardon-otros-juegos-arrancan` in `~/scratch/cardon/docs2`. Exploration
+scripts in `~/scratch/cardon/explorar/`.
 
-### Dónde vive y cómo se corre
+### Where it lives and how it is run
 
-`justfile` nuevo en la raíz de los ports, que importa `maquina.just`, con
-`just arrancan` (lo que se le pase va a pytest: `just arrancan -k sunset`).
-Las pruebas, en `pruebas/` de la raíz: `juegos.py` (el arnés), 
-`test_arrancan.py`, `test_pintados.py` y `golden/`. Del arnés de ABL se usa
-sólo `emulator/retro.py` (por `pythonpath` en `pruebas/pytest.ini`): el
-resto importa `lugares.py`, que fija el proyecto de ABL y pide su
-`GAME_DIR`. El recorte a 15 bits pasó a `retro.fifteen_bits`, y
-`tanda.quince_bits` lo llama. Cada juego se arma con su propio
-`just cartuchos`, **sin el `GAME_DIR` de afuera** (si viniera heredado,
-armaría con los recursos de otro juego). No entra en `just pruebas` de ABL.
+A new `justfile` at the root of the ports, which imports `maquina.just`, with
+`just arrancan` (whatever is passed goes to pytest: `just arrancan -k sunset`).
+The tests, in `pruebas/` at the root: `juegos.py` (the harness),
+`test_arrancan.py`, `test_pintados.py` and `golden/`. From ABL's harness only
+`emulator/retro.py` is used (via `pythonpath` in `pruebas/pytest.ini`): the
+rest imports `lugares.py`, which pins ABL's project and asks for its
+`GAME_DIR`. The cut to 15 bits moved to `retro.fifteen_bits`, and
+`tanda.quince_bits` calls it. Each game is built with its own
+`just cartuchos`, **without the outside `GAME_DIR`** (if it came inherited,
+it would build with another game's resources). It does not go in ABL's `just pruebas`.
 
-### Cómo decide "llegó al primer mapa" (medido 2026-10-11)
+### How it decides "it reached the first map" (measured 2026-10-11)
 
-* Título: se toca A cada 16 cuadros hasta que `ticks` deja de ser cero
-  (el lazo principal arrancó). El toque único de ABL —30 cuadros de aire y
-  un A— se perdía en Dooms 2 y El Dorado. Sin título (`TITLE_TILES` en
-  cero) no se toca nada.
-* Después, **por ticks y no por cuadros**: A en un tick de cada 16
-  mientras haya página (`ev_active`), fundido, mensaje o menú. Por cuadros,
-  El Dorado llegaba 5 cuadros antes en bsnes; por ticks los dos cores
-  llegan en el mismo tick con la misma pantalla.
-* Control = 30 ticks seguidos sin `ev_active`, `fade`, `msg_open` ni
-  `menu_open`. Ahí se pide: el mapa medido (`PRIMER_MAPA`), pantalla de más
-  de un color, y que el héroe camine para algún lado (24 ticks por lado).
-* Colgada: un tick que no llega en 3000 cuadros (la carga más larga medida,
-  ~200 cuadros en El Dorado).
-* Los dos cores: mismo (tick, mapa, héroe, lado) y capturas idénticas a 15
-  bits al llegar y después de caminar.
-* MSU-1 sólo para VD (`[rom] msu = "required"`); los demás sin, que es lo
-  que se juega.
+* Title: A is pressed every 16 frames until `ticks` stops being zero
+  (the main loop started). ABL's single press —30 frames of air and
+  an A— was lost in Dooms 2 and El Dorado. Without a title (`TITLE_TILES` at
+  zero) nothing is pressed.
+* Afterwards, **by ticks and not by frames**: A on one tick out of 16
+  while there is a page (`ev_active`), fade, message or menu. By frames,
+  El Dorado arrived 5 frames earlier in bsnes; by ticks both cores
+  arrive on the same tick with the same screen.
+* Control = 30 ticks in a row without `ev_active`, `fade`, `msg_open` or
+  `menu_open`. There it requires: the measured map (`PRIMER_MAPA`), a screen with more
+  than one color, and that the hero walks some way (24 ticks per side).
+* Hung: a tick that does not arrive in 3000 frames (the longest load measured,
+  ~200 frames in El Dorado).
+* The two cores: same (tick, map, hero, side) and identical captures at 15
+  bits on arriving and after walking.
+* MSU-1 only for VD (`[rom] msu = "required"`); the others without, which is
+  what is played.
 
-Resultado, por juego (control en el tick, mapa):
+Result, per game (control at tick, map):
 
     book-of-three        3054   2
-    desert-nightmare    10138  16   (menú propio del 1: "With Intro")
+    desert-nightmare    10138  16   (map 1's own menu: "With Intro")
     dooms2               1934  15
     el-dorado            1108   2
     frozen-world         2682   9
     sunset-over-imdahl   8442  10
-    vampires-dawn         490   4   ("Skip Intro ?" por la primera opción)
+    vampires-dawn         490   4   ("Skip Intro ?" by the first option)
 
-Los siete arman y llegan, idénticos en snes9x y bsnes. Armar desde cero,
-en serie: BoT 13 s, DN 55 s, Dooms2 13 s, El Dorado 5 s, Frozen 20 s,
-Sunset 33 s, VD 132 s. `PRIMER_MAPA` es lo que alcanza el port, **no está
-comparado contra RM2k**.
+The seven build and arrive, identical in snes9x and bsnes. Building from scratch,
+serially: BoT 13 s, DN 55 s, Dooms2 13 s, El Dorado 5 s, Frozen 20 s,
+Sunset 33 s, VD 132 s. `PRIMER_MAPA` is what the port reaches, **it is not
+compared against RM2k**.
 
-### Las goldens de Sunset
+### Sunset's goldens
 
-Plaza (2) y bar (28), quietos en las celdas de las capturas de Mulita
-—(28,10) y (4,11)— y caminando tres celdas para cada lado con la foto a
-mitad del tercer paso: plaza desde (25,17), con la cámara moviéndose en
-los cuatro; bar desde (10,9), donde la cámara casi no tiene para dónde.
-Se llega jugando la intro y con el salto de puerta (`ir_al_mapa` como el
-de ABL): es el `release`. Se exige `PAINT_ON` = 1, el registro "painted"
-en el `.inc`, que el héroe camine 48 px para cada lado y, en la plaza, que
-la cámara se mueva. snes9x y bsnes contra la misma golden, a 15 bits: dan
-igual. Lado a lado en
+Plaza (2) and bar (28), still on the cells of Mulita's captures
+—(28,10) and (4,11)— and walking three cells to each side with the shot at
+the middle of the third step: plaza from (25,17), with the camera moving in
+all four; bar from (10,9), where the camera has almost nowhere to go.
+It gets there by playing the intro and with the door jump (`ir_al_mapa` like
+ABL's): it is the `release`. It requires `PAINT_ON` = 1, the "painted" record
+in the `.inc`, that the hero walks 48 px to each side and, in the plaza, that
+the camera moves. snes9x and bsnes against the same golden, at 15 bits: they come out
+equal. Side by side in
 `/shared/capturas/2026-10-11-los-otros-juegos-arman-y-arrancan/`.
 
-**Hallazgos** (no arreglados, son del motor):
+**Findings** (not fixed, they belong to the engine):
 
-* En un mapa pintado los eventos "encima del héroe" se dibujan **sobre los
-  techos**: los objetos suben un escalón en modo 1 (`oam.s`), y "encima"
-  queda en prioridad 3, arriba de BG1 alta. En RM2k las imágenes (los
-  techos) van arriba de todo (easyrpg: `Priority_PictureNew` > 
-  `Priority_EventsFlying`). Se ve con el DummyGuard (13,23) del mapa 2,
-  caminando desde (15,20). No comparado contra el original con Wine.
-* Un guardia de capa normal (evento 8, (36,13) del mapa 2) con las piernas
-  sobre el borde del techo naranja. Probablemente un borde de los que no
-  entran en los 127 (deuda de Mulita); no lo comprobé.
+* In a painted map the events "above the hero" are drawn **over the
+  roofs**: the objects go up one step in mode 1 (`oam.s`), and "above"
+  ends up at priority 3, over high BG1. In RM2k the pictures (the
+  roofs) go above everything (easyrpg: `Priority_PictureNew` >
+  `Priority_EventsFlying`). It shows with the DummyGuard (13,23) of map 2,
+  walking from (15,20). Not compared against the original with Wine.
+* A normal-layer guard (event 8, (36,13) of map 2) with its legs
+  over the edge of the orange roof. Probably an edge of those that do not
+  fit in the 127 (Mulita's debt); I did not check it.
 
-Las caminatas están elegidas para que ninguno de los dos quede en una
+The walks are chosen so that neither of the two ends up in a
 golden.
 
-### Rojo comprobado (a mano, y vuelto atrás)
+### Red checked (by hand, and reverted)
 
-* `start_map = 999` en el toml de Dooms 2: "dooms2 no arma", con la salida.
+* `start_map = 999` in Dooms 2's toml: "dooms2 no arma", with the output.
 * `TOPE = 300`: "300 ticks tocando A y el jugador no tuvo el control".
-* El Dorado esperando el mapa 3: "tiene el control en el mapa 2 y no en el 3".
-* Un pixel de una golden tocado: "difiere de su golden en 1 de 57344".
-* Lo que **no** se comprobó en rojo: que los dos cores difieran (haría falta
-  una ROM que lea memoria sin inicializar); la comparación es la misma de
-  `test_cores.py`.
+* El Dorado waiting for map 3: "tiene el control en el mapa 2 y no en el 3".
+* One pixel of a golden touched: "difiere de su golden en 1 de 57344".
+* What was **not** checked in red: that the two cores differ (it would need
+  a ROM that reads uninitialized memory); the comparison is the same as
+  `test_cores.py`'s.
 
-### Lo que no cubre
+### What it does not cover
 
-* Si los mapas se ven bien (a propósito), salvo los dos pintados.
-* Lo que pasa después del primer mapa, peleas, menús, guardar.
-* Las otras opciones de las preguntas de las intros ("No Intro", etc.).
-* Que `PRIMER_MAPA` sea el de RM2k.
+* Whether the maps look right (on purpose), except the two painted ones.
+* What happens after the first map, battles, menus, saving.
+* The other options of the intros' questions ("No Intro", etc.).
+* That `PRIMER_MAPA` is RM2k's.
 
-### Para mergear
+### To merge
 
-Ramas: ports `cardon-otros-juegos` (`b94b479` el arnés y la receta,
-`a85b7e3` las goldens; `origin/main` 1353abc ya adentro), libro
-`cardon-otros-juegos-arrancan` (`29a5114`, una sección en `testing.md` y
-una línea en `contributing/README.md`). Nada que instalar: no toca las
-herramientas.
+Branches: ports `cardon-otros-juegos` (`b94b479` the harness and the recipe,
+`a85b7e3` the goldens; `origin/main` 1353abc already inside), book
+`cardon-otros-juegos-arrancan` (`29a5114`, a section in `testing.md` and
+a line in `contributing/README.md`). Nothing to install: it does not touch the
+tools.
 
-Sobre la rama, con las herramientas globales (`fc6f7456`): `just arrancan`
-**8 passed**, rc 0, 106 s con los cartuchos ya armados (Dooms 2 se
-rearmó); desde cero suma ~270 s de armado. La tanda de ABL **1203
-passed**, rc 0, y `abl.sfc` `27d989db75901791…`, igual que main.
+On the branch, with the global tools (`fc6f7456`): `just arrancan`
+**8 passed**, rc 0, 106 s with the cartridges already built (Dooms 2 was
+rebuilt); from scratch it adds ~270 s of building. ABL's suite **1203
+passed**, rc 0, and `abl.sfc` `27d989db75901791…`, the same as main.

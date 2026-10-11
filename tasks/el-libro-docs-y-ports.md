@@ -1,58 +1,58 @@
 ---
-name: "El libro: docs/ de las herramientas y de ABL, y la sección de ports"
-description: "docs/port, rpgmaker, snes y jetbrains.md de snes-rm2k, y docs/ de ABL, al libro en inglés; y la sección ports/, una entrada por juego"
+name: "The book: the tools' and ABL's docs/, and the ports section"
+description: "docs/port, rpgmaker, snes and jetbrains.md from snes-rm2k, and ABL's docs/, to the book in English; and the ports/ section, one entry per game"
 type: docs
 status: testing
 assignee: taro
 agents: [Tijereta]
 ---
 
-De taro, el 2026-10-10: toda la documentación en un solo lugar, el libro
-(`snes-rm2k-docs`), en inglés: "El libro es para personas y para IAs".
-Esta tarea es una de cuatro en paralelo; las convenciones comunes están en
-el encargo de Hornero, y Hornero arma el `SUMMARY.md` final, borra los
-originales y actualiza las referencias.
+From taro, on 2026-10-10: all the documentation in a single place, the book
+(`snes-rm2k-docs`), in English: "The book is for people and for AIs".
+This task is one of four in parallel; the common conventions are in
+Hornero's brief, and Hornero puts together the final `SUMMARY.md`, deletes the
+originals and updates the references.
 
-## Mientras se trabaja (Tijereta, 2026-10-10)
+## While working (Tijereta, 2026-10-10)
 
-Clon del libro en `~/scratch/tijereta/docs`, rama `tijereta-docs-ports`,
-desde `149452a`. Fuentes: `snes-rm2k` en `e43e3e1b`, los ports en
-`4eec80a`, este repo en `90f292b`.
+Clone of the book in `~/scratch/tijereta/docs`, branch `tijereta-docs-ports`,
+from `149452a`. Sources: `snes-rm2k` at `e43e3e1b`, the ports at
+`4eec80a`, this repo at `90f292b`.
 
-* Los slugs de `port/`, `rpgmaker/`, `snes/`, `research/` de ABL quedan en
-  castellano; los nuevos (`README.md`, `contributing/`, los de cada juego)
-  en inglés o como el directorio del juego.
-* Las citas a `workflow/decisiones/x.md` pasan a `../decisions/x.md`, las
-  de `divergencias/` a `../divergences/x.md` y las de `docs/research/` a
-  `../research/x.md`: los slugs no cambian, así que los enlaces a las
-  secciones de Mulita, Calandria y Cardón se resuelven al mergear.
+* The slugs of ABL's `port/`, `rpgmaker/`, `snes/`, `research/` stay in
+  Spanish; the new ones (`README.md`, `contributing/`, each game's)
+  in English or like the game's directory.
+* Citations of `workflow/decisiones/x.md` become `../decisions/x.md`, those
+  of `divergencias/` `../divergences/x.md` and those of `docs/research/`
+  `../research/x.md`: the slugs don't change, so the links to the
+  sections of Mulita, Calandria and Cardón resolve on merging.
 
-## Cómo quedó (Tijereta, 2026-10-10)
+## How it ended up (Tijereta, 2026-10-10)
 
-Rama `tijereta-docs-ports` del clon `~/scratch/tijereta/docs`, siete
-commits sobre `149452a`; el `SUMMARY.md` va en uno propio (`031f761`).
-`mdbook build` sin warnings; los únicos enlaces que no resuelven en la
-rama son a `decisions/`, `ports/abl/decisions/`, `divergences/` y
-`research/`, y todos existen en los clones de Mulita, Calandria y Cardón.
+Branch `tijereta-docs-ports` of the clone `~/scratch/tijereta/docs`, seven
+commits on `149452a`; the `SUMMARY.md` goes in a commit of its own (`031f761`).
+`mdbook build` with no warnings; the only links that don't resolve in the
+branch are to `decisions/`, `ports/abl/decisions/`, `divergences/` and
+`research/`, and all of them exist in the clones of Mulita, Calandria and Cardón.
 
-* `internals/`: los siete de `docs/port/`. `pipeline.md` queda con el
-  diagrama de binarios y salidas, y enlaza al `pipeline.md` del libro para
-  lo demás; lo que `cgram.md` y `vram.md` repetían del modo 3 y de lo que
-  se pierde, enlazado a `fitting.md` y `cartridge/mode-3.md`. Las
-  variables, con los nombres de hoy (`SOUNDFONT`, `RTP_DIR`), en su commit.
-* `reference/`: `chipsets.md`, `rtp.md`, `emulators.md` (ya estaba en
-  inglés: sólo perdió las menciones de la máquina) y el FAQ de Bregalad,
-  tal cual, como archivo estático.
-* `contributing/`: los cuatro repos y `jetbrains.md`.
-* `ports/`: qué es un port, ABL (su README, armado con el del port y el
-  de su `docs/`; su pipeline, su RTP y los tres research) y una página
-  por cada uno de los siete, como foto al 2026-10-06: lo del relevamiento
-  y lo de cada tarea de `testing/` que lo nombra.
+* `internals/`: the seven from `docs/port/`. `pipeline.md` keeps the
+  diagram of binaries and outputs, and links to the book's `pipeline.md` for
+  the rest; what `cgram.md` and `vram.md` repeated about mode 3 and about what
+  is lost, linked to `fitting.md` and `cartridge/mode-3.md`. The
+  variables, with today's names (`SOUNDFONT`, `RTP_DIR`), in their own commit.
+* `reference/`: `chipsets.md`, `rtp.md`, `emulators.md` (it was already in
+  English: it only lost the mentions of the machine) and Bregalad's FAQ,
+  as is, as a static file.
+* `contributing/`: the four repos and `jetbrains.md`.
+* `ports/`: what a port is, ABL (its README, put together from the port's and
+  its `docs/`'s; its pipeline, its RTP and the three research pages) and a page
+  for each of the seven, as a snapshot as of 2026-10-06: what came from the survey
+  and from each `testing/` task that names it.
 
-**Lo que quedó viejo en el original y se tradujo tal cual**, para quien
-actualice: `events.md` dice que "lo que queda del lado de Python es el
-conversor", y el conversor ya es Rust; `vram.md` dice que los repartos
-del panorama "son cuatro" y lista cinco. El README de ABL llamaba
-`abl-snes` al repo de las herramientas: en el libro dice snes-rm2k.
+**What was stale in the original and was translated as is**, for whoever
+updates it: `events.md` says that "what remains on the Python side is the
+converter", and the converter is Rust now; `vram.md` says that the panorama
+layouts "are four" and lists five. ABL's README called the tools repo
+`abl-snes`: in the book it says snes-rm2k.
 
-Al mergear no hay nada que instalar: es sólo el libro.
+On merging there is nothing to install: it is only the book.
