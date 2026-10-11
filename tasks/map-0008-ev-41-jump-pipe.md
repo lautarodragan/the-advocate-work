@@ -1,96 +1,99 @@
 ---
-name: "Bug en caño en mapa 0008"
-description: "Edge case al subirse al caño en Lashe City 34,35"
+name: "Pipe bug on map 0008"
+description: "Edge case when climbing onto the pipe in Lashe City 34,35"
 type: bug
 status: done
 ---
 
-Si dejo apretado el auto-fire del emulador (que es más rápido que
-el que tenemos implementado directamente en el rom), 
-puedo subir y bajar del caño sin apretar ningún otro botón.
+If I hold down the emulator's auto-fire (which is faster than
+the one we have implemented directly in the rom),
+I can climb up and down the pipe without pressing any other button.
 
-El EV0042 triggerea la subida con Action Button. Te deja sobre 
-EV0043. EV0043 hace lo mismo, pero para bajar.
+EV0042 triggers the climb with Action Button. It leaves you on
+EV0043. EV0043 does the same, but to go down.
 
-Por lo que vi, la subida es irrelevante.
-Creo que lo que pasa es que el auto-fire del `A`
-triggerea el evento EV0052, que está sobre el caño.
-Ese evento se supone que le podés interactuar solo desde
-la izquierda, nunca _sobre_ él.
+From what I saw, the climb is irrelevant.
+I think what happens is that the auto-fire of `A`
+triggers event EV0052, which is on top of the pipe.
+That event is supposed to be interactable only from
+the left, never _on top of_ it.
 
-No logré reproducirlo con el auto-fire propio del juego.
-Tampoco pude reproducirlo en el juego original.
+I couldn't reproduce it with the game's own auto-fire.
+I couldn't reproduce it in the original game either.
 
-# Lo hecho, el 2026-09-27
+# What was done, on 2026-09-27
 
-**La sospecha era la buena: es el `EV0052`, y la causa es que la tecla de
-acción no miraba la ruta forzada del héroe.** El caño son tres eventos:
+**The suspicion was the right one: it is `EV0052`, and the cause is that the
+action key did not look at the hero's forced route.** The pipe is three
+events:
 
-    EV0042 (51,22)  capa de abajo, acción: sube y deja al héroe en (55,18)
-    EV0043 (55,18)  capa de abajo, acción: baja y lo deja en (51,22)
-    EV0052 (52,21)  capa del héroe, acción: sube, encarado desde (51,21)
+    EV0042 (51,22)  lower layer, action: climbs up and leaves the hero at (55,18)
+    EV0043 (55,18)  lower layer, action: goes down and leaves him at (51,22)
+    EV0052 (52,21)  hero's layer, action: climbs up, faced from (51,21)
 
-La página del `EV0043` es **un `MoveEvent` solo**, sin espera: termina en el
-mismo cuadro en que arranca y el héroe baja el caño con la página ya cerrada.
-La ROM sólo pedía `step_left` en cero para aceptar la A, y entre dos pasos de
-una ruta —y en un `wait`, y en el aire— está en cero. En el arnés, con A cada
-cuadro, cada dos o cuatro y cuatro desde (55,18): en el cuadro 49 el héroe
-está en (52,20) mirando abajo entre dos pasos, la A mira la celda de enfrente,
-(52,21), y dispara el `EV0052`, cuya ruta arranca desde ahí y no desde
-(51,21): termina en (56,19), arriba del edificio. El autofire de la ROM, de
-cuatro y cuatro, cae o no según la fase con que se apriete X.
+The page of `EV0043` is **a single `MoveEvent`**, without wait: it ends in the
+same frame it starts and the hero goes down the pipe with the page already
+closed. The ROM only asked for `step_left` at zero to accept A, and between
+two steps of a route —and in a `wait`, and in the air— it is at zero. In the
+harness, with A every frame, every two, and four on four off from (55,18): on
+frame 49 the hero is at (52,20) facing down between two steps, A looks at the
+cell in front, (52,21), and triggers `EV0052`, whose route starts from there
+and not from (51,21): it ends at (56,19), on top of the building. The ROM's
+autofire, four on four off, hits it or not depending on the phase with which X
+is pressed.
 
-**RM2k**: `Game_Player::UpdateNextMovementAction` vuelve antes de mirar el
-botón si `IsMoveRouteOverwritten()` (`game_player.cpp:297`), y recién después
-viene el `IsStopping()` del que cuelga `CheckActionEvent`. La regla de capas
-—la celda propia pide otra capa, la de enfrente la del héroe— ya estaba bien.
+**RM2k**: `Game_Player::UpdateNextMovementAction` returns before looking at
+the button if `IsMoveRouteOverwritten()` (`game_player.cpp:297`), and only
+after that comes the `IsStopping()` that `CheckActionEvent` hangs from. The
+layer rule —one's own cell asks for another layer, the one in front for the
+hero's— was already right.
 
-**El arreglo**: `probar_accion` vuelve sin mirar nada si al héroe le queda
-ruta —`ruta_salto`, `ruta_espera`, `ruta_i < ruta_n`, las tres cosas del héroe
-de `hay_rutas` sin la del paso, que ya mira quien llama—. `git blame` da
-`1410cb87`, que escribió la tecla de acción cuando el héroe no tenía rutas que
-sobrevivieran a su página, y su comentario cita sólo el `IsStopping()`.
+**The fix**: `probar_accion` returns without looking at anything if the hero
+has route left —`ruta_salto`, `ruta_espera`, `ruta_i < ruta_n`, the three
+things of the hero in `hay_rutas` without the step one, which the caller
+already checks—. `git blame` gives `1410cb87`, which wrote the action key when
+the hero had no routes that survived their page, and its comment cites only
+the `IsStopping()`.
 
-**Lo que sigue pasando, y es de RM2k**: con el autofire sostenido el héroe
-sube y baja para siempre, pero ahora por los eventos que corresponden. La
-bajada lo deja parado **sobre** el `EV0042`, que es de otra capa y de acción,
-y la A siguiente lo sube (`CheckEventTriggerHere`); la subida lo deja sobre el
-`EV0043`, y la A siguiente lo baja. RM2k hace lo mismo con cualquier autofire.
+**What still happens, and it is RM2k's**: with the autofire held, the hero
+goes up and down forever, but now through the right events. Going down leaves
+him standing **on** `EV0042`, which is of another layer and an action one, and
+the next A takes him up (`CheckEventTriggerHere`); going up leaves him on
+`EV0043`, and the next A takes him down. RM2k does the same with any autofire.
 
-**Otros lugares**: un script aproximado —páginas con un `MoveEvent` sobre el
-héroe sin `ProceedWithMovement` detrás, siguiendo la ruta y mirando en cada
-parada si había un evento de acción abajo o enfrente— da unas treinta
-páginas candidatas en los mapas 8, 9, 95, 261, 278, 279, 343 y 344. Es
-aproximado —la celda de arranque de los eventos de la capa del héroe se
-adivina— y no hace falta afinarlo: el arreglo es general y las cubre a todas.
+**Other places**: an approximate script —pages with a `MoveEvent` on the hero
+without a `ProceedWithMovement` after it, following the route and checking at
+each stop whether there was an action event below or in front— gives some
+thirty candidate pages on maps 8, 9, 95, 261, 278, 279, 343 and 344. It is
+approximate —the starting cell of the events in the hero's layer is guessed—
+and it does not need refining: the fix is general and covers them all.
 
-**La prueba**: `pruebas/rpgmaker/test_accion_con_ruta.py`, A cada uno, dos y
-cuatro cuadros desde el `EV0043`: lo segundo que arranca tiene que ser el
-`EV0042` y en (51,22). Sin el arreglo da rojo en las tres —"disparó el evento
-de índice 51 con el héroe en (52, 20)"—; con él, verde. La misma aserción
-cobra que la A de después de la ruta no se pierda.
+**The test**: `pruebas/rpgmaker/test_accion_con_ruta.py`, A every one, two and
+four frames from `EV0043`: the second thing that starts has to be `EV0042` and
+at (51,22). Without the fix it goes red in all three —"disparó el evento de
+índice 51 con el héroe en (52, 20)"—; with it, green. The same assertion
+enforces that the A after the route is not lost.
 
-## El `wait` que quedaba pegado
+## The `wait` that stayed stuck
 
-El arreglo sacó a la luz otro, que lo tapaba: con él puesto, el recorrido del
-capítulo se trababa en el guardia de la puerta de Tasgarde (mapa 74) con
-`ruta_espera` en 19 y la ruta terminada. Las páginas de los eventos 6, 7 y 16
-de ese mapa mandan al héroe `[face, wait]`: una ruta que **termina** en
-`wait` —21 en el juego, en 15 mapas— dejaba `ruta_espera` cargada para
-siempre, porque `move_hero` sólo llamaba a `paso_de_ruta`, el único que la
-descuenta, con órdenes por leer. `git blame`: la compuerta es de `483c043f` y
-el `wait` llegó un día después en `a95ac7f7`, sin contemplar el caso. Ahora
-`move_hero` entra también con una espera pendiente. Lo que cambia en el
-juego: después de una de esas rutas el héroe queda quieto los veinte cuadros
-del `wait` antes de que el pad lo mueva, como en RM2k. No se movió ninguna
-golden.
+The fix brought to light another one, which it was hiding: with it in place,
+the chapter's walkthrough got stuck at the Tasgarde gate guard (map 74) with
+`ruta_espera` at 19 and the route finished. The pages of events 6, 7 and 16 on
+that map send the hero `[face, wait]`: a route that **ends** in `wait` —21 in
+the game, on 15 maps— left `ruta_espera` loaded forever, because `move_hero`
+only called `paso_de_ruta`, the only one that counts it down, with orders left
+to read. `git blame`: the gate is from `483c043f` and the `wait` arrived a day
+later in `a95ac7f7`, without considering the case. Now `move_hero` also enters
+with a pending wait. What changes in the game: after one of those routes the
+hero stays still for the twenty frames of the `wait` before the pad moves him,
+as in RM2k. No golden moved.
 
-## Lo que tiene que probar taro
+## What taro has to test
 
-Con el autofire del emulador sostenido sobre el caño: bajando ya no tiene que
-volver a subir a mitad de camino ni aparecer arriba del edificio, en (56,19).
-Que suba y baje entero, de punta a punta, sí es lo esperado.
+With the emulator's autofire held on the pipe: going down he must no longer
+climb back up halfway nor appear on top of the building, at (56,19). Going all
+the way up and down, end to end, is the expected behaviour.
 
-Y en Tasgarde, al hablar con el guardia de la puerta y los otros dos que
-hacen girar al héroe: que después del giro el control vuelva normal, un
-tercio de segundo más tarde que antes.
+And in Tasgarde, when talking to the gate guard and the other two who make the
+hero turn: that after the turn control comes back normally, a third of a
+second later than before.

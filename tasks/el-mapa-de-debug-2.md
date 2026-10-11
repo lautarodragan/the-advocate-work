@@ -1,202 +1,206 @@
 ---
-name: "El mapa de debug, 2: la rama la elige el compañero"
-description: "Los Back Alleys dejan moverse, el grupo no se desordena ni se queda sin héroe al cruzar, y el NPC elige la rama que aplican las puertas"
+name: "The debug map, 2: the companion picks the branch"
+description: "The Back Alleys let you move, the party does not get scrambled nor left without a hero when crossing, and the NPC picks the branch the doors apply"
 type: bug
 status: done
 assignee: taro
 ---
 
-# Qué reportó taro
+# What taro reported
 
-Jugando `tasks/el-mapa-de-debug.md` (sale de `main` en
-`455f9fc1`, llevado a `8308033b` con el hito 4 del mundo):
+Playing `tasks/el-mapa-de-debug.md` (it starts from `main` at `455f9fc1`,
+brought to `8308033b` with the world's milestone 4):
 
-> - Elegir los Back Alleys (AFTER THE DIRECTOR IS SHOT) te deja donde te
->   dejaría la cinemática del director, pero no hay cinemática activada, así
->   que quedo ahí, y no puedo moverme. [...] que Talan aparezca directamente
->   donde termina la cinemática normalmente, justo antes del puente que te
->   lleva al savepoint y bum/inn.
-> - Elegir a Arden e ir al Talan's Pad (inicial) deja a Arden en el primer
->   lugar de la party, y al héroe en el mapa, invisible. Lo mismo pasa si
->   elijo a Saldra y voy a LASHE CITY WITH THE CAR [...]
-> - [...] que los conjuntos de switches se prendan/apaguen como corresponde
->   para cada party member. Y [...] que no te permita agregar a más de un
->   party member: si tenés a Arden y sumás a Saldra, sale Arden.
+> - Choosing the Back Alleys (AFTER THE DIRECTOR IS SHOT) leaves you where the
+>   director's cutscene would leave you, but there is no cutscene triggered, so
+>   I stay there, and I can't move. [...] that Talan appears directly where the
+>   cutscene normally ends, right before the bridge that takes you to the
+>   savepoint and bum/inn.
+> - Choosing Arden and going to Talan's Pad (initial) leaves Arden in the first
+>   place of the party, and the hero on the map, invisible. The same happens if
+>   I choose Saldra and go to LASHE CITY WITH THE CAR [...]
+> - [...] that the sets of switches turn on/off as appropriate for each party
+>   member. And [...] that it doesn't let you add more than one party member:
+>   if you have Arden and add Saldra, Arden leaves.
 
-Todo el arreglo está en `parches/manual/nuevos/Map0900.json`: **la ROM no se
-tocó.**
+The whole fix is in `parches/manual/nuevos/Map0900.json`: **the ROM was not
+touched.**
 
-# Los Back Alleys: la celda de (93,0) no es pisable
+# The Back Alleys: the cell at (93,0) is not walkable
 
-La puerta saltaba a `[20, 93, 0]`, el `Teleport` del evento 15 del mapa 19.
-Pero la cinemática **sigue después del `Teleport`**: una ruta del héroe que,
-atravesando, baja cinco, va tres a la izquierda, salta cinco, baja tres,
-salta tres, y —ya sin atravesar— da un paso abajo. Sin la ruta, Talan queda
-en (93,0), que no es pisable, y de una celda bloqueada no se sale.
+The door jumped to `[20, 93, 0]`, the `Teleport` of event 15 on map 19. But the
+cutscene **continues after the `Teleport`**: a route of the hero that, passing
+through, goes down five, three to the left, jumps five, goes down three, jumps
+three, and —no longer passing through— takes one step down. Without the route,
+Talan stays at (93,0), which is not walkable, and there is no way out of a
+blocked cell.
 
-Contada sobre la ruta y confirmada con la colisión del 20 (el `Mundo` del
-arnés): termina en **(90,17)**, arriba del puente vertical que baja al save
-point (88,27) y al Bum de la posada (91,27), mirando abajo. La ruta sube una
-la velocidad: 5, que la puerta ya ponía. Ningún switch lo pone el final de la
-cinemática: los de la escena (89 a 92) los prende la página del 19 antes.
+Counted over the route and confirmed with the collision of 20 (the harness's
+`Mundo`): it ends at **(90,17)**, on top of the vertical bridge that goes down
+to the save point (88,27) and to the inn's Bum (91,27), facing down. The route
+raises the speed by one: 5, which the door already set. No switch is set by the
+end of the cutscene: the scene's (89 to 92) are turned on by the page of 19
+before.
 
-# El grupo desordenado y el héroe invisible: el mapa, no la ROM
+# The scrambled party and the invisible hero: the map, not the ROM
 
-**El orden.** Las puertas del pad y del auto armaban el grupo como lo deja el
-juego en ese punto: sacar a Talan y meter a DummyHero. Con un compañero
-adentro, sacar a Talan lo deja a él primero, DummyHero entra detrás, y la
-página del destino —la 3 del 4, la del 36— cambia DummyHero por Talan
-**detrás** del compañero: `[Arden, Talan]`, o `[Saldra, Talan, Arden]` en el
-36, que suma a Arden por el 54 que la puerta fijaba. Es exactamente lo que
-hace RM2k: agregar va al final, sacar corre a los de atrás. La ROM hace lo
-mismo.
+**The order.** The pad's and the car's doors built the party as the game leaves
+it at that point: removing Talan and adding DummyHero. With a companion inside,
+removing Talan leaves the companion first, DummyHero goes in behind, and the
+destination's page —page 3 of 4, the one of 36— swaps DummyHero for Talan
+**behind** the companion: `[Arden, Talan]`, or `[Saldra, Talan, Arden]` on 36,
+which adds Arden because of the 54 the door set. It is exactly what RM2k does:
+adding goes at the end, removing shifts the ones behind. The ROM does the same.
 
-**El héroe invisible.** El líder que queda es un compañero, y el conversor no
-le prevé gráfico: `lideres_posibles` (snes_convert.py) suma a la tabla de
-actores del cartucho sólo a los que alguna página deja **primeros**, porque
-las poses de cada candidato son tiles de VRAM que se cargan con el mapa. Arden
-y Saldra no lideran nunca en el juego, así que no están, y
-`elegir_grafico_heroe` (grupo.s) sale por `sin_lider` con `hero_poses` en
-cero: no se dibuja nada.
+**The invisible hero.** The leader that remains is a companion, and the
+converter provides no graphic for them: `lideres_posibles` (snes_convert.py)
+adds to the cartridge's actor table only those that some page leaves **first**,
+because each candidate's poses are VRAM tiles loaded with the map. Arden and
+Saldra never lead in the game, so they are not there, and
+`elegir_grafico_heroe` (grupo.s) exits through `sin_lider` with `hero_poses` at
+zero: nothing is drawn.
 
-**¿El juego real llega a ese caso?** Se miraron todas las tandas de
-`ChangePartyMembers` de los mapas del cartucho (script descartable): toda
-tanda que saca a Talan con un compañero posible en el grupo saca también a
-los compañeros (26, 33, 37, 38, 40, 41, 47, 48, 49, 52, 54, 64, 81), y las
-que sacan sólo a Talan (12, 18, 45) corren con Talan solo —el 45 viene del
-40, que ya los sacó a todos—. Así que en el cartucho de hoy no: sólo el mapa
-de debug armaba ese grupo, y se arregla ahí. No se hizo `git blame` de la ROM
-porque no se toca.
+**Does the real game reach that case?** All the `ChangePartyMembers` batches of
+the cartridge's maps were looked at (throwaway script): every batch that
+removes Talan with a possible companion in the party also removes the
+companions (26, 33, 37, 38, 40, 41, 47, 48, 49, 52, 54, 64, 81), and the ones
+that remove only Talan (12, 18, 45) run with Talan alone —45 comes from 40,
+which already removed them all—. So in today's cartridge, no: only the debug
+map built that party, and it is fixed there. No `git blame` of the ROM was done
+because it is not touched.
 
-**Más adelante sí, y queda anotado para cuando entre**: el evento 2 del mapa
-111 hace `+17 +18 -14` —Saldra y AG7 entran y Talan sale—, así que Saldra
-lidera. `lideres_posibles` simula cada mapa desde el grupo del LDB, donde esa
-tanda deja a DummyHero primero, y no la vería: el día que el 111 entre al
-cartucho, Saldra se dibujaría sin gráfico igual que acá. Hay otras que sacan
-sólo a Talan (113, 145, 168, 171, 173, 175, 232) y habría que ver con qué
-grupo se llega a cada una. Es la aproximación que su docstring ya advierte.
+**Later on, yes, and it is noted for when it goes in**: event 2 of map 111 does
+`+17 +18 -14` —Saldra and AG7 come in and Talan leaves—, so Saldra leads.
+`lideres_posibles` simulates each map from the LDB's party, where that batch
+leaves DummyHero first, and would not see it: the day 111 goes into the
+cartridge, Saldra would be drawn without a graphic just like here. There are
+others that remove only Talan (113, 145, 168, 171, 173, 175, 232) and one would
+have to see with which party each one is reached. It is the approximation its
+docstring already warns about.
 
-**El arreglo**: ninguna puerta saca a Talan con un compañero adentro. Las que
-dejan a DummyHero sacan antes a los tres compañeros (15, 17, 18); la de los
-Back Alleys los saca y deja a Talan solo. Así Talan es siempre el primero, y
-lo que agregan después las páginas del juego va detrás en su orden.
+**The fix**: no door removes Talan with a companion inside. The ones that leave
+DummyHero first remove the three companions (15, 17, 18); the Back Alleys one
+removes them and leaves Talan alone. That way Talan is always first, and what
+the game's pages add afterwards goes behind in its order.
 
-# La rama la elige el compañero
+# The companion picks the branch
 
-Hablarle a un NPC lo suma, **saca al otro** si había uno, prende el switch de
-su rama y apaga los de las otras; hablarle otra vez lo saca y apaga el suyo.
-Las ramas son las del juego:
+Talking to an NPC adds them, **removes the other** if there was one, turns on
+their branch's switch and turns off those of the others; talking to them again
+removes them and turns off theirs. The branches are the game's:
 
-    Arden    54 NVAlly            los Neon Vipers
-    Saldra   56 LTAlly            los Lazer Teeth
-    AG7-17   150 AG7-17 In Party  sin pandilla, con el droide
-    ninguno  —                    sin pandilla, sin el droide
+    Arden    54 NVAlly            the Neon Vipers
+    Saldra   56 LTAlly            the Lazer Teeth
+    AG7-17   150 AG7-17 In Party  no gang, with the droid
+    none     —                    no gang, without the droid
 
-El cartel de cada NPC dice qué rama toman las puertas; los de las puertas
-dicen "on your companion's path". AG7 sigue corriendo el común 37 al prender
-el 150 (ver `divergencias/los-comunes-del-equipo-corren-al-cerrar-el-menu.md`).
+Each NPC's sign says which branch the doors take; the doors' signs say "on
+your companion's path". AG7 still runs common 37 when turning on 150 (see
+`divergencias/los-comunes-del-equipo-corren-al-cerrar-el-menu.md`).
 
-Cada puerta lee el 54, el 56 y el 150 y pone lo de esa rama **en ese
-tramo**, apagando los switches de las otras. De dónde sale cada uno lo dice el
-`Comment` de la página; se buscó igual que la primera vez, cruzando qué se
-pone antes de cada punto con qué mira alguien después (scripts descartables).
+Each door reads 54, 56 and 150 and sets what belongs to that branch **at that
+stretch**, turning off the switches of the others. Where each one comes from is
+said by the page's `Comment`; it was looked up the same way as the first time,
+crossing what is set before each point with what someone looks at afterwards
+(throwaway scripts).
 
-**Lo que pone cada rama en cada puerta:**
+**What each branch sets at each door:**
 
-    NORMAL START   todas: apaga 54, 56 y 150 y saca a los compañeros.
+    NORMAL START   all: turns off 54, 56 and 150 and removes the companions.
 
-    TALAN'S PAD    todas: nada. En el juego la rama no existe todavía —se
-                   elige en el 12 o en el 9—, así que el compañero sale y el
-                   54, el 56 y el 150 se apagan. El cartel lo dice.
+    TALAN'S PAD    all: nothing. In the game the branch does not exist yet
+                   —it is chosen on 12 or on 9—, so the companion leaves and
+                   54, 56 and 150 are turned off. The sign says so.
 
-    BACK ALLEYS    Arden:  48 (el espía, oído en la celda del 11), 54, 58
-                           (el hotplate del 12 lo atrapa), 73 (la escena del
-                           14). Oro 400.
-                   Saldra: 38 (rechaza la misión), 55, 56 (el 9: le cuenta
-                           del espía a los Lazer Teeth), 58. Oro 400.
-                   AG7 y ninguno: el Hover-Tram, 69 y 72 —Stash se lleva
-                           los 100 del despertador—, y su tarjeta (ítem 91).
-                           Oro 300. El droide no existe todavía.
-                   El compañero sale en las cuatro: en el juego se suma en
-                   las Rat Tracks (26) y en la escena del 27 del 20.
+    BACK ALLEYS    Arden:  48 (the spy, overheard in the cell of 11), 54, 58
+                           (the hotplate of 12 catches him), 73 (the scene
+                           of 14). Gold 400.
+                   Saldra: 38 (turns down the mission), 55, 56 (9: tells
+                           the Lazer Teeth about the spy), 58. Gold 400.
+                   AG7 and none: the Hover-Tram, 69 and 72 —Stash takes
+                           the alarm clock's 100—, and his card (item 91).
+                           Gold 300. The droid does not exist yet.
+                   The companion leaves in all four: in the game they join
+                   at the Rat Tracks (26) and in the scene of 27 on 20.
 
-    WITH THE CAR   Lo de los Back Alleys, más:
-                   Arden y Saldra: nada más. Oro 845.
-                   AG7: el droide ya en el grupo —183 (cartel de Stash), 203
-                        (el chip, que Stash se queda), 205 (el túnel) y 150;
-                        la puerta de Stash cerrada (185 apagado)—. No abre los
-                        cofres de la planta. Oro 745.
-                   Ninguno: sin el droide, que se puede ir a buscar. Oro 745.
-                   El grupo queda en DummyHero; el 36 mete a Talan, al
-                   compañero y a AG7 si está el 150.
+    WITH THE CAR   What the Back Alleys set, plus:
+                   Arden and Saldra: nothing more. Gold 845.
+                   AG7: the droid already in the party —183 (Stash's sign),
+                        203 (the chip, which Stash keeps), 205 (the tunnel)
+                        and 150; Stash's door closed (185 off)—. It does not
+                        open the plant's chests. Gold 745.
+                   None: without the droid, which can be fetched. Gold 745.
+                   The party is left on DummyHero; 36 adds Talan, the
+                   companion and AG7 if 150 is on.
 
-    THE RACE       Lo del auto, más lo común del cierre (151, 156, 160-162,
-                   166, 182, 238; 148 y 90-92 apagados: los apaga el 44) y la
-                   condición de la página 2 del 36:
-                   Arden:  159 (el vidcast de los Vipers), 167-169 (el caño,
-                           el HQ vacío, el susurro) y los tres cofres del HQ,
-                           que sólo se alcanzan por el caño (544-546, ítems
-                           124 y 157, +250). Oro 1095.
-                   Saldra: 158 (el vidcast de los Lazer Teeth), 181 (los
-                           guardias del 47). Oro 845.
-                   AG7:    el droide, como con auto. Oro 745.
-                   Ninguno: **no hay rama**: sin el droide la página 2 del 36
-                           no ofrece irse. La puerta dice "Talk to Arden,
-                           Saldra or AG7-17 first" y no salta ni pone nada.
+    THE RACE       What the car sets, plus the common closing ones (151,
+                   156, 160-162, 166, 182, 238; 148 and 90-92 off: 44 turns
+                   them off) and the condition of page 2 of 36:
+                   Arden:  159 (the Vipers' vidcast), 167-169 (the pipe, the
+                           empty HQ, the whisper) and the HQ's three chests,
+                           which are only reached through the pipe (544-546,
+                           items 124 and 157, +250). Gold 1095.
+                   Saldra: 158 (the Lazer Teeth's vidcast), 181 (the guards
+                           of 47). Gold 845.
+                   AG7:    the droid, as with the car. Gold 745.
+                   None:   **there is no branch**: without the droid page 2 of
+                           36 does not offer leaving. The door says "Talk to
+                           Arden, Saldra or AG7-17 first" and neither jumps
+                           nor sets anything.
 
-    THE WORLD      Lo de la carrera por rama, más las tres vueltas; el 53 y
-                   el 64 hacen el resto según la rama. Ninguno: como la
-                   carrera.
+    THE WORLD      What the race sets per branch, plus the three laps; 53
+                   and 64 do the rest according to the branch. None: like
+                   the race.
 
-**Dos cosas que la primera versión ponía mal y se corrigieron de paso**: la
-puerta de la carrera prendía el 158 y el 159 juntos (el 44 prende uno por
-rama) y dejaba prendidos el 90 al 92 (el 44 los apaga).
+**Two things the first version set wrong and were corrected in passing**: the
+race door turned on 158 and 159 together (44 turns on one per branch) and left
+90 to 92 on (44 turns them off).
 
-**Para saber si hay compañero con una sola condición** las puertas de la
-carrera y del mundo usan el switch **709**, que el juego no usa: sin nombre,
-y ninguna página, común ni tropa lo pone ni lo mira. La ROM no compila
-`EndEventProcessing` ni las etiquetas, y la puerta sin compañero no puede
-poner nada antes de decir que no; la otra salida era repetir todo el estado
-tres veces. Se prende y se apaga en la misma página.
+**To know whether there is a companion with a single condition** the race and
+world doors use switch **709**, which the game does not use: unnamed, and no
+page, common or troop sets it or looks at it. The ROM does not compile
+`EndEventProcessing` nor the labels, and the door without a companion cannot
+set anything before saying no; the other way out was repeating the whole state
+three times. It is turned on and off in the same page.
 
-# Pruebas
+# Tests
 
-`pruebas/abl/test_mapa_de_debug.py`, sobre `release`:
+`pruebas/abl/test_mapa_de_debug.py`, on `release`:
 
-* los Back Alleys con cada compañero y sin: la celda (90,17), Talan solo y
-  visible, los switches de la rama y ninguno de las otras, el oro, y Talan
-  **caminando** por el puente hasta (90,22);
-* el pad con Arden sumado —el caso de taro—: Talan primero y visible, el 54
-  apagado;
-* el auto con cada compañero y sin: los switches y el oro al llegar, y en el
-  Sector 35 el grupo `[Talan, compañero]` —con Saldra, el caso de taro— con
-  Talan visible;
-* la carrera con cada compañero: los switches y el oro; y sin compañero, que
-  no salta y no pone nada;
-* el mundo con Arden;
-* cada NPC suma, prende su rama, y saca; y sumar a Saldra con Arden saca a
-  Arden, y a AG7 con Saldra saca a Saldra.
+* the Back Alleys with each companion and without: the cell (90,17), Talan
+  alone and visible, the branch's switches and none of the others', the gold,
+  and Talan **walking** along the bridge to (90,22);
+* the pad with Arden added —taro's case—: Talan first and visible, 54 off;
+* the car with each companion and without: the switches and the gold on
+  arrival, and in Sector 35 the party `[Talan, compañero]` —with Saldra,
+  taro's case— with Talan visible;
+* the race with each companion: the switches and the gold; and without a
+  companion, that it does not jump and sets nothing;
+* the world with Arden;
+* each NPC adds, turns on their branch, and removes; and adding Saldra with
+  Arden removes Arden, and AG7 with Saldra removes Saldra.
 
-"Visible" es Talan de líder y `hero_poses` distinto de cero: sin entrada en la
-tabla de actores, `elegir_grafico_heroe` lo deja en cero.
+"Visible" is Talan as leader and `hero_poses` other than zero: without an entry
+in the actor table, `elegir_grafico_heroe` leaves it at zero.
 
-**Contra el mapa de antes** (el `Map0900.json` de `8308033b`, con `release`
-armado aparte): fallan 16 de las 21 —el pad espera a Talan en el grupo y
-nunca llega, los Back Alleys quedan en (93,0), el auto con Saldra no tiene su
-rama, los NPC no sacan al otro—.
+**Against the map from before** (the `Map0900.json` of `8308033b`, with
+`release` built separately): 16 of the 21 fail —the pad expects Talan in the
+party and he never arrives, the Back Alleys stay at (93,0), the car with Saldra
+does not have her branch, the NPCs do not remove the other—.
 
-La golden `mapa-de-debug-llegada` no cambió: los carteles y los NPC son
-texto.
+The golden `mapa-de-debug-llegada` did not change: the signs and the NPCs are
+text.
 
-Con `main` mergeado en `43dc5303`: `just cartuchos` y `just pruebas`, todo en
-verde.
+With `main` merged at `43dc5303`: `just cartuchos` and `just pruebas`, all
+green.
 
-# Qué tiene que probar taro
+# What taro has to test
 
-* Cada NPC: el cartel dice la rama, y sumar uno saca al otro.
-* Los Back Alleys con cada uno: que Talan se mueva, y jugar hasta las Rat
-  Tracks —ahí se suma el compañero, o nadie sin pandilla—.
-* El pad con un compañero sumado: Talan visible, sin compañero.
-* El auto con Saldra, con Arden, con AG7 y sin nadie: el grupo en el sector,
-  y con AG7 que Stash no vuelva a abrir.
-* La carrera y el mundo con cada uno, y sin nadie: el cartel que no deja.
+* Each NPC: the sign states the branch, and adding one removes the other.
+* The Back Alleys with each one: that Talan moves, and playing up to the Rat
+  Tracks —there the companion joins, or nobody without a gang—.
+* The pad with a companion added: Talan visible, without a companion.
+* The car with Saldra, with Arden, with AG7 and with nobody: the party in the
+  sector, and with AG7 that Stash does not open again.
+* The race and the world with each one, and with nobody: the sign that does
+  not let you.

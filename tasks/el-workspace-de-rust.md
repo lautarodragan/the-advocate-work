@@ -1,153 +1,150 @@
 ---
-name: "El workspace de Rust"
-description: "Los nueve crates de tools/ en un workspace de Cargo: un Cargo.lock y un target/, sin cambiar lo que hace ningún binario"
+name: "The Rust workspace"
+description: "The nine crates of tools/ in a Cargo workspace: one Cargo.lock and one target/, without changing what any binary does"
 type: refactor
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-09-29: "dale, armá el workspace". Charlado antes: los
-crates siguen siendo proyectos separados —`cargo install --path` instala
-cada uno por su cuenta, y cada uno se publica solo—; el workspace sólo hace
-que las dependencias compartidas se compilen una vez y que haya un solo
-`Cargo.lock`.
+From taro, on 2026-09-29: "go ahead, set up the workspace". Discussed before:
+the crates are still separate projects —`cargo install --path` installs each
+one on its own, and each one is published alone—; the workspace only makes the
+shared dependencies compile once and there be a single `Cargo.lock`.
 
-Lo que Hornero ya decidió: los perfiles de compilación van arriba, porque
-el workspace ignora los de cada crate. `ditto` y `protocol` optimizaban por
-tamaño (`opt-level = "z"`, `panic = "abort"`): el `opt-level` se conserva
-por paquete, y `panic = "abort"` se pierde, porque no se puede fijar por
-paquete. Cambia el tamaño de esos dos binarios, no lo que hacen.
+What Hornero already decided: the build profiles go at the top, because the
+workspace ignores each crate's. `ditto` and `protocol` optimised for size
+(`opt-level = "z"`, `panic = "abort"`): the `opt-level` is kept per package,
+and `panic = "abort"` is lost, because it cannot be set per package. It
+changes the size of those two binaries, not what they do.
 
-## Sumado el 2026-09-29, de taro
+## Added on 2026-09-29, from taro
 
-Dos cosas más, en la misma tarea:
+Two more things, in the same task:
 
-1. **Los crates se agrupan en carpetas por capa**, adentro del mismo
-   workspace y con `git mv`: `tools/snes/` —formato de SNES, sin saber de
-   RPG Maker: `voodoo`, `lz2`, `gunter` y `protocol`, que es genérico pero
-   genera constantes para el ensamblador de 65816—; `tools/rm2k/` —RPG
-   Maker, sin saber de la SNES: `ditto` y `rm2k-render`—; y
-   `tools/rm2k-snes/` —lo que une las dos: `project`, `cartridge`,
-   `rm2k-snes-audio`, y los crates del conversor que vienen—. Los nombres
-   de crates y binarios no cambian; el `Cargo.toml` del workspace queda en
-   `tools/`. Los paquetes de Python de `tools/` no se mueven.
-2. **Una prueba que haga cumplir la dirección de las capas**, leyendo
-   `cargo metadata`: `snes/` y `rm2k/` no dependen de `rm2k-snes/`, y
-   `snes/` y `rm2k/` no dependen uno del otro.
+1. **The crates are grouped into folders by layer**, inside the same workspace
+   and with `git mv`: `tools/snes/` —SNES format, without knowing about RPG
+   Maker: `voodoo`, `lz2`, `gunter` and `protocol`, which is generic but
+   generates constants for the 65816 assembler—; `tools/rm2k/` —RPG Maker,
+   without knowing about the SNES: `ditto` and `rm2k-render`—; and
+   `tools/rm2k-snes/` —what joins the two: `project`, `cartridge`,
+   `rm2k-snes-audio`, and the converter crates that are coming—. The names of
+   crates and binaries do not change; the workspace's `Cargo.toml` stays in
+   `tools/`. The Python packages of `tools/` do not move.
+2. **A test that enforces the direction of the layers**, reading
+   `cargo metadata`: `snes/` and `rm2k/` do not depend on `rm2k-snes/`, and
+   `snes/` and `rm2k/` do not depend on each other.
 
-3. **`rm2k-render` deja de leer `rm2k-snes.toml`.** Va a `rm2k/`, pero
-   `layers --map N` buscaba el archivo del proyecto hacia arriba y leía
-   `[paths] data` para encontrar el volcado: saber de la capa de arriba
-   copiando su formato en vez de depender de un crate, que la prueba de
-   capas por `cargo metadata` no ve. Ahora recibe `--data <dir>`, el
-   directorio del volcado de Ditto, y la prueba de capas mira también que
-   nada de `snes/` ni de `rm2k/` nombre `rm2k-snes.toml`.
+3. **`rm2k-render` stops reading `rm2k-snes.toml`.** It goes to `rm2k/`, but
+   `layers --map N` looked for the project file upwards and read
+   `[paths] data` to find the dump: knowing about the layer above by copying
+   its format instead of depending on a crate, which the layers test via
+   `cargo metadata` does not see. Now it receives `--data <dir>`, Ditto's dump
+   directory, and the layers test also checks that nothing in `snes/` or
+   `rm2k/` names `rm2k-snes.toml`.
 
-Commits: el workspace; la mudanza, sólo `git mv` y rutas; la prueba; lo de
-`rm2k-render`; la prosa aparte.
+Commits: the workspace; the move, only `git mv` and paths; the test; the
+`rm2k-render` part; the prose separately.
 
-## Lo hecho
+## What was done
 
-### El workspace
+### The workspace
 
-- `tools/Cargo.toml`, virtual, con los nueve crates y `ditto/xtask`:
-  Ditto tenía su propio workspace para el generador del esquema, y un
-  workspace no puede anidar otro, así que `xtask` pasó a miembro del de
-  arriba. `cargo xtask` sigue andando parado en `ditto/`, porque el alias
-  está en `ditto/.cargo/config.toml` y cargo lo lee desde el directorio
-  donde se lo corre.
-- `resolver = "2"`: un manifiesto virtual no tiene edición de dónde
-  sacarlo y caería en el 1; "2" es lo que cada miembro, en edición 2021,
-  usaba solo.
-- Perfiles arriba, `opt-level = "z"` por paquete para `ditto` y
-  `protocol`; `panic = "abort"` se pierde. Medido: `ditto` pasa de 2,21 a
-  3,01 MB y `protocol` de 0,77 a 1,07 MB.
-- Un `Cargo.lock`: armado **juntando los nueve** —los paquetes del
-  registro de todos, deduplicados— para que cargo parta de versiones que ya
-  se usaban, y después, donde dos crates tenían versiones distintas, subido
-  a la más nueva con `cargo update --precise`. Ninguna versión es nueva:
-  todas estaban en algún lock. Las que se unificaron, con quién tenía la
-  vieja:
-  - `clap` y `clap_builder` 4.6.6 → 4.6.7, `clap_derive` 4.6.4 → 4.6.7,
+- `tools/Cargo.toml`, virtual, with the nine crates and `ditto/xtask`: Ditto
+  had its own workspace for the schema generator, and a workspace cannot nest
+  another, so `xtask` became a member of the one above. `cargo xtask` still
+  works standing in `ditto/`, because the alias is in
+  `ditto/.cargo/config.toml` and cargo reads it from the directory where it is
+  run.
+- `resolver = "2"`: a virtual manifest has no edition to take it from and would
+  fall back to 1; "2" is what each member, in edition 2021, used on its own.
+- Profiles at the top, `opt-level = "z"` per package for `ditto` and
+  `protocol`; `panic = "abort"` is lost. Measured: `ditto` goes from 2.21 to
+  3.01 MB and `protocol` from 0.77 to 1.07 MB.
+- One `Cargo.lock`: built **by joining the nine** —the registry packages of
+  all of them, deduplicated— so that cargo starts from versions that were
+  already in use, and then, where two crates had different versions, bumped to
+  the newest with `cargo update --precise`. No version is new: they were all
+  in some lock. The ones that were unified, with who had the old one:
+  - `clap` and `clap_builder` 4.6.6 → 4.6.7, `clap_derive` 4.6.4 → 4.6.7,
     `clap_lex` 1.1.0 → 1.1.1: `protocol`.
-  - `syn` 3.0.5 → 3.0.6 y `unicode-ident` 1.0.24 → 1.0.26: `ditto`,
-    `gunter`, `protocol` y `voodoo`.
-  - `cfg-if` 1.0.4 → 1.0.5 y `zlib-rs` 0.6.7 → 0.6.8: `voodoo`.
-- **`cargo install --locked --path <crate>` usa el lock del workspace**:
-  comprobado bajando `clap` a 4.6.6 en el lock del workspace e instalando
-  `protocol`, que compiló `clap v4.6.6`. Y usa el `target/` del workspace.
-- `CARGO_MANIFEST_DIR` sigue siendo el directorio del paquete: los `.dbg`
-  que arman los binarios nuevos nombran los fuentes relativos a la raíz del
-  worktree, igual que antes.
-- Un solo `target/`, en `tools/target/`; se borraron los `.gitignore` de
-  cada crate, que sólo decían `target/`.
-- `tools/justfile`: las recetas de probar siguen paradas en cada crate
-  (`cargo test` en un miembro prueba sólo ése), y hay una nueva,
-  `rust-test`, que prueba el workspace entero en debug.
+  - `syn` 3.0.5 → 3.0.6 and `unicode-ident` 1.0.24 → 1.0.26: `ditto`,
+    `gunter`, `protocol` and `voodoo`.
+  - `cfg-if` 1.0.4 → 1.0.5 and `zlib-rs` 0.6.7 → 0.6.8: `voodoo`.
+- **`cargo install --locked --path <crate>` uses the workspace's lock**:
+  checked by lowering `clap` to 4.6.6 in the workspace's lock and installing
+  `protocol`, which compiled `clap v4.6.6`. And it uses the workspace's
+  `target/`.
+- `CARGO_MANIFEST_DIR` is still the package's directory: the `.dbg` files the
+  new binaries build name the sources relative to the worktree's root, same as
+  before.
+- A single `target/`, in `tools/target/`; each crate's `.gitignore`, which only
+  said `target/`, was deleted.
+- `tools/justfile`: the test recipes still stand in each crate (`cargo test`
+  in a member tests only that one), and there is a new one, `rust-test`, which
+  tests the whole workspace in debug.
 
-### Las capas
+### The layers
 
-- La mudanza fue un commit de sólo `git mv` y las rutas que dejaban de
-  valer: los miembros, la dependencia de `rm2k-snes-audio` en `gunter`,
-  los `cd` de las recetas, las rutas de `protocol`, `test_protocol.py` y el
-  `.idea/` de ditto. `_install` busca cada proyecto por su nombre en las
-  carpetas de `rust_layers`, así que `install lz2` sigue siendo `install
-  lz2`.
-- `suite::tools()` de `project` contaba un directorio hacia arriba desde el
-  crate y ahora cuenta dos. Es el único `CARGO_MANIFEST_DIR` que llega a
-  `tools/`; los demás usos de `env!` son `CARGO_BIN_EXE_*` y
-  `CARGO_TARGET_TMPDIR`, que no dependen de dónde esté el crate. Como una
-  mudanza más lo rompería sin error de compilación, lleva una prueba: que
-  desde ahí se llegue a `runtime/main.s`.
-- `tools/tests/test_layers.py` lee `cargo metadata --no-deps`. Probado que
-  falla con `rm2k-project = { workspace = true }` en `gunter` —heredada del
-  workspace, para ver que `cargo metadata` le da la ruta igual— y `lz2`
-  como dev-dependency de `ditto`; y el grep de `rm2k-snes.toml`, con el
-  `source.rs` de `rm2k-render` de antes.
-- `rm2k-render layers --map N` pide `--data <dir>`; nadie usaba `--map`
-  —el conversor usa `--request`, `render/render_map.py`—. Con el `toml`
-  del crate salen del lock `toml` 0.9, `toml_datetime` 0.7 y `winnow` 0.7.
+- The move was a commit of only `git mv` and the paths that stopped being
+  valid: the members, `rm2k-snes-audio`'s dependency on `gunter`, the recipes'
+  `cd`s, the paths of `protocol`, `test_protocol.py` and ditto's `.idea/`.
+  `_install` looks for each project by its name in the folders of
+  `rust_layers`, so `install lz2` is still `install lz2`.
+- `project`'s `suite::tools()` counted one directory up from the crate and now
+  counts two. It is the only `CARGO_MANIFEST_DIR` that reaches `tools/`; the
+  other uses of `env!` are `CARGO_BIN_EXE_*` and `CARGO_TARGET_TMPDIR`, which
+  do not depend on where the crate is. Since one more move would break it
+  without a compile error, it carries a test: that from there `runtime/main.s`
+  is reached.
+- `tools/tests/test_layers.py` reads `cargo metadata --no-deps`. Tested that it
+  fails with `rm2k-project = { workspace = true }` in `gunter` —inherited from
+  the workspace, to see that `cargo metadata` gives it the path anyway— and
+  `lz2` as a dev-dependency of `ditto`; and the grep of `rm2k-snes.toml`, with
+  `rm2k-render`'s `source.rs` from before.
+- `rm2k-render layers --map N` asks for `--data <dir>`; nobody used `--map`
+  —the converter uses `--request`, `render/render_map.py`—. With the crate's
+  `toml`, `toml` 0.9, `toml_datetime` 0.7 and `winnow` 0.7 leave the lock.
 
-### Verificación
+### Verification
 
-- `cargo build --release` y `cargo test` del workspace: 251 pruebas, las
-  mismas que daban los nueve por separado en `main`, más la de
-  `suite::tools()`, 252; 3 ignoradas en los dos casos.
-- `NO_CACHE=1 just cartuchos` con los nueve instalados en el `bin/` local:
-  los 999 archivos de `rom/build/` —`.sfc`, `.msu`, `.pcm`, `.inc`, `.sym`
-  y demás— iguales a los que salen acá con los binarios de `main`. Los dos
-  `.dbg` difieren, y sólo en dos cosas medidas: los binarios de `main`
-  estaban instalados desde otro árbol y nombran los `.inc` con ruta
-  absoluta, y los comentarios que la prosa cambió en `tools/runtime/*.s`
-  cambian el tamaño que el `.dbg` anota de cada fuente.
-- `just -f tools/justfile test`, `rust-test` y `protocol --check`.
+- `cargo build --release` and `cargo test` of the workspace: 251 tests, the
+  same ones the nine gave separately in `main`, plus the `suite::tools()` one,
+  252; 3 ignored in both cases.
+- `NO_CACHE=1 just cartuchos` with the nine installed in the local `bin/`: the
+  999 files of `rom/build/` —`.sfc`, `.msu`, `.pcm`, `.inc`, `.sym` and the
+  rest— identical to those that come out here with `main`'s binaries. The two
+  `.dbg` differ, and only in two measured things: `main`'s binaries were
+  installed from another tree and name the `.inc` with an absolute path, and
+  the comments the prose changed in `tools/runtime/*.s` change the size the
+  `.dbg` notes for each source.
+- `just -f tools/justfile test`, `rust-test` and `protocol --check`.
 
-### Tiempos
+### Times
 
-Compilar e instalar en limpio los ocho crates con binario, con el loop de
-`_install`, en esta máquina y con el registro ya bajado:
+Compiling and installing from clean the eight crates with a binary, with
+`_install`'s loop, on this machine and with the registry already downloaded:
 
-- antes, nueve proyectos con su `target/` cada uno: 188 s;
-- después, el workspace: 172 s.
+- before, nine projects with a `target/` each: 188 s;
+- after, the workspace: 172 s.
 
-Poco, porque lo que cuesta es el `lto` con una sola unidad de código, que
-se hace por binario igual; lo que se ahorra es recompilar las
-dependencias: se compilan 80 crates en vez de 206. Y no todas se
-comparten, porque `cargo install --path` compila un paquete por vez y las
-features se unifican por paquete: `clap` con y sin `derive`, `toml` y
-`serde_json` con y sin `preserve_order`. Recompilar después de tocar un
-crate es lo que más baja: las dependencias ya están en `tools/target/`.
+Little, because what costs is the `lto` with a single code unit, which is done
+per binary anyway; what is saved is recompiling the dependencies: 80 crates are
+compiled instead of 206. And not all are shared, because `cargo install
+--path` compiles one package at a time and the features are unified per
+package: `clap` with and without `derive`, `toml` and `serde_json` with and
+without `preserve_order`. Recompiling after touching a crate is what goes down
+the most: the dependencies are already in `tools/target/`.
 
-Con eso, sobre la rama antes de mergear `main` (lo que trajo `main` fue
-sólo prosa de `workflow/`): `just pruebas`, 874 en verde.
+With that, on the branch before merging `main` (what `main` brought was only
+prose in `workflow/`): `just pruebas`, 874 green.
 
-## Al mergear, en el checkout principal
+## When merging, in the main checkout
 
-- `just -f tools/justfile install`, todo: cambian los perfiles de `ditto`
-  y `protocol`, el lock de todos, y `rm2k-render` cambia su interfaz; y
-  los binarios de `cartridge` buscan el runtime por la ruta del crate, que
-  se mudó.
-- Borrar los `target/` viejos de cada crate, que quedan sin trackear y ya
-  no los usa nadie: `tools/*/target`. El nuevo es `tools/target/`.
-- Mirar que no quede nada suelto en `tools/` con el nombre de un crate:
-  un directorio vacío o un `.idea/` sin trackear no los mueve el merge.
+- `just -f tools/justfile install`, everything: the profiles of `ditto` and
+  `protocol` change, the lock of all of them, and `rm2k-render` changes its
+  interface; and `cartridge`'s binaries look for the runtime through the
+  crate's path, which moved.
+- Delete each crate's old `target/`, which are left untracked and nobody uses
+  any more: `tools/*/target`. The new one is `tools/target/`.
+- Check that nothing is left loose in `tools/` with a crate's name: an empty
+  directory or an untracked `.idea/` are not moved by the merge.

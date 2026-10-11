@@ -1,111 +1,112 @@
 ---
-name: "Las flechas se repiten en el menú"
-description: "Sostener una flecha en el menú mueve la selección sola después de una espera, como Input::IsRepeated de RM2k"
+name: "The arrows repeat in the menu"
+description: "Holding an arrow in the menu moves the selection on its own after a delay, like RM2k's Input::IsRepeated"
 type: feature
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-09-28: "al mantener presionada una flecha direccional
-dentro del menú, luego de ~1s, debería empezar a mover la selección
-continuamente en esa dirección, a un ritmo de ~10 items por segundo
-(revisar el código de easy rpg para confirmar)".
+From taro, on 2026-09-28: "when holding down a directional arrow inside the
+menu, after ~1s, it should start moving the selection continuously in that
+direction, at a rate of ~10 items per second (check easy rpg's code to
+confirm)".
 
-## Qué hace el original
+## What the original does
 
-- **easyrpg** (`src/input.cpp`): `start_repeat_time = 23` y `repeat_time =
-  4`, en cuadros, con `repeated = press_time == 1 || (press_time >= 23 &&
-  press_time % 4 == 0)`, y `press_time` vale 1 en el cuadro del flanco. O sea
-  que dispara en el cuadro 0, en el 23, en el 27, en el 31…: **0,38 s de
-  espera y 15 por segundo**, no el segundo y los diez que recordaba taro.
-- **El RPG_RT, medido**: el de 2015 con Wine, grabando con `ffmpeg -f
-  x11grab` a 60 cuadros la zona del cursor de la pantalla de título mientras
-  `xdotool` sostenía abajo 2,5 s, y buscando la fila con la barra roja cuadro
-  por cuadro. Los cambios caen a **23 cuadros del primero y después cada 4,
-  sin una sola excepción** en treinta y tantas repeticiones, y dan la vuelta
-  de la última a la primera. Coincide con easyrpg. El de 2000, que es el que
-  usó el autor, no se midió (necesita la `Harmony.dll`).
-- **Quién repite**: en easyrpg, todo lo que es `Window_Selectable` mueve el
-  cursor con `IsRepeated` —el menú, ítems, equipo, el título, las elecciones
-  de un mensaje, End Game—, y también `Window_Shop`, `Window_ShopNumber`,
-  `Window_BattleStatus` y `Scene_File`. A, B y X no: son `IsTriggered`.
-- **Dar la vuelta repitiendo**: `Window_Selectable` distingue toque y
-  repetición, pero con `endless_scrolling = true` —el valor por omisión; sólo
-  lo apaga un comando de Maniacs— la repetición da la vuelta igual. El título
-  del RPG_RT también la da, medido. **`Scene_File` no**: ahí sólo el toque da
-  la vuelta, y la repetición se queda en la punta.
-- **La entrada de teclas** (`KeyInputProc`) con espera es `IsTriggered`
-  (`game_interpreter.cpp:3222`): no repite.
+- **easyrpg** (`src/input.cpp`): `start_repeat_time = 23` and `repeat_time =
+  4`, in frames, with `repeated = press_time == 1 || (press_time >= 23 &&
+  press_time % 4 == 0)`, and `press_time` is 1 on the frame of the edge. That
+  is, it fires on frame 0, on 23, on 27, on 31…: **0.38 s of delay and 15 per
+  second**, not the second and the ten that taro remembered.
+- **RPG_RT, measured**: the 2015 one with Wine, recording with `ffmpeg -f
+  x11grab` at 60 frames the area of the title screen's cursor while `xdotool`
+  held down for 2.5 s, and finding the row with the red bar frame by frame.
+  The changes land **23 frames after the first and then every 4, without a
+  single exception** in thirty-odd repetitions, and they wrap around from the
+  last to the first. It matches easyrpg. The 2000 one, which is the one the
+  author used, was not measured (it needs `Harmony.dll`).
+- **Who repeats**: in easyrpg, everything that is a `Window_Selectable` moves
+  the cursor with `IsRepeated` —the menu, items, equipment, the title, a
+  message's choices, End Game—, and also `Window_Shop`, `Window_ShopNumber`,
+  `Window_BattleStatus` and `Scene_File`. A, B and X do not: they are
+  `IsTriggered`.
+- **Wrapping around while repeating**: `Window_Selectable` distinguishes press
+  and repeat, but with `endless_scrolling = true` —the default; only a Maniacs
+  command turns it off— the repeat wraps around anyway. RPG_RT's title wraps
+  too, measured. **`Scene_File` does not**: there only the press wraps around,
+  and the repeat stays at the end.
+- **The key input** (`KeyInputProc`) with wait is `IsTriggered`
+  (`game_interpreter.cpp:3222`): it does not repeat.
 
-## Qué difería en la ROM
+## What differed in the ROM
 
-Todas las pantallas miraban sólo el flanco: sostener una flecha movía el
-cursor una vez.
+All the screens looked only at the edge: holding an arrow moved the cursor
+once.
 
-## Qué se hizo
+## What was done
 
-- **Un solo lugar, `read_pad`** (`rom/src/control.s`), que llama a
-  `flechas_repetir` en el banco 1. Todas las pantallas calculan el flanco
-  igual —`pad` contra `pad_ant`—, así que en el cuadro de la repetición se
-  borran de `pad_ant` las flechas sostenidas y cada una lo ve como un toque
-  nuevo. **Ninguna pantalla se tocó** para tener la repetición: la llevan el
-  menú, ítems, equipo, ranuras, título, las elecciones de un mensaje, la
-  tienda, la pelea y End Game. La elección de actor que está rehaciendo Ñandú
-  también la va a tener si mira el flanco igual.
-- Un contador, `flechas_cuadros`, que se pone en cero con una flecha nueva o
-  con ninguna, y al llegar a 23 dispara y vuelve a 19. Nunca pasa de 23.
-- `flechas_repetidas` dice qué bits se falsificaron este cuadro, para los dos
-  lugares que tienen que distinguir:
-  - `tecla_valor` (`menu.s`, la entrada de teclas con espera) los saca, con un
-    `ora` y un `eor` que no tocan el acarreo del que depende.
-  - `ranuras.s` no da la vuelta si la flecha viene de la repetición.
-- Las dos variables en `ram_baja.s`, al final, y en cero en `arranque`.
+- **A single place, `read_pad`** (`rom/src/control.s`), which calls
+  `flechas_repetir` in bank 1. All the screens compute the edge the same way
+  —`pad` against `pad_ant`—, so on the repeat frame the held arrows are
+  cleared from `pad_ant` and each screen sees it as a new press. **No screen
+  was touched** to get the repeat: the menu, items, equipment, slots, title, a
+  message's choices, the shop, the battle and End Game have it. The actor
+  choice that Ñandú is redoing will have it too if it looks at the edge the
+  same way.
+- A counter, `flechas_cuadros`, which is reset to zero with a new arrow or with
+  none, and on reaching 23 fires and goes back to 19. It never goes past 23.
+- `flechas_repetidas` says which bits were faked this frame, for the two places
+  that have to tell the difference:
+  - `tecla_valor` (`menu.s`, the key input with wait) removes them, with an
+    `ora` and an `eor` that do not touch the carry it depends on.
+  - `ranuras.s` does not wrap around if the arrow comes from the repeat.
+- The two variables in `ram_baja.s`, at the end, and zeroed in `arranque`.
 
-## Qué no entra
+## What is not included
 
-- **Un contador por flecha**, como RM2k: es uno para las cuatro. Ver
+- **One counter per arrow**, like RM2k: it is one for all four. See
   `workflow/divergencias/un-solo-contador-para-las-cuatro-flechas.md`.
-- **Las demás diferencias toque/repetición de easyrpg** no se miraron una por
-  una: `Window_Selectable` las tiene pero da la vuelta igual, y
-  `Window_BattleStatus` y la tienda repiten sin distinguir. Si alguna otra
-  pantalla del RPG_RT frena en la punta como las ranuras, no se sabe.
-- `Scene_File` se tomó de easyrpg: no se midió en el RPG_RT.
+- **easyrpg's other press/repeat differences** were not looked at one by one:
+  `Window_Selectable` has them but wraps around anyway, and
+  `Window_BattleStatus` and the shop repeat without distinguishing. Whether
+  any other RPG_RT screen stops at the end like the slots, is not known.
+- `Scene_File` was taken from easyrpg: it was not measured in RPG_RT.
 
-## Pruebas
+## Tests
 
-- `pruebas/rpgmaker/test_repeticion.py`, cuadro de hardware por cuadro:
-  - en el menú de pausa, abajo y arriba sostenidos mueven en el cuadro del
-    flanco, a los 23 y cada 4;
-  - soltar corta, y volver a apretar espera los 23 enteros;
-  - B sostenido no repite (el menú no se vuelve a abrir);
-  - en las ranuras, abajo sostenido llega a la cuarta y se queda; un toque
-    da la vuelta.
-- `test_tecla.py::test_sostener_una_direccion_no_contesta` ya cubría la
-  entrada de teclas: da **rojo** sin la guarda de `tecla_valor` (la variable
-  queda en 2). Las de `test_repeticion.py` del menú dan rojo sin el `jsl`, y
-  la de ranuras sin su guarda: las tres cosas verificadas quitándolas.
-- **Lo que ninguna prueba ejecuta**: la repetición en el título, en las
-  elecciones de un mensaje, en ítems, equipo, tienda, pelea y End Game. Es el
-  mismo mecanismo y ninguna pantalla cambió, pero no hay caso que sostenga
-  una flecha ahí.
-- Ninguna golden cambió, y `test_musica_techos.py` sigue en verde: no hizo
-  falta `just techos`.
-- `just cartuchos` y `just pruebas` sobre la rama, con `main` adentro
-  (`535b19fd`, sin commits nuevos): todo en verde menos
-  `test_indice.py`, que pedía la prueba nueva en `pruebas/README.md`; se
-  sumó y se corrió esa sola, en verde.
+- `pruebas/rpgmaker/test_repeticion.py`, hardware frame by frame:
+  - in the pause menu, down and up held move on the frame of the edge, at 23
+    and every 4;
+  - releasing stops it, and pressing again waits the full 23;
+  - B held does not repeat (the menu does not open again);
+  - in the slots, down held reaches the fourth and stays; a press wraps
+    around.
+- `test_tecla.py::test_sostener_una_direccion_no_contesta` already covered the
+  key input: it goes **red** without the `tecla_valor` guard (the variable
+  stays at 2). The menu ones in `test_repeticion.py` go red without the `jsl`,
+  and the slots one without its guard: the three things verified by removing
+  them.
+- **What no test executes**: the repeat in the title, in a message's choices,
+  in items, equipment, shop, battle and End Game. It is the same mechanism and
+  no screen changed, but there is no case that holds an arrow there.
+- No golden changed, and `test_musica_techos.py` stays green: `just techos` was
+  not needed.
+- `just cartuchos` and `just pruebas` on the branch, with `main` merged in
+  (`535b19fd`, without new commits): all green except `test_indice.py`, which
+  asked for the new test in `pruebas/README.md`; it was added and that one
+  alone was run, green.
 
-## Espacio
+## Space
 
-`just espacio`, antes y después, en `release` y `test-special`: el banco 0
-cuesta 30 bytes (el `jsl`, la guarda de `tecla_valor`, las dos de las
-ranuras y los dos `stz` del arranque); el resto, 48 bytes, va en el banco 1;
-y 2 de BSS.
+`just espacio`, before and after, in `release` and `test-special`: bank 0
+costs 30 bytes (the `jsl`, the `tecla_valor` guard, the two of the slots and
+the two `stz` of the startup); the rest, 48 bytes, goes in bank 1; and 2 of
+BSS.
 
-## Qué tiene que mirar taro
+## What taro has to look at
 
-Jugando, en el menú de pausa, en ítems y en una elección de un mensaje:
-sostener abajo, que a los 0,38 s baje solo y a quince por segundo. Si se
-siente rápido, es lo que hace el original; los dos números son
-`REPETIR_ESPERA` y `REPETIR_CADA` en `control.s`. Y en la pantalla de
-guardar, que sostener abajo se quede en la última.
+Playing, in the pause menu, in items and in a message's choice: holding down,
+that after 0.38 s it goes down on its own and at fifteen per second. If it
+feels fast, it is what the original does; the two numbers are
+`REPETIR_ESPERA` and `REPETIR_CADA` in `control.s`. And in the save screen,
+that holding down stays on the last one.

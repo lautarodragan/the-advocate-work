@@ -1,59 +1,59 @@
 ---
-name: "La ventana de mensajes se queda arriba"
-description: "Jugando, la ventana pasó a quedar siempre arriba —y el cronómetro abajo— con NPCs de Lashe City que en el original hablan abajo"
+name: "The message window stays at the top"
+description: "While playing, the window started staying at the top all the time —and the timer at the bottom— with Lashe City NPCs who in the original talk at the bottom"
 type: bug
 status: done
 assignee: Calancate
 ---
 
-De taro, el 2026-10-04, con el build `2026-10-04-5b29ba9-f6a44973`: "en algún
-momento pasó a quedarse permanentemente arriba, y el cronómetro, abajo.
-Creo que debería haber vuelto a estar abajo en algún momento". El Bum al
-lado de la casa de Talan, el worried worker, el oficial del hover tram,
-varios NPCs del lado izquierdo de Lashe City, los Neon Vipers: todos arriba.
+From taro, on 2026-10-04, with the build `2026-10-04-5b29ba9-f6a44973`: "at
+some point it started staying permanently at the top, and the timer, at the
+bottom. I think it should have gone back to the bottom at some point". The Bum
+next to Talan's house, the worried worker, the hover tram officer, several
+NPCs on the left side of Lashe City, the Neon Vipers: all at the top.
 
-Es de `la-ventana-arriba-al-medio-y-sin-fondo.md` (Quirquincho). Un
-candidato, sin confirmar: el común 15, `CustomMenuSideQuests`, termina con
-`MessageOptions [0,0,0,0]` —arriba— y los otros menús de la consola con
+It comes from `la-ventana-arriba-al-medio-y-sin-fondo.md` (Quirquincho). A
+candidate, unconfirmed: common 15, `CustomMenuSideQuests`, ends with
+`MessageOptions [0,0,0,0]` —top— and the console's other menus with
 `[0,2,0,0]`.
 
-## No es un bug: el original hace lo mismo (Calancate)
+## It is not a bug: the original does the same (Calancate)
 
-taro lo confirmó jugando el original: "estoy probando el original y parece
-que sí es así". Lo que la deja arriba, leído en el volcado de ABL en
-`5b29ba9` y en easyrpg-player:
+taro confirmed it playing the original: "I'm testing the original and it
+seems it really is like that". What leaves it at the top, read in ABL's dump
+at `5b29ba9` and in easyrpg-player:
 
-* **La pone arriba primero la escena de los Neon Vipers**: mapa 14
-  (`NV Get Talan to Work`), evento 2 `SceneDriver`, autostart. Su comando
-  120 es `MessageOptions [0,0,0,1]`, para "LAZER TEETH LOOKOUT", y el 124
-  la deja en `[0,0,0,0]` —arriba, fija— justo antes de pasar al mapa 16, la
-  corrida al trabajo, que no tiene ningún `MessageOptions`. Por eso el
-  cronómetro de esa corrida va abajo.
-* **Y en Lashe City casi todo la vuelve a dejar arriba**. En los mapas 8 y
-  9, los carteles hacen `[1,0,0,0]` y después `[0,0,0,0]`. El Bum abre su
-  página 1 con `[0,0,0,0]`. Los eventos que la pasan abajo un rato (EV0013,
-  los chicos, el EV0004 del 9) terminan volviendo a `[0,0,0,0]`. Para el
-  autor, arriba es lo normal de esa zona. El único que la deja abajo es la
-  página 2 del `DetourOfficer` del mapa 8, con `[0,2,1,0]`. Los NPCs sin
-  `MessageOptions`, como el Tram Officer o el UpsetWorker, hablan donde
-  quedó.
-* **El común 15 no hace falta**: termina en `[0,0,0,0]`, pero la ventana ya
-  estaba arriba sin abrir la consola.
+* **The Neon Vipers scene is the first to put it at the top**: map 14
+  (`NV Get Talan to Work`), event 2 `SceneDriver`, autostart. Its command 120
+  is `MessageOptions [0,0,0,1]`, for "LAZER TEETH LOOKOUT", and 124 leaves it
+  at `[0,0,0,0]` —top, fixed— right before moving to map 16, the run to work,
+  which has no `MessageOptions` at all. That is why that run's timer is at the
+  bottom.
+* **And in Lashe City almost everything leaves it at the top again**. On maps
+  8 and 9, the signs do `[1,0,0,0]` and then `[0,0,0,0]`. The Bum opens his
+  page 1 with `[0,0,0,0]`. The events that move it to the bottom for a while
+  (EV0013, the kids, EV0004 on 9) end up going back to `[0,0,0,0]`. For the
+  author, the top is the normal place in that area. The only one that leaves
+  it at the bottom is page 2 of the `DetourOfficer` on map 8, with
+  `[0,2,1,0]`. The NPCs without `MessageOptions`, like the Tram Officer or the
+  UpsetWorker, talk wherever it was left.
+* **Common 15 is not needed**: it ends in `[0,0,0,0]`, but the window was
+  already at the top without opening the console.
 
-Contra easyrpg-player:
+Against easyrpg-player:
 
-* **La opción persiste igual**. `CommandMessageOptions` la guarda en
-  `Game_System` (`message_position` y `message_prevent_overlap`), que es
-  parte de la partida y no se resetea al cambiar de mapa. liblcf da por
-  omisión abajo y correrse. Lo nuestro es `FAR_MSG_OPTIONS`, en la
-  partida, que `msg_place` sólo lee: lo corrido va a `MSG_PLACE` y no se
-  guarda. El compilador traduce `p[2] != 0` a `MSG_DODGE`, que es el
-  inverso de `SetMessagePositionFixed(p[2] == 0)`, como debe.
-* **El cronómetro también va abajo**. `Sprite_Timer` lo baja cuando la
-  ventana tiene `GetY() < 20`, se vea o no: "RPG_RT doesn't check for the
-  global setting … just checks for the Y position of the message window,
-  regardless if it is active or visible". `timer.s` mira `MSG_PLACE`, la
-  última ventana, y hace lo mismo.
+* **The option persists the same way**. `CommandMessageOptions` stores it in
+  `Game_System` (`message_position` and `message_prevent_overlap`), which is
+  part of the save and is not reset on changing maps. liblcf defaults to
+  bottom and moving aside. Ours is `FAR_MSG_OPTIONS`, in the save, which
+  `msg_place` only reads: the moved position goes to `MSG_PLACE` and is not
+  saved. The compiler translates `p[2] != 0` to `MSG_DODGE`, which is the
+  inverse of `SetMessagePositionFixed(p[2] == 0)`, as it should.
+* **The timer goes to the bottom too**. `Sprite_Timer` moves it down when the
+  window has `GetY() < 20`, whether it shows or not: "RPG_RT doesn't check
+  for the global setting … just checks for the Y position of the message
+  window, regardless if it is active or visible". `timer.s` looks at
+  `MSG_PLACE`, the last window, and does the same.
 
-No se cambió ni código ni goldens. No se corrió Wine ni ninguna ROM:
-alcanzó con el volcado y el fuente de easyrpg-player, más lo que taro jugó.
+Neither code nor goldens changed. Neither Wine nor any ROM was run: the dump
+and easyrpg-player's source were enough, plus what taro played.

@@ -1,151 +1,152 @@
 ---
-name: "Los textos entran en la ventana"
-description: "Rearmar los saltos de línea de los mensajes para el ancho de la SNES, como parche"
+name: "The texts fit in the window"
+description: "Rebuilding the messages' line breaks for the SNES's width, as a patch"
 status: done
 ---
 
-# Qué
+# What
 
-Que los mensajes del juego entren enteros en la ventana de la SNES, en vez de
-cortarse. Hoy `Mensajes.agregar` (`tools/port/eventos.py`) **trunca** cada
-renglón a `ventana.COLUMNAS` y cada cuadro a `ventana.LINEAS`: el porqué de los
-39 caracteres está en `tools/port/ventana.py`, y es el banco de tiles, no el
-ancho de la ventana. RM2k no tiene auto-wrap: cada salto lo puso el autor a
-mano, pensando en 320 px de pantalla.
+That the game's messages fit whole in the SNES window, instead of being cut.
+Today `Mensajes.agregar` (`tools/port/eventos.py`) **truncates** each line to
+`ventana.COLUMNAS` and each box to `ventana.LINEAS`: the reason for the 39
+characters is in `tools/port/ventana.py`, and it is the tile bank, not the
+window's width. RM2k has no auto-wrap: the author put each break by hand,
+thinking of a 320 px screen.
 
-Es una decisión artística —cambia lo que se lee— así que va como **parche**,
-en la línea de `parches-de-decisiones-artisticas.md`.
+It is an artistic decision —it changes what is read— so it goes as a
+**patch**, in the line of `parches-de-decisiones-artisticas.md`.
 
 # Status
 
-**Hecho el 2026-09-24**, en `4c82f2a` y `6ea392e`. taro lo jugó hasta
-después del Director y los textos están bien: "no hace falta que hagamos nada
-más complejo". Cómo quedó:
+**Done on 2026-09-24**, in `4c82f2a` and `6ea392e`. taro played it until after
+the Director and the texts are fine: "we don't need to do anything more
+complex". How it ended up:
 
-* **El reajuste es un paso del pipeline, aparte de los parches.** taro pidió
-  que no compita con `parches/` ni con los forks de `juego/`: son dos
-  procesos distintos. El lector tiene un gancho, `lcf.REAJUSTAR_TEXTOS`, que
-  el conversor pone —como `DECORAR_TRANSLUCIDO`—, y corre después de los
-  forks sobre lo que haya quedado. Un cuadro que ya entra no lo toca, así que
-  un texto corregido a mano en un fork gana siempre.
-* **El TOML de abajo no se hizo**, y no hace falta mientras no aparezca un
-  caso: si alguno sale mal, se trata como un bug de ese caso.
-* **El bloque de mensajes cuenta de a dos bytes** (`MENSAJES_PASO`): partir
-  cuadros lo pasó de los 64 KB que alcanza el operando de `OP_MESSAGE`.
-* Los textos de la pelea tienen otro ancho y siguen en
+* **The refit is a step of the pipeline, separate from the patches.** taro
+  asked that it not compete with `parches/` nor with the forks of `juego/`:
+  they are two different processes. The reader has a hook,
+  `lcf.REAJUSTAR_TEXTOS`, which the converter sets —like
+  `DECORAR_TRANSLUCIDO`—, and it runs after the forks on whatever is left. A
+  box that already fits is not touched, so a text corrected by hand in a fork
+  always wins.
+* **The TOML below was not done**, and it is not needed as long as no case
+  shows up: if one comes out wrong, it is treated as a bug of that case.
+* **The message block counts in steps of two bytes** (`MENSAJES_PASO`):
+  splitting boxes pushed it past the 64 KB the operand of `OP_MESSAGE`
+  reaches.
+* The battle texts have another width and continue in
   `los-textos-de-la-pelea-no-entran.md`.
 
-Lo de abajo es cómo se llegó, el 2026-09-24:
+What is below is how it was arrived at, on 2026-09-24:
 
-* **Primero una función, y la infraestructura sólo si hace falta.**
-  `tools/port/textos.py` es pura: recibe un cuadro y devuelve uno o más.
-  Está en `main` con sus pruebas, pero todavía no la llama el conversor.
-* **El TOML que mapea texto queda decidido**, y el mapeo tiene que ser
-  determinístico. Es el modelo de gettext: la clave es el original exacto, la
-  traducción puede ser más de un cuadro, y un contexto desambigua el día que
-  el mismo cuadro tenga que salir distinto en dos lugares. Con la función
-  sola ese día no llega: el mismo cuadro da siempre lo mismo.
-* **Un cuadro partido repite la línea del que habla**, porque el juego lo
-  hace así: de los 564 cuadros seguidos del mismo personaje, todos repiten el
-  nombre.
-* La idea de que Ditto extraiga los textos con ids, con ida y vuelta byte por
-  byte, sirve para traducciones de verdad. Hoy no hace falta.
+* **First a function, and the infrastructure only if needed.**
+  `tools/port/textos.py` is pure: it receives a box and returns one or more.
+  It is in `main` with its tests, but the converter does not call it yet.
+* **The TOML that maps text is decided**, and the mapping has to be
+  deterministic. It is gettext's model: the key is the exact original, the
+  translation can be more than one box, and a context disambiguates the day
+  the same box has to come out differently in two places. With the function
+  alone that day does not come: the same box always gives the same thing.
+* **A split box repeats the speaker's line**, because the game does it that
+  way: of the 564 consecutive boxes by the same character, all repeat the
+  name.
+* The idea of Ditto extracting the texts with ids, with a byte-for-byte round
+  trip, is useful for real translations. Today it is not needed.
 
-**El experimento está en la rama `textos-experimento`**: forks en
-`juego/mapas/` de los mapas 1 a 16 que cambian, sin el 11. Es temporal y no
-va a `main`, porque un fork tapa a `data/`. La ROM y un antes y después de
-cada cuadro están en `pruebas-manuales/2026-09-24-0aeb917-textos/`.
+**The experiment is in the `textos-experimento` branch**: forks in
+`juego/mapas/` of the maps 1 to 16 that change, without 11. It is temporary and
+does not go to `main`, because a fork covers `data/`. The ROM and a before and
+after of each box are in `pruebas-manuales/2026-09-24-0aeb917-textos/`.
 
-# Lo que complica, y cómo se resuelve
+# What complicates it, and how it is solved
 
-**La línea del que habla.** Casi todos los cuadros que no entran arrancan con
-una: el nombre en mayúsculas —`KERSH`, `MANTA`— o `?????` cuando todavía no se
-sabe quién es. Esa línea no se toca, y el cuerpo tiene tres renglones en vez de
-cuatro. Detectarla con "todo en mayúsculas, corta, sin punto final" alcanzó en
-los mapas 1 a 16, pero es una heurística: el parche dice cuál es, así que un
-caso mal detectado se arregla a mano.
+**The speaker's line.** Almost all the boxes that do not fit start with one:
+the name in capitals —`KERSH`, `MANTA`— or `?????` when it is not yet known who
+it is. That line is not touched, and the body has three lines instead of four.
+Detecting it with "all in capitals, short, without a final period" was enough
+on maps 1 to 16, but it is a heuristic: the patch says which one it is, so a
+wrongly detected case is fixed by hand.
 
-**Los saltos que el autor quiso.** Dos reglas:
+**The breaks the author wanted.** Two rules:
 
-1. **Un cuadro que entra no se toca.** Así se conservan todos los saltos de
-   todos los cuadros que ya andaban, que son la mayoría.
-2. En un cuadro que no entra, **un salto original es un buen lugar para cortar,
-   pero no uno obligado.** Tratarlos como obligados dejaba huérfanas —"it still
-   / is."— y hacía que más cuadros no entraran.
+1. **A box that fits is not touched.** That way all the breaks of all the boxes
+   that already worked are kept, which are the majority.
+2. In a box that does not fit, **an original break is a good place to cut, but
+   not a mandatory one.** Treating them as mandatory left orphans —"it still
+   / is."— and made more boxes not fit.
 
-**Lo que no entra ni reajustado.** El cuerpo pasa de tres renglones. Hay dos
-salidas y es una decisión por caso: partirlo en dos cuadros, lo que le suma una
-tecla al jugador, o editar el texto a mano. El parche tiene que poder decir las
-dos cosas.
+**What does not fit even refitted.** The body goes over three lines. There are
+two ways out and it is a decision per case: splitting it into two boxes, which
+adds one key press for the player, or editing the text by hand. The patch has
+to be able to say both things.
 
-# Dónde vive el parche
+# Where the patch lives
 
-**No se editan los JSON de `data/`.** Son derivados: `just datos` los vacía y
-los vuelve a escribir desde los `.lmu`, así que una edición ahí se pierde en la
-próxima regeneración, y además el `git diff` de `data/` dejaría de decir "el
-juego no cambió".
+**The JSON files in `data/` are not edited.** They are derived: `just datos`
+empties them and writes them again from the `.lmu`, so an edit there is lost on
+the next regeneration, and besides the `git diff` of `data/` would stop saying
+"the game did not change".
 
-Lo que propongo es un **archivo de textos que el conversor aplica en memoria**,
-después de leer `data/` y antes de compilar:
+What I propose is a **texts file that the converter applies in memory**, after
+reading `data/` and before compiling:
 
-    parches/textos/<mapa>.toml     uno por mapa, como parches/mapas/
-    parches/textos/comunes.toml    los eventos comunes
-    parches/textos/tropas.toml     las páginas de pelea: otro ancho
+    parches/textos/<mapa>.toml     one per map, like parches/mapas/
+    parches/textos/comunes.toml    the common events
+    parches/textos/tropas.toml     the battle pages: another width
 
-Cada entrada es un cuadro: **el texto original como clave** y el que lo
-reemplaza —uno o más cuadros—. Que la clave sea el contenido y no una
-posición (mapa, evento, página, índice de comando) es lo que evita copiar los
-eventos:
+Each entry is a box: **the original text as the key** and the one that replaces
+it —one or more boxes—. That the key is the content and not a position (map,
+event, page, command index) is what avoids copying the events:
 
-* no hace falta copiar nada del evento, sólo el texto;
-* sobrevive a que cambie el orden de los eventos o de los comandos;
-* un cuadro que el juego repite en varios lados se arregla una vez;
-* una entrada cuyo original ya no aparece en el juego es un parche viejo, y el
-  chequeo falla diciéndolo, como `just parches-check`.
+* nothing of the event needs to be copied, only the text;
+* it survives the order of the events or of the commands changing;
+* a box the game repeats in several places is fixed once;
+* an entry whose original no longer appears in the game is a stale patch, and
+  the check fails saying so, like `just parches-check`.
 
-Una entrada podría verse así:
+An entry could look like this:
 
     [[cuadro]]
     original = ["MANTA", "I already told you. He didn't go this way."]
     nuevo = [["MANTA", "I already told you.", "He didn't go this way."]]
     a_mano = false
 
-Se aplica **reemplazando el `ShowMessage` y sus `ShowMessage_2`** por los
-cuadros nuevos, antes de `agrupar`. Así partir un cuadro en dos son dos
-`ShowMessage` más, y la ROM no se entera. La cola de escapes —`\|`, `\^`— va al
-final del último cuadro.
+It is applied **by replacing the `ShowMessage` and its `ShowMessage_2`** with
+the new boxes, before `agrupar`. That way splitting a box in two is two more
+`ShowMessage`s, and the ROM does not notice. The tail of escapes —`\|`, `\^`—
+goes at the end of the last box.
 
-**Dos pasos, como los otros parches:** una receta propone el reajuste de todo
-lo que no entra y escribe las entradas; lo que se edita a mano lleva
-`a_mano = true` y la receta no lo vuelve a pisar. El chequeo de la tanda falla
-si un cuadro no entra y no tiene entrada. Con eso el truncado de
-`Mensajes.agregar` deja de ser el camino normal y pasa a ser un error.
+**Two steps, like the other patches:** a recipe proposes the refit of
+everything that does not fit and writes the entries; what is edited by hand
+carries `a_mano = true` and the recipe does not overwrite it again. The suite's
+check fails if a box does not fit and has no entry. With that the truncation of
+`Mensajes.agregar` stops being the normal path and becomes an error.
 
-# El experimento, sólo sobre el texto
+# The experiment, only on the text
 
-Contando los cuadros por página, con repetidos, el 2026-09-24:
+Counting the boxes per page, with repeats, on 2026-09-24:
 
-| | Cuadros con un renglón de más de 39 | Arrancan con el que habla | Reajustados siguen sin entrar |
+| | Boxes with a line longer than 39 | Start with the speaker | Still do not fit after refitting |
 |---|---|---|---|
-| Mapas 1 a 16 (introducción y Lashe City) | 157 | 155 | 4 |
-| El resto del juego | 1.353 | 1.297 | ~310 |
+| Maps 1 to 16 (introduction and Lashe City) | 157 | 155 | 4 |
+| The rest of the game | 1,353 | 1,297 | ~310 |
 
-La forma de cortar pesó mucho en cuántos quedan sin entrar. Con los mismos
-cuadros de los mapas 1 a 16:
+The way of cutting weighed a lot on how many are left not fitting. With the
+same boxes of maps 1 to 16:
 
-* si los saltos originales se tratan como obligados, no entran 9;
-* si se rearma todo el cuerpo, no entran 4, pero se pierden todos los saltos del
-  autor;
-* con el algoritmo de abajo, no entran 4.
+* if the original breaks are treated as mandatory, 9 do not fit;
+* if the whole body is rebuilt, 4 do not fit, but all the author's breaks are
+  lost;
+* with the algorithm below, 4 do not fit.
 
-El algoritmo elige los cortes minimizando un costo, como un párrafo de TeX:
+The algorithm chooses the cuts by minimising a cost, like a TeX paragraph:
 
-* cortar después de un fin de oración es gratis;
-* cortar después de una coma cuesta un poco, y en cualquier otro lado más;
-* donde cortaba el original, el corte sale más barato;
-* un renglón corto y una palabra huérfana al final penalizan.
+* cutting after the end of a sentence is free;
+* cutting after a comma costs a little, and anywhere else more;
+* where the original cut, the cut comes out cheaper;
+* a short line and an orphan word at the end are penalised.
 
-Ejemplos de los mapas 1 y 2:
+Examples from maps 1 and 2:
 
     KERSH                                          KERSH
     Time is running out. There's no turning back.  Time is running out.
@@ -160,30 +161,32 @@ Ejemplos de los mapas 1 y 2:
     Imagination is not easily represented          it still is. Imagination is not easily
     with ones and zeroes.                          represented with ones and zeroes.
 
-El tercero muestra el límite: el original tenía una oración por renglón, y el
-reajuste lo convierte en prosa corrida. **Los pesos son gusto**: con otros
-valores el mismo cuadro sale de otra forma y otros quedan peor. Ésa es la razón
-para que la salida sea un archivo que se lee y se edita, y no algo que el
-conversor decide solo en cada build.
+The third shows the limit: the original had one sentence per line, and the
+refit turns it into running prose. **The weights are taste**: with other values
+the same box comes out another way and others end up worse. That is the reason
+for the output to be a file that is read and edited, and not something the
+converter decides on its own in each build.
 
 # Plan
 
-1. **El formato y la aplicación**, sin reajustar nada: el conversor lee
-   `parches/textos/`, reemplaza los cuadros y el chequeo detecta parches viejos.
-   Con el directorio vacío la ROM tiene que salir byte por byte igual.
-2. **La receta que propone**, corrida sobre los mapas 1 a 16. taro lee el diff,
-   corrige a mano lo que no le gusta y lo juega. Es el experimento de verdad.
-3. **El resto del juego**, de a tandas. Los cerca de 310 cuadros que no entran
-   piden una decisión cada uno.
-4. **Las opciones de `ShowChoice` y los textos de la pelea**, con su propio
-   ancho. Es lo que pide `los-textos-de-la-pelea-no-entran.md`, y el mismo
-   mecanismo lo resuelve.
+1. **The format and the application**, without refitting anything: the
+   converter reads `parches/textos/`, replaces the boxes and the check detects
+   stale patches. With the directory empty the ROM has to come out byte for
+   byte identical.
+2. **The recipe that proposes**, run over maps 1 to 16. taro reads the diff,
+   corrects by hand what he does not like and plays it. It is the real
+   experiment.
+3. **The rest of the game**, in batches. The roughly 310 boxes that do not fit
+   ask for a decision each.
+4. **The options of `ShowChoice` and the battle texts**, with their own width.
+   It is what `los-textos-de-la-pelea-no-entran.md` asks for, and the same
+   mechanism solves it.
 
-# Preguntas abiertas
+# Open questions
 
-* Para los cuadros que no entran: ¿partir en dos, o editar el texto?
-* ¿Un archivo por mapa, o uno solo para todo el juego? Por mapa se lee mejor en
-  el diff, pero un cuadro repetido en varios mapas queda en uno solo, o en todos.
-* Los tres `\V` —el valor de una variable— no tienen ancho conocido hasta
-  correr. Hoy no compilan; cuando compilen, el reajuste tiene que suponer un
-  ancho para ellos.
+* For the boxes that do not fit: split in two, or edit the text?
+* One file per map, or a single one for the whole game? Per map reads better in
+  the diff, but a box repeated in several maps ends up in only one, or in all.
+* The three `\V` —the value of a variable— have no known width until run time.
+  Today they do not compile; when they compile, the refit has to assume a
+  width for them.

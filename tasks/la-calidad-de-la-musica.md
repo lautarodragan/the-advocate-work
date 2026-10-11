@@ -1,844 +1,856 @@
 ---
-name: "La calidad de la música"
-description: "Por qué escape_newyork suena mal por el SPC700, once versiones grabadas para comparar, y en qué orden arreglarlo"
+name: "The quality of the music"
+description: "Why escape_newyork sounds bad through the SPC700, eleven versions recorded to compare, and in what order to fix it"
 type: feature
 status: done
 ---
 
-**Lo que taro eligió escuchando, el 2026-09-25**: lo que más le importa, y
-mucho, es **el reparto de voces** (la variante 09 "es muy aceptable"); después
-**las envolventes**; después **la batería**; y **las muestras a 22 kHz** hacen
-una diferencia notoria pero importan menos. Quiere **todas juntas**, sabiendo
-que aun así se nota la diferencia con la referencia (para eso está el MSU-1).
+**What taro chose by listening, on 2026-09-25**: what matters most to him, and
+by a lot, is **the voice allocation** (variant 09 "is very acceptable"); then
+**the envelopes**; then **the drums**; and **the samples at 22 kHz** make a
+noticeable difference but matter less. He wants **all of them together**,
+knowing that even so the difference with the reference will be noticeable
+(that is what the MSU-1 is for).
 
-El orden de implementación no es el de sus prioridades por el espacio: el
-reparto suma +74% de stream en el formato de hoy (~436 KB, todo el margen del
-cartucho unido). Así que: batería → notas que se sueltan antes de tiempo →
-envolventes → velocidad y CC → **el formato por nota, diseñado para todo lo de
-arriba y para el reparto** → reparto y rampa → muestras por mapa. **Hechos
-el 0, el 1 y el 2**, el 2026-09-25, **y el 3, el 4 y el 5** el 2026-09-26:
-ver cada uno abajo. Después del 5, el mismo día: **el 5b**, la frase de la
-batalla que el reparto cortaba, y **el aire por tema** (la opción B, al final
-del 5). **Y el 6**, el mismo día: medido, prototipado, decidido por taro
-(la opción A) e implementado entero, con el arranque bajado a 40 cuadros.
-Con eso están todos los pasos del plan: lo que queda son detalles, en "Qué
-queda de la calidad de la música", al final del 6.
+The order of implementation is not that of his priorities, because of space:
+the allocation adds +74% of stream in today's format (~436 KB, the whole
+margin of the merged cartridge). So: drums → notes released early → envelopes
+→ velocity and CC → **the per-note format, designed for everything above and
+for the allocation** → allocation and ramp → samples per map. **0, 1 and 2
+done**, on 2026-09-25, **and 3, 4 and 5** on 2026-09-26: see each one below.
+After 5, the same day: **5b**, the battle phrase the allocation cut, and **the
+air per theme** (option B, at the end of 5). **And 6**, the same day:
+measured, prototyped, decided by taro (option A) and implemented entirely, with
+the startup lowered to 40 frames. With that all the steps of the plan are
+there: what is left are details, in "What is left of the quality of the
+music", at the end of 6.
 
 
-taro, el 2026-09-25: *"`escape_newyork` se escucha particularmente mal, y tal
-vez incluir las envolventes lo mejore mucho. Y hay notas que se cortan muy
-abruptamente."* Esto es la investigación: **el diagnóstico, once versiones
-del tema grabadas saliendo de la ROM, y el plan**. No hay nada mergeado.
+taro, on 2026-09-25: *"`escape_newyork` sounds particularly bad, and maybe
+including the envelopes improves it a lot. And there are notes that cut off
+very abruptly."* This is the investigation: **the diagnosis, eleven versions of
+the theme recorded coming out of the ROM, and the plan**. Nothing is merged.
 
-* Las grabaciones y lo que cambió en cada una:
-  `/shared/audio/2026-09-25-escape-newyork/` y su `LEEME.txt`.
-* Los prototipos: rama local `proto-calidad-musica` (commit `0067f7c`), **no
-  para mergear**. `tools/audio/proto_musica.py` arma cada variante según
-  `PROTO_MUSICA`; `tools/audio/proto/` tiene cómo se armó, grabó y midió
-  cada una.
+* The recordings and what changed in each one:
+  `/shared/audio/2026-09-25-escape-newyork/` and its `LEEME.txt`.
+* The prototypes: local branch `proto-calidad-musica` (commit `0067f7c`), **not
+  to be merged**. `tools/audio/proto_musica.py` builds each variant according
+  to `PROTO_MUSICA`; `tools/audio/proto/` has how each one was built, recorded
+  and measured.
 
-Los números de abajo son del 2026-09-25, sobre `9602035`, con los 22 temas
-del `release`: los scripts que los midieron están en esa rama, y antes de
-implementar hay que volver a correrlos.
+The numbers below are from 2026-09-25, on `9602035`, with the 22 themes of
+`release`: the scripts that measured them are on that branch, and before
+implementing they have to be run again.
 
-# El diagnóstico
+# The diagnosis
 
-## La batería no suena, en ningún tema: es un bug
+## The drums do not play, in any theme: it is a bug
 
-`dsp_musica` (`rom/src/efectos_de_sonido.s`) recibe el valor en B, y el
-`rep #$20` / `and #$000F` con el que arma el índice de la sombra lo pone en
-cero: **toda escritura de la música a las voces 6 y 7 llega al DSP como
-cero**. Esas dos son las de la percusión (`DRUM_VOICES`, y también las de los
-efectos). Grabando la ROM con un stream de sólo batería sale silencio de
-principio a fin; con el arreglo, suena.
+`dsp_musica` (`rom/src/efectos_de_sonido.s`) receives the value in B, and the
+`rep #$20` / `and #$000F` with which it builds the shadow's index sets it to
+zero: **every write of the music to voices 6 and 7 reaches the DSP as zero**.
+Those two are the percussion ones (`DRUM_VOICES`, and also the sound effects').
+Recording the ROM with a drums-only stream gives silence from start to finish;
+with the fix, it plays.
 
-`git blame`: la voz 7 desde `854dba96` (2026-09-11, la música en la IRQ), la 6
-desde `8c9c182e` (2026-09-24, la segunda voz de efectos). O sea que desde
-ayer no suena ninguna voz de batería, y antes no sonaba la mitad. No lo cobró
-nada porque ninguna prueba mira el audio de la música.
+`git blame`: voice 7 since `854dba96` (2026-09-11, the music in the IRQ), 6
+since `8c9c182e` (2026-09-24, the second sound effects voice). That is, since
+yesterday no drum voice plays, and before that half did not play. Nothing
+caught it because no test looks at the music's audio.
 
-El arreglo, tres líneas por voz, está en el prototipo: guardar el valor en la
-pila antes del `rep` (`xba` / `pha` / `xba`) y sacarlo con `pla` en vez del
-`xba` que sigue al `sep`.
+The fix, three lines per voice, is in the prototype: saving the value on the
+stack before the `rep` (`xba` / `pha` / `xba`) and taking it out with `pla`
+instead of the `xba` that follows the `sep`.
 
-## Se pierde la mitad de lo que el MIDI toca
+## Half of what the MIDI plays is lost
 
-`escape_newyork`: 195 s, 2.660 notas, nueve canales, 80 negras por minuto. La
-polifonía que pide va de 8 a 12 casi todo el tiempo, con picos de 20, contra
-8 voces. El reparto de hoy (`assign`) le da **una voz fija a cada canal
-melódico** y dos a la batería:
+`escape_newyork`: 195 s, 2,660 notes, nine channels, 80 quarter notes per
+minute. The polyphony it asks for goes from 8 to 12 almost all the time, with
+peaks of 20, against 8 voices. Today's allocation (`assign`) gives **one fixed
+voice to each melodic channel** and two to the drums:
 
-| Canal | Programa | Pide a la vez | Tiene |
+| Channel | Program | Asks for at once | Has |
 |---|---|---:|---:|
-| 2 | cuerdas (48), acordes de 3 notas de 12 s, velocidad 29 | 3 | 1 |
-| 4 | polysynth (90), acordes | hasta 6 | 1 |
+| 2 | strings (48), 3-note chords of 12 s, velocity 29 | 3 | 1 |
+| 4 | polysynth (90), chords | up to 6 | 1 |
 | 0 | piano (0) | 2 | 1 |
-| 3 | bajo sintético (38), notas de 6 cuadros en octavas | 2 | 1 |
+| 3 | synth bass (38), 6-frame notes in octaves | 2 | 1 |
 | 6 | polysynth (90) | 2 | 1 |
-| 1 | sierra (81), la línea de bajo | 1 | 1 |
+| 1 | saw (81), the bass line | 1 | 1 |
 | 5 | clavinet (7) | 2 | **0** |
-| 7 | onda cuadrada (80) | 1–3 | **0** |
-| 9 | batería | 3 | 2 |
+| 7 | square wave (80) | 1–3 | **0** |
+| 9 | drums | 3 | 2 |
 
-Se pierde el **55% del tiempo-nota**: 6% de canales sin voz y 50% de notas que
-pierden la voz. Con 8 voces el piso es 23% —lo que pasa de 8 a la vez—.
-Cuando un acorde arranca en un solo cuadro sobre una voz, las tres
-preparaciones se pisan y suena la última: 864 notas.
+**55% of the note-time** is lost: 6% from channels without a voice and 50% from
+notes that lose their voice. With 8 voices the floor is 23% —what goes over 8
+at once—. When a chord starts on a single frame on one voice, the three setups
+overwrite each other and the last one plays: 864 notes.
 
-## Los cortes en seco
+## The hard cuts
 
-Todo robo de una voz que suena es un `KON`, que pone la envolvente en cero de
-golpe: un clic. Hoy son **204 notas cortadas mientras suenan**, **~1.100 colas
-de release cortadas** al reusar la voz, y las **329 notas que se sueltan antes
-de tiempo** de `notas-que-se-sueltan-antes-de-tiempo.md`. Es lo que mejor
-explica "notas que se cortan muy abruptamente".
+Every steal of a voice that is playing is a `KON`, which sets the envelope to
+zero at once: a click. Today there are **204 notes cut while playing**,
+**~1,100 release tails cut** on reusing the voice, and the **329 notes released
+early** of `notas-que-se-sueltan-antes-de-tiempo.md`. It is what best explains
+"notes that cut off very abruptly".
 
-## Las muestras, a 4-8 kHz
+## The samples, at 4-8 kHz
 
-El banco lo comparten los 22 temas y lo melódico tiene 40 KB: el piano queda a
-6 kHz, las cuerdas a 5,5, la sierra a 6,1, el polysynth a 8,4, contra los
-22 kHz del SoundFont. Y cada programa lleva **una sola muestra, la de la zona
-del do central**: la línea de bajo con sierra (notas 24 a 40) toca `SAW0_60`
-dos octavas abajo, con menos de 1 kHz de ancho de banda, cuando el SF2 trae
-`SAW0_48` para esa zona. Es lo que más apaga el sonido: ver la medida de
-abajo.
+The bank is shared by the 22 themes and the melodic part has 40 KB: the piano
+ends up at 6 kHz, the strings at 5.5, the saw at 6.1, the polysynth at 8.4,
+against the SoundFont's 22 kHz. And each program carries **a single sample,
+the one of the middle C zone**: the bass line with saw (notes 24 to 40) plays
+`SAW0_60` two octaves down, with less than 1 kHz of bandwidth, when the SF2
+brings `SAW0_48` for that zone. It is what dulls the sound the most: see the
+measurement below.
 
-## Lo que el MIDI no tiene
+## What the MIDI does not have
 
-Ni pitch bend, ni paneo, ni expresión, ni reverb ni chorus: sólo CC7 en los
-últimos 20 s, para el fundido del final. La referencia de fluidsynth sale
-seca, igual que la ROM, así que el eco del DSP no es lo que falta acá.
+No pitch bend, no panning, no expression, no reverb or chorus: only CC7 in the
+last 20 s, for the final fade. The fluidsynth reference comes out dry, same as
+the ROM, so the DSP's echo is not what is missing here.
 
-## Envolventes y volumen
+## Envelopes and volume
 
-Las familias de `sdsp.py` no están tan lejos del SF2. Lo que más difiere: el
-bajo sintético y la sierra se sueltan en 25–30 ms en el SF2 y en la ROM
-arrastran colas de 2,4 s (GAIN 14); el piano baja al 50% en 110 ms en vez de
-apagarse en unos seis segundos.
+The families of `sdsp.py` are not that far from the SF2. What differs most:
+the synth bass and the saw are released in 25–30 ms in the SF2 and in the ROM
+drag tails of 2.4 s (GAIN 14); the piano drops to 50% in 110 ms instead of
+dying out in some six seconds.
 
-La velocidad se convierte lineal, y fluidsynth atenúa 40·log10(127/v) dB —al
-cuadrado—. Las cuerdas a velocidad 29 quedan 26 dB abajo en la referencia y
-13 dB en la ROM: la mezcla sale corrida hacia los colchones.
+The velocity is converted linearly, and fluidsynth attenuates 40·log10(127/v)
+dB —squared—. The strings at velocity 29 end up 26 dB down in the reference and
+13 dB in the ROM: the mix comes out shifted towards the pads.
 
-**El atenuador del SF2 y el pico de las muestras no cambian nada acá**: medido,
-los siete programas y los golpes del tema están normalizados de fábrica y su
-atenuación inicial es ~0.
+**The SF2's attenuator and the samples' peak change nothing here**: measured,
+the theme's seven programs and drum hits are normalised from the factory and
+their initial attenuation is ~0.
 
-# Las variantes grabadas
+# The recorded variants
 
-Once, en `/shared/audio/2026-09-25-escape-newyork/`. Del 02 al 08 cada una
-suma un cambio sobre la anterior, en el orden en que se harían; el 09 y el 10
-aíslan los dos que más pesan. Cómo se grabaron —la pantalla de título tocando
-el tema, snes9x, sin MSU-1, sin otra cosa encima, el tema entero— está en el
-`LEEME.txt`.
+Eleven, in `/shared/audio/2026-09-25-escape-newyork/`. From 02 to 08 each one
+adds a change over the previous one, in the order they would be done; 09 and
+10 isolate the two that weigh the most. How they were recorded —the title
+screen playing the theme, snes9x, without MSU-1, with nothing else on top, the
+whole theme— is in the `LEEME.txt`.
 
-| # | Qué suma | Stream del tema | Los 22 temas |
+| # | What it adds | Theme's stream | The 22 themes |
 |---|---|---:|---:|
-| 00 | referencia: fluidsynth + el SF2 | | |
-| 01 | la ROM de hoy | 34.329 | 626.319 |
-| 02 | la batería (el arreglo de `dsp_musica`) | +0 | +0 |
-| 03 | no soltar a la que robó; sin muestra no ocupa voz | −1.760 | −71.072 |
-| 04 | envolventes del SF2, y aire en la mezcla | +624 | +10.011 |
-| 05 | curva de velocidad de fluidsynth, CC7/10/11 | +48 | +22.086 |
-| 06 | reparto de las 8 voces en un solo grupo | +16.391 | +436.356 |
-| 07 | rampa de 12 ms antes de reusar una voz que suena | +4.814 | +124.146 |
-| 08 | banco con sólo este tema, a 22 kHz | −93 | (no aplica) |
-| 09 | sólo el reparto, sobre 03 | +15.837 sobre 02 | +371.719 |
-| 10 | sólo el banco a 22 kHz, sobre 02 | −1.131 | (no aplica) |
+| 00 | reference: fluidsynth + the SF2 | | |
+| 01 | today's ROM | 34,329 | 626,319 |
+| 02 | the drums (the `dsp_musica` fix) | +0 | +0 |
+| 03 | not releasing the one that stole; without a sample it takes no voice | −1,760 | −71,072 |
+| 04 | the SF2's envelopes, and air in the mix | +624 | +10,011 |
+| 05 | fluidsynth's velocity curve, CC7/10/11 | +48 | +22,086 |
+| 06 | allocation of the 8 voices in a single group | +16,391 | +436,356 |
+| 07 | 12 ms ramp before reusing a voice that is playing | +4,814 | +124,146 |
+| 08 | bank with only this theme, at 22 kHz | −93 | (does not apply) |
+| 09 | only the allocation, on top of 03 | +15,837 over 02 | +371,719 |
+| 10 | only the bank at 22 kHz, on top of 02 | −1,131 | (does not apply) |
 
-"Aire" es bajar el techo de cada voz un 20% y subir `MASTER` de `$60` a
-`$78`: con la batería sonando y los sostenidos del SF2, la suma de las voces
-saturaba el DSP, que recorta antes del volumen general —1.000 muestras
-recortadas en el 04 sin esto; con esto, menos de 100 en todas—.
+"Air" is lowering each voice's ceiling by 20% and raising `MASTER` from `$60`
+to `$78`: with the drums playing and the SF2's sustains, the sum of the voices
+saturated the DSP, which clips before the master volume —1,000 clipped samples
+in 04 without this; with this, fewer than 100 in all of them—.
 
-La diferencia espectral media contra la referencia (24 bandas, ventanas de
-0,25 s), que orienta y no reemplaza al oído: 7,8 dB la ROM de hoy, 7,2 con
-envolventes y volumen, 6,3 con el reparto, **4,2 con todo y las muestras a
-22 kHz**; la tasa sola baja los agudos de 9 dB a 5, y el reparto solo, graves
-y medios.
+The mean spectral difference against the reference (24 bands, 0.25 s windows),
+which guides and does not replace the ear: 7.8 dB today's ROM, 7.2 with
+envelopes and volume, 6.3 with the allocation, **4.2 with everything and the
+samples at 22 kHz**; the rate alone lowers the highs from 9 dB to 5, and the
+allocation alone, the lows and mids.
 
-# Qué haría, en qué orden, y cuánto cuesta
+# What I would do, in what order, and how much it costs
 
-## 0. El arreglo de `dsp_musica`: hecho
+## 0. The `dsp_musica` fix: done
 
-Hecho el 2026-09-25, en `1d8a2ba`. No es el del prototipo: el índice de la
-sombra se arma con X en ocho bits (`sep #$10` / `tax` / `rep #$10`) y A no se
-ensancha, así que B no se toca; sale tres bytes más corto por voz y pisa la
-parte alta de Y, que `music_frame` no usa. Lo cobra
-`pruebas/rpgmaker/test_bateria_suena.py`: toca el tema del título y exige que
-la sombra de las voces 6 y 7 tenga lo que el stream les escribe, con volumen y
-pitch distintos de cero. Sin el arreglo da rojo.
+Done on 2026-09-25, in `1d8a2ba`. It is not the prototype's: the shadow's index
+is built with X in eight bits (`sep #$10` / `tax` / `rep #$10`) and A is not
+widened, so B is not touched; it comes out three bytes shorter per voice and
+overwrites the high part of Y, which `music_frame` does not use.
+`pruebas/rpgmaker/test_bateria_suena.py` enforces it: it plays the title's
+theme and requires the shadow of voices 6 and 7 to have what the stream writes
+to them, with volume and pitch other than zero. Without the fix it goes red.
 
-De paso: **la sombra no se inicializa**, así que antes de la primera
-escritura de la música tiene lo que traía la WRAM ($55 en snes9x). Si un
-efecto termina antes de que la música le haya escrito a su voz, se le
-devuelve esa basura al DSP. Pendiente, chico.
+In passing: **the shadow is not initialised**, so before the music's first
+write it has whatever WRAM had ($55 in snes9x). If a sound effect ends before
+the music has written to its voice, that garbage is given back to the DSP.
+Pending, small.
 
-**La saturación, con sólo el arreglo** (sin tocar la mezcla). Cómo se midió:
-el `release` de `1d8a2ba` con el `lda #TEMA_TITULO` de `titulo.s` parcheado
-en la ROM a cada tema —así cada uno suena solo, con sus muestras subidas por
-`tema_asegurar`; se comprobó que no le falta ninguna—, snes9x, sin MSU-1, el
-stream entero una vez, contando las muestras del audio del core (L+R) en el
-tope. **El tope no es 32767 sino 24575**: el DSP recorta la suma de las voces
-a 16 bits y recién después multiplica por `MASTER` (`$60`), así que un audio
-que llega a ±24575 está recortado. El script es descartable; volver a medir
-antes de fijar el aire.
+**The saturation, with only the fix** (without touching the mix). How it was
+measured: the `release` of `1d8a2ba` with the `lda #TEMA_TITULO` of `titulo.s`
+patched in the ROM to each theme —that way each one plays alone, with its
+samples uploaded by `tema_asegurar`; it was checked that none is missing—,
+snes9x, without MSU-1, the whole stream once, counting the samples of the
+core's audio (L+R) at the ceiling. **The ceiling is not 32767 but 24575**: the
+DSP clips the sum of the voices to 16 bits and only then multiplies by
+`MASTER` (`$60`), so audio that reaches ±24575 is clipped. The script is
+throwaway; measure again before fixing the air.
 
-| Tema | Sin el arreglo | Con el arreglo |
+| Theme | Without the fix | With the fix |
 |---|---:|---:|
-| T_VGFighterMAX_Masako (batalla) | 168.213 | 309.040 |
-| hzbreach | 70.186 | 146.578 |
-| TF3_1_awe | 60.996 | 110.894 |
-| hzstream | 6.370 | 57.672 |
-| rshinld | 2.876 | 10.344 |
-| evilrhys | 148 | 6.920 |
-| Lunar_Pyramid | 0 | 4.574 |
-| 3D-Galax | 0 | 3.404 |
-| lufsorr | 268 | 2.336 |
-| cd4 | 102 | 1.036 |
+| T_VGFighterMAX_Masako (battle) | 168,213 | 309,040 |
+| hzbreach | 70,186 | 146,578 |
+| TF3_1_awe | 60,996 | 110,894 |
+| hzstream | 6,370 | 57,672 |
+| rshinld | 2,876 | 10,344 |
+| evilrhys | 148 | 6,920 |
+| Lunar_Pyramid | 0 | 4,574 |
+| 3D-Galax | 0 | 3,404 |
+| lufsorr | 268 | 2,336 |
+| cd4 | 102 | 1,036 |
 | cd2 | 0 | 894 |
 | Astpgmarch | 24 | 858 |
-| Fantasia_Of_The_Wind (título) | 2 | 542 |
+| Fantasia_Of_The_Wind (title) | 2 | 542 |
 | wb3shop | 0 | 382 |
 | escape_newyork | 0 | 140 |
 | C3classi | 0 | 112 |
 | wb3mlair, Gaden, KSSMKEND, vswar, dcbest, golden_axe-turtlevillage2 | 0 | 0 |
 
-O sea: **16 de los 22 temas recortan con la batería de vuelta**, y tres ya
-recortaban fuerte sin ella —el de batalla el que más—, así que el aire del
-paso 2 no es sólo por la batería. `golden_axe-turtlevillage2` es todo
-percusión: sin el arreglo su pico era 0, silencio entero. `dcbest` no tiene
-batería y da igual en las dos.
+That is: **16 of the 22 themes clip with the drums back**, and three already
+clipped heavily without them —the battle one the most—, so the air of step 2 is
+not only because of the drums. `golden_axe-turtlevillage2` is all percussion:
+without the fix its peak was 0, complete silence. `dcbest` has no drums and is
+the same in both.
 
-## 1. Las notas que se sueltan antes de tiempo: hecho
+## 1. The notes released early: done
 
-Hecho el 2026-09-25 (commit "Música: una nota robada no suelta a la que le
-robó la voz"). El release se agenda al final de `build_events`, sólo para las
-notas que llegan a su fin siendo dueñas de la voz, y no va cuando la voz se
-reusa en el mismo cuadro en que la nota termina; y una nota sin muestra ya
-no ocupa voz.
+Done on 2026-09-25 (commit "Música: una nota robada no suelta a la que le robó
+la voz"). The release is scheduled at the end of `build_events`, only for the
+notes that reach their end still owning the voice, and it does not go when the
+voice is reused on the same frame the note ends; and a note without a sample no
+longer takes a voice.
 
-**Lo que dejó de pasar**, contado con la lógica vieja sobre las mismas
-entradas: **564 notas y 14.486 cuadros** se soltaban antes de su fin en los
-22 temas —341 de `escape_newyork` (el prototipo contó 329 notas robadas; acá
-se cuentan las que se soltaban), 168 de `cd4`, 31 de
-`Fantasia_Of_The_Wind`, 19 de `3D-Galax` y 5 entre `hzstream`, `TF3_1_awe`
-y `hzbreach`—, y **11.024 notas sin muestra** ocupaban voz en los nueve
-temas que no aportan al banco. **El stream de los 22 bajó de 626.319 a
-555.247 B (−11,3%)**, igual que en el prototipo. La saturación casi no
-cambió. Lo cobra `pruebas/herramientas/test_musica_stream.py`.
+**What stopped happening**, counted with the old logic on the same inputs:
+**564 notes and 14,486 frames** were released before their end in the 22
+themes —341 of `escape_newyork` (the prototype counted 329 stolen notes; here
+the ones that were released are counted), 168 of `cd4`, 31 of
+`Fantasia_Of_The_Wind`, 19 of `3D-Galax` and 5 among `hzstream`, `TF3_1_awe`
+and `hzbreach`—, and **11,024 notes without a sample** took a voice in the nine
+themes that do not contribute to the bank. **The stream of the 22 went down
+from 626,319 to 555,247 B (−11.3%)**, same as in the prototype. The saturation
+barely changed. `pruebas/herramientas/test_musica_stream.py` enforces it.
 
-## 2. Envolventes del SoundFont, con aire: hecho, con más aire que el pensado
+## 2. Envelopes from the SoundFont, with air: done, with more air than planned
 
-Hecho el 2026-09-25 (commit "Música: las envolventes salen del SoundFont, y
-la mezcla tiene aire"):
+Done on 2026-09-25 (commit "Música: las envolventes salen del SoundFont, y la
+mezcla tiene aire"):
 
-* **`gunter sf2 --extract --json` devuelve la envolvente de la zona**,
-  generadores 33 a 40, ya resuelta —la del instrumento más la del preset, con
-  los defaults y topes de la especificación— y en las unidades del SF2. **Hay
-  que correr `just herramientas`**: el conversor se niega, con ese mensaje,
-  con un `gunter` anterior.
-* `sdsp.envelope` la traduce a ADSR1, ADSR2 y el GAIN del release, con las
-  dos cosas que mostró la grabación —release lineal debajo de 100 ms, y la
-  caída exponencial a cero donde el SF2 anda por -40 dB—. Da exactamente lo
-  mismo que el prototipo en 3.456 combinaciones de programa y tecla —los
-  programas que el SF2 tiene, una tecla de cada tres entre la 20 y la 98—.
-  Las ocho familias de `sdsp.py` se fueron.
-* **El aire**: con 0,8 y MASTER en `$78`, lo que proponía el prototipo, los
-  16 temas seguían recortando —hzbreach 107.218 muestras, la batalla
-  59.982—: el prototipo lo había medido en `escape_newyork`, que es de los
-  que menos recortan. Quedó en **0,5**: techo de 48 por voz y 42 la
-  percusión, MASTER en `$7F`, que es el tope del registro. Los efectos de
-  sonido bajan su techo lo mismo que subió MASTER y suenan igual que antes.
+* **`gunter sf2 --extract --json` returns the zone's envelope**, generators 33
+  to 40, already resolved —the instrument's plus the preset's, with the
+  specification's defaults and caps— and in the SF2's units. **`just
+  herramientas` has to be run**: the converter refuses, with that message,
+  with an earlier `gunter`.
+* `sdsp.envelope` translates it to ADSR1, ADSR2 and the release GAIN, with the
+  two things the recording showed —linear release below 100 ms, and the
+  exponential drop to zero where the SF2 is around -40 dB—. It gives exactly
+  the same as the prototype in 3,456 combinations of program and key —the
+  programs the SF2 has, one key out of every three between 20 and 98—. The
+  eight families of `sdsp.py` are gone.
+* **The air**: with 0.8 and MASTER at `$78`, what the prototype proposed, the
+  16 themes kept clipping —hzbreach 107,218 samples, the battle 59,982—: the
+  prototype had measured it on `escape_newyork`, which is one of those that
+  clip the least. It ended up at **0.5**: a ceiling of 48 per voice and 42 for
+  the percussion, MASTER at `$7F`, which is the register's cap. The sound
+  effects lower their ceiling by the same amount MASTER went up and sound the
+  same as before.
 
-**Cómo se midió** —el mismo método que el del punto 0—: el `release` con el
-`lda #TEMA_TITULO` de `titulo.s` parcheado a cada tema, snes9x sin MSU-1, el
-stream entero una vez, contando las muestras del audio del core (L+R) en el
-tope, que es `32767·MASTER/128` —24.575 con `$60`, 30.719 con `$78`, 32.511
-con `$7F`—. LUFS integrados con `ebur128` de ffmpeg sobre la misma
-grabación. Los scripts, descartables, en el scratchpad de la sesión
+**How it was measured** —the same method as in point 0—: the `release` with
+the `lda #TEMA_TITULO` of `titulo.s` patched to each theme, snes9x without
+MSU-1, the whole stream once, counting the samples of the core's audio (L+R) at
+the ceiling, which is `32767·MASTER/128` —24,575 with `$60`, 30,719 with
+`$78`, 32,511 with `$7F`—. Integrated LUFS with ffmpeg's `ebur128` on the same
+recording. The scripts, throwaway, in the session's scratchpad
 (`audio-pasos-1-2/sat.py`).
 
-| Tema | Stream hoy | Paso 1 | Paso 2 | Recortes hoy | Paso 1 | Aire 0,8 | Paso 2 (0,5) | Pico hoy → paso 2 | LUFS hoy → paso 2 |
+| Theme | Stream today | Step 1 | Step 2 | Clips today | Step 1 | Air 0.8 | Step 2 (0.5) | Peak today → step 2 | LUFS today → step 2 |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| hzstream | 13.042 | 11.990 | 11.999 | 57.672 | 58.114 | 34.718 | 36 | -2.5 → -0.1 | -7.6 → -9.6 |
-| escape_newyork | 34.329 | 32.569 | 33.193 | 140 | 108 | 190 | 0 | -2.5 → -2.6 | -15.6 → -17.3 |
-| TF3_1_awe | 23.444 | 21.546 | 21.546 | 110.894 | 113.112 | 78.030 | 468 | -2.5 → -0.1 | -7.1 → -9.0 |
-| T_VGFighterMAX_Masako | 156.304 | 147.088 | 148.312 | 309.040 | 311.370 | 59.982 | 70 | -2.5 → -0.1 | -6.6 → -10.7 |
-| evilrhys | 36.338 | 35.126 | 35.876 | 6.920 | 6.864 | 4.314 | 0 | -2.5 → -0.5 | -11.0 → -13.6 |
-| lufsorr | 16.161 | 10.533 | 11.529 | 2.336 | 2.346 | 2.202 | 0 | -2.5 → -0.4 | -11.2 → -12.6 |
-| cd4 | 50.885 | 43.087 | 45.886 | 1.036 | 914 | 208 | 0 | -2.5 → -3.4 | -14.4 → -17.4 |
-| C3classi | 33.498 | 26.532 | 27.537 | 112 | 100 | 38 | 0 | -2.5 → -3.7 | -14.8 → -15.9 |
-| rshinld | 12.272 | 7.274 | 7.406 | 10.344 | 10.566 | 9.372 | 4 | -2.5 → -0.1 | -10.6 → -12.1 |
-| cd2 | 30.461 | 29.225 | 29.261 | 894 | 892 | 348 | 0 | -2.5 → -2.7 | -12.5 → -15.0 |
-| hzbreach | 30.758 | 29.620 | 29.626 | 146.578 | 148.166 | 107.218 | 858 | -2.5 → -0.1 | -6.8 → -8.6 |
-| wb3mlair | 9.117 | 7.335 | 7.497 | 0 | 0 | 0 | 0 | -4.8 → -6.2 | -22.2 → -22.2 |
-| Astpgmarch | 6.521 | 6.350 | 6.527 | 858 | 834 | 850 | 0 | -2.5 → -1.9 | -10.7 → -14.0 |
-| Gaden | 7.271 | 5.357 | 5.639 | 0 | 0 | 0 | 0 | -7.5 → -12.7 | -19.0 → -23.0 |
-| 3D-Galax | 60.346 | 49.146 | 49.080 | 3.404 | 3.490 | 1.022 | 0 | -2.5 → -2.3 | -14.7 → -16.9 |
-| wb3shop | 9.916 | 9.046 | 9.046 | 382 | 368 | 422 | 0 | -2.5 → -3.0 | -16.9 → -19.2 |
-| KSSMKEND | 12.942 | 10.980 | 10.980 | 0 | 0 | 0 | 0 | -6.1 → -9.0 | -22.2 → -23.7 |
-| vswar | 21.289 | 20.536 | 20.536 | 0 | 0 | 0 | 0 | -3.7 → -5.3 | -15.1 → -16.9 |
-| Lunar_Pyramid | 37.190 | 32.792 | 32.792 | 4.574 | 4.304 | 498 | 0 | -2.5 → -3.0 | -13.4 → -15.5 |
-| dcbest | 5.017 | 5.017 | 5.017 | 0 | 0 | 0 | 0 | -7.7 → -10.5 | -20.8 → -21.1 |
+| hzstream | 13,042 | 11,990 | 11,999 | 57,672 | 58,114 | 34,718 | 36 | -2.5 → -0.1 | -7.6 → -9.6 |
+| escape_newyork | 34,329 | 32,569 | 33,193 | 140 | 108 | 190 | 0 | -2.5 → -2.6 | -15.6 → -17.3 |
+| TF3_1_awe | 23,444 | 21,546 | 21,546 | 110,894 | 113,112 | 78,030 | 468 | -2.5 → -0.1 | -7.1 → -9.0 |
+| T_VGFighterMAX_Masako | 156,304 | 147,088 | 148,312 | 309,040 | 311,370 | 59,982 | 70 | -2.5 → -0.1 | -6.6 → -10.7 |
+| evilrhys | 36,338 | 35,126 | 35,876 | 6,920 | 6,864 | 4,314 | 0 | -2.5 → -0.5 | -11.0 → -13.6 |
+| lufsorr | 16,161 | 10,533 | 11,529 | 2,336 | 2,346 | 2,202 | 0 | -2.5 → -0.4 | -11.2 → -12.6 |
+| cd4 | 50,885 | 43,087 | 45,886 | 1,036 | 914 | 208 | 0 | -2.5 → -3.4 | -14.4 → -17.4 |
+| C3classi | 33,498 | 26,532 | 27,537 | 112 | 100 | 38 | 0 | -2.5 → -3.7 | -14.8 → -15.9 |
+| rshinld | 12,272 | 7,274 | 7,406 | 10,344 | 10,566 | 9,372 | 4 | -2.5 → -0.1 | -10.6 → -12.1 |
+| cd2 | 30,461 | 29,225 | 29,261 | 894 | 892 | 348 | 0 | -2.5 → -2.7 | -12.5 → -15.0 |
+| hzbreach | 30,758 | 29,620 | 29,626 | 146,578 | 148,166 | 107,218 | 858 | -2.5 → -0.1 | -6.8 → -8.6 |
+| wb3mlair | 9,117 | 7,335 | 7,497 | 0 | 0 | 0 | 0 | -4.8 → -6.2 | -22.2 → -22.2 |
+| Astpgmarch | 6,521 | 6,350 | 6,527 | 858 | 834 | 850 | 0 | -2.5 → -1.9 | -10.7 → -14.0 |
+| Gaden | 7,271 | 5,357 | 5,639 | 0 | 0 | 0 | 0 | -7.5 → -12.7 | -19.0 → -23.0 |
+| 3D-Galax | 60,346 | 49,146 | 49,080 | 3,404 | 3,490 | 1,022 | 0 | -2.5 → -2.3 | -14.7 → -16.9 |
+| wb3shop | 9,916 | 9,046 | 9,046 | 382 | 368 | 422 | 0 | -2.5 → -3.0 | -16.9 → -19.2 |
+| KSSMKEND | 12,942 | 10,980 | 10,980 | 0 | 0 | 0 | 0 | -6.1 → -9.0 | -22.2 → -23.7 |
+| vswar | 21,289 | 20,536 | 20,536 | 0 | 0 | 0 | 0 | -3.7 → -5.3 | -15.1 → -16.9 |
+| Lunar_Pyramid | 37,190 | 32,792 | 32,792 | 4,574 | 4,304 | 498 | 0 | -2.5 → -3.0 | -13.4 → -15.5 |
+| dcbest | 5,017 | 5,017 | 5,017 | 0 | 0 | 0 | 0 | -7.7 → -10.5 | -20.8 → -21.1 |
 | golden_axe-turtlevillage2 | 831 | 831 | 831 | 0 | 0 | 0 | 0 | -7.4 → -11.1 | -17.0 → -20.7 |
-| Fantasia_Of_The_Wind | 18.387 | 13.267 | 14.902 | 542 | 592 | 2.018 | 0 | -2.5 → -0.6 | -12.1 → -13.1 |
-| **Los 22** | 626.319 | 555.247 | 565.018 | 655.726 | 662.140 | 301.430 | 1.436 | | |
+| Fantasia_Of_The_Wind | 18,387 | 13,267 | 14,902 | 542 | 592 | 2,018 | 0 | -2.5 → -0.6 | -12.1 → -13.1 |
+| **The 22** | 626,319 | 555,247 | 565,018 | 655,726 | 662,140 | 301,430 | 1,436 | | |
 
 
-**Lo que cuesta el aire**: donde antes no recortaba, el nivel baja
-20·log10(0,5·127/96) = −3,6 dB —`escape_newyork` de -15,6 a -17,3 LUFS,
-con las envolventes nuevas en el medio—. Los que recortaban bajan más, pero
-lo que perdieron era distorsión: la batalla, de -6,6 a -10,7 LUFS. Recortan
-cinco, a lo sumo 858 muestras de 6,3 millones (hzbreach).
+**What the air costs**: where it did not clip before, the level goes down
+20·log10(0.5·127/96) = −3.6 dB —`escape_newyork` from -15.6 to -17.3 LUFS, with
+the new envelopes in between—. The ones that clipped go down more, but what
+they lost was distortion: the battle, from -6.6 to -10.7 LUFS. Five clip, at
+most 858 samples out of 6.3 million (hzbreach).
 
-**Lo que no se pudo con un número global**: cero recortes en todos sin
-bajar el nivel. Midiendo el pico verdadero de cada tema con el techo en un
-cuarto —24 y 21, sin recortes en ninguno— y escalando, para que no recorte
-ninguno el techo global tiene que ser 1,56 veces ese cuarto (hzbreach),
-contra los 2 de hoy: otro −2,2 dB para todos. Un techo por tema dejaría a
-los tranquilos donde están, pero el pico no se deja estimar desde el stream:
-contra la suma de los volúmenes de las voces, la relación varía de 85 a 135
-entre los temas densos, así que la regla necesita un margen que se come lo
-que gana. Lo que sí funcionaría es una tabla de techos medida, que habría que
-volver a medir con cada cambio de la mezcla —la curva de velocidad del 3, el
-reparto del 5—. No se hizo: es una decisión para después del 5.
+**What could not be done with a global number**: zero clips in all of them
+without lowering the level. Measuring the true peak of each theme with the
+ceiling at a quarter —24 and 21, without clips in any— and scaling, for none
+to clip the global ceiling has to be 1.56 times that quarter (hzbreach),
+against today's 2: another −2.2 dB for everyone. A ceiling per theme would
+leave the calm ones where they are, but the peak cannot be estimated from the
+stream: against the sum of the voices' volumes, the ratio varies from 85 to 135
+among the dense themes, so the rule needs a margin that eats what it gains.
+What would work is a measured table of ceilings, which would have to be
+measured again with each change of the mix —the velocity curve of 3, the
+allocation of 5—. It was not done: it is a decision for after 5.
 
-**Stream**: +9.771 B sobre el paso 1 (+1,8%), lo previsto: el piano cambia
-de ADSR2 por tecla. Lo cobra `test_musica_stream.py`, con el SF2 de verdad:
-el release del bajo sintético y el decaimiento del piano por tecla.
+**Stream**: +9,771 B over step 1 (+1.8%), as expected: the piano changes ADSR2
+per key. `test_musica_stream.py` enforces it, with the real SF2: the synth
+bass's release and the piano's decay per key.
 
-**Para escuchar**: `/shared/audio/2026-09-25-pasos-1-y-2/`, con su
-`LEEME.txt`.
+**To listen**: `/shared/audio/2026-09-25-pasos-1-y-2/`, with its `LEEME.txt`.
 
-## 3. Curva de velocidad y controladores: hecho
+## 3. Velocity curve and controllers: done
 
-Hecho el 2026-09-26 (commit "Música: la velocidad al cuadrado, y los
-controladores del MIDI"). Medido sobre `55098bd`, con el `release` de hoy,
-que tiene **32 temas** y no los 22 de las tablas de arriba: los diez nuevos
-van al final de la tabla.
+Done on 2026-09-26 (commit "Música: la velocidad al cuadrado, y los
+controladores del MIDI"). Measured on `55098bd`, with today's `release`, which
+has **32 themes** and not the 22 of the tables above: the ten new ones go at
+the end of the table.
 
-**La curva**, medida con fluidsynth y el SF2 —una nota sola, RMS, contra
-velocidad 127—: la velocidad baja 40·log10(127/v) dB exactos (64 da -11,9;
-29, -25,7). CC7 y CC11 igual, cada uno —CC7 medido contra 100, su valor de
-GM, así que un canal en 127 suena **+4 dB**—; el paneo es seno y coseno con
-el centro a -3 dB de un paneo total (0 da +3,0 dB y silencio; 32, +2,3 y
--5,3). Así quedó `sdsp.volume`; el piso bajó de 4 a 2.
+**The curve**, measured with fluidsynth and the SF2 —a single note, RMS,
+against velocity 127—: the velocity drops exactly 40·log10(127/v) dB (64 gives
+-11.9; 29, -25.7). CC7 and CC11 the same, each one —CC7 measured against 100,
+its GM value, so a channel at 127 sounds **+4 dB**—; the panning is sine and
+cosine with the centre at -3 dB from a full pan (0 gives +3.0 dB and silence;
+32, +2.3 and -5.3). That is how `sdsp.volume` ended up; the floor went down
+from 4 to 2.
 
-**Qué entró** —`midi.py` ya no los tira; ver su encabezado—:
+**What went in** —`midi.py` no longer drops them; see its header—:
 
-* **CC7, CC11 y CC10**, a la nota que arranca y a la que ya sonaba (también
-  en su cola). CC7 hay 3.851 en 25 temas, CC10 1.532 en 21, CC11 4.427 en
-  tres (`vswar`, `3D-Galax`, `Fire_Mustang`).
-* **El pitch bend**, con el rango del RPN 0 (CC101 y CC100 en cero, y CC6/
-  CC38). Lo usan de verdad tres temas: `3D-Galax` (194, la sierra de la
-  melodía, 116 con la nota sonando), `dcbest` (396 en el bajo, casi todos
-  **entre** notas: desafinan la que viene, hasta 1,2 semitonos) y `vswar`
-  (445 en el canal 13, que no tiene voz: no suena). Entró porque cuesta
-  **2.270 B** en los 32 temas y la altura al arrancar la nota es gratis.
-  `3D-Galax` pide un rango de **95 semitonos**; fluidsynth lo respeta
-  (medido: la caída llega a -20,6 semitonos) y un sintetizador GS lo topa en
-  24. Se siguió a fluidsynth, que es la referencia y de donde sale la pista
-  de MSU-1: si suena raro, es lo primero para mirar. Un CC101 sin su CC100
-  no elige el RPN —medido; es el caso de `dcbest`, que queda en 2—.
-* **El pedal (CC64)**, que no es un evento del stream: alarga las notas que
-  se sueltan con el pedal abajo. Lo usan el título (`Fantasia_Of_The_Wind`,
-  38, el piano) y `pn28year` (606). **Baja** el stream 5.481 B, porque una
-  nota sostenida hasta que la roba otra ya no escribe su release.
+* **CC7, CC11 and CC10**, to the note that starts and to the one already
+  playing (also in its tail). There are 3,851 CC7 in 25 themes, 1,532 CC10 in
+  21, 4,427 CC11 in three (`vswar`, `3D-Galax`, `Fire_Mustang`).
+* **The pitch bend**, with the range of RPN 0 (CC101 and CC100 at zero, and
+  CC6/CC38). Three themes really use it: `3D-Galax` (194, the melody's saw,
+  116 with the note playing), `dcbest` (396 in the bass, almost all **between**
+  notes: they detune the next one, up to 1.2 semitones) and `vswar` (445 on
+  channel 13, which has no voice: it does not play). It went in because it
+  costs **2,270 B** in the 32 themes and the pitch at the note's start is free.
+  `3D-Galax` asks for a range of **95 semitones**; fluidsynth respects it
+  (measured: the drop reaches -20.6 semitones) and a GS synthesiser caps it at
+  24. fluidsynth was followed, as it is the reference and where the MSU-1 track
+  comes from: if it sounds odd, it is the first thing to look at. A CC101
+  without its CC100 does not select the RPN —measured; it is `dcbest`'s case,
+  which stays at 2—.
+* **The pedal (CC64)**, which is not a stream event: it lengthens the notes
+  released with the pedal down. The title (`Fantasia_Of_The_Wind`, 38, the
+  piano) and `pn28year` (606) use it. It **lowers** the stream by 5,481 B,
+  because a note sustained until another steals it no longer writes its
+  release.
 
-**Qué no entró**, y quién lo usa:
+**What did not go in**, and who uses it:
 
-* **Modulación (CC1)**: sólo `Tnt07` de verdad (392); `vswar` y `11h035`
-  la mandan en 0. Es el vibrato del SF2, o sea una escritura de altura por
-  cuadro mientras suena, o un LFO en el driver. Anotado para el formato.
-* **Reverb y chorus (CC91, CC93)**: en 13 temas, casi siempre un valor fijo
-  al principio. La referencia sale seca (`-R 0 -C 0`) y el eco del DSP está
-  apagado: va con el eco, si alguna vez se prende.
-* **Los NRPN del AWE32** de `TF3_1_awe` (4.134, MSB 127): corte y resonancia
-  del filtro, que el DSP no tiene.
-* **El aftertouch**: ningún tema lo usa.
-* **El paneo por tecla del SF2** —el charles a un lado, el bombo al centro—:
-  `gunter` no devuelve el generador 17. La batería suena al centro salvo por
-  el CC10 de su canal.
-* **Los cambios de programa a mitad del tema**, que ya se ignoraban (vale el
-  primero de cada canal): `hzbreach`, `Astpgmarch` y `bubstix`.
+* **Modulation (CC1)**: only `Tnt07` for real (392); `vswar` and `11h035` send
+  it at 0. It is the SF2's vibrato, that is, a pitch write per frame while it
+  plays, or an LFO in the driver. Noted for the format.
+* **Reverb and chorus (CC91, CC93)**: in 13 themes, almost always a fixed value
+  at the start. The reference comes out dry (`-R 0 -C 0`) and the DSP's echo is
+  off: it goes with the echo, if it is ever turned on.
+* **The AWE32 NRPNs** of `TF3_1_awe` (4,134, MSB 127): the filter's cutoff and
+  resonance, which the DSP does not have.
+* **Aftertouch**: no theme uses it.
+* **The SF2's per-key panning** —the hi-hat to one side, the kick in the
+  centre—: `gunter` does not return generator 17. The drums play in the centre
+  except for their channel's CC10.
+* **Program changes in the middle of the theme**, which were already ignored
+  (the first one of each channel counts): `hzbreach`, `Astpgmarch` and
+  `bubstix`.
 
-**Bytes del stream**, antes → después, y **saturación** —muestras en el
-tope, L+R, con el método del paso 2 y **el mismo aire**: 0,5 y MASTER
-`$7F`—, con pico (dBFS) y LUFS integrados:
+**Stream bytes**, before → after, and **saturation** —samples at the ceiling,
+L+R, with step 2's method and **the same air**: 0.5 and MASTER `$7F`—, with
+peak (dBFS) and integrated LUFS:
 
-| Tema | Stream antes | Paso 3 | Recortes antes | Paso 3 | Pico | LUFS |
+| Theme | Stream before | Step 3 | Clips before | Step 3 | Peak | LUFS |
 |---|---:|---:|---:|---:|---:|---:|
-| hzstream | 11.999 | 11.999 | 36 | 36 | -0.1 → -0.1 | -9.6 → -9.6 |
-| escape_newyork | 33.193 | 33.235 | 0 | 0 | -2.6 → -5.4 | -17.3 → -20.7 |
-| TF3_1_awe | 21.546 | 30.054 | 460 | 0 | -0.1 → -1.8 | -9.0 → -13.4 |
-| T_VGFighterMAX_Masako | 148.312 | 148.312 | 70 | 290 | -0.1 → -0.1 | -10.7 → -10.3 |
-| evilrhys | 35.876 | 35.882 | 0 | 232 | -0.5 → -0.1 | -13.6 → -11.1 |
-| lufsorr | 11.529 | 12.231 | 0 | 0 | -0.4 → -2.4 | -12.6 → -15.0 |
-| cd4 | 45.886 | 45.799 | 0 | 0 | -3.4 → -3.7 | -17.4 → -17.9 |
-| C3classi | 27.537 | 27.537 | 0 | 0 | -3.7 → -3.6 | -15.9 → -16.6 |
-| rshinld | 7.406 | 8.906 | 0 | **4.552** | -0.1 → -0.1 | -12.1 → -8.7 |
-| cd2 | 29.261 | 29.255 | 0 | 0 | -2.7 → -4.1 | -15.0 → -16.7 |
-| hzbreach | 29.626 | 29.626 | 816 | 834 | -0.1 → -0.1 | -8.6 → -8.6 |
-| wb3mlair | 7.497 | 7.497 | 0 | 0 | -6.2 → -9.3 | -22.2 → -24.7 |
-| Astpgmarch | 6.527 | 6.527 | 0 | 0 | -1.9 → -1.7 | -14.0 → -14.0 |
-| Gaden | 5.639 | 5.639 | 0 | 0 | -12.7 → -17.9 | -23.0 → -31.3 |
-| 3D-Galax | 49.080 | 52.615 | 0 | 166 | -2.3 → -0.1 | -16.9 → -13.9 |
-| wb3shop | 9.046 | 9.046 | 0 | 0 | -3.0 → -5.1 | -19.2 → -21.3 |
-| KSSMKEND | 10.980 | 10.980 | 0 | 0 | -9.0 → -10.9 | -23.7 → -24.7 |
-| vswar | 20.536 | 26.345 | 0 | 0 | -5.3 → -6.8 | -16.9 → -20.3 |
-| Lunar_Pyramid | 32.792 | 32.792 | 0 | 0 | -3.0 → -0.3 | -15.5 → -14.1 |
-| dcbest | 5.017 | 6.594 | 0 | 0 | -10.5 → -6.3 | -21.1 → -17.0 |
+| hzstream | 11,999 | 11,999 | 36 | 36 | -0.1 → -0.1 | -9.6 → -9.6 |
+| escape_newyork | 33,193 | 33,235 | 0 | 0 | -2.6 → -5.4 | -17.3 → -20.7 |
+| TF3_1_awe | 21,546 | 30,054 | 460 | 0 | -0.1 → -1.8 | -9.0 → -13.4 |
+| T_VGFighterMAX_Masako | 148,312 | 148,312 | 70 | 290 | -0.1 → -0.1 | -10.7 → -10.3 |
+| evilrhys | 35,876 | 35,882 | 0 | 232 | -0.5 → -0.1 | -13.6 → -11.1 |
+| lufsorr | 11,529 | 12,231 | 0 | 0 | -0.4 → -2.4 | -12.6 → -15.0 |
+| cd4 | 45,886 | 45,799 | 0 | 0 | -3.4 → -3.7 | -17.4 → -17.9 |
+| C3classi | 27,537 | 27,537 | 0 | 0 | -3.7 → -3.6 | -15.9 → -16.6 |
+| rshinld | 7,406 | 8,906 | 0 | **4,552** | -0.1 → -0.1 | -12.1 → -8.7 |
+| cd2 | 29,261 | 29,255 | 0 | 0 | -2.7 → -4.1 | -15.0 → -16.7 |
+| hzbreach | 29,626 | 29,626 | 816 | 834 | -0.1 → -0.1 | -8.6 → -8.6 |
+| wb3mlair | 7,497 | 7,497 | 0 | 0 | -6.2 → -9.3 | -22.2 → -24.7 |
+| Astpgmarch | 6,527 | 6,527 | 0 | 0 | -1.9 → -1.7 | -14.0 → -14.0 |
+| Gaden | 5,639 | 5,639 | 0 | 0 | -12.7 → -17.9 | -23.0 → -31.3 |
+| 3D-Galax | 49,080 | 52,615 | 0 | 166 | -2.3 → -0.1 | -16.9 → -13.9 |
+| wb3shop | 9,046 | 9,046 | 0 | 0 | -3.0 → -5.1 | -19.2 → -21.3 |
+| KSSMKEND | 10,980 | 10,980 | 0 | 0 | -9.0 → -10.9 | -23.7 → -24.7 |
+| vswar | 20,536 | 26,345 | 0 | 0 | -5.3 → -6.8 | -16.9 → -20.3 |
+| Lunar_Pyramid | 32,792 | 32,792 | 0 | 0 | -3.0 → -0.3 | -15.5 → -14.1 |
+| dcbest | 5,017 | 6,594 | 0 | 0 | -10.5 → -6.3 | -21.1 → -17.0 |
 | golden_axe-turtlevillage2 | 831 | 831 | 0 | 0 | -11.2 → -8.2 | -20.7 → -17.7 |
-| Fantasia_Of_The_Wind | 14.902 | 14.545 | 0 | 0 | -0.6 → -4.9 | -13.1 → -16.3 |
-| Fire_Mustang_Intro_And_Level_2_By_Luiz_Vasco | 15.030 | 15.030 | 0 | 0 | -4.2 → -3.9 | -16.2 → -15.8 |
-| bubstix | 29.988 | 29.988 | 0 | 0 | -2.3 → -3.4 | -15.8 → -17.1 |
-| wb3town | 6.002 | 6.002 | 0 | 0 | -5.7 → -7.7 | -18.2 → -20.2 |
-| 11h035 | 17.342 | 17.234 | 0 | 0 | -4.9 → -7.8 | -18.0 → -21.2 |
+| Fantasia_Of_The_Wind | 14,902 | 14,545 | 0 | 0 | -0.6 → -4.9 | -13.1 → -16.3 |
+| Fire_Mustang_Intro_And_Level_2_By_Luiz_Vasco | 15,030 | 15,030 | 0 | 0 | -4.2 → -3.9 | -16.2 → -15.8 |
+| bubstix | 29,988 | 29,988 | 0 | 0 | -2.3 → -3.4 | -15.8 → -17.1 |
+| wb3town | 6,002 | 6,002 | 0 | 0 | -5.7 → -7.7 | -18.2 → -20.2 |
+| 11h035 | 17,342 | 17,234 | 0 | 0 | -4.9 → -7.8 | -18.0 → -21.2 |
 | prepara | 630 | 630 | 0 | 0 | -9.3 → -13.8 | -20.5 → -26.3 |
-| T_ProjectJustice_DiscLoad | 15.819 | 15.819 | 0 | 0 | -6.5 → -7.9 | -22.9 → -24.3 |
-| pn28year | 19.767 | 17.781 | 4 | 0 | -0.1 → -4.8 | -13.0 → -19.2 |
-| Tnt07 | 8.299 | 8.299 | 0 | 0 | -7.5 → -9.6 | -21.8 → -23.8 |
-| Deflector1 | 31.025 | 31.025 | 0 | 178 | -1.6 → -0.1 | -16.6 → -14.2 |
-| MML2_MotherZone | 2.640 | 2.640 | 0 | 0 | -10.7 → -9.2 | -21.2 → -19.7 |
-| **Los 32** | 711.560 | 730.695 | 1.386 | 6.288 | | |
-| **Los 22 de las tablas de arriba** | 565.018 | 586.247 | 1.382 | 6.110 | | |
+| T_ProjectJustice_DiscLoad | 15,819 | 15,819 | 0 | 0 | -6.5 → -7.9 | -22.9 → -24.3 |
+| pn28year | 19,767 | 17,781 | 4 | 0 | -0.1 → -4.8 | -13.0 → -19.2 |
+| Tnt07 | 8,299 | 8,299 | 0 | 0 | -7.5 → -9.6 | -21.8 → -23.8 |
+| Deflector1 | 31,025 | 31,025 | 0 | 178 | -1.6 → -0.1 | -16.6 → -14.2 |
+| MML2_MotherZone | 2,640 | 2,640 | 0 | 0 | -10.7 → -9.2 | -21.2 → -19.7 |
+| **The 32** | 711,560 | 730,695 | 1,386 | 6,288 | | |
+| **The 22 of the tables above** | 565,018 | 586,247 | 1,382 | 6,110 | | |
 
-* **Stream: +19.135 B (+2,7%)** en los 32. Desglosado: la curva sola −12
-  B, CC7/10/11 +22.328, el bend +2.270, el pedal −5.481. Los que cambian
-  son los que usan CC de verdad: `TF3_1_awe` +39% (dos ondas cuadradas con
-  CC7 de compuerta, 34 → 0 → 34 cada ~10 cuadros, y paneo en todo),
-  `dcbest` +31% (el bend), `vswar` +28%, `rshinld` +20%. Seguir
-  actualizando las colas —las voces cuya nota ya se soltó— cuesta 1.195 B
-  de eso: no vale un caso aparte.
-* **Saturación: de 1.386 a 6.288 muestras**, 4,5 veces más, y casi todo en
-  **`rshinld` (4.552, de 3,1 millones)**: CC7 en 127 en casi todos sus
-  canales, +4 dB sobre el techo que el aire suponía. Los demás que empiezan
-  a recortar lo hacen poco (la batalla 290, `evilrhys` 232, `Deflector1`
-  178, `3D-Galax` 166), y `TF3_1_awe` deja de recortar. **El aire no se
-  tocó**, como pidió taro: la tabla de techos por tema del paso 2 había que
-  volver a medirla después de este paso y del 5.
-* **El nivel** baja en los que tienen colchones suaves (`escape_newyork`
-  -3,4 LUFS, `Gaden` -8,3, `pn28year` -6,2) y sube en los que piden CC7
-  alto (`rshinld` +3,4, `dcbest` +4,1). Contra la referencia —fluidsynth con
-  el SF2, LUFS integrados—, en los 13 temas que aportan al banco, y por eso
-  suenan enteros, la distancia ROM − referencia queda **más pareja entre
-  temas: su desvío baja de 2,7 dB a 1,5**. Contando los 22 con los
-  mutilados no cambia (4,1), porque ahí manda lo que no suena.
-* **Hay estéreo**: `TF3_1_awe` pasa de mono a lado/centro -8,8 dB.
-* **El fundido del final de `escape_newyork` existe**: baja unos 25 dB en
-  los últimos 12 s, donde antes seguía al mismo nivel hasta el corte.
+* **Stream: +19,135 B (+2.7%)** in the 32. Broken down: the curve alone −12
+  B, CC7/10/11 +22,328, the bend +2,270, the pedal −5,481. The ones that change
+  are those that really use CCs: `TF3_1_awe` +39% (two square waves with a CC7
+  gate, 34 → 0 → 34 every ~10 frames, and panning everywhere), `dcbest` +31%
+  (the bend), `vswar` +28%, `rshinld` +20%. Keeping the tails updated —the
+  voices whose note was already released— costs 1,195 B of that: it is not
+  worth a separate case.
+* **Saturation: from 1,386 to 6,288 samples**, 4.5 times more, and almost all
+  in **`rshinld` (4,552, out of 3.1 million)**: CC7 at 127 on almost all its
+  channels, +4 dB over the ceiling the air assumed. The others that start to
+  clip do so a little (the battle 290, `evilrhys` 232, `Deflector1` 178,
+  `3D-Galax` 166), and `TF3_1_awe` stops clipping. **The air was not
+  touched**, as taro asked: step 2's table of ceilings per theme had to be
+  measured again after this step and 5.
+* **The level** goes down in the ones with soft pads (`escape_newyork` -3.4
+  LUFS, `Gaden` -8.3, `pn28year` -6.2) and goes up in the ones that ask for a
+  high CC7 (`rshinld` +3.4, `dcbest` +4.1). Against the reference —fluidsynth
+  with the SF2, integrated LUFS—, in the 13 themes that contribute to the bank,
+  and that is why they play whole, the ROM − reference distance ends up **more
+  even between themes: its deviation goes down from 2.7 dB to 1.5**. Counting
+  the 22 with the mutilated ones it does not change (4.1), because there what
+  does not play dominates.
+* **There is stereo**: `TF3_1_awe` goes from mono to side/centre -8.8 dB.
+* **The fade at the end of `escape_newyork` exists**: it goes down some 25 dB
+  in the last 12 s, where before it stayed at the same level until the cut.
 
-**Lo cobra** `pruebas/herramientas/test_musica_stream.py`: la curva, CC7 a
-mitad de una nota, CC7 por CC11, el paneo, el bend antes y durante, que un
-control no toque otro canal ni la altura de la batería, y en el lector el
-RPN 0 y el pedal. Las ocho dan rojo con las `tools/` de `55098bd`.
+**It is enforced by** `pruebas/herramientas/test_musica_stream.py`: the curve,
+CC7 in the middle of a note, CC7 times CC11, the panning, the bend before and
+during, that a controller does not touch another channel nor the drums' pitch,
+and in the reader RPN 0 and the pedal. The eight go red with the `tools/` of
+`55098bd`.
 
-**Para escuchar**: `/shared/audio/2026-09-26-paso-3/`, con su `LEEME.txt`:
-`escape_newyork`, la batalla, el título (el pedal), `3D-Galax` (CC11 y el
-bend), `vswar` (CC11), `rshinld` (el que más recorta) y `TF3_1_awe` (el
-estéreo y la compuerta), antes y después.
+**To listen**: `/shared/audio/2026-09-26-paso-3/`, with its `LEEME.txt`:
+`escape_newyork`, the battle, the title (the pedal), `3D-Galax` (CC11 and the
+bend), `vswar` (CC11), `rshinld` (the one that clips the most) and `TF3_1_awe`
+(the stereo and the gate), before and after.
 
-### Lo que el stream lleva después del paso 3: la lista para el formato
+### What the stream carries after step 3: the list for the format
 
-Todo cuenta por voz del DSP; las cantidades son de los 32 temas del
-`release`, 3.741 s de música, con el reparto de hoy.
+Everything counts per DSP voice; the amounts are from the 32 themes of
+`release`, 3,741 s of music, with today's allocation.
 
-**Por nota** (50.565 notas que arrancan):
+**Per note** (50,565 notes that start):
 
-* altura: 14 bits, `sdsp.pitch_for(tecla + bend del canal, raíz, tasa)`
-  —con el bend es una altura cualquiera, no una tecla—; la batería no se
-  transpone ni se dobla;
-* muestra (SRCN), ADSR1 y ADSR2: juntos son "el instrumento", y ADSR2
-  cambia por tecla dentro de un programa (el piano);
-* volumen izquierdo y derecho: **distintos en 12.056 notas (24%)**, muchas
-  por un paneo de 60 a 63, casi al centro. Salen de cinco cosas —velocidad,
-  CC7, CC11 y CC10 del canal, y el techo melódico o de batería—, así que un
-  formato que guarde la velocidad por nota y el estado del canal aparte los
-  reconstruye; guardar L y R ya calculados es lo de hoy;
+* pitch: 14 bits, `sdsp.pitch_for(tecla + bend del canal, raíz, tasa)` —with
+  the bend it is any pitch, not a key—; the drums are not transposed or
+  doubled;
+* sample (SRCN), ADSR1 and ADSR2: together they are "the instrument", and ADSR2
+  changes per key within a program (the piano);
+* left and right volume: **different in 12,056 notes (24%)**, many because of
+  a pan of 60 to 63, almost in the centre. They come from five things
+  —velocity, the channel's CC7, CC11 and CC10, and the melodic or drum
+  ceiling—, so a format that stores the velocity per note and the channel's
+  state separately rebuilds them; storing L and R already computed is what is
+  done today;
 * KON.
 
-**Por release** (15.450): ADSR1 en 0 y el GAIN del release, que es **por
-instrumento y tecla** —sale de la misma envolvente que ADSR1 y ADSR2—, así
-que puede vivir en la tabla del instrumento y el evento ser "soltar la voz".
+**Per release** (15,450): ADSR1 at 0 and the release GAIN, which is **per
+instrument and key** —it comes from the same envelope as ADSR1 and ADSR2—, so
+it can live in the instrument's table and the event be "release the voice".
 
-**Por controlador, a una voz que ya suena** —en 3.976 cuadros, 1,06 por
-segundo de música en promedio pero muy concentrados: `vswar` 9,3 cuadros
-por segundo, `pn28year` 8,5, `TF3_1_awe` 7,6; 24 de los 32 no tienen
-ninguno—:
+**Per controller, to a voice that is already playing** —in 3,976 frames, 1.06
+per second of music on average but very concentrated: `vswar` 9.3 frames per
+second, `pn28year` 8.5, `TF3_1_awe` 7.6; 24 of the 32 have none—:
 
-* **volumen L y R de una voz**: 4.301. Va el par entero: un CC cambia el
-  volumen o el paneo, y los dos lados se recalculan. Un CC7 de canal
-  escribe **todas las voces de ese canal a la vez**, así que el peor cuadro
-  son 8 voces × 2 registros = 16 escrituras (`rshinld`, que tiene pocos
-  cuadros con controladores —36— pero cada uno toca las ocho). Un evento
-  "volumen del canal" que el driver aplique a sus voces lo achicaría, pero
-  el driver tendría que saber qué voz es de qué canal, y con el reparto del
-  5 eso cambia nota a nota;
-* **altura de una voz**: 563, los bends con la nota sonando (`dcbest` 395,
-  `3D-Galax` 168). Los dos bytes de PITCH;
-* nada más: la expresión y el volumen se funden en L y R, y el pedal ya
-  viene aplicado a los fines de las notas.
+* **L and R volume of a voice**: 4,301. The whole pair goes: a CC changes the
+  volume or the pan, and both sides are recomputed. A channel CC7 writes **all
+  the voices of that channel at once**, so the worst frame is 8 voices × 2
+  registers = 16 writes (`rshinld`, which has few frames with controllers —36—
+  but each one touches all eight). A "channel volume" event that the driver
+  applied to its voices would shrink it, but the driver would have to know
+  which voice belongs to which channel, and with step 5's allocation that
+  changes note by note;
+* **pitch of a voice**: 563, the bends with the note playing (`dcbest` 395,
+  `3D-Galax` 168). The two bytes of PITCH;
+* nothing else: the expression and the volume merge into L and R, and the
+  pedal comes already applied to the notes' ends.
 
-**Lo que no lleva y el formato podría querer después**: la modulación (CC1,
-`Tnt07`: vibrato, o sea altura por cuadro o un LFO del driver), el paneo por
-tecla de la batería y la rampa del 5.
+**What it does not carry and the format might want later**: the modulation
+(CC1, `Tnt07`: vibrato, that is, pitch per frame or a driver LFO), the drums'
+per-key panning and the ramp of 5.
 
-## 4. El formato por nota: hecho
+## 4. The per-note format: done
 
-Hecho el 2026-09-26 (commits "Música: el stream es por nota, y el 65816 lo
-expande a las mismas escrituras" y "Música: la ROM anota lo que le pide al
-DSP, y una prueba lo compara cuadro a cuadro"). Es la idea 1 de
-`la-musica-pesa-789-kb.md`. El porqué de cada decisión está donde vive: "el
-formato por nota" en `tools/audio/snes_music.py`, el encabezado de
-`tools/protocol/music.toml` y `music_frame` en `rom/src/musica.s`.
+Done on 2026-09-26 (commits "Música: el stream es por nota, y el 65816 lo
+expande a las mismas escrituras" and "Música: la ROM anota lo que le pide al
+DSP, y una prueba lo compara cuadro a cuadro"). It is idea 1 of
+`la-musica-pesa-789-kb.md`. The reason for each decision is where it lives:
+"the per-note format" in `tools/audio/snes_music.py`, the header of
+`tools/protocol/music.toml` and `music_frame` in `rom/src/musica.s`.
 
-**La propiedad que lo sostiene: la secuencia de escrituras al DSP, cuadro por
-cuadro, es la de antes.** `escrituras` es lo que era `pack` —la
-especificación—, y el conversor se corta si un tema, decodificado, no la da.
-El SPC700 no cambió.
+**The property that holds it up: the sequence of writes to the DSP, frame by
+frame, is the one from before.** `escrituras` is what `pack` was —the
+specification—, and the converter stops if a theme, decoded, does not give it.
+The SPC700 did not change.
 
-### El formato
+### The format
 
-Un tema es su stream y su tabla de **sonidos**: seis bytes —PITCH_L,
-PITCH_H, SRCN, ADSR1, ADSR2 y el GAIN del release— por cada combinación que
-el tema toca. La voz va en los tres bits bajos del opcode.
+A theme is its stream and its table of **sounds**: six bytes —PITCH_L,
+PITCH_H, SRCN, ADSR1, ADSR2 and the release GAIN— for each combination the
+theme plays. The voice goes in the opcode's three low bits.
 
-| Opcodes | Nombre | Argumentos | Qué escribe |
+| Opcodes | Name | Arguments | What it writes |
 |---|---|---|---|
-| `$00`-`$07` | `OP_NOTE_V0`-`V7` | sonido | PITCH, SRCN, ADSR1, ADSR2; KON al cerrar el cuadro |
-| `$08`-`$0F` | `OP_NOTE_VOL_Vv` | volumen, sonido | VOL_L = VOL_R, y lo de `OP_NOTE` |
-| `$10`-`$17` | `OP_NOTE_PAN_Vv` | izquierda, derecha, sonido | VOL_L, VOL_R, y lo de `OP_NOTE` |
-| `$18`-`$1F` | `OP_RELEASE_Vv` | — | ADSR1 en 0 y el GAIN del sonido de la voz |
-| `$20`-`$27` | `OP_RELEASE_GAIN_Vv` | GAIN | ADSR1 en 0 y ese GAIN |
-| `$28`-`$2F` | `OP_SET_VOL_Vv` | volumen | VOL_L = VOL_R, a una voz que suena |
-| `$30`-`$37` | `OP_SET_PAN_Vv` | izquierda, derecha | VOL_L y VOL_R, a una voz que suena |
-| `$38`-`$3F` | `OP_SET_PITCH_Vv` | altura (palabra) | PITCH_L y PITCH_H, a una voz que suena |
-| `$40`-`$5F` | `OP_WAIT_1`-`32` | — | cierra el cuadro —dispara el KON— y espera |
-| `$60` | `OP_WAIT` | cuadros (palabra) | lo mismo, más largo; 0 dispara sin esperar |
-| `$61` | `OP_DSP` | registro, valor | una escritura cruda, no de voz: el KOF del final |
-| `$62` | `OP_INIT` | — | el arranque del DSP, la tabla `dsp_init_*`, y KON y KOF en 0 |
-| `$63` | `OP_END` | — | vuelve a empezar |
+| `$00`-`$07` | `OP_NOTE_V0`-`V7` | sound | PITCH, SRCN, ADSR1, ADSR2; KON on closing the frame |
+| `$08`-`$0F` | `OP_NOTE_VOL_Vv` | volume, sound | VOL_L = VOL_R, and what `OP_NOTE` writes |
+| `$10`-`$17` | `OP_NOTE_PAN_Vv` | left, right, sound | VOL_L, VOL_R, and what `OP_NOTE` writes |
+| `$18`-`$1F` | `OP_RELEASE_Vv` | — | ADSR1 at 0 and the GAIN of the voice's sound |
+| `$20`-`$27` | `OP_RELEASE_GAIN_Vv` | GAIN | ADSR1 at 0 and that GAIN |
+| `$28`-`$2F` | `OP_SET_VOL_Vv` | volume | VOL_L = VOL_R, to a voice that is playing |
+| `$30`-`$37` | `OP_SET_PAN_Vv` | left, right | VOL_L and VOL_R, to a voice that is playing |
+| `$38`-`$3F` | `OP_SET_PITCH_Vv` | pitch (word) | PITCH_L and PITCH_H, to a voice that is playing |
+| `$40`-`$5F` | `OP_WAIT_1`-`32` | — | closes the frame —fires the KON— and waits |
+| `$60` | `OP_WAIT` | frames (word) | the same, longer; 0 fires without waiting |
+| `$61` | `OP_DSP` | register, value | a raw write, not a voice one: the final KOF |
+| `$62` | `OP_INIT` | — | the DSP's startup, the `dsp_init_*` table, and KON and KOF at 0 |
+| `$63` | `OP_END` | — | starts over |
 
-Todas las escrituras de voz pasan por el caché del 65816 —`MUS_SOMBRA`, ocho
-registros por voz—, así que el stream nunca dice lo que no cambia: una nota
-en la misma voz y con el mismo volumen que la anterior son **dos bytes**, la
-familia con la voz y el sonido, y escribe sólo lo que el caché no tiene —en
-el caso típico la altura y el ADSR1 que el release había apagado—. Antes eran
-tres bytes por escritura: una nota así eran 9 más su parte del KON.
+All voice writes go through the 65816's cache —`MUS_SOMBRA`, eight registers
+per voice—, so the stream never says what does not change: a note on the same
+voice and with the same volume as the previous one is **two bytes**, the family
+with the voice and the sound, and it writes only what the cache does not have
+—in the typical case the pitch and the ADSR1 the release had turned off—.
+Before it was three bytes per write: a note like that was 9 plus its share of
+the KON.
 
-**De qué está hecho**, en los 32 temas del `release`: notas sin volumen 50%,
-esperas 16,5%, notas con volumen 11,7%, releases 7,4%, notas con paneo 5,9%,
-la tabla de sonidos 4,5%, cambios de volumen y altura a una voz que suena 4%.
-`OP_RELEASE_GAIN` no lo usa ningún tema todavía: está para la rampa del 5.
+**What it is made of**, in the 32 themes of `release`: notes without volume
+50%, waits 16.5%, notes with volume 11.7%, releases 7.4%, notes with pan 5.9%,
+the sounds table 4.5%, volume and pitch changes to a voice that is playing 4%.
+`OP_RELEASE_GAIN` is not used by any theme yet: it is there for the ramp of 5.
 
 ### Bytes
 
-Del `conversor.log` de cada cartucho, que los imprime por tema. Antes: el
-`release` de `fb12bbb`.
+From each cartridge's `conversor.log`, which prints them per theme. Before: the
+`release` of `fb12bbb`.
 
-| Tema | Antes | Stream | Sonidos | Después | % |
+| Theme | Before | Stream | Sounds | After | % |
 |---|---:|---:|---:|---:|---:|
-| T_VGFighterMAX_Masako | 148.312 | 40.796 | 540 | 41.336 | 28% |
-| 3D-Galax | 52.615 | 14.548 | 276 | 14.824 | 28% |
-| cd4 | 45.799 | 12.395 | 276 | 12.671 | 28% |
-| evilrhys | 35.882 | 9.648 | 624 | 10.272 | 29% |
-| escape_newyork | 33.235 | 8.539 | 426 | 8.965 | 27% |
-| Lunar_Pyramid | 32.792 | 7.820 | 252 | 8.072 | 25% |
-| Deflector1 | 31.025 | 8.455 | 528 | 8.983 | 29% |
-| TF3_1_awe | 30.054 | 9.538 | 426 | 9.964 | 33% |
-| bubstix | 29.988 | 7.793 | 540 | 8.333 | 28% |
-| hzbreach | 29.626 | 8.645 | 630 | 9.275 | 31% |
-| cd2 | 29.255 | 6.696 | 246 | 6.942 | 24% |
-| C3classi | 27.537 | 7.262 | 438 | 7.700 | 28% |
-| vswar | 26.345 | 8.992 | 192 | 9.184 | 35% |
-| pn28year | 17.781 | 5.364 | 264 | 5.628 | 32% |
-| 11h035 | 17.234 | 4.433 | 360 | 4.793 | 28% |
-| T_ProjectJustice_DiscLoad | 15.819 | 4.230 | 78 | 4.308 | 27% |
-| Fire_Mustang_Intro_And_Level_2_By_Luiz_Vasco | 15.030 | 3.870 | 114 | 3.984 | 27% |
-| Fantasia_Of_The_Wind | 14.545 | 3.672 | 528 | 4.200 | 29% |
-| lufsorr | 12.231 | 3.002 | 330 | 3.332 | 27% |
-| hzstream | 11.999 | 3.434 | 594 | 4.028 | 34% |
-| KSSMKEND | 10.980 | 2.885 | 114 | 2.999 | 27% |
-| wb3shop | 9.046 | 2.469 | 132 | 2.601 | 29% |
-| rshinld | 8.906 | 3.040 | 402 | 3.442 | 39% |
-| Tnt07 | 8.299 | 2.511 | 102 | 2.613 | 31% |
-| wb3mlair | 7.497 | 2.073 | 216 | 2.289 | 31% |
-| dcbest | 6.594 | 2.696 | 30 | 2.726 | 41% |
-| Astpgmarch | 6.527 | 1.835 | 330 | 2.165 | 33% |
-| wb3town | 6.002 | 1.481 | 156 | 1.637 | 27% |
-| Gaden | 5.639 | 1.203 | 114 | 1.317 | 23% |
-| MML2_MotherZone | 2.640 | 509 | 24 | 533 | 20% |
+| T_VGFighterMAX_Masako | 148,312 | 40,796 | 540 | 41,336 | 28% |
+| 3D-Galax | 52,615 | 14,548 | 276 | 14,824 | 28% |
+| cd4 | 45,799 | 12,395 | 276 | 12,671 | 28% |
+| evilrhys | 35,882 | 9,648 | 624 | 10,272 | 29% |
+| escape_newyork | 33,235 | 8,539 | 426 | 8,965 | 27% |
+| Lunar_Pyramid | 32,792 | 7,820 | 252 | 8,072 | 25% |
+| Deflector1 | 31,025 | 8,455 | 528 | 8,983 | 29% |
+| TF3_1_awe | 30,054 | 9,538 | 426 | 9,964 | 33% |
+| bubstix | 29,988 | 7,793 | 540 | 8,333 | 28% |
+| hzbreach | 29,626 | 8,645 | 630 | 9,275 | 31% |
+| cd2 | 29,255 | 6,696 | 246 | 6,942 | 24% |
+| C3classi | 27,537 | 7,262 | 438 | 7,700 | 28% |
+| vswar | 26,345 | 8,992 | 192 | 9,184 | 35% |
+| pn28year | 17,781 | 5,364 | 264 | 5,628 | 32% |
+| 11h035 | 17,234 | 4,433 | 360 | 4,793 | 28% |
+| T_ProjectJustice_DiscLoad | 15,819 | 4,230 | 78 | 4,308 | 27% |
+| Fire_Mustang_Intro_And_Level_2_By_Luiz_Vasco | 15,030 | 3,870 | 114 | 3,984 | 27% |
+| Fantasia_Of_The_Wind | 14,545 | 3,672 | 528 | 4,200 | 29% |
+| lufsorr | 12,231 | 3,002 | 330 | 3,332 | 27% |
+| hzstream | 11,999 | 3,434 | 594 | 4,028 | 34% |
+| KSSMKEND | 10,980 | 2,885 | 114 | 2,999 | 27% |
+| wb3shop | 9,046 | 2,469 | 132 | 2,601 | 29% |
+| rshinld | 8,906 | 3,040 | 402 | 3,442 | 39% |
+| Tnt07 | 8,299 | 2,511 | 102 | 2,613 | 31% |
+| wb3mlair | 7,497 | 2,073 | 216 | 2,289 | 31% |
+| dcbest | 6,594 | 2,696 | 30 | 2,726 | 41% |
+| Astpgmarch | 6,527 | 1,835 | 330 | 2,165 | 33% |
+| wb3town | 6,002 | 1,481 | 156 | 1,637 | 27% |
+| Gaden | 5,639 | 1,203 | 114 | 1,317 | 23% |
+| MML2_MotherZone | 2,640 | 509 | 24 | 533 | 20% |
 | golden_axe-turtlevillage2 | 831 | 255 | 12 | 267 | 32% |
 | prepara | 630 | 205 | 132 | 337 | 53% |
-| **Los 32** | 730.695 | 200.294 | 9.426 | 209.720 | 28,7% |
+| **The 32** | 730,695 | 200,294 | 9,426 | 209,720 | 28.7% |
 
-`test-special`, con sus 5 temas: de 221.558 a 61.910 (27,9%).
+`test-special`, with its 5 themes: from 221,558 to 61,910 (27.9%).
 
-**El cartucho `release`**, sumando los segmentos del `.dbg`: de 3.649.137 B
-usados a 3.128.883 (87,0% a 74,6%), **520 KB libres más**. El banco 0 paga
-el decodificador: de 1.825 B libres a 1.168 —581 del decodificador y 76 de
-la bitácora—. Si hace falta, el decodificador se puede mudar al banco 1 con
-un puente para `dsp_musica`, como la pelea.
+**The `release` cartridge**, adding up the `.dbg`'s segments: from 3,649,137 B
+used to 3,128,883 (87.0% to 74.6%), **520 KB more free**. Bank 0 pays for the
+decoder: from 1,825 B free to 1,168 —581 from the decoder and 76 from the
+log—. If needed, the decoder can move to bank 1 with a bridge for
+`dsp_musica`, like the battle.
 
-### Ciclos
+### Cycles
 
-Medidos con una sonda en una copia descartable de los dos árboles —`fb12bbb`
-y éste—: la línea de barrido al entrar y al salir de `music_tick`, en cada
-cuadro de los 32 temas enteros, en snes9x. La IRQ cae en la línea 112.
+Measured with a probe in a throwaway copy of both trees —`fb12bbb` and this
+one—: the scanline on entering and leaving `music_tick`, on every frame of the
+32 whole themes, in snes9x. The IRQ falls on line 112.
 
-* **El peor cuadro de todos baja de 94 líneas a 89.** Es la vuelta al
-  principio del de batalla, con el arranque y las ocho voces escritas
-  enteras; lo que manda ahí es la espera del SPC700 por cada escritura.
-* Lo que sube es el cuadro con muchas notas y pocas escrituras: el de
-  `escape_newyork` con 16 notas y 43 escrituras pasa de 65 líneas a 78.
-* Por regresión sobre los 224.436 cuadros: antes, 1,05 + 1,59 líneas por
-  escritura; ahora, 1,02 + 1,34 por escritura + 1,27 por evento de voz. En
-  total la música ocupa un 7,8% más de líneas. Una nota cuyo sonido ya
-  estaba entero en el caché cuesta del orden de una línea y cuarto.
+* **The worst frame of all goes down from 94 lines to 89.** It is the battle
+  one's return to the start, with the startup and the eight voices written
+  whole; what dominates there is the SPC700's wait for each write.
+* What goes up is the frame with many notes and few writes: the
+  `escape_newyork` one with 16 notes and 43 writes goes from 65 lines to 78.
+* By regression over the 224,436 frames: before, 1.05 + 1.59 lines per write;
+  now, 1.02 + 1.34 per write + 1.27 per voice event. In total the music takes
+  7.8% more lines. A note whose sound was already whole in the cache costs on
+  the order of a line and a quarter.
 
-Lo que queda para ganar, si el 5 lo pide: en `nota_sonido`, copiar el sonido
-y comparar en línea, sin un `jsr` por registro —del orden de 75 ciclos por
-nota, estimado—.
+What is left to gain, if 5 asks for it: in `nota_sonido`, copying the sound and
+comparing inline, without a `jsr` per register —on the order of 75 cycles per
+note, estimated—.
 
 ### RAM
 
-Nada en la `BSS`, y la página cero **gana** el byte de `wait_frames`. Lo del
-decodificador va a la RAM lejana, **`$6C00` a `$6FFF`**, que no usaba nadie
-(`ram_lejana.s` tiene el mapa): `MUS_SOMBRA` 128 B —72 usados, ocho registros
-y el GAIN del sonido por voz—, 11 B de estado —la espera de dieciséis bits, el
-KON juntado, el que hay que bajar, dónde empiezan los sonidos del tema, qué
-voces ya tuvieron nota y GAIN—, y la bitácora de la prueba, 4 B y 512 de
-anillo.
+Nothing in `BSS`, and the zero page **gains** the byte of `wait_frames`. The
+decoder's goes to far RAM, **`$6C00` to `$6FFF`**, which nobody used
+(`ram_lejana.s` has the map): `MUS_SOMBRA` 128 B —72 used, eight registers and
+the sound's GAIN per voice—, 11 B of state —the sixteen-bit wait, the gathered
+KON, the one that has to be lowered, where the theme's sounds start, which
+voices already had a note and GAIN—, and the test's log, 4 B and a 512 ring.
 
-### Cómo se verificó
+### How it was verified
 
-* **En Python, en cada armado**: `build_varios` decodifica el stream de cada
-  tema con `decodificar` —el modelo de `music_frame`, que imita también que
-  el caché del 65816 no sabe decir "no sé"— y se corta si no da `escrituras`.
-  Pasa en los 32 temas del `release` y los 5 de `test-special`. Antes de
-  cambiar el formato, `escrituras` se comparó contra los streams viejos de
-  los dos cartuchos: las mismas escrituras en los mismos cuadros.
-* **En la ROM**: `dsp_musica` anota lo que recibe en `MUS_BITACORA` si la
-  prueba la prende, y `test_musica_escrituras.py` toca temas enteros y lo
-  compara cuadro por cuadro contra el modelo corriendo sobre los bytes del
-  cartucho: el del título, prendido por el código principal al encender;
-  `escape_newyork`, el de batalla, 3D-Galax y TF3_1_awe, prendidos por la
-  IRQ al volver al principio. Y la segunda vuelta de cada uno.
-* **Cómo se la vio fallar**, rompiendo el decodificador y armando cada vez:
-  sin el `iny` entre los dos lados de `OP_NOTE_PAN`, rojo el título y
-  TF3_1_awe en el cuadro 0; sin escribir sin mirar la primera nota de cada
-  voz, rojo tres de cinco en la vuelta al principio; con la espera inicial
-  cargada con B sucio, rojo el título en el cuadro 0.
-* **Ese último fue el único error de verdad**: `music_start_ya` ponía la
-  espera en cero con un `lda #0` de ocho bits y un `sta` de dieciséis. Lo
-  encontró `test_bateria_suena`, porque la batería del título no llegaba: el
-  tema esperaba miles de cuadros. El camino de la IRQ no lo ve —B llega en
-  cero—, y por eso la prueba prende el título por el otro.
+* **In Python, on each build**: `build_varios` decodes each theme's stream
+  with `decodificar` —the model of `music_frame`, which also imitates that the
+  65816's cache cannot say "I don't know"— and stops if it does not give
+  `escrituras`. It passes on the 32 themes of `release` and the 5 of
+  `test-special`. Before changing the format, `escrituras` was compared against
+  the old streams of both cartridges: the same writes on the same frames.
+* **In the ROM**: `dsp_musica` notes what it receives in `MUS_BITACORA` if the
+  test turns it on, and `test_musica_escrituras.py` plays whole themes and
+  compares it frame by frame against the model running on the cartridge's
+  bytes: the title's, started by the main code on power-up; `escape_newyork`,
+  the battle one, 3D-Galax and TF3_1_awe, started by the IRQ on returning to
+  the start. And the second pass of each one.
+* **How it was seen failing**, breaking the decoder and building each time:
+  without the `iny` between the two sides of `OP_NOTE_PAN`, the title and
+  TF3_1_awe red on frame 0; without writing blindly the first note of each
+  voice, three of five red on the return to the start; with the initial wait
+  loaded with a dirty B, the title red on frame 0.
+* **That last one was the only real error**: `music_start_ya` set the wait to
+  zero with an eight-bit `lda #0` and a sixteen-bit `sta`.
+  `test_bateria_suena` found it, because the title's drums did not arrive: the
+  theme waited thousands of frames. The IRQ path does not see it —B arrives at
+  zero—, and that is why the test starts the title through the other one.
 
-### Cómo encaja el 5
+### How 5 fits
 
-* **El reparto por prioridad no toca el formato.** El formato no sabe de
-  canales: cada evento dice la voz, y la elige el conversor. Que una voz pase
-  de un canal a otro es una nota más con su sonido, y cambiar de instrumento
-  cuesta lo mismo que no cambiarlo —el sonido va en cada nota—. Lo que en el
-  formato viejo sumaba +74% de stream acá es, a lo sumo, un byte de volumen
-  más por nota cuando la voz viene de otro canal. No está medido.
-* **La rampa es un `OP_RELEASE_GAIN`** con el GAIN de la rampa, en el cuadro
-  antes de la nota: es lo que hacía el prototipo (`frames[at].release` con
-  `RAMPA`), y en `Frame.release` ya entra tal cual, como (voz, GAIN). Queda
-  del lado del 65816, sin latencia ni temporizador en el driver: la duda de
-  abajo sobre hacerla en el SPC700 se contesta con que no hace falta.
-* **Los ciclos**: el peor cuadro del prototipo pasaba de 56 a 80 escrituras.
-  Con 1,34 líneas por escritura y 1,27 por evento, eso son del orden de 30
-  líneas más en el peor cuadro, que hoy es de 89. Si no entra, lo de
-  `nota_sonido` de arriba.
-* **Lo que el formato no tiene y el 5 no necesita**: la modulación (CC1) y
-  el paneo por tecla de la batería. Si entran, una altura por cuadro es un
-  `OP_SET_PITCH`, y el paneo es el volumen del sonido de cada golpe.
+* **The allocation by priority does not touch the format.** The format knows
+  nothing of channels: each event says the voice, and the converter chooses
+  it. A voice going from one channel to another is one more note with its
+  sound, and changing instrument costs the same as not changing it —the sound
+  goes in each note—. What in the old format added +74% of stream here is, at
+  most, one more volume byte per note when the voice comes from another
+  channel. Not measured.
+* **The ramp is an `OP_RELEASE_GAIN`** with the ramp's GAIN, on the frame
+  before the note: it is what the prototype did (`frames[at].release` with
+  `RAMPA`), and it already fits as is in `Frame.release`, as (voice, GAIN). It
+  stays on the 65816's side, without latency or a timer in the driver: the
+  doubt below about doing it in the SPC700 is answered by it not being needed.
+* **The cycles**: the prototype's worst frame went from 56 to 80 writes. With
+  1.34 lines per write and 1.27 per event, that is on the order of 30 more
+  lines in the worst frame, which today is 89. If it does not fit, the
+  `nota_sonido` thing above.
+* **What the format does not have and 5 does not need**: the modulation (CC1)
+  and the drums' per-key panning. If they go in, a pitch per frame is an
+  `OP_SET_PITCH`, and the panning is the volume of each hit's sound.
 
-## 5. El reparto de las ocho voces, y la rampa: hecho
+## 5. The allocation of the eight voices, and the ramp: done
 
-Hecho el 2026-09-26, en dos commits que se pueden escuchar y medir por
-separado: "Música: las ocho voces para todos los canales, repartidas nota a
-nota" y "Música: una voz que suena se baja en 12 ms antes de dársela a otra
-nota"; y un tercero que corrige cómo se cuenta el tiempo-nota de un golpe
-("Música: el tiempo-nota de un golpe se cuenta hasta que suelta la voz"),
-que no cambia la ROM. Medido sobre `92754ab`, con el `release` de 32 temas.
-El porqué de cada regla está donde vive: `assign`, `_libre`, `_victima` y
-`RAMPA` en `tools/audio/snes_music.py`.
+Done on 2026-09-26, in two commits that can be listened to and measured
+separately: "Música: las ocho voces para todos los canales, repartidas nota a
+nota" and "Música: una voz que suena se baja en 12 ms antes de dársela a otra
+nota"; and a third that corrects how a hit's note-time is counted ("Música: el
+tiempo-nota de un golpe se cuenta hasta que suelta la voz"), which does not
+change the ROM. Measured on `92754ab`, with the 32-theme `release`. The reason
+for each rule is where it lives: `assign`, `_libre`, `_victima` and `RAMPA` in
+`tools/audio/snes_music.py`.
 
-**Para escuchar**: `/shared/audio/2026-09-26-paso-5/`, con su `LEEME.txt`:
-`escape_newyork`, la batalla, el título, `cd4`, `Lunar_Pyramid` y
-`T_ProjectJustice_DiscLoad`, antes, con el reparto, y con el reparto y la
-rampa, todos a la misma sonoridad.
+**To listen**: `/shared/audio/2026-09-26-paso-5/`, with its `LEEME.txt`:
+`escape_newyork`, the battle, the title, `cd4`, `Lunar_Pyramid` and
+`T_ProjectJustice_DiscLoad`, before, with the allocation, and with the
+allocation and the ramp, all at the same loudness.
 
-### El reparto
+### The allocation
 
-* **Las ocho voces son de todos los canales** (`assign`). Una nota toma una
-  voz libre —la que nadie sostiene—, primero una callada y si no la que
-  termina antes su cola; los golpes prefieren las voces 6 y 7 —las de los
-  efectos, como cuando la batería las tenía fijas— y lo melódico las otras;
-  y a igual, la que tuvo una nota del mismo canal, que sale más barata.
-* **Si las ocho están sostenidas, la regla del prototipo** (`_victima`): la
-  misma tecla del mismo canal se roba a sí misma; nunca a una nota que
-  arrancó en ese cuadro ni a la última voz de otro canal; entre las demás,
-  a la más débil —el volumen con que arrancó— y a la par a la más vieja; y
-  la nota nueva cede si su canal ya suena y la víctima es la última de otro,
-  o es más fuerte que ella y su canal no tiene más voces. En cada cuadro
-  eligen primero las notas más fuertes.
-* **Un golpe sostiene su voz hasta el fin de la nota en el MIDI** o el de su
-  muestra, lo que llegue antes; lo que queda de la muestra es como una cola.
-  Sostenerla hasta el fin de la muestra le hacía perder a lo melódico 8,3%
-  del tiempo-nota en vez de 7,9% (Lunar_Pyramid 33% en vez de 23%).
+* **The eight voices belong to all the channels** (`assign`). A note takes a
+  free voice —the one nobody holds—, first a silent one and otherwise the one
+  that ends its tail first; the hits prefer voices 6 and 7 —the sound effects'
+  ones, as when the drums had them fixed— and the melodic part the others; and
+  if equal, the one that had a note from the same channel, which comes out
+  cheaper.
+* **If all eight are held, the prototype's rule** (`_victima`): the same key of
+  the same channel steals from itself; never from a note that started on that
+  frame nor from the last voice of another channel; among the rest, from the
+  weakest —the volume it started with— and when tied from the oldest; and the
+  new note yields if its channel is already playing and the victim is the last
+  of another, or is louder than it and its channel has no more voices. On each
+  frame the loudest notes choose first.
+* **A hit holds its voice until the end of the note in the MIDI** or that of
+  its sample, whichever comes first; what is left of the sample is like a
+  tail. Holding it until the end of the sample made the melodic part lose 8.3%
+  of the note-time instead of 7.9% (Lunar_Pyramid 33% instead of 23%).
 
-**Las reglas que se probaron**, en los 32 temas, con un script descartable
-(`audio-paso-5/evaluar.py`) que arma todo con cada regla. "Pesado" es el
-tiempo-nota perdido pesado por la velocidad al cuadrado, que es como baja
-el volumen; "robos" son las notas cortadas mientras sonaban:
+**The rules that were tried**, on the 32 themes, with a throwaway script
+(`audio-paso-5/evaluar.py`) that builds everything with each rule. "Weighted" is
+the lost note-time weighted by the velocity squared, which is how the volume
+goes down; "steals" are the notes cut while they were playing:
 
-| Regla | Perdido | Pesado | Robos | Stream |
+| Rule | Lost | Weighted | Steals | Stream |
 |---|---:|---:|---:|---:|
-| la del prototipo (la que quedó) | 7,4% | 6,74% | 2.883 | 322.752 |
-| robarle a la más vieja, sin ceder nunca | 7,4% | 6,85% | 7.121 | 336.426 |
-| robarle a la más débil, sin ceder nunca | 7,6% | 6,91% | 3.597 | 326.689 |
-| la del prototipo, protegiendo la más grave y la más aguda | 7,4% | 6,73% | 2.636 | 321.687 |
-| la del prototipo, robando primero dentro del propio canal | 7,4% | 6,75% | 2.905 | 322.761 |
+| the prototype's (the one that stayed) | 7.4% | 6.74% | 2,883 | 322,752 |
+| steal from the oldest, never yielding | 7.4% | 6.85% | 7,121 | 336,426 |
+| steal from the weakest, never yielding | 7.6% | 6.91% | 3,597 | 326,689 |
+| the prototype's, protecting the lowest and the highest | 7.4% | 6.73% | 2,636 | 321,687 |
+| the prototype's, stealing first within one's own channel | 7.4% | 6.75% | 2,905 | 322,761 |
 
-(Con la rampa puesta, por eso el stream.) Proteger los extremos gana en
-`escape_newyork`, `TF3_1_awe` y la batalla lo que pierde en `11h035` y
-`evilrhys`: no entró. Lo que no se probó y podría ganar algo: estimar el
-nivel actual de la víctima con su envolvente —el piano sostenido decae— en
-vez del volumen con que arrancó, y dejar arrancar tarde una nota larga que
-no consiguió voz (la onda cuadrada de `escape_newyork` pierde el 99%: sus
-nueve notas caen en cuadros con nueve notas o más, y son de las más suaves).
+(With the ramp in place, hence the stream.) Protecting the extremes gains in
+`escape_newyork`, `TF3_1_awe` and the battle what it loses in `11h035` and
+`evilrhys`: it did not go in. What was not tried and could gain something:
+estimating the victim's current level with its envelope —the sustained piano
+decays— instead of the volume it started with, and letting a long note that
+did not get a voice start late (`escape_newyork`'s square wave loses 99%: its
+nine notes fall on frames with nine notes or more, and they are among the
+softest).
 
-**El formato no cambió** ni el driver: cada evento ya decía su voz. El
-conversor imprime por tema cuánto tiempo-nota se pierde contra el piso de
-ocho voces (`tiempo_perdido`), que reemplaza a `coverage`; `share_voices`
-y `coverage` se fueron de `musica.py`.
+**The format did not change** nor the driver: each event already said its
+voice. The converter prints per theme how much note-time is lost against the
+eight-voice floor (`tiempo_perdido`), which replaces `coverage`;
+`share_voices` and `coverage` are gone from `musica.py`.
 
-**Lo cobran** tres pruebas nuevas en `test_musica_stream.py` —el acorde con
-más canales que voces, que ninguna nota se quede sin voz con una libre, a
-quién se le roba— y `pruebas/rpgmaker/test_musica_reparto.py`, sobre
-`escape_newyork` de verdad: el primer acorde de las cuerdas dispara tres
-voces, y el clavinet y la onda cuadrada están en el banco y suenan. Las
-cinco dan rojo con el reparto de antes, reproducido en el script.
+**They are enforced** by three new tests in `test_musica_stream.py` —the chord
+with more channels than voices, that no note goes without a voice while there
+is a free one, whom it steals from— and `pruebas/rpgmaker/test_musica_reparto.py`,
+on the real `escape_newyork`: the strings' first chord fires three voices, and
+the clavinet and the square wave are in the bank and play. The five go red with
+the allocation from before, reproduced in the script.
 
-### La rampa
+### The ramp
 
-En el cuadro anterior a la nota que toma una voz que todavía suena
-—sostenida o en su cola—, ADSR1 en cero y GAIN `RAMPA`: lineal, 64 pasos de
-6 muestras, 12 ms. Es un `OP_RELEASE_GAIN` más. No va a una nota que arrancó
-en ese mismo cuadro, ni a una voz callada. **Son 28.714 rampas contra
-64.274 notas**: 20.331 sobre colas melódicas —14.298 a las que les quedaban
-menos de 15 cuadros—, 5.138 sobre golpes, 2.815 sobre notas sostenidas.
-Una rampa sólo donde la cola todavía se oiría achicaría el costo, pero pide
-estimar su nivel; no se hizo.
+On the frame before the note that takes a voice that is still playing —held or
+in its tail—, ADSR1 at zero and GAIN `RAMPA`: linear, 64 steps of 6 samples,
+12 ms. It is one more `OP_RELEASE_GAIN`. It does not go to a note that started
+on that same frame, nor to a silent voice. **There are 28,714 ramps against
+64,274 notes**: 20,331 on melodic tails —14,298 on ones that had fewer than 15
+frames left—, 5,138 on hits, 2,815 on held notes. A ramp only where the tail
+would still be heard would shrink the cost, but it asks for estimating its
+level; it was not done.
 
-**Lo cobran** dos pruebas en `test_musica_stream.py`: el robo de una nota
-sostenida y el de una cola. Una medida grosera de clics sobre las
-grabaciones —ventanas de 1 ms donde la segunda diferencia salta 8 veces
-sobre su entorno, que también cuenta los golpes de batería— da, con reparto
-→ con rampa: el título 116 → 8, la batalla 642 → 424, `escape_newyork`
-3.497 → 3.407 (casi todo batería), `cd4` 519 → 522.
+**They are enforced** by two tests in `test_musica_stream.py`: the steal of a
+held note and that of a tail. A rough measurement of clicks on the recordings
+—1 ms windows where the second difference jumps 8 times over its
+surroundings, which also counts the drum hits— gives, with allocation → with
+ramp: the title 116 → 8, the battle 642 → 424, `escape_newyork` 3,497 → 3,407
+(almost all drums), `cd4` 519 → 522.
 
-### Bytes, pérdida y ciclos
+### Bytes, loss and cycles
 
-Bytes: stream más sonidos, del `conversor.log`. Pérdida: `tiempo_perdido`,
-y la de antes con el reparto viejo reproducido en el script. Ciclos: la
-sonda del paso 4 —la línea de barrido al entrar y salir de `music_tick`—,
-cada tema entero desde su vuelta al principio, en snes9x; la IRQ cae en la
-línea 112.
+Bytes: stream plus sounds, from `conversor.log`. Loss: `tiempo_perdido`, and
+the one from before with the old allocation reproduced in the script. Cycles:
+the probe of step 4 —the scanline on entering and leaving `music_tick`—, each
+whole theme from its return to the start, in snes9x; the IRQ falls on line
+112.
 
-| Tema | Stream antes | Reparto | Rampa | Tiempo-nota perdido antes → después | Piso | Peor cuadro (líneas) antes → reparto → rampa |
+| Theme | Stream before | Allocation | Ramp | Note-time lost before → after | Floor | Worst frame (lines) before → allocation → ramp |
 |---|---:|---:|---:|---:|---:|---:|
-| hzstream | 4.028 | 4.268 | 4.452 | 0.0% → 0.0% | 0.0% | 32 → 38 → 37 |
-| escape_newyork | 8.965 | 10.458 | 12.329 | 57.6% → 40.8% | 19.9% | 78 → 76 → 78 |
-| TF3_1_awe | 9.964 | 12.378 | 16.786 | 23.1% → 11.5% | 4.1% | 54 → 73 → 73 |
-| T_VGFighterMAX_Masako | 41.336 | 50.212 | 72.203 | 53.2% → 48.9% | 35.4% | 89 → 100 → 100 |
-| evilrhys | 10.272 | 11.556 | 16.436 | 44.7% → 33.6% | 14.5% | 81 → 98 → 98 |
-| lufsorr | 3.332 | 4.319 | 6.168 | 0.0% → 0.0% | 0.0% | 36 → 47 → 48 |
-| cd4 | 12.671 | 15.119 | 16.910 | 27.2% → 0.1% | 0.1% | 62 → 65 → 66 |
-| C3classi | 7.700 | 10.369 | 14.883 | 17.8% → 0.0% | 0.0% | 58 → 64 → 65 |
-| rshinld | 3.442 | 4.558 | 7.089 | 28.0% → 11.3% | 4.9% | 63 → 73 → 75 |
-| cd2 | 6.942 | 7.168 | 8.083 | 4.8% → 0.0% | 0.0% | 50 → 61 → 61 |
-| hzbreach | 9.275 | 10.019 | 14.047 | 0.0% → 0.0% | 0.0% | 40 → 49 → 48 |
-| wb3mlair | 2.289 | 2.600 | 2.720 | 0.0% → 0.0% | 0.0% | 45 → 45 → 45 |
-| Astpgmarch | 2.165 | 2.275 | 2.381 | 0.0% → 0.0% | 0.0% | 40 → 40 → 40 |
-| Gaden | 1.317 | 2.010 | 2.189 | 69.4% → 0.0% | 0.0% | 23 → 29 → 29 |
-| 3D-Galax | 14.824 | 17.869 | 17.914 | 0.4% → 0.0% | 0.0% | 34 → 38 → 38 |
-| wb3shop | 2.601 | 2.874 | 3.252 | 5.4% → 0.0% | 0.0% | 74 → 81 → 81 |
-| KSSMKEND | 2.999 | 3.328 | 3.454 | 1.0% → 0.0% | 0.0% | 44 → 43 → 43 |
-| vswar | 9.184 | 14.179 | 15.007 | 54.7% → 0.0% | 0.0% | 33 → 48 → 49 |
-| Lunar_Pyramid | 8.072 | 9.376 | 12.536 | 57.9% → 18.9% | 3.1% | 79 → 94 → 94 |
-| dcbest | 2.726 | 3.979 | 3.979 | 0.0% → 0.0% | 0.0% | 25 → 27 → 27 |
+| hzstream | 4,028 | 4,268 | 4,452 | 0.0% → 0.0% | 0.0% | 32 → 38 → 37 |
+| escape_newyork | 8,965 | 10,458 | 12,329 | 57.6% → 40.8% | 19.9% | 78 → 76 → 78 |
+| TF3_1_awe | 9,964 | 12,378 | 16,786 | 23.1% → 11.5% | 4.1% | 54 → 73 → 73 |
+| T_VGFighterMAX_Masako | 41,336 | 50,212 | 72,203 | 53.2% → 48.9% | 35.4% | 89 → 100 → 100 |
+| evilrhys | 10,272 | 11,556 | 16,436 | 44.7% → 33.6% | 14.5% | 81 → 98 → 98 |
+| lufsorr | 3,332 | 4,319 | 6,168 | 0.0% → 0.0% | 0.0% | 36 → 47 → 48 |
+| cd4 | 12,671 | 15,119 | 16,910 | 27.2% → 0.1% | 0.1% | 62 → 65 → 66 |
+| C3classi | 7,700 | 10,369 | 14,883 | 17.8% → 0.0% | 0.0% | 58 → 64 → 65 |
+| rshinld | 3,442 | 4,558 | 7,089 | 28.0% → 11.3% | 4.9% | 63 → 73 → 75 |
+| cd2 | 6,942 | 7,168 | 8,083 | 4.8% → 0.0% | 0.0% | 50 → 61 → 61 |
+| hzbreach | 9,275 | 10,019 | 14,047 | 0.0% → 0.0% | 0.0% | 40 → 49 → 48 |
+| wb3mlair | 2,289 | 2,600 | 2,720 | 0.0% → 0.0% | 0.0% | 45 → 45 → 45 |
+| Astpgmarch | 2,165 | 2,275 | 2,381 | 0.0% → 0.0% | 0.0% | 40 → 40 → 40 |
+| Gaden | 1,317 | 2,010 | 2,189 | 69.4% → 0.0% | 0.0% | 23 → 29 → 29 |
+| 3D-Galax | 14,824 | 17,869 | 17,914 | 0.4% → 0.0% | 0.0% | 34 → 38 → 38 |
+| wb3shop | 2,601 | 2,874 | 3,252 | 5.4% → 0.0% | 0.0% | 74 → 81 → 81 |
+| KSSMKEND | 2,999 | 3,328 | 3,454 | 1.0% → 0.0% | 0.0% | 44 → 43 → 43 |
+| vswar | 9,184 | 14,179 | 15,007 | 54.7% → 0.0% | 0.0% | 33 → 48 → 49 |
+| Lunar_Pyramid | 8,072 | 9,376 | 12,536 | 57.9% → 18.9% | 3.1% | 79 → 94 → 94 |
+| dcbest | 2,726 | 3,979 | 3,979 | 0.0% → 0.0% | 0.0% | 25 → 27 → 27 |
 | golden_axe-turtlevillage2 | 267 | 267 | 321 | 0.0% → 0.0% | 0.0% | 30 → 30 → 30 |
-| Fire_Mustang_Intro_And_Level_2_By_Luiz_Vasco | 3.984 | 7.024 | 7.720 | 0.0% → 0.0% | 0.0% | 42 → 52 → 52 |
-| bubstix | 8.333 | 11.295 | 13.064 | 0.0% → 0.0% | 0.0% | 30 → 55 → 55 |
-| wb3town | 1.637 | 1.913 | 2.002 | 0.3% → 0.0% | 0.0% | 38 → 52 → 52 |
-| Fantasia_Of_The_Wind | 4.200 | 5.337 | 7.879 | 18.9% → 11.5% | 8.9% | 61 → 79 → 78 |
-| 11h035 | 4.793 | 5.362 | 6.875 | 13.4% → 8.9% | 1.4% | 70 → 76 → 77 |
+| Fire_Mustang_Intro_And_Level_2_By_Luiz_Vasco | 3,984 | 7,024 | 7,720 | 0.0% → 0.0% | 0.0% | 42 → 52 → 52 |
+| bubstix | 8,333 | 11,295 | 13,064 | 0.0% → 0.0% | 0.0% | 30 → 55 → 55 |
+| wb3town | 1,637 | 1,913 | 2,002 | 0.3% → 0.0% | 0.0% | 38 → 52 → 52 |
+| Fantasia_Of_The_Wind | 4,200 | 5,337 | 7,879 | 18.9% → 11.5% | 8.9% | 61 → 79 → 78 |
+| 11h035 | 4,793 | 5,362 | 6,875 | 13.4% → 8.9% | 1.4% | 70 → 76 → 77 |
 | prepara | 337 | 668 | 778 | 15.5% → 0.0% | 0.0% | 38 → 48 → 48 |
-| T_ProjectJustice_DiscLoad | 4.308 | 4.826 | 5.190 | 21.3% → 0.0% | 0.0% | 72 → 85 → 85 |
-| pn28year | 5.628 | 6.349 | 9.224 | 60.9% → 50.6% | 49.9% | 46 → 47 → 55 |
-| Tnt07 | 2.613 | 2.835 | 2.835 | 0.0% → 0.0% | 0.0% | 44 → 43 → 43 |
-| Deflector1 | 8.983 | 11.184 | 11.844 | 31.0% → 0.0% | 0.0% | 37 → 52 → 51 |
-| MML2_MotherZone | 533 | 1.629 | 2.202 | 28.4% → 0.0% | 0.0% | 29 → 42 → 42 |
-| **Los 32** | 209.720 | 257.603 | 322.752 | | | |
+| T_ProjectJustice_DiscLoad | 4,308 | 4,826 | 5,190 | 21.3% → 0.0% | 0.0% | 72 → 85 → 85 |
+| pn28year | 5,628 | 6,349 | 9,224 | 60.9% → 50.6% | 49.9% | 46 → 47 → 55 |
+| Tnt07 | 2,613 | 2,835 | 2,835 | 0.0% → 0.0% | 0.0% | 44 → 43 → 43 |
+| Deflector1 | 8,983 | 11,184 | 11,844 | 31.0% → 0.0% | 0.0% | 37 → 52 → 51 |
+| MML2_MotherZone | 533 | 1,629 | 2,202 | 28.4% → 0.0% | 0.0% | 29 → 42 → 42 |
+| **The 32** | 209,720 | 257,603 | 322,752 | | | |
 
-* **Stream: de 209.720 a 257.603 B con el reparto (+23%) y a 322.752 con la
-  rampa (+25% más)**. El +74% del prototipo era en el formato viejo; en el
-  por nota, que una voz cambie de canal cuesta un byte de volumen. La
-  batalla es la que más paga la rampa (50.212 → 72.203): es la más densa.
-* **El cartucho `release`, de 74,6% a 75,7% con el reparto y a 77,3% con la
-  rampa** (3.128.883 → 3.176.812 → 3.241.961 B usados, sumando los
-  segmentos del `.dbg`). El banco 0 no cambia: 1.168 B libres.
-* **Ciclos: el peor cuadro de todos, de 89 líneas a 100** con el reparto, y
-  la rampa no lo mueve. Es la vuelta al principio del de batalla —el
-  arranque y las ocho voces escritas enteras—, que termina en la línea 212,
-  13 antes del vblank. El peor a mitad de un tema **baja** de 82 a 79 con el
-  reparto (los acordes ya no se pisan en una voz) y queda en 78 con la
-  rampa. En total la música ocupa 24% más de líneas con el reparto y 37%
-  con la rampa. Lo de `nota_sonido` del paso 4 no hizo falta.
-* **Pérdida de tiempo-nota: en promedio de 19,8% a 7,4%**, con un piso de
-  4,4%. `escape_newyork` de 58% a 41% (piso 20%; el prototipo contaba
-  55% → 39% y un piso de 23% midiendo los golpes por su largo en el MIDI);
-  doce temas que perdían algo pasan a no perder nada.
-* **El banco**: los canales que no tenían voz suman siete programas —la
-  celesta, la guitarra de acero, el timbal, el shakuhachi, el fantasía, el
-  space voice y el koto—, 67 muestras en vez de 60 en los mismos 57 KB, y
-  las demás bajan de tasa: el piano de 6,1 a 4,5 kHz, las cuerdas de 5,5 a
-  4,1, la sierra de 6,1 a 4,6, el bronce de 10,8 a 5,4. Siguen sin aportar
-  los mismos 19 temas. Lo compensa el 6.
+* **Stream: from 209,720 to 257,603 B with the allocation (+23%) and to
+  322,752 with the ramp (+25% more)**. The prototype's +74% was in the old
+  format; in the per-note one, a voice changing channel costs a volume byte.
+  The battle is the one that pays the most for the ramp (50,212 → 72,203): it
+  is the densest.
+* **The `release` cartridge, from 74.6% to 75.7% with the allocation and to
+  77.3% with the ramp** (3,128,883 → 3,176,812 → 3,241,961 B used, adding up
+  the `.dbg`'s segments). Bank 0 does not change: 1,168 B free.
+* **Cycles: the worst frame of all, from 89 lines to 100** with the
+  allocation, and the ramp does not move it. It is the battle one's return to
+  the start —the startup and the eight voices written whole—, which ends on
+  line 212, 13 before the vblank. The worst in the middle of a theme **goes
+  down** from 82 to 79 with the allocation (the chords no longer overwrite
+  each other on one voice) and stays at 78 with the ramp. In total the music
+  takes 24% more lines with the allocation and 37% with the ramp. The
+  `nota_sonido` thing of step 4 was not needed.
+* **Note-time loss: on average from 19.8% to 7.4%**, with a floor of 4.4%.
+  `escape_newyork` from 58% to 41% (floor 20%; the prototype counted 55% → 39%
+  and a floor of 23% measuring the hits by their length in the MIDI); twelve
+  themes that lost something go to losing nothing.
+* **The bank**: the channels that had no voice add seven programs —the
+  celesta, the steel guitar, the timpani, the shakuhachi, the fantasia, the
+  space voice and the koto—, 67 samples instead of 60 in the same 57 KB, and
+  the others go down in rate: the piano from 6.1 to 4.5 kHz, the strings from
+  5.5 to 4.1, the saw from 6.1 to 4.6, the brass from 10.8 to 5.4. The same 19
+  themes still do not contribute. 6 compensates for it.
 
-### La saturación, y las dos opciones del aire
+### The saturation, and the two options for the air
 
-Con el método de los pasos anteriores —cada tema en el título, snes9x sin
-MSU-1, el tema entero, muestras de L+R en el tope, que con MASTER `$7F` es
-32.511— y **sin tocar el aire** (0,5, MASTER `$7F`), como pidió taro:
+With the method of the previous steps —each theme on the title, snes9x without
+MSU-1, the whole theme, L+R samples at the ceiling, which with MASTER `$7F` is
+32,511— and **without touching the air** (0.5, MASTER `$7F`), as taro asked:
 
-| Tema | Recortes antes | Reparto | Rampa | Pico antes → rampa (dBFS) | LUFS antes → reparto → rampa |
+| Theme | Clips before | Allocation | Ramp | Peak before → ramp (dBFS) | LUFS before → allocation → ramp |
 |---|---:|---:|---:|---:|---:|
 | hzstream | 36 | 84 | 88 | -0.1 → -0.1 | -9.6 → -9.5 → -9.5 |
 | escape_newyork | 0 | 0 | 0 | -5.1 → -4.2 | -20.7 → -18.5 → -18.5 |
 | TF3_1_awe | 0 | 6 | 7 | -1.8 → -0.1 | -13.4 → -11.3 → -11.4 |
-| T_VGFighterMAX_Masako | 298 | 2.400 | 2.528 | -0.1 → -0.1 | -10.4 → -10.9 → -11.2 |
-| evilrhys | 240 | 1.458 | 1.468 | -0.1 → -0.1 | -11.1 → -10.6 → -10.7 |
+| T_VGFighterMAX_Masako | 298 | 2,400 | 2,528 | -0.1 → -0.1 | -10.4 → -10.9 → -11.2 |
+| evilrhys | 240 | 1,458 | 1,468 | -0.1 → -0.1 | -11.1 → -10.6 → -10.7 |
 | lufsorr | 0 | 0 | 0 | -2.4 → -3.0 | -15.0 → -14.9 → -15.0 |
 | cd4 | 0 | 0 | 0 | -3.7 → -1.4 | -17.9 → -16.1 → -16.1 |
 | C3classi | 0 | 0 | 0 | -3.6 → -3.1 | -16.6 → -15.7 → -15.8 |
-| rshinld | 4.724 | 7.888 | 7.786 | -0.1 → -0.1 | -8.7 → -8.1 → -8.2 |
+| rshinld | 4,724 | 7,888 | 7,786 | -0.1 → -0.1 | -8.7 → -8.1 → -8.2 |
 | cd2 | 0 | 0 | 0 | -4.1 → -3.3 | -16.7 → -16.5 → -16.5 |
 | hzbreach | 846 | 514 | 536 | -0.1 → -0.1 | -8.6 → -8.9 → -8.9 |
 | wb3mlair | 0 | 0 | 0 | -9.6 → -9.5 | -24.7 → -24.9 → -24.9 |
 | Astpgmarch | 0 | 0 | 0 | -1.7 → -1.2 | -14.0 → -14.2 → -14.2 |
 | Gaden | 0 | 0 | 0 | -17.9 → -8.3 | -31.3 → -11.0 → -11.3 |
-| 3D-Galax | 186 | 1.410 | 1.406 | -0.1 → -0.1 | -13.9 → -13.7 → -13.7 |
+| 3D-Galax | 186 | 1,410 | 1,406 | -0.1 → -0.1 | -13.9 → -13.7 → -13.7 |
 | wb3shop | 0 | 0 | 0 | -5.1 → -3.8 | -21.3 → -20.3 → -20.3 |
 | KSSMKEND | 0 | 0 | 0 | -10.9 → -7.9 | -24.7 → -24.4 → -24.4 |
 | vswar | 0 | 0 | 0 | -6.7 → -3.6 | -20.3 → -18.4 → -18.4 |
-| Lunar_Pyramid | 28 | 5.723 | 5.852 | -0.1 → -0.1 | -14.1 → -11.6 → -11.6 |
+| Lunar_Pyramid | 28 | 5,723 | 5,852 | -0.1 → -0.1 | -14.1 → -11.6 → -11.6 |
 | dcbest | 0 | 0 | 0 | -6.3 → -3.9 | -17.0 → -15.8 → -15.8 |
 | golden_axe-turtlevillage2 | 0 | 0 | 0 | -8.1 → -8.1 | -17.7 → -17.7 → -17.7 |
 | Fire_Mustang_Intro_And_Level_2_By_Luiz_Vasco | 0 | 8 | 11 | -4.1 → -0.1 | -15.8 → -13.5 → -13.5 |
@@ -852,36 +864,37 @@ MSU-1, el tema entero, muestras de L+R en el tope, que con MASTER `$7F` es
 | Tnt07 | 0 | 0 | 0 | -9.6 → -8.6 | -23.8 → -23.7 → -23.7 |
 | Deflector1 | 178 | 806 | 806 | -0.1 → -0.1 | -14.2 → -13.0 → -13.0 |
 | MML2_MotherZone | 0 | 0 | 0 | -9.2 → -3.5 | -19.7 → -17.9 → -17.9 |
-| **Los 32** | 6.536 | 20.297 | 20.488 | | |
+| **The 32** | 6,536 | 20,297 | 20,488 | | |
 
 
-**Los recortes se triplican**, de 6.536 a 20.488 muestras, casi todos en
-cinco temas: `rshinld` (7.786, el que ya más recortaba, por CC7 en 127),
-`Lunar_Pyramid` (28 → 5.852), la batalla (298 → 2.528), `evilrhys` (240 →
-1.468) y `3D-Galax` (186 → 1.406). La rampa casi no cambia nada. El nivel
-sube donde el reparto devolvió canales: `escape_newyork` +2,2 LUFS, `cd4`
-+1,8, `Gaden` +20 (tenía casi todo lo que suena sin voz).
+**The clips triple**, from 6,536 to 20,488 samples, almost all in five themes:
+`rshinld` (7,786, the one that already clipped the most, because of CC7 at
+127), `Lunar_Pyramid` (28 → 5,852), the battle (298 → 2,528), `evilrhys` (240
+→ 1,468) and `3D-Galax` (186 → 1,406). The ramp barely changes anything. The
+level goes up where the allocation gave channels back: `escape_newyork` +2.2
+LUFS, `cd4` +1.8, `Gaden` +20 (it had almost everything that plays without a
+voice).
 
-**Las dos opciones**, para que taro elija. Las dos salen del pico verdadero
-de cada tema: se armó el mismo commit con el aire en 0,25 —el techo de cada
-voz en un cuarto del original, 24 y 21—, que no recorta en ninguno, se midió
-el pico y se lo multiplicó por 2 (el volumen es lineal; el redondeo del
-registro a 0,25 lo hace aproximado). El LUFS de las opciones es el de esa
-grabación más la ganancia; el de hoy, el medido.
+**The two options**, for taro to choose. Both come from each theme's true
+peak: the same commit was built with the air at 0.25 —each voice's ceiling at
+a quarter of the original, 24 and 21—, which does not clip in any, the peak was
+measured and multiplied by 2 (the volume is linear; the register's rounding at
+0.25 makes it approximate). The options' LUFS is that of that recording plus
+the gain; today's, the measured one.
 
-* **A, un aire global**: 0,318 en vez de 0,5, **−3,9 dB para todos**. Lo fija
-  `rshinld`, cuyo pico verdadero pasa 3,9 dB del tope. No recorta ninguno,
-  y los 22 temas que hoy no recortan bajan 3,9 dB sin necesidad
-  (`escape_newyork` a -22,7 LUFS).
-* **B, un techo por tema**: cada uno con el aire más alto que no recorta,
-  topado en el 0,5 de hoy. **22 temas quedan como están**; bajan los 10 que
-  pasan del tope, de −0,5 dB (`TF3_1_awe`) a −3,9 (`rshinld`), la batalla
-  −2,9. Cuesta una tabla —un volumen por tema que `build_events` aplique en
-  `lados`— y **volver a medirla con cada cambio de la mezcla**: el paso 6
-  cambia las muestras y con ellas los picos. Medirla es este mismo script
-  con el aire en 0,25, 30 s de snes9x por tema en paralelo.
+* **A, a global air**: 0.318 instead of 0.5, **−3.9 dB for everyone**.
+  `rshinld` sets it, whose true peak goes 3.9 dB over the ceiling. None clips,
+  and the 22 themes that do not clip today go down 3.9 dB needlessly
+  (`escape_newyork` to -22.7 LUFS).
+* **B, a ceiling per theme**: each one with the highest air that does not clip,
+  capped at today's 0.5. **22 themes stay as they are**; the 10 that go over
+  the ceiling go down, from −0.5 dB (`TF3_1_awe`) to −3.9 (`rshinld`), the
+  battle −2.9. It costs a table —one volume per theme that `build_events`
+  applies in `lados`— and **measuring it again with each change of the mix**:
+  step 6 changes the samples and with them the peaks. Measuring it is this same
+  script with the air at 0.25, 30 s of snes9x per theme in parallel.
 
-| Tema | Pico verdadero con 0,5 (dB sobre el tope) | B: aire del tema | B: dB | LUFS hoy | A: LUFS | B: LUFS |
+| Theme | True peak with 0.5 (dB over the ceiling) | B: theme's air | B: dB | LUFS today | A: LUFS | B: LUFS |
 |---|---:|---:|---:|---:|---:|---:|
 | hzstream | +1.1 | 0.438 | -1.1 | -9.5 | -13.4 | -10.6 |
 | escape_newyork | -4.2 | 0.500 | +0.0 | -18.5 | -22.7 | -18.8 |
@@ -916,522 +929,531 @@ grabación más la ganancia; el de hoy, el medido.
 | Deflector1 | +2.4 | 0.379 | -2.4 | -13.0 | -16.9 | -15.4 |
 | MML2_MotherZone | -3.3 | 0.500 | +0.0 | -17.9 | -21.7 | -17.8 |
 
-### El aire: un techo por tema (la opción B): hecho
+### The air: a ceiling per theme (option B): done
 
-taro eligió la B. Hecho el 2026-09-26, después del 5b —que cambia la mezcla
-de la batalla—, en el commit "Música: un techo de volumen por tema, medido".
-El porqué vive en `leer_techos` (tools/audio/snes_music.py) y cómo se mide
-en tools/audio/techos.py.
+taro chose B. Done on 2026-09-26, after 5b —which changes the battle's mix—,
+in the commit "Música: un techo de volumen por tema, medido". The reason lives
+in `leer_techos` (tools/audio/snes_music.py) and how it is measured in
+tools/audio/techos.py.
 
-* **La tabla**: `parches/auto/musica/techos.toml`, versionada como las
-  decisiones de `parches/auto/`: el aire de cada tema —los 32, los que no
-  recortan con 0,5—, el pico y los LUFS con él, hasta qué cuadro hay que
-  tocarlo para pasar por su pico y la huella de su mezcla. `build_varios` la
-  lee y `build_events` multiplica el techo de cada voz por aire/0,5.
-* **No se escribe a mano: `just techos`**, unos cuatro minutos. Arma una
-  copia de `release` en `rom/build/techos/` con todos los temas a 0,25
-  (`--aire-de-medida` del conversor), toca cada uno entero en snes9x sin
-  MSU-1 —la pantalla de título parchada al tema, como los scripts de los
-  pasos anteriores, ocho a la vez—, le da el aire más alto que deja su pico
-  0,5 dB bajo el tope (topado en 0,5), escribe la tabla, rearma `release` y
-  lo vuelve a medir; si alguno recortara todavía, lo baja y repite. La
-  primera vez entraron todos en una vuelta. `just techos --medir` sólo mide
-  el `release` armado.
-* **El sello de los cartuchos mira los aires de la tabla** (`cartuchos.huella`):
-  cambiar uno rearma, y reescribir los picos o las huellas no.
-* **La prueba**, `pruebas/rpgmaker/test_musica_techos.py`:
-  `test_la_tabla_de_techos_es_la_de_esta_mezcla` arma los 32 temas en
-  memoria (3 s) y compara la huella de cada uno —lo que le escribe al DSP y
-  las muestras que toca— con la de la tabla: cualquier cambio de la mezcla
-  (el paso 6) la pone en rojo diciendo qué tema y que hay que correr `just
-  techos`. Y `test_el_tema_no_recorta_en_su_pico`, uno por tema de los que
-  quedaron a menos de 1,5 dB del tope —12—, toca el tema en la ROM hasta su
-  `hasta` y pide cero muestras en el tope: 42.555 cuadros en total, **unos 21
-  s de CPU, 5 s con los ocho procesos**; el más largo, 3D-Galax, 3,5 s. Tocar
-  los 32 enteros serían unos 2 minutos de CPU.
-* **Por qué sólo los cercanos**: con la mezcla igual (la huella), lo único
-  que mueve el pico es en qué momento del cuadro cae cada escritura, que
-  cambia con cualquier cambio de la ROM. Medido: `11h035`, `cd4` y `vswar`
-  tienen el mismo stream antes y después de este cambio, y su pico se movió
-  0,2 dB. Los que están a más de 1,5 dB no llegan al tope por eso.
-* **Cómo se la vio fallar**: con el aire de la batalla cambiado a mano a
-  0,45 en la tabla, rojo las dos: la huella de la batalla, y 224 muestras en
-  el tope en sus primeros 8.700 cuadros.
+* **The table**: `parches/auto/musica/techos.toml`, versioned like the
+  decisions in `parches/auto/`: each theme's air —the 32, the ones that do not
+  clip with 0.5—, the peak and the LUFS with it, up to which frame it has to be
+  played to go through its peak and the fingerprint of its mix.
+  `build_varios` reads it and `build_events` multiplies each voice's ceiling by
+  air/0.5.
+* **It is not written by hand: `just techos`**, some four minutes. It builds a
+  copy of `release` in `rom/build/techos/` with all the themes at 0.25 (the
+  converter's `--aire-de-medida`), plays each one whole in snes9x without MSU-1
+  —the title screen patched to the theme, like the scripts of the previous
+  steps, eight at a time—, gives it the highest air that leaves its peak 0.5 dB
+  below the ceiling (capped at 0.5), writes the table, rebuilds `release` and
+  measures it again; if any still clipped, it lowers it and repeats. The first
+  time all of them fit in one pass. `just techos --medir` only measures the
+  built `release`.
+* **The cartridges' stamp looks at the table's airs**
+  (`cartuchos.huella`): changing one rebuilds, and rewriting the peaks or the
+  fingerprints does not.
+* **The test**, `pruebas/rpgmaker/test_musica_techos.py`:
+  `test_la_tabla_de_techos_es_la_de_esta_mezcla` builds the 32 themes in
+  memory (3 s) and compares each one's fingerprint —what it writes to the DSP
+  and the samples it plays— with the table's: any change of the mix (step 6)
+  turns it red saying which theme and that `just techos` has to be run. And
+  `test_el_tema_no_recorta_en_su_pico`, one per theme among those left at less
+  than 1.5 dB from the ceiling —12—, plays the theme in the ROM up to its
+  `hasta` and asks for zero samples at the ceiling: 42,555 frames in total,
+  **some 21 s of CPU, 5 s with the eight processes**; the longest, 3D-Galax,
+  3.5 s. Playing the 32 whole would be some 2 minutes of CPU.
+* **Why only the close ones**: with the mix the same (the fingerprint), the
+  only thing that moves the peak is at what moment of the frame each write
+  falls, which changes with any change of the ROM. Measured: `11h035`, `cd4`
+  and `vswar` have the same stream before and after this change, and their
+  peak moved 0.2 dB. The ones more than 1.5 dB away do not reach the ceiling
+  because of that.
+* **How it was seen failing**: with the battle's air changed by hand to 0.45
+  in the table, both red: the battle's fingerprint, and 224 samples at the
+  ceiling in its first 8,700 frames.
 
-Antes: el `release` con el 5b y el aire en 0,5 para todos, medido con `just
-techos --medir`. Después: la tabla. "dB" es lo que baja cada tema.
+Before: the `release` with 5b and the air at 0.5 for everyone, measured with
+`just techos --medir`. After: the table. "dB" is how much each theme goes down.
 
-| Tema | Aire | dB | Recortes antes → después | Pico antes → después (dB) | LUFS antes → después |
+| Theme | Air | dB | Clips before → after | Peak before → after (dB) | LUFS before → after |
 |---|---:|---:|---:|---:|---:|
-| rshinld | 0,298 | -4,5 | 7790 → 0 | 0,0 → -0,7 | -8,2 → -12,7 |
-| T_VGFighterMAX_Masako | 0,350 | -3,1 | 2384 → 0 | 0,0 → -0,5 | -10,1 → -13,1 |
-| Lunar_Pyramid | 0,356 | -3,0 | 5436 → 0 | 0,0 → -0,5 | -11,5 → -14,5 |
-| Deflector1 | 0,363 | -2,8 | 792 → 0 | 0,0 → -0,6 | -13,1 → -15,9 |
-| 3D-Galax | 0,366 | -2,7 | 1380 → 0 | 0,0 → -0,5 | -13,7 → -16,4 |
-| evilrhys | 0,380 | -2,4 | 538 → 0 | 0,0 → -0,5 | -10,5 → -12,9 |
-| hzbreach | 0,381 | -2,4 | 556 → 0 | 0,0 → -0,4 | -8,9 → -11,2 |
-| hzstream | 0,389 | -2,2 | 130 → 0 | 0,0 → -0,5 | -9,5 → -11,8 |
-| Fire_Mustang_Intro_And_Level_2_By_Luiz_Vasco | 0,438 | -1,1 | 7 → 0 | 0,0 → -0,5 | -13,5 → -14,7 |
-| TF3_1_awe | 0,440 | -1,1 | 14 → 0 | 0,0 → -0,5 | -11,4 → -12,5 |
-| 11h035 | 0,500 | 0,0 | 0 → 0 | -6,6 → -6,4 | -21,2 → -21,2 |
-| Astpgmarch | 0,500 | 0,0 | 0 → 0 | -1,2 → -1,2 | -14,2 → -14,2 |
-| C3classi | 0,500 | 0,0 | 0 → 0 | -3,1 → -3,1 | -15,8 → -15,8 |
-| Fantasia_Of_The_Wind | 0,500 | 0,0 | 0 → 0 | -4,4 → -4,4 | -16,3 → -16,3 |
-| Gaden | 0,500 | 0,0 | 0 → 0 | -8,2 → -8,2 | -11,0 → -11,1 |
-| KSSMKEND | 0,500 | 0,0 | 0 → 0 | -7,9 → -7,9 | -24,4 → -24,4 |
-| MML2_MotherZone | 0,500 | 0,0 | 0 → 0 | -3,5 → -3,5 | -17,9 → -17,9 |
-| T_ProjectJustice_DiscLoad | 0,500 | 0,0 | 0 → 0 | -5,0 → -5,0 | -20,9 → -20,9 |
-| Tnt07 | 0,500 | 0,0 | 0 → 0 | -8,6 → -8,6 | -23,6 → -23,6 |
-| bubstix | 0,500 | 0,0 | 0 → 0 | -3,1 → -3,1 | -17,2 → -17,2 |
-| cd2 | 0,500 | 0,0 | 0 → 0 | -3,2 → -3,2 | -16,5 → -16,5 |
-| cd4 | 0,500 | 0,0 | 0 → 0 | -1,3 → -1,1 | -16,2 → -16,2 |
-| dcbest | 0,500 | 0,0 | 0 → 0 | -3,8 → -3,8 | -15,9 → -15,9 |
-| escape_newyork | 0,500 | 0,0 | 0 → 0 | -5,1 → -5,1 | -18,5 → -18,5 |
-| golden_axe-turtlevillage2 | 0,500 | 0,0 | 0 → 0 | -8,0 → -8,0 | -17,7 → -17,7 |
-| lufsorr | 0,500 | 0,0 | 0 → 0 | -3,1 → -3,1 | -15,0 → -15,0 |
-| pn28year | 0,500 | 0,0 | 0 → 0 | -5,1 → -5,1 | -19,5 → -19,5 |
-| prepara | 0,500 | 0,0 | 0 → 0 | -13,7 → -13,7 | -25,3 → -25,3 |
-| vswar | 0,500 | 0,0 | 0 → 0 | -3,6 → -3,8 | -18,4 → -18,4 |
-| wb3mlair | 0,500 | 0,0 | 0 → 0 | -9,4 → -9,4 | -24,9 → -24,9 |
-| wb3shop | 0,500 | 0,0 | 0 → 0 | -4,0 → -4,0 | -20,3 → -20,3 |
-| wb3town | 0,500 | 0,0 | 0 → 0 | -6,1 → -6,1 | -20,2 → -20,2 |
+| rshinld | 0.298 | -4.5 | 7790 → 0 | 0.0 → -0.7 | -8.2 → -12.7 |
+| T_VGFighterMAX_Masako | 0.350 | -3.1 | 2384 → 0 | 0.0 → -0.5 | -10.1 → -13.1 |
+| Lunar_Pyramid | 0.356 | -3.0 | 5436 → 0 | 0.0 → -0.5 | -11.5 → -14.5 |
+| Deflector1 | 0.363 | -2.8 | 792 → 0 | 0.0 → -0.6 | -13.1 → -15.9 |
+| 3D-Galax | 0.366 | -2.7 | 1380 → 0 | 0.0 → -0.5 | -13.7 → -16.4 |
+| evilrhys | 0.380 | -2.4 | 538 → 0 | 0.0 → -0.5 | -10.5 → -12.9 |
+| hzbreach | 0.381 | -2.4 | 556 → 0 | 0.0 → -0.4 | -8.9 → -11.2 |
+| hzstream | 0.389 | -2.2 | 130 → 0 | 0.0 → -0.5 | -9.5 → -11.8 |
+| Fire_Mustang_Intro_And_Level_2_By_Luiz_Vasco | 0.438 | -1.1 | 7 → 0 | 0.0 → -0.5 | -13.5 → -14.7 |
+| TF3_1_awe | 0.440 | -1.1 | 14 → 0 | 0.0 → -0.5 | -11.4 → -12.5 |
+| 11h035 | 0.500 | 0.0 | 0 → 0 | -6.6 → -6.4 | -21.2 → -21.2 |
+| Astpgmarch | 0.500 | 0.0 | 0 → 0 | -1.2 → -1.2 | -14.2 → -14.2 |
+| C3classi | 0.500 | 0.0 | 0 → 0 | -3.1 → -3.1 | -15.8 → -15.8 |
+| Fantasia_Of_The_Wind | 0.500 | 0.0 | 0 → 0 | -4.4 → -4.4 | -16.3 → -16.3 |
+| Gaden | 0.500 | 0.0 | 0 → 0 | -8.2 → -8.2 | -11.0 → -11.1 |
+| KSSMKEND | 0.500 | 0.0 | 0 → 0 | -7.9 → -7.9 | -24.4 → -24.4 |
+| MML2_MotherZone | 0.500 | 0.0 | 0 → 0 | -3.5 → -3.5 | -17.9 → -17.9 |
+| T_ProjectJustice_DiscLoad | 0.500 | 0.0 | 0 → 0 | -5.0 → -5.0 | -20.9 → -20.9 |
+| Tnt07 | 0.500 | 0.0 | 0 → 0 | -8.6 → -8.6 | -23.6 → -23.6 |
+| bubstix | 0.500 | 0.0 | 0 → 0 | -3.1 → -3.1 | -17.2 → -17.2 |
+| cd2 | 0.500 | 0.0 | 0 → 0 | -3.2 → -3.2 | -16.5 → -16.5 |
+| cd4 | 0.500 | 0.0 | 0 → 0 | -1.3 → -1.1 | -16.2 → -16.2 |
+| dcbest | 0.500 | 0.0 | 0 → 0 | -3.8 → -3.8 | -15.9 → -15.9 |
+| escape_newyork | 0.500 | 0.0 | 0 → 0 | -5.1 → -5.1 | -18.5 → -18.5 |
+| golden_axe-turtlevillage2 | 0.500 | 0.0 | 0 → 0 | -8.0 → -8.0 | -17.7 → -17.7 |
+| lufsorr | 0.500 | 0.0 | 0 → 0 | -3.1 → -3.1 | -15.0 → -15.0 |
+| pn28year | 0.500 | 0.0 | 0 → 0 | -5.1 → -5.1 | -19.5 → -19.5 |
+| prepara | 0.500 | 0.0 | 0 → 0 | -13.7 → -13.7 | -25.3 → -25.3 |
+| vswar | 0.500 | 0.0 | 0 → 0 | -3.6 → -3.8 | -18.4 → -18.4 |
+| wb3mlair | 0.500 | 0.0 | 0 → 0 | -9.4 → -9.4 | -24.9 → -24.9 |
+| wb3shop | 0.500 | 0.0 | 0 → 0 | -4.0 → -4.0 | -20.3 → -20.3 |
+| wb3town | 0.500 | 0.0 | 0 → 0 | -6.1 → -6.1 | -20.2 → -20.2 |
 
-**Los recortes, de 19.027 muestras a cero.** Los 22 que no recortaban
-quedan igual (el pico de tres se movió 0,2 dB por lo de arriba). Los diez
-que recortaban bajan entre 1,1 dB (`TF3_1_awe`, `Fire_Mustang`) y 4,5 dB
-(`rshinld`), un poco más que lo que estimaba la opción B por el margen de
-0,5 dB; la batalla, 3,1 dB, a -13,1 LUFS.
+**The clips, from 19,027 samples to zero.** The 22 that did not clip stay the
+same (the peak of three moved 0.2 dB because of the above). The ten that
+clipped go down between 1.1 dB (`TF3_1_awe`, `Fire_Mustang`) and 4.5 dB
+(`rshinld`), a little more than option B estimated because of the 0.5 dB
+margin; the battle, 3.1 dB, to -13.1 LUFS.
 
-## 5b. La frase de la batalla, que el reparto cortaba: hecho
+## 5b. The battle phrase, which the allocation cut: done
 
-taro, el 2026-09-26, escuchando las grabaciones del 5: *"algunos mejoran
-mucho, pero uno empeora: el tema de batalla. [...] la frase principal (que
-empieza en el segundo 15 y termina en el segundo 22, aprox, y luego se
-repite) se interrumpe constantemente, lo cual lo vuelve inescuchable."*
-Hecho el mismo día, en el commit "Música: la melodía de la batalla no llega
-última a su cuadro". El porqué vive en `_orden_del_cuadro` de
+taro, on 2026-09-26, listening to the recordings of 5: *"some improve a lot,
+but one gets worse: the battle theme. [...] the main phrase (which starts at
+second 15 and ends at second 22, approx, and then repeats) is constantly
+interrupted, which makes it unlistenable."*
+Done the same day, in the commit "Música: la melodía de la batalla no llega
+última a su cuadro". The reason lives in `_orden_del_cuadro` of
 `tools/audio/snes_music.py`.
 
-**Para escuchar**: `/shared/audio/2026-09-26-batalla/`, con su `LEEME.txt`:
-la batalla (47 s: la referencia, antes del reparto, el paso 5 y las dos
-variantes que la arreglan), y `escape_newyork` y el título enteros con el
-paso 5 y las dos variantes.
+**To listen**: `/shared/audio/2026-09-26-batalla/`, with its `LEEME.txt`: the
+battle (47 s: the reference, before the allocation, step 5 and the two
+variants that fix it), and `escape_newyork` and the title whole with step 5 and
+the two variants.
 
-### El diagnóstico
+### The diagnosis
 
-* **La frase es la voz de arriba de los acordes del órgano**, el canal 0
-  (programa 20): acordes de tres notas —la de arriba con velocidad 127, las
-  otras dos con 100—, que empiezan a los 15,43 s con un acorde de 1,7 s y
-  bajan 72, 71, 69, 67... hasta los 22,2 s, y vuelven a empezar. Es el canal
-  más fuerte de la mezcla: su CC7 lo deja en un nivel de 124 contra 114 del
-  bajo y 82 de la batería. En la pista de MSU-1, el pico del espectro entre
-  300 y 1200 Hz sigue exactamente esa línea (una octava arriba, el segundo
-  armónico del órgano). El canal 1 es un eco: las mismas notas 9 cuadros
-  después, con un tercio del nivel. Los canales 2 y 3 tocan el bajo
-  **nota por nota igual**, con dos programas.
-* **No la cortaba ni el robo ni la rampa: la nota no conseguía voz.** De sus
-  536 notas en todo el tema, 290 sonaban enteras, 32 se las robaban a mitad
-  y **214 no sonaban**; en la frase, 5 de 21 sin voz y 1 robada, una nota sí
-  y otra no (17,57 s, 18,43 s, 21,00 s, 21,65 s, 21,97 s...). El órgano
-  quedaba callado el 48% del tiempo en que el MIDI lo hace sonar (52% en la
-  frase).
-* **Las 214 son el mismo caso**: las ocho voces ya habían arrancado en ese
-  mismo cuadro, y a una nota del cuadro no se le roba. Quién las tenía, en
-  suma sobre los 214 cuadros: la batería 946 voces de 1.712 —4,4 por
-  cuadro—, los dos bajos 214 cada uno, los metales 238, la guitarra 100. En
-  cada tiempo el tema pega cinco o seis golpes juntos —35 y 36, dos bombos;
-  38 y 40, dos cajas; el charles— y todo va con velocidad 127, así que el
-  orden del cuadro —por velocidad y, a la par, el más grave primero— dejaba
-  a la melodía, lo más agudo, para el final.
-* **Con el reparto fijo de antes no pasaba**: el órgano tenía su voz fija y
-  la batería dos, así que el órgano no se callaba nunca (0%), aunque sonara
-  la nota de abajo del acorde y no la de arriba (la de arriba se "perdía" el
-  94%, pero en su voz sonaba otra del mismo acorde, con el mismo ritmo). Lo
-  que se oye como "se interrumpe" es el ritmo: que el canal calle.
-* **Ni un tope de voces para la batería ni proteger las notas recién
-  empezadas cambian nada**: la melodía no se perdía por robos entre cuadros
-  sino por el orden dentro de uno. Lo confirman las grabaciones: en las
-  ventanas de las notas 71 y 67 de la frase, la energía de la melodía es 24%
-  y 10% del total entre 300 y 1200 Hz en el paso 5, contra 80% y 60% con el
-  arreglo y 51% y 48% en la referencia.
+* **The phrase is the top voice of the organ's chords**, channel 0 (program
+  20): three-note chords —the top one with velocity 127, the other two with
+  100—, which start at 15.43 s with a 1.7 s chord and go down 72, 71, 69,
+  67... until 22.2 s, and start again. It is the loudest channel of the mix:
+  its CC7 leaves it at a level of 124 against 114 for the bass and 82 for the
+  drums. In the MSU-1 track, the spectrum's peak between 300 and 1200 Hz
+  follows exactly that line (an octave up, the organ's second harmonic).
+  Channel 1 is an echo: the same notes 9 frames later, at a third of the
+  level. Channels 2 and 3 play the bass **identically note for note**, with two
+  programs.
+* **Neither the steal nor the ramp cut it: the note did not get a voice.** Of
+  its 536 notes in the whole theme, 290 played whole, 32 were stolen halfway
+  and **214 did not play**; in the phrase, 5 of 21 without a voice and 1
+  stolen, every other note (17.57 s, 18.43 s, 21.00 s, 21.65 s, 21.97 s...).
+  The organ was silent 48% of the time the MIDI makes it play (52% in the
+  phrase).
+* **The 214 are the same case**: the eight voices had already started on that
+  same frame, and a note of the frame is not stolen from. Who had them, summed
+  over the 214 frames: the drums 946 voices of 1,712 —4.4 per frame—, the two
+  basses 214 each, the brass 238, the guitar 100. On each beat the theme hits
+  five or six drums together —35 and 36, two kicks; 38 and 40, two snares; the
+  hi-hat— and everything goes with velocity 127, so the frame's order —by
+  velocity and, when tied, the lowest first— left the melody, the highest, for
+  last.
+* **With the fixed allocation from before it did not happen**: the organ had
+  its fixed voice and the drums two, so the organ was never silent (0%), even
+  though the chord's bottom note played and not the top one (the top one was
+  "lost" 94%, but another one of the same chord, with the same rhythm, played
+  on its voice). What is heard as "is interrupted" is the rhythm: the channel
+  going silent.
+* **Neither a voice cap for the drums nor protecting the just-started notes
+  change anything**: the melody was not lost because of steals between frames
+  but because of the order within one. The recordings confirm it: in the
+  windows of notes 71 and 67 of the phrase, the melody's energy is 24% and 10%
+  of the total between 300 and 1200 Hz in step 5, against 80% and 60% with the
+  fix and 51% and 48% in the reference.
 
-### Las variantes
+### The variants
 
-Con un script descartable (`audio-batalla/variantes.py` en el scratchpad),
-que arma los 32 temas del `release` con cada regla. Como en el 5: "perdido"
-es el tiempo-nota perdido en promedio por tema; "pesado", pesado por el
-nivel con que arranca cada nota (con los controladores; el del 5 pesaba por
-la velocidad sola); "arriba" y "abajo", en qué fracción de los cuadros no
-suena la nota más aguda (más grave) de lo melódico que el MIDI tiene
-sonando; "golpes", qué fracción de los golpes no suena, contando una sola
-vez los de una familia en un mismo cuadro —dos bombos juntos son un
-golpe—; "stream", stream más sonidos de los 32. La melodía de la batalla es
-la voz de arriba del canal 0 en todo el tema, y entre paréntesis en la frase.
+With a throwaway script (`audio-batalla/variantes.py` in the scratchpad),
+which builds the 32 themes of `release` with each rule. As in 5: "lost" is the
+average note-time lost per theme; "weighted", weighted by the level each note
+starts with (with the controllers; that of 5 weighted by velocity alone);
+"top" and "bottom", in what fraction of the frames the highest (lowest) note
+of the melodic part the MIDI has playing does not play; "hits", what fraction
+of the hits does not play, counting only once those of a family on the same
+frame —two kicks together are one hit—; "stream", stream plus sounds of the
+32. The battle's melody is the top voice of channel 0 throughout the theme, and
+in parentheses in the phrase.
 
-| Regla | Perdido | Pesado | Robos | Arriba | Abajo | Golpes | Stream | Batalla: melodía perdida (15-22 s) | Órgano callado |
+| Rule | Lost | Weighted | Steals | Top | Bottom | Hits | Stream | Battle: melody lost (15-22 s) | Organ silent |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| el reparto fijo por canal, de antes del paso 5 | 19,84% | 19,99% | 13.968 | 11,2% | 10,8% | 2,49% | 283.360 | 94% (91%) | 0% |
-| el paso 5: por velocidad, y a la par el más grave primero | 7,38% | 6,06% | 2.883 | 10,7% | 3,3% | 0,39% | 322.752 | 48% (52%) | 48% |
-| paso 5, y una nota con menos de 4 cuadros no se roba | 7,39% | 6,06% | 2.124 | 10,6% | 3,4% | 0,44% | 319.527 | 56% (57%) | 56% |
-| ídem, 8 cuadros | 7,42% | 6,10% | 1.760 | 10,7% | 3,3% | 0,52% | 317.748 | 73% (63%) | 73% |
-| paso 5, y la batería sostiene a lo sumo 2 voces | 7,31% | 6,00% | 2.811 | 10,7% | 3,3% | 0,64% | 322.764 | 48% (52%) | 48% |
-| ídem, 3 voces | 7,33% | 6,02% | 2.851 | 10,7% | 3,3% | 0,52% | 322.833 | 48% (52%) | 48% |
-| paso 5, y una nota de menos de 8 cuadros no roba | 6,94% | 5,76% | 1.559 | 9,8% | 3,1% | 2,58% | 308.736 | 25% (20%) | 25% |
-| paso 5, y un golpe no le roba a lo melódico | 7,08% | 5,77% | 2.728 | 10,4% | 3,2% | 2,29% | 322.102 | 48% (52%) | 48% |
-| paso 5, y el golpe repetido de una familia al final del cuadro | 7,09% | 5,79% | 2.815 | 9,4% | 3,1% | 0,35% | 323.081 | 31% (23%) | 31% |
-| por nivel (con el CC7) en vez de velocidad | 7,06% | 5,60% | 3.051 | 8,3% | 3,3% | 2,52% | 326.081 | 22% (29%) | 22% |
-| por nivel, y el golpe repetido al final | 6,90% | 5,48% | 3.064 | 7,4% | 3,3% | 2,14% | 326.174 | 22% (29%) | 22% |
-| ronda: la primera de cada canal antes que la segunda de cualquiera | 6,92% | 5,97% | 1.998 | 4,4% | 3,7% | 2,54% | 315.482 | 0% (0%) | 0% |
-| golpes primero, lo melódico por nivel / lugar en su canal | 7,39% | 6,12% | 2.761 | 7,5% | 3,9% | 0,15% | 320.540 | 25% (34%) | 25% |
-| **ronda** por nivel, cada familia de golpes un canal, golpes primero a la par, repetidos al final | 6,94% | 5,91% | 2.511 | 5,6% | 3,7% | 0,18% | 318.665 | 0% (0%) | 0% |
-| **nivel y lugar** (la que quedó): golpes primero uno por familia, lo melódico por nivel / lugar, repetidos al final | 7,05% | 5,82% | 2.528 | 6,9% | 3,7% | 0,12% | 319.160 | 0% (0%) | 0% |
-| nivel y lugar, y el golpe repetido no roba | 6,91% | 5,73% | 2.446 | 6,7% | 3,6% | 0,12% | 318.586 | 0% (0%) | 0% |
+| the fixed allocation per channel, from before step 5 | 19.84% | 19.99% | 13,968 | 11.2% | 10.8% | 2.49% | 283,360 | 94% (91%) | 0% |
+| step 5: by velocity, and when tied the lowest first | 7.38% | 6.06% | 2,883 | 10.7% | 3.3% | 0.39% | 322,752 | 48% (52%) | 48% |
+| step 5, and a note with fewer than 4 frames is not stolen | 7.39% | 6.06% | 2,124 | 10.6% | 3.4% | 0.44% | 319,527 | 56% (57%) | 56% |
+| same, 8 frames | 7.42% | 6.10% | 1,760 | 10.7% | 3.3% | 0.52% | 317,748 | 73% (63%) | 73% |
+| step 5, and the drums hold at most 2 voices | 7.31% | 6.00% | 2,811 | 10.7% | 3.3% | 0.64% | 322,764 | 48% (52%) | 48% |
+| same, 3 voices | 7.33% | 6.02% | 2,851 | 10.7% | 3.3% | 0.52% | 322,833 | 48% (52%) | 48% |
+| step 5, and a note of fewer than 8 frames does not steal | 6.94% | 5.76% | 1,559 | 9.8% | 3.1% | 2.58% | 308,736 | 25% (20%) | 25% |
+| step 5, and a hit does not steal from the melodic part | 7.08% | 5.77% | 2,728 | 10.4% | 3.2% | 2.29% | 322,102 | 48% (52%) | 48% |
+| step 5, and a family's repeated hit at the end of the frame | 7.09% | 5.79% | 2,815 | 9.4% | 3.1% | 0.35% | 323,081 | 31% (23%) | 31% |
+| by level (with CC7) instead of velocity | 7.06% | 5.60% | 3,051 | 8.3% | 3.3% | 2.52% | 326,081 | 22% (29%) | 22% |
+| by level, and the repeated hit at the end | 6.90% | 5.48% | 3,064 | 7.4% | 3.3% | 2.14% | 326,174 | 22% (29%) | 22% |
+| round: the first of each channel before the second of any | 6.92% | 5.97% | 1,998 | 4.4% | 3.7% | 2.54% | 315,482 | 0% (0%) | 0% |
+| hits first, the melodic part by level / place in its channel | 7.39% | 6.12% | 2,761 | 7.5% | 3.9% | 0.15% | 320,540 | 25% (34%) | 25% |
+| **round** by level, each family of hits a channel, hits first when tied, repeated ones at the end | 6.94% | 5.91% | 2,511 | 5.6% | 3.7% | 0.18% | 318,665 | 0% (0%) | 0% |
+| **level and place** (the one that stayed): hits first one per family, the melodic part by level / place, repeated ones at the end | 7.05% | 5.82% | 2,528 | 6.9% | 3.7% | 0.12% | 319,160 | 0% (0%) | 0% |
+| level and place, and the repeated hit does not steal | 6.91% | 5.73% | 2,446 | 6.7% | 3.6% | 0.12% | 318,586 | 0% (0%) | 0% |
 
-* **Lo que decide es el orden del cuadro, no a quién se roba.** Todo lo que
-  se hace en `_victima` —no robar lo recién empezado, un tope para la
-  batería, que los golpes no roben, que lo corto no robe— deja la melodía
-  igual o peor. La idea de detectar el canal de la melodía (el registro, el
-  volumen, el que más suena solo) no hizo falta: ordenar por el nivel real
-  ya la pone primera, porque es lo más fuerte.
-* **La ronda estricta** salva la melodía, pero le cuesta a la batería
-  (golpes 2,54%; la de la batalla pierde el 44% de sus golpes) si la
-  batería es un canal más; con cada familia como un canal, 0,18%. Y en
-  `escape_newyork` les da voz a las cuerdas de velocidad 29 —nivel 6, casi
-  inaudibles— a costa del polysynth (nivel 36): el pesado de ese tema sube
-  de 24,7% a 28,1%.
-* **Nivel y lugar** —la elegida— es la ronda sin ese defecto: la segunda
-  nota de un canal vale la mitad de su nivel, así que va antes que la
-  primera de un canal que suena a menos de la mitad. Contra el paso 5:
-  perdido 7,38% → 7,05%, robos 2.883 → 2.528, arriba 10,7% → 6,9%, golpes
-  0,39% → 0,12%; lo que empeora es abajo, 3,3% → 3,7%. Por tema, lo que
-  cambia: la batalla 48,9% → 47,0% (su batería pierde el 30% del tiempo de
-  golpe, casi todo el segundo bombo y la segunda caja: por familia, 0,1%);
-  `evilrhys` 33,6% → 29,4%; `Lunar_Pyramid` 18,9% → 14,0%; `escape_newyork`
-  40,8% → 39,7% y sus golpes 6,9% → 3,3%; `11h035` 8,9% → 10,3% y
-  `pn28year` pierde más el bajo (abajo 55,9% → 64,5%, con un piso de 50%).
-  `cd4`, `vswar` y `Gaden` siguen en 0%.
-* **Que el golpe repetido no robe** gana un poco más (6,91%, 2.446 robos)
-  pero es una regla más en `_victima`: no entró. Las dos que quedan parejas
-  para elegir escuchando son nivel y lugar (implementada) y la ronda (en las
-  grabaciones, `-3-ronda`; es cambiar la clave de `_orden_del_cuadro`).
+* **What decides is the frame's order, not whom one steals from.** Everything
+  done in `_victima` —not stealing what just started, a cap for the drums,
+  hits not stealing, short notes not stealing— leaves the melody the same or
+  worse. The idea of detecting the melody's channel (the register, the volume,
+  the one that plays alone the most) was not needed: sorting by the real level
+  already puts it first, because it is the loudest.
+* **The strict round** saves the melody, but costs the drums (hits 2.54%; the
+  battle's loses 44% of its hits) if the drums are one more channel; with each
+  family as a channel, 0.18%. And in `escape_newyork` it gives a voice to the
+  velocity-29 strings —level 6, almost inaudible— at the expense of the
+  polysynth (level 36): that theme's weighted goes up from 24.7% to 28.1%.
+* **Level and place** —the chosen one— is the round without that defect: a
+  channel's second note is worth half its level, so it goes before the first
+  of a channel that plays at less than half. Against step 5: lost 7.38% →
+  7.05%, steals 2,883 → 2,528, top 10.7% → 6.9%, hits 0.39% → 0.12%; what gets
+  worse is the bottom, 3.3% → 3.7%. Per theme, what changes: the battle 48.9%
+  → 47.0% (its drums lose 30% of the hit time, almost all the second kick and
+  the second snare: per family, 0.1%); `evilrhys` 33.6% → 29.4%;
+  `Lunar_Pyramid` 18.9% → 14.0%; `escape_newyork` 40.8% → 39.7% and its hits
+  6.9% → 3.3%; `11h035` 8.9% → 10.3% and `pn28year` loses more of the bass
+  (bottom 55.9% → 64.5%, with a floor of 50%). `cd4`, `vswar` and `Gaden` stay
+  at 0%.
+* **The repeated hit not stealing** gains a little more (6.91%, 2,446 steals)
+  but it is one more rule in `_victima`: it did not go in. The two left even,
+  to choose by listening, are level and place (implemented) and the round (in
+  the recordings, `-3-ronda`; it is changing the key of
+  `_orden_del_cuadro`).
 
-### Bytes, ciclos y la prueba
+### Bytes, cycles and the test
 
-* **Stream: de 322.752 a 319.160 B** en los 32 temas (la batalla 72.203 →
-  69.613): menos robos, menos rampas. El `release` usa 3,6 KB menos; el
-  banco 0 no cambia (1.168 B libres).
-* **Ciclos**, con la sonda del paso 4 en snes9x, cada tema entero desde su
-  vuelta al principio: **el peor cuadro sigue en 100 líneas** —la vuelta al
-  principio de la batalla—, el peor a mitad de un tema (sin los últimos 31
-  cuadros) baja de 91 a 90, y la música ocupa 1,2% menos líneas en total.
-  Lo que más sube es `cd2` (61 → 68) y `3D-Galax` (38 → 44), que no pierden
-  nada pero reparten las voces en otro orden.
-* **La prueba**: `test_la_melodia_de_la_batalla_no_pierde_notas`
-  (`pruebas/rpgmaker/test_musica_reparto.py`) arma el tema y pide que cada
-  nota de la voz de arriba del canal 0 suene entera, en todo el tema; con la
-  regla del paso 5 da rojo con 214 + 32. Y
+* **Stream: from 322,752 to 319,160 B** in the 32 themes (the battle 72,203 →
+  69,613): fewer steals, fewer ramps. The `release` uses 3.6 KB less; bank 0
+  does not change (1,168 B free).
+* **Cycles**, with the probe of step 4 in snes9x, each whole theme from its
+  return to the start: **the worst frame stays at 100 lines** —the battle's
+  return to the start—, the worst in the middle of a theme (without the last
+  31 frames) goes down from 91 to 90, and the music takes 1.2% fewer lines in
+  total. What goes up the most is `cd2` (61 → 68) and `3D-Galax` (38 → 44),
+  which lose nothing but allocate the voices in another order.
+* **The test**: `test_la_melodia_de_la_batalla_no_pierde_notas`
+  (`pruebas/rpgmaker/test_musica_reparto.py`) builds the theme and asks that
+  each note of channel 0's top voice play whole, throughout the theme; with
+  step 5's rule it goes red with 214 + 32. And
   `test_la_voz_de_arriba_del_acorde_no_llega_ultima_a_su_cuadro`
-  (`pruebas/herramientas/test_musica_stream.py`), el caso armado a mano:
-  once notas en un cuadro, cinco golpes de tres familias, y afuera quedan
-  el segundo bombo, la segunda caja y la nota de abajo del acorde; con la
-  regla del paso 5 el que queda afuera es el acorde entero.
+  (`pruebas/herramientas/test_musica_stream.py`), the case built by hand:
+  eleven notes on a frame, five hits from three families, and left out are the
+  second kick, the second snare and the chord's bottom note; with step 5's rule
+  the one left out is the whole chord.
 
-## 6. Las muestras: presupuesto por paquete y zonas
+## 6. The samples: budget per package and zones
 
-Es lo que más cambia el sonido (el 10 solo ya se acerca más que el 07) y lo
-más caro: es `presupuesto-de-muestras-por-paquete.md`, y detrás
-`una-muestra-por-instrumento.md`. taro escuchó la variante 08/10 y
-dijo que hace "una diferencia notoria", y aprobó arrancar.
+It is what changes the sound the most (10 alone already gets closer than 07)
+and the most expensive: it is `presupuesto-de-muestras-por-paquete.md`, and
+behind it `una-muestra-por-instrumento.md`. taro listened to variant 08/10 and
+said it makes "a noticeable difference", and approved starting.
 
-### Hecho, el 2026-09-26
+### Done, on 2026-09-26
 
-taro eligió la opción A (*"1,3 s es un costo muy bajo que pagar por lo que
-obtenemos a cambio"*) y bajar el arranque a menos de un segundo. Implementado
-en cuatro commits más el de la prosa, sobre `d5caa40`:
+taro chose option A (*"1.3 s is a very low cost to pay for what we get in
+return"*) and lowering the startup to less than a second. Implemented in four
+commits plus the prose one, on `d5caa40`:
 
-1. **El presupuesto por paquete** (A): `repartir` y `Banco` en
-   `tools/audio/snes_music.py`, los paquetes armados en el conversor antes que
-   el banco, la herencia con `temas_heredados` (los teletransportes de las
-   páginas compiladas, que ahora anota `Temas.destino`). Se fueron el recorte
-   de aportantes, `--banco-entero`, `build_bank`, `build_drum_bank` y el
-   brillo de los golpes. **Y un cambio en la ROM que no estaba en el plan**:
-   con cada paquete llenando la ARAM, las muestras que el paquete nuevo
-   comparte con el anterior se quedaban donde estaban y los huecos dejaban
-   afuera muestras de paquetes que entran solos —con la música callada, en
-   cinco de trece saltos entre los mapas más llenos, y al volver de una
-   pelea—. `paquete_cargar_ya` ahora decide primero dónde va cada una, sin
-   subir, y si algo no entra acomoda todo desde cero (salvo el tema que
-   suena) antes de subir. Lo cobra
-   `test_cada_paquete_entra_entero_aunque_la_aram_quede_partida`.
-2. **La zona más usada**: `zonas_mas_usadas`, una por programa.
-3. **El pasabajos** antes de bajar la tasa (`resample` en
-   `tools/audio/snes_samples.py`): un sinc con ventana de Blackman, circular
-   en el loop. `gunter` no cambió.
-4. **El arranque**: `BOOT_CUADROS` de 112 a 40, con la cuenta en el conversor
-   (`cuadros_del_arranque`), que se corta si el paquete del mapa de arranque
-   no entra.
+1. **The budget per package** (A): `repartir` and `Banco` in
+   `tools/audio/snes_music.py`, the packages built in the converter before the
+   bank, the inheritance with `temas_heredados` (the teleports of the compiled
+   pages, which `Temas.destino` now notes). Gone are the trimming of
+   contributors, `--banco-entero`, `build_bank`, `build_drum_bank` and the hits'
+   brightness. **And a change in the ROM that was not in the plan**: with each
+   package filling the ARAM, the samples the new package shares with the
+   previous one stayed where they were and the gaps left out samples of
+   packages that fit on their own —with the music silenced, in five of thirteen
+   jumps between the fullest maps, and on returning from a battle—.
+   `paquete_cargar_ya` now decides first where each one goes, without
+   uploading, and if something does not fit it arranges everything from zero
+   (except the theme that is playing) before uploading.
+   `test_cada_paquete_entra_entero_aunque_la_aram_quede_partida` enforces it.
+2. **The most used zone**: `zonas_mas_usadas`, one per program.
+3. **The low-pass** before lowering the rate (`resample` in
+   `tools/audio/snes_samples.py`): a sinc with a Blackman window, circular in
+   the loop. `gunter` did not change.
+4. **The startup**: `BOOT_CUADROS` from 112 to 40, with the count in the
+   converter (`cuadros_del_arranque`), which stops if the starting map's
+   package does not fit.
 
-**Los números**, medidos sobre `release` antes (`d5caa40`) y después:
+**The numbers**, measured on `release` before (`d5caa40`) and after:
 
-* **Tasas**: la mediana de los 67 programas pasa de **11,1 a 21,4 kHz**
-  (antes sólo 39 estaban en el banco), y la de los 49 golpes de **7 a 14,4**
-  (antes 28). Todos los temas tienen todas sus notas, salvo siete golpes de
-  `Astpgmarch`, `vswar` y `bubstix` en teclas que el kit GS del SoundFont no
-  tiene (10, 13, 22, 23, 88, 124, 125): tampoco suenan en la referencia.
-  La lista entera, con qué paquete limita a cada muestra, la imprime el
-  conversor en `rom/build/release/conversor.log`.
-* **Los que quedaron peor que antes**, todos por el mapa 3 (43 KB de
-  efectos): el oboe (21,9 → 6,8 kHz), la flauta (21,8 → 8,8), el slap, el
-  arpa, las cuerdas 48 (4,1 → 10,4: mejor que antes, pero lo más bajo de
-  `escape_newyork`), y el bombo, la caja y el charles (≈19 → 10,3, en todos
-  los temas). Con la zona más usada, algunas zonas son más largas y el
-  polysynth de `escape_newyork` quedó en 12,6 kHz (16,9 con sólo el paso 1)
-  y su bajo en 14,6 (20,8).
-* **Subida, medida en la ROM** con la sonda del prototipo (cuadros de
-  `paquete_cargar_ya`, desde el 4 y con lo que venga sonando):
+* **Rates**: the median of the 67 programs goes from **11.1 to 21.4 kHz**
+  (before only 39 were in the bank), and that of the 49 hits from **7 to
+  14.4** (before 28). All the themes have all their notes, except seven hits
+  of `Astpgmarch`, `vswar` and `bubstix` on keys the SoundFont's GS kit does not
+  have (10, 13, 22, 23, 88, 124, 125): they do not play in the reference
+  either. The whole list, with which package limits each sample, is printed by
+  the converter in `rom/build/release/conversor.log`.
+* **The ones that ended up worse than before**, all because of map 3 (43 KB of
+  sound effects): the oboe (21.9 → 6.8 kHz), the flute (21.8 → 8.8), the slap,
+  the harp, strings 48 (4.1 → 10.4: better than before, but the lowest of
+  `escape_newyork`), and the kick, the snare and the hi-hat (≈19 → 10.3, in all
+  the themes). With the most used zone, some zones are longer and
+  `escape_newyork`'s polysynth ended up at 12.6 kHz (16.9 with only step 1)
+  and its bass at 14.6 (20.8).
+* **Upload, measured in the ROM** with the prototype's probe (frames of
+  `paquete_cargar_ya`, from 4 and with whatever comes playing):
 
-  | | antes | después |
+  | | before | after |
   |---|---:|---:|
-  | mapa 1 | 40 | 52 |
-  | mapa 2 | 58 | 71 |
-  | mapa 3 | 58 | 84 |
-  | mapa 9 | 32 | 59 |
-  | mapa 19 | 32 | 58 |
-  | mapa 26 | 23 | 83 |
-  | entrar a la pelea | 36 | 58 |
-  | salir de la pelea (al 2) | 58 | 63 |
-  | el paquete del arranque | 10 | 21 |
-  | el tema del título | 6 | 12 |
+  | map 1 | 40 | 52 |
+  | map 2 | 58 | 71 |
+  | map 3 | 58 | 84 |
+  | map 9 | 32 | 59 |
+  | map 19 | 32 | 58 |
+  | map 26 | 23 | 83 |
+  | entering the battle | 36 | 58 |
+  | leaving the battle (to 2) | 58 | 63 |
+  | the startup package | 10 | 21 |
+  | the title's theme | 6 | 12 |
 
-  El trabajo del arranque de `release` termina en el cuadro 30 (antes 20):
-  con `BOOT_CUADROS` en 40, **el juego arranca 72 cuadros antes, 1,2 s**.
-* **Recortes**: cero, con los techos medidos de nuevo en cada commit que
-  cambió la mezcla (`just techos`; lo cobra `test_musica_techos.py`).
-* **Cartucho** (suma de segmentos de `ld65`): de 3.238.073 a 3.510.754 B.
-  **Banco 0** en `release`: de 1.144 a 1.015 B libres (el reacomodo de
-  `paquete_cargar_ya`); en `test-special`, 1.713.
-* **El pasabajos**, contra un remuestreo ideal por FFT en las 62 muestras
-  que bajan de su tasa: 5,5 dB más de relación señal/error en la mediana, y
-  en los platillos, el charles, la pandereta y la cabasa de -9..-3 dB (lo
-  replegado más fuerte que la señal) a +7..+17. Contra la pista de MSU-1,
-  con la "diferencia de agudos" de arriba, no se ve (±0,1 dB): lo replegado
-  pesa poco en el espectro promedio del tema entero.
+  The work of `release`'s startup ends on frame 30 (before 20): with
+  `BOOT_CUADROS` at 40, **the game starts 72 frames earlier, 1.2 s**.
+* **Clips**: zero, with the ceilings measured again on each commit that
+  changed the mix (`just techos`; `test_musica_techos.py` enforces it).
+* **Cartridge** (sum of `ld65`'s segments): from 3,238,073 to 3,510,754 B.
+  **Bank 0** in `release`: from 1,144 to 1,015 B free (the rearranging of
+  `paquete_cargar_ya`); in `test-special`, 1,713.
+* **The low-pass**, against an ideal FFT resampling on the 62 samples that go
+  down from their rate: 5.5 dB more signal-to-error ratio at the median, and in
+  the cymbals, the hi-hat, the tambourine and the cabasa from -9..-3 dB (the
+  aliasing louder than the signal) to +7..+17. Against the MSU-1 track, with
+  the "highs difference" from above, it is not seen (±0.1 dB): the aliasing
+  weighs little in the whole theme's average spectrum.
 
-Contra la pista de MSU-1 (agudos, en dB, la cuenta de las grabaciones de
-arriba): `escape_newyork` 10,4 → 7,6, la batalla 3,5 → 3,1, el título 5,3 →
-1,3, `3D-Galax` 11,8 → 4,1, `Gaden` 7,4 → 1,8.
+Against the MSU-1 track (highs, in dB, the count of the recordings above):
+`escape_newyork` 10.4 → 7.6, the battle 3.5 → 3.1, the title 5.3 → 1.3,
+`3D-Galax` 11.8 → 4.1, `Gaden` 7.4 → 1.8.
 
-**Para escuchar**: `/shared/audio/2026-09-26-paso-6-final/`, con su
-`LEEME.txt`: los cuatro temas de antes y `Gaden` —uno de los 19 que no
-aportaban: sonaban dos canales de siete—, de la ROM final sin MSU-1, a la
-misma sonoridad.
+**To listen**: `/shared/audio/2026-09-26-paso-6-final/`, with its `LEEME.txt`:
+the four themes from before and `Gaden` —one of the 19 that did not
+contribute: two channels out of seven played—, from the final ROM without
+MSU-1, at the same loudness.
 
-**Lo que no cubre `just pruebas`**: que con el tema heredado sonando los temas
-del paquete entren con la ARAM partida en los saltos del juego. Lo miró un
-script aparte con catorce saltos de la herencia (a ningún tema le faltó nada;
-a seis les faltaron efectos, que completa el `PlayBGM`); el conversor sólo
-comprueba que la suma entre.
+**What `just pruebas` does not cover**: that with the inherited theme playing
+the package's themes fit with the ARAM fragmented in the game's jumps. A
+separate script looked at it with fourteen jumps of the inheritance (no theme
+was missing anything; six were missing sound effects, which the `PlayBGM`
+completes); the converter only checks that the sum fits.
 
-### Sin el techo del mapa 3, el 2026-09-26
+### Without map 3's ceiling, on 2026-09-26
 
-taro, sobre los que quedaron peor: *"No me parece aceptable que instrumentos
-pierdan calidad por un solo mapa, pero tampoco quiero perder calidad en los
-efectos de sonido."* Así que los efectos no se tocaron —sus 92 muestras y
-las 120 filas de `sonido_tabla` salen byte por byte iguales, con el SRCN
-corrido; lo comparó un script contra el `musicdata.inc` de `d7056b6`— y se
-atacó por dos lados, en el commit "Audio: copias de una muestra para el
-paquete que la limita, y los temas de salida aparte".
+taro, about the ones that ended up worse: *"I don't find it acceptable that
+instruments lose quality because of a single map, but I don't want to lose
+quality in the sound effects either."* So the sound effects were not touched
+—their 92 samples and the 120 rows of `sonido_tabla` come out byte for byte
+identical, with the SRCN shifted; a script compared it against the
+`musicdata.inc` of `d7056b6`— and it was attacked from two sides, in the commit
+"Audio: copias de una muestra para el paquete que la limita, y los temas de
+salida aparte".
 
-**Qué suena de verdad en el mapa 3.** Una sola página (evento 5, página 2)
-prende `evilrhys`, toca toda la secuencia de efectos, funde el tema, y
-recién después de "Core...?" prende `lufsorr` y salta al mapa 4. O sea que
-los dos temas del paquete suenan en el 3, pero **nunca con los efectos a la
-vez que `lufsorr`**: el oboe y la flauta son sólo de `lufsorr`, y la batería
-limitada es la de `evilrhys`, que sí suena con la secuencia. `lufsorr` se
-oye en el 3 un instante; su público es el 4 y los mapas de después.
+**What really plays on map 3.** A single page (event 5, page 2) starts
+`evilrhys`, plays the whole sequence of sound effects, fades the theme, and
+only after "Core...?" starts `lufsorr` and jumps to map 4. That is, both themes
+of the package play on 3, but **never with the sound effects at the same time
+as `lufsorr`**: the oboe and the flute are only `lufsorr`'s, and the limited
+drums are `evilrhys`'s, which does play with the sequence. `lufsorr` is heard
+on 3 for an instant; its audience is 4 and the maps after it.
 
-**1. Temas de salida** (`Temas.de_salida` en `tools/port/eventos.py`): un
-`PlayBGM` seguido de un `Teleport` a otro mapa, sin efectos, otro tema ni
-ramas en el medio, no tiene que caber con los efectos del mapa. Va en una
-tercera lista del paquete; se sube al entrar **si hay lugar**, y si no lo
-sube su `PlayBGM` él solo, soltando lo demás y dejando el paquete anotado
-como incompleto (`extra_de_salida` en `rom/src/paquete_de_audio.s`). El
-conversor encuentra cinco: `lufsorr` en el 3, `hzstream` en el 4 —que se
-llevaba con él las herencias `4+Astpgmarch` y compañía, que limitaban medio
-cartucho—, `hzbreach` en el 14, `wb3mlair` en el 16 y `vswar` en el 26.
+**1. Exit themes** (`Temas.de_salida` in `tools/port/eventos.py`): a `PlayBGM`
+followed by a `Teleport` to another map, without sound effects, another theme
+or branches in between, does not have to fit with the map's sound effects. It
+goes in a third list of the package; it is uploaded on entering **if there is
+room**, and otherwise its `PlayBGM` uploads it on its own, releasing the rest
+and leaving the package noted as incomplete (`extra_de_salida` in
+`rom/src/paquete_de_audio.s`). The converter finds five: `lufsorr` on 3,
+`hzstream` on 4 —which took with it the inheritances `4+Astpgmarch` and
+company, which limited half
+the cartridge—, `hzbreach` on 14, `wb3mlair` on 16 and `vswar` on 26.
 
-**2. Copias** (`snes_music.copias`): una clave limitada por un grupo donde
-no están todos los temas que la usan pasa a ser otra muestra para los de
-adentro; los de afuera dejan de pagarlo. La peor primero, hasta llenar el
-directorio: son 47 copias y el directorio queda en 255 entradas, el tope
-del SRCN. La opción B entera —la condición para todas las muestras— pediría
-unas 370.
+**2. Copies** (`snes_music.copias`): a key limited by a group where not all the
+themes that use it are becomes another sample for the ones inside; the ones
+outside stop paying for it. The worst first, until the directory is full: there
+are 47 copies and the directory ends up at 255 entries, the SRCN's cap. The
+whole option B —the condition for all the samples— would ask for some 370.
 
-**Números**, `release` antes (`d7056b6`) y después, kHz, fuera del mapa 3
-(la tabla por tema la imprime el conversor: una línea por copia, con los
-temas que la usan):
+**Numbers**, `release` before (`d7056b6`) and after, kHz, outside map 3 (the
+table per theme is printed by the converter: one line per copy, with the themes
+that use it):
 
-| | antes del paso 6 | antes | después |
+| | before step 6 | before | after |
 |---|---:|---:|---:|
-| oboe (`lufsorr`, `prepara`) | 21,9 | 6,8 | 20,4 (su tasa nativa) |
-| oboe (`Astpgmarch`) | 21,9 | 6,8 | 13,6 |
-| flauta (`lufsorr`) | 21,8 | 8,8 | 21,9 |
-| bombo `KICK264` | 19,4 | 10,2 | 16,2 |
-| bombo `SOLKK60A`, cajas | 4,7-8,1 | 10,3 | 16,0 (13,9 en `Astpgmarch`) |
-| charles | 14,9 | 10,3 | 16,0 |
-| polysynth de `escape_newyork` | 8,4 | 12,6 | 21,1 |
-| cuerdas 48 (`escape_newyork`, batalla) | 4,1 | 10,4 | 16,4 |
+| oboe (`lufsorr`, `prepara`) | 21.9 | 6.8 | 20.4 (its native rate) |
+| oboe (`Astpgmarch`) | 21.9 | 6.8 | 13.6 |
+| flute (`lufsorr`) | 21.8 | 8.8 | 21.9 |
+| kick `KICK264` | 19.4 | 10.2 | 16.2 |
+| kick `SOLKK60A`, snares | 4.7-8.1 | 10.3 | 16.0 (13.9 in `Astpgmarch`) |
+| hi-hat | 14.9 | 10.3 | 16.0 |
+| `escape_newyork`'s polysynth | 8.4 | 12.6 | 21.1 |
+| strings 48 (`escape_newyork`, battle) | 4.1 | 10.4 | 16.4 |
 
-En el mapa 3, `evilrhys` sube de 10,3 a 12,5 en toda su batería (le deja
-lugar `lufsorr`). La mediana de los 338 pares (tema, muestra) pasa de 14,5 a
-16,2 kHz y ya ninguno queda bajo 12 (antes 113).
+On map 3, `evilrhys` goes up from 10.3 to 12.5 on all its drums (`lufsorr`
+leaves it room). The median of the 338 (theme, sample) pairs goes from 14.5 to
+16.2 kHz and none is left below 12 any more (before 113).
 
-**Lo que no se alcanzó**: el bombo `KICK264` queda en 16,2 contra los 19,4
-de antes del paso 6 —lo limita el mapa 9 con `rshinld` sonando, y el
-directorio se llenó antes de llegar a esa copia—, y el oboe de `Astpgmarch`
-en 13,6, que lo limita su propio mapa 18 con `hzstream` sonando.
+**What was not reached**: the `KICK264` kick stays at 16.2 against the 19.4 of
+before step 6 —map 9 with `rshinld` playing limits it, and the directory filled
+up before reaching that copy—, and `Astpgmarch`'s oboe at 13.6, which its own
+map 18 with `hzstream` playing limits.
 
-**Lo que se paga**:
+**What is paid**:
 
-* **86 pares bajan**, casi todos de ~22 a 16-20 kHz (el crash y un tom de la
-  batalla 21,7 → 16,0, el koto de `rshinld` 27,7 → 13,9): lo que se libera
-  del mapa 3 compite en los otros paquetes, y el reparto le da a todo la
-  misma fracción. Es la batería a 16 contra platillos a 22 de antes.
-* **Cartucho**, suma de segmentos de `ld65`: de 2.986.461 a 3.089.032 B
-  (71,2% → 73,6%). **Banco 0** en `release`: de 1.027 a 902 B libres.
-* **Cuadros**, calculados a 1,4 por KB (lo medido en el paso 6), no
-  medidos: prender `lufsorr` en el 3 congela unos 13 cuadros (9 KB), después
-  de "Core...?" y antes del salto. `vswar` en el 26, si no entra al lado de
-  su paquete, hasta unos 70 (51 KB) al tocar el evento. El 4, el 14 y el 16
-  tienen lugar: su tema de salida se sube al entrar, como antes. La carga
-  del mapa 3 es la misma (el paquete sigue lleno).
+* **86 pairs go down**, almost all from ~22 to 16-20 kHz (the battle's crash
+  and a tom 21.7 → 16.0, `rshinld`'s koto 27.7 → 13.9): what is freed from map
+  3 competes in the other packages, and the split gives everything the same
+  fraction. It is the drums at 16 against cymbals at 22 from before.
+* **Cartridge**, sum of `ld65`'s segments: from 2,986,461 to 3,089,032 B
+  (71.2% → 73.6%). **Bank 0** in `release`: from 1,027 to 902 B free.
+* **Frames**, computed at 1.4 per KB (what was measured in step 6), not
+  measured: starting `lufsorr` on 3 freezes some 13 frames (9 KB), after
+  "Core...?" and before the jump. `vswar` on 26, if it does not fit next to its
+  package, up to some 70 (51 KB) on touching the event. 4, 14 and 16 have room:
+  their exit theme is uploaded on entering, as before. Map 3's load is the same
+  (the package is still full).
 
-**Lo que no cubre `just pruebas`**: los saltos del juego con el tema de
-salida sonando en el mapa de destino; lo cubierto es el camino de la ROM en
-el mapa 3 (`test_el_tema_de_salida_sube_solo`, caso `tema-de-salida`).
+**What `just pruebas` does not cover**: the game's jumps with the exit theme
+playing on the destination map; what is covered is the ROM's path on map 3
+(`test_el_tema_de_salida_sube_solo`, case `tema-de-salida`).
 
-**Para escuchar**: `/shared/audio/2026-09-26-sin-el-techo-del-mapa-3/`,
-con su `LEEME.txt`: `lufsorr`, la batalla, `escape_newyork`, `Astpgmarch` y
-`evilrhys`, antes y después, sin MSU-1, a la misma sonoridad.
+**To listen**: `/shared/audio/2026-09-26-sin-el-techo-del-mapa-3/`, with its
+`LEEME.txt`: `lufsorr`, the battle, `escape_newyork`, `Astpgmarch` and
+`evilrhys`, before and after, without MSU-1, at the same loudness.
 
-**Descartado**:
+**Discarded**:
 
-* **Que los efectos del 3 no estén todos a la vez**: la secuencia los toca
-  seguidos, bajo el mismo tema; subir uno en el momento es congelar la
-  cinemática.
-* **Deduplicar efectos**: el trueno del 1 (entero, 22 kHz) y el del 3 (6 kHz,
-  recortado) son muestras distintas; no hay dos iguales.
-* **Deduplicar muestras de música iguales**: a la tasa nativa sólo hay
-  cuatro claves repetidas (piano 1 y 2, cuerdas 48 y 49, los tres coros), y
-  los golpes que salen iguales lo son sólo a ciertas tasas. Son cuatro
-  entradas del directorio: quedó para después.
-* **Darles a los efectos su propio lugar en el directorio**: liberaría unas
-  70 entradas —ningún paquete tiene más de 20 efectos— y alcanzaría para el
-  bombo, pero las listas de la ROM son de un byte y `FAR_ARAM_DE` y
-  `FAR_QUIERE` se pasarían de su lugar en la RAM lejana: es rehacer
-  `paquete_de_audio.s`. Es lo próximo si hace falta más.
+* **That 3's sound effects not all be there at once**: the sequence plays them
+  in a row, under the same theme; uploading one at the moment is freezing the
+  cutscene.
+* **Deduplicating sound effects**: the thunder of 1 (whole, 22 kHz) and that of
+  3 (6 kHz, trimmed) are different samples; there are no two identical ones.
+* **Deduplicating identical music samples**: at the native rate there are only
+  four repeated keys (piano 1 and 2, strings 48 and 49, the three choirs), and
+  the hits that come out identical are so only at certain rates. They are four
+  directory entries: left for later.
+* **Giving the sound effects their own place in the directory**: it would free
+  some 70 entries —no package has more than 20 sound effects— and it would be
+  enough for the kick, but the ROM's lists are one byte and `FAR_ARAM_DE` and
+  `FAR_QUIERE` would go past their place in far RAM: it is redoing
+  `paquete_de_audio.s`. It is the next thing if more is needed.
 
-### Qué queda de la calidad de la música
+### What is left of the quality of the music
 
-Con el 6 hecho, **los pasos del plan están todos**: la batería, las notas que
-se soltaban antes, las envolventes, la velocidad y los controladores, el
-formato por nota, el reparto y la rampa, el aire por tema y las muestras. Lo
-que queda son detalles, en el orden en que los haría:
+With 6 done, **all the steps of the plan are there**: the drums, the notes that
+were released early, the envelopes, the velocity and the controllers, the
+per-note format, the allocation and the ramp, the air per theme and the
+samples. What is left are details, in the order I would do them:
 
-1. **Taparlo**: el fundido de la pelea
-   (`el-fundido-al-entrar-y-salir-de-la-pelea.md`), que es lo único del
-   paso 6 que se ve seguido.
-2. ~~**Los efectos del mapa 3**~~: hecho sin tocarlos, en "Sin el techo del
-   mapa 3". Si hace falta más —el bombo a los 19 de antes—, darles a los
-   efectos su propio lugar en el directorio para que entren más copias.
-3. **Escucharlo contra la referencia** en los temas que no se grabaron nunca:
-   los 19 que no aportaban suenan por primera vez enteros, y es donde puede
-   haber sorpresas —un programa en un registro que la zona más usada no
-   cubre, un golpe que el kit no tiene—.
-4. **Una segunda zona sólo donde se oiga**, si taro la extraña en algún bajo.
-5. **La polifonía**: `escape_newyork` pierde el 40% del tiempo-nota por falta
-   de voces (piso 20%) y la batalla el 47% (piso 35%). Es de ocho voces y no
-   de las muestras; lo que se podría es mirar qué se pierde, no ganarlo.
-6. **El lazo de subida del SPC700** (almacenar con `mov !abs+y`, acusar antes
-   del último almacenamiento): entre 10 y 20% menos cuadros en cada paquete,
-   estimado. Sólo si el fundido no alcanza a taparlo.
-### Lo que se midió antes de implementarlo
+1. **Covering it**: the battle's fade
+   (`el-fundido-al-entrar-y-salir-de-la-pelea.md`), which is the only thing of
+   step 6 that is seen often.
+2. ~~**Map 3's sound effects**~~: done without touching them, in "Without map
+   3's ceiling". If more is needed —the kick at the 19 from before—, giving the
+   sound effects their own place in the directory so that more copies fit.
+3. **Listening to it against the reference** in the themes that were never
+   recorded: the 19 that did not contribute play whole for the first time, and
+   it is where there may be surprises —a program in a register the most used
+   zone does not cover, a hit the kit does not have—.
+4. **A second zone only where it can be heard**, if taro misses it in some
+   bass.
+5. **The polyphony**: `escape_newyork` loses 40% of the note-time for lack of
+   voices (floor 20%) and the battle 47% (floor 35%). It is about eight voices
+   and not about the samples; what could be done is look at what is lost, not
+   gain it.
+6. **The SPC700's upload loop** (storing with `mov !abs+y`, acknowledging
+   before the last store): between 10 and 20% fewer frames in each package,
+   estimated. Only if the fade does not manage to cover it.
+### What was measured before implementing it
 
-**Estado, 2026-09-26, antes de la decisión**: medido, prototipado y grabado;
-el plan está abajo y tiene decisiones para taro. **Hecho y listo para merge sólo el paso 1** —el
-paquete que no entró se completa en el próximo `PlayBGM`—, que arregla algo
-que pasa hoy en el juego y que el resto necesita. Medido sobre `03c21fb`, con
-el `release` de 32 temas.
+**Status, 2026-09-26, before the decision**: measured, prototyped and recorded;
+the plan is below and it has decisions for taro. **Done and ready to merge only
+step 1** —the package that did not fit is completed on the next `PlayBGM`—,
+which fixes something that happens today in the game and that the rest needs.
+Measured on `03c21fb`, with the 32-theme `release`.
 
-* **Para escuchar**: `/shared/audio/2026-09-26-paso-6/`, con su `LEEME.txt`:
-  `escape_newyork`, la batalla, el título y `3D-Galax` (uno de los 19 que hoy
-  no aportan) en cinco versiones —hoy, por paquete, por paquete con la zona
-  más usada, con dos zonas, y el techo a 22 kHz—, a la misma sonoridad.
-* **Los prototipos**: rama local `proto-paso-6` (commit `06a40ef`), **no para
-  mergear**: una sonda de tiempos en `paquete_cargar_ya` y un `Banco` que arma
-  cada muestra con el presupuesto de un JSON (`PROTO_PASO6`).
-* **Los scripts**, descartables, en el scratchpad de la sesión
-  (`audio-paso-6/`): `volcar.py` saca del conversor lo que recibe `emit`
-  —paquetes, temas, muestras—, `reparto.py` hace el reparto, `herencia.py`
-  el grafo de qué tema puede venir sonando, `medir_subida.py` y
-  `herencia_rom.py` miden en la ROM, `grabar.py` y `distancia.py` graban y
-  comparan contra la pista de MSU-1.
+* **To listen**: `/shared/audio/2026-09-26-paso-6/`, with its `LEEME.txt`:
+  `escape_newyork`, the battle, the title and `3D-Galax` (one of the 19 that do
+  not contribute today) in five versions —today, per package, per package with
+  the most used zone, with two zones, and the ceiling at 22 kHz—, at the same
+  loudness.
+* **The prototypes**: local branch `proto-paso-6` (commit `06a40ef`), **not to
+  be merged**: a timing probe in `paquete_cargar_ya` and a `Banco` that builds
+  each sample with the budget from a JSON (`PROTO_PASO6`).
+* **The scripts**, throwaway, in the session's scratchpad (`audio-paso-6/`):
+  `volcar.py` takes out of the converter what `emit` receives —packages,
+  themes, samples—, `reparto.py` does the split, `herencia.py` the graph of
+  which theme may come in playing, `medir_subida.py` and `herencia_rom.py`
+  measure in the ROM, `grabar.py` and `distancia.py` record and compare against
+  the MSU-1 track.
 
-### Lo que no era como se pensaba: la subida ya no va por el IPL
+### What was not as thought: the upload no longer goes through the IPL
 
-* **El IPL sólo sube el driver y el directorio** —menos de 1 KB, menos de un
-  cuadro—. Las muestras las sube `paquete_cargar_ya` por el comando 3 del
-  driver: **ternas por los puertos 0, 1 y 2, con el testigo en el 3**. O sea
-  que el "cargador de cuatro puertos" de
-  `decisiones/el-arranque-esta-dimensionado-para-el-techo-de-aram.md` **ya
-  existe** desde los paquetes por mapa.
-* **Medido en la ROM**, con la sonda —cuadro y línea al entrar y salir de
-  `paquete_cargar_ya`—, en dieciocho paquetes: **1,33 a 1,42 cuadros por
-  KB**, unos 45 KB/s. Es casi lo mismo que el comentario de `BOOT_CUADROS`
-  medía para el IPL byte a byte (1,4): la terna no ganó lo que prometía.
-* **El techo es el SPC700**: su lazo de terna son 56 ciclos a 1,024 MHz, 55
-  KB/s. Lo que falta hasta ahí es la latencia del acuse, la IRQ de la música
-  —que sigue sonando durante la subida— y el rearmado del puntero cada 255 B.
-  Un lazo más apretado (almacenar con `mov !abs+y` en vez de `[dp]+y`, acusar
-  antes del último almacenamiento) llega a unos 48 ciclos: **entre 10 y 20%
-  más rápido, estimado**. No se prototipó: no paga un comando nuevo del
-  driver.
-* **El arranque**: termina su trabajo en el cuadro 20 —el paquete del mapa 4,
-  7,4 KB, son 10 cuadros— y espera hasta el 112. Con la ARAM llena por el
-  comando 3 serían 62 KB × 1,36 + 9 = 94 cuadros, así que `BOOT_CUADROS`
-  sigue cubriendo el techo, pero **lo que lo compraría de vuelta ya no es un
-  cargador**: es dimensionarlo para el paquete de arranque y no para el techo.
-  Es una decisión (ver abajo).
+* **The IPL only uploads the driver and the directory** —less than 1 KB, less
+  than a frame—. The samples are uploaded by `paquete_cargar_ya` through the
+  driver's command 3: **triplets through ports 0, 1 and 2, with the token on
+  3**. That is, the "four-port loader" of
+  `decisiones/el-arranque-esta-dimensionado-para-el-techo-de-aram.md` **already
+  exists** since the per-map packages.
+* **Measured in the ROM**, with the probe —frame and line on entering and
+  leaving `paquete_cargar_ya`—, in eighteen packages: **1.33 to 1.42 frames per
+  KB**, some 45 KB/s. It is almost the same as what the comment of
+  `BOOT_CUADROS` measured for the IPL byte by byte (1.4): the triplet did not
+  gain what it promised.
+* **The ceiling is the SPC700**: its triplet loop is 56 cycles at 1.024 MHz,
+  55 KB/s. What is missing up to there is the latency of the acknowledgement,
+  the music's IRQ —which keeps playing during the upload— and the rebuilding of
+  the pointer every 255 B. A tighter loop (storing with `mov !abs+y` instead of
+  `[dp]+y`, acknowledging before the last store) reaches some 48 cycles:
+  **between 10 and 20% faster, estimated**. It was not prototyped: it does not
+  pay for a new driver command.
+* **The startup**: it finishes its work on frame 20 —map 4's package, 7.4 KB,
+  is 10 frames— and waits until 112. With the ARAM full through command 3 it
+  would be 62 KB × 1.36 + 9 = 94 frames, so `BOOT_CUADROS` still covers the
+  ceiling, but **what would buy it back is no longer a loader**: it is sizing
+  it for the startup package and not for the ceiling. It is a decision (see
+  below).
 
-### El presupuesto por paquete, medido
+### The budget per package, measured
 
-**Cómo**: se corrió el conversor de `release` interceptando `emit` —los
-paquetes de cada mapa y el de la pelea, los temas, las muestras de los
-efectos— y más el paquete del título (el tema del título con el paquete del
-mapa 4, que es lo que arma `tema_asegurar`). Para cada paquete, lo libre es
-la ARAM menos el directorio, menos sus efectos, menos 1 KB de margen; y cada
-muestra —una por programa y una por golpe, en todo el cartucho, como hoy—
-tiene que entrar en **todos** los paquetes donde está. El reparto es un
-llenado progresivo sobre la fracción de su tamaño a la tasa del SF2: se sube
-a todas juntas hasta que un paquete se llena, esas quedan fijas, y se sigue
-con las demás. Las voces salen de `build_voice` y `build_drum` con ese
-presupuesto, o sea son las que armaría el conversor.
+**How**: `release`'s converter was run intercepting `emit` —each map's
+packages and the battle's, the themes, the sound effects' samples— plus the
+title's package (the title's theme with map 4's package, which is what
+`tema_asegurar` builds). For each package, what is free is the ARAM minus the
+directory, minus its sound effects, minus 1 KB of margin; and each sample —one
+per program and one per hit, across the whole cartridge, as today— has to fit
+in **all** the packages where it is. The split is a progressive filling over
+the fraction of its size at the SF2's rate: all are raised together until a
+package fills up, those stay fixed, and it continues with the rest. The voices
+come out of `build_voice` and `build_drum` with that budget, that is, they are
+the ones the converter would build.
 
-**Qué temas pueden sonar en cada mapa**: los del paquete —el propio y los que
-prende un `PlayBGM` de sus páginas—, y **el que viene sonando del mapa
-anterior**, porque casi ningún mapa del juego trae tema propio: lo prende una
-página, y hasta entonces sigue el de antes. Seguir los `Teleport` sin mirar
-condiciones da que cualquier tema puede llegar a cualquier mapa (el 4 es el
-enrutador); con la regla "un mapa con `PlayBGM` se va con uno de los suyos"
-queda la columna de abajo. Ningún evento común tiene `PlayBGM`.
+**Which themes can play on each map**: those of the package —its own and the
+ones a `PlayBGM` of its pages starts—, and **the one that comes playing from
+the previous map**, because almost no map of the game brings its own theme: a
+page starts it, and until then the one from before continues. Following the
+`Teleport`s without looking at conditions gives that any theme can reach any
+map (4 is the router); with the rule "a map with a `PlayBGM` leaves with one of
+its own" the column below remains. No common event has a `PlayBGM`.
 
-Las variantes: **A**, una muestra por programa limitada por su peor paquete,
-y los temas que vienen sonando pesan sólo como temas (sus muestras más las del
-paquete tienen que entrar, sin los efectos: ver "La herencia"); **B**, una
-copia por tema, limitada sólo por los paquetes de ese tema. "Subida" es la
-música más los efectos del paquete a 1,36 cuadros por KB.
+The variants: **A**, one sample per program limited by its worst package, and
+the themes that come playing weigh only as themes (their samples plus the
+package's have to fit, without the sound effects: see "The inheritance"); **B**,
+one copy per theme, limited only by that theme's packages. "Upload" is the
+music plus the package's sound effects at 1.36 frames per KB.
 
-| Paquete | Temas | Puede venir sonando | Efectos | Música hoy | Música A | Música B | Libre A | Subida hoy → A (cuadros) |
+| Package | Themes | May come playing | Sound effects | Music today | Music A | Music B | Free A | Upload today → A (frames) |
 |---|---|---|---:|---:|---:|---:|---:|---:|
 | 4 | hzstream | Astpgmarch, Fantasia Of Th, dcbest, evilrhys, lufsorr | 0 | 7452 | 14490 | 13041 | 48093 | 10 → 19 |
 | 1 | escape newyork | hzstream | 26289 | 9387 | 23472 | 35568 | 12822 | 47 → 66 |
@@ -1464,63 +1486,63 @@ música más los efectos del paquete a 1,36 cuadros por KB.
 | 261 | Deflector1 | — | 15840 | 7695 | 25119 | 31815 | 21624 | 31 → 54 |
 | 269 | MML2 MotherZone | — | 4797 | 1485 | 12672 | 15039 | 45114 | 8 → 23 |
 | 348 | T ProjectJustice D | — | 0 | 7614 | 26784 | 23571 | 35799 | 10 → 36 |
-| pelea | T VGFighterMAX Mas | — | 14832 | 15642 | 42327 | 46557 | 5424 | 40 → 76 |
-| titulo | Fantasia Of The Wi, hzstream | — | 0 | 11520 | 23400 | 27225 | 39183 | 15 → 31 |
+| battle | T VGFighterMAX Mas | — | 14832 | 15642 | 42327 | 46557 | 5424 | 40 → 76 |
+| title | Fantasia Of The Wi, hzstream | — | 0 | 11520 | 23400 | 27225 | 39183 | 15 → 31 |
 
-(Los mapas 5, 6, 10, 13, 23, 29, 30 y 34 no tienen temas en el paquete y no
-limitan a nadie; los de la segunda mitad de la tabla son los de prueba.)
+(Maps 5, 6, 10, 13, 23, 29, 30 and 34 have no themes in the package and limit
+nobody; the ones in the second half of the table are the test ones.)
 
-Y lo que le toca a cada programa melódico. "Lo limita" es el paquete que lo
-fijó en A ("4+Astpgmar" es el 4 con `Astpgmarch` sonando); "A+herencia" es A
-con el tema heredado **y los efectos** en el presupuesto; B da el rango entre
-las copias de los temas que lo usan. kHz:
+And what each melodic program gets. "Limited by" is the package that fixed it
+in A ("4+Astpgmar" is 4 with `Astpgmarch` playing); "A+inheritance" is A with
+the inherited theme **and the sound effects** in the budget; B gives the range
+among the copies of the themes that use it. kHz:
 
-| Programa | Muestra | Temas | Hoy | A | Lo limita | A+herencia | B |
+| Program | Sample | Themes | Today | A | Limited by | A+inheritance | B |
 |---|---|---:|---:|---:|---|---:|---:|
 | 0 | PIANO64 | 6 | 4.5 | 14.7 | 4+Astpgmar | 17.4 | 13.2–22.1 |
 | 1 | PIANO56 | 1 | 4.7 | 22.1 | — | 22.1 | 22.1–22.1 |
 | 2 | PIANO56 | 3 | 4.7 | 22.1 | — | 22.1 | 14.9–22.1 |
 | 7 | CLAVI60 | 3 | 21.1 | 21.1 | — | 21.1 | 21.1–21.1 |
 | 8 | CELST77 | 2 | 22.5 | 18.2 | 3 | 18.2 | 18.2–22.5 |
-| 10 | M_BOX82 | 2 | no está | 19.9 | 26 | 21.5 | 14.9–21.5 |
+| 10 | M_BOX82 | 2 | not there | 19.9 | 26 | 21.5 | 14.9–21.5 |
 | 11 | VIBE_64A | 3 | 7.9 | 22.3 | — | 22.3 | 15.8–18.4 |
 | 13 | XYLO_72 | 1 | 22.8 | 22.8 | — | 22.8 | 14.3–14.3 |
 | 15 | SANTR74 | 1 | 22.5 | 22.5 | — | 22.5 | 22.5–22.5 |
-| 16 | EORG173 | 1 | no está | 18.0 | 26 | 22.5 | 18.0–18.0 |
+| 16 | EORG173 | 1 | not there | 18.0 | 26 | 22.5 | 18.0–18.0 |
 | 17 | EORG253 | 2 | 11.1 | 22.3 | — | 22.3 | 15.3–22.3 |
-| 18 | EORG379 | 3 | no está | 19.5 | 19 | 20.9 | 14.9–16.6 |
+| 18 | EORG379 | 3 | not there | 19.5 | 19 | 20.9 | 14.9–16.6 |
 | 20 | R_ORG53 | 1 | 22.1 | 22.1 | — | 22.1 | 22.1–22.1 |
 | 24 | NYLON57A | 2 | 11.1 | 22.2 | — | 22.2 | 15.2–18.1 |
 | 25 | STLGT57B | 1 | 9.4 | 22.2 | — | 22.2 | 17.6–17.6 |
-| 26 | JAZGT59A | 1 | no está | 19.6 | 26 | 22.0 | 15.8–15.8 |
-| 27 | CLNGT60 | 1 | no está | 22.0 | — | 22.0 | 14.7–14.7 |
+| 26 | JAZGT59A | 1 | not there | 19.6 | 26 | 22.0 | 15.8–15.8 |
+| 27 | CLNGT60 | 1 | not there | 22.0 | — | 22.0 | 14.7–14.7 |
 | 30 | DSTGT64 | 3 | 21.3 | 21.3 | — | 21.3 | 16.0–21.3 |
-| 32 | ACOBS60A | 2 | no está | 20.6 | — | 20.6 | 20.6–20.6 |
+| 32 | ACOBS60A | 2 | not there | 20.6 | — | 20.6 | 20.6–20.6 |
 | 33 | MMBAS62 | 12 | 21.0 | 18.4 | 19 | 21.0 | 13.1–21.0 |
 | 34 | PCKBS50A | 2 | 12.9 | 15.2 | 4+Astpgmar | 5.8 | 12.9–15.2 |
 | 35 | FRTLS48A | 3 | 8.3 | 10.4 | 3 | 6.2 | 10.4–22.9 |
-| 36 | SLPBS43 | 2 | no está | 22.1 | — | 22.1 | 22.1–22.1 |
+| 36 | SLPBS43 | 2 | not there | 22.1 | — | 22.1 | 22.1–22.1 |
 | 37 | SLPMT52A | 2 | 22.3 | 11.1 | 3 | 5.9 | 9.8–15.7 |
 | 38 | SYBS148A | 6 | 10.3 | 20.6 | 26 | 22.6 | 14.4–22.6 |
-| 39 | SYBS248A | 2 | no está | 19.5 | 26 | 21.6 | 15.4–17.5 |
-| 40 | VIOLN68 | 1 | no está | 23.3 | — | 23.3 | 16.7–16.7 |
+| 39 | SYBS248A | 2 | not there | 19.5 | 26 | 21.6 | 15.4–17.5 |
+| 40 | VIOLN68 | 1 | not there | 23.3 | — | 23.3 | 16.7–16.7 |
 | 42 | CELLH64 | 2 | 21.0 | 21.0 | — | 21.0 | 21.0–21.0 |
-| 44 | STRNG71B | 2 | no está | 22.1 | — | 22.1 | 15.0–22.1 |
+| 44 | STRNG71B | 2 | not there | 22.1 | — | 22.1 | 15.0–22.1 |
 | 45 | PIZZ_71 | 3 | 19.7 | 22.4 | — | 22.4 | 17.9–22.4 |
 | 46 | HARP_57A | 7 | 12.0 | 10.6 | 3 | 5.6 | 9.9–21.8 |
 | 47 | TMPNI47 | 2 | 7.2 | 11.0 | 3 | 6.0 | 9.9–15.3 |
 | 48 | STRNG71B | 10 | 4.1 | 10.8 | 3 | 5.9 | 9.6–22.1 |
-| 49 | STRNG71B | 3 | no está | 19.5 | 19 | 20.9 | 15.8–22.1 |
-| 50 | SSTR162A | 2 | no está | 22.0 | — | 22.0 | 14.9–22.0 |
-| 52 | CHOIR65A | 4 | no está | 19.7 | 19 | 21.1 | 15.9–22.3 |
-| 53 | POPVX64A | 1 | no está | 21.4 | — | 21.4 | 21.4–21.4 |
-| 56 | TRMPT65 | 2 | no está | 19.3 | 26 | 22.1 | 16.6–19.3 |
-| 58 | TRMBN62A | 2 | no está | 13.8 | 4+Astpgmar | 18.3 | 13.8–18.3 |
+| 49 | STRNG71B | 3 | not there | 19.5 | 19 | 20.9 | 15.8–22.1 |
+| 50 | SSTR162A | 2 | not there | 22.0 | — | 22.0 | 14.9–22.0 |
+| 52 | CHOIR65A | 4 | not there | 19.7 | 19 | 21.1 | 15.9–22.3 |
+| 53 | POPVX64A | 1 | not there | 21.4 | — | 21.4 | 21.4–21.4 |
+| 56 | TRMPT65 | 2 | not there | 19.3 | 26 | 22.1 | 16.6–19.3 |
+| 58 | TRMBN62A | 2 | not there | 13.8 | 4+Astpgmar | 18.3 | 13.8–18.3 |
 | 61 | BRASS64 | 1 | 5.4 | 21.7 | — | 21.7 | 16.3–16.3 |
-| 63 | SBRS255 | 1 | no está | 21.9 | — | 21.9 | 21.9–21.9 |
+| 63 | SBRS255 | 1 | not there | 21.9 | — | 21.9 | 21.9–21.9 |
 | 68 | OBOE_61A | 3 | 21.9 | 8.8 | 3 | 4.4 | 8.8–21.9 |
-| 69 | EHORN61A | 1 | no está | 17.5 | 19 | 21.9 | 17.5–17.5 |
-| 71 | SYNCL64 | 1 | no está | 20.4 | 19 | 20.4 | 20.4–20.4 |
+| 69 | EHORN61A | 1 | not there | 17.5 | 19 | 21.9 | 17.5–17.5 |
+| 71 | SYNCL64 | 1 | not there | 20.4 | 19 | 20.4 | 20.4–20.4 |
 | 73 | FLUTE65A | 1 | 21.8 | 10.9 | 3 | 5.4 | 10.9–10.9 |
 | 75 | PNFLT72 | 2 | 11.9 | 18.9 | 19 | 20.3 | 16.0–21.4 |
 | 77 | SHAKU63 | 1 | 8.0 | 22.1 | — | 22.1 | 15.0–15.0 |
@@ -1528,223 +1550,231 @@ las copias de los temas que lo usan. kHz:
 | 80 | SQUAR60 | 6 | 6.2 | 14.7 | 4+Astpgmar | 5.8 | 13.1–22.0 |
 | 81 | SAW0_60 | 4 | 4.6 | 14.7 | 4+Astpgmar | 11.7 | 13.1–22.0 |
 | 82 | CALLI72 | 2 | 8.3 | 22.0 | — | 22.0 | 14.9–22.0 |
-| 83 | CHFFR72A | 1 | no está | 25.3 | — | 25.3 | 25.3–25.3 |
+| 83 | CHFFR72A | 1 | not there | 25.3 | — | 25.3 | 25.3–25.3 |
 | 87 | BS_LD48 | 3 | 14.6 | 20.8 | 2 | 6.2 | 16.7–22.9 |
 | 88 | FANTA53 | 3 | 8.6 | 22.0 | — | 22.0 | 17.8–22.0 |
-| 89 | WRMPD72A | 1 | no está | 22.0 | — | 22.0 | 22.0–22.0 |
+| 89 | WRMPD72A | 1 | not there | 22.0 | — | 22.0 | 22.0–22.0 |
 | 90 | POLY_60A | 3 | 8.4 | 16.9 | 2 | 4.2 | 12.6–21.1 |
 | 91 | SPACE79 | 3 | 7.2 | 19.1 | 2 | 5.9 | 15.0–22.1 |
-| 92 | ELP1_56 | 1 | no está | 19.6 | 19 | 22.9 | 16.4–16.4 |
-| 94 | CHOIR65A | 1 | no está | 19.7 | 19 | 21.1 | 16.7–16.7 |
-| 96 | ICE__60A | 1 | no está | 22.1 | — | 22.1 | 18.1–18.1 |
-| 99 | ATMOS60A | 3 | no está | 21.1 | — | 21.1 | 21.1–21.1 |
-| 102 | CHOIR65A | 1 | no está | 22.3 | — | 22.3 | 18.2–18.2 |
+| 92 | ELP1_56 | 1 | not there | 19.6 | 19 | 22.9 | 16.4–16.4 |
+| 94 | CHOIR65A | 1 | not there | 19.7 | 19 | 21.1 | 16.7–16.7 |
+| 96 | ICE__60A | 1 | not there | 22.1 | — | 22.1 | 18.1–18.1 |
+| 99 | ATMOS60A | 3 | not there | 21.1 | — | 21.1 | 21.1–21.1 |
+| 102 | CHOIR65A | 1 | not there | 22.3 | — | 22.3 | 18.2–18.2 |
 | 107 | KOTO_57 | 1 | 24.4 | 24.4 | — | 24.4 | 16.3–16.3 |
-| 112 | TNKBLA5 | 1 | no está | 22.4 | — | 22.4 | 22.4–22.4 |
+| 112 | TNKBLA5 | 1 | not there | 22.4 | — | 22.4 | 22.4–22.4 |
 | 116 | SURDO60 | 1 | 9.6 | 10.7 | 3 | 5.9 | 9.6–9.6 |
-| 118 | SYNDR56 | 1 | no está | 20.8 | — | 20.8 | 20.8–20.8 |
+| 118 | SYNDR56 | 1 | not there | 20.8 | — | 20.8 | 20.8–20.8 |
 | 127 | PISTL60 | 2 | 11.4 | 22.1 | — | 22.1 | 15.0–22.1 |
 
-Lo que dice:
+What it says:
 
-* **Los 19 temas que hoy no aportan pasan a aportar todos**: en A están
-  todos los programas y todos los golpes del cartucho (116 muestras contra
-  67). `3D-Galax`, por ejemplo, recupera el órgano, el piano eléctrico y el
-  coro, que hoy no suenan.
-* **La mediana de los programas pasa de 11,1 a 20,8 kHz**, y la de los golpes
-  de 7 a 14,7 (hoy sólo 28 de los 49 golpes están en el banco). El piano pasa
-  de 4,5 a 14,7, las cuerdas de 4,1 a 10,8, la sierra de 4,6 a 14,7, el
-  bronce de 5,4 a 21,7.
-* **Lo que manda son los efectos de los mapas 2 y 3**: 36,8 y 43 KB de sus
-  64. Todo lo que tocan `evilrhys` y `lufsorr` en el 3 queda cerca de 10 kHz,
-  y como la muestra es una por programa, queda así en todos los temas: el
-  arpa, las cuerdas 48, los golpes de batería comunes. **Seis programas
-  quedan peor que hoy**, porque hoy eran cortos y el banco les daba la tasa
-  del SF2 —el oboe (21,9 → 8,8), la flauta (21,8 → 10,9), el slap (22,3 →
-  11,1), la celesta, el arpa y el bajo sintético 33—, y el bombo y el charles
-  de la batalla bajan de 19,4 y 14,9 a unos 10,7.
-* **B** —una copia por tema— saca ese techo: cada tema queda limitado sólo
-  por sus propios paquetes (`escape_newyork` todo a unos 21,5 kHz, la batalla
-  a 16–22). Pero son **430 muestras** y el SRCN es un byte: hoy los 92 efectos
-  ocupan su lugar en el mismo directorio, así que a la música le quedan 163.
-  Ver el orden de implementación.
+* **The 19 themes that do not contribute today all start contributing**: in A
+  all the programs and all the hits of the cartridge are there (116 samples
+  against 67). `3D-Galax`, for example, gets back the organ, the electric piano
+  and the choir, which do not play today.
+* **The programs' median goes from 11.1 to 20.8 kHz**, and that of the hits
+  from 7 to 14.7 (today only 28 of the 49 hits are in the bank). The piano goes
+  from 4.5 to 14.7, the strings from 4.1 to 10.8, the saw from 4.6 to 14.7, the
+  brass from 5.4 to 21.7.
+* **What dominates is the sound effects of maps 2 and 3**: 36.8 and 43 KB of
+  their 64. Everything `evilrhys` and `lufsorr` play on 3 ends up close to
+  10 kHz, and since the sample is one per program, it stays that way in all the
+  themes: the harp, strings 48, the common drum hits. **Six programs end up
+  worse than today**, because today they were short and the bank gave them the
+  SF2's rate —the oboe (21.9 → 8.8), the flute (21.8 → 10.9), the slap (22.3 →
+  11.1), the celesta, the harp and synth bass 33—, and the battle's kick and
+  hi-hat go down from 19.4 and 14.9 to some 10.7.
+* **B** —one copy per theme— removes that ceiling: each theme is limited only by
+  its own packages (`escape_newyork` all at some 21.5 kHz, the battle at
+  16–22). But it is **430 samples** and the SRCN is a byte: today the 92 sound
+  effects take their place in the same directory, so the music is left with
+  163. See the order of implementation.
 
-### La herencia: el tema que viene sonando, y los efectos
+### The inheritance: the theme that comes playing, and the sound effects
 
-`paquete_cargar_ya` no mueve las muestras del tema que suena —la música sigue
-durante el fundido—, y acomoda el paquete nuevo alrededor, en orden: sus
-temas y después sus efectos. Lo que no entra, no sube. Medido en la ROM
-(`herencia_rom.py`: el salto con el tema del mapa de origen marcado como el
-que suena, que es lo único que mira `paquete_cargar_ya`):
+`paquete_cargar_ya` does not move the samples of the theme that is playing
+—the music keeps going during the fade—, and arranges the new package around
+it, in order: its themes and then its sound effects. What does not fit is not
+uploaded. Measured in the ROM (`herencia_rom.py`: the jump with the origin
+map's theme marked as the one playing, which is the only thing
+`paquete_cargar_ya` looks at):
 
-* **Hoy ya pasa, en el juego**: del 2 al 3 la página del ascensor salta con el
-  tema del 2 sonando —recién después vuelve a pedirlo— y al 3 le faltaban
-  efectos, que no volvían en toda la escena aunque la página del 3 prendiera
-  enseguida `evilrhys`. Es lo que arregla el paso 1.
-* **Con A, sin nada más**, faltan muchos más, porque cada paquete ya llena la
-  ARAM solo: del 1 al 2 con `escape_newyork` sonando faltan 6 efectos del 2,
-  del 2 al 3 faltan 10, del 4 al 19 faltan 6, y del 4 al 1 con `hzstream`
-  sonando falta **el trueno entero** (23,8 KB). Y con los saltos que no son del
-  juego —el arnés salta de cualquier lado— faltan también un par de muestras
-  de los temas, porque las muestras quietas dejan la ARAM partida en huecos.
+* **It already happens today, in the game**: from 2 to 3 the elevator page
+  jumps with 2's theme playing —only afterwards does it ask for it again— and
+  3 was missing sound effects, which did not come back during the whole scene
+  even though 3's page started `evilrhys` right away. It is what step 1 fixes.
+* **With A, and nothing else**, many more are missing, because each package
+  already fills the ARAM on its own: from 1 to 2 with `escape_newyork` playing
+  6 sound effects of 2 are missing, from 2 to 3 10 are missing, from 4 to 19 6
+  are missing, and from 4 to 1 with `hzstream` playing **the whole thunder** is
+  missing (23.8 KB). And with the jumps that are not the game's —the harness
+  jumps from anywhere— a couple of the themes' samples are missing too,
+  because the still samples leave the ARAM fragmented into gaps.
 
-Las dos maneras de pagarlo:
+The two ways of paying for it:
 
-1. **Presupuestar la herencia entera** —cada paquete tiene que entrar con
-   cualquiera de los temas que pueden venir sonando, efectos incluidos— es la
-   columna "A+herencia": el polysynth de `escape_newyork` a 4,2 kHz, las
-   cuerdas y la onda cuadrada a 5,8. Peor que hoy en los temas que importan.
-2. **Que el tema que suena tenga prioridad y los efectos esperen**: el
-   paquete se arma igual, lo que no entra queda anotado, y el primer
-   `PlayBGM` —que arranca el tema de cero y calla el viejo— sube lo que
-   faltaba. Es el paso 1, y cuesta un congelado del tamaño de lo que faltaba
-   en ese `PlayBGM`: con A, del orden de 10 a 25 KB en esos saltos, o sea
-   **15 a 35 cuadros**. Los efectos del mapa no suenan entre la llegada y ese
-   `PlayBGM`; en el 2 y en el 3 del juego, la página prende su tema antes de
-   usarlos. A es esto: los temas heredados cuentan en el presupuesto sólo
-   como temas.
+1. **Budgeting the whole inheritance** —each package has to fit with any of the
+   themes that may come playing, sound effects included— is the
+   "A+inheritance" column: `escape_newyork`'s polysynth at 4.2 kHz, the strings
+   and the square wave at 5.8. Worse than today in the themes that matter.
+2. **That the playing theme has priority and the sound effects wait**: the
+   package is built the same, what does not fit is noted, and the first
+   `PlayBGM` —which starts the theme from zero and silences the old one—
+   uploads what was missing. It is step 1, and it costs a freeze the size of
+   what was missing in that `PlayBGM`: with A, on the order of 10 to 25 KB in
+   those jumps, that is, **15 to 35 frames**. The map's sound effects do not
+   play between the arrival and that `PlayBGM`; on the game's 2 and 3, the page
+   starts its theme before using them. A is this: the inherited themes count in
+   the budget only as themes.
 
-La 2 es la que hace que A valga la pena; la 1 no.
+Option 2 is the one that makes A worth it; option 1 is not.
 
-### Los efectos de sonido
+### The sound effects
 
-Son lo último de cada paquete y van a 6 kHz, recortados a 0,75 s (el trueno
-del mapa 1 entero, a 22 kHz). En el presupuesto por paquete son un costo fijo
-que se resta antes de repartir: por eso los mapas 2 y 3 son los que limitan.
-Con el paso 1 sobreviven a la herencia; al cambio de paquete ya sobrevivían,
-porque son del paquete. Si alguna vez hace falta más lugar, los del 3 son el
-lugar donde buscarlo: son veinte, casi todos de la secuencia del final del
-mapa, y el trueno a 6 kHz está dos veces (en el 3 y entero en el 1).
+They are the last thing of each package and go at 6 kHz, trimmed to 0.75 s
+(map 1's thunder whole, at 22 kHz). In the budget per package they are a fixed
+cost subtracted before splitting: that is why maps 2 and 3 are the ones that
+limit. With step 1 they survive the inheritance; they already survived the
+package change, because they belong to the package. If more room is ever
+needed, 3's are the place to look for it: there are twenty, almost all from the
+sequence at the end of the map, and the thunder at 6 kHz is there twice (on 3
+and whole on 1).
 
-### Una muestra por zona
+### One sample per zone
 
-Hoy cada programa lleva la muestra de la zona del do central. **El 34% del
-tiempo-nota melódico de los 32 temas suena a 12 semitonos o más de la raíz de
-esa muestra, en teclas para las que el SF2 tiene otra.** Y es muy concentrado:
-32 pares (tema, programa) tocan más de un cuarto de sus notas en otra zona, y
-muchos **todas** —el bajo sintético 33 en doce temas toca `MMBAS40` y no la
-del 62; la sierra de `escape_newyork` y de `hzstream`, `SAW0_48`—.
+Today each program carries the sample of the middle C zone. **34% of the
+melodic note-time of the 32 themes plays 12 semitones or more from that
+sample's root, on keys for which the SF2 has another.** And it is very
+concentrated: 32 (theme, program) pairs play more than a quarter of their notes
+in another zone, and many **all** of them —synth bass 33 in twelve themes plays
+`MMBAS40` and not the 62 one; the saw of `escape_newyork` and of `hzstream`,
+`SAW0_48`—.
 
-* **La zona más usada** (variante 3): cada programa lleva la muestra de la
-  zona que más tiempo-nota suma en el cartucho, en vez de la del do central.
-  **No cuesta ARAM** —sigue siendo una por programa— y es lo que más cerca
-  dejó a `3D-Galax` de la referencia (agudos: 11,8 dB de diferencia hoy, 7,3
-  por paquete, 3,4 con la zona más usada, 3,8 el techo). Lo que pierde: un
-  programa que dos temas tocan en registros distintos queda bien para uno
-  solo.
-* **Dos zonas** (variante 4, las que tienen al menos el 15% del programa):
-  **149 muestras en vez de 116**, cada una a menos tasa (mediana de 14,7 a
-  12,6 kHz en los temas grabados). En la cuenta del espectro sale peor que una
-  sola, porque la cuenta mide agudos y no timbre; es para escuchar en los
-  graves.
-* **Tres zonas** serían 151: casi nadie usa una tercera con más del 15%.
+* **The most used zone** (variant 3): each program carries the sample of the
+  zone that adds up the most note-time in the cartridge, instead of the middle
+  C one. **It costs no ARAM** —it is still one per program— and it is what left
+  `3D-Galax` closest to the reference (highs: 11.8 dB of difference today, 7.3
+  per package, 3.4 with the most used zone, 3.8 the ceiling). What it loses: a
+  program that two themes play in different registers ends up right for only
+  one.
+* **Two zones** (variant 4, the ones with at least 15% of the program): **149
+  samples instead of 116**, each one at a lower rate (median from 14.7 to 12.6
+  kHz in the recorded themes). In the spectrum count it comes out worse than a
+  single one, because the count measures highs and not timbre; it is for
+  listening to in the lows.
+* **Three zones** would be 151: almost nobody uses a third with more than 15%.
 
-### Cuánto cuesta en cuadros, y dónde se paga
+### How much it costs in frames, and where it is paid
 
-La tabla de arriba tiene la subida de cada paquete. Dónde cae:
+The table above has each package's upload. Where it falls:
 
-* **El cambio de mapa**: en el fundido, que no se ve. El peor pasa de 77 a 83
-  cuadros (1,4 s); los mapas 2, 3, 19 y 26 quedan todos ahí.
-* **La pelea**: hoy congela unos 40 cuadros al entrar y otros tantos al
-  salir; con A, unos 76 (1,3 s) cada vez. Es lo único que se vería seguido.
-* **El título**: 15 → 31 cuadros, al aparecer.
-* **Un `PlayBGM` a mitad de escena**: ninguno cambia de paquete —los temas
-  que prende cada página ya están en el paquete de su mapa, y los eventos
-  comunes no tienen `PlayBGM`—, salvo el completado del paso 1, que es lo que
-  faltaba y nada más.
-* **El arranque**: 10 → 19 cuadros de trabajo, adentro de los 112 que ya
-  espera.
+* **The map change**: in the fade, which is not seen. The worst goes from 77 to
+  83 frames (1.4 s); maps 2, 3, 19 and 26 all end up there.
+* **The battle**: today it freezes some 40 frames on entering and as many on
+  leaving; with A, some 76 (1.3 s) each time. It is the only thing that would
+  be seen often.
+* **The title**: 15 → 31 frames, on appearing.
+* **A `PlayBGM` in the middle of a scene**: none changes package —the themes
+  each page starts are already in its map's package, and the common events have
+  no `PlayBGM`—, except step 1's completion, which is what was missing and
+  nothing more.
+* **The startup**: 10 → 19 frames of work, inside the 112 it already waits.
 
-### Cartucho, banco 0 y la tanda
+### Cartridge, bank 0 and the suite
 
-* **El `release` pasa de 3.246.058 a 3.518.487 B usados** con A (77,4% a
-  83,9% de los 4 MB): 166 KB de muestras más —cada programa a lo que da su
-  peor paquete, 116 muestras— y 106 KB de stream, que es lo que los 19 temas
-  que no aportaban tenían sin muestra.
-* **El banco 0 no se mueve con A**: es todo del conversor. Con el paso 1 pasó
-  de 1.168 a 1.144 B libres en `release`.
-* **Lo que se rompe** al implementar A: `test_un_tema_pierde_sus_muestras_pero_nunca_su_numero`
-  y `test_un_tema_que_no_aporta_pierde_notas_y_la_ROM_lo_dice` prueban el
-  recorte de aportantes, que se va; la huella de los 32 temas en
-  `techos.toml`, que hay que volver a medir con `just techos`.
+* **The `release` goes from 3,246,058 to 3,518,487 B used** with A (77.4% to
+  83.9% of the 4 MB): 166 KB more of samples —each program at what its worst
+  package gives, 116 samples— and 106 KB of stream, which is what the 19 themes
+  that did not contribute had without a sample.
+* **Bank 0 does not move with A**: it is all the converter's. With step 1 it
+  went from 1,168 to 1,144 B free in `release`.
+* **What breaks** on implementing A:
+  `test_un_tema_pierde_sus_muestras_pero_nunca_su_numero` and
+  `test_un_tema_que_no_aporta_pierde_notas_y_la_ROM_lo_dice` test the trimming
+  of contributors, which goes away; the fingerprint of the 32 themes in
+  `techos.toml`, which has to be measured again with `just techos`.
 
-### Decisiones que habría que tomar o reescribir
+### Decisions that would have to be taken or rewritten
 
-* **`decisiones/un-solo-banco-de-muestras.md` no se revierte con A: se
-  reescribe su porqué.** Sigue habiendo un banco, una muestra por programa,
-  subido en paquetes por mapa. Lo que se va es la regla de `build_varios` de
-  que el banco **entero** tiene que entrar en la ARAM, y con ella el recorte
-  de aportantes y `--banco-entero`. Con B sí se revierte: cada tema tiene sus
-  copias.
-* **Una nueva: cuando el tema que viene sonando y el paquete no entran
-  juntos, gana el tema y los efectos esperan al próximo `PlayBGM`.** Es la
-  del paso 1, y la que hace posible A.
-* **`decisiones/el-arranque-esta-dimensionado-para-el-techo-de-aram.md`**:
-  su "lo que lo compraría" quedó viejo —el cargador de varios puertos ya
-  existe—. Lo que queda por decidir es si se achica `BOOT_CUADROS` al paquete
-  de arranque (con A, 19 cuadros de trabajo más 9 de mapa: se podría bajar a
-  unos 48 con margen y ganar un segundo al encender) con una aserción en el
-  conversor de que el paquete del mapa de arranque entra en ese tiempo.
-* **La pelea a 1,3 s de congelado en cada punta**, en vez de 0,7: la memoria
-  de taro dice que la calidad del audio vale unos cuadros de carga; esto es
-  medio segundo más, en cada pelea.
-* **`wishlist/velocidad-presupuesto-percusion.md` se va con A**: el lazo que
-  baja la percusión de a 10% es el de `Banco`, que A reemplaza.
-* **`musica-del-lado-del-spc700.md`**: si algún día el secuenciador
-  va al SPC700, necesita un buffer en la ARAM, y con A cada paquete la llena.
-  Habría que reservarlo en el presupuesto (es cambiar el margen).
+* **`decisiones/un-solo-banco-de-muestras.md` is not reverted with A: its
+  reason is rewritten.** There is still one bank, one sample per program,
+  uploaded in packages per map. What goes away is `build_varios`'s rule that
+  the **whole** bank has to fit in the ARAM, and with it the trimming of
+  contributors and `--banco-entero`. With B it is reverted: each theme has its
+  copies.
+* **A new one: when the theme that comes playing and the package do not fit
+  together, the theme wins and the sound effects wait for the next
+  `PlayBGM`.** It is step 1's, and the one that makes A possible.
+* **`decisiones/el-arranque-esta-dimensionado-para-el-techo-de-aram.md`**: its
+  "what would buy it" became stale —the multi-port loader already exists—.
+  What is left to decide is whether `BOOT_CUADROS` is shrunk to the startup
+  package (with A, 19 frames of work plus 9 of map: it could go down to some 48
+  with margin and gain a second on power-up) with an assertion in the converter
+  that the starting map's package fits in that time.
+* **The battle at 1.3 s of freeze at each end**, instead of 0.7: taro's memory
+  says that audio quality is worth a few frames of loading; this is half a
+  second more, in each battle.
+* **`wishlist/velocidad-presupuesto-percusion.md` goes away with A**: the loop
+  that lowers the percussion 10% at a time is `Banco`'s, which A replaces.
+* **`musica-del-lado-del-spc700.md`**: if the sequencer ever goes to the SPC700,
+  it needs a buffer in the ARAM, and with A each package fills it. It would
+  have to be reserved in the budget (it is changing the margin).
 
-### El orden de implementación, en commits verificables
+### The order of implementation, in verifiable commits
 
-1. **Hecho: el paquete que no entró se completa en el próximo `PlayBGM`**
-   (commit "Audio: el paquete que no entró con otro tema sonando se completa
-   en el próximo PlayBGM"). `PAQ_INCOMPLETO` y el rearmado en
-   `tema_asegurar`. Arregla ya el paso del 2 al 3. Lo cobra
-   `test_el_paquete_que_no_entro_con_otro_tema_sonando_se_completa` con el
-   caso `paquete-incompleto`, que exige que el paquete haya quedado
-   incompleto al llegar —si no, no prueba nada— y da rojo sin el arreglo.
-2. **El presupuesto por paquete (A), en el conversor.** Las listas de los
-   paquetes se arman antes de `build_varios` —los temas y los nombres de los
-   efectos ya se saben; los tamaños de los efectos salen de `build_efectos`,
-   que es determinista— y se le pasan; `Banco` reemplaza los 40 KB y el lazo
-   de la percusión por el llenado progresivo; el recorte de aportantes se va.
-   El conversor calcula también la herencia realista (los `Teleport` y los
-   `PlayBGM` de cada mapa, lo de `herencia.py`) y **se corta** si un paquete
-   no entra solo, o si con un tema heredado no entran los temas. Imprime la
-   tasa de cada muestra y qué paquete la limitó. Verificación: la ROM entera
-   con `SIN_CACHE=1` igual a la de con caché, `just techos`, `just pruebas`
-   con las dos pruebas del recorte reemplazadas por una que pida que cada
-   paquete entre y que todos los temas tengan todas sus muestras, y
-   `test_cores.py` dos veces. Para escuchar: la variante 2.
-3. **La zona más usada** (variante 3), si taro la prefiere escuchando: la
-   tecla con que se pide la muestra de cada programa pasa de 60 a la raíz de
-   su zona más usada, y la altura de cada nota sale de esa raíz. No cambia la
-   ARAM. `just techos`.
-4. **El remuestreo con filtro**, aparte: `snes_samples.resample` interpola
-   lineal sin filtrar, y a 10 kHz desde 22 eso repliega. Sólo cambia bytes de
-   muestras; se mide con la cuenta del espectro y se escucha. `just techos`.
-5. **Si hace falta más**, en este orden: bajar `BOOT_CUADROS` (decisión de
-   arriba); darle a los efectos su propio lugar en el directorio —unos veinte
-   por paquete en vez de los 92 del cartucho— para que entre **B** para los
-   programas que limita un paquete ajeno (el oboe, la flauta, las cuerdas 48,
-   la batería); y una segunda zona sólo donde se oiga.
+1. **Done: the package that did not fit is completed on the next `PlayBGM`**
+   (commit "Audio: el paquete que no entró con otro tema sonando se completa en
+   el próximo PlayBGM"). `PAQ_INCOMPLETO` and the rebuild in `tema_asegurar`.
+   It already fixes the transition from 2 to 3. It is enforced by
+   `test_el_paquete_que_no_entro_con_otro_tema_sonando_se_completa` with the
+   case `paquete-incompleto`, which requires the package to have been left
+   incomplete on arrival —otherwise it tests nothing— and goes red without the
+   fix.
+2. **The budget per package (A), in the converter.** The packages' lists are
+   built before `build_varios` —the themes and the sound effects' names are
+   already known; the sound effects' sizes come from `build_efectos`, which is
+   deterministic— and are passed to it; `Banco` replaces the 40 KB and the
+   percussion loop with the progressive filling; the trimming of contributors
+   goes away. The converter also computes the realistic inheritance (the
+   `Teleport`s and the `PlayBGM`s of each map, what `herencia.py` does) and
+   **stops** if a package does not fit on its own, or if with an inherited theme
+   the themes do not fit. It prints each sample's rate and which package
+   limited it. Verification: the whole ROM with `SIN_CACHE=1` identical to the
+   one with cache, `just techos`, `just pruebas` with the two trimming tests
+   replaced by one that asks that each package fit and that all the themes have
+   all their samples, and `test_cores.py` twice. To listen: variant 2.
+3. **The most used zone** (variant 3), if taro prefers it by listening: the key
+   with which each program's sample is requested goes from 60 to the root of
+   its most used zone, and each note's pitch comes from that root. It does not
+   change the ARAM. `just techos`.
+4. **The resampling with a filter**, separately: `snes_samples.resample`
+   interpolates linearly without filtering, and at 10 kHz from 22 that aliases.
+   It only changes sample bytes; it is measured with the spectrum count and
+   listened to. `just techos`.
+5. **If more is needed**, in this order: lowering `BOOT_CUADROS` (decision
+   above); giving the sound effects their own place in the directory —some
+   twenty per package instead of the cartridge's 92— so that **B** fits for the
+   programs that another theme's package limits (the oboe, the flute, strings
+   48, the drums); and a second zone only where it can be heard.
 
-# Qué medir en los otros temas
+# What to measure in the other themes
 
-Con los scripts de `tools/audio/proto/` en la rama del prototipo:
+With the scripts of `tools/audio/proto/` on the prototype's branch:
 
-* **La batería que vuelve**: medido en el 0, con la tabla; volver a medirlo
-  con las envolventes puestas antes de fijar el aire.
-* **Polifonía contra 8 voces y tiempo-nota perdido**: medido en el 5, y lo
-  imprime el conversor por tema. El peor es `pn28year` (51%, con un piso de
-  50%), después la batalla (49%, piso 35%).
-* **Qué temas usan CC7, CC10, CC11 y pitch bend**, y cuánto stream sumarían.
-* **Golpes recortados sin fundido**: `_build_drum` corta en 0,5 s sin
-  fundido, y el platillo, el ride y el charles abierto del SF2 duran más y
-  hasta traen loop; eso es un corte en seco en cada platillo. En
-  `escape_newyork` no pasa —sus cuatro golpes duran menos de 0,2 s—.
-* **Notas lejos del do central**, que suenan con la zona equivocada.
-* El de batalla, `T_VGFighterMAX_Masako`, que es el más pesado y el que más
-  se oye.
+* **The drums that come back**: measured in 0, with the table; measure it again
+  with the envelopes in place before fixing the air.
+* **Polyphony against 8 voices and lost note-time**: measured in 5, and the
+  converter prints it per theme. The worst is `pn28year` (51%, with a floor of
+  50%), then the battle (49%, floor 35%).
+* **Which themes use CC7, CC10, CC11 and pitch bend**, and how much stream they
+  would add.
+* **Hits trimmed without a fade**: `_build_drum` cuts at 0.5 s without a fade,
+  and the SF2's cymbal, ride and open hi-hat last longer and even bring a loop;
+  that is a hard cut on every cymbal. In `escape_newyork` it does not happen
+  —its four hits last less than 0.2 s—.
+* **Notes far from middle C**, which play with the wrong zone.
+* The battle one, `T_VGFighterMAX_Masako`, which is the heaviest and the one
+  heard the most.
 
-**El rango de pitch bend de 3D-Galax (95 semitonos)**: taro decidió dejarlo como pide el MIDI, que es como lo toca fluidsynth y como suena la versión de Amiga (la última nota de la frase cae varias octavas). En Windows con un sintetizador GS se habría topado en 24. Respetarlo no cuesta nada: el bend ya se escribe igual, sólo cambia el valor de la altura. 2026-09-26.
+**The pitch bend range of 3D-Galax (95 semitones)**: taro decided to leave it as the MIDI asks, which is how fluidsynth plays it and how the Amiga version sounds (the last note of the phrase drops several octaves). On Windows with a GS synthesiser it would have been capped at 24. Respecting it costs nothing: the bend is already written the same way, only the pitch value changes. 2026-09-26.

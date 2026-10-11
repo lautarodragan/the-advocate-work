@@ -1,13 +1,14 @@
 ---
-name: "El conversor no limpia los parches viejos"
-description: "rom/build/<cartucho>/parches/ conserva los toml de mapas que ya no entran, y test_parches cae por eso"
+name: "The converter does not clean up old patches"
+description: "rom/build/<cartucho>/parches/ keeps the tomls of maps that no longer go in, and test_parches fails because of it"
 type: bug
 status: done
 ---
 
-Encontrado el 2026-09-25 midiendo si se juntan `release` y `test-main`: al
-rearmar `release` sin los mapas de prueba siguió estando
-`rom/build/release/parches/0052.toml`, de una corrida anterior que sí los
-llevaba, y eso solo hace caer `test_parches`. El conversor escribe un parche
-por mapa y no borra los de los mapas que dejaron de entrar. Que limpie el
-directorio (o que escriba en uno nuevo y lo mueva) antes de escribir.
+Found on 2026-09-25 while measuring whether `release` and `test-main` can be
+merged: after rebuilding `release` without the test maps,
+`rom/build/release/parches/0052.toml` was still there, from an earlier run
+that did include them, and that alone makes `test_parches` fail. The converter
+writes one patch per map and does not delete those of the maps that stopped
+going in. It should clean the directory (or write into a new one and move it)
+before writing.

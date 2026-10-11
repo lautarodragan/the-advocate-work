@@ -1,58 +1,60 @@
 ---
-name: "Eventos opacos al mapa"
-description: "Un evento que es un tile opaco fijo se hornea en el mapa"
+name: "Opaque events into the map"
+description: "An event that is a fixed opaque tile is baked into the map"
 status: done
 ---
 
-# Qué
+# What
 
-Un evento que se dibuja con **un tile opaco del ChipSet**, siempre el mismo y
-siempre en la misma celda, no se dibuja como evento: su tile se mete en la capa
-alta del mapa y su fila del NPC nace escondida. El evento sigue entero para su
-lógica —dispara, cierra el paso, es blanco de una ruta—; lo que se ahorra es su
-objeto de OAM y su paso por `place_npc`.
+An event that is drawn with **an opaque tile of the ChipSet**, always the same
+one and always in the same cell, is not drawn as an event: its tile goes into
+the map's upper layer and its NPC row is born hidden. The event stays whole for
+its logic —it triggers, it blocks the way, it is the target of a route—; what
+is saved is its OAM object and its pass through `place_npc`.
 
-La regla vive en `eventos_horneables`, en `tools/port/snes_convert.py`, con las
-cinco condiciones y el porqué de cada una. Cuántos eventos hornea cada mapa lo
-dice el conversor en su informe.
+The rule lives in `eventos_horneables`, in `tools/port/snes_convert.py`, with
+the five conditions and the reason for each one. How many events each map
+bakes is told by the converter in its report.
 
-# Por qué
+# Why
 
-Sale del **HQ de los Lazer Teeth, el mapa 11**, que es el más cargado del juego
-—68 eventos dibujados, 62 de ellos con un tile— y el que usa
-`pruebas/rpgmaker/test_paralelos.py` para medir si el cuadro entra.
+It comes from **the Lazer Teeth HQ, map 11**, which is the most loaded map of
+the game —68 drawn events, 62 of them with a tile— and the one that
+`pruebas/rpgmaker/test_paralelos.py` uses to measure whether the frame fits.
 
-**Lo medido, caminando 1200 cuadros en el mapa 11** (cuadros perdidos, con el
-contador leído y puesto en cero cada 50 cuadros: satura en 255, y una medición
-de 1200 cuadros seguidos contesta 213 por eso y no por lo que pasó):
+**What was measured, walking 1200 frames on map 11** (frames lost, with the
+counter read and reset to zero every 50 frames: it saturates at 255, and a
+measurement of 1200 frames in a row answers 213 because of that and not
+because of what happened):
 
-    eventos dibujados   cuadros perdidos
-    68 (como estaba)          450
-    50 (horneando 18)         228
+    drawn events        frames lost
+    68 (as it was)            450
+    50 (baking 18)            228
     31                        150
      9                         74
 
-O sea que cuesta del orden de **siete cuadros perdidos por evento dibujado** en
-ese mapa, y hornear los 18 que caen en la regla los baja a la mitad. Quieto no
-se pierde ninguno: lo que los produce es el redibujado del scroll, y los
-sprites son lo que lo empuja por encima del cuadro.
+That is, it costs on the order of **seven frames lost per drawn event** on that
+map, and baking the 18 that fall under the rule halves them. Standing still
+none is lost: what produces them is the scroll's redraw, and the sprites are
+what push it over the frame.
 
-Las tres filas de abajo son mediciones de control, con eventos escondidos a
-mano: dicen dónde está el techo y no son código que exista.
+The three bottom rows are control measurements, with events hidden by hand:
+they tell where the ceiling is and are not code that exists.
 
-**El techo de la regla es chico, y es el dato que hay que tener antes de
-estirarla**: sobre los 328 mapas del juego hay 522 eventos dibujados con un tile
-del ChipSet y **32 caen en la regla, en 12 mapas** —19 de ellos en el mapa 11—.
-Aflojando todo menos "opaco y de dibujo fijo" serían 91 en 16 mapas, 49 de ellos
-en el 11. La diferencia son los que **el juego mueve**: en el mapa 11, 46 de sus
-62 eventos de tile son blanco de un `ChangeEventLocation` —es el minijuego de
-las piedras— y ésos no se pueden hornear de ninguna manera.
+**The rule's ceiling is small, and it is the figure one has to have before
+stretching it**: across the game's 328 maps there are 522 events drawn with a
+ChipSet tile and **32 fall under the rule, in 12 maps** —19 of them on map
+11—. Loosening everything except "opaque and with a fixed drawing" it would be
+91 in 16 maps, 49 of them on map 11. The difference is the ones that **the game
+moves**: on map 11, 46 of its 62 tile events are the target of a
+`ChangeEventLocation` —it is the stones minigame— and those cannot be baked in
+any way.
 
-# Lo que no se ahorra todavía
+# What is not saved yet
 
-**La paleta de sprite y la ranura de VRAM.** El evento horneado sigue entrando
-en el reparto de `npcs_dibujables` como si se dibujara, a propósito: sacarlo de
-ahí le libera una paleta al mapa, y con eso **cambia lo que se ve** —un gráfico
-que hoy se dibuja con una paleta ajena pasaría a tener la suya, y el mapa 11
-tiene uno: `@tile:lasheint:49`—. Es una mejora, pero es una decisión aparte y
-mueve goldens.
+**The sprite palette and the VRAM slot.** The baked event still goes into the
+`npcs_dibujables` split as if it were drawn, on purpose: taking it out of there
+frees a palette for the map, and with that **what is seen changes** —a graphic
+that today is drawn with someone else's palette would get its own, and map 11
+has one: `@tile:lasheint:49`—. It is an improvement, but it is a separate
+decision and it moves goldens.

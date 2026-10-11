@@ -1,117 +1,115 @@
 ---
-name: "Los bailarines de la granja no se mueven"
-description: "En el baile del 127, el 37 y la 38 tienen ruta y animación de girar, y en la ROM quedan quietos: el conversor no los cuenta entre los que caminan"
+name: "The farm dancers don't move"
+description: "In the dance on 127, 37 and 38 have a route and the spin animation, and in the ROM they stay still: the converter does not count them among the ones that walk"
 type: bug
 status: done
 assignee: taro
 ---
 
-Lo vio Yaguareté el 2026-10-03, al meter la granja con la caché de ranuras
-(`tasks/la-cache-de-ranuras.md`). Es de antes de la caché y
-no se siguió.
+Yaguareté saw it on 2026-10-03, while putting in the farm with the slot cache
+(`tasks/la-cache-de-ranuras.md`). It predates the cache and was not followed
+up.
 
-Base: herramientas `fe0f90ee`, ABL `4cd8eb6`.
+Base: tools `fe0f90ee`, ABL `4cd8eb6`.
 
-# La causa
+# The cause
 
-`route::own` en `rm2k-snes-events` —lo que decide si una página tiene ruta
-propia, y de ahí si su evento camina para Wally (`moves.rs`)— devolvía
-`None` para toda página con la animación "girar" (`AnimType_spin`, 5). Sin
-ruta propia no es de los que caminan: no le tocan las doce poses, no pide
-lugar de ruta, y se dibuja quieto mirando adonde dice su página.
+`route::own` in `rm2k-snes-events` —what decides whether a page has its own
+route, and from there whether its event walks as far as Wally is concerned
+(`moves.rs`)— returned `None` for every page with the "spin" animation
+(`AnimType_spin`, 5). Without its own route it is not one of the ones that
+walk: it does not get the twelve poses, it does not ask for a route slot, and
+it is drawn still, facing wherever its page says.
 
-**Era a propósito, y era un recorte de alcance**: `git blame` da la línea en
-`cc001fba` y su comentario en `67a6e827` (el pase a Rust, 2026-09-29), y
-`git log -S spin` lleva a `a80a37d7` (2026-09-05, "Los droides del mapa 2
-caminan solos"), que la dejó afuera diciendo "el giro en el lugar
-(`AnimType_spin`, dos páginas) ... ninguna de las dos páginas del juego que
-lo usan está en los primeros mapas". Con el 127 en el cartucho, una sí está.
+**It was on purpose, and it was a scope cut**: `git blame` gives the line in
+`cc001fba` and its comment in `67a6e827` (the move to Rust, 2026-09-29), and
+`git log -S spin` leads to `a80a37d7` (2026-09-05, "Los droides del mapa 2
+caminan solos"), which left it out saying "the spin in place
+(`AnimType_spin`, two pages) ... neither of the game's two pages that use it
+is in the first maps". With 127 in the cartridge, one is.
 
-# Cuántos
+# How many
 
-Medido sobre los JSON de todos los mapas de ABL: **cuatro páginas** usan
-"girar".
+Measured over the JSON of all of ABL's maps: **four pages** use "spin".
 
-    mapa  evento        ruta                         velocidad  ¿en release?
-    127   37 Farmer2    propia, un cuadrado, repite  3          sí
-    127   38 Actress2   propia, un cuadrado, repite  3          sí
-    64    3  AG7-17     ninguna (quieto)             1          sí
-    227   3  AG7-17     ninguna (quieto)             1          no (>= 129)
+    map   event         route                        speed      in release?
+    127   37 Farmer2    own, a square, repeats       3          yes
+    127   38 Actress2   own, a square, repeats       3          yes
+    64    3  AG7-17     none (still)                 1          yes
+    227   3  AG7-17     none (still)                 1          no (>= 129)
 
-El robot del 64 (switches 150 y 207, "Leaving Lashe City Scene") es el
-mismo caso sin ruta: también se quedaba quieto.
+The robot on 64 (switches 150 and 207, "Leaving Lashe City Scene") is the same
+case without a route: it also stayed still.
 
-# El arreglo
+# The fix
 
-Lo que hace RM2k (`Game_Character::UpdateAnimation` y `UpdateFacing` de
-EasyRPG): la cuenta sube cada cuadro y al llegar a 24, 16, 12, 8, 6 o 4
-—por velocidad— mira un cuarto más en el sentido del reloj; los pasos y los
-`face_*` no lo dan vuelta; la columna es la de la página y nada la anima.
+What RM2k does (`Game_Character::UpdateAnimation` and `UpdateFacing` in
+EasyRPG): the count goes up every frame and on reaching 24, 16, 12, 8, 6 or 4
+—by speed— it faces one quarter further clockwise; steps and `face_*` do not
+turn it around; the column is the page's and nothing animates it.
 
-* **Compilador** (`route::own`): una página que gira tiene ruta propia, con
-  `"spin"` y `"pattern"` (la columna). La que gira sin ruta
-  (`MoveType_stationary`) recibe una vacía que repite: la consola sólo anima
-  a un evento con lugar de ruta.
-* **Emisión** (`rm2k-snes-mapdata`): el byte de flags de la página (+13) está
-  lleno, así que el giro va en el de la velocidad (+15): bit 7 gira, bits 4
-  y 5 la columna.
-* **Runtime**: `load_page_into_slot` enmascara la velocidad y pone el bit 7
-  de +18 y la columna en +10; `animate_ev_route` deriva a `spin_step` (en
-  FAR, `far_npcs.s`, con su tabla); `move`, el giro del salto (`oam.s`) y
-  `look` no le cambian hacia dónde mira a uno que gira;
-  `remove_page_from_slot` le saca el bit.
+* **Compiler** (`route::own`): a page that spins has its own route, with
+  `"spin"` and `"pattern"` (the column). The one that spins without a route
+  (`MoveType_stationary`) gets an empty one that repeats: the console only
+  animates an event with a route slot.
+* **Emission** (`rm2k-snes-mapdata`): the page's flags byte (+13) is full, so
+  the spin goes in the speed one (+15): bit 7 spins, bits 4 and 5 the column.
+* **Runtime**: `load_page_into_slot` masks the speed and sets bit 7 of +18 and
+  the column in +10; `animate_ev_route` diverts to `spin_step` (in FAR,
+  `far_npcs.s`, with its table); `move`, the jump's turn (`oam.s`) and `look`
+  do not change which way one that spins faces; `remove_page_from_slot` clears
+  the bit.
 
-**Ni RAM nueva ni opcodes**: el bit 7 de +18 del lugar de ruta no lo usaba
-nadie.
+**Neither new RAM nor opcodes**: bit 7 of +18 of the route slot was used by
+nobody.
 
-# La caché y los lugares de ruta
+# The cache and the route slots
 
-En el baile pasan a caminar dos más: 8 lugares de ruta de los 12, que la
-celebración ya soltó. Con la caché, piden ranura propia (128 + evento) en
-vez de compartir pose: el conversor cuenta 17 poses quietas en el 127 en
-vez de 18, y el pico estático sigue en 33 contra 30 ranuras (la misma
-advertencia de antes; la celebración pide 26). `test_granja.py`, que mira
-la VRAM de cada evento cuadro por cuadro, sigue verde.
+In the dance two more start walking: 8 route slots out of 12, which the
+celebration already released. With the cache, they ask for their own slot
+(128 + event) instead of sharing a pose: the converter counts 17 still poses on
+127 instead of 18, and the static peak stays at 33 against 30 slots (the same
+warning as before; the celebration asks for 26). `test_granja.py`, which looks
+at each event's VRAM frame by frame, stays green.
 
-`just espacio release`, con las herramientas de main y con éstas:
+`just espacio release`, with main's tools and with these:
 
-                 antes      después
-    bancos       78 de 127  78 de 127
-    banco 0      2.810 B    2.757 B
-    banco 1      6.647 B    6.583 B
+                 before     after
+    banks        78 of 127  78 of 127
+    bank 0       2,810 B    2,757 B
+    bank 1       6,647 B    6,583 B
     BSS          125 B      125 B
 
-# Pruebas (en ABL, rama `bailarines`)
+# Tests (in ABL, branch `bailarines`)
 
-* `rpgmaker/test_girar.py`, nueva: los dos que bailan giran en el sentido
-  del reloj cada 12 cuadros, sin cambiar de columna, y se mueven; el robot
-  del 64 (switches 150 y 207) gira cada 24 y no se mueve.
-* `abl/test_recorrido_granja_golden.py`: en el baile, el 37 y la 38 tienen
-  que moverse y mostrar los cuatro lados.
-* **El rojo**, con las herramientas de main: el recorrido falla con "en el
-  baile no se movieron [36, 37]", y `test_girar.py` con "dio 0 cuartos de
-  vuelta" en las dos.
+* `rpgmaker/test_girar.py`, new: the two that dance spin clockwise every 12
+  frames, without changing column, and they move; the robot on 64 (switches
+  150 and 207) spins every 24 and does not move.
+* `abl/test_recorrido_granja_golden.py`: in the dance, 37 and 38 have to move
+  and show all four sides.
+* **The red**, with main's tools: the walkthrough fails with "en el baile no
+  se movieron [36, 37]", and `test_girar.py` with "dio 0 cuartos de vuelta" in
+  both.
 
-Tanda de ABL con estas herramientas: todo verde, con las dos nuevas.
-**Ninguna golden se movió**: las de la tanda pasan exactas, y las once del
-recorrido de la granja salen byte por byte iguales a las de main —en sus
-fotos los que bailan no están en pantalla, o la foto se saca antes de su
-primer giro—. Capturas del baile girando en
-`/shared/capturas/2026-10-04-bailarines/`.
+ABL's suite with these tools: all green, with the two new ones. **No golden
+moved**: the suite's pass exactly, and the farm walkthrough's eleven come out
+byte for byte identical to main's —in their shots the dancers are not on
+screen, or the shot is taken before their first spin—. Captures of the dance
+spinning in `/shared/capturas/2026-10-04-bailarines/`.
 
-**No lo cubre la tanda**: un `face_*` o un salto sobre uno que gira, una
-ruta forzada sobre él, y una página que gira con otra columna que la del
-medio (las cuatro del juego usan la del medio). El robot del 64 sólo se
-mira por su fila: en ese momento de la escena no se ve en pantalla.
+**The suite does not cover**: a `face_*` or a jump on one that spins, a forced
+route on it, and a page that spins with a column other than the middle one
+(the game's four use the middle one). The robot on 64 is only checked through
+its row: at that moment of the scene it is not seen on screen.
 
-# Al mergear
+# When merging
 
-Instalar `events`, `mapdata`, `convert` y `cartridge`: `just -f
-tools/justfile install events mapdata convert cartridge` (`cartridge`
-arma con el runtime).
+Install `events`, `mapdata`, `convert` and `cartridge`: `just -f
+tools/justfile install events mapdata convert cartridge` (`cartridge` builds
+with the runtime).
 
-# Qué tiene que probar taro
+# What taro has to test
 
-* El baile de la granja: que el 37 y la 38 den su cuadrado girando.
-* La salida de Lashe (64) cuando el robot AG7-17 está (switches 150 y 207):
-  que gire en su lugar.
+* The farm dance: that 37 and 38 do their square spinning.
+* Leaving Lashe (64) when the robot AG7-17 is there (switches 150 and 207):
+  that it spins in place.

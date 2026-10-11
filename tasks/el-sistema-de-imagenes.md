@@ -1,54 +1,53 @@
 ---
-name: "Plan: el sistema de imágenes y la portable console"
-description: "Qué usa la portable console de ABL (ShowPicture, MovePicture, eventos comunes automáticos y paralelos, la entrada del control), cuántas imágenes y de qué tamaño, cómo dibujarlas en modo 3 y qué se congela mientras se muestran; para sacar de ahí las tareas"
+name: "Plan: the picture system and the portable console"
+description: "What ABL's portable console uses (ShowPicture, MovePicture, autostart and parallel common events, the controller input), how many pictures and of what size, how to draw them in mode 3 and what freezes while they are shown; to derive the tasks from there"
 type: research
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-10-01: le interesa `ShowPicture` y "todo el sistema de la
-portable console" —el menú propio de ABL, hecho con eventos comunes e
-imágenes—, porque sirve para sistemas custom de muchos juegos. Dijo que es
-aceptable usar el MSU-1; con 46 bancos libres de 64 KB y las imágenes del
-juego estimadas en ~430 KB con LZ2, Hornero cree que entran en la ROM sin
-romper `decisiones/el-juego-se-juega-sin-msu-1.md`.
+From taro, on 2026-10-01: he is interested in `ShowPicture` and "the whole
+portable console system" —ABL's own menu, made with common events and
+pictures—, because it is useful for custom systems in many games. He said
+using the MSU-1 is acceptable; with 46 free banks of 64 KB and the game's
+pictures estimated at ~430 KB with LZ2, Hornero thinks they fit in the ROM
+without breaking `decisiones/el-juego-se-juega-sin-msu-1.md`.
 
-La idea de taro para dibujarlas en modo 3, que tiene dos capas: "en la
-práctica la mayoría de los ShowPicture impiden moverse mientras se muestran.
-No sé si congelan otras cosas, como movimientos de eventos o tiles
-animados, pero no descartaría la posibilidad de hornear en runtime la
-imagen o capas del mapa, o no mostrar eventos mientras se muestra una
-imagen. No es algo que sirva siempre, pero creo que en muchos casos sí".
+taro's idea for drawing them in mode 3, which has two layers: "in practice
+most ShowPictures prevent moving while they are shown. I don't know if they
+freeze other things, like event movements or animated tiles, but I wouldn't
+rule out the possibility of baking the picture or map layers at runtime, or
+not showing events while a picture is shown. It isn't something that always
+works, but I think in many cases it does".
 
-El menú custom propio, con modo 5 y fuente, quedó en el wishlist:
-`un-menu-custom-propio.md`. Esto es antes: las imágenes como las
-usa RM2k.
+Our own custom menu, with mode 5 and a font, went to the wishlist:
+`un-menu-custom-propio.md`. This comes before: the pictures as RM2k uses
+them.
 
-## El estudio (Jilguero, 2026-10-01)
+## The study (Jilguero, 2026-10-01)
 
-Está en `docs/research/2026-10-01-el-sistema-de-imagenes.md`, medido sobre
-`76d98bed`. Lo que taro tiene que mirar para decidir:
+It is in `docs/research/2026-10-01-el-sistema-de-imagenes.md`, measured on
+`76d98bed`. What taro has to look at to decide:
 
-* **La portable console no hace falta para jugar**: lo que escribe no lo lee
-  nadie fuera de ella. La abre el ítem 81. El menú viejo (comunes 11 a 20 y
-  34) está muerto: nadie lo abre.
-* **Lo que pide además de las imágenes**: comunes automáticos (no los
-  paralelos), `Label`/`JumpToLabel`, un `CallEvent` compartido —pegado en
-  el lugar, el menú son 140.193 comandos— y `\V[n]` en tres mensajes.
-* **Dibujo**: dos planos. Objetos para lo chico sobre el mapa —con los
-  eventos ocultos cuando el mapa no deja lugar—, y BG1 en modo 1 para lo
-  grande con el mapa oculto, sin VRAM extra. Cubren 20 de las 21
-  situaciones de las escenas y toda la consola, con un marco negro en sus
-  páginas de texto. Deudas: el montaje translúcido del 217, el humo y la
-  sombra opacos, el zoom de las cuatro fotos *Diff* como fundido.
-* **Espacio**: ~330 KB con LZ2, 5 o 6 de los 46 bancos.
-* **Orden**: primero las escenas (fases 1 a 3 del estudio), después la
-  consola (4 a 6), después el menú propio del wishlist.
+* **The portable console is not needed to play**: what it writes is read by
+  nobody outside it. Item 81 opens it. The old menu (commons 11 to 20 and 34)
+  is dead: nobody opens it.
+* **What it asks for besides the pictures**: autostart common events (not the
+  parallel ones), `Label`/`JumpToLabel`, a shared `CallEvent` —pasted in
+  place, the menu is 140,193 commands— and `\V[n]` in three messages.
+* **Drawing**: two planes. Objects for the small stuff over the map —with the
+  events hidden when the map leaves no room—, and BG1 in mode 1 for the big
+  stuff with the map hidden, with no extra VRAM. They cover 20 of the 21
+  situations of the scenes and the whole console, with a black frame on its
+  text pages. Debts: the translucent montage of 217, the opaque smoke and
+  shadow, the zoom of the four *Diff* photos as a fade.
+* **Space**: ~330 KB with LZ2, 5 or 6 of the 46 banks.
+* **Order**: first the scenes (phases 1 to 3 of the study), then the console
+  (4 to 6), then our own menu from the wishlist.
 
-Las tareas que salen están en la sección 5 del estudio, con su orden; no se
-abrieron en `todo/` para que taro elija el plano antes.
+The tasks that come out of it are in section 5 of the study, with their order;
+they were not opened in `todo/` so that taro picks the plane first.
 
-No cambió código: no hay nada que instalar al mergear. `just pruebas` no se
-corrió —sólo cambian un `.md` de `docs/research/` y esta tarea—. No se
-sacaron capturas con el RPG_RT bajo Wine: las imágenes del juego alcanzaron
-para medir.
+No code changed: there is nothing to install when merging. `just pruebas` was
+not run —only a `.md` in `docs/research/` and this task change—. No captures
+were taken with RPG_RT under Wine: the game's pictures were enough to measure.

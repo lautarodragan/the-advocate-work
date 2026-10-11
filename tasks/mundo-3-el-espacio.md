@@ -1,89 +1,90 @@
 ---
-name: "Mundo 3: el espacio"
-description: "El hito 3 de el-mundo-y-lo-que-sigue: el acomodo de bancos con first-fit decreasing, la tabla de alturas del .msu por paquete, el bloque de textos de a cuatro bytes y `just espacio`"
+name: "World 3: the space"
+description: "Milestone 3 of el-mundo-y-lo-que-sigue: bank packing with first-fit decreasing, the .msu's height table per package, the text block in four-byte steps and `just espacio`"
 type: refactor
 status: done
 assignee: taro
 ---
 
-# Qué
+# What
 
-El hito 3 de `el-mundo-y-lo-que-sigue.md`, que tiene lo medido antes
-(sección "Espacio"). Sale de `2ca861a`, con los hitos 1 y 2 ya en `release`.
-Un commit por cosa, cada uno con su antes y su después en el mensaje:
+Milestone 3 of `el-mundo-y-lo-que-sigue.md`, which has what was measured
+before (section "Espacio"). It starts from `2ca861a`, with milestones 1 and 2
+already in `release`. One commit per thing, each one with its before and after
+in the message:
 
-1. **`just espacio`** (`tools/ensamblado/espacio.py`): imprime, para cada
-   cartucho o para la ruta de una ROM armada aparte, los bancos de datos
-   usados y libres, los huecos, banco 0, banco 1, BSS, ZEROPAGE y el bloque
-   de textos. Lee el `.dbg` y el `memoria.cfg`; no relinkea. Los textos salen
-   de dos constantes que el conversor emite al lado de `mensajes`
-   (`MENSAJES_BYTES`, `MENSAJES_TOPE`). `test_espacio.py` la compara con el
-   `.res` linkeado a mano, y AGENTS.md apunta a la receta.
-2. **El acomodo de bancos con first-fit decreasing** (`bancos.resolver`). Las
-   restricciones son las que ya declaraba el conversor: un `.bloque` de hasta
-   un banco entero en uno; uno de más (el bloque de textos) arrancando banco
-   y siguiendo en los siguientes; un `.cruza` partido sólo entre bancos
-   consecutivos (`spc_block`, `advance`), entero en un hueco si entra y si no
-   en una cadena al final. No se encontró ninguna otra restricción de orden
-   (ver el mensaje del commit: restas de etiquetas, `*`, `#^` de otra
-   etiqueta). Los bancos se escriben al final de `mapdata.inc`.
-3. **`se_msu_altura` por paquete**: pares (índice, altura) sólo de los
-   sonidos del paquete, ordenados y cerrados con $FFFF; listas iguales
-   compartidas. `altura_msu` la recorre. Se descartó partirla entre bancos.
-4. **Los textos de a cuatro bytes**: `MENSAJES_PASO = 4`, y `msg_empezar`
-   saca los dos bits de arriba con `rol` para que el de más de 128 KB corra
-   el mismo código que el de más de 64 KB. Se midieron el paso 3, un operando
-   de 24 bits y un segundo bloque con otro opcode (ver el commit). `empujon`
-   se volvió a medir.
+1. **`just espacio`** (`tools/ensamblado/espacio.py`): it prints, for each
+   cartridge or for the path of a ROM built separately, the data banks used
+   and free, the gaps, bank 0, bank 1, BSS, ZEROPAGE and the text block. It
+   reads the `.dbg` and `memoria.cfg`; it does not relink. The texts come from
+   two constants the converter emits next to `mensajes` (`MENSAJES_BYTES`,
+   `MENSAJES_TOPE`). `test_espacio.py` compares it with the `.res` linked by
+   hand, and AGENTS.md points to the recipe.
+2. **Bank packing with first-fit decreasing** (`bancos.resolver`). The
+   constraints are the ones the converter already declared: a `.bloque` of up
+   to a whole bank in one; one larger (the text block) starting a bank and
+   continuing into the following ones; a `.cruza` split only between
+   consecutive banks (`spc_block`, `advance`), whole in a gap if it fits and
+   otherwise in a chain at the end. No other ordering constraint was found
+   (see the commit message: label subtractions, `*`, `#^` of another label).
+   The banks are written at the end of `mapdata.inc`.
+3. **`se_msu_altura` per package**: (index, height) pairs only for the
+   package's sounds, sorted and closed with $FFFF; identical lists shared.
+   `altura_msu` walks it. Splitting it across banks was discarded.
+4. **The texts in four-byte steps**: `MENSAJES_PASO = 4`, and `msg_empezar`
+   takes out the top two bits with `rol` so that the one beyond 128 KB runs
+   the same code as the one beyond 64 KB. Step 3, a 24-bit operand and a
+   second block with another opcode were measured (see the commit). `empujon`
+   was measured again.
 
-# Lo medido
+# What was measured
 
-Con `just espacio`, en bancos de datos usados (entran 124, del $02 al $7D).
-"Camino" es `release` más el camino principal del mundo —85 a 95, 99 a 102 y
-259; el 74 y el 255 ya estaban—, armado aparte y sin commitear. Antes del
-punto 4 el camino no convierte por los textos, así que sus dos primeras
-filas se armaron con el paso 4 puesto a mano sólo para medir.
+With `just espacio`, in data banks used (124 fit, from $02 to $7D). "Path" is
+`release` plus the world's main path —85 to 95, 99 to 102 and 259; 74 and 255
+were already there—, built separately and uncommitted. Before point 4 the path
+does not convert because of the texts, so its first two rows were built with
+step 4 set by hand only to measure.
 
-    después de            release        test-special   camino
-    2ca861a               113 (312,9 KB  24 (66,1 KB    no linkea: pide 125
-                          de huecos)     de huecos)     (339,9 KB de huecos)
-    first-fit decreasing  104 (18,0 KB)  22 (0,6 KB)    115
-    alturas del .msu      103            22             114
-    textos de a 4         103            22             114
+    after                 release        test-special   path
+    2ca861a               113 (312.9 KB  24 (66.1 KB    does not link: asks 125
+                          of gaps)       of gaps)       (339.9 KB of gaps)
+    first-fit decreasing  104 (18.0 KB)  22 (0.6 KB)    115
+    .msu heights          103            22             114
+    texts in 4s           103            22             114
 
-    banco 0 (release)     175 -> 165 B (el `msg_empezar` nuevo)
-    banco 0 (camino)      136 B
-    banco 1 (release)     7.761 -> 7.744 B (`altura_msu`)
-    BSS / ZEROPAGE        138 / 4 B, sin cambios
-    se_msu_altura         release 22.484 -> 1.614 B; camino 29.202 -> 1.852 B
-    textos (camino)       137.822 de 262.144 B
+    bank 0 (release)      175 -> 165 B (the new `msg_empezar`)
+    bank 0 (path)         136 B
+    bank 1 (release)      7,761 -> 7,744 B (`altura_msu`)
+    BSS / ZEROPAGE        138 / 4 B, unchanged
+    se_msu_altura         release 22,484 -> 1,614 B; path 29,202 -> 1,852 B
+    texts (path)          137,822 of 262,144 B
 
-**Al camino principal le quedan 10 bancos.** Lo opcional, sumado de a una
-zona encima del camino (el 67 sin los dígitos del cronómetro, porque con ellos
-no convierte —`args.timer_en`, ver el plan—; eso no es de este hito):
+**The main path has 10 banks left.** The optional parts, added one area at a
+time on top of the path (67 without the timer digits, because with them it
+does not convert —`args.timer_en`, see the plan—; that is not part of this
+milestone):
 
-    + Yun Town (67 71 72)            117 bancos, quedan 7, banco 0 100 B
-    + Drust Camp (68 103 199-201)    119, quedan 5, banco 0 56 B
-    + Tangle Forest (310 a 313)      119, quedan 5, banco 0 90 B
-    + las tres                       125: no entra por un banco
+    + Yun Town (67 71 72)            117 banks, 7 left, bank 0 100 B
+    + Drust Camp (68 103 199-201)    119, 5 left, bank 0 56 B
+    + Tangle Forest (310 to 313)     119, 5 left, bank 0 90 B
+    + the three                      125: does not fit by one bank
 
-Así que después de este hito entran el camino y cualquiera de las tres
-zonas, o dos; las tres juntas, no. Lo siguiente que da espacio está en el
-plan: las poses espejadas y la música.
+So after this milestone the path and any one of the three areas fit, or two;
+the three together, no. The next thing that gives space is in the plan: the
+mirrored poses and the music.
 
-# Qué mirar (taro)
+# What to look at (taro)
 
-La ROM cambió de lugar casi todos sus datos y el bloque de textos se lee de
-otra manera, así que lo que conviene jugar es lo que ninguna golden cubre
-entero: **textos largos del final de Lashe City y de Sorbe** (los que caen
-pasados los 64 KB del bloque) y **efectos de sonido con MSU-1**, que ahora
-buscan su altura en una lista. Las goldens y la tanda pasan (`just pruebas`,
-878).
+The ROM moved almost all its data and the text block is read in another way,
+so what is worth playing is what no golden covers entirely: **long texts from
+the end of Lashe City and from Sorbe** (the ones that fall past the block's
+64 KB) and **sound effects with MSU-1**, which now look up their height in a
+list. The goldens and the suite pass (`just pruebas`, 878).
 
-# Lo que no cubre `just pruebas`
+# What `just pruebas` does not cover
 
-* El bit de más de 128 KB de `msg_empezar`: ningún cartucho de la tanda llega
-  a ese desplazamiento. Corre las mismas instrucciones que el de 64 KB, que sí
-  se ejecuta (con él roto dan rojo ocho goldens).
-* Los números del camino y de las zonas opcionales: son variantes que ninguna
-  receta arma.
+* The beyond-128 KB bit of `msg_empezar`: no cartridge of the suite reaches
+  that offset. It runs the same instructions as the 64 KB one, which does get
+  executed (with it broken eight goldens go red).
+* The numbers of the path and of the optional areas: they are variants that no
+  recipe builds.

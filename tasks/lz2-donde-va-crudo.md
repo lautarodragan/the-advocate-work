@@ -1,216 +1,216 @@
 ---
-name: "LZ2 donde va crudo"
-description: "Comprimir con LZ2 lo que hoy va crudo y se sube al cargar: la tabla de bloques, el bytecode, los battlers, las animaciones de las cinemáticas, la fuente y los fondos de batalla livianos; unos 470 KB en el juego entero, sin perder nada"
+name: "LZ2 where it goes raw"
+description: "Compressing with LZ2 what today goes raw and is uploaded on loading: the block table, the bytecode, the battlers, the cutscenes' animations, the font and the light battle backgrounds; some 470 KB in the whole game, without losing anything"
 type: feature
 status: done
 assignee: taro
 ---
 
-Fase 1 del plan de `docs/research/2026-10-01-el-juego-entero-sin-msu-1.md`
-(Tucu-tucu), medido por Lechuza en
-`docs/research/2026-10-01-los-mapas-por-el-msu-1.md`, sección 5. De taro,
-el 2026-10-01, después de pasar a 8 MB
-(`decisiones/el-cartucho-pasa-a-8-mb.md`). Las poses y las secuencias de
-música no se pueden: se leen mientras se usan, y por qué está en el estudio.
+Phase 1 of the plan of `docs/research/2026-10-01-el-juego-entero-sin-msu-1.md`
+(Tucu-tucu), measured by Lechuza in
+`docs/research/2026-10-01-los-mapas-por-el-msu-1.md`, section 5. From taro, on
+2026-10-01, after moving to 8 MB (`decisiones/el-cartucho-pasa-a-8-mb.md`). The
+poses and the music sequences cannot be: they are read while in use, and why is
+in the study.
 
-## Cómo va (Quirquincho, 2026-10-01)
+## How it is going (Quirquincho, 2026-10-01)
 
-Base: `cd3dce0d`, `abl.sfc` en `ccdf1191…`. Cada paso, con `NO_CACHE=1 just
-cartuchos`, `just pruebas` y `just -f tools/justfile test`; el tiempo de
-carga con el método de `_cargar` en `test_carga_descomprimida.py` —los
-cuadros de hardware de la vuelta del lazo que cargó— sobre los 97 mapas de
-`release`, y la pelea con `SCN_FRAMES` en el caso `pelea-en-52`.
+Base: `cd3dce0d`, `abl.sfc` at `ccdf1191…`. Each step, with `NO_CACHE=1 just
+cartuchos`, `just pruebas` and `just -f tools/justfile test`; the load time
+with the method of `_cargar` in `test_carga_descomprimida.py` —the hardware
+frames of the loop iteration that loaded— over the 97 maps of `release`, and
+the battle with `SCN_FRAMES` in the case `pelea-en-52`.
 
-### 1. La tabla de bloques y su pasabilidad: hecho
+### 1. The block table and its passability: done
 
-Se pueden: la CPU las lee sólo por `blocks_ptr`, `blocks8_ptr` y `pass_ptr`,
-punteros de 24 bits que `enter_map` arma desde el registro. Viven ahora en
-la WRAM **detrás de la grilla**, en un tercer flujo de LZ2 pegado a los dos
-de la grilla (`map_ram` en `materials.rs`): `lz2_grid` lo descomprime donde
-terminó el segundo, y por eso vuelven solas con `back_from_battle`. El
-registro trae las direcciones de la WRAM, que calcula el conversor; la ROM
-no las calcula, y `test_carga_descomprimida.py` mira que coincidan y que el
-contenido sea el de `crudos/N.map_ram.bin`, al cargar cada mapa y a la vuelta
-de la pelea del 52.
+They can be: the CPU reads them only through `blocks_ptr`, `blocks8_ptr` and
+`pass_ptr`, 24-bit pointers that `enter_map` builds from the record. They now
+live in WRAM **behind the grid**, in a third LZ2 stream stuck to the grid's two
+(`map_ram` in `materials.rs`): `lz2_grid` decompresses it where the second one
+ended, and that is why they come back on their own with `back_from_battle`. The
+record brings the WRAM addresses, which the converter computes; the ROM does
+not compute them, and `test_carga_descomprimida.py` checks that they match and
+that the content is that of `crudos/N.map_ram.bin`, on loading each map and on
+returning from the battle on 52.
 
-* En `release`: 119,2 KB crudos, 61,7 KB en LZ2 (el reporte del conversor).
-  `just espacio`: de 62 bancos de datos a 61, y los huecos de 7.406 B a 0.
-* Carga: +39 cuadros sobre los 97 mapas, +0,4 de media, mediana 0, máximo
-  +2. La pelea no cambia.
-* Ninguna golden se movió; las dos tandas en verde.
-* Los hashes de `tests/python.rs` de `rm2k-snes-mapdata` cambiaron a
-  propósito: son los bytes del cartucho.
+* In `release`: 119.2 KB raw, 61.7 KB in LZ2 (the converter's report). `just
+  espacio`: from 62 data banks to 61, and the gaps from 7,406 B to 0.
+* Load: +39 frames over the 97 maps, +0.4 on average, median 0, maximum +2. The
+  battle does not change.
+* No golden moved; both suites green.
+* The hashes of `tests/python.rs` of `rm2k-snes-mapdata` changed on purpose:
+  they are the cartridge's bytes.
 
-### 2. Los battlers: hecho
+### 2. The battlers: done
 
-Se pueden, pero no "al empezar y listo": la CPU los vuelve a leer **durante
-toda la pelea** —`scene_tick` redibuja a los que siguen vivos encima de un
-enemigo borrado, y un enemigo oculto se dibuja cuando aparece—, así que
-tienen que quedarse en la WRAM. Van a la mitad de la grilla en el `$7E`
-(`SCN_BATTLERS = GRID`): la pelea no lee el mapa, y `back_from_battle` ya
-descomprimía la grilla entera. `scn_battlers_load` descomprime los battlers
-distintos de la tropa —los de `SCN_PAL_BAT`— uno detrás del otro y anota
-dónde cayó cada uno por ranura de paleta (`SCN_BAT_PTR`, `$7E6650`); el
-conversor corta si los de una tropa pasan de 32 KB (en `release`, la más
-pesada son 15 KB). `scn_terrain`, que lee la grilla, corre antes.
+They can be, but not "at the start and that's it": the CPU reads them again
+**throughout the whole battle** —`scene_tick` redraws the ones still alive on
+top of an erased enemy, and a hidden enemy is drawn when it appears—, so they
+have to stay in WRAM. They go to the half of the grid in `$7E` (`SCN_BATTLERS =
+GRID`): the battle does not read the map, and `back_from_battle` already
+decompressed the whole grid. `scn_battlers_load` decompresses the troop's
+distinct battlers —those of `SCN_PAL_BAT`— one after the other and notes where
+each one landed per palette slot (`SCN_BAT_PTR`, `$7E6650`); the converter
+stops if a troop's go over 32 KB (in `release`, the heaviest is 15 KB).
+`scn_terrain`, which reads the grid, runs before.
 
-* En `release`: los huecos de `just espacio` pasan de 0 a 62.525 B (147 KB
-  de battlers crudos).
-* La pelea del droide en el 52 compone en 11 cuadros en vez de 10; los mapas
-  no cambian. La entrada a la pelea es a negro, así que no se ve.
-* `test_reservas_de_la_wram.py` deja pasar `SCN_BATTLERS`, y la decisión de
-  la grilla lo dice.
+* In `release`: the gaps of `just espacio` go from 0 to 62,525 B (147 KB of raw
+  battlers).
+* The droid battle on 52 composes in 11 frames instead of 10; the maps do not
+  change. The entry to the battle is to black, so it is not seen.
+* `test_reservas_de_la_wram.py` lets `SCN_BATTLERS` through, and the grid's
+  decision says so.
 
-### 3. Las animaciones de batalla (las de las cinemáticas): hecho, cuadro por cuadro
+### 3. The battle animations (the cutscenes' ones): done, frame by frame
 
-Se pueden, pero no "al empezar la pelea", como decía el estudio: las dibuja
-`ShowBattleAnimation` **en el mapa** —las páginas de tropa no lo compilan— y
-`anim_frame_build` las arma en el lazo principal, con la pantalla prendida.
-Cada cuadro va en su propio flujo de LZ2 y se descomprime cuando toca en uno
-de dos lugares de `LZ2_BUFFER` —libre en el mapa una vez cargado—, el que no
-tiene el cuadro anterior, cuyos tiles se borran primero. La pelea pisa
-`LZ2_BUFFER`, así que `scene_upload` llama a `anim_buf_clear`.
+They can be, but not "at the start of the battle", as the study said: they are
+drawn by `ShowBattleAnimation` **on the map** —the troop pages do not compile
+it— and `anim_frame_build` builds them in the main loop, with the screen on.
+Each frame goes in its own LZ2 stream and is decompressed when its turn comes
+into one of two places of `LZ2_BUFFER` —free on the map once loaded—, the one
+that does not have the previous frame, whose tiles are erased first. The battle
+overwrites `LZ2_BUFFER`, so `scene_upload` calls `anim_buf_clear`.
 
-**Probé primero la animación entera en un flujo**, descomprimida al armar su
-primer cuadro: ahorraba más —67.696 B a 28.171, contra 37.354 cuadro por
-cuadro—, pero el primer tick de la animación tardaba hasta 4 cuadros de
-hardware (la 148, de 13,7 KB) y 2 la mayoría: el mapa se frenaba al empezar
-cada animación. Cuadro por cuadro, medido sobre las 21 animaciones de
-`release` en el mapa 6 con el método de `test_animacion_cuadros.py`, ningún
-tick pasa de un cuadro.
+**I tried first the whole animation in one stream**, decompressed when building
+its first frame: it saved more —67,696 B to 28,171, against 37,354 frame by
+frame—, but the animation's first tick took up to 4 hardware frames (148, of
+13.7 KB) and 2 for most: the map stalled at the start of each animation. Frame
+by frame, measured over the 21 animations of `release` on map 6 with the
+method of `test_animacion_cuadros.py`, no tick goes over one frame.
 
-* En `release`: 67.696 B crudos, 37.354 en LZ2. `just espacio`: de 61 bancos
-  de datos a 60.
-* `test_animacion_cuadros.py` arma cada cuadro de cada animación por el
-  camino del juego y lo compara con la cuenta sin comprimir.
-* **Se me escapó un camino**, y lo arreglé en un commit aparte: volver del
-  menú, de la tienda, de las ranuras o de una pelea pasa por `back_to_map`,
-  que sube los tiles del mapa por `LZ2_BUFFER` y pisa el cuadro anterior;
-  borrarlo leía tiles de fondo como números de la caja, dejaba tiles viejos
-  y escribía más allá de `ANIMB_BUF`. `back_to_map` llama ahora a
-  `anim_buf_clear` (en vez de `scene_upload`), y
-  `test_la_caja_vuelve_entera_del_menu` lo cobra: en rojo sin el arreglo
-  (cuadros 4 y 5 de la 148), en verde con él.
+* In `release`: 67,696 B raw, 37,354 in LZ2. `just espacio`: from 61 data banks
+  to 60.
+* `test_animacion_cuadros.py` builds each frame of each animation through the
+  game's path and compares it with the uncompressed count.
+* **A path slipped past me**, and I fixed it in a separate commit: coming back
+  from the menu, the shop, the slots or a battle goes through `back_to_map`,
+  which uploads the map's tiles through `LZ2_BUFFER` and overwrites the
+  previous frame; erasing it read background tiles as box numbers, left old
+  tiles and wrote beyond `ANIMB_BUF`. `back_to_map` now calls
+  `anim_buf_clear` (instead of `scene_upload`), and
+  `test_la_caja_vuelve_entera_del_menu` enforces it: red without the fix
+  (frames 4 and 5 of 148), green with it.
 
-### 4. Los fondos de batalla livianos: hecho
+### 4. The light battle backgrounds: done
 
-Se pueden: la CPU lee el respaldo liviano una sola vez, en `scn_double`, que
-lo agranda a los dos búferes de la escena al empezar la pelea. Ahora se
-descomprime antes a la mitad de la grilla en el `$7E` (`SCN_BATTLERS`), y
-los battlers se descomprimen después, encima: `scn_battlers_load` se mudó de
-antes de `scn_backdrop` a después. La tanda corre sin MSU-1, así que el
-camino del respaldo es el que miran las goldens y `test_batalla_escena_dibujo.py`.
+They can be: the CPU reads the light fallback only once, in `scn_double`, which
+enlarges it into the scene's two buffers at the start of the battle. Now it is
+decompressed beforehand into the half of the grid in `$7E` (`SCN_BATTLERS`),
+and the battlers are decompressed afterwards, on top: `scn_battlers_load`
+moved from before `scn_backdrop` to after. The suite runs without MSU-1, so
+the fallback's path is the one the goldens and `test_batalla_escena_dibujo.py`
+look at.
 
-* En `release`: 73.728 B crudos (18 fondos de 4 KB), 55.331 en LZ2. Los
-  huecos de `just espacio` pasan de 27.331 B a 45.728.
-* La pelea del droide compone en 12 cuadros en vez de 11 (10 en la base), a
-  negro.
+* In `release`: 73,728 B raw (18 backgrounds of 4 KB), 55,331 in LZ2. The gaps
+  of `just espacio` go from 27,331 B to 45,728.
+* The droid battle composes in 12 frames instead of 11 (10 at the base), to
+  black.
 
-### 5. El bytecode de los eventos: hecho, con lo que sigue corriendo en otro mapa
+### 5. The events' bytecode: done, with what keeps running on another map
 
-Se lee de la ROM mientras corre —`[code_ptr], y`—, así que va a la WRAM:
-detrás de la tabla de bloques, en un bloque de LZ2 propio que nombra la tabla
-`map_code` (puesto pegado a la grilla, dos mapas con la misma grilla y otros
-eventos dejaban de compartirla: eran 6 KB). La tabla de páginas apunta a la
-WRAM. Los saltos de una página son relativos a donde empieza.
+It is read from the ROM while it runs —`[code_ptr], y`—, so it goes to WRAM:
+behind the block table, in an LZ2 block of its own that the `map_code` table
+names (placed stuck to the grid, two maps with the same grid and other events
+stopped sharing it: it was 6 KB). The page table points to WRAM. A page's jumps
+are relative to where it starts.
 
-**El problema era lo que sigue corriendo después de un `Teleport` a otro
-mapa**: el mapa nuevo pone su bytecode en el mismo lugar. En `release` son
-282 páginas que siguen después de saltar (contado sobre el volcado, con los
-`CallEvent` adentro), y además **cada caso de la tanda** empieza saltando y
-sigue. Y la ruta forzada del héroe apunta al bytecode de la página que la dio
-y sigue caminando en el mapa nuevo (`Game_Player::PerformTeleport` no la
-corta). Lo que se hace:
+**The problem was what keeps running after a `Teleport` to another map**: the
+new map puts its bytecode in the same place. In `release` there are 282 pages
+that continue after jumping (counted over the dump, with the `CallEvent`s
+inside), and besides **each case of the suite** starts by jumping and
+continues. And the hero's forced route points to the bytecode of the page that
+gave it and keeps walking on the new map (`Game_Player::PerformTeleport` does
+not cut it). What is done:
 
-* `code_carry_before`, al empezar `enter_map_no_events` y con el mapa viejo
-  todavía en `map_current`: si la página en primer plano está en el bytecode
-  de ese mapa, su puntero se muda a `CODE_CARRY` (en `LZ2_BUFFER`, arriba de
-  los cuadros de la animación de batalla); y la ruta del héroe, si apunta al
-  banco del bytecode, se copia entera a `ROUTE_CARRY` (`$7E7F00`, 256 B).
-* `code_carry_after`, al final de la carga y de `back_to_map` —que sube los
-  tiles por `LZ2_BUFFER`—: descomprime ahí el bytecode del mapa acarreado
-  (`CARRY_MAP`, `$7E7EF0`).
-* Lo demás que apunta al bytecode no sobrevive al cambio de mapa: las
-  paralelas, las rutas de los eventos y la línea de tiempo de la animación
-  empiezan de nuevo con el mapa nuevo.
+* `code_carry_before`, at the start of `enter_map_no_events` and with the old
+  map still in `map_current`: if the foreground page is in that map's
+  bytecode, its pointer moves to `CODE_CARRY` (in `LZ2_BUFFER`, above the
+  battle animation's frames); and the hero's route, if it points to the
+  bytecode's bank, is copied whole to `ROUTE_CARRY` (`$7E7F00`, 256 B).
+* `code_carry_after`, at the end of the load and of `back_to_map` —which
+  uploads the tiles through `LZ2_BUFFER`—: it decompresses there the bytecode
+  of the carried map (`CARRY_MAP`, `$7E7EF0`).
+* Everything else that points to the bytecode does not survive the map change:
+  the parallels, the events' routes and the animation's timeline start over
+  with the new map.
 
-La primera versión olvidaba `back_to_map`: con el menú, las ranuras o una
-pelea en el medio de una página acarreada, la página leía tiles de fondo.
-Lo cobraron siete pruebas de la tanda —`test_guardar_golden.py`,
-`test_curar.py`, `test_experiencia_dibujo.py`—, y destapó el mismo error en
-la animación de batalla (el commit aparte de arriba).
+The first version forgot `back_to_map`: with the menu, the slots or a battle in
+the middle of a carried page, the page read background tiles. Seven tests of
+the suite caught it —`test_guardar_golden.py`, `test_curar.py`,
+`test_experiencia_dibujo.py`—, and it uncovered the same error in the battle
+animation (the separate commit above).
 
-* En `release`: 124,7 KB de bytecode, 80,2 en LZ2. `just espacio`: de 60
-  bancos de datos a 59, y los huecos de 45.728 B a 25.045 —44.853 B menos—.
-* Carga: +0,4 cuadros de media sobre los 97 mapas, +6 en el 4 (que en
-  `release` lleva los 262 casos). Acarrear cuesta otra descompresión adentro
-  del fundido.
-* La carrera, que es lo más justo de CPU, no pierde cuadros por leer el
-  bytecode de la WRAM (8 ciclos por byte contra 6): manejando, el 49 pierde
-  35 cuadros en 976 ticks antes y después, el 52 5 y 4, el 54 0 y 1.
-* `test_carga_descomprimida.py` mira el bytecode en la WRAM contra
-  `crudos/N.map_code.bin` y `map_code` contra dónde quedó;
-  `test_la_ruta_del_heroe_sigue_entera_en_el_mapa_nuevo` mira la copia de la
-  ruta, que ningún caso corre.
+* In `release`: 124.7 KB of bytecode, 80.2 in LZ2. `just espacio`: from 60 data
+  banks to 59, and the gaps from 45,728 B to 25,045 —44,853 B less—.
+* Load: +0.4 frames on average over the 97 maps, +6 on 4 (which in `release`
+  carries the 262 cases). Carrying costs another decompression inside the
+  fade.
+* The race, which is the tightest on CPU, does not lose frames from reading the
+  bytecode from WRAM (8 cycles per byte against 6): driving, 49 loses 35 frames
+  in 976 ticks before and after, 52 5 and 4, 54 0 and 1.
+* `test_carga_descomprimida.py` checks the bytecode in WRAM against
+  `crudos/N.map_code.bin` and `map_code` against where it ended up;
+  `test_la_ruta_del_heroe_sigue_entera_en_el_mapa_nuevo` checks the route's
+  copy, which no case runs.
 
-### 6. La fuente: no se puede
+### 6. The font: it cannot be
 
-La CPU la lee **cada vez que compone texto** (`messages.s`, `font_pre_lo` y
-`font_pre_bk`): las cuatro fases precorridas, 59.280 B en `release`, tendrían
-que vivir descomprimidas en la WRAM todo el tiempo, en el mapa y en la pelea,
-y no hay 58 KB libres en ningún momento —en el mapa queda `LZ2_BUFFER`, 24 KB,
-y en la pelea ni eso—. Una sola fase y correrla en la ROM sería otro formato,
-no LZ2. Y los textos son de Guayacán.
+The CPU reads it **every time it composes text** (`messages.s`, `font_pre_lo`
+and `font_pre_bk`): the four pre-shifted phases, 59,280 B in `release`, would
+have to live decompressed in WRAM all the time, on the map and in the battle,
+and there are not 58 KB free at any moment —on the map `LZ2_BUFFER` is left,
+24 KB, and in the battle not even that—. A single phase and shifting it at run
+time would be another format, not LZ2. And the texts are Guayacán's.
 
-## Lo que queda (Quirquincho, al entregar)
+## What is left (Quirquincho, on delivering)
 
-Los commits, sobre `cd3dce0d`:
+The commits, on `cd3dce0d`:
 
-    86343e26  la tabla de bloques y su pasabilidad, detrás de la grilla
-    25f90404  los battlers, a la mitad de la grilla durante la pelea
-    496a0f25  los cuadros de las animaciones de batalla, uno por uno
-    c3c958ab  los fondos de batalla livianos
-    6b7569ce  arreglo: la caja de la animación se limpia al volver al mapa
-    14139ad9  el bytecode de los eventos, detrás de la grilla, y acarreado
+    86343e26  the block table and its passability, behind the grid
+    25f90404  the battlers, to the half of the grid during the battle
+    496a0f25  the frames of the battle animations, one by one
+    c3c958ab  the light battle backgrounds
+    6b7569ce  fix: the animation's box is cleared on returning to the map
+    14139ad9  the events' bytecode, behind the grid, and carried
 
-Lo ahorrado en `release`, en bytes de ROM usados (bancos × 64 KB menos los
-huecos de `just espacio`):
+What was saved in `release`, in ROM bytes used (banks × 64 KB minus the gaps of
+`just espacio`):
 
-    tabla de bloques + pasabilidad   58.130
-    battlers                         62.525
-    animaciones de batalla           30.342
-    fondos livianos                  18.397
-    bytecode                         44.853
-    total                           214.247   (209 KB)
+    block table + passability        58,130
+    battlers                         62,525
+    battle animations                30,342
+    light backgrounds                18,397
+    bytecode                         44,853
+    total                           214,247   (209 KB)
 
-`just espacio`, antes y después:
+`just espacio`, before and after:
 
-    release                62 bancos, huecos 7.406 B   ->  59, huecos 25.045 B
-                           banco 0 269 B, banco 1 4.241 B -> 247 B y 3.890 B
-    test-special           16 bancos, huecos 57.838 B  ->  15, huecos 21.304 B
-    test-encounter-every-step  7 bancos, 30.784 B      ->  7, 36.716 B
+    release                62 banks, gaps 7,406 B      ->  59, gaps 25,045 B
+                           bank 0 269 B, bank 1 4,241 B -> 247 B and 3,890 B
+    test-special           16 banks, gaps 57,838 B     ->  15, gaps 21,304 B
+    test-encounter-every-step  7 banks, 30,784 B       ->  7, 36,716 B
 
-El tiempo de carga, en cuadros de hardware de la vuelta que carga (el método
-de `_cargar`), sobre los 97 mapas de `release`: **+76 entre todos, +0,8 de
-media, mediana +1, máximo +6** (el 4, que lleva los casos de la tanda). La
-pelea del droide compone en 12 cuadros contra 10, a negro. Las pantallas
-(título, Game Over) no cambian: no tocan nada de esto. Volver del menú, de la
-tienda o de las ranuras con una página acarreada cuesta una descompresión
-más del bytecode.
+The load time, in hardware frames of the iteration that loads (the method of
+`_cargar`), over the 97 maps of `release`: **+76 among all of them, +0.8 on
+average, median +1, maximum +6** (4, which carries the suite's cases). The
+droid battle composes in 12 frames against 10, to black. The screens (title,
+Game Over) do not change: they touch none of this. Coming back from the menu,
+the shop or the slots with a carried page costs one more decompression of the
+bytecode.
 
-Ninguna golden se movió. `just pruebas`: 936 (934 + las dos nuevas);
-`just -f tools/justfile test`: 39; `cargo test` de `rm2k-snes-mapdata`.
-`test_musica_techos.py` pasa.
+No golden moved. `just pruebas`: 936 (934 + the two new ones); `just -f
+tools/justfile test`: 39; `cargo test` of `rm2k-snes-mapdata`.
+`test_musica_techos.py` passes.
 
-**Al mergear**:
+**When merging**:
 
-* Instalar `mapdata`: `just -f tools/justfile install mapdata`. Nada más de
-  Rust cambió, y ningún script de Python.
-* **Choca con Guayacán** en `rm2k-snes-mapdata`: yo toqué `materials.rs`,
-  `record.rs`, `scene.rs`, `emit.rs` (la sección de las animaciones) y los
-  hashes de `tests/python.rs`, que son los bytes del `.inc`: con los dos
-  cambios juntos hay que volver a sacarlos, a propósito.
-* RAM lejana tomada: `$7E7EF0-$7E7FFF` (`CARRY_MAP`, `ROUTE_CARRY`) y
-  `$7E6650-$7E665F` (`SCN_BAT_PTR`, adentro del rango de la escena). Si
-  Guayacán tomó algo en `$7E7A50-$7E7FFF`, chocan sin que git diga nada.
-* El banco 0 bajó 22 B: el que más aprieta sigue siendo `release`.
+* Install `mapdata`: `just -f tools/justfile install mapdata`. Nothing else in
+  Rust changed, and no Python script.
+* **It clashes with Guayacán** in `rm2k-snes-mapdata`: I touched
+  `materials.rs`, `record.rs`, `scene.rs`, `emit.rs` (the animations section)
+  and the hashes of `tests/python.rs`, which are the bytes of the `.inc`: with
+  both changes together they have to be taken again, on purpose.
+* Far RAM taken: `$7E7EF0-$7E7FFF` (`CARRY_MAP`, `ROUTE_CARRY`) and
+  `$7E6650-$7E665F` (`SCN_BAT_PTR`, inside the scene's range). If Guayacán took
+  something in `$7E7A50-$7E7FFF`, they clash without git saying anything.
+* Bank 0 went down 22 B: the tightest is still `release`.

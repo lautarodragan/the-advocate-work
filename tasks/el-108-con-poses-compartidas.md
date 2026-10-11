@@ -1,189 +1,190 @@
 ---
-name: "El 108 con poses compartidas"
-description: "Los quietos que ninguna cámara muestra juntos se turnan una ranura de VRAM, sólo en el mapa que no entra sin eso; Distant Paradise (108) entra en release y la demo termina en su llegada"
+name: "108 with shared poses"
+description: "The still ones that no camera shows together take turns on a VRAM slot, only on the map that does not fit without it; Distant Paradise (108) goes into release and the demo ends on its arrival"
 type: feature
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-10-01, entre las opciones de
-`mundo-7-camino-a-paradise.md` (Puma): la A. El 108 pide 42 ranuras
-de pose quieta (15 personajes mirando a 3 o 4 lados) y la VRAM da 24, pero en
-pantalla a la vez hay entre 12 y 19. Extiende la decisión de las poses en
-caliente (`decisiones/las-poses-se-suben-en-caliente.md`, que ahora lo dice).
+From taro, on 2026-10-01, among the options of `mundo-7-camino-a-paradise.md`
+(Puma): option A. 108 asks for 42 still-pose slots (15 characters facing 3 or 4
+sides) and the VRAM gives 24, but on screen at the same time there are between
+12 and 19. It extends the decision of hot poses
+(`decisiones/las-poses-se-suben-en-caliente.md`, which now says so).
 
-Base: `387b1e49`, `abl.sfc` `58fce320…`; mergeado con el `main` de Pirincho
+Base: `387b1e49`, `abl.sfc` `58fce320…`; merged with Pirincho's `main`
 (`4d427f34`).
 
-# Quién se turna con quién
+# Who takes turns with whom
 
-Lo decide `wally` (`plan_sharing` en `map.rs`), con el coloreo en
-`rm2k-snes-map-sprites` (`share.rs`). Se turnan los quietos que:
+`wally` decides it (`plan_sharing` in `map.rs`), with the colouring in
+`rm2k-snes-map-sprites` (`share.rs`). The still ones that take turns are those
+that:
 
-* nadie mueve: ni ruta propia ni `SetMoveRoute` (`movable`), ni animación
-  quieta, ni `SetEventLocation`/`SwapEventLocations` de una página del mapa
-  o de un evento común —uno de un evento común que mueve "este evento"
-  apaga los turnos del mapa entero, porque puede ser cualquiera—;
-* no están horneados;
-* dibujan **un solo gráfico** en todas sus páginas (las que no dibujan nada
-  no cuentan: el que aparece y desaparece se turna igual).
+* nobody moves: neither their own route nor `SetMoveRoute` (`movable`), nor
+  still animation, nor `SetEventLocation`/`SwapEventLocations` from a page of
+  the map or from a common event —one from a common event that moves "this
+  event" turns off the turns for the whole map, because it can be any of
+  them—;
+* are not baked;
+* draw **a single graphic** in all their pages (the ones that draw nothing do
+  not count: the one that appears and disappears takes turns anyway).
 
-El que muestra una pose que ya tiene un quieto que no se turna usa esa
-ranura, como siempre. Los demás se colorean: dos van juntos si muestran la
-misma pose o si nunca están los dos en pantalla. "En pantalla" es lo que
-`build_oam` no descarta —la caja de 32x32 toca la pantalla de 256x224—, así
-que para cualquier cámara dos están a la vez sólo si |dx| < 288 px y
-|dy| < 256 px: menos de 18 celdas en x y de 16 en y. Es exactamente el
-"margen 1" de Puma (16x14 celdas más una alrededor), y no le agregué otro
-margen: la ROM decide con la misma comparación, así que es exacto. Una
-ranura donde todos muestran la misma pose queda como una quieta de siempre;
-sólo las que tienen más de una van a la ROM.
+The one that shows a pose that a still one that does not take turns already
+has uses that slot, as always. The rest are coloured: two go together if they
+show the same pose or if they are never both on screen. "On screen" is what
+`build_oam` does not discard —the 32x32 box touches the 256x224 screen—, so for
+any camera two are on screen at once only if |dx| < 288 px and |dy| < 256 px:
+fewer than 18 cells in x and 16 in y. It is exactly Puma's "margin 1" (16x14
+cells plus one around), and I did not add another margin: the ROM decides with
+the same comparison, so it is exact. A slot where everyone shows the same pose
+stays as a regular still one; only those with more than one go to the ROM.
 
-**Sólo se activa en un mapa que no entra sin eso**: `wally` convierte como
-siempre, mira si algún reparto de VRAM entra —los repartos le llegan en el
-pedido, `layouts`, de `vram.LAYOUTS`— y sólo si no, vuelve a convertir con
-turnos. Los otros mapas salen byte por byte iguales.
+**It only kicks in on a map that does not fit without it**: `wally` converts as
+always, checks whether some VRAM layout fits —the layouts reach it in the
+request, `layouts`, from `vram.LAYOUTS`— and only if not, converts again with
+turns. The other maps come out byte for byte identical.
 
-El 108 queda en 22 ranuras, 376 tiles de sprite, y entra en "+ambos" (384).
-13 ranuras se las turnan 74 quietos, con 32 poses. El cronómetro no va en el
-108 —no es un mapa del cronómetro—; si fuera, sus glifos empiezan en la
-fila siguiente y serían 411 tiles: no entraría.
+108 ends up at 22 slots, 376 sprite tiles, and fits in "+ambos" (384). 13 slots
+are shared by 74 still ones, with 32 poses. The timer does not go on 108 —it is
+not a timer map—; if it did, its glyphs start on the next row and it would be
+411 tiles: it would not fit.
 
-# Qué hace el runtime
+# What the runtime does
 
-`tools/runtime/shared_poses.s`, en FAR. Tablas de `share_table`
-(`rm2k-snes-mapdata`): `share_maps`, una palabra por mapa, y `share_data`,
-con un registro por mapa que se turna (ranuras, evento → ranura y pose,
-pose → lugar en `npc_poses`). RAM lejana: `SHARE_N` y `SHARE_OWNER` en
-$2590-$259F, 15 ranuras como mucho (`SHARE_MAX`, que el `.inc` asserta).
+`tools/runtime/shared_poses.s`, in FAR. Tables from `share_table`
+(`rm2k-snes-mapdata`): `share_maps`, one word per map, and `share_data`, with
+one record per map that takes turns (slots, event → slot and pose, pose →
+place in `npc_poses`). Far RAM: `SHARE_N` and `SHARE_OWNER` at $2590-$259F, 15
+slots at most (`SHARE_MAX`, which the `.inc` asserts).
 
-* `place_npc`: si `SHARE_N` no es cero, `share_want` mira la ranura de la
-  fila; si tiene otra pose, encola la suya con `vram_queue` y **la fila no
-  se dibuja ese cuadro**, sino el siguiente, con la pose arriba. Si la cola
-  está llena, pregunta de nuevo al cuadro siguiente. El que mira al héroe
-  está en la ranura del giro y no se mira.
-* `load_sprite` llama a `share_load`: cuántas ranuras tiene el mapa y
-  "nadie sabe qué tienen". Cubre entrar al mapa y volver de la pelea.
-* `build_oam_settled`, en el banco 0: el primer OAM del mapa —entrar, volver
-  de la pelea, salto dentro del mismo mapa (`FADE_SAME`), cargar desde el
-  título o al encender— se arma con la pantalla apagada, sube la cola y lo
-  rearma hasta que no falte nadie. En un mapa sin turnos es un solo
-  `build_oam`, como antes.
-* `share_boot` pone `SHARE_N` en cero al encender: la RAM lejana arranca con
-  basura.
+* `place_npc`: if `SHARE_N` is not zero, `share_want` looks at the row's slot;
+  if it has another pose, it queues its own with `vram_queue` and **the row is
+  not drawn that frame**, but on the next one, with the pose up. If the queue
+  is full, it asks again on the next frame. The one looking at the hero is in
+  the turn slot and is not looked at.
+* `load_sprite` calls `share_load`: how many slots the map has and "nobody
+  knows what they have". It covers entering the map and coming back from the
+  battle.
+* `build_oam_settled`, in bank 0: the map's first OAM —entering, coming back
+  from the battle, a jump within the same map (`FADE_SAME`), loading from the
+  title or on power-up— is built with the screen off, uploads the queue and
+  rebuilds it until nobody is missing. On a map without turns it is a single
+  `build_oam`, as before.
+* `share_boot` sets `SHARE_N` to zero on power-up: far RAM starts with
+  garbage.
 
-Lo que **no** cubre, y está dicho en el encabezado de `shared_poses.s`: si
-dos vblanks seguidos no tienen lugar para poses —una línea de la ventana
-subiendo con la cámara corriéndose—, la fila se dibuja antes de que su pose
-suba, y ese cuadro muestra la pose anterior. La del héroe y las de los que
-caminan tienen el mismo límite.
+What it does **not** cover, and it is said in the header of `shared_poses.s`:
+if two consecutive vblanks have no room for poses —a line of the window going
+up with the camera scrolling—, the row is drawn before its pose is uploaded,
+and that frame shows the previous pose. The hero's and those of the ones that
+walk have the same limit.
 
-# El 108 en release, y el fin de la demo
+# 108 in release, and the end of the demo
 
-`below = 109`. Del otro lado del 108 está otro capítulo: la escena de la
-llegada (108 ev5) salta enseguida al Consejo (110), que encadena el recuerdo
-de la montaña (175), la casa de Talan (114), el 108 de noche con la chica
-que llora, el mirador (109) y el sueño (122). Nada de eso es barato, así que
-el corte es el primero: **el fork del 108 cambia el `Teleport` al Consejo
-por el cartel del fin** ("END OF THE DEMO / The Council of Paradise is not
-/ in the cartridge yet. / Thanks for playing!") y la vuelta al título. El
-fork del 107 se fue: el túnel vuelve a saltar al 108, con su pregunta de
-guardar. Lo que faltaría para el próximo corte natural —el salto al sueño
-en el mirador (109 ev6)—: el 110, el 175, el 114, el 109 y el 122.
+`below = 109`. On the other side of 108 is another chapter: the arrival scene
+(108 ev5) jumps right away to the Council (110), which chains the memory of the
+mountain (175), Talan's house (114), 108 at night with the girl who cries, the
+lookout (109) and the dream (122). None of that is cheap, so the cut is the
+first one: **108's fork changes the `Teleport` to the Council for the end
+sign** ("END OF THE DEMO / The Council of Paradise is not / in the cartridge
+yet. / Thanks for playing!") and the return to the title. 107's fork is gone:
+the tunnel jumps to 108 again, with its save question. What would be missing
+for the next natural cut —the jump to the dream at the lookout (109 ev6)—: 110,
+175, 114, 109 and 122.
 
-Las 26 páginas del 108 que saltan a 109, 110, 112 a 118, 120, 126, 127 y
-150 no compilan: las casas no se abren, como las puertas del mundo cuyo
-destino no está. El pueblo, al llegar, está casi vacío: los vecinos tienen
-páginas de tandas posteriores (switches 350, 376, 396, 427…).
+The 26 pages of 108 that jump to 109, 110, 112 to 118, 120, 126, 127 and 150 do
+not compile: the houses do not open, like the world's doors whose destination
+is not there. The town, on arrival, is almost empty: the neighbours have pages
+from later batches (switches 350, 376, 396, 427…).
 
-# Pruebas
+# Tests
 
-En `rom/pruebas/abl/test_paradise.py`:
+In `rom/pruebas/abl/test_paradise.py`:
 
-* `test_recien_llegado[paradise-108-llegada]`: la llegada en (19,19) con la
-  escena vista (333), golden y celdas contra `fill_window`, como las otras.
-* `test_los_quietos_del_108_se_turnan`: el pueblo lleno (333, 396, 386,
-  388), caminando por el camino de la plaza hacia abajo y de vuelta, con
-  golden en cada parada. En cada una, cada quieto que se turna y está en
-  pantalla tiene que tener en la VRAM los bytes de su pose en el cartucho,
-  leídos de las tablas como los lee `share_want`; y alguna ranura tiene que
-  haber mostrado dos poses en el camino (la 6: el 79 y el 75).
-* `test_el_108_se_turna_al_saltar_dentro_del_mapa_y_al_cargar`: un salto
-  `FADE_SAME` de (20,19) a (20,45), y guardar por el menú y cargar ahí.
+* `test_recien_llegado[paradise-108-llegada]`: the arrival at (19,19) with the
+  scene seen (333), golden and cells against `fill_window`, like the others.
+* `test_los_quietos_del_108_se_turnan`: the full town (333, 396, 386, 388),
+  walking along the plaza's path down and back, with a golden at each stop. At
+  each one, each still one that takes turns and is on screen has to have in
+  VRAM the bytes of its pose in the cartridge, read from the tables as
+  `share_want` reads them; and some slot has to have shown two poses along the
+  way (6: 79 and 75).
+* `test_el_108_se_turna_al_saltar_dentro_del_mapa_y_al_cargar`: a `FADE_SAME`
+  jump from (20,19) to (20,45), and saving through the menu and loading there.
 
-Y `rpgmaker/test_cores.py::test_los_quietos_que_se_turnan_una_ranura`: la
-caminata en snes9x y en bsnes.
+And `rpgmaker/test_cores.py::test_los_quietos_que_se_turnan_una_ranura`: the
+walk in snes9x and in bsnes.
 
-**El rojo**: sin el arreglo, el 108 no convierte (con las herramientas
-globales: "this map can't carry a message window: it spends 462 background
-tiles, 696 sprite tiles"). Con el arreglo y `share_want` devolviendo siempre
-"como está", las dos pruebas de los turnos fallan: dos quietos dibujados con
-la pose de otro. Además, antes de congelar las goldens comparé la silueta de
-cada quieto que se turna y está entero en pantalla contra su cuadro del
-CharSet original: coinciden todos.
+**The red**: without the fix, 108 does not convert (with the global tools:
+"this map can't carry a message window: it spends 462 background tiles, 696
+sprite tiles"). With the fix and `share_want` always returning "as it is", the
+two turn tests fail: two still ones drawn with another's pose. Besides, before
+freezing the goldens I compared the silhouette of each still one that takes
+turns and is whole on screen against its frame of the original CharSet: they
+all match.
 
-`test_recorrido_paradise_golden.py` sigue ahora del túnel al 108: contesta
-que no a la pregunta de guardar y el cartel sale en el 108. Sus fotos siguen
-sin bendecir.
+`test_recorrido_paradise_golden.py` now continues from the tunnel to 108: it
+answers no to the save question and the sign comes out on 108. Its shots are
+still not blessed.
 
-En Rust: `wally` (`tests/shared_slots.rs`: se turnan sólo si no entra, y no
-el que algo cambia de lugar), `rm2k-snes-map-sprites` (el alcance y el
-coloreo) y `rm2k-snes-mapdata` (`share_table`). Los hashes de
-`mapdata/tests/python.rs` se regeneraron a propósito, sobre el árbol
-mergeado con Pirincho.
+In Rust: `wally` (`tests/shared_slots.rs`: they take turns only if it does not
+fit, and not the one something changes place), `rm2k-snes-map-sprites` (the
+reach and the colouring) and `rm2k-snes-mapdata` (`share_table`). The hashes of
+`mapdata/tests/python.rs` were regenerated on purpose, on the tree merged with
+Pirincho.
 
-# Lo que no cubre `just pruebas`
+# What `just pruebas` does not cover
 
-* **Volver de una pelea en el 108**: `back_from_battle` sube el banco
-  (`share_load`) y `battle_fade_to_map` pasa por `build_oam_settled`, pero el
-  108 no tiene encuentros ni peleas de evento, así que ninguna prueba lo
-  ejecuta.
-* El límite de los dos vblanks sin lugar, de arriba.
+* **Coming back from a battle on 108**: `back_from_battle` uploads the bank
+  (`share_load`) and `battle_fade_to_map` goes through `build_oam_settled`, but
+  108 has neither encounters nor event battles, so no test executes it.
+* The limit of the two vblanks without room, from above.
 
-# Espacio
+# Space
 
-`just espacio release`, sobre el árbol mergeado con Pirincho:
+`just espacio release`, on the tree merged with Pirincho:
 
-                   main (Pirincho)       con el 108
-    bancos         —                     64 de 128, 44 libres
-    banco 0        1.220 B               1.165 B
-    banco 1        —                     3.204 B
+                   main (Pirincho)       with 108
+    banks          —                     64 of 128, 44 free
+    bank 0         1,220 B               1,165 B
+    bank 1         —                     3,204 B
     BSS, ZEROPAGE  —                     128 B, 4 B
-    textos         —                     112.717 B
+    texts          —                     112,717 B
 
-El código de los turnos en el banco 0 son unos 55 B (el gancho de
-`place_npc`, `build_oam_settled` y dos `jsl`); lo demás va en FAR.
+The turns code in bank 0 is some 55 B (the `place_npc` hook,
+`build_oam_settled` and two `jsl`); the rest goes in FAR.
 
-# Verificación
+# Verification
 
-Sobre el árbol mergeado (`abl.sfc` `e1e0d591…`): `NO_CACHE=1 just
-cartuchos` y `just cartuchos` con caché dan las mismas huellas; `just
-pruebas` 966 en verde (961 + las cinco nuevas), con `test_musica_techos.py`
-incluido; `just -f tools/justfile test` 39; `cargo test` de `wally`,
-`rm2k-snes-map-sprites` y `rm2k-snes-mapdata`. Antes de sumar el 108 —con
-los turnos ya en la ROM y el 108 afuera— `NO_CACHE=1 just cartuchos`
-cambiaba sólo las ROMs y el `mapdata.inc`, y `just pruebas` daba 961 sin
-mover ninguna golden.
+On the merged tree (`abl.sfc` `e1e0d591…`): `NO_CACHE=1 just cartuchos` and
+`just cartuchos` with cache give the same fingerprints; `just pruebas` 966
+green (961 + the five new ones), with `test_musica_techos.py` included; `just
+-f tools/justfile test` 39; `cargo test` of `wally`, `rm2k-snes-map-sprites`
+and `rm2k-snes-mapdata`. Before adding 108 —with the turns already in the ROM
+and 108 outside— `NO_CACHE=1 just cartuchos` changed only the ROMs and
+`mapdata.inc`, and `just pruebas` gave 961 without moving any golden.
 
 # Goldens
 
-Cinco nuevas, en su commit, sin tocar ninguna existente:
-`paradise-108-llegada` y `paradise-108-turnos-{arriba,al-medio,abajo,de-vuelta}`.
-Lado a lado en `/shared/capturas/2026-10-01-el-108/`, con un `LEEME.txt`.
-**El merge espera el visto bueno de taro.**
+Five new ones, in their commit, without touching any existing one:
+`paradise-108-llegada` and
+`paradise-108-turnos-{arriba,al-medio,abajo,de-vuelta}`. Side by side in
+`/shared/capturas/2026-10-01-el-108/`, with a `LEEME.txt`. **The merge waits
+for taro's approval.**
 
-# Al mergear
+# When merging
 
-Instalar `wally`, `mapdata` y `cartridge` (`just -f tools/justfile install
-wally mapdata cartridge`): `wally` lleva `rm2k-snes-map-sprites` adentro, y
-`cartridge` arma con el runtime. Python: cambiaron `map_convert.py` y
-`snes_convert.py`, sin archivos nuevos ni renombrados.
+Install `wally`, `mapdata` and `cartridge` (`just -f tools/justfile install
+wally mapdata cartridge`): `wally` carries `rm2k-snes-map-sprites` inside, and
+`cartridge` builds with the runtime. Python: `map_convert.py` and
+`snes_convert.py` changed, without new or renamed files.
 
-# Qué tiene que probar taro
+# What taro has to test
 
-* Del túnel (107) a Paradise: la pregunta de guardar, la escena de la
-  llegada y el cartel del fin.
-* Caminar el 108 con gente: jugando, el pueblo está casi vacío hasta
-  tandas de la historia que no entran; hay que prender 396, 386 y 388 en un
-  emulador (o pedirme un caso). Que cada vecino tenga su cara y mire para su
-  lado al entrar en pantalla, sobre todo en los bordes.
+* From the tunnel (107) to Paradise: the save question, the arrival scene and
+  the end sign.
+* Walking 108 with people: playing, the town is almost empty until batches of
+  the story that do not fit; 396, 386 and 388 have to be turned on in an
+  emulator (or ask me for a case). That each neighbour has their face and
+  faces their side on entering the screen, above all at the edges.

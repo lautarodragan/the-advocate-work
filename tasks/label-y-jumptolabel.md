@@ -1,93 +1,95 @@
 ---
-name: "Label y JumpToLabel"
-description: "Los dos comandos que no tienen caso en el compilador de eventos: los usan la portable console y 8 páginas de mapas"
+name: "Label and JumpToLabel"
+description: "The two commands that have no case in the event compiler: the portable console and 8 map pages use them"
 type: feature
 status: done
 assignee: taro
 ---
 
-Fase 1 de `docs/research/2026-10-01-el-sistema-de-imagenes.md` (Jilguero),
-de taro el 2026-10-01: "me parece perfecto avanzar con Label, JumpToLabel".
+Phase 1 of `docs/research/2026-10-01-el-sistema-de-imagenes.md` (Jilguero),
+from taro on 2026-10-01: "going ahead with Label, JumpToLabel sounds perfect
+to me".
 
-## Qué hace RM2k
+## What RM2k does
 
-Confirmado en easyrpg, `CommandJumpToLabel` y el despacho de `Cmd::Label`
+Confirmed in easyrpg, `CommandJumpToLabel` and the dispatch of `Cmd::Label`
 (`game_interpreter.cpp`):
 
-- `Label` no hace nada.
-- `JumpToLabel` recorre **la lista entera del frame desde arriba** y salta
-  a la **primera** `Label` con ese número: no mira la indentación ni si está
-  antes o después del salto. Una segunda con el mismo número no se alcanza
-  nunca.
-- Si no hay ninguna con ese número, **no hace nada** y sigue.
-- La lista es la del frame: un `CallEvent` sólo ve sus propias etiquetas.
-- No hay pila de bloques. Lo que hay es un sub-índice por indentación
-  (`subcommand_path`): un `ElseBranch`, un `ShowChoiceOption` o un manejador
-  de pelea corre o saltea su cuerpo según lo que dejó ahí **el último bloque
-  de esa indentación**. Saltar **hacia afuera** de un bloque no cuesta nada.
-  Saltar **hacia adentro** del cuerpo de arriba de una rama con `else` hace
-  que el `else` corra o no según ese resto: normalmente no, pero una rama
-  falsa sin `else` deja "else" puesto y entonces sí.
-- `Loop` sin el parche Maniac no guarda estado; `EndLoop` busca su `Loop`
-  hacia atrás por indentación. Acá `Loop` no compila, así que no importa.
+- `Label` does nothing.
+- `JumpToLabel` walks **the frame's whole list from the top** and jumps to the
+  **first** `Label` with that number: it does not look at the indentation nor
+  at whether it is before or after the jump. A second one with the same number
+  is never reached.
+- If there is none with that number, **it does nothing** and continues.
+- The list is the frame's: a `CallEvent` only sees its own labels.
+- There is no block stack. What there is is a sub-index per indentation
+  (`subcommand_path`): an `ElseBranch`, a `ShowChoiceOption` or a battle
+  handler runs or skips its body according to what **the last block at that
+  indentation** left there. Jumping **out** of a block costs nothing. Jumping
+  **into** the upper body of a branch with `else` makes the `else` run or not
+  according to that leftover: normally not, but a false branch without `else`
+  leaves "else" set and then it does.
+- `Loop` without the Maniac patch keeps no state; `EndLoop` looks for its
+  `Loop` backwards by indentation. Here `Loop` does not compile, so it does
+  not matter.
 
-## Qué se hizo
+## What was done
 
-`tools/rm2k-snes/events/src/compile.rs`: `label_targets` resuelve cada
-salto como easyrpg —la primera del número, o nada— y `page` emite un
-`OP_GOTO`: hacia atrás con la posición ya conocida, hacia adelante abierto y
-parchado al final de la página. Sin opcode nuevo.
+`tools/rm2k-snes/events/src/compile.rs`: `label_targets` resolves each jump
+like easyrpg —the first one with the number, or nothing— and `page` emits an
+`OP_GOTO`: backwards with the position already known, forwards left open and
+patched at the end of the page. No new opcode.
 
-**Lo que no compila**: un salto que cae adentro de un cuerpo que **no es el
-último** de su bloque —el de arriba de una rama con `else`, una opción que no
-es la última, un manejador que no es el último—, porque ahí lo que sigue
-depende del sub-índice viejo de RM2k y acá es siempre un salto al final. Si
-la etiqueta está en el último cuerpo —un `else`, la última opción, una rama
-sin `else`— después viene el fin del bloque, que no hace nada en ninguno de
-los dos, y compila. Los 13 saltos del común 39 que entran a un bloque caen
-todos en un `else`.
+**What does not compile**: a jump that lands inside a body that **is not the
+last** of its block —the upper one of a branch with `else`, an option that is
+not the last, a handler that is not the last—, because there what follows
+depends on RM2k's old sub-index and here it is always a jump to the end. If
+the label is in the last body —an `else`, the last option, a branch without
+`else`— what comes next is the end of the block, which does nothing in either
+of the two, and it compiles. The 13 jumps of common 39 that go into a block
+all land in an `else`.
 
-**Lo que queda como riesgo**: un salto hacia atrás sin nada que espere en
-el medio cuelga la ROM —`run_code` no corta por cantidad de comandos, como
-easyrpg, que cede el cuadro—. Medido sobre el juego: todos los saltos hacia
-atrás de los comunes 16, 21 y 39 tienen un `KeyInputProc` con espera
-adentro de la vuelta, salvo el `JumpToLabel 15` del 39 que sólo da la vuelta
-si ninguno de los switches 712 a 725 está prendido.
+**What remains as a risk**: a backwards jump with nothing that waits in
+between hangs the ROM —`run_code` does not cut off by number of commands,
+like easyrpg, which yields the frame—. Measured over the game: all the
+backwards jumps of commons 16, 21 and 39 have a `KeyInputProc` with wait
+inside the loop, except the `JumpToLabel 15` of 39, which only loops if none
+of the switches 712 to 725 is on.
 
-## Cuántas páginas compilan ahora
+## How many pages compile now
 
-**Ninguna más.** Medido con `rm2k-snes-events scan` sobre todos los mapas
-del juego, el binario de la base contra el nuevo: 5560 y 5560. Las 8 páginas
-de mapa son la misma página en los mapas 332 a 339 (Room B a Room I, evento
-3), y además de las etiquetas usan dos cosas que no compilan: la rama por la
-dirección del héroe (`ConditionalBranch` tipo 6) y `ControlVars` desde la
-posición de un evento (operando 6: X e Y del héroe y del evento 7). Con esas
-dos neutralizadas compila con el compilador nuevo y no con el viejo, que
-pedía además sacar `Label`/`JumpToLabel`. Los comunes de la consola (16, 21
-y 39) tienen los bloqueos que dice el estudio de Jilguero.
+**None more.** Measured with `rm2k-snes-events scan` over all the game's
+maps, the base's binary against the new one: 5560 and 5560. The 8 map pages
+are the same page on maps 332 to 339 (Room B to Room I, event 3), and besides
+the labels they use two things that do not compile: the branch on the hero's
+direction (`ConditionalBranch` type 6) and `ControlVars` from an event's
+position (operand 6: X and Y of the hero and of event 7). With those two
+neutralised it compiles with the new compiler and not with the old one, which
+also required removing `Label`/`JumpToLabel`. The console's commons (16, 21
+and 39) have the blockers that Jilguero's study lists.
 
-## Pruebas
+## Tests
 
-- Unitarias en `compile.rs`: adelante, atrás, afuera de dos ramas, la
-  primera del número gana, una que no está no hace nada, adentro del último
-  cuerpo (`else`, rama sin `else`, última opción) compila, adentro de uno
-  que no es el último no, y dentro del mismo cuerpo.
-- `rom/pruebas/casos/etiquetas.json` y `rpgmaker/test_etiquetas.py`: una
-  vuelta hacia atrás de tres pasadas, un salto adelante por encima de un
-  switch, uno a una etiqueta que no está, y uno adentro de un `else`. **El
-  rojo**: con el compilador de la base, `just cartuchos` se niega —"the test
-  page doesn't compile"—.
-- El juego chico de las pruebas de Python (`tests/game/`) usaba una `Label`
-  suelta como "comando que no compila", en el común 3 y en la página 2 del
-  evento 9: ahora compila y cambiaba el hash del scan. Se reemplazó por un
-  `Loop`, que tampoco compila, y los hashes de `python.json` quedan como
-  estaban, sin regenerar.
-- Sin el caso, `abl.sfc` sale igual a la base (`645b6b86…`); con el caso
-  cambia (una página de prueba más) y no se mueve ninguna golden.
+- Unit tests in `compile.rs`: forwards, backwards, out of two branches, the
+  first one with the number wins, one that is not there does nothing, inside
+  the last body (`else`, branch without `else`, last option) compiles, inside
+  one that is not the last does not, and within the same body.
+- `rom/pruebas/casos/etiquetas.json` and `rpgmaker/test_etiquetas.py`: a
+  backwards loop of three passes, a forward jump over a switch, one to a label
+  that is not there, and one into an `else`. **The red**: with the base's
+  compiler, `just cartuchos` refuses —"the test page doesn't compile"—.
+- The small game of the Python tests (`tests/game/`) used a loose `Label` as
+  "a command that does not compile", in common 3 and in page 2 of event 9: now
+  it compiles and it changed the scan's hash. It was replaced with a `Loop`,
+  which does not compile either, and the hashes in `python.json` stay as they
+  were, without regenerating.
+- Without the case, `abl.sfc` comes out identical to the base's
+  (`645b6b86…`); with the case it changes (one more test page) and no golden
+  moves.
 
-## Al mergear
+## When merging
 
-- Instalar `events` en el global: `just -f tools/justfile install events`.
-- Ninguna golden cambia, y no hay nada que jugar todavía: ninguna página del
-  juego compila por esto solo. Lo que se puede mirar es el caso `etiquetas`,
-  que corre en la tanda.
+- Install `events` in the global one: `just -f tools/justfile install events`.
+- No golden changes, and there is nothing to play yet: no page of the game
+  compiles because of this alone. What can be looked at is the `etiquetas`
+  case, which runs in the suite.

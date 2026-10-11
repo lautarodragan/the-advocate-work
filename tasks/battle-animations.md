@@ -1,98 +1,101 @@
 ---
-name: "Animaciones de batalla"
-description: "El sonido, la luz y los cuadros de ShowBattleAnimation"
+name: "Battle animations"
+description: "The sound, the light and the frames of ShowBattleAnimation"
 status: done
 ---
 
-### Las animaciones de batalla: el sonido y la luz
+### Battle animations: the sound and the light
 
-`ShowBattleAnimation` son dos mitades, y ésta es la del **sonido y la luz**: sus
-efectos y sus destellos, en el cuadro en que RM2k los pone. El dibujo está en la
-sección que sigue. Son once en la intro —tres en el Linkage Block, ocho en el
-Emitter Room, todas de fuego— y sin ellas esas escenas son silencio y nada.
+`ShowBattleAnimation` is two halves, and this is the one of **the sound and
+the light**: its sound effects and its flashes, on the frame where RM2k puts
+them. The drawing is in the next section. There are eleven in the intro —three
+in the Linkage Block, eight in the Emitter Room, all of fire— and without them
+those scenes are silence and nothing.
 
-Compila a `OP_ANIMATION` con la línea de tiempo adentro: por cada `timing` de
-la animación, en el cuadro par `2 * (frame - 1)`, su efecto y su destello, de
-la pantalla o del evento objetivo. Hay una sola a la vez, como en
-`Game_Screen::ShowBattleAnimation`, y avanza una vez por cuadro antes que los
-destellos (`animacion_tick`). Con "esperar", la
-página espera lo que dura. Tres cosas son nuestras:
+It compiles to `OP_ANIMATION` with the timeline inside: for each `timing` of
+the animation, on the even frame `2 * (frame - 1)`, its sound effect and its
+flash, of the screen or of the target event. There is only one at a time, as
+in `Game_Screen::ShowBattleAnimation`, and it advances once per frame before
+the flashes (`animacion_tick`). With "wait", the page waits for as long as it
+lasts. Three things are ours:
 
-* **El destello es un `FlashScreen` o un `FlashSprite`** que arranca en la
-  fuerza que RM2k le da al primer cuadro y baja lineal en diez; allá baja a
-  escalones. Diez, y par a propósito: el destello de pantalla trabaja en dos
-  fases según la paridad de lo que le queda, y con once arrancaba por la que
-  ninguna página del juego toma, que es la que quedó sin probar.
-* **Al héroe no se lo destella.** Con quién comparte paleta depende del grupo,
-  que el compilador no ve; para los `FlashSprite` el conversor lo mira y corta
-  la ROM entera, y una animación no vale eso. Tampoco a un evento que comparta
-  gráfico con otro, y eso **quedó conservador** desde que el destello pasó a ser
-  por fila de paleta (ver abajo): hoy el del objetivo se podría emitir igual. No
-  se hizo en la misma vuelta porque cambia qué se dibuja en los mapas donde dos
-  eventos comparten gráfico, y eso pide medir la tanda de nuevo.
-* **El dibujo no está.** Son celdas de 96x96 con zoom de hasta el doble y su
-  propia paleta; es el sistema de al lado, y está abajo.
+* **The flash is a `FlashScreen` or a `FlashSprite`** that starts at the
+  strength RM2k gives the first frame and goes down linearly over ten; there it
+  goes down in steps. Ten, and even on purpose: the screen flash works in two
+  phases according to the parity of what it has left, and with eleven it
+  started with the one no page of the game takes, which is the one that was
+  left untested.
+* **The hero is not flashed.** Whom he shares a palette with depends on the
+  party, which the compiler does not see; for `FlashSprite`s the converter
+  checks it and stops the whole ROM, and an animation is not worth that. Nor an
+  event that shares a graphic with another, and that **stayed conservative**
+  since the flash became per palette row (see below): today the target's could
+  be emitted anyway. It was not done in the same round because it changes what
+  is drawn on the maps where two events share a graphic, and that asks for
+  measuring the suite again.
+* **The drawing is not there.** They are 96x96 cells with zoom of up to double
+  and their own palette; it is the system next door, and it is below.
 
-Lo cobra `animacion` en la tanda —la 82 sobre el héroe, que destella la
-pantalla—, por la página de prueba de `pruebas/casos/animacion.json`: la escena
-del Emitter Room no se puede disparar desde una prueba. Los efectos los cobra
-el paquete de audio de cada mapa, que los cuenta como uno más.
+It is enforced by `animacion` in the suite —82 on the hero, which flashes the
+screen—, through the test page in `pruebas/casos/animacion.json`: the Emitter
+Room scene cannot be triggered from a test. The sound effects are enforced by
+each map's audio package, which counts them as one more.
 
-### El dibujo de las animaciones de batalla
+### The drawing of battle animations
 
-También se dibujan. El sistema entero está en
-`tools/port/animacion.py`, que es el único lugar donde se decide dónde cae y de qué
-color es cada pixel; la ROM no decide nada de eso.
+They are drawn too. The whole system is in `tools/port/animacion.py`, which is
+the only place where it is decided where each pixel falls and what colour it
+is; the ROM decides nothing of that.
 
-**Una caja de 64x64, la misma para toda la ROM.** Son cuatro objetos de 32x32
-en 64 tiles, que es una fila de bloques de la grilla de nombres de OAM: un
-objeto de 32x32 lee cuatro tiles de cuatro filas seguidas, así que en una fila
-entran cuatro objetos y ni uno más. Más que eso tampoco había: la VRAM de
-sprites que le queda libre al mapa 2 son 101 tiles y una caja de 96x96 son 144.
-Que la caja **no dependa del mapa** es lo que deja que los 388
-`ShowBattleAnimation` de los 81 mapas del juego compartan los mismos cuadros ya
-convertidos en el cartucho.
+**A 64x64 box, the same one for the whole ROM.** It is four 32x32 objects in 64
+tiles, which is one row of blocks of the OAM name grid: a 32x32 object reads
+four tiles from four consecutive rows, so four objects fit in a row and not one
+more. More than that there was not anyway: the sprite VRAM left free on map 2
+is 101 tiles and a 96x96 box is 144. That the box **does not depend on the
+map** is what lets the 388 `ShowBattleAnimation`s of the game's 81 maps share
+the same frames already converted in the cartridge.
 
-**La animación se achica entera hasta entrar**, con su proporción, y cuánto se
-achicó lo emite el conversor animación por animación. Las de la intro:
+**The animation is shrunk whole until it fits**, keeping its proportion, and
+how much it was shrunk the converter emits animation by animation. The intro's:
 
-| animación | de       | a     | cuadros | en el cartucho |
-|-----------|----------|-------|---------|----------------|
-| 77        | 192x192  | 64x64 | 20      | 40 KB          |
-| 78        | 144x176  | 52x64 | 24      | 48 KB          |
-| 79        | 512x384  | 64x48 | 28      | 56 KB          |
-| 82        | 536x416  | 64x49 | 28      | 56 KB          |
+| animation | from     | to    | frames  | in the cartridge |
+|-----------|----------|-------|---------|------------------|
+| 77        | 192x192  | 64x64 | 20      | 40 KB            |
+| 78        | 144x176  | 52x64 | 24      | 48 KB            |
+| 79        | 512x384  | 64x48 | 28      | 56 KB            |
+| 82        | 536x416  | 64x49 | 28      | 56 KB            |
 
-Achicarlas es lo que hace que las grandes existan: al 11% la 82 es un brillo y
-no un incendio, pero está, y la alternativa medida era que no estuviera.
+Shrinking them is what makes the big ones exist: at 11% 82 is a glow and not a
+blaze, but it is there, and the measured alternative was that it not be.
 
-**Los cuadros van prerenderizados en el cartucho y se suben por DMA.** Uno cada
-dos cuadros de consola, que es lo que dura un cuadro de RM2k: 2 KB, o sea
-cuatro de las cinco poses del presupuesto del vblank, y se le **descuentan** a
-`vq_tope` en vez de fijarlo, igual que un paso de la animación del ChipSet. Van
-uno por cuadro y no un bloque seguido por animación porque 28 cuadros son 57 KB
-y un banco tiene 32.
+**The frames go pre-rendered in the cartridge and are uploaded by DMA.** One
+every two console frames, which is how long an RM2k frame lasts: 2 KB, that
+is, four of the five poses of the vblank budget, and they are **subtracted**
+from `vq_tope` instead of fixing it, same as a step of the ChipSet animation.
+They go one per frame and not one continuous block per animation because 28
+frames are 57 KB and a bank has 32.
 
-**Una paleta de sprite entera para ella sola**, como el cartel: sus quince
-colores son de la animación y se pisan cuando empieza otra, así que un
-personaje metido ahí cambiaría de color con ella. Los mapas 2 y 3 llenaban las
-ocho, así que en los mapas que muestran animaciones **los personajes se
-reparten siete**; lo que eso fusiona está en `assets/LIMITACIONES.md`. Si con
-siete no entra el cronómetro manda el cronómetro, se vuelve a ocho y ese mapa
-no dibuja: le pasa al mapa 9, y lo dice.
+**A whole sprite palette for itself alone**, like the sign: its fifteen
+colours are the animation's and are overwritten when another one starts, so a
+character put there would change colour with it. Maps 2 and 3 filled all
+eight, so on the maps that show animations **the characters share seven**;
+what that merges is in `assets/LIMITACIONES.md`. If with seven the timer does
+not fit, the timer wins, it goes back to eight and that map does not draw: it
+happens to map 9, and it says so.
 
-**Dónde cae.** Con alcance "pantalla" va al centro de la de la consola, que es
-`DrawAt(screen_width / 2, screen_height / 2)`; con el otro, sobre el objetivo,
-que es `GetScreenX()` y `GetScreenY(false)` menos medio personaje y la corrida
-de `Animation::Position`. Esa corrida va **horneada en el ancla** que lleva la
-tabla, así que la consola sólo resta. Un objetivo sin fila de NPC, o escondido,
-no tiene de dónde sacar la posición y la animación no se dibuja.
+**Where it lands.** With "screen" scope it goes to the centre of the console's
+screen, which is `DrawAt(screen_width / 2, screen_height / 2)`; with the
+other, on the target, which is `GetScreenX()` and `GetScreenY(false)` minus
+half a character and the offset of `Animation::Position`. That offset is
+**baked into the anchor** the table carries, so the console only subtracts. A
+target without an NPC row, or hidden, has nowhere to take the position from
+and the animation is not drawn.
 
-Lo que se pierde está en `assets/LIMITACIONES.md`: la transparencia de una
-celda, el destello sobre la animación y las `global`.
+What is lost is in `assets/LIMITACIONES.md`: a cell's transparency, the flash
+on the animation and the `global` ones.
 
-En la tanda lo cobran `animacion-dibujo` —la 78 sobre el héroe, con uno de sus
-cuadros vacíos y los tres más cargados— y `animacion-evento` —la misma sobre
-Manta, pegada al borde izquierdo, donde `emit_object` recorta la caja—. Son dos
-casos y no uno porque en la ROM son dos caminos: el héroe sale de `hero_x` y un
-evento de su fila, por `npc_de_evento`.
+In the suite it is enforced by `animacion-dibujo` —78 on the hero, with one of
+its empty frames and the three most loaded ones— and `animacion-evento` —the
+same one on Manta, stuck to the left edge, where `emit_object` clips the box—.
+They are two cases and not one because in the ROM they are two paths: the hero
+comes from `hero_x` and an event from its row, through `npc_de_evento`.

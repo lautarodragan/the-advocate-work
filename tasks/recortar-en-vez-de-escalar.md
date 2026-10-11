@@ -1,146 +1,142 @@
 ---
-name: "Recortar una imagen en vez de escalarla"
-description: "Una opción del motor para que una imagen de pantalla completa se recorte a la ventana de la consola en vez de escalarse; ABL la usa en las cuatro fotos Diff, que son capturas del mapa"
+name: "Cropping a picture instead of scaling it"
+description: "An engine option so that a full-screen picture is cropped to the console's window instead of being scaled; ABL uses it on the four Diff photos, which are captures of the map"
 type: feature
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-10-02 (la tarea del juego está en ABL:
-`tasks/las-fotos-diff-recortadas-y-el-montaje.md`): las fotos
-Diff son capturas del mapa a 320x240, y el original las usa para un efecto
-de "en vivo a foto". Escaladas a 256 ya no coinciden con el mapa de la ROM.
-Recortadas sí, porque la ROM no escala el mapa.
+From taro, on 2026-10-02 (the game's task is in ABL:
+`tasks/las-fotos-diff-recortadas-y-el-montaje.md`): the Diff photos are
+captures of the map at 320x240, and the original uses them for a "live to
+photo" effect. Scaled to 256 they no longer match the ROM's map. Cropped they
+do, because the ROM does not scale the map.
 
-Va encima de `sin-resample` (Corbatita): con `image` en lugar del LANCZOS de
-Pillow, las fotos escaladas eligen otros colores al reducirse y la sombra del
-árbol pasa de verde a azul. Recortadas no pasan por el escalador. Hornero
-propuso esperar a esto antes de mergear `sin-resample`, para que esa versión
-no entre nunca, y taro dijo que vaya con lo que le parezca bien. El montaje
-del 217 queda para después del piloto del modo 7.
+It goes on top of `sin-resample` (Corbatita): with `image` instead of Pillow's
+LANCZOS, the scaled photos pick other colours when reduced and the tree's
+shadow goes from green to blue. Cropped, they do not go through the scaler.
+Hornero proposed waiting for this before merging `sin-resample`, so that that
+version never goes in, and taro said to go with whatever seemed right. The
+montage of 217 is left for after the mode 7 pilot.
 
-Hecha por Golondrina, desde `main` en `3a188d9f` con la rama de Corbatita
-mergeada encima (`2b76713c`); `main` se movió a `ef5f8133` con el mismo
-merge, y está mergeado antes de entregar.
+Done by Golondrina, from `main` at `3a188d9f` with Corbatita's branch merged on
+top (`2b76713c`); `main` moved to `ef5f8133` with the same merge, and it is
+merged before delivering.
 
-## Dónde vive la opción: `[graphics] cropped_pictures`
+## Where the option lives: `[graphics] cropped_pictures`
 
-En `rm2k-snes.toml`, una tabla por nombre de imagen, con el pixel de la
-imagen desde donde se corta la pantalla de la consola:
+In `rm2k-snes.toml`, a table by picture name, with the picture's pixel from
+which the console's screen is cut:
 
     [graphics.cropped_pictures]
     PhoneCallDiff = [8, 16]
 
-Por qué ahí y no en un parche versionado: los parches son **lo que el
-conversor decide perder** —colores fusionados, efectos que no entran— y los
-escribe él; esto es una decisión del juego sobre cómo se presenta una
-imagen, que el conversor no puede tomar solo porque depende de dónde está
-la cámara cuando la escena la muestra. Es la misma clase de cosa que
-`[graphics] opaque`: una perilla del motor que el juego prende, por nombre,
-sin distinguir mayúsculas como RM2k. Y como toda clave del archivo de
-proyecto, **es obligatoria** (vacía, `{}`, en un juego que no recorta nada):
-el conversor no tiene valores por omisión para lo que dice el juego.
+Why there and not in a versioned patch: the patches are **what the converter
+decides to lose** —merged colours, sound effects that do not fit— and it writes
+them itself; this is a decision of the game about how a picture is presented,
+which the converter cannot take alone because it depends on where the camera is
+when the scene shows it. It is the same kind of thing as `[graphics] opaque`:
+an engine knob the game turns on, by name, case-insensitive like RM2k. And like
+every key of the project file, **it is mandatory** (empty, `{}`, in a game
+that crops nothing): the converter has no defaults for what the game says.
 
-Lo que hace, de punta a punta:
+What it does, end to end:
 
-* `rm2k-snes-convert` la lee al leer el juego (`pictures::Cropped`, en
-  `Game`) y le pasa el recorte a la etapa de las imágenes grandes. Una
-  imagen recortada **siempre es grande** —es la pantalla—, salvo que su
-  `ShowPicture` la ponga por variables, que sigue yendo a los objetos.
-* `rm2k-snes-images background` recibe `"crop": [x, y]` en la petición, y
-  sólo cuando hay recorte, así la petición de las escaladas es la de
-  siempre. Con recorte no escala: el lienzo es la pantalla de la consola,
-  cortada de la imagen desde ese pixel, dondequiera que la ponga el
-  `ShowPicture`. Se niega si la ventana se sale de la imagen o si el zoom
-  no es 100 (el recorte es en los pixeles del archivo).
-* Nada más cambia: ni la emisión, ni el runtime, ni el compilador.
+* `rm2k-snes-convert` reads it when reading the game (`pictures::Cropped`, in
+  `Game`) and passes the crop to the stage of the large pictures. A cropped
+  picture **is always large** —it is the screen—, unless its `ShowPicture`
+  places it by variables, which still goes to the objects.
+* `rm2k-snes-images background` receives `"crop": [x, y]` in the request, and
+  only when there is a crop, so the request for the scaled ones is the usual
+  one. With a crop it does not scale: the canvas is the console's screen, cut
+  from the picture from that pixel, wherever the `ShowPicture` places it. It
+  refuses if the window goes outside the picture or if the zoom is not 100 (the
+  crop is in the file's pixels).
+* Nothing else changes: neither the emission, nor the runtime, nor the
+  compiler.
 
-El montaje del 217 muestra las mismas cuatro fotos, así que también van
-recortadas: es la misma imagen con el mismo nombre.
+The montage of 217 shows the same four photos, so they go cropped too: it is
+the same picture with the same name.
 
-## El recorte, verificado contra la ROM
+## The crop, verified against the ROM
 
-Los cuatro mapas son de 20x15, la pantalla de RM2k entera, así que la foto
-es lo que mostraba RM2k con la cámara en (0, 0). La ROM centra al héroe
-—que llega por un `Teleport` y no se mueve— contra el borde del mapa: de
-Chimango, `PhoneCallDiff` y `SurlGravesDiff` desde (8, 16), y `SurlBroDiff`
-y `ThreeRubbleDiff` desde (0, 16).
+The four maps are 20x15, RM2k's whole screen, so the photo is what RM2k showed
+with the camera at (0, 0). The ROM centres the hero —who arrives through a
+`Teleport` and does not move— against the map's edge: from Chimango,
+`PhoneCallDiff` and `SurlGravesDiff` from (8, 16), and `SurlBroDiff` and
+`ThreeRubbleDiff` from (0, 16).
 
-Para verificarlo, en un clon aparte de ABL (no commiteado), un cartucho de
-prueba con los mapas 212 a 217 y una página por mapa que entra con el
-`Teleport` del juego —(8, 10), (6, 10), (8, 9) y (7, 11)—: la escena de
-verdad corre y pone la foto. Se guardó cada cuadro hasta la foto, y se
-midió, a 15 bits:
+To verify it, in a separate clone of ABL (not committed), a test cartridge with
+maps 212 to 217 and one page per map that enters with the game's `Teleport`
+—(8, 10), (6, 10), (8, 9) and (7, 11)—: the real scene runs and puts up the
+photo. Each frame up to the photo was saved, and it was measured, at 15 bits:
 
-| mapa | foto | la ROM contra el mapa de RM2k | el siguiente |
+| map | photo | the ROM against RM2k's map | the next one |
 |---|---|---|---|
-| 212 | PhoneCallDiff (8, 16) | 99,5 % idénticos | — |
-| 213 | SurlBroDiff (0, 16) | 99,2 % | 81,0 % en (16, 16) |
-| 214 | SurlGravesDiff (8, 16) | 83,7 % | 76,1 % en (40, 16) |
-| 216 | ThreeRubbleDiff (0, 16) | 96,0 % | 66,7 % en (16, 16) |
+| 212 | PhoneCallDiff (8, 16) | 99.5 % identical | — |
+| 213 | SurlBroDiff (0, 16) | 99.2 % | 81.0 % at (16, 16) |
+| 214 | SurlGravesDiff (8, 16) | 83.7 % | 76.1 % at (40, 16) |
+| 216 | ThreeRubbleDiff (0, 16) | 96.0 % | 66.7 % at (16, 16) |
 
-"El mapa de RM2k" son sus dos capas dibujadas por `rm2k-render layers`, sin
-eventos; lo que no coincide son los personajes (el 214 tiene cien tumbas
-que son eventos). El cuadro es el último antes de la foto sin el destello
-blanco que la escena pone justo antes. **La cámara de la ROM es exactamente
-el recorte de Chimango en los cuatro.**
+"RM2k's map" is its two layers drawn by `rm2k-render layers`, without events;
+what does not match is the characters (214 has a hundred graves that are
+events). The frame is the last one before the photo without the white flash the
+scene puts just before. **The ROM's camera is exactly Chimango's crop in all
+four.**
 
-Y que la foto sea la pantalla de RM2k sin correrse: la correlación de los
-bordes entre la foto y el mapa de RM2k da el máximo sin correrla en el 212,
-el 213 y el 216, y en el 214 a un pixel por muy poco (0,122 contra 0,116):
-es la foto que más cambió respecto del mapa —otras tumbas—. Los bordes de
-la pantalla de la ROM contra cada recorte de la foto también dan el máximo
-en el recorte, en los cuatro. **Pixel por pixel no coinciden, ni pueden**:
-las fotos están retocadas —suavizadas y con grano, el 212 en sepia— y son
-otro momento de la escena, que es el punto del efecto; y la ROM reduce los
-colores. Lo que coincide es el fondo, sin corrimiento.
+And that the photo is RM2k's screen without shifting: the correlation of the
+edges between the photo and RM2k's map gives the maximum without shifting it on
+212, 213 and 216, and on 214 at one pixel by very little (0.122 against
+0.116): it is the photo that changed the most with respect to the map —other
+graves—. The edges of the ROM's screen against each crop of the photo also give
+the maximum at the crop, in all four. **Pixel by pixel they do not match, nor
+can they**: the photos are retouched —smoothed and with grain, 212 in sepia—
+and are another moment of the scene, which is the point of the effect; and the
+ROM reduces the colours. What matches is the background, without shifting.
 
-La golden nueva de `imagen-grande-foto-5` es, pixel por pixel, la pantalla
-de la ROM en el 212 de verdad con la foto arriba; la de
-`imagen-grande-fotos-5`, la del 213.
+The new golden of `imagen-grande-foto-5` is, pixel by pixel, the ROM's screen
+on the real 212 with the photo on top; that of `imagen-grande-fotos-5`, the one
+of 213.
 
-## En ABL
+## In ABL
 
-En `/extras/scratch/golondrina/abl`, rama `fotos-recortadas`, encima de
-`a64eab2` (los dos commits de Corbatita, que son los de `/shared/abl-snes`):
+In `/extras/scratch/golondrina/abl`, branch `fotos-recortadas`, on top of
+`a64eab2` (Corbatita's two commits, which are those of `/shared/abl-snes`):
 
-* `26fc753` pide el recorte en `rm2k-snes.toml`, con los cuatro;
-* `a942b02` las goldens, sólo goldens: **siete**, las que muestran las
-  fotos —`imagen-grande-foto-5` y `-140`, `imagen-grande-fotos-5`, `-65` y
-  `-125`, `imagen-grande-montaje-fotos-3` y `-9`—. Ninguna otra se mueve,
-  tampoco las 68 de Corbatita.
+* `26fc753` asks for the crop in `rm2k-snes.toml`, with the four;
+* `a942b02` the goldens, only goldens: **seven**, the ones that show the photos
+  —`imagen-grande-foto-5` and `-140`, `imagen-grande-fotos-5`, `-65` and
+  `-125`, `imagen-grande-montaje-fotos-3` and `-9`—. No other moves, not even
+  Corbatita's 68.
 
-`abl.sfc` pasa de `0072d314…` a `8c9e670f…`; los dos cartuchos de prueba
-quedan iguales (no llevan las fotos). `just espacio` sobre `release`: 43
-bancos libres, igual que antes; los huecos de los bancos usados bajan de
-62.373 B a 59.217 B: las fotos recortadas piden unos 3 KB más que las
-escaladas (por qué, no lo medí).
+`abl.sfc` goes from `0072d314…` to `8c9e670f…`; the two test cartridges stay
+the same (they do not carry the photos). `just espacio` on `release`: 43 free
+banks, same as before; the gaps of the used banks go down from 62,373 B to
+59,217 B: the cropped photos ask for some 3 KB more than the scaled ones (why,
+I did not measure).
 
-Lado a lado —antes de `sin-resample`, con `sin-resample` y recortada, y el
-mapa justo antes de cada foto contra la foto— en
-`/shared/capturas/2026-10-02-fotos-recortadas/`, con su `LEEME.txt`.
-**El merge espera el visto bueno de taro a las siete goldens.**
+Side by side —before `sin-resample`, with `sin-resample` and cropped, and the
+map right before each photo against the photo— in
+`/shared/capturas/2026-10-02-fotos-recortadas/`, with its `LEEME.txt`. **The
+merge waits for taro's approval of the seven goldens.**
 
-## Los números
+## The numbers
 
-* `just pruebas` en el clon de ABL, con las herramientas de esta rama
-  adelante en el PATH —y `main` mergeado, que no cambió nada del árbol—:
-  **993** en verde con las goldens nuevas, incluida
-  `test_musica_techos.py`. Sin ellas, las tres pruebas de las fotos en rojo
-  y nada más.
-* `NO_CACHE=1 just cartuchos` y el armado con caché dan el mismo
+* `just pruebas` in the ABL clone, with this branch's tools first in the PATH
+  —and `main` merged, which changed nothing in the tree—: **993** green with
+  the new goldens, including `test_musica_techos.py`. Without them, the three
+  tests of the photos red and nothing else.
+* `NO_CACHE=1 just cartuchos` and the build with cache give the same
   `abl.sfc`, `8c9e670f…`.
 * `just -f tools/justfile test`: 32.
-* `cargo test -p rm2k-snes-images -p rm2k-snes-convert`: en verde, con
-  cuatro pruebas nuevas —el recorte en `background.rs`, y la tabla en
-  `pictures.rs`—.
+* `cargo test -p rm2k-snes-images -p rm2k-snes-convert`: green, with four new
+  tests —the crop in `background.rs`, and the table in `pictures.rs`—.
 
-## Al mergear
+## When merging
 
-* Instalar `images` y `convert`: `just -f tools/justfile install images
-  convert`. Nada de Python cambió.
-* **Antes de instalarlos, `/shared/abl-snes` necesita la tabla**: el
-  conversor nuevo se niega a correr sin `[graphics] cropped_pictures`. Traer
-  primero los dos commits de la rama `fotos-recortadas` del clon
-  (`/extras/scratch/golondrina/abl`), que van por fast-forward sobre
-  `a64eab2`.
+* Install `images` and `convert`: `just -f tools/justfile install images
+  convert`. No Python changed.
+* **Before installing them, `/shared/abl-snes` needs the table**: the new
+  converter refuses to run without `[graphics] cropped_pictures`. First bring
+  the two commits of the clone's `fotos-recortadas` branch
+  (`/extras/scratch/golondrina/abl`), which go by fast-forward on `a64eab2`.
