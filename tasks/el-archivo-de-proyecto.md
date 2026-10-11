@@ -1,112 +1,115 @@
 ---
-name: "El archivo de proyecto de ABL"
-description: "Los pasos 3 y 4 del plan: las perillas de ABL salen del código a rom/rm2k-snes.toml, y cartuchos.py queda como el mecanismo que lo lee"
+name: "ABL's project file"
+description: "Steps 3 and 4 of the plan: ABL's knobs move out of the code into rom/rm2k-snes.toml, and cartuchos.py stays as the mechanism that reads it"
 type: refactor
 status: done
 assignee: taro
 ---
 
-Pasos 3 y 4 del plan de `docs/research/el-mapa-de-las-herramientas-de-python.md`
-(§4, y la tabla de §3 con los ganchos). taro autorizó el 2026-09-29 a
-Hornero a decidir lo abierto sin esperarlo. Lo decidido:
+Steps 3 and 4 of the plan in
+`docs/research/el-mapa-de-las-herramientas-de-python.md` (§4, and §3's table
+with the hooks). taro authorized Hornero on 2026-09-29 to decide the open
+points without waiting for him. What was decided:
 
-- **El archivo es `rom/rm2k-snes.toml`**: se llama como la suite que lo lee,
-  igual que `Cargo.toml`, y vive en la raíz de ABL.
-- **Las claves van en inglés** —son la interfaz de las herramientas, que van
-  a ir en inglés, y renombrarlas después rompería el archivo de cada juego—;
-  **los comentarios van en castellano**, porque el archivo es de ABL.
-- **Una perilla por commit, con el mismo valor**, y la ROM byte por byte
-  igual en cada uno.
-- **`cartuchos.py` se queda como el mecanismo** que lee el archivo y arma
-  (`rm2k-snes-cartridges`); lo de ABL —qué mapas, qué cartuchos, qué casos—
-  pasa al archivo. La clave del caché sigue siendo el hash de los binarios
-  hasta que haya versiones de verdad.
-- **Los límites del motor medidos sobre ABL** (clase c del research) **no**
-  van al archivo: se quedan en el código con un comentario que diga que se
-  midieron contra A Blurred Line (decisión de taro).
+- **The file is `rom/rm2k-snes.toml`**: it's named after the suite of tools
+  that reads it, like `Cargo.toml`, and lives at ABL's root.
+- **The keys are in English** —they're the tools' interface, which will be in
+  English, and renaming them later would break every game's file—; **the
+  comments are in Spanish**, because the file is ABL's.
+- **One knob per commit, with the same value**, and the ROM byte for byte
+  identical on each one.
+- **`cartuchos.py` stays as the mechanism** that reads the file and builds
+  (`rm2k-snes-cartridges`); ABL's stuff —which maps, which cartridges, which
+  cases— moves to the file. The cache key is still the hash of the binaries
+  until there are real versions.
+- **The engine limits measured on ABL** (the research's class c) do **not**
+  go into the file: they stay in the code with a comment saying they were
+  measured against A Blurred Line (taro's decision).
 
-## Lo hecho
+## What was done
 
-La red de cada perilla: `SIN_CACHE=1 just cartuchos` antes de tocar nada y
-después de cada una, con los sha256 de todo `rom/build/` menos `cache/`, los
-`.o`, `sello.txt` y `conversor.log`, y los `.dbg` sin `mtime`. **Los `.sfc`,
-`.sym`, `.msu`, `.pcm` y `musicdata.inc` no cambiaron nunca.** Lo único que
-se movió: los dos `mapdata.inc`, por el bloque de la identidad (seis líneas,
-dos `.define`), y por eso los `.dbg`, en números de línea y tamaños de
-archivo; los símbolos, con sus valores, son los mismos.
+Each knob's safety net: `SIN_CACHE=1 just cartuchos` before touching anything
+and after each one, with the sha256 of all of `rom/build/` except `cache/`,
+the `.o`s, `sello.txt` and `conversor.log`, and the `.dbg`s without `mtime`.
+**The `.sfc`, `.sym`, `.msu`, `.pcm` and `musicdata.inc` never changed.** The
+only thing that moved: the two `mapdata.inc`, because of the identity block
+(six lines, two `.define`s), and hence the `.dbg`s, in line numbers and file
+sizes; the symbols, with their values, are the same.
 
-1. **El archivo y su lector.** `rom/rm2k-snes.toml` y `tools/comun/perillas.py`:
-   `perillas.valor("maps", "below", tipo=int)` falla con el nombre de la
-   clave si falta, o si el tipo no es; `perillas.ascii` mide los textos que
-   van a la ROM. El archivo entra entero en la huella de los cartuchos y en
-   lo que `entregar` exige commiteado.
-2. **Los cartuchos.** `[maps]`, `[debug]`, `[cases]` y `[cartridges.*]`.
-   cartuchos.py lee el archivo y arma los flags en el orden de siempre, así
-   que el sello sale igual. El 900 sale de `fork.nuevos()`: el de debug es
-   el único mapa nuevo, y si hubiera otro se niega. Un cartucho nuevo es una
-   tabla más.
-3. **La identidad.** `[rom]`: `name`, `title`, `sram_signature`,
-   `msu_data_signature`. El conversor emite `ROM_TITULO` y `SRAM_MAGIA_TEXTO`
-   como `.define` al principio del `mapdata.inc` —fuera de `RODATA`, que el
-   acomodo de bancos mueve—, y `cabecera.s` y `partida.s` los usan con
-   `.byte` y `.strat`. La firma sigue siendo `ABLS`. `entregar.HUELLA_MSU`
-   sale igual, letra por letra.
-4. **Gráficos, pelea, saltos y `--map-id`.** `[graphics]`, `[battle]` y
-   `[music] jumps_that_never_happen`. `--map-id` ya no tiene default: lo
-   cobra `main` y no `required`, porque el parser se reusa para cada `--caso`.
-5. **Las tablas de audio.** `[sound_effects]` y `[music]`. snes_music las
-   expone como funciones —`se_enteros()`, `temas_aparte()`…— y las leen
-   también eventos.py y snes_convert.py.
-6. **Los límites del motor** (clase c): un comentario que dice que se
-   midieron contra A Blurred Line en cada constante de Python. Los tres del
-   runtime ya lo decían y no se tocaron, para no mover el `.dbg`.
+1. **The file and its reader.** `rom/rm2k-snes.toml` and
+   `tools/comun/perillas.py`: `perillas.valor("maps", "below", tipo=int)`
+   fails with the key's name if it's missing, or if the type isn't right;
+   `perillas.ascii` measures the texts that go into the ROM. The whole file
+   goes into the cartridges' fingerprint and into what `entregar` requires to
+   be committed.
+2. **The cartridges.** `[maps]`, `[debug]`, `[cases]` and `[cartridges.*]`.
+   cartuchos.py reads the file and builds the flags in the usual order, so the
+   stamp comes out the same. Map 900 comes from `fork.nuevos()`: the debug one
+   is the only new map, and if there were another it refuses. A new cartridge
+   is one more table.
+3. **The identity.** `[rom]`: `name`, `title`, `sram_signature`,
+   `msu_data_signature`. The converter emits `ROM_TITULO` and
+   `SRAM_MAGIA_TEXTO` as `.define`s at the start of `mapdata.inc` —outside
+   `RODATA`, which the bank layout moves—, and `cabecera.s` and `partida.s`
+   use them with `.byte` and `.strat`. The signature is still `ABLS`.
+   `entregar.HUELLA_MSU` comes out the same, letter by letter.
+4. **Graphics, battle, jumps and `--map-id`.** `[graphics]`, `[battle]` and
+   `[music] jumps_that_never_happen`. `--map-id` no longer has a default:
+   `main` enforces it and not `required`, because the parser is reused for
+   each `--caso`.
+5. **The audio tables.** `[sound_effects]` and `[music]`. snes_music exposes
+   them as functions —`se_enteros()`, `temas_aparte()`…— and eventos.py and
+   snes_convert.py read them too.
+6. **The engine limits** (class c): a comment saying they were measured
+   against A Blurred Line on each Python constant. The three in the runtime
+   already said so and weren't touched, so as not to move the `.dbg`.
 
-**Se lee al usar, no al importar**, salvo en cartuchos.py, que es el
-orquestador del juego: `test_las_herramientas_se_importan_sin_un_juego`
-importa el conversor con el archivo apuntando a uno que no existe. Y
-`rom/pruebas/herramientas/test_perillas_repetidas.py` falla si un `.py` de
-las herramientas vuelve a escribir un texto del archivo: sobre el árbol de
-antes de esto encontraba las tablas de efectos, `vswar`, `ABLBackdropSJ08`,
-`savept`, `Future1`, `nobodyhere`, `test-special` y `mapa-de-debug`.
+**It's read on use, not on import**, except in cartuchos.py, which is the
+game's orchestrator: `test_las_herramientas_se_importan_sin_un_juego` imports
+the converter with the file pointing at one that doesn't exist. And
+`rom/pruebas/herramientas/test_perillas_repetidas.py` fails if a tools `.py`
+writes a text from the file again: on the tree from before this, it found the
+sound effect tables, `vswar`, `ABLBackdropSJ08`, `savept`, `Future1`,
+`nobodyhere`, `test-special` and `mapa-de-debug`.
 
-## Lo que no se hizo: el ambiente (el paso 7 del encargo)
+## What wasn't done: the environment (step 7 of the assignment)
 
-Las herramientas siguen leyendo `ABL_GAME_DIR`, `ABL_RTP_DIR` y
-`ABL_SOUNDFONT` por `comun/proyecto.py`. Cómo lo haría:
+The tools still read `ABL_GAME_DIR`, `ABL_RTP_DIR` and `ABL_SOUNDFONT` through
+`comun/proyecto.py`. How I'd do it:
 
-* `recursos.GAME_DIR`, `recursos.RTP_DIR` y `snes_samples.SOUNDFONT` son
-  globales de módulo que se usan **adentro** de funciones, no sólo como
-  defaults: `escena.py` y `snes_music.py` leen `recursos.RTP_DIR` sin que se
-  lo pasen, y `snes_music` lee `snes_samples.SOUNDFONT` en tres lugares. Pasar
-  el valor por parámetro toca unas cuarenta firmas. Lo más barato que
-  respeta la regla es **un solo lugar que se configura**: `recursos` y
-  `snes_samples` sin valor hasta que el `main` de cada ejecutable los fija
-  desde `--game-dir`, `--rtp-dir` y `--soundfont`, y que fallen claro si
-  alguien los lee sin fijar. Después, si vale la pena, se convierten en
-  parámetros de a uno.
-* Los ejecutables que los necesitan: `rm2k-snes-convert` (ya tiene
-  `--game-dir`), `rm2k-snes-msu` (ya tiene `--soundfont`),
-  `rm2k-snes-cartridges`, que se los pasa al conversor, y
+* `recursos.GAME_DIR`, `recursos.RTP_DIR` and `snes_samples.SOUNDFONT` are
+  module globals used **inside** functions, not only as defaults: `escena.py`
+  and `snes_music.py` read `recursos.RTP_DIR` without it being passed, and
+  `snes_music` reads `snes_samples.SOUNDFONT` in three places. Passing the
+  value as a parameter touches some forty signatures. The cheapest thing that
+  respects the rule is **a single place that gets configured**: `recursos` and
+  `snes_samples` with no value until each executable's `main` sets them from
+  `--game-dir`, `--rtp-dir` and `--soundfont`, and failing clearly if someone
+  reads them unset. Then, if worth it, they become parameters one at a time.
+* The executables that need them: `rm2k-snes-convert` (already has
+  `--game-dir`), `rm2k-snes-msu` (already has `--soundfont`),
+  `rm2k-snes-cartridges`, which passes them to the converter, and
   `rm2k-snes-volume-ceilings`.
-* `rom/justfile` traduce: `--game-dir "${ABL_GAME_DIR:-…}"` y compañía, en
-  las recetas que llaman a esos cuatro. El default de la máquina se queda en
-  el justfile de ABL, que ya lo repite (`datos`, `ditto-*`).
-* Las pruebas de ABL que leen `GAME_DIR` (unas veinte) leen la variable
-  ellas: son del lado de ABL. `tanda` y `conftest.py` son el lugar.
-* `huella` del cartucho no cubre dónde está el juego —no lo cubre hoy
-  tampoco—, así que cambiar `--game-dir` no deja viejo a un cartucho: igual
-  que ahora.
-* `test_proyecto.py` pasa a prohibir `os.environ` de esas tres en todo
-  `tools/`, `proyecto.py` incluido.
+* `rom/justfile` translates: `--game-dir "${ABL_GAME_DIR:-…}"` and company,
+  in the recipes that call those four. The machine's default stays in ABL's
+  justfile, which already repeats it (`datos`, `ditto-*`).
+* ABL's tests that read `GAME_DIR` (about twenty) read the variable
+  themselves: they're on ABL's side. `tanda` and `conftest.py` are the place.
+* The cartridge's `huella` doesn't cover where the game is —it doesn't today
+  either—, so changing `--game-dir` doesn't make a cartridge stale: same as
+  now.
+* `test_proyecto.py` goes on to forbid `os.environ` of those three in all of
+  `tools/`, `proyecto.py` included.
 
-## Lo que queda abierto
+## What remains open
 
-* **La versión de la suite** que el juego declara en el archivo, y la receta
-  `verificar-herramientas`: son de la decisión, pero no de este encargo.
-* **`release` es un nombre que las herramientas exigen**: es el cartucho que
-  lleva el nombre de la ROM, las pistas de MSU-1 y todos los casos.
-  Podría ser una clave (`[rom] played_cartridge`), pero hoy lo nombran
-  también `entregar`, `parches` y la tanda.
-* **Los nombres de módulo de cartuchos.py** —`MENOR_A`, `CARTUCHOS`,
-  `FUERA`— se quedaron por la tanda, que los lee. Renombrarlos o que la
-  tanda lea el archivo es otro cambio.
+* **The version of the suite of tools** that the game declares in the file,
+  and the `verificar-herramientas` recipe: they're part of the decision, but
+  not of this assignment.
+* **`release` is a name the tools require**: it's the cartridge that carries
+  the ROM's name, the MSU-1 tracks and all the cases. It could be a key
+  (`[rom] played_cartridge`), but today `entregar`, `parches` and the suite
+  name it too.
+* **cartuchos.py's module names** —`MENOR_A`, `CARTUCHOS`, `FUERA`— stayed
+  because of the suite, which reads them. Renaming them or having the suite
+  read the file is another change.

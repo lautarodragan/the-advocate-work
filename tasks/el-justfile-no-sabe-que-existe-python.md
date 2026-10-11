@@ -1,40 +1,38 @@
 ---
-name: "El justfile no sabe que existe Python"
-description: "El justfile llama sólo ejecutables del PATH; los .py que se ejecutan pasan a ser ejecutables de verdad, y una prueba con grep cuida que el lado de ABL no nombre tools/"
+name: "The justfile doesn't know Python exists"
+description: "The justfile only calls executables from the PATH; the .py files that get executed become real executables, and a grep test makes sure ABL's side doesn't name tools/"
 type: refactor
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-09-28, como primer paso para separar las herramientas de
-ABL (ver `workflow/decisiones/las-herramientas-se-separan-de-abl.md` y
+From taro, on 2026-09-28, as a first step to separate the tools from ABL (see
+`workflow/decisiones/las-herramientas-se-separan-de-abl.md` and
 `docs/research/el-mapa-de-las-herramientas-de-python.md`):
 
-> Se me ocurre un primer paso: que justfile no sepa que existe python. ABL
-> no puede saber que existe el directorio de tools — solo sabe que existe
-> una suite de herramientas disponible en el path. Los archivos de Python
-> que son ejecutables se convierten en ejecutables de verdad, con hashbang y
-> chmod +x.
+> A first step occurs to me: that the justfile doesn't know Python exists. ABL
+> can't know the tools directory exists — it only knows there's a suite of
+> tools available in the path. The Python files that are executables become
+> real executables, with a hashbang and chmod +x.
 >
-> Luego podemos tener un test muy simple con grep: si algo en abl matchea el
-> path de tools, falla el pipeline.
+> Then we can have a very simple test with grep: if anything in abl matches
+> the tools path, the pipeline fails.
 
-Medido antes de empezar: el `justfile` tiene 50 líneas que nombran
-`python3` o `tools/` (`grep -c "python3\|tools/" justfile`), y 63 archivos de
-`pruebas/` importan módulos de `tools/` directamente. Por eso la prueba del
-grep arranca con una lista de excepciones para `pruebas/` que sólo puede
-achicarse.
+Measured before starting: the `justfile` has 50 lines that name `python3` or
+`tools/` (`grep -c "python3\|tools/" justfile`), and 63 files of `pruebas/`
+import modules from `tools/` directly. That's why the grep test starts with an
+exceptions list for `pruebas/` that can only shrink.
 
-## Lo hecho (Espinillo)
+## What was done (Espinillo)
 
-Tres commits, en el orden que pide AGENTS.md: lo que se verifica con las ROMs
-primero, la prueba y la prosa después, los docs aparte.
+Three commits, in the order AGENTS.md asks for: what's verified with the ROMs
+first, the test and the prose afterwards, the docs separately.
 
-### Los ejecutables
+### The executables
 
-Los ocho `.py` que tienen `__main__` pasan a tener hashbang y `chmod +x`, y
-`just herramientas` los instala como symlinks en `{{cargo_root}}/bin`, al lado
-de los de Rust:
+The eight `.py` files that have `__main__` get a hashbang and `chmod +x`, and
+`just herramientas` installs them as symlinks in `{{cargo_root}}/bin`, next to
+the Rust ones:
 
     rm2k-snes-cartridges        tools/ensamblado/cartuchos.py
     rm2k-snes-assemble          tools/ensamblado/ensamblar.py
@@ -45,115 +43,115 @@ de los de Rust:
     rm2k-snes-volume-ceilings   tools/audio/techos.py
     abl-entregar                tools/ensamblado/entregar.py
 
-El `justfile` llama sólo a cinco: `rm2k-snes-convert`, `-assemble` y `-msu`
-los usan los otros scripts adentro o se corren a mano, y se instalan igual
-porque se ejecutan.
+The `justfile` only calls five: `rm2k-snes-convert`, `-assemble` and `-msu`
+are used by the other scripts internally or run by hand, and they're installed
+anyway because they get executed.
 
-**Los nombres siguen al repo donde va a vivir cada programa.** La suite va a
-ser un repo en inglés (lo decidido el 2026-09-28), así que sus ejecutables ya
-van en inglés: el nombre es lo que ABL consume, y ponerlo en castellano
-obligaría a renombrarlo dos veces —en el `justfile`, en los docs y en el `bin/`
-de taro, donde el viejo quedaría colgado—. Los flags siguen en castellano
-(`--lista`, `--medir`): ésos se traducen con el código. `entregar` se queda con
-ABL según el research (§ la tabla de módulos), así que va con `abl-` y en
-castellano. El prefijo es porque el `bin/` es compartido: `espacio`, `parches`
-o `msu` sueltos no dicen qué son y pueden chocar con cualquier cosa; con
-`rm2k-snes-<TAB>` aparece la suite entera. Los de Rust siguen sin prefijo, y
-`protocol` es el que más riesgo de choque tiene: no es de esta tarea.
+**The names follow the repo where each program is going to live.** The suite
+is going to be a repo in English (decided on 2026-09-28), so its executables
+already go in English: the name is what ABL consumes, and putting it in
+Spanish would force renaming it twice —in the `justfile`, in the docs and in
+taro's `bin/`, where the old one would be left dangling—. The flags stay in
+Spanish (`--lista`, `--medir`): those get translated with the code.
+`entregar` stays with ABL according to the research (§ the modules table), so
+it goes with `abl-` and in Spanish. The prefix is because the `bin/` is
+shared: a bare `espacio`, `parches` or `msu` doesn't say what it is and can
+clash with anything; with `rm2k-snes-<TAB>` the whole suite shows up. The Rust
+ones remain without a prefix, and `protocol` is the one with the most risk of
+a clash: not part of this task.
 
-**Symlinks y no copias**, como pedía el encargo. No encontré razón para copiar.
+**Symlinks and not copies**, as the assignment asked. I found no reason to
+copy.
 
-### La desviación: un symlink apunta a un solo checkout
+### The deviation: a symlink points at a single checkout
 
-Con sólo `realpath`, un script corrido desde el PATH usa el checkout del
-symlink. En un worktree de sub-agente, `just cartuchos` armaba entonces **las
-ROMs de otro árbol, con el conversor de otro árbol y en el `rom/build/` de
-ése**, y la tanda del worktree se negaba a correr contra las suyas, viejas.
-Rompía a todos los sub-agentes a partir del primer `just herramientas` desde
-`main`.
+With just `realpath`, a script run from the PATH uses the symlink's checkout.
+In a sub-agent's worktree, `just cartuchos` would then build **the ROMs of
+another tree, with another tree's converter and in that one's `rom/build/`**,
+and the worktree's suite refused to run against its own, stale ones. It broke
+every sub-agent from the first `just herramientas` run from `main` onwards.
 
-Así que cada script, al arrancar desde el PATH, busca hacia arriba desde el
-directorio actual un checkout que tenga su propia copia del mismo archivo, y si
-la hay y no es él, hace `execv` de ésa (`tools/comun/ejecutable.py`). El
-checkout del symlink queda como el de último recurso: fuera de todo checkout.
-Es lo mismo que hace cualquier herramienta que prefiere la versión del
-proyecto a la instalada.
+So each script, when starting from the PATH, searches upwards from the current
+directory for a checkout that has its own copy of the same file, and if there
+is one and it isn't itself, it does an `execv` of that one
+(`tools/comun/ejecutable.py`). The symlink's checkout remains as the last
+resort: outside any checkout. It's the same thing any tool that prefers the
+project's version over the installed one does.
 
-`comun/` es la capa que no importa nada; `ensamblado/` la importa sólo al
-arrancar como script. `tools/README.md` la baja a una fila propia.
+`comun/` is the layer that imports nothing; `ensamblado/` imports it only when
+starting as a script. `tools/README.md` moves it down to a row of its own.
 
-Lo que esto **no** resuelve: si el checkout al que apunta el symlink se borra
-—un worktree que se limpia—, los ejecutables quedan colgando hasta volver a
-correr `just herramientas` desde otro. Por eso:
+What this does **not** solve: if the checkout the symlink points at gets
+deleted —a worktree that gets cleaned up—, the executables are left dangling
+until `just herramientas` is run again from another one. Hence:
 
-> **Al mergear, correr `just herramientas` desde `main`.** Hoy los symlinks de
-> `/usr/local/bin` apuntan al worktree de Espinillo.
+> **When merging, run `just herramientas` from `main`.** Today the symlinks in
+> `/usr/local/bin` point at Espinillo's worktree.
 
-### `video.py` y pytest
+### `video.py` and pytest
 
-`video.py` es de `pruebas/`, así que no se instala: el `justfile` lo llama por
-su ruta, y el `-O` va en el hashbang (`#!/usr/bin/env -S python3 -O`). No hizo
-falta ponerlo en ninguna lista de excepciones. `env -S` es de coreutils 8.30 en
-adelante.
+`video.py` belongs to `pruebas/`, so it isn't installed: the `justfile` calls
+it by its path, and the `-O` goes in the hashbang (`#!/usr/bin/env -S python3
+-O`). It didn't need to go in any exceptions list. `env -S` is from coreutils
+8.30 onwards.
 
-Las pruebas corren con `pytest` en vez de `python3 -m pytest`; lo único que
-agregaba el `-m` era la raíz en el `sys.path`, y nada importa `pruebas.` ni
-`tools.` desde ahí. `_xdist` pregunta con `pytest -p xdist --help`, que sale 1
-si el plugin no está (medido con un `-p` inexistente: `--version` sale 0 igual,
-por eso no sirve).
+The tests run with `pytest` instead of `python3 -m pytest`; the only thing the
+`-m` added was the root in `sys.path`, and nothing imports `pruebas.` or
+`tools.` from there. `_xdist` asks with `pytest -p xdist --help`, which exits 1
+if the plugin isn't there (measured with a non-existent `-p`: `--version`
+exits 0 anyway, which is why it doesn't work).
 
-### La prueba
+### The test
 
-`pruebas/herramientas/test_lado_de_abl.py`. Qué es el lado de ABL está escrito
-arriba de la prueba: el `justfile` salvo las ocho recetas de las herramientas
-(`protocolo`, `*-pruebas`, `ditto-vuelta-entera`, `herramientas`), `parches/`,
-`data/`, y `pruebas/` + `pytest.ini` con 28 excepciones. Las dos listas sólo
-pueden achicarse: falla si aparece uno nuevo y si uno de la lista ya no nombra
-`tools/`.
+`pruebas/herramientas/test_lado_de_abl.py`. What ABL's side is, is written
+above the test: the `justfile` except the eight recipes of the tools
+(`protocolo`, `*-pruebas`, `ditto-vuelta-entera`, `herramientas`),
+`parches/`, `data/`, and `pruebas/` + `pytest.ini` with 28 exceptions. Both
+lists can only shrink: it fails if a new one appears and if one on the list no
+longer names `tools/`.
 
-Para que diera verde hubo que cambiar el encabezado que el conversor escribe en
-cada parche versionado —136 archivos de `parches/auto/`, una línea cada uno— y
-el de `techos.toml`, más los README de `parches/` y `data/` y la prosa de las
-recetas de ABL.
+For it to go green the header the converter writes in each versioned patch
+had to change —136 files of `parches/auto/`, one line each— as well as
+`techos.toml`'s, plus the READMEs of `parches/` and `data/` and the prose of
+ABL's recipes.
 
-Las excepciones de `pruebas/` son de dos clases. Las que arman el camino de los
-imports o leen archivos de `tools/` (`pytest.ini`, `video.py`,
-`test_repartos.py`, `test_musica_stream.py`, `test_protocolo.py`) se van cuando
-las pruebas se separen de las herramientas. Las demás lo nombran en la prosa
-—"ver `tools/port/eventos.py`"— y se van al reescribirla.
+The exceptions of `pruebas/` are of two kinds. The ones that build the import
+path or read files from `tools/` (`pytest.ini`, `video.py`,
+`test_repartos.py`, `test_musica_stream.py`, `test_protocolo.py`) go away when
+the tests get separated from the tools. The rest name it in the prose —"ver
+`tools/port/eventos.py`"— and go away when that's rewritten.
 
-Lo que la prueba no mira, a propósito: los imports por nombre de paquete
-(`from rpgmaker import lcf`), que no dicen dónde está nada.
+What the test doesn't look at, on purpose: imports by package name (`from
+rpgmaker import lcf`), which don't say where anything is.
 
-### Verificado
+### Verified
 
-Ver el mensaje de cada commit. Al final, sobre el árbol mergeado con `main`:
+See each commit's message. At the end, on the tree merged with `main`:
 
-* **ROMs byte por byte**: `just cartuchos` sobre `2bf9ff2c`, antes de tocar
-  nada, y `SIN_CACHE=1 just cartuchos` sobre el árbol final: los 47 archivos
-  de `rom/build/release/` y `rom/build/tests/special/` —dos `.sfc`, dos `.msu`
-  y 43 `.pcm`— con el mismo sha256. `abl.sfc`
-  `7a3c6483…6a66552`, `prueba.sfc` `fb6db844…66a0617`.
-* **`just pruebas`**, corrido desde el scratchpad con `--justfile`: 973
-  pasan, ninguna falla.
-* `just herramientas` instala los ocho; los ocho contestan `--help` por su
-  nombre desde fuera del repo.
-* Desde fuera del repo también: `just espacio release`, `just espacio
-  <ruta a abl.sfc>`, `just parches-check`, `just build release`, `just video
-  release … quieto:120` (el `-O` del hashbang anda: sin él, `video.py` se
-  niega) y `just techos --medir`.
-* El re-exec, con un checkout falso en el scratchpad cuyo `cartuchos.py`
-  sólo imprime: `rm2k-snes-cartridges` corrido adentro corre ése.
-* La prueba del grep, con una línea que viola cada regla puesta a mano y
-  sacada después: ver el mensaje de `2aa151be`.
+* **ROMs byte for byte**: `just cartuchos` on `2bf9ff2c`, before touching
+  anything, and `SIN_CACHE=1 just cartuchos` on the final tree: the 47 files of
+  `rom/build/release/` and `rom/build/tests/special/` —two `.sfc`, two `.msu`
+  and 43 `.pcm`— with the same sha256. `abl.sfc` `7a3c6483…6a66552`,
+  `prueba.sfc` `fb6db844…66a0617`.
+* **`just pruebas`**, run from the scratchpad with `--justfile`: 973 pass,
+  none fails.
+* `just herramientas` installs the eight; all eight answer `--help` by their
+  name from outside the repo.
+* From outside the repo too: `just espacio release`, `just espacio <ruta a
+  abl.sfc>`, `just parches-check`, `just build release`, `just video release …
+  quieto:120` (the hashbang's `-O` works: without it, `video.py` refuses) and
+  `just techos --medir`.
+* The re-exec, with a fake checkout in the scratchpad whose `cartuchos.py`
+  only prints: `rm2k-snes-cartridges` run inside it runs that one.
+* The grep test, with a line violating each rule put in by hand and removed
+  afterwards: see the message of `2aa151be`.
 
-**Lo que no se probó**: nada del host. `CARGO_ROOT=~/.cargo just
-herramientas` no se corrió; la receta hace `mkdir -p` del `bin/` y usa rutas
-absolutas, así que no debería depender de dónde, pero no está medido. `just
-entregar` tampoco se corrió, por encargo: sólo `abl-entregar --help`. Y la
-rama de `_xdist` sin el plugin no se ejecutó entera; se midió sólo que `pytest
--p <inexistente> --help` sale 1.
+**What wasn't tested**: nothing on the host. `CARGO_ROOT=~/.cargo just
+herramientas` wasn't run; the recipe does `mkdir -p` of the `bin/` and uses
+absolute paths, so it shouldn't depend on where, but it isn't measured. `just
+entregar` wasn't run either, as instructed: only `abl-entregar --help`. And the
+`_xdist` branch without the plugin wasn't run in full; only that `pytest -p
+<inexistente> --help` exits 1 was measured.
 
-**Para taro**: después de mergear, `just herramientas` una vez, del lado del
-host también. Sin eso, `just cartuchos` dice `rm2k-snes-cartridges: command
-not found`.
+**For taro**: after merging, `just herramientas` once, on the host side too.
+Without that, `just cartuchos` says `rm2k-snes-cartridges: command not found`.

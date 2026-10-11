@@ -1,110 +1,115 @@
 ---
-name: "Reducir el README"
-description: "README.md mucho más corto: fuera el relato y lo duplicado, lo demás a docs/ y decisiones/"
+name: "Shrink the README"
+description: "A much shorter README.md: out with the narrative and the duplicated, the rest to docs/ and decisiones/"
 type: docs
 status: done
 assignee: taro
 ---
 
-taro lo empezó a mano el 2026-09-25 y el 2026-09-26 se lo pasó a un agente,
-con sus criterios: fuera lo que es relato (lo tiene el registro de commits),
-a `docs/` o `decisiones/` lo que se pueda, y nada que ya explique un README
-más acotado. Se queda qué es el proyecto, cómo arrancar, los porqués de
-arquitectura sin línea de código donde vivir y "Lo que falta".
+taro started it by hand on 2026-09-25 and on 2026-09-26 handed it to an
+agent, with his criteria: out with what is narrative (the commit log has it),
+to `docs/` or `decisiones/` whatever can go there, and nothing that a more
+focused README already explains. What stays: what the project is, how to get
+started, the architecture whys with no line of code to live in, and "Lo que
+falta".
 
-Los párrafos viejos o falsos que distintos agentes anotaron durante esos
-días, y que esta pasada corrige o saca:
+The stale or false paragraphs that different agents noted during those days,
+and that this pass fixes or removes:
 
-* `README.md` enlaza a una sección "El MSU-1" (`#el-msu-1`, en el índice de
-  arriba) que no existe, y el docstring de `tools/audio/msu.py` la cita.
-* El flag `--inicio` se sacó el 2026-09-25: la línea de `README.md` que lo
-  menciona ("sigue existiendo para las recetas") se va.
-* El párrafo "Cómo se suelta una nota" (~líneas 851-853) dice que "el valor por familia está en `sdsp.py`": desde el 2026-09-25 las envolventes salen del SoundFont y las familias se fueron.
-* "Cómo está armado", en el audio (~líneas 777-785): "en la consola sólo un
-  intérprete de un stream de escrituras" ya no es así desde el 2026-09-26 —el
-  stream es por nota y el 65816 lo expande a escrituras: ver "el formato por
-  nota" en `tools/audio/snes_music.py`—. Lo del driver del SPC700, que espera
-  pares (registro, valor), sigue valiendo: el driver no cambió.
-* Los dos párrafos al final de "las muestras de percusión" (~líneas 890-898):
-  "La percusión se lleva además una segunda voz del DSP" y "Con el reparto de
-  voces por cobertura, que es el mismo código de `md_music.py`" dejaron de ser
-  ciertos el 2026-09-26: las ocho voces son de todos los canales y se reparten
-  nota a nota (`assign` y `_victima` en `tools/audio/snes_music.py`); la
-  batería va primero a las voces 6 y 7 pero no las tiene fijas, y
-  `share_voices`/`coverage` se fueron. Cuánto tiempo-nota se pierde lo
-  imprime el conversor por tema.
-  Desde el 2026-09-26, también: el orden en que eligen voz las notas de un
-  mismo cuadro es `_orden_del_cuadro` (golpes primero, uno por familia; lo
-  melódico por nivel dividido por su lugar en el acorde).
-* "Lo que sí queda de ellas son los números de `sdsp.py`" (~líneas 962-966):
-  el techo por voz ya no es uno solo desde el 2026-09-26. `sdsp.AIRE` es el
-  máximo, y el tema que con él recortaría va con el suyo, medido por `just
-  techos` y versionado en `parches/auto/musica/techos.toml` (ver
-  `leer_techos` en `tools/audio/snes_music.py`).
-* "Varios temas en el cartucho" (~líneas 130-200) quedó viejo entero el
-  2026-09-26, con el presupuesto por paquete (el paso 6 de
-  `tasks/la-calidad-de-la-musica.md`): ya no hay recorte de aportantes
-  —todos los temas aportan todas sus muestras—, `build_bank`, el reparto de
-  sobrantes, la percusión "con lo que sobre" y `--banco-entero` se fueron, y
-  "Por qué el límite sigue estando" es justo lo que se cambió: ahora cada
-  muestra tiene el presupuesto de su peor paquete. El porqué que queda está
-  en `workflow/decisiones/un-solo-banco-de-muestras.md` y en `Banco`
-  (`tools/audio/snes_music.py`). El enlace a
-  `workflow/presupuesto-de-muestras-por-paquete.md` apunta ahora a
+* `README.md` links to an "El MSU-1" section (`#el-msu-1`, in the index at
+  the top) that doesn't exist, and the docstring of `tools/audio/msu.py`
+  cites it.
+* The `--inicio` flag was removed on 2026-09-25: the line of `README.md` that
+  mentions it ("sigue existiendo para las recetas") goes away.
+* The "Cómo se suelta una nota" paragraph (~lines 851-853) says that "el valor por familia está en `sdsp.py`": since 2026-09-25 the envelopes come from the SoundFont and the families are gone.
+* "Cómo está armado", in the audio (~lines 777-785): "en la consola sólo un
+  intérprete de un stream de escrituras" hasn't been the case since
+  2026-09-26 —the stream is per note and the 65816 expands it into writes:
+  see "el formato por nota" in `tools/audio/snes_music.py`—. The part about
+  the SPC700 driver, which expects (register, value) pairs, still holds: the
+  driver didn't change.
+* The two paragraphs at the end of "las muestras de percusión" (~lines
+  890-898): "La percusión se lleva además una segunda voz del DSP" and "Con
+  el reparto de voces por cobertura, que es el mismo código de
+  `md_music.py`" stopped being true on 2026-09-26: the eight voices belong to
+  all channels and are allocated note by note (`assign` and `_victima` in
+  `tools/audio/snes_music.py`); the drums go to voices 6 and 7 first but
+  don't have them fixed, and `share_voices`/`coverage` are gone. How much
+  note-time is lost is printed by the converter per theme.
+  Also since 2026-09-26: the order in which the notes of a single frame pick
+  a voice is `_orden_del_cuadro` (hits first, one per family; the melodic
+  ones by level divided by their place in the chord).
+* "Lo que sí queda de ellas son los números de `sdsp.py`" (~lines 962-966):
+  the per-voice ceiling is no longer a single one since 2026-09-26.
+  `sdsp.AIRE` is the maximum, and the theme that would clip with it goes with
+  its own, measured by `just techos` and versioned in
+  `parches/auto/musica/techos.toml` (see `leer_techos` in
+  `tools/audio/snes_music.py`).
+* "Varios temas en el cartucho" (~lines 130-200) went entirely stale on
+  2026-09-26, with the per-package budget (step 6 of
+  `tasks/la-calidad-de-la-musica.md`): there's no longer trimming of
+  contributors —all themes contribute all their samples—, `build_bank`, the
+  allocation of leftovers, the percussion "with whatever is left" and
+  `--banco-entero` are gone, and "Por qué el límite sigue estando" is exactly
+  what was changed: now each sample has the budget of its worst package. The
+  why that remains is in `workflow/decisiones/un-solo-banco-de-muestras.md`
+  and in `Banco` (`tools/audio/snes_music.py`). The link to
+  `workflow/presupuesto-de-muestras-por-paquete.md` now points to
   `workflow/tasks/done/`.
-* "Lo que sí cuesta caro es el arranque" (~línea 217): el arranque ya no sube
-  el banco por el IPL; sube el driver y el directorio, y el paquete del mapa
-  de arranque por el comando 3. `BOOT_CUADROS` bajó de 112 a 40 el
-  2026-09-26 y ya no está dimensionado sobre el techo: ver
+* "Lo que sí cuesta caro es el arranque" (~line 217): the boot no longer
+  uploads the bank through the IPL; it uploads the driver and the directory,
+  and the boot map's package through command 3. `BOOT_CUADROS` went down from
+  112 to 40 on 2026-09-26 and is no longer sized on the ceiling: see
   `workflow/decisiones/el-arranque-esta-dimensionado-para-el-paquete-de-arranque.md`.
 
-## Cómo quedó
+## How it ended up
 
-Los ocho puntos de arriba están resueltos: el ancla y la cita de `msu.py`, en
-el índice nuevo y en el commit de las citas; `--inicio` se fue con "Cómo se
-verifica", que estaba entera en los docstrings de las pruebas; el resto, en
-el commit de los párrafos viejos del audio. Cada commit de la pasada dice en
-su mensaje adónde fue cada sección que sacó.
+The eight points above are resolved: the anchor and the citation in
+`msu.py`, in the new index and in the citations commit; `--inicio` went away
+with "Cómo se verifica", which was entirely in the tests' docstrings; the
+rest, in the commit of the audio's stale paragraphs. Each commit of the pass
+says in its message where each section it removed went.
 
-Lo que conviene que taro lea, porque es criterio y no lo verifica nada:
+What taro should read, because it's judgement and nothing verifies it:
 
-* el README entero, que ahora es corto;
-* las dos decisiones nuevas, `decisiones/las-poses-se-suben-en-caliente.md` y
+* the whole README, which is short now;
+* the two new decisions, `decisiones/las-poses-se-suben-en-caliente.md` and
   `decisiones/el-color-math-no-se-usa.md`;
-* la divergencia que vuelve,
-  `divergencias/atravesar-paredes-vale-mientras-dura-la-ruta.md`, que se
-  había perdido en la reescritura del 2026-09-20 y que `celda_bloqueada`
-  seguía citando.
+* the divergence that comes back,
+  `divergencias/atravesar-paredes-vale-mientras-dura-la-ruta.md`, which had
+  been lost in the rewrite of 2026-09-20 and which `celda_bloqueada` was
+  still citing.
 
-Lo que se dejó sin tocar a propósito, porque ya no es el README:
+What was left untouched on purpose, because it's no longer the README:
 
-* dos comentarios de `tools/port/eventos.py` citan secciones que no existen
-  ("Lo que falta", por `PlayBGM`, y "la tabla de orden", por `PlaySound`),
-  pero el párrafo entero está viejo —dice que la ROM sube un solo banco— y
-  arreglarlo es criterio, no una cita;
-* la línea de `README.md` en el mapa de arriba de `AGENTS.md` dice "el port
-  a SNES entero con sus trampas", y `decisiones/README.md` dice que "el
-  porqué largo de varias está además en `README.md`": los dos describen el
-  README de antes.
+* two comments in `tools/port/eventos.py` cite sections that don't exist
+  ("Lo que falta", for `PlayBGM`, and "la tabla de orden", for `PlaySound`),
+  but the whole paragraph is stale —it says the ROM uploads a single bank—
+  and fixing it is judgement, not a citation;
+* the `README.md` line in the map at the top of `AGENTS.md` says "el port a
+  SNES entero con sus trampas", and `decisiones/README.md` says that "el
+  porqué largo de varias está además en `README.md`": both describe the
+  earlier README.
 
-## La segunda pasada
+## The second pass
 
-taro pidió el 2026-09-26 sacar "Por qué la Super Nintendo" y toda
-comparación con la Mega Drive, mudar lo que había quedado por dudoso, dejar
-"Referencias" como una lista con enlaces, y que ninguna documentación salvo
-`AGENTS.md` nombre el ambiente (contenedor, `/extras`, `/shared`, `box`).
-Adónde fue cada cosa:
+taro asked on 2026-09-26 to remove "Por qué la Super Nintendo" and every
+comparison with the Mega Drive, move what had been left as doubtful, leave
+"Referencias" as a list with links, and that no documentation except
+`AGENTS.md` name the environment (container, `/extras`, `/shared`, `box`).
+Where each thing went:
 
-* el audio, a `docs/port/audio.md`;
-* las trampas del hardware, al encabezado de `rom/src/main.s`;
-* los translúcidos horneados, a `decisiones/los-translucidos-van-horneados.md`;
-* la regla del ambiente, a `AGENTS.md`.
+* the audio, to `docs/port/audio.md`;
+* the hardware traps, to the header of `rom/src/main.s`;
+* the baked translucent ones, to
+  `decisiones/los-translucidos-van-horneados.md`;
+* the environment rule, to `AGENTS.md`.
 
-Lo que queda nombrando el ambiente, a propósito, porque taro dejó afuera las
-tareas y el código: las tareas de `tasks/` y `ESTADO.md`, y comentarios y
-defaults de `justfile`, `tools/` (`render_map.py`, `msu.py`,
+What still names the environment, on purpose, because taro left out the
+tasks and the code: the tasks in `tasks/` and `ESTADO.md`, and comments and
+defaults of `justfile`, `tools/` (`render_map.py`, `msu.py`,
 `snes_samples.py`, `entregar.py`, `ensamblar.py`, `retro.py`, `batalla.py`,
-`experiencia.py`, `fuente.py`, `fork.py`, `cache_disco.py`), `rom/src/msu1.s`
-y cuatro pruebas.
+`experiencia.py`, `fuente.py`, `fork.py`, `cache_disco.py`),
+`rom/src/msu1.s` and four tests.
 
-**taro lo dio por bueno el 2026-09-26.**
+**taro approved it on 2026-09-26.**

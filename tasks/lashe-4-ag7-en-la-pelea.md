@@ -1,145 +1,150 @@
 ---
-name: "Lashe 4: AG7 en la pelea"
-description: "Las habilidades del droide según sus piezas, el SP de las armas, y ShortCircuit de los enemigos"
+name: "Lashe 4: AG7 in battle"
+description: "The droid's skills according to its parts, the weapons' SP, and the enemies' ShortCircuit"
 type: feature
 status: done
 ---
 
-# Qué
+# What
 
-El hito 4 de `lashe-city-hasta-la-carrera.md` —el contexto está ahí—. Tiene dos
-mitades que no se pisan:
+Milestone 4 of `lashe-city-hasta-la-carrera.md` —the context is there—. It has
+two halves that don't step on each other:
 
-- **los enemigos de la planta** (tropas 108 a 114);
-- **AG7-17** (actor 18), que el hito 3 mete al grupo sin habilidades.
+- **the plant's enemies** (troops 108 to 114);
+- **AG7-17** (actor 18), whom milestone 3 puts in the party without skills.
 
-Lo que taro contestó el 2026-09-26 y manda acá: AG7 **no puede perder
-habilidades** —o sea, las de a muchos entran— y las armas cobran SP porque
-en el original lo cobran: **fiel al original**.
+What taro answered on 2026-09-26 and governs here: AG7 **can't lose skills**
+—that is, the multi-target ones go in— and the weapons charge SP because in
+the original they do: **faithful to the original**.
 
 # Status
 
-2026-09-27, en `testing/`: hecho en la rama del agente, sobre `main` en
-a3140f1 y con `main` mergeado encima del hito 5 (6c4949d); `just cartuchos`
-y la tanda entera en verde sobre el árbol mergeado. Lo que queda es de taro:
-jugarlo (ver abajo). Las goldens no cambiaron.
+2026-09-27, in `testing/`: done on the agent's branch, on `main` at a3140f1
+and with `main` merged on top of milestone 5 (6c4949d); `just cartuchos` and
+the whole suite green on the merged tree. What's left is taro's: play it (see
+below). The goldens didn't change.
 
-# Lo hecho
+# What was done
 
-**El espacio, primero y aparte.** Al banco 1 le quedaban ~350 B y el código
-de la pelea vive ahí. El código y los mensajes de las páginas de tropa —casi
-once KB— pasaron a RODATA en su propio commit, con la tanda en verde y sin
-tocar ninguna golden: se leen con un puntero largo cuyo banco sale de
-`^tropa_codigo`, así que alcanza con que cada bloque entre en un banco.
+**The space, first and separately.** Bank 1 had ~350 B left and the battle
+code lives there. The troop pages' code and messages —almost eleven KB— moved
+to RODATA in their own commit, with the suite green and without touching any
+golden: they're read with a long pointer whose bank comes from
+`^tropa_codigo`, so it's enough for each block to fit in a bank.
 
-**Los enemigos eligen qué hacer** (`batalla.accion_del_enemigo`,
-`ba_accion_enemiga`): la lista de acciones del LDB con su `rating`, y los
-pesos de `SelectEnemyAiActionRpgRtCompat` —`max(0, rating - máximo + 10)`—.
-Con eso **el único de la planta que tira `ShortCircuit` es el Tangle Wire**
-(tropa 113), que la tiene en 50 como el ataque; el Scrapped Droid (10), el
-Trash Hauler y el Junkbot (30) quedan diez puntos o más abajo y pesan cero,
-en RM2k también. Una acción de peso sola no tira dado, para no mover el azar
-de las peleas que ya estaban. Lo que no se modela —condiciones, las otras
-acciones básicas, estados— en
+**The enemies choose what to do** (`batalla.accion_del_enemigo`,
+`ba_accion_enemiga`): the LDB's list of actions with their `rating`, and the
+weights of `SelectEnemyAiActionRpgRtCompat` —`max(0, rating - maximum + 10)`—.
+With that **the only one in the plant that casts `ShortCircuit` is the
+Tangle Wire** (troop 113), which has it at 50 like the attack; the Scrapped
+Droid (10), the Trash Hauler and the Junkbot (30) are ten points or more below
+and weigh zero, in RM2k too. A lone weighted action doesn't roll a die, so as
+not to move the randomness of the battles that were already there. What isn't
+modelled —conditions, the other basic actions, states— in
 `divergencias/lo-que-la-ia-de-los-enemigos-no-modela.md`.
 
-**Los cinco alcances** (`batalla.blancos_de_la_habilidad`, `ba_hab_usar`):
-`enemies` y `party` repiten el efecto sobre cada vivo del lado, con sus tiros
-por blanco; `self` cae sobre el que la usa. Sólo `enemy` y `ally` piden
-blanco. Con eso AG7 no pierde ninguna de sus diecisiete —las que tocan
-estados (BioWarfare, HeadButt, RemoveStatus) hacen lo que se puede sin
-estados— y de paso entran las de a muchos de todos los actores, Arden
-incluido.
+**The five scopes** (`batalla.blancos_de_la_habilidad`, `ba_hab_usar`):
+`enemies` and `party` repeat the effect on each living one of that side, with
+their rolls per target; `self` falls on the user. Only `enemy` and `ally` ask
+for a target. With that AG7 loses none of its seventeen —the ones that touch
+states (BioWarfare, HeadButt, RemoveStatus) do what can be done without
+states— and along the way every actor's multi-target ones go in, Arden
+included.
 
-**El SP de las armas** (`batalla.sp_del_arma`, `ba_atacar`): el `sp_cost` del
-arma de la ranura 0 se cobra antes del acierto, sin gris con los SP en cero.
-Las armaduras que traen `sp_cost` (NetLauncher, SpikedHelmet) no cobran:
-`ForEachEquipment<true, false>` sólo mira armas.
+**The weapons' SP** (`batalla.sp_del_arma`, `ba_atacar`): the `sp_cost` of the
+weapon in slot 0 is charged before the hit roll, with no greying out at zero
+SP. The armours that carry `sp_cost` (NetLauncher, SpikedHelmet) don't
+charge: `ForEachEquipment<true, false>` only looks at weapons.
 
-**El evento común 37: lo a medida.** `eventos.COMUNES_DEL_EQUIPO` reconoce
-los comunes paralelos, con switch, que no tienen más que `ChangeSkills` y
-ramas por el equipo. Su cuerpo se pega detrás del `ControlSwitches` que
-prende su switch y la ROM lo corre al cerrar el menú
-(`comunes_del_equipo`). Por qué no lo general, con los números:
-`divergencias/los-comunes-del-equipo-corren-al-cerrar-el-menu.md`. En corto:
+**Common event 37: the tailored approach.** `eventos.COMUNES_DEL_EQUIPO`
+recognizes the parallel common events, with a switch, that have nothing but
+`ChangeSkills` and branches on the equipment. Their body is pasted after the
+`ControlSwitches` that turns on their switch and the ROM runs it on closing
+the menu (`comunes_del_equipo`). Why not the general approach, with the
+numbers: `divergencias/los-comunes-del-equipo-corren-al-cerrar-el-menu.md`.
+In short:
 
-    general   ~0,13 cuadros de CPU por vuelta del cuerpo, en cada cuadro de
-              todos los mapas desde que AG7 entra —medido con casos
-              descartables: 0/10/20/30 corridas seguidas, 63/64/66/67 cuadros—,
-              y prende además el 2 (DisableSaving, sin switch), el 3 y el 8
-    a medida  8 B de banco 0, 117 de banco 1, 0 de RAM, 0 ciclos por cuadro;
-              no cubre un `ChangeEquipment` de página sobre el 18 (el juego
-              no tiene ninguno)
+    general   ~0.13 frames of CPU per iteration of the body, on every frame of
+              every map from the moment AG7 joins —measured with throwaway
+              cases: 0/10/20/30 runs in a row, 63/64/66/67 frames—,
+              and it also turns on 2 (DisableSaving, no switch), 3 and 8
+    tailored  8 B of bank 0, 117 of bank 1, 0 of RAM, 0 cycles per frame;
+              doesn't cover a page `ChangeEquipment` on 18 (the game
+              has none)
 
-**La animación 62 no se dibuja**, ni la de ninguna habilidad: es un
-subsistema nuevo adentro de la pelea (objetos, OAM, una paleta, los cuadros
-por DMA), y queda con lo mirado en `animaciones-en-la-pelea.md`.
+**Animation 62 isn't drawn**, nor any skill's: it's a new subsystem inside the
+battle (objects, OAM, a palette, the frames by DMA), and it stays with what was
+looked at in `animaciones-en-la-pelea.md`.
 
-# Números usados
+# Numbers used
 
-- Opcode: ninguno.
-- RAM lejana: `$7E7960`-`$7E797F`, en `rom/src/ram_lejana.s`: `BA_ARMA_SP`
-  (4 bytes) y `BA_HAB_I` (1).
-- Tuplas de `test_*_golden.py`: ninguna.
+- Opcode: none.
+- Far RAM: `$7E7960`-`$7E797F`, in `rom/src/ram_lejana.s`: `BA_ARMA_SP`
+  (4 bytes) and `BA_HAB_I` (1).
+- Tuples of `test_*_golden.py`: none.
 
-# Lo medido
+# What was measured
 
-Con `.res N, $00` y la tabla de símbolos, después del hito y con el 5
-mergeado:
+With `.res N, $00` and the symbol table, after the milestone and with 5
+merged:
 
-    release       banco 0: 211 libres (219 antes)   banco 1: ~10,2 KB
-    test-special  banco 0: 981                      banco 1: ~11,3 KB
+    release       bank 0: 211 free (219 before)    bank 1: ~10.2 KB
+    test-special  bank 0: 981                      bank 1: ~11.3 KB
 
-BSS y ZEROPAGE sin cambio.
+BSS and ZEROPAGE unchanged.
 
-**Una página de prueba de más de ~12 KB se cuelga**: la de 40 corridas del
-37 (12,3 KB) no llegaba al final y la de 30 (9,2 KB) sí. No es de este hito
-—ninguna página del juego se acerca— y queda anotado por si alguien arma una.
+**A test page of more than ~12 KB hangs**: the one with 40 runs of 37
+(12.3 KB) didn't reach the end and the one with 30 (9.2 KB) did. It isn't
+from this milestone —no page of the game comes close— and it's noted in case
+someone builds one.
 
-# Pruebas
+# Tests
 
-`pruebas/rpgmaker/test_ag7_y_la_planta.py`, con dos páginas nuevas,
-`ag7-componentes` y `pelea-113` (Talan y AG7 en el piso 1):
+`pruebas/rpgmaker/test_ag7_y_la_planta.py`, with two new pages,
+`ag7-componentes` and `pelea-113` (Talan and AG7 on floor 1):
 
-* al prenderse el 150 AG7 sabe ConcentratedSpray y nada más;
-* cambiar el arma no cambia nada con el menú abierto, y al cerrarlo sabe
-  ArmMissile y no ConcentratedSpray —en rojo sin la llamada desde el menú—;
-* con el switch apagado, cerrar el menú no toca nada;
-* la pelea contra la tropa 113, turno por turno contra el modelo: los HP de
-  los cuatro, los SP de AG7 (su arma) y los del Tangle Wire (`ShortCircuit`),
-  exigiendo que los dos hayan bajado;
-* la lista de "Components" en la pelea;
-* BombsAway, con el GrenadeLauncher: sin blanco, a los dos enemigos.
+* when 150 turns on AG7 knows ConcentratedSpray and nothing else;
+* changing the weapon changes nothing with the menu open, and on closing it
+  it knows ArmMissile and not ConcentratedSpray —red without the call from
+  the menu—;
+* with the switch off, closing the menu touches nothing;
+* the battle against troop 113, turn by turn against the model: the HP of the
+  four, AG7's SP (its weapon) and the Tangle Wire's (`ShortCircuit`),
+  requiring that both have gone down;
+* the "Components" list in battle;
+* BombsAway, with the GrenadeLauncher: no target, at both enemies.
 
-`test_cores.py` suma `test_la_pelea_de_la_planta`: dos turnos de la 113 en
-snes9x y bsnes.
+`test_cores.py` adds `test_la_pelea_de_la_planta`: two turns of 113 in snes9x
+and bsnes.
 
-# Qué tiene que mirar taro jugando
+# What taro has to look at while playing
 
-Lo que se puede ver jugando es menos de lo que se hizo: **en lo que llega
-hasta la carrera AG7 no consigue ninguna otra pieza** —ninguna tienda ni
-ningún evento de esos mapas da una, y los enemigos de la planta no sueltan
-nada—, así que tiene la ArmCannon y nada más. Lo que hay:
+What can be seen while playing is less than what was done: **in what reaches
+up to the race AG7 doesn't get any other part** —no shop and no event of those
+maps gives one, and the plant's enemies drop nothing—, so it has the ArmCannon
+and nothing else. What there is:
 
-* **"Components" en la pelea**, con ConcentratedSpray.
-* **Sacarle la ArmCannon** en el menú de equipo y salir: en la pelea que
-  sigue "Components" está en gris. Volver a ponérsela y salir: vuelve.
-* **El SP del arma.** La pelea no muestra SP y el menú de pausa tampoco, así
-  que se ve por el gris: con 60 SP, nueve ConcentratedSpray dejan 6, que
-  todavía alcanzan; un ataque más (1 SP) y la habilidad queda en gris. Sin
-  el costo del arma seguiría disponible. Los SP pasan de una pelea a otra.
-* **El Tangle Wire** —el cable, en la tropa con la rata— tirando
-  `ShortCircuit` más o menos la mitad de las veces; los otros de la planta
-  sólo pegan, como en RM2k.
-* **De rebote, el jefe de los Rat Tracks** (el KingRat) ahora a veces muerde
-  con `RoyalRatBite` en vez de pegar.
+* **"Components" in battle**, with ConcentratedSpray.
+* **Taking off its ArmCannon** in the equip menu and leaving: in the next
+  battle "Components" is greyed out. Putting it back on and leaving: it comes
+  back.
+* **The weapon's SP.** The battle doesn't show SP and neither does the pause
+  menu, so it's seen through the grey: with 60 SP, nine ConcentratedSpray
+  leave 6, which is still enough; one more attack (1 SP) and the skill goes
+  grey. Without the weapon's cost it would stay available. SP carries over
+  from one battle to the next.
+* **The Tangle Wire** —the cable, in the troop with the rat— casting
+  `ShortCircuit` roughly half the time; the others in the plant only hit, as
+  in RM2k.
+* **As a side effect, the Rat Tracks boss** (the KingRat) now sometimes bites
+  with `RoyalRatBite` instead of hitting.
 
-Las de a muchos (BombsAway, TillTheyGlow) y las piezas que cambian la
-habilidad sólo se pueden ver hoy en las pruebas.
+The multi-target ones (BombsAway, TillTheyGlow) and the parts that change the
+skill can only be seen in the tests today.
 
-# Probado
+# Tested
 
-taro, el 2026-09-27, en la SNES con el FX Pak: anduvo todo, incluido el camino
-de vender el Idol, sobornar al guardia y llevar a AG7; la carrera sin lag ni
-bugs (el compañero al volante, también). Queda aparte el héroe negro después
-de cambiar de gráfico en el mismo mapa (HQ de Lazer Teeth, Boss Wick).
+taro, on 2026-09-27, on the SNES with the FX Pak: everything worked, including
+the path of selling the Idol, bribing the guard and taking AG7 along; the race
+without lag or bugs (the companion at the wheel, too). Separate from this: the
+black hero after changing graphic on the same map (Lazer Teeth HQ, Boss Wick).
