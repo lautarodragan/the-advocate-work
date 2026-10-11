@@ -1,85 +1,87 @@
-# Estado del Trabajo
+# State of the Work
 
-Este repo es una especie de Jira casero: las tareas de todos los repos, y
-desde dónde se trabaja —el `AGENTS.md` y `.claude/`—.
+This repo is a kind of home-made Jira: the tasks of every repo, and the
+place work is done from —the `AGENTS.md` and `.claude/`—.
 
-Las tareas viven todas en `tasks/`, un archivo por tarea, y su estado es
-el `status` del frontmatter:
+The tasks all live in `tasks/`, one file per task, and their state is the
+`status` in the frontmatter:
 
-- `draft`: hallazgos y cosas que todavía no son una tarea: se vio algo,
-  pero falta definir qué hacer
-- `todo`: tareas no empezadas
-- `doing`: tareas en progreso: quien la toma la pasa acá antes que nada
-- `testing`: hechas y a la espera de que taro las pruebe jugando
-- `done`: tareas terminadas
-- `wishlist`: lo que nos gustaría hacer y nadie está haciendo
+- `draft`: findings and things that are not a task yet: something was
+  seen, but what to do about it is still undefined
+- `todo`: tasks not started
+- `doing`: tasks in progress: whoever takes one moves it here before
+  anything else
+- `testing`: done and waiting for taro to test them by playing
+- `done`: finished tasks
+- `wishlist`: what we would like to do and nobody is doing
 
-**El nombre de archivo de una tarea no cambia nunca**, aunque su título
-cambie: es su dirección, y se la enlaza desde los otros repos y desde el
-libro —`tasks/<nombre>.md` en GitHub—. Es de taro, el 2026-10-11, el mismo
-día que este repo se hizo público. Hasta ese día había una carpeta por
-estado, y cada tarea que se movía rompía las citas a ella; las citas
-viejas con carpeta —`testing/x.md`, `tasks/todo/x.md`— son `tasks/x.md`.
-`nu tasks/tasks.nu ls -s <estado>` las lista.
+**A task's file name never changes**, even if its title does: it is its
+address, and it is linked from the other repos and from the book
+—`tasks/<name>.md` on GitHub—. It is taro's, from 2026-10-11, the same day
+this repo went public. Until that day there was one folder per state, and
+every task that moved broke the citations to it; old citations with a
+folder —`testing/x.md`, `tasks/todo/x.md`— are `tasks/x.md`.
+`nu tasks/tasks.nu ls -s <state>` lists them.
 
-**Este repo es público**: nada de lo que se escribe acá puede ser privado.
+**This repo is public**: nothing written here can be private.
 
-**Un draft no está listo para tomarse.** Es lo que un agente encuentra y no
-arregla —un error que no es de su tarea, un camino que no cubrió, "lo
-siguiente, medido"—: un archivo corto con qué se vio, en qué juego, en qué
-commit y cómo reproducirlo, sin `assignee` y sin decir cómo se arregla.
-Sale de ahí cuando alguien lo define —a `todo` o a `wishlist`— o se
-borra si otra cosa lo arregló. La diferencia con `wishlist`: una tarea de
-la lista de deseos está definida y sólo falta priorizarla; un draft no
-está definido. Es de taro, el 2026-10-11: hasta ese día los hallazgos
-quedaban en la sección "Hallazgos" de la tarea del agente y se enterraban
-con ella.
+**A draft is not ready to be taken.** It is what an agent finds and does
+not fix —a bug that is not part of its task, a path it did not cover, "the
+next thing, measured"—: a short file with what was seen, in which game, at
+which commit and how to reproduce it, with no `assignee` and without saying
+how to fix it. It leaves that state when someone defines it —to `todo` or
+to `wishlist`— or it is deleted if something else fixed it. The difference
+from `wishlist`: a task in the wishlist is defined and only needs to be
+prioritised; a draft is not defined. It is taro's, from 2026-10-11: until
+that day findings stayed in the "Hallazgos" section of the agent's task and
+were buried with it.
 
-**Las decisiones, las divergencias y los research no están acá**: viven en
-el libro, `the-advocate-docs`, en inglés, desde el 2026-10-10 —"el libro es
-para personas y para IAs", de taro—. Hasta ese día `decisiones/` y
-`divergencias/` eran carpetas de este repo, y los research estaban en
-`docs/research/` de las herramientas y de ABL. Los nombres de archivo se
-conservaron, así que una cita vieja se encuentra por nombre:
+**Decisions, divergences and research are not here**: they live in the
+book, `the-advocate-docs`, in English, since 2026-10-10 —"the book is for
+people and for AIs", taro's words—. Until that day `decisiones/` and
+`divergencias/` were folders in this repo, and the research was in
+`docs/research/` of the tools and of ABL. File names were kept, so an old
+citation is found by name:
 
-* `decisiones/x.md` es `src/decisions/x.md` del libro, salvo dos de ABL,
-  que están en `src/ports/abl/decisions/`;
-* `divergencias/x.md` es `src/divergences/x.md`;
-* `docs/research/x.md` de las herramientas es `src/research/x.md`, y el de
-  ABL, `src/ports/abl/research/x.md`;
-* `docs/port/x.md` es `src/internals/x.md`.
+* `decisiones/x.md` is `src/decisions/x.md` in the book, except two of
+  ABL's, which are in `src/ports/abl/decisions/`;
+* `divergencias/x.md` is `src/divergences/x.md`;
+* `docs/research/x.md` of the tools is `src/research/x.md`, and ABL's,
+  `src/ports/abl/research/x.md`;
+* `docs/port/x.md` is `src/internals/x.md`.
 
-## El frontmatter de una tarea
+## A task's frontmatter
 
     ---
-    name: "Título corto"
-    description: "Una línea: qué es, para la lista"
+    name: "Short title"
+    description: "One line: what it is, for the list"
     type: bug | feature | refactor | test | docs
     status: draft | todo | doing | testing | done | wishlist
     assignee: taro
     ---
 
-`type` y `status` van siempre. `assignee` dice quién la tiene: `taro` para las suyas y para
-las que esperan algo de él —jugar, mirar unas goldens—, y el nombre del agente
-para las que están en `doing`. Ver "Tomar una tarea" en `AGENTS.md`. En
-`todo`, sin `assignee`, la toma quien llegue. Muchas de las que están en
-`done` son de antes de estos campos y no llevan `assignee`.
+`type` and `status` are always there. `assignee` says who has it: `taro`
+for his own and for those waiting on something from him —playing, looking
+at some goldens—, and the agent's name for those in `doing`. See "Taking a
+task" in `AGENTS.md`. In `todo`, with no `assignee`, whoever comes first
+takes it. Many of those in `done` predate these fields and carry no
+`assignee`.
 
-**Acá se trackea todo**: las herramientas y el runtime (`the-advocate`), los
-ports (`the-advocate-ports`: A Blurred Line y los otros juegos) y el libro
-(`the-advocate-docs`). Es de taro, el 2026-10-10, "para trackear todo en un
-solo lugar".
+**Everything is tracked here**: the tools and the runtime (`the-advocate`),
+the ports (`the-advocate-ports`: A Blurred Line and the other games) and
+the book (`the-advocate-docs`). It is taro's, from 2026-10-10, "to track
+everything in one place".
 
-Hasta ese día esto era la carpeta `workflow/` de `the-advocate`, y de ahí
-salió con su historia (`git subtree split`). Así que:
+Until that day this was the `workflow/` folder of `the-advocate`, and it
+came out of there with its history (`git subtree split`). So:
 
-* **un `workflow/…` escrito en otro repo es la ruta de acá**, sin el
-  `workflow/`: `workflow/tasks/todo/x.md` es `tasks/todo/x.md`, que hoy
-  es `tasks/x.md`;
-* **los hashes que citan las tareas y los mensajes de commit son de
-  `the-advocate`**, o de `the-advocate-ports` cuando hablan de ABL: los commits
-  de acá son copias con otro hash y el mismo mensaje.
+* **a `workflow/…` written in another repo is the path here**, without the
+  `workflow/`: `workflow/tasks/todo/x.md` is `tasks/todo/x.md`, which
+  today is `tasks/x.md`;
+* **the hashes that tasks and commit messages cite are from
+  `the-advocate`**, or from `the-advocate-ports` when they talk about ABL:
+  the commits here are copies with another hash and the same message.
 
-Del 2026-10-02 al 2026-10-10 las tareas y decisiones de ABL vivieron en su
-repo; ese día volvieron a `the-advocate`, y desde ahí vinieron con todo lo
-demás.
+From 2026-10-02 to 2026-10-10 ABL's tasks and decisions lived in its repo;
+that day they went back to `the-advocate`, and from there they came along
+with everything else.
