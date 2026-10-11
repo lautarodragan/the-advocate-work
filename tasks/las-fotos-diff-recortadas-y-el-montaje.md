@@ -6,7 +6,7 @@ status: todo
 ---
 
 De taro, el 2026-10-02, mirando las goldens de
-`testing/las-imagenes-grandes-en-modo-1.md` (Aguilucho):
+`las-imagenes-grandes-en-modo-1.md` (Aguilucho):
 
 - **Las fotos Diff** (212, 213, 214, 216) son capturas del mapa en ese
   momento, y el original las usa para un efecto de "en vivo a foto" que
@@ -27,5 +27,5 @@ De taro, el 2026-10-02, mirando las goldens de
   `tira-destellos.png` de Aguilucho son sólo esos destellos, sin foto: por eso
   son rectángulos grises.
 
-Si el piloto de modo 7 (`doing/el-piloto-del-modo-7.md`) da bien, el zoom
+Si el piloto de modo 7 (`el-piloto-del-modo-7.md`) da bien, el zoom
 de las fotos vuelve, y esto va junto con él.

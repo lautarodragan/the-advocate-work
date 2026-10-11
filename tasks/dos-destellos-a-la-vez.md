@@ -57,4 +57,4 @@ Dos cosas que costaron y conviene saber:
 
 Con todo, `just pruebas` en verde y ninguna golden se movió.
 
-**taro, el 2026-09-26: mejoró, pero no es perfecto; sospecha que lo que queda es lag y no un bug.** La investigación de los chips midió que en la terraza, en las vueltas pesadas, casi 200 de las 262 líneas se van en recalcular paletas (`destello_tick` + `flashes_tick`): sigue en `todo/la-terraza-pierde-cuadros-en-los-destellos.md`.
+**taro, el 2026-09-26: mejoró, pero no es perfecto; sospecha que lo que queda es lag y no un bug.** La investigación de los chips midió que en la terraza, en las vueltas pesadas, casi 200 de las 262 líneas se van en recalcular paletas (`destello_tick` + `flashes_tick`): sigue en `la-terraza-pierde-cuadros-en-los-destellos.md`.

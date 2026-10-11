@@ -20,7 +20,7 @@ cuentan en el ancho. Casos en `text/tests/escapes.json`; el rojo se vio con
 la regla desactivada.
 
 **Deuda declarada**: se pierde el color y la velocidad. Está anotada acá y en
-`todo/las-caras-y-las-esperas.md`, donde ya vive `without_waits`.
+`las-caras-y-las-esperas.md`, donde ya vive `without_waits`.
 
 Páginas de mapa que compilan (`rm2k-snes-events culprits --every-map`, antes
 -> después): Desert Nightmare 5738 -> 7034 de 7340; Sunset Over Imdahl 898 ->
@@ -29,5 +29,5 @@ huella, `27e94e67039533a2…`.
 
 `-p rm2k-snes-screens`: `the_boxes_of_the_maps_and_the_common_events` falla
 (`left: 5, right: 4`), **y falla igual sin este cambio**: es el caso de
-`todo/una-prueba-de-screens-cambia-con-el-workspace.md`, que acá falla también
+`una-prueba-de-screens-cambia-con-el-workspace.md`, que acá falla también
 con `-p`. Al mergear: instalar `text events screens convert cartridge`.

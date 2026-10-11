@@ -6,7 +6,7 @@ status: draft
 ---
 
 Visto por Calandria el 2026-10-11, de paso
-(`testing/rescatar-los-hallazgos.md`), herramientas `fc6f7456`, ports
+(`rescatar-los-hallazgos.md`), herramientas `fc6f7456`, ports
 `a85b7e3`: el armado del release de Desert Nightmare avisa que en 157
 mapas no dibuja las imágenes `TextboxInnen` y `TextboxRahmen`, que son el
 marco propio de sus mensajes.

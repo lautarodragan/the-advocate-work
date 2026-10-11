@@ -20,8 +20,8 @@ Es investigación y plan, no código. **El resultado es
 leer, y sobre todo contestar las preguntas de su §5, que son las que deciden
 por dónde se empieza.
 
-Relacionadas: `todo/las-responsabilidades-de-snes-convert.md` y
-`wishlist/un-juego-golden-y-dos-repos.md`.
+Relacionadas: `las-responsabilidades-de-snes-convert.md` y
+`un-juego-golden-y-dos-repos.md`.
 
 # Bitácora
 

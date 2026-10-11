@@ -5,13 +5,13 @@ type: bug
 status: draft
 ---
 
-Medido por Calandria el 2026-10-11 (`testing/las-exclusiones-que-sobran.md`):
+Medido por Calandria el 2026-10-11 (`las-exclusiones-que-sobran.md`):
 con el mapa 1 adentro, "the slot screen and the menu gather 524 tiles and
 their bank fits 448" con el System de ABL, y 482 con el del juego
-(Tijereta, `testing/la-ventana-en-el-banco-de-tiles.md`, que lo dejó como
+(Tijereta, `la-ventana-en-el-banco-de-tiles.md`, que lo dejó como
 "tarea aparte": "son caras, no ventanas"). Es probablemente lo mismo que
 Carpintero dejó sin hacer el 2026-10-06 en
-`testing/degradar-en-vez-de-fallar.md`, el punto 4: "los nombres que no
+`degradar-en-vez-de-fallar.md`, el punto 4: "los nombres que no
 entran en el banco del menú… probarlo en Dooms 2"; no se comprobó que sea
 el mismo corte.
 

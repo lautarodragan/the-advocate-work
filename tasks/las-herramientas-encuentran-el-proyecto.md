@@ -7,7 +7,7 @@ assignee: taro
 ---
 
 Lo que queda para que `tools/` no sepa nada de dónde ni cómo está ABL, después
-de `testing/el-archivo-de-proyecto.md` (Molle). Lo decidió Hornero, con la
+de `el-archivo-de-proyecto.md` (Molle). Lo decidió Hornero, con la
 autorización de taro del 2026-09-29 para decidir sin esperarlo:
 
 - **Las herramientas encuentran el proyecto como cargo encuentra el suyo**:

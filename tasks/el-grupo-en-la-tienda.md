@@ -20,7 +20,7 @@ Las capturas del original están en
 `/shared/capturas/2026-09-28-tienda/original-comprar-arco.png` y
 `original-comprar-chaqueta.png`.
 
-La tienda de la ROM (`testing/la-tienda-como-el-original.md`, Aguaribay) no
+La tienda de la ROM (`la-tienda-como-el-original.md`, Aguaribay) no
 lo tiene: en 256 de ancho la lista va a lo ancho y "Owned Items" con el oro
 debajo, así que esa ventana no tiene dónde ir sin sacarle filas a la lista
 de comprar, que ya tiene cinco. Antes de implementarlo hay que decidir de

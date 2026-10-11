@@ -7,7 +7,7 @@ assignee: Mulita
 agents: [Mulita]
 ---
 
-Medido por Mulita el 2026-10-11 en `testing/sunset-el-mapa-22-en-negro.md`:
+Medido por Mulita el 2026-10-11 en `sunset-el-mapa-22-en-negro.md`:
 la escena que abre el juego queda negra porque `WinterMist`, una niebla al
 95 % de transparencia, va como imagen grande —en lugar del mapa— y la
 transparencia oscurece hacia negro.
@@ -87,7 +87,7 @@ matemática de color) está escrito ahí, sin hacer: es decisión de taro.
   `/shared/capturas/2026-10-11-sunset-imagenes/`. Para el original armé
   variantes del juego que empiezan en el mapa con las imágenes de la
   puerta (`~/scratch/mulita/wine3/variante.py`).
-* Rojo antes: la escena del 22 negra (tarea `testing/sunset-el-mapa-22-en-negro.md`),
+* Rojo antes: la escena del 22 negra (tarea `sunset-el-mapa-22-en-negro.md`),
   y cualquier mapa con techos tapado por una imagen grande.
 
 ### Lo que vi y no es de esto

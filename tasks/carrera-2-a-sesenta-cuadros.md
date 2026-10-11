@@ -8,7 +8,7 @@ assignee: taro
 
 # Qué
 
-El hito 2 de `todo/la-carrera-y-lo-que-sigue.md`. Sale de `main` en `69e66ed`.
+El hito 2 de `la-carrera-y-lo-que-sigue.md`. Sale de `main` en `69e66ed`.
 Se da por hecho con los cuadros perdidos en cero o casi en el 49, el 52 y el 54
 manejando, y lo tiene que cobrar una prueba: el recorrido
 `pruebas/abl/test_recorrido_carrera_golden.py` ya maneja con un piloto.
@@ -112,7 +112,7 @@ Lo que dice cada camino, como límite:
   línea— más leer la lista y el estado: **~1,7 líneas por página**, ~70 para
   las 41 de una vuelta, contra ~310 al empezar.
 * **"Correr las paralelas sólo cuando algo cambia de celda"** (la idea 2 de
-  `wishlist/optimizar-los-eventos-paralelos-al-compilar.md`): no se hizo, y
+  `optimizar-los-eventos-paralelos-al-compilar.md`): no se hizo, y
   su límite es cero para lo que importa. El héroe avanza media celda por tick,
   así que cambia de celda cada dos ticks y en ésos corren las 41 igual: el
   tick más pesado no baja. Además las 41 escriben las mismas dos variables

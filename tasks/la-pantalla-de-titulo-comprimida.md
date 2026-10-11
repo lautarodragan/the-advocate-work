@@ -7,7 +7,7 @@ assignee: Chajá
 ---
 
 De taro, el 2026-09-28, después de la pantalla de Game Over
-(`testing/la-pantalla-de-game-over.md`). Carpincho dejó `pantalla_subir` y
+(`la-pantalla-de-game-over.md`). Carpincho dejó `pantalla_subir` y
 `tools/port/pantalla_completa.py` sin saber qué pantalla suben, para que el
 título los use, y midió:
 
@@ -28,7 +28,7 @@ igual pixel por pixel: la golden `titulo` no cambia.
   el título tiene que volver sin un parpadeo largo.
 * Empezar y cargar una partida desde el título, y un Game Over que vuelva al
   título: la pista del título que sigue al empezar
-  (`done/la-pista-del-titulo-sigue-al-empezar.md`) no se tocó, pero pasa por
+  (`la-pista-del-titulo-sigue-al-empezar.md`) no se tocó, pero pasa por
   el mismo lugar.
 
 # Lo que se hizo

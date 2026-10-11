@@ -7,7 +7,7 @@ assignee: taro
 agents: [Mulita]
 ---
 
-Visto por Mulita el 2026-10-10, al cerrar `testing/el-grupo-vacio-al-empezar.md`: no es del grupo vacío, pasa también con `party = [1]`.
+Visto por Mulita el 2026-10-10, al cerrar `el-grupo-vacio-al-empezar.md`: no es del grupo vacío, pasa también con `party = [1]`.
 
 ## La causa: son dos, una detrás de la otra
 
@@ -72,7 +72,7 @@ Dos caminos, sin elegir:
   matemática de color para la transparencia, en un mapa que ya está en
   modo 3 con el panorama. Es una feature entera.
 
-Ver `todo/sunset-las-imagenes-sobre-el-mapa.md`.
+Ver `sunset-las-imagenes-sobre-el-mapa.md`.
 
 ## Bitácora
 

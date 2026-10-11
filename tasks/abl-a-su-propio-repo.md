@@ -19,7 +19,7 @@ pruebas de ROM propias. Por eso la fase 2 va enseguida.
 
 # La clasificación (Ñandú-petiso, 2026-10-02, antes de mover nada)
 
-El criterio es el de `testing/decisiones-y-divergencias-por-repo.md`: va con
+El criterio es el de `decisiones-y-divergencias-por-repo.md`: va con
 ABL lo que es de este juego —su contenido, sus pruebas, sus recetas, sus
 experimentos, lo que decide qué lleva su cartucho—; queda lo que valdría
 para cualquier juego portado con las herramientas, aunque se haya
@@ -109,8 +109,8 @@ en el runtime o el conversor.
 * `wishlist/`: `caso-propio-para-la-escena-del-ascensor`,
   `partir-test-comandos-golden`.
 
-`testing/las-pruebas-sin-opcodes.md` (Cotorra) toca las dos mitades y queda
-acá, con la mitad de Rust, y `testing/el-juego-de-pruebas.md` y
+`las-pruebas-sin-opcodes.md` (Cotorra) toca las dos mitades y queda
+acá, con la mitad de Rust, y `el-juego-de-pruebas.md` y
 `decisiones-y-divergencias-por-repo.md` también: son el plan de este repo.
 
 # Lo hecho

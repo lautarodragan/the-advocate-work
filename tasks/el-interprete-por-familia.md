@@ -6,7 +6,7 @@ status: done
 ---
 
 El despacho es por tabla desde el 2026-09-25 (la parte C de
-`done/main-s-segunda-etapa.md`), así que ya se puede hacer. Ojo: la prueba
+`main-s-segunda-etapa.md`), así que ya se puede hacer. Ojo: la prueba
 `test_la_entrada_k_de_la_tabla_salta_al_manejador_del_opcode_k` exige que
 cada manejador siga en el banco de `correr_codigo`.
 

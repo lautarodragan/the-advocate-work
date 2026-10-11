@@ -6,7 +6,7 @@ status: done
 assignee: taro
 ---
 
-De taro, el 2026-09-29, después del paso 1 (`testing/el-justfile-no-sabe-que-existe-python.md`):
+De taro, el 2026-09-29, después del paso 1 (`el-justfile-no-sabe-que-existe-python.md`):
 el problema es el que `npm link` intenta resolver, con N sub-agentes en
 paralelo que modifican las herramientas seguido. Lo acordado:
 

@@ -21,7 +21,7 @@ generado por `protocol`, y las pruebas usan los números para tres cosas:
    `rm2k-snes-audio decode`.
 
 Cuando esto termine, la tarea siguiente es declarar los dos bytecodes en
-Rust y dejar `protocol` y sus TOML: `todo/los-bytecodes-en-rust.md`.
+Rust y dejar `protocol` y sus TOML: `los-bytecodes-en-rust.md`.
 
 ## El conteo, antes de tocar nada (Cotorra, 2026-10-02)
 

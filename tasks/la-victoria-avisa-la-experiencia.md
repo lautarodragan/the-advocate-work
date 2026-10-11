@@ -8,7 +8,7 @@ assignee: taro
 
 **Que la victoria diga la experiencia ganada y quién subió de nivel.**
 
-La experiencia y la subida de nivel ya andan (`done/experiencia-y-subida-de-nivel.md`),
+La experiencia y la subida de nivel ya andan (`experiencia-y-subida-de-nivel.md`),
 pero la pelea no las cuenta: ni "N EXP received" ni "Level up!". El estado cambia
 igual; se ve recién en el menú.
 

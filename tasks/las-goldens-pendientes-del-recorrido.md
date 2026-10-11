@@ -5,7 +5,7 @@ type: test
 status: todo
 ---
 
-Lo midió Irupé el 2026-09-29 (`testing/las-pruebas-sin-agujeros-callados.md`):
+Lo midió Irupé el 2026-09-29 (`las-pruebas-sin-agujeros-callados.md`):
 de las 135 fotos que sacan las pruebas de recorrido, sólo las 8 de
 `apertura/` y `talan/` tenían golden. Las otras 127 están en
 `rom/pruebas/golden/playthrough/pendientes.txt`, agrupadas por prueba. Hasta

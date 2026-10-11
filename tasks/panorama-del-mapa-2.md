@@ -31,6 +31,6 @@ ventanillas se vean quietas.
 
 # Hecho
 
-El 2026-10-05, con todos los panoramas —`testing/los-panoramas.md`—: el 2 va
+El 2026-10-05, con todos los panoramas —`los-panoramas.md`—: el 2 va
 aplanado, con la pantalla grande en BG2, y `ChangePBG` compila a
 `OP_PANORAMA`.

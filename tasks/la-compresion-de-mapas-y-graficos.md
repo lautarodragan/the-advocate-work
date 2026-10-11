@@ -183,7 +183,7 @@ Lo que dicen las columnas del dominio:
   ya vista: la izquierda de muchos CharSet es la derecha dada vuelta.
 
 El agente del S-DD1 midió lo mismo con el algoritmo del chip
-(`wishlist/chips-sa-1-y-s-dd1.md`) y los números cruzan: `map_celdas` 278,2
+(`chips-sa-1-y-s-dd1.md`) y los números cruzan: `map_celdas` 278,2
 KB, zlib 22,9 contra 22,7.
 
 ## Las cuatro variantes de las grillas

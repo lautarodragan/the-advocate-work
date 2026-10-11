@@ -11,7 +11,7 @@ Tu nombre va en tres lugares, y así te encontrás a vos mismo:
 
 * en el `assignee` de la tarea mientras la tenés, y en su lista `agents`
   para siempre —agregalo vos al tomarla si no está; cuando la pasás a
-  `testing/` el `assignee` pasa a ser taro, y `agents` queda—;
+  `testing` el `assignee` pasa a ser taro, y `agents` queda—;
 * en cada commit tuyo, en una línea al final, junto a las que te pase el
   encargo: `Agente: <Tu nombre>`.
 
@@ -75,9 +75,9 @@ antes, empezá desde ahí y no lo vuelvas a medir.
 
 * Mergeá `main` en cada rama tuya: la de este repo y las de los que
   tocaste.
-* Pasá la tarea a `testing/` con `assignee: taro`, tu nombre en `agents`,
+* Pasá la tarea a `status: testing` con `assignee: taro`, tu nombre en `agents`,
   y qué hay que instalar al mergear, en tu worktree de este repo.
-* **Lo que encontraste y no arreglaste va a `tasks/draft/`**, un archivo
+* **Lo que encontraste y no arreglaste es un draft**, un archivo
   por hallazgo: qué se vio, en qué juego, en qué commit y cómo
   reproducirlo —ver el README de este repo—. Y si se ve jugando un port,
   una línea en "Known issues" de su página del libro,

@@ -7,7 +7,7 @@ assignee: taro
 agents: [Calandria]
 ---
 
-Del re-barrido del 2026-10-10 (`testing/otros-juegos-el-rebarrido.md`): las exclusiones commiteadas son las del relevamiento y sobran. Entonces Book of Three necesitaba sólo la 46, Dooms 2 la 1, la 10, la 14 y la 63, Frozen la 1 y la 2, y Desert las doce del barrido. Desde entonces entraron los gemelos y el recorte de eventos, la música y las tropas en palabras, y el grupo vacío, así que hay que medir de nuevo.
+Del re-barrido del 2026-10-10 (`otros-juegos-el-rebarrido.md`): las exclusiones commiteadas son las del relevamiento y sobran. Entonces Book of Three necesitaba sólo la 46, Dooms 2 la 1, la 10, la 14 y la 63, Frozen la 1 y la 2, y Desert las doce del barrido. Desde entonces entraron los gemelos y el recorte de eventos, la música y las tropas en palabras, y el grupo vacío, así que hay que medir de nuevo.
 
 ## Cómo se mide (Calandria, 2026-10-11)
 

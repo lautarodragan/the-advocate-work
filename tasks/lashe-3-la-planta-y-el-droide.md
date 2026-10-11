@@ -80,7 +80,7 @@ banco $61). BSS y ZEROPAGE sin cambio.
 164 compilan (antes 120).
 
 **Cuadros perdidos**, caminando 1200 cuadros de a 50 ida y vuelta (el método de
-`done/el-mapa-11-se-rediseno.md`), con los encuentros apagados: 0 en 57, 59,
+`el-mapa-11-se-rediseno.md`), con los encuentros apagados: 0 en 57, 59,
 60, 61, 62 y 63. Los únicos 10 salieron de pisar sin querer el pozo de (15,7)
 del 62 y caer al 60: un teletransporte.
 

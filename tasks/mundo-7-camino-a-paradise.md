@@ -195,7 +195,7 @@ verde. `NO_CACHE=1 just cartuchos` da las mismas huellas que con caché.
 tres y las fotos del recorrido están en `/shared/capturas/2026-10-01-paradise/`.
 **El merge espera a taro.** El cielo del 105 sale negro: su panorama
 (Evening1) no se dibuja, como en todos los mapas con panorama
-(`wishlist/panorama-del-mapa-2.md`).
+(`panorama-del-mapa-2.md`).
 
 ## Espacio
 

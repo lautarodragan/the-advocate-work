@@ -6,7 +6,7 @@ status: draft
 ---
 
 Lo vio Aguará el 2026-10-06 armando el tablero contra RM2k
-(`testing/el-tablero-contra-rm2k.md`): "los comunes en paralelo no corren
+(`el-tablero-contra-rm2k.md`): "los comunes en paralelo no corren
 —6 en ABL, 35 en Vampires Dawn—, que no estaba en ningún estudio". Sigue
 igual en the-advocate `fc6f7456`: el comentario de `party_common_events`,
 en `rm2k-snes/events/src/indices.rs`, dice "The ROM does not run parallel
@@ -34,7 +34,7 @@ miró en un emulador, y alguno puede estar cubierto por otro camino (un
 `CallEvent` desde un mapa). Lo que se midió el 2026-09-27 sobre hacerlos
 de verdad —otro intérprete, el cuerpo en cada cuadro mientras el switch
 esté prendido— y por qué no se hizo entonces está en ese mismo comentario
-y en `done/los-comunes-automaticos-y-la-consola.md`: el 2 de ABL,
+y en `los-comunes-automaticos-y-la-consola.md`: el 2 de ABL,
 `DisableSaving`, no tiene switch y correría siempre.
 
 **Cómo verlo**: la lista sale de `commonevents.json` de cada port

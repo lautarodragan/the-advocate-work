@@ -5,7 +5,7 @@ type: refactor
 status: done
 ---
 
-La opción (d) de la pregunta 2 del 38 en `todo/lashe-city-hasta-la-carrera.md`:
+La opción (d) de la pregunta 2 del 38 en `lashe-city-hasta-la-carrera.md`:
 que la dirección del tilemap de BG1 la elija el conversor por mapa, como ya
 elige `OBSEL` y `BG12NBA`. Medido e implementado el 2026-09-25 sobre `dd73115`.
 

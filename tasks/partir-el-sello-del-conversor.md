@@ -6,7 +6,7 @@ status: wishlist
 ---
 
 Propuesto el 2026-09-26 por la optimización de `just cartuchos` (ver
-`done/cartuchos-en-caliente-en-diez-segundos.md`): hoy tocar cualquier
+`cartuchos-en-caliente-en-diez-segundos.md`): hoy tocar cualquier
 archivo de `rom/src/` reconvierte todo, pero el conversor lee de `rom/src/`
 un solo archivo, `ram_lejana.s` (medido con un audit hook). Con un sello para
 el conversor (flags, casos, `tools/`, binarios, `parches/manual`, techos y

@@ -6,7 +6,7 @@ status: done
 assignee: taro
 ---
 
-Sale de lo que dejó abierto `testing/el-justfile-de-las-herramientas.md`
+Sale de lo que dejó abierto `el-justfile-de-las-herramientas.md`
 (Espinillo). taro pidió el 2026-09-29 que Hornero decida lo abierto y haga
 una primera versión sin esperarlo. Lo decidido:
 

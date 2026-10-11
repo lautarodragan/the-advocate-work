@@ -8,7 +8,7 @@ assignee: taro
 
 # Qué
 
-El hito 3 de `todo/la-carrera-y-lo-que-sigue.md`: las faltas 4 y 5. Sale de
+El hito 3 de `la-carrera-y-lo-que-sigue.md`: las faltas 4 y 5. Sale de
 `main` en `69e66ed`.
 
 * **El cartel de los controles** (`EscapeInst`): decidido, la opción (a). Un

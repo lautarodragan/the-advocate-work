@@ -6,8 +6,8 @@ status: done
 ---
 
 taro nota lag en la escena de la terraza (mapa 32) y en el destello azul de
-Kersh (`done/dos-destellos-a-la-vez.md`: "mejoró, pero no es perfecto; lo que
-queda es lag"). La investigación de los chips (`wishlist/chips-sa-1-y-s-dd1.md`,
+Kersh (`dos-destellos-a-la-vez.md`: "mejoró, pero no es perfecto; lo que
+queda es lag"). La investigación de los chips (`chips-sa-1-y-s-dd1.md`,
 "Dónde se va el cuadro hoy") midió que en las vueltas pesadas casi 200 de las
 262 líneas se van en recalcular paletas: `destello_tick` ~103 y
 `flashes_tick` ~94. Es CPU pura, y medida en snes9x: en el hardware puede ser

@@ -43,14 +43,14 @@ días, y que esta pasada corrige o saca:
   `leer_techos` en `tools/audio/snes_music.py`).
 * "Varios temas en el cartucho" (~líneas 130-200) quedó viejo entero el
   2026-09-26, con el presupuesto por paquete (el paso 6 de
-  `tasks/todo/la-calidad-de-la-musica.md`): ya no hay recorte de aportantes
+  `tasks/la-calidad-de-la-musica.md`): ya no hay recorte de aportantes
   —todos los temas aportan todas sus muestras—, `build_bank`, el reparto de
   sobrantes, la percusión "con lo que sobre" y `--banco-entero` se fueron, y
   "Por qué el límite sigue estando" es justo lo que se cambió: ahora cada
   muestra tiene el presupuesto de su peor paquete. El porqué que queda está
   en `workflow/decisiones/un-solo-banco-de-muestras.md` y en `Banco`
   (`tools/audio/snes_music.py`). El enlace a
-  `workflow/wishlist/presupuesto-de-muestras-por-paquete.md` apunta ahora a
+  `workflow/presupuesto-de-muestras-por-paquete.md` apunta ahora a
   `workflow/tasks/done/`.
 * "Lo que sí cuesta caro es el arranque" (~línea 217): el arranque ya no sube
   el banco por el IPL; sube el driver y el directorio, y el paquete del mapa

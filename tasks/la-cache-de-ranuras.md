@@ -7,7 +7,7 @@ assignee: taro
 ---
 
 De taro, el 2026-10-03: "vamos con la 1", entre los caminos para la granja
-de ABL (`workflow/tasks/testing/mundo-8-paradise.md` y
+de ABL (`tasks/mundo-8-paradise.md` y
 `mundo-7-camino-a-paradise.md`, opción D, en ABL). Es del motor: sirve para
 cualquier mapa con mucha gente, de cualquier juego.
 
@@ -261,7 +261,7 @@ si el horneado los deja bien parados.
 
 # ABL
 
-En su rama `cache-de-ranuras` (ver su `workflow/tasks/testing/mundo-9-la-granja.md`):
+En su rama `cache-de-ranuras` (ver su `tasks/mundo-9-la-granja.md`):
 
 * **`below = 129`**: el 127 y la arboleda (128), que es la noche que sigue.
 * **El corte**: el fork del 108 devuelve la salida a la granja a la del

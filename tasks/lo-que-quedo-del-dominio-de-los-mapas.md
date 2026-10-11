@@ -6,7 +6,7 @@ status: done
 assignee: taro
 ---
 
-De `testing/rust-el-dominio-de-los-mapas.md` (Mara, 2026-09-30):
+De `rust-el-dominio-de-los-mapas.md` (Mara, 2026-09-30):
 
 - que `rm2k-snes-events scan` conteste los blancos de ruta de cada página,
   así `movable_events` sale de Python;

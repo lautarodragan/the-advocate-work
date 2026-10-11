@@ -7,7 +7,7 @@ assignee: taro
 agents: [Tijereta]
 ---
 
-Medido por Tijereta el 2026-10-10, al cerrar `testing/la-musica-y-las-tropas-en-dos-bytes.md`: con `Music/` entero (281 temas), arrancando en 8 y sin los 82 mapas que excluyó Aguará, VD pasa la música, las tropas y las acciones y corta acá (`emit.rs` de `rm2k-snes-audio`). Es el muro siguiente de todo el juego.
+Medido por Tijereta el 2026-10-10, al cerrar `la-musica-y-las-tropas-en-dos-bytes.md`: con `Music/` entero (281 temas), arrancando en 8 y sin los 82 mapas que excluyó Aguará, VD pasa la música, las tropas y las acciones y corta acá (`emit.rs` de `rm2k-snes-audio`). Es el muro siguiente de todo el juego.
 
 ## Hecho, el 2026-10-11 (Tijereta)
 

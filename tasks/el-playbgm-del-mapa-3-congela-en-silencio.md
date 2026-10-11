@@ -6,7 +6,7 @@ status: done
 assignee: taro
 ---
 
-Medido el 2026-09-26 al verificar `done/al-mapa-3-le-falta-un-efecto.md`:
+Medido el 2026-09-26 al verificar `al-mapa-3-le-falta-un-efecto.md`:
 sin MSU-1, apenas aparece el mapa 3 (después del fundido) el `PlayBGM
 TF3_1_awe` congela **86 cuadros (1,4 s) con la imagen quieta y en silencio**.
 TF3 no está en el paquete del 3 y hay que subirlo, pero de los 61.614 B que

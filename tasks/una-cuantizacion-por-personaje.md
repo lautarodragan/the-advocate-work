@@ -7,7 +7,7 @@ agents: [Mulita]
 assignee: taro
 ---
 
-De `testing/vampires-dawn-arma-desde-su-toml.md` (Aguará, 2026-10-11):
+De `vampires-dawn-arma-desde-su-toml.md` (Aguará, 2026-10-11):
 `record.rs` de mapdata guarda un banco de doce poses por (CharSet, índice,
 datos), y un personaje que en otro mapa sale cuantizado distinto lleva un
 banco propio —506 avisos "goes with a pose bank of its own" en el armado

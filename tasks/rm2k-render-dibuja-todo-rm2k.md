@@ -30,11 +30,11 @@ colores o cortar en 8x8 se queda del lado de Adeleine y de `voodoo`.
 En tres partes, cada una con las ROMs byte por byte iguales y todo lo que
 dibuja comparado pixel por pixel contra el Python:
 
-- los CharSets: `testing/rm2k-render-los-charsets.md` (Yaguarundí);
-- la pelea —animaciones, enemigos, fondos—: `testing/rm2k-render-pelea.md`
+- los CharSets: `rm2k-render-los-charsets.md` (Yaguarundí);
+- la pelea —animaciones, enemigos, fondos—: `rm2k-render-pelea.md`
   (Coatí);
 - las pantallas —caras, System, cartel de `ShowPicture`—:
-  `testing/rm2k-render-pantallas.md` (Hurra).
+  `rm2k-render-pantallas.md` (Hurra).
 
 `load_image` se fue. Lo que el port hace con esas imágenes para la consola
 —achicar, cortar en 8x8, la trama, el horneado, los colores— sigue en el

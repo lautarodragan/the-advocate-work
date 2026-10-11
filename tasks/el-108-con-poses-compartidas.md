@@ -7,7 +7,7 @@ assignee: taro
 ---
 
 De taro, el 2026-10-01, entre las opciones de
-`testing/mundo-7-camino-a-paradise.md` (Puma): la A. El 108 pide 42 ranuras
+`mundo-7-camino-a-paradise.md` (Puma): la A. El 108 pide 42 ranuras
 de pose quieta (15 personajes mirando a 3 o 4 lados) y la VRAM da 24, pero en
 pantalla a la vez hay entre 12 y 19. Extiende la decisión de las poses en
 caliente (`decisiones/las-poses-se-suben-en-caliente.md`, que ahora lo dice).

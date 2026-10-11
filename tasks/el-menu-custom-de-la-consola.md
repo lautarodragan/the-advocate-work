@@ -15,7 +15,7 @@ sistema en algo custom pero genérico — una feature diseñada para armar
 menús custom, que siga las mismas reglas que el resto del menú de
 items/etc. Entonces no necesitaríamos ninguna imagen. O tal vez solo las
 que muestran arte de los personajes". Es la idea de
-`wishlist/un-menu-custom-propio.md`, sin el modo 5: hoy hay ancho variable
+`un-menu-custom-propio.md`, sin el modo 5: hoy hay ancho variable
 en baja.
 
 Y dos decisiones suyas para el diseño: **es una opción más del menú de

@@ -19,7 +19,7 @@ del ABL?
    izquierda de EV0020, habiendo terminado la secuencia del bosque que se
    prende fuego, luchado con los agentes y el Hover Tram."
 
-Sigue a `done/dos-puertas-mas-en-el-mapa-de-debug.md`: mismo método.
+Sigue a `dos-puertas-mas-en-el-mapa-de-debug.md`: mismo método.
 
 ## Dónde quedaron
 

@@ -15,7 +15,7 @@ del cronómetro, que ya están en la ROM; un mensaje cuando baja. Antes de elegi
 hay que mirar si el minijuego se puede perder: si no, el contador es sólo
 información.
 
-**Se puede perder**, mirado en el hito 4 (`testing/mundo-4-el-capitulo.md`):
+**Se puede perder**, mirado en el hito 4 (`mundo-4-el-capitulo.md`):
 cada salto y cada escalera del 95 restan 5 a la variable 48, que arranca en
 99, y con la variable en cero la paralela 56 dice "So... tired... can't go
 on...", devuelve a Eisen a la entrada, apaga las tres palancas y la repone en

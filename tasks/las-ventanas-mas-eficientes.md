@@ -8,7 +8,7 @@ assignee: taro
 ---
 
 taro, el 2026-10-11, después de hablar de la pantalla del nombre
-(`wishlist/la-pantalla-del-nombre-del-heroe.md`): que se analice para
+(`la-pantalla-del-nombre-del-heroe.md`): que se analice para
 todas las ventanas, no sólo ésa. "Si podemos hacer las ventanas, en
 general, más eficientes, es un win por todos lados."
 
@@ -96,4 +96,4 @@ objetos, y dónde irían las teselas de las caras en objetos.
 
 Nada que instalar. Sólo el libro.
 
-Hallazgo sin arreglar: `draft/el-texto-de-objetos-de-abl-no-entra.md`.
+Hallazgo sin arreglar: `el-texto-de-objetos-de-abl-no-entra.md`.

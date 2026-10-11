@@ -8,7 +8,7 @@ assignee: taro
 
 # Qué reportó taro
 
-Jugando `workflow/tasks/testing/el-mapa-de-debug.md` (sale de `main` en
+Jugando `tasks/el-mapa-de-debug.md` (sale de `main` en
 `455f9fc1`, llevado a `8308033b` con el hito 4 del mundo):
 
 > - Elegir los Back Alleys (AFTER THE DIRECTOR IS SHOT) te deja donde te

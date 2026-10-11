@@ -52,6 +52,6 @@ motor y no específico de ABL.
 la celda de estas variables?", que es el de los autos de la carrera, las luces
 del mapa 11 y unas doscientas cincuenta páginas del juego: `OP_CELL_TEST`, y
 un atajo que corre esas páginas sin el intérprete cuando no pasan de la
-condición. Ver `testing/carrera-2-a-sesenta-cuadros.md`, que tiene medido
+condición. Ver `carrera-2-a-sesenta-cuadros.md`, que tiene medido
 también el límite de la 2 para la carrera: cero en el tick más pesado,
 porque el héroe cambia de celda cada dos ticks.

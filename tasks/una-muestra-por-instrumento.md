@@ -25,5 +25,5 @@ paquete cada paquete lleno la reparte entera. Lo que ya se hizo, el
 2026-09-26: cada programa lleva la muestra de la zona que más suena en el
 cartucho, no la del do central (`most_used_zones` en
 `tools/rm2k-snes/rm2k-snes-audio/src/bank.rs`). Dos zonas por programa se midieron en el paso 6
-de `tasks/todo/la-calidad-de-la-musica.md`: 149 muestras en vez de 116, cada
+de `tasks/la-calidad-de-la-musica.md`: 149 muestras en vez de 116, cada
 una a menos tasa.

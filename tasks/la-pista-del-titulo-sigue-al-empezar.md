@@ -31,4 +31,4 @@ del MSU-1** guarda `music_apagada` en 1 —el SPC700 está callado a
 propósito—, así que al cargarla `music_boot` toma el camino callado y la
 partida arranca muda hasta el próximo `PlayBGM` (antes de este arreglo, seguía
 la pista del título). Anotado en
-`workflow/tasks/todo/la-partida-guardada-con-msu-arranca-muda.md`.
+`tasks/la-partida-guardada-con-msu-arranca-muda.md`.

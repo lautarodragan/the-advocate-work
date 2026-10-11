@@ -6,7 +6,7 @@ status: done
 assignee: taro
 ---
 
-De taro, el 2026-10-02. Va **después** de `doing/las-pruebas-sin-opcodes.md`,
+De taro, el 2026-10-02. Va **después** de `las-pruebas-sin-opcodes.md`,
 para que ninguna prueba de Python necesite los números.
 
 - Un crate en `tools/rm2k-snes/` (por ejemplo `rm2k-snes-bytecode`) declara

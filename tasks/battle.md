@@ -170,7 +170,7 @@ Qué entra en la lista y cuánto cura sale de easyrpg-player:
   eso pasó de imposible a deuda—, y las de revivir porque revivir es sacar el
   estado de muerto y los estados no existen. (Eso último no era cierto: EasyRPG
   decide si alguien está caído por los HP, y así se resolvió en el menú; en la
-  pelea sigue pendiente en `todo/el-elixir-en-la-pelea.md`.) Son 12 de las 22 medicinas del
+  pelea sigue pendiente en `el-elixir-en-la-pelea.md`.) Son 12 de las 22 medicinas del
   juego, de la Potion de 50 a la Miracle Drop, que cura todo.
 * **Cuánto cura**: `Game_BattleAlgorithm::Item::vExecute`, o sea
   `recover_hp_rate * GetMaxHp() / 100 + recover_hp`, topado contra lo que le

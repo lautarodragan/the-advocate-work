@@ -5,7 +5,7 @@ type: bug
 status: draft
 ---
 
-Medido por Carpintero el 2026-10-10 (`testing/los-eventos-que-no-entran-en-la-ram.md`):
+Medido por Carpintero el 2026-10-10 (`los-eventos-que-no-entran-en-la-ram.md`):
 cuando un mapa pasa de los 120 eventos de la RAM, `Game::trim`
 (`rm2k-snes/convert/src/trim.rs`) deja afuera lo que menos pierde, y la
 tercera clase es "una pared invisible". Desert: "9 pierden decoración y 8

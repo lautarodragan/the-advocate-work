@@ -10,7 +10,7 @@ ROM (ahorraba 32 KB, del 75,8 % al 75,0 %, y le pareció poca diferencia): **lo
 contrario, meter en la ROM todos los fondos que usan los mapas de `release`,
 con la calidad tan baja como haga falta**, y que el reemplazo quede sólo para
 lo que no entre. Con MSU-1 no cambia nada. Sigue a
-`testing/todos-los-fondos-en-el-msu-1.md`.
+`todos-los-fondos-en-el-msu-1.md`.
 
 Todo lo medido acá es del 2026-09-27, sobre `91b5a37d` (antes) y esta rama
 (después), con scripts descartables.
@@ -58,7 +58,7 @@ crecieron son 17 KB, medio banco, y el otro medio es el acomodo secuencial de
 `bancos.py`, que deja un bloque que no entra para el banco siguiente.
 
 **El camino principal que falta** (Tasgarde, Eisen, 259 y 255) son unos diez
-bancos según `todo/el-mundo-y-lo-que-sigue.md` (`m2` 112 contra `m4` 122,
+bancos según `el-mundo-y-lo-que-sigue.md` (`m2` 112 contra `m4` 122,
 medidos con los tres fondos de antes). Con esto le queda **uno** en vez de
 dos, más los fondos de sus propios mapas, a 4 KB cada uno. El hito 3 de ese
 plan (first-fit decreasing) daba ocho más.

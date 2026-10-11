@@ -15,7 +15,7 @@ detrás hay ceros, porque la suma de control igual cuadra.
 
 Que la cabecera de la partida lleve su tamaño o una versión derivada del
 formato (`partida_tabla`), y que una que no coincide se trate como "no hay
-partida". Ver `workflow/tasks/testing/juntar-release-y-test-main.md`.
+partida". Ver `tasks/juntar-release-y-test-main.md`.
 
 No urge: taro prueba siempre desde cero y no comparte partidas entre builds.
 Importa el día que un `.srm` viaje para reproducir un bug, o para quien juegue

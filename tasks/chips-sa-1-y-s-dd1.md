@@ -338,7 +338,7 @@ páginas de RM2k**: las `Light*` y el `LightFloor`. Hacer que el SA-1 las haga s
 código de ABL es exactamente la idea anterior. Cualquier versión más fina —el
 SA-1 compara posiciones y la CPU principal decide— necesita saber qué página
 es "un chequeo", y eso es reconocer el minijuego por dentro, que es lo que
-`done/el-mapa-11-se-rediseno.md` ya descartó con el camino 4.
+`el-mapa-11-se-rediseno.md` ya descartó con el camino 4.
 
 # Diseños
 

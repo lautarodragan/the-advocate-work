@@ -7,7 +7,7 @@ assignee: taro
 ---
 
 De taro, el 2026-09-30, después de la maqueta
-(`testing/maqueta-del-menu-en-alta-resolucion.md`, Ñacurutú). El modo 5 con
+(`maqueta-del-menu-en-alta-resolucion.md`, Ñacurutú). El modo 5 con
 la fuente ×1,5 por glifo es lo que mejor se lee en la maqueta, pero hay un
 riesgo que sólo se ve en la consola: las columnas de un pixel de alta
 resolución están en el límite del ancho de banda de NTSC y pueden verse

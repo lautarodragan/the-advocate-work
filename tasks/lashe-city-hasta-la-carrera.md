@@ -376,16 +376,16 @@ armadura 282. Lo que pide:
 
 Cada uno es jugable y se verifica por separado. El orden es el de la lista.
 
-**El 1 está hecho** (2026-09-27, `testing/lashe-1-los-cuatro-sectores-con-auto.md`):
+**El 1 está hecho** (2026-09-27, `lashe-1-los-cuatro-sectores-con-auto.md`):
 los seis mapas en `release`, el 37 sin plantar al conversor y el 36 forkeado
 con el fin de la demo. Lo que deja para los siguientes: las puertas muertas
 del 37 al 41 y del 48 al 57, y los paquetes de audio que trajo el 38 —ver ahí—.
 
-**El 2 está hecho** (2026-09-27, `testing/lashe-2-boss-wick-y-los-vidcasts.md`):
+**El 2 está hecho** (2026-09-27, `lashe-2-boss-wick-y-los-vidcasts.md`):
 del 40 al 45 en `release`, `ChangeScreenTransitions` con el mosaico, y el tope
 de teletransportes encadenados subido de 8 a 32, que la escena de Wick pasaba.
 
-**El 3 está hecho** (2026-09-27, `testing/lashe-3-la-planta-y-el-droide.md`):
+**El 3 está hecho** (2026-09-27, `lashe-3-la-planta-y-el-droide.md`):
 57, 59 a 63 y 164 en `release`, `RecallToLocation`/`MemorizeLocation` y el
 tema recordado, y AG7-17 entra al grupo. De paso la ranura de variable pasó a
 ocho bits (las del juego ya no entraban en siete). Lo que deja para el 4: AG7
@@ -428,7 +428,7 @@ confirmación entre hito e hito.
 * **(2026-09-26)** AG7 **no puede perder habilidades**, y las armas cobran SP
   si en el original lo hacen: **fiel al original**.
 * **(2026-09-26)** El tutorial del droide (164): **se conserva**.
-* **(2026-09-26)** El 38 ya entra en la VRAM (`done/el-tilemap-del-fondo-lo-elige-el-reparto.md`): no hace falta partirlo.
+* **(2026-09-26)** El 38 ya entra en la VRAM (`el-tilemap-del-fondo-lo-elige-el-reparto.md`): no hace falta partirlo.
 * **(2026-09-26)** El cartel "REC" del 45: **queda como deuda** por ahora.
 * **(2026-09-26)** El soborno del guardia (switch 29) **se puede jugar**: el
   `DetourOfficer` (evento 19 del mapa 8, (62,32)) ofrece el soborno en su
@@ -474,7 +474,7 @@ confirmación entre hito e hito.
    **(d) está hecho (2026-09-25)**: un cuarto reparto baja el tilemap de BG1 a
    $1800 y da 480 de fondo con 384 de sprite; el 38 convierte con 4 tiles de
    fondo y 37 de sprite de margen, sin cambiarle el reparto a ningún mapa. Ver
-   `done/el-tilemap-del-fondo-lo-elige-el-reparto.md`.
+   `el-tilemap-del-fondo-lo-elige-el-reparto.md`.
 3. **El cartucho.** `release` con esto ronda el 86% —el umbral de revisar la
    decisión de 4 MB— y la carrera viene después. Y `test-main` no entra con los
    18 mapas. ¿`test-main` deja de llevar todos los mapas (y las pruebas de la
@@ -505,7 +505,7 @@ confirmación entre hito e hito.
 
 - **Los cuadros perdidos** caminando por el 37 (23 eventos) y el 38 (47): el 8,
   que es de su tamaño, era de los más cargados; conviene medirlos como el 11
-  (`done/el-mapa-11-se-rediseno.md`) antes de dar por bueno el hito 1.
+  (`el-mapa-11-se-rediseno.md`) antes de dar por bueno el hito 1.
 - **Cuánto pesa el 38** en ROM: no convierte.
 
 El título del héroe no es un riesgo: el comentario de `CHANGE_HERO_TITLE` en

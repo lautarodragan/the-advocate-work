@@ -7,8 +7,8 @@ status: done
 
 # Qué
 
-El hito 2 de `todo/el-mundo-y-lo-que-sigue.md`, que tiene todo lo medido
-antes. Sale de `3aac634`, con el hito 1 (`testing/mundo-1-el-66-entra.md`).
+El hito 2 de `el-mundo-y-lo-que-sigue.md`, que tiene todo lo medido
+antes. Sale de `3aac634`, con el hito 1 (`mundo-1-el-66-entra.md`).
 
 * **El sexto reparto**, `LAYOUT_VENTANA_ENCIMA`: la base de BG2 en `$5000`,
   la capa de encima en 256 tiles, 384 de fondo y 384 de sprite, para el 69
@@ -93,7 +93,7 @@ estos mapas.
 # Deuda
 
 * **La pelea en el mundo y la de Vago salen sin fondo.** Es de
-  `todo/todos-los-fondos-en-el-msu-1.md`, que va en paralelo.
+  `todos-los-fondos-en-el-msu-1.md`, que va en paralelo.
 * **El cartel sale en la ventana de siempre**, abajo: el `MessageOptions`
   del original (transparente y al medio) no lo hace la ROM, igual que en el
   resto del juego.

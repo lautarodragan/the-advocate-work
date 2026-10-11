@@ -6,7 +6,7 @@ status: done
 assignee: taro
 ---
 
-Lo encontró Irupé el 2026-09-29 (`testing/las-pruebas-sin-agujeros-callados.md`):
+Lo encontró Irupé el 2026-09-29 (`las-pruebas-sin-agujeros-callados.md`):
 desde `991bf935` (2026-09-27), `just video … apertura` da `TypeError`
 porque la fábrica de `recorrido` de `rom/pruebas/arnes/video.py` no acepta
 `caso`, y `talan` se traba en el mapa 900 porque no elige la página sin el

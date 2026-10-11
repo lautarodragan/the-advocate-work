@@ -77,7 +77,7 @@ los dígitos. Va antes que regenerar las 9 goldens restantes.
   menos.
 * Nombran `test-main`: `cartuchos.py` (5), `pruebas/README.md` (3), `justfile`
   (2), `test_guardar_save_point.py` (1, con `en="test-main"`),
-  `wishlist/la-carrera-en-release.md` (2). `conftest.py` afirma que `release`
+  `la-carrera-en-release.md` (2). `conftest.py` afirma que `release`
   no lleva casos. Y `donde_esta` depende del orden del diccionario: con
   `test-special` primero, `parado-tapado` —que está en los dos— se corrió en
   el chico y movió su golden.

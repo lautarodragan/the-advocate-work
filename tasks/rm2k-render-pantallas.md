@@ -7,8 +7,8 @@ assignee: taro
 ---
 
 De taro, el 2026-09-30: "seguí con todos esos", después de los CharSets
-(`testing/rm2k-render-los-charsets.md`, Yaguarundí). Es otra parte de
-`todo/rm2k-render-dibuja-todo-rm2k.md`, en paralelo con la otra
+(`rm2k-render-los-charsets.md`, Yaguarundí). Es otra parte de
+`rm2k-render-dibuja-todo-rm2k.md`, en paralelo con la otra
 (`rm2k-render-pelea.md` y `rm2k-render-pantallas.md`).
 
 Alcance: las FaceSets (menus.py), el System de las ventanas (window.py) y el cartel de ShowPicture (picture.py).

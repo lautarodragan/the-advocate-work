@@ -5,7 +5,7 @@ type: refactor
 status: todo
 ---
 
-La limpieza del 2026-09-26 (`done/restos-de-la-referencia-en-eventos-py.md`)
+La limpieza del 2026-09-26 (`restos-de-la-referencia-en-eventos-py.md`)
 sacó los comentarios que se apoyaban en la referencia de Python y dejó
 afuera, a propósito, estas cuatro cosas: cada una pide algo más que
 reescribir un comentario.
@@ -21,7 +21,7 @@ reescribir un comentario.
    se dibuja entonces) o si cortar sigue siendo lo correcto, y dejar el porqué.
 3. **`titulo.render` y `ventana.pagina` no tienen llamadores** y describen la
    comparación vieja: borrarlas (`titulo.render` ya está nombrada en
-   `wishlist/inventario-de-imagenes-en-python.md`). `git blame` y `git grep`
+   `inventario-de-imagenes-en-python.md`). `git blame` y `git grep`
    antes.
 4. **"Topado en 999 como en la referencia"** (`rom/src/batalla.s`): no se sabe
    si habla de la referencia de Python o del dibujo de `escena`. Averiguar con

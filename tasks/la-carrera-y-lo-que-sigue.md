@@ -197,9 +197,9 @@ que acepta el volante), en orden de cuánto destraba:
    2,02 en el 52, medido con `cuadros_perdidos` durante 300 ticks. El 51, con
    13 páginas de la misma forma, no pierde ninguno, y `release` en el 52 (con
    las páginas de los autos sin compilar) tampoco. Coincide con lo que estimaba
-   `wishlist/chips-sa-1-y-s-dd1.md` (~9 líneas por página, ~370 líneas). Se
+   `chips-sa-1-y-s-dd1.md` (~9 líneas por página, ~370 líneas). Se
    juega, pero a 30 cuadros. Lo general es
-   `wishlist/optimizar-los-eventos-paralelos-al-compilar.md`: las 40 páginas
+   `optimizar-los-eventos-paralelos-al-compilar.md`: las 40 páginas
    son el mismo patrón —leer la celda propia en dos variables y compararlas con
    otras dos— y un opcode fundido lo haría en código nativo. Un opcode, del
    orden de diez bytes de banco 0 para su entrada y cien de banco 1, más el
@@ -211,7 +211,7 @@ que acepta el volante), en orden de cuánto destraba:
    el texto "Use the UP and DOWN arrow keys to change lanes, and avoid the
    traffic! Fewer crashes means better rewards! Press any key to begin."
 5. **Los sonidos del salto del puente** (orden 35 de ruta, seis rutas del 51)
-   se tiran al compilar. Es `todo/los-sonidos-adentro-de-las-rutas.md`.
+   se tiran al compilar. Es `los-sonidos-adentro-de-las-rutas.md`.
 6. **El fin de la demo**: el 64 salta al 66, que no entra. Va un fork del 64
    con el mismo cartel y el `ReturntoTitleScreen` que hoy tiene el del 36, y el
    fork del 36 se borra.
@@ -242,7 +242,7 @@ entera, que el arnés puede manejar sosteniendo teclas. Banco 0: 6 bytes de los
 mapas más los dos arreglos, del orden de veinte.
 
    **Hecho el 2026-09-27**, con las preguntas 1, 3, 5 y 6 contestadas con la
-   recomendación: ver `testing/carrera-1-entra-y-se-corre.md`.
+   recomendación: ver `carrera-1-entra-y-se-corre.md`.
 
 **2. La carrera a 60 cuadros.** El opcode fundido (3), o lo que diga la
 medición de `optimizar-los-eventos-paralelos-al-compilar.md`. Se da por hecho
@@ -250,14 +250,14 @@ con `cuadros_perdidos` en cero —o casi— en el 49, el 52 y el 54 manejando.
 Independiente del 3 y del 4.
 
    **Hecho el 2026-09-27**, con el opcode fundido y lo que dijo la medición:
-   ver `testing/carrera-2-a-sesenta-cuadros.md`, que tiene el límite de cada
+   ver `carrera-2-a-sesenta-cuadros.md`, que tiene el límite de cada
    camino.
 
 **3. Lo que se ve y se oye.** El cartel de los controles (4) y los sonidos del
 salto (5), según lo que conteste taro.
 
    **Hecho el 2026-09-27**, con la opción (a) de la pregunta 4: ver
-   `testing/carrera-3-lo-que-se-ve-y-se-oye.md`.
+   `carrera-3-lo-que-se-ve-y-se-oye.md`.
 
 **4. La regla de los mapas por id.** `release` pasa a ser "los mapas con id
 menor a X, sin los de `--exclude-maps`, más los agregados" —hoy el 164— y los
@@ -269,7 +269,7 @@ arriba, la lista resultante tiene que ser la misma que la de este hito 1, y
 eso se compara. Puede ir antes, en paralelo o después del 2.
 
    **Hecho el 2026-09-27**: los errores en `9d6c0d3`, la regla en
-   `done/la-regla-de-mapas-por-id.md`. La exclusión no es un flag del
+   `la-regla-de-mapas-por-id.md`. La exclusión no es un flag del
    conversor sino un valor de `cartuchos.py`; el porqué está ahí.
 
 **5. (Condicional) X = 85.** Sólo si taro lo quiere antes de que entre el
@@ -293,7 +293,7 @@ Lo que hay que repartir si el 1 y el 2 van en paralelo: el opcode del 2, en
 4. **El cartel de los controles**: (a) un fork del 49 que cambie el
    `ShowPicture` por un `ShowMessage` con el mismo texto —barato, y la
    pantalla ya está negra—; (b) un segundo cartel por ROM
-   (`wishlist/sistema-de-imagenes.md`); (c) deuda. **Recomendado: (a).**
+   (`sistema-de-imagenes.md`); (c) deuda. **Recomendado: (a).**
 5. **Dónde termina la demo**: ¿al final de la escena del 64, en vez del salto
    al mundo, o antes, al salir del 53 con el premio? **Recomendado: el 64**, que
    cierra la escena con el compañero.

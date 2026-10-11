@@ -6,7 +6,7 @@ status: draft
 ---
 
 Lo dejó Mulita el 2026-10-10 en "Lo que no cubre" de
-`testing/el-grupo-vacio-al-empezar.md`: "Una pelea con el grupo vacío.
+`el-grupo-vacio-al-empezar.md`: "Una pelea con el grupo vacío.
 RM2k la pierde enseguida (`Game_Battle::CheckLose` sin nadie que pueda
 actuar); el runtime no se miró ni se probó." Lo demás del grupo vacío
 —no dibujarse, caminar, el menú, guardar y cargar— sí lo cubre

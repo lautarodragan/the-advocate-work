@@ -19,7 +19,7 @@ Qué implica:
 * El número de pista de cada tema lo decide hoy `PISTAS_MSU`; con todos, la
   numeración puede salir del índice del tema.
 * Consecuencias en la ROM: con MSU-1 **ninguna** muestra de música se sube
-  (`done/` o `testing/con-msu-1-no-se-suben-las-muestras-del-tema.md`), así
+  (`done/` o `con-msu-1-no-se-suben-las-muestras-del-tema.md`), así
   que la ARAM entera queda para los efectos; conviene hacerlo **después** de la
   tarea de los efectos con MSU-1, o coordinado con ella.
 * Las pistas van a `/shared/msu/` con `just entregar --actualizar-msu`

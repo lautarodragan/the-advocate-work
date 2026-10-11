@@ -8,7 +8,7 @@ assignee: taro
 
 # Qué
 
-El hito 3 de `todo/el-mundo-y-lo-que-sigue.md`, que tiene lo medido antes
+El hito 3 de `el-mundo-y-lo-que-sigue.md`, que tiene lo medido antes
 (sección "Espacio"). Sale de `2ca861a`, con los hitos 1 y 2 ya en `release`.
 Un commit por cosa, cada uno con su antes y su después en el mensaje:
 

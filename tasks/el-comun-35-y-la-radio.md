@@ -6,7 +6,7 @@ status: done
 assignee: taro
 ---
 
-De taro, el 2026-09-30, al contestar sobre `testing/eventos-de-tropa-en-la-pelea.md`
+De taro, el 2026-09-30, al contestar sobre `eventos-de-tropa-en-la-pelea.md`
 (Yarará):
 
 - **El común 35 (`ResetAfterBattles`).** Sin él, la invocación queda en el

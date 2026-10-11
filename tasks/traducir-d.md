@@ -53,7 +53,7 @@ y sobre el árbol mergeado con `main` pasan las dos tandas.
   (`docs/port/msu-datos.md`), "Qué fondos hay" y "El respaldo liviano"
   (`tools/port/escena.py`), "el formato por nota" (`tools/audio/snes_music.py`),
   "lo que depende del actor" (`titulo.py`), y el título de sección de
-  `workflow/tasks/done/audio-bgm.md` que cita `paquete_de_audio.s`. **Si la
+  `tasks/audio-bgm.md` que cita `paquete_de_audio.s`. **Si la
   fase 1 de esos archivos traduce el título, la cita queda colgando**: hay
   que hacer grep de cada uno;
 * una frase de taro citada textual en `nivel.s`, con la traducción al lado;

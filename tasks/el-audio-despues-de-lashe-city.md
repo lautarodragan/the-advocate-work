@@ -18,7 +18,7 @@ el paquete de tres temas; parte son copias que la segunda tanda de
 
 Con MSU-1 no se oye (todos los temas tienen pista). Se encara **cuando
 terminen los mapas de Lashe City** (cada hito suma paquetes y lo vuelve a
-mover), con el mismo método que `testing/el-directorio-de-los-efectos.md`:
+mover), con el mismo método que `el-directorio-de-los-efectos.md`:
 medir par por par con `Banco` contra el `main` de antes de los mapas nuevos,
 y buscar que ningún instrumento de los temas que ya estaban quede peor.
 

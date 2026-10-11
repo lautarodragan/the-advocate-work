@@ -33,7 +33,7 @@ más complejo". Cómo quedó:
 * **El bloque de mensajes cuenta de a dos bytes** (`MENSAJES_PASO`): partir
   cuadros lo pasó de los 64 KB que alcanza el operando de `OP_MESSAGE`.
 * Los textos de la pelea tienen otro ancho y siguen en
-  `todo/los-textos-de-la-pelea-no-entran.md`.
+  `los-textos-de-la-pelea-no-entran.md`.
 
 Lo de abajo es cómo se llegó, el 2026-09-24:
 

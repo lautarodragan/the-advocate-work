@@ -7,7 +7,7 @@ assignee: taro
 agents: [Cardón]
 ---
 
-De taro, el 2026-10-10, en el orden propuesto. Del 2026-10-06: el mapa 1 de Vampires Dawn ("a stream of anim_tiles is 27264 bytes and 8192 fit in WRAM"), uno de Book of Three y uno de Desert Nightmare. Misma línea que `testing/degradar-en-vez-de-fallar.md`.
+De taro, el 2026-10-10, en el orden propuesto. Del 2026-10-06: el mapa 1 de Vampires Dawn ("a stream of anim_tiles is 27264 bytes and 8192 fit in WRAM"), uno de Book of Three y uno de Desert Nightmare. Misma línea que `degradar-en-vez-de-fallar.md`.
 
 ## Qué es el flujo y quién pone el tope (Cardón, 2026-10-10)
 

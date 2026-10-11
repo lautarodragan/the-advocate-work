@@ -8,7 +8,7 @@ assignee: taro
 
 # Qué
 
-La parte de `todo/eventos-de-tropa-en-la-pelea.md` que se nota **en las peleas
+La parte de `eventos-de-tropa-en-la-pelea.md` que se nota **en las peleas
 que `release` puede pelear hoy**, que es lo que pidió taro el 2026-09-28 con
 dos casos del primer gran hito:
 
@@ -189,7 +189,7 @@ los HP de un actor que no pelea, la sacudida sólo de la escena, y el trueno.
   tropas), y después `ChangeHP` sobre los HP de la pelea.
 - **Los mensajes largos se cortan a 31 letras**: el despegue sale "The Captain
   has taken off in th" y el segundo llamado del rey pierde la "s" de
-  "sounds". Es `todo/los-textos-de-la-pelea-no-entran.md`, que ya lo tenía con
+  "sounds". Es `los-textos-de-la-pelea-no-entran.md`, que ya lo tenía con
   Absorb Aura.
 - **El común 35** no corre: ver `divergencias/llamada-salteada.md`.
 

@@ -15,7 +15,7 @@ lugares, imágenes, la sigla) da 125 líneas en unos 50 archivos de `tools/`.
 cuidado"), y los límites medidos contra ABL siguen con su comentario. Lo que
 se limpia es lo otro: datos de prueba y fixtures, defaults, literales en el
 código. Y hace falta para el juego de pruebas: este repo no tiene que
-llevar nada de ABL (`testing/el-juego-de-pruebas.md`).
+llevar nada de ABL (`el-juego-de-pruebas.md`).
 
 # Lo que se encontró (Monterita, 2026-10-02)
 

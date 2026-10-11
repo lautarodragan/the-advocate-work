@@ -13,7 +13,7 @@ el después y los aceptó, así que no hubo que frenar el capítulo, pero **va a
 volver a pasar con cada tema que se sume**.
 
 Lo que se probó sin recuperarlos (ver
-`testing/mundo-4-el-capitulo.md`, "La música de antes, sin MSU-1"):
+`mundo-4-el-capitulo.md`, "La música de antes, sin MSU-1"):
 `TEMAS_APARTE` (los nuevos ya van solos), `SE_DE_SIEMPRE` de 70 a 130 (lo
 mejor, 29 pares, y mueve la tanda de efectos que taro aprobó), `COPIA_HASTA`
 en 0,85 y 0,95, sin la herencia de jackalstg2, sin el paquete del 259. El
@@ -28,7 +28,7 @@ taro escuche.
 
 # Lo que se pensó el 2026-09-30, y por qué pasa al wishlist
 
-Con la radio de las páginas de tropa (`testing/el-comun-35-y-la-radio.md`)
+Con la radio de las páginas de tropa (`el-comun-35-y-la-radio.md`)
 volvió a pasar: sin MSU-1, el tema de batalla bajó de 11,5 a 10 kHz y otros
 34 temas perdieron alguna muestra, las peores de 20,4 a 6,8 kHz. taro
 propuso ir más allá de "elegir mejor qué copiar", y lo que salió de la charla:

@@ -44,7 +44,7 @@ cada escena:
 la elección de profesión —y detrás, el resto del capítulo: la cantera, los
 bandidos, el teatro—. Y el 127 es uno de los mapas que no entran en la VRAM
 (731 tiles de sprite, 22 eventos que caminan:
-`testing/mundo-7-camino-a-paradise.md`). En
+`mundo-7-camino-a-paradise.md`). En
 `el-108-con-poses-compartidas.md` el próximo corte era el salto al sueño
 (109 ev6); el día siguiente entra entero sin pedir nada más que el 126 y el
 113, así que el corte se fue hasta la puerta de la granja.
@@ -181,11 +181,11 @@ espera el visto bueno de taro.**
 # Lo que no está hecho, y lo que se ve distinto
 
 * **La granja (127)**, y con ella el resto del capítulo: necesita la caché
-  de ranuras (la opción D de `testing/mundo-7-camino-a-paradise.md`), y ni
+  de ranuras (la opción D de `mundo-7-camino-a-paradise.md`), y ni
   así entra holgada. Es lo que sigue, y es de taro elegir.
 * **Los panoramas** del mirador (109, Night1), del de día (126, Morning1) y
   del recuerdo (175 y 176, Night1) salen negros, como en todos los mapas con
-  panorama: `wishlist/panorama-del-mapa-2.md`.
+  panorama: `panorama-del-mapa-2.md`.
 * **La lluvia de la noche no se ve** en el 108, el 110, el 114 y el 118: las
   gotas no entran en las paletas de sprite (lo dice el conversor). Suena
   `Rain1`; en el 125 sí llueve.

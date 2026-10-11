@@ -6,7 +6,7 @@ status: draft
 ---
 
 Lo declaró Carpintero el 2026-10-06 como degradación
-(`testing/degradar-en-vez-de-fallar.md`, punto 5): el conversor chequea el
+(`degradar-en-vez-de-fallar.md`, punto 5): el conversor chequea el
 título contra los límites que `title.s` afirma —544 tiles de imagen, 704
 del menú— y, si no entra, el juego arranca sin título, con un WARNING. No
 hay tarea que lo siga.

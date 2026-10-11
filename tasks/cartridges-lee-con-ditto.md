@@ -6,7 +6,7 @@ status: done
 assignee: taro
 ---
 
-Lo dejó anotado Zorzal el 2026-09-29 (`testing/rust-ditto-como-biblioteca.md`):
+Lo dejó anotado Zorzal el 2026-09-29 (`rust-ditto-como-biblioteca.md`):
 desde que la biblioteca de Ditto es el único lugar en Rust que sabe leer el
 volcado, queda un lector a mano en `tools/rm2k-snes/cartridge/src/cartridges.rs`,
 que lee `maps.json` para saber el tipo de cada nodo del árbol. Que pase a

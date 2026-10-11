@@ -5,7 +5,7 @@ type: feature
 status: done
 ---
 
-Quedó afuera de `testing/la-victoria-avisa-la-experiencia.md` (2026-09-26): en
+Quedó afuera de `la-victoria-avisa-la-experiencia.md` (2026-09-26): en
 RM2k, al ganar, la misma página de la victoria cuenta el oro ganado y los
 ítems que dejaron los enemigos (`ProcessSceneActionVictory` en EasyRPG), y el
 grupo los recibe. El port todavía no da ni oro ni ítems al ganar. Los datos

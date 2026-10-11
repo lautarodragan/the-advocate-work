@@ -11,7 +11,7 @@ items. el limite de resolución de la snes complica las cosas, pero
 deberíamos poder usar los colores de texto igual que en el original, y los
 mismos separadores".
 
-Lo más cercano ya hecho: `testing/el-menu-como-rm2k.md` (Tero), que sacó los
+Lo más cercano ya hecho: `el-menu-como-rm2k.md` (Tero), que sacó los
 colores del skin del juego y comparó contra capturas del original con Wine.
 
 ## Qué hace el original

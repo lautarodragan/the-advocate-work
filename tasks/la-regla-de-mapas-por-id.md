@@ -7,7 +7,7 @@ status: done
 
 # Qué
 
-La segunda mitad del hito 4 de `todo/la-carrera-y-lo-que-sigue.md`. La
+La segunda mitad del hito 4 de `la-carrera-y-lo-que-sigue.md`. La
 primera —los dos errores latentes del conversor— ya está en `main`
 (`9d6c0d3`).
 

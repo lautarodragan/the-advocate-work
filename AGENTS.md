@@ -68,19 +68,22 @@ y el README de este repo dice adónde fue cada carpeta.
 **Las pruebas de ABL son, hasta que exista el juego de pruebas, las únicas
 pruebas de ROM del motor**: ver "La regla que sostiene todo".
 
-Al empezar, mirar `tasks/doing/` y `testing/`, que es dónde quedamos. La
-tarea se escribe **mientras se trabaja, no al final**, y al terminar se mueve de
-carpeta.
+Al empezar, mirar las tareas en `doing` y `testing` —`nu tasks/tasks.nu
+ls -s doing`—, que es dónde quedamos. La tarea se escribe **mientras se
+trabaja, no al final**, y al terminar se le cambia el `status`. Las
+tareas viven todas en `tasks/`, y **su nombre de archivo no cambia
+nunca**: es lo que las enlaza desde los otros repos y el libro (ver el
+README de este repo).
 
-**Tomar una tarea es pasarla a `doing/` con su `assignee`, antes que nada.** Con
+**Tomar una tarea es pasarla a `doing` con su `assignee`, antes que nada.** Con
 sub-agentes lo hace el que los lanza, en `main` y antes de lanzarlos, así el
 worktree ya sale con la tarea tomada y dos agentes no agarran la misma. El
 `assignee` es el nombre del agente: el que los lanza les pone uno —una palabra,
 no el código de la herramienta— y se lo dice en el encargo. Una tarea que el
-agente abre por su cuenta nace en `doing/` con su nombre. Es de taro, el
-2026-09-28; hasta ese día la carpeta se llamaba `wip/` y casi no se usaba.
+agente abre por su cuenta nace en `doing` con su nombre. Es de taro, el
+2026-09-28; hasta ese día el estado se llamaba `wip` y casi no se usaba.
 
-**Un hallazgo que no se arregla va a `tasks/draft/`**, y si se ve jugando
+**Un hallazgo que no se arregla es un draft**, y si se ve jugando
 un port, a "Known issues" de su página del libro, una línea contada desde
 lo que se ve; el que lo arregla saca las dos cosas en el mismo cambio. Al
 mergear una rama de sub-agente, lo que su informe dice que encontró y no
@@ -685,7 +688,7 @@ vale para todos en `.claude/agentes.md` —lo que antes se repetía en cada
 encargo—. Se lanzan por su nombre, no como `general-purpose`, así el mismo
 agente vuelve y se encuentra a sí mismo: cada tarea lleva en `agents` a
 todos los que trabajaron en ella —el `assignee` pasa a taro en
-`testing/`—, que `nu tasks/tasks.nu ls -a <nombre>` filtra, y cada
+`testing`—, que `nu tasks/tasks.nu ls -a <nombre>` filtra, y cada
 commit suyo termina con `Agente: <nombre>`, que `git log --grep` encuentra.
 Lo pidió taro, el 2026-10-04. Siguen arrancando de cero cada vez: la
 continuidad es lo que dejan escrito.

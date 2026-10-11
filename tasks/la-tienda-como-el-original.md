@@ -13,8 +13,8 @@ sigue existiendo por ella). La pantalla es `rom/src/tienda.s`, y la
 referencia es `pantallas.pantalla_tienda`.
 
 Lo hecho hasta ahora, que es de donde sale el mecanismo:
-`testing/la-pantalla-de-items-como-el-original.md` (Jacarandá) y
-`testing/la-pantalla-de-equipo-como-el-original.md` (Ñandú). Las dos arman
+`la-pantalla-de-items-como-el-original.md` (Jacarandá) y
+`la-pantalla-de-equipo-como-el-original.md` (Ñandú). Las dos arman
 las ventanas en BG1 detrás del texto de BG2, comparten tiles y colores
 (`titulo.marcos`), y cada una sube su tilemap. Falta capturar el original
 de la tienda con Wine, como se hizo para las otras dos.
@@ -47,7 +47,7 @@ comentario.
 
 ## Medido el 2026-09-28, con la elección de actor
 
-La elección de actor (`testing/la-eleccion-de-actor-como-el-original.md`)
+La elección de actor (`la-eleccion-de-actor-como-el-original.md`)
 ya usa esa salida: BG1 con base en `$4000`, 60 tiles de 8bpp y su tilemap
 en `$4800`. Medido contra los repartos (`_controlar_objetivo`): el banco de
 BG1 más chico es el de `VENTANA_FONDO`, `$1000..$4C00`; todos los demás

@@ -7,7 +7,7 @@ assignee: taro
 agents: [Tijereta]
 ---
 
-Del re-barrido del 2026-10-10 (research `2026-10-10-otros-juegos-de-nuevo` del libro): son los dos muros de todo el juego que le quedan a Vampires Dawn. El tope de la música cuenta todos los archivos de `Music/`, se usen o no. Misma línea que `testing/los-encuentros-en-dos-bytes.md`.
+Del re-barrido del 2026-10-10 (research `2026-10-10-otros-juegos-de-nuevo` del libro): son los dos muros de todo el juego que le quedan a Vampires Dawn. El tope de la música cuenta todos los archivos de `Music/`, se usen o no. Misma línea que `los-encuentros-en-dos-bytes.md`.
 
 ## Hecho, el 2026-10-10 (Tijereta)
 

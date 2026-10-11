@@ -13,7 +13,7 @@ como perilla del proyecto, sobre lo que deje ésta: el compositor, la tabla
 de avances, el reparto por pixeles y las pantallas en texto compuesto se
 aprovechan las dos.
 
-El estudio, la hoja y lo que costaría: `workflow/tasks/done/una-fuente-para-la-alta-resolucion.md`,
+El estudio, la hoja y lo que costaría: `tasks/una-fuente-para-la-alta-resolucion.md`,
 en ABL, y `experimentos/fuentes/` allá.
 
 ## Hecho (Calandria)

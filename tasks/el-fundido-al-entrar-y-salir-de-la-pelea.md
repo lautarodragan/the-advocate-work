@@ -7,7 +7,7 @@ status: done
 
 Hoy la pelea entra y sale sin transición. En RM2k hay una (la de la base de
 datos del sistema, "Battle Start" y "Battle End"; ver
-`wishlist/las-otras-transiciones-de-rm2k.md` para las que no son el fundido).
+`las-otras-transiciones-de-rm2k.md` para las que no son el fundido).
 
 Además de parecerse al original, taro señaló el 2026-09-26 que **tapa el tiempo
 de carga**: con las muestras repartidas por paquete de mapa (paso 6 de

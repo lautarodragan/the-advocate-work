@@ -21,6 +21,7 @@ def parse_file [file: string] {
   let name = $yml | get -o name | default "(Not Named)"
   let task_type = $yml | get -o type | default "(no task type assigned)"
   let task_description = $yml | get -o description | default "(no task description)"
+  let status = $yml | get -o status | default "(no status)"
   let assignee = $yml | get -o assignee | default ""
   # `assignee` es quién la tiene ahora —taro, cuando pasa a testing—, y
   # `agents` todos los que trabajaron en ella, que no se borra.
@@ -30,6 +31,7 @@ def parse_file [file: string] {
     file: $file,
     name: $name,
     task_type: $task_type,
+    status: $status,
     description: $task_description,
     assignee: $assignee,
     agents: $agents,
@@ -54,42 +56,46 @@ def print_task [] {
   print '' 
 }
 
+# Las tareas viven todas en esta carpeta, y su estado es el `status` del
+# frontmatter: draft, todo, doing, testing, done o wishlist. Con
+# `--status "*"`, todas, agrupadas por estado.
+#
 # Con `--assignee`, sólo las que tiene o en las que trabajó ése —su
 # `assignee` o su lista `agents`—: un sub-agente busca así lo suyo, de
-# cualquier carpeta con `-s "*"`. Sin distinguir mayúsculas ni tildes, para
+# cualquier estado con `-s "*"`. Sin distinguir mayúsculas ni tildes, para
 # que "huron" encuentre a Hurón.
 def "main ls" [
   --status (-s): string = "doing"
   --assignee (-a): string
 ] {
-  ls | where { $in.type == dir and ($status == "*" or $in.name == $status) } | each { 
-    if $status == "*" {
-      print ([
-        (ansi green)
-        ($in.name | str uppercase)
-        (ansi reset)
-      ] | str join); 
-    }
+  let tasks = all_tasks
+    | where { $status == "*" or $in.status == $status }
+    | where { |t| $assignee == null or ($t.agents | any { ($in | normalize) == ($assignee | normalize) }) }
 
-    let parsed = ls $in.name | where type == file | get name | each { parse_file $in }
-      | where { |t| $assignee == null or ($t.agents | any { ($in | normalize) == ($assignee | normalize) }) }
-      | sort-by task_type
-    
-    $parsed | each { print_task }
-    
-    print '' 
+  $tasks | group-by status | items { |group, parsed|
+    if $status == "*" {
+      print ([(ansi green) ($group | str uppercase) (ansi reset)] | str join)
+    }
+    $parsed | sort-by task_type | each { print_task }
+    print ''
   };
 
   ();
+}
+
+# Todas las tareas de la carpeta, leídas: la de este script, así se puede
+# correr desde cualquier lado.
+def all_tasks [] {
+  ls ($env.FILE_PWD | path join '*.md' | into glob) | where type == file | get name | each { parse_file $in }
 }
 
 # Elegir una tarea con filtro difuso y abrirla en $EDITOR.
 def "main open" [
   --status (-s): string = "*"
 ] {
-  let tasks = ls | where { $in.type == dir and ($status == "*" or $in.name == $status) } | each { |dir|
-    ls $dir.name | where type == file | get name | each { parse_file $in | insert status $dir.name }
-  } | flatten | sort-by { $in.status == done } status task_type
+  let tasks = all_tasks
+    | where { $status == "*" or $in.status == $status }
+    | sort-by { $in.status == done } status task_type
 
   let chosen = $tasks | input list --fuzzy --display { |t| [$t.status '  ' ($t | task_title) '  ' (ansi dark_gray) $t.description (ansi reset)] | str join } "Tarea:"
   if ($chosen | is-empty) { return }

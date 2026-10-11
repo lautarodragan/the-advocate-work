@@ -9,7 +9,7 @@ assignee: Ombú
 Dos cosas chicas de la pelea, del 2026-09-28.
 
 **El HP de los enemigos.** RM2k no lo muestra nunca y ABL no tiene cómo verlo
-(lo midió Tero: `testing/el-menu-como-rm2k.md`). taro aceptó la propuesta:
+(lo midió Tero: `el-menu-como-rm2k.md`). taro aceptó la propuesta:
 esconderlo por defecto con un flag de armado, `CON_HP_DE_ENEMIGOS = False` en
 `cartuchos.py`, como `CON_MAPA_DE_DEBUG`. Hoy lo dibuja `ba_renglon` en
 `rom/src/batalla.s`; en `pantallas.py` está anotado como decisión propia.
@@ -17,7 +17,7 @@ esconderlo por defecto con un flag de armado, `CON_HP_DE_ENEMIGOS = False` en
 **El trueno del despegue.** La página de turno 1 de las tropas 102 y 104 pide
 Thunder9, y no suena porque meterlo en el paquete de la pelea le baja al tema
 de batalla seis instrumentos de ~14 a ~11,5 kHz y el BRASS64 de 16,3 a 10,8
-(lo midió Ceibo: `testing/eventos-de-tropa-de-release.md`). Se decide
+(lo midió Ceibo: `eventos-de-tropa-de-release.md`). Se decide
 escuchando.
 
 2026-09-28, en `testing/`: hecho por Ombú en su rama, sobre `main` en

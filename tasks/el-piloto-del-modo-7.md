@@ -39,7 +39,7 @@ cuadro a cuadro, en el 212 y el 213, con el ancho de lo que no es negro:
   no se mueve: PhoneCallDiff y SurlGravesDiff se recortan desde (8, 16) y
   SurlBroDiff y ThreeRubbleDiff desde (0, 16), a 256x224. Lo calcula
   `recorte()` en `armar.py`; la comparación con capturas que pide
-  `todo/las-fotos-diff-recortadas-y-el-montaje.md` no se hizo.
+  `las-fotos-diff-recortadas-y-el-montaje.md` no se hizo.
 
 ## La ROM
 
@@ -195,7 +195,7 @@ el mapa de 128x128 en los bytes bajos y los 256 tiles en los altos.
 **Aparte del modo 7**: el destello con `COLDATA` sirve también para la foto
 en modo 1 de hoy —el blanco del 213, 214 y 216 que hoy se corta al
 aparecer la foto, `divergencias/lo-que-las-imagenes-grandes-no-modelan.md`—
-y para el montaje del 217 de `todo/las-fotos-diff-recortadas-y-el-montaje.md`.
+y para el montaje del 217 de `las-fotos-diff-recortadas-y-el-montaje.md`.
 
 ## Qué hay en `/shared/experimentos/2026-10-02-modo-7/`
 

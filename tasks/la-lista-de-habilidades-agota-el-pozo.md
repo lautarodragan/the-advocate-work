@@ -112,7 +112,7 @@ Con los tres se ve todo: `pozo-despues-0.png`, `-1` y `-2`.
 ### Lo que se encontró de paso
 
 **La lista de la pelea no se desplaza**: junta 16 a lo sumo y muestra 14.
-Va en `workflow/tasks/todo/la-lista-de-habilidades-de-la-pelea-no-se-desplaza.md`.
+Va en `tasks/la-lista-de-habilidades-de-la-pelea-no-se-desplaza.md`.
 
 ## Para taro
 

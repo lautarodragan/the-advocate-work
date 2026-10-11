@@ -7,8 +7,8 @@ assignee: taro
 ---
 
 De taro, el 2026-09-30: "seguí con todos esos", después de los CharSets
-(`testing/rm2k-render-los-charsets.md`, Yaguarundí). Es otra parte de
-`todo/rm2k-render-dibuja-todo-rm2k.md`, en paralelo con la otra
+(`rm2k-render-los-charsets.md`, Yaguarundí). Es otra parte de
+`rm2k-render-dibuja-todo-rm2k.md`, en paralelo con la otra
 (`rm2k-render-pelea.md` y `rm2k-render-pantallas.md`).
 
 Alcance: las animaciones de pelea (battle_animations.py, animation.py), los enemigos y los fondos de batalla (battle_scenes.py, scene.py).

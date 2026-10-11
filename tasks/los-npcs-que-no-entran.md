@@ -7,4 +7,4 @@ assignee: Carpintero
 agents: [Carpintero]
 ---
 
-De taro, el 2026-10-10, en el orden propuesto. Del 2026-10-06: es lo que corta 24 mapas de Vampires Dawn y 3 de Desert Nightmare ("más de 104 NPCs en OAM"). Misma línea que `testing/degradar-en-vez-de-fallar.md`.
+De taro, el 2026-10-10, en el orden propuesto. Del 2026-10-06: es lo que corta 24 mapas de Vampires Dawn y 3 de Desert Nightmare ("más de 104 NPCs en OAM"). Misma línea que `degradar-en-vez-de-fallar.md`.

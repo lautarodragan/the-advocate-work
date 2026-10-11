@@ -19,7 +19,7 @@ rama de **"Yes, I'll do it!"**, que es la que sale de tocar A sin mover el curso
 Para tomarla hay que mover el cursor del `ShowChoice`, que el arnés hoy no hace;
 ver `Recorrido.activar` y `mirar_a`. Lo demás ya está: el camino hasta la
 cinemática es el mismo, y el detalle de cada evento está escrito en
-`workflow/tasks/done/el-recorrido-de-los-neon-vipers.md`.
+`tasks/el-recorrido-de-los-neon-vipers.md`.
 
 Por qué vale: los saltos largos son el caso extremo de `salto_avanzar_heroe`, y
 el bug del salto colgado de esta semana vivía justo ahí.
@@ -47,7 +47,7 @@ que nadie devuelve, y el RPG_RT original queda igual de corrido. Ver
 ## Al 2026-09-26: cubierta
 
 `pruebas/abl/test_recorrido_vipers_otras_ramas_golden.py`, con
-`Recorrido.elegir` —ver `done/elegir-una-opcion-en-el-recorrido.md`—. Tres
+`Recorrido.elegir` —ver `elegir-una-opcion-en-el-recorrido.md`—. Tres
 casos, que arrancan con `ir_al_mapa` en el techo del HQ y entran por la puerta:
 el camino del caño ya lo juega el tramo del "Yes".
 

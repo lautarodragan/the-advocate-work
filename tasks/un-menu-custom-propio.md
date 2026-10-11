@@ -17,9 +17,9 @@ Es un agregado del port, no algo de RM2k: el juego describe su menú con
 imágenes y lógica de eventos, y esto lo reemplazaría por una descripción
 propia. Serviría para otros juegos con menús hechos de imágenes, que son
 muchos. Lo de la fuente y el modo 5 sale de
-`testing/una-fuente-para-la-alta-resolucion.md` (Espinillo) y de la ROM de
+`una-fuente-para-la-alta-resolucion.md` (Espinillo) y de la ROM de
 prueba de Carancho; taro dijo que en la tele de tubo el texto estirado se ve
 raro, así que la fuente tendría que pensarse para eso.
 
 Primero va el sistema de imágenes tal como lo usa RM2k
-(`doing/el-sistema-de-imagenes.md`): esto viene después, sobre eso.
+(`el-sistema-de-imagenes.md`): esto viene después, sobre eso.

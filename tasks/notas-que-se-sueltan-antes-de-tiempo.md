@@ -25,7 +25,7 @@ notas que siguen siendo dueñas de su voz, y la nota sin muestra sale antes de
 elegir voz. En los 22 temas del `release` eran 564 notas soltadas antes de
 tiempo y 11.024 notas sin muestra ocupando voz; el stream bajó 11,3%. Los
 números tema por tema y cómo se midieron, en el punto 1 de
-`todo/la-calidad-de-la-musica.md`; lo cobra
+`la-calidad-de-la-musica.md`; lo cobra
 `pruebas/herramientas/test_musica_stream.py`.
 
 **Para taro**: está en `testing/` porque se oye —poco: sobre todo el bajo de

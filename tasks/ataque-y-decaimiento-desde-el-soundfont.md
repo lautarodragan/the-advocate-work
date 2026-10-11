@@ -13,7 +13,7 @@ sacarlos de las ocho familias de `sdsp.py`.
 # Status
 
 Hecho el 2026-09-25, junto con el release y el aire de la mezcla: es el
-punto 2 de `todo/la-calidad-de-la-musica.md`, que tiene los números. Está en
+punto 2 de `la-calidad-de-la-musica.md`, que tiene los números. Está en
 `testing/` porque taro tiene que escucharlo: las grabaciones, en
 `/shared/audio/2026-09-25-pasos-1-y-2/` (las `-2-`).
 

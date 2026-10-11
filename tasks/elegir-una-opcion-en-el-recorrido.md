@@ -23,7 +23,7 @@ auto:
 - la cola del auto (36, página 2) es "Stay / We've got to get out of here": la
   que lleva al límite es la segunda.
 
-Y destraba `wishlist/la-otra-rama-de-los-neon-vipers.md`, que se quedó sin hacer
+Y destraba `la-otra-rama-de-los-neon-vipers.md`, que se quedó sin hacer
 justamente por esto.
 
 # Lo que ya se sabe
@@ -31,7 +31,7 @@ justamente por esto.
 - **Un toque puede perderse**: la ROM lee el pad una vez por vuelta y una
   vuelta puede durar varios cuadros. `Recorrido.mirar_a` ya resolvió lo mismo
   para girar comprobando la RAM; conviene el mismo método (ver
-  `done/el-recorrido-de-los-neon-vipers.md`, "Un agujero del arnés").
+  `el-recorrido-de-los-neon-vipers.md`, "Un agujero del arnés").
 - **La ventana ignora el botón mientras se compone**: nada de toques en los
   primeros treinta cuadros desde que se abre (ver `ESTADO.md`, "Lo que la tanda
   no cubre").
@@ -73,7 +73,7 @@ un `elegir` hay que cortarlo apenas arranca la página:
 
 **La prueba**: `pruebas/abl/test_recorrido_vipers_otras_ramas_golden.py`, que
 juega la rama del "No" de la cinemática del hotplate, las dos opciones de la
-reja y el mapa 14 —ver `done/la-otra-rama-de-los-neon-vipers.md`—. **Vista en
+reja y el mapa 14 —ver `la-otra-rama-de-los-neon-vipers.md`—. **Vista en
 rojo** con la opción de arriba en lugar de la segunda: la del "No" termina en
 (44,13) sin el switch 38, que es la rama del "Yes", y la reja con "Climb the
 Fence" en vez de "Don't Bother".

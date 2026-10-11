@@ -6,10 +6,10 @@ status: draft
 ---
 
 Lo dejó dicho Tijereta el 2026-10-05 en
-`testing/la-ventana-con-mas-colores.md`: los colores que se funden en las
+`la-ventana-con-mas-colores.md`: los colores que se funden en las
 ventanas de 8bpp (`borders.rs`: ítems, equipo, tienda, elección de actor)
 "todavía no se escriben en los parches: es lo que falta de esta tarea". Y
-`testing/la-ventana-en-el-banco-de-tiles.md` (2026-10-11) sumó más del
+`la-ventana-en-el-banco-de-tiles.md` (2026-10-11) sumó más del
 mismo tipo: las celdas que Adeleine funde para que entren en su banco
 (`fit.rs`, `merge_least_visible_tiles`), el fondo de la ventana de
 mensajes que se ve por el marco (`group_cells`) y los colores de End

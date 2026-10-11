@@ -7,7 +7,7 @@ assignee: taro
 ---
 
 De taro, el 2026-09-30, después de probar en la SNES la ROM de
-`testing/rom-de-prueba-del-menu-en-modo-5.md` (Carancho): "ninguna me
+`rom-de-prueba-del-menu-en-modo-5.md` (Carancho): "ninguna me
 convence. Con el texto estirado, se ve raro en la tele de tubo. En algunos
 casos se hace difícil leer". Pero no descarta el modo 5, porque **la pelea
 también tiene muchos problemas de UI por la resolución**, y ahí podría

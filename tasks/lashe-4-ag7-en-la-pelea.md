@@ -73,7 +73,7 @@ prende su switch y la ROM lo corre al cerrar el menú
 
 **La animación 62 no se dibuja**, ni la de ninguna habilidad: es un
 subsistema nuevo adentro de la pelea (objetos, OAM, una paleta, los cuadros
-por DMA), y queda con lo mirado en `wishlist/animaciones-en-la-pelea.md`.
+por DMA), y queda con lo mirado en `animaciones-en-la-pelea.md`.
 
 # Números usados
 

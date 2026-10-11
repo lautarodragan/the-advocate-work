@@ -84,7 +84,7 @@ símbolo sigue en $01:F874 (~1,9 KB libres), sin cambio. **Cartucho**: de
 medido. **CGRAM**: 37 dibuja 5 gráficos con paleta prestada (las dos puertas de
 tile, `Chara2:4`, `Crown1:3`, `Future2:5`), el 38 tres (`BLObjs:2`, `Chara2:2`,
 `People4:0`). **Cuadros perdidos** caminando 1200 cuadros de a 50, ida y vuelta,
-el método de `done/el-mapa-11-se-rediseno.md`: 0 en las cuatro celdas del 37,
+el método de `el-mapa-11-se-rediseno.md`: 0 en las cuatro celdas del 37,
 0 o 1 en las cinco del 38, 0 en el 47 y el 48 (el 8, en las mismas
 condiciones, da 0 a 2).
 

@@ -5,7 +5,7 @@ type: bug
 status: draft
 ---
 
-Visto por Cardón el 2026-10-11 (`testing/los-otros-juegos-arman-y-arrancan.md`),
+Visto por Cardón el 2026-10-11 (`los-otros-juegos-arman-y-arrancan.md`),
 herramientas `fc6f7456`, ports `a85b7e3`, en snes9x y bsnes igual.
 
 **Qué se ve**: Sunset Over Imdahl, mapa 2 (la plaza), el DummyGuard en
@@ -25,5 +25,5 @@ release; ir al mapa 2 y mirar el guardia. Las caminatas de las goldens de
 Cerca, sin comprobar si es lo mismo: un guardia de capa normal en (36,13)
 del mismo mapa tiene las piernas sobre el borde de un techo; puede ser uno
 de los bordes que no entran en los 127 (la deuda de
-`testing/sunset-en-modo-1-con-color-math.md`, ahora
-`draft/los-bordes-de-techo-que-no-entran.md`).
+`sunset-en-modo-1-con-color-math.md`, ahora
+`los-bordes-de-techo-que-no-entran.md`).

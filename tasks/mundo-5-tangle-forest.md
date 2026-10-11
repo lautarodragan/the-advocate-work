@@ -7,7 +7,7 @@ assignee: taro
 ---
 
 De taro, el 2026-10-01: "¿podemos agregar más mapas?". El plan es
-`todo/el-mundo-y-lo-que-sigue.md`, hitos 1 a 4 hechos. La demo terminaba al
+`el-mundo-y-lo-que-sigue.md`, hitos 1 a 4 hechos. La demo terminaba al
 entrar a Tangle Forest (66 ev19), y Tangle **no es opcional**: el túnel a
 Paradise está del otro lado del bosque, y se cruza por 310, 311, 313 y 312.
 

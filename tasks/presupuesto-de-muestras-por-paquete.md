@@ -7,7 +7,7 @@ status: done
 
 # Hecho, el 2026-09-26
 
-Es el paso 6 de `tasks/todo/la-calidad-de-la-musica.md`, la opción A, con lo
+Es el paso 6 de `tasks/la-calidad-de-la-musica.md`, la opción A, con lo
 medido y lo que salió: cada muestra con el presupuesto de su peor paquete,
 los efectos restados, y el tema que puede venir sonando contado sólo como
 tema (`decisiones/el-tema-que-suena-gana-y-los-efectos-esperan.md`). Las tres

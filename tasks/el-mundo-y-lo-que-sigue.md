@@ -166,7 +166,7 @@ destraban:
 * **`Comment`** no hace nada en RM2k: se saltea al compilar.
 * **Las dos transiciones** son las instantáneas; la ROM ya tiene
   `TRANSICION_BORRAR/MOSTRAR` (`op_transition`) y le falta el valor "sin
-  fundido". Ver `wishlist/las-otras-transiciones-de-rm2k.md`.
+  fundido". Ver `las-otras-transiciones-de-rm2k.md`.
 
 Y lo que ya se acepta sin hacer (`ACEPTADOS_SIN_HACER`), que compila y no se
 ve:
@@ -310,8 +310,8 @@ entra (121 de 124) y todo el capítulo sigue sin entrar (125). Es una cota
 optimista: `ffd.py` ignora cualquier restricción de orden entre bloques, y
 habría que ver cuáles hay (el `.cruza`, las tablas que se recorren seguidas).
 Lo que sigue después está medido en otros lados: las poses espejadas
-(`testing/la-compresion-de-mapas-y-graficos.md`, el punto 5) y la música
-(`todo/la-musica-pesa-789-kb.md`, las ideas 2 a 4). Y
+(`la-compresion-de-mapas-y-graficos.md`, el punto 5) y la música
+(`la-musica-pesa-789-kb.md`, las ideas 2 a 4). Y
 `decisiones/el-cartucho-se-queda-en-4-mb.md` dice que se revisa al llegar al
 85-90%: `m3` ya está ahí.
 
@@ -336,7 +336,7 @@ Tangle Forest (310 a 313) queda afuera de las dos mientras no haya lugar.
 
 # Hitos
 
-**1. El 66 entra.** (Hecho: `testing/mundo-1-el-66-entra.md`.) El quinto reparto al final de `LAYOUTS` y el fondo de más
+**1. El 66 entra.** (Hecho: `mundo-1-el-66-entra.md`.) El quinto reparto al final de `LAYOUTS` y el fondo de más
 de 32 KB en dos flujos de LZ2. El 66 en `release`; el fork del 64 se borra y
 el fin de la demo pasa a un fork del 66 que corte al pisar Sorbe (ev10), así
 el mundo se puede caminar y pelear. Las demás entradas del 66 no hacen nada
@@ -346,20 +346,20 @@ recién llegado, `celdas_mal_dibujadas` en cero, una pelea en el 66 que vuelve
 al mapa (es la que pisaría la mitad alta de la grilla si el LZ2 no se parte),
 y `test_carga_descomprimida` con un fondo de dos flujos.
 
-**2. Sorbe y la curación.** (Hecho: `testing/mundo-2-sorbe.md`.) El reparto con la capa de encima de 256 (el 69), el
+**2. Sorbe y la curación.** (Hecho: `mundo-2-sorbe.md`.) El reparto con la capa de encima de 256 (el 69), el
 `Comment` salteado, y `ChangeEncounterSteps` hecho. 69 y 76 a 84 en
 `release`; el fin de la demo pasa a la entrada de Tasgarde (66 ev13), que es
 adonde lleva el viaje de Dalia. 81,4%, banco 0 192 menos lo de
 `ChangeEncounterSteps`.
 
-**3. El espacio.** (Hecho: `testing/mundo-3-el-espacio.md`; al camino principal le quedan diez bancos, y entran él y una o dos de las zonas opcionales, no las tres.) El acomodo con first-fit decreasing en `bancos.py`, con la
+**3. El espacio.** (Hecho: `mundo-3-el-espacio.md`; al camino principal le quedan diez bancos, y entran él y una o dos de las zonas opcionales, no las tres.) El acomodo con first-fit decreasing en `bancos.py`, con la
 ROM armando igual y las goldens sin moverse; la tabla de alturas del `.msu` por
 paquete; el bloque de textos de a 4 bytes; y `medir.py` —o lo que lo
 reemplace— diciendo bancos libres y no un porcentaje. Puede ir en paralelo con
 el 1 y el 2; **tiene que estar antes del 4**, que deja tres bancos.
 
 **4. Tasgarde, Eisen y el puente: el capítulo.** (Hecho:
-`testing/mundo-4-el-capitulo.md`. **La demo termina en la entrada de Tangle
+`mundo-4-el-capitulo.md`. **La demo termina en la entrada de Tangle
 Forest (66 ev19), no en el 18**: el túnel a Paradise está del otro lado del
 bosque, y del puente al túnel no se llega caminando por el mundo —se cruza por
 310, 311, 313 y 312, que sale al oeste—. O sea que Tangle Forest no es
@@ -370,7 +370,7 @@ de la demo al fork del 66 ev18, "Continue onward". La regla de mapas según la
 pregunta 5.
 
 **5. Lo opcional**, detrás del 3 (Tangle Forest, que resultó del camino
-principal, hecho: `testing/mundo-5-tangle-forest.md`; la demo termina ahora
+principal, hecho: `mundo-5-tangle-forest.md`; la demo termina ahora
 en el "Continue onward" del 66 ev18, que era la meta, y no queda ningún banco
 libre): Yun Town (el cronómetro por alcance, y el
 reparto del 2 para su capa de encima), Drust Camp (comparar contra más de
@@ -392,13 +392,13 @@ conviene el mismo agente o uno detrás del otro; un opcode para
 3. **El cartel "Meanwhile in Lashe City"**: un fork del 81 con un
    `ShowMessage`, como el de la carrera.
 4. **El contador de Fortitude**: deuda, en
-   `todo/el-contador-de-fortitude-no-se-ve.md`.
+   `el-contador-de-fortitude-no-se-ve.md`.
 5. **La regla de mapas**: le da igual cualquiera de las dos; queda por id,
    como se decidió en la carrera.
 6. **Los fondos de batalla**: todos van al `.msu`, estén o no en el
    cartucho, y las peleas cuyo fondo no entra en la ROM comparten uno de los
    que ya hay, en baja calidad, en vez de salir en negro. Es su propia tarea:
-   `todo/todos-los-fondos-en-el-msu-1.md`.
+   `todos-los-fondos-en-el-msu-1.md`.
 7. **El cartucho**: exprimir primero. taro: "a este ritmo, ni 6 MB ni 8 MB
    nos van a permitir cubrir todo el juego".
 
@@ -414,7 +414,7 @@ conviene el mismo agente o uno detrás del otro; un opcode para
 3. **El cartel "Meanwhile in Lashe City"** del 81, que es el cambio de
    protagonista a Dalia: (a) un fork que lo cambie por un `ShowMessage` con el
    mismo texto, como el de la carrera; (b) un segundo cartel por ROM
-   (`wishlist/sistema-de-imagenes.md`); (c) deuda. **Recomendado: (a).**
+   (`sistema-de-imagenes.md`); (c) deuda. **Recomendado: (a).**
 4. **El contador de Fortitude** del minijuego del 95: sin él se juega sin ver
    cuánto aguanta Eisen. (a) mostrar la variable 48 con los dígitos del
    cronómetro, que ya están en la ROM; (b) un mensaje cuando baja; (c) deuda.
@@ -432,6 +432,6 @@ conviene el mismo agente o uno detrás del otro; un opcode para
    deuda hasta después del hito 3.**
 7. **El cartucho**: `m3` ya está en el 88,5% que la decisión de 4 MB dice que
    dispara la revisión. ¿Se abre ahora (ExHiROM, SA-1, S-DD1:
-   `wishlist/chips-sa-1-y-s-dd1.md`) o se sigue exprimiendo? **Recomendado:
+   `chips-sa-1-y-s-dd1.md`) o se sigue exprimiendo? **Recomendado:
    exprimir primero** —el acomodo da ocho bancos sin tocar la ROM—, y abrirla
    con el número del capítulo siguiente delante.

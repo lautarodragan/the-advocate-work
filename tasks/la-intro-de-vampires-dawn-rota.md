@@ -7,7 +7,7 @@ assignee: taro
 agents: [Hurón]
 ---
 
-Visto por Carpintero el 2026-10-11 (`testing/boot-frames-por-cartucho.md`): con el piso en 90 se ve igual, así que no es el arranque. Si es un error del motor con los panoramas, puede estar en otros juegos también.
+Visto por Carpintero el 2026-10-11 (`boot-frames-por-cartucho.md`): con el piso en 90 se ve igual, así que no es el arranque. Si es un error del motor con los panoramas, puede estar en otros juegos también.
 
 ## La causa (Hurón, 2026-10-11)
 

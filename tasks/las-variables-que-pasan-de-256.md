@@ -6,7 +6,7 @@ status: draft
 ---
 
 Lo declaró Carpintero el 2026-10-06 como degradación
-(`testing/degradar-en-vez-de-fallar.md`, punto 2): las variables que no
+(`degradar-en-vez-de-fallar.md`, punto 2): las variables que no
 tienen lugar salen de la lista con un WARNING, la página que usa una queda
 afuera, y un evento cuya condición de página usa una también. Antes era un
 corte del armado; ahora es una pérdida que no sigue ninguna tarea.

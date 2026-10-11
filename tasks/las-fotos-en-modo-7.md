@@ -11,7 +11,7 @@ definitivamente la forma de encarar las fotos", y eligió la variante 4, la
 **híbrida vq**: la foto quieta a resolución completa en modo 1, como hoy, y
 al empezar el zoom el modo 7 con una textura de 255 tiles elegidos por
 cuantización vectorial. El piloto, lo medido y el costo de llevarlo al
-juego: `workflow/tasks/done/el-piloto-del-modo-7.md`, en ABL. Es del motor:
+juego: `tasks/el-piloto-del-modo-7.md`, en ABL. Es del motor:
 cualquier imagen grande con zoom, de cualquier juego.
 
 Hecha por Chajá, desde `main` en `2c05f8a0`; ABL en un clon, rama

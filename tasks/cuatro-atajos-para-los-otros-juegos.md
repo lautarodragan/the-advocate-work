@@ -13,11 +13,11 @@ páginas que **sólo** ese comando deja afuera:
 
 * `ConditionalBranch` tipo 6, por la dirección de un personaje: Sunset 111,
   Vampires Dawn 37, El Dorado 23, Desert 21. Ya en
-  `todo/los-comandos-sueltos-de-los-mapas.md`, para ABL (31 páginas).
+  `los-comandos-sueltos-de-los-mapas.md`, para ABL (31 páginas).
 * `MoveEvent` con órdenes que la ROM no entiende: el paso al azar (8) en
   Desert (39) y Vampires Dawn (16), alejarse del héroe (10) en Vampires Dawn
   (48) y El Dorado (9), y rutas de Sunset con 36/37 (unas 40; falta ver qué
-  orden es la que traba). `wishlist/ruta-los-movimientos-que-faltan.md` dice
+  orden es la que traba). `ruta-los-movimientos-que-faltan.md` dice
   que no rendían: en ABL era cierto, en estos juegos no.
 * `PlayerVisibility`: El Dorado 170.
 * `Comment` en las páginas de las tropas: The Book of Three 153. En los mapas
@@ -52,7 +52,7 @@ del xorshift del mapa, así que es al azar pero no es el generador de RM2k.
 compilaban: son **las diagonales del héroe** (4 a 7), que el compilador
 rechaza a propósito. Es lo que más páginas deja ahora: unas 51 en Sunset y 45
 en Vampires Dawn, medido. **No se hizo**, y por qué está en
-`wishlist/ruta-los-movimientos-que-faltan.md`: es un paso nuevo del héroe, no
+`ruta-los-movimientos-que-faltan.md`: es un paso nuevo del héroe, no
 cuatro rutinas copiadas, y no hay con qué compararlo. Los giros relativos (16
 a 20) y avanzar (11) del héroe tampoco: unas 8 páginas en Sunset.
 

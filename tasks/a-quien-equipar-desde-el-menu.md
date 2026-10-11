@@ -7,7 +7,7 @@ assignee: taro
 ---
 
 Apareció el 2026-09-28, mirando la golden `equipo-a-quien` de la elección de
-actor (`testing/la-eleccion-de-actor-como-el-original.md`, Ñandú): elegir a
+actor (`la-eleccion-de-actor-como-el-original.md`, Ñandú): elegir a
 quién equipar usa la pantalla de la elección de actor sin las ventanas del
 ítem, y la mitad izquierda queda negra. Antes de ese cambio ya estaba así,
 sobre negro y con el ">".

@@ -8,7 +8,7 @@ assignee: taro
 
 # Qué
 
-El hito 1 de `todo/la-carrera-y-lo-que-sigue.md`, que tiene todo lo medido
+El hito 1 de `la-carrera-y-lo-que-sigue.md`, que tiene todo lo medido
 antes de empezar: el recorrido, las faltas numeradas y el costo. Sale de `main`
 en `49f0e2f`.
 

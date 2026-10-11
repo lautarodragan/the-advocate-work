@@ -5,7 +5,7 @@ type: test
 status: draft
 ---
 
-Lo dejó Hurón el 2026-10-06 en `testing/eraseevent-de-verdad.md`: las
+Lo dejó Hurón el 2026-10-06 en `eraseevent-de-verdad.md`: las
 pruebas de `EraseEvent` (tres del crate de eventos y
 `pruebas/rpgmaker/test_borrar_evento_de_verdad.py` de ABL, en
 `test-special`) "no cubren que el evento se deje de dibujar, que deje de

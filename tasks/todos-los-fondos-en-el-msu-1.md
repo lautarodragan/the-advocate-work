@@ -18,7 +18,7 @@ porque el cartucho no lleva sus cinco terrenos:
 - **Con MSU-1, cada pelea muestra su fondo correcto**, aunque no esté en la
   ROM.
 
-Ver `docs/port/msu-datos.md` y `testing/msu-1-los-fondos-por-el-puerto-de-datos.md`
+Ver `docs/port/msu-datos.md` y `msu-1-los-fondos-por-el-puerto-de-datos.md`
 para cómo se leen hoy. Hay que medir cuánto pesan todos los fondos del juego
 en el `.msu` y decidir el orden (por id del fondo, así el sector de cada uno
 no depende de qué mapas entran).

@@ -12,9 +12,9 @@ Pedido de taro, el 2026-09-26: **cuando la música va por MSU-1, los efectos
 de sonido tienen que sonar a su calidad máxima, con su longitud completa, y
 con todas las voces posibles.** Sin MSU-1 no cambia nada.
 
-Absorbe el punto 1 de `todo/mas-voces-para-los-efectos.md` (con MSU-1, todas
+Absorbe el punto 1 de `mas-voces-para-los-efectos.md` (con MSU-1, todas
 las voces para efectos) y el plan B de
-`testing/con-msu-1-no-se-suben-las-muestras-del-tema.md` ("los efectos de
+`con-msu-1-no-se-suben-las-muestras-del-tema.md` ("los efectos de
 calidad desde el `.msu`").
 
 # El diseño, con sus números
@@ -76,7 +76,7 @@ paquetes 8, 10, 12, 13, 14, 16, 17, 18, 21, 23, 28, 30, 33, 74, 133, 255 y
 kHz, el 3 a 6 y 4 kHz** —los nueve que el cartucho ya lleva enteros a 6, los
 once que lleva recortados a 4—, y el 261 y el 121 bajos porque sus temas no
 tienen pista y ocupan la ARAM. Cuando todos los temas tengan pista
-(`todo/todos-los-temas-tienen-pista-de-msu-1.md`) esos dos suben solos.
+(`todos-los-temas-tienen-pista-de-msu-1.md`) esos dos suben solos.
 
 ## De dónde salen: el `.msu`
 

@@ -47,7 +47,7 @@ apague su cono y deje puesto el switch de la lámpara rota.
 
 Cuadros perdidos caminando 1200 cuadros, con el contador leído y puesto en cero
 cada 50 porque **`cuadros_perdidos` satura en 255**. Es el mismo método con que
-salieron el 450 y el 228 de `done/eventos-opacos-al-mapa.md`, y ese 228 se
+salieron el 450 y el 228 de `eventos-opacos-al-mapa.md`, y ese 228 se
 reprodujo clavado.
 
 **La celda desde la que se mide cambia la respuesta por un factor de cinco**, y
@@ -238,7 +238,7 @@ esto lo sabría. Si el camino 3 alcanza, éste no hace falta.
 
 ## 5. Liberarles la paleta de sprite y la ranura de VRAM a los horneados
 
-Está anotado en `done/eventos-opacos-al-mapa.md` y sigue valiendo: hoy un evento
+Está anotado en `eventos-opacos-al-mapa.md` y sigue valiendo: hoy un evento
 horneado sigue entrando en el reparto de `npcs_dibujables` como si se dibujara.
 Sacarlo libera una paleta y **cambia lo que se ve** —el mapa 11 tiene un gráfico
 dibujado con una paleta ajena, `@tile:lasheint:49`—, así que **mueve goldens** y

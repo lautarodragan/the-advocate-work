@@ -7,7 +7,7 @@ status: wishlist
 
 # Qué
 
-Lo que quedó afuera de `testing/los-panoramas.md`, para cualquier juego:
+Lo que quedó afuera de `los-panoramas.md`, para cualquier juego:
 
 * **Un `ChangePBG` que nombra otra imagen.** Hoy cambia los bucles y la
   velocidad y deja la imagen. Haría falta convertir cada imagen que las

@@ -9,7 +9,7 @@ assignee: taro
 De taro, el 2026-09-28: "Ahora quiero implementar las mejoras de UI que
 hicimos en el menú de items para el menú de equipamiento".
 
-Lo de ítems está en `testing/la-pantalla-de-items-como-el-original.md`
+Lo de ítems está en `la-pantalla-de-items-como-el-original.md`
 (Jacarandá, `f3b0cc90`): las ventanas del System en BG1 detrás del texto de
 BG2, y la barra roja como cursor en lugar del ">". Su sección "Equipar y
 habilidades" ya decía qué servía: el mecanismo, pero con su propio juego de

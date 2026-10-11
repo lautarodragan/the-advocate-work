@@ -1139,8 +1139,8 @@ la voz de arriba del canal 0 en todo el tema, y entre paréntesis en la frase.
 ## 6. Las muestras: presupuesto por paquete y zonas
 
 Es lo que más cambia el sonido (el 10 solo ya se acerca más que el 07) y lo
-más caro: es `wishlist/presupuesto-de-muestras-por-paquete.md`, y detrás
-`wishlist/una-muestra-por-instrumento.md`. taro escuchó la variante 08/10 y
+más caro: es `presupuesto-de-muestras-por-paquete.md`, y detrás
+`una-muestra-por-instrumento.md`. taro escuchó la variante 08/10 y
 dijo que hace "una diferencia notoria", y aprobó arrancar.
 
 ### Hecho, el 2026-09-26
@@ -1339,7 +1339,7 @@ formato por nota, el reparto y la rampa, el aire por tema y las muestras. Lo
 que queda son detalles, en el orden en que los haría:
 
 1. **Taparlo**: el fundido de la pelea
-   (`todo/el-fundido-al-entrar-y-salir-de-la-pelea.md`), que es lo único del
+   (`el-fundido-al-entrar-y-salir-de-la-pelea.md`), que es lo único del
    paso 6 que se ve seguido.
 2. ~~**Los efectos del mapa 3**~~: hecho sin tocarlos, en "Sin el techo del
    mapa 3". Si hace falta más —el bombo a los 19 de antes—, darles a los
@@ -1690,7 +1690,7 @@ La tabla de arriba tiene la subida de cada paquete. Dónde cae:
   medio segundo más, en cada pelea.
 * **`wishlist/velocidad-presupuesto-percusion.md` se va con A**: el lazo que
   baja la percusión de a 10% es el de `Banco`, que A reemplaza.
-* **`wishlist/musica-del-lado-del-spc700.md`**: si algún día el secuenciador
+* **`musica-del-lado-del-spc700.md`**: si algún día el secuenciador
   va al SPC700, necesita un buffer en la ARAM, y con A cada paquete la llena.
   Habría que reservarlo en el presupuesto (es cambiar el margen).
 

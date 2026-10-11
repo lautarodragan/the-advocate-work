@@ -7,7 +7,7 @@ assignee: taro
 ---
 
 Lo dejó anotado Guazú al pasar el compilador de eventos a Rust
-(`testing/rust-el-compilador-de-eventos.md`): los porqués de cada comando
+(`rust-el-compilador-de-eventos.md`): los porqués de cada comando
 —cuánto destrabó, cuándo entró, qué se midió, qué error protege— siguen en
 `tools/port/events.py`, pero el código que protegen está ahora en
 `tools/rm2k-snes/events/`. La regla de AGENTS.md es que un porqué que

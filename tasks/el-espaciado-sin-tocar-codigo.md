@@ -11,7 +11,7 @@ con +1. me gustan todas, igualmente, y me gustaría mantener la perilla". Y
 preguntó si cambiar el espaciado pide tocar código. Hoy sí, en tres lugares
 fijos: el banco del menú (con +1 faltan 2 tiles, con +2 26), los nombres en
 celdas contadas (ranuras, habilidades de la pelea) y el pozo de pares de la
-tienda y la pelea. Ver `workflow/tasks/testing/el-espaciado-entre-letras.md`.
+tienda y la pelea. Ver `tasks/el-espaciado-entre-letras.md`.
 
 ## Hecho (Benteveo)
 
@@ -104,7 +104,7 @@ llegar a saber 54 habilidades) sabiéndolas todas, con la lista abierta.
 **Ya con 0 el pozo se agota**: la séptima fila de habilidades sale a medias
 y el primer renglón de los comandos no sale. Con 1 se agota en la sexta.
 Es de antes de la perilla y no se arregló: ver
-`workflow/tasks/todo/la-lista-de-habilidades-agota-el-pozo.md`.
+`tasks/la-lista-de-habilidades-agota-el-pozo.md`.
 
 ### ABL en +1
 

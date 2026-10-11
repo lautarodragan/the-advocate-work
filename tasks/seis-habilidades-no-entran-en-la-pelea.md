@@ -7,7 +7,7 @@ assignee: taro
 ---
 
 Lo midió Tordo el 2026-10-03, contando a mano contra el tope de celdas, al
-hacer la perilla del espaciado (`workflow/tasks/testing/el-espaciado-entre-letras.md`).
+hacer la perilla del espaciado (`tasks/el-espaciado-entre-letras.md`).
 No se corrió en la ROM: falta ver cuáles son, qué se ve, y si el conversor
 debería avisarlo.
 

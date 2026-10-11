@@ -9,7 +9,7 @@ assignee: taro
 De taro, el 2026-10-02: "map-background podría pasar a ser parte de wally y
 ya, no?" y, para las dos, "dale". Mara los separó en tres crates para que
 Cargo cuidara que el fondo no sabe de los objetos y al revés
-(`testing/rust-el-dominio-de-los-mapas.md`, "Un crate o varios"); esa
+(`rust-el-dominio-de-los-mapas.md`, "Un crate o varios"); esa
 frontera pasa a cuidarla una prueba.
 
 ## Cómo quedó

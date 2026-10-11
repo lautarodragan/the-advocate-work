@@ -5,7 +5,7 @@ type: bug
 status: draft
 ---
 
-Medido por Mulita el 2026-10-11 (`testing/sunset-en-modo-1-con-color-math.md`),
+Medido por Mulita el 2026-10-11 (`sunset-en-modo-1-con-color-math.md`),
 con `modo1/chequear.py` —VRAM contra el `.inc`, cuadro a cuadro— en el
 mapa 2 de Sunset Over Imdahl: la fila que viene se sube adelantada, 11
 tiles por cuadro, y "una vuelta atrás de la cámara con una fila a medio

@@ -7,7 +7,7 @@ status: done
 
 # Qué
 
-El hito 1 de `todo/el-mundo-y-lo-que-sigue.md`, que tiene todo lo medido
+El hito 1 de `el-mundo-y-lo-que-sigue.md`, que tiene todo lo medido
 antes. Sale de `2be61a9`.
 
 * **El quinto reparto** al final de `LAYOUTS`, `LAYOUT_VENTANA_FONDO_TECHO`:

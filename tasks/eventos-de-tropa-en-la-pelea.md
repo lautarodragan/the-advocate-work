@@ -13,7 +13,7 @@ Es lo que hace andar los sistemas de cada personaje: una habilidad de tipo switc
 miran corren en la pelea.
 
 **El mecanismo ya existe** desde el 2026-09-21, con el sistema de Talan
-(`done/el-sistema-de-batalla-de-talan.md`): las páginas de tropa se compilan
+(`el-sistema-de-batalla-de-talan.md`): las páginas de tropa se compilan
 deduplicadas, corren en la pelea con el mismo intérprete de los mapas, sus
 mensajes salen en la pantalla de pelea, y una habilidad de tipo switch prende su
 switch. Lo que falta es **completar comandos**: lo que una página de tropa puede

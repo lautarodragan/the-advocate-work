@@ -10,7 +10,7 @@ assignee: taro
 taro, el 2026-10-11, creó el estado `draft` (ver el README de este repo y
 "Un hallazgo que no se arregla" en `AGENTS.md`). Los hallazgos de antes
 quedaron en las tareas de los agentes; ésta los rescata. El ejemplo del
-formato es `draft/los-eventos-encima-del-heroe-sobre-los-techos-pintados.md`,
+formato es `los-eventos-encima-del-heroe-sobre-los-techos-pintados.md`,
 y el de "Known issues", la página de Sunset en el libro.
 
 ## Cómo se hizo (Calandria, 2026-10-11)
@@ -82,7 +82,7 @@ port"). Cada línea nombra su draft o su tarea de `todo/`.
 * Los muros de VD de la música, las tropas, las poses, el arranque y los
   errores sin mapa: sus tareas de `testing/`.
 * Las diagonales y giros del héroe en las rutas (`cuatro-atajos-para-los-otros-juegos`):
-  `wishlist/ruta-los-movimientos-que-faltan`.
+  `ruta-los-movimientos-que-faltan.md`.
 * `EraseScreen`/`ShowScreen`, `ChangeSystemGraphics`, las caras, los
   colores y las esperas: sus tareas de `todo/` (con la línea de arriba).
 

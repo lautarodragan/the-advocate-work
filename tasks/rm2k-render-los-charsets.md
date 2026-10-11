@@ -7,7 +7,7 @@ assignee: taro
 ---
 
 De taro, el 2026-09-30: "vamos a por los CharSets en rm2k-render". Es la
-primera parte de `todo/rm2k-render-dibuja-todo-rm2k.md`, y va después de
+primera parte de `rm2k-render-dibuja-todo-rm2k.md`, y va después de
 Adeleine en Rust porque los CharSets pasan por Adeleine antes de llegar a
 Voodoo.
 

@@ -13,7 +13,7 @@ pero seguro estén mal—". Para 65816 no hay nada que valga la pena adoptar,
 así que se hace: "y que esté hecho en Rust".
 
 El antecedente es la guarda de los bancos de Ratona
-(`testing/la-guarda-de-los-bancos.md`), que lee el `.dbg` y marca los saltos
+(`la-guarda-de-los-bancos.md`), que lee el `.dbg` y marca los saltos
 a otro banco. La trampa 1 es la de `AGENTS.md`, "La trampa que más veces
 mordió".
 

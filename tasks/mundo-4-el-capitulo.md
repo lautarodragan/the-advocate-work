@@ -7,7 +7,7 @@ status: done
 
 # Qué
 
-El hito 4 de `todo/el-mundo-y-lo-que-sigue.md`. Sale de `3c16a17`, con los
+El hito 4 de `el-mundo-y-lo-que-sigue.md`. Sale de `3c16a17`, con los
 hitos 1 a 3 (`testing/mundo-1-*`, `mundo-2-sorbe`, `mundo-3-el-espacio`), y
 mergea `main` con el mapa de debug (`455f9fc`).
 
@@ -29,7 +29,7 @@ mergea `main` con el mapa de debug (`455f9fc`).
   Tasgarde) al **66 ev19, la entrada de Tangle Forest**, y no al 18 como
   decía el encargo: ver abajo.
 * **El contador de Fortitude** queda como deuda
-  (`todo/el-contador-de-fortitude-no-se-ve.md`, con lo medido: el minijuego
+  (`el-contador-de-fortitude-no-se-ve.md`, con lo medido: el minijuego
   se puede perder). El minijuego se juega hasta el final sin él.
 
 No hizo falta ningún opcode ni RAM lejana nueva: el 0x33 y $7E7A10-$7E7A2F
@@ -52,7 +52,7 @@ los dos mensajes de Talan. El 18 quedó como el original (su `Teleport` al 105
 no compila y la página no hace nada). **Tangle Forest es el hito siguiente del
 camino principal**, no lo opcional; lo que pide está en el plan (el
 `EraseEvent` del 311, las condiciones de cronómetro del 312). Anotado en
-`todo/el-mundo-y-lo-que-sigue.md`, hito 4.
+`el-mundo-y-lo-que-sigue.md`, hito 4.
 
 # Hecho y comprobado
 
@@ -98,7 +98,7 @@ debug, eran 114 bancos, que es lo que el hito 3 midió para este camino.
 
 # La música de antes, sin MSU-1
 
-Medido par por par con `Banco`, como en `done/el-audio-despues-de-lashe-city.md`
+Medido par por par con `Banco`, como en `el-audio-despues-de-lashe-city.md`
 (los argumentos de `build_varios` capturados de cada árbol y el reparto
 rearmado; baja = más de 0,5 kHz), contra `main` 455f9fc1: **bajan 43 pares
 (tema, instrumento) de 15 temas que ya estaban, y suben 51.** Los peores, golpes
@@ -124,8 +124,8 @@ propia tarea.
 
 * **Los panoramas no se dibujan**: el puente (259), debajo (255), el 95, el
   94 y el 99 tienen uno y se ven en negro detrás del mapa, como todo panorama
-  del port (`wishlist/panorama-del-mapa-2.md`).
-* **El contador de Fortitude no se ve**: `todo/el-contador-de-fortitude-no-se-ve.md`.
+  del port (`panorama-del-mapa-2.md`).
+* **El contador de Fortitude no se ve**: `el-contador-de-fortitude-no-se-ve.md`.
 * Borrar con "ninguna" es un cuadro negro y no el fundido del mapa viejo al
   nuevo: `divergencias/las-transiciones-del-teletransporte.md`.
 * Una partida guardada en el save point del minijuego vuelve con el fundido

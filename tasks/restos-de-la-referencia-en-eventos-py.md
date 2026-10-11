@@ -46,6 +46,6 @@ Lo que quedó mencionándola a propósito, o sin tocar:
   lo dice, y cambiarlo es un cambio de comportamiento;
 * `titulo.render` y `ventana.pagina` no tienen llamadores y sus comentarios
   describen la comparación de la referencia: lo que corresponde es borrarlas
-  (la primera ya está en `wishlist/inventario-de-imagenes-en-python.md`);
+  (la primera ya está en `inventario-de-imagenes-en-python.md`);
 * el "topado en 999 como en la referencia" de `batalla.s`: no se sabe si es la
   de Python o el dibujo de `escena`.

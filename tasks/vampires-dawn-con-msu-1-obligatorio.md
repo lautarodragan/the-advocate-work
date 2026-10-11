@@ -7,7 +7,7 @@ assignee: taro
 agents: [Hornero, Tijereta]
 ---
 
-Sigue de `testing/vampires-dawn-entra-comprimido.md`, donde Tijereta midió todo: las poses en LZ2 son lo único que rinde en serio (−2,86 MB) y le cuestan a ABL cuadros —ocho rojas por CPU—; con ellas VD queda en 8,91 MB contra 7,94, y lo demás suma a lo sumo ~0,84 MB. El experimento está en las ramas locales `tijereta-vd-comprimido` de the-advocate y de los ports, sin mergear.
+Sigue de `vampires-dawn-entra-comprimido.md`, donde Tijereta midió todo: las poses en LZ2 son lo único que rinde en serio (−2,86 MB) y le cuestan a ABL cuadros —ocho rojas por CPU—; con ellas VD queda en 8,91 MB contra 7,94, y lo demás suma a lo sumo ~0,84 MB. El experimento está en las ramas locales `tijereta-vd-comprimido` de the-advocate y de los ports, sin mergear.
 
 La decisión de taro, el 2026-10-11: antes que dos cartuchos, el MSU-1 obligatorio **para este juego**; ABL y los demás siguen jugables sin él ([[sin-msu-jugable]] en la memoria). Un chip de compresión no, mientras el MSU-1 siga siendo opcional en general.
 

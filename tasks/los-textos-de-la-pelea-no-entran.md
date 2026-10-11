@@ -17,7 +17,7 @@ Dos casos, los dos de la pantalla de pelea:
   "Talan has absorbed the enemy aura!". Ya estaba así antes de las páginas de
   tropa.
 
-Salen de `done/el-sistema-de-batalla-de-talan.md`.
+Salen de `el-sistema-de-batalla-de-talan.md`.
 
 **Otro caso, visto el 2026-09-26 al hacer el elixir en la pelea**: "Kersh
 Pungent Elixir-LIFE  used." pasa de 32 columnas y el punto cae en la columna

@@ -21,7 +21,7 @@ imagen o capas del mapa, o no mostrar eventos mientras se muestra una
 imagen. No es algo que sirva siempre, pero creo que en muchos casos sí".
 
 El menú custom propio, con modo 5 y fuente, quedó en el wishlist:
-`wishlist/un-menu-custom-propio.md`. Esto es antes: las imágenes como las
+`un-menu-custom-propio.md`. Esto es antes: las imágenes como las
 usa RM2k.
 
 ## El estudio (Jilguero, 2026-10-01)

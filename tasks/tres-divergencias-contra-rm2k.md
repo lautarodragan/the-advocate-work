@@ -7,7 +7,7 @@ assignee: taro
 ---
 
 Las marcó Guayabo el 2026-09-29, al clasificar las divergencias por repo
-(`testing/decisiones-y-divergencias-por-repo.md`): se midieron contra la
+(`decisiones-y-divergencias-por-repo.md`): se midieron contra la
 referencia en Python que existía hasta el 2026-09-16, no contra RM2k, así
 que no se sabe si la ROM difiere de RM2k.
 
@@ -56,7 +56,7 @@ señalaba— camina los mismos 88 cuadros y la cámara corre los mismos 176
 pixeles que en las otras. No hay nada que empiece cuatro ticks antes ni
 pantalla corrida ocho pixeles. Lo que sí difiere es el largo de cada vuelta:
 161 ticks en la ROM y 158 en el original. Es una tarea nueva:
-`todo/el-teletransporte-tarda-tres-cuadros-de-mas.md`.
+`el-teletransporte-tarda-tres-cuadros-de-mas.md`.
 
 **La fase de los tiles animados — se borra.** Los diez pixeles son el agua del
 ChipSet del mapa 6, que se ve después de que la ruta de `grafico-heroe` baja la

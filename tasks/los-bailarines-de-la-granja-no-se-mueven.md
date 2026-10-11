@@ -7,7 +7,7 @@ assignee: taro
 ---
 
 Lo vio Yaguareté el 2026-10-03, al meter la granja con la caché de ranuras
-(`workflow/tasks/testing/la-cache-de-ranuras.md`). Es de antes de la caché y
+(`tasks/la-cache-de-ranuras.md`). Es de antes de la caché y
 no se siguió.
 
 Base: herramientas `fe0f90ee`, ABL `4cd8eb6`.

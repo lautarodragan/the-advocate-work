@@ -8,7 +8,7 @@ assignee: taro
 
 De taro, el 2026-10-04: "Dale", a seguir con las dos diferencias que
 Quirquincho encontró comparando contra el original con Wine
-(`workflow/tasks/testing/la-ventana-arriba-al-medio-y-sin-fondo.md`; las
+(`tasks/la-ventana-arriba-al-medio-y-sin-fondo.md`; las
 capturas en `/shared/capturas/2026-10-04-ventana-de-mensajes/original/`).
 
 ## Hecho (Tijereta)

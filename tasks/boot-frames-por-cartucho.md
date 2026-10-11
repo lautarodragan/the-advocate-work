@@ -7,7 +7,7 @@ assignee: taro
 agents: [Carpintero]
 ---
 
-Del re-barrido del 2026-10-10 (`testing/otros-juegos-el-rebarrido.md`): el mapa 3 de VD no entra en `BOOT_FRAMES` (46 de 44). Subir la constante mueve en ABL el cuadro en que arranca el lazo, y con él las pruebas que cuentan cuadros. La propuesta de Tijereta: que el conversor emita el de cada cartucho, `max(44, la estimación)`, así ABL no se mueve.
+Del re-barrido del 2026-10-10 (`otros-juegos-el-rebarrido.md`): el mapa 3 de VD no entra en `BOOT_FRAMES` (46 de 44). Subir la constante mueve en ABL el cuadro en que arranca el lazo, y con él las pruebas que cuentan cuadros. La propuesta de Tijereta: que el conversor emita el de cada cartucho, `max(44, la estimación)`, así ABL no se mueve.
 
 ## Lo hecho
 

@@ -7,7 +7,7 @@ assignee: taro
 ---
 
 De taro, el 2026-10-02 (la tarea del juego está en ABL:
-`workflow/tasks/todo/las-fotos-diff-recortadas-y-el-montaje.md`): las fotos
+`tasks/las-fotos-diff-recortadas-y-el-montaje.md`): las fotos
 Diff son capturas del mapa a 320x240, y el original las usa para un efecto
 de "en vivo a foto". Escaladas a 256 ya no coinciden con el mapa de la ROM.
 Recortadas sí, porque la ROM no escala el mapa.

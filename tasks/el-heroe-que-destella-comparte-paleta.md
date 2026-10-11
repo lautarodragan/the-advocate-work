@@ -5,7 +5,7 @@ type: bug
 status: draft
 ---
 
-Medido por Calandria el 2026-10-11 (`testing/las-exclusiones-que-sobran.md`)
+Medido por Calandria el 2026-10-11 (`las-exclusiones-que-sobran.md`)
 y **comprobado hoy** (the-advocate `fc6f7456`, ports `a85b7e3`): con el 1
 devuelto a The Frozen World (y el 2 todavía afuera), `just cartuchos
 release` corta en "map 1: a page makes the hero flash, and actor 11 is

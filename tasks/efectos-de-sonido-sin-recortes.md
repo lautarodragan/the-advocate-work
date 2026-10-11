@@ -9,7 +9,7 @@ assignee: taro
 # Qué
 
 Mejorar cómo suenan los efectos de sonido. Los límites que tenían —ver
-`done/audio-sound-effects.md`— fueron intencionales, todos por la ARAM: van en
+`audio-sound-effects.md`— fueron intencionales, todos por la ARAM: van en
 el paquete de audio de cada mapa, a 6 kHz y a lo sumo tres cuartos de segundo
 (uno más largo repite sus últimos 0,4 s hasta durar lo que dura en RM2k).
 
@@ -191,7 +191,7 @@ cuesta la última copia de `snes_music.copias`: **el primero, el `SPACE79` de
 `T_ProjectJustice_DiscLoad` y `dcbest`, 17,9 → 16,0 kHz**; el segundo, la
 copia de antes, y así. Liberar entradas es "darles a los efectos su propio
 lugar en el directorio" (ver "Sin el techo del mapa 3" en
-`done/la-calidad-de-la-musica.md`), que es rehacer `paquete_de_audio.s`.
+`la-calidad-de-la-musica.md`), que es rehacer `paquete_de_audio.s`.
 
 **Los que no le cuestan a ningún instrumento pero sí a los efectos**: en
 los paquetes 9, 18, 20, 28 y 32, con algún tema que puede venir sonando los
@@ -318,7 +318,7 @@ sin tema; en el juego pagarían lo de la tabla.
 
 **Sin MSU-1, el `FadeOutBGM` calla también los efectos** hasta que arranca
 otro tema. El trueno del final del mapa 3 es uno de los que caen ahí.
-Arreglado el 2026-09-26: `tasks/testing/el-fundido-del-tema-calla-los-efectos.md`.
+Arreglado el 2026-09-26: `tasks/el-fundido-del-tema-calla-los-efectos.md`.
 
 # Lo de antes: el 2026-09-24
 

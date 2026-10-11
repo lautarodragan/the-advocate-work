@@ -18,7 +18,7 @@ hacerse.
 # Por qué
 
 La ROM dibuja **un** `ShowPicture` por cartucho, que es el caso fácil: ver
-`done/show-picture-phase-1.md`, que dice también cómo.
+`show-picture-phase-1.md`, que dice también cómo.
 
 Lo que costaría el resto está medido, y el detalle está en "Lo que costaría el
 sistema de imágenes entero", en esa misma tarea: **34 `ShowPicture` en el juego, 20

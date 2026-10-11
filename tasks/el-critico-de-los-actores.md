@@ -7,7 +7,7 @@ assignee: taro
 ---
 
 Lo encontró Cardón el 2026-09-30, pasando el modelo de la pelea a Rust
-(`testing/rust-el-dominio-de-la-pelea.md`). taro lo pidió como tarea ese día.
+(`rust-el-dominio-de-la-pelea.md`). taro lo pidió como tarea ese día.
 
 `tools/runtime/battle.s`, al armar un actor para la pelea, guarda
 `BA_CRIT` en cero con el comentario "no actor in ABL has a critical hit".

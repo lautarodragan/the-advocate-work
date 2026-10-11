@@ -5,7 +5,7 @@ type: bug
 status: draft
 ---
 
-Visto por Hurón el 2026-10-06 (`testing/eraseevent-de-verdad.md`): en la
+Visto por Hurón el 2026-10-06 (`eraseevent-de-verdad.md`): en la
 escena del WC de Desert Nightmare (mapa 7), el evento 4 es una paralela
 que muestra `Lichteffekt_Tankstelle_WC` y se borra. En RM2k es una
 máscara oscura al 35% sobre el cuarto; en la ROM "sale opaca y tapa el
@@ -18,7 +18,7 @@ saca el mapa de la pantalla; su transparencia oscurece hacia el negro de
 atrás (`divergences/lo-que-las-imagenes-grandes-no-modelan.md` del libro).
 Es lo mismo que tenía Sunset con sus techos y nieblas, que desde el
 2026-10-11 se dibujan adentro del mapa con `[graphics] map_pictures`
-(`testing/sunset-las-imagenes-sobre-el-mapa.md`); esa perilla está
+(`sunset-las-imagenes-sobre-el-mapa.md`); esa perilla está
 prendida sólo en Sunset.
 
 **No comprobado hoy en la consola.** Armado hoy (the-advocate `fc6f7456`,

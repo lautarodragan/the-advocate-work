@@ -7,7 +7,7 @@ assignee: taro
 ---
 
 Apareció el 2026-09-29 midiendo contra el RPG_RT las tres divergencias que
-venían de la referencia en Python (`testing/tres-divergencias-contra-rm2k.md`,
+venían de la referencia en Python (`tres-divergencias-contra-rm2k.md`,
 Caranday). La de `move-event-tras-teleport-interno.md` no se sostuvo, pero
 midiéndola salió esto.
 

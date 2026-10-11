@@ -58,7 +58,7 @@ Lo que se puede hacer y lo que no (pregunta 4 del plan):
   lejana (la BSS tiene ~100 bytes libres), y se guarda en la partida si el
   original la guarda.
 
-Y la deuda de `wishlist/las-otras-transiciones-de-rm2k.md` se achica: el
+Y la deuda de `las-otras-transiciones-de-rm2k.md` se achica: el
 mosaico deja de estar ahí.
 
 **Dos temas nuevos sin muestras en el banco**: `Kfmus5` (la guarida, suena
@@ -152,7 +152,7 @@ décimas —los platillos de `evilrhys` de 4,6 a 4,5—. El conversor no sabe qu
 `Kfmus5` sigue sonando del 41 al 45 —sale de la página del 37 y la regla de
 `temas_heredados` corta en el 41, que tiene `PlayBGM` propios— así que esos
 paquetes no le reservan lugar. Nadie lo escuchó sin MSU-1: va con la pasada
-de audio (`todo/el-audio-despues-de-lashe-city.md`). `just techos` rehecho: ningún
+de audio (`el-audio-despues-de-lashe-city.md`). `just techos` rehecho: ningún
 tema recorta.
 
 # Pruebas

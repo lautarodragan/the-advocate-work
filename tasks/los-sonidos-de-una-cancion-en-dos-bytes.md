@@ -7,7 +7,7 @@ assignee: taro
 agents: [Hornero, Tijereta]
 ---
 
-Medido por Calandria el 2026-10-11 (`testing/las-exclusiones-que-sobran.md`). Misma familia que `testing/la-musica-y-las-tropas-en-dos-bytes.md`. Mirar antes cómo quedó la tarea de Tijereta de los sonidos en más de un banco, que toca lo mismo.
+Medido por Calandria el 2026-10-11 (`las-exclusiones-que-sobran.md`). Misma familia que `la-musica-y-las-tropas-en-dos-bytes.md`. Mirar antes cómo quedó la tarea de Tijereta de los sonidos en más de un banco, que toca lo mismo.
 
 ## Hecho, el 2026-10-11 (Tijereta)
 
