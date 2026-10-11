@@ -1,111 +1,115 @@
 ---
-name: "Tres divergencias, contra RM2k"
-description: "Verificar con el RPG_RT en Wine tres divergencias que se midieron contra la referencia en Python y no contra RM2k"
+name: "Three divergences, against RM2k"
+description: "Verify with RPG_RT under Wine three divergences that were measured against the Python reference and not against RM2k"
 type: test
 status: done
 assignee: taro
 ---
 
-Las marcó Guayabo el 2026-09-29, al clasificar las divergencias por repo
-(`decisiones-y-divergencias-por-repo.md`): se midieron contra la
-referencia en Python que existía hasta el 2026-09-16, no contra RM2k, así
-que no se sabe si la ROM difiere de RM2k.
+Guayabo flagged them on 2026-09-29, when classifying the divergences by repo
+(`decisiones-y-divergencias-por-repo.md`): they were measured against the
+Python reference that existed until 2026-09-16, not against RM2k, so it is
+not known whether the ROM differs from RM2k.
 
-- `workflow/divergencias/fase-de-los-tiles-animados.md` (lo dice ella misma)
-- `workflow/divergencias/cronometro-llegando-a-cero.md` (sus 252 pixeles son
-  de `27c828de`, contra la referencia)
+- `workflow/divergencias/fase-de-los-tiles-animados.md` (it says so itself)
+- `workflow/divergencias/cronometro-llegando-a-cero.md` (its 252 pixels are
+  from `27c828de`, against the reference)
 - `workflow/divergencias/move-event-tras-teleport-interno.md`
 
-Para cada una: o se confirma contra el RPG_RT con Wine —y la divergencia
-dice qué se midió—, o se descarta y se borra, contándolo en el commit.
+For each one: either it is confirmed against RPG_RT under Wine —and the
+divergence says what was measured—, or it is discarded and deleted, saying
+so in the commit.
 
-## Cómo se midió (Caranday, 2026-09-29)
+## How it was measured (Caranday, 2026-09-29)
 
-**El original**: el RPG_RT de 2015 con Wine, sobre una copia del juego donde
-la página 1 del EV0001 del mapa 4 —el autostart con que arranca la partida—
-se reemplaza por la página del caso: la de `rom/pruebas/casos/timer-cero.json`
-tal cual, o un `Teleport` al lugar que se quiere mirar. Se elige "Begin the
-Story" y se graba el escritorio de Wine con `ffmpeg -f x11grab -framerate 60`,
-sin pérdida; después se lee cuadro por cuadro a 320x240. **Wine no deja contar
-cuadros absolutos** —la grabación va a reloj de pared y a veces duplica o
-pierde uno—, así que todo se mide **entre marcas del mismo video**: cuándo
-aparece algo, cuándo empieza a oscurecer un fundido, cuándo se mueve la
-cámara. Cada número de abajo salió igual en dos grabaciones por lo menos.
+**The original**: the 2015 RPG_RT under Wine, on a copy of the game where
+page 1 of EV0001 of map 4 —the autostart the game begins with— is replaced
+by the case's page: the one from `rom/pruebas/casos/timer-cero.json` as is,
+or a `Teleport` to the place to look at. "Begin the Story" is chosen and the
+Wine desktop is recorded with `ffmpeg -f x11grab -framerate 60`, lossless;
+then it is read frame by frame at 320x240. **Wine does not let one count
+absolute frames** —the recording runs on wall-clock time and sometimes
+duplicates or drops one—, so everything is measured **between marks of the
+same video**: when something appears, when a fade starts to darken, when
+the camera moves. Every number below came out the same in at least two
+recordings.
 
-**La ROM**: `release`, con `tanda.partida` y una captura por tick, y las mismas
-marcas.
+**The ROM**: `release`, with `tanda.partida` and one capture per tick, and
+the same marks.
 
-**easyrpg** coincide en lo que se miró: el cronómetro se apaga cuando le quedan
-menos de sesenta cuadros (`Game_Party::UpdateTimers`), y la animación del
-ChipSet sale de un contador que no avanza durante las transiciones
+**easyrpg** agrees on what was looked at: the timer goes off when it has
+less than sixty frames left (`Game_Party::UpdateTimers`), and the ChipSet
+animation comes from a counter that does not advance during transitions
 (`Player::Update(false)`).
 
-## Lo que dio
+## What it gave
 
-**El cronómetro — se borra.** Con la página de `timer-cero`, medido desde el
-cuadro en que aparece el cronómetro, en los dos: el dos puntos se apaga en el
-+30, los dígitos se ven hasta el +59 y en el +60 el cronómetro ya no está.
-**Nunca muestra 00:00, ni en uno ni en el otro.** Los 252 pixeles del cuadro 60
-eran la referencia equivocándose. Lo único distinto es el tinte de después del
-`Wait 2`: +12 en el original, +13 en la ROM; va a la tarea nueva de abajo.
+**The timer — deleted.** With the `timer-cero` page, measured from the
+frame in which the timer appears, in both: the colon goes off at +30, the
+digits are visible until +59 and at +60 the timer is gone. **It never shows
+00:00, in neither one.** The 252 pixels of frame 60 were the reference being
+wrong. The only difference is the tint after the `Wait 2`: +12 in the
+original, +13 in the ROM; it goes to the new task below.
 
-**El `MoveEvent` tras el teletransporte interno — se borra.** En los dos, el
-héroe da el primer paso dos cuadros después de que termina el fundido, en las
-cuatro vueltas de la escena del mapa 16, y en la cuarta —la que el archivo
-señalaba— camina los mismos 88 cuadros y la cámara corre los mismos 176
-pixeles que en las otras. No hay nada que empiece cuatro ticks antes ni
-pantalla corrida ocho pixeles. Lo que sí difiere es el largo de cada vuelta:
-161 ticks en la ROM y 158 en el original. Es una tarea nueva:
+**The `MoveEvent` after the internal teleport — deleted.** In both, the
+hero takes the first step two frames after the fade ends, in the four
+rounds of the map 16 scene, and in the fourth —the one the file pointed
+at— walks the same 88 frames and the camera scrolls the same 176 pixels as
+in the others. Nothing starts four ticks early and no screen is shifted
+eight pixels. What does differ is the length of each round: 161 ticks in
+the ROM and 158 in the original. It is a new task:
 `el-teletransporte-tarda-tres-cuadros-de-mas.md`.
 
-**La fase de los tiles animados — se borra.** Los diez pixeles son el agua del
-ChipSet del mapa 6, que se ve después de que la ruta de `grafico-heroe` baja la
-cámara: hoy cambia de paso en el tick 47 de ese caso, igual que el 2026-09-12.
-Contra el original se midió la regla, no la fase absoluta —ésa depende de todo
-lo que se jugó desde "Begin the Story", y el arranque de la ROM no dura lo
-mismo; lo dice `tools/rpgmaker/rm2k.py`—:
+**The phase of the animated tiles — deleted.** The ten pixels are the water
+of map 6's ChipSet, visible after the `grafico-heroe` route lowers the
+camera: today it changes step at tick 47 of that case, same as on
+2026-09-12. Against the original, the rule was measured, not the absolute
+phase —that depends on everything played since "Begin the Story", and the
+ROM's boot does not last the same; `tools/rpgmaker/rm2k.py` says so—:
 
-* **cada 24 cuadros**, en los dos;
-* **quieta durante el fundido del teletransporte**, y exactamente durante él:
-  en el original el agua cambia 24 cuadros después del último del fundido, con
-  el último paso de antes en el cuadro previo al primero del fundido. En la
-  ROM, con un `Teleport` de verdad (los de la escena del mapa 16),
-  `vueltas_congeladas` sube durante los mismos 69 ticks que dura el fundido que
-  se ve.
+* **every 24 frames**, in both;
+* **still during the teleport fade**, and exactly during it: in the
+  original the water changes 24 frames after the last frame of the fade,
+  with the last step before it on the frame previous to the first of the
+  fade. In the ROM, with a real `Teleport` (those of the map 16 scene),
+  `vueltas_congeladas` goes up during the same 69 ticks the visible fade
+  lasts.
 
-La diferencia de un cuadro que medía el archivo era entre dos relojes —el de
-la referencia contaba los ticks del fundido y el de la ROM no— y dejó de
-existir el 2026-09-18 (`4b2c6fe5`), cuando la ROM pasó a congelar la animación
-como easyrpg.
+The one-frame difference the file measured was between two clocks —the
+reference's counted the fade ticks and the ROM's did not— and stopped
+existing on 2026-09-18 (`4b2c6fe5`), when the ROM began freezing the
+animation like easyrpg.
 
-Dos cosas vistas de paso, que no cambian lo de arriba:
+Two things seen in passing, which do not change the above:
 
-* `Partida.ir_al_mapa` congela **un tick más** que el fundido que se ve (70
-  contra 69): la animación sale de ahí un cuadro atrasada. Es del arnés, que
-  pide el fundido desde afuera; con el `Teleport` de una página no pasa.
-* En el original, abrir el menú y cerrarlo también deja el agua quieta: en un
-  menú que estuvo abierto 103 cuadros contando las dos transiciones, el agua
-  perdió 100. La ROM tampoco cuenta `vueltas` en el menú; no se midió cuadro
-  por cuadro.
+* `Partida.ir_al_mapa` freezes **one tick more** than the visible fade (70
+  against 69): the animation comes out of it one frame late. It is the
+  harness's, which asks for the fade from outside; with a page's
+  `Teleport` it does not happen.
+* In the original, opening and closing the menu also leaves the water
+  still: in a menu that was open 103 frames counting both transitions, the
+  water lost 100. The ROM does not count `vueltas` in the menu either; it
+  was not measured frame by frame.
 
-## Dónde quedaron las capturas
+## Where the captures ended up
 
-`/shared/capturas/2026-09-29-divergencias/`, el original y la ROM con el
-mismo nombre y el número relativo a la marca que se usó:
+`/shared/capturas/2026-09-29-divergencias/`, the original and the ROM with
+the same name and the number relative to the mark used:
 
-* `cronometro-{rpgrt,rom}-*`: antes, al aparecer, el tinte, el dos puntos, el
-  último cuadro con dígitos y el primero sin cronómetro. El número es el
-  cuadro desde la llegada al mapa 6.
-* `mapa16-{rpgrt,rom}-tramo3-*` y `tramo4-*`: el final de la tercera vuelta,
-  y la cuarta de punta a punta.
-* `agua-{rpgrt,rom}-*`: el último paso del agua antes del fundido, el primero
-  y el último cuadro del fundido, y el paso de después. Los de la ROM salen de
-  `ir_al_mapa`, así que llevan el tick de más del arnés.
+* `cronometro-{rpgrt,rom}-*`: before, on appearing, the tint, the colon, the
+  last frame with digits and the first without timer. The number is the
+  frame since arriving at map 6.
+* `mapa16-{rpgrt,rom}-tramo3-*` and `tramo4-*`: the end of the third round,
+  and the fourth from start to finish.
+* `agua-{rpgrt,rom}-*`: the last water step before the fade, the first and
+  the last frame of the fade, and the step after. The ROM ones come from
+  `ir_al_mapa`, so they carry the harness's extra tick.
 
-En las de la ROM del mapa 16 el héroe no se ve: la partida sale de `en-5` y
-llega al 16 por `ir_al_mapa`, sin el grupo con el que el juego entra ahí. La
-cámara lo sigue igual, que es lo que se midió.
+In the ROM captures of map 16 the hero is not visible: the save starts from
+`en-5` and reaches 16 through `ir_al_mapa`, without the party the game
+enters there with. The camera follows him anyway, which is what was
+measured.
 
-Lo que no cubre `just pruebas`: nada de esto. Son mediciones con scripts
-descartables; no se tocó código ni goldens, sólo dos comentarios de prueba
-que citaban los archivos borrados.
+What `just pruebas` does not cover: none of this. These are measurements
+with throwaway scripts; no code or goldens were touched, only two test
+comments that cited the deleted files.

@@ -1,99 +1,101 @@
 ---
-name: "End Game en el menú de pausa"
-description: "La orden End Game del menú de pausa tiene que andar como en RM2k"
+name: "End Game in the pause menu"
+description: "The pause menu's End Game command has to work as in RM2k"
 type: feature
 status: done
 assignee: Yaguareté
 ---
 
-De taro, el 2026-09-28: "que End Game ande bien".
+From taro, on 2026-09-28: "make End Game work properly".
 
-En RM2k, End Game abre `Scene_End`: una ventana que pregunta si volver al
-título, con "Yes"/"No" (los términos del LDB), y "Yes" funde la pantalla y la
-música y va al título. Hay que ver qué hace hoy la ROM con esa orden (el
-menú está en `rom/src/menu.s`; las órdenes y cuándo van en gris, en
-`tools/port/titulo.py`).
+In RM2k, End Game opens `Scene_End`: a window that asks whether to return
+to the title, with "Yes"/"No" (the LDB's terms), and "Yes" fades the screen
+and the music and goes to the title. We have to see what the ROM does today
+with that command (the menu is in `rom/src/menu.s`; the commands and when
+they are greyed out, in `tools/port/titulo.py`).
 
-## Qué hacía la ROM
+## What the ROM did
 
-La orden va en gris y A no hace nada: `MENU_HECHAS` (titulo.py) no la
-incluye, y el comentario decía por qué —"terminar el juego pide volver al
-título sin reiniciar el SPC700"—. Eso dejó de valer: desde la pantalla de
-Game Over, volver al título es un `jml reset`, que repone todo, y
-`OP_RETURN_TO_TITLE` hace lo mismo.
+The command is greyed out and A does nothing: `MENU_HECHAS` (titulo.py)
+does not include it, and the comment said why —"ending the game requires
+returning to the title without resetting the SPC700"—. That no longer
+holds: since the Game Over screen, returning to the title is a `jml reset`,
+which restores everything, and `OP_RETURN_TO_TITLE` does the same.
 
-## Qué hace el original
+## What the original does
 
-Mirado en `Scene_End` de easyrpg-player y en el RPG_RT de 2015 con Wine
-(la copia del juego de Tero, con el mapa 4 que arranca con el grupo):
+Looked at in easyrpg-player's `Scene_End` and in the 2015 RPG_RT under Wine
+(Tero's copy of the game, with map 4 that starts with the party):
 
-- Pantalla negra con dos ventanas del System: arriba la pregunta, el término
-  `exit_game_message` ("End game?"), de 70x32 —el ancho del texto más 16— en
-  y=72; abajo `yes` y `no` ("Yes", "No"), de 34x48, en y=120. Las dos
-  centradas en x. Texto en el color 0; el cursor es la barra roja del
-  System.
-- **Entra con el cursor en "Yes"**. easyrpg entra en "No" (`SetIndex(1)`):
-  vale el original. El RPG_RT de 2000 no arranca con Wine (se cae al cambiar
-  el modo de video), así que el de 2015 es lo único medido.
-- B, o "No", vuelve al menú con el cursor en "End Game".
-- "Yes": el tema se funde en 400 ms (`BgmFade(400)`) y la pantalla se funde a
-  negro en unos 330 ms —medido con capturas cada 18 ms—; después, el título.
-- Entre el menú y esta pantalla hay un fundido corto (unos 6 cuadros). En la
-  ROM las pantallas del menú se abren sin fundido, y ésta también.
+- Black screen with two System windows: on top the question, the term
+  `exit_game_message` ("End game?"), 70x32 —the text's width plus 16— at
+  y=72; below `yes` and `no` ("Yes", "No"), 34x48, at y=120. Both centred
+  on x. Text in colour 0; the cursor is the System's red bar.
+- **It enters with the cursor on "Yes"**. easyrpg enters on "No"
+  (`SetIndex(1)`): the original prevails. The 2000 RPG_RT does not start
+  under Wine (it crashes when changing the video mode), so the 2015 one is
+  the only one measured.
+- B, or "No", returns to the menu with the cursor on "End Game".
+- "Yes": the theme fades in 400 ms (`BgmFade(400)`) and the screen fades to
+  black in about 330 ms —measured with captures every 18 ms—; then, the
+  title.
+- Between the menu and this screen there is a short fade (about 6 frames).
+  In the ROM the menu's screens open without a fade, and this one too.
 
-La orden iba en gris desde que nació el menú (606911f4), por el porqué de
-arriba; `git blame` no mostró otra razón.
+The command had been greyed out since the menu was born (606911f4), for the
+why above; `git blame` showed no other reason.
 
-## Qué se hizo
+## What was done
 
-- `tools/port/fin_del_juego.py` dibuja la pantalla con las reglas de
-  `Scene_End` —`ventana.ventana`, `ventana.cursor` y `dibujar_linea`, las de
-  las otras ventanas— y la convierte: **una sola imagen de tiles y tilemap
-  para las dos órdenes, con un índice de paleta por par de colores** (con la
-  barra en "Yes", con la barra en "No"). Mover el cursor es subir la otra
-  paleta de 16 colores en el vblank. La letra va a 6 pixeles, como en RM2k:
-  no es la de a una letra por celda de la pantalla de ítems, porque son tres
-  palabras fijas.
-- Va en BG2, sobre `RANURA_VRAM` y `RANURA_MAP`, que es lo que ya escribe el
-  menú: al volver, `menu_subir` los rearma y el mapa vuelve sin nada nuevo.
-- `rom/src/fin_del_juego.s`, en el banco 1: arriba y abajo cambian de orden,
-  B y "No" vuelven con `rtl`, y "Yes" funde el tema como un `FadeOutBGM` de
-  400 ms —con la guarda de `op_fade_bgm`—, funde la pantalla en 20 cuadros,
-  espera que el tema termine, lo calla (y la pista del MSU-1) y salta a
-  `reset`, igual que la salida de la pantalla de Game Over. El reset es el
-  arranque entero: música, paletas y RAM como al encender.
-- En el menú, `MENU_FIN` entra en `MENU_HECHAS` y `menu_pantalla` hace el
-  `jsl`; al volver, el cursor queda en End Game. El banco 0 gasta 15 bytes
-  (`just espacio release`: de 205 a 190 libres).
-- Lo que sigue distinto está en
+- `tools/port/fin_del_juego.py` draws the screen with `Scene_End`'s rules
+  —`ventana.ventana`, `ventana.cursor` and `dibujar_linea`, the ones of the
+  other windows— and converts it: **a single image of tiles and tilemap for
+  both commands, with one palette index per pair of colours** (with the bar
+  on "Yes", with the bar on "No"). Moving the cursor is uploading the other
+  16-colour palette in vblank. The letters go at 6 pixels, as in RM2k: it is
+  not the one-letter-per-cell font of the items screen, because they are
+  three fixed words.
+- It goes on BG2, over `RANURA_VRAM` and `RANURA_MAP`, which is what the
+  menu already writes: on returning, `menu_subir` rebuilds them and the map
+  comes back with nothing new.
+- `rom/src/fin_del_juego.s`, in bank 1: up and down switch command, B and
+  "No" return with `rtl`, and "Yes" fades the theme like a 400 ms
+  `FadeOutBGM` —with `op_fade_bgm`'s guard—, fades the screen in 20 frames,
+  waits for the theme to finish, silences it (and the MSU-1 track) and
+  jumps to `reset`, same as the Game Over screen's exit. The reset is the
+  whole boot: music, palettes and RAM as on power-up.
+- In the menu, `MENU_FIN` enters `MENU_HECHAS` and `menu_pantalla` does the
+  `jsl`; on returning, the cursor stays on End Game. Bank 0 spends 15 bytes
+  (`just espacio release`: from 205 to 190 free).
+- What is still different is in
   `workflow/divergencias/lo-que-la-pantalla-de-end-game-no-modela.md`.
 
-## Pruebas
+## Tests
 
-- `pruebas/rpgmaker/test_fin_del_juego.py`: la pantalla contra
-  `fin_del_juego.render` en las dos órdenes y dando la vuelta; "No" y B
-  vuelven al menú —contra `render_menu` con el cursor en End Game— sin que
-  corra el reloj; "Yes", sobre el mapa 21 con su tema sonando, prende el
-  fundido del tema, reinicia, llega a la golden `titulo`, y "Begin the Story"
-  vuelve a arrancar el juego.
-- Goldens nuevas `fin` y `fin-no` (`test_menu_golden.py`). Cambian `menu`,
-  `menu-2` y `menu-grupo`: End Game ya no va en gris. Lado a lado con el
-  original en `/shared/capturas/2026-09-28-end-game/`.
-- Los techos de la música se volvieron a medir (`just techos`): el cambio de
-  la ROM hizo recortar a `dcbest`, como la prueba avisa que puede pasar.
-- Lo que ninguna prueba mira: que el fundido del tema **se oiga**, y la
-  pista del MSU-1 callándose. La prueba mira que el fundido se prenda.
+- `pruebas/rpgmaker/test_fin_del_juego.py`: the screen against
+  `fin_del_juego.render` on both commands and wrapping around; "No" and B
+  return to the menu —against `render_menu` with the cursor on End Game—
+  without the clock running; "Yes", on map 21 with its theme playing, starts
+  the theme fade, resets, reaches the `titulo` golden, and "Begin the Story"
+  starts the game again.
+- New goldens `fin` and `fin-no` (`test_menu_golden.py`). `menu`, `menu-2`
+  and `menu-grupo` change: End Game is no longer greyed out. Side by side
+  with the original in `/shared/capturas/2026-09-28-end-game/`.
+- The music ceilings were measured again (`just techos`): the ROM change
+  made `dcbest` clip, as the test warns may happen.
+- What no test looks at: that the theme fade **can be heard**, and the
+  MSU-1 track going silent. The test checks that the fade starts.
 
-## Qué tiene que probar taro
+## What taro has to test
 
-- Menú, End Game: la pregunta y "Yes"/"No" en ventanas, con la barra roja en
-  "Yes". Arriba y abajo la mueven.
-- "No", y B: de vuelta al menú con el cursor en End Game; al cerrar el menú,
-  el mapa como estaba.
-- "Yes" con música sonando: la pantalla y el tema se funden y aparece el
-  título con su tema; "Begin the Story" empieza de cero y "Resume the Story"
-  carga la partida. Con y sin MSU-1.
+- Menu, End Game: the question and "Yes"/"No" in windows, with the red bar
+  on "Yes". Up and down move it.
+- "No", and B: back to the menu with the cursor on End Game; on closing the
+  menu, the map as it was.
+- "Yes" with music playing: the screen and the theme fade and the title
+  appears with its theme; "Begin the Story" starts from scratch and "Resume
+  the Story" loads the save. With and without MSU-1.
 
-# Probado
+# Tested
 
-taro, el 2026-09-28: anda perfectamente, con y sin MSU-1.
+taro, on 2026-09-28: works perfectly, with and without MSU-1.

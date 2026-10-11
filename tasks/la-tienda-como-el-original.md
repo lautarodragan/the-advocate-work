@@ -1,220 +1,223 @@
 ---
-name: "La tienda como el original"
-description: "Las ventanas del System y la barra roja de cursor, como ya tienen ítems y equipo, llevadas a la tienda"
+name: "The shop like the original"
+description: "The System's windows and the red cursor bar, as items and equipment already have them, brought to the shop"
 type: feature
 status: done
 assignee: taro
 ---
 
-Nació el 2026-09-28, cuando taro aprobó la pantalla de equipo, para dejar
-escrito lo de la VRAM que está más abajo. Es lo que sigue después de ítems y
-equipo. taro la pidió el 2026-09-28: "vamos con la tienda". Hoy la tienda sigue sobre negro y con el ">" (`EQ_CURSOR`
-sigue existiendo por ella). La pantalla es `rom/src/tienda.s`, y la
-referencia es `pantallas.pantalla_tienda`.
+It was born on 2026-09-28, when taro approved the equipment screen, to write
+down the VRAM matter below. It's what comes after items and equipment. taro
+asked for it on 2026-09-28: "let's go with the shop". Today the shop is still
+on black and with the ">" (`EQ_CURSOR` still exists because of it). The
+screen is `rom/src/tienda.s`, and the reference is
+`pantallas.pantalla_tienda`.
 
-Lo hecho hasta ahora, que es de donde sale el mecanismo:
-`la-pantalla-de-items-como-el-original.md` (Jacarandá) y
-`la-pantalla-de-equipo-como-el-original.md` (Ñandú). Las dos arman
-las ventanas en BG1 detrás del texto de BG2, comparten tiles y colores
-(`titulo.marcos`), y cada una sube su tilemap. Falta capturar el original
-de la tienda con Wine, como se hizo para las otras dos.
+What has been done so far, which is where the mechanism comes from:
+`la-pantalla-de-items-como-el-original.md` (Jacarandá) and
+`la-pantalla-de-equipo-como-el-original.md` (Ñandú). Both build the windows
+in BG1 behind BG2's text, share tiles and colours (`titulo.marcos`), and each
+uploads its tilemap. The original shop still has to be captured with Wine, as
+was done for the other two.
 
-## Los tiles de las ventanas ya no entran donde están
+## The windows' tiles no longer fit where they are
 
-Los de ítems y equipo, que son 24 de 8bpp, van en la misma base que la
-fuente (BG1 y BG2 arrancan en `$2000`) y detrás de ella. Con la fuente de
-336 tiles de 4bpp llegan **justo** a `$3800`, donde empieza el tilemap de
-BG1: no queda ni un tile libre. Unas ventanas para la tienda no van a entrar
-ahí salvo que compartan todos los tiles con las de las otras dos
-pantallas. El conversor lo controla en `_controlar_marco_de_items`.
+The items and equipment ones, which are 24 at 8bpp, go in the same base as
+the font (BG1 and BG2 start at `$2000`) and after it. With the font's 336
+tiles at 4bpp they reach **exactly** `$3800`, where BG1's tilemap starts: not
+a single tile is left free. Windows for the shop won't fit there unless they
+share all their tiles with the other two screens'. The converter checks it in
+`_controlar_marco_de_items`.
 
-No es un problema de que vivan en VRAM todo el tiempo, porque no viven ahí:
-se suben al abrir la pantalla, y al cerrar `volver_al_mapa` repone el mapa
-con `load_map`. La regla es que el menú sólo escriba en el banco de BG1 que
-`load_map` repone (`_controlar_ranuras`). Así, cerrar el menú no cuesta
-nada más que eso. Si el menú escribiera afuera de ese banco, al cerrar
-habría que reponer lo que pisó, y eso sí se sentiría como un lag.
+It isn't a problem of them living in VRAM all the time, because they don't
+live there: they're uploaded when the screen opens, and on closing
+`volver_al_mapa` restores the map with `load_map`. The rule is that the menu
+only writes in the BG1 bank that `load_map` restores (`_controlar_ranuras`).
+That way, closing the menu costs nothing more than that. If the menu wrote
+outside that bank, on closing what it overwrote would have to be restored,
+and that would feel like lag.
 
-La salida que se charló con taro, **sin medir**: darle a BG1 una base de
-tiles propia (`BG12NBA` deja una por capa, de a 4096 palabras), por ejemplo
-`$4000`, y llevar las ventanas ahí. Según los comentarios de `RANURA_VRAM` en
-`snes_convert.py`, en todos los repartos el banco de BG1 cubre al menos
-`$2000..$4C00`, y el menú usa hasta `$3C00` (el tilemap de las ranuras). Si
-es así, en `$4000..$4C00` entran unos 96 tiles de 8bpp sin tocar la fuente
-y sin nada que reponer al cerrar. Primero hay que medirlo contra los
-repartos de verdad, que es lo que hace el conversor, y no contra el
-comentario.
+The way out discussed with taro, **unmeasured**: give BG1 a tile base of its
+own (`BG12NBA` allows one per layer, in steps of 4096 words), for example
+`$4000`, and take the windows there. According to the comments on
+`RANURA_VRAM` in `snes_convert.py`, in every allocation BG1's bank covers at
+least `$2000..$4C00`, and the menu uses up to `$3C00` (the slots' tilemap).
+If so, some 96 tiles at 8bpp fit in `$4000..$4C00` without touching the font
+and with nothing to restore on closing. First it has to be measured against
+the real allocations, which is what the converter does, and not against the
+comment.
 
-## Medido el 2026-09-28, con la elección de actor
+## Measured on 2026-09-28, with the actor choice
 
-La elección de actor (`la-eleccion-de-actor-como-el-original.md`)
-ya usa esa salida: BG1 con base en `$4000`, 60 tiles de 8bpp y su tilemap
-en `$4800`. Medido contra los repartos (`_controlar_objetivo`): el banco de
-BG1 más chico es el de `VENTANA_FONDO`, `$1000..$4C00`; todos los demás
-llegan por lo menos a `$5000`. O sea que `$4000..$4C00` está siempre
-adentro. Para la tienda:
+The actor choice (`la-eleccion-de-actor-como-el-original.md`) already uses
+that way out: BG1 with its base at `$4000`, 60 tiles at 8bpp and its tilemap
+at `$4800`. Measured against the allocations (`_controlar_objetivo`): the
+smallest BG1 bank is `VENTANA_FONDO`'s, `$1000..$4C00`; all the others reach
+at least `$5000`. So `$4000..$4C00` is always inside. For the shop:
 
-- Con el tilemap de BG1 donde lo tienen ítems y equipo (`$3800`), toda la
-  zona de `$4000..$4C00` queda para tiles: **96 de 8bpp**.
-- Con el tilemap ahí mismo, como la elección, **64**.
-- Las dos pantallas no se abren a la vez que la elección, así que pueden
-  pisarse. Las ventanas de ítems y equipo (24 tiles) también podrían mudarse
-  ahí, y eso devolvería los 24 a la fuente.
+- With BG1's tilemap where items and equipment have it (`$3800`), the whole
+  `$4000..$4C00` area is left for tiles: **96 at 8bpp**.
+- With the tilemap right there, like the choice, **64**.
+- The two screens aren't opened at the same time as the choice, so they can
+  overlap. The items and equipment windows (24 tiles) could also move there,
+  and that would give the 24 back to the font.
 
-## Qué hace el original
+## What the original does
 
-Capturado el 2026-09-28 con el RPG_RT de 2015 y Wine, a 320x240, sobre una
-copia del juego cuyo mapa 4 arranca con Kersh y Core, ítems, mil de oro y un
-`OpenShop` de tipo 0 con armas, armaduras, un casco, medicinas y un material.
-Las capturas están en `/shared/capturas/2026-09-28-tienda/original-*.png`, y
-se contrastaron con `Scene_Shop` y `Window_Shop*` de easyrpg.
+Captured on 2026-09-28 with the 2015 RPG_RT and Wine, at 320x240, on a copy
+of the game whose map 4 starts with Kersh and Core, items, a thousand gold
+and a type-0 `OpenShop` with weapons, armour, a helmet, medicines and a
+material. The captures are in `/shared/capturas/2026-09-28-tienda/original-*.png`,
+and were checked against easyrpg's `Scene_Shop` and `Window_Shop*`.
 
-- **La principal**: la ayuda arriba (32 de alto) vacía, el medio (128) una
-  ventana vacía, y abajo la del mensaje (80) con el saludo y debajo las tres
-  órdenes, 16 pixeles más adentro. La barra cruza la ventana (x = 11 a 308).
-- **Comprar**: la ayuda con la descripción de lo que marca el cursor; a la
-  izquierda la lista (184 de ancho, siete filas) con el nombre y el precio, en
-  gris lo que no alcanza; a la derecha, una encima de la otra, el grupo (48),
-  "Owned Items" y "Equipped Items" en rojo con sus cuentas (48), y el oro con
-  la moneda en rojo (32); abajo el mensaje, de un renglón.
-- **El grupo** son los charsets de cada uno, de frente: caminando y en color
-  si puede equiparlo, quietos y en gris (`Tone(128,128,128)`) si no, y al
-  lado una flecha del System —azul si sube, roja si baja, un punto si queda
-  igual, una "E" si ya lo tiene puesto—. Con una medicina, en color y sin
-  flecha.
-- **La cantidad**: la ventana de la lista se vuelve una con el ítem, "x" y la
-  cantidad —con una barra chiquita sobre las cifras— y el total con la moneda
-  en rojo debajo. El grupo, la cuenta y el oro siguen.
-- **Los "listo"** ("Done", "Thanks."): la ventana de la lista vacía, lo demás
-  igual.
-- **Vender**: la lista a lo ancho, en dos columnas, sin la columna de la
-  derecha; la cantidad de vender es como la de comprar, con el grupo.
+- **The main one**: the help at the top (32 high) empty, the middle (128) an
+  empty window, and at the bottom the message one (80) with the greeting and
+  below it the three commands, 16 pixels further in. The bar crosses the
+  window (x = 11 to 308).
+- **Buy**: the help with the description of what the cursor marks; on the
+  left the list (184 wide, seven rows) with the name and the price, in grey
+  what can't be afforded; on the right, one above the other, the party (48),
+  "Owned Items" and "Equipped Items" in red with their counts (48), and the
+  gold with the currency in red (32); at the bottom the message, one line.
+- **The party** is each member's charset, facing front: walking and in colour
+  if they can equip it, still and in grey (`Tone(128,128,128)`) if not, and
+  next to it an arrow from the System —blue if it goes up, red if it goes
+  down, a dot if it stays the same, an "E" if they already have it on—. With
+  a medicine, in colour and without an arrow.
+- **The quantity**: the list window becomes one with the item, "x" and the
+  quantity —with a tiny bar over the digits— and the total with the currency
+  in red below. The party, the count and the gold remain.
+- **The "done" ones** ("Done", "Thanks."): the list window empty, the rest
+  the same.
+- **Sell**: the list across the full width, in two columns, without the
+  right-hand column; the sell quantity is like the buy one, with the party.
 
-## Qué difería en la ROM
+## What differed in the ROM
 
-Todo sobre negro, el ">" como cursor, el mensaje arriba donde RM2k pone la
-ayuda —sin descripción—, el oro, la cuenta y la lista en una sola columna, y
-los términos en blanco.
+Everything on black, the ">" as cursor, the message at the top where RM2k
+puts the help —without description—, the gold, the count and the list in a
+single column, and the terms in white.
 
-## Qué se hizo
+## What was done
 
-- **Tres distribuciones** (`pantallas.TI_CAPAS`), que comparten la ayuda
-  de arriba (48, dos renglones, como en ítems):
-  - la principal: el medio vacío (80) y abajo el mensaje (96) con el saludo
-    y las órdenes pegadas debajo, como RM2k;
-  - la de comprar, que usan también las dos cantidades y los dos "listo": la
-    lista (96, cinco filas) o la cantidad; debajo, lado a lado, "Owned
-    Items" y "Equipped Items" en rojo con sus cuentas (152 de ancho) y el oro
-    con la moneda en rojo (104), que es la columna de la derecha de RM2k
-    bajada; y el mensaje de un renglón (32);
-  - la de vender: la lista (144, ocho filas) y el mensaje.
-- **La ayuda muestra la descripción** de lo que marca el cursor, y el
-  mensaje del tendero bajó a su ventana, como en RM2k. Antes el mensaje iba
-  arriba y la descripción no estaba.
-- **Los "listo" dejan la ventana del medio vacía**, como RM2k: antes
-  mostraban la lista.
-- **La barra** en lugar del ">": sobre la orden —de x = 12 hasta donde las
-  otras—, sobre la fila de la lista —la del equipo, de x = 4 a 244— y sobre
-  las dos cifras de la cantidad, como la barrita de RM2k.
-- **Un saludo de dos renglones baja las órdenes uno.** El resaludo de los
-  juegos de mensajes 1 y 2 mide 31 y 32 letras ("Are you going to buy
-  something?", "I dont have all day you know!!!!") y en un renglón entran
-  30; la ventana de abajo tiene lugar para ese caso, y con un saludo de un
-  renglón las órdenes suben, pegadas al mensaje como en RM2k. Los demás
-  mensajes miden 26 a lo sumo, y el conversor comprueba que entren en uno.
-- **Las ventanas en BG1 con su propia base, `$4000`**, y el tilemap en
-  `$3800`, donde el de ítems y equipo. Son **39 tiles** de 8bpp de los 96
-  que entran, y **4 colores**, en la CGRAM 64..67 —donde los de ítems—.
-  `_controlar_tienda` comprueba contra los repartos que caigan en lo que
-  `load_map` repone; `tienda-120` y `tienda-200`, que miran el mapa después
-  de cerrar la tienda, no cambiaron.
-- **Lo que se guarda es poco** (`pantallas.tienda_compacta`): las tres capas
-  como tramos de filas, sin repetir un tramo que ya está guardado —16 filas
-  de tilemap para las tres, 1024 bytes—, y cada barra sólo en el rectángulo
-  que cambia, sin repetir los iguales: 628 bytes para las 18 posiciones.
-- **Cada cuadro se repone todo**, como en el equipo (`ti_ventanas`): las
-  filas de la capa del modo debajo de la ayuda, 1408 bytes, y encima la
-  barra. Con los 1792 del texto son unos 3,3 KB por vblank; calculado, unas
-  veintisiete de sus treinta y siete líneas. En bsnes, que no deja escribir
-  la VRAM fuera del vblank, las veintidós pantallas de las pruebas salieron
-  pixel por pixel iguales a la referencia.
-- `items_ppu_prender` sigue de largo en `pantalla_ppu_prender`, que recibe
-  `BG12NBA` en A: la tienda le pasa la base propia de BG1.
-- El código nuevo va en el banco 1 (`tienda.s`); el banco 0 no cambió.
-- `EQ_CURSOR` y `PANT_NOMBRE` se fueron en su propio commit: el ">" y la
-  columna de los nombres de ítems en esta pantalla quedaban sólo por la
-  tienda. Las ROMs salieron byte por byte iguales.
+- **Three layouts** (`pantallas.TI_CAPAS`), which share the help at the top
+  (48, two lines, as in items):
+  - the main one: the middle empty (80) and at the bottom the message (96)
+    with the greeting and the commands right below, like RM2k;
+  - the buy one, which the two quantities and the two "done" ones also use:
+    the list (96, five rows) or the quantity; below, side by side, "Owned
+    Items" and "Equipped Items" in red with their counts (152 wide) and the
+    gold with the currency in red (104), which is RM2k's right-hand column
+    moved down; and the one-line message (32);
+  - the sell one: the list (144, eight rows) and the message.
+- **The help shows the description** of what the cursor marks, and the
+  shopkeeper's message moved down to its window, as in RM2k. Before, the
+  message went at the top and the description wasn't there.
+- **The "done" ones leave the middle window empty**, like RM2k: before, they
+  showed the list.
+- **The bar** instead of the ">": over the command —from x = 12 to where the
+  others are—, over the list's row —the equipment one, from x = 4 to 244— and
+  over the quantity's two digits, like RM2k's little bar.
+- **A two-line greeting moves the commands down one.** The re-greeting of
+  message sets 1 and 2 is 31 and 32 letters long ("Are you going to buy
+  something?", "I dont have all day you know!!!!") and 30 fit in a line; the
+  bottom window has room for that case, and with a one-line greeting the
+  commands move up, right under the message as in RM2k. The other messages
+  are 26 at most, and the converter checks that they fit in one.
+- **The windows in BG1 with their own base, `$4000`**, and the tilemap at
+  `$3800`, where the items and equipment one is. That's **39 tiles** at 8bpp
+  of the 96 that fit, and **4 colours**, in CGRAM 64..67 —where the items
+  ones are—. `_controlar_tienda` checks against the allocations that they
+  fall in what `load_map` restores; `tienda-120` and `tienda-200`, which look
+  at the map after closing the shop, didn't change.
+- **What's stored is little** (`pantallas.tienda_compacta`): the three layers
+  as runs of rows, without repeating a run that's already stored —16 tilemap
+  rows for the three, 1024 bytes—, and each bar only in the rectangle that
+  changes, without repeating identical ones: 628 bytes for the 18 positions.
+- **Every frame everything is restored**, as in equipment (`ti_ventanas`):
+  the rows of the mode's layer below the help, 1408 bytes, and the bar on
+  top. With the text's 1792 that's some 3.3 KB per vblank; calculated, some
+  twenty-seven of its thirty-seven lines. In bsnes, which doesn't allow
+  writing VRAM outside vblank, the twenty-two screens of the tests came out
+  pixel for pixel identical to the reference.
+- `items_ppu_prender` falls through into `pantalla_ppu_prender`, which
+  receives `BG12NBA` in A: the shop passes it BG1's own base.
+- The new code goes in bank 1 (`tienda.s`); bank 0 didn't change.
+- `EQ_CURSOR` and `PANT_NOMBRE` went in their own commit: the ">" and the
+  item-name column in this screen remained only because of the shop. The
+  ROMs came out byte-for-byte identical.
 
-## Qué no entra
+## What doesn't fit
 
-- **La lista y la columna de la derecha, lado a lado**: con letras de 8
-  pixeles un nombre de veinte letras con su precio son 26 celdas y "Equipped
-  Items" con su cuenta 17; con los cuatro de marco son 47, y la pantalla tiene
-  32. La columna baja, entre la lista y el mensaje.
-- **La lista de siete filas**: debajo de la ayuda (48), la cuenta y el oro
-  (48) y el mensaje (32), quedan 96: cinco filas. La de vender, que no tiene
-  la cuenta, tiene ocho. Las dos columnas de vender, por lo mismo que en
-  ítems: una.
-- **El grupo, con sus sprites y sus flechas**: no tiene dónde ir en esta
-  distribución sin sacarle filas a la lista —la ventana de RM2k mide 136 por
-  48—, y es un trabajo aparte de las ventanas: los charsets de cada uno del
-  grupo como sprites, de frente, caminando en tres cuadros, una versión en
-  gris de cada uno para el que no puede equiparlo, y las cuatro flechas del
-  System —de 8x8, en cuatro cuadros— con la cuenta de `CmpEquip`. Queda como
-  divergencia declarada; si taro lo quiere, es una tarea propia.
-- **Las flechitas de la lista** que dicen que hay más arriba o abajo: la de
-  ítems tampoco las tiene.
-- **La ayuda de un renglón** y la fuente a 6 pixeles: como en ítems y
-  equipo, ya declarado.
-- **El mensaje del juego 0 arranca un espacio más adentro** en RM2k ("
-  What do you want to buy?"): partir los renglones se come el espacio, como
-  ya era.
+- **The list and the right-hand column, side by side**: with 8-pixel letters
+  a twenty-letter name with its price is 26 cells and "Equipped Items" with
+  its count 17; with the four of the frame that's 47, and the screen has 32.
+  The column moves down, between the list and the message.
+- **The seven-row list**: below the help (48), the count and the gold (48)
+  and the message (32), 96 remain: five rows. The sell one, which doesn't
+  have the count, has eight. The two sell columns, for the same reason as in
+  items: one.
+- **The party, with its sprites and its arrows**: it has nowhere to go in
+  this layout without taking rows from the list —RM2k's window is 136 by
+  48—, and it's a separate job from the windows: each party member's charset
+  as sprites, facing front, walking in three frames, a grey version of each
+  for the one who can't equip it, and the System's four arrows —8x8, in four
+  frames— with the `CmpEquip` computation. It stays as a declared divergence;
+  if taro wants it, it's a task of its own.
+- **The list's little arrows** saying there's more above or below: the items
+  one doesn't have them either.
+- **The one-line help** and the font at 6 pixels: as in items and
+  equipment, already declared.
+- **Set 0's message starts one space further in** in RM2k ("
+  What do you want to buy?"): splitting the lines eats the space, as it
+  already did.
 
-## Pruebas
+## Tests
 
-- `test_tienda_dibujo.py` compara cada modo contra `pantalla_tienda`, que
-  ahora dibuja las ventanas y la barra (`Texto.ventanas`). Con dos pruebas
-  nuevas, entre las tres la barra pasa por cada lugar con un parche distinto
-  —la última fila de cada lista y la última orden, que cruzan la franja del
-  fondo—:
-  - el de armas (EV0021), como estaba: cada modo una vez;
-  - nueva, el de armaduras (EV0023, juego 1): el resaludo de dos renglones con
-    la barra en Leave, vender con diez ítems y la lista corrida, la cantidad
-    de vender y "vendido";
-  - nueva, el de repuestos (EV0025 con el switch 150): once ítems, la barra
-    en la quinta fila y la lista corrida.
-- **Goldens nuevas**, diez, de la ROM en esos mismos estados:
+- `test_tienda_dibujo.py` compares each mode against `pantalla_tienda`, which
+  now draws the windows and the bar (`Texto.ventanas`). With two new tests,
+  among the three the bar passes through every place with a different patch
+  —the last row of each list and the last command, which cross the
+  background's band—:
+  - the weapons one (EV0021), as it was: each mode once;
+  - new, the armour one (EV0023, set 1): the two-line re-greeting with the
+    bar on Leave, selling with ten items and the list scrolled, the sell
+    quantity and "sold";
+  - new, the spare parts one (EV0025 with switch 150): eleven items, the bar
+    on the fifth row and the list scrolled.
+- **New goldens**, ten, from the ROM in those same states:
   `tienda-principal`, `tienda-comprar-2`, `tienda-cuantos-2`,
   `tienda-comprado`, `tienda-vender`, `tienda-armaduras-resaludo-salir`,
   `tienda-armaduras-vender-corrida`, `tienda-armaduras-cuantos-venta`,
-  `tienda-armaduras-vendido` y `tienda-repuestos-corrida`. Hasta ahora la
-  tienda no tenía golden de su pantalla, sólo del mapa alrededor, y ésas no
-  cambiaron.
-- Antes, ahora y el original, lado a lado, en
-  `/shared/capturas/2026-09-28-tienda/`, con las goldens del último commit.
-- Verificado con `just cartuchos` y `just pruebas` sobre esta rama, con
-  `main` mergeado —no se había movido—: todo en verde. Ningún tema de música
-  pasó a recortar, así que no hay commit de techos.
-- **Lo que `just pruebas` no corre**: la tienda en bsnes. Se corrió a mano,
-  con las tres pruebas de la tienda apuntadas a bsnes, y las veintidós
-  pantallas salieron iguales a la referencia; es lo que dice que el DMA de
-  cada cuadro entra en el vblank. Tampoco corre una tienda de sólo comprar o
-  de sólo vender (`OpenShop` tipo 1 o 2), que entra derecho a la lista: su
-  camino no cambió, pero la capa sale de la misma tabla.
-- `just espacio`, antes (`main` en `24dc8b6e`) y después: en `release` los
-  huecos de datos pasaron de 13.910 a 9.432 B, el banco 1 de 3.739 a 3.333
-  y el banco 0 quedó en 224; en `test-special`, de 23.213 a 18.735, de 6.243
-  a 5.837 y 1.117. Ningún cartucho usa un banco de datos más.
+  `tienda-armaduras-vendido` and `tienda-repuestos-corrida`. Until now the
+  shop had no golden of its screen, only of the map around it, and those
+  didn't change.
+- Before, now and the original, side by side, in
+  `/shared/capturas/2026-09-28-tienda/`, with the goldens from the last commit.
+- Verified with `just cartuchos` and `just pruebas` on this branch, with
+  `main` merged —it hadn't moved—: all green. No music theme started
+  clipping, so there's no ceilings commit.
+- **What `just pruebas` doesn't run**: the shop in bsnes. It was run by hand,
+  with the three shop tests pointed at bsnes, and the twenty-two screens came
+  out identical to the reference; that's what says each frame's DMA fits in
+  vblank. Nor does it run a buy-only or sell-only shop (`OpenShop` type 1 or
+  2), which goes straight into the list: its path didn't change, but the
+  layer comes out of the same table.
+- `just espacio`, before (`main` at `24dc8b6e`) and after: in `release` the
+  data gaps went from 13,910 to 9,432 B, bank 1 from 3,739 to 3,333 and bank
+  0 stayed at 224; in `test-special`, from 23,213 to 18,735, from 6,243 to
+  5,837 and 1,117. No cartridge uses one more data bank.
 
-## Qué tiene que mirar taro
+## What taro has to look at
 
-- Un tendero: la principal con el saludo abajo y las órdenes debajo, la
-  barra cruzando la ventana; el de armaduras de Lashe City Interiors, que
-  saluda de nuevo en dos renglones al volver con B.
-- Comprar: la descripción arriba, la barra en la lista, "Owned Items",
-  "Equipped Items" y la moneda en rojo; con más de cinco cosas, que la lista
-  se corra con la barra.
-- La cantidad: la barrita sobre las cifras, y "Done" con el medio vacío.
-- Vender, con muchas cosas en el inventario, y "Thanks.".
-- Salir, y el mapa como siempre (BG1 tiene otra base en la tienda y el mapa
-  la repone).
+- A shopkeeper: the main one with the greeting at the bottom and the
+  commands below, the bar crossing the window; the armour one in Lashe City
+  Interiors, which greets again in two lines when coming back with B.
+- Buy: the description at the top, the bar in the list, "Owned Items",
+  "Equipped Items" and the currency in red; with more than five things, that
+  the list scrolls with the bar.
+- The quantity: the little bar over the digits, and "Done" with the middle
+  empty.
+- Sell, with many things in the inventory, and "Thanks.".
+- Leaving, and the map as always (BG1 has another base in the shop and the
+  map restores it).

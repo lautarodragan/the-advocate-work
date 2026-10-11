@@ -1,36 +1,35 @@
 ---
-name: "Efectos de sonido"
-description: "PlaySound suena, con sus muestras en el paquete del mapa"
+name: "Sound effects"
+description: "PlaySound plays, with its samples in the map's package"
 status: done
 ---
 
-### Los efectos de sonido
+### Sound effects
 
-`PlaySound` suena. Compila a `OP_SOUND` con el índice del
-efecto en `sonido_tabla`, que lleva por efecto la muestra, la altura, el
-volumen de cada lado y cuántos cuadros dura: el tempo de RM2k estira la altura
-y la duración, y el paneo baja el lado contrario.
+`PlaySound` plays. It compiles to `OP_SOUND` with the index of the
+effect in `sonido_tabla`, which carries, per effect, the sample, the pitch, the
+volume of each side and how many frames it lasts: RM2k's tempo stretches the pitch
+and the duration, and the panning lowers the opposite side.
 
-Tres decisiones, las tres por la ARAM:
+Three decisions, all three because of the ARAM:
 
-* **Van por mapa**: ver "El paquete de audio de cada mapa", más abajo. Hasta
-  ahí se quedaban con lo que la música dejaba libre, y de los 38 que pide la
-  demo entraban 5.
-* **A 6 kHz y a lo sumo tres cuartos de segundo** —era uno hasta el paquete,
-  que tiene que subirlos en el fundido de cada salto—. Uno más largo repite sus
-  últimos 0,4 s hasta durar lo que dura en RM2k: la lluvia de la apertura son
-  cinco segundos de ruido y así se la oye entera.
-* **El efecto le roba la voz 7 a la música**, que es de percusión. La ROM
-  guarda una sombra de los registros de esa voz que la música escribe
-  (`dsp_musica`), y al terminar el efecto la devuelve tal cual; mientras suena,
-  la música no la toca.
+* **They go per map**: see "Each map's audio package", below. Until
+  then they made do with what the music left free, and of the 38 the
+  demo asks for, 5 fit.
+* **At 6 kHz and at most three quarters of a second** —it was one until the package,
+  which has to upload them during the fade of each jump—. A longer one repeats its
+  last 0.4 s until it lasts what it lasts in RM2k: the rain in the opening is
+  five seconds of noise and that way it is heard whole.
+* **The effect steals voice 7 from the music**, which is percussion. The ROM
+  keeps a shadow of the registers of that voice that the music writes
+  (`dsp_musica`), and when the effect ends it gives it back as it was; while it plays,
+  the music doesn't touch it.
 
-La tanda no mide audio: compara imágenes, y `OP_SOUND` no cuesta un tick. Lo
-que se corrió fue una grabación de la apertura de
-`abl` con el núcleo de libretro, contra la misma ROM con el volumen de
-los efectos en cero: los disparos caen en los cuadros 191, 433 y 576, y en el
-hueco entre el fin del tercero y el siguiente (cuadros 890 a 920) las dos
-salidas son idénticas muestra por muestra. Es decir, la música vuelve entera.
-Si suenan bien lo dice el oído de taro.
+The suite doesn't measure audio: it compares images, and `OP_SOUND` doesn't cost a tick. What
+was run was a recording of `abl`'s opening with the libretro core, against the
+same ROM with the effects' volume at zero: the shots fall on frames 191, 433 and 576, and in the
+gap between the end of the third and the next (frames 890 to 920) the two
+outputs are identical sample by sample. That is, the music comes back whole.
+Whether they sound good is for taro's ear to say.
 
-`play_sound_effect` en las rutas sigue aceptándose sin hacerse.
+`play_sound_effect` in move routes is still accepted without being performed.

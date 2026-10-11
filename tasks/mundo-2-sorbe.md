@@ -1,121 +1,121 @@
 ---
-name: "Mundo 2: Sorbe y la curación"
-description: "El hito 2 de el-mundo-y-lo-que-sigue: el reparto con la capa de encima de 256 tiles, ChangeEncounterSteps, los mapas 69 y 76 a 84 en release, el cartel del 81 y el fin de la demo en la entrada de Tasgarde"
+name: "World 2: Sorbe and the healing"
+description: "Milestone 2 of el-mundo-y-lo-que-sigue: the layout with a 256-tile above layer, ChangeEncounterSteps, maps 69 and 76 to 84 in release, the sign on 81 and the end of the demo at Tasgarde's entrance"
 type: feature
 status: done
 ---
 
-# Qué
+# What
 
-El hito 2 de `el-mundo-y-lo-que-sigue.md`, que tiene todo lo medido
-antes. Sale de `3aac634`, con el hito 1 (`mundo-1-el-66-entra.md`).
+Milestone 2 of `el-mundo-y-lo-que-sigue.md`, which has everything measured
+beforehand. It starts from `3aac634`, with milestone 1 (`mundo-1-el-66-entra.md`).
 
-* **El sexto reparto**, `LAYOUT_VENTANA_ENCIMA`: la base de BG2 en `$5000`,
-  la capa de encima en 256 tiles, 384 de fondo y 384 de sprite, para el 69
-  (329 de fondo, 157 de encima, 283 de sprite). La ventana arranca en el índice
-  256 de BG2 y no en el 128, así que el cartucho lleva un segundo plano de sus
-  celdas, `ventana_celdas_256` (640 B), y `estampar_ventana` elige por la
-  distancia entre la ventana y la base de BG2. `vram_layout` mira ahora
-  también la capa de encima.
-* **`ChangeEncounterSteps`**: OP_ENCOUNTER_STEPS (0x32) lleva el `1 / pasos`
-  y los siete umbrales de las filas, calculados en el conversor. Los umbrales
-  del mapa pasaron a copiarse a la RAM al entrar (`ENC_UMB`, $7E79C0), para
-  que el comando cambie la chance y las filas juntas, como
-  `Encuentros.poner_pasos`. En un mapa sin encuentros no hace nada; cargar
-  otro mapa vuelve a los del mapa.
-* **69 y 76 a 84 en `release`**, por `AGREGADOS`: entre el 66 y el 84 están
-  Yun Town y Drust Camp, que no entran todavía, y el 74, que ya estaba como
-  mapa de prueba.
-* **El cartel "Meanwhile, in Lashe City"** del 81: un fork que cambia el
-  `ShowPicture` de `MeanwhileLashe` por un `ShowMessage` con el mismo texto y
-  saca los `MovePicture`, la espera y el `ErasePicture`. El texto sale de
-  leer la imagen del juego.
-* **El fin de la demo** pasa del 66 ev10 (Sorbe) al 66 ev13 (Tasgarde): el
-  ev10 volvió a ser el del original.
+* **The sixth layout**, `LAYOUT_VENTANA_ENCIMA`: BG2's base at `$5000`,
+  the above layer in 256 tiles, 384 background and 384 sprite, for 69
+  (329 background, 157 above, 283 sprite). The window starts at index
+  256 of BG2 and not at 128, so the cartridge carries a second map of its
+  cells, `ventana_celdas_256` (640 B), and `estampar_ventana` chooses by the
+  distance between the window and BG2's base. `vram_layout` now also looks
+  at the above layer.
+* **`ChangeEncounterSteps`**: OP_ENCOUNTER_STEPS (0x32) carries the `1 / pasos`
+  and the seven thresholds of the rows, computed in the converter. The map's
+  thresholds are now copied to RAM on entering (`ENC_UMB`, $7E79C0), so
+  that the command changes the chance and the rows together, like
+  `Encuentros.poner_pasos`. On a map without encounters it does nothing; loading
+  another map goes back to that map's.
+* **69 and 76 to 84 in `release`**, through `AGREGADOS`: between 66 and 84 are
+  Yun Town and Drust Camp, which don't go in yet, and 74, which was already there as
+  a test map.
+* **The sign "Meanwhile, in Lashe City"** on 81: a fork that replaces the
+  `ShowPicture` of `MeanwhileLashe` with a `ShowMessage` with the same text and
+  removes the `MovePicture`s, the wait and the `ErasePicture`. The text comes from
+  reading the game's image.
+* **The end of the demo** moves from 66 ev10 (Sorbe) to 66 ev13 (Tasgarde):
+  ev10 went back to being the original's.
 
-# Hecho y comprobado
+# Done and checked
 
-* **Ningún mapa que ya estaba cambia de reparto**: con el conversor del
-  primer commit, el `mapdata.inc` de `release` y el de `test-special` salen
-  iguales a los de `3aac634` salvo el bloque nuevo de `ventana_celdas_256`
-  (diff de los dos `.inc`, que traen el registro de cada mapa: reparto,
-  `BG12NBA`, direcciones de la ventana).
-* **El 69 entra en el reparto nuevo** y la ventana sale bien: golden
-  `sorbe-69-mensaje` (`test_sorbe.py`). **Se vio fallar con el error puesto**:
-  forzando a `estampar_ventana` a usar siempre el plano de 128, esa golden
-  difiere en el 26 % de los pixeles.
-* **Todas las páginas disparables de los mapas nuevos compilan** (con
-  `culpables.py` de `mundo-plan`): 69, 76 a 84. En el 66 no compilan siete,
-  las de los destinos que no están (67, 68, 105, 259, 310, 312).
-* **`test_pasos_de_encuentro.py`**, nueva: 10 pasos en el 66 (chance y
-  umbrales), cero en el 66, 10 en el 5 (sin encuentros: no escribe nada), y
-  la vuelta a los 65 del 66 al recargarlo. `test_batalla_golden.py::
-  test_encuentro` cobra que el paso en que sale el encuentro de
-  `test-special` no se movió al leer los umbrales de la RAM.
-* **`test_recorrido_sorbe_golden.py`**, nueva: del mundo (rama de "no" a
-  Wick, el 162, que es la del tobillo) a Sorbe, la vieja y el guardia, la
-  montaña y la pelea con Vago, la curación, la historia y el cartel, la
-  oficina, la fábrica, afuera, el transporte, y el viaje de Dalia hasta el
-  fin de la demo y el título. **La pelea con Vago se gana con los HP del
-  grupo puestos en 999** desde el arnés: Talan en nivel 1 y Arden en 3, que
-  es lo que da una partida nueva, pierden. Sus capturas no están bendecidas.
-* **`test_sorbe.py`**, nueva: goldens de la llegada al 69, al 76 y al 81, con
-  `celdas_mal_dibujadas` en cero, y la del mensaje en el 69.
-* **El viaje de Dalia termina solo en el fin de la demo**, sin caminar: la
-  ruta del auto termina justo sobre la entrada de Tasgarde, y RPG_RT, al dar
-  el último paso de una ruta, la cancela y mira el evento bajo el héroe
-  (`Game_Character::UpdateMovement` y `Game_Player::UpdateMovement` de
-  easyrpg); el evento queda esperando a que termine la página del viaje. La
-  ROM hace lo mismo.
-* **La carrera** termina ahora al entrar a Sorbe Village (el 69).
-* **Al mergear `main`** (los fondos en el MSU-1) quedó en rojo
-  `test_msu_una_pelea_del_mundo_lee_su_terreno_o_el_reemplazo`: llega al 66
-  con `DummyHero` y eso ahora arranca el viaje de Dalia. Prende el 278 y pasa
-  con sus goldens intactas. Y `just techos` por los dos temas nuevos.
-* **`just cartuchos` y `just pruebas` en verde** sobre el árbol mergeado.
+* **No map that was already in changes layout**: with the converter from the
+  first commit, the `mapdata.inc` of `release` and of `test-special` come out
+  the same as `3aac634`'s except for the new block of `ventana_celdas_256`
+  (diff of the two `.inc`s, which carry each map's record: layout,
+  `BG12NBA`, the window's addresses).
+* **69 goes into the new layout** and the window comes out right: golden
+  `sorbe-69-mensaje` (`test_sorbe.py`). **It was seen failing with the bug in place**:
+  forcing `estampar_ventana` to always use the 128 map, that golden
+  differs in 26 % of the pixels.
+* **All triggerable pages of the new maps compile** (with
+  `culpables.py` from `mundo-plan`): 69, 76 to 84. On 66 seven don't compile,
+  those whose destinations aren't in (67, 68, 105, 259, 310, 312).
+* **`test_pasos_de_encuentro.py`**, new: 10 steps on 66 (chance and
+  thresholds), zero on 66, 10 on 5 (without encounters: it writes nothing), and
+  the return to 66's 65 on reloading it. `test_batalla_golden.py::
+  test_encuentro` covers that the step on which `test-special`'s encounter
+  comes up didn't move when reading the thresholds from RAM.
+* **`test_recorrido_sorbe_golden.py`**, new: from the world (the "no" branch to
+  Wick, 162, which is the ankle one) to Sorbe, the old woman and the guard, the
+  mountain and the fight with Vago, the healing, the story and the sign, the
+  office, the factory, outside, the transport, and Dalia's trip up to the
+  end of the demo and the title. **The fight with Vago is won with the party's HP
+  set to 999** from the harness: Talan at level 1 and Arden at 3, which
+  is what a new game gives, lose. Its captures aren't blessed.
+* **`test_sorbe.py`**, new: goldens of the arrival at 69, 76 and 81, with
+  `celdas_mal_dibujadas` at zero, and the one of the message on 69.
+* **Dalia's trip ends by itself at the end of the demo**, without walking: the
+  car's route ends right on Tasgarde's entrance, and RPG_RT, on taking
+  the last step of a route, cancels it and looks at the event under the hero
+  (`Game_Character::UpdateMovement` and `Game_Player::UpdateMovement` of
+  easyrpg); the event waits for the trip's page to finish. The
+  ROM does the same.
+* **The race** now ends on entering Sorbe Village (69).
+* **On merging `main`** (the backgrounds in the MSU-1)
+  `test_msu_una_pelea_del_mundo_lee_su_terreno_o_el_reemplazo` went red: it reaches 66
+  with `DummyHero` and that now starts Dalia's trip. It turns on 278 and passes
+  with its goldens intact. And `just techos` for the two new themes.
+* **`just cartuchos` and `just pruebas` green** on the merged tree.
 
-# Espacio
+# Space
 
-Medido con el método de `AGENTS.md` sobre lo que dejó `just cartuchos`, en el
-árbol mergeado con los fondos en el MSU-1:
+Measured with the method in `AGENTS.md` on what `just cartuchos` left, on the
+merged tree with the backgrounds in the MSU-1:
 
-    release        81,8 %   banco 0 189 B   banco 1 ~7,9 KB   BSS 138   ZEROPAGE 4
-                   último banco de datos $71: quedan doce, del $72 al $7D
-                   textos: 117.016 B de 131.072, sobran 14.056
-    test-special   19,2 %   banco 0 1.033 B banco 1 ~9,8 KB   BSS 138   ZEROPAGE 4
+    release        81,8 %   bank 0 189 B    bank 1 ~7,9 KB    BSS 138   ZEROPAGE 4
+                   last data bank $71: twelve left, from $72 to $7D
+                   texts: 117.016 B of 131.072, 14.056 to spare
+    test-special   19,2 %   bank 0 1.033 B  bank 1 ~9,8 KB    BSS 138   ZEROPAGE 4
 
-Contra el hito 1 (75,6 %, banco 0 261 B, banco 1 8.185 B): el banco 0 perdió
-72 bytes en `release` —las tablas de los diez mapas, más `estampar_ventana` y
-`op_encounter_steps`— y ganó 40 en `test-special`, que no suma mapas. El
-bloque de textos que el plan daba por lleno con el capítulo entero sobra con
-estos mapas.
+Against milestone 1 (75.6 %, bank 0 261 B, bank 1 8,185 B): bank 0 lost
+72 bytes in `release` —the tables of the ten maps, plus `estampar_ventana` and
+`op_encounter_steps`— and gained 40 in `test-special`, which adds no maps. The
+text block that the plan considered full with the whole chapter has room to spare with
+these maps.
 
-# Deuda
+# Debt
 
-* **La pelea en el mundo y la de Vago salen sin fondo.** Es de
-  `todos-los-fondos-en-el-msu-1.md`, que va en paralelo.
-* **El cartel sale en la ventana de siempre**, abajo: el `MessageOptions`
-  del original (transparente y al medio) no lo hace la ROM, igual que en el
-  resto del juego.
-* La rama de Wick (el 164, el tobillo curado por su cirujano) no la juega
-  ninguna prueba: en Sorbe, Vago espera en la puerta de su casa (69 ev18) y
-  lleva directo al 81.
-* Yun Town, Drust Camp y Tangle Forest siguen afuera: sus entradas del mundo
-  no hacen nada.
+* **The battle on the world and Vago's come out without a background.** That belongs to
+  `todos-los-fondos-en-el-msu-1.md`, which goes in parallel.
+* **The sign comes out in the usual window**, at the bottom: the original's `MessageOptions`
+  (transparent and in the middle) isn't done by the ROM, same as in the
+  rest of the game.
+* Wick's branch (164, the ankle healed by his surgeon) isn't played by
+  any test: in Sorbe, Vago waits at the door of his house (69 ev18) and
+  leads straight to 81.
+* Yun Town, Drust Camp and Tangle Forest are still out: their entrances on the world
+  do nothing.
 
-# Qué tiene que probar taro
+# What taro has to test
 
-* Terminar la carrera y la despedida (con el "no" a Wick, que es el tobillo),
-  caminar a Sorbe y entrar.
-* En Sorbe: hablar con la vieja del pozo, y el guardia del camino a la montaña
-  deja pasar. Que los árboles y techos que tapan al héroe (la capa de encima,
-  en el reparto nuevo) se vean bien, y los mensajes también.
-* La montaña: los encuentros al azar, y Vago arriba. **Con el grupo de una
-  partida jugada** —la prueba la gana con los HP en 999—: ¿se le gana?
-* La curación, la historia y el cartel "Meanwhile, in Lashe City" sobre la
-  pantalla negra; la oficina; Dalia en la fábrica y la salida de abajo; el
-  transporte.
-* El viaje en auto por el mundo: sin peleas, y al llegar a Tasgarde el cartel
-  del fin sale solo y vuelve al título.
-* La tienda (79), la posada (78), el spa (77) y el alcalde (80) de Sorbe: no
-  los mira ninguna prueba.
+* Finish the race and the farewell (with the "no" to Wick, which is the ankle),
+  walk to Sorbe and go in.
+* In Sorbe: talk to the old woman at the well, and the guard on the road to the mountain
+  lets you through. That the trees and roofs that cover the hero (the above layer,
+  in the new layout) look right, and the messages too.
+* The mountain: the random encounters, and Vago at the top. **With the party of a
+  played game** —the test wins it with HP at 999—: can he be beaten?
+* The healing, the story and the sign "Meanwhile, in Lashe City" on the
+  black screen; the office; Dalia in the factory and the exit at the bottom; the
+  transport.
+* The car trip across the world: no battles, and on reaching Tasgarde the sign
+  of the end comes out by itself and goes back to the title.
+* Sorbe's shop (79), inn (78), spa (77) and mayor (80): no test
+  looks at them.

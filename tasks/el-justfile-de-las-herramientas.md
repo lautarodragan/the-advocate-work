@@ -1,90 +1,95 @@
 ---
-name: "El justfile de las herramientas"
-description: "Las recetas que son de las herramientas se mudan a tools/justfile; el justfile de la raíz queda para ABL"
+name: "The tools' justfile"
+description: "The recipes that belong to the tools move to tools/justfile; the root justfile is left for ABL"
 type: refactor
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-09-29: el primer paso antes de mover `data/`, `parches/`,
-`pruebas/` y el motor (ver `workflow/decisiones/las-herramientas-se-separan-de-abl.md`).
-Un `tools/justfile` con lo que es de las herramientas, y el de la raíz
-acotado a ABL. Se acerca a tener dos repos sin mover todavía ninguna ruta.
+From taro, on 2026-09-29: the first step before moving `data/`, `parches/`,
+`pruebas/` and the engine (see `workflow/decisiones/las-herramientas-se-separan-de-abl.md`).
+A `tools/justfile` with what belongs to the tools, and the root one
+narrowed to ABL. It gets closer to having two repos without moving any path
+yet.
 
-Lo que va a `tools/justfile`, según lo charlado: `protocolo`,
+What goes to `tools/justfile`, as discussed: `protocolo`,
 `protocolo-pruebas`, `gunter-pruebas`, `ditto-pruebas`,
 `ditto-vuelta-entera`, `voodoo-pruebas`, `lz2-pruebas`, `herramientas`,
-`herramientas-locales`, `_instalar` y `cuales`. Lo que pone el `bin/` local
-adelante en el `PATH` y la guarda se quedan en el de la raíz. También se
-quedan `datos` y `ditto-volcado`, que vuelcan este juego.
+`herramientas-locales`, `_instalar` and `cuales`. What puts the local
+`bin/` at the front of the `PATH` and the guard stay in the root one. `datos`
+and `ditto-volcado`, which dump this game, also stay.
 
-De `pruebas/herramientas/`, sólo se mudan a `tools/` las que no necesitan
-el juego ni una ROM, confirmado prueba por prueba.
+From `pruebas/herramientas/`, only those that need neither the game nor a
+ROM move to `tools/`, confirmed test by test.
 
-## Lo hecho (Espinillo)
+## What was done (Espinillo)
 
-* **`tools/justfile`** con las once recetas de la lista, más
-  `_no_en_el_principal`, que es de `herramientas-locales`. Las rutas pierden
-  el `tools/` porque `just` corre parado en el directorio del `justfile`;
-  lo de afuera se nombra desde ahí: `protocolo` escribe en `../rom/src/`, y
-  el `bin/` local se arma en la raíz (`parent_directory(justfile_directory())`),
-  que es donde lo busca el `PATH` de la raíz. `tools/justfile` pone el mismo
-  `bin/` adelante en su `PATH`, para que `protocolo` use el `protocol` del
-  worktree si se lo está modificando.
-* **La raíz** se queda con el `PATH`, la guarda, `datos` y `ditto-volcado`.
-  No delega en nada.
-* **El comando de la guarda es `just -f tools/justfile herramientas-locales`.**
-  Anda desde la raíz sin que la raíz importe ni delegue, y `-f` corre la
-  receta parada en `tools/`, igual que desde adentro. La otra opción, `cd
-  tools && just …`, dice lo mismo en dos comandos. La guarda queda como la
-  única receta de ABL que nombra `tools/`: la lista de la prueba pasa de
-  nueve a esa sola, y se renombra a `RECETAS_QUE_NOMBRAN_TOOLS`.
-* **Un error de la prueba del grep**, arreglado en su propio commit: una
-  receta con valores por omisión (`datos DIR="data" …:`) no se reconocía, y
-  su comentario quedaba a cuenta de `voodoo-pruebas`, que estaba exceptuada.
-  Por ahí se escapaba un `tools/rpgmaker/lcf.py` en el comentario de `datos`.
+* **`tools/justfile`** with the eleven recipes on the list, plus
+  `_no_en_el_principal`, which belongs to `herramientas-locales`. The paths
+  lose the `tools/` because `just` runs standing in the `justfile`'s
+  directory; what is outside is named from there: `protocolo` writes into
+  `../rom/src/`, and the local `bin/` is built at the root
+  (`parent_directory(justfile_directory())`), which is where the root's
+  `PATH` looks for it. `tools/justfile` puts the same `bin/` at the front of
+  its `PATH`, so that `protocolo` uses the worktree's `protocol` if it is
+  being modified.
+* **The root** keeps the `PATH`, the guard, `datos` and `ditto-volcado`. It
+  delegates to nothing.
+* **The guard's command is `just -f tools/justfile herramientas-locales`.**
+  It works from the root without the root importing or delegating, and `-f`
+  runs the recipe standing in `tools/`, same as from inside. The other
+  option, `cd tools && just …`, says the same in two commands. The guard
+  stays as the only ABL recipe that names `tools/`: the test's list goes
+  from nine to that one alone, and is renamed to
+  `RECETAS_QUE_NOMBRAN_TOOLS`.
+* **A bug in the grep test**, fixed in its own commit: a recipe with default
+  values (`datos DIR="data" …:`) was not recognised, and its comment was
+  counted against `voodoo-pruebas`, which was exempted. Through there a
+  `tools/rpgmaker/lcf.py` in the comment of `datos` slipped by.
 
-### Lo que no cerró del todo
+### What did not fully close
 
-* **`ditto-pruebas` y `ditto-vuelta-entera` siguen sabiendo de ABL**: si no
-  viene `DITTO_CORPUS`, usan `ABL_GAME_DIR`. Las mudé igual, porque son las
-  pruebas de Ditto; pero el corpus es el juego, así que cuando se separen
-  los repos alguien tiene que pasárselo. Una receta de la raíz que lo pase
-  tendría que llamar a `tools/justfile`, que es lo que la raíz no puede.
-* **`tools/justfile` está en castellano**, como el Python de `tools/`: se
-  traduce con él.
+* **`ditto-pruebas` and `ditto-vuelta-entera` still know about ABL**: if
+  `DITTO_CORPUS` does not come, they use `ABL_GAME_DIR`. I moved them
+  anyway, because they are Ditto's tests; but the corpus is the game, so
+  when the repos are split someone has to pass it to them. A root recipe
+  that passes it would have to call `tools/justfile`, which is what the root
+  cannot do.
+* **`tools/justfile` is in Spanish**, like the Python of `tools/`: it gets
+  translated with it.
 
-### `pruebas/herramientas/`: no se movió ninguna
+### `pruebas/herramientas/`: none was moved
 
-* `test_lz2.py` necesita los cartuchos armados (`tanda.cartucho`): se queda.
-* `test_protocolo.py` mezcla: unas corren `protocol --check` y comparan
-  módulos, y otras leen los cartuchos (`tanda`) y el juego (`GAME_DIR`).
-  Habría que partirla.
-* `test_escapes.py` sólo importa `port.eventos` y `port.ventana`: no
-  necesita ni el juego ni una ROM.
-* Sin mirarlas a fondo, tampoco importan la tanda ni el juego
-  `test_temas_heredados.py`, `test_sustituciones.py` y
-  `test_musica_stream.py`; `test_lideres.py` usa `datos.DEMO`, del arnés.
+* `test_lz2.py` needs the built cartridges (`tanda.cartucho`): it stays.
+* `test_protocolo.py` mixes: some run `protocol --check` and compare
+  modules, and others read the cartridges (`tanda`) and the game
+  (`GAME_DIR`). It would have to be split.
+* `test_escapes.py` only imports `port.eventos` and `port.ventana`: it needs
+  neither the game nor a ROM.
+* Without looking at them in depth, `test_temas_heredados.py`,
+  `test_sustituciones.py` and `test_musica_stream.py` do not import the
+  suite or the game either; `test_lideres.py` uses `datos.DEMO`, from the
+  harness.
 
-No las moví porque no es obvio adónde: `tools/` no tiene carpeta de
-pruebas de Python ni un `pytest.ini` propio, y `tools/justfile` no tiene
-receta que las corra. Hace falta decidir eso primero (¿`tools/pruebas/`?,
-¿en inglés?).
+I did not move them because it is not obvious where to: `tools/` has no
+Python tests folder nor its own `pytest.ini`, and `tools/justfile` has no
+recipe that runs them. That has to be decided first (`tools/pruebas/`?,
+in English?).
 
-### Verificado
+### Verified
 
-* `just --list` de la raíz: 14 recetas de ABL; `just -f tools/justfile
-  --list`: las 10 de las herramientas.
-* `just -f tools/justfile protocolo --check`: los dos al día.
-* `just lz2-pruebas`, parado en `tools/`: 19 pasan. Fue la única
-  compilación de Rust. Las demás `*-pruebas`, `ditto-vuelta-entera` y
-  `herramientas` sólo con `--dry-run`.
-* Sin el `bin/`, `just cartuchos` se niega con el comando nuevo; ese
-  comando lo arma sin compilar Rust, con los symlinks a `tools/` del
-  worktree, y `just cartuchos` anda después. `_no_en_el_principal` sale 1
-  en el checkout principal.
-* `just pruebas` desde la raíz: 973 pasan. `abl.sfc` y `prueba.sfc`
-  rearmados, con el mismo sha256 que antes.
+* `just --list` at the root: 14 ABL recipes; `just -f tools/justfile
+  --list`: the tools' 10.
+* `just -f tools/justfile protocolo --check`: both up to date.
+* `just lz2-pruebas`, standing in `tools/`: 19 pass. It was the only Rust
+  compilation. The other `*-pruebas`, `ditto-vuelta-entera` and
+  `herramientas` only with `--dry-run`.
+* Without the `bin/`, `just cartuchos` refuses with the new command; that
+  command builds it without compiling Rust, with the symlinks to the
+  worktree's `tools/`, and `just cartuchos` works afterwards.
+  `_no_en_el_principal` exits 1 in the main checkout.
+* `just pruebas` from the root: 973 pass. `abl.sfc` and `prueba.sfc`
+  rebuilt, with the same sha256 as before.
 
-**Lo que no**: `herramientas` de verdad contra el global, las `*-pruebas`
-salvo `lz2`, y el host.
+**What not**: `herramientas` for real against the global one, the
+`*-pruebas` except `lz2`, and the host.

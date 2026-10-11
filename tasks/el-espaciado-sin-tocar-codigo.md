@@ -1,158 +1,158 @@
 ---
-name: "El espaciado sin tocar código"
-description: "Que cambiar [text] letter_spacing no pida tocar el motor: el banco del menú calculado y no fijo, y el conversor revisando todo lo que tiene ancho contado; ABL pasa a +1"
+name: "Spacing without touching code"
+description: "Changing [text] letter_spacing should not require touching the engine: the menu's bank computed rather than fixed, and the converter checking everything that has a counted width; ABL moves to +1"
 type: feature
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-10-03, después de probar las tres ROMs de Tordo: "me quedo
-con +1. me gustan todas, igualmente, y me gustaría mantener la perilla". Y
-preguntó si cambiar el espaciado pide tocar código. Hoy sí, en tres lugares
-fijos: el banco del menú (con +1 faltan 2 tiles, con +2 26), los nombres en
-celdas contadas (ranuras, habilidades de la pelea) y el pozo de pares de la
-tienda y la pelea. Ver `tasks/el-espaciado-entre-letras.md`.
+From taro, on 2026-10-03, after trying Tordo's three ROMs: "I'll go
+with +1. I like all of them, anyway, and I'd like to keep the knob". And
+he asked whether changing the spacing requires touching code. Today it does, in three fixed
+places: the menu's bank (with +1 it is 2 tiles short, with +2 26), the names in
+counted cells (slots, battle skills) and the pair pool of the
+shop and the battle. See `tasks/el-espaciado-entre-letras.md`.
 
-## Hecho (Benteveo)
+## Done (Benteveo)
 
-Worktree de las herramientas desde `c66f453f`; ABL en el clon
-`/extras/scratch/benteveo/abl` desde `e700650`, rama `espaciado-1`.
+Tools worktree from `c66f453f`; ABL in the clone
+`/extras/scratch/benteveo/abl` from `e700650`, branch `espaciado-1`.
 
-### El banco del menú
+### The menu's bank
 
-**El tope no se puede subir.** Tordo vio que BG1 queda libre hasta `$4C00`
-en todas las disposiciones, pero entre `$2000` y `$4C00` ya está todo: el
-banco del menú ($2000-$3C00, 448 tiles), su tilemap ($3C00), las ventanas
-de la elección de actor y del menú en BG1 (`TARGET_VRAM`, $4000, 58 de 64
-tiles de 8bpp) y su tilemap ($4800). Aun empacando perfecto, el menú tendría
-460 tiles y con +2 pide 474.
+**The ceiling cannot be raised.** Tordo saw that BG1 is free up to `$4C00`
+in every layout, but between `$2000` and `$4C00` everything is already taken: the
+menu's bank ($2000-$3C00, 448 tiles), its tilemap ($3C00), the windows
+of the actor choice and of the menu on BG1 (`TARGET_VRAM`, $4000, 58 of 64
+8bpp tiles) and their tilemap ($4800). Even packing perfectly, the menu would have
+460 tiles, and with +2 it asks for 474.
 
-Lo que se hizo es que **el menú no pague por lo que no muestra**: los
-encabezados y las filas de las ranuras. Si los nombres no entran con el
-banco en el orden de siempre, `rm2k-snes-screens` lo vuelve a juntar con
-ese texto al final (`slots::Order::MenuFirst`) y el menú y la elección de
-actor componen sus nombres desde donde terminan sus propios tiles
-(`SLOT_MENU_TILES`, `tl_strip_menu`), encima del texto de las ranuras. La
-pantalla de ranuras sube el banco entero cada vez que abre, así que no le
-afecta. Con 0 no se reordena, y el runtime nuevo sólo se arma si
-`SLOT_MENU_TILES` difiere de `SLOT_TILES`: **la ROM con 0 sale byte por
-byte igual** (37dde95f…, verificado).
+What was done is that **the menu doesn't pay for what it doesn't show**: the
+headers and the rows of the slots. If the names don't fit with the
+bank in the usual order, `rm2k-snes-screens` packs it again with
+that text at the end (`slots::Order::MenuFirst`), and the menu and the actor
+choice compose their names from where their own tiles end
+(`SLOT_MENU_TILES`, `tl_strip_menu`), on top of the slots' text. The
+slots screen uploads the whole bank every time it opens, so it is not
+affected. With 0 nothing is reordered, and the new runtime is only built if
+`SLOT_MENU_TILES` differs from `SLOT_TILES`: **the ROM with 0 comes out byte for
+byte the same** (37dde95f…, verified).
 
-    espaciado   banco   el menú muestra   nombres del menú   ranuras
-    +0          314     314                78 de 134          40 de 134
-    +1          355     278                94 de 170          48 de 92
-    +2          368     288                106 de 160         56 de 80
+    spacing     bank    menu shows        menu names         slots
+    +0          314     314                78 of 134          40 of 134
+    +1          355     278                94 of 170          48 of 92
+    +2          368     288                106 of 160         56 of 80
 
-`tl_strip` ya no podía pisar el tilemap: `tl_strip_new` deja el nombre en
-blanco si no entra (`bcs full`). Que no pase lo cuida el conversor, que si
-ni reordenando entra se niega diciendo qué pide cada pantalla.
+`tl_strip` could no longer overwrite the tilemap: `tl_strip_new` leaves the name
+blank if it doesn't fit (`bcs full`). That it doesn't happen is guarded by the converter, which, if
+it doesn't fit even after reordering, refuses, saying what each screen asks for.
 
-### Lo que se corta
+### What gets cut
 
-El conversor avisa —WARNING en `conversor.log`, una línea por lugar, con
-cada nombre, sus pixeles y lo que se ve— y no se niega: la consola corta y
-sigue, como con las otras cosas que el cartucho lleva de menos. Revisa:
+The converter warns —a WARNING in `conversor.log`, one line per place, with
+each name, its pixels and what is shown— and doesn't refuse: the console cuts and
+carries on, as with the other things the cartridge carries less of. It checks:
 
-* `rm2k-snes-screens`: los actores en el menú (13 celdas) y en las ranuras
-  (7), las medicinas en la elección de actor (dos renglones de 11) y el
-  equipo en su pantalla (19).
-* `rm2k-snes-battle`, que ahora recibe la fuente: actores y enemigos (14),
-  habilidades (11), ítems (14) y comandos de habilidad (10).
-* No se revisan la lista de ítems ni la tienda: 20 letras entran en las 24
-  celdas que tienen con cualquier fuente que el motor acepte (una letra
-  avanza 8 a lo sumo).
+* `rm2k-snes-screens`: the actors in the menu (13 cells) and in the slots
+  (7), the medicines in the actor choice (two lines of 11) and the
+  equipment on its screen (19).
+* `rm2k-snes-battle`, which now receives the font: actors and enemies (14),
+  skills (11), items (14) and skill commands (10).
+* The item list and the shop are not checked: 20 letters fit in the 24
+  cells they have with any font the engine accepts (a letter
+  advances 8 at most).
 
-Con ABL:
+With ABL:
 
-    espaciado   ranuras   enemigos   habilidades   ítems de la pelea
+    spacing     slots     enemies    skills        battle items
     +0          3         14         26            0
     +1          3         14         26            0
     +2          3         14         28            4
 
-**Casi todo eso es corte por letras, no por pixeles**, y es de antes de la
-perilla: el cartucho guarda tantas letras como celdas, de cuando una letra
-ocupaba una. "Gang Member" no entra en la ranura con 0 porque tiene 11
-letras y la ranura guarda 7, aunque mida 55 de 56 pixeles; los catorce
-enemigos son nombres de 15 letras o más que entrarían.
+**Almost all of that is a cut by letters, not by pixels**, and it predates the
+knob: the cartridge stores as many letters as cells, from when a letter
+took up one. "Gang Member" doesn't fit in the slot with 0 because it has 11
+letters and the slot stores 7, even though it measures 55 of 56 pixels; the fourteen
+enemies are names of 15 letters or more that would fit.
 
-### Las habilidades
+### The skills
 
-En la pelea el nombre se cortaba en 11 letras: 41 de las habilidades de ABL
-con 0, cuando por pixeles no entran 3 (Tordo contó 6 sobre las 367 de la
-base; el cartucho lleva las que el grupo puede usar). Ahora guarda 13, que
-es lo que deja el registro de una fila de la capa de texto (`TL_RECORD`,
-56 bytes, con las dos columnas); agrandarlo no entra en la RAM. Quedan 26
-cortadas con 0. Eso sí cambia la ROM con 0, y va en su propio commit.
+In battle the name was cut at 11 letters: 41 of ABL's skills
+with 0, when by pixels 3 don't fit (Tordo counted 6 out of the 367 in the
+database; the cartridge carries the ones the party can use). Now it stores 13, which
+is what the record of one row of the text layer allows (`TL_RECORD`,
+56 bytes, with both columns); enlarging it doesn't fit in RAM. 26 remain
+cut with 0. That one does change the ROM with 0, and it goes in its own commit.
 
-Hacerlas entrar todas pediría más celdas (correr el guión y el costo) o un
-registro más grande: no se hizo. La tarea de las seis queda en `todo/`
-con esto anotado.
+Making them all fit would require more cells (moving the dash and the cost) or a
+bigger record: it wasn't done. The task for the six stays in `todo/`
+with this noted.
 
-### El pozo de pares
+### The pair pool
 
-El conversor cuenta lo que piden las listas más cargadas, con los textos
-más anchos que el cartucho puede poner en ellas (`rm2k_snes_text::cells`):
-es una cota, no lo que pasa.
+The converter counts what the most loaded lists ask for, with the widest
+texts the cartridge can put in them (`rm2k_snes_text::cells`):
+it's a bound, not what happens.
 
-    espaciado   tienda   pelea: habilidades   pelea: ítems   (de 191)
+    spacing     shop     battle: skills       battle: items  (of 191)
     +0          142      283                  195
     +1          168      325                  228
     +2          191      350                  255
 
-Y medido en la ROM: la pelea de `batalla` con Talan (actor 14, que puede
-llegar a saber 54 habilidades) sabiéndolas todas, con la lista abierta.
-**Ya con 0 el pozo se agota**: la séptima fila de habilidades sale a medias
-y el primer renglón de los comandos no sale. Con 1 se agota en la sexta.
-Es de antes de la perilla y no se arregló: ver
+And measured in the ROM: the `batalla` battle with Talan (actor 14, who can
+come to know 54 skills) knowing all of them, with the list open.
+**Already with 0 the pool runs out**: the seventh row of skills comes out half drawn
+and the first line of the commands doesn't come out. With 1 it runs out at the sixth.
+It predates the knob and wasn't fixed: see
 `tasks/la-lista-de-habilidades-agota-el-pozo.md`.
 
-### ABL en +1
+### ABL at +1
 
-`rm2k-snes.toml` con `letter_spacing = 1`, y el arnés le pasa la perilla
-del proyecto al modelo de las pantallas (`screen_stage.spacing`), así que
-las `_dibujo` esperan lo que corresponde.
+`rm2k-snes.toml` with `letter_spacing = 1`, and the harness passes the project's
+knob to the screens model (`screen_stage.spacing`), so
+the `_dibujo` tests expect what they should.
 
-**Cambian 106 goldens de la tanda, sólo letras**: miradas todas lado a lado.
-Las cajas que se rearman cortan los renglones en otro lugar, algunas
-descripciones pasan a dos renglones, y la lista de habilidades muestra dos
-letras más de los nombres largos (ése es el cambio de las trece letras).
-Ninguna del recorrido. Se repitió la tanda hasta que no apareció ninguna
-roja nueva: ocho vueltas, por las escenas de varias goldens seguidas.
+**106 goldens of the suite change, letters only**: all looked at side by side.
+The boxes that get rebuilt break lines in a different place, some
+descriptions go to two lines, and the skill list shows two
+more letters of the long names (that's the thirteen-letter change).
+None from the walkthrough. The suite was repeated until no new red one
+appeared: eight rounds, because of the scenes with several goldens in a row.
 
-Dos pruebas miraban un cuadro justo y se corrieron un cuadro con los
-mensajes rearmados; se tocaron las pruebas, no la ROM:
+Two tests looked at one exact frame and shifted by a frame with the
+rebuilt messages; the tests were touched, not the ROM:
 
-* la celebración de la granja miraba las ranuras en un cuadro con la
-  pantalla apagada a mano después del salto —pasa igual con 0, un cuadro
-  antes, que `CADA` no miraba—: `sin_errores` ya no cuenta lo que no se ve;
-* `items-2` capturaba en el cuadro en que llegaba la descripción, que con
-  1 va en dos renglones y llega uno después: ahora mira el 78. La deuda
-  del texto que llega después del cursor crece un cuadro ahí (seis a siete).
+* the farm celebration looked at the slots in a frame with the
+  screen turned off by hand after the jump —the same happens with 0, one frame
+  earlier, which `CADA` didn't look at—: `sin_errores` no longer counts what isn't shown;
+* `items-2` captured in the frame where the description arrived, which with
+  1 goes on two lines and arrives one later: now it looks at 78. The debt
+  of text that arrives after the cursor grows by one frame there (six to seven).
 
-### Verificado
+### Verified
 
-* Con 0, `abl.sfc` sale igual, `37dde95f…`, con los commits del runtime y
-  del conversor. El de las trece letras la cambia a propósito
-  (`2ae0e1b3…` con 0).
-* La tanda de ABL con 1, con `screens`, `mapdata`, `convert`, `battle` y
-  `cartridge` en local: **1045 en verde**. `abl.sfc` con 1: `e765fa06…`.
-* `cargo test` de `text`, `screens`, `mapdata`, `battle` y `convert`, y
+* With 0, `abl.sfc` comes out the same, `37dde95f…`, with the runtime and
+  converter commits. The thirteen-letter one changes it on purpose
+  (`2ae0e1b3…` with 0).
+* ABL's suite with 1, with `screens`, `mapdata`, `convert`, `battle` and
+  `cartridge` local: **1045 green**. `abl.sfc` with 1: `e765fa06…`.
+* `cargo test` of `text`, `screens`, `mapdata`, `battle` and `convert`, and
   `just -f tools/justfile test`: 27.
-* Lo que la tanda **no** cubre: el reordenamiento con 2 (armado y medido,
-  no jugado ni corrida la tanda); la negativa del conversor cuando ni
-  reordenando entra (la cubre la prueba de `screens` con 24 ranuras).
+* What the suite does **not** cover: the reordering with 2 (built and measured,
+  not played nor the suite run); the converter's refusal when it doesn't fit even
+  after reordering (covered by the `screens` test with 24 slots).
 
-## Para taro
+## For taro
 
-Jugar el +1: los mensajes, el menú con el grupo entero, una medicina desde
-el menú (los nombres del menú van ahora encima del texto de las ranuras),
-guardar en una ranura, una tienda y una pelea con habilidades. Las goldens
-lado a lado y las capturas del pozo, en
-`/shared/capturas/2026-10-03-espaciado-1/`, con su LEEME.
+Play the +1: the messages, the menu with the whole party, a medicine from
+the menu (the menu's names now go on top of the slots' text),
+saving to a slot, a shop and a battle with skills. The goldens
+side by side and the captures of the pool, in
+`/shared/capturas/2026-10-03-espaciado-1/`, with its LEEME.
 
-Ramas: herramientas, `worktree-agent-a06268194b190fc7f`; ABL,
-`espaciado-1` del clon `/extras/scratch/benteveo/abl`.
+Branches: tools, `worktree-agent-a06268194b190fc7f`; ABL,
+`espaciado-1` of the clone `/extras/scratch/benteveo/abl`.
 
-Al mergear, reinstalar `screens`, `mapdata`, `convert` y `battle`. `text`
-cambió, pero es biblioteca y va adentro de ésos; el runtime viaja con el
+When merging, reinstall `screens`, `mapdata`, `convert` and `battle`. `text`
+changed, but it's a library and goes inside those; the runtime travels with the
 checkout.

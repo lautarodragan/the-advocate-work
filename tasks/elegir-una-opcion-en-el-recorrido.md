@@ -1,82 +1,85 @@
 ---
-name: "El recorrido elige la opción N"
-description: "Que Recorrido pueda mover el cursor de un ShowChoice antes de confirmar"
+name: "The playthrough picks option N"
+description: "Let Recorrido move a ShowChoice's cursor before confirming"
 type: test
 status: done
 ---
 
-# Qué
+# What
 
-`Recorrido` —`pruebas/arnes/recorrido.py`— sólo confirma un `ShowChoice` con la
-opción de arriba: toca A sin mover el cursor. Hace falta **elegir la opción N**:
-bajar el cursor N veces, comprobar en la RAM que quedó donde se pidió, y recién
-ahí confirmar.
+`Recorrido` —`pruebas/arnes/recorrido.py`— only confirms a `ShowChoice`
+with the top option: it presses A without moving the cursor. We need to
+**pick option N**: move the cursor down N times, check in RAM that it ended
+up where requested, and only then confirm.
 
-Es el hito 0 de `lashe-city-hasta-la-carrera.md` y se puede hacer en paralelo
-con el 1. Sin esto no se puede escribir ningún recorrido de Lashe City con
-auto:
+It is milestone 0 of `lashe-city-hasta-la-carrera.md` and can be done in
+parallel with 1. Without this no Lashe City playthrough with the car can be
+written:
 
-- la elección del 36 es `Sector 32 / 33 / 34 / 35`, y el tramo principal
-  —el 37— es la **cuarta**;
-- el favor de Boss Wick (40, evento 7, página 4) tiene dos elecciones seguidas,
-  y la rama de "Refuse" es la segunda;
-- la cola del auto (36, página 2) es "Stay / We've got to get out of here": la
-  que lleva al límite es la segunda.
+- the choice on 36 is `Sector 32 / 33 / 34 / 35`, and the main stretch
+  —37— is the **fourth**;
+- Boss Wick's favour (40, event 7, page 4) has two choices in a row, and the
+  "Refuse" branch is the second;
+- the car's queue (36, page 2) is "Stay / We've got to get out of here": the
+  one that leads to the limit is the second.
 
-Y destraba `la-otra-rama-de-los-neon-vipers.md`, que se quedó sin hacer
-justamente por esto.
+And it unblocks `la-otra-rama-de-los-neon-vipers.md`, which was left undone
+precisely because of this.
 
-# Lo que ya se sabe
+# What is already known
 
-- **Un toque puede perderse**: la ROM lee el pad una vez por vuelta y una
-  vuelta puede durar varios cuadros. `Recorrido.mirar_a` ya resolvió lo mismo
-  para girar comprobando la RAM; conviene el mismo método (ver
+- **A press can get lost**: the ROM reads the pad once per loop and a loop
+  can last several frames. `Recorrido.mirar_a` already solved the same thing
+  for turning while checking RAM; the same method is advisable (see
   `el-recorrido-de-los-neon-vipers.md`, "Un agujero del arnés").
-- **La ventana ignora el botón mientras se compone**: nada de toques en los
-  primeros treinta cuadros desde que se abre (ver `ESTADO.md`, "Lo que la tanda
-  no cubre").
-- Qué variable de la RAM dice dónde está el cursor: está en el intérprete de
-  `OP_CHOICE`; la tabla de símbolos del cartucho la exporta si tiene nombre.
+- **The window ignores the button while composing**: no presses in the
+  first thirty frames since it opens (see `ESTADO.md`, "Lo que la tanda no
+  cubre").
+- Which RAM variable says where the cursor is: it is in the `OP_CHOICE`
+  interpreter; the cartridge's symbol table exports it if it has a name.
 
-# Hecho es
+# Done means
 
-Una prueba que elige la opción 2 de una elección de dos y comprueba que corrió
-esa rama —en `release` hay candidatos: el guardia del auditorio—, vista en rojo
-con el toque de A sin mover el cursor.
+A test that picks option 2 of a two-option choice and checks that that
+branch ran —in `release` there are candidates: the auditorium guard—, seen
+red with the A press without moving the cursor.
 
 ---
 
-## Al 2026-09-26: hecho
+## As of 2026-09-26: done
 
-**La API**, en `Recorrido`: `elegir(opcion)` espera el próximo `ShowChoice`
-cerrando con A los mensajes de antes, baja el cursor hasta `opcion` —desde
-cero— y confirma. Son dos mitades sueltas, `marcar(opcion)` y `confirmar()`,
-para poder sacarle una foto a la ventana con el cursor puesto.
+**The API**, in `Recorrido`: `elegir(opcion)` waits for the next
+`ShowChoice` closing the earlier messages with A, moves the cursor down to
+`opcion` —from zero— and confirms. They are two separate halves,
+`marcar(opcion)` and `confirmar()`, so as to take a snapshot of the window
+with the cursor in place.
 
-Todo por RAM y ningún cuadro contado:
+Everything through RAM and no frames counted:
 
-- **abierta** es `eleg_activo` y `msg_abierto` juntos, como `abierta` de
-  `test_elegir.py`: `op_choice` prende el primero antes de que la ventana
-  termine de componerse, y `eleccion_tick` no mira el pad hasta el segundo;
-- **el A que cierra los mensajes** se toca sólo con un mensaje abierto y la
-  elección no. Es la trampa de verdad: la paciencia de `esperar` toca A a
-  ciegas, y un toque que cae con la elección recién compuesta se lleva la
-  opción de arriba;
-- **cada toque de abajo se comprueba** en `eleg_sel` y se repite si se perdió;
-  uno que llegó no se repite nunca, porque la ventana mira flancos;
-- **resuelta** es que la ventana deje de estar lista. Si la rama abre otra
-  elección, esa no está compuesta todavía y no se la contesta de paso.
+- **open** is `eleg_activo` and `msg_abierto` together, like `abierta` in
+  `test_elegir.py`: `op_choice` turns on the first before the window
+  finishes composing, and `eleccion_tick` does not look at the pad until the
+  second;
+- **the A that closes the messages** is pressed only with a message open and
+  the choice not. It is the real trap: `esperar`'s patience presses A
+  blindly, and a press that lands with the choice freshly composed takes the
+  top option;
+- **every down press is checked** in `eleg_sel` and repeated if it was lost;
+  one that arrived is never repeated, because the window looks at edges;
+- **resolved** is the window ceasing to be ready. If the branch opens
+  another choice, that one is not composed yet and is not answered in
+  passing.
 
-`activar` sigue tocando A a ciegas después del primer toque, así que antes de
-un `elegir` hay que cortarlo apenas arranca la página:
+`activar` still presses A blindly after the first press, so before an
+`elegir` it has to be cut as soon as the page starts:
 `activar(celda, lambda p: p.corriendo_una_pagina())`.
 
-**La prueba**: `pruebas/abl/test_recorrido_vipers_otras_ramas_golden.py`, que
-juega la rama del "No" de la cinemática del hotplate, las dos opciones de la
-reja y el mapa 14 —ver `la-otra-rama-de-los-neon-vipers.md`—. **Vista en
-rojo** con la opción de arriba en lugar de la segunda: la del "No" termina en
-(44,13) sin el switch 38, que es la rama del "Yes", y la reja con "Climb the
-Fence" en vez de "Don't Bother".
+**The test**: `pruebas/abl/test_recorrido_vipers_otras_ramas_golden.py`,
+which plays the "No" branch of the hotplate cinematic, the two options of
+the fence and map 14 —see `la-otra-rama-de-los-neon-vipers.md`—. **Seen
+red** with the top option instead of the second: the "No" one ends at
+(44,13) without switch 38, which is the "Yes" branch, and the fence with
+"Climb the Fence" instead of "Don't Bother".
 
-Lo del guardia del auditorio no hizo falta: la cinemática de los Neon Vipers
-es una elección de dos donde la segunda rama deja rastro en la RAM.
+The auditorium guard was not needed: the Neon Vipers cinematic is a
+two-option choice where the second branch leaves a trace in RAM.

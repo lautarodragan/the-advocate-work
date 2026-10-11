@@ -1,140 +1,139 @@
 ---
-name: "Lashe 3: la planta de reciclaje y el droide"
-description: "Stash, los pisos que se rompen y AG7-17 entrando al grupo: 57, 59 a 63 y 164"
+name: "Lashe 3: the recycling plant and the droid"
+description: "Stash, the floors that break, and AG7-17 joining the party: 57, 59 to 63 and 164"
 type: feature
 status: done
 assignee: taro
 ---
 
-# Qué
+# What
 
-El hito 3 de `lashe-city-hasta-la-carrera.md` —el contexto y lo medido están
-ahí—. Va después del 1 y en paralelo con el 2.
+Milestone 3 of `lashe-city-hasta-la-carrera.md` —the context and what was measured are
+there—. It comes after 1 and in parallel with 2.
 
-El camino del droide desde el Sector 32 (48): la puerta de Stash, la escena del
-"bald man" que te robó en el Hover-Tram (o del guardia sobornado), la planta de
-reciclaje con los pisos que se rompen, el Motivator Chip, el túnel de vuelta, y
-**AG7-17 entrando al grupo**, con su tutorial. Prende el 150, que es lo que la
-rama sin compañero necesita para irse.
+The droid's path from Sector 32 (48): Stash's door, the scene with the
+"bald man" who robbed you on the Hover-Tram (or with the bribed guard), the recycling
+plant with the floors that break, the Motivator Chip, the tunnel back, and
+**AG7-17 joining the party**, with its tutorial. It turns on 150, which is what the
+branch without a companion needs to leave.
 
-Mapas: **57** (Stash's Emporium), **59** (Outside Recycling Plant), **60**,
-**61** y **62** (los tres pisos), **63** (el túnel) y **164** (el tutorial del
-droide, fuera del subárbol de Lashe City).
+Maps: **57** (Stash's Emporium), **59** (Outside Recycling Plant), **60**,
+**61** and **62** (the three floors), **63** (the tunnel) and **164** (the
+droid's tutorial, outside Lashe City's subtree).
 
 # Status
 
-2026-09-27, en `testing/`: hecho en la rama del agente, con `main` mergeado
-encima del hito 2. Lo que queda es de taro: jugarlo y mirar las fotos sin
-golden de `pruebas/snapshots/playthrough/lashe-planta*/`.
+2026-09-27, in `testing/`: done on the agent's branch, with `main` merged
+on top of milestone 2. What's left is taro's: playing it and looking at the photos without a
+golden in `pruebas/snapshots/playthrough/lashe-planta*/`.
 
-# Lo hecho
+# What was done
 
-**Los siete mapas en `MAPAS_DEL_JUEGO`**, y compilan **todas** sus páginas
-disparables, las dos de la puerta de Stash del 48 incluidas.
+**The seven maps in `MAPAS_DEL_JUEGO`**, and **all** their triggerable pages
+compile, including the two of Stash's door on 48.
 
-**`RecallToLocation` y `MemorizeLocation` son un solo opcode, `OP_LOCATION`**:
-el mismo lugar leído o escrito en tres variables, con un bit de modo. **En las
-variables el mapa es el id de RM2k** —cualquier otra página las lee y las
-escribe: los pisos cargan el 61 con un `ControlVars`—, así que la ROM lo
-traduce con `mapa_rm2k`, una tabla de ids por índice que el conversor emite en
-RODATA (no cuesta banco 0). Saltar es un `Teleport` con el destino leído al
-correr, y la página sigue en el mapa nuevo; a un mapa que el cartucho no lleva
-**no salta y sigue**. Al recordar, el refresco de cada una de las tres
-escrituras va en un bit del modo.
+**`RecallToLocation` and `MemorizeLocation` are a single opcode, `OP_LOCATION`**:
+the same place read or written in three variables, with a mode bit. **In the
+variables the map is the RM2k id** —any other page reads and
+writes them: the floors load 61 with a `ControlVars`—, so the ROM
+translates it with `mapa_rm2k`, a table of ids by index that the converter emits in
+RODATA (it costs no bank 0). Jumping is a `Teleport` with the destination read at
+run time, and the page continues on the new map; to a map the cartridge doesn't carry
+**it doesn't jump and carries on**. When recalling, the refresh of each of the three
+writes goes in a bit of the mode.
 
-**El tema recordado es `OP_MEMORIZED_BGM`**, con el índice en `TEMA_RECORDADO`
-($7E7940, RAM lejana; el reset lo pone en $FF). Poner el que ya suena no lo
-reinicia, como `BgmPlay` con el mismo nombre. No viaja en la partida: los dos
-comandos van siempre en la misma página automática.
+**The memorized theme is `OP_MEMORIZED_BGM`**, with the index in `TEMA_RECORDADO`
+($7E7940, far RAM; reset sets it to $FF). Playing the one already playing doesn't
+restart it, like `BgmPlay` with the same name. It doesn't travel in the save: the two
+commands always go in the same autostart page.
 
-Los cuerpos viven en el banco 1 (`rom/src/lugar_y_tema_recordados.s`) y en el
-0 queda sólo la entrada, como `op_heal`: en el 0 quedaban 342 bytes y los dos
-pedían casi 200. Leen y escriben las variables directo en la RAM lejana.
+The bodies live in bank 1 (`rom/src/lugar_y_tema_recordados.s`) and in
+0 only the entry remains, like `op_heal`: bank 0 had 342 bytes left and the two
+asked for almost 200. They read and write the variables directly in far RAM.
 
-**La ranura de variable pasó a ocho bits.** El juego nombra 127 variables y
-estos dos comandos suman nueve (127-129, 158-160, 169-171): la ranura, que
-llevaba el bit de `VAR_REFRESCO` arriba, no entraba en siete. El bit se mudó al
-byte de banderas de cada opcode que escribe (la operación de OP_VAR, las
-banderas de OP_KEY, el modo de OP_TERRAIN y de OP_LOCATION). Commit aparte, con
-la tanda en verde antes de las variables nuevas. **Una partida guardada con un
-build anterior no carga** (la firma de la partida cambia con las ranuras).
+**The variable slot went to eight bits.** The game names 127 variables and
+these two commands add nine (127-129, 158-160, 169-171): the slot, which
+carried the `VAR_REFRESCO` bit on top, didn't fit in seven. The bit moved to the
+flags byte of each opcode that writes (OP_VAR's operation, OP_KEY's
+flags, the mode of OP_TERRAIN and of OP_LOCATION). Separate commit, with
+the suite green before the new variables. **A game saved with an
+earlier build doesn't load** (the save's signature changes with the slots).
 
-El conversor anota como destino del audio el mapa de un `RecallToLocation`
-cuando la página lo puso con una constante (los pisos); la vuelta del tutorial
-salta a lo que recordó otra página y no se anota.
+The converter records as the audio destination the map of a `RecallToLocation`
+when the page set it with a constant (the floors); the return from the tutorial
+jumps to what another page memorized and isn't recorded.
 
-**AG7-17 entra al grupo sin habilidades**: el evento común 37 (`UpdateAG7
-Skills`) es paralelo y la ROM no corre comunes paralelos. Es del hito 4, que
-tiene que darle las suyas sin que pueda perderlas.
+**AG7-17 joins the party without skills**: common event 37 (`UpdateAG7
+Skills`) is parallel and the ROM doesn't run parallel common events. That's for milestone 4, which
+has to give it its own without it being able to lose them.
 
-# Lo medido
+# What was measured
 
-Todo sobre `release`. **Banco 0**: 342 libres antes del hito, 244 con el hito
-solo, **219 con el hito 2 mergeado**. **Banco 1**: el último símbolo pasó de
-$01:F874 (~1,9 KB libres) a $01:FEA4 (**~350 B libres**, con los dos hitos); la
-mayor parte son las páginas de tropa y las tablas de los encuentros de la
-planta, no el código. **Cartucho**: 2.964.854 B usados, 70,7% de 4 MB (último
-banco $61). BSS y ZEROPAGE sin cambio.
+All on `release`. **Bank 0**: 342 free before the milestone, 244 with the milestone
+alone, **219 with milestone 2 merged**. **Bank 1**: the last symbol went from
+$01:F874 (~1.9 KB free) to $01:FEA4 (**~350 B free**, with both milestones); most
+of it is the troop pages and the plant's encounter tables, not the code. **Cartridge**: 2,964,854 B used, 70.7% of 4 MB (last
+bank $61). BSS and ZEROPAGE unchanged.
 
-**Páginas**: con `medir.py` del plan, 176 de 176 disparables de 48, 57, 59-63 y
-164 compilan (antes 120).
+**Pages**: with the plan's `medir.py`, 176 of 176 triggerable ones of 48, 57, 59-63 and
+164 compile (120 before).
 
-**Cuadros perdidos**, caminando 1200 cuadros de a 50 ida y vuelta (el método de
-`el-mapa-11-se-rediseno.md`), con los encuentros apagados: 0 en 57, 59,
-60, 61, 62 y 63. Los únicos 10 salieron de pisar sin querer el pozo de (15,7)
-del 62 y caer al 60: un teletransporte.
+**Dropped frames**, walking 1200 frames 50 at a time back and forth (the method of
+`el-mapa-11-se-rediseno.md`), with encounters turned off: 0 on 57, 59,
+60, 61, 62 and 63. The only 10 came from accidentally stepping on the hole at (15,7)
+of 62 and falling to 60: a teleport.
 
-**Audio.** `fm2bar_gs` (Stash) entra con todas sus notas y su pista de MSU-1
-salió sola. Contra `main` con el hito 2, par por par (programa, tema) del
-banco compartido: bajan dos, 0,1 kHz (SPACE79 en `TF3_1_awe` y
-`T_ProjectJustice_DiscLoad`). `just techos` rehecho: ningún tema recorta.
+**Audio.** `fm2bar_gs` (Stash) goes in with all its notes and its MSU-1 track
+came out by itself. Against `main` with milestone 2, pair by pair (program, theme) of the
+shared bank: two go down, 0.1 kHz (SPACE79 in `TF3_1_awe` and
+`T_ProjectJustice_DiscLoad`). `just techos` redone: no theme clips.
 
-# Pruebas
+# Tests
 
-`pruebas/rpgmaker/test_lugar_recordado.py`, con cinco casos nuevos:
-`lugar-caer` (el piso del 60 entero: cae al 61 en la celda de las variables y
-la página sigue allá), `lugar-ida-y-vuelta`, `lugar-ausente` (el mapa 999: no
-salta), `tema-recordado` y `tema-recordado-el-mismo` (no reinicia).
-`test_cores.py` suma `lugar-ida-y-vuelta`.
+`pruebas/rpgmaker/test_lugar_recordado.py`, with five new cases:
+`lugar-caer` (the whole floor of 60: it falls to 61 at the variables' cell and
+the page carries on there), `lugar-ida-y-vuelta`, `lugar-ausente` (map 999: it doesn't
+jump), `tema-recordado` and `tema-recordado-el-mismo` (doesn't restart).
+`test_cores.py` adds `lugar-ida-y-vuelta`.
 
-`pruebas/abl/test_recorrido_lashe_planta_golden.py`, sobre `release`:
+`pruebas/abl/test_recorrido_lashe_planta_golden.py`, on `release`:
 
-* `test_stash_la_planta_y_ag7_en_el_grupo`: sin compañero y con el ídolo
-  robado (71). Del 48 a lo de Stash, la escena, la planta, **cuatro caídas**
-  —de la entrada del 60 no se sube sin caer—, el chip, el túnel, la página 5
-  de Stash, lo recordado (48, 3, 39), el tutorial y la vuelta: grupo
-  [Talan, AG7], el 150, sin el chip, el tema de antes sonando.
-* `test_la_escena_de_stash_con_el_soborno`: la página 4 (29), hasta la planta.
+* `test_stash_la_planta_y_ag7_en_el_grupo`: no companion and with the idol
+  stolen (71). From 48 to Stash's, the scene, the plant, **four falls**
+  —from the entrance of 60 you can't go up without falling—, the chip, the tunnel, page 5
+  of Stash, what was memorized (48, 3, 39), the tutorial and the return: party
+  [Talan, AG7], 150, without the chip, the previous theme playing.
+* `test_la_escena_de_stash_con_el_soborno`: page 4 (29), up to the plant.
 * `test_con_arden_la_puerta_de_stash_esta_cerrada`.
 
-Los encuentros al azar de la planta **se apagan** en la prueba (`ENC_BASE` en
-cero al llegar a cada mapa): ninguna prueba del recorrido camina por un área
-con encuentros, y las peleas de la planta son del hito 4.
+The plant's random encounters **are turned off** in the test (`ENC_BASE` at
+zero on reaching each map): no walkthrough test walks through an area
+with encounters, and the plant's battles are milestone 4's.
 
-Fotos sin golden:
+Photos without a golden:
 
-    lashe-planta          la escena de Stash, afuera de la planta, el piso 1,
-                          caído en el piso 0, el cuarto del chip, el túnel, el
-                          tutorial, AG7 en el grupo
-    lashe-planta-soborno  la escena de Stash con el soborno
+    lashe-planta          Stash's scene, outside the plant, floor 1,
+                          fallen onto floor 0, the chip's room, the tunnel, the
+                          tutorial, AG7 in the party
+    lashe-planta-soborno  Stash's scene with the bribe
     lashe-planta-arden    "Looks like they're closed"
 
-Lo que **no** cubren: las páginas 1 y 3 de Stash (créditos y nada), los otros
-pozos del 62 y del 60 —el de (12,10) del 62 encadena dos caídas por una página
-automática del 60—, y las peleas de la planta.
+What they do **not** cover: Stash's pages 1 and 3 (credits and nothing), the other
+holes of 62 and 60 —the one at (12,10) of 62 chains two falls through an autostart
+page of 60—, and the plant's battles.
 
-# Qué tiene que mirar taro jugando
+# What taro has to look at while playing
 
-La escena de Stash según cómo haya ido el tram, los pisos que se rompen y la
-caída (el héroe tiene que bajar desde arriba atravesando, no aparecer), el
-chip, el túnel, el tutorial —el droide en la pantalla negra y el tema que
-sigue sin cortarse— y AG7 en el grupo desde el menú de pausa. Pelear en la
-planta con AG7: sin habilidades, y los enemigos sin la suya. Y que una partida
-de un build anterior no carga.
+Stash's scene depending on how the tram went, the floors that break and the
+fall (the hero has to come down from above passing through, not appear), the
+chip, the tunnel, the tutorial —the droid on the black screen and the theme that
+keeps going without cutting— and AG7 in the party from the pause menu. Fighting in the
+plant with AG7: without skills, and the enemies without theirs. And that a save
+from an earlier build doesn't load.
 
-# Probado
+# Tested
 
-taro, el 2026-09-27, en la SNES con el FX Pak: anduvo todo, incluido el camino
-de vender el Idol, sobornar al guardia y llevar a AG7; la carrera sin lag ni
-bugs (el compañero al volante, también). Queda aparte el héroe negro después
-de cambiar de gráfico en el mismo mapa (HQ de Lazer Teeth, Boss Wick).
+taro, on 2026-09-27, on the SNES with the FX Pak: everything worked, including the path
+of selling the Idol, bribing the guard and taking AG7; the race with no lag nor
+bugs (the companion at the wheel, too). Set aside is the black hero after
+changing graphic on the same map (Lazer Teeth's HQ, Boss Wick).

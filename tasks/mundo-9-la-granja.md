@@ -1,98 +1,100 @@
 ---
-name: "Mundo 9: la celebración en la granja"
-description: "La granja (127) y la arboleda (128) en release: la celebración entra por la caché de ranuras de VRAM, y el fin de la demo pasa a la noche de la celebración"
+name: "World 9: the celebration at the farm"
+description: "The farm (127) and the grove (128) in release: the celebration fits thanks to the VRAM slot cache, and the end of the demo moves to the night of the celebration"
 type: feature
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-10-03, junto con la caché de ranuras de las herramientas
-(`workflow/tasks/*/la-cache-de-ranuras.md` de allá, Yaguareté): "meté el 127
-en release si entra". Entra.
+From taro, on 2026-10-03, together with the tools' slot cache
+(`workflow/tasks/*/la-cache-de-ranuras.md` over there, Yaguareté): "put 127
+in release if it fits". It fits.
 
-Base: ABL `57ef34d`, herramientas `60097b1a`.
+Base: ABL `57ef34d`, tools `60097b1a`.
 
-# Qué mapas, y dónde corta la demo
+# Which maps, and where the demo cuts
 
-    108 "se me hizo tarde": la salida a la granja, el evento 20 (382)
-    127 la celebración, la automática del 31 (383): Pierson presenta a
-        Talan y le hace la Pregunta dos veces; los de la profesión que
-        elige saltan en su lugar. La escena apaga el 383, prende el 389 y
-        salta dentro del mapa
-    127 el baile (389): Isabella, el 46 (390), y la salida a la arboleda,
-        el 27, donde espera Emily
-    128 la arboleda: la automática del 2, la orquesta y Pierson; vuelve al
-        108 con el 395
-    108 Emily da las buenas noches, la automática del 47 (395) —"What a
-        day."—, que salta a la casa de Talan con el 396: ahí empieza el día
-        siguiente, el trabajo de cada profesión
+    108 "se me hizo tarde": the exit to the farm, event 20 (382)
+    127 the celebration, the autostart of 31 (383): Pierson introduces
+        Talan and asks him the Question twice; those of the profession he
+        chooses jump in place. The scene turns 383 off, turns 389 on and
+        jumps within the map
+    127 the dance (389): Isabella, 46 (390), and the exit to the grove,
+        27, where Emily waits
+    128 the grove: the autostart of 2, the orchestra and Pierson; returns
+        to 108 with 395
+    108 Emily says good night, the autostart of 47 (395) —"What a
+        day."—, which jumps to Talan's house with 396: there the next day
+        begins, each profession's work
 
-**El corte es la vuelta de la arboleda**: el fork del 108 cambia el
-`Teleport` del 47 a la casa de Talan por el cartel ("END OF THE DEMO / The
+**The cut is the return from the grove**: the fork of 108 replaces event
+47's `Teleport` to Talan's house with the sign ("END OF THE DEMO / The
 next day in Paradise is / not in the cartridge yet. / Thanks for playing!")
-y la vuelta al título, y la salida a la granja (eventos 20 y 21) vuelve a
-ser la del juego. **La regla**: `below = 129`.
+and the return to the title, and the exit to the farm (events 20 and 21)
+goes back to being the game's. **The rule**: `below = 129`.
 
-Del 127 no compilan las páginas que saltan al 152 y al 158 (tandas
-posteriores), como las puertas del mundo cuyo destino no está.
+From 127, the pages that jump to 152 and 158 (later batches) do not
+compile, like the world's doors whose destination is not there.
 
-# Lo que pidió de las herramientas
+# What it asked of the tools
 
-* **La caché de ranuras**: el 127 no entraba en la VRAM ni con los quietos
-  turnándose. Ahora nadie tiene ranura fija: el que entra en pantalla pide
-  una. Ver la tarea de allá.
-* **Las rutas terminadas sueltan su lugar**: el 127 manda a caminar a
-  dieciocho eventos distintos —Pierson y las cuatro profesiones de la
-  celebración, los seis que pasean en el baile, Emily y Radin— y la ROM
-  tiene doce lugares de ruta. Ahora el tope es doce moviéndose a la vez:
-  ver `divergencias/las-rutas-terminadas-sueltan-su-lugar.md` de allá.
+* **The slot cache**: 127 did not fit in VRAM even with the idle ones
+  taking turns. Now nobody has a fixed slot: whoever comes on screen asks
+  for one. See the task over there.
+* **Finished routes release their place**: 127 sends eighteen different
+  events walking —Pierson and the four professions of the celebration, the
+  six who stroll at the dance, Emily and Radin— and the ROM has twelve
+  route places. Now the cap is twelve moving at once: see
+  `divergencias/las-rutas-terminadas-sueltan-su-lugar.md` over there.
 
-# Pruebas
+# Tests
 
-* `abl/test_granja.py`: la celebración cuadro por cuadro, eligiendo
-  granjero —siete saltan—, y cada cinco cuadros que cada evento en pantalla
-  tenga en la VRAM, en su ranura de la caché, los bytes de su pose en el
-  cartucho (`arnes/cache_de_ranuras.py`). Con golden al empezar, con los
-  granjeros en el aire y en el baile.
-* `abl/test_recorrido_granja_golden.py`: del 108 al cartel del fin y el
-  título, con once fotos con golden. En el baile mira además que los seis
-  que pasean se muevan: usan los lugares de ruta que la celebración dejó.
-* `abl/test_recorrido_paradise_dia_golden.py` termina ahora al llegar a la
-  granja: sus dos fotos del cartel y del título se fueron, y la de la
-  granja es nueva.
-* `rpgmaker/test_cores.py::test_la_cache_de_ranuras`: la celebración en
-  snes9x y en bsnes.
-* `parches/auto/mapas/`: dos parches nuevos, el 127 y el 128.
-* `parches/auto/musica/techos.toml`: rehecho con `just techos`, porque los
-  temas nuevos movieron el reparto de las muestras y
-  `test_musica_techos.py` daba rojo.
+* `abl/test_granja.py`: the celebration frame by frame, choosing farmer
+  —seven jump—, and every five frames that each event on screen has in
+  VRAM, in its cache slot, the bytes of its pose in the cartridge
+  (`arnes/cache_de_ranuras.py`). With a golden at the start, with the
+  farmers in the air and at the dance.
+* `abl/test_recorrido_granja_golden.py`: from 108 to the end sign and the
+  title, with eleven snapshots with golden. At the dance it also checks
+  that the six who stroll move: they use the route places the celebration
+  left.
+* `abl/test_recorrido_paradise_dia_golden.py` now ends on reaching the
+  farm: its two snapshots of the sign and the title went away, and the farm
+  one is new.
+* `rpgmaker/test_cores.py::test_la_cache_de_ranuras`: the celebration in
+  snes9x and in bsnes.
+* `parches/auto/mapas/`: two new patches, 127 and 128.
+* `parches/auto/musica/techos.toml`: redone with `just techos`, because the
+  new themes moved the distribution of the samples and
+  `test_musica_techos.py` went red.
 
-**El rojo**: sin subir la pose al tomar una ranura, las dos de la granja
-fallan en el primer cuadro mirado; sin que las rutas terminadas suelten su
-lugar, el recorrido falla porque dos de los que pasean no se mueven.
+**The red**: without uploading the pose when taking a slot, the two farm
+tests fail on the first frame looked at; without finished routes releasing
+their place, the playthrough fails because two of those who stroll do not
+move.
 
-# Lo que no está hecho, y lo que se ve distinto
+# What is not done, and what looks different
 
-* **Los del baile aparecen uno o dos cuadros tarde** después del salto
-  dentro del mapa: el refresco de páginas que los muestra viene después de
-  armar ese cuadro, y piden ranura en el siguiente. Pasa con la pantalla
-  recién subida.
-* **Los dos que bailan en el lugar** —el 37 y la 38, con ruta propia y la
-  animación "girar"— no se mueven en la ROM: el conversor no los cuenta como
-  de los que caminan. No es de la caché; no lo seguí.
-* La rama de defensor y la de actor no las juega ninguna prueba: la tanda
-  elige granjero, que es la que más gente hace saltar.
-* La música del 127 y del 128 no se escuchó.
+* **The dancers appear one or two frames late** after the jump within the
+  map: the page refresh that shows them comes after building that frame,
+  and they ask for a slot on the next one. It happens with the freshly
+  uploaded screen.
+* **The two who dance in place** —37 and 38, with their own route and the
+  "spin" animation— do not move in the ROM: the converter does not count
+  them among those who walk. It is not the cache's; I did not follow it.
+* The defender and the actor branches are played by no test: the suite
+  chooses farmer, which is the one that makes most people jump.
+* The music of 127 and 128 was not listened to.
 
-# Al mergear
+# When merging
 
-Herramientas: instalar `wally`, `mapdata`, `convert` y `cartridge`.
+Tools: install `wally`, `mapdata`, `convert` and `cartridge`.
 
-# Qué tiene que probar taro
+# What taro has to test
 
-* Desde la salida del pueblo a la granja: la celebración entera, eligiendo
-  cada profesión (las tres ramas hacen saltar a gente distinta); el baile,
-  hablar con Isabella, y la salida con Emily; la arboleda, y las buenas
-  noches con el cartel del fin.
-* Que nadie de la celebración aparezca tarde o con la pose de otro, sobre
-  todo en el salto al baile.
+* From the town exit to the farm: the whole celebration, choosing each
+  profession (the three branches make different people jump); the dance,
+  talking to Isabella, and the exit with Emily; the grove, and the good
+  night with the end sign.
+* That nobody in the celebration appears late or with someone else's pose,
+  above all on the jump to the dance.

@@ -1,51 +1,53 @@
 ---
-name: "Restos de la referencia"
-description: "Comentarios que se apoyan en la referencia de Python, y constantes sin uso"
+name: "Leftovers of the reference"
+description: "Comments that lean on the Python reference, and unused constants"
 type: refactor
 status: done
 ---
 
-La referencia de Python se fue el 2026-09-16, y el 2026-09-25 se sacó lo que
-quedaba de ella en `eventos.Estado`. Quedaron, vistos y sin tocar para no
-hacer una barrida general, en `tools/port/eventos.py`:
+The Python reference went away on 2026-09-16, and on 2026-09-25 what was left
+of it in `eventos.Estado` was removed. What remained, seen and left untouched
+so as not to do a general sweep, in `tools/port/eventos.py`:
 
-* el comentario de `SENO_SACUDIDA`: "la ROM y la referencia coinciden exacto";
-* el de `ChangePBG`: "la referencia tampoco lo modela y los dos lados quedan
-  iguales";
-* siete constantes sin uso en código: `ANIM_NO_CONTINUA`, `LLUVIA_DX`,
-  `LLUVIA_DY`, `PAN_FIJAR`, `PAN_SOLTAR`, `SWITCH_INDIRECTO` y `SWITCH_OFF`.
-  Pueden estar como documentación del formato de RM2k: `git blame` antes de
-  borrarlas.
+* the comment on `SENO_SACUDIDA`: "the ROM and the reference match exactly";
+* the one on `ChangePBG`: "the reference doesn't model it either and both
+  sides end up equal";
+* seven constants unused in code: `ANIM_NO_CONTINUA`, `LLUVIA_DX`,
+  `LLUVIA_DY`, `PAN_FIJAR`, `PAN_SOLTAR`, `SWITCH_INDIRECTO` and `SWITCH_OFF`.
+  They may be there as documentation of the RM2k format: `git blame` before
+  deleting them.
 
-`grep -n -i 'referencia\|los dos lados' tools/port/*.py` da el resto de
-candidatos: separar los que hablan de la referencia de Python de los que
-hablan de otra cosa (los dibujos de `tools/port/` que comparan las pruebas
-`_dibujo` también se llaman así a veces).
+`grep -n -i 'referencia\|los dos lados' tools/port/*.py` gives the rest of the
+candidates: separate the ones that talk about the Python reference from the
+ones that talk about something else (the drawings in `tools/port/` that the
+`_dibujo` tests compare against are sometimes called that too).
 
-**Y en `rom/src/`**: `grep -n -i referencia rom/src/*.s` da unas cincuenta
-líneas. Una la vio taro depurando en Mesen2 el 2026-09-25, en `eventos_tick`
-(`rom/src/cargar_mapa.s`, después de `espera_boton`): "sería un cuadro de
-diferencia contra la referencia". Mismo criterio: si el porqué sigue valiendo
-sin la referencia, se reescribe; si sólo existía por ella, se va.
+**And in `rom/src/`**: `grep -n -i referencia rom/src/*.s` gives some fifty
+lines. taro saw one while debugging in Mesen2 on 2026-09-25, in `eventos_tick`
+(`rom/src/cargar_mapa.s`, after `espera_boton`): "it would be one frame of
+difference against the reference". Same criterion: if the why still holds
+without the reference, it's rewritten; if it only existed because of it, it
+goes.
 
-## Cómo quedó (2026-09-26)
+## How it ended up (2026-09-26)
 
-Se fue `LLUVIA_DX, LLUVIA_DY`, la única de las siete que sólo leía el modelo
-borrado; las otras seis son miembros de enums de liblcf en la misma tupla que
-sus hermanos usados, y se quedan. Los comentarios, en un commit por archivo o
-por zona: el `git log` de esta tarea dice cuáles se reescribieron y cuáles se
-fueron.
+`LLUVIA_DX, LLUVIA_DY` went, the only one of the seven that only the deleted
+model read; the other six are members of liblcf enums in the same tuple as
+their used siblings, and they stay. The comments, in one commit per file or
+per area: the `git log` of this task says which were rewritten and which
+went.
 
-Lo que quedó mencionándola a propósito, o sin tocar:
+What was left mentioning it on purpose, or untouched:
 
-* el comentario largo de `KeyInputProc` sin espera, en `eventos.py`, y su
-  `NoSePuede`: la medición que cita era contra la referencia, y reescribirlo
-  pide volver a medir con `TECLA_SIN_ESPERA=1` contra la golden de `heroe 52`;
-* la VRAM de las animaciones en `snes_convert.py` corta el build en vez de
-  avisar como las paletas, y la única razón era la referencia: el comentario
-  lo dice, y cambiarlo es un cambio de comportamiento;
-* `titulo.render` y `ventana.pagina` no tienen llamadores y sus comentarios
-  describen la comparación de la referencia: lo que corresponde es borrarlas
-  (la primera ya está en `inventario-de-imagenes-en-python.md`);
-* el "topado en 999 como en la referencia" de `batalla.s`: no se sabe si es la
-  de Python o el dibujo de `escena`.
+* the long comment on `KeyInputProc` without wait, in `eventos.py`, and its
+  `NoSePuede`: the measurement it cites was against the reference, and
+  rewriting it needs measuring again with `TECLA_SIN_ESPERA=1` against the
+  `heroe 52` golden;
+* the animations' VRAM in `snes_convert.py` stops the build instead of
+  warning like the palettes do, and the only reason was the reference: the
+  comment says so, and changing it is a change in behaviour;
+* `titulo.render` and `ventana.pagina` have no callers and their comments
+  describe the reference's comparison: the right thing is to delete them
+  (the first is already in `inventario-de-imagenes-en-python.md`);
+* the "capped at 999 as in the reference" in `batalla.s`: it's unknown whether
+  it's the Python one or the `escena` drawing.

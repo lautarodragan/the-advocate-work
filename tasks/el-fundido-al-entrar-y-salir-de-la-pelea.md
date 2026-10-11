@@ -1,73 +1,79 @@
 ---
-name: "El fundido al entrar y salir de la pelea"
-description: "La transición de RM2k al empezar y terminar una pelea, que además tapa la carga del paquete de audio"
+name: "The fade on entering and leaving battle"
+description: "RM2k's transition when a battle starts and ends, which also covers the loading of the audio package"
 type: feature
 status: done
 ---
 
-Hoy la pelea entra y sale sin transición. En RM2k hay una (la de la base de
-datos del sistema, "Battle Start" y "Battle End"; ver
-`las-otras-transiciones-de-rm2k.md` para las que no son el fundido).
+Today the battle enters and leaves without a transition. In RM2k there is
+one (the one in the system database, "Battle Start" and "Battle End"; see
+`las-otras-transiciones-de-rm2k.md` for those that are not the fade).
 
-Además de parecerse al original, taro señaló el 2026-09-26 que **tapa el tiempo
-de carga**: con las muestras repartidas por paquete de mapa (paso 6 de
-`la-calidad-de-la-musica.md`), subir el paquete de la pelea pasa de ~0,7 s a
-~1,3 s congelados al entrar, y otro tanto al salir. Con un fundido, esa carga
-cae adentro de la pantalla negra, como ya pasa en el cambio de mapa.
+Besides looking like the original, taro pointed out on 2026-09-26 that **it
+covers the loading time**: with the samples distributed per map package
+(step 6 of `la-calidad-de-la-musica.md`), uploading the battle package goes
+from ~0.7 s to ~1.3 s frozen on entering, and as much again on leaving.
+With a fade, that load falls inside the black screen, as already happens on
+map changes.
 
-Mirar qué transición pide la base de datos de ABL, si el fundido que ya
-existe para los mapas alcanza, y medir que la carga quede entera adentro.
+Look at which transition ABL's database asks for, whether the fade that
+already exists for maps is enough, and measure that the load falls entirely
+inside.
 
-# Qué pide la base de datos
+# What the database asks for
 
 `battle_start_fadeout = 16`, `battle_start_fadein = 17`, `battle_end_fadeout =
-17`, `battle_end_fadein = 16`. En `Game_System::GetTransition` de easyrpg el 16
-es `ZoomIn`/`ZoomOut` y el 17 `MosaicOut`/`MosaicIn`, de 41 cuadros cada una.
-Además, al entrar, `Scene_Map::TransitionOut` antepone siempre dos destellos
-blancos de diez cuadros (`PrependFlashes(31, 31, 31, 31, 10, 2)`).
+17`, `battle_end_fadein = 16`. In easyrpg's `Game_System::GetTransition` 16
+is `ZoomIn`/`ZoomOut` and 17 `MosaicOut`/`MosaicIn`, 41 frames each.
+Besides, on entering, `Scene_Map::TransitionOut` always prepends two white
+flashes of ten frames (`PrependFlashes(31, 31, 31, 31, 10, 2)`).
 
-# Qué se hizo
+# What was done
 
-Todo en `rom/src/fundido_de_pelea.s`, y bloqueando como la pelea: no cuesta
-ningún tick.
+All in `rom/src/fundido_de_pelea.s`, and blocking like the battle: it costs
+no tick.
 
-* los destellos, con color math: el color fijo sumado a toda la pantalla;
-* el zoom **como fundido** —la decisión de taro para lo que la consola no
-  hace—, con la rampa del teletransporte;
-* el mosaico con el mosaico del PPU, **y fundiendo a la vez**: RM2k no
-  oscurece en el mosaico, pero la carga tiene que caer en negro. Así, cada
-  lado se apaga, carga, y el otro prende.
+* the flashes, with colour math: the fixed colour added to the whole
+  screen;
+* the zoom **as a fade** —taro's decision for what the console does not
+  do—, with the teleport's ramp;
+* the mosaic with the PPU's mosaic, **and fading at the same time**: RM2k
+  does not darken in the mosaic, but the load has to fall in black. So each
+  side goes dark, loads, and the other lights up.
 
-Las goldens de la pelea no se movieron: ninguna captura cae adentro de la
-transición. Lo que se corrió fueron los números de `test_batalla_golden.py`
-—68 cuadros, lo que la transición suma antes de que la pelea tome el
-control—, el de `test_cores.py`, y `Pelea.cerrar`, que ahora espera a que el
-mapa vuelva a correr.
+The battle goldens did not move: no capture falls inside the transition.
+What shifted were the numbers of `test_batalla_golden.py` —68 frames, what
+the transition adds before the battle takes control—, the one of
+`test_cores.py`, and `Pelea.cerrar`, which now waits for the map to run
+again.
 
-`test_fundido_de_pelea.py` cobra que cada cuadro en que el paquete avanza se
-ve negro, al entrar y al salir. Sin el cambio da 83 de 83 cuadros visibles de
-los dos lados (droide del mapa 2, `release`).
+`test_fundido_de_pelea.py` enforces that every frame in which the package
+advances is black, on entering and on leaving. Without the change it gives
+83 of 83 frames visible on both sides (map 2's droid, `release`).
 
-# Medido, el droide del mapa 2 en `release`, sin MSU-1
+# Measured, map 2's droid in `release`, without MSU-1
 
-| | antes | después |
+| | before | after |
 |---|---|---|
-| entrar: de la pelea pedida al control | 90 cuadros, 83 con el mapa congelado | 158: destellos 20, fundido 23, carga 83 en negro, escena 9 en negro, mosaico 23 |
-| salir: de la A final al mapa corriendo | 104, 83 con la pelea congelada | 150: mosaico 23, carga 83 en negro, mapa 22 en negro, fundido 22 |
+| entering: from the battle requested to control | 90 frames, 83 with the map frozen | 158: flashes 20, fade 23, load 83 in black, scene 9 in black, mosaic 23 |
+| leaving: from the final A to the map running | 104, 83 with the battle frozen | 150: mosaic 23, load 83 in black, map 22 in black, fade 22 |
 
-La carga tarda lo mismo; lo que se suma son las rampas. Con MSU-1 —ya
-mergeado lo de no subir las muestras de los temas con pista— la carga de
-entrada baja a 20 cuadros y la de salida a 49, las dos en negro: entrar dura
-94 cuadros y salir 116.
+The load takes the same; what is added are the ramps. With MSU-1 —with not
+uploading the samples of themes that have a track already merged— the
+entering load drops to 20 frames and the leaving one to 49, both in black:
+entering lasts 94 frames and leaving 116.
 
-# Para mirar jugando
+# To look at while playing
 
-* que los destellos se parezcan: son suma de color, no alfa, y los sprites de
-  las paletas 0 a 3 —el héroe— destellan menos, que es del hardware;
-* el mosaico de la pelea, que en RM2k llega a bloques de 41 pixeles y acá a
-  16, el tope del PPU;
-* ya estaba antes: al empezar la pelea del droide vuelve a verse el último
-  mensaje ("Get ready everyone!") durante los destellos y el fundido. Está
-  igual en `main` sin este cambio —antes se veía congelado—, no es de acá.
+* that the flashes look alike: they are colour addition, not alpha, and the
+  sprites of palettes 0 to 3 —the hero— flash less, which is the
+  hardware's;
+* the battle's mosaic, which in RM2k reaches blocks of 41 pixels and here
+  16, the PPU's cap;
+* it was already there before: when the droid battle starts the last
+  message ("Get ready everyone!") shows again during the flashes and the
+  fade. It is the same on `main` without this change —before it was seen
+  frozen—, it does not come from here.
 
-**taro miró las capturas el 2026-09-26 y las ve bien.** Falta jugarlo.
+**taro looked at the captures on 2026-09-26 and finds them fine.** It still
+has to be played.

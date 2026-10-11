@@ -1,67 +1,67 @@
 ---
-name: "Plan: los mapas por el MSU-1"
-description: "Ni 6 ni 8 MB alcanzan para el juego entero: cuánto pesa, qué se puede leer del .msu, cuánto tarda cargar un mapa así y qué pasa sin MSU-1, para que taro decida hasta dónde llega el cartucho"
+name: "Plan: the maps via the MSU-1"
+description: "Neither 6 nor 8 MB are enough for the whole game: how much it weighs, what can be read from the .msu, how long loading a map that way takes and what happens without MSU-1, so taro can decide how far the cartridge goes"
 type: research
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-10-01, al preguntar por más mapas. Ya decidido: el
-cartucho se queda en 4 MB (`decisiones/el-cartucho-se-queda-en-4-mb.md`), y
-taro dijo el 2026-09-27 que "a este ritmo, ni 6 MB ni 8 MB nos van a
-permitir cubrir todo el juego". Los fondos de batalla ya van por el `.msu`
-(`docs/port/msu-datos.md`). Esto es un estudio con números, sin
-implementar: es lo que define hasta dónde llega el cartucho, y conviene
-antes de seguir sumando capítulos. Después se sumó la pregunta de taro por
-los chips de descompresión (S-DD1, SPC7110, SA-1).
+From taro, on 2026-10-01, when asking about more maps. Already decided: the
+cartridge stays at 4 MB (`decisiones/el-cartucho-se-queda-en-4-mb.md`), and
+taro said on 2026-09-27 that "at this rate, neither 6 MB nor 8 MB will
+let us cover the whole game". The battle backgrounds already go through the `.msu`
+(`docs/port/msu-datos.md`). This is a study with numbers, without
+implementing: it's what defines how far the cartridge goes, and it's worth doing
+before adding more chapters. Later taro's question about
+decompression chips (S-DD1, SPC7110, SA-1) was added.
 
-# Hecho
+# Done
 
-Lechuza, el 2026-10-01. **El estudio es
-`docs/research/2026-10-01-los-mapas-por-el-msu-1.md`**; lo de abajo es lo
-que hay que decidir y lo que quedó suelto.
+Lechuza, on 2026-10-01. **The study is
+`docs/research/2026-10-01-los-mapas-por-el-msu-1.md`**; what's below is what
+has to be decided and what was left loose.
 
-* **El juego entero son 8.514 KB de datos**: 266 bancos contra 124. Tampoco
-  entra en 8 MB. Medido convirtiendo los 328 mapas en once corridas.
-* **Con los mapas y la música por el `.msu`, la ROM del juego entero baja a
-  3,0 MB** y entra con 0,9 MB libres. La música sola son 3,4 MB, y lo que un
-  mapa sube al entrar, 1,9.
-* **Leer un mapa del `.msu` es más rápido que descomprimirlo**: el puerto da
-  42 KB por cuadro en los tres cores del arnés (`just msu-puerto`), y la
-  carga del mapa típico pasa de ~5 cuadros a ~0,4; la del 66, de 22 a 1,5.
-* **Sin MSU-1 se llega a un tercio del juego**, más o menos lo de hoy.
-* **El S-DD1 empata con LZ2 en los tiles** (57 contra 58 %); lo que da es
-  descomprimir las poses sin CPU (32 % contra 41 %). **El FX Pak no tiene
-  SPC7110** (`MENU_ERR_NOIMPL` en su firmware).
+* **The whole game is 8,514 KB of data**: 266 banks against 124. It doesn't
+  fit in 8 MB either. Measured by converting the 328 maps in eleven runs.
+* **With the maps and the music through the `.msu`, the whole game's ROM drops to
+  3.0 MB** and fits with 0.9 MB free. The music alone is 3.4 MB, and what a
+  map uploads on entering, 1.9.
+* **Reading a map from the `.msu` is faster than decompressing it**: the port gives
+  42 KB per frame on the harness's three cores (`just msu-puerto`), and the
+  typical map's load goes from ~5 frames to ~0.4; 66's, from 22 to 1.5.
+* **Without MSU-1 a third of the game can be reached**, roughly what there is today.
+* **The S-DD1 ties with LZ2 on the tiles** (57 against 58 %); what it gives is
+  decompressing the poses without CPU (32 % against 41 %). **The FX Pak has no
+  SPC7110** (`MENU_ERR_NOIMPL` in its firmware).
 
-# Lo que taro tiene que decidir
+# What taro has to decide
 
-* **Uno o dos cartuchos.** La recomendación es dos del mismo conversor:
-  `release` sin MSU-1 como hoy, y uno `completo` que pide MSU-1. La opción
-  de una sola ROM deja lo jugable sin MSU-1 en menos de la mitad de hoy.
+* **One or two cartridges.** The recommendation is two from the same converter:
+  `release` without MSU-1 as today, and a `completo` one that requires MSU-1. The
+  single-ROM option leaves what's playable without MSU-1 at less than half of today's.
 
-# Lo que taro tiene que probar
+# What taro has to test
 
-* **La ROM del puerto en el FX Pak** (fase 0 del estudio): `just
-  msu-puerto` arma `rom/build/msu-puerto/msu-puerto.sfc` y su `.msu`; en la
-  consola, **verde** si los 576 KB llegaron bien, **rojo** si no, **azul**
-  sin MSU-1. Decide si la carga lee a toda velocidad o de a 8 KB por cuadro.
-  En Mednafen se puede mirar con `-force_module snes_faust`.
+* **The port's ROM on the FX Pak** (phase 0 of the study): `just
+  msu-puerto` builds `rom/build/msu-puerto/msu-puerto.sfc` and its `.msu`; on the
+  console, **green** if the 576 KB arrived right, **red** if not, **blue**
+  without MSU-1. It decides whether loading reads at full speed or 8 KB per frame.
+  In Mednafen it can be looked at with `-force_module snes_faust`.
 
-# Lo que quedó suelto, para tareas aparte
+# What was left loose, for separate tasks
 
-* **Cinco mapas no entran en la VRAM** (108, 127, 148 y 250 sin lugar para
-  la ventana; 285 con la caja de las animaciones de batalla).
-* **`rm2k-snes-battle` indexa las tropas de los encuentros con un byte**, y
-  el juego entero tiene 365.
-* **Los candidatos a líder con todos los mapas**: el 207 pide 9 gráficos de
-  la orden 34 (tope 8) y el 288 suma al actor 34, sin CharSet.
-* **Un pánico en `rm2k-snes-audio`** (`msu.rs:116`, "no entry found for
-  key") con los mapas 120 y 122 en el mismo cartucho.
-* **El bloque de textos del juego entero son ~255 KB** de los 256.
+* **Five maps don't fit in VRAM** (108, 127, 148 and 250 without room for
+  the window; 285 with the battle animations box).
+* **`rm2k-snes-battle` indexes the encounters' troops with a byte**, and
+  the whole game has 365.
+* **The leader candidates with all the maps**: 207 asks for 9 graphics of
+  order 34 (ceiling 8) and 288 adds actor 34, without a CharSet.
+* **A panic in `rm2k-snes-audio`** (`msu.rs:116`, "no entry found for
+  key") with maps 120 and 122 in the same cartridge.
+* **The whole game's text block is ~255 KB** of the 256.
 
-# Al mergear
+# When merging
 
-Nada que instalar: no se tocó Rust ni el runtime, y la ROM no cambia. Es
-una receta nueva, `msu-puerto`, con su experimento en
+Nothing to install: neither Rust nor the runtime was touched, and the ROM doesn't change. It's
+a new recipe, `msu-puerto`, with its experiment in
 `rom/experimentos/msu-puerto/`.

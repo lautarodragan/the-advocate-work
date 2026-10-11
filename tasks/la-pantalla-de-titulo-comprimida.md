@@ -1,105 +1,106 @@
 ---
-name: "La pantalla de título comprimida"
-description: "El título ocupa 31,7 KB sin comprimir; en LZ2, por el mismo camino que el Game Over, serían 15,2 KB sin cambiar un pixel"
+name: "The compressed title screen"
+description: "The title takes 31.7 KB uncompressed; in LZ2, by the same path as the Game Over, it would be 15.2 KB without changing a pixel"
 type: refactor
 status: done
 assignee: Chajá
 ---
 
-De taro, el 2026-09-28, después de la pantalla de Game Over
-(`la-pantalla-de-game-over.md`). Carpincho dejó `pantalla_subir` y
-`tools/port/pantalla_completa.py` sin saber qué pantalla suben, para que el
-título los use, y midió:
+From taro, on 2026-09-28, after the Game Over screen
+(`la-pantalla-de-game-over.md`). Carpincho left `pantalla_subir` and
+`tools/port/pantalla_completa.py` not knowing which screen they upload, so
+that the title could use them, and measured:
 
-    hoy, sin comprimir                  31.744 B
-    LZ2, sin cambiar un pixel           15.241 B   (ahorra 16,5 KB)
-    liviana en la ROM + calidad en .msu  2.483 B   (ahorra 29 KB)
+    today, uncompressed                 31,744 B
+    LZ2, without changing a pixel       15,241 B   (saves 16.5 KB)
+    light in the ROM + quality in .msu   2,483 B   (saves 29 KB)
 
-taro eligió la segunda: sólo comprimir. La pantalla de título tiene que salir
-igual pixel por pixel: la golden `titulo` no cambia.
+taro chose the second: only compress. The title screen has to come out the
+same pixel for pixel: the `titulo` golden does not change.
 
-2026-09-28, en `testing/`: hecho por Chajá en su rama, sobre `main` en
-2df404b7. Lo que queda es de taro: ver "Qué tiene que probar taro".
+2026-09-28, in `testing/`: done by Chajá on his branch, over `main` at
+2df404b7. What is left is taro's: see "What taro has to test".
 
-# Qué tiene que probar taro
+# What taro has to test
 
-* **Mirar** el título al encender, sin y con MSU-1: tiene que ser el de
-  siempre, y aparecer igual de rápido. Y volver de "Resume the Story" con B:
-  el título tiene que volver sin un parpadeo largo.
-* Empezar y cargar una partida desde el título, y un Game Over que vuelva al
-  título: la pista del título que sigue al empezar
-  (`la-pista-del-titulo-sigue-al-empezar.md`) no se tocó, pero pasa por
-  el mismo lugar.
+* **Look** at the title on power-up, without and with MSU-1: it has to be
+  the usual one, and appear just as fast. And come back from "Resume the
+  Story" with B: the title has to come back without a long flicker.
+* Start and load a game from the title, and a Game Over that returns to the
+  title: the title track that keeps playing on starting
+  (`la-pista-del-titulo-sigue-al-empezar.md`) was not touched, but it goes
+  through the same place.
 
-# Lo que se hizo
+# What was done
 
-* **La imagen viaja por el camino de la de Game Over**: un flujo LZ2 con los
-  tiles, el tilemap y los colores (`tools/port/pantalla_completa.py`), y una
-  segunda fila en `pantallas_tabla`. `titulo_tiles`, `titulo_celdas` y
-  `titulo_cgram` no existen más; el menú sigue sin comprimir, aparte.
-* **Los colores del menú van en el mismo flujo**, debajo de los de la imagen
-  (`comprimida(..., debajo=)`): CGRAM entera en un DMA, como antes, y sin
-  otro DMA en el banco 0.
-* **El tilemap de la imagen se mudó** de $4000 a `PANTALLA_MAPA` ($7C00), que
-  es donde lo pone `pantalla_subir`. Lo que se ve no cambia; dos `.assert` en
-  `titulo.s` cuidan que la imagen y el menú no se pisen en la VRAM.
-* **`pantalla_subir` se partió en dos**: `pantalla_descomprimir` (a
-  `PANTALLA_BUFFER`) y `pantalla_subir` (de ahí a la VRAM y CGRAM). El Game
-  Over llama a las dos seguidas.
-* **El título se descomprime en el arranque, antes de la espera de
-  BOOT_CUADROS**, y `titulo_subir` sólo lo sube. Ver "Los cuadros".
-* **`pantalla_subir` deja el PPU como `ppu_reset`, no en cero.** Ponía
-  TMW y CGWSEL en cero, que al Game Over no le importa porque le sigue el
-  reset; al título le sigue el mapa, y con TMW en cero la ventana de mensaje
-  dejaba de tapar a los objetos: nueve goldens en rojo (`ventana`,
-  `hablar-60`, `apertura-830`…), en verde otra vez con TMW en $10 y CGWSEL
-  en $30, los valores de `ppu_altos`.
+* **The image travels by the Game Over one's path**: an LZ2 stream with the
+  tiles, the tilemap and the colours (`tools/port/pantalla_completa.py`),
+  and a second row in `pantallas_tabla`. `titulo_tiles`, `titulo_celdas` and
+  `titulo_cgram` no longer exist; the menu stays uncompressed, separate.
+* **The menu's colours go in the same stream**, below the image's
+  (`comprimida(..., debajo=)`): the whole CGRAM in one DMA, as before, and
+  without another DMA in bank 0.
+* **The image's tilemap moved** from $4000 to `PANTALLA_MAPA` ($7C00), which
+  is where `pantalla_subir` puts it. What is seen does not change; two
+  `.assert`s in `titulo.s` make sure the image and the menu do not overlap
+  in VRAM.
+* **`pantalla_subir` was split in two**: `pantalla_descomprimir` (to
+  `PANTALLA_BUFFER`) and `pantalla_subir` (from there to VRAM and CGRAM).
+  The Game Over calls both in a row.
+* **The title is decompressed at boot, before the BOOT_CUADROS wait**, and
+  `titulo_subir` only uploads it. See "The frames".
+* **`pantalla_subir` leaves the PPU as `ppu_reset` does, not at zero.** It
+  set TMW and CGWSEL to zero, which the Game Over does not care about
+  because the reset follows it; the map follows the title, and with TMW at
+  zero the message window stopped covering the objects: nine goldens red
+  (`ventana`, `hablar-60`, `apertura-830`…), green again with TMW at $10 and
+  CGWSEL at $30, the values of `ppu_altos`.
 
-# Los cuadros
+# The frames
 
-Medido con snes9x, cuadro por cuadro desde el reset, contra la golden
-`titulo` (scripts descartables):
+Measured with snes9x, frame by frame from reset, against the `titulo`
+golden (throwaway scripts):
 
-                                         antes   descomprimiendo   en el
-                                                 al mostrarlo      arranque
-    el título aparece, desde el reset      43          52             43
-    vuelve, desde el B en las ranuras       2          11              2
+                                         before  decompressing     at
+                                                 when showing      boot
+    the title appears, from reset          43          52             43
+    it returns, from the B in the slots     2          11              2
 
-Descomprimir los 34.304 B son unos nueve cuadros. Hacerlo al mostrar el
-título eran nueve cuadros más de negro en los dos caminos, así que se movió
-al arranque, que tenía cuadros de sobra esperando BOOT_CUADROS; y al volver
-de las ranuras no se descomprime de nuevo, porque nada de lo que corre en el
-título escribe el banco $7F. En `release` el buffer termina de llenarse en el
-cuadro 42, o sea que **el arranque de una ROM con título se pasa de
-BOOT_CUADROS** por uno o dos cuadros: no importa, porque lo que cuenta
-cuadros desde el reset es el lazo, y a él se llega después del título. La
-cuenta del conversor (`cuadros_del_arranque`) no lo suma, a propósito: cuida
-a las ROMs sin título.
+Decompressing the 34,304 B takes about nine frames. Doing it when showing
+the title meant nine more frames of black on both paths, so it was moved to
+boot, which had frames to spare waiting for BOOT_CUADROS; and on returning
+from the slots it is not decompressed again, because nothing that runs in
+the title writes bank $7F. In `release` the buffer finishes filling at
+frame 42, meaning that **the boot of a ROM with a title overruns
+BOOT_CUADROS** by one or two frames: it does not matter, because what
+counts frames since reset is the loop, and that is reached after the title.
+The converter's count (`cuadros_del_arranque`) does not add it, on purpose:
+it looks after ROMs without a title.
 
-# Espacio
+# Space
 
-`just espacio release`, antes (2df404b7) y después:
+`just espacio release`, before (2df404b7) and after:
 
-    bancos de datos  115 de 124, 9 libres        115 de 124, 9 libres
-    huecos           15.250 B                    32.139 B
-    banco 0          50 B                        175 B
-    banco 1          5.135 B                     5.122 B
+    data banks       115 of 124, 9 free          115 of 124, 9 free
+    gaps             15,250 B                    32,139 B
+    bank 0           50 B                        175 B
+    bank 1           5,135 B                     5,122 B
 
-El flujo del título son 17.407 B (la imagen, el tilemap y los colores, de
-34.304 crudos) contra los 34.304 sin comprimir de antes: los 16,9 KB que se
-liberan quedan como hueco en los bancos usados y no alcanzan para liberar un
-banco entero. El banco 0 gana 125 B: tres DMA de `titulo_subir` que se fueron.
+The title's stream is 17,407 B (the image, the tilemap and the colours, from
+34,304 raw) against the 34,304 uncompressed of before: the 16.9 KB that are
+freed stay as gaps in the used banks and are not enough to free a whole
+bank. Bank 0 gains 125 B: three `titulo_subir` DMAs that went away.
 
-# Pruebas
+# Tests
 
-Ninguna nueva y ninguna golden cambió. `titulo`, `titulo-2`,
-`titulo-ranuras`, `titulo-ranuras2`, `game-over` y las `CINEMATICAS` salen
-iguales.
+No new ones and no golden changed. `titulo`, `titulo-2`,
+`titulo-ranuras`, `titulo-ranuras2`, `game-over` and the `CINEMATICAS` come
+out the same.
 
-**Un camino que `just pruebas` no ejecuta**: cancelar con B la pantalla de
-ranuras y volver al título, que ahora sube la imagen **sin** descomprimirla
-de nuevo. Ninguna prueba vuelve al título por ahí. Lo corrí a mano con un
-script descartable —la captura sale igual a la golden `titulo`, dos cuadros
-después del B, como antes— pero con la SRAM vacía: con ranuras llenas la
-pantalla dibuja más cosas, y ninguna escribe el banco $7F según el código,
-no según una prueba.
+**A path that `just pruebas` does not execute**: cancelling the slots
+screen with B and returning to the title, which now uploads the image
+**without** decompressing it again. No test returns to the title that way.
+I ran it by hand with a throwaway script —the capture comes out equal to the
+`titulo` golden, two frames after the B, as before— but with empty SRAM:
+with filled slots the screen draws more things, and none of them writes
+bank $7F according to the code, not according to a test.
