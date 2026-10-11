@@ -1,59 +1,58 @@
 ---
-name: "El Elixir en la pelea"
-description: "Usar en la pelea un ítem que sólo sirve sobre un caído"
+name: "The Elixir in battle"
+description: "Use in battle an item that only works on a fallen ally"
 type: feature
 status: done
 assignee: taro
 ---
 
-**Usar en la pelea un ítem que sólo sirve sobre un caído.**
+**Use in battle an item that only works on a fallen ally.**
 
-El `Pungent Elixir-LIFE` (`ko_only`) ya levanta a un caído desde el menú, pero
-la pelea no lo ofrece: `batalla.item_usable_en_batalla` deja afuera los ítems
-`ko_only`, así que taro no lo pudo usar en Arden con 0 HP.
+The `Pungent Elixir-LIFE` (`ko_only`) already revives a fallen ally from the menu, but
+the battle doesn't offer it: `batalla.item_usable_en_batalla` leaves out the
+`ko_only` items, so taro couldn't use it on Arden with 0 HP.
 
-Lo que pide, según quedó medido al arreglar el menú:
+What it asks for, as was measured when fixing the menu:
 
-- que el cursor de blanco de un ítem pueda pararse en un aliado caído;
-- que el levantado vuelva a pedir órdenes el turno siguiente y cobre la
-  experiencia al ganar;
-- mover `batalla.py` igual, porque contra eso predice los HP `test_batalla.py`.
+- that an item's target cursor can stop on a fallen ally;
+- that the revived ally asks for orders again on the next turn and earns the
+  experience on winning;
+- change `batalla.py` the same way, because `test_batalla.py` predicts the HP against it.
 
-Levantar es lo mismo que en el menú: 1 HP y después el porcentaje del ítem
-(`medicina_usar`). Referencia: `Scene_Battle` y `Game_Battler::UseItem` de
-EasyRPG.
+Reviving is the same as in the menu: 1 HP and then the item's percentage
+(`medicina_usar`). Reference: EasyRPG's `Scene_Battle` and `Game_Battler::UseItem`.
 
-# Cómo quedó (2026-09-26)
+# How it turned out (2026-09-26)
 
-- **La lista** ofrece los `ko_only` que levantan —el primero de `state_set`,
-  el estado de muerto—: Phoenix Down, Pungent Elixir y Jumper Cable. Una
-  `ko_only` que no levanta seguiría afuera: no le serviría a nadie.
-- **El cursor de a quién** se para sólo en los actores a los que el ítem les
-  sirve: caídos para uno que levanta, en pie para uno que no es `ko_only`. Una
-  habilidad sigue parándose sólo en los que están en pie. Arranca en el
-  primero al que le sirve; si no le sirve a nadie —un elixir sin caídos—, A no
-  sale de la lista. **RM2k deja pararse en cualquiera** y el ítem que no sirve
-  se gasta sin efecto; acá se lo saltea, que es lo que la pelea ya hacía con
-  los caídos. Es una simplificación a favor del jugador, declarada en
+- **The list** offers the `ko_only` items that revive —the first in `state_set`,
+  the death state—: Phoenix Down, Pungent Elixir and Jumper Cable. A
+  `ko_only` that doesn't revive would stay out: it wouldn't be any use to anyone.
+- **The who cursor** stops only on the actors the item is useful
+  for: fallen ones for one that revives, standing ones for one that isn't `ko_only`. A
+  skill still stops only on those standing. It starts on the
+  first one it's useful for; if it's useful for nobody —an elixir with nobody fallen—, A doesn't
+  leave the list. **RM2k lets you stop on anyone** and the useless item
+  is spent with no effect; here it's skipped, which is what the battle already did with
+  the fallen. It's a simplification in the player's favour, declared in
   `ba_item_sirve_sobre`.
-- **Levantar** es `max(1, curacion)` con la cura topada contra el máximo
-  entero: el `SetHp(1)` de `RemoveStates` y el `ChangeHp(hp - 1)` de
-  `ApplyStateEffect`. Lo mismo que `medicina_usar` desde el menú. El
-  renglón de abajo del mensaje es el `message_recovery` del estado de muerto,
-  "Core has revived!", y no el de los HP: `IsRevived` en `ePreHp`.
-- **De paso**: una medicina que no levanta sobre un blanco que murió entre que
-  se eligió y que le tocó **ya no lo levanta**. Los dos lados le sumaban la
-  cura a los cero HP; `ApplyHpEffect` no toca a un muerto. Ese camino no lo
-  ejecuta ninguna prueba: pide que el droide mate al blanco antes de que
-  actúe el de la poción, y eso depende del azar.
-- **El levantado** pide órdenes desde el turno siguiente y cobra la
-  experiencia al ganar sin tocar nada: `ba_actor_siguiente` y
-  `ba_exp_repartir` ya miraban los HP.
+- **Reviving** is `max(1, curacion)` with the healing capped against the whole
+  maximum: the `SetHp(1)` of `RemoveStates` and the `ChangeHp(hp - 1)` of
+  `ApplyStateEffect`. The same as `medicina_usar` from the menu. The
+  bottom line of the message is the death state's `message_recovery`,
+  "Core has revived!", and not the HP one: `IsRevived` in `ePreHp`.
+- **In passing**: a medicine that doesn't revive, on a target that died between being
+  chosen and its turn coming, **no longer revives it**. Both sides added the
+  healing to the zero HP; `ApplyHpEffect` doesn't touch a dead one. That path isn't
+  run by any test: it needs the droid to kill the target before the one with the potion
+  acts, and that depends on chance.
+- **The revived one** asks for orders from the next turn and earns the
+  experience on winning without touching anything: `ba_actor_siguiente` and
+  `ba_exp_repartir` already looked at the HP.
 
-## Deuda que se vio
+## Debt that was seen
 
-- El renglón de arriba de "usar un ítem" con un nombre largo se pasa de las
-  32 columnas y la última letra cae en la columna 0 del renglón de abajo:
-  "Kersh Pungent Elixir-LIFE  used." deja el punto delante de "Core has
-  revived!". Es de antes —cualquier ítem de nombre largo lo hace, y el
-  nombre del LDB trae un espacio al final—; no se tocó.
+- The top line of "use an item" with a long name goes past the
+  32 columns and the last letter falls in column 0 of the line below:
+  "Kersh Pungent Elixir-LIFE  used." leaves the full stop in front of "Core has
+  revived!". It's older —any item with a long name does it, and the
+  name in the LDB has a trailing space—; it wasn't touched.

@@ -1,81 +1,81 @@
 ---
-name: "Seis habilidades no entran en la pelea"
-description: "Con la fuente de ancho variable y espaciado 0, 6 de los 367 nombres de habilidades se pasan de su lugar en la pelea"
+name: "Six skills don't fit in battle"
+description: "With the variable-width font and spacing 0, 6 of the 367 skill names overflow their place in battle"
 type: bug
 status: done
 assignee: taro
 ---
 
-Lo midió Tordo el 2026-10-03, contando a mano contra el tope de celdas, al
-hacer la perilla del espaciado (`tasks/el-espaciado-entre-letras.md`).
-No se corrió en la ROM: falta ver cuáles son, qué se ve, y si el conversor
-debería avisarlo.
+Tordo measured it on 2026-10-03, counting by hand against the cell cap, while
+making the spacing knob (`tasks/el-espaciado-entre-letras.md`).
+It wasn't run in the ROM: it remains to see which ones they are, what's shown, and whether the converter
+should warn about it.
 
-## Lo que encontró Benteveo, el 2026-10-03
+## What Benteveo found, on 2026-10-03
 
-Desde `el-espaciado-sin-tocar-codigo` el conversor las nombra: un WARNING
-en `conversor.log`, "skill names in the battle don't fit in 11 cells", con
-cada nombre, sus pixeles y lo que se ve.
+Since `el-espaciado-sin-tocar-codigo` the converter names them: a WARNING
+in `conversor.log`, "skill names in the battle don't fit in 11 cells", with
+each name, its pixels and what's shown.
 
-Lo que más cortaba no eran los pixeles sino las letras: el cartucho guardaba
-11 letras de cada nombre, de cuando una letra ocupaba una celda, y eso
-cortaba 41 de las habilidades de la pelea de ABL con 0. Ahora guarda 13
-—lo que deja el registro de una fila de la capa de texto, `TL_RECORD`, con
-las dos columnas de la lista— y quedan 26, todas de catorce letras o más.
-Por pixeles no entran 3 con 0 (las seis de Tordo eran sobre las 367 de la
-base; el cartucho lleva las que el grupo puede usar) y 27 con 2.
+What cut the most wasn't the pixels but the letters: the cartridge stored
+11 letters of each name, from when a letter took up one cell, and that
+cut 41 of ABL's battle skills with 0. Now it stores 13
+—what a text layer row's record, `TL_RECORD`, allows with
+the list's two columns— and 26 remain, all of fourteen letters or more.
+By pixels 3 don't fit with 0 (Tordo's six were out of the baseline's 367;
+the cartridge carries the ones the party can use) and 27 with 2.
 
-Para que entren todas haría falta más lugar en la fila: correr el guión y
-el costo, o un registro más grande, que no entra en la RAM de la capa
-(`FAR_TEXT_LAYER` tiene 62 bytes libres y harían falta 432 para ocho
-letras más). No se hizo.
+For all of them to fit the row would need more room: move the dash and
+the cost, or a bigger record, which doesn't fit in the layer's RAM
+(`FAR_TEXT_LAYER` has 62 bytes free and 432 would be needed for eight
+more letters). It wasn't done.
 
-## Hecho (Carpintero, 2026-10-04)
+## Done (Carpintero, 2026-10-04)
 
-Worktree de las herramientas desde `fe0f90ee`; ABL en el clon
-`/extras/scratch/carpintero/abl`, rama `texto-de-la-pelea`. Va junto con
-`la-lista-de-habilidades-agota-el-pozo`: es la misma capa de texto.
+Tools worktree from `fe0f90ee`; ABL in the clone
+`/extras/scratch/carpintero/abl`, branch `texto-de-la-pelea`. It goes together with
+`la-lista-de-habilidades-agota-el-pozo`: it's the same text layer.
 
-**El cartucho guarda enteros los nombres de habilidades y enemigos**, y la
-consola los corta en sus celdas, por pixeles, como ya hacía. Con eso ya no
-queda ninguno cortado por letras.
+**The cartridge stores skill and enemy names whole**, and the
+console cuts them in their cells, by pixels, as it already did. With that none
+is left cut by letters.
 
-* Los enemigos eran sólo el conversor: la fila de un enemigo tiene lugar de
-  sobra en su registro.
-* Las habilidades las limitaba el registro de una fila (`TL_RECORD`): la
-  lista escribe ahora cada nombre **por referencia** (`TL_BY_REF` en
-  `text_layer.s`), un tramo de seis bytes —dónde está el texto en la ROM y
-  cuántas letras— sea cual sea el largo, y la composición las lee de ahí
-  (`tl_ref_letter`). Sólo lo pide la lista de habilidades; todo lo demás se
-  escribe como antes. RAM: 8 bytes más dentro de `FAR_TEXT_LAYER`.
-* No hizo falta agrandar el registro (los 432 bytes de Benteveo).
+* The enemies were only the converter: an enemy's row has room to
+  spare in its record.
+* The skills were limited by a row's record (`TL_RECORD`): the
+  list now writes each name **by reference** (`TL_BY_REF` in
+  `text_layer.s`), a six-byte span —where the text is in the ROM and
+  how many letters— whatever the length, and the composition reads them from there
+  (`tl_ref_letter`). Only the skill list asks for it; everything else is
+  written as before. RAM: 8 more bytes inside `FAR_TEXT_LAYER`.
+* There was no need to enlarge the record (Benteveo's 432 bytes).
 
-Lo que avisa el conversor con ABL, ahora todo por pixeles:
+What the converter warns about with ABL, now all by pixels:
 
-    espaciado   habilidades   enemigos   ítems
+    spacing     skills        enemies    items
     +0          3             0          0
     +1          14            0          0
     +2          27            3          4
 
-Antes, con +1: 26 habilidades y 14 enemigos. Lo que queda no entra en las
-celdas: hacerlo entrar pediría correr el guión y el costo, y eso cambia la
-pantalla; no se hizo.
+Before, with +1: 26 skills and 14 enemies. What remains doesn't fit in the
+cells: making it fit would require moving the dash and the cost, and that changes the
+screen; it wasn't done.
 
-### Verificado
+### Verified
 
-* La tanda de ABL con +1: cambian **cinco goldens, sólo letras de más**
-  —"Healing Syringe" entero en `batalla-hab`, `-dos` y `-blanco`, y
-  "DecayingShambler" en `msu-datos-rom` y `-msu`—, miradas lado a lado. Se
-  repitió hasta que no apareció ninguna roja nueva (dos vueltas): **1045 en
-  verde**. `abl.sfc` con +1: `17c71a14…`.
-* `cargo test -p rm2k-snes-battle` (la prueba contra el modelo de Python
-  corta ahora los dos nombres como él), `just -f tools/justfile test`: 27.
-* La lista de Talan con sus 54, con 0, 1 y 2, mirada (`pozo-despues-*.png`).
+* ABL's suite with +1: **five goldens change, only extra letters**
+  —"Healing Syringe" whole in `batalla-hab`, `-dos` and `-blanco`, and
+  "DecayingShambler" in `msu-datos-rom` and `-msu`—, looked at side by side. It
+  was repeated until no new red appeared (two rounds): **1045
+  green**. `abl.sfc` with +1: `17c71a14…`.
+* `cargo test -p rm2k-snes-battle` (the test against the Python model
+  now cuts the two names like it does), `just -f tools/justfile test`: 27.
+* Talan's list with its 54, with 0, 1 and 2, looked at (`pozo-despues-*.png`).
 
-## Para taro
+## For taro
 
-Una pelea con habilidades de nombre largo y contra un enemigo de nombre
-largo. Las goldens lado a lado en
+A battle with long-named skills and against an enemy with a long
+name. The goldens side by side in
 `/shared/capturas/2026-10-04-texto-de-la-pelea/goldens/`.
 
-Al mergear, reinstalar `battle` y `convert`.
+On merging, reinstall `battle` and `convert`.

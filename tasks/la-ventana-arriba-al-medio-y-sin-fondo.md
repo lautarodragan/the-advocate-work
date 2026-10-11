@@ -1,93 +1,93 @@
 ---
-name: "La ventana de mensajes arriba, al medio y sin fondo"
-description: "MessageOptions de RM2k: la posición de la ventana (arriba, medio, abajo), sin fondo, correrse si tapa al héroe y los eventos que siguen durante el mensaje; hoy el compilador lo ignora y todo sale abajo con fondo"
+name: "The message window at the top, in the middle and without background"
+description: "RM2k's MessageOptions: the window's position (top, middle, bottom), no background, moving if it covers the hero and events that keep going during the message; today the compiler ignores it and everything comes out at the bottom with background"
 type: feature
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-10-04: "podés hacer que el texto se pueda mostrar en el
-medio o arriba de la pantalla, como en el rpg maker 2000 original? … puede
-que también haya una opción para mostrarlo sin fondo".
+From taro, on 2026-10-04: "can you make the text able to show in the
+middle or at the top of the screen, like in the original rpg maker 2000? … there may
+also be an option to show it without background".
 
-Es `MessageOptions` (10120), que `compile.rs` tiene en `IGNORABLE` desde
+It's `MessageOptions` (10120), which `compile.rs` has in `IGNORABLE` since
 `c64e4d96`: "where and how the message window is drawn, which without
-messages is drawn nowhere". ABL lo usa 1110 veces en 202 mapas (contado el
-2026-10-04 sobre el volcado); los parámetros más comunes, en el orden
-[sin fondo, posición, correrse si tapa al héroe, eventos durante el
-mensaje], con la posición 0 arriba, 1 medio, 2 abajo:
+messages is drawn nowhere". ABL uses it 1110 times in 202 maps (counted on
+2026-10-04 over the dump); the most common parameters, in the order
+[no background, position, move if it covers the hero, events during the
+message], with position 0 top, 1 middle, 2 bottom:
 
     (0,2,0,0) 284   (0,0,0,0) 223   (1,1,0,0) 175   (1,0,0,0) 134
     (0,1,0,0)  89   (1,2,0,0)  74   (0,2,1,0)  72   (0,0,1,0)  46
 
-## Hecho (Quirquincho)
+## Done (Quirquincho)
 
-Worktree de las herramientas desde `cc502f93`; ABL en el clon
-`/extras/scratch/quirquincho/abl` desde `e65a7b5`, rama
+Tools worktree from `cc502f93`; ABL in the clone
+`/extras/scratch/quirquincho/abl` from `e65a7b5`, branch
 `ventana-de-mensajes`.
 
-### Las cuatro opciones
+### The four options
 
-* **La posición**: arriba en la línea 0, al medio en la 72 —centrada en las
-  224— y abajo en la 144, como siempre. La elección y los dígitos van en la
-  misma ventana, así que la siguen solos.
-* **Sin fondo**: el texto con su sombra sobre el mapa. Con dos límites,
-  escritos en `workflow/divergencias/la-ventana-sin-fondo-no-tapa-a-los-personajes.md`:
-  los personajes pasan por encima del texto, y la capa de encima del mapa no
-  se ve en la franja mientras dura el mensaje. Los dos salen de que la
-  ventana es BG2, la misma capa que la de encima, y el modo 3 no tiene otra.
-* **Correrse si tapa al héroe**: `GetRealPosition`, al abrir cada ventana,
-  con los umbrales de RM2k medidos desde la ventana y no desde el borde de
-  la pantalla, que acá mide 16 líneas menos (`DODGE_*` en
-  `message_place.s`). Prendido por omisión, como en liblcf: por eso varias
-  goldens se corren arriba sin que el juego lo pida. La prueba cubre abajo
-  que se corre arriba; arriba y al medio que se corren, no.
-* **Los eventos se mueven durante el mensaje**: las rutas propias de las
-  páginas siguen leyendo órdenes con una página corriendo. Era una
-  condición más en `event_routes.s`. **No lo cubre ninguna prueba**: ABL lo
-  usa 3 veces.
+* **The position**: top at line 0, middle at 72 —centred in the
+  224— and bottom at 144, as always. The choice and the digits go in the
+  same window, so they follow it on their own.
+* **No background**: the text with its shadow over the map. With two limits,
+  written in `workflow/divergencias/la-ventana-sin-fondo-no-tapa-a-los-personajes.md`:
+  the characters pass over the text, and the map's upper layer isn't
+  visible in the band while the message lasts. Both come from the
+  window being BG2, the same layer as the upper one, and mode 3 has no other.
+* **Move if it covers the hero**: `GetRealPosition`, on opening each window,
+  with RM2k's thresholds measured from the window and not from the edge of
+  the screen, which here measures 16 lines less (`DODGE_*` in
+  `message_place.s`). On by default, as in liblcf: that's why several
+  goldens move to the top without the game asking for it. The test covers bottom
+  moving to top; top and middle moving, it doesn't.
+* **Events move during the message**: the pages' own routes
+  keep reading commands with a page running. It was one more
+  condition in `event_routes.s`. **No test covers it**: ABL
+  uses it 3 times.
 
-Y una que no estaba pedida: con la ventana arriba, el cronómetro baja al pie
-de la pantalla, como `Sprite_Timer` —RM2k lo dibuja encima de la ventana y
-acá la máscara de los objetos lo escondía—.
+And one that wasn't asked for: with the window at the top, the timer moves down to the foot
+of the screen, like `Sprite_Timer` —RM2k draws it over the window and
+here the object mask hid it—.
 
-### Cómo se mueve
+### How it moves
 
-Ni scroll de la capa ni reescribir el tilemap: **el HDMA**. Ya cambiaba
-BG2SC y el scroll de BG2 en la línea 144; ahora las tablas tienen tres
-tramos, que alcanzan para las tres posiciones, y las escribe
-`msg_hdma_build` en el vblank en que la ventana aparece. Sin fondo tampoco
-escribe VRAM: el tilemap de la ventana es de 32x32 y el marco usaba diez
-filas, así que debajo va el mismo plano sin marco y el scroll elige.
+Neither layer scroll nor rewriting the tilemap: **HDMA**. It already changed
+BG2SC and BG2's scroll at line 144; now the tables have three
+segments, which are enough for the three positions, and they're written by
+`msg_hdma_build` in the vblank in which the window appears. No background doesn't
+write VRAM either: the window's tilemap is 32x32 and the frame used ten
+rows, so below goes the same plane without the frame and the scroll chooses.
 
-### Lo que usa
+### What it uses
 
 * Opcode `0x41`, `OP_MESSAGE_OPTIONS (options: byte)`.
-* RAM: `FAR_MSG_OPTIONS` en `$7E25FB`, en la partida; `MSG_PLACE`,
-  `MSG_SC`, `MSG_ENTRY` y `MSG_VOFS` en `$7E25F6`-`$7E25F9`, fuera de ella.
-  El hueco `$2580`-`$25EF` está lleno: la primera versión puso la máscara
-  en `$25C4` y pisaba el estado del MSU-1 y de la música.
-* VRAM: nada nuevo. El segundo plano va en las filas 10 a 19 del tilemap de
-  la ventana, que estaban sin usar en los seis repartos y en las imágenes
-  grandes.
-* ROM: las máscaras de los objetos pasaron a cuatro tablas en `$C0`.
+* RAM: `FAR_MSG_OPTIONS` at `$7E25FB`, in the save; `MSG_PLACE`,
+  `MSG_SC`, `MSG_ENTRY` and `MSG_VOFS` at `$7E25F6`-`$7E25F9`, outside it.
+  The gap `$2580`-`$25EF` is full: the first version put the mask
+  at `$25C4` and stomped on the MSU-1 and music state.
+* VRAM: nothing new. The second plane goes in rows 10 to 19 of the window's
+  tilemap, which were unused in the six layouts and in the large
+  pictures.
+* ROM: the object masks became four tables at `$C0`.
 
-### Verificado
+### Verified
 
-* La tanda de ABL con `cartridge`, `events`, `mapdata` y `convert` de este
-  árbol: verde, con la prueba nueva y 22 goldens movidas. Se repitió hasta
-  que no apareció ninguna roja nueva: cinco vueltas.
-* El rojo de antes: la prueba nueva con las herramientas globales da 9 de
-  10 en rojo —pasa `ventana-abajo`, que es lo de siempre—.
-* `cargo test` de `events` y `mapdata`, y `just -f tools/justfile test`.
-* Contra el original con Wine: la misma página de los casos puesta en una
-  copia del juego. Las posiciones y el texto sin fondo caen igual.
+* ABL's suite with `cartridge`, `events`, `mapdata` and `convert` from this
+  tree: green, with the new test and 22 goldens moved. It was repeated until
+  no new red appeared: five rounds.
+* The red from before: the new test with the global tools gives 9 out of
+  10 red —`ventana-abajo` passes, which is the usual behaviour—.
+* `cargo test` of `events` and `mapdata`, and `just -f tools/justfile test`.
+* Against the original under Wine: the same page from the cases placed in a
+  copy of the game. The positions and the no-background text land the same.
 
-## Para taro
+## For taro
 
-Jugar una cinemática con texto sin fondo y una con la ventana arriba —la
-corrida al trabajo, con el cronómetro—. Las goldens lado a lado, el
-original al lado y un LEEME, en `/shared/capturas/2026-10-04-ventana-de-mensajes/`.
+Play a cutscene with no-background text and one with the window at the top —the
+run to work, with the timer—. The goldens side by side, the
+original next to them and a LEEME, in `/shared/capturas/2026-10-04-ventana-de-mensajes/`.
 
-Al mergear, reinstalar `cartridge` —trae el runtime—, `events`, `mapdata` y
-`convert`. `bytecode` cambió pero es biblioteca, adentro de ésos.
+On merging, reinstall `cartridge` —it brings the runtime—, `events`, `mapdata` and
+`convert`. `bytecode` changed but it's a library, inside those.

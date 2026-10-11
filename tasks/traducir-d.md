@@ -1,63 +1,63 @@
 ---
-name: "Traducir las herramientas al inglés, fase 1: el runtime"
-description: "Comentarios, docstrings, mensajes y prosa al inglés, sin tocar nombres de código: tools/runtime/, los comentarios de los .s y .inc escritos a mano"
+name: "Translate the tools into English, phase 1: the runtime"
+description: "Comments, docstrings, messages and prose into English, without touching code names: tools/runtime/, the comments of the hand-written .s and .inc files"
 type: refactor
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-09-29: "traducir las herramientas a inglés". Es la regla de
-AGENTS.md para los proyectos aparte, que ahora alcanza a todo `tools/`
-(ver `workflow/decisiones/las-herramientas-se-separan-de-abl.md`).
+From taro, on 2026-09-29: "translate the tools into English". It's the rule in
+AGENTS.md for the separate projects, which now reaches all of `tools/`
+(see `workflow/decisiones/las-herramientas-se-separan-de-abl.md`).
 
-**Fase 1**, repartida entre cuatro agentes por área: comentarios, docstrings,
-mensajes de error, `help=` y prosa. **Los nombres de código no se tocan** —
-módulos, funciones, variables, símbolos del runtime, flags—: eso es la fase
-2, de a un área por vez, porque un nombre cambia en todos los que lo
-importan. Los términos salen de `tools/GLOSSARY.md`.
+**Phase 1**, split among four agents by area: comments, docstrings,
+error messages, `help=` and prose. **Code names aren't touched** —
+modules, functions, variables, runtime symbols, flags—: that's phase
+2, one area at a time, because a name changes in everything that
+imports it. The terms come from `tools/GLOSSARY.md`.
 
-Alcance de esta parte: tools/runtime/, los comentarios de los .s y .inc escritos a mano.
+Scope of this part: tools/runtime/, the comments of the hand-written .s and .inc files.
 
-## Cómo se hizo
+## How it was done
 
-El 2026-09-29, Palmar. Son 93 `.s` escritos a mano y unas 44.000 líneas; los
-dos `.inc` de al lado (`event_opcodes.inc`, `music_opcodes.inc`) salen de
-`tools/protocol/` y **ya tenían el encabezado en inglés**: no se tocaron.
+On 2026-09-29, Palmar. There are 93 hand-written `.s` files and some 44,000 lines; the
+two `.inc` files next to them (`event_opcodes.inc`, `music_opcodes.inc`) come from
+`tools/protocol/` and **already had their header in English**: they weren't touched.
 
-Se repartió en nueve grupos de unos diez archivos, uno por ayudante, cada uno
-en su worktree; cada grupo es un commit. Qué se traduce: todo lo que sigue al
-`;`, y el mensaje de los `.assert ..., error, "…"`, que es texto que imprime
-`ca65` cuando falla el armado y no un dato. Qué no: nada a la izquierda del
-`;`, ni los strings de `.byte`/`.asciiz`, ni los identificadores que los
-comentarios citan.
+It was split into nine groups of about ten files, one per helper, each one
+in its own worktree; each group is a commit. What gets translated: everything after the
+`;`, and the message of the `.assert ..., error, "…"`, which is text that
+`ca65` prints when the build fails and not data. What doesn't: nothing to the left of the
+`;`, nor the `.byte`/`.asciiz` strings, nor the identifiers the
+comments cite.
 
-Dos redes por grupo:
+Two safety nets per group:
 
-* un comparador que saca comentarios y mensajes de `.assert` —respetando
-  `"…"` y `'x'`— y exige que el resto sea línea por línea lo de `HEAD`;
-* `SIN_CACHE=1 just cartuchos` y el sha256 de los `.sfc`, `.msu` y `.pcm` de
-  `rom/build/`, que tienen que salir iguales a los de antes de empezar.
+* a comparer that strips comments and `.assert` messages —respecting
+  `"…"` and `'x'`— and requires the rest to be line by line what's in `HEAD`;
+* `SIN_CACHE=1 just cartuchos` and the sha256 of the `.sfc`, `.msu` and `.pcm` in
+  `rom/build/`, which have to come out the same as before starting.
 
-## Qué quedó
+## What was left
 
-Los 93 `.s`, en nueve commits de grupo y uno que alinea los grupos entre
-sí: unas 10.700 líneas de comentario reescritas. Los `.sfc`, `.msu` y
-`.pcm` de `rom/build/` salieron con el mismo sha256 después de cada commit,
-y sobre el árbol mergeado con `main` pasan las dos tandas.
+The 93 `.s` files, in nine group commits and one that aligns the groups with
+each other: some 10,700 comment lines rewritten. The `.sfc`, `.msu` and
+`.pcm` in `rom/build/` came out with the same sha256 after each commit,
+and on the tree merged with `main` both suites pass.
 
-**Lo que quedó en castellano a propósito**, dentro de los comentarios:
+**What was left in Spanish on purpose**, inside the comments:
 
-* los identificadores, rutas y nombres de Python que se citan: son la fase 2;
-* títulos de secciones de archivos que no son del runtime, que se citan
-  entre comillas para que se puedan buscar: "Cuánto tarda"
-  (`docs/port/msu-datos.md`), "Qué fondos hay" y "El respaldo liviano"
+* the identifiers, paths and Python names being cited: they're phase 2;
+* section titles of files that aren't the runtime's, cited
+  in quotes so they can be searched for: "Cuánto tarda"
+  (`docs/port/msu-datos.md`), "Qué fondos hay" and "El respaldo liviano"
   (`tools/port/escena.py`), "el formato por nota" (`tools/audio/snes_music.py`),
-  "lo que depende del actor" (`titulo.py`), y el título de sección de
-  `tasks/audio-bgm.md` que cita `paquete_de_audio.s`. **Si la
-  fase 1 de esos archivos traduce el título, la cita queda colgando**: hay
-  que hacer grep de cada uno;
-* una frase de taro citada textual en `nivel.s`, con la traducción al lado;
-* el único dato: el `.byte "S-MSU1"` de `msu1.s`.
+  "lo que depende del actor" (`titulo.py`), and the section title of
+  `tasks/audio-bgm.md` that `paquete_de_audio.s` cites. **If the
+  phase 1 of those files translates the title, the citation is left dangling**: each one
+  has to be grepped;
+* a phrase of taro's quoted verbatim in `nivel.s`, with the translation next to it;
+* the only piece of data: the `.byte "S-MSU1"` in `msu1.s`.
 
-Lo que no se puede ver con las dos redes es la calidad de la prosa: el
-comparador sólo dice que el código no cambió.
+What can't be seen with the two safety nets is the quality of the prose: the
+comparer only says the code didn't change.

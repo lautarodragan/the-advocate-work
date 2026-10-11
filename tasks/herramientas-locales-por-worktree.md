@@ -1,91 +1,91 @@
 ---
-name: "Herramientas locales por worktree"
-description: "Un bin/ propio de cada worktree, adelante en el PATH de just, en lugar de ejecutable.py; Rust se compila sólo si el agente toca ese proyecto"
+name: "Local tools per worktree"
+description: "Each worktree's own bin/, first in just's PATH, instead of ejecutable.py; Rust is compiled only if the agent touches that project"
 type: refactor
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-09-29, después del paso 1 (`el-justfile-no-sabe-que-existe-python.md`):
-el problema es el que `npm link` intenta resolver, con N sub-agentes en
-paralelo que modifican las herramientas seguido. Lo acordado:
+From taro, on 2026-09-29, after step 1 (`el-justfile-no-sabe-que-existe-python.md`):
+the problem is the one `npm link` tries to solve, with N sub-agents in
+parallel modifying the tools often. What was agreed:
 
-- cada worktree tiene un `bin/` propio, ignorado por git, que el `justfile`
-  pone adelante en el `PATH` si existe: lo que no está ahí sale del global;
-- Python se linkea entero (los ocho ejecutables), porque no cuesta nada y
-  cada script resuelve sus módulos desde su checkout real;
-- Rust se instala ahí **sólo para el proyecto que el agente modifica**. De
-  taro: "es importante que ningún subagente corra una compilación de Rust
-  innecesaria. Son costosas";
-- `tools/comun/ejecutable.py` se va: resolvía lo mismo de forma implícita;
-- al mergear, el que mergea vuelve a instalar en el global sólo lo de Rust
-  que la rama tocó.
+- each worktree has its own `bin/`, ignored by git, which the `justfile`
+  puts first in the `PATH` if it exists: what isn't there comes from the global one;
+- Python is linked whole (the eight executables), because it costs nothing and
+  each script resolves its modules from its real checkout;
+- Rust is installed there **only for the project the agent modifies**. From
+  taro: "it's important that no subagent runs an unnecessary Rust
+  compilation. They're costly";
+- `tools/comun/ejecutable.py` goes: it resolved the same thing implicitly;
+- on merging, whoever merges reinstalls in the global only the Rust
+  the branch touched.
 
-## Lo hecho (Espinillo)
+## What was done (Espinillo)
 
-* `just herramientas-locales [proyectos…]` arma `.herramientas-locales/bin/`
-  en el worktree: los ocho scripts siempre, y `cargo install --root` sólo de
-  los proyectos nombrados. Sin nombres no compila nada; un nombre que no es
-  proyecto corta antes de compilar. Se niega en el checkout principal
-  (`git-dir` igual a `git-common-dir`).
-* El `justfile` exporta `PATH` con ese `bin/` adelante si existe
-  (`path_exists`). En `main` no existe.
-* `just herramientas [proyectos…]`: con nombres, sólo esos de Rust más los
-  symlinks de Python; sin nombres, todo, como antes.
-* Las dos usan `_instalar`, que entró en la lista de recetas de las
-  herramientas de `test_lado_de_abl.py` con lo que antes estaba adentro de
+* `just herramientas-locales [proyectos…]` builds `.herramientas-locales/bin/`
+  in the worktree: the eight scripts always, and `cargo install --root` only of
+  the named projects. Without names it compiles nothing; a name that isn't a
+  project stops before compiling. It refuses in the main checkout
+  (`git-dir` equal to `git-common-dir`).
+* The `justfile` exports `PATH` with that `bin/` first if it exists
+  (`path_exists`). In `main` it doesn't exist.
+* `just herramientas [proyectos…]`: with names, only those in Rust plus the
+  Python symlinks; without names, everything, as before.
+* Both use `_instalar`, which joined the list of tool
+  recipes in `test_lado_de_abl.py` with what used to be inside
   `herramientas`.
-* `just cuales` imprime qué ejecutable resuelve el checkout para cada una.
-* Se fue `tools/comun/ejecutable.py` con sus llamadas; `comun/` volvió a su
-  fila en `tools/README.md`.
-* AGENTS.md, "Sub-agentes": qué hace el agente al empezar y qué reinstala el
-  que mergea.
+* `just cuales` prints which executable the checkout resolves for each one.
+* `tools/comun/ejecutable.py` went away with its calls; `comun/` went back to its
+  row in `tools/README.md`.
+* AGENTS.md, "Sub-agentes": what the agent does on starting and what the
+  merger reinstalls.
 
-**El nombre, `.herramientas-locales/`**: en la raíz y no en `tools/`, así que
-la huella —que mira `tools/*/*.py`, `rom/src/` y los binarios que resuelve el
-PATH— no lo recorre, y la prueba del grep tampoco —mira `parches/`, `data/` y
-`pruebas/`—. Oculto, porque no es parte del árbol. Adentro queda lo que
-`cargo install --root` deja: `bin/`, `.crates.toml` y `.crates2.json`.
+**The name, `.herramientas-locales/`**: at the root and not in `tools/`, so
+the fingerprint —which looks at `tools/*/*.py`, `rom/src/` and the binaries the
+PATH resolves— doesn't walk it, and neither does the grep test —it looks at `parches/`, `data/` and
+`pruebas/`—. Hidden, because it isn't part of the tree. Inside is what
+`cargo install --root` leaves: `bin/`, `.crates.toml` and `.crates2.json`.
 
-**Sin el `bin/`, un worktree se niega.** Correría los scripts de `main`,
-que arman en el `rom/build/` de `main`: pisaría sus cartuchos sin enterarse.
-Lo marcó el coordinador antes de mergear, y se resolvió con
-`_herramientas_del_checkout`, de la que dependen `cartuchos`, `build`,
-`pruebas*`, `espacio`, `parches`, `parches-check`, `techos`, `entregar` y
-`video`. Pasa en el checkout principal (`git-dir` igual al común) y en un
-worktree con `.herramientas-locales/bin/`. `herramientas-locales` y `cuales`
-no dependen de ella. Medido: sin el `bin/`, `just cartuchos`, `just pruebas`,
-`just espacio release` y `just video` salen 1 con el mensaje, y `just
-cuales` anda; en el checkout principal la receta sale 0; después de `just
-herramientas-locales` —sin Rust— `just cartuchos` arma y `just pruebas` da
-973 en verde, con `abl.sfc` y `prueba.sfc` iguales que antes.
+**Without the `bin/`, a worktree refuses.** It would run `main`'s scripts,
+which build in `main`'s `rom/build/`: it would stomp on its cartridges without noticing.
+The coordinator flagged it before merging, and it was solved with
+`_herramientas_del_checkout`, which `cartuchos`, `build`,
+`pruebas*`, `espacio`, `parches`, `parches-check`, `techos`, `entregar` and
+`video` depend on. It passes in the main checkout (`git-dir` equal to the common one) and in a
+worktree with `.herramientas-locales/bin/`. `herramientas-locales` and `cuales`
+don't depend on it. Measured: without the `bin/`, `just cartuchos`, `just pruebas`,
+`just espacio release` and `just video` exit 1 with the message, and `just
+cuales` works; in the main checkout the recipe exits 0; after `just
+herramientas-locales` —without Rust— `just cartuchos` builds and `just pruebas` gives
+973 green, with `abl.sfc` and `prueba.sfc` the same as before.
 
-**`cargo` fuera de instalar**: sólo lo llaman `herramientas`, `_instalar` y
-las `*-pruebas` de Rust, que son sus pruebas. Ningún `.py` de `tools/` ni de
-`pruebas/` lo llama (grep).
+**`cargo` outside installing**: it's only called by `herramientas`, `_instalar` and
+the Rust `*-pruebas`, which are its tests. No `.py` in `tools/` or in
+`pruebas/` calls it (grep).
 
-### Verificado
+### Verified
 
-* **ROMs**: `SIN_CACHE=1 just cartuchos` en este worktree, con su `bin/`
-  —los ocho scripts y `lz2` locales—: los 47 archivos de `release/` y
-  `tests/special/` con el mismo sha256 que antes del paso 1 (`abl.sfc`
+* **ROMs**: `SIN_CACHE=1 just cartuchos` in this worktree, with its `bin/`
+  —the eight scripts and `lz2` local—: the 47 files in `release/` and
+  `tests/special/` with the same sha256 as before step 1 (`abl.sfc`
   `7a3c6483…6a66552`).
-* **`just pruebas`**: 973 pasan.
-* **Resolución**, con `just cuales`:
-  * este worktree sin `bin/`: todo en `/usr/local/bin`, sin error;
-  * después de `just herramientas-locales`: los ocho locales, Rust global;
-  * después de `just herramientas-locales lz2`: `lz2` también local;
-  * una copia del `justfile` en un directorio sin `bin/` —lo que ve `main`—:
-    todo global.
-* `just herramientas-locales foo` corta sin crear el directorio;
-  `_no_en_el_principal` corrido en el checkout principal sale 1.
-* **Rust se compiló una sola vez**: `lz2`, el más chico (una crate, sin
-  dependencias; `protocol` tiene 34 y 837 líneas contra 700).
-* El global no se tocó: los symlinks de `/usr/local/bin` siguen apuntando al
-  checkout principal, con la fecha de cuando los instaló el coordinador.
-  `just herramientas lz2` se probó sólo con `--dry-run`.
+* **`just pruebas`**: 973 pass.
+* **Resolution**, with `just cuales`:
+  * this worktree without `bin/`: everything in `/usr/local/bin`, no error;
+  * after `just herramientas-locales`: the eight local, Rust global;
+  * after `just herramientas-locales lz2`: `lz2` local too;
+  * a copy of the `justfile` in a directory without `bin/` —what `main` sees—:
+    everything global.
+* `just herramientas-locales foo` stops without creating the directory;
+  `_no_en_el_principal` run in the main checkout exits 1.
+* **Rust was compiled only once**: `lz2`, the smallest (one crate, no
+  dependencies; `protocol` has 34 and 837 lines against 700).
+* The global wasn't touched: the symlinks in `/usr/local/bin` still point to the
+  main checkout, with the date when the coordinator installed them.
+  `just herramientas lz2` was tried only with `--dry-run`.
 
-**Lo que no se probó**: `just herramientas <proyecto>` de verdad contra el
-global, y nada del host (`CARGO_ROOT=~/.cargo`). Tampoco un segundo worktree
-real: "desde `main`" se probó con la copia del `justfile`, no corriendo en
-el checkout principal, que no se quiso tocar.
+**What wasn't tested**: `just herramientas <proyecto>` for real against the
+global, and nothing on the host (`CARGO_ROOT=~/.cargo`). Nor a real second
+worktree: "from `main`" was tested with the copy of the `justfile`, not running in
+the main checkout, which nobody wanted to touch.

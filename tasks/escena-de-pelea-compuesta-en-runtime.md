@@ -1,74 +1,74 @@
 ---
-name: "La escena de pelea en la consola"
-description: "Fondo y enemigos compuestos al empezar la pelea; los muertos desaparecen"
+name: "The battle scene on the console"
+description: "Background and enemies composed when the battle starts; the dead disappear"
 status: done
 ---
 
-**La escena de la pelea, compuesta en la consola y no en el conversor.**
+**The battle scene, composed on the console and not in the converter.**
 
-Hoy `tools/port/escena.py` hornea fondo y monstruos en una imagen por tropa, a
-32 KB cada una (seis en `abl`). Eso multiplica imágenes por combinación, y un
-enemigo muerto se sigue viendo.
+Today `tools/port/escena.py` bakes background and monsters into one image per troop, at
+32 KB each (six in `abl`). That multiplies images per combination, and a
+dead enemy is still visible.
 
-La idea, de taro el 2026-09-21: guardar **cada fondo una vez y cada enemigo una
-vez**, y componer al empezar la pelea.
+The idea, from taro on 2026-09-21: store **each background once and each enemy
+once**, and compose when the battle starts.
 
-- El fondo limpio va a la WRAM; los battlers se superponen con `AND`/`OR` por
-  plano de bits —el 8bpp es planar—, y la escena sube a la VRAM como hoy.
-- Cada battler tiene **15 colores más el transparente**: sus 4 bits bajos salen
-  de su dibujo y los 4 altos son la paleta que le toca en esta pelea. Es una
-  decisión artística —se pierden colores respecto de hoy— y va a `parches/`.
-- Cuando un enemigo muere, se recomponen sus celdas desde el fondo limpio y se
-  suben por DMA. Sin versiones precalculadas.
-- Sin fondo —o sin MSU-1, más adelante— es el mismo código sobre un fondo liso.
+- The clean background goes to WRAM; the battlers are overlaid with `AND`/`OR` per
+  bit plane —8bpp is planar—, and the scene goes up to VRAM as today.
+- Each battler has **15 colours plus transparent**: its low 4 bits come
+  from its drawing and the high 4 are the palette it gets in this battle. It's an
+  artistic decision —colours are lost compared with today— and it goes to `parches/`.
+- When an enemy dies, its cells are recomposed from the clean background and
+  uploaded by DMA. No precomputed versions.
+- With no background —or without MSU-1, later on— it's the same code over a flat background.
 
-PoC: dos fondos en la ROM, `SJBackdropABL04` (la pelea del droide, tropa 82) y
-`ABLBackdropSJ03` (los encuentros al azar de los Back Alleys: tropas 88–93 y
-99–101). Si no entran los dos, sólo el de los Back Alleys.
+PoC: two backgrounds in the ROM, `SJBackdropABL04` (the droid battle, troop 82) and
+`ABLBackdropSJ03` (the random encounters in the Back Alleys: troops 88–93 and
+99–101). If both don't fit, only the Back Alleys one.
 
-Lo que decide si sirve: **cuánto tarda componer la escena más cargada** y **cómo
-se ven los battlers a 15 colores**.
+What decides whether it works: **how long it takes to compose the busiest scene** and **how
+the battlers look at 15 colours**.
 
-## El PoC, hecho (2026-09-21)
+## The PoC, done (2026-09-21)
 
-Anda en `abl`: la pelea del droide sobre `SJBackdropABL04` y los encuentros al
-azar de Sector 30 y Sector 27 sobre `ABLBackdropSJ03`, heredado del mapa como
-hace `Game_Map::SetupBattle`. Un enemigo muerto desaparece. El cómo está en
-`tools/port/escena.py` y arriba de `escena_subir` en `main.s`; los quince
-colores de cada battler, en `parches/battlers/`.
+It works in `abl`: the droid battle over `SJBackdropABL04` and the random
+encounters in Sector 30 and Sector 27 over `ABLBackdropSJ03`, inherited from the map as
+`Game_Map::SetupBattle` does. A dead enemy disappears. The how is in
+`tools/port/escena.py` and above `escena_subir` in `main.s`; the fifteen
+colours of each battler, in `parches/battlers/`.
 
-Las capturas que hay que mirar están en `/extras/capturas/escena-runtime/`
-—antes y después, y un borrado cuadro por cuadro—, y las de las once goldens
-que se movieron, al lado de cada una como `<nombre>.nueva.png`, sin
-reemplazarla.
+The captures to look at are in `/extras/capturas/escena-runtime/`
+—before and after, and an erase frame by frame—, and those of the eleven goldens
+that moved, next to each one as `<nombre>.nueva.png`, without
+replacing it.
 
-**Cómo se mide lo que decide si sirve**, que no se escribe acá porque cambia:
+**How what decides whether it works is measured**, which isn't written here because it changes:
 
-* cuántos cuadros lleva componer: `ESC_CUADROS`, en la RAM, apenas se abre la
-  pelea. La más cargada del PoC es la tropa 100 —el encuentro de
+* how many frames composing takes: `ESC_CUADROS`, in RAM, as soon as the
+  battle opens. The busiest in the PoC is troop 100 —the encounter in
   `test_escena.py`—.
-* cuánto ocupa: la suma de los segmentos de la ROM en el `.dbg` del build de
-  `abl`, contra el de antes.
-* el banco 0: el método de `AGENTS.md`, en los cuatro cartuchos.
+* how much it takes up: the sum of the ROM segments in the `.dbg` of the
+  `abl` build, against the previous one.
+* bank 0: the method in `AGENTS.md`, in the four cartridges.
 
-## Lo que falta para que sea el mecanismo de todas las peleas
+## What's missing for it to be the mechanism of every battle
 
-* **Los demás fondos.** El juego nombra una quincena entre los
-  `EnemyEncounter` y los mapas, a 32 KB cada uno sin comprimir. Comprimirlos
-  es barato de este lado —el fondo limpio ya se arma en la WRAM, así que la
-  descompresión va ahí y el búfer compuesto sale de él con un `mvn`—, y es lo
-  que haría falta antes de sumarlos; o traerlos por MSU-1.
-* **El fondo del mapa en un `EnemyEncounter` que no nombra ninguno**
-  —`parameters[2] == 0`—. Hoy va liso; RM2k usa el del mapa, igual que un
-  encuentro al azar. Y el del terreno, `background_type` 1, que el port no
-  tiene.
-* **Una tropa que dos `EnemyEncounter` piden con fondos distintos** se queda
-  con el primero, como antes: el fondo es de la tropa y no de la pelea. Para
-  eso el opcode tendría que llevarlo.
-* **El borrado es de golpe**: RM2k funde al enemigo que muere. Acá se va en
-  los cuadros que tarda en subir, de a filas de tiles, y la pelea se congela
-  mientras la ROM recompone.
-* **El fundido de entrada a la pelea no existe en el port**: la composición
-  pasa con la pantalla negra. RM2k hace dos destellos y una transición de 41
-  cuadros para salir del mapa y otra de 41 para entrar, así que el negro
-  entraría adentro de la primera.
+* **The other backgrounds.** The game names about fifteen between the
+  `EnemyEncounter`s and the maps, at 32 KB each uncompressed. Compressing them
+  is cheap on this side —the clean background is already built in WRAM, so the
+  decompression goes there and the composed buffer comes out of it with an `mvn`—, and it's
+  what would be needed before adding them; or bring them through MSU-1.
+* **The map's background in an `EnemyEncounter` that names none**
+  —`parameters[2] == 0`—. Today it goes flat; RM2k uses the map's, just like a
+  random encounter. And the terrain's, `background_type` 1, which the port doesn't
+  have.
+* **A troop that two `EnemyEncounter`s ask for with different backgrounds** keeps
+  the first, as before: the background belongs to the troop and not to the battle. For
+  that the opcode would have to carry it.
+* **The erase is all at once**: RM2k fades out the enemy that dies. Here it goes in
+  the frames it takes to upload, in rows of tiles, and the battle freezes
+  while the ROM recomposes.
+* **The fade into battle doesn't exist in the port**: the composition
+  happens with the screen black. RM2k does two flashes and a 41-frame
+  transition to leave the map and another of 41 to come in, so the black
+  would fit inside the first one.

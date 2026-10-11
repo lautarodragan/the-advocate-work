@@ -1,109 +1,109 @@
 ---
-name: "Los textos de la pelea"
-description: "Mensajes de pelea cortados a 31 caracteres o pasados del borde"
+name: "The battle texts"
+description: "Battle messages cut at 31 characters or running past the edge"
 type: bug
 status: done
 assignee: taro
 ---
 
-**Los textos de la pelea que no entran en el ancho de la pantalla.**
+**The battle texts that don't fit in the width of the screen.**
 
-Dos casos, los dos de la pantalla de pelea:
+Two cases, both on the battle screen:
 
-- **Los mensajes de las páginas de tropa se cortan a los 31 caracteres.**
-  Algunas líneas de `Absorb Aura` llegan a 40 ("RainDrop... GatheringWaves...") y
-  pierden la segunda técnica.
-- **El mensaje propio de la pelea se pasa del borde** en vez de cortarse:
-  "Talan has absorbed the enemy aura!". Ya estaba así antes de las páginas de
-  tropa.
+- **The troop page messages are cut at 31 characters.**
+  Some lines of `Absorb Aura` reach 40 ("RainDrop... GatheringWaves...") and
+  lose the second technique.
+- **The battle's own message runs past the edge** instead of being cut:
+  "Talan has absorbed the enemy aura!". It was already like that before the troop
+  pages.
 
-Salen de `el-sistema-de-batalla-de-talan.md`.
+They come from `el-sistema-de-batalla-de-talan.md`.
 
-**Otro caso, visto el 2026-09-26 al hacer el elixir en la pelea**: "Kersh
-Pungent Elixir-LIFE  used." pasa de 32 columnas y el punto cae en la columna
-0 del renglón de abajo, delante de "Core has revived!". Pasa con cualquier
-ítem de nombre largo, y el nombre del LDB trae un espacio al final.
+**Another case, seen on 2026-09-26 while doing the elixir in battle**: "Kersh
+Pungent Elixir-LIFE  used." goes past 32 columns and the full stop falls in column
+0 of the line below, in front of "Core has revived!". It happens with any
+item with a long name, and the name in the LDB has a trailing space.
 
-**Dos más, desde que corren las páginas por turno y por HP (2026-09-28)**: el
-despegue de la pelea de los agentes sale "The Captain has taken off in th", y
-el segundo llamado del Rat King pierde la "s" de "sounds". Ver
+**Two more, since the per-turn and per-HP pages run (2026-09-28)**: the
+take-off in the agents' battle comes out "The Captain has taken off in th", and
+the Rat King's second call loses the "s" of "sounds". See
 `tasks/*/eventos-de-tropa-de-release.md`.
 
-# Lo que se hizo (Cardenal, 2026-10-02)
+# What was done (Cardenal, 2026-10-02)
 
-**Qué dijo el blame del tope de 31.** Nace en `a7cd387a` (2026-09-21), "Las
-páginas de tropa se compilan", como `BA_PAG_MSG_ANCHO = 31`: es lo que entra
-desde la columna 1 en una pantalla de 32 celdas, y el comentario ya decía
-que los renglones de hasta cuarenta de los sistemas de Talan perdían su
-segunda técnica, y que era deuda declarada. El bloque `messages_troop` se
-armaba con la ventana del mapa —39 columnas— y la ROM cortaba al dibujar.
-Fue una decisión consciente de dejarlo para después, no de cortar.
+**What the blame said about the cap of 31.** It's born in `a7cd387a` (2026-09-21), "Las
+páginas de tropa se compilan", as `BA_PAG_MSG_ANCHO = 31`: it's what fits
+from column 1 on a 32-cell screen, and the comment already said
+that the up-to-forty lines of Talan's systems lost their
+second technique, and that it was declared debt. The `messages_troop` block was
+built with the map's window —39 columns— and the ROM cut when drawing.
+It was a conscious decision to leave it for later, not to cut.
 
-Los mensajes propios de la pelea se arman pegando pedazos desde la primera
-versión (`9527063d`): nadie decidió que se pasaran, nunca se midió cuánto
-miden. Medido sobre el LDB: 43 pares de actor y habilidad pasan de 31 en el
-primer renglón, el más largo de 41, y 3 `using_message2` en el segundo, el
-más largo de 50 (el de la habilidad 144, de Manta).
+The battle's own messages are built by gluing pieces together since the first
+version (`9527063d`): nobody decided they would run over, how long they are was
+never measured. Measured over the LDB: 43 actor and skill pairs go past 31 on the
+first line, the longest at 41, and 3 `using_message2` on the second, the
+longest at 50 (the one for skill 144, Manta's).
 
-**Las páginas de tropa** (el primer commit): el compilador rehace las cajas
-de las páginas para la ventana de la pelea —31 por 4— con el mismo `refit`
-que las del mapa usan para la suya (`reflow` en `troops.rs`); el conversor
-le pasa la ventana en el pedido, `troop_window`, con el ancho que contesta
-`rm2k-snes-battle layout`. La ROM no cambia. "The Captain has taken off in
-the ship!" sale en una caja de tres renglones con TALAN arriba.
+**The troop pages** (the first commit): the compiler redoes the pages'
+boxes for the battle window —31 by 4— with the same `refit`
+the map's use for their own (`reflow` in `troops.rs`); the converter
+passes it the window in the request, `troop_window`, with the width that
+`rm2k-snes-battle layout` answers. The ROM doesn't change. "The Captain has taken off in
+the ship!" comes out in a three-line box with TALAN at the top.
 
-Pruebas, en ABL: `test_el_despegue_se_lee_entero` lee la pantalla —no el
-cartucho— y exige el texto entero del LDB; en rojo antes: "The Captain has
-taken off in th". Las que comparaban el bloque contra el LDB
-(`test_eventos_de_tropa.py`, `test_sistemas_de_tropa.py`) ahora comparan
-contra las cajas rehechas (`screen_stage.refit`).
+Tests, in ABL: `test_el_despegue_se_lee_entero` reads the screen —not the
+cartridge— and requires the whole text from the LDB; red before: "The Captain has
+taken off in th". The ones that compared the block against the LDB
+(`test_eventos_de_tropa.py`, `test_sistemas_de_tropa.py`) now compare
+against the redone boxes (`screen_stage.refit`).
 
-**Los mensajes propios de la pelea** (el segundo commit, en la ROM):
-`ba_message` ya no escribe letra por letra en la pantalla. Arma los dos
-renglones de RM2k en `BA_MBUF` —`ba_put`, `ba_put_text`, `ba_put_name`,
-`ba_put_number`— y `ba_flow` los parte en los espacios en renglones de 31
-(una palabra más larga, en el borde), y los dibuja desde abajo: con dos o
-menos van donde iban siempre, y con más suben sobre los del grupo, que es lo
-que tapa la ventana de mensajes de RM2k. Hasta cuatro.
+**The battle's own messages** (the second commit, in the ROM):
+`ba_message` no longer writes letter by letter on the screen. It builds RM2k's two
+lines in `BA_MBUF` —`ba_put`, `ba_put_text`, `ba_put_name`,
+`ba_put_number`— and `ba_flow` splits them at the spaces into lines of 31
+(a longer word, at the edge), and draws them from the bottom: with two or
+fewer they go where they always went, and with more they go up over the party's, which is
+what RM2k's message window covers. Up to four.
 
-- RAM: `$7E7B00`-`$7E7BFF`, en `far_ram.s` (`BA_MBUF` y compañía). Ningún
-  símbolo de los tres cartuchos caía ahí —medido sobre `abl.sfc.sym`—, y no
-  toca `FAR_PAIR_LIST` (`$7E2400`-`$7E257F`).
-- Se fue `ba_number_exact`: lo usaba sólo `ba_message`.
+- RAM: `$7E7B00`-`$7E7BFF`, in `far_ram.s` (`BA_MBUF` and company). No
+  symbol of the three cartridges fell there —measured over `abl.sfc.sym`—, and it doesn't
+  touch `FAR_PAIR_LIST` (`$7E2400`-`$7E257F`).
+- `ba_number_exact` is gone: only `ba_message` used it.
 
-Pruebas, en ABL (`test_batalla.py`): `test_el_mensaje_del_elixir_entra_en_la_pantalla`
-y `test_el_mensaje_de_detect_aura_entra_en_la_pantalla` leen la pantalla y
-exigen los renglones que da `envolver`, la regla escrita en la prueba.
-En rojo antes: `'#Kersh Pungent Elixir-LIFE  used'` —el `#` es la celda que
-pisó el punto— y `'####an has perceived the enemy a'`.
+Tests, in ABL (`test_batalla.py`): `test_el_mensaje_del_elixir_entra_en_la_pantalla`
+and `test_el_mensaje_de_detect_aura_entra_en_la_pantalla` read the screen and
+require the lines that `envolver` gives, the rule written in the test.
+Red before: `'#Kersh Pungent Elixir-LIFE  used'` —the `#` is the cell the
+full stop stomped on— and `'####an has perceived the enemy a'`.
 
-**Ninguna golden se movió**: ninguna muestra un mensaje que se pase. Las
-capturas de los casos nuevos, antes y después, en
+**No golden moved**: none shows a message that runs over. The
+captures of the new cases, before and after, in
 `/shared/capturas/2026-10-02-textos-de-la-pelea/`.
 
-**Lo que queda**: el corte de `ba_page_message` sigue, para un renglón que
-`refit` no pueda partir (una palabra de más de 31). Una página con `\V[n]`
-que crezca al poner los dígitos también se corta en el borde, como en el
-mapa.
+**What's left**: `ba_page_message`'s cut remains, for a line that
+`refit` can't split (a word longer than 31). A page with `\V[n]`
+that grows when the digits are put in is also cut at the edge, as in the
+map.
 
-# Qué tiene que mirar taro
+# What taro has to look at
 
-- **La pelea de los agentes** en la terraza (mapa 32): después de la
-  sacudida, "TALAN / The Captain has taken off / in the ship!", entero.
-- **El Rat King**: los dos llamados, el segundo con su "sounds".
-- **Absorb Aura de Talan**: las técnicas que aprende, ahora sin cortar.
-- **Usar el Pungent Elixir-LIFE** en una pelea: "Kersh Pungent Elixir-LIFE"
-  / "used." / "Core has revived!", tres renglones, el primero sobre el lugar
-  del cuarto del grupo.
-- **Cualquier habilidad de nombre largo**: Detect Aura, Mindshield, las de
-  Manta. Si el mensaje tiene más de dos renglones, tapa a los últimos del
-  grupo mientras dura: a propósito, como la ventana de RM2k. Decidir
-  jugando si se lee bien.
+- **The agents' battle** on the terrace (map 32): after the
+  shake, "TALAN / The Captain has taken off / in the ship!", whole.
+- **The Rat King**: both calls, the second with its "sounds".
+- **Talan's Absorb Aura**: the techniques he learns, now uncut.
+- **Using the Pungent Elixir-LIFE** in a battle: "Kersh Pungent Elixir-LIFE"
+  / "used." / "Core has revived!", three lines, the first over the place
+  of the party's fourth.
+- **Any skill with a long name**: Detect Aura, Mindshield, Manta's.
+  If the message has more than two lines, it covers the last ones of the
+  party while it lasts: on purpose, like RM2k's window. Decide
+  while playing whether it reads well.
 
-# Al mergear
+# On merging
 
-- Instalar en el global: `just -f tools/justfile install events convert`
-  (y `cartridge`, que arma con el runtime del checkout). `battle` sólo
-  cambió un comentario en este arreglo; con el del crítico se instala igual.
-- Ramas: `worktree-agent-a33a321932dffd972` acá, `cardenal-textos-y-critico`
-  en el clon de ABL (`/extras/scratch/cardenal/abl`).
+- Install in the global: `just -f tools/justfile install events convert`
+  (and `cartridge`, which builds with the checkout's runtime). `battle` only
+  changed a comment in this fix; with the critical-hit one it gets installed anyway.
+- Branches: `worktree-agent-a33a321932dffd972` here, `cardenal-textos-y-critico`
+  in the ABL clone (`/extras/scratch/cardenal/abl`).

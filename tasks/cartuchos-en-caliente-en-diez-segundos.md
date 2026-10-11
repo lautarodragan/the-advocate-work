@@ -1,84 +1,84 @@
 ---
-name: "Cartuchos en caliente en diez segundos"
-description: "Segunda vuelta de optimizar `just cartuchos`: el objetivo de taro era menos de 10 s en caliente, sin refactors y con todo rom/build byte por byte igual"
+name: "Warm cartridges in ten seconds"
+description: "Second round of optimising `just cartuchos`: taro's goal was under 10 s warm, with no refactors and all of rom/build identical byte for byte"
 type: refactor
 status: done
 ---
 
-Pedido de taro, el 2026-09-26, después de `que-armar-los-cartuchos-tarde-menos.md`:
-`just cartuchos` en caliente por debajo de 10 s, y bajar también el camino
-en frío. Mismas reglas que la vuelta anterior: sin refactors innecesarios,
-sin cambiar qué produce el conversor, y todo `rom/build/release` y
-`rom/build/tests` byte por byte igual y determinista.
+Request from taro, on 2026-09-26, after `que-armar-los-cartuchos-tarde-menos.md`:
+`just cartuchos` warm under 10 s, and also bring down the cold
+path. Same rules as the previous round: no unnecessary refactors,
+without changing what the converter produces, and all of `rom/build/release` and
+`rom/build/tests` identical byte for byte and deterministic.
 
-**No se llegó a 10 s.** Los números de cada paso, antes y después, están en
-el mensaje de cada commit, que es donde no envejecen; `just cartuchos` los
-imprime.
+**10 s wasn't reached.** The numbers for each step, before and after, are in
+each commit's message, which is where they don't go stale; `just cartuchos`
+prints them.
 
-## Dónde se iba el tiempo, después de la vuelta anterior
+## Where the time went, after the previous round
 
-En caliente, casi todo es el conversor de `release`, y adentro no había una
-etapa que dominara: la música (`build_varios`), el `convertir` de cada mapa, la
-escena de batalla, los barridos que cargan todos los mapas del juego para
-indexar variables y habilidades, y un reguero de etapas chicas. Detrás del
-conversor va el `ca65` de `release`, que no se puede apurar sin cambiar lo
-que el conversor emite.
+Warm, nearly all of it is `release`'s converter, and inside there was no
+stage that dominated: the music (`build_varios`), each map's `convertir`, the
+battle scene, the sweeps that load every map in the game to
+index variables and skills, and a trickle of small stages. Behind the
+converter comes `release`'s `ca65`, which can't be sped up without changing
+what the converter emits.
 
-En frío, las capas del mapa 2 eran el piso: las capas van un proceso por
-mapa, así que el build no termina antes que el mapa más caro. Con ese piso
-bajado, el camino crítico pasó a ser las pistas de MSU-1, una detrás de la
-otra.
+Cold, map 2's layers were the floor: layers go one process per
+map, so the build doesn't finish before the most expensive map. With that floor
+lowered, the critical path became the MSU-1 tracks, one after the
+other.
 
-## Lo hecho, un commit por cosa
+## What was done, one commit per thing
 
-1. Los colores y los tiles de las poses de los CharSets con numpy.
-2. `merge_least_visible` con numpy.
-3. `fork.mapas` recuerda lo validado mientras el directorio no cambie.
-4. Las zonas del SoundFont, pedidas a `gunter` en hilos.
-5. Los temas de `build_varios`, en paralelo.
-6. Los barridos de variables y habilidades, en paralelo.
-7. `comun/paralelo.en_paralelo`, uno solo para todo lo anterior, y con él
-   los MIDI y los efectos.
-8. Las capas se cuantizan y se cortan en celdas con numpy (el piso en frío).
-9. Las pistas de MSU-1, a la vez.
-10. Los `indexar_*` y los barridos leen un solo LDB.
-11. La pantalla de ítems cuenta los colores con numpy.
-12. Las muestras de cada tema, decodificando en paralelo.
-13. `en_paralelo` corre en serie si el proceso ya tiene hilos: en un worker
-    de pytest con un core cargado, bifurcar puede trabar al hijo.
+1. The colours and tiles of the CharSets' poses with numpy.
+2. `merge_least_visible` with numpy.
+3. `fork.mapas` remembers what it validated as long as the directory doesn't change.
+4. The SoundFont zones, requested from `gunter` in threads.
+5. The themes of `build_varios`, in parallel.
+6. The variable and skill sweeps, in parallel.
+7. `comun/paralelo.en_paralelo`, a single one for all of the above, and with it
+   the MIDIs and the sound effects.
+8. The layers are quantised and cut into cells with numpy (the cold floor).
+9. The MSU-1 tracks, at the same time.
+10. The `indexar_*` and the sweeps read a single LDB.
+11. The item screen counts colours with numpy.
+12. Each theme's samples, decoding in parallel.
+13. `en_paralelo` runs serially if the process already has threads: in a pytest
+    worker with a loaded core, forking can hang the child.
 
-Cada uno verificado igual: `cartuchos.py` en frío (`SIN_CACHE=1`), con el
-caché borrado —la corrida que lo llena— y en caliente, comparando el sha256
-de todo `rom/build/release` y `rom/build/tests`, salvo el `.o` y los
-`mtime` del `.dbg`, contra lo que armaba el `main` de partida; y lo mismo
-después de mergear `main`, contra lo que arma ese `main`. `just pruebas` en
-verde al final.
+Each one verified the same way: `cartuchos.py` cold (`SIN_CACHE=1`), with the
+cache deleted —the run that fills it— and warm, comparing the sha256
+of all of `rom/build/release` and `rom/build/tests`, except the `.o` and the
+`.dbg`'s `mtime`s, against what the starting `main` built; and the same
+after merging `main`, against what that `main` builds. `just pruebas`
+green at the end.
 
-## Lo que queda
+## What's left
 
-* **Un sello partido en dos: el del conversor y el del ensamblado.** Es lo
-  que llevaría a menos de 10 s el caso más común, que es tocar `rom/src/`.
-  Hoy la huella de `cartuchos.py` mete todo `rom/src/` en el mismo sello que
-  los `.py` de `tools/`, así que tocar una línea de ensamblador vuelve a
-  convertir todo. El conversor lee de `rom/src/` un solo archivo,
-  `ram_lejana.s` —lo comprobé con un audit hook sobre la conversión de
-  `release`—, así que con un sello para el conversor (flags, casos, `tools/`,
-  binarios del conversor, `parches/manual/`, techos y `ram_lejana.s`) y otro
-  para el ensamblado (`rom/src/`, `ca65`, `ld65`), tocar ensamblador sería
-  sólo `ca65` y `ld65`. Es un cambio de estructura en `cartuchos.py` y no se
-  hizo.
-* **El conversor en caliente sigue siendo un reguero**: `convertir` (los
-  atlas de los ChipSets para decidir qué se hornea, `build_blocks`, las
-  poses), lo que queda en serie de la música, las dos `emit`, la escena,
-  la compresión, el acomodo de bancos. Ninguna pasa de un par de décimas
-  sola; bajarlas todas juntas pide paralelizar `convertir` por mapa o
-  superponer etapas del `main`, que es la tarea de responsabilidades
+* **A stamp split in two: the converter's and the assembly's.** It's what
+  would take the most common case, which is touching `rom/src/`, under 10 s.
+  Today `cartuchos.py`'s fingerprint puts all of `rom/src/` in the same stamp as
+  the `.py` files of `tools/`, so touching one line of assembler converts
+  everything again. The converter reads a single file from `rom/src/`,
+  `ram_lejana.s` —I checked it with an audit hook over `release`'s
+  conversion—, so with one stamp for the converter (flags, cases, `tools/`,
+  converter binaries, `parches/manual/`, ceilings and `ram_lejana.s`) and another
+  for the assembly (`rom/src/`, `ca65`, `ld65`), touching assembler would be
+  just `ca65` and `ld65`. It's a structural change in `cartuchos.py` and wasn't
+  done.
+* **The warm converter is still a trickle**: `convertir` (the
+  ChipSet atlases to decide what gets baked, `build_blocks`, the
+  poses), what's left serial in the music, the two `emit`, the scene,
+  the compression, the bank packing. None goes over a couple of tenths
+  alone; lowering them all together requires parallelising `convertir` per map or
+  overlapping stages of `main`, which is the responsibilities task
   (`las-responsabilidades-de-snes-convert.md`).
-* **El `ca65` de `release` es un piso**: arma el `mapdata.inc` entero, que
-  son megas de `.byte` en texto. Bajarlo es emitir los bloques grandes como
-  binario (`.incbin`), que cambia lo que produce el conversor.
-* **En frío**, con las capas del mapa 2 bajadas, lo que queda de él es sobre
-  todo el dibujo con Pillow (`render_layers`, una pegada por tile) y
-  `imagen()` en `convert`, que arma los pixeles de cada dibujo en Python;
-  esta segunda se podría hacer con las celdas compartidas de
-  `tiles_cuantizados`, como `_colores_de`.
+* **`release`'s `ca65` is a floor**: it assembles the whole `mapdata.inc`, which
+  is megabytes of `.byte` in text. Lowering it means emitting the big blocks as
+  binary (`.incbin`), which changes what the converter produces.
+* **Cold**, with map 2's layers lowered, what's left of it is mostly
+  the drawing with Pillow (`render_layers`, one paste per tile) and
+  `imagen()` in `convert`, which builds the pixels of each drawing in Python;
+  this second one could be done with the shared cells of
+  `tiles_cuantizados`, like `_colores_de`.

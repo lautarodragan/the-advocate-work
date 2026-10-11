@@ -1,139 +1,139 @@
 ---
-name: "Los textos sin comprimir"
-description: "119 KB de textos a un byte por letra: mensajes repetidos, nombres y DTE los bajarían uno o dos bancos, sin perder el acceso directo a cada cuadro"
+name: "The uncompressed texts"
+description: "119 KB of text at one byte per letter: repeated messages, names and DTE would bring them down one or two banks, without losing direct access to each box"
 type: feature
 status: done
 assignee: taro
 ---
 
-No urge: se hace cuando apriete el espacio, probablemente con el capítulo
-siguiente al del mundo. Lo decidió taro el 2026-09-27.
+Not urgent: it gets done when space gets tight, probably with the chapter
+after the world one. taro decided it on 2026-09-27.
 
-# Lo medido
+# What was measured
 
-Con un script descartable sobre el bloque `mensajes` de `release` en
-3c16a178 (cómo está hoy lo imprime `just espacio`):
+With a throwaway script over the `mensajes` block of `release` at
+3c16a178 (how it is today is printed by `just espacio`):
 
-    como hoy, un byte por letra     119.082 B
-    LZ2, en dos flujos de < 64 KB    63.405 B   (47 % menos)
-    zlib -9, de referencia           46.550 B   (61 % menos)
+    as today, one byte per letter    119,082 B
+    LZ2, in two streams of < 64 KB   63,405 B   (47 % less)
+    zlib -9, for reference           46,550 B   (61 % less)
 
-Usa 88 valores de byte de 256.
+It uses 88 byte values out of 256.
 
-# Por qué no LZ2
+# Why not LZ2
 
-La ROM abre cada cuadro en su desplazamiento exacto (`msg_empezar`). Con LZ2
-habría que descomprimir desde el principio de un bloque para llegar a una
-frase: tiempo o RAM, y cuanto más chicos los bloques, menos comprime.
+The ROM opens each box at its exact offset (`msg_empezar`). With LZ2
+you'd have to decompress from the start of a block to reach a
+phrase: time or RAM, and the smaller the blocks, the less it compresses.
 
-# Lo que se propone, en este orden
+# What's proposed, in this order
 
-1. **Mensajes repetidos**: un cuadro idéntico a otro apunta al mismo lugar.
-   Hay casos obvios (el de Sewell sale tres veces seguidas al principio del
-   bloque). Gratis para la ROM.
-2. **Lo que se repite adentro de los cuadros**: los nombres de los personajes
-   (TALAN, KERSH…, en cada cabecera) y otras frases frecuentes. taro lo
-   señaló. Un código de diccionario para palabras enteras, o que DTE los
-   absorba.
-3. **DTE** (pares de letras en un byte): los 168 valores libres para los
-   pares más comunes. Conserva el acceso directo; el decodificador es una
-   tabla y unas pocas instrucciones en la rutina que dibuja el texto. Lo
-   típico es 30–40 %; **no está medido**.
+1. **Repeated messages**: a box identical to another points to the same place.
+   There are obvious cases (Sewell's comes out three times in a row at the start of the
+   block). Free for the ROM.
+2. **What repeats inside the boxes**: the characters' names
+   (TALAN, KERSH…, in every header) and other frequent phrases. taro
+   pointed it out. A dictionary code for whole words, or have DTE
+   absorb them.
+3. **DTE** (pairs of letters in one byte): the 168 free values for the
+   most common pairs. It keeps direct access; the decoder is a
+   table and a few instructions in the routine that draws the text. The
+   typical figure is 30–40 %; **it isn't measured**.
 
-Medir cada paso antes de implementar, y que `just espacio` muestre el
-resultado.
+Measure each step before implementing, and have `just espacio` show the
+result.
 
-# Lo hecho (Guayacán, 2026-10-01)
+# What was done (Guayacán, 2026-10-01)
 
-**DTE, la idea 3**, en `ba0b2952`. Los valores de byte 95 a 255 —los que la
-fuente no usa: tiene 95 glifos, ASCII menos 32— son pares de letras, de un
-solo nivel. El compilador de eventos elige los 161 pares más frecuentes
-sobre los cuadros que entran en el cartucho y emite la tabla
-(`message_pairs`, `MESSAGE_PAIR_FIRST`); el porqué de cada pieza está en
-`Pairs` (`messages.rs`), en `compile` (`lib.rs`) y en `msg_letter`.
+**DTE, idea 3**, in `ba0b2952`. Byte values 95 to 255 —the ones the
+font doesn't use: it has 95 glyphs, ASCII minus 32— are pairs of letters, of a
+single level. The event compiler picks the 161 most frequent pairs
+over the boxes that go into the cartridge and emits the table
+(`message_pairs`, `MESSAGE_PAIR_FIRST`); the why of each piece is in
+`Pairs` (`messages.rs`), in `compile` (`lib.rs`) and in `msg_letter`.
 
-* Un par no sale de un renglón, así que no parte nada: los escapes van en
-  la cabecera y el largo en su byte. El largo sigue contando **letras**.
-* El acceso directo a cada cuadro no cambia: cada uno sigue en su
-  desplazamiento, con el paso de 4.
-* El compilador compila dos veces —la primera sólo junta los cuadros que
-  quedan—, porque el desplazamiento se escribe en el bytecode al compilar.
-  Esa primera vuelta no tiene el tope del operando.
+* A pair doesn't go beyond a line, so it doesn't split anything: the escapes go in
+  the header and the length in its byte. The length still counts **letters**.
+* Direct access to each box doesn't change: each one stays at its
+  offset, with the step of 4.
+* The compiler compiles twice —the first only gathers the boxes that
+  remain—, because the offset is written into the bytecode when compiling.
+  That first pass doesn't have the operand's cap.
 
-## Quién lee texto del bloque
+## Who reads text from the block
 
-Buscado con `grep` de `messages`, `msg_ptr`, `msg_start` y
-`message_tick` en el runtime, y de `messages` en las pruebas:
+Searched with a `grep` of `messages`, `msg_ptr`, `msg_start` and
+`message_tick` in the runtime, and of `messages` in the tests:
 
-* `message_tick`, el único que lee letras de `messages`: ahora por
-  `msg_letter`, en el banco 1. Lo usan `ShowMessage` (`op_message`) y
-  `ShowChoice` (`pick_open`, que vuelve a llamar a `msg_start`).
-  `msg_start` lee sólo la cabecera y `message_tick` el largo, que no
-  cambiaron.
-* `ba_page_message` lee `messages_troop`, **otro bloque, que sigue sin
-  pares**: lo dice su comentario.
-* Los nombres, los menús, la tienda, las ranuras, la pelea (`scr_text`,
-  `slot_text_write`, `level.s`) usan `msg_ptr` como puntero pero leen
-  **otras tiras**, no `messages`: no se tocaron. `InputNumber` no lee
-  texto del bloque.
-* En las pruebas: `cuadro_de_texto` (`tanda.py`) recorre el bloque y ahora
-  decodifica los pares; `test_compositor.py` cuenta los bytes por letras;
-  `mensaje_en_pantalla` (`batalla.py`) lee `messages_troop`, sin pares.
+* `message_tick`, the only one that reads letters from `messages`: now through
+  `msg_letter`, in bank 1. It's used by `ShowMessage` (`op_message`) and
+  `ShowChoice` (`pick_open`, which calls `msg_start` again).
+  `msg_start` reads only the header and `message_tick` the length, which didn't
+  change.
+* `ba_page_message` reads `messages_troop`, **another block, which still has no
+  pairs**: its comment says so.
+* The names, the menus, the shop, the slots, the battle (`scr_text`,
+  `slot_text_write`, `level.s`) use `msg_ptr` as a pointer but read
+  **other strings**, not `messages`: they weren't touched. `InputNumber` doesn't read
+  text from the block.
+* In the tests: `cuadro_de_texto` (`tanda.py`) walks the block and now
+  decodes the pairs; `test_compositor.py` counts the bytes as letters;
+  `mensaje_en_pantalla` (`batalla.py`) reads `messages_troop`, without pairs.
 
-## Lo medido
+## What was measured
 
-`just espacio`, antes (`cd3dce0d`) y después:
+`just espacio`, before (`cd3dce0d`) and after:
 
-    cartucho                      textos antes   textos después
-    release                       145.792 B      94.417 B   (-35 %)
-    test-special                   66.064 B      65.943 B   (*)
+    cartridge                     texts before   texts after
+    release                       145,792 B      94,417 B   (-35 %)
+    test-special                   66,064 B      65,943 B   (*)
     test-encounter-every-step         747 B         463 B
 
-    banco 0, los tres               269/1.069/1.113   267/1.067/1.111 B libres
-    banco 1, los tres              4.241 B       4.179 B libres
-    bancos de datos                62/16/7       62/16/7 de 128
+    bank 0, all three              269/1,069/1,113   267/1,067/1,111 B free
+    bank 1, all three              4,241 B       4,179 B free
+    data banks                     62/16/7       62/16/7 of 128
 
-Sin el empujón vuelto a medir, `test-special` bajaba a 36.583 B (-45 %).
+Without the push re-measured, `test-special` went down to 36,583 B (-45 %).
 
-(*) `test-special` lleva el caso `empujon`, que existe para empujar el
-cuadro del mapa 255 sobre el borde de banco —`test_texto`—: con DTE quedaba
-en +36.188 y no cruzaba, así que se volvió a medir (684 cuadros, una cola y
-dos de dos letras) hasta que cayó otra vez en +$FFFC, como antes.
+(*) `test-special` carries the `empujon` case, which exists to push map 255's
+box over the bank edge —`test_texto`—: with DTE it ended up
+at +36,188 and didn't cross, so it was re-measured (684 boxes, a tail and
+two of two letters) until it fell again at +$FFFC, as before.
 
-La tabla son 322 bytes más. Los bancos de datos no se movieron: lo que
-liberan los 51 KB es medio banco de los de 64 KB, y hoy sobran 46.
+The table is 322 more bytes. The data banks didn't move: what
+the 51 KB free up is half a bank of the 64 KB ones, and today 46 are spare.
 
-**El ritmo del texto no cambió**, medido con un script descartable que
-guarda por tick `msg_state`, `msg_line`, `msg_col`, los cuadros perdidos y
-los cuadros del emulador, contra la ROM base: trazas idénticas en
-`grupo-11-en-255` (dos cuadros de cuatro renglones), `autofire`, `ventana`
-y 2400 ticks del juego desde el título. O sea las mismas `MSG_CHARS` = 5
-letras por vuelta, y ni un cuadro perdido de más: `message_tick` corre en
-el lazo principal, no en el vblank, y el `jsl` por letra no se nota al lado
-de `compose_char`. Las goldens no se movieron ni un pixel.
+**The text's pace didn't change**, measured with a throwaway script that
+saves per tick `msg_state`, `msg_line`, `msg_col`, the lost frames and
+the emulator's frames, against the base ROM: identical traces in
+`grupo-11-en-255` (two boxes of four lines), `autofire`, `ventana`
+and 2400 ticks of the game from the title. That is, the same `MSG_CHARS` = 5
+letters per loop, and not one extra lost frame: `message_tick` runs in
+the main loop, not in the vblank, and the `jsl` per letter doesn't show next
+to `compose_char`. The goldens didn't move a single pixel.
 
-## La idea 1, los cuadros repetidos: ya estaba hecha
+## Idea 1, the repeated boxes: it was already done
 
-El compilador guarda cada cuadro una sola vez desde antes —la clave del
-`Messages` es el contenido, cola de escapes incluida—, así que en el bloque
-de `release` hay **cero** cuadros repetidos. Lo que queda repetido son
-renglones sueltos: 14.878 bytes en renglones que aparecen más de una vez,
-casi todos cortos (el más repetido, 749 veces, son 3 bytes: un nombre). Para
-compartirlos haría falta un puntero por renglón, que cuesta más que lo que
-ahorra en los cortos y rompe la lectura de corrido; no se hizo. Y el
-relleno al paso de 4 son 3.596 bytes: si algún día el bloque apretara, un
-paso de 2 alcanza para 128 KB, que hoy sobran.
+The compiler has stored each box only once since before —the key of the
+`Messages` is the content, escape tail included—, so in `release`'s block
+there are **zero** repeated boxes. What remains repeated is
+individual lines: 14,878 bytes in lines that appear more than once,
+almost all short (the most repeated, 749 times, is 3 bytes: a name). To
+share them a pointer per line would be needed, which costs more than it
+saves on the short ones and breaks straight-through reading; it wasn't done. And the
+padding to the step of 4 is 3,596 bytes: if the block ever got tight, a
+step of 2 is enough for 128 KB, which today is plenty.
 
-## Para el merge
+## For the merge
 
-* Reinstalar `events` y `mapdata` (el compilador y el emisor), y
-  `cartridge` porque cambia el runtime: `just -f tools/justfile install
+* Reinstall `events` and `mapdata` (the compiler and the emitter), and
+  `cartridge` because the runtime changes: `just -f tools/justfile install
   events mapdata cartridge`.
-* Con Quirquincho chocan en `rm2k-snes-mapdata` (`emit.rs`: las líneas de
-  `message_pairs` van justo después de `MESSAGES_CAP`; `request.rs`: el
-  campo `message_pairs`) y en la lista de `main.s` (`message_letter.s`
-  antes de `header.s`). Si su rama mueve dónde arranca `messages` en
-  `test-special`, `test_texto[texto-cruza]` y `[texto-lejos]` van a pedir
-  volver a medir el empujón: el desplazamiento está medido desde el
-  principio del bloque, que hoy cae al principio de un banco.
-* Nada de esto toca goldens.
+* With Quirquincho they clash in `rm2k-snes-mapdata` (`emit.rs`: the
+  `message_pairs` lines go right after `MESSAGES_CAP`; `request.rs`: the
+  `message_pairs` field) and in `main.s`'s list (`message_letter.s`
+  before `header.s`). If their branch moves where `messages` starts in
+  `test-special`, `test_texto[texto-cruza]` and `[texto-lejos]` will require
+  re-measuring the push: the offset is measured from the
+  start of the block, which today falls at the start of a bank.
+* None of this touches goldens.

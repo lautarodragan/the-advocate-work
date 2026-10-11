@@ -1,42 +1,42 @@
 ---
-name: "Ataque y decaimiento"
-description: "Las envolventes de cada instrumento, leídas del SoundFont"
+name: "Attack and decay"
+description: "Each instrument's envelopes, read from the SoundFont"
 type: feature
 status: done
 ---
 
-# Qué
+# What
 
-Leer el **ataque y el decaimiento** de cada instrumento del SoundFont, en vez de
-sacarlos de las ocho familias de `sdsp.py`.
+Read each instrument's **attack and decay** from the SoundFont, instead of
+taking them from the eight families in `sdsp.py`.
 
 # Status
 
-Hecho el 2026-09-25, junto con el release y el aire de la mezcla: es el
-punto 2 de `la-calidad-de-la-musica.md`, que tiene los números. Está en
-`testing/` porque taro tiene que escucharlo: las grabaciones, en
-`/shared/audio/2026-09-25-pasos-1-y-2/` (las `-2-`).
+Done on 2026-09-25, together with the release and the mix's headroom: it's
+item 2 of `la-calidad-de-la-musica.md`, which has the numbers. It's in
+`testing/` because taro has to listen to it: the recordings, in
+`/shared/audio/2026-09-25-pasos-1-y-2/` (the `-2-` ones).
 
-`gunter sf2 --extract --json` devuelve la envolvente de volumen de la zona
-—generadores 33 a 40—, y `sdsp.envelope` la traduce a lo que el DSP sabe
-hacer. **Pide `just herramientas`** antes de armar.
+`gunter sf2 --extract --json` returns the zone's volume envelope
+—generators 33 to 40—, and `sdsp.envelope` translates it into what the DSP can
+do. **It needs `just herramientas`** before building.
 
-# Por qué
+# Why
 
-Las ocho familias de `sdsp.py` se eligieron **a ojo, cuando el banco era
-sintético**. El SoundFont trae los suyos por instrumento y todavía no se leen.
+The eight families in `sdsp.py` were picked **by eye, when the bank was
+synthetic**. The SoundFont carries its own per instrument and they aren't read yet.
 
-Y hay un segundo motivo, que es el que lo convirtió en tarea: la SoundFont
-reducida de `el-audio-en-dos-pasos-lossy.md` **se va a abrir en un DAW** para
-juzgar cómo suena sin armar la ROM. Si las envolventes que usa la ROM no son
-las del SoundFont, lo que se oye ahí no es lo que va a salir de la consola,
-justo en los ataques —que es donde más se nota—.
+And there's a second reason, the one that turned it into a task: the reduced
+SoundFont from `el-audio-en-dos-pasos-lossy.md` **is going to be opened in a DAW** to
+judge how it sounds without building the ROM. If the envelopes the ROM uses aren't
+the SoundFont's, what you hear there isn't what will come out of the console,
+precisely in the attacks —which is where it's most noticeable—.
 
-**El release entró también**, aunque cuando se anotó no iba: el mecanismo
-sigue siendo el de "Cómo se suelta una nota", en `README.md` —apagar el ADSR
-y pedir GAIN—, pero la velocidad del GAIN ahora sale del SoundFont en vez de
-la familia, porque con la de la familia el bajo arrastraba 2,4 s de cola
-donde el SoundFont pide 30 ms. Ese párrafo del README —"el valor por familia
-está en `sdsp.py`"— quedó viejo, y no se tocó porque taro lo está editando.
+**The release went in too**, even though when this was noted it wasn't included: the mechanism
+is still the one in "How a note is released", in `README.md` —turn off the ADSR
+and request GAIN—, but the GAIN rate now comes from the SoundFont instead of
+the family, because with the family's the bass dragged a 2.4 s tail
+where the SoundFont asks for 30 ms. That README paragraph —"the per-family value
+is in `sdsp.py`"— went stale, and wasn't touched because taro is editing it.
 
-**taro escuchó las grabaciones y lo dio por bueno el 2026-09-26.**
+**taro listened to the recordings and approved it on 2026-09-26.**

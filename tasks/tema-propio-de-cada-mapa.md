@@ -1,18 +1,18 @@
 ---
-name: "El tema de cada mapa"
-description: "Al entrar a un mapa suena el tema que trae en sus propiedades"
+name: "Each map's theme"
+description: "On entering a map, the theme it carries in its properties plays"
 status: done
 ---
 
-**Que al entrar a un mapa suene su tema propio.**
+**Make entering a map play its own theme.**
 
-RM2k guarda un tema por mapa en `maps.json` (`music_type`: 0 hereda del padre, 1 lo
-decide un evento, 2 el que trae el mapa). El conversor hoy lo lee **sólo para el mapa
-de arranque** —`temas_de_la_rom` en `snes_convert.py`—; en los demás la música
-cambia únicamente con un `PlayBGM`.
+RM2k stores a theme per map in `maps.json` (`music_type`: 0 inherits from the parent, 1 is
+decided by an event, 2 is the one the map carries). The converter today reads it **only for the
+starting map** —`temas_de_la_rom` in `snes_convert.py`—; in the rest the music
+changes only with a `PlayBGM`.
 
-Lo usan 73 mapas del juego. En `abl`: el 16 (`hzbreach`), el 21 y el 26
-(`KSSMKEND`, los Rat Tracks, donde taro lo encontró). `lcf.map_music` ya resuelve la
-herencia.
+73 maps of the game use it. In `abl`: 16 (`hzbreach`), 21 and 26
+(`KSSMKEND`, the Rat Tracks, where taro found it). `lcf.map_music` already resolves the
+inheritance.
 
-Hecho es: entrar a los Rat Tracks cambia a `KSSMKEND`, con una prueba que lo mire.
+Done means: entering the Rat Tracks switches to `KSSMKEND`, with a test that checks it.
