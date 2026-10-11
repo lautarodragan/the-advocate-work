@@ -4,7 +4,7 @@ description: "RM2k accepts BMP as well as PNG (CharSet, ChipSet, System, Picture
 type: feature
 status: testing
 agents: [Chajá]
-assignee: Chajá
+assignee: taro
 ---
 
 From the survey of other games (`docs/research/2026-10-05-otros-juegos.md`):

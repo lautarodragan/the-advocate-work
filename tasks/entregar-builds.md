@@ -1,6 +1,7 @@
 ---
 name: "The builds for taro come out of a recipe"
 description: "just entregar leaves the release in /shared/builds/ with the .dbg and the commit's rom/src/, so that Mesen2 shows the source from there"
+type: chore
 status: done
 ---
 

@@ -1,6 +1,7 @@
 ---
 name: "The texts fit in the window"
 description: "Rebuilding the messages' line breaks for the SNES's width, as a patch"
+type: feature
 status: done
 ---
 

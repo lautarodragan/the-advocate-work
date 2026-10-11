@@ -1,6 +1,7 @@
 ---
 name: "Battle animations"
 description: "The sound, the light and the frames of ShowBattleAnimation"
+type: feature
 status: done
 ---
 

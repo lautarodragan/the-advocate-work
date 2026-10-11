@@ -27,7 +27,7 @@ item with a long name, and the name in the LDB has a trailing space.
 **Two more, since the per-turn and per-HP pages run (2026-09-28)**: the
 take-off in the agents' battle comes out "The Captain has taken off in th", and
 the Rat King's second call loses the "s" of "sounds". See
-`tasks/*/eventos-de-tropa-de-release.md`.
+`tasks/eventos-de-tropa-de-release.md`.
 
 # What was done (Cardenal, 2026-10-02)
 

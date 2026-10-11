@@ -1,6 +1,7 @@
 ---
 name: "Experience and levelling up"
 description: "Gaining experience, levelling up and growing according to the LDB's curves"
+type: feature
 status: done
 ---
 

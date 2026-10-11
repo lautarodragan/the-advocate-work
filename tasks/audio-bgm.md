@@ -1,6 +1,7 @@
 ---
 name: "Music through the SPC700"
 description: "The themes through the SPC700, with the shared sample bank"
+type: feature
 status: done
 ---
 

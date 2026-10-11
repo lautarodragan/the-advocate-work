@@ -3,7 +3,7 @@ name: "The NPCs that don't fit in OAM"
 description: "A map with more NPCs than fit in OAM cuts the build; make it draw the ones that fit and warn, like the other degradations"
 type: feature
 status: testing
-assignee: Carpintero
+assignee: taro
 agents: [Carpintero]
 ---
 
