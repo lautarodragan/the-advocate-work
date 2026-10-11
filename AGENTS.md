@@ -159,8 +159,10 @@ place is useful to him. What that asks for when working:
   `internals/` has to be up to date**: whoever changes what it describes
   changes it in the same commit, in the book.
 * **The book is public**: it does not name the environment —not `~`, not
-  `/shared`, not the container— nor does it link to the repos, which are
-  private: it names them as text ("`runtime/hero.s` in the-advocate").
+  `/shared`, not the container—. **A task is cited with a link** to
+  `tasks/<name>.md` on GitHub, since this repo went public on 2026-10-11
+  (taro). Files of the other repos are named as text ("`runtime/hero.s`
+  in the-advocate"): the-advocate-ports is private.
 * **mdBook does not warn about broken links.** Before pushing to the book,
   the relative links of what was touched are checked. Each push to `main`
   publishes it on its own, with its workflow.
