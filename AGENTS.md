@@ -80,6 +80,14 @@ no el código de la herramienta— y se lo dice en el encargo. Una tarea que el
 agente abre por su cuenta nace en `doing/` con su nombre. Es de taro, el
 2026-09-28; hasta ese día la carpeta se llamaba `wip/` y casi no se usaba.
 
+**Un hallazgo que no se arregla va a `tasks/draft/`**, y si se ve jugando
+un port, a "Known issues" de su página del libro, una línea contada desde
+lo que se ve; el que lo arregla saca las dos cosas en el mismo cambio. Al
+mergear una rama de sub-agente, lo que su informe dice que encontró y no
+arregló tiene que estar ahí. Es de taro, el 2026-10-11: hasta ese día los
+hallazgos quedaban en la tarea del agente y se enterraban con ella. Qué
+es un draft, en el README de este repo.
+
 ## Dónde va cada cosa que uno quiere dejar escrita
 
 Dos reglas, de taro, el 2026-09-15. Las dos salen del mismo problema: lo que se

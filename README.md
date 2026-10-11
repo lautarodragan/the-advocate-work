@@ -3,11 +3,24 @@
 Este repo es una especie de Jira casero: las tareas de todos los repos, y
 desde dónde se trabaja —el `AGENTS.md` y `.claude/`—.
 
+- `tasks/draft/` hallazgos y cosas que todavía no son una tarea: se vio
+  algo, pero falta definir qué hacer
 - `tasks/todo/` tareas no empezadas
 - `tasks/doing/` tareas en progreso: quien la toma la pasa acá antes que nada
 - `tasks/testing/` hechas y a la espera de que taro las pruebe jugando
 - `tasks/done/` tareas terminadas
 - `tasks/wishlist/` es lo que nos gustaría hacer y nadie está haciendo
+
+**Un draft no está listo para tomarse.** Es lo que un agente encuentra y no
+arregla —un error que no es de su tarea, un camino que no cubrió, "lo
+siguiente, medido"—: un archivo corto con qué se vio, en qué juego, en qué
+commit y cómo reproducirlo, sin `assignee` y sin decir cómo se arregla.
+Sale de ahí cuando alguien lo define —a `todo/` o a `wishlist/`— o se
+borra si otra cosa lo arregló. La diferencia con `wishlist/`: una tarea de
+la lista de deseos está definida y sólo falta priorizarla; un draft no
+está definido. Es de taro, el 2026-10-11: hasta ese día los hallazgos
+quedaban en la sección "Hallazgos" de la tarea del agente y se enterraban
+con ella en `done/`.
 
 **Las decisiones, las divergencias y los research no están acá**: viven en
 el libro, `the-advocate-docs`, en inglés, desde el 2026-10-10 —"el libro es

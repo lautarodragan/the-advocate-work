@@ -77,6 +77,14 @@ antes, empezá desde ahí y no lo vuelvas a medir.
   tocaste.
 * Pasá la tarea a `testing/` con `assignee: taro`, tu nombre en `agents`,
   y qué hay que instalar al mergear, en tu worktree de este repo.
+* **Lo que encontraste y no arreglaste va a `tasks/draft/`**, un archivo
+  por hallazgo: qué se vio, en qué juego, en qué commit y cómo
+  reproducirlo —ver el README de este repo—. Y si se ve jugando un port,
+  una línea en "Known issues" de su página del libro,
+  `src/ports/<juego>/README.md`, contado desde lo que se ve. Un hallazgo
+  que sólo queda en tu tarea o en tu informe se pierde.
+* **Si arreglaste algo que estaba en "Known issues" de un port**, sacá su
+  línea en el mismo cambio, y el draft, si había.
 * **No dejes nada corriendo**: tandas, esperas, Wine, Xvfb.
 * Devolvé un informe **corto y en castellano**: qué hiciste, qué no, las
   ramas de cada repo, la tanda y la huella de `abl.sfc`, dónde están
