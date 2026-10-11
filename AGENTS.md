@@ -1,925 +1,992 @@
-# Cómo se trabaja en estos repos
+# How work is done in these repos
 
-Esto es lo que **no** se deduce leyendo el código. Todo lo demás está en
-fuentes mejores, y hay que ir a ellas antes que a este archivo.
+This is what can **not** be deduced by reading the code. Everything else is
+in better sources, and one has to go to them before this file.
 
-**Son cuatro repos, y éste es el único con instrucciones**: este archivo y
-`.claude/` —el plantel de sub-agentes— valen para los cuatro, y ninguno de
-los otros tiene los suyos. Es de taro, el 2026-10-10. El CLI corre parado
-acá, y los otros repos están al lado:
+**There are four repos, and this is the only one with instructions**: this
+file and `.claude/` —the roster of sub-agents— apply to all four, and none
+of the others has its own. It is taro's, from 2026-10-10. The CLI runs
+standing here, and the other repos are next to it:
 
-    the-advocate-work   éste: dónde quedamos —`tasks/`— de todos los
-                     repos; su README explica cada carpeta
-    the-advocate        las herramientas y el runtime: el conversor, el motor
-                     en ensamblador, sus pruebas, y cómo funciona cada parte
-    the-advocate-ports  los juegos portados, uno por directorio: `abl/` —A
-                     Blurred Line, con la tanda y sus goldens— y los siete
-                     del relevamiento de otros juegos
-    the-advocate-docs   el libro, público y en inglés, para personas y para
-                     IAs: **toda la documentación** —qué es el proyecto,
-                     cómo funciona por dentro, la referencia de RM2k y de
-                     la consola, las decisiones, las divergencias con
-                     RM2k, los research y una entrada por port—
+    the-advocate-work   this one: where we left off —`tasks/`— for every
+                     repo; its README explains each folder
+    the-advocate        the tools and the runtime: the converter, the engine
+                     in assembly, their tests, and how each part works
+    the-advocate-ports  the ported games, one per directory: `abl/` —A
+                     Blurred Line, with the suite and its goldens— and the
+                     seven from the survey of other games
+    the-advocate-docs   the book, public and in English, for people and for
+                     AIs: **all the documentation** —what the project is,
+                     how it works inside, the reference for RM2k and for
+                     the console, the decisions, the divergences from
+                     RM2k, the research and one entry per port—
 
-**Las rutas de este archivo son de adentro de cada repo**, y cuál es lo dice
-la sección o la ruta misma: `runtime/…`, `snes/…`, `rm2k/…` y
-`rm2k-snes/…` son de `the-advocate`; `pruebas/…`, `parches/…`, `justfile` y `rm2k-snes.toml` sueltos,
-de `abl/` en `the-advocate-ports`. Adentro de `the-advocate`:
+**The paths in this file are from inside each repo**, and which one is
+said by the section or by the path itself: `runtime/…`, `snes/…`, `rm2k/…`
+and `rm2k-snes/…` are from `the-advocate`; `pruebas/…`, `parches/…`, and a
+bare `justfile` and `rm2k-snes.toml`, from `abl/` in `the-advocate-ports`.
+Inside `the-advocate`:
 
-    justfile         qué se puede correr —probar e instalar las
-                     herramientas—; los comentarios explican el porqué. Se
-                     corre con `just`, parado en cualquier lugar del repo
-    README.md        qué es el proyecto, cómo se instala, y los porqués de
-                     arquitectura que no tienen línea de código donde vivir
-    LAYOUT.md        qué hace cada carpeta del repo
+    justfile         what can be run —testing and installing the
+                     tools—; the comments explain the why. It is run with
+                     `just`, standing anywhere in the repo
+    README.md        what the project is, how it is installed, and the
+                     architectural whys that have no line of code to live in
+    LAYOUT.md        what each folder of the repo does
 
-Hasta el 2026-10-10 todo eso vivía en una carpeta `tools/` de ese repo, y
-se corría con `just -f tools/justfile`: **una cita `tools/x` es `x`**.
+Until 2026-10-10 all of that lived in a `tools/` folder of that repo, and
+it was run with `just -f tools/justfile`: **a `tools/x` citation is `x`**.
 
-Y adentro de `abl/`, en `the-advocate-ports` —cada juego es un proyecto
-entero en su directorio, y todo se corre parado en él; el README de la
-raíz dice cuáles hay—:
+And inside `abl/`, in `the-advocate-ports` —each game is a whole project in
+its directory, and everything is run standing in it; the README at the
+root says which ones there are—:
 
-    justfile         qué se puede correr; los comentarios explican el porqué
-    README.md        qué es el juego, cómo se arma y cómo encuentra a las
-                     herramientas
-    data/            el volcado a JSON; su README lo ve desde adentro
-    pruebas/         la tanda: su README dice qué ROM hay y qué prueba
-                     cubre qué
+    justfile         what can be run; the comments explain the why
+    README.md        what the game is, how it is built and how it finds the
+                     tools
+    data/            the dump to JSON; its README sees it from inside
+    pruebas/         the suite: its README says which ROM there is and
+                     which test covers what
 
-    git log          en los cuatro: los mensajes son largos a propósito,
-                     son el registro
+    git log          in all four: the messages are long on purpose, they
+                     are the record
 
-**La historia se partió dos veces.** El 2026-10-02 ABL se fue de las
-herramientas a su propio repo, sin historia: la de antes de esa fecha está
-en `the-advocate`, y lo que en los ports es `abl/X` allá era `rom/X` (cómo
-pedir su `blame`, en "`git blame` y los cambios mecánicos"). Ese repo tuvo
-a ABL en la raíz hasta el 2026-10-10, cuando pasó a `abl/` con un `git mv`
-—`blame` lo sigue sin opciones— y entraron los otros siete juegos. El 2026-10-10
-`tasks/`, `decisiones/` y `divergencias/` salieron de la carpeta
-`workflow/` de `the-advocate` a este repo, **con** su historia: **un
-`workflow/…` citado en otro repo es la misma ruta acá**, sin el prefijo, y
-los hashes que citan las tareas son de `the-advocate`, o de los ports cuando
-hablan de ABL. Y el mismo día `decisiones/`, `divergencias/` y todos los
-`docs/` —de las herramientas y de ABL— pasaron al libro, traducidos y con
-los mismos nombres de archivo: **una cita vieja se encuentra por nombre**,
-y el README de este repo dice adónde fue cada carpeta.
+**History was split twice.** On 2026-10-02 ABL left the tools for its own
+repo, without history: the history before that date is in `the-advocate`,
+and what in the ports is `abl/X` was `rom/X` there (how to ask for its
+`blame`, in "`git blame` and mechanical changes"). That repo had ABL at the
+root until 2026-10-10, when it moved to `abl/` with a `git mv` —`blame`
+follows it without options— and the other seven games came in. On
+2026-10-10 `tasks/`, `decisiones/` and `divergencias/` left the `workflow/`
+folder of `the-advocate` for this repo, **with** their history: **a
+`workflow/…` cited in another repo is the same path here**, without the
+prefix, and the hashes the tasks cite are from `the-advocate`, or from the
+ports when they talk about ABL. And the same day `decisiones/`,
+`divergencias/` and all the `docs/` —of the tools and of ABL— moved to the
+book, translated and with the same file names: **an old citation is found
+by name**, and this repo's README says where each folder went.
 
-**Las pruebas de ABL son, hasta que exista el juego de pruebas, las únicas
-pruebas de ROM del motor**: ver "La regla que sostiene todo".
+**ABL's tests are, until the test game exists, the engine's only ROM
+tests**: see "The rule that holds everything up".
 
-Al empezar, mirar las tareas en `doing` y `testing` —`nu tasks/tasks.nu
-ls -s doing`—, que es dónde quedamos. La tarea se escribe **mientras se
-trabaja, no al final**, y al terminar se le cambia el `status`. Las
-tareas viven todas en `tasks/`, y **su nombre de archivo no cambia
-nunca**: es lo que las enlaza desde los otros repos y el libro (ver el
-README de este repo).
+When starting, look at the tasks in `doing` and `testing` —`nu
+tasks/tasks.nu ls -s doing`—, which is where we left off. The task is
+written **while working, not at the end**, and when finishing its `status`
+is changed. The tasks all live in `tasks/`, and **their file name never
+changes**: it is what links them from the other repos and the book (see
+this repo's README).
 
-**Tomar una tarea es pasarla a `doing` con su `assignee`, antes que nada.** Con
-sub-agentes lo hace el que los lanza, en `main` y antes de lanzarlos, así el
-worktree ya sale con la tarea tomada y dos agentes no agarran la misma. El
-`assignee` es el nombre del agente: el que los lanza les pone uno —una palabra,
-no el código de la herramienta— y se lo dice en el encargo. Una tarea que el
-agente abre por su cuenta nace en `doing` con su nombre. Es de taro, el
-2026-09-28; hasta ese día el estado se llamaba `wip` y casi no se usaba.
+**Taking a task is moving it to `doing` with its `assignee`, before
+anything else.** With sub-agents the one launching them does it, on `main`
+and before launching them, so the worktree already starts with the task
+taken and two agents do not grab the same one. The `assignee` is the
+agent's name: the one launching them gives them one —one word, not the
+tool's code— and tells it in the assignment. A task the agent opens on its
+own is born in `doing` with its name. It is taro's, from 2026-09-28; until
+that day the state was called `wip` and was barely used.
 
-**Un hallazgo que no se arregla es un draft**, y si se ve jugando
-un port, a "Known issues" de su página del libro, una línea contada desde
-lo que se ve; el que lo arregla saca las dos cosas en el mismo cambio. Al
-mergear una rama de sub-agente, lo que su informe dice que encontró y no
-arregló tiene que estar ahí. Es de taro, el 2026-10-11: hasta ese día los
-hallazgos quedaban en la tarea del agente y se enterraban con ella. Qué
-es un draft, en el README de este repo.
+**A finding that is not fixed is a draft**, and if it shows while playing a
+port, it goes to "Known issues" of its page in the book, one line told from
+what is seen; whoever fixes it removes both things in the same change. When
+merging a sub-agent's branch, what its report says it found and did not fix
+has to be there. It is taro's, from 2026-10-11: until that day findings
+stayed in the agent's task and were buried with it. What a draft is, in
+this repo's README.
 
-## Dónde va cada cosa que uno quiere dejar escrita
+## Where each thing one wants to leave written goes
 
-Dos reglas, de taro, el 2026-09-15. Las dos salen del mismo problema: lo que se
-escribe a mano en un documento envejece sin avisar, y lo que vive lejos del
-código no lo lee nadie cuando hace falta.
+Two rules, taro's, from 2026-09-15. Both come from the same problem: what
+is written by hand in a document ages without warning, and what lives far
+from the code nobody reads when it is needed.
 
-**Un número se escribe sólo si es propiedad del hardware o del formato.** Los
-32.704 bytes del banco 0, los tiles de 8x8, el color de 15 bits, los 64 KB de
-ARAM: ésos no cambian. **Un número que describe el estado de nuestro trabajo no
-va escrito en ningún lado, va el comando que lo imprime**: cuántos casos
-pasan lo dice la tanda, cuánto pesa el cartucho lo dice el build.
+**A number is written only if it is a property of the hardware or of the
+format.** The 32,704 bytes of bank 0, the 8x8 tiles, the 15-bit colour, the
+64 KB of ARAM: those do not change. **A number that describes the state of
+our work is not written anywhere; the command that prints it is**: how many
+cases pass is said by the suite, how much the cartridge weighs is said by
+the build.
 
-El 2026-09-15 había **tres números distintos para la misma pregunta** —281, 314
-y 332 de 489— en dos archivos, los tres viejos, y el real era 350. Uno de ésos
-lo había escrito yo una hora antes.
+On 2026-09-15 there were **three different numbers for the same question**
+—281, 314 and 332 of 489— in two files, all three stale, and the real one
+was 350. One of those I had written myself an hour earlier.
 
-**Un porqué se queda en el README sólo si es una decisión de arquitectura que
-no tiene una línea de código donde vivir**: por qué modo 3 fijo, por qué
-LoROM. **Un porqué que protege una línea concreta va como comentario en esa
-línea.** El razonamiento es de taro y es difícil de discutir: nadie que esté
-editando una rutina va a buscar la razón en un README de cinco mil líneas, así
-que ahí no protege a nadie.
+**A why stays in the README only if it is an architectural decision that
+has no line of code to live in**: why fixed mode 3, why LoROM. **A why that
+protects a concrete line goes as a comment on that line.** The reasoning is
+taro's and is hard to argue with: nobody editing a routine is going to look
+for the reason in a five-thousand-line README, so there it protects no one.
 
-Y si el error no es de los que se vuelven a cometer, no va a ningún lado: el
-`git log` ya lo tiene.
+And if the mistake is not one of those that get made again, it goes
+nowhere: the `git log` already has it.
 
-**La documentación no nombra el ambiente donde corremos esto**: ni el
-contenedor, ni `box`, ni las carpetas de `~` que no son repos, ni `/shared`,
-ni rutas de esta máquina. Dice qué variable o qué flag lo apunta
-—`GAME_DIR`, `RTP_DIR`—, y el ambiente queda en este archivo y en
-`maquina.just` de los ports, que son los únicos que lo describen. Es de taro,
-el 2026-09-26; las tareas y los defaults del código no cuentan.
+**The documentation does not name the environment where we run this**:
+not the container, not `box`, not the folders in `~` that are not repos,
+not `/shared`, not paths of this machine. It says which variable or which
+flag points to it —`GAME_DIR`, `RTP_DIR`—, and the environment stays in
+this file and in `maquina.just` of the ports, which are the only ones that
+describe it. It is taro's, from 2026-09-26; tasks and code defaults do not
+count.
 
-**Se asume que todo el código escrito es intencional**, sabiendo que puede no
-serlo. No se documenta cada caso intencional, porque los no intencionales son
-la excepción. Ante algo que parece un error, el primer paso es **`git blame`**:
-sirve para separar "esto es a propósito" de "esto se rompió en algún cambio",
-que es la diferencia entre tocarlo con confianza y tocarlo a ciegas. Recién con
-la intención demostrada —y demostrada errónea, o parcialmente errónea— se
-arregla.
+**All written code is assumed to be intentional**, knowing it may not be.
+Each intentional case is not documented, because the unintentional ones are
+the exception. In front of something that looks like a bug, the first step
+is **`git blame`**: it separates "this is on purpose" from "this broke in
+some change", which is the difference between touching it with confidence
+and touching it blindly. Only with the intention shown —and shown wrong, or
+partly wrong— is it fixed.
 
-Al revés también: **si uno escribe a propósito algo que se ve raro, lo aclara
-ahí mismo.** El ejemplo de taro: "acá la variable que se llama NUMBER es de
-tipo string y no number, por contraintuitivo que sea, pero no se puede arreglar
-porque así lo espera una API que no controlamos". Eso es lo que un comentario
-tiene que decir; lo que el código ya dice, no.
+The other way round too: **if one writes on purpose something that looks
+odd, one clarifies it right there.** taro's example: "here the variable
+called NUMBER is of type string and not number, counterintuitive as it is,
+but it cannot be fixed because that is what an API we do not control
+expects". That is what a comment has to say; what the code already says,
+no.
 
-## El libro: decisiones, divergencias, research
+## The book: decisions, divergences, research
 
-Desde el 2026-10-10 **toda la documentación vive en el libro**,
-`the-advocate-docs`, y se escribe **en inglés**, también sus commits. Es de
-taro: "El libro es para personas y para IAs", y le sirve tenerlo en un solo
-lugar. Lo que eso pide al trabajar:
+Since 2026-10-10 **all the documentation lives in the book**,
+`the-advocate-docs`, and it is written **in English**, its commits too. It
+is taro's: "The book is for people and for AIs", and having it in a single
+place is useful to him. What that asks for when working:
 
-* **Una decisión nueva** va a `src/decisions/<slug>.md` —o a
-  `src/ports/<juego>/decisions/` si es de un juego—, con `## What`, `## Why`
-  y, si hace falta, `## How it applies`; **una divergencia nueva**, a
-  `src/divergences/<slug>.md`; **un research**, a `src/research/<slug>.md`
-  o al de su port. Cada una, además, en `src/SUMMARY.md`, donde le toca.
-* **Un research es una foto**: arriba la fecha y el commit de lo que midió;
-  no se actualiza, se hace uno nuevo. **Una página de `internals/` tiene
-  que estar al día**: el que cambia lo que describe la cambia en el mismo
-  commit, en el libro.
-* **El libro es público**: no nombra el ambiente —ni `~`, ni `/shared`, ni
-  el contenedor— ni enlaza a los repos, que son privados: los nombra como
-  texto ("`runtime/hero.s` in the-advocate").
-* **mdBook no avisa de los links rotos.** Antes de pushear al libro se
-  revisan los links relativos de lo que se tocó. Cada push a `main` lo
-  publica solo, con su workflow.
+* **A new decision** goes to `src/decisions/<slug>.md` —or to
+  `src/ports/<game>/decisions/` if it is a game's—, with `## What`,
+  `## Why` and, if needed, `## How it applies`; **a new divergence**, to
+  `src/divergences/<slug>.md`; **a research**, to `src/research/<slug>.md`
+  or to its port's. Each one, also, in `src/SUMMARY.md`, where it belongs.
+* **A research is a snapshot**: at the top, the date and the commit of what
+  it measured; it is not updated, a new one is made. **A page in
+  `internals/` has to be up to date**: whoever changes what it describes
+  changes it in the same commit, in the book.
+* **The book is public**: it does not name the environment —not `~`, not
+  `/shared`, not the container— nor does it link to the repos, which are
+  private: it names them as text ("`runtime/hero.s` in the-advocate").
+* **mdBook does not warn about broken links.** Before pushing to the book,
+  the relative links of what was touched are checked. Each push to `main`
+  publishes it on its own, with its workflow.
 
-Los porqués que protegen una línea de código **siguen yendo como
-comentario en esa línea**, en castellano: el libro es para lo que no tiene
-una línea donde vivir.
+The whys that protect a line of code **still go as a comment on that
+line**, in Spanish: the book is for what has no line to live in.
 
-## Los proyectos independientes están en inglés
+## The independent projects are in English
 
-Todo va en castellano —comentarios, documentación y mensajes de commit—,
-**salvo el libro, `the-advocate-docs`, que es para afuera y va en inglés
-entero, sus commits incluidos, y los directorios de `the-advocate` que son
-proyectos aparte**, que van en inglés
-de punta a punta: código, comentarios, nombres de pruebas y README. Desde el
-2026-09-19 viven adentro de las herramientas —ver `LAYOUT.md`—:
+Everything goes in Spanish —comments, documentation and commit messages—,
+**except the book, `the-advocate-docs`, which is for the outside and goes
+in English entirely, its commits included; this repo, `the-advocate-work`,
+which goes in English entirely too —tasks, README, this file and
+`.claude/`, its commits included— since 2026-10-11, taro's decision the
+same day it went public; and the directories of `the-advocate` that are
+separate projects**, which go in English from end to end: code, comments,
+test names and README. The rest of `the-advocate` and the ports stay as
+they were: comments and commits in Spanish, except those projects. Since
+2026-09-19 they live inside the tools —see `LAYOUT.md`—:
 
-    snes/        los formatos de la consola, sin saber de RPG Maker
-      gunter/          Gunter: códec BRR y lector de SoundFont
-      goombario/       Goombario: el linter de 65816, lo que ensambla bien y
-                       está mal; lee la ROM, el `.dbg` de `ld65` y el fuente
-      adeleine/        Adeleine: qué colores se pierden y cómo se agrupan en paletas
-      voodoo/          Voodoo: de una imagen a tiles, paletas y tilemap
-      lz2/             el LC_LZ2 de Nintendo, con el que se comprimen los mapas
-    rm2k/        los de RPG Maker 2000, sin saber de la consola
-      ditto/           lee y escribe sus formatos; como biblioteca, el único
-                       lugar en Rust que lee el volcado
-      rules/           rm2k-rules: lo que el formato significa —pasabilidad,
-                       páginas, experiencia—
-      rm2k-render/     las capas de un mapa, sus CharSets, lo de la pelea y las
-                       caras, ventanas y carteles de las pantallas, dibujados
-                       como RM2k
-    rm2k-snes/   los que unen las dos cosas
-      project/         la biblioteca: qué juego, sus perillas, los flags de la
-                       máquina; y `rm2k-snes-project`, que se lo dice en JSON
-                       a las pruebas de un juego
-      bytecode/        los dos bytecodes del cartucho, declarados una vez: las
-                       constantes de Rust y los `.inc` del ensamblador
-      cartridge/       los cartuchos: el reparto en bancos, ca65 + ld65, el espacio
-      patches/         los parches: lo que el conversor decide perder, en TOML
-      rm2k-snes-audio/ la música: del MIDI y el SoundFont a musicdata.inc
-      battle/          la pelea: experiencia y encuentros, el modelo y su
-                       pantalla de texto, y la pelea jugada para las pruebas
-      events/          el compilador de eventos: de las páginas de RM2k al bytecode
-      wally/           Wally: un mapa entero —capas, horneado, sprites—, con
-                       sus dos mitades como módulos que no se conocen: el
-                       fondo y sus bloques de 16x16, y los personajes como
-                       objetos
-      text/            la fuente, una línea de texto sobre el System y el
-                       reparto de las cajas al ancho de la ventana
-      screens/         las pantallas: la ventana de mensajes, el título, las
-                       ranuras, el menú, las pantallas de texto, End Game
-      images/          las imágenes: el título y el Game Over, la de
-                       `ShowPicture`, los fondos y battlers de la pelea y sus
-                       animaciones, escalados y con sus paletas
-      mapdata/         la emisión: el `.inc` del cartucho con lo que contestó
-                       cada etapa, los flujos de LZ2 y los repartos de VRAM
-      convert/         el conversor: le pregunta a cada etapa, en orden, lo que
-                       el cartucho necesita, y le da lo que contestaron las otras
+    snes/        the console's formats, knowing nothing about RPG Maker
+      gunter/          Gunter: BRR codec and SoundFont reader
+      goombario/       Goombario: the 65816 linter, what assembles fine and
+                       is wrong; reads the ROM, the `.dbg` from `ld65` and
+                       the source
+      adeleine/        Adeleine: which colours are lost and how they are
+                       grouped into palettes
+      voodoo/          Voodoo: from an image to tiles, palettes and tilemap
+      lz2/             Nintendo's LC_LZ2, which the maps are compressed with
+    rm2k/        RPG Maker 2000's, knowing nothing about the console
+      ditto/           reads and writes its formats; as a library, the only
+                       place in Rust that reads the dump
+      rules/           rm2k-rules: what the format means —passability,
+                       pages, experience—
+      rm2k-render/     a map's layers, its CharSets, the battle stuff and
+                       the faces, windows and signs of the screens, drawn
+                       like RM2k
+    rm2k-snes/   the ones that join both things
+      project/         the library: which game, its knobs, the machine's
+                       flags; and `rm2k-snes-project`, which tells it in
+                       JSON to a game's tests
+      bytecode/        the cartridge's two bytecodes, declared once: the
+                       Rust constants and the assembler's `.inc`
+      cartridge/       the cartridges: the split into banks, ca65 + ld65,
+                       the space
+      patches/         the patches: what the converter decides to lose, in
+                       TOML
+      rm2k-snes-audio/ the music: from the MIDI and the SoundFont to
+                       musicdata.inc
+      battle/          the battle: experience and encounters, the model and
+                       its text screen, and the played battle for the tests
+      events/          the event compiler: from RM2k's pages to the
+                       bytecode
+      wally/           Wally: a whole map —layers, baking, sprites—, with
+                       its two halves as modules that do not know each
+                       other: the background and its 16x16 blocks, and the
+                       characters as objects
+      text/            the font, a line of text over the System and the
+                       split of the boxes to the window's width
+      screens/         the screens: the message window, the title, the
+                       slots, the menu, the text screens, End Game
+      images/          the images: the title and the Game Over, the one of
+                       `ShowPicture`, the battle backgrounds and battlers
+                       and their animations, scaled and with their palettes
+      mapdata/         the emission: the cartridge's `.inc` with what each
+                       stage answered, the LZ2 streams and the VRAM layouts
+      convert/         the converter: it asks each stage, in order, for
+                       what the cartridge needs, and gives it what the
+                       others answered
 
-Las capas sólo dependen hacia abajo —`rm2k-snes/` de las otras dos, y
-ésas de nada de las demás—, y lo cuida `tests/test_layers.py`. Todos
-son un solo workspace de Cargo, con el `Cargo.lock` y el `target/`
-en la raíz de `the-advocate`.
+The layers only depend downwards —`rm2k-snes/` on the other two, and those
+on nothing of the rest—, and `tests/test_layers.py` guards it. They are
+all one Cargo workspace, with the `Cargo.lock` and the `target/` at the
+root of `the-advocate`.
 
-Hasta el 2026-09-16 hubo otro más, `w65/`, el ensamblador de 65816. Lo reemplazaron
-`ca65` y `ld65`, del proyecto cc65: ver "Dónde corre esto".
+Until 2026-09-16 there was one more, `w65/`, the 65816 assembler. It was
+replaced by `ca65` and `ld65`, from the cc65 project: see "Where this runs".
 
-**Se consumen desde el PATH, no desde `target/release`.** Se instalan con
-`just install` —`cargo install --locked --path …`— y a
-partir de ahí son herramientas del sistema, como `python3` o un core de
-libretro: **ningún script ni prueba de este juego llama a `cargo`**. Es de taro, el 2026-09-15, y lo que
-evita es que cada corrida de la tanda quede atada al toolchain de Rust.
+**They are consumed from the PATH, not from `target/release`.** They are
+installed with `just install` —`cargo install --locked --path …`— and from
+then on they are system tools, like `python3` or a libretro core: **no
+script or test of this game calls `cargo`**. It is taro's, from 2026-09-15,
+and what it avoids is each run of the suite being tied to the Rust
+toolchain.
 
-`CARGO_ROOT` dice dónde instalan; por omisión `/usr/local`, que acá está en el
-PATH.
+`CARGO_ROOT` says where they install; by default `/usr/local`, which here
+is in the PATH.
 
-La regla para saber si algo va adentro de uno de ésos es una sola: **si no
-necesita saber nada de este juego, es un proyecto aparte y va en inglés.**
-Adentro no se nombra a ABL ni al port, y sus flags son ingleses aunque el
-equivalente de las recetas los tenga en castellano (`--include`, `--symbols`).
-Hablar de la consola *como formato* —el SPC700, el 65816— sí está bien: eso es
-el dominio, no el proyecto.
+The rule to know whether something goes inside one of those is a single
+one: **if it does not need to know anything about this game, it is a
+separate project and goes in English.** Inside, neither ABL nor the port is
+named, and their flags are English even if the recipes' equivalent has
+them in Spanish (`--include`, `--symbols`). Talking about the console *as a
+format* —the SPC700, the 65816— is fine: that is the domain, not the
+project.
 
-No es un descuido que corregir: si alguien lo "arregla" al castellano, deshace
-la decisión. **Los mensajes de commit siguen en castellano también para esos
-directorios**: son del repo.
+It is not an oversight to correct: if someone "fixes" it into Spanish, they
+undo the decision. **Commit messages stay in Spanish for those directories
+too**: they belong to the repo.
 
-Y **lo que esas herramientas generan va en inglés también**, aunque caiga en
-el repo de las herramientas o en `runtime/`: es su salida, no fuente de este árbol, y dice arriba
-que es generada y de dónde; y también lo que dejan en el `build/` de un
-port, como los comentarios de los `.inc` del conversor. El 2026-09-14 la regla era la contraria —"el idioma
-del árbol donde cae"— y duró un día: al generalizar el generador para el
-segundo bytecode quedó claro que hacerlo hablar castellano lo ata a este repo.
+And **what those tools generate goes in English too**, even if it lands in
+the tools repo or in `runtime/`: it is their output, not source of this
+tree, and it says at the top that it is generated and where from; and also
+what they leave in a port's `build/`, like the comments in the converter's
+`.inc` files. On 2026-09-14 the rule was the opposite —"the language of the
+tree where it lands"— and it lasted a day: when generalising the generator
+for the second bytecode it became clear that making it speak Spanish ties
+it to this repo.
 
-Las pruebas de esos proyectos no dependen del juego. Ditto recibe el corpus por
-`DITTO_CORPUS`, y sin esa variable las que lo necesitan se saltean con un
-mensaje; `rm2k-snes/rm2k-snes-audio/` recibe el SoundFont por `SOUNDFONT`, igual;
-`snes/goombario/` ensambla programas de juguete y necesita `ca65` y
-`ld65` en el PATH, y sin ellos se saltea igual;
-y `snes/gunter/`, `snes/voodoo/`, `snes/lz2/`,
+The tests of those projects do not depend on the game. Ditto receives the
+corpus through `DITTO_CORPUS`, and without that variable the ones that need
+it are skipped with a message; `rm2k-snes/rm2k-snes-audio/` receives the
+SoundFont through `SOUNDFONT`, the same; `snes/goombario/` assembles toy
+programs and needs `ca65` and `ld65` in the PATH, and without them it is
+skipped the same way; and `snes/gunter/`, `snes/voodoo/`, `snes/lz2/`,
 `snes/adeleine/`, `rm2k/rules/`, `rm2k/rm2k-render/`, `rm2k-snes/battle/`,
-`rm2k-snes/bytecode/`, `rm2k-snes/events/`, `rm2k-snes/patches/`, `rm2k-snes/wally/` y
-los dos de las pantallas, `rm2k-snes/images/`,
-`rm2k-snes/mapdata/` y `rm2k-snes/convert/` no necesitan nada.
+`rm2k-snes/bytecode/`, `rm2k-snes/events/`, `rm2k-snes/patches/`,
+`rm2k-snes/wally/` and the two of the screens, `rm2k-snes/images/`,
+`rm2k-snes/mapdata/` and `rm2k-snes/convert/` need nothing.
 
-### `snes/voodoo/` no decide colores, y eso no se arregla
+### `snes/voodoo/` does not decide colours, and that is not to be fixed
 
-`snes/voodoo/` convierte una imagen **que ya entra**: recibe PNG indexados cuyos
-índices son entradas de CGRAM, y si la imagen rompe el formato, dice dónde y no
-la arregla. Qué colores se pierden y cómo se agrupan en paletas lo decide
-Adeleine, `snes/adeleine/` —`wally`, `rm2k-snes-screens`
-y `rm2k-snes-images` lo usan como biblioteca—, que corre
-**antes**; lo que decidió de cada mapa queda como imágenes en
-`build/<cartucho>/adeleine/`, en el proyecto del juego. La prueba para saber de qué lado
-va algo es si cambia un pixel de lo que se ve.
+`snes/voodoo/` converts an image **that already fits**: it receives indexed
+PNGs whose indices are CGRAM entries, and if the image breaks the format,
+it says where and does not fix it. Which colours are lost and how they are
+grouped into palettes is decided by Adeleine, `snes/adeleine/` —`wally`,
+`rm2k-snes-screens` and `rm2k-snes-images` use it as a library—, which runs
+**before**; what it decided for each map stays as images in
+`build/<cartridge>/adeleine/`, in the game's project. The test to know
+which side something goes on is whether it changes a pixel of what is
+seen.
 
-Es de taro, el 2026-09-17. Voodoo tuvo un `--merge` que fusionaba colores; se
-sacó para que haya una sola respuesta a "qué color se perdió". Devolverle
-cualquier decisión de ésas deshace el diseño, aunque sea cómodo.
+It is taro's, from 2026-09-17. Voodoo had a `--merge` that fused colours;
+it was removed so that there is a single answer to "which colour was
+lost". Giving it back any decision of that kind undoes the design, however
+convenient it is.
 
-## El número de un opcode se elige en la declaración
+## An opcode's number is chosen in the declaration
 
-En `rm2k-snes/bytecode/` y en ningún otro lado. Hay dos declaraciones,
-cada una una invocación de la macro `bytecode!`: `src/events.rs`, el bytecode
-que interpreta `run_code`, y `src/music.rs`, el stream que lee `irq_music`. El
-lado de Rust toma las constantes con un `use`, y `rm2k-snes-assemble` escribe
-el del 65816 —`event_opcodes.inc` y `music_opcodes.inc`— en el directorio
-del cartucho en cada build: no hay generado commiteado que pueda quedar
-viejo. Los dos caen en el mismo espacio de símbolos del ensamblador, así que
-dos opcodes de bytecodes distintos pueden compartir **número** pero no
-**nombre** —por eso `OP_FIN` se llama `OP_DONE`: `OP_END` ya era del stream
-de música—, y eso, como un número repetido o un hueco en el despacho, **no
-compila**: son `const` asserts del crate, con el opcode en el mensaje.
+In `rm2k-snes/bytecode/` and nowhere else. There are two declarations,
+each one an invocation of the `bytecode!` macro: `src/events.rs`, the
+bytecode that `run_code` interprets, and `src/music.rs`, the stream that
+`irq_music` reads. The Rust side takes the constants with a `use`, and
+`rm2k-snes-assemble` writes the 65816 one —`event_opcodes.inc` and
+`music_opcodes.inc`— in the cartridge's directory on each build: there is
+no committed generated file that can go stale. Both land in the same symbol
+space of the assembler, so two opcodes of different bytecodes can share a
+**number** but not a **name** —that is why `OP_FIN` is called `OP_DONE`:
+`OP_END` already belonged to the music stream—, and that, like a repeated
+number or a gap in the dispatch, **does not compile**: they are `const`
+asserts of the crate, with the opcode in the message.
 
-Hasta el 2026-10-02 los declaraban dos TOML de `snes/protocol/`, un
-generador que escribía los dos lados y los commiteaba, y una prueba que
-cuidaba que no envejecieran.
+Until 2026-10-02 they were declared by two TOML files in `snes/protocol/`,
+a generator that wrote both sides and committed them, and a test that
+made sure they did not go stale.
 
-Antes el de eventos lo declaraba `tools/port/events.py` y le llegaba al intérprete
-adentro de `mapdata.inc`, que es cómo dos ramas pudieron elegir el mismo sin
-que git viera nada; el de música estaba escrito a mano de los dos lados.
-(`mapdata.inc` sigue existiendo y `main.s` lo sigue incluyendo: lo que salió de
-ahí es el bytecode, no las tablas del mapa.) Al repartir trabajo entre
-sub-agentes sigue valiendo repartir los números de antemano, pero ahora la
-colisión es un conflicto de git en un archivo y no un bug que viaja adentro de
-un merge.
+Before that, the event one was declared by `tools/port/events.py` and
+reached the interpreter inside `mapdata.inc`, which is how two branches
+could pick the same one without git seeing anything; the music one was
+written by hand on both sides. (`mapdata.inc` still exists and `main.s`
+still includes it: what left it is the bytecode, not the map tables.) When
+splitting work among sub-agents it is still worth handing out the numbers
+in advance, but now the collision is a git conflict in a file and not a
+bug that travels inside a merge.
 
-Del de eventos sale también **la tabla del despacho** de `run_code` (la
-macro `EVENT_HANDLERS`), así que un opcode nuevo es su entrada en
-`src/events.rs` y su `.proc op_x`, con el nombre del opcode en minúsculas; el
-despacho no se toca. Eso pide **números contiguos desde 0**: si se saca un
-opcode, el hueco hay que cerrarlo —renumerando, o dándole el número al
-próximo que se agregue—, porque la declaración no compila con huecos.
+From the event one also comes **the dispatch table** of `run_code` (the
+`EVENT_HANDLERS` macro), so a new opcode is its entry in `src/events.rs`
+and its `.proc op_x`, with the opcode's name in lowercase; the dispatch is
+not touched. That requires **contiguous numbers from 0**: if an opcode is
+removed, the gap has to be closed —renumbering, or giving the number to the
+next one added—, because the declaration does not compile with gaps.
 
-## `git blame` y los cambios mecánicos
+## `git blame` and mechanical changes
 
-Todo lo de esta sección es de `the-advocate`, salvo el último párrafo, que dice
-cómo se le pide el `blame` a lo de los ports.
+Everything in this section is about `the-advocate`, except the last
+paragraph, which says how to ask for the `blame` of what is in the ports.
 
-`.git-blame-ignore-revs` lista los commits que `git blame` tiene que saltear:
-renombres masivos y reformateos, que sin esto contestan "fue el renombre" en
-cada línea que tocaron. El criterio para meter uno es que su cambio **no pueda
-alterar el comportamiento**, y en este repo eso se demuestra, no se supone: los
-dos que hay adentro tienen las dos ROMs saliendo byte por byte iguales.
+`.git-blame-ignore-revs` lists the commits `git blame` has to skip: mass
+renames and reformats, which without this answer "it was the rename" on
+every line they touched. The criterion for putting one in is that its
+change **cannot alter behaviour**, and in this repo that is demonstrated,
+not assumed: the two that are in there have both ROMs coming out byte for
+byte equal.
 
-Si no funciona no esperado, podemos pasarlo como argumento: git blame --ignore-revs-file .git-blame-ignore-revs <archivo>.
+If it does not work as expected, we can pass it as an argument: git blame --ignore-revs-file .git-blame-ignore-revs <file>.
 
-Y lo que **no** arregla: sólo sirve para `blame`. Para `git log` y `git diff`
-no hay equivalente, así que para rastrear cuándo cambió algo sigue valiendo
-`git log -S '<texto>'`, que busca por contenido y por eso ignora el ruido solo.
+And what it does **not** fix: it only works for `blame`. For `git log` and
+`git diff` there is no equivalent, so to track when something changed
+`git log -S '<text>'` still holds, which searches by content and therefore
+ignores the noise on its own.
 
-**`runtime/` atraviesa el corte de `main.s` sólo con
-`git blame -C --diff-algorithm=histogram <archivo>`.** El 2026-09-25 `main.s`
-se partió en un archivo por subsistema, y el corte **no** está en
-`.git-blame-ignore-revs` porque no sirve: ignorar un commit le pasa la culpa
-al mismo archivo en el padre, y ninguno de los nuevos existía. Sin opciones,
-`blame` contesta "fue el corte" en cada línea; con `-C` solo, casi igual,
-porque el diff por omisión (Myers) aparea las líneas repetidas —`rts`,
-`.endproc`, blancos— con las primeras que encuentra en treinta mil líneas y
-los trozos quedan más cortos que el mínimo de `-C`. Con histogram, que ancla
-en las líneas únicas, **cada línea sale con el mismo commit que daba el
-`main.s` de antes**: medido sobre las treinta y cuatro mil. `git log
---follow` no cruza el corte; `git log -S` sí, porque busca en todos los
-archivos.
+**`runtime/` gets across the split of `main.s` only with
+`git blame -C --diff-algorithm=histogram <file>`.** On 2026-09-25 `main.s`
+was split into one file per subsystem, and the split is **not** in
+`.git-blame-ignore-revs` because it does not help: ignoring a commit passes
+the blame to the same file in the parent, and none of the new ones
+existed. Without options, `blame` answers "it was the split" on every line;
+with `-C` alone, almost the same, because the default diff (Myers) pairs
+the repeated lines —`rts`, `.endproc`, blanks— with the first ones it finds
+in thirty thousand lines and the chunks end up shorter than `-C`'s minimum.
+With histogram, which anchors on the unique lines, **each line comes out
+with the same commit the old `main.s` gave**: measured over the
+thirty-four thousand. `git log --follow` does not cross the split; `git log
+-S` does, because it searches in every file.
 
-**La mudanza de `rom/src/` a `runtime/`, el 2026-09-29, no cuesta
-nada**: fue un commit de `git mv` solo, sin tocar una línea, y `blame` sigue
-los renombres sin opciones. Con las de arriba, cada línea de
-`runtime/` sale con el mismo commit que daba en `rom/src/` antes de
-mudarse: medido sobre `main.s`, `hero.s`, `interpreter.s`, `battle.s`,
-`registers.s`, `audio_package.s` y `event_opcodes.inc`, cuatro mil
-líneas. Con `data/`, `parches/` y `pruebas/`, que se mudaron adentro de
-`rom/` en el mismo commit, alcanzaba el `blame` sin opciones: medido sobre
+**The move from `rom/src/` to `runtime/`, on 2026-09-29, costs nothing**:
+it was a commit with a `git mv` alone, without touching a line, and `blame`
+follows renames without options. With the options above, each line of
+`runtime/` comes out with the same commit it gave in `rom/src/` before the
+move: measured over `main.s`, `hero.s`, `interpreter.s`, `battle.s`,
+`registers.s`, `audio_package.s` and `event_opcodes.inc`, four thousand
+lines. With `data/`, `parches/` and `pruebas/`, which moved inside `rom/`
+in the same commit, `blame` without options was enough: measured over
 `rom/pruebas/arnes/consola.py`.
 
-**Lo de ABL se fue a su propio repo el 2026-10-02, sin historia**: en
-`the-advocate-ports` cada archivo nace en un solo commit. Su `blame` se pide
-en `the-advocate`, sobre la ruta
-que tenía y en el padre del commit que lo borró —`git blame
-d356bfb7^ -- rom/pruebas/arnes/consola.py`—, y `git log -S` sigue
-encontrando todo lo que pasó antes de esa fecha, de los dos lados.
+**ABL's stuff left for its own repo on 2026-10-02, without history**: in
+`the-advocate-ports` each file is born in a single commit. Its `blame` is
+asked for in `the-advocate`, on the path it had and at the parent of the
+commit that deleted it —`git blame d356bfb7^ --
+rom/pruebas/arnes/consola.py`—, and `git log -S` still finds everything
+that happened before that date, on both sides.
 
-Los IDE que no dejan pasarle opciones a `blame` —el annotate de JetBrains—
-necesitan configuración del lado del host: ver "JetBrains" en el libro, en `contributing/`.
+IDEs that do not let you pass options to `blame` —JetBrains' annotate—
+need configuration on the host side: see "JetBrains" in the book, in
+`contributing/`.
 
-## La regla que sostiene todo
+## The rule that holds everything up
 
-Nada se da por bueno porque se vea bien: **se compara pixel por pixel, a 15
-bits**, que es la profundidad real de la consola. Lo que cambió el 2026-09-16
-es contra qué.
+Nothing is taken as good because it looks good: **it is compared pixel by
+pixel, at 15 bits**, which is the console's real depth. What changed on
+2026-09-16 is against what.
 
-Hasta ese día se comparaba contra una **referencia en Python** que hacía lo
-mismo que la ROM. Hoy se compara contra **capturas congeladas** —las goldens de
-la tanda de ABL, en `pruebas/golden/tanda/` de su repo, que son lo que la ROM
-dibujaba el día que la tanda estaba en verde—. De ahí salen tres
-obligaciones, y una de ellas es nueva.
+Until that day it was compared against a **Python reference** that did the
+same as the ROM. Today it is compared against **frozen captures** —the
+goldens of ABL's suite, in `pruebas/golden/tanda/` of its repo, which are
+what the ROM drew the day the suite was green—. Three obligations come out
+of that, and one of them is new.
 
-**Las pruebas de ROM del motor viven en ABL, por ahora**: casi todo
-`pruebas/rpgmaker/` de los ports es lo que RM2k hace, usando a ABL de
-escenario. Se fueron con el juego el 2026-10-02, porque necesitan uno, y
-vuelven a `the-advocate` de a poco
-cuando exista el juego de pruebas —la fase 2 de
-`research/2026-10-02-el-juego-de-pruebas.md` del libro—. Hasta entonces **un
-cambio en las herramientas se verifica corriendo la tanda de ABL con
-las herramientas del cambio**, como dice "Dónde corre esto"; `just test`
-y las de cada crate no corren ninguna ROM. Es el riesgo
-que el estudio señaló, y es el argumento para no demorar la fase 2. Y una
-golden que se mueve por un cambio de las herramientas se mira y se
-commitea en los ports, en su propio commit.
+**The engine's ROM tests live in ABL, for now**: almost all of
+`pruebas/rpgmaker/` in the ports is what RM2k does, using ABL as a stage.
+They left with the game on 2026-10-02, because they need one, and they
+come back to `the-advocate` little by little when the test game exists
+—phase 2 of `research/2026-10-02-el-juego-de-pruebas.md` in the book—.
+Until then **a change in the tools is verified by running ABL's suite with
+the tools of the change**, as "Where this runs" says; `just test` and each
+crate's tests run no ROM. It is the risk the study pointed out, and it is
+the argument for not delaying phase 2. And a golden that moves because of a
+change in the tools is looked at and committed in the ports, in its own
+commit.
 
-**Cambiar una golden es un acto deliberado.** Va a git, se mira, y el commit
-explica por qué el render cambió. Si regenerarlas fuera automático, o si la
-tanda lo hiciera sola, dejarían de cumplir ninguna función. Es lo mismo que
-cualquier snapshot testing.
+**Changing a golden is a deliberate act.** It goes to git, it is looked at,
+and the commit explains why the render changed. If regenerating them were
+automatic, or if the suite did it on its own, they would stop serving any
+purpose. It is the same as any snapshot testing.
 
-**Una golden caza regresiones, no errores de nacimiento.** Una feature que sale
-mal desde el día uno hornea el bug adentro de su golden y la prueba lo defiende
-a partir de ahí. No es teórico: el 2026-09-15 aparecieron **tres goldens del
-recorrido con un tinte pegado**, y dos de ellas **pasaban** —una con 10,3% de
-diferencia bajo un tope del 15%—. Lo que contrapesa esto es que taro juega.
+**A golden catches regressions, not birth defects.** A feature that comes
+out wrong from day one bakes the bug into its golden and the test defends
+it from then on. It is not theoretical: on 2026-09-15 **three goldens of
+the walkthrough with a stuck tint** showed up, and two of them **passed**
+—one with a 10.3% difference under a 15% cap—. What counterweighs this is
+that taro plays.
 
-**Y hay una clase de error que ninguna golden puede ver, porque el emulador que
-la sacó tampoco la ve.** Para eso está `pruebas/rpgmaker/test_cores.py`, en los ports: corre el mismo
-cartucho en **snes9x y en bsnes** y compara las dos capturas entre sí. bsnes
-arranca la WRAM con basura y snes9x en cero, así que una diferencia significa
-que la ROM depende de memoria sin inicializar. Da rojo **cuatro de cada cinco
-corridas** con el error puesto —medido—, porque la basura tiene que caer en un
-valor que rompa.
+**And there is a class of bug that no golden can see, because the emulator
+that took it does not see it either.** That is what
+`pruebas/rpgmaker/test_cores.py`, in the ports, is for: it runs the same
+cartridge in **snes9x and in bsnes** and compares the two captures with
+each other. bsnes starts WRAM with garbage and snes9x with zeros, so a
+difference means the ROM depends on uninitialised memory. It goes red
+**four out of five runs** with the bug in place —measured—, because the
+garbage has to land on a value that breaks.
 
-Lo que **se fue** con la referencia: la obligación de mover los dos lados
-juntos, y el modo de falla de "si los dos lados se equivocan igual, la
-comparación da cero" —que mordió dos veces, con los códigos de comando de las
-puertas y con la prioridad de OAM—. Ya no hay dos lados.
+What **went away** with the reference: the obligation to move both sides
+together, and the failure mode of "if both sides are wrong the same way,
+the comparison gives zero" —which bit twice, with the doors' command codes
+and with OAM priority—. There are no two sides any more.
 
-Lo que **sigue entero** es su primo, y es el que más veces mordió: **un camino
-que ninguna prueba ejecuta**. Así sobrevivieron los tres errores del intérprete
-de eventos, así estuvo rota meses la receta que comparaba contra `ca65`, y así
-una prueba de tropas leyó el chunk equivocado sin fallar nunca.
+What **is still whole** is its cousin, and it is the one that bit most
+often: **a path no test executes**. That is how the three bugs of the event
+interpreter survived, that is how the recipe that compared against `ca65`
+was broken for months, and that is how a troops test read the wrong chunk
+without ever failing.
 
-**Decir "verificado" obliga a nombrar qué se corrió.** El commit `c64e4d9`
-decía "Verificado: mapas 7 y 4 en cero" sobre un camino que ninguna prueba
-ejecutaba, y detrás había tres errores encadenados. Si un camino nuevo no lo
-cubre la tanda, el mensaje tiene que decirlo con todas las letras.
+**Saying "verified" requires naming what was run.** Commit `c64e4d9` said
+"Verificado: mapas 7 y 4 en cero" over a path no test executed, and behind
+it there were three chained bugs. If a new path is not covered by the
+suite, the message has to say so in so many words.
 
-## Dónde corre esto
+## Where this runs
 
-Adentro de un contenedor de podman que taro levanta con `box`, una función
-suya de nushell: Arch —igual que el host—. **Los cuatro repos están clonados
-en `~/`, adentro del contenedor** —`~/the-advocate-work`, `~/the-advocate`,
-`~/the-advocate-ports`, `~/the-advocate-docs`—, y el CLI corre parado en el
-primero. Desde el 2026-10-10 no se comparte nada de git con el host: lo que
-se commitea acá llega a GitHub con un `git push` desde acá, y taro lo trae
-de ahí. `~` es un volumen con nombre y sobrevive al contenedor. Hasta ese día
-el repo de las herramientas estaba montado del host en `/host/abl-snes` y el
-de ABL en `/abl-snes`: son checkouts viejos y no se usan.
+Inside a podman container that taro brings up with `box`, a nushell
+function of his: Arch —same as the host—. **The four repos are cloned in
+`~/`, inside the container** —`~/the-advocate-work`, `~/the-advocate`,
+`~/the-advocate-ports`, `~/the-advocate-docs`—, and the CLI runs standing
+in the first one. Since 2026-10-10 nothing of git is shared with the host:
+what is committed here reaches GitHub with a `git push` from here, and
+taro brings it from there. `~` is a named volume and survives the
+container. Until that day the tools repo was mounted from the host at
+`/host/abl-snes` and ABL's at `/abl-snes`: they are old checkouts and are
+not used.
 
-**Cada repo tiene su clave para GitHub**, una deploy key con escritura en
-`~/.ssh/<repo>` —GitHub no deja usar la misma en dos repos—. La elige
-`~/.gitconfig` por el remote, con un `includeIf
-"hasconfig:remote.*.url:…"` por repo que apunta a `~/.ssh/git/<repo>.gitconfig`
-y su `core.sshCommand`; así vale para cualquier clon o worktree, también el
-primer `git clone`. `~/.ssh/config` sólo dice `IdentitiesOnly yes` para
-`github.com`: sin eso ssh ofrece otra clave, GitHub la acepta, y contesta un
-engañoso "Repository not found". Un repo nuevo es la clave, su `.gitconfig`
-y un `includeIf` más.
+**Each repo has its own key for GitHub**, a deploy key with write access in
+`~/.ssh/<repo>` —GitHub does not allow using the same one in two repos—.
+`~/.gitconfig` picks it by the remote, with one `includeIf
+"hasconfig:remote.*.url:…"` per repo pointing to
+`~/.ssh/git/<repo>.gitconfig` and its `core.sshCommand`; that way it holds
+for any clone or worktree, also the first `git clone`. `~/.ssh/config` only
+says `IdentitiesOnly yes` for `github.com`: without it ssh offers another
+key, GitHub accepts it, and answers a misleading "Repository not found". A
+new repo is the key, its `.gitconfig` and one more `includeIf`.
 
-`/shared` es otra cosa: un CIFS montado del NAS de taro —disco mecánico,
-lento, sin symlinks, sin bits de ejecución y sin distinguir mayúsculas—, y
-es donde van los builds, las capturas y el audio para taro (ver
-"Sub-agentes"). Hasta el 2026-10-03 ABL vivía ahí, en `/shared/abl-snes`, y
-la copia vieja sigue pero **no se usa**.
+`/shared` is something else: a CIFS mounted from taro's NAS —spinning
+disk, slow, no symlinks, no execute bits and case-insensitive—, and it is
+where the builds, the captures and the audio for taro go (see
+"Sub-agents"). Until 2026-10-03 ABL lived there, in `/shared/abl-snes`, and
+the old copy is still there but **is not used**.
 
-**Las herramientas se consumen desde el PATH**: las instala `just
-install`, desde `~/the-advocate`, en `/usr/local/bin`, y desde
-ahí son del sistema, como `python3` o un core de libretro. **El runtime lo
-arma `rm2k-snes-cartridges` desde el checkout del que se instaló** —la ruta
-queda compilada en `project`—: reinstalar desde otro checkout cambia qué
-runtime entra en la ROM. Ningún script ni prueba de los ports llama a
-`cargo` ni nombra la ruta de `the-advocate`, y lo cuida
-`pruebas/herramientas/test_lado_de_abl.py`: lo que las herramientas saben
-del proyecto —sus rutas, el `rm2k-snes.toml`— el arnés se lo pregunta a
+**The tools are consumed from the PATH**: `just install` installs them,
+from `~/the-advocate`, into `/usr/local/bin`, and from there they belong to
+the system, like `python3` or a libretro core. **The runtime is assembled
+by `rm2k-snes-cartridges` from the checkout it was installed from** —the
+path is compiled into `project`—: reinstalling from another checkout
+changes which runtime goes into the ROM. No script or test of the ports
+calls `cargo` or names the path of `the-advocate`, and
+`pruebas/herramientas/test_lado_de_abl.py` guards it: what the tools know
+about the project —its paths, the `rm2k-snes.toml`— the harness asks
 `rm2k-snes-project` (`pruebas/arnes/proyecto.py`).
 
-**Para correr ABL con las herramientas de un checkout que las cambia** —un
-worktree de `the-advocate` que toca el runtime o el conversor—: `just
-install-local .local-tools <proyectos de Rust>` en el
-worktree, y desde `abl/` de los ports `PATH=<worktree>/.local-tools/bin:$PATH
-just pruebas`. El `justfile` de ABL arma su PATH desde el que recibe,
-y lo que no esté en ese `bin/` sale del global. **Pero arma en el `build/`
-del checkout de los ports donde corre**: el de `~/the-advocate-ports` es el que
-se juega y el de la tanda principal, así que un agente que lo necesite se
-saca su propio worktree (`git -C ~/the-advocate-ports worktree add <dir>`).
+**To run ABL with the tools of a checkout that changes them** —a worktree
+of `the-advocate` that touches the runtime or the converter—: `just
+install-local .local-tools <Rust projects>` in the worktree, and from
+`abl/` in the ports `PATH=<worktree>/.local-tools/bin:$PATH just pruebas`.
+ABL's `justfile` builds its PATH from the one it receives, and what is not
+in that `bin/` comes from the global one. **But it builds in the `build/`
+of the ports checkout where it runs**: the one in `~/the-advocate-ports` is
+the one that gets played and the one of the main suite, so an agent that
+needs it gets its own worktree (`git -C ~/the-advocate-ports worktree add
+<dir>`).
 
-El resto del sistema es descartable, y por eso taro trabaja en auto mode y
-no aprueba comando por comando; lo que revisa es el `git diff`.
+The rest of the system is disposable, and that is why taro works in auto
+mode and does not approve command by command; what he reviews is the `git
+diff`.
 
-Lo que el contenedor cambia en la práctica:
+What the container changes in practice:
 
-* **No hay podman adentro**, y desde el 2026-09-19 ninguna receta lo usa: el
-  port a Mega Drive, `audio-validar` y el `rom/Containerfile` se fueron.
-* **No hay puertos publicados.** Nada que se sirva acá adentro se ve desde el
-  host.
-* **`~` sobrevive a la sesión**, igual que los paquetes instalados:
-  `/root`, `/usr`, `/var` y `/etc` son volúmenes con nombre, no capas de la
-  imagen. `/tmp` no: el contenedor corre con `--rm --replace`, y se muere
-  con él.
+* **There is no podman inside**, and since 2026-09-19 no recipe uses it:
+  the Mega Drive port, `audio-validar` and the `rom/Containerfile` are
+  gone.
+* **There are no published ports.** Nothing served in here is visible from
+  the host.
+* **`~` survives the session**, as do the installed packages: `/root`,
+  `/usr`, `/var` and `/etc` are named volumes, not layers of the image.
+  `/tmp` does not: the container runs with `--rm --replace`, and it dies
+  with it.
 
-`~` es de **uso libre**, y ésa es la manera de conseguir material de
-referencia: se clona o se descarga acá adentro en vez de montar algo del host,
-que revela menos y da más margen. Además de los cuatro repos tiene:
+`~` is **free to use**, and that is the way to get reference material: it
+is cloned or downloaded in here instead of mounting something from the
+host, which reveals less and gives more leeway. Besides the four repos it
+has:
 
-    ~/juegos/      los originales de RM2k: `<port>.zip` —`abl.zip` y los
-                   siete del relevamiento— es el `GAME_DIR` de cada port, y
-                   al lado el mismo juego en un directorio, para Wine
-    ~/assets/      `rtp.zip`, el RTP de Don Miguel, sin el cual faltan 22
-                   assets —`rtp/` al lado es el mismo, descomprimido—;
-                   `rtpe/`, el RTP extendido; `soundfonts/`, de
-                   donde salen las muestras; y `msu/`, los reemplazos de las
-                   pistas de MSU-1
-    ~/ref/         lo clonado para leer: liblcf, easyrpg-player, los
-                   emuladores, Game-Decompilations; y `cc65/`, compilado
-                   acá, de donde salen `ca65` y `ld65`
-    ~/wine/        el ABL original corriendo con Wine: la receta, en
+    ~/juegos/      the RM2k originals: `<port>.zip` —`abl.zip` and the
+                   seven from the survey— is each port's `GAME_DIR`, and
+                   next to it the same game in a directory, for Wine
+    ~/assets/      `rtp.zip`, Don Miguel's RTP, without which 22 assets
+                   are missing —`rtp/` next to it is the same,
+                   unzipped—; `rtpe/`, the extended RTP; `soundfonts/`,
+                   where the samples come from; and `msu/`, the
+                   replacements for the MSU-1 tracks
+    ~/ref/         what was cloned to read: liblcf, easyrpg-player, the
+                   emulators, Game-Decompilations; and `cc65/`, compiled
+                   here, where `ca65` and `ld65` come from
+    ~/wine/        the original ABL running with Wine: the recipe, in
                    `~/wine/abl/LEEME.txt`
-    ~/scratch/     los temporales, cada agente en `<nombre>/`
+    ~/scratch/     the temporary files, each agent in `<name>/`
 
-**Los juegos y el RTP se leen de su `.zip`, y no se tocan**: un cambio a
-un juego va por sus parches. Es de taro, el 2026-10-11 —"nos fuerza un
-poco a no modificarlos"—. Las herramientas leen igual un directorio, y
-una copia retocada para medir algo se descomprime en `~/scratch/<nombre>/`
-y se le pasa en `GAME_DIR`; nunca se edita la de `~/juegos`.
+**The games and the RTP are read from their `.zip`, and are not touched**:
+a change to a game goes through its patches. It is taro's, from 2026-10-11
+—"it forces us a bit not to modify them"—. The tools read a directory just
+the same, and a copy retouched to measure something is unzipped into
+`~/scratch/<name>/` and passed in `GAME_DIR`; the one in `~/juegos` is
+never edited.
 
-Hasta el 2026-10-10 todo eso vivía en `/extras`, otro volumen del mismo
-disco, con 75 GB de restos de otras épocas; se limpió y se mudó acá. Lo que
-taro quiere que mire lo deja en `/shared`.
+Until 2026-10-10 all that lived in `/extras`, another volume on the same
+disk, with 75 GB of leftovers from other times; it was cleaned up and moved
+here. What taro wants looked at he leaves in `/shared`.
 
-Las herramientas llegan a `~` y a `/shared` por flags —`--game-dir`,
-`--rtp-dir`, `--soundfont`, `--replacements`, `--shared`—, y no saben de
-ningún valor de esta máquina. Los pone `maquina.just`, en la raíz de los
-ports, que cada `justfile` de un juego importa: traduce `RTP_DIR`,
-`SOUNDFONT`, `SHARED` y `JUEGOS` con los valores de acá por omisión, y cada
-juego agrega su `GAME_DIR`; se exportan, porque las pruebas de ABL los leen
-también. Los reemplazos de MSU-1, que no tienen variable, son su
-`reemplazos_msu`. Si el ambiente cambia, se cambia ahí. Hasta el 2026-10-10
-ABL los llamaba `ABL_GAME_DIR`, `ABL_RTP_DIR` y `ABL_SOUNDFONT`, y cada
-juego repetía los suyos. `ABL_CACHE` y `CARTUCHOS` también se traducen, en
-el de ABL, pero sin valor de la máquina: el caché y los cartuchos de prueba
-viven adentro de `build/`, y las variables sólo los mueven.
+The tools reach `~` and `/shared` through flags —`--game-dir`,
+`--rtp-dir`, `--soundfont`, `--replacements`, `--shared`—, and know of no
+value of this machine. They are set by `maquina.just`, at the root of the
+ports, which each game's `justfile` imports: it translates `RTP_DIR`,
+`SOUNDFONT`, `SHARED` and `JUEGOS` with the values from here by default,
+and each game adds its `GAME_DIR`; they are exported, because ABL's tests
+read them too. The MSU-1 replacements, which have no variable, are its
+`reemplazos_msu`. If the environment changes, it is changed there. Until
+2026-10-10 ABL called them `ABL_GAME_DIR`, `ABL_RTP_DIR` and
+`ABL_SOUNDFONT`, and each game repeated its own. `ABL_CACHE` and
+`CARTUCHOS` are translated too, in ABL's, but with no machine value: the
+cache and the test cartridges live inside `build/`, and the variables only
+move them.
 
-Las dos pruebas de las herramientas que leen un SoundFont de verdad —las
-de `rm2k-snes-audio`— lo reciben en `SOUNDFONT`, como Ditto su corpus en
-`DITTO_CORPUS`: sin la variable se saltean. Para correrlas acá,
+The two tests of the tools that read a real SoundFont —those of
+`rm2k-snes-audio`— receive it in `SOUNDFONT`, like Ditto its corpus in
+`DITTO_CORPUS`: without the variable they are skipped. To run them here,
 `SOUNDFONT="$HOME/assets/soundfonts/Microsoft GS Wavetable Synth.sf2" just
-crate-test rm2k-snes-audio`, parado en `~/the-advocate`.
+crate-test rm2k-snes-audio`, standing in `~/the-advocate`.
 
-**`ca65` y `ld65` se compilan acá adentro, y eso fue una decisión.** No están
-empaquetados en Arch, y hasta el 2026-09-15 la regla era no compilar fuentes de
-internet en la misma caja donde vive el repo: `audio-validar` corría `ca65` en un
-podman aparte, desde el host. taro dio esa regla por caduca —venía de cuando
-cada comando se envolvía en su propio contenedor— así que `cc65` se clonó y se
-compiló en `~/ref/cc65`, y los binarios están enlazados en
-`/usr/local/bin`. Si el contenedor se recrea desde la imagen, se rearman con
-`git clone --depth 1 https://github.com/cc65/cc65.git` y `make -j8 bin`.
+**`ca65` and `ld65` are compiled in here, and that was a decision.** They
+are not packaged in Arch, and until 2026-09-15 the rule was not to compile
+sources from the internet in the same box where the repo lives:
+`audio-validar` ran `ca65` in a separate podman, from the host. taro
+declared that rule expired —it came from when each command was wrapped in
+its own container— so `cc65` was cloned and compiled in `~/ref/cc65`, and
+the binaries are linked in `/usr/local/bin`. If the container is recreated
+from the image, they are rebuilt with `git clone --depth 1
+https://github.com/cc65/cc65.git` and `make -j8 bin`.
 
-Lo que se comprobó del clon antes de usarlo, para que el próximo no lo dé por
-descuido ni lo repita: el repo **no trae binarios commiteados** —los de `bin/`
-salen de sus 989 fuentes de C—, el build **no baja nada de internet** ni escribe
-fuera de su directorio, y `ca65` usa **55 símbolos externos y ninguno es de red
-ni de ejecución** —no importa `socket`, `connect`, `exec*`, `fork`, `system`,
-`popen` ni `dlopen`—. Lo que **no** se comprobó: los tags del proyecto no están
-firmados, el clon es `--depth 1` y no tiene historia, y nadie leyó los 989
-archivos. Y el build corrió con red y como root: auditar después no deshace eso.
+What was checked about the clone before using it, so that the next person
+does not take it as carelessness nor repeat it: the repo **brings no
+committed binaries** —those in `bin/` come from its 989 C sources—, the
+build **downloads nothing from the internet** nor writes outside its
+directory, and `ca65` uses **55 external symbols and none is about network
+or execution** —it does not import `socket`, `connect`, `exec*`, `fork`,
+`system`, `popen` or `dlopen`—. What was **not** checked: the project's
+tags are not signed, the clone is `--depth 1` and has no history, and
+nobody read the 989 files. And the build ran with network and as root:
+auditing afterwards does not undo that.
 
-**La defensa que no dependía de la auditoría se fue con `w65`.** Mientras
-existió, la salida de `ca65` se comparaba byte por byte contra la nuestra; el
-2026-09-16 las dos ROMs de referencia salieron idénticas y `w65` se borró.
-Desde ahí `ca65` y `ld65` son los que arman, y lo que cobraría un binario
-alterado es lo mismo que cobra cualquier regresión: las goldens y
-`test_cores.py`. Recompilarlos sin mirar deja de ser inocuo.
+**The defence that did not depend on the audit left with `w65`.** While it
+existed, the output of `ca65` was compared byte for byte against ours; on
+2026-09-16 the two reference ROMs came out identical and `w65` was deleted.
+From then on `ca65` and `ld65` are the ones that build, and what would
+catch an altered binary is the same thing that catches any regression: the
+goldens and `test_cores.py`. Recompiling them without looking stops being
+harmless.
 
-**Los repos de `~/ref` están clonados adentro y no son los del host.**
-`liblcf` es de donde sale el esquema de Ditto —y con él los defaults que
-el `data/` de un juego trae ya aplicados y los nombres de los comandos de RM2k, contra los
-que se sostiene `codes.rs` del compilador de eventos—: salen de ahí y de ningún
-otro lado, porque la primera versión del filtro de puertas los puso de memoria
-y tres estaban mal. Si hace
-falta algo que no se consigue desde acá, se le pide a taro que lo copie a
-`~`.
+**The repos in `~/ref` are cloned inside and are not the host's.** `liblcf`
+is where Ditto's schema comes from —and with it the defaults that a game's
+`data/` already brings applied and the names of RM2k's commands, against
+which `codes.rs` of the event compiler holds up—: they come from there and
+from nowhere else, because the first version of the doors filter put them
+in from memory and three were wrong. If something is needed that cannot be
+obtained from here, taro is asked to copy it to `~`.
 
-**taro no corre nada en el host**: si corre algo a mano, lo hace acá
-adentro, y lo pregunta antes. Es suyo, el 2026-10-05. Lo único que es del
-host es el `git push`, el EverDrive por USB, y **ver y escuchar la ROM de
-verdad** — acá adentro se captura con Xvfb y el audio se graba a un wav en
-vez de sonar.
+**taro runs nothing on the host**: if he runs something by hand, he does it
+in here, and asks first. It is his, from 2026-10-05. The only things that
+belong to the host are the `git push`, the EverDrive over USB, and
+**seeing and hearing the ROM for real** — in here it is captured with Xvfb
+and the audio is recorded to a wav instead of playing.
 
-## Recetas o scripts descartables
+## Recipes or throwaway scripts
 
-La decisión no es de seguridad: es el costo de mantener el script contra lo que
-rinda tenerlo. Una receta por cada script convertiría al justfile en ruido.
+The decision is not about security: it is the cost of maintaining the
+script against what having it yields. One recipe per script would turn the
+justfile into noise.
 
-**Receta de `just`** cuando se va a volver a correr: si entra en una cadena de
-verificación, o si conviene que quede escrito cómo se armó algo. `evento`
-nació así, y de paso dejó de existir la
-ROM armada a mano que mandó a mirar el mapa equivocado.
+**A `just` recipe** when it is going to be run again: if it goes into a
+verification chain, or if it is worth having written down how something
+was built. `evento` was born that way, and along the way the hand-built ROM
+that sent us to look at the wrong map ceased to exist.
 
-**Script descartable** cuando contesta una pregunta de una sola vez: cuántos
-mapas tienen tal cosa, en qué offset de la ROM cae tal byte. Va al scratchpad
-y se tira.
+**A throwaway script** when it answers a one-off question: how many maps
+have such a thing, at what ROM offset such a byte falls. It goes to the
+scratchpad and is thrown away.
 
-## Trampas del entorno
+## Environment traps
 
-**`runtime/` es un solo ensamblado partido en muchos `.s`.** `main.s` los
-pega con `.include`, y el orden de esa lista es el orden en la ROM: partir es
-gratis, mover no. Lo que eso implica —cada archivo hereda los anchos y el
-segmento del anterior, las anónimas se resuelven sobre el texto pegado— lo
-dice el encabezado de `main.s`, que es donde lo va a ver quien agregue un
-archivo. Hasta el 2026-09-25 era un solo archivo; se partió byte por byte
-igual, y por eso hay rutinas que quedaron en el archivo del vecino: moverlas
-es un cambio de ROM, y va en su propio commit.
+**`runtime/` is a single assembly split into many `.s` files.** `main.s`
+glues them together with `.include`, and the order of that list is the
+order in the ROM: splitting is free, moving is not. What that implies —each
+file inherits the widths and the segment of the previous one, anonymous
+labels are resolved over the glued text— is said by the header of
+`main.s`, which is where whoever adds a file will see it. Until 2026-09-25
+it was a single file; it was split byte for byte equal, and that is why
+there are routines that stayed in the neighbour's file: moving them is a
+ROM change, and goes in its own commit.
 
-**Un `.inc` generado nunca va en `runtime/`.** `ca65` busca los
-`.include` primero en el directorio del archivo que incluye y recién después en
-los `-I`, así que un `mapdata.inc` en `runtime/` taparía al del cartucho sin
-avisar: la ROM saldría con los datos de otro. Hasta el 2026-09-16 la receta
-`convert` escribía justo ahí —en `rom/src/`, donde vivía el runtime hasta el
-2026-09-29; era "estado global", y así se terminó mirando el
-mapa 6 creyendo que era la demo del hito 12—; hoy cada cartucho escribe el suyo
-en su directorio del `build/` del proyecto, y `rm2k-snes-assemble` se niega a armar si
-encuentra uno en `runtime/`. **Las
-ROMs salen de una receta, no de un `ca65` suelto.**
+**A generated `.inc` never goes in `runtime/`.** `ca65` looks for
+`.include`s first in the directory of the including file and only after
+that in the `-I`s, so a `mapdata.inc` in `runtime/` would cover the
+cartridge's without warning: the ROM would come out with someone else's
+data. Until 2026-09-16 the `convert` recipe wrote right there —in
+`rom/src/`, where the runtime lived until 2026-09-29; it was "global
+state", and that is how map 6 ended up being looked at in the belief that
+it was the demo of milestone 12—; today each cartridge writes its own in
+its directory of the project's `build/`, and `rm2k-snes-assemble` refuses
+to build if it finds one in `runtime/`. **ROMs come out of a recipe, not
+of a loose `ca65`.**
 
-**Cuánto le sobra al banco 0 depende de qué cartucho se arme.** Las tablas que
-emite el conversor viven ahí, así que el número cambia con la lista de mapas:
-el 2026-09-13 la misma pregunta se contestó **81**, **1** y **85** bytes en la
-misma tarde, y las tres estaban bien —cada una con un `mapdata.inc` distinto—.
-Así que al decir "quedan N bytes" hay que decir con cuál.
+**How much bank 0 has left depends on which cartridge is built.** The
+tables the converter emits live there, so the number changes with the list
+of maps: on 2026-09-13 the same question was answered **81**, **1** and
+**85** bytes in the same afternoon, and all three were right —each with a
+different `mapdata.inc`—. So when saying "N bytes are left" one has to say
+with which one.
 
-**El que manda es el más apretado**: hasta el 2026-09-25 los cartuchos de
-prueba llevaban más mapas que `abl`, y medir sólo en ella decía que había
-lugar cuando no lo había. Desde que `abl` es también el cartucho de la tanda
-lleva todos, pero `test-special` tiene sus flags propios. Cuál es el más
-apretado cambia, y dos veces quedó
-escrito acá y se quedó viejo: **no se escribe, se mide**, y hay que medirlos
-todos: `abl` y los que arma `cartuchos`.
+**The tightest one rules**: until 2026-09-25 the test cartridges carried
+more maps than `abl`, and measuring only in it said there was room when
+there was not. Since `abl` is also the suite's cartridge it carries all of
+them, but `test-special` has its own flags. Which one is the tightest
+changes, and twice it was written here and went stale: **it is not
+written, it is measured**, and all of them have to be measured: `abl` and
+the ones `cartuchos` builds.
 
-**Se mide con `just espacio`, en `abl/` de los ports**, que corre `rm2k-snes-space` e imprime para cada cartucho los bancos de
-datos libres y los huecos, el banco 0, el banco 1, `BSS`, `ZEROPAGE` y el
-bloque de textos; con la ruta de una ROM armada aparte, mide ésa. Lo que
-cuenta es **cuántos bancos quedan**, no un porcentaje: los bancos `$7E` y
-`$7F` no son ROM. Hasta el 2026-09-27 se medía a mano, linkeando un `.res N`
-contra el `.o` de la receta; eso sigue sirviendo para lo único que la receta
-no puede, que es una ROM que no linkea: ahí `ld65` dice por cuánto se pasa.
+**It is measured with `just espacio`, in `abl/` of the ports**, which runs
+`rm2k-snes-space` and prints for each cartridge the free data banks and
+the gaps, bank 0, bank 1, `BSS`, `ZEROPAGE` and the text block; with the
+path of a ROM built separately, it measures that one. What counts is **how
+many banks are left**, not a percentage: banks `$7E` and `$7F` are not
+ROM. Until 2026-09-27 it was measured by hand, linking a `.res N` against
+the recipe's `.o`; that still works for the only thing the recipe cannot
+do, which is a ROM that does not link: there `ld65` says by how much it
+overflows.
 
-**`build/cache/`, en el port, es un caché en disco** —qué pistas de MSU-1 ya están—
-y su clave lleva el hash de los fuentes **y el de los binarios que producen lo
-guardado**, así que no hay que borrarlo al tocar código. Lo único que pide es
-que cualquier cambio en lo que se cachea se verifique con `NO_CACHE=1`: las
-dos ROMs tienen que ser byte por byte iguales. Ver `cache.rs` en
-`rm2k-project`.
+**`build/cache/`, in the port, is an on-disk cache** —which MSU-1 tracks
+are already there— and its key carries the hash of the sources **and that
+of the binaries that produce what is stored**, so it does not have to be
+deleted when touching code. The only thing it asks is that any change in
+what is cached be verified with `NO_CACHE=1`: both ROMs have to be byte for
+byte equal. See `cache.rs` in `rm2k-project`.
 
-**Mientras corren las pruebas no se toca ningún fuente**, tampoco desde el
-otro repo. La huella de `rm2k-snes-cartridges` cubre todo `runtime/`
-del checkout desde el que se instalaron las herramientas y los binarios
-que arman —`ca65`, `ld65`, `rm2k-snes-assemble` y
-los que corre el conversor—: tocar cualquiera de ésos mientras corre la
-tanda de ABL, o reinstalar uno, mezcla dos versiones y el resultado no dice
-nada.
+**While the tests are running no source is touched**, not from the other
+repo either. The fingerprint of `rm2k-snes-cartridges` covers all of
+`runtime/` of the checkout the tools were installed from and the binaries
+that build —`ca65`, `ld65`, `rm2k-snes-assemble` and the ones the converter
+runs—: touching any of those while ABL's suite is running, or reinstalling
+one, mixes two versions and the result says nothing.
 
-Lo que **ya no hace falta** es aislarse en un worktree para eso. Hasta el
-2026-09-16 existía `just hitos-foto`, que sacaba una foto del árbol con
-`git stash create` porque la tanda corría recetas que pisaban
-`rom/src/mapdata.inc` —el runtime vivía ahí—, que entonces era estado global. Desde el 9f las
-pruebas no arman nada: corren contra los cartuchos que arma `just cartuchos`
-antes —`release` y los de `build/tests/`—, y el arnés se
-niega a correr contra uno viejo. Dos corridas a la vez sólo se pisan si las
-dos encuentran un cartucho viejo y lo rearman juntas: con `just cartuchos`
-corrido una vez antes, lo único que se pelean es la CPU.
+What **is no longer needed** is isolating oneself in a worktree for that.
+Until 2026-09-16 there was `just hitos-foto`, which took a snapshot of the
+tree with `git stash create` because the suite ran recipes that overwrote
+`rom/src/mapdata.inc` —the runtime lived there—, which was then global
+state. Since 9f the tests build nothing: they run against the cartridges
+that `just cartuchos` builds beforehand —`release` and those in
+`build/tests/`—, and the harness refuses to run against a stale one. Two
+runs at once only step on each other if both find a stale cartridge and
+rebuild it together: with `just cartuchos` run once before, the only thing
+they fight over is the CPU.
 
-**Las tareas en segundo plano que lanzamos nosotros las podemos matar
-nosotros.**
+**The background tasks we launch, we can kill.**
 
-Lo que más se acumula son las **esperas armadas por los agentes** —`until !
-pgrep -f "pytest"; do sleep 30; done`— y tienen dos vicios:
+What piles up the most are the **waits set up by the agents** —`until !
+pgrep -f "pytest"; do sleep 30; done`— and they have two vices:
 
-* **Nunca terminan solas**, porque su propia línea de comando contiene el texto
-  que el `pgrep` busca, así que se encuentran a sí mismas.
-* Cuando por fin despiertan, imprimen resultados de tandas que cerraron horas
-  antes, y eso ya mandó a mirar números viejos más de una vez.
+* **They never end on their own**, because their own command line contains
+  the text the `pgrep` looks for, so they find themselves.
+* When they finally wake up, they print results of suites that closed
+  hours earlier, and that has already sent us to look at old numbers more
+  than once.
 
-Al matarlas, ojo con el `pkill`: si el patrón aparece en la línea de comando
-propia, se mata a sí mismo —código 144— y deja la mitad del trabajo hecho.
-Partir el patrón alcanza: `pgrep -f 'un[t]il ! pgrep'`, y después `kill` uno
-por uno salteando el `$$`.
+When killing them, careful with `pkill`: if the pattern appears in its own
+command line, it kills itself —code 144— and leaves half the job done.
+Splitting the pattern is enough: `pgrep -f 'un[t]il ! pgrep'`, and then
+`kill` one by one skipping `$$`.
 
-## Sub-agentes
+## Sub-agents
 
-**Se usan, y son la forma preferida cuando dos trabajos no se pisan demasiado.**
-Siempre con `isolation: "worktree"`, que les da su copia **de este repo**:
-ahí toman, escriben y mueven su tarea. **El código lo trabajan en worktrees
-propios** de cada repo que toquen —`git -C ~/the-advocate worktree add
-~/scratch/<nombre>/the-advocate`, y lo mismo con los ports—, así el
-`mapdata.inc` —que es estado global— y las tandas no se mezclan. El que los
-lanza trae sus ramas con `git merge` desde esos worktrees.
+**They are used, and they are the preferred way when two jobs do not step
+on each other too much.** Always with `isolation: "worktree"`, which gives
+them their copy **of this repo**: there they take, write and move their
+task. **They work the code in worktrees of their own** of each repo they
+touch —`git -C ~/the-advocate worktree add ~/scratch/<name>/the-advocate`,
+and the same with the ports—, so `mapdata.inc` —which is global state— and
+the suites do not get mixed. The one launching them brings their branches
+in with `git merge` from those worktrees.
 
-**Son un plantel fijo, desde el 2026-10-04**: un archivo por agente en
-`.claude/agents/`, con un nombre de la flora o la fauna argentina, y lo que
-vale para todos en `.claude/agentes.md` —lo que antes se repetía en cada
-encargo—. Se lanzan por su nombre, no como `general-purpose`, así el mismo
-agente vuelve y se encuentra a sí mismo: cada tarea lleva en `agents` a
-todos los que trabajaron en ella —el `assignee` pasa a taro en
-`testing`—, que `nu tasks/tasks.nu ls -a <nombre>` filtra, y cada
-commit suyo termina con `Agente: <nombre>`, que `git log --grep` encuentra.
-Lo pidió taro, el 2026-10-04. Siguen arrancando de cero cada vez: la
-continuidad es lo que dejan escrito.
+**They are a fixed roster, since 2026-10-04**: one file per agent in
+`.claude/agents/`, with a name from Argentine flora or fauna, and what
+applies to all of them in `.claude/agentes.md` —what used to be repeated in
+every assignment—. They are launched by their name, not as
+`general-purpose`, so the same agent comes back and finds itself: each task
+carries in `agents` everyone who worked on it —the `assignee` becomes taro
+in `testing`—, which `nu tasks/tasks.nu ls -a <name>` filters, and each
+commit of theirs ends with `Agente: <name>`, which `git log --grep` finds.
+That line stays `Agente: <name>`, in Spanish, in all four repos —this one
+and the book included, although their messages are in English—, so that
+the same `git log --grep` keeps finding it. taro asked for it, on
+2026-10-04. They still start from scratch every time: continuity is what
+they leave written.
 
-Lo que hay que hacer siempre:
+What always has to be done:
 
-* **Traer los builds a `/shared`, con `just entregar "<qué mirar>"`, desde
-  los ports.** Los worktrees viven en `~`, que no está montado en el host, y
-  `/shared` sí: es donde taro los encuentra. Van a
-  `/shared/builds/<fecha>-<commit de ABL>-<commit de las herramientas>/`, y
-  el texto que se le pasa a la receta va al `LEEME.txt`: qué cambió, qué
-  mirar y con qué limitaciones se chocó. Hasta el 2026-09-24 iban a
-  `pruebas-manuales/`, adentro del repo, y hasta el 2026-09-25 se armaban a
-  mano, que se repetía seguido y se equivocaba.
+* **Bring the builds to `/shared`, with `just entregar "<what to look
+  at>"`, from the ports.** The worktrees live in `~`, which is not mounted
+  on the host, and `/shared` is: it is where taro finds them. They go to
+  `/shared/builds/<date>-<ABL commit>-<tools commit>/`, and the text passed
+  to the recipe goes to the `LEEME.txt`: what changed, what to look at and
+  which limitations were hit. Until 2026-09-24 they went to
+  `pruebas-manuales/`, inside the repo, and until 2026-09-25 they were
+  assembled by hand, which was repeated often and went wrong.
 
-  **Un solo `.sfc` por build, y se llama `abl.sfc`**: el cartucho con pantalla
-  de título, que es el que taro juega. Las otras demos no se copian; el que las
-  quiera las arma. Y **se dejan los dos últimos directorios y nada más**: el
-  anterior sirve para comparar con lo que se venía jugando, y los de más atrás
-  se rearman desde su commit. Es de taro, el 2026-09-20, después de que los
-  builds llegaran a 4,3 GB en 51 directorios. La receta borra los demás y no
-  toca lo que taro deja adentro, como la partida de su emulador.
+  **A single `.sfc` per build, and it is called `abl.sfc`**: the cartridge
+  with a title screen, which is the one taro plays. The other demos are not
+  copied; whoever wants them builds them. And **the last two directories
+  are kept and nothing more**: the previous one is useful to compare with
+  what was being played, and the older ones are rebuilt from their commit.
+  It is taro's, from 2026-09-20, after the builds reached 4.3 GB in 51
+  directories. The recipe deletes the rest and does not touch what taro
+  leaves inside, like his emulator's save.
 
-  **Al lado va `abl.sfc.dbg`**, con el que Mesen2 muestra nuestros nombres de
-  rutina en el depurador, **y el `runtime/` del commit**, sacado con `git
-  archive`: Mesen2 busca el fuente subiendo de carpeta desde el `.dbg`, así
-  que con `runtime/` al lado lo muestra también desde `/shared/builds/`. Los
-  `.inc` que genera el conversor no van —pesan ~15 MB— y lo que cae en ellos
-  se ve sólo desensamblado. Por eso la receta **se niega con cambios sin
-  commitear** en lo que entra en la ROM, de los dos lados —el juego y el
-  runtime del checkout de `the-advocate` del que se instalaron las
-  herramientas—: el build se nombra por dos commits y tienen que ser ésos.
-  Ver "Debugging with Mesen2" en el libro, `reference/snes/emulators.md`.
+  **Next to it goes `abl.sfc.dbg`**, with which Mesen2 shows our routine
+  names in the debugger, **and the commit's `runtime/`**, taken with `git
+  archive`: Mesen2 looks for the source going up folders from the `.dbg`,
+  so with `runtime/` next to it it shows it also from `/shared/builds/`.
+  The `.inc` files the converter generates do not go —they weigh ~15 MB—
+  and what falls in them is only seen disassembled. That is why the recipe
+  **refuses when there are uncommitted changes** in what goes into the ROM,
+  on both sides —the game and the runtime of the `the-advocate` checkout the
+  tools were installed from—: the build is named after two commits and they
+  have to be those. See "Debugging with Mesen2" in the book,
+  `reference/snes/emulators.md`.
 
-  **Lo demás que taro tiene que mirar o escuchar va a dos carpetas y no a la
-  raíz de `/shared`**: capturas y goldens a `/shared/capturas/<fecha>-<tema>/`,
-  audio a `/shared/audio/<fecha>-<tema>/`. Es de taro, el 2026-09-27, después
-  de limpiar una docena de carpetas sueltas (`capturas-lashe-3`,
-  `goldens-textos`…) y 2 GB de audio viejo. Lo que ya está en git o se rearma
-  desde un commit se puede borrar cuando taro lo dio por mirado.
+  **The rest of what taro has to look at or listen to goes to two folders
+  and not to the root of `/shared`**: captures and goldens to
+  `/shared/capturas/<date>-<topic>/`, audio to
+  `/shared/audio/<date>-<topic>/`. It is taro's, from 2026-09-27, after
+  cleaning up a dozen loose folders (`capturas-lashe-3`,
+  `goldens-textos`…) and 2 GB of old audio. What is already in git or is
+  rebuilt from a commit can be deleted once taro has declared it looked at.
 
-  **Las pistas de MSU-1 no van en el build: van a `/shared/msu/`**, un solo
-  directorio que se actualiza sólo cuando cambian —su `LEEME.txt` dice con
-  qué huella se comparan—. Pesan medio giga, y copiarlas en cada build las
-  duplicaría por nada. taro copia el `abl.sfc` al lado. Es de taro, el
-  2026-09-25, cuando `release` pasó a llevarlas siempre. `just entregar`
-  avisa si no coinciden con las del build, y las copia sólo con
-  `--actualizar-msu`.
+  **The MSU-1 tracks do not go in the build: they go to `/shared/msu/`**, a
+  single directory that is updated only when they change —its `LEEME.txt`
+  says which fingerprint they are compared with—. They weigh half a gig,
+  and copying them in every build would duplicate them for nothing. taro
+  copies the `abl.sfc` next to them. It is taro's, from 2026-09-25, when
+  `release` started carrying them always. `just entregar` warns if they do
+  not match the build's, and copies them only with `--actualizar-msu`.
 
-  **El `abl.msu` sí va en el build, y además a `/shared/msu/` siempre.**
-  Desde el 2026-09-25 no está vacío: lleva los fondos de batalla que la ROM
-  lee por el MSU-1 —ver `internals/msu-datos.md` del libro—, así que cambia con el
-  conversor y es del build, no de las pistas; y pesa 32 KB por fondo. Con el
-  `abl.sfc` de otro build no se rompe nada: la ROM no encuentra su firma en
-  el `.msu` y usa los fondos que lleva.
-* **Y la ROM que se le da a probar sale de `main` mergeado, no de la rama del
-  agente.** La del agente tiene su arreglo y **ninguno de los demás**. 
-  La del agente sirve para aislar **su** cambio; la que se juega, no.
-* **Decirle de qué commit sale, y que mergee `main` antes de entregar.** Un
-  worktree se saca de donde esté `main` al lanzarlo, y `main` se mueve: el
-  2026-09-15 uno trabajó cuatro horas sobre un README **doce commits viejo** y
-  vio 5.499 líneas donde había 4.717. La reconciliación después es trabajo
-  perdido que se evita con una línea en el encargo.
-* **Pasarle al agente lo que ya está medido**, para que no lo vuelva a averiguar
-  y para que no lo mida distinto.
-* **Pedirle el límite medido y no la implementación forzada.** Cuando el punto
-  es comparar dos caminos, saber dónde se rompe cada uno vale tanto como el
-  código.
-* **Avisarle que hay otros corriendo**: dos tandas a la vez se pelean por CPU y
-  tardan, y matarlas por impaciencia arruina la corrida.
-* **Repartirles los números de antemano.** Todo lo que se elige tomando "el
-  siguiente libre" —un opcode, un índice en una tupla de
-  `pruebas/*/test_*_golden.py` de ABL, una dirección de la RAM lejana— lo va a elegir cada agente
-  mirando su copia, y dos van a elegir el mismo sin que git vea nada. Sale más
-  barato decirle a cada uno cuál le toca al lanzarlo que descubrirlo mergeando:
-  el 2026-09-13 pasó con las tres cosas a la vez, y una colisión de opcodes
-  viajó adentro de un merge que ya se había dado por verificado.
-* **Decirle que namespacee sus archivos temporales.** El scratchpad es
-  **compartido entre agentes**, y dos que trabajan en paralelo eligen el mismo
-  nombre obvio: el 2026-09-15 dos escribieron un `comparar.sh` cada uno en el
-  mismo lugar. Uno pisa al otro y el pisado no se entera. `<scratchpad>/<lo que
-  hace>/…` alcanza.
-* **Que corra `just install-local .local-tools`
-  al empezar, si va a modificar las herramientas**, desde la raíz del
-  worktree. El global —`just install`— sale de
-  `~/the-advocate`, y esto arma un `bin/` en el destino con los
-  proyectos de Rust que se le nombren —scripts de Python no queda
-  ninguno, desde el 2026-10-02—; `justfile` lo pone adelante en el
-  PATH de sus recetas, y ABL lo usa si se le pone adelante en el suyo (ver "Dónde corre esto").
-  **Un proyecto de Rust se le pasa sólo si el agente lo va a modificar**
-  —`… install-local .local-tools lz2`—: compilar cuesta, y sin
-  nombres no compila nada. Y **todo se corre por `just`**: un comando
-  suelto no ve ese `bin/` y usa el global. Es de taro, el 2026-09-29, y
-  reemplazó a un re-exec implícito que los scripts hacían solos.
-* **Pedirle que no deje nada esperando cuando termina.** Un sub-agente puede
-  lanzar los suyos, y ésos **no aparecen** en la lista del que los mandó. 
-  Lo mismo con los `sleep` largos para esperar
-  una tanda: el 2026-09-12 uno dejó cinco armados y siguieron avisando que había
-  terminado mucho después de haber entregado.
+  **The `abl.msu` does go in the build, and also to `/shared/msu/`
+  always.** Since 2026-09-25 it is not empty: it carries the battle
+  backgrounds that the ROM reads through MSU-1 —see `internals/msu-datos.md`
+  in the book—, so it changes with the converter and belongs to the build,
+  not to the tracks; and it weighs 32 KB per background. With another
+  build's `abl.sfc` nothing breaks: the ROM does not find its signature in
+  the `.msu` and uses the backgrounds it carries.
+* **And the ROM given to test comes from merged `main`, not from the
+  agent's branch.** The agent's has its fix and **none of the others'**.
+  The agent's is useful to isolate **its** change; the one that gets
+  played, no.
+* **Tell it which commit it starts from, and to merge `main` before
+  delivering.** A worktree is taken from wherever `main` is when launching
+  it, and `main` moves: on 2026-09-15 one worked four hours on a README
+  **twelve commits old** and saw 5,499 lines where there were 4,717. The
+  reconciliation afterwards is lost work that is avoided with one line in
+  the assignment.
+* **Pass the agent what is already measured**, so it does not find it out
+  again and so it does not measure it differently.
+* **Ask it for the measured limit and not the forced implementation.** When
+  the point is to compare two paths, knowing where each one breaks is worth
+  as much as the code.
+* **Warn it that others are running**: two suites at once fight over CPU
+  and take longer, and killing them out of impatience ruins the run.
+* **Hand out the numbers to them in advance.** Everything that is chosen
+  by taking "the next free one" —an opcode, an index in a tuple of ABL's
+  `pruebas/*/test_*_golden.py`, a far RAM address— each agent is going to
+  choose looking at its copy, and two are going to choose the same one
+  without git seeing anything. It is cheaper to tell each one which it gets
+  when launching it than to discover it when merging: on 2026-09-13 it
+  happened with all three things at once, and an opcode collision travelled
+  inside a merge that had already been declared verified.
+* **Tell it to namespace its temporary files.** The scratchpad is **shared
+  among agents**, and two working in parallel pick the same obvious name:
+  on 2026-09-15 two wrote a `comparar.sh` each in the same place. One
+  overwrites the other and the overwritten one does not find out.
+  `<scratchpad>/<what it does>/…` is enough.
+* **That it runs `just install-local .local-tools` when starting, if it is
+  going to modify the tools**, from the root of the worktree. The global
+  one —`just install`— comes from `~/the-advocate`, and this builds a
+  `bin/` in the destination with the Rust projects named to it —there are
+  no Python scripts left, since 2026-10-02—; `justfile` puts it first in
+  the PATH of its recipes, and ABL uses it if it is put first in its own
+  (see "Where this runs"). **A Rust project is passed to it only if the
+  agent is going to modify it** —`… install-local .local-tools lz2`—:
+  compiling costs, and without names it compiles nothing. And **everything
+  is run through `just`**: a loose command does not see that `bin/` and
+  uses the global one. It is taro's, from 2026-09-29, and it replaced an
+  implicit re-exec the scripts did on their own.
+* **Ask it to leave nothing waiting when it finishes.** A sub-agent can
+  launch its own, and those **do not show up** in the list of the one who
+  sent it. The same with long `sleep`s to wait for a suite: on 2026-09-12
+  one left five set up and they kept announcing it had finished long after
+  it had delivered.
 
-### Lo verificable y lo opinable no comparten commit
+### What is verifiable and what is a matter of judgement do not share a commit
 
-De taro, el 2026-09-16, y sirve para cualquier limpieza grande: **primero el
-cambio mecánico solo, en su commit, verificado; después el de criterio, guiado
-por el diff del anterior.**
+taro's, from 2026-09-16, and it works for any big cleanup: **first the
+mechanical change alone, in its commit, verified; then the judgement one,
+guided by the diff of the previous one.**
 
-El caso que lo mostró: borrar 784 líneas de código muerto y arreglar los
-comentarios que lo citaban. El borrado lo verifican dos redes —`just pruebas` y
-la ROM byte por byte—; arreglar la prosa no lo verifica nada. Mezclados, un
-error de criterio viaja adentro de un cambio que "pasó las pruebas" y ahí ya no
-lo mira nadie.
+The case that showed it: deleting 784 lines of dead code and fixing the
+comments that cited it. The deletion is verified by two nets —`just
+pruebas` and the ROM byte for byte—; fixing the prose is verified by
+nothing. Mixed, a judgement error travels inside a change that "passed the
+tests" and there nobody looks at it any more.
 
-Y tiene un segundo beneficio que fue el que lo decidió: **el diff del primer
-commit es la lista del segundo**, completa por construcción. La lista escrita a
-mano que se iba a usar en cambio no tenía once citas colgando adentro del
-propio archivo, ni dos definiciones muertas de otros, ni un parámetro muerto.
+And it has a second benefit, which was what decided it: **the diff of the
+first commit is the list for the second**, complete by construction. The
+handwritten list that was going to be used instead was missing eleven
+dangling citations inside the file itself, two dead definitions from
+others, and a dead parameter.
 
-### Un merge sin conflictos no es un merge verificado
+### A merge without conflicts is not a verified merge
 
-Dos ramas que cambian **la misma convención en archivos o líneas distintas**
-mergean limpio y git no dice nada. Pasó el 2026-09-13: una rama hizo que
-`package_load` leyera el mapa de `map_current` en vez de A, la otra trajo un
-llamador que se lo seguía pasando en A, y desde ese merge la pelea cargaba el
-paquete de audio del mapa. Las dos pruebas que lo cobraban estuvieron en rojo
-un día entero y **tres informes seguidos las dieron por "preexistentes"** —lo
-eran, pero preexistente no quiere decir ajena—.
+Two branches that change **the same convention in different files or
+lines** merge cleanly and git says nothing. It happened on 2026-09-13: one
+branch made `package_load` read the map from `map_current` instead of A,
+the other brought a caller that still passed it in A, and from that merge
+on the battle loaded the map's audio package. The two tests that caught it
+were red for a whole day and **three reports in a row took them as
+"pre-existing"** —they were, but pre-existing does not mean unrelated—.
 
-Y tiene una variante peor, que mordió dos veces el mismo día: **git resuelve
-solo un extremo del cambio y deja el otro en conflicto.** Uno arregla lo que
-git marcó, que es lo que se ve, y queda incoherente con lo que git ya decidió
-callado treinta líneas más arriba. Las dos veces ensamblaba y corría:
+And it has a worse variant, which bit twice the same day: **git resolves
+one end of the change on its own and leaves the other in conflict.** One
+fixes what git marked, which is what is visible, and is left inconsistent
+with what git already decided silently thirty lines above. Both times it
+assembled and ran:
 
-* una rama dejó el índice en `Y` —`tay`— y la otra en `comp_and`; git se quedó
-  con el `sta comp_and` de una, dejó en conflicto el `tyx` de la otra, y el
-  código leía un registro que ya nadie cargaba;
-* dos ramas agregaron un campo a una tupla posicional de prueba, así
-  que los índices se corrieron; git marcó los usos de una zona y auto-mergeó
-  los de otra, que quedaron leyendo el campo del vecino.
+* one branch left the index in `Y` —`tay`— and the other in `comp_and`;
+  git kept the `sta comp_and` of one, left the `tyx` of the other in
+  conflict, and the code read a register nobody loaded any more;
+* two branches added a field to a positional test tuple, so the indices
+  shifted; git marked the uses in one area and auto-merged those in
+  another, which ended up reading the neighbour's field.
 
-La regla práctica: **cuando un conflicto es por un cambio de convención, hay
-que ir a buscar a mano los demás usos de esa convención**, con grep, en vez de
-confiar en que git los haya marcado todos. Si git marcó uno, es probable que
-haya resuelto mal otro.
+The practical rule: **when a conflict is due to a change of convention, one
+has to go and look by hand for the other uses of that convention**, with
+grep, instead of trusting that git marked them all. If git marked one, it
+probably resolved another one wrong.
 
-Así que al mergear una rama de sub-agente:
+So when merging a sub-agent's branch:
 
-* **Correr `just test` y la tanda de ABL sobre el árbol
-  mergeado**, con las herramientas del merge instaladas, no sobre las ramas.
-  Que cada una viniera en verde no dice nada del merge.
-* **Reinstalar en el global sólo lo de Rust que la rama tocó**: `just
-  install lz2`, desde `~/the-advocate`. Una rama que
-  toca `rm2k-project` —`project`— cambia todos los binarios que lo
-  compilan adentro, y se reinstala todo. Hasta el 2026-10-02 había
-  también scripts de Python, instalados como symlinks, y una receta
-  `install-scripts` para rearmarlos: se fueron con el último script.
-* **Un rojo heredado se bisecta, no se hereda.** Si una prueba está en rojo y
-  nadie la rompió, apareció en algún lado: `git log -S` para saber cuándo nació
-  y correrla en los padres del merge sospechoso. Cuesta veinte minutos.
-* **Mirar a mano las firmas que las dos ramas tocaron**: quién pasa qué a quién
-  y con cuántos bits.
-* **Y la prosa también colisiona, no sólo el código.** Al mergear documentación de
-  dos ramas hay que **leerla**, no sólo resolver los conflictos que git marcó.
-* **Y los números que cada rama eligió sola.** Un opcode nuevo, un índice en una tupla de prueba, una dirección de la RAM lejana: cada agente toma "el
-  siguiente libre" mirando su copia, así que dos ramas eligen el mismo y git no
-  ve nada. Pasó las tres cosas el mismo día. Lo de los opcodes lo cuida ahora
-  la declaración, que no compila con un número repetido; lo demás hay que
-  mirarlo.
+* **Run `just test` and ABL's suite on the merged tree**, with the merge's
+  tools installed, not on the branches. That each one came green says
+  nothing about the merge.
+* **Reinstall into the global one only the Rust the branch touched**:
+  `just install lz2`, from `~/the-advocate`. A branch that touches
+  `rm2k-project` —`project`— changes all the binaries that compile it in,
+  and everything is reinstalled. Until 2026-10-02 there were also Python
+  scripts, installed as symlinks, and an `install-scripts` recipe to
+  rebuild them: they left with the last script.
+* **An inherited red is bisected, not inherited.** If a test is red and
+  nobody broke it, it appeared somewhere: `git log -S` to know when it was
+  born and run it on the parents of the suspicious merge. It costs twenty
+  minutes.
+* **Look by hand at the signatures both branches touched**: who passes what
+  to whom and with how many bits.
+* **And prose collides too, not only code.** When merging documentation
+  from two branches one has to **read it**, not only resolve the conflicts
+  git marked.
+* **And the numbers each branch chose on its own.** A new opcode, an index
+  in a test tuple, a far RAM address: each agent takes "the next free one"
+  looking at its copy, so two branches choose the same one and git sees
+  nothing. All three things happened the same day. The opcodes are now
+  guarded by the declaration, which does not compile with a repeated
+  number; the rest has to be looked at.
 
-### Cuando un sub-agente se corta
+### When a sub-agent gets cut off
 
-**Se le puede escribir, y con eso retoma desde su transcripción.** Cuando el
-corte es por límite de sesión —el caso normal— alcanza con mandarle un mensaje
-diciéndole dónde quedó y qué falta: sigue con su contexto entero. Pasarle lo
-que cambió mientras no estaba —si `main` avanzó, si alguien tocó los mismos
-archivos, qué números ya no valen— vale tanto como el pedido.
+**It can be written to, and with that it resumes from its transcript.**
+When the cut is due to the session limit —the normal case— it is enough to
+send it a message telling it where it was left and what is missing: it
+continues with its whole context. Passing it what changed while it was away
+—if `main` moved forward, if someone touched the same files, which numbers
+are no longer valid— is worth as much as the request.
 
-**Antes de escribirle, mirar si choca con lo que uno está haciendo.** Un agente
-cuya rama se está mergeando en ese momento no se retoma, porque se pisan; uno
-que quedó a mitad de medir o de escribir casos, sí.
+**Before writing to it, check whether it clashes with what one is doing.**
+An agent whose branch is being merged at that moment is not resumed,
+because they step on each other; one that was left halfway through
+measuring or writing cases, yes.
 
-Y en cualquier caso, al retomar conviene mirar, en este orden:
+And in any case, when resuming it is worth looking, in this order, at:
 
-1. **Sus ramas y sus worktrees**: `git log --oneline worktree-agent-<id>`
-   acá, para su tarea, y sus ramas `<nombre>-…` en `~/the-advocate` y
-   `~/the-advocate-ports`, para el código. Lo commiteado está entero; lo demás
-   no existe.
-2. **Los logs que haya dejado**, antes que su informe: una tanda en segundo
-   plano puede haber terminado después del corte, así que su "quedó pendiente"
-   puede ser viejo.
-3. **Su transcripción**, en
-   `~/.claude/projects/<proyecto>/<sesión>/subagents/agent-<id>.jsonl`. Son
-   megas: se lee **del final hacia atrás, una entrada por vez**, mirando qué
-   herramienta usó última. Nunca entero.
-4. **Lo que dejó corriendo**: `pgrep -af "pytest|cartuchos"`, y `git
-   worktree list` en cada repo.
+1. **Its branches and its worktrees**: `git log --oneline
+   worktree-agent-<id>` here, for its task, and its `<name>-…` branches in
+   `~/the-advocate` and `~/the-advocate-ports`, for the code. What is
+   committed is whole; the rest does not exist.
+2. **The logs it may have left**, before its report: a suite in the
+   background may have finished after the cut, so its "left pending" may
+   be stale.
+3. **Its transcript**, in
+   `~/.claude/projects/<project>/<session>/subagents/agent-<id>.jsonl`.
+   They are megabytes: it is read **from the end backwards, one entry at a
+   time**, looking at which tool it used last. Never whole.
+4. **What it left running**: `pgrep -af "pytest|cartuchos"`, and `git
+   worktree list` in each repo.
 
-Y para el agente nuevo que lo reemplace: pasarle lo que el anterior dejó escrito
-—commits y su tarea— para que no vuelva a medir lo mismo.
+And for the new agent that replaces it: pass it what the previous one left
+written —commits and its task— so it does not measure the same thing
+again.
 
-## La trampa que más veces mordió
+## The trap that bit most often
 
-**`plx`, `ply` y `pla` dejan N y Z del valor que sacan de la pila**, y `sep`/`rep`
-no tocan Z. Así que un `beq` o un `bpl` pegado a un `pl*` no está mirando lo que
-uno cree: mira lo que salió de la pila.
+**`plx`, `ply` and `pla` leave N and Z from the value they pull off the
+stack**, and `sep`/`rep` do not touch Z. So a `beq` or a `bpl` right after
+a `pl*` is not looking at what one thinks: it looks at what came off the
+stack.
 
-Van cuatro veces, y las cuatro se veían como cualquier otra cosa menos como lo
-que eran:
+It has happened four times, and all four looked like anything but what
+they were:
 
-* ninguna ruta se movía nunca, porque la ranura 0 daba "bloqueado" siempre
-  (el `cmp #0` de `ev_route_frame`, con su comentario);
-* la pantalla de título se quedó sin música un día entero, porque la pregunta
-  "¿esta muestra está en la ARAM?" contestaba siempre que sí;
-* `ConditionalBranch` por variable **tomaba siempre la rama**, con la variable
-  en 12 y la condición pidiendo `>= 99`;
-* `IsActorInParty` daba que todos los actores están en el grupo.
+* no route ever moved, because slot 0 always gave "blocked" (the `cmp #0`
+  in `ev_route_frame`, with its comment);
+* the title screen was left without music for a whole day, because the
+  question "is this sample in ARAM?" always answered yes;
+* `ConditionalBranch` by variable **always took the branch**, with the
+  variable at 12 and the condition asking for `>= 99`;
+* `IsActorInParty` said all actors are in the party.
 
-El arreglo es siempre el mismo: un `cmp #0` explícito entre el `pl*` y el salto.
-Desde el 2026-10-02 lo busca Goombario —`snes/goombario/`— sobre cada
-cartucho armado, en `pruebas/herramientas/test_linter.py` de ABL: un salto
-condicional sobre una bandera que dejó un `pl*` es rojo, salvo los que miran
-a propósito lo que se sacó, que están en `excepciones-del-linter.txt` de ABL,
-con su porqué. Uno nuevo de ésos va ahí, diciendo qué es lo sacado.
+The fix is always the same: an explicit `cmp #0` between the `pl*` and the
+branch. Since 2026-10-02 Goombario —`snes/goombario/`— looks for it on
+every built cartridge, in ABL's `pruebas/herramientas/test_linter.py`: a
+conditional branch on a flag left by a `pl*` is red, except those that
+look on purpose at what was pulled, which are in ABL's
+`excepciones-del-linter.txt`, with their why. A new one of those goes
+there, saying what it is that was pulled.
 
 ## Git
 
-Los commits van directo a `main`, en los cuatro repos, **y se pushean**:
-desde el 2026-10-10 los repos sólo existen acá adentro y en GitHub, así que
-un commit sin pushear es un commit que taro no ve. Lo que **nunca** se hace
-sin preguntarle es reescribir lo que ya está en GitHub: `push --force`,
-`rebase` de lo pusheado, borrar una rama de allá. Hasta ese día el push lo
-hacía taro, con una clave en una YubiKey. Los sub-agentes no pushean: lo
-suyo llega a `main` por el merge del que los lanzó, que es el que pushea.
+Commits go straight to `main`, in all four repos, **and are pushed**: since
+2026-10-10 the repos only exist in here and on GitHub, so a commit not
+pushed is a commit taro does not see. What is **never** done without
+asking him is rewriting what is already on GitHub: `push --force`,
+`rebase` of what was pushed, deleting a branch over there. Until that day
+the push was done by taro, with a key on a YubiKey. Sub-agents do not
+push: their work reaches `main` through the merge of the one who launched
+them, who is the one who pushes.
 
-Los mensajes van en castellano y explican el porqué, no el qué —el diff ya dice el qué—.
+Messages explain the why, not the what —the diff already says the what—.
+They go in Spanish, except in the book and in this repo, which go in
+English (see "The independent projects are in English"); the final
+`Agente: <name>` line is the same in all four.

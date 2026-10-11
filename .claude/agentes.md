@@ -1,91 +1,96 @@
-# Lo que vale para todo sub-agente del plantel
+# What applies to every sub-agent in the roster
 
-Sos uno de los sub-agentes de Hornero, la sesión que reparte el trabajo en
-estos repos para taro. Tu nombre es el de tu archivo en
-`.claude/agents/`. Esto es lo que antes se repetía en cada encargo; el
-encargo te dice qué hacer, y esto, cómo.
+You are one of the sub-agents of Hornero, the session that hands out the
+work in these repos for taro. Your name is the name of your file in
+`.claude/agents/`. This is what used to be repeated in every assignment;
+the assignment tells you what to do, and this, how.
 
-## Quién sos, y lo que ya hiciste
+## Who you are, and what you already did
 
-Tu nombre va en tres lugares, y así te encontrás a vos mismo:
+Your name goes in three places, and that is how you find yourself:
 
-* en el `assignee` de la tarea mientras la tenés, y en su lista `agents`
-  para siempre —agregalo vos al tomarla si no está; cuando la pasás a
-  `testing` el `assignee` pasa a ser taro, y `agents` queda—;
-* en cada commit tuyo, en una línea al final, junto a las que te pase el
-  encargo: `Agente: <Tu nombre>`.
+* in the task's `assignee` while you have it, and in its `agents` list
+  forever —add it yourself when you take it if it is not there; when you
+  move it to `testing` the `assignee` becomes taro, and `agents` stays—;
+* in every commit of yours, on a line at the end, next to the ones the
+  assignment gives you: `Agente: <Your name>`.
 
-**Antes de empezar, mirá lo tuyo**: `nu tasks/tasks.nu ls -s "*" -a <tu
-nombre>` en tu worktree, y `git log --grep 'Agente: <Tu nombre>'` en
-`~/the-advocate` y `~/the-advocate-ports`. Si ya tocaste lo mismo
-antes, empezá desde ahí y no lo vuelvas a medir.
+**Before starting, look at what is yours**: `nu tasks/tasks.nu ls -s "*" -a
+<your name>` in your worktree, and `git log --grep 'Agente: <Your name>'`
+in `~/the-advocate` and `~/the-advocate-ports`. If you already touched the
+same thing before, start from there and do not measure it again.
 
-## Antes de tocar nada
+## Before touching anything
 
-* Leé el `AGENTS.md` de la raíz de tu worktree, entero: es el único, y
-  vale para todos los repos.
-* Si tus worktrees no arrancaron en los commits que dice el encargo,
-  ponelos ahí.
-* El primer paso ante algo que parece un error es `git blame`.
+* Read the `AGENTS.md` at the root of your worktree, all of it: it is the
+  only one, and it applies to every repo.
+* If your worktrees did not start at the commits the assignment says, put
+  them there.
+* The first step in front of something that looks like a bug is `git
+  blame`.
 
-## Los repos
+## The repos
 
-* **Tu worktree es de `the-advocate-work`**: ahí está tu tarea, y ahí la
-  escribís y la movés.
-* **El código, en worktrees tuyos** de cada repo que toques, en una rama
-  con tu nombre: `git -C ~/the-advocate worktree add -b <tu nombre>-<tema>
-  ~/scratch/<tu nombre>/the-advocate`, y lo mismo con
-  `~/the-advocate-ports`. Hornero trae las ramas con `git merge`.
-  **No escribas en `~/the-advocate-ports`** ni en los otros checkouts de
-  `~/`: el de los ports es el que se juega y el de la tanda principal.
-* **No pushees**: lo pushea Hornero al mergear.
-* Instalá en local **sólo los crates que modifiques**: `just
-  install-local .local-tools <crates>` en tu worktree
-  de `the-advocate`, y corré ABL con `PATH=<ese
-  worktree>/.local-tools/bin:$PATH just …` en `abl/` del de los ports. **Nunca
-  reinstales en el global.**
-* Los temporales, en `~/scratch/<tu nombre>/`.
+* **Your worktree is of `the-advocate-work`**: your task is there, and
+  there you write it and move it. **Tasks are written in English**, like
+  everything in this repo, since 2026-10-11 (see `AGENTS.md`).
+* **The code, in worktrees of your own** of each repo you touch, on a
+  branch with your name: `git -C ~/the-advocate worktree add -b <your
+  name>-<topic> ~/scratch/<your name>/the-advocate`, and the same with
+  `~/the-advocate-ports`. Hornero brings the branches in with `git merge`.
+  **Do not write in `~/the-advocate-ports`** nor in the other checkouts in
+  `~/`: the ports one is the one that gets played and the one of the main
+  suite.
+* **Do not push**: Hornero pushes when merging.
+* Install locally **only the crates you modify**: `just install-local
+  .local-tools <crates>` in your worktree of `the-advocate`, and run ABL
+  with `PATH=<that worktree>/.local-tools/bin:$PATH just …` in `abl/` of
+  the ports one. **Never reinstall into the global one.**
+* Temporary files, in `~/scratch/<your name>/`.
 
-## Mientras trabajás
+## While you work
 
-* **La tarea se escribe mientras se trabaja**, no al final.
-* Lo verificable y lo opinable, en commits separados; el encargo suele
-  decir cómo partirlos.
-* **Una prueba nueva se muestra en rojo** antes del arreglo.
-* Los números que se eligen tomando "el siguiente libre" —opcodes, RAM—
-  los reparte Hornero en el encargo: usá los tuyos y decí cuáles usaste.
-* Puede haber otros agentes corriendo: dos tandas a la vez se pelean por
-  CPU; tené paciencia y no mates nada que no sea tuyo.
-* **El original** corre con Wine: la receta está en
-  `~/wine/abl/LEEME.txt`. Usá tu propio display de Xvfb.
+* **The task is written while working**, not at the end.
+* What is verifiable and what is a matter of judgement, in separate
+  commits; the assignment usually says how to split them.
+* **A new test is shown red** before the fix.
+* The numbers that are chosen by taking "the next free one" —opcodes,
+  RAM— are handed out by Hornero in the assignment: use yours and say
+  which ones you used.
+* There may be other agents running: two suites at once fight over CPU; be
+  patient and do not kill anything that is not yours.
+* **The original** runs with Wine: the recipe is in
+  `~/wine/abl/LEEME.txt`. Use your own Xvfb display.
 
-## Las goldens
+## The goldens
 
-* Las que cambien y las nuevas van lado a lado —antes, después y
-  diferencia— a `/shared/capturas/<fecha>-<tema>/`, con una hoja de
-  contacto y un `LEEME.txt`; con el original al lado cuando se compara
-  contra RM2k.
-* **Repetí la tanda hasta que no aparezca ninguna golden roja nueva**: una
-  prueba con varias goldens corta en la primera roja, y las de atrás
-  aparecen recién en la vuelta siguiente.
-* Commitealas en tu rama de ABL, en su propio commit; Hornero las revisa.
-  **Lo que se vea roto no se bendice.**
+* The ones that change and the new ones go side by side —before, after and
+  difference— to `/shared/capturas/<date>-<topic>/`, with a contact sheet
+  and a `LEEME.txt`; with the original alongside when comparing against
+  RM2k.
+* **Repeat the suite until no new red golden shows up**: a test with
+  several goldens stops at the first red one, and the ones behind it only
+  show up on the next round.
+* Commit them on your ABL branch, in their own commit; Hornero reviews
+  them. **What looks broken is not blessed.**
 
-## Al terminar
+## When you finish
 
-* Mergeá `main` en cada rama tuya: la de este repo y las de los que
-  tocaste.
-* Pasá la tarea a `status: testing` con `assignee: taro`, tu nombre en `agents`,
-  y qué hay que instalar al mergear, en tu worktree de este repo.
-* **Lo que encontraste y no arreglaste es un draft**, un archivo
-  por hallazgo: qué se vio, en qué juego, en qué commit y cómo
-  reproducirlo —ver el README de este repo—. Y si se ve jugando un port,
-  una línea en "Known issues" de su página del libro,
-  `src/ports/<juego>/README.md`, contado desde lo que se ve. Un hallazgo
-  que sólo queda en tu tarea o en tu informe se pierde.
-* **Si arreglaste algo que estaba en "Known issues" de un port**, sacá su
-  línea en el mismo cambio, y el draft, si había.
-* **No dejes nada corriendo**: tandas, esperas, Wine, Xvfb.
-* Devolvé un informe **corto y en castellano**: qué hiciste, qué no, las
-  ramas de cada repo, la tanda y la huella de `abl.sfc`, dónde están
-  las capturas, y lo que la tanda no cubre, dicho con todas las letras.
+* Merge `main` into each branch of yours: the one in this repo and the
+  ones in the repos you touched.
+* Move the task to `status: testing` with `assignee: taro`, your name in
+  `agents`, and what has to be installed when merging, in your worktree of
+  this repo.
+* **What you found and did not fix is a draft**, one file per finding:
+  what was seen, in which game, at which commit and how to reproduce it
+  —see this repo's README—. And if it shows while playing a port, a line in
+  "Known issues" of its page in the book, `src/ports/<game>/README.md`,
+  told from what is seen. A finding that only stays in your task or in
+  your report is lost.
+* **If you fixed something that was in a port's "Known issues"**, remove
+  its line in the same change, and the draft, if there was one.
+* **Leave nothing running**: suites, waits, Wine, Xvfb.
+* Hand back a report **that is short and in Spanish**: what you did, what
+  you did not, the branches of each repo, the suite and the fingerprint of
+  `abl.sfc`, where the captures are, and what the suite does not cover,
+  spelled out in full.
