@@ -153,15 +153,15 @@ those 9 pixels disappears: there is no need to choose between losing the wall an
 
 It is the experiment taro wanted first, and the curve settles it:
 
-    colores   tiles
-       17      165     <- lo que el reparto da hoy
+    colours   tiles
+       17      165     <- what the allocation gives today
        13      165
        10      165
         8      165
         6      164
         4      164
         3      163
-        2      130     <- y acá ya es una silueta
+        2      130     <- and here it is already a silhouette
 
 From 17 colours to 3, **two tiles** are gained. The reason is that **the tram's tiles
 differ in shape and not in colour**: it is a detailed 3D render, and two
@@ -215,10 +215,10 @@ The ChipSet recipe **cannot bring this picture in**, and not because of the miss
 operation —`desde_imagen` would be the same as `desde_charset`— but because of the **vehicle**:
 the ChipSet's PNG is indexed and has 256 entries.
 
-    ChipSet1, la base del 11              usa 134 índices
-    pisando las 55 ranuras altas que hacen falta   quedan 130 libres
-    el tram pide, a 24 bits                       204 índices nuevos
-    el tram pide, a 15 bits                       148 índices nuevos
+    ChipSet1, the base of 11                       uses 134 indices
+    overwriting the 55 upper slots that are needed 130 left free
+    the tram asks, at 24 bits                      204 new indices
+    the tram asks, at 15 bits                      148 new indices
 
 130 < 148: **it does not fit**. It only fits if the fork also does two things it does not
 do today, and both are decisions, not details —`paleta.py` and `techo.py`—:

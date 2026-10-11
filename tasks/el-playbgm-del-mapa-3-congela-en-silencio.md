@@ -49,8 +49,8 @@ Measured with the new case `paso-al-3` —escape_newyork on 2, `Teleport`
 to 3 and `PlayBGM` of TF3_1_awe, like the lift page—, in
 hardware frames with the music silent and the picture still:
 
-    antes (3d83de68)    86
-    con la propuesta 1  38
+    before (3d83de68)   86
+    with proposal 1     38
 
 And the arrival, under the fade, 53 instead of 55: there it does not rebuild either.
 With TF3 playing ten of the package's sound effects remain instead of nine, and

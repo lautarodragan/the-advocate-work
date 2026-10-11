@@ -17,14 +17,14 @@ which comes from easyrpg-player and is written twice: in `main.s` and in
 `pruebas/rpgmaker/test_batalla.py` predict **the exact number** each HP is going to have
 after each turn, instead of settling for "it went down".
 
-    daño            max(0, atk / 2 - def / 4), por 3 si es crítico, varianza
-                    de 4 —`adj = max(1, 4 * dmg / 10)`— y la mitad al que se
-                    defiende                        algo.cpp
-    acierto         90 el actor, 70 u 90 el enemigo, ajustado por agilidad:
+    damage          max(0, atk / 2 - def / 4), times 3 if critical, variance
+                    of 4 —`adj = max(1, 4 * dmg / 10)`— and half for whoever
+                    defends                         algo.cpp
+    hit             90 the actor, 70 or 90 the enemy, adjusted by agility:
                     100 - (100 - hit) * (agiF + agiB) / (2 * agiF)
-    orden de turnos agi + rand(0, agi / 4 + 3), de mayor a menor y estable
-    huir            recortar(150 - redondear(100 * agiE / agiG), 0, 100), y
-                    sube diez cada vez que falla
+    turn order      agi + rand(0, agi / 4 + 3), highest to lowest and stable
+    escape          clamp(150 - round(100 * agiE / agiG), 0, 100), and
+                    goes up ten every time it fails
 
 Three rolls per hit and **in this order**: hit, critical and variance, with
 the critical roll made even if the probability is zero, which is what
@@ -99,23 +99,23 @@ reset like `Game_Actor::Setup` and **travel in the save**, after the equipment.
 
 What there is, and what there is not:
 
-    atacar, con blanco elegible     sí
-    defender                        sí, y vale sólo el turno en que le toca
-    huir                            sí, pero es orden de cada actor y no del
-                                    grupo, que es una simplificación declarada
-    usar un ítem                    sí: ver abajo
-    habilidades                     sí: ver abajo
-    los estados                     no
-    experiencia y subir nivel       sí, desde el 2026-09-21: ver
+    attack, with a choosable target yes
+    defend                          yes, and it counts only on its own turn
+    escape                          yes, but it is each actor's order and not the
+                                    party's, which is a declared simplification
+    use an item                     yes: see below
+    skills                          yes: see below
+    statuses                        no
+    experience and levelling up     yes, since 2026-09-21: see
                                     `experiencia-y-subida-de-nivel.md`
-    oro al ganar                    no
-    la música y los efectos         sí: ver abajo
-    los battlers dibujados          sí; desde el 2026-09-21 compuestos en la
-                                    consola: `escena-de-pelea-compuesta-en-runtime.md`
-    la imagen de fondo              sí
-    las páginas de evento de tropa  sí, desde el 2026-09-21, las de switch y
-                                    variable: `el-sistema-de-batalla-de-talan.md`
-    los encuentros aleatorios       sí: ver abajo
+    gold on winning                 no
+    music and sound effects         yes: see below
+    drawn battlers                  yes; since 2026-09-21 composed on the
+                                    console: `escena-de-pelea-compuesta-en-runtime.md`
+    the background image            yes
+    troop event pages               yes, since 2026-09-21, the switch and
+                                    variable ones: `el-sistema-de-batalla-de-talan.md`
+    random encounters               yes: see below
 
 The screen shows the enemies' HP, which RM2k does not. It is on purpose:
 what this round has to let you see is the mechanics, and without that a hit that
@@ -342,11 +342,11 @@ not an editor folder, which is what it looks like—.
 
 Measured over the whole game:
 
-    23 áreas, colgando de 20 mapas
-    33 mapas con tropas propias, ninguno de ellos con área
-    53 mapas donde puede salir un encuentro, de 328
-    5 de los 29 de `abl`: el 20, el 21, el 26, el 28 y el 32
-    129 tropas distintas
+    23 areas, hanging from 20 maps
+    33 maps with their own troops, none of them with an area
+    53 maps where an encounter can come out, of 328
+    5 of the 29 of `abl`: 20, 21, 26, 28 and 32
+    129 distinct troops
 
 **How it triggers**, from `Game_Player::UpdateEncounterSteps`. Each step of the
 hero **with the pad** adds the terrain's `encounter_rate` to an accumulator; the
@@ -438,14 +438,14 @@ Everything comes from the LDB —`system.json`— and **who sounds at what momen
 easyrpg-player**, not from memory: it is written with its function of
 origin in `eventos.AUDIO_BATALLA`.
 
-    battle_music      T_VGFighterMAX_Masako   `Scene_Battle`, al construirse
-    battle_end_music  T_VGFighterMAX_Masako   `BGM_Victory`, al ganar
+    battle_music      T_VGFighterMAX_Masako   `Scene_Battle`, when constructed
+    battle_end_music  T_VGFighterMAX_Masako   `BGM_Victory`, on winning
     dodge_se          Evasion1                `AlgorithmBase::GetFailureSe`
-    enemy_attack_se   Attack2                 `Normal::GetStartSe`, fuente enemiga
-    enemy_damaged_se  Damage1                 el mensaje del golpe, blanco enemigo
-    actor_damaged_se  Bite                    ídem, blanco del grupo
+    enemy_attack_se   Attack2                 `Normal::GetStartSe`, enemy source
+    enemy_damaged_se  Damage1                 the hit's message, enemy target
+    actor_damaged_se  Bite                    same, party target
     enemy_death_se    Monster1                `ProcessBattleActionDeath`
-    escape_se         Escape                  cuando el grupo escapa
+    escape_se         Escape                  when the party escapes
 
 `battle_se` —the one for starting the battle— is `(OFF)` in this game, so it is not
 registered: it would be a mute entry forever.

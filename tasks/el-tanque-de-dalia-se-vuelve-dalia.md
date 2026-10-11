@@ -54,9 +54,9 @@ Speed 3 is set by 64 (event 2, the `[29]` of Talan's ankle), and
 Dr. Vago returns it to 4 when healing him: map 81, event 6, page 1,
 "…able to walk quickly now". There the page does
 
-    MoveEvent héroe [28]
-    TintScreen negro, 0,5 s, esperar
-    MoveEvent héroe [34 Future1 0]    ← reemplaza a la ruta anterior
+    MoveEvent hero [28]
+    TintScreen black, 0,5 s, wait
+    MoveEvent hero [34 Future1 0]     ← replaces the previous route
 
 In RM2k the `[28]` runs during the 30 frames of the fade. In the ROM the
 compiler dropped the duration **and the wait** of the `TintScreen`

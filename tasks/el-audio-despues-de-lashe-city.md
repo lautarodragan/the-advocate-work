@@ -126,10 +126,10 @@ Against 93af39f, without MSU-1, `release`:
 The 48 go back to the old rate (or within 0.1 kHz) except four, which stay
 as in main:
 
-    Deflector1  golpe 36    22,0 -> 14,1 -> 14,1  (y el 40: 14,0 -> 14,0 -> 21,9)
-    TF3_1_awe   programa 34 15,2 -> 14,0 -> 14,0  (del hito 2)
-    vswar       golpe 45    22,0 -> 14,1 -> 14,1
-    vswar       golpe 46    22,1 -> 14,1 -> 14,1
+    Deflector1  hit 36      22,0 -> 14,1 -> 14,1  (and 40: 14,0 -> 14,0 -> 21,9)
+    TF3_1_awe   program 34  15,2 -> 14,0 -> 14,0  (from milestone 2)
+    vswar       hit 45      22,0 -> 14,1 -> 14,1
+    vswar       hit 46      22,1 -> 14,1 -> 14,1
 
 All four are limited by the battle package or by `18+hzstream`, and the copy
 that would separate them lowers others by a tenth; forcing the `vswar` one makes

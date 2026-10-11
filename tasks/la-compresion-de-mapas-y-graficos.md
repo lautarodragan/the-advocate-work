@@ -49,19 +49,19 @@ pilot; that still stands.
 Measured on `main` with audio step 6 merged (`2d6b665`), in
 `release`.
 
-    antes de todo esto (con el piloto)   2916,5 KB usados, 71,2%, último banco $63
-    tiles en LZ2                         2480,4 KB, 60,6%
-    grillas en LZ2 (y un caso nuevo)     2234,4 KB, 54,6%
-    poses deduplicadas                   2141,2 KB, 52,3%, último banco $46
+    before all this (with the pilot)     2916,5 KB used, 71,2%, last bank $63
+    tiles in LZ2                         2480,4 KB, 60,6%
+    grids in LZ2 (and a new case)        2234,4 KB, 54,6%
+    deduplicated poses                   2141,2 KB, 52,3%, last bank $46
 
-    por clase             crudo      LZ2
+    by class              raw        LZ2
     map_tiles            458,9    262,5
     sprite_tiles         287,8     62,4
     above_tiles           19,3     13,0
     anim_tiles            14,6      6,6
     map_celdas           278,2     32,1
-    total               1058,7    376,9   (681,8 KB menos)
-    poses: 545 distintas de 732          (93,5 KB menos)
+    total               1058,7    376,9   (681,8 KB less)
+    poses: 545 distinct of 732           (93,5 KB less)
 
 The compressor is a separate project, `tools/lz2/`, with an optimal parser: it comes out
 a bit smaller than the measurement's greedy one (262.5 against 266.4 on the
@@ -73,9 +73,9 @@ audio package of each map is the same and the only thing that changes is the
 decompression—. It includes the audio package upload, which is what weighs
 the most:
 
-    sin comprimir              33,9 de media, 76 el peor (mapa 26, audio)
-    con todo, al final         40,3 de media, 80 el peor
-    lo que suma comprimir       6,4 de media, 14 el que más (mapa 52)
+    uncompressed               33,9 on average, 76 the worst (map 26, audio)
+    with everything, at the end 40,3 on average, 80 the worst
+    what compressing adds       6,4 on average, 14 the most (map 52)
 
 Against the estimates taro accepted —5 on average and 12 the worst,
 only the tiles— it ends up a bit above because it adds the grid, which was estimated
@@ -117,20 +117,20 @@ subtracting the address of the next symbol cuts it at the border. That is why th
 X-ray in `juntar-release-y-test-main.md` gave 285 KB and the `.dbg` one
 208: it is 278).
 
-    release, 03c21fb           usado 3162 KB de 4096 (77,2%), último banco $6B
+    release, 03c21fb           used 3162 KB of 4096 (77,2%), last bank $6B
 
-    anim_batalla   548,0 KB   274 cuadros de 2 KB
-    map_tiles      458,9 KB   un bloque por mapa, 8bpp
-    sprite_poses   366,0 KB   732 poses de 512 B
-    sprite_tiles   287,8 KB   un bloque por mapa, 4bpp
-    map_celdas     278,2 KB   las grillas
-    muestra        262,2 KB   (audio: afuera)
-    tema_stream    206,4 KB   (audio: afuera)
+    anim_batalla   548,0 KB   274 frames of 2 KB
+    map_tiles      458,9 KB   one block per map, 8bpp
+    sprite_poses   366,0 KB   732 poses of 512 B
+    sprite_tiles   287,8 KB   one block per map, 4bpp
+    map_celdas     278,2 KB   the grids
+    muestra        262,2 KB   (audio: left out)
+    tema_stream    206,4 KB   (audio: left out)
     battler         74,8 KB
-    map_bloques     51,8 KB   los diccionarios de bloques
-    fondo           48,0 KB   los de pelea que no van por el MSU-1
-    paginas         39,8 KB   y evcodigo 39,2, mensajes 32,0, titulo_tiles 31,0
-    above_tiles     19,3 KB   y anim_tiles 14,7, fuente_pre* 4 × 14,5
+    map_bloques     51,8 KB   the block dictionaries
+    fondo           48,0 KB   the battle ones that do not go through the MSU-1
+    paginas         39,8 KB   and evcodigo 39,2, mensajes 32,0, titulo_tiles 31,0
+    above_tiles     19,3 KB   and anim_tiles 14,7, fuente_pre* 4 × 14,5
 
 The grids **with their dictionaries** —`map_celdas`, `map_bloques` and
 `bloque_pass`— are 329 KB, 10% of the cartridge: neither 5% nor 30%.
@@ -146,12 +146,12 @@ and lengths from 3 to 18, like those of many commercial games. **zlib -9** is th
 reference bound; "together" is zlib over all the blocks of the class
 stuck together, which says how much repeats **between** maps.
 
-    clase          crudo     RLE     LZ2   LZSS 4K   zlib -9   junto   lo del dominio
-    anim_batalla   548,0    27,2    20,4    78,5     20,0     13,8    sin tiles vacíos: 36,0
-    map_tiles      458,9   357,0   266,4   264,1    223,7    212,9    tiles únicos entre mapas: 445,4
-    sprite_poses   366,0   138,6    83,9*  103,5     67,4     64,0    poses repetidas: -93,5
-    sprite_tiles   287,8    91,6    63,5    82,6     53,0     33,4    tiles únicos entre mapas: 44,4
-    map_celdas     278,2   176,7    32,8    47,9     22,7     22,2    ver las cuatro variantes
+    class          raw       RLE     LZ2   LZSS 4K   zlib -9   together the domain's
+    anim_batalla   548,0    27,2    20,4    78,5     20,0     13,8    without empty tiles: 36,0
+    map_tiles      458,9   357,0   266,4   264,1    223,7    212,9    unique tiles across maps: 445,4
+    sprite_poses   366,0   138,6    83,9*  103,5     67,4     64,0    repeated poses: -93,5
+    sprite_tiles   287,8    91,6    63,5    82,6     53,0     33,4    unique tiles across maps: 44,4
+    map_celdas     278,2   176,7    32,8    47,9     22,7     22,2    see the four variants
     battler         74,8    51,2    45,7    39,6     32,8     32,3
     map_bloques     51,8    35,7    28,3    25,7     19,9     15,8
     fondo           48,0    44,1    37,2    36,5     31,1     30,9
@@ -192,11 +192,11 @@ Over the cartridge's 39 distinct maps, grid plus dictionary plus
 passability; "chunks N" are deduplicated chunks of N×N blocks, with
 one-byte indices where they fit:
 
-    1. como hoy                               329,1 KB   263 bloques el mapa que más
-    2. trozos de 2 / 4 / 8 / 16               126,8 / 115,5 / 137,1 / 175,0 KB
-    3. capas separadas, trozos de 1/2/4/8     302,2 / 131,7 /  99,9 / 124,9 KB
-    4. capas y pasabilidad aparte, 1/2/4/8    437,2 / 162,5 / 130,7 / 180,6 KB
-    LZ2 de la grilla entera                    87,8 KB (sin acceso directo)
+    1. as today                               329,1 KB   263 blocks the largest map
+    2. chunks of 2 / 4 / 8 / 16               126,8 / 115,5 / 137,1 / 175,0 KB
+    3. separate layers, chunks of 1/2/4/8     302,2 / 131,7 /  99,9 / 124,9 KB
+    4. layers and passability apart, 1/2/4/8  437,2 / 162,5 / 130,7 / 180,6 KB
+    LZ2 of the whole grid                      87,8 KB (no direct access)
 
 4×4 chunks are the sweet spot of the first two: **-214 KB**, and with
 separate layers **-229**. Separate passability (4) always loses: one byte
@@ -219,10 +219,10 @@ measurement: the pilot was measured on the emulated console, this was not.
   with the screen off inside the fade: they are not seen. Decompressing LZ2 to a
   buffer in WRAM and uploading from there with the same DMA:
 
-      map_tiles     2,97 cuadros de media, 7,21 el peor (27.584 B)
-      sprite_tiles  1,28 de media, 2,53 el peor (15.200 B)
-      above_tiles   0,20 de media, 1,03 el peor
-      anim_tiles    0,56 de media, 1,13 el peor
+      map_tiles     2,97 frames on average, 7,21 the worst (27.584 B)
+      sprite_tiles  1,28 on average, 2,53 the worst (15.200 B)
+      above_tiles   0,20 on average, 1,03 the worst
+      anim_tiles    0,56 on average, 1,13 the worst
 
   That is **some 5 more frames of black per map change on average, 12 the
   worst**. The buffer: the largest block is 27.5 KB, and **`$7F0000` to
@@ -270,19 +270,19 @@ measurement: the pilot was measured on the emulated console, this was not.
 By KB saved, with the cost and the risk alongside. The saving numbers are
 against today's cartridge, after the pilot.
 
-    qué                                  ahorra    costo en la consola                   riesgo
-    1. anim_batalla sin tiles vacíos      -512 KB   8 scanlines por cuadro nuevo, 50     HECHO
-                                                    el peor; 2 KB de RAM lejana
-    2. tiles de mapa, sprites, encima y   -431 KB   ~5 cuadros más de negro por cambio   bajo
-       animación del ChipSet, LZ2                   de mapa, 12 el peor; buffer en
-                                                    $7F0000; el descompresor
-    3. grillas, LZ2 a la WRAM al cargar   -245 KB   1,2 cuadros de media, 5,8 el peor;   bajo
-                                                    reservar $7E8000-$7EFFFF
-    4. poses idénticas, deduplicadas       -94 KB   ninguno: sólo el conversor           muy bajo
-    5. poses espejadas                     -46 KB   el bit de espejo en la OAM           medio
-    6. battlers y fondos, LZ2              -40 KB   ~3 cuadros al entrar a la pelea      bajo
-    (grillas en trozos de 4×4             -214 KB   una indirección más por celda en     alto
-     con capas: si no hubiera WRAM)                 cada lector de la grilla
+    what                                 saves     cost on the console                   risk
+    1. anim_batalla without empty tiles   -512 KB   8 scanlines per new frame, 50        DONE
+                                                    the worst; 2 KB of far RAM
+    2. map, sprite, upper layer and       -431 KB   ~5 more frames of black per map      low
+       ChipSet animation tiles, LZ2                 change, 12 the worst; buffer at
+                                                    $7F0000; the decompressor
+    3. grids, LZ2 to WRAM on loading      -245 KB   1,2 frames on average, 5,8 the       low
+                                                    worst; reserve $7E8000-$7EFFFF
+    4. identical poses, deduplicated       -94 KB   none: only the converter             very low
+    5. mirrored poses                      -46 KB   the mirror bit in the OAM            medium
+    6. battlers and backgrounds, LZ2       -40 KB   ~3 frames on entering the battle     low
+    (grids in 4×4 chunks                  -214 KB   one more indirection per cell in     high
+     with layers: if there were no WRAM)            each reader of the grid
 
 **What first: 2 and 3 together**, because they are a single piece of work —an
 LZ2 decompressor in the ROM and the compressor in the converter— and between the two

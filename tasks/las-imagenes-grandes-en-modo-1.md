@@ -69,17 +69,17 @@ cartridge has 43 free banks).
 
 ## Which scenes are drawn
 
-    49    EscapeInst         release: el fork del 49 se borró, ver abajo
-    212   PhoneCallDiff      caso de prueba, con el fundido
-    213   SurlBroDiff        caso de prueba
-    214   SurlGravesDiff     caso de prueba
-    216   ThreeRubbleDiff    caso de prueba
-    285   AdvoInstr          caso de prueba: sube 93 líneas en 4 s
-    309   ABLEndBox8         caso de prueba: sube y baja de negro
-    208   GTest4             caso de prueba: ondas 6 -> 1 -> 4, y 8 saturada
-    267   GTest4             es la segunda del 208, con otro mensaje
-    288   ShipFlash, GTest4  caso de prueba: saturadas, ondas 2
-    217   el montaje         caso de prueba: las dos opciones, abajo
+    49    EscapeInst         release: 49's fork was deleted, see below
+    212   PhoneCallDiff      test case, with the fade
+    213   SurlBroDiff        test case
+    214   SurlGravesDiff     test case
+    216   ThreeRubbleDiff    test case
+    285   AdvoInstr          test case: goes up 93 lines in 4 s
+    309   ABLEndBox8         test case: goes up and comes down from black
+    208   GTest4             test case: waves 6 -> 1 -> 4, and 8 saturated
+    267   GTest4             it is 208's second, with another message
+    288   ShipFlash, GTest4  test case: saturated, waves 2
+    217   the montage        test case: the two options, below
 
 Maps 207 to 217, 285, 288 and 309 are not in the cartridge;
 each case in `rom/pruebas/casos/imagen-grande-*.json` copies its scene's commands

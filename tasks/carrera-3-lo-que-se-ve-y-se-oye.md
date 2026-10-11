@@ -82,28 +82,28 @@ why for each map.
 
 They sound, with the music allocation identical pair by pair:
 
-    mapa  efectos de ruta nuevos en el paquete
+    map   new route sound effects in the package
     13    Blow5
     21    Blow4
     28    Switch2
     33    Blow1, Blow6
-    51    Wind7 (el puente de la carrera; Annihilation2 ya estaba)
+    51    Wind7 (the race's bridge; Annihilation2 was already there)
     60    Blow6
     61    Blow6
     62    Blow6
 
 and on 8 and 19, where they already were because of the pages. They do not sound:
 
-    3     Decision1, Blow1 a Blow6, Shot2 (la escena de evilrhys): no entran
-          ni con las muestras al mínimo. Switch1 sí, por las páginas.
-    7     Blow2: le baja a Deflector1 un instrumento de 22,9 a 16,4 kHz
-    13    Flash1  } cada efecto nuevo en el cartucho le saca una entrada
-    21    Earth4  } del directorio a la primera tanda de `copias`; con dos
-                    nuevos bajan dos golpes 7 kHz. Earth4 además dura 1,36 s
-                    y entraría recortado
-    14    Kill3, Sword1, Sword2, Explosion4: con ellos `hzbreach` deja de
-          ser tema de salida y el paquete no entra
-    121   Earth8 (mapa de prueba): le baja 25 pares
+    3     Decision1, Blow1 to Blow6, Shot2 (the evilrhys scene): they do not fit
+          even with the samples at the minimum. Switch1 does, through the pages.
+    7     Blow2: it lowers an instrument of Deflector1 from 22,9 to 16,4 kHz
+    13    Flash1  } each new sound effect in the cartridge takes a directory
+    21    Earth4  } entry away from the first batch of `copias`; with two
+                    new ones two hits go down 7 kHz. Earth4 also lasts 1,36 s
+                    and would fit clipped
+    14    Kill3, Sword1, Sword2, Explosion4: with them `hzbreach` stops
+          being an exit theme and the package does not fit
+    121   Earth8 (test map): it lowers 25 pairs
 
 All the ones that went in last less than three quarters of a second, so
 they sound whole. And **Annihilation2** —the hit against the edge of the

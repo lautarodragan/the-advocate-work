@@ -135,7 +135,7 @@ battles.
 
 Measured by relinking the `.o` of `release` with `ld65`'s map:
 
-    release   75,6 %   banco 0 261 B   banco 1 ~8.090 B   BSS 138   ZEROPAGE 4
+    release   75,6 %   bank 0 261 B    bank 1 ~8.090 B    BSS 138   ZEROPAGE 4
 
 Bank 0 did not change: all the new code is in bank 1 (some 95 B, in
 `escena_subir` and `esc_terreno`) and the tables go in generated banks.

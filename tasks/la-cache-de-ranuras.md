@@ -47,11 +47,11 @@ where they start.
 
 **Today**: 316 fit (108 with its turns). Four do not fit:
 
-    no entran por fondo     148 Paradise Burning     614 de fondo, techo 544
-                            250 Return to Paradise   621 de fondo
-    no entran por sprites   127 ParadiseFarmland     41 ranuras, 692 tiles
-                            285 Tasgarde Mainframe   50 ranuras + la caja de
-                                                     la animación y la lluvia
+    don't fit: background   148 Paradise Burning     614 background, ceiling 544
+                            250 Return to Paradise   621 background
+    don't fit: sprites      127 ParadiseFarmland     41 slots, 692 tiles
+                            285 Tasgarde Mainframe   50 slots + the animation's
+                                                     box and the rain
 
 (Puma listed 285 as "the 64-tile box of the battle
 animations": it is the same, the box does not fit because 50 slots already fill the
@@ -71,14 +71,14 @@ turning one if there is a still one that turns around—:
 
 Slots (dynamic + fixed) against the cap of the best allocation for its background:
 
-                           margen 0     margen 1     margen 2    tope
-    127  (a) sola          36+2  NO     40+2  NO     45+2  NO     32
-         (b) +quietos      33+2  NO     36+2  NO     41+2  NO
-         (c) +espejos      33+2  NO     36+2  NO     41+2  NO
-         (d) +fases        26+2  sí     26+2  sí     26+2  sí
-    285  (a) sola          13+1  sí     16+1  sí     17+1  sí   32, menos
-         (b) +quietos      11+1  sí     12+1  sí     13+1  sí   la caja
-         (c) +espejos      11+1  sí     12+1  sí     13+1  sí   y la lluvia
+                           margin 0     margin 1     margin 2    cap
+    127  (a) alone         36+2  NO     40+2  NO     45+2  NO     32
+         (b) +still        33+2  NO     36+2  NO     41+2  NO
+         (c) +mirrors      33+2  NO     36+2  NO     41+2  NO
+         (d) +phases       26+2  yes    26+2  yes    26+2  yes
+    285  (a) alone         13+1  yes    16+1  yes    17+1  yes  32, minus
+         (b) +still        11+1  yes    12+1  yes    13+1  yes  the box
+         (c) +mirrors      11+1  yes    12+1  yes    13+1  yes  and the rain
 
 **Unblocks**: the cache alone, 285 with any margin. 127, **only
 counting by phases**.
@@ -300,10 +300,10 @@ tasks):
   removing the new table they give the old ones again.
 * `just espacio release`, before (`main`, without 127) and after:
 
-                      antes        después
-      bancos          71 de 127    72 de 127
-      banco 0         2.868 B      2.725 B
-      banco 1         14.204 B     13.587 B
+                      before       after
+      banks           71 of 127    72 of 127
+      bank 0          2.868 B      2.725 B
+      bank 1          14.204 B     13.587 B
       BSS, ZEROPAGE   128 B, 4 B   128 B, 4 B
 
 **`just pruebas` does not cover**: coming back from a battle on a map with a cache (127

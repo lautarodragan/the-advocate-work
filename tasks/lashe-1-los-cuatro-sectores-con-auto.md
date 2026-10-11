@@ -69,8 +69,8 @@ All on `release`, `93af39f` against this branch:
 pages of 36, 37, 38, 39, 47, 48 and 56 compile. The three that do not are the
 expected ones, doors to maps of other milestones:
 
-    37  evento 13, página 3 (la puerta del vecino) ...... Teleport -> 41 (hito 2)
-    48  evento 9, páginas 1 y 2 (la puerta de Stash) .... Teleport -> 57 (hito 3)
+    37  event 13, page 3 (the neighbour's door) ......... Teleport -> 41 (milestone 2)
+    48  event 9, pages 1 and 2 (Stash's door) ........... Teleport -> 57 (milestone 3)
 
 And incidentally the two pages of map 10 that lead to 38 compile (the doors
 of switch 231).
@@ -100,12 +100,12 @@ package: 1267 B to spare), `8+vswar`, `10+vswar`, `36+vswar`, `56+vswar` and the
 real `Banco`, against `93af39f`: of 338 pairs **47 go down** and 26 go up; the
 median goes from 18.9 to 16.5 kHz. The ones that go down the most:
 
-    vswar         15 pares: el polysynth 21,1 -> 12,6; platillos y toms 22 -> 14,1;
-                  cuerdas 22,1 -> 14,2 y 16,7; coro 22,3 -> 16,8
-    escape_newyork polysynth 21,1 -> 12,6, y cuatro más de 1 a 2 kHz
-    golden_axe    golpes 41 y 42: 22 -> 14,1; bajos y cuerdas 22 -> 16,5
-    Deflector1    golpe 36 22 -> 14,1
-    cd4, T_ProjectJustice, C3classi, Lunar_Pyramid, wb3town: 1,7 a 5,3 kHz
+    vswar         15 pairs: the polysynth 21,1 -> 12,6; cymbals and toms 22 -> 14,1;
+                  strings 22,1 -> 14,2 and 16,7; choir 22,3 -> 16,8
+    escape_newyork polysynth 21,1 -> 12,6, and four more by 1 to 2 kHz
+    golden_axe    hits 41 and 42: 22 -> 14,1; basses and strings 22 -> 16,5
+    Deflector1    hit 36 22 -> 14,1
+    cd4, T_ProjectJustice, C3classi, Lunar_Pyramid, wb3town: 1,7 to 5,3 kHz
 
 Half of it belongs to the package itself —`38+cd4` has to fit `vswar`,
 `golden_axe` and `cd4` together—, but the ones that fall to 14.1 "the battle limits it" do not:
@@ -139,11 +139,11 @@ on 34— except the HQ and the guards, which jump to their sector:
 
 The photos are in `pruebas/snapshots/playthrough/lashe-*/` **without a golden**:
 
-    lashe-sectores  el 36 la primera vez, y cada sector al llegar
-    lashe-pad       el pad de Talan
-    lashe-hq        arriba del caño, el HQ vacío, de vuelta en la calle
-    lashe-guardias  la tienda, después de los guardias
-    lashe-fin       irse o quedarse, el cartel del fin, el título
+    lashe-sectores  36 the first time, and each sector on arrival
+    lashe-pad       Talan's pad
+    lashe-hq        above the pipe, the empty HQ, back on the street
+    lashe-guardias  the shop, after the guards
+    lashe-fin       leave or stay, the end card, the title
 
 What they do **not** cover: the blue car (130 off, 131 on: the same
 pages with the neighbouring cell), the "alone" branch (without a companion there is nothing

@@ -46,9 +46,9 @@ It is enforced by `pruebas/rpgmaker/test_fundido_del_tema.py`, with the new case
 `efecto-tras-el-fundido`: `Switch1` before the first theme, during the fade
 of `evilrhys` and after. Peaks measured with snes9x:
 
-    antes del tema     0  →  9267
-    durante (15%)   1782  →  9470
-    después            0  →  9267
+    before the theme   0  →  9267
+    during (15%)    1782  →  9470
+    after              0  →  9267
 
 And `test_con_msu_el_fundido_para_la_pista_y_los_efectos_siguen`
 (`pruebas/abl/test_msu.py`) looks at the same thing with MSU-1; that one also passed

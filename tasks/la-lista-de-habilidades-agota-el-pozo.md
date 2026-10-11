@@ -94,7 +94,7 @@ In the ROM, with the case `batalla` and Talan knowing his 54 (and separately his
 with the longest names), the list open and the cursor going through it. Free at
 the worst moment, out of 447:
 
-    espaciado   libres
+    spacing     free
     +0          170
     +1          132
     +2          113

@@ -23,7 +23,7 @@ name the `which` recipe of `tools/justfile` finds it like the others.
 
     rm2k-render layers --map N [--project DIR] --game-dir G --rtp-dir R --out DIR
     rm2k-render layers --request map.json --chipset-file X.png --out DIR
-    rm2k-render atlas (--chipset NOMBRE | --chipset-file X.png) -o atlas.png
+    rm2k-render atlas (--chipset NAME | --chipset-file X.png) -o atlas.png
 
 It writes `lower.png`, `upper.png` and, per family the map uses,
 `water-1.png`, `water-2.png`, `animated-1.png` to `animated-3.png`; it deletes

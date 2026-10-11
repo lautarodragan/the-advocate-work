@@ -38,8 +38,8 @@ space moved along with the cursor.
 RM2k's font it gives the same as before, to the bit. The message window measures
 240 pixels. Over ABL's boxes, with `rm2k-snes-screens boxes`:
 
-    39 columnas:          1245 cajas rearmadas, 299 partidas en varias
-    240 px, low-variable:    1 caja rearmada,     0 partidas
+    39 columns:           1245 boxes rebuilt, 299 split into several
+    240 px, low-variable:    1 box rebuilt,       0 split
 
 The only one is "Isabella!!" on map 157, which carries a trail of spaces.
 
@@ -52,13 +52,13 @@ by pixel. On map 6 with the camera moving, counting hardware frames
 against ticks while composing (the case `anclada` and one with four full
 rows):
 
-    letras por vuelta   precompuesta (8 fases)   de un bit
-    5                   0 perdidos               0
-    6                   0                        1 (una vez)
+    letters per loop    precomposed (8 phases)   one-bit
+    5                   0 lost                   0
+    6                   0                        1 (once)
     7-10                0                        0
-    11-12               0                        se pierden
+    11-12               0                        frames lost
     16-18               0
-    20 en adelante      se pierden
+    20 and up           frames lost
 
 The one-bit one costs almost twice as much per letter. The tables are 117 KB; the one-bit
 one, 1.1 KB and a table of 4.5 KB. The tables go in, and `MSG_CHARS` stays at 5.

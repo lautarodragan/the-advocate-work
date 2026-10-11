@@ -39,22 +39,22 @@ What to keep at hand when touching it:
 
 Measured over the game's 328 maps, not estimated:
 
-    ShowPicture en el juego                    34, en 23 páginas
-    carteles distintos                         20
-    páginas que muestran 2, 3 y 4 a la vez     2, 3 y 1
-    comandos que el modelo de hoy sabe hacer    7 de 34
-    con la pantalla ya teñida a negro          10 de 34
+    ShowPicture in the game                    34, in 23 pages
+    distinct cards                             20
+    pages that show 2, 3 and 4 at once         2, 3 and 1
+    commands today's model can do               7 of 34
+    with the screen already tinted to black    10 of 34
 
 And what each one would ask for, counted per command —one command can ask for
 several—:
 
-    el color transparente del PNG              21
-    pegada al mapa (fixed_to_map)               9
-    translúcida (top_trans)                     8
-    zoom distinto de 100                        7
-    rotar u ondear                              6
-    saturación distinta de 100                  5
-    la posición desde una variable              2
+    the PNG's transparent colour               21
+    stuck to the map (fixed_to_map)             9
+    translucent (top_trans)                     8
+    zoom other than 100                         7
+    rotate or wave                              6
+    saturation other than 100                   5
+    the position from a variable                2
 
 What that table says is that **the expensive part is not the cards**. Of the 20
 distinct ones, six are text cards that fit in a tall object

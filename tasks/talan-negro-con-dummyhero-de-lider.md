@@ -40,8 +40,8 @@ The dump of `cgram_sombra` at the moment of each scene, before the
 fix —palette 0 all at zero, and Talan's sprite in the OAM with
 palette 0—:
 
-    mapa 14, Talan sale del barril   grupo=10 hero_pal=0  obj pal 0: 0000 x16
-    mapa 40, el favor y el cirujano  grupo=10 hero_pal=0  obj pal 0: 0000 x16
+    map 14, Talan leaves the barrel  grupo=10 hero_pal=0  obj pal 0: 0000 x16
+    map 40, the favour and surgeon   grupo=10 hero_pal=0  obj pal 0: 0000 x16
 
 And "a map change fixes it" is because in both cases the next map
 loads with Talan as leader: 14 puts him in the party before going to 16 and
@@ -55,8 +55,8 @@ new. What looked black on each one depends on who uses palette 0.
 Where the game gets with `DummyHero` leading —pages that set 10, and
 the maps they jump to afterwards—, with a throwaway script over `data/`:
 
-    ponen al 10     4, 12, 18, 26, 33, 37, 38, 40, 45, 47, 48, 81, 84
-    se llega así a  4, 5, 14, 20, 36, 40, 66, 82
+    set 10          4, 12, 18, 26, 33, 37, 38, 40, 45, 47, 48, 81, 84
+    reached so      4, 5, 14, 20, 36, 40, 66, 82
 
 # The fix
 
@@ -75,10 +75,10 @@ black (with the fix, with `DummyHero` leading the slot keeps the
 cartridge's colours, which are those of the first leader), but with another leader who
 is not the graphic's it would look with someone else's colours. In `release`:
 
-    14  NV Get Talan to Work   ev4  -> Future1:0 (Talan)    6 paletas de 8
-    76  Sorbe Mountain         ev5  -> AG717:4 (AG7-17)     7 paletas de 8
-    81  Dr. Vago's House       ev2  -> Future1:0 (Talan)    Talan lidera: bien
-    83  Dalia at the Factory   ev13 -> Future1:5 (Kersh)    8 paletas de 8
+    14  NV Get Talan to Work   ev4  -> Future1:0 (Talan)    6 palettes of 8
+    76  Sorbe Mountain         ev5  -> AG717:4 (AG7-17)     7 palettes of 8
+    81  Dr. Vago's House       ev2  -> Future1:0 (Talan)    Talan leads: fine
+    83  Dalia at the Factory   ev13 -> Future1:5 (Kersh)    8 palettes of 8
 
 It was not touched: fixing it means giving them their own palette in the converter, and 83 already
 uses all eight, so there someone would end up drawn with a borrowed one. If

@@ -102,7 +102,7 @@ original.
 Measured at the end, on the merge with `main` (`9d6c0d3`), with the method of
 `AGENTS.md`:
 
-    cartucho      banco 0   banco 1   BSS   ZEROPAGE   ROM
+    cartridge     bank 0    bank 1    BSS   ZEROPAGE   ROM
     release       191 B     ~10,2 KB  109   4          72,6 %
     test-special  967 B     ~11,1 KB  109   4          18,7 %
 
