@@ -1,126 +1,129 @@
 ---
-name: "El público del Auditorio"
-description: "Los NPCs que son decoración, horneados en un ChipSet propio"
+name: "The Auditorium audience"
+description: "The NPCs that are decoration, baked into a ChipSet of their own"
 status: done
 ---
 
-# Qué
+# What
 
-Hornear en un ChipSet propio a los sprites que son **decoración**: el público
-del Auditorio, que no se mueve nunca, y los que estén en la misma.
+Bake into a ChipSet of their own the sprites that are **decoration**: the
+Auditorium audience, which never moves, and any others in the same situation.
 
 # Status
 
-**Hecho el 2026-09-21 en el mapa 18**, el Auditorio. Sus 31 eventos de público
-son tiles de la capa alta del ChipSet 54, que es propio del mapa; el fork está
-en `juego/mapas/Map0018.json` y la receta de la imagen en
+**Done on 2026-09-21 on map 18**, the Auditorium. Its 31 audience events are
+tiles of the upper layer of ChipSet 54, which is the map's own; the fork is in
+`juego/mapas/Map0018.json` and the picture's recipe in
 `juego/chipsets/0054.json`.
 
-Lo que ganó, del conversor, contra los mismos números de antes:
+What it gained, from the converter, against the same numbers from before:
 
-    cartucho   personajes   paletas de sprite   tiles de sprite   NPCs
+    cartridge  characters   sprite palettes     sprite tiles      NPCs
     abl           8 -> 6         8 -> 6            219 -> 158     36 -> 5
     juego         9 -> 7         8 -> 6            219 -> 158     36 -> 5
     pruebas      10 -> 8         8 -> 5            211 -> 147     36 -> 5
 
-Y lo que costó, que es fondo y sobraba: **21 -> 64 colores de los 103** que el
-mapa tiene, con **cero fusionados**; 54 -> 102 tiles de fondo y 29 -> 43
-bloques, o sea 224 B más de tabla de bloques.
+And what it cost, which is background and was to spare: **21 -> 64 colours of
+the 103** the map has, with **zero merged**; 54 -> 102 background tiles and
+29 -> 43 blocks, that is, 224 B more of block table.
 
-**El mapa se dibuja igual**: el render de RM2k con y sin el fork sale con cero
-pixeles de diferencia en los 320x240.
+**The map is drawn the same**: RM2k's render with and without the fork comes
+out with zero pixels of difference across the 320x240.
 
-# Por qué
+# Why
 
-La otra de las dos ideas para **cuando haga falta apretar assets**. Un sprite
-que no se mueve nunca paga banco de sprites, paleta de sprite y ranuras de OAM
-por nada: horneado en el ChipSet es tile de fondo, que es lo que ya se comparte
-entre los mapas del mismo chipset.
+The other of the two ideas for **when assets need squeezing**. A sprite that
+never moves pays for sprite bank, sprite palette and OAM slots for nothing:
+baked into the ChipSet it is a background tile, which is what is already shared
+between maps with the same chipset.
 
-En el 18 el límite no era teórico: el mapa estaba **clavado en 8 de 8 paletas
-de sprite**, que es donde
-`workflow/decisiones/un-grafico-que-no-entra-no-se-dibuja.md` empieza a decidir
-por nosotros. Y decidía: las cinco goldens `18-*` cambiaron al hornear porque
-**ahora se dibuja gente que el port venía descartando**.
+On 18 the limit was not theoretical: the map was **stuck at 8 of 8 sprite
+palettes**, which is where
+`workflow/decisiones/un-grafico-que-no-entra-no-se-dibuja.md` starts deciding
+for us. And it was deciding: the five `18-*` goldens changed on baking because
+**now people are drawn that the port had been discarding**.
 
-# Cuál es "decoración", medido
+# Which is "decoration", measured
 
-La pregunta que quedaba anotada —"un evento que nunca camina pero al que se le
-puede hablar sigue siendo un evento"— se contestó mirando el mapa:
+The question that had been noted —"an event that never walks but can be talked
+to is still an event"— was answered by looking at the map:
 
-* **cero comandos en todas sus páginas**: no hablan, no disparan nada;
-* **una sola página**, así que su dibujo no depende de ningún switch;
-* **`animation_type` 0** en las 41 páginas del mapa: ninguno anima;
-* y **nadie los nombra**: las dos páginas de `EV0036` —259 comandos, la
-  cinemática entera— le hablan a los eventos 1, 9, 16 y 37 y a nadie más.
+* **zero commands in all their pages**: they do not talk, they do not trigger
+  anything;
+* **a single page**, so their drawing does not depend on any switch;
+* **`animation_type` 0** in the map's 41 pages: none animates;
+* and **nobody names them**: the two pages of `EV0036` —259 commands, the
+  whole cutscene— address events 1, 9, 16 and 37 and nobody else.
 
-De los 36 eventos dibujados del mapa quedan cinco como sprite: el `Director`,
-que está en el escenario; `Dessen` y los dos `WalkIn*`, que la cinemática
-mueve; y `EV0019`, la mujer de pelo amarillo, que es la única cuyo sprite se
-sale de su celda —dos pixeles, medidos— y que se deja como está para que el
-fork no tome ninguna decisión sobre cómo se ve.
+Of the map's 36 drawn events five remain as sprites: the `Director`, who is on
+the stage; `Dessen` and the two `WalkIn*`, which the cutscene moves; and
+`EV0019`, the woman with yellow hair, who is the only one whose sprite goes
+out of her cell —two pixels, measured— and who is left as she is so that the
+fork makes no decision about how she looks.
 
-# El orden de dibujo, que es lo que había que confirmar
+# The drawing order, which is what had to be confirmed
 
-Horneado, el público pasa de ordenarse por Y con el héroe a ser fondo: nadie
-puede volver a taparlo. Vale porque **en el mapa 18 no se camina libremente**:
-`EV0036` es autostart y no suelta al jugador. Las tres posiciones del héroe
-salen de la cinemática, y las tres están en el pasillo del medio —x 7 a 12,
-que el público no ocupa— o detrás de todos:
+Baked, the audience goes from being sorted by Y with the hero to being
+background: nobody can cover it again. It works because **on map 18 one does
+not walk freely**: `EV0036` is autostart and does not release the player. The
+hero's three positions come from the cutscene, and all three are in the middle
+aisle —x 7 to 12, which the audience does not occupy— or behind everyone:
 
-* entra en **(9,14)** desde el mapa 17 y desde el 83, que son los únicos
-  teleports que apuntan acá;
-* camina a **(6,12)**, la última fila, al lado de `Dessen`;
-* los dos `WalkIn*` suben por las columnas 8 y 10, que también son pasillo.
+* he enters at **(9,14)** from map 17 and from 83, which are the only teleports
+  that point here;
+* he walks to **(6,12)**, the last row, next to `Dessen`;
+* the two `WalkIn*` go up columns 8 and 10, which are aisle too.
 
-O sea que ningún sprite queda nunca en una celda por delante de un horneado, y
-la única celda pisable desde la que se los vería por detrás —la fila 7— no la
-pisa nadie en el juego.
+That is, no sprite ever ends up on a cell in front of a baked one, and the only
+walkable cell from which they would be seen from behind —row 7— is stepped on
+by nobody in the game.
 
-# Las ranuras, y cómo se eligieron
+# The slots, and how they were chosen
 
-Son **cuatro combinaciones de (gráfico, dirección)** para los 31 eventos, y
-dos tiles altos cada una —la cabeza cae en la celda de adelante y el cuerpo en
-la suya—, así que **ocho tiles**:
+There are **four (graphic, direction) combinations** for the 31 events, and
+two upper tiles each —the head falls on the cell in front and the body on its
+own—, so **eight tiles**:
 
-    gráfico             dirección   eventos   cabeza   cuerpo
-    Future1  índice 0       0          3       120      121
-    Future2  índice 6       0          9       122      123
-    Future2  índice 2       3          5       124      125
-    Future3  índice 5       0         14       126      127
+    graphic             direction   events    head     body
+    Future1  index 0        0          3       120      121
+    Future2  index 6        0          9       122      123
+    Future2  index 2        3          5       124      125
+    Future3  index 5        0         14       126      127
 
-El ChipSet 25, del que sale el 54, tiene **arte en 143 de sus 144 ranuras
-altas**, así que no hay ninguna vacía: lo que hace que pisar ocho sea gratis es
-que **el 54 es privado del mapa 18**, y el 18 dibuja diez —la 0 y las 105 a
-119—. Las otras 134 son de uso libre, y lo cuida
-`test_fork_no_pisa_una_ranura_que_su_mapa_dibuja_con_el_arte_de_antes`.
+ChipSet 25, which 54 comes from, has **art in 143 of its 144 upper slots**, so
+there is no empty one: what makes overwriting eight free is that **54 is
+private to map 18**, and 18 draws ten —0 and 105 to 119—. The other 134 are
+free to use, and
+`test_fork_no_pisa_una_ranura_que_su_mapa_dibuja_con_el_arte_de_antes` guards
+it.
 
-**La pasabilidad la escribe el ChipSet, y es lo que sostiene el horneado**: el
-tile del cuerpo va en 0 —un evento en la capa del héroe es una pared, y de
-tiles sueltos la celda quedaría abierta y el jugador caminaría por encima de la
-gente— y el de la cabeza en 15, que es lo que la celda de adelante daba. Las
-celdas abiertas del mapa pasan de 197 a 166: las 31, ninguna más.
+**The passability is written by the ChipSet, and it is what holds up the
+baking**: the body tile goes at 0 —an event in the hero's layer is a wall, and
+with loose tiles the cell would be left open and the player would walk over the
+people— and the head one at 15, which is what the cell in front gave. The map's
+open cells go from 197 to 166: the 31, no more.
 
-# Lo que hizo falta del mecanismo
+# What was needed from the mechanism
 
-El fork de mapas ya existía —lo estrenó el mapa 11, ver
-`el-mapa-11-se-rediseno.md`— y no se tocó. Lo único que se le agregó es una
-tercera operación a la receta de la imagen del ChipSet, `desde_charset`, que es
-la primera que **trae pixeles de afuera del ChipSet**.
+The map fork already existed —map 11 debuted it, see
+`el-mapa-11-se-rediseno.md`— and was not touched. The only thing added to it is
+a third operation in the ChipSet picture's recipe, `desde_charset`, which is
+the first that **brings pixels from outside the ChipSet**.
 
-Su trampa, que no se ve venir: **los dos PNG son indexados y sus índices no
-quieren decir lo mismo.** Copiar los bytes de un CharSet adentro de un ChipSet
-da un sprite pintado con la paleta del ChipSet. Se copia por color, y el que
-falta se agrega en un índice que el ChipSet no use; el índice 0 queda afuera de
-la búsqueda en las dos puntas porque es el color key.
+Its trap, which one does not see coming: **both PNGs are indexed and their
+indices do not mean the same thing.** Copying a CharSet's bytes into a ChipSet
+gives a sprite painted with the ChipSet's palette. It is copied by colour, and
+the missing one is added at an index the ChipSet does not use; index 0 is left
+out of the search on both ends because it is the colour key.
 
-# Cómo se reproduce
+# How to reproduce it
 
-Los scripts descartables quedaron en `/extras/scratch/fork-auditorio/`:
-`inventario.py` lista los 37 eventos con sus páginas, `celdas.py` dice qué tile
-tiene cada celda con gente y la de arriba, `ev36c.py` dice a quién nombra la
-cinemática, `pasa.py` dibuja la pasabilidad, `ranuras.py` cuenta las ranuras
-altas libres, `generar.py` arma los tres archivos del fork y `render18.py` saca
-el render de RM2k con y sin fork, que `comparar.py` compara pixel por pixel.
+The throwaway scripts were left in `/extras/scratch/fork-auditorio/`:
+`inventario.py` lists the 37 events with their pages, `celdas.py` says which
+tile each cell with people has and the one above, `ev36c.py` says whom the
+cutscene names, `pasa.py` draws the passability, `ranuras.py` counts the free
+upper slots, `generar.py` builds the fork's three files and `render18.py`
+takes RM2k's render with and without the fork, which `comparar.py` compares
+pixel by pixel.
 
-Las capturas están en `/extras/capturas/auditorio/`.
+The captures are in `/extras/capturas/auditorio/`.

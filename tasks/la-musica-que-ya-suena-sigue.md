@@ -1,129 +1,132 @@
 ---
-name: "Un tema que ya suena no vuelve a empezar"
-description: "En RM2k, PlayBGM con el tema que ya está sonando no lo reinicia; en la ROM sí: la victoria de la pelea y la caminata a la fábrica"
+name: "A theme that is already playing does not start over"
+description: "In RM2k, PlayBGM with the theme that is already playing does not restart it; in the ROM it does: the battle victory and the walk to the factory"
 type: bug
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-09-30: "creo que en el RPG Maker, cuando se ejecuta un play
-bgm o algo transiciona a un nuevo tema, si el tema es el mismo que ya está
-sonando, no comienza de cero, simplemente sigue sonando". Lo nota en dos
-lugares:
+From taro, on 2026-09-30: "I think in RPG Maker, when a play bgm runs or
+something transitions to a new theme, if the theme is the same one that is
+already playing, it doesn't start from zero, it just keeps playing". He
+notices it in two places:
 
-- **La pelea**: el tema de batalla y el de "ganar batalla" son el mismo. En
-  el original, probablemente, no cambiaba nada al ganar.
-- **La cinemática de la caminata hacia la fábrica**: la música se reinicia
-  en una de las transiciones.
+- **The battle**: the battle theme and the "win battle" one are the same. In
+  the original, probably, nothing changed on winning.
+- **The cutscene of the walk to the factory**: the music restarts in one of
+  the transitions.
 
-A confirmar en easyrpg (`Game_System::BgmPlay` y cómo la pelea pide el tema
-de victoria) y, si se puede, con el RPG_RT bajo Wine, grabando su audio.
+To be confirmed in easyrpg (`Game_System::BgmPlay` and how the battle asks for
+the victory theme) and, if possible, with RPG_RT under Wine, recording its
+audio.
 
-## Qué hace RM2k
+## What RM2k does
 
-**easyrpg** (`src/game_system.cpp`, `Game_System::BgmPlay`): si el nombre es
-el que suena y no hay un fundido en curso (`music_stopping`, que prende
-`BgmFade` y apaga el siguiente `BgmPlay`), **no reinicia**: sólo ajusta el
-volumen, el tempo y el balance que hayan cambiado. "El mismo tema" es **sólo
-el nombre**: con otro volumen o tempo sigue igual, ajustado. `fadein` no
-cuenta. La pelea pasa por la misma función: `Scene_Battle` anota
-`before_battle_music` y pide `BGM_Battle` al construirse;
-`Scene_Battle_Rpg2k` pide `BGM_Victory` al ganar; `Game_Map::OnContinueFromBattle`
-repone el de antes. Y `Game_Map::PlayBgm`, al entrar a un mapa, también.
+**easyrpg** (`src/game_system.cpp`, `Game_System::BgmPlay`): if the name is
+the one playing and there is no fade in progress (`music_stopping`, which
+`BgmFade` turns on and the next `BgmPlay` turns off), **it does not restart**:
+it only adjusts the volume, tempo and balance that changed. "The same theme" is
+**only the name**: with another volume or tempo it keeps going, adjusted.
+`fadein` does not count. The battle goes through the same function:
+`Scene_Battle` notes `before_battle_music` and asks for `BGM_Battle` on being
+constructed; `Scene_Battle_Rpg2k` asks for `BGM_Victory` on winning;
+`Game_Map::OnContinueFromBattle` restores the previous one. And
+`Game_Map::PlayBgm`, on entering a map, too.
 
-**El RPG_RT de 2015 bajo Wine** dice lo mismo, medido. El MIDI no suena acá
-adentro —Wine no tiene sintetizador MIDI sin el secuenciador de ALSA—, así
-que el tema fue un WAV puesto en `Music/`: un barrido de frecuencia, donde la
-altura dice por dónde va. Una página en el mapa de arranque lo pidió así, y
-la grabación (`/shared/audio/2026-09-30-tema-que-sigue/`) dice:
+**The 2015 RPG_RT under Wine** says the same, measured. The MIDI does not play
+in here —Wine has no MIDI synthesiser without ALSA's sequencer—, so the theme
+was a WAV put in `Music/`: a frequency sweep, where the pitch tells how far
+along it is. A page on the starting map asked for it like this, and the
+recording (`/shared/audio/2026-09-30-tema-que-sigue/`) says:
 
-    PlayBGM igual                 sigue
-    PlayBGM con volumen 50        sigue, más bajo
-    PlayBGM con tempo 150         sigue, más rápido (y vuelve al volumen 100)
-    otro tema, y después éste     empieza de cero
-    a mitad de un FadeOutBGM      empieza de cero
+    same PlayBGM                  keeps going
+    PlayBGM with volume 50        keeps going, quieter
+    PlayBGM with tempo 150        keeps going, faster (and back to volume 100)
+    another theme, then this one  starts from zero
+    in the middle of a FadeOutBGM starts from zero
 
-Las dos fuentes coinciden en todo. Lo que no se pudo: el runtime de 2000
-—el del autor— necesita la `Harmony.dll` de verdad, y con MIDI.
+The two sources agree on everything. What could not be done: the 2000 runtime
+—the author's— needs the real `Harmony.dll`, and with MIDI.
 
-## Los casos del juego
+## The game's cases
 
-- **La victoria**: `battle_music` y `battle_end_music` del LDB son los dos
-  `T_VGFighterMAX_Masako`, y la ROM lo reiniciaba al ganar. Hay 130
-  `ChangeSystemBGM` en el juego, que la ROM ignora desde antes; con eso los
-  dos siguen siendo el mismo.
-- **La caminata a la fábrica**: la puerta del mapa 8 salta al 16 ("Running
-  To Work Scene"), que trae `hzbreach` como tema; el mapa lo prende al
-  cargar, y la automática del 16 empieza con un `PlayBGM hzbreach`, que lo
-  reiniciaba con la escena ya andando. Las transiciones de adentro del 16 son
-  saltos al mismo mapa y no tocan la música; la del final funde, pide
-  `wb3mlair` y salta al 17. (El mapa 14 también pide `hzbreach` y salta al
-  16, pero ninguna puerta lleva a él.)
-- **Cuántos PlayBGM piden el que ya suena**, estático y sin seguir ramas: de
-  168, **10** repiten el que la misma página acababa de pedir sin un fundido
-  entre medio, **5** son el primero de una automática que pide el tema de su
-  mapa, y **8** pares salto→automática del destino piden el mismo. Ninguna
-  pelea arranca con el tema de batalla ya sonando.
+- **The victory**: the LDB's `battle_music` and `battle_end_music` are both
+  `T_VGFighterMAX_Masako`, and the ROM restarted it on winning. There are 130
+  `ChangeSystemBGM` in the game, which the ROM has ignored since before; with
+  that the two are still the same.
+- **The walk to the factory**: the door on map 8 jumps to 16 ("Running To Work
+  Scene"), which brings `hzbreach` as its theme; the map starts it on loading,
+  and 16's autostart begins with a `PlayBGM hzbreach`, which restarted it with
+  the scene already going. The transitions inside 16 are jumps to the same map
+  and do not touch the music; the final one fades, asks for `wb3mlair` and
+  jumps to 17. (Map 14 also asks for `hzbreach` and jumps to 16, but no door
+  leads to it.)
+- **How many PlayBGMs ask for the one already playing**, statically and without
+  following branches: of 168, **10** repeat the one the same page had just
+  asked for without a fade in between, **5** are the first of an autostart that
+  asks for its map's theme, and **8** jump→destination-autostart pairs ask for
+  the same one. No battle starts with the battle theme already playing.
 
-## Lo que se hizo
+## What was done
 
-`song_playing` (en `music.s`) es la pregunta de `BgmPlay`: el tema es el que
-suena —por la pista del MSU-1 o por el SPC700— y no se está fundiendo.
-`music_play` la hace antes de `music_start`, y la usan el `PlayBGM`, el
-`PlayMemorizedBGM` y `battle_bgm` —la entrada, la victoria, la vuelta, el
-Game Over—. `music_start` sigue reiniciando siempre: lo usan el título y la
-partida cargada. `map_song_mute` y `remembered_song` tenían cada uno su
-copia de la pregunta: ahora preguntan lo mismo.
+`song_playing` (in `music.s`) is `BgmPlay`'s question: the theme is the one
+playing —through the MSU-1 track or through the SPC700— and it is not fading.
+`music_play` asks it before `music_start`, and it is used by `PlayBGM`,
+`PlayMemorizedBGM` and `battle_bgm` —the entry, the victory, the return, the
+Game Over—. `music_start` still always restarts: the title and the loaded game
+use it. `map_song_mute` and `remembered_song` each had their own copy of the
+question: now they ask the same one.
 
-**Con MSU-1** vale igual: `song_playing` mira `MSU_PLAYING` antes que
-`music_off`, y la pista no se reinicia (lo cobra
-`test_con_msu_el_tema_pedido_dos_veces_no_reinicia_la_pista`, escuchando).
+**With MSU-1** it holds the same: `song_playing` looks at `MSU_PLAYING` before
+`music_off`, and the track does not restart (enforced by
+`test_con_msu_el_tema_pedido_dos_veces_no_reinicia_la_pista`, listening).
 
-**Sin MSU-1, la pelea cambia el paquete de audio al entrar**, y para eso
-calla lo que suena: si el mapa estuviera tocando el tema de batalla, se
-reiniciaría al entrar igual. No pasa en el juego —ver arriba—, así que no se
-tocó `battle_audio_load`; si alguna vez hace falta, `package_load` ya deja
-en su lugar las muestras del tema que suena, y alcanzaría con no callarlo
-cuando es el mismo.
+**Without MSU-1, the battle changes the audio package on entering**, and for
+that it silences what is playing: if the map were playing the battle theme, it
+would restart on entering anyway. It does not happen in the game —see above—,
+so `battle_audio_load` was not touched; if it is ever needed, `package_load`
+already leaves the samples of the playing theme in place, and it would be
+enough not to silence it when it is the same one.
 
-## Las pruebas
+## The tests
 
-- `rpgmaker/test_tema_que_ya_suena.py`, con el caso `tema-pedido-dos-veces`:
-  dos `PlayBGM evilrhys` en una página. Rojo antes del arreglo: el stream
-  volvió de `$65C296` a `$65C1A6`.
-- `test_batalla.py::test_ganar_deja_seguir_el_tema_de_la_victoria`: **antes
-  pedía lo contrario**, que la victoria lo arrancara de cero
-  (`546fb17d`, 2026-09-12). Rojo antes del arreglo con la condición dada
-  vuelta: el cursor volvió de `$6781CB` a `$67808D`.
+- `rpgmaker/test_tema_que_ya_suena.py`, with the case `tema-pedido-dos-veces`:
+  two `PlayBGM evilrhys` in one page. Red before the fix: the stream went back
+  from `$65C296` to `$65C1A6`.
+- `test_batalla.py::test_ganar_deja_seguir_el_tema_de_la_victoria`: **it used
+  to ask for the opposite**, that the victory start it from zero (`546fb17d`,
+  2026-09-12). Red before the fix with the condition flipped: the cursor went
+  back from `$6781CB` to `$67808D`.
 - `abl/test_msu.py::test_con_msu_el_tema_pedido_dos_veces_no_reinicia_la_pista`:
-  compara lo que suena después de cada `PlayBGM`. Correlación 1,00 antes del
-  arreglo y 0,12 después.
+  compares what plays after each `PlayBGM`. Correlation 1.00 before the fix and
+  0.12 after.
 
-## Lo que queda
+## What remains
 
-- **El volumen y el tempo de un `PlayBGM` la ROM no los lee**, ni antes ni
-  ahora: 69 de los 168 piden otro volumen y 13 otro tempo. RM2k, con el
-  mismo tema, los ajusta sin reiniciar.
+- **The volume and tempo of a `PlayBGM` are not read by the ROM**, neither
+  before nor now: 69 of the 168 ask for another volume and 13 for another
+  tempo. RM2k, with the same theme, adjusts them without restarting.
 
-## Para escuchar
+## To listen to
 
-`/shared/audio/2026-09-30-tema-que-sigue/`, con su `LEEME.txt`: la victoria
-y la corrida al 16, antes y después, con MSU-1 y sin él, y la grabación del
-RPG_RT.
+`/shared/audio/2026-09-30-tema-que-sigue/`, with its `LEEME.txt`: the victory
+and the run to 16, before and after, with MSU-1 and without it, and RPG_RT's
+recording.
 
-## Al mergear
+## When merging
 
-- Instalar `cartridge` en el global no hace falta: no se tocó Rust. Sólo
-  cambió `tools/runtime/`, que el global ya lee del checkout principal.
-- No hay goldens nuevas ni movidas, y `test_musica_techos.py` pasó.
-- Con `main` mergeado (`bfbabec5`) la tanda dio 904 en verde y 2 en rojo,
-  los dos de `test_rutas_auditorio.py`, de Pecarí: piden lo que cambió en
-  `map-sprites` y `maps`, y el `rm2k-snes-maps` global es de antes de su
-  merge. No los compilé acá —no son míos—; con eso reinstalado tendrían que
-  pasar.
+- Installing `cartridge` in the global one is not needed: no Rust was touched.
+  Only `tools/runtime/` changed, which the global one already reads from the
+  main checkout.
+- There are no new or moved goldens, and `test_musica_techos.py` passed.
+- With `main` merged (`bfbabec5`) the suite gave 904 green and 2 red, both
+  from `test_rutas_auditorio.py`, Pecarí's: they ask for what changed in
+  `map-sprites` and `maps`, and the global `rm2k-snes-maps` predates their
+  merge. I did not compile them here —they are not mine—; with that
+  reinstalled they should pass.
 
-## Qué escuchar jugando
+## What to listen for while playing
 
-La victoria de cualquier pelea: el tema no vuelve a empezar al ganar. Y la
-corrida al trabajo, al entrar al 16: `hzbreach` sigue de largo cuando arranca
-la escena.
+The victory of any battle: the theme does not start over on winning. And the
+run to work, on entering 16: `hzbreach` carries straight on when the scene
+starts.

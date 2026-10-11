@@ -1,164 +1,165 @@
 ---
-name: "El contador de Fortitude no se ve"
-description: "El minijuego de Eisen (mapa 95) lleva la cuenta en la variable 48 y la muestra con una imagen que la ROM no dibuja"
+name: "The Fortitude counter is not shown"
+description: "Eisen's minigame (map 95) keeps the count in variable 48 and shows it with a picture the ROM does not draw"
 type: bug
 status: done
 assignee: taro
 ---
 
-Del plan `el-mundo-y-lo-que-sigue.md` (pregunta 4). El minijuego del 95 compila
-y se juega, pero sin ver cuánto aguanta Eisen: el contador de Fortitude es una
-imagen que la ROM no dibuja. taro lo dejó como deuda el 2026-09-27.
+From the plan `el-mundo-y-lo-que-sigue.md` (question 4). The minigame on 95
+compiles and is playable, but without seeing how much Eisen can endure: the
+Fortitude counter is a picture the ROM does not draw. taro left it as a debt on
+2026-09-27.
 
-Los caminos que estaban sobre la mesa: mostrar la variable 48 con los dígitos
-del cronómetro, que ya están en la ROM; un mensaje cuando baja. Antes de elegir
-hay que mirar si el minijuego se puede perder: si no, el contador es sólo
-información.
+The paths that were on the table: showing variable 48 with the timer's digits,
+which are already in the ROM; a message when it goes down. Before choosing one
+has to check whether the minigame can be lost: if not, the counter is only
+information.
 
-**Se puede perder**, mirado en el hito 4 (`mundo-4-el-capitulo.md`):
-cada salto y cada escalera del 95 restan 5 a la variable 48, que arranca en
-99, y con la variable en cero la paralela 56 dice "So... tired... can't go
-on...", devuelve a Eisen a la entrada, apaga las tres palancas y la repone en
-99. La ruta de
-`test_recorrido_capitulo_golden.py`, que va derecho a las tres palancas y a la
-escotilla, termina con 4: sin ver el contador, cualquier rodeo obliga a
-empezar de nuevo sin que el jugador lo vea venir. Así que el contador no es
-sólo información.
+**It can be lost**, checked in milestone 4 (`mundo-4-el-capitulo.md`): each
+jump and each ladder on 95 subtracts 5 from variable 48, which starts at 99,
+and with the variable at zero parallel 56 says "So... tired... can't go
+on...", sends Eisen back to the entrance, turns off the three levers and resets
+it to 99. The route of `test_recorrido_capitulo_golden.py`, which goes straight
+to the three levers and the hatch, ends with 4: without seeing the counter, any
+detour forces starting over without the player seeing it coming. So the counter
+is not only information.
 
-## Tomada el 2026-09-30
+## Taken on 2026-09-30
 
-Decidido por Hornero, con la autorización de taro para decidir sin
-esperarlo: el camino es **mostrar la variable 48 con los dígitos del
-cronómetro**, que ya están en la ROM, en el lugar y en el momento en que el
-original muestra su imagen —medirlo con el RPG_RT en Wine—. Un mensaje
-cuando baja no avisa antes de perder, que es lo que importa. Cambia lo que
-se ve: las goldens que se muevan esperan el visto bueno de taro.
+Decided by Hornero, with taro's authorisation to decide without waiting for
+him: the path is **showing variable 48 with the timer's digits**, which are
+already in the ROM, in the place and at the moment the original shows its
+picture —measure it with RPG_RT on Wine—. A message when it goes down does not
+warn before losing, which is what matters. It changes what is seen: the goldens
+that move wait for taro's approval.
 
-## Qué hace el original (Chimango, 2026-09-30)
+## What the original does (Chimango, 2026-09-30)
 
-Medido con el RPG_RT de 2015 en Wine, sobre una copia del juego cuyo EV0001
-del mapa 4 lleva a Eisen al 95. Las capturas, en
+Measured with the 2015 RPG_RT on Wine, on a copy of the game whose EV0001 on
+map 4 takes Eisen to 95. The captures, in
 `/shared/capturas/2026-09-30-fortitude/original-*.png`.
 
-* **Son tres imágenes**, fijas a la pantalla —no se mueven con la cámara—:
-  la 1 es el rótulo `Fortitude` (110x25, azul en cursiva) centrado en
-  (70, 10); la 2 es la decena y la 3 la unidad, dígitos rojos de 16x16
-  (`Picture/0.png` a `9.png`) centrados en (55, 30) y (70, 30).
-* **Aparecen** cuando termina la escena de entrada (EV0001 o EV0005, los dos
-  del 95), justo antes de "A NOTE ABOUT FORTITUDE": las tres de golpe, en
-  99, sin fundido.
-* **Cambian** sólo cuando corre el común 9, `FortitudeDisplay`: cada salto y
-  cada escalera del 95 —treinta y una páginas— restan 5 o 10 a la variable 48
-  y lo llaman. El común recorta la 48 a 0..99, pone la decena con una cadena
-  de `ConditionalBranch` y la unidad con el común 10, `CalculateSecondDigit`,
-  sobre la variable 49; **debajo de 10 borra la decena** (" 9", no "09").
-  Tras un salto desde 99 se ve 94.
-* **Se van al cambiar de mapa**, y con el fundido del teleport: RM2k 2000 no
-  tiene el flag de las imágenes de 2003, y `ShowParams` arranca con
-  `erase_on_map_change` prendido (easyrpg, `game_pictures.h`). Un teleport al
-  mismo mapa no las borra: el "So... tired" de la paralela 56 manda a Eisen a
-  la entrada del 95 y el contador sigue, en 99. Al volver del 99 al 95
-  (después de la escena de los misiles) no hay contador hasta el próximo
-  salto, que muestra sólo los dígitos: **el rótulo no vuelve**.
-* El tinte no las toca —`affected_by_tint` arranca apagado— y el mensaje de
-  abajo no las tapa.
+* **They are three pictures**, fixed to the screen —they do not move with the
+  camera—: 1 is the `Fortitude` label (110x25, blue italics) centred at
+  (70, 10); 2 is the tens and 3 the units, red 16x16 digits (`Picture/0.png`
+  to `9.png`) centred at (55, 30) and (70, 30).
+* **They appear** when the entrance scene ends (EV0001 or EV0005, both on 95),
+  right before "A NOTE ABOUT FORTITUDE": all three at once, at 99, without a
+  fade.
+* **They change** only when common 9, `FortitudeDisplay`, runs: each jump and
+  each ladder on 95 —thirty-one pages— subtracts 5 or 10 from variable 48 and
+  calls it. The common clamps 48 to 0..99, sets the tens with a chain of
+  `ConditionalBranch` and the units with common 10, `CalculateSecondDigit`, on
+  variable 49; **below 10 it erases the tens** (" 9", not "09"). After a jump
+  from 99, 94 is shown.
+* **They go away on changing maps**, and with the teleport's fade: RM2k 2000
+  does not have the 2003 pictures flag, and `ShowParams` starts with
+  `erase_on_map_change` on (easyrpg, `game_pictures.h`). A teleport to the
+  same map does not erase them: parallel 56's "So... tired" sends Eisen to the
+  entrance of 95 and the counter stays, at 99. On coming back from 99 to 95
+  (after the missiles scene) there is no counter until the next jump, which
+  shows only the digits: **the label does not come back**.
+* The tint does not touch them —`affected_by_tint` starts off— and the message
+  below does not cover them.
 
-## Por qué el común 9 nunca corrió en la ROM
+## Why common 9 never ran in the ROM
 
-La variable 49 sólo la nombran los comunes 9 y 10, y el barrido que le da
-lugar a cada variable (`indices::variables`) mira las páginas de los mapas y
-de las tropas, no los comunes. Sin lugar para la 49 el común no compila, y un
-`CallEvent` a un común que no compila se saltea: los treinta y un saltos
-restaban y nadie dibujaba nada.
+Variable 49 is named only by commons 9 and 10, and the sweep that gives each
+variable a slot (`indices::variables`) looks at the pages of maps and troops,
+not the commons. Without a slot for 49 the common does not compile, and a
+`CallEvent` to a common that does not compile is skipped: the thirty-one jumps
+subtracted and nobody drew anything.
 
-Darle lugar no alcanza, y se probó: con los comunes en el barrido, el común 9
-compila a **1.345 bytes**, y como `CallEvent` se compila pegando el cuerpo en
-el lugar de la llamada, son 1.345 bytes por salto —40 KB en el mapa 95, sin
-contar los dígitos— para una cadena de `if` que decide qué dígito mostrar. Y
-sumaría 71 variables que sólo nombran comunes, que harían compilar otros
-comunes en otros mapas: fuera de esta tarea.
+Giving it a slot is not enough, and it was tried: with the commons in the
+sweep, common 9 compiles to **1,345 bytes**, and since `CallEvent` is compiled
+by pasting the body in place of the call, it is 1,345 bytes per jump —40 KB on
+map 95, not counting the digits— for a chain of `if`s that decides which digit
+to show. And it would add 71 variables that only commons name, which would make
+other commons compile on other maps: outside this task.
 
-## Cómo se hizo: el común 9, declarado como contador
+## How it was done: common 9, declared as a counter
 
-**`OP_COUNTER` (0x35)**, con la variable, `x` e `y`. El proyecto declara en
-`rm2k-snes.toml`, `[events] counters`, que el común 9 es el contador de la
-variable 48, y el compilador de eventos (`compile_counter`):
+**`OP_COUNTER` (0x35)**, with the variable, `x` and `y`. The project declares
+in `rm2k-snes.toml`, `[events] counters`, that common 9 is the counter of
+variable 48, and the event compiler (`compile_counter`):
 
-* compila **`CallEvent` al común 9** como `OP_COUNTER` en vez de pegar su
-  cuerpo: 4 bytes por salto en vez de 1.345;
-* compila **un `ShowPicture` de un dígito en las imágenes del contador** —las
-  que el común 9 usa para dígitos, la 2 y la 3— como el mismo `OP_COUNTER`.
-  Es lo que hacen las escenas de entrada (EV0001 y EV0005): la 48 en 99 y las
-  dos imágenes con "9". Muestra el valor de la variable y no el de la imagen,
-  que es lo mismo mientras la página muestre los dígitos del valor que acaba
-  de poner: se asume, y está escrito en `compile_counter`;
-* saca **dónde** del común: el medio de los centros de sus dos imágenes de
-  dígitos, escalado a la pantalla de la consola, y el número centrado ahí
-  —(41, 20), los dos glifos de 8x16 pegados—. Verifica que sean dos imágenes
-  y cada una siempre en el mismo lugar; si no, corta la conversión.
+* compiles **`CallEvent` to common 9** as `OP_COUNTER` instead of pasting its
+  body: 4 bytes per jump instead of 1,345;
+* compiles **a `ShowPicture` of a digit in the counter's pictures** —the ones
+  common 9 uses for digits, 2 and 3— as the same `OP_COUNTER`. It is what the
+  entrance scenes do (EV0001 and EV0005): 48 at 99 and the two pictures with
+  "9". It shows the variable's value and not the picture's, which is the same
+  as long as the page shows the digits of the value it has just set: this is
+  assumed, and it is written in `compile_counter`;
+* takes **where** from the common: the middle of the centres of its two digit
+  pictures, scaled to the console's screen, and the number centred there
+  —(41, 20), the two 8x16 glyphs side by side—. It verifies that they are two
+  pictures and each one always in the same place; if not, it stops the
+  conversion.
 
-La ROM (`counter_set`, en el banco 1, y `counter_oam`) recorta a 0..99, borra
-la decena debajo de 10 y dibuja con los glifos del cronómetro, **debajo del
-cronómetro y con su paleta sin teñir**, igual que el original no tiñe sus
-imágenes. El contador se va al cambiar de mapa (`enter_map_no_events`); un
-teleport al mismo mapa no lo toca, como en RM2k. `timer_oam` quedó partido
-en `glyph_oam`, que dibuja un glifo, y los dos lo usan.
+The ROM (`counter_set`, in bank 1, and `counter_oam`) clamps to 0..99, erases
+the tens below 10 and draws with the timer's glyphs, **below the timer and with
+its palette untinted**, just as the original does not tint its pictures. The
+counter goes away on changing maps (`enter_map_no_events`); a teleport to the
+same map does not touch it, as in RM2k. `timer_oam` was split into
+`glyph_oam`, which draws one glyph, and both use it.
 
-Por qué así y no las otras formas:
+Why this way and not the other ways:
 
-* **Compilar el común como es** (darle lugar a la 49): 1.345 bytes por
-  llamada, 40 KB en el 95. Descartado arriba.
-* **Una imagen de dígito = un glifo**, regla general sin declarar nada: igual
-  necesita que el común compile, y encima suma los `ShowPicture`, ~110 por
-  llamada. Y cada glifo centrado en su imagen deja un hueco entre la decena y
-  la unidad, porque las imágenes miden el doble.
-* **Declararlo en el proyecto** reinterpreta un común, y eso es una decisión
-  del juego: por eso va en el `.toml` y no en el compilador, que no sabe de
-  ABL. Lo que se toma a confianza es que el común 9 dibuja la 48 en dos
-  dígitos sin cero adelante; lo que se verifica es dónde.
+* **Compiling the common as it is** (giving 49 a slot): 1,345 bytes per call,
+  40 KB on 95. Discarded above.
+* **A digit picture = a glyph**, a general rule without declaring anything: it
+  still needs the common to compile, and on top of that it adds the
+  `ShowPicture`s, ~110 per call. And each glyph centred in its picture leaves a
+  gap between the tens and the units, because the pictures are twice as big.
+* **Declaring it in the project** reinterprets a common, and that is a decision
+  of the game: that is why it goes in the `.toml` and not in the compiler,
+  which does not know about ABL. What is taken on trust is that common 9 draws
+  48 in two digits without a leading zero; what is verified is where.
 
-**Lo que no se hace:**
+**What is not done:**
 
-* **El rótulo `Fortitude`** (imagen 1): los glifos del cronómetro son dígitos
-  y dos puntos. Sigue como deuda, aceptado sin hacerse.
-* **El recorte de la variable**: el común escribe la 48 recortada; la ROM
-  recorta sólo lo que muestra. Nadie más la lee, y la paralela 56 pregunta
-  "<= 0", que da lo mismo.
-* **Una partida guardada en el 95** vuelve sin contador hasta el próximo
-  salto: las imágenes de RM2k viajan en la partida, y el contador no.
-* **Encima de la ventana**: como el cronómetro y la imagen, prioridad 3. En
-  RM2k la ventana tapa las imágenes; se nota sólo con un mensaje arriba con el
-  contador puesto (el "What are you doing, Professor?" del EV0055).
+* **The `Fortitude` label** (picture 1): the timer's glyphs are digits and a
+  colon. It remains as a debt, accepted without being done.
+* **The clamping of the variable**: the common writes 48 clamped; the ROM
+  clamps only what it shows. Nobody else reads it, and parallel 56 asks
+  "<= 0", which gives the same.
+* **A game saved on 95** comes back without a counter until the next jump:
+  RM2k's pictures travel in the save, and the counter does not.
+* **Above the window**: like the timer and the picture, priority 3. In RM2k the
+  window covers the pictures; it is noticed only with a message at the top with
+  the counter up (the "What are you doing, Professor?" of EV0055).
 
-**Los dos viven en el banco 1** (`tools/runtime/counter.s`): después de
-mergear el `wanted_fits` de Cachirla el banco 0 se pasaba por 32 bytes. En
-el 0 quedan el despacho de `op_counter`, el puente `glyph_oam_far` y las
-tres líneas del borrado, la paleta y el arranque. `just espacio`: 55 bytes
-libres en el banco 0 de `release`.
+**Both live in bank 1** (`tools/runtime/counter.s`): after merging Cachirla's
+`wanted_fits` bank 0 went over by 32 bytes. Left in bank 0 are the dispatch of
+`op_counter`, the `glyph_oam_far` bridge and the three lines of the erasing,
+the palette and the startup. `just espacio`: 55 bytes free in `release`'s bank
+0.
 
-## La prueba
+## The test
 
-`test_contador` (`rom/pruebas/rpgmaker/test_comandos_golden.py`), con el caso
-`contador`: en el 95, la 48 en 99 y las imágenes 2 y 3 con "9" como la escena
-de entrada; después los saltos de verdad —las páginas de los eventos 15 y
-16, llamadas con `CallEvent`, que restan 5 y llaman al común 9—, el segundo
-desde 12; un tinte negro y un `Teleport` al 6. Cinco goldens nuevas: 99, 94,
-7 sin decena, 7 sin teñir sobre negro, y el 6 sin contador.
+`test_contador` (`rom/pruebas/rpgmaker/test_comandos_golden.py`), with the case
+`contador`: on 95, 48 at 99 and pictures 2 and 3 with "9" like the entrance
+scene; then the real jumps —the pages of events 15 and 16, called with
+`CallEvent`, which subtract 5 and call common 9—, the second from 12; a black
+tint and a `Teleport` to 6. Five new goldens: 99, 94, 7 without tens, 7
+untinted on black, and 6 without a counter.
 
-Del bytecode: con el compilador local, la petición de `release` con y sin la
-declaración, contra la respuesta de base, cambian **sólo 33 páginas del mapa
-95** —los 31 saltos, la paralela 56 y las dos escenas de entrada—.
+Of the bytecode: with the local compiler, `release`'s request with and without
+the declaration, against the base answer, **only 33 pages of map 95** change
+—the 31 jumps, parallel 56 and the two entrance scenes—.
 
-## Para taro
+## For taro
 
-* **Las goldens nuevas esperan tu visto bueno.** Lado a lado con el original,
-  en `/shared/capturas/2026-09-30-fortitude/`: `original-*` (Wine),
-  `ahora-contador-*` (la ROM) y `lado-a-lado-99.png` / `lado-a-lado-94.png`.
-  El "antes" es que no había nada: `antes-capitulo-95-llegada-sin-contador.png`.
-  Ninguna golden existente se movió.
-* **Al mergear hay que instalar** `events` y `cartridge`: `just -f
-  tools/justfile install events cartridge` (el runtime cambia, y el
-  compilador lee `[events] counters`).
-* Lo que no cubre `just pruebas`: la escena de entrada de verdad (EV0001) y el
-  "So... tired" de la paralela 56. Los dos compilan a `OP_COUNTER` —está en el
-  diff del bytecode— pero ninguna prueba los juega; jugarlos es lo que falta.
+* **The new goldens wait for your approval.** Side by side with the original,
+  in `/shared/capturas/2026-09-30-fortitude/`: `original-*` (Wine),
+  `ahora-contador-*` (the ROM) and `lado-a-lado-99.png` /
+  `lado-a-lado-94.png`. The "before" is that there was nothing:
+  `antes-capitulo-95-llegada-sin-contador.png`. No existing golden moved.
+* **When merging, install** `events` and `cartridge`: `just -f tools/justfile
+  install events cartridge` (the runtime changes, and the compiler reads
+  `[events] counters`).
+* What `just pruebas` does not cover: the real entrance scene (EV0001) and
+  parallel 56's "So... tired". Both compile to `OP_COUNTER` —it is in the
+  bytecode diff— but no test plays them; playing them is what is missing.

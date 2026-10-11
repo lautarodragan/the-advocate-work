@@ -1,72 +1,76 @@
 ---
-name: "Un mapa con un paso de encuentro rompe el ensamblado"
-description: "encounter_steps = 1 da enc_base 65536, que no entra en un .word: --test-encounters 1 no arma"
+name: "A map with one encounter step breaks the assembly"
+description: "encounter_steps = 1 gives enc_base 65536, which does not fit in a .word: --test-encounters 1 does not build"
 type: bug
 status: done
 assignee: taro
 ---
 
-Lo encontró Surubí el 2026-09-29 al pasar las tablas de pelea a Rust
-(`rust-el-piloto-de-la-pelea.md`): un mapa con `encounter_steps` 1
-da `enc_base` 65536, que no entra en un `.word`. El Python lo emitía igual y
-el Rust lo reproduce a propósito, porque su prueba fija la salida del
-Python. Ningún mapa de ABL tiene 1, pero `--test-encounters 1` rompería el
-ensamblado. Arreglarlo cambia la salida en ese caso, así que va aparte:
-decidir qué hace RM2k con un paso (¿un encuentro por paso?) y emitir algo
-que entre.
+Surubí found it on 2026-09-29 while moving the battle tables to Rust
+(`rust-el-piloto-de-la-pelea.md`): a map with `encounter_steps` 1 gives
+`enc_base` 65536, which does not fit in a `.word`. The Python emitted it
+anyway and the Rust reproduces it on purpose, because its test pins the
+Python's output. No ABL map has 1, but `--test-encounters 1` would break the
+assembly. Fixing it changes the output in that case, so it goes separately:
+decide what RM2k does with one step (one encounter per step?) and emit
+something that fits.
 
-## Tomada el 2026-09-29
+## Taken on 2026-09-29
 
-Hornero miró easyrpg (`Game_Player::UpdateEncounterSteps`): la chance por
-paso es `1/encounter_steps` por un factor que crece con lo caminado, así que
-con 1 da 100% o más: pelea en cada paso. No hay nada que decidir: la chance
-tiene que saturar en el máximo en vez de desbordar. Ningún mapa de ABL usa
-1, así que la ROM de ABL no cambia; el caso de prueba es
+Hornero looked at easyrpg (`Game_Player::UpdateEncounterSteps`): the chance
+per step is `1/encounter_steps` times a factor that grows with what has been
+walked, so with 1 it gives 100% or more: a battle on every step. There is
+nothing to decide: the chance has to saturate at the maximum instead of
+overflowing. No ABL map uses 1, so ABL's ROM does not change; the test case is
 `--test-encounters 1`.
 
-## Cómo lo usa la ROM, y dónde se arregla (Calandria, 2026-09-29)
+## How the ROM uses it, and where it is fixed (Calandria, 2026-09-29)
 
-`enc_base` es `65536 // pasos`, una palabra por registro de encuentros.
-`encounter_map` la copia a `ENC_BASE` al entrar al mapa, y
-`encounter_steps` —el cuerpo de `OP_ENCOUNTER_STEPS`— la pisa con la del
-operando. En cada paso, `encounter_step` sube de fila con `ENC_N` contra los
-umbrales, y corre la base según el `pmod` de la fila: a la derecha 4 a 1 veces
-en las filas 0 a 3, a la izquierda 1 a 4 en las 4 a 7. **Si el corrimiento a
-la izquierda acarrea, es "siempre"**, sin tirar el dado —el `PercentChance`
-con chance >= 1—; si no, pelea si el xorshift da menos que eso.
+`enc_base` is `65536 // pasos`, one word per encounter record.
+`encounter_map` copies it to `ENC_BASE` on entering the map, and
+`encounter_steps` —the body of `OP_ENCOUNTER_STEPS`— overwrites it with the
+operand's. On each step, `encounter_step` goes up a row with `ENC_N` against
+the thresholds, and shifts the base according to the row's `pmod`: to the
+right 4 to 1 times in rows 0 to 3, to the left 1 to 4 in rows 4 to 7. **If the
+shift to the left carries, it is "always"**, without rolling the die —the
+`PercentChance` with chance >= 1—; if not, a battle happens if the xorshift
+gives less than that.
 
-La cuenta con 1 paso: los umbrales son `ceil(fila / 100)` = 1, 1, 1, 1, 2, 2,
-2, así que en el primer paso —`ENC_N` = 1— ya está en la fila 4, `pmod` 2. En
-easyrpg: `ratio` = 100 / 1 = 100, la misma fila, `p = 1 * 2 * 1` = 2, siempre.
-En la ROM: `$FFFF << 1` acarrea, siempre. Y como `ENC_N` vuelve a 0 con cada
-encuentro y el paso siguiente lo pone en 1, **las filas 0 a 3 nunca se tiran
-con un paso**; si se tiraran, `$FFFF >> k` es `$10000 >> k` menos una parte en
-65536. Así que **alcanza con saturar en `$FFFF` en lo que se emite**, y el
-runtime no se toca. Con 2 pasos la base es `$8000`, que ya entra.
+The arithmetic with 1 step: the thresholds are `ceil(fila / 100)` = 1, 1, 1,
+1, 2, 2, 2, so on the first step —`ENC_N` = 1— it is already in row 4, `pmod`
+2. In easyrpg: `ratio` = 100 / 1 = 100, the same row, `p = 1 * 2 * 1` = 2,
+always. In the ROM: `$FFFF << 1` carries, always. And since `ENC_N` goes back
+to 0 with each encounter and the next step sets it to 1, **rows 0 to 3 are
+never rolled with one step**; if they were, `$FFFF >> k` is `$10000 >> k`
+minus one part in 65536. So **saturating at `$FFFF` in what is emitted is
+enough**, and the runtime is not touched. With 2 steps the base is `$8000`,
+which already fits.
 
-Son tres copias, y las tres saturan igual: `base` en `rm2k-snes-battle` (las
-tablas del mapa), `enc_base` en `rm2k-snes-events` (el operando de
-`ChangeEncounterSteps`, que con 1 **no compilaba**: `word` se negaba) y
-`enc_base` en `tools/port/events.py` (el modelo). La prueba de `battle` que
-fija el texto del Python, `the_encounters_of_the_game_are_the_pythons`,
-cambió a propósito: su juego tiene el mapa 5 con 1 paso. El hash nuevo es el
-del texto del Python con ese `.word` de 65536 a 65535 y nada más —verificado
-contra el texto guardado del piloto—.
+There are three copies, and all three saturate the same way: `base` in
+`rm2k-snes-battle` (the map's tables), `enc_base` in `rm2k-snes-events` (the
+operand of `ChangeEncounterSteps`, which with 1 **did not compile**: `word`
+refused) and `enc_base` in `tools/port/events.py` (the model). The `battle`
+test that pins the Python's text, `the_encounters_of_the_game_are_the_pythons`,
+changed on purpose: its game has map 5 with 1 step. The new hash is that of
+the Python's text with that `.word` going from 65536 to 65535 and nothing
+else —verified against the pilot's saved text—.
 
-La prueba de la ROM es un cartucho nuevo, `test-encounter-every-step`: el
-mapa 21 y el grupo del encuentro de `test-special`, con `--test-encounters
-1`. Su caso, `encuentro-cada-paso`, es una copia de `grupo-11-12-13` y no
-el mismo: un caso en dos cartuchos tiene que estar en el que lleva todos
-(`test_un_caso_que_esta_en_dos_corre_en_el_que_lleva_todos`), y ése no
-está en `release`. Así que va en `excluded_cases`. Antes del arreglo no ensamblaba (`Range error (65536
-not in [0..65535])`); después, `test_encuentro_cada_paso.py` camina para
-arriba y la pelea sale al primer paso. Con el cartucho cambiado a
-`test-special` la misma prueba da rojo con "8 pasos", que es el control.
+The ROM test is a new cartridge, `test-encounter-every-step`: map 21 and the
+encounter party of `test-special`, with `--test-encounters 1`. Its case,
+`encuentro-cada-paso`, is a copy of `grupo-11-12-13` and not the same one: a
+case in two cartridges has to be in the one that carries them all
+(`test_un_caso_que_esta_en_dos_corre_en_el_que_lleva_todos`), and that one is
+not in `release`. So it goes in `excluded_cases`. Before the fix it did not
+assemble (`Range error (65536 not in [0..65535])`); after it,
+`test_encuentro_cada_paso.py` walks up and the battle comes on the first step.
+With the cartridge changed to `test-special` the same test goes red with
+"8 pasos", which is the control.
 
-## Al mergear
+## When merging
 
-Reinstalar en el global `battle` y `events`: `just -f tools/justfile install
-battle events`. El cartucho nuevo lo arma `just cartuchos` solo. En `abl.sfc`
-no hay nada que jugar, porque sale igual. Lo único que queda para taro, si
-quiere, es mirar `rom/build/tests/encounter-every-step/prueba.sfc`, donde
-cada paso en el mapa 21 es una pelea.
+Reinstall `battle` and `events` in the global one: `just -f tools/justfile
+install battle events`. The new cartridge is built by `just cartuchos` on its
+own. In `abl.sfc` there is nothing to play, because it comes out the same. The
+only thing left for taro, if he wants, is to look at
+`rom/build/tests/encounter-every-step/prueba.sfc`, where every step on map 21
+is a battle.

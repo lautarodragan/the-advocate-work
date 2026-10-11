@@ -1,83 +1,87 @@
 ---
-name: "Todos los temas tienen pista de MSU-1"
-description: "Hoy sólo algunos temas tienen pista (PISTAS_MSU); taro quiere que todos, siempre"
+name: "Every theme has an MSU-1 track"
+description: "Today only some themes have a track (PISTAS_MSU); taro wants all of them, always"
 type: feature
 status: done
 ---
 
-taro, el 2026-09-26: **todos los temas siempre deberían tener su versión
-MSU-1**. Hoy la tienen los de `PISTAS_MSU` (`tools/audio/snes_music.py`), y
-los informes de audio de estos días hablaban de "los temas que tienen pista"
-como si fuera normal que algunos no.
+taro, on 2026-09-26: **every theme should always have its MSU-1 version**.
+Today those in `PISTAS_MSU` (`tools/audio/snes_music.py`) have it, and the
+audio reports of these days talked about "the themes that have a track" as if
+it were normal for some not to.
 
-Qué implica:
+What it implies:
 
-* Renderizar la pista de cada tema que no la tiene (`tools/audio/msu.py`, con
-  fluidsynth y el SoundFont, o el reemplazo de audio si hay), y que la lista
-  deje de escribirse a mano: **todo tema que entra en el cartucho tiene pista**,
-  y una prueba (o una aserción del conversor) que falle si alguno no la tiene.
-* El número de pista de cada tema lo decide hoy `PISTAS_MSU`; con todos, la
-  numeración puede salir del índice del tema.
-* Consecuencias en la ROM: con MSU-1 **ninguna** muestra de música se sube
-  (`done/` o `con-msu-1-no-se-suben-las-muestras-del-tema.md`), así
-  que la ARAM entera queda para los efectos; conviene hacerlo **después** de la
-  tarea de los efectos con MSU-1, o coordinado con ella.
-* Las pistas van a `/shared/msu/` con `just entregar --actualizar-msu`
-  (cambia la huella).
-* Tocar `msu.py` rehace todas las pistas: se hace una vez.
+* Rendering the track of each theme that does not have one
+  (`tools/audio/msu.py`, with fluidsynth and the SoundFont, or the audio
+  replacement if there is one), and the list no longer being written by hand:
+  **every theme that goes into the cartridge has a track**, and a test (or an
+  assertion in the converter) that fails if any does not have one.
+* Each theme's track number is decided today by `PISTAS_MSU`; with all of
+  them, the numbering can come from the theme's index.
+* Consequences in the ROM: with MSU-1 **no** music sample is uploaded
+  (`done/` or `con-msu-1-no-se-suben-las-muestras-del-tema.md`), so the whole
+  ARAM is left for the sound effects; it is better done **after** the task of
+  the sound effects with MSU-1, or coordinated with it.
+* The tracks go to `/shared/msu/` with `just entregar --actualizar-msu` (the
+  fingerprint changes).
+* Touching `msu.py` redoes all the tracks: it is done once.
 
 # Status
 
-**Hecho el 2026-09-26, falta que taro lo escuche.** Todo tema del cartucho
-tiene pista: en `release` son 32, los 22 de antes y diez nuevos.
+**Done on 2026-09-26, taro still has to listen to it.** Every theme in the
+cartridge has a track: in `release` there are 32, the 22 from before and ten
+new ones.
 
-**La numeración sale de `Music/` del juego**, no del cartucho: el número de
-un tema es su lugar en la lista ordenada —sin mayúsculas, desde 1— de los
-`.mid` y `.wav` de `Music/` (`pista_msu` en `snes_music.py`). El índice del
-tema en el cartucho lo decide el orden en que aparecen los `PlayBGM` al
-compilar, así que un mapa nuevo habría corrido los números de los que vienen
-detrás, y cada corrimiento son cientos de megas que rehacer y que volver a
-copiar a la tarjeta. `Music/` es del juego original y no cambia: un tema
-nuevo es un archivo nuevo, y los demás quedan donde estaban. Los números
-salen salteados (2, 4, 15 … 224), y al MSU-1 le da igual.
+**The numbering comes from the game's `Music/`**, not from the cartridge: a
+theme's number is its place in the sorted list —case-insensitive, from 1— of
+the `.mid` and `.wav` files in `Music/` (`pista_msu` in `snes_music.py`). The
+theme's index in the cartridge is decided by the order in which the `PlayBGM`s
+appear when compiling, so a new map would have shifted the numbers of the ones
+that come after, and each shift is hundreds of megabytes to redo and to copy
+to the card again. `Music/` belongs to the original game and does not change:
+a new theme is a new file, and the others stay where they were. The numbers
+come out with gaps (2, 4, 15 … 224), and the MSU-1 does not care.
 
-Lo que costó: **renumerar una vez los 22 de antes**. Las pistas de
-`/shared/msu/` hay que reemplazarlas enteras con `just entregar
---actualizar-msu` —la huella cambia—: con esta ROM, las `abl-1` a `abl-22`
-de antes suenan temas equivocados.
+What it cost: **renumbering the 22 from before once**. The tracks in
+`/shared/msu/` have to be replaced entirely with `just entregar
+--actualizar-msu` —the fingerprint changes—: with this ROM, the `abl-1` to
+`abl-22` from before play the wrong themes.
 
-Cómo se arma ahora:
+How it is built now:
 
-* El conversor le pone su `pista` a cada tema (`build_varios`), la escribe en
-  la `tema_msu` de la ROM y en el `musica.json` de al lado.
-* `msu.py` arma **las del `musica.json`** y borra los `<rom>-N.pcm` que ya no
-  son de ningún tema, porque `just entregar` copia todos los que encuentra.
-  Un tema que en el juego es un WAV tiene pista también, por ffmpeg (hoy no
-  hay ninguno en el cartucho).
-* `cartuchos.py` arma las pistas **detrás** de la conversión de `release`,
-  y no a la par: las necesita del `musica.json`.
+* The converter gives each theme its `pista` (`build_varios`), writes it into
+  the ROM's `tema_msu` and into the `musica.json` next to it.
+* `msu.py` builds **those in `musica.json`** and deletes the `<rom>-N.pcm`
+  that no longer belong to any theme, because `just entregar` copies every
+  one it finds. A theme that is a WAV in the game has a track too, via ffmpeg
+  (today there is none in the cartridge).
+* `cartuchos.py` builds the tracks **after** the `release` conversion, and
+  not alongside it: it needs them from `musica.json`.
 
-**La prueba** es `test_todo_tema_tiene_su_pista` (`pruebas/abl/test_msu.py`):
-todo tema con música en `Music/` tiene número en `musica.json`, el mismo en
-la `tema_msu` de la ROM, y su `.pcm` al lado; y ningún `.pcm` sobra. Se la
-vio fallar sacando `abl-148.pcm` a mano, agregando un `abl-5.pcm` de más y
-poniendo en `null` la pista de `prepara` en el `musica.json`.
+**The test** is `test_todo_tema_tiene_su_pista` (`pruebas/abl/test_msu.py`):
+every theme with music in `Music/` has a number in `musica.json`, the same one
+in the ROM's `tema_msu`, and its `.pcm` next to it; and no `.pcm` is left
+over. It was seen failing by removing `abl-148.pcm` by hand, adding an extra
+`abl-5.pcm` and setting `prepara`'s track to `null` in `musica.json`.
 
-**Las nuevas** —`11h035`, `bubstix`, `Deflector1`, `Fire_Mustang…`,
+**The new ones** —`11h035`, `bubstix`, `Deflector1`, `Fire_Mustang…`,
 `MML2_MotherZone`, `pn28year`, `prepara`, `T_ProjectJustice_DiscLoad`,
-`Tnt07`, `wb3town`— pesan 177 MB juntas. El volumen, por pico como las demás
-(ver `msu.py`); la mediana del nivel, medida como el RMS de ventanas de 1 s
-en el percentil 90, da lo mismo en las nuevas que en las de antes, y todas
-caen dentro del rango de las 22. Las 22 re-renderizadas salen byte por byte
-iguales a las de antes, con otro nombre.
+`Tnt07`, `wb3town`— weigh 177 MB together. The volume, by peak like the
+others (see `msu.py`); the median level, measured as the RMS of 1 s windows at
+the 90th percentile, gives the same in the new ones as in the ones from
+before, and all of them fall within the range of the 22. The 22 re-rendered
+ones come out byte for byte identical to the ones from before, with another
+name.
 
-**Lo que cambió en los efectos de calidad con MSU-1**, contra `main`
-(`ee55226`), en la salida del conversor:
+**What changed in the quality of the sound effects with MSU-1**, against
+`main` (`ee55226`), in the converter's output:
 
     paquete 121: 5000 Hz: 1                       -> 22050 Hz: 1
     paquete 261: 22050 Hz: 3, 6000 Hz: 3, 5500: 1 -> 22050 Hz: 3, 18000 Hz: 4
     paquete  52: 22050 Hz: 1, 20000 Hz: 2         -> 22050 Hz: 3
 
-Sin MSU-1 no cambia nada: contra la de `main`, la ROM difiere en 134 bytes,
-y todos caen en la `tema_msu`, en las tablas de los efectos del `.msu`
-(`se_msu_filas`, `se_msu_altura`) y en su firma (`msu_datos_firma`).
+Without MSU-1 nothing changes: against `main`'s, the ROM differs in 134
+bytes, and all of them fall in `tema_msu`, in the tables of the `.msu`'s
+sound effects (`se_msu_filas`, `se_msu_altura`) and in its signature
+(`msu_datos_firma`).

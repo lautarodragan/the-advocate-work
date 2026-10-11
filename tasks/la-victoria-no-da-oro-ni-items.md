@@ -1,76 +1,77 @@
 ---
-name: "La victoria no da oro ni ítems"
-description: "RM2k da y cuenta el oro y los ítems al ganar; el port todavía no"
+name: "Victory gives neither gold nor items"
+description: "RM2k gives and reports the gold and the items on winning; the port does not yet"
 type: feature
 status: done
 ---
 
-Quedó afuera de `la-victoria-avisa-la-experiencia.md` (2026-09-26): en
-RM2k, al ganar, la misma página de la victoria cuenta el oro ganado y los
-ítems que dejaron los enemigos (`ProcessSceneActionVictory` en EasyRPG), y el
-grupo los recibe. El port todavía no da ni oro ni ítems al ganar. Los datos
-están en las tropas y los enemigos del LDB (`gold`, `drop_id`,
-`drop_probability`); el azar de los ítems tiene que usar el generador de la
-pelea (ver `ENC_SEMILLA` y la semilla propia de la pelea).
+It was left out of `la-victoria-avisa-la-experiencia.md` (2026-09-26): in
+RM2k, on winning, the same victory page reports the gold won and the items the
+enemies dropped (`ProcessSceneActionVictory` in EasyRPG), and the party
+receives them. The port does not give gold or items on winning yet. The data
+is in the LDB's troops and enemies (`gold`, `drop_id`, `drop_probability`);
+the items' randomness has to use the battle's generator (see `ENC_SEMILLA` and
+the battle's own seed).
 
-## Cómo quedó, el 2026-09-27
+## How it ended up, on 2026-09-27
 
-Al ganar, `ba_vic_empezar` hace lo que `ProcessSceneActionVictory` hace en su
-primer sub-estado, en el mismo orden: reparte la experiencia, suma el oro de
-la tropa —`GetMoney`, topado en ORO_MAX como `GainGold`— y tira el botín
-—`GenerateDrops`—: por cada enemigo, en el orden de la tropa, **un tiro si
-tiene ítem**, con `ba_pct` sobre la semilla de la pelea. `ChanceOf(n, 100)` es
-`GetRandomNumber(1, 100) <= n`, que con nuestro azar es lo mismo que
-`PercentChance`; el de chance 100 se tira igual. Lo que sale suma uno al
-inventario, topado en 99.
+On winning, `ba_vic_empezar` does what `ProcessSceneActionVictory` does in its
+first sub-state, in the same order: it hands out the experience, adds the
+troop's gold —`GetMoney`, capped at ORO_MAX like `GainGold`— and rolls the
+loot —`GenerateDrops`—: for each enemy, in the troop's order, **one roll if it
+has an item**, with `ba_pct` on the battle's seed. `ChanceOf(n, 100)` is
+`GetRandomNumber(1, 100) <= n`, which with our randomness is the same as
+`PercentChance`; the one with chance 100 is rolled anyway. What comes out adds
+one to the inventory, capped at 99.
 
-El modelo tira lo mismo: `batalla.Batalla.tirar_el_botin`, que `jugar_turno`
-llama al ganar, después del último golpe, y es el punto 5 del orden de azar
-de la clase. Como es lo último que tira la pelea, no le mueve nada a ninguna
-predicción anterior.
+The model rolls the same: `batalla.Batalla.tirar_el_botin`, which
+`jugar_turno` calls on winning, after the last hit, and it is point 5 of the
+class's randomness order. Since it is the last thing the battle rolls, it does
+not move anything in any earlier prediction.
 
-La primera página cuenta ahora, detrás de la victoria y la experiencia, el
-oro —" You found 285Cr credits!", que es `gold_recieved_a`, un espacio, el
-número pegado a `gold` y `gold_recieved_b`, como lo arma RM2k sin
-placeholders— y un renglón por ítem, "Healing Draught-HP obtained!"
-(`item_recieved` pegado al nombre, sin espacio: el espacio es de RM2k3). Son
-renglones del mismo mensaje, así que lo que no entra en los cuatro sigue en
-otra página con A, igual que las habilidades de un actor (`ba_vic_linea`).
-Con la victoria partida en dos renglones, la experiencia y el oro llenan la
-primera página y los ítems van siempre en la segunda.
+The first page now reports, after the victory and the experience, the gold
+—" You found 285Cr credits!", which is `gold_recieved_a`, a space, the number
+stuck to `gold` and `gold_recieved_b`, as RM2k builds it without
+placeholders— and one line per item, "Healing Draught-HP obtained!"
+(`item_recieved` stuck to the name, without a space: the space is RM2k3's).
+They are lines of the same message, so what does not fit in the four goes on
+another page with A, same as an actor's skills (`ba_vic_linea`). With the
+victory split in two lines, the experience and the gold fill the first page
+and the items always go on the second.
 
-Lo del conversor:
+The converter's part:
 
-* `tropa_oro`, `enemigo_botin` y `enemigo_botin_pct`, en RODATA con su
+* `tropa_oro`, `enemigo_botin` and `enemigo_botin_pct`, in RODATA with their
   `.bloque`;
-* los ítems que puede soltar algún enemigo de las tropas del cartucho entran
-  en la lista de ítems (`items_del_botin`), para tener su nombre;
-* `cobrar_la_victoria` cobra también el renglón del oro y el de cada ítem que
-  se puede soltar.
+* the items that some enemy of the cartridge's troops can drop go into the
+  item list (`items_del_botin`), to have their name;
+* `cobrar_la_victoria` also enforces the gold line and the line of each item
+  that can be dropped.
 
-La suma del oro con tope salió de la venta de la tienda a una rutina,
-`oro_sumar`, que usan las dos.
+Adding the gold with a cap moved out of the shop's sale into a routine,
+`oro_sumar`, which both use.
 
-RAM lejana: `$7E79E0-$7E79E8` (`BA_BOTIN*` en `ram_lejana.s`), del rango
-repartido. Ningún opcode.
+Far RAM: `$7E79E0-$7E79E8` (`BA_BOTIN*` in `ram_lejana.s`), from the range
+handed out. No opcode.
 
-Lo cubre `pruebas/rpgmaker/test_victoria.py` con el caso nuevo `pelea-222`,
-tres Crazed Marauder: la semilla la elige el modelo —la primera con la que
-gana sin bajas y los tres tiros no salen iguales— y se escribe en `BA_SEM` al
-abrir la pelea, con 1 HP a cada enemigo. La prueba compara el oro, el
-inventario y las dos primeras páginas contra el modelo y los renglones de
-`pantallas`, y otra cobra el tope de 99.
+It is covered by `pruebas/rpgmaker/test_victoria.py` with the new case
+`pelea-222`, three Crazed Marauders: the model picks the seed —the first one
+with which it wins without casualties and the three rolls do not come out the
+same— and it is written into `BA_SEM` when the battle opens, with 1 HP for
+each enemy. The test compares the gold, the inventory and the first two pages
+against the model and the lines from `pantallas`, and another one enforces the
+cap of 99.
 
-## Qué tiene que mirar taro
+## What taro has to look at
 
-En Lashe City ningún enemigo suelta ítems —las tropas de `release` que
-sueltan son las de los encuentros de los mapas de prueba, que no se
-alcanzan jugando—, así que lo que se ve es **el oro**: después de cualquier
-pelea con enemigos que den oro, la primera página dice " You found NCr
-credits!" y el oro del menú sube eso. El droide del mapa 2 da cero y no lo
-dice, que es lo de RM2k (`if (money > 0)`). Los ítems en la página sólo se
-ven con el caso `pelea-222`.
+In Lashe City no enemy drops items —the `release` troops that drop are those
+of the test maps' encounters, which cannot be reached playing—, so what is
+seen is **the gold**: after any battle with enemies that give gold, the first
+page says " You found NCr credits!" and the menu's gold goes up by that. The
+droid on map 2 gives zero and does not say it, which is RM2k's behaviour
+(`if (money > 0)`). The items on the page are only seen with the case
+`pelea-222`.
 
-* Que la página del oro se lea bien y que la A la pase como antes.
-* Que el oro del menú después de pelear sea el de antes más lo que dijo la
-  página.
+* That the gold page reads well and that A moves past it as before.
+* That the menu's gold after fighting is the previous one plus what the page
+  said.

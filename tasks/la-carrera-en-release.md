@@ -1,66 +1,67 @@
 ---
-name: "La carrera en release"
-description: "La persecución en auto, que hoy no entra en ninguna ROM"
+name: "The race in release"
+description: "The car chase, which today does not go into any ROM"
 type: feature
 status: done
 ---
 
-# Qué
+# What
 
-Meter la persecución en auto —los mapas 49 a 54— en `release`, cuando se la
-encare. (Hasta el 2026-09-25 decía "y en `test-main`": se juntaron.)
+Put the car chase —maps 49 to 54— into `release`, when it is taken on. (Until
+2026-09-25 it said "and into `test-main`": they were merged.)
 
 # Status
 
-**Entró el 2026-09-27**, con el hito 1 de `la-carrera-y-lo-que-sigue.md`: ver
-`carrera-1-entra-y-se-corre.md`. Lo de abajo es lo que se sabía antes.
+**It went in on 2026-09-27**, with milestone 1 of
+`la-carrera-y-lo-que-sigue.md`: see `carrera-1-entra-y-se-corre.md`. What is
+below is what was known before.
 
-Hasta el 2026-09-24 tenía su propia ROM, `just build carrera` —antes
-`demo-carrera`—, armada aparte. taro la sacó ese día: fue un experimento para
-probar ese caso, y no tiene sentido adelantarse tanto. Se retoma cuando entre
-en `release`.
+Until 2026-09-24 it had its own ROM, `just build carrera` —formerly
+`demo-carrera`—, built separately. taro removed it that day: it was an
+experiment to try that case, and it makes no sense to get so far ahead. It is
+picked up again when it goes into `release`.
 
-Lo que sigue es el comentario que tenía la receta, que es lo que costó
-averiguar. La receta no se guarda: arrancaba en el mapa 49 plantando al héroe
-con `--inicio 1 26`, y ese flag del conversor se sacó el 2026-09-25. La
-carrera se va a probar **llegando al mapa normalmente**, por el `Teleport` del
-juego, no arrancando en una celda elegida desde afuera.
+What follows is the comment the recipe had, which is what took effort to find
+out. The recipe is not kept: it started on map 49 placing the hero with
+`--inicio 1 26`, and that converter flag was removed on 2026-09-25. The race
+is going to be tested **by reaching the map normally**, through the game's
+`Teleport`, not by starting on a cell chosen from outside.
 
-# Lo que se sabía
+# What was known
 
-Los siete mapas son los de la escena: el 49, el 52 y el 54 son las tres
-vueltas, el 50 es la sala de choque con el "vamos de nuevo", el 51 el puente
-levantado, y el 53 el final.
+The seven maps are the scene's: 49, 52 and 54 are the three laps, 50 is the
+crash room with the "let's go again", 51 the raised bridge, and 53 the ending.
 
-**Con `--grupo 14`, Talan, que es con quien el juego llega hasta acá.** Al
-entrar al 49, `RaceController1` saca del grupo a los actores que pueden estar
-ahí y mete a `CarRED` o a `CarBLUE` según el switch que él mismo prende, así
-que el héroe **es el auto**. Con el grupo de pruebas puesto, Kersh quedaría
-adentro —no está en esa lista— y el gráfico saldría mal; con el grupo inicial
-de la base, el héroe se dibuja **sin gráfico** hasta que el `PanScreen` de
-`RaceController1` termina y recién ahí entra el auto, que es un síntoma que
-taro reportó jugando.
+**With `--grupo 14`, Talan, who is the one the game gets here with.** On
+entering 49, `RaceController1` removes from the party the actors that may be
+there and adds `CarRED` or `CarBLUE` depending on the switch it turns on
+itself, so the hero **is the car**. With the test party set, Kersh would stay
+inside —he is not on that list— and the graphic would come out wrong; with the
+database's initial party, the hero is drawn **without a graphic** until
+`RaceController1`'s `PanScreen` finishes and only then does the car come in,
+which is a symptom taro reported while playing.
 
-**La celda por la que se entra en el juego es la (1, 26)**, y no es
-cosmético. Sin ella el conversor planta al héroe en el tile abierto más cercano
-al centro, que en este mapa cae en una fila donde **no hay ni un obstáculo** ni
-ninguno de los eventos que saltan al mapa siguiente: el auto podía cruzar las
-500 celdas del mapa sin chocar con nada y sin llegar a ninguna parte. La celda
-sale del `Teleport [49, 1, 26]` del evento 3 del mapa 36, que es por donde el
-juego entra, así que llegando al mapa normalmente se cae ahí sin hacer nada.
+**The cell through which the game enters is (1, 26)**, and it is not
+cosmetic. Without it the converter places the hero on the open tile nearest to
+the centre, which on this map lands on a row where **there is not a single
+obstacle** nor any of the events that jump to the next map: the car could
+cross the map's 500 cells without hitting anything and without getting
+anywhere. The cell comes from the `Teleport [49, 1, 26]` of event 3 on map 36,
+which is where the game enters, so reaching the map normally lands there
+without doing anything.
 
-**El switch 171 es lo que la hace arrancar** —lo prende la página de prueba
-`pruebas/casos/switch-171.json`—, y hay que saber por qué. El
-evento 1 del mapa 49 tiene dos páginas automáticas, una por switch, y la que
-arma el auto pide el 171. Con los dos apagados **ninguna es la activa** y el
-evento no hace nada, así que el héroe se queda siendo `DummyHero`, cuyo sprite
-es una celda vacía a propósito: pantalla sin auto. Quien lo prende en el juego
-es `RaceControllerZERO`, la intro de Talan con el cartel de los controles; esa
-página compila, y el switch sigue puesto a mano sólo porque nadie volvió a
-mirar esa escena desde entonces: sacarlo es una prueba a mano de toda la intro.
+**Switch 171 is what makes it start** —the test page
+`pruebas/casos/switch-171.json` turns it on—, and one has to know why. Event 1
+on map 49 has two autostart pages, one per switch, and the one that sets up the
+car asks for 171. With both off **neither is the active one** and the event
+does nothing, so the hero stays as `DummyHero`, whose sprite is an empty cell
+on purpose: screen without a car. What turns it on in the game is
+`RaceControllerZERO`, Talan's intro with the controls sign; that page compiles,
+and the switch is still set by hand only because nobody looked at that scene
+again since then: removing it is a manual test of the whole intro.
 
-**Y la carrera no corre sola**, que es lo primero que se nota jugando: el héroe
-camina libre y a la velocidad que le dejó `RaceController1`. Quien la corre es
-`RaceController2`, la única página paralela del 49 que no compila, y lo que la
-corta es el `KeyInputProc` **sin espera**; el porqué de que ese comando siga
-sin aceptarse está en `KEY_INPUT_PROC` en eventos.py.
+**And the race does not run on its own**, which is the first thing one notices
+playing: the hero walks freely and at the speed `RaceController1` left him.
+What runs it is `RaceController2`, the only parallel page of 49 that does not
+compile, and what stops it is the `KeyInputProc` **without wait**; the reason
+that command is still not accepted is in `KEY_INPUT_PROC` in eventos.py.

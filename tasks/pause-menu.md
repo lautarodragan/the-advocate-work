@@ -1,207 +1,205 @@
 ---
-name: "Menú de pausa"
-description: "B abre el menú, que es Scene_Menu de RM2k"
+name: "Pause menu"
+description: "B opens the menu, which is RM2k's Scene_Menu"
 status: done
 ---
 
-# El menú de pausa
+# The pause menu
 
-**B abre el menú**, que es `Scene_Menu` de RM2k: las cinco
-órdenes a la izquierda —`Use Item`, `Tech Skill`, `Equipment`, `Save`, `End
-Game`, con los términos del LDB—, el oro abajo y el grupo a la derecha, con la
-cara, el nombre, el nivel —el de su `initial_level`, como en las ranuras—, el
-estado y los HP. **Hacen algo tres órdenes** —`MENU_HECHAS` en `titulo.py`—:
-los ítems, el equipo y guardar. Guardar abre la pantalla de
-ranuras en modo guardar y, elija o cancele, vuelve al menú con el cursor en
-Save, como `Scene_Save` vuelve a `Scene_Menu`. Las otras dos van en el
-color 3 del sistema, el de "no se puede", y A no hace nada con ellas: las
-técnicas son un paso que sigue, y terminar el juego pide volver al
-título sin reiniciar el SPC700.
+**B opens the menu**, which is RM2k's `Scene_Menu`: the five commands on the
+left —`Use Item`, `Tech Skill`, `Equipment`, `Save`, `End Game`, with the LDB's
+terms—, the gold at the bottom and the party on the right, with the face, the
+name, the level —that of their `initial_level`, as in the slots—, the status
+and the HP. **Three commands do something** —`MENU_HECHAS` in `titulo.py`—:
+the items, the equipment and saving. Saving opens the slots screen in save
+mode and, whether one chooses or cancels, returns to the menu with the cursor
+on Save, as `Scene_Save` returns to `Scene_Menu`. The other two go in the
+system's colour 3, the "cannot" one, and A does nothing with them: the skills
+are a step that follows, and ending the game asks for returning to the title
+without resetting the SPC700.
 
-**La geometría es nuestra**, no la de RM2k: allá son 320x240 con ventanas, acá
-256x224 sobre fondo negro como la pantalla de ranuras, sin el título del
-actor, la experiencia ni los SP, y el oro con una cifra por celda y no a los 6
-pixeles de la fuente, para que la ROM las escriba de a una sin armar tiles. Es
-cosmético y está declarado.
+**The geometry is ours**, not RM2k's: there it is 320x240 with windows, here
+256x224 on a black background like the slots screen, without the actor's
+title, the experience or the SP, and the gold with one digit per cell and not
+at the font's 6 pixels, so that the ROM writes them one at a time without
+building tiles. It is cosmetic and declared.
 
-**Los HP de ahora se escriben corriendo.** El bloque de la fila lo dibuja el
-conversor una vez, así que cualquier número que llevara adentro sería el del
-día que se convirtió: con los HP ahí el menú muestra siempre el máximo del
-nivel por más que una pelea los baje, y la comparación de pixeles no lo ve
-porque `render_menu` hornea el mismo número. Las tres cifras las escribe
-`menu_hp_escribir` desde `FAR_HP`, con las mismas celdas de una por cifra que
-el oro y por la misma razón. El "/máximo" de al lado tampoco va horneado desde
-el 2026-09-20, pero por otro motivo: cambia de un actor a otro, y todo lo que
-cambia con el actor se compone con glifos. Vale para las dos pantallas que
-comparten el panel, el menú y la elección de actor, porque las dos pasan por
-`menu_grupo_pintar`.
+**The current HP are written at run time.** The row's block is drawn by the
+converter once, so any number it carried inside would be the one from the day
+it was converted: with the HP there the menu always shows the level's maximum
+no matter how much a battle lowers them, and the pixel comparison does not see
+it because `render_menu` bakes the same number. The three digits are written
+by `menu_hp_escribir` from `FAR_HP`, with the same one-cell-per-digit layout as
+the gold and for the same reason. The "/maximum" next to it has not been baked
+since 2026-09-20 either, but for another reason: it changes from one actor to
+another, and everything that changes with the actor is composed with glyphs.
+It holds for the two screens that share the panel, the menu and the actor
+choice, because both go through `menu_grupo_pintar`.
 
-Las cifras caen alineadas con las del oro sin tocar nada: las dos líneas se
-dibujan a dos pixeles del borde de arriba de su celda. Y el precio de las
-celdas de 8 pixeles es el mismo que ya se paga en el oro. Todo lo demás sale de
-`titulo.py`: `render_menu` es la referencia y el conversor emite **los mismos
-bloques de celdas**, en el mismo banco de tiles y la misma paleta que la
-pantalla de ranuras —las caras son las mismas y guardar se abre desde el menú—.
-Las órdenes en gris llevan su propia paleta de BG2: el color 3 es un degradé y
-con el del texto sumaban 18 colores, así que a las caras les quedan seis
-paletas.
+The digits land aligned with the gold's without touching anything: both lines
+are drawn two pixels from the top edge of their cell. And the price of the
+8-pixel cells is the same one already paid for the gold. Everything else comes
+from `titulo.py`: `render_menu` is the reference and the converter emits **the
+same cell blocks**, in the same tile bank and the same palette as the slots
+screen —the faces are the same and saving opens from the menu—. The grey
+commands carry their own BG2 palette: colour 3 is a gradient and with the
+text's they added up to 18 colours, so the faces are left with six palettes.
 
-### Lo que depende del actor se compone con glifos
+### What depends on the actor is composed with glyphs
 
-**El nombre, el nivel y los HP máximos no se hornean**: la ROM los escribe de
-a una letra por celda con los glifos de `ranura_glifo_celdas`, que son las
-mismas dos celdas por carácter que ya usaban el oro y los HP de ahora. Es una
-decisión de presupuesto, medida: el banco de tiles de estas dos pantallas es
-**uno solo y está deduplicado**, así que lo que se hornea por actor no lo
-comparte con nadie, y el texto de un actor eran unos siete tiles marginales
-cada uno. Con 12 actores el banco juntaba 446 de los 448 que entran en la
-VRAM; con el actor 21 adentro, 462 —por eso sus casos vivían en un cartucho
-aparte—; y los 52 actores con cara del juego entero, 751. Componiendo, lo que
-se paga una vez son las letras que los nombres usan y lo único que sigue
-costando por actor es su cara: los mismos 12 actores juntan 364 tiles, y el 21
-entra.
+**The name, the level and the maximum HP are not baked**: the ROM writes them
+one letter per cell with the glyphs of `ranura_glifo_celdas`, which are the
+same two cells per character that the gold and the current HP already used. It
+is a budget decision, measured: the tile bank of these two screens is **a
+single one and it is deduplicated**, so what is baked per actor is shared with
+nobody, and an actor's text was some seven marginal tiles each. With 12 actors
+the bank gathered 446 of the 448 that fit in VRAM; with actor 21 inside, 462
+—that is why its cases lived in a separate cartridge—; and the whole game's 52
+actors with a face, 751. Composing, what is paid once are the letters the names
+use and the only thing that still costs per actor is their face: the same 12
+actors gather 364 tiles, and 21 fits.
 
-Subir el texto **a demanda** en vez de componerlo se midió y no servía: una
-cara residente cuesta 8,4 tiles marginales contra 13 de una ranura a demanda,
-y el texto suelto de un actor son de 22 a 39 tiles contra los 7 que cuesta
-estando adentro del banco deduplicado.
+Uploading the text **on demand** instead of composing it was measured and did
+not work: a resident face costs 8.4 marginal tiles against 13 for an on-demand
+slot, and an actor's loose text is 22 to 39 tiles against the 7 it costs being
+inside the deduplicated bank.
 
-Lo que se paga, y está declarado como cosmético: las letras compuestas van a 8
-pixeles de paso y no a los 6 de la fuente, así que el nombre, el nivel y el
-máximo salen un poco más anchos que si se hornearan. Es el mismo precio que ya
-pagaban el oro, los HP y las pantallas de ítems, equipo y tienda. Lo que no
-depende del actor —"File 1", "- Empty -", el término del nivel, "Normal",
-"HP", las órdenes— se sigue horneando con la fuente, y por eso al hacer el
-cambio sólo se movieron las dos goldens del menú.
+What is paid, and it is declared as cosmetic: the composed letters go at an
+8-pixel step and not at the font's 6, so the name, the level and the maximum
+come out a little wider than if they were baked. It is the same price the gold,
+the HP and the items, equipment and shop screens already paid. What does not
+depend on the actor —"File 1", "- Empty -", the level term, "Normal", "HP",
+the commands— is still baked with the font, and that is why on making the
+change only the menu's two goldens moved.
 
-De qué sale cada tira: `ranura_actor_texto` es una fila de 32 bytes ASCII por
-actor —el nombre, las dos cifras del nivel y el máximo detrás de su barra—,
-emitida por el conversor fuera del banco 0. `ranura_texto_de` arma el puntero
-y `ranura_texto_escribir` escribe primero las celdas de arriba de todas las
-letras, que van seguidas en la VRAM, y después las de abajo, que es lo mismo
-que hace `texto_escribir` en la pantalla de ítems con su propia tabla de
-glifos.
+What each strip comes from: `ranura_actor_texto` is a row of 32 ASCII bytes
+per actor —the name, the level's two digits and the maximum behind its slash—,
+emitted by the converter outside bank 0. `ranura_texto_de` builds the pointer
+and `ranura_texto_escribir` writes first the upper cells of all the letters,
+which go consecutively in VRAM, and then the lower ones, which is the same
+thing `texto_escribir` does on the items screen with its own glyph table.
 
-**La séptima cara se cuelga de una paleta prestada.** La lista de caras no es la
-del grupo sino la de todos los que algún `ChangePartyMembers` de los mapas de la
-ROM pueda meter, y con Lashe City entera son ocho: los cuatro de la intro más
-Arden, Saldra, el Gang Member de los Rat Tracks y AG7-17. Cada color de la cara
-que sobra va al más cercano por luma de la paleta a la que menos colores le
-falte, que es lo que `cabe` hace con los sprites y por la misma razón: un
-personaje con colores raros es un error visible y un mapa que no entra es un
-mapa menos. Se ve en el informe del conversor, que las nombra.
+**The seventh face hangs from a borrowed palette.** The list of faces is not
+the party's but that of everyone some `ChangePartyMembers` of the ROM's maps
+can bring in, and with the whole of Lashe City there are eight: the four from
+the intro plus Arden, Saldra, the Rat Tracks' Gang Member and AG7-17. Each
+colour of the leftover face goes to the closest by luma of the palette missing
+the fewest colours, which is what `cabe` does with the sprites and for the
+same reason: a character with odd colours is a visible error and a map that
+does not fit is one map less. It is seen in the converter's report, which
+names them.
 
-**Cuándo se abre es lo de RM2k.** `Game_Player::Update` anota el pedido
-—`menu_calling`— si B se aprieta con el menú permitido, sin mensaje y sin
-página corriendo; `UpdateNextMovementAction` lo atiende con el héroe quieto:
-con una página corriendo lo tira, con un mensaje lo deja esperando, y si no,
-abre el menú antes de mirar la cruceta. O sea que B a mitad de un paso abre el
-menú al terminarlo. En la ROM el pedido es el bit 7 de `FAR_ACCESO`,
-`pedir_menu` lo anota después de `move_hero` y `move_hero` lo atiende; un
-teletransporte lo tira, como `MoveTo`. Y el B que cancela una elección se
-consume ahí mismo: en RM2k la ventana procesa la tecla después del héroe, y
-acá la elección corre antes que `pedir_menu`. Lo mismo al cerrar el menú y la
-pantalla de ranuras: el B que cerró no le llega a nadie más.
+**When it opens is RM2k's behaviour.** `Game_Player::Update` notes the request
+—`menu_calling`— if B is pressed with the menu allowed, without a message and
+without a page running; `UpdateNextMovementAction` serves it with the hero
+still: with a page running it drops it, with a message it leaves it waiting,
+and otherwise it opens the menu before looking at the D-pad. That is, B in the
+middle of a step opens the menu on finishing it. In the ROM the request is bit
+7 of `FAR_ACCESO`, `pedir_menu` notes it after `move_hero` and `move_hero`
+serves it; a teleport drops it, like `MoveTo`. And the B that cancels a choice
+is consumed right there: in RM2k the window processes the key after the hero,
+and here the choice runs before `pedir_menu`. The same on closing the menu and
+the slots screen: the B that closed reaches nobody else.
 
-`ChangeSaveAccess` y `ChangeMainMenuAccess` **se honran**: dejaron de estar
-entre los comandos ignorados, compilan a `OP_ACCESS` y apagan o prenden los
-bits 0 y 1 de `FAR_ACCESO`, que viaja en la partida. Guardar prohibido pone
-Save en gris; el menú prohibido hace que B no lo pida. El save point no mira
-el permiso, como `OpenSaveMenu`.
+`ChangeSaveAccess` and `ChangeMainMenuAccess` **are honoured**: they stopped
+being among the ignored commands, they compile to `OP_ACCESS` and turn bits 0
+and 1 of `FAR_ACCESO` off or on, which travels in the save. Saving forbidden
+puts Save in grey; the menu forbidden makes B not ask for it. The save point
+does not look at the permission, like `OpenSaveMenu`.
 
-Mientras el menú se ve **el reloj del juego no corre**, igual que con la
-pantalla de ranuras, así que el menú no cuesta ningún tick y el mapa sigue por
-el cuadro que le tocaba. Lo cobran `test_menu` y `test_menu_vuelve` de
-`pruebas/rpgmaker/test_tanda_pantallas.py`: el menú como se abre, con el cursor movido, y
-el mapa después de cerrar. Quien lo compara contra una referencia en Python
-—`titulo.render_menu`, que sigue viva— es `pruebas/rpgmaker/test_menu.py`, y es además lo
-que mira lo que la tanda no alcanza: el menú con un grupo y oro
-puestos, guardar desde el menú, los dos permisos puestos por el bytecode, B a
-mitad de un paso, y que los permisos vuelvan de la SRAM.
+While the menu is shown **the game clock does not run**, same as with the
+slots screen, so the menu costs no tick and the map continues from the frame it
+was on. It is enforced by `test_menu` and `test_menu_vuelve` of
+`pruebas/rpgmaker/test_tanda_pantallas.py`: the menu as it opens, with the
+cursor moved, and the map after closing. What compares it against a Python
+reference —`titulo.render_menu`, which is still alive— is
+`pruebas/rpgmaker/test_menu.py`, and it is also what looks at what the suite
+does not reach: the menu with a party and gold set, saving from the menu, both
+permissions set by the bytecode, B in the middle of a step, and the permissions
+coming back from SRAM.
 
-### La pantalla de ítems
+### The items screen
 
-"Use Item" abre `Scene_Item`: arriba la descripción del
-ítem marcado y abajo la lista del inventario con cuántos hay de cada uno, en
-orden de número como `Game_Party`. En gris va lo que A no usa, como
-`Window_Item`. Hoy A usa **los ítems de switch**, que en la demo son uno solo,
-la Portable Console: prende su switch —el 710—, gasta uno si tiene usos
-—`uses` en cero es infinito—, pide el refresco de páginas y vuelve derecho al
-mapa, que es el `PopUntil(Scene::Map)` de RM2k. B vuelve al menú. Las
-medicinas quedan en gris: piden HP que cambien, y en los mapas de la demo la
-única forma de perderlos es una pelea. El switch 710 dispara el evento común 39, "NewMenuActivated",
-que es el menú propio del juego hecho con imágenes: 568 comandos, y los
-eventos comunes todavía no corren.
+"Use Item" opens `Scene_Item`: at the top the description of the selected item
+and below the inventory list with how many there are of each, in number order
+like `Game_Party`. In grey goes what A does not use, like `Window_Item`. Today
+A uses **the switch items**, which in the demo are a single one, the Portable
+Console: it turns on its switch —710—, spends one if it has uses —`uses` at
+zero is infinite—, asks for the page refresh and returns straight to the map,
+which is RM2k's `PopUntil(Scene::Map)`. B returns to the menu. The medicines
+stay in grey: they ask for HP that change, and on the demo's maps the only way
+to lose them is a battle. Switch 710 triggers common event 39,
+"NewMenuActivated", which is the game's own menu made with pictures: 568
+commands, and common events do not run yet.
 
-**Las medicinas van en blanco y abren la elección de actor**, que es el panel
-del grupo del menú con un cursor al costado —`render_objetivo`—. A no hacía
-nada —**resuelto el 2026-09-21**, ver `curar-fuera-de-pelea.md`—, y eso era
-deuda: `UseItem` sólo gasta la medicina si sube algo, y
-desde que hay peleas los HP bajan, así que usarla tendría algo que hacer.
-Hasta el 2026-09-12 no la tenía, porque fuera de batalla nadie bajaba nunca de
-los máximos y los tres comandos que tocan HP o estados compilaban a nada; hoy
-`FullHeal` y el `ChangeHP` que suma son OP_HEAL y curan de verdad. Libros,
-materiales y especiales siguen en gris.
+**The medicines go in white and open the actor choice**, which is the menu's
+party panel with a cursor at the side —`render_objetivo`—. A did nothing
+—**solved on 2026-09-21**, see `curar-fuera-de-pelea.md`—, and that was a
+debt: `UseItem` only spends the medicine if something goes up, and since there
+are battles the HP go down, so using it would have something to do. Until
+2026-09-12 it did not, because outside battle nobody ever went below the
+maximum and the three commands that touch HP or statuses compiled to nothing;
+today `FullHeal` and the `ChangeHP` that adds are OP_HEAL and really heal.
+Books, materials and specials stay in grey.
 
-**El texto va de a una letra por celda.** La pantalla tiene su propio banco de
-tiles con cada carácter de la fuente en dos celdas, en blanco y en gris —307
-tiles, que no dependen de cuántos ítems haya—, y los nombres y las descripciones
-van en ASCII en el cartucho; escribir una letra son dos palabras del tilemap. Va
-así y no con el texto de cada ítem ya dibujado, como las caras, porque eso crece
-con el inventario y con una docena de ítems ya no entra en VRAM. El precio es
-que las letras van a 8 pixeles y no a los 6 de la fuente, como las cifras del
-oro. En RM2k la lista va en dos columnas de 144 pixeles; acá en una, con la
-cantidad a la derecha, y la descripción en dos renglones de 30 letras. Es
-cosmético y está declarado.
+**The text goes one letter per cell.** The screen has its own tile bank with
+each character of the font in two cells, in white and in grey —307 tiles,
+which do not depend on how many items there are—, and the names and the
+descriptions go in ASCII in the cartridge; writing a letter is two words of
+the tilemap. It goes this way and not with each item's text already drawn, like
+the faces, because that grows with the inventory and with a dozen items it no
+longer fits in VRAM. The price is that the letters go at 8 pixels and not at
+the font's 6, like the gold's digits. In RM2k the list goes in two columns of
+144 pixels; here in one, with the quantity on the right, and the description
+in two lines of 30 letters. It is cosmetic and declared.
 
-La descripción se compone en `texto_buf` —el búfer del compositor de
-mensajes, libre con el menú abierto— y sube de un DMA al principio de cada
-cuadro: escribirla letra por letra al mover el cursor no entraba en el vblank
-y el segundo renglón salía cortado. Cuando el cursor se sale de las once
-filas, la lista se repinta entera con la pantalla apagada, que es un cuadro
-en negro.
+The description is composed in `texto_buf` —the message composer's buffer,
+free with the menu open— and is uploaded with one DMA at the start of each
+frame: writing it letter by letter on moving the cursor did not fit in the
+vblank and the second line came out cut. When the cursor goes out of the
+eleven rows, the list is repainted whole with the screen off, which is one
+frame of black.
 
-Lo cobran `test_items` y `test_items_vuelve` de
-`pruebas/rpgmaker/test_tanda_pantallas.py` —la pantalla como se entra, con el cursor
-sobre la consola, y el mapa después de usarla— y
-`pruebas/rpgmaker/test_items_pantalla.py`, que la compara contra `titulo.render_items`:
-la consola prende el 710
-y no se gasta, un ítem en gris no hace nada, catorce ítems en once filas se
-corren y vuelven, y la lista vacía.
+It is enforced by `test_items` and `test_items_vuelve` of
+`pruebas/rpgmaker/test_tanda_pantallas.py` —the screen as it is entered, with
+the cursor on the console, and the map after using it— and
+`pruebas/rpgmaker/test_items_pantalla.py`, which compares it against
+`titulo.render_items`: the console turns on 710 and is not spent, an item in
+grey does nothing, fourteen items in eleven rows scroll and come back, and the
+empty list.
 
-### El equipo, y las pantallas de texto
+### The equipment, and the text screens
 
-"Equipment" abre la elección de actor en modo elegir y después `Scene_Equip`
-de ése: su nombre, los cuatro parámetros —los del nivel,
-mockeado en 1, más lo que suma lo puesto—, y las cinco ranuras. A sobre una
-ranura muestra la lista de lo que el actor puede ponerse ahí, con los
-parámetros que quedarían; la línea vacía del final es sacarse lo que tiene. Lo
-que se saca vuelve al inventario y lo nuevo sale de ahí; un arma a dos manos
-saca el escudo y un escudo saca el arma a dos manos, que es
-`Game_Actor::ChangeEquipment`. En RM2k la lista y las ranuras se ven a la vez;
-acá la lista las reemplaza mientras se elige. Cosmético y declarado.
+"Equipment" opens the actor choice in choose mode and then `Scene_Equip` of
+that one: their name, the four parameters —those of the level, mocked at 1,
+plus what the equipped items add—, and the five slots. A on a slot shows the
+list of what the actor can wear there, with the parameters that would result;
+the empty line at the end is taking off what they have. What is taken off goes
+back to the inventory and the new one comes out of there; a two-handed weapon
+takes off the shield and a shield takes off the two-handed weapon, which is
+`Game_Actor::ChangeEquipment`. In RM2k the list and the slots are seen at the
+same time; here the list replaces them while choosing. Cosmetic and declared.
 
-El equipo es estado: cinco palabras por actor del LDB en `FAR_EQUIPO`, que
-arranca con el equipo inicial de la base —un DMA de la tabla del conversor en
-el reset— y viaja en la partida. Son 610 bytes más, y con ellos la partida
-pasó de los 1024 de la ranura: **la SRAM es de 32 KB** y
-las ranuras van cada 2048. `ChangeEquipment` no compilaba —el juego lo usa en
-dos mapas que hoy están en la demo—: **compila desde el 2026-09-21** la forma de
-sacar una ranura, ver `change-equipment-skills-game-over.md`.
+The equipment is state: five words per LDB actor in `FAR_EQUIPO`, which starts
+with the database's initial equipment —a DMA of the converter's table on
+reset— and travels in the save. It is 610 more bytes, and with them the save
+went past the slot's 1024: **the SRAM is 32 KB** and the slots go every 2048.
+`ChangeEquipment` did not compile —the game uses it on two maps that are in the
+demo today—: **since 2026-09-21 it compiles** the form that removes a slot, see
+`change-equipment-skills-game-over.md`.
 
-La pantalla de equipo —y la tienda, que sigue— son **pantallas de texto**: no
-llevan bloques dibujados sino la fuente de la pantalla de ítems, y se componen
-enteras en `texto_buf` —el tilemap de 32 por 28 celdas, 1792 bytes— que sube
-de un DMA por cuadro. Componer no tiene apuro, y `pantallas.py` es la
-referencia con el mismo compositor de celdas. El DMA va **después** de leer el
-control: al revés, sus diez líneas hacían que `read_pad` llegara con la
-lectura automática terminada, cada vuelta duraba dos cuadros y la mitad de los
-toques se perdía. Lo cobró `equipo`.
+The equipment screen —and the shop, which follows— are **text screens**: they
+carry no drawn blocks but the items screen's font, and they are composed whole
+in `texto_buf` —the tilemap of 32 by 28 cells, 1792 bytes— which is uploaded
+with one DMA per frame. Composing is in no hurry, and `pantallas.py` is the
+reference with the same cell composer. The DMA goes **after** reading the
+controller: the other way round, its ten lines made `read_pad` arrive with the
+automatic read finished, each iteration lasted two frames and half the presses
+were lost. `equipo` caught it.
 
-Lo cobran `test_equipo` y `test_equipo_vuelve` de
-`pruebas/rpgmaker/test_tanda_pantallas.py` —las ranuras de Kersh con su equipo inicial,
-la lista del arma con los parámetros que quedarían, y el mapa después de
-volver—
-y `pruebas/rpgmaker/test_equipo.py`: el equipo inicial en la RAM, equipar desde el
-menú, la lanza a dos manos que saca el escudo, la línea vacía, y el equipo en
-la partida.
+It is enforced by `test_equipo` and `test_equipo_vuelve` of
+`pruebas/rpgmaker/test_tanda_pantallas.py` —Kersh's slots with his initial
+equipment, the weapon list with the parameters that would result, and the map
+after returning— and `pruebas/rpgmaker/test_equipo.py`: the initial equipment
+in RAM, equipping from the menu, the two-handed spear that takes off the
+shield, the empty line, and the equipment in the save.

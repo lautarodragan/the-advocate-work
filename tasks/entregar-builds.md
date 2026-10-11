@@ -1,33 +1,35 @@
 ---
-name: "Los builds para taro salen de una receta"
-description: "just entregar deja el release en /shared/builds/ con el .dbg y el rom/src/ del commit, para que Mesen2 muestre el fuente desde ahí"
+name: "The builds for taro come out of a recipe"
+description: "just entregar leaves the release in /shared/builds/ with the .dbg and the commit's rom/src/, so that Mesen2 shows the source from there"
 status: done
 ---
 
-Los builds de `/shared/builds/<fecha>-<commit>/` se armaban a mano y se
-equivocaban. Ahora los arma `just entregar "<qué mirar>"`
-(`tools/ensamblado/entregar.py`), y suman el `rom/src/` del commit, sacado con
-`git archive`, que taro aprobó el 2026-09-25: Mesen2 busca el fuente subiendo
-de carpeta desde el `.dbg`, así que con eso lo muestra también desde `/shared`.
+The builds in `/shared/builds/<fecha>-<commit>/` were put together by hand and
+got things wrong. Now `just entregar "<qué mirar>"`
+(`tools/ensamblado/entregar.py`) builds them, and they add the commit's
+`rom/src/`, taken with `git archive`, which taro approved on 2026-09-25: Mesen2
+looks for the source by walking up folders from the `.dbg`, so with that it
+shows it from `/shared` too.
 
-# Hecho
+# Done
 
-- Se niega con cambios sin commitear en `rom/src/`, `tools/`, `parches/` o
-  `data/`, y si no existe `/shared`.
-- Si el directorio del commit ya existe, pisa sólo `abl.sfc`, `abl.sfc.dbg`,
-  `LEEME.txt` y `rom/`: la partida que taro deja ahí se queda.
-- Borra los directorios `<fecha>-<commit>` menos el nuevo y el más nuevo de
-  los demás; lo que no tenga ese formato no lo toca.
-- Compara la huella de las pistas con la de `/shared/msu/LEEME.txt`, corriendo
-  el mismo comando que dice ahí. Si no coincide avisa al final y lo dice el
-  LEEME del build; `--actualizar-msu` las copia, borra las que sobran y le
-  cambia al LEEME de ahí el commit y la huella.
+- It refuses with uncommitted changes in `rom/src/`, `tools/`, `parches/` or
+  `data/`, and if `/shared` does not exist.
+- If the commit's directory already exists, it overwrites only `abl.sfc`,
+  `abl.sfc.dbg`, `LEEME.txt` and `rom/`: the save that taro leaves there stays.
+- It deletes the `<fecha>-<commit>` directories except the new one and the
+  newest of the others; whatever does not have that format it leaves alone.
+- It compares the fingerprint of the tracks with the one in
+  `/shared/msu/LEEME.txt`, running the same command it says there. If it does
+  not match it warns at the end and the build's LEEME says so;
+  `--actualizar-msu` copies them, deletes the extra ones and changes the
+  commit and the fingerprint in the LEEME there.
 
-# Medido
+# Measured
 
-- Contra un `/shared` falso en el scratchpad: los casos de arriba, más la
-  huella que no coincide con y sin `--actualizar-msu`.
-- La búsqueda de Mesen2 reimplementada (`mesen_busca.py`) sobre el `.dbg` del
-  build: encuentra todos los `.s` y le faltan sólo `mapdata.inc` y
-  `musicdata.inc`, que no se copian a propósito. En la interfaz de Mesen2 no
-  se miró.
+- Against a fake `/shared` in the scratchpad: the cases above, plus the
+  fingerprint that does not match, with and without `--actualizar-msu`.
+- Mesen2's search reimplemented (`mesen_busca.py`) over the build's `.dbg`:
+  it finds all the `.s` and is missing only `mapdata.inc` and
+  `musicdata.inc`, which are not copied on purpose. It was not looked at in
+  Mesen2's interface.

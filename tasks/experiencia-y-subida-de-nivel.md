@@ -1,37 +1,38 @@
 ---
-name: "Experiencia y subida de nivel"
-description: "Ganar experiencia, subir de nivel y crecer según las curvas del LDB"
+name: "Experience and levelling up"
+description: "Gaining experience, levelling up and growing according to the LDB's curves"
 status: done
 ---
 
-**Experiencia y subida de nivel.**
+**Experience and levelling up.**
 
-Hoy no existen: cada actor queda en el `initial_level` del LDB y aprende las
-habilidades de ese nivel (`batalla.habilidades_de`). Falta ganar experiencia al
-ganar una pelea, subir de nivel con la curva de experiencia del LDB, y que al subir
-crezcan HP, SP, ataque, defensa, mente y agilidad según las curvas de parámetros de
-cada actor, y se aprendan las habilidades del nivel nuevo.
+Today they do not exist: each actor stays at the LDB's `initial_level` and
+learns the skills of that level (`batalla.habilidades_de`). What is missing is
+gaining experience when winning a battle, levelling up with the LDB's
+experience curve, and, on levelling up, HP, SP, attack, defence, mind and
+agility growing according to each actor's parameter curves, and the skills of
+the new level being learned.
 
-Referencia: `Game_Actor` de EasyRPG en `/extras/ref/easyrpg-player`. Taro lo pidió
-el 2026-09-21.
+Reference: EasyRPG's `Game_Actor` in `/extras/ref/easyrpg-player`. Taro asked
+for it on 2026-09-21.
 
-Hecho es: una pelea ganada da experiencia, un actor sube de nivel y sus números
-crecen como en RM2k, y todo eso viaja en la partida guardada.
+Done means: a battle won gives experience, an actor levels up and its numbers
+grow as in RM2k, and all of that travels in the saved game.
 
-## Dónde quedó, el 2026-09-21
+## Where it stood, on 2026-09-21
 
-Lo de "hecho es" está, con casos que corren la ROM en
-`pruebas/rpgmaker/test_experiencia.py`. Lo que quedó afuera:
+What "done means" asks for is there, with cases that run the ROM in
+`pruebas/rpgmaker/test_experiencia.py`. What was left out:
 
-- **La victoria no dice nada**: RM2k pone "N EXP received", "<nombre> Level
-  up!" y lo que se aprendió (`PushExperienceGainedMessage`, `ChangeLevel` con
-  su `PendingMessage`), y acá la pelea sigue diciendo sólo el término de la
-  victoria. El estado cambia igual; lo que falta es contarlo. Mueve las
-  pantallas de fin de pelea de la tanda.
-- **`ChangeExp`, `ChangeLevel` y `ChangeParameters` no están**, porque el juego
-  no los usa: ningún mapa, evento común ni tropa de `data/` los nombra, y
-  ninguna rama pregunta por el nivel de un actor. Tampoco los `*_mod` de
-  `ChangeParameters`, por lo mismo. Si alguno aparece, `exp_sumar` es la mitad
-  de `ChangeExp` que sube; bajar de nivel pide además topar los HP y los SP,
-  que es el `SetLevel` de easyrpg.
-- Un actor que no puede entrar al grupo no tiene experiencia: sólo pelean ésos.
+- **The victory says nothing**: RM2k shows "N EXP received", "<nombre> Level
+  up!" and what was learned (`PushExperienceGainedMessage`, `ChangeLevel` with
+  its `PendingMessage`), and here the battle still says only the victory term.
+  The state changes anyway; what is missing is telling it. It moves the
+  suite's end-of-battle screens.
+- **`ChangeExp`, `ChangeLevel` and `ChangeParameters` are not there**, because
+  the game does not use them: no map, common event or troop in `data/` names
+  them, and no branch asks about an actor's level. Nor the `*_mod` of
+  `ChangeParameters`, for the same reason. If any of them shows up,
+  `exp_sumar` is the half of `ChangeExp` that goes up; going down a level also
+  asks for capping HP and SP, which is easyrpg's `SetLevel`.
+- An actor that cannot join the party has no experience: only those fight.

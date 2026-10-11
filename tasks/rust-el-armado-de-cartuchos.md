@@ -1,170 +1,164 @@
 ---
-name: "Rust: la biblioteca del proyecto y el armado de cartuchos"
-description: "El primer paso a Rust: tools/project/ (encontrar el proyecto, las perillas, el ambiente, la clave del caché) y tools/cartridge/ con rm2k-snes-assemble, rm2k-snes-space y rm2k-snes-cartridges, reemplazando a tools/assembly/ con las ROMs byte por byte iguales"
+name: "Rust: the project library and the building of cartridges"
+description: "The first step to Rust: tools/project/ (finding the project, the knobs, the environment, the cache key) and tools/cartridge/ with rm2k-snes-assemble, rm2k-snes-space and rm2k-snes-cartridges, replacing tools/assembly/ with the ROMs byte for byte identical"
 type: refactor
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-09-29: encarar las herramientas nuevas en Rust en el orden
-de `docs/research/las-herramientas-hoy.md`. Éste es el primero: la
-biblioteca común y `rm2k-snes-build` (que Hornero decidió partir en los tres
-ejecutables que ya existen, con los mismos nombres, para que nadie que los
-llama tenga que cambiar).
+From taro, on 2026-09-29: take on the new tools in Rust in the order of
+`docs/research/las-herramientas-hoy.md`. This is the first one: the common
+library and `rm2k-snes-build` (which Hornero decided to split into the three
+executables that already exist, with the same names, so that nobody who calls
+them has to change).
 
-- `tools/project/`: crate de biblioteca, `rm2k-project`.
-- `tools/cartridge/`: crate con los tres ejecutables. Reemplaza a
-  `tools/assembly/{assemble,banks,space,cartridges}.py`; `entregar.py` es de
-  ABL y queda.
+- `tools/project/`: library crate, `rm2k-project`.
+- `tools/cartridge/`: crate with the three executables. It replaces
+  `tools/assembly/{assemble,banks,space,cartridges}.py`; `entregar.py` is
+  ABL's and stays.
 
-## Lo que se decidió, y por qué
+## What was decided, and why
 
-**Dos crates, y el reparto.** `rm2k-project` es lo que hoy es
-`tools/common/` sin lo que es del conversor: encontrar `rm2k-snes.toml`
-(hacia arriba o `--project`), las perillas con errores que nombran la clave
-—`missing key cartridges.test-special.party`—, las rutas de `[paths]`, los
-flags del ambiente (`environment::arguments`, `Environment::as_flags`) y la
-clave del caché, que da **exactamente** la de `disk_cache.key` de Python
-(una prueba lo compara contra un valor sacado de Python), así que los dos
-lados comparten el caché. `parallel.py` no se portó: nadie en Rust lo
-necesita todavía. El Python de `common/` sigue, porque el conversor es
-Python. `rm2k-snes-cartridge` es una biblioteca con los tres ejecutables
-encima (`src/bin/`): comparten el reparto, la lectura del `.dbg` y la de
-los cartuchos, y `space` necesita a `cartridges` para saber si uno está
-viejo.
+**Two crates, and the split.** `rm2k-project` is what `tools/common/` is today
+minus what belongs to the converter: finding `rm2k-snes.toml` (upwards or
+`--project`), the knobs with errors that name the key —`missing key
+cartridges.test-special.party`—, the paths of `[paths]`, the environment flags
+(`environment::arguments`, `Environment::as_flags`) and the cache key, which
+gives **exactly** the one from Python's `disk_cache.key` (a test compares it
+against a value taken from Python), so both sides share the cache.
+`parallel.py` was not ported: nobody in Rust needs it yet. The Python of
+`common/` stays, because the converter is Python. `rm2k-snes-cartridge` is a
+library with the three executables on top (`src/bin/`): they share the split,
+the reading of the `.dbg` and that of the cartridges, and `space` needs
+`cartridges` to know whether one is stale.
 
-**Las dependencias**: `toml` (con `preserve_order`, porque el orden de
-`[cartridges]` es el orden en que se arman e imprimen), `serde_json` (leer
-`maps.json`, los casos y los mapas nuevos; escribir `--json`), `sha2` (la
-huella y la clave del caché) y `clap` (con la API de builder, no derive:
-así la biblioteca le da a cada ejecutable sólo los flags de ambiente que
-usa, con la misma ayuda, como hacía `environment.add_arguments`). Nada de
-`regex`: lo que se parsea —directivas de ca65, registros del `.dbg`, el
-`.cfg`— son formatos chicos y se leen a mano.
+**The dependencies**: `toml` (with `preserve_order`, because the order of
+`[cartridges]` is the order in which they are built and printed),
+`serde_json` (reading `maps.json`, the cases and the new maps; writing
+`--json`), `sha2` (the fingerprint and the cache key) and `clap` (with the
+builder API, not derive: that way the library gives each executable only the
+environment flags it uses, with the same help, as `environment.add_arguments`
+did). No `regex`: what is parsed —ca65 directives, `.dbg` records, the `.cfg`—
+are small formats and are read by hand.
 
-**El reparto en bancos se mudó del conversor al ensamblador.** Hasta hoy
-`snes_convert.py` llamaba a `banks.resolve` y escribía `memoria.cfg`; ahora
-el conversor deja todo en `RODATA` con sus `.block`/`.crossbank` y
-`rm2k-snes-assemble` reparte, reescribe los `.inc` en el lugar —como hacía
-el Python— y escribe el `.cfg` antes de correr `ca65`. Es lo que pedía el
-plan ("el reparto en bancos y el `.cfg` de `ld65`") y además es el lugar
-natural: el reparto es la otra mitad de lo que `ld65` no sabe hacer. Cuáles
-son los archivos a repartir ya no es una lista de nombres
-(`mapdata.inc`, `musicdata.inc`): son los `.include` que se encuentran en el
-directorio de `-I`, en el orden en que los lee `ca65`. La misma regla da el
-chequeo de "un generado tapado": uno que está en `-I` y también al lado del
-archivo que lo incluye. Correr el reparto dos veces no cambia nada (hay una
-prueba).
+**The bank split moved from the converter to the assembler.** Until today
+`snes_convert.py` called `banks.resolve` and wrote `memoria.cfg`; now the
+converter leaves everything in `RODATA` with its `.block`/`.crossbank` and
+`rm2k-snes-assemble` splits, rewrites the `.inc` in place —as the Python did—
+and writes the `.cfg` before running `ca65`. It is what the plan asked for
+("the bank split and `ld65`'s `.cfg`") and besides it is the natural place:
+the split is the other half of what `ld65` does not know how to do. Which files
+to split is no longer a list of names (`mapdata.inc`, `musicdata.inc`): they are
+the `.include`s found in the `-I` directory, in the order `ca65` reads them.
+The same rule gives the "a covered generated file" check: one that is in `-I`
+and also next to the file that includes it. Running the split twice changes
+nothing (there is a test).
 
-Consecuencia: la línea "bank packing: N piece(s) in M bank(s)" pasa de
-`conversor.log` a la salida de `rm2k-snes-assemble`, o sea a la de
+Consequence: the line "bank packing: N piece(s) in M bank(s)" moves from
+`conversor.log` to the output of `rm2k-snes-assemble`, that is, to that of
 `just cartuchos`.
 
-**Dónde está el runtime.** Un binario instalado no tiene `__file__`: el
-crate guarda en tiempo de compilación dónde estaba su fuente
-(`CARGO_MANIFEST_DIR`), y de ahí salen `tools/`, la raíz y
-`tools/runtime/`. Es lo mismo que hacía el symlink de un script: el binario
-responde por el checkout desde el que se instaló.
+**Where the runtime is.** An installed binary has no `__file__`: the crate
+stores at compile time where its source was (`CARGO_MANIFEST_DIR`), and from
+there come `tools/`, the root and `tools/runtime/`. It is the same thing a
+script's symlink did: the binary answers for the checkout it was installed
+from.
 
-**La huella** sigue cubriendo lo que cubría —todo `tools/runtime/`, `ca65`,
-`ld65`, los binarios que corre el conversor (`voodoo`, `gunter`, `lz2` y,
-desde el merge con Hurón, `rm2k-render`), los
-`.py` de `tools/*/` menos `tests/`, `parches/manual/*/*`, el archivo de
-proyecto y los techos de volumen por su valor— y **suma el binario de
-`rm2k-snes-assemble`**, porque ahora el reparto vive ahí: un cambio en el
-reparto tiene que rearmar. Los `.py` siguen adentro mientras el conversor
-sea Python.
+**The fingerprint** still covers what it covered —all of `tools/runtime/`,
+`ca65`, `ld65`, the binaries the converter runs (`voodoo`, `gunter`, `lz2` and,
+since the merge with Hurón, `rm2k-render`), the `.py` files of `tools/*/`
+except `tests/`, `parches/manual/*/*`, the project file and the volume ceilings
+by their value— and **adds the `rm2k-snes-assemble` binary**, because the split
+lives there now: a change in the split has to rebuild. The `.py` files stay in
+while the converter is Python.
 
-**`sello.txt` cambió de formato.** Era la huella y un `repr` de Python de
-(flags, [(caso, texto entero del JSON)]); ahora son líneas:
+**`sello.txt` changed format.** It was the fingerprint and a Python `repr` of
+(flags, [(case, whole text of the JSON)]); now it is lines:
 
     inputs <huella>
     flags ["--party", "10", …]
     case <nombre> <sha256 del JSON>
 
-Todos los cartuchos armados antes de esto quedan viejos una vez, y se
-rearman solos.
+All cartridges built before this become stale once, and rebuild on their own.
 
-**Lo que las pruebas de ABL necesitan, por la línea de comandos.**
-`rm2k-snes-cartridges --list --json` (dónde está cada cartucho y su ROM, sus
-flags, sus casos y cuáles empiezan con `Teleport`, si está viejo y por qué,
-en qué cartucho corre cada caso, los mapas, lo que cubre la huella),
-`rm2k-snes-space --json`, `rm2k-snes-assemble --sources` y
-`rm2k-snes-assemble --memory-map` (la pila). El arnés lo pide en
-`rom/pruebas/arnes/cartuchos.py`, una vez por proceso. Las pruebas de
-`tools/tests/` que leían el runtime pegado usan `--sources` desde un
-fixture de `tests/conftest.py`.
+**What ABL's tests need, through the command line.**
+`rm2k-snes-cartridges --list --json` (where each cartridge and its ROM are,
+its flags, its cases and which ones start with `Teleport`, whether it is stale
+and why, which cartridge each case runs in, the maps, what the fingerprint
+covers), `rm2k-snes-space --json`, `rm2k-snes-assemble --sources` and
+`rm2k-snes-assemble --memory-map` (the stack). The harness asks for it in
+`rom/pruebas/arnes/cartuchos.py`, once per process. The tests of
+`tools/tests/` that read the pasted runtime use `--sources` from a fixture in
+`tests/conftest.py`.
 
-**Flags nuevos**, además de los de siempre, que quedan iguales:
-`--list --json`; `--convert-into DIR -- <flags del conversor>` y
-`--without-tracks`, que son lo que `rm2k-snes-volume-ceilings` hacía
-importando `cartridges.convert` y `cartridges.build`; y en
-`rm2k-snes-msu`, `--quiet` y una última línea "MSU-1 tracks, N made and M
-that were already there", que `rm2k-snes-cartridges` imprime como
-"release: …" en su lugar, igual que antes. `rm2k-snes-patches` saca los
-mapas de prueba del archivo de proyecto y los directorios de
-`--list --json`.
+**New flags**, besides the usual ones, which stay the same: `--list --json`;
+`--convert-into DIR -- <flags del conversor>` and `--without-tracks`, which
+are what `rm2k-snes-volume-ceilings` did by importing `cartridges.convert` and
+`cartridges.build`; and in `rm2k-snes-msu`, `--quiet` and a last line "MSU-1
+tracks, N made and M that were already there", which `rm2k-snes-cartridges`
+prints as "release: …" in its place, same as before. `rm2k-snes-patches` takes
+the test maps from the project file and the directories from `--list --json`.
 
-**Los nombres en castellano que quedan en el crate** —`prueba.sfc`,
-`sello.txt`, `conversor.log`, `memoria.cfg`, `nuevos/`, `musica/techos.toml`
-con sus `temas` y su `aire`, el nodo `arbol` de un mapa nuevo, el área
-`RESERVADO` del `.cfg`— no son de ABL sino convenciones de la suite que
-comparte con el conversor de Python, y cambiarlas cambia lo que sale. Van
-cuando se porte el conversor.
+**The Spanish names that remain in the crate** —`prueba.sfc`, `sello.txt`,
+`conversor.log`, `memoria.cfg`, `nuevos/`, `musica/techos.toml` with its
+`temas` and its `aire`, the `arbol` node of a new map, the `RESERVADO` area of
+the `.cfg`— are not ABL's but conventions of the suite it shares with the
+Python converter, and changing them changes what comes out. They go when the
+converter is ported.
 
-**El `install` de `tools/justfile`**: `project` y `cartridge` entran en
-`rust_projects`; una biblioteca se saltea al instalar (no tiene binario), y
-los symlinks de la suite se borran antes de `cargo install`, porque cargo
-no escribe encima de lo que no instaló y `rm2k-snes-assemble` era un
-symlink. Los tres symlinks a los `.py` que se reemplazan salen en el mismo
-commit que pone a Rust en su lugar —no en el del borrado—: con el reparto
-fuera del conversor, el `assemble.py` de Python ya no arma una ROM buena, y
-un `install-scripts` que lo volviera a enlazar la rompería.
+**The `install` of `tools/justfile`**: `project` and `cartridge` go into
+`rust_projects`; a library is skipped when installing (it has no binary), and
+the suite's symlinks are deleted before `cargo install`, because cargo does not
+write over what it did not install and `rm2k-snes-assemble` was a symlink. The
+three symlinks to the `.py` files being replaced leave in the same commit that
+puts Rust in their place —not in the deletion one—: with the split outside the
+converter, Python's `assemble.py` no longer builds a good ROM, and an
+`install-scripts` that linked it again would break it.
 
-## Al mergear
+## When merging
 
-Desde el checkout principal:
+From the main checkout:
 
     just -f tools/justfile install project cartridge
     just -f tools/justfile install-scripts
 
-El primero compila sólo esos dos (y rearma los symlinks); el segundo es
-por si acaso, y no toca Rust.
+The first compiles only those two (and rebuilds the symlinks); the second is
+just in case, and does not touch Rust.
 
-## Lo que se midió
+## What was measured
 
-Sobre el árbol mergeado con `main` en `d4b766c1`, con `NO_CACHE=1 just
-cartuchos` antes (Python, en `53bee831`) y después (Rust), hasheando todo
-`rom/build/` menos el caché —1001 archivos—:
+On the tree merged with `main` at `d4b766c1`, with `NO_CACHE=1 just
+cartuchos` before (Python, at `53bee831`) and after (Rust), hashing all of
+`rom/build/` minus the cache —1001 files—:
 
-* **iguales byte por byte**: los dos `.sfc`, los `.msu`, las 43 pistas
-  `.pcm`, los `.inc`, los `.sym` y todo lo demás (`.bin`, `.png`, `.json`,
-  `.toml`);
-* **los `.dbg`, iguales con el campo `mtime` tapado**. Ese campo es la fecha
-  de cada fuente, y cambia entre dos armados de Python también: se midió
-  armando dos veces con Python, y difieren en eso y en el `.o`, nada más;
-* **`memoria.cfg`, sólo la cabecera**: `# Generated by
-  tools/assembly/banks.py: …` pasó a `# Generated by rm2k-snes-assemble: …`;
-* `conversor.log` pierde la línea `bank packing: …`, que ahora imprime el
-  ensamblador; `sello.txt` cambió de formato (arriba).
+* **byte for byte identical**: the two `.sfc`, the `.msu`, the 43 `.pcm`
+  tracks, the `.inc`, the `.sym` and everything else (`.bin`, `.png`,
+  `.json`, `.toml`);
+* **the `.dbg`, identical with the `mtime` field masked**. That field is each
+  source's date, and it changes between two Python builds too: it was measured
+  by building twice with Python, and they differ in that and in the `.o`,
+  nothing more;
+* **`memoria.cfg`, only the header**: `# Generated by
+  tools/assembly/banks.py: …` became `# Generated by rm2k-snes-assemble: …`;
+* `conversor.log` loses the line `bank packing: …`, which the assembler now
+  prints; `sello.txt` changed format (above).
 
-`just espacio` con Rust contra el `space.show` de Python sobre los mismos
-cartuchos: diff vacío. `rm2k-snes-cartridges --list`: igual al de Python.
+`just espacio` with Rust against Python's `space.show` on the same cartridges:
+empty diff. `rm2k-snes-cartridges --list`: identical to Python's.
 
-Las tandas, sobre el árbol final: `just pruebas` 874; `just -f
-tools/justfile test` 98 y 2 salteadas (eran 132: las 34 de
-`test_banks.py` y `test_assemble.py` se portaron a Rust); `cargo test`: 14
-en `project/`, 43 en `cartridge/`. La lista de excepciones de
-`test_lado_de_abl.py` pasó de 23 a 17.
+The suites, on the final tree: `just pruebas` 874; `just -f tools/justfile
+test` 98 and 2 skipped (it was 132: the 34 of `test_banks.py` and
+`test_assemble.py` were ported to Rust); `cargo test`: 14 in `project/`, 43 in
+`cartridge/`. The exceptions list of `test_lado_de_abl.py` went from 23 to 17.
 
-## Lo que no se corrió, y lo que quedó
+## What was not run, and what was left
 
-* **`just techos` entero no se corrió**: es lo único que usa
-  `--convert-into` y `--without-tracks`, y no lo cubre ninguna prueba. Se
-  probó a mano `rm2k-snes-cartridges release --convert-into DIR --
-  --measure-headroom 0.25`, que armó la copia.
-* **Los comentarios de `tools/runtime/`** (`header.s`, `main.s`,
-  `bank1.s`, `enter_map.s`, `event_routes.s`) citan todavía
-  `tools/ensamblado/banks.py` y `cartridges.py`, viejos desde antes de esta
-  tarea. Cambiarlos mueve el tamaño del fuente que queda en el `.dbg`, así
-  que van en un commit del runtime y no en éste.
+* **The whole `just techos` was not run**: it is the only thing that uses
+  `--convert-into` and `--without-tracks`, and no test covers it.
+  `rm2k-snes-cartridges release --convert-into DIR --
+  --measure-headroom 0.25` was tried by hand, and it built the copy.
+* **The comments of `tools/runtime/`** (`header.s`, `main.s`, `bank1.s`,
+  `enter_map.s`, `event_routes.s`) still cite `tools/ensamblado/banks.py` and
+  `cartridges.py`, stale since before this task. Changing them moves the size
+  of the source that ends up in the `.dbg`, so they go in a runtime commit and
+  not in this one.

@@ -1,93 +1,92 @@
 ---
-name: "Las herramientas sin datos ni código de ABL"
-description: "Lo que en tools/ nombra o trae algo de ABL fuera de los comentarios: datos de prueba, fixtures copiados del juego, defaults y literales en el código; los comentarios se quedan por la decisión de las herramientas"
+name: "The tools without ABL's data or code"
+description: "What in tools/ names or brings in something of ABL outside the comments: test data, fixtures copied from the game, defaults and literals in the code; the comments stay because of the tools decision"
 type: refactor
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-10-02, al ver que una prueba del compilador de eventos usa
-`PhoneCallDiff` como dato: "dale". Un `grep` de nombres de ABL (personajes,
-lugares, imágenes, la sigla) da 125 líneas en unos 50 archivos de `tools/`.
+From taro, on 2026-10-02, on seeing that a test of the event compiler uses
+`PhoneCallDiff` as data: "go ahead". A `grep` of ABL names (characters,
+places, pictures, the acronym) gives 125 lines in some 50 files of `tools/`.
 
-**Los comentarios del motor que nombran a ABL se quedan**, como dice
-`decisiones/las-herramientas-se-separan-de-abl.md` ("por ahora, por
-cuidado"), y los límites medidos contra ABL siguen con su comentario. Lo que
-se limpia es lo otro: datos de prueba y fixtures, defaults, literales en el
-código. Y hace falta para el juego de pruebas: este repo no tiene que
-llevar nada de ABL (`el-juego-de-pruebas.md`).
+**The engine comments that name ABL stay**, as
+`decisiones/las-herramientas-se-separan-de-abl.md` says ("for now, out of
+care"), and the limits measured against ABL keep their comment. What is
+cleaned up is the rest: test data and fixtures, defaults, literals in the
+code. And it is needed for the test game: this repo must not carry anything of
+ABL (`el-juego-de-pruebas.md`).
 
-# Lo que se encontró (Monterita, 2026-10-02)
+# What was found (Monterita, 2026-10-02)
 
-El `grep` del encargo da, sobre `3bf9aaf5`, 125 líneas en 53 archivos. Se
-clasificaron sacándole a cada archivo los comentarios con las mismas reglas
-de la guarda (abajo):
+The request's `grep` gives, on `3bf9aaf5`, 125 lines in 53 files. They were
+classified by stripping each file of its comments with the same rules as the
+guard (below):
 
-| clase | líneas | archivos | qué se hizo |
+| class | lines | files | what was done |
 |---|---|---|---|
-| comentarios del runtime (`;`) | 41 | 26 | se quedan, por la decisión |
-| comentarios y docstrings de los crates y del Python | 53 | 17 | se quedan; salvo los de pruebas del compilador que citaban mapas de ABL |
-| prosa de `.md` | 14 | 3 | se quedan como contexto, menos una que estaba vieja |
-| datos de prueba y literales en pruebas | 15 | 9 | cambiados |
-| literales en código | 2 | 2 | se quedan: son comentarios del `.inc` que se emite |
+| runtime comments (`;`) | 41 | 26 | they stay, by the decision |
+| comments and docstrings of the crates and of the Python | 53 | 17 | they stay; except those of the compiler's tests that cited ABL maps |
+| `.md` prose | 14 | 3 | they stay as context, except one that was stale |
+| test data and literals in tests | 15 | 9 | changed |
+| literals in code | 2 | 2 | they stay: they are comments of the emitted `.inc` |
 
-Pero el `grep` no veía todo. Para encontrar lo demás se cruzó cada literal
-de `tools/` fuera de los comentarios contra todos los textos del volcado de
-ABL y los nombres de sus archivos que no son del RTP (un script
-descartable), y aparecieron: oradores en mayúsculas (`KERSH`, `MANTA`,
-`TALAN`, `CONDA`, `CORE`), líneas de diálogo sin ningún nombre, el término
-de victoria, un battler (`sentry drone`, `BLmouse`), un CharSet (`Future2`),
-imágenes (`AdvoInstr`, `smoke1`), "What's the password?", y el `abl-*` del
-`justfile`. Lo que coincidía era casi siempre palabra común (`Sword`,
-`Potion`, `Sign`, `Thunder`, `Attack`): eso se quedó.
+But the `grep` did not see everything. To find the rest, each literal of
+`tools/` outside the comments was crossed against all the texts of ABL's dump
+and the names of its files that are not from the RTP (a throwaway script),
+and these showed up: speakers in capitals (`KERSH`, `MANTA`, `TALAN`,
+`CONDA`, `CORE`), dialogue lines without any name, the victory term, a
+battler (`sentry drone`, `BLmouse`), a CharSet (`Future2`), pictures
+(`AdvoInstr`, `smoke1`), "What's the password?", and the `abl-*` of the
+`justfile`. What matched was almost always a common word (`Sword`, `Potion`,
+`Sign`, `Thunder`, `Attack`): that stayed.
 
-**Los fixtures que eran copia del juego**, todos texto —las imágenes de
-prueba son de fórmula, se miraron—:
+**The fixtures that were a copy of the game**, all text —the test pictures are
+formula-made, they were checked—:
 
-* `rm2k-snes-text`: las cajas de `tests/refit.rs` (todas diálogo de ABL
-  menos una), dos casos de `tests/escapes.json`, y en `tests/python.rs` un nombre
-  y dos oradores;
-* `rm2k-snes-screens`: los cuadros de `tests/game/` (mapa 1 y evento
-  común 1), las mismas líneas;
-* `rm2k-snes-events`: el orador de la caja que se rearma, en
-  `compile.json`, `scan.json` y el mapa 1 del juego chico;
-* `rm2k-snes-mapdata`: los nombres "Talan's Pad" y "Lashe City - 34,35" de
-  `tests/maps.json` (el resto del fixture es inventado);
-* `rm2k-snes-patches`: el battler con un espacio.
+* `rm2k-snes-text`: the boxes of `tests/refit.rs` (all ABL dialogue except
+  one), two cases of `tests/escapes.json`, and in `tests/python.rs` a name and
+  two speakers;
+* `rm2k-snes-screens`: the frames of `tests/game/` (map 1 and common event
+  1), the same lines;
+* `rm2k-snes-events`: the speaker of the box that gets rebuilt, in
+  `compile.json`, `scan.json` and map 1 of the small game;
+* `rm2k-snes-mapdata`: the names "Talan's Pad" and "Lashe City - 34,35" of
+  `tests/maps.json` (the rest of the fixture is made up);
+* `rm2k-snes-patches`: the battler with a space.
 
-Se reemplazaron por texto inventado **del mismo largo palabra por palabra**,
-con la misma puntuación y oradores de la misma forma, porque eso es lo que
-miran el reparto y los escapes. Los hashes contra el Python que cambiaron
-(nueve: dos de text, cuatro de mapdata, uno de events, uno de screens, uno
-de patches) se cambiaron a propósito, comprobando que la respuesta nueva,
-con los nombres viejos de vuelta, es la vieja byte por byte; en screens,
-que cada caja corta en los mismos lugares. Lo dice el comentario de cada
-prueba y el commit.
+They were replaced with made-up text **of the same length word by word**, with
+the same punctuation and speakers of the same shape, because that is what the
+split and the escapes look at. The hashes against the Python that changed
+(nine: two of text, four of mapdata, one of events, one of screens, one of
+patches) were changed on purpose, checking that the new answer, with the old
+names put back, is the old one byte for byte; in screens, that each box breaks
+at the same places. Each test's comment and the commit say so.
 
-Los comentarios de prueba que se reescribieron son los del compilador
-(`compile.rs`), que decían de qué mapa de ABL salía cada caso. Los de la
-prueba de `mapdata/src/vram.rs` se quedan: son un límite medido.
+The test comments that were rewritten are those of the compiler
+(`compile.rs`), which said which ABL map each case came from. Those of the
+test in `mapdata/src/vram.rs` stay: they are a measured limit.
 
-**La guarda** es `tools/tests/test_no_game_names.py`: saca los comentarios
-de cada archivo de `tools/` (`;`, `//`, `/* */`, `#`, docstrings), saltea
-los `.md` y busca una lista de palabras de ABL. Excepciones: el propio
-archivo, `test_project.py` (escribe `ABL_*` a propósito) y las dos líneas
-del `.inc` emitido, por pedazo de texto y con una prueba que falla si ya
-no coinciden. Un `const _RED: &str = "PhoneCallDiff";` en
-`rm2k-snes/text/src/refit.rs` la pone en rojo. Sobre `3bf9aaf5`
-encontraba 64 apariciones en 15 archivos. Lo que **no** ve: una línea
-copiada sin ningún nombre adentro.
+**The guard** is `tools/tests/test_no_game_names.py`: it strips the comments
+of each file of `tools/` (`;`, `//`, `/* */`, `#`, docstrings), skips the
+`.md` and searches for a list of ABL words. Exceptions: the file itself,
+`test_project.py` (it writes `ABL_*` on purpose) and the two lines of the
+emitted `.inc`, by piece of text and with a test that fails if they no longer
+match. A `const _RED: &str = "PhoneCallDiff";` in
+`rm2k-snes/text/src/refit.rs` turns it red. On `3bf9aaf5` it found 64
+occurrences in 15 files. What it does **not** see: a copied line without any
+name inside.
 
-Las tandas: `just -f tools/justfile test` pasó de 32 a 52 (la guarda, la
-de las excepciones y dieciocho casos de la red); `cargo test -p` de los
-ocho crates tocados, en verde. Ningún binario cambia —los `.rs` tocados lo
-son en sus pruebas—, así que la ROM no se puede mover; igual se corrió la
-tanda de ABL en un clon, con estas herramientas adelante en el PATH.
+The suites: `just -f tools/justfile test` went from 32 to 52 (the guard, the
+exceptions one and eighteen cases of the net); `cargo test -p` of the eight
+crates touched, green. No binary changes —the `.rs` files touched are so in
+their tests—, so the ROM cannot move; even so ABL's suite was run in a clone,
+with these tools first in the PATH.
 
-**Al mergear no hay que instalar nada**: no cambia ningún binario ni el
-nombre de ningún script.
+**When merging there is nothing to install**: no binary changes, nor the name
+of any script.
 
-La tanda de ABL, en un clon de `/shared/abl-snes` (`a942b02`) con el
-`bin/` local de este worktree adelante en el PATH: 993 en verde antes y
-después, y `abl.sfc` `8c9e670f8c86d7c4…` las dos veces. No dice mucho, y
-está bien que no: no hay nada en la ROM que esto pueda mover.
+ABL's suite, in a clone of `/shared/abl-snes` (`a942b02`) with this
+worktree's local `bin/` first in the PATH: 993 green before and after, and
+`abl.sfc` `8c9e670f8c86d7c4…` both times. It does not say much, and it is fine
+that it does not: there is nothing in the ROM that this can move.

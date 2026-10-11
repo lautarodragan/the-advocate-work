@@ -1,157 +1,156 @@
 ---
-name: "La mudanza: el runtime a tools/, ABL adentro de rom/"
-description: "rom/src pasa a tools/runtime; data/, parches/, pruebas/, pytest.ini y el justfile de ABL pasan adentro de rom/, con las ROMs byte por byte iguales"
+name: "The move: the runtime to tools/, ABL inside rom/"
+description: "rom/src becomes tools/runtime; data/, parches/, pruebas/, pytest.ini and ABL's justfile move inside rom/, with the ROMs byte for byte identical"
 type: refactor
 status: done
 assignee: taro
 ---
 
-Decidido por taro el 2026-09-29 (ver
-`workflow/decisiones/las-herramientas-se-separan-de-abl.md`): se distingue
-el runtime genérico del proyecto A Blurred Line. La raíz queda con `rom/`,
-`tools/`, `docs/` y `workflow/` (más los archivos sueltos de siempre:
+Decided by taro on 2026-09-29 (see
+`workflow/decisiones/las-herramientas-se-separan-de-abl.md`): the generic
+runtime is distinguished from the A Blurred Line project. The root is left with
+`rom/`, `tools/`, `docs/` and `workflow/` (plus the usual loose files:
 `AGENTS.md`, `CLAUDE.md`, `README.md`, `DITTO.md`, `.gitignore`…).
 
-Va después del paso 2 del plan (`comun/proyecto.py`, Tipa, `e257bca3`), así
-que mover cada carpeta es cambiar una línea ahí. Hornero decide los detalles
-con la autorización de taro para decidir sin esperarlo.
+It goes after step 2 of the plan (`comun/proyecto.py`, Tipa, `e257bca3`), so
+moving each folder is changing one line there. Hornero decides the details with
+taro's authorisation to decide without waiting for him.
 
 - `rom/src/` → `tools/runtime/`
 - `data/` → `rom/data/`, `parches/` → `rom/parches/`, `pruebas/` →
   `rom/pruebas/`, `pytest.ini` → `rom/pytest.ini`
-- el `justfile` de la raíz → `rom/justfile`
-- `rom/build/` se queda donde está.
+- the root `justfile` → `rom/justfile`
+- `rom/build/` stays where it is.
 
-## Lo hecho (Algarrobo, 2026-09-29)
+## What was done (Algarrobo, 2026-09-29)
 
-Cuatro commits: `3b3f8db6`, sólo `git mv` y no arma; `78a5d27e`, lo que lo
-hace andar; `1bf580f3`, la prosa; `539ba681`, cinco comentarios que la
-pasada mecánica de la prosa cambió adentro de strings que el conversor
-escribe al `.inc`, y que vuelven a decir `rom/src/` (ver abajo).
+Four commits: `3b3f8db6`, only `git mv` and it does not build; `78a5d27e`,
+what makes it work; `1bf580f3`, the prose; `539ba681`, five comments that the
+mechanical pass over the prose changed inside strings that the converter
+writes to the `.inc`, and that say `rom/src/` again (see below).
 
-- **`proyecto.py`**: `runtime()` cuelga de `herramientas()`, y una función
-  nueva, `abl()` —`rom/`—, de la que cuelgan `build`, `data`, `parches` y
-  `pruebas`. `raiz()` sigue siendo la del repo: ahí corren `ca65` y `ld65`,
-  y contra ella se escriben las rutas de los `.inc` y los `.dbg`. Por eso
-  los `.inc` salen iguales y los `.dbg` cambian sólo en el nombre de los
-  fuentes. `entregar` se acomodó solo: su `RUNTIME` sale de `proyecto`, y
-  `HUELLA_MSU` da el mismo texto porque `rom/build/` no se movió.
-- **`ensamblar.py`** mira el directorio del fuente que arma, así que la
-  negativa pasó sola a `tools/runtime/`. Probado con un `mapdata.inc`
-  vacío ahí: se niega.
-- **`.gitignore`**: `rom/pruebas/snapshots/`. `.git-blame-ignore-revs` se
-  queda en la raíz y sin cambios: `git blame` lo busca ahí, y sus commits
-  valen para todo el repo.
+- **`proyecto.py`**: `runtime()` hangs from `herramientas()`, and a new
+  function, `abl()` —`rom/`—, from which `build`, `data`, `parches` and
+  `pruebas` hang. `raiz()` is still the repo's: `ca65` and `ld65` run there,
+  and the paths of the `.inc` and `.dbg` files are written against it. That is
+  why the `.inc` come out identical and the `.dbg` change only in the sources'
+  names. `entregar` adjusted on its own: its `RUNTIME` comes from `proyecto`,
+  and `HUELLA_MSU` gives the same text because `rom/build/` did not move.
+- **`ensamblar.py`** looks at the directory of the source it builds, so the
+  refusal moved to `tools/runtime/` on its own. Tested with an empty
+  `mapdata.inc` there: it refuses.
+- **`.gitignore`**: `rom/pruebas/snapshots/`. `.git-blame-ignore-revs` stays at
+  the root and unchanged: `git blame` looks for it there, and its commits hold
+  for the whole repo.
 
-## Las decisiones, y por qué
+## The decisions, and why
 
-**Desde dónde se corren las recetas de ABL: desde la raíz, igual que
-antes, o desde `rom/`.** La raíz tiene un `justfile` de dos líneas que sólo
-hace `import "rom/justfile"` con `set working-directory := "rom"`. Así:
+**Where ABL's recipes are run from: from the root, same as before, or from
+`rom/`.** The root has a two-line `justfile` that only does `import
+"rom/justfile"` with `set working-directory := "rom"`. That way:
 
-- taro sigue escribiendo `just cartuchos`, `just entregar "…"` y
-  `mednafen rom/build/release/abl.sfc` desde la raíz, como siempre;
-- las recetas corren paradas en `rom/` las llame quien las llame —desde la
-  raíz, desde `rom/`, desde `rom/pruebas/abl/`, o con `-f` desde `/tmp`—,
-  así que sus rutas son relativas a ABL y no al repo;
-- el de la raíz no tiene recetas ni nombra `tools/`, y ninguno de los dos
-  `justfile` de abajo sabe que existe: es del repo, y el día que se parta
-  se borra.
+- taro keeps writing `just cartuchos`, `just entregar "…"` and
+  `mednafen rom/build/release/abl.sfc` from the root, as always;
+- the recipes run standing in `rom/` whoever calls them —from the root, from
+  `rom/`, from `rom/pruebas/abl/`, or with `-f` from `/tmp`—, so their paths
+  are relative to ABL and not to the repo;
+- the root one has no recipes nor names `tools/`, and neither of the two
+  `justfile`s below knows it exists: it is the repo's, and the day it is split
+  it gets deleted.
 
-Descartado: `mod rom`, que obliga a escribir `just rom cartuchos`, y que
-taro corra desde `rom/`, que cambia su costumbre y el comando de `mednafen`.
+Discarded: `mod rom`, which forces writing `just rom cartuchos`, and taro
+running from `rom/`, which changes his habit and the `mednafen` command.
 
-Un detalle que costó: importado, `justfile_directory()` es la raíz, no
-`rom/`. `rom/justfile` usa `source_directory()`, que es el suyo en los dos
-casos. Probado en un árbol de juguete antes de tocar el repo.
+A detail that took effort: imported, `justfile_directory()` is the root, not
+`rom/`. `rom/justfile` uses `source_directory()`, which is its own in both
+cases. Tested in a toy tree before touching the repo.
 
-**El `bin/` local: `herramientas-locales <destino> [proyectos…]`, con el
-destino obligatorio.** Ninguno de los dos lados puede saber dónde vive el
-otro, así que lo dice el que consume. `rom/justfile` busca el suyo en
-`rom/.herramientas-locales/`, y su guarda, cuando no está, da el comando
-entero con rutas absolutas —sale de `git rev-parse --show-toplevel` y de
-`source_directory()`—, así que se puede pegar desde cualquier directorio.
-Un destino relativo es relativo a donde se corrió `just`
-(`invocation_directory()`), no a `tools/`. `tools/justfile` busca el suyo
-en `tools/.herramientas-locales/`, para que `protocolo` y sus pruebas usen
-el `protocol` del worktree si alguien lo modifica. Obligatorio y no con un
-valor por omisión porque `herramientas-locales lz2` sería ambiguo.
+**The local `bin/`: `herramientas-locales <destino> [proyectos…]`, with the
+destination mandatory.** Neither side can know where the other lives, so the
+one that consumes says it. `rom/justfile` looks for its own in
+`rom/.herramientas-locales/`, and its guard, when it is not there, gives the
+whole command with absolute paths —it comes from `git rev-parse
+--show-toplevel` and from `source_directory()`—, so it can be pasted from any
+directory. A relative destination is relative to where `just` was run
+(`invocation_directory()`), not to `tools/`. `tools/justfile` looks for its own
+in `tools/.herramientas-locales/`, so that `protocolo` and its tests use the
+worktree's `protocol` if someone modifies it. Mandatory and not with a default
+because `herramientas-locales lz2` would be ambiguous.
 
-**Las rutas en la prosa de `rom/` son desde `rom/`**: `build/release`,
-`pruebas/`, y el runtime como `runtime/<archivo>.s`, sin `tools/`, que es
-lo que cobra `test_lado_de_abl.py`. Afuera de `rom/`, desde la raíz del
-repo.
+**The paths in the prose of `rom/` are from `rom/`**: `build/release`,
+`pruebas/`, and the runtime as `runtime/<archivo>.s`, without `tools/`, which is
+what `test_lado_de_abl.py` enforces. Outside `rom/`, from the repo's root.
 
-## Verificado
+## Verified
 
-- **ROMs**: `SIN_CACHE=1 just cartuchos` antes de tocar nada (desde la
-  raíz) y después del segundo commit (desde la raíz): de los 1001 archivos
-  de `rom/build/` —sin `cache/`, `.o` ni `sello.txt`—, iguales todos salvo
-  los dos `.dbg`. `abl.sfc` `7a3c6483…6a66552`, `prueba.sfc`
-  `fb6db844…ae2d877`, `abl.msu` `905decd2…6b83cee`, y los `.pcm` y los
-  `.inc` generados, iguales. Los `.dbg` difieren en 95 líneas `file` cada
-  uno y en nada más, y la única diferencia es `rom/src/` → `tools/runtime/`
-  en el nombre.
-- **Y otra vez al final**, `SIN_CACHE=1 just cartuchos` desde `rom/` sobre
-  los cuatro commits, contra lo de antes de la mudanza: iguales todos salvo
-  los dos `.dbg`, que suman al cambio de nombre el `size` de los 16 `.s`
-  cuyos comentarios tocó la prosa, y nada más.
+- **ROMs**: `SIN_CACHE=1 just cartuchos` before touching anything (from the
+  root) and after the second commit (from the root): of the 1001 files of
+  `rom/build/` —without `cache/`, `.o` or `sello.txt`—, all identical except
+  the two `.dbg`. `abl.sfc` `7a3c6483…6a66552`, `prueba.sfc`
+  `fb6db844…ae2d877`, `abl.msu` `905decd2…6b83cee`, and the `.pcm` and the
+  generated `.inc`, identical. The `.dbg` differ in 95 `file` lines each and in
+  nothing else, and the only difference is `rom/src/` → `tools/runtime/` in
+  the name.
+- **And again at the end**, `SIN_CACHE=1 just cartuchos` from `rom/` on the
+  four commits, against what there was before the move: all identical except
+  the two `.dbg`, which add to the name change the `size` of the 16 `.s` whose
+  comments the prose touched, and nothing more.
 
-  **Esa corrida fue la que cazó el error de la prosa**: la primera vez,
-  después de `1bf580f3`, los cuatro `.inc` generados salían distintos. La
-  pasada mecánica había cambiado `rom/src/` por `tools/runtime/` en cinco
-  strings de `snes_convert.py` y `snes_music.py` que son comentarios que
-  el conversor escribe al `.inc`. La decisión dice que lo emitido no se
-  toca todavía, así que volvieron a `rom/src/`, con un comentario al lado.
-  Ninguna prueba compara los `.inc` contra los de antes: sin esta corrida,
-  habría pasado.
-- **Tandas**: `just pruebas` desde la raíz, 866 antes y después; desde
-  `rom/`, después de la prosa, 866. `just -f tools/justfile pruebas`, 117.
-- **`test_lado_de_abl.py`**: sin tocar el código. Calcula su raíz tres
-  carpetas arriba de sí misma, que ahora es `rom/`, y sus rutas relativas
-  —`justfile`, `parches`, `data`, `pruebas`, `pytest.ini`— siguen
-  apuntando a lo mismo. Las 23 excepciones son las mismas: `rom/pytest.ini`
-  nombra `../tools`, y ya estaba en la lista.
-- **Desde otros directorios**: `just espacio release` desde
-  `rom/pruebas/abl/`; `just -f <raíz>/justfile parches-check` y `just -f
-  <raíz>/rom/justfile cartuchos` desde `/tmp`; `just parches` deja el árbol
-  igual; `pruebas/arnes/video.py --help` desde `rom/`.
-- **La guarda**: este worktree sin `bin/` se niega, y el comando que da,
-  pegado desde `/tmp`, arma el `bin/` y deja pasar. Sin destino,
-  `herramientas-locales` dice su uso; con uno relativo, lo arma relativo al
-  directorio desde donde se corrió.
-- **Mesen2**: armé lo que dejaría `just entregar` en un directorio del
-  scratchpad —`abl.sfc`, `.dbg`, `.msu` y el `git archive` de
-  `tools/runtime/`— y corrí la búsqueda de Mesen2 reimplementada (al lado
-  del `.dbg` y subiendo): encuentra los 95 fuentes y le faltan
-  `mapdata.inc` y `musicdata.inc`, igual que antes. Desde
-  `rom/build/release/` en el clon encuentra los 97.
-- **`git blame -C --diff-algorithm=histogram`**: de `tools/runtime/` en
-  `HEAD` contra `rom/src/` en `4ab92fd0`, línea por línea, el mismo commit
-  en las 4223 líneas de `main.s`, `heroe.s`, `interprete.s`, `batalla.s`,
-  `registros.s`, `paquete_de_audio.s` y `event_opcodes.inc`. Y `blame` sin
-  opciones sobre `rom/pruebas/arnes/consola.py`, igual en sus 1133.
+  **That run was the one that caught the prose's error**: the first time,
+  after `1bf580f3`, the four generated `.inc` came out different. The
+  mechanical pass had changed `rom/src/` to `tools/runtime/` in five strings of
+  `snes_convert.py` and `snes_music.py` that are comments the converter writes
+  to the `.inc`. The decision says that what is emitted is not touched yet, so
+  they went back to `rom/src/`, with a comment next to them. No test compares
+  the `.inc` against the ones from before: without this run, it would have got
+  through.
+- **Suites**: `just pruebas` from the root, 866 before and after; from `rom/`,
+  after the prose, 866. `just -f tools/justfile pruebas`, 117.
+- **`test_lado_de_abl.py`**: without touching the code. It computes its root
+  three folders above itself, which is now `rom/`, and its relative paths
+  —`justfile`, `parches`, `data`, `pruebas`, `pytest.ini`— still point at the
+  same things. The 23 exceptions are the same: `rom/pytest.ini` names
+  `../tools`, and it was already on the list.
+- **From other directories**: `just espacio release` from `rom/pruebas/abl/`;
+  `just -f <raíz>/justfile parches-check` and `just -f <raíz>/rom/justfile
+  cartuchos` from `/tmp`; `just parches` leaves the tree the same;
+  `pruebas/arnes/video.py --help` from `rom/`.
+- **The guard**: this worktree without `bin/` refuses, and the command it
+  gives, pasted from `/tmp`, builds the `bin/` and lets it through. Without a
+  destination, `herramientas-locales` states its usage; with a relative one,
+  it builds it relative to the directory it was run from.
+- **Mesen2**: I put together what `just entregar` would leave in a scratchpad
+  directory —`abl.sfc`, `.dbg`, `.msu` and the `git archive` of
+  `tools/runtime/`— and ran Mesen2's reimplemented search (next to the `.dbg`
+  and going up): it finds the 95 sources and is missing `mapdata.inc` and
+  `musicdata.inc`, same as before. From `rom/build/release/` in the clone it
+  finds the 97.
+- **`git blame -C --diff-algorithm=histogram`**: of `tools/runtime/` at `HEAD`
+  against `rom/src/` at `4ab92fd0`, line by line, the same commit in the 4223
+  lines of `main.s`, `heroe.s`, `interprete.s`, `batalla.s`, `registros.s`,
+  `paquete_de_audio.s` and `event_opcodes.inc`. And `blame` without options on
+  `rom/pruebas/arnes/consola.py`, identical across its 1133.
 
-**No se corrió**: `just entregar` de verdad, `datos`, `datos-vuelta`,
-`techos`, ni `video` más allá del `--help`.
+**Not run**: `just entregar` for real, `datos`, `datos-vuelta`, `techos`, nor
+`video` beyond `--help`.
 
-## Qué tiene que hacer taro en el host
+## What taro has to do on the host
 
-- **Nada para correr las recetas**: `just cartuchos`, `just pruebas`, `just
-  entregar "…"` siguen andando desde la raíz. También andan desde `rom/`.
-- **La ROM sigue en `rom/build/release/abl.sfc`.** `rom/build/` no se movió,
-  y las pistas de MSU-1 de `/shared/msu/` siguen valiendo: la huella es la
-  misma.
-- **`just -f tools/justfile herramientas` no hace falta volver a correrlo.**
-  Los symlinks del global apuntan a los `.py` de `tools/`, que no se
-  movieron, y esos scripts leen las rutas de `proyecto.py`, que es el nuevo
-  apenas se mergea. Rust no cambió.
-- **Los builds que entregue `just entregar` desde ahora traen
-  `tools/runtime/`** al lado del `.dbg`, en vez de `rom/src/`. Mesen2 lo
-  encuentra igual.
-- **El IDE**: si JetBrains tenía marcado `rom/src/` o `pruebas/` como
-  carpeta de algo, hay que marcar `tools/runtime/` y `rom/pruebas/`.
-- **Sub-agentes**: el comando de arranque cambió —`just -f tools/justfile
-  herramientas-locales rom/.herramientas-locales`—, y está en AGENTS.md.
-  Los worktrees viejos con `.herramientas-locales/` en su raíz dejan de
-  usarlo: la guarda se niega y da el comando nuevo.
+- **Nothing to run the recipes**: `just cartuchos`, `just pruebas`, `just
+  entregar "…"` keep working from the root. They also work from `rom/`.
+- **The ROM is still at `rom/build/release/abl.sfc`.** `rom/build/` did not
+  move, and the MSU-1 tracks in `/shared/msu/` are still valid: the
+  fingerprint is the same.
+- **`just -f tools/justfile herramientas` does not need to be run again.** The
+  global symlinks point at the `.py` files of `tools/`, which did not move, and
+  those scripts read the paths from `proyecto.py`, which is the new one as soon
+  as it is merged. Rust did not change.
+- **The builds that `just entregar` delivers from now on bring
+  `tools/runtime/`** next to the `.dbg`, instead of `rom/src/`. Mesen2 finds it
+  all the same.
+- **The IDE**: if JetBrains had `rom/src/` or `pruebas/` marked as a folder of
+  something, `tools/runtime/` and `rom/pruebas/` have to be marked.
+- **Sub-agents**: the startup command changed —`just -f tools/justfile
+  herramientas-locales rom/.herramientas-locales`—, and it is in AGENTS.md.
+  Old worktrees with `.herramientas-locales/` at their root stop using it: the
+  guard refuses and gives the new command.

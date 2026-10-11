@@ -1,53 +1,58 @@
 ---
-name: "Música por el SPC700"
-description: "Los temas por el SPC700, con el banco de muestras compartido"
+name: "Music through the SPC700"
+description: "The themes through the SPC700, with the shared sample bank"
 status: done
 ---
 
-### El paquete de audio de cada mapa
+### Each map's audio package
 
-La ARAM son 64 KB, y los instrumentos de los ocho temas de la demo son 53: los
-efectos que piden el Linkage Block y el Emitter Room —43 y 55 KB— no entran ni
-cerca. Por eso hay **un paquete por mapa**: al cargar uno se suben **los temas
-que sus páginas pueden prender y los efectos que piden**, en el orden en que
-aparecen, que es la prioridad si no entran todos. Cada tema
-por separado son de 8 a 32 KB, así que en el Emitter Room entran sus dos temas,
-los catorce efectos y el tema del mapa anterior, que sigue sonando.
+The ARAM is 64 KB, and the instruments of the demo's eight themes are 53: the
+sound effects that the Linkage Block and the Emitter Room ask for —43 and
+55 KB— do not come anywhere near fitting. That is why there is **one package
+per map**: when loading one, **the themes its pages can start and the sound
+effects they ask for** are uploaded, in the order in which they appear, which
+is the priority if they do not all fit. Each theme on its own is 8 to 32 KB,
+so in the Emitter Room its two themes fit, along with the fourteen sound
+effects and the previous map's theme, which keeps playing.
 
-Cómo está hecho:
+How it is done:
 
-* **Las muestras tienen número fijo en todo el cartucho**: las de la música y,
-  detrás, las de los efectos. Es el SRCN que el stream de la música ya
-  escribía, así que ni un byte del stream cambió. El directorio del SPC700
-  tiene una entrada por muestra y **las que no están apuntan al silencio**, un
-  bloque BRR de nueve bytes.
-* **Qué muestras usa un tema** lo dice su stream: los valores que escribe en
-  los registros SRCN (`muestras_del_stream`). El conversor emite esa lista por
-  tema, y por mapa sus temas y las muestras de sus efectos (`paquetes`).
-* **Las del tema que está sonando no se mueven**: la música sigue durante el
-  fundido, y pisarle una muestra que está tocando sería ruido. Las que el
-  paquete nuevo también quiere se quedan donde están, y las demás se sueltan.
-  Lo que falta se acomoda en el primer hueco donde entre, recorriendo la lista
-  de lo ocupado en orden (`paquete_cargar`, `colocar_muestra`).
-* **El driver del SPC700 aprendió a escribir la ARAM**: tres comandos más en
-  el puerto 2 —un byte, el puntero y un bloque de ternas— al lado del par del
-  DSP de siempre. La música sigue mandando pares con el puerto 2 en cero, y la
-  subida va en tandas de 85 ternas con las interrupciones cortadas, así que
-  la música se atrasa un poco y no se pierde. Son unos 55 KB por segundo.
-* **Un `PlayBGM` de un tema que el mapa no traía** —el del título, o uno de un
-  evento común— calla la música, suelta todo y rearma el paquete con ese tema
-  adelante: congela la imagen lo que tarde. Un efecto que no entró no suena.
+* **The samples have a fixed number across the whole cartridge**: the
+  music's and, behind them, the sound effects'. It is the SRCN that the music
+  stream already wrote, so not a single byte of the stream changed. The
+  SPC700's directory has one entry per sample and **the ones that are not
+  there point at silence**, a nine-byte BRR block.
+* **Which samples a theme uses** is told by its stream: the values it writes
+  into the SRCN registers (`muestras_del_stream`). The converter emits that
+  list per theme, and per map its themes and the samples of its sound effects
+  (`paquetes`).
+* **The ones of the theme that is playing do not move**: the music keeps going
+  during the fade, and overwriting a sample that is playing would be noise.
+  The ones the new package also wants stay where they are, and the rest are
+  released. What is missing gets placed in the first gap where it fits, going
+  through the list of what is occupied in order (`paquete_cargar`,
+  `colocar_muestra`).
+* **The SPC700 driver learned to write the ARAM**: three more commands on port
+  2 —a byte, the pointer and a block of triplets— next to the usual DSP pair.
+  The music keeps sending pairs with port 2 at zero, and the upload goes in
+  batches of 85 triplets with interrupts disabled, so the music falls a bit
+  behind and is not lost. It is some 55 KB per second.
+* **A `PlayBGM` of a theme the map did not bring** —the title's, or one from a
+  common event— silences the music, releases everything and rebuilds the
+  package with that theme first: it freezes the picture for as long as it
+  takes. A sound effect that did not fit does not play.
 
-Lo que cuesta: el fundido de un salto dura lo que tarda la subida. Del mapa 1
-al Emitter Room son 58 cuadros perdidos, de los que unos 14 son la carga del
-mapa de siempre: unas siete décimas de segundo de negro más.
+What it costs: a jump's fade lasts as long as the upload takes. From map 1 to
+the Emitter Room it is 58 frames lost, of which some 14 are the usual map
+load: some seven tenths of a second more of black.
 
-Cómo se verifica, porque la tanda no mide audio: la ARAM se lee del estado
-guardado del core —`retro_serialize`, ubicando el driver— y cada muestra que la
-ROM dice tener se compara con la del cartucho byte por byte, con su entrada del
-directorio. Y `pruebas/rpgmaker/test_musica_paquete.py` lo cobra solo: para el tema que la
-ROM dice estar tocando, que cada muestra de su `tema_muestras` tenga entrada en
-`FAR_ARAM_DE`. Hace falta una prueba de estado porque **el silencio no cambia un
-pixel**, y el tema de la pantalla de título es el más expuesto: es el único que
-ningún paquete trae —sale de `title_music` del LDB y los paquetes se arman con
-los `PlayBGM` de cada mapa— así que depende por entero de ese camino.
+How it is verified, because the suite does not measure audio: the ARAM is read
+from the core's saved state —`retro_serialize`, locating the driver— and each
+sample the ROM says it has is compared with the cartridge's byte by byte, with
+its directory entry. And `pruebas/rpgmaker/test_musica_paquete.py` enforces it
+on its own: for the theme the ROM says it is playing, that each sample in its
+`tema_muestras` has an entry in `FAR_ARAM_DE`. A state test is needed because
+**silence does not change a pixel**, and the title screen's theme is the most
+exposed: it is the only one no package brings —it comes from the LDB's
+`title_music` and the packages are built with each map's `PlayBGM`s— so it
+depends entirely on that path.

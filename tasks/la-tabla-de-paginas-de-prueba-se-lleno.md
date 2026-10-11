@@ -1,68 +1,69 @@
 ---
-name: "La tabla de páginas de prueba se llenó"
-description: "El número de página de prueba era un byte y release ya tenía 256: un caso más no ensamblaba. Ahora entran 2048 páginas por mapa, contando las del mapa"
+name: "The test page table filled up"
+description: "The test page number was a byte and release already had 256: one more case did not assemble. Now 2048 pages fit per map, counting the map's own"
 type: bug
 status: done
 assignee: taro
 ---
 
-Lo encontró Tacuarita el 2026-10-01 (`mundo-5-tangle-forest.md`):
-la tabla de páginas de prueba de `release` está llena, porque el número de
-página es un byte y ya hay 256. Un caso más rompe el ensamblado con `Range
-error`. Mientras tanto, ningún mapa nuevo puede sumar casos propios.
+Tacuarita found it on 2026-10-01 (`mundo-5-tangle-forest.md`): the `release`
+test page table is full, because the page number is a byte and there are
+already 256. One more case breaks the assembly with `Range error`. Meanwhile,
+no new map can add cases of its own.
 
-## Qué era
+## What it was
 
-Lo único que no entraba era el `+2` del registro de página, "its page
-number", que `rm2k-snes-mapdata` (`record.rs`, `page_table`) escribía entero
-con `.byte`. **La consola no lo lee**: `read_page` salta de `+0` a `+3`, y
-ninguna otra lectura de `[page_ptr], y` cae en `+2` —buscado en todo
-`tools/runtime/`—. Todo lo demás ya era de 16 bits:
+The only thing that did not fit was the `+2` of the page record, "its page
+number", which `rm2k-snes-mapdata` (`record.rs`, `page_table`) wrote whole with
+`.byte`. **The console does not read it**: `read_page` jumps from `+0` to `+3`,
+and no other read of `[page_ptr], y` lands on `+2` —searched across all of
+`tools/runtime/`—. Everything else was already 16-bit:
 
-* el valor contra el que la página k compara la variable del caso es el
-  `.word` de `+26`, con signo: hasta 32767;
-* `M_PAGE_COUNT` es un escalar de 16 bits del registro del mapa, y
-  `pages_left` es de 2 bytes;
-* el arnés escribe la variable del caso en dos bytes (`_elegir_el_caso`);
-* el recorrido usa `page_ofs` de 16 bits, y `pick_by_ev` guarda ese offset
-  por evento, con `$FFFD`–`$FFFF` como centinelas.
+* the value page k compares the case variable against is the `.word` at
+  `+26`, signed: up to 32767;
+* `M_PAGE_COUNT` is a 16-bit scalar of the map record, and `pages_left` is
+  2 bytes;
+* the harness writes the case variable in two bytes (`_elegir_el_caso`);
+* the walk uses a 16-bit `page_ofs`, and `pick_by_ev` stores that offset per
+  event, with `$FFFD`–`$FFFF` as sentinels.
 
-## Qué se hizo
+## What was done
 
-Lo más barato: `+2` lleva **sólo el byte bajo** del número, con el porqué
-al lado. Ensancharlo costaba un byte por página —el registro ya ocupa los 32—
-para un número que nadie lee, y cambiar el runtime. Las ROMs salen **byte
-por byte iguales** (ninguna página de hoy pasa de 255), y la tabla no crece.
+The cheapest thing: `+2` carries **only the low byte** of the number, with the
+reason next to it. Widening it cost one byte per page —the record already takes
+all 32— for a number nobody reads, and changing the runtime. The ROMs come out
+**byte for byte identical** (no page today goes past 255), and the table does
+not grow.
 
-**El límite nuevo es `MAX_PAGES`**, en `record.rs`: 2048 páginas en la tabla
-de un mapa —65536 / 32, por el `page_ofs` de 16 bits—, y es el de las
-páginas de prueba, que van todas en un evento del mapa que las lleva, sumadas
-a las de ese mapa. `check_counts` se niega con un mensaje si un mapa lo pasa,
-en vez de dejar que el offset dé la vuelta callado. El comentario de
-`CASE_VARIABLE` en `tools/port/events.py` apunta ahí.
+**The new limit is `MAX_PAGES`**, in `record.rs`: 2048 pages in a map's table
+—65536 / 32, because of the 16-bit `page_ofs`—, and it is the limit of the
+test pages, which all go in one event of the map that carries them, added to
+that map's own. `check_counts` refuses with a message if a map goes past it,
+instead of letting the offset wrap around silently. The comment on
+`CASE_VARIABLE` in `tools/port/events.py` points there.
 
-## Lo medido
+## What was measured
 
-* **El rojo, de punta a punta**: con dos casos de más en `pruebas/casos/`
-  (copias de `contador`), `just build release` con el `mapdata` viejo da
-  `Range error (256 not in [0..255])` y `(257 …)` en `mapdata.inc`. Con el
-  nuevo arma, y una prueba descartable corrió los dos casos —páginas 255 y
-  256— contra las goldens `contador-110` y `contador-190`: iguales. Los
-  casos y la prueba se borraron después.
-* **La prueba que queda**: `more_than_256_test_pages_fit_in_the_page_table`,
-  en `record.rs`: arma la tabla de un evento de prueba con 300 páginas y
-  mira que cada literal de cada `.byte` y `.word` entre en su directiva, que
-  es lo que mira `ca65`. Sin el arreglo da rojo con `256 does not fit in:
-  .byte 256  ; +2  its page number`. Y
-  `a_map_with_more_pages_than_the_console_walks_is_refused`, que 2048 entran
-  y 2049 no. Corren con `cargo test -p rm2k-snes-mapdata`, **no con `just
-  pruebas`**; de punta a punta lo va a cubrir `release` en cuanto pase de 256
-  casos, que es lo próximo que suma Zorro o Puma.
-* `NO_CACHE=1 just cartuchos` antes y después: los 1287 archivos de
-  `rom/build/` iguales, `abl.sfc` en `6809f47d59671284…`. Las goldens no se
-  movieron, y el espacio tampoco.
+* **The red, end to end**: with two extra cases in `pruebas/casos/` (copies of
+  `contador`), `just build release` with the old `mapdata` gives
+  `Range error (256 not in [0..255])` and `(257 …)` in `mapdata.inc`. With the
+  new one it builds, and a throwaway test ran the two cases —pages 255 and
+  256— against the goldens `contador-110` and `contador-190`: identical. The
+  cases and the test were deleted afterwards.
+* **The test that stays**: `more_than_256_test_pages_fit_in_the_page_table`,
+  in `record.rs`: it builds the table of a test event with 300 pages and
+  checks that each literal of each `.byte` and `.word` fits in its directive,
+  which is what `ca65` checks. Without the fix it goes red with `256 does not
+  fit in: .byte 256  ; +2  its page number`. And
+  `a_map_with_more_pages_than_the_console_walks_is_refused`, that 2048 fit and
+  2049 do not. They run with `cargo test -p rm2k-snes-mapdata`, **not with
+  `just pruebas`**; end to end it will be covered by `release` as soon as it
+  goes past 256 cases, which is the next thing Zorro or Puma adds.
+* `NO_CACHE=1 just cartuchos` before and after: the 1287 files of `rom/build/`
+  identical, `abl.sfc` at `6809f47d59671284…`. The goldens did not move, and
+  neither did the space.
 
-## Al mergear
+## When merging
 
-Instalar `mapdata` en el global: `just -f tools/justfile install mapdata`.
-Nada de Python renombrado.
+Install `mapdata` in the global one: `just -f tools/justfile install mapdata`.
+No Python renamed.

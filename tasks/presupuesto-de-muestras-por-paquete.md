@@ -1,50 +1,49 @@
 ---
-name: "Muestras por paquete"
-description: "Repartir la ARAM por paquete de mapa y no por banco"
+name: "Samples per package"
+description: "Splitting the ARAM per map package and not per bank"
 type: feature
 status: done
 ---
 
-# Hecho, el 2026-09-26
+# Done, on 2026-09-26
 
-Es el paso 6 de `tasks/la-calidad-de-la-musica.md`, la opción A, con lo
-medido y lo que salió: cada muestra con el presupuesto de su peor paquete,
-los efectos restados, y el tema que puede venir sonando contado sólo como
-tema (`decisiones/el-tema-que-suena-gana-y-los-efectos-esperan.md`). Las tres
-decisiones de abajo quedaron así: la unidad sigue siendo el mapa; el freno se
-paga en el fundido de cada mapa y en la pelea; y la muestra de un programa es
-una sola para todo el cartucho, a la tasa de su peor paquete. Lo de abajo es
-cómo estaba escrito antes.
+It is step 6 of `tasks/la-calidad-de-la-musica.md`, option A, with what was
+measured and what came out: each sample with the budget of its worst package,
+the sound effects subtracted, and the theme that may come in already playing
+counted only as a theme
+(`decisiones/el-tema-que-suena-gana-y-los-efectos-esperan.md`). The three
+decisions below ended up like this: the unit is still the map; the stall is
+paid in each map's fade and in the battle; and a program's sample is a single
+one for the whole cartridge, at the rate of its worst package. What is below
+is how it was written before.
 
-# Qué
+# What
 
-Que el presupuesto de ARAM se reparta **por paquete y no por banco**: darle a
-cada programa lo que su peor paquete puede pagar, en vez de una parte del banco
-entero.
+That the ARAM budget be split **per package and not per bank**: giving each
+program what its worst package can pay, instead of a share of the whole bank.
 
-Hoy los 40 KB de `ARAM_BUDGET` se reparten entre **todos** los programas del
-cartucho, así que sumar temas le baja la tasa a los que ya sonaban bien: con
-diecinueve temas en vez de once, la mediana pasa de 12,5 a 8,4 kHz. Y los temas
-que no alcanzan a aportar programas suenan incompletos —en `abl` son nueve, con
-entre el 12% y el 72% de sus notas.
+Today the 40 KB of `ARAM_BUDGET` are split among **all** the cartridge's
+programs, so adding themes lowers the rate of those that already sounded good:
+with nineteen themes instead of eleven, the median goes from 12.5 to 8.4 kHz.
+And the themes that do not manage to contribute programs sound incomplete —in
+`abl` there are nine, with between 12% and 72% of their notes.
 
 # Blockers
 
-* **El tiempo de transferencia.** Subir un banco de 32 KB por el protocolo del
-  IPL es del orden de medio segundo, o sea unos treinta cuadros de juego
-  frenado. Hoy se paga en cada cambio de mapa, adentro del fundido; en un
-  `PlayBGM` a mitad de una escena se vería.
-* **Los efectos de sonido comparten la ARAM** y tienen que sobrevivir al
-  cambio de paquete.
+* **The transfer time.** Uploading a 32 KB bank through the IPL's protocol is
+  on the order of half a second, that is, some thirty frames of stalled game.
+  Today it is paid on each map change, inside the fade; in a `PlayBGM` in the
+  middle of a scene it would show.
+* **The sound effects share the ARAM** and have to survive the package change.
 
-No es un blocker, aunque estuvo escrito como tal: **el mecanismo ya existe**.
-`paquete_cargar` manda el SPC700 de vuelta al IPL (`APU_CMD_IPL`) y sube el
-paquete de audio del mapa.
+It is not a blocker, although it was written as one: **the mechanism already
+exists**. `paquete_cargar` sends the SPC700 back to the IPL (`APU_CMD_IPL`)
+and uploads the map's audio package.
 
-# Decisiones a tomar
+# Decisions to make
 
-* **Cuál es la unidad del paquete**: el mapa, como hoy, o el tema.
-* **Dónde se paga el freno**, y si hay `PlayBGM` fuera de un fundido que no lo
-  tolere.
-* **Qué pasa con un tema que suena en varios paquetes**: se duplica su muestra
-  o se comparte un piso común.
+* **What the package's unit is**: the map, as today, or the theme.
+* **Where the stall is paid**, and whether there is a `PlayBGM` outside a fade
+  that does not tolerate it.
+* **What happens with a theme that plays in several packages**: its sample is
+  duplicated or a common floor is shared.
