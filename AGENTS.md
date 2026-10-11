@@ -478,11 +478,12 @@ Lo que el contenedor cambia en la práctica:
 referencia: se clona o se descarga acá adentro en vez de montar algo del host,
 que revela menos y da más margen. Además de los cuatro repos tiene:
 
-    ~/juegos/      los originales de RM2k, uno por directorio: `abl-rm`, y
-                   los siete del relevamiento. Es de donde sale el
-                   `GAME_DIR` de cada port
-    ~/assets/      `rtp/`, el RTP de Don Miguel, sin el cual faltan 22
-                   assets; `rtpe/`, el RTP extendido; `soundfonts/`, de
+    ~/juegos/      los originales de RM2k: `<port>.zip` —`abl.zip` y los
+                   siete del relevamiento— es el `GAME_DIR` de cada port, y
+                   al lado el mismo juego en un directorio, para Wine
+    ~/assets/      `rtp.zip`, el RTP de Don Miguel, sin el cual faltan 22
+                   assets —`rtp/` al lado es el mismo, descomprimido—;
+                   `rtpe/`, el RTP extendido; `soundfonts/`, de
                    donde salen las muestras; y `msu/`, los reemplazos de las
                    pistas de MSU-1
     ~/ref/         lo clonado para leer: liblcf, easyrpg-player, los
@@ -491,6 +492,12 @@ que revela menos y da más margen. Además de los cuatro repos tiene:
     ~/wine/        el ABL original corriendo con Wine: la receta, en
                    `~/wine/abl/LEEME.txt`
     ~/scratch/     los temporales, cada agente en `<nombre>/`
+
+**Los juegos y el RTP se leen de su `.zip`, y no se tocan**: un cambio a
+un juego va por sus parches. Es de taro, el 2026-10-11 —"nos fuerza un
+poco a no modificarlos"—. Las herramientas leen igual un directorio, y
+una copia retocada para medir algo se descomprime en `~/scratch/<nombre>/`
+y se le pasa en `GAME_DIR`; nunca se edita la de `~/juegos`.
 
 Hasta el 2026-10-10 todo eso vivía en `/extras`, otro volumen del mismo
 disco, con 75 GB de restos de otras épocas; se limpió y se mudó acá. Lo que
