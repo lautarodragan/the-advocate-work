@@ -85,10 +85,7 @@ del mapa; en las páginas del mapa, los eventos comunes y las de prueba.
 
 ## La salida sin pérdida (hecha: los gemelos)
 
-Fusionar las tiras: eventos invisibles, quietos, fuera de la capa del
-héroe, sin nombrar y con las mismas páginas cuentan una vez —un dueño con
-fila, y las otras celdas en una tabla de ROM que `event_in_cell` mira
-después de la RAM—. Medido: deja entrando sin perder nada 23 de los 38
-mapas de VD y 1 de los 11 de Desert. Cuesta un campo más en el registro de
-cada mapa (mueve `abl.sfc`), código en el banco 0 y un camino de la ROM que
-la tanda de ABL no ejecuta, porque ningún mapa de ABL pasa del tope.
+Medida antes de hacerla con `~/scratch/carpintero/eventos/fusion.py`. Lo
+que costó: una palabra por mapa en el bloque `ev_pos` (el registro estaba
+lleno en sus 128 bytes, así que no hubo campo nuevo), 6 bytes por gemelo,
+unos 70 bytes de `CODE` en el banco 0, y un cartucho de prueba más.
