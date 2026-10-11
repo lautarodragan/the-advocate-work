@@ -2,7 +2,8 @@
 name: "Vampires Dawn con MSU-1 obligatorio"
 description: "VD no entra en los 127 bancos ni con lo razonable comprimido (faltan ~1 MB con las poses en LZ2, más sin ellas): que un proyecto pueda pedir el MSU-1 obligatorio y lleve al .msu lo que no entra"
 type: feature
-agents: [Hornero]
+assignee: Tijereta
+agents: [Hornero, Tijereta]
 ---
 
 Sigue de `testing/vampires-dawn-entra-comprimido.md`, donde Tijereta midió todo: las poses en LZ2 son lo único que rinde en serio (−2,86 MB) y le cuestan a ABL cuadros —ocho rojas por CPU—; con ellas VD queda en 8,91 MB contra 7,94, y lo demás suma a lo sumo ~0,84 MB. El experimento está en las ramas locales `tijereta-vd-comprimido` de the-advocate y de los ports, sin mergear.
