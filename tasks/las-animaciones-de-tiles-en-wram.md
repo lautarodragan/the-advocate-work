@@ -1,87 +1,87 @@
 ---
-name: "Las animaciones de tiles que no entran en WRAM"
-description: "Un mapa cuyo flujo de anim_tiles no entra en WRAM corta el armado; que el mapa quede sin esa animación, con aviso"
+name: "Tile animations that don't fit in WRAM"
+description: "A map whose anim_tiles stream doesn't fit in WRAM stops the build; have the map go without that animation, with a warning"
 type: feature
 status: testing
 assignee: taro
 agents: [Cardón]
 ---
 
-De taro, el 2026-10-10, en el orden propuesto. Del 2026-10-06: el mapa 1 de Vampires Dawn ("a stream of anim_tiles is 27264 bytes and 8192 fit in WRAM"), uno de Book of Three y uno de Desert Nightmare. Misma línea que `degradar-en-vez-de-fallar.md`.
+From taro, on 2026-10-10, in the proposed order. From 2026-10-06: Vampires Dawn's map 1 ("a stream of anim_tiles is 27264 bytes and 8192 fit in WRAM"), one in Book of Three and one in Desert Nightmare. Same line as `degradar-en-vez-de-fallar.md`.
 
-## Qué es el flujo y quién pone el tope (Cardón, 2026-10-10)
+## What the stream is and who sets the ceiling (Cardón, 2026-10-10)
 
-`anim_tiles` son los dibujos de la animación del ChipSet —el agua, tres
-dibujos, y los tiles animados, cuatro— que `anim_upload` sube a VRAM cada
-vez que cambia el reloj. Viven en WRAM mientras se está en el mapa, en
-`ANIM_DRAWINGS` = `$7F6000`–`$7F8000` (`far_ram.s`): 8 KB, arriba del buffer
-de carga del fondo y debajo de la grilla, y lo que va después —capa de
-arriba y sprites, 24 KB— no puede pisarlos. El tope lo pone el runtime y lo
-hace cumplir el conversor: `LZ2_CAP_ANIM` en `mapdata/src/materials.rs`,
-contra el que `check_streams` cortaba el armado. Agrandarlo es achicar el
-de los sprites; no se tocó.
+`anim_tiles` are the drawings of the ChipSet's animation —the water, three
+drawings, and the animated tiles, four— that `anim_upload` uploads to VRAM each
+time the clock changes. They live in WRAM while on the map, in
+`ANIM_DRAWINGS` = `$7F6000`–`$7F8000` (`far_ram.s`): 8 KB, above the
+background's load buffer and below the grid, and what comes after —upper
+layer and sprites, 24 KB— can't overwrite them. The ceiling is set by the runtime and
+enforced by the converter: `LZ2_CAP_ANIM` in `mapdata/src/materials.rs`,
+against which `check_streams` stopped the build. Enlarging it means shrinking
+the sprites'; it wasn't touched.
 
-Cada familia es una corrida contigua de tiles al final del banco del fondo
-(Voodoo la numera), el banco ya lleva el dibujo 0 de cada uno, y la consola
-sube los primeros `tiles` de cada dibujo. Así que **se puede perder menos
-que la animación entera sin redibujar nada**: cortar la corrida a sus
-primeros `k` tiles deja a los demás quietos en su dibujo 0.
+Each family is a contiguous run of tiles at the end of the background's bank
+(Voodoo numbers it), the bank already carries drawing 0 of each one, and the console
+uploads the first `tiles` of each drawing. So **less than the whole animation
+can be lost without redrawing anything**: cutting the run to its
+first `k` tiles leaves the others still on their drawing 0.
 
-Medido con las herramientas globales, un mapa por cartucho:
+Measured with the global tools, one map per cartridge:
 
-| mapa | bytes | corridas (tiles × dibujos) |
+| map | bytes | runs (tiles × drawings) |
 |---|---|---|
-| Book of Three 46 | 10432 | agua 25×3, animados 22×4 |
-| Desert Nightmare 182 | 9792 | agua 51×3 |
+| Book of Three 46 | 10432 | water 25×3, animated 22×4 |
+| Desert Nightmare 182 | 9792 | water 51×3 |
 | Vampires Dawn 236 | 9792 | — |
 | Vampires Dawn 351 | 9152 | — |
-| Vampires Dawn 1 | 27264 | agua 142×3 |
+| Vampires Dawn 1 | 27264 | water 142×3 |
 
-El orden de Voodoo (el primero que encuentra, fila por fila) ya deja
-adelante los más usados: en el mapa 1 de VD los primeros 42 tiles de agua
-cubren casi todas las celdas de agua del mapa.
+Voodoo's order (the first it finds, row by row) already puts the most used
+in front: on VD's map 1 the first 42 water tiles
+cover almost all the map's water cells.
 
-## Hecho (Cardón, 2026-10-10)
+## Done (Cardón, 2026-10-10)
 
-**Se pierde parte de la animación, no toda**: `mapdata/src/animation.rs`
-corta cada corrida a sus primeros `k` tiles; los de atrás quedan quietos en
-su dibujo 0, con un WARNING que dice cuántos tiles y cuántas celdas por
-familia. Los `k` son los que más celdas del mapa dejan moviéndose dentro de
-los 8 KB (contadas por la tabla de bloques; empates, más bytes y después la
-primera familia). No se reordena la corrida —movería números de tile en la
-tabla de bloques—; no hizo falta: el orden de Voodoo ya deja adelante los
-más usados. "Menos cuadros" no se puede sin tocar el runtime: cuántos
-dibujos tiene cada familia es fijo en `chipset_animation.s`.
+**Part of the animation is lost, not all of it**: `mapdata/src/animation.rs`
+cuts each run to its first `k` tiles; the ones behind stay still on
+their drawing 0, with a WARNING that says how many tiles and how many cells per
+family. The `k` are the ones that leave the most map cells moving within
+the 8 KB (counted by the block table; ties, more bytes and then the
+first family). The run isn't reordered —it would move tile numbers in the
+block table—; it wasn't needed: Voodoo's order already puts the
+most used in front. "Fewer frames" isn't possible without touching the runtime: how many
+drawings each family has is fixed in `chipset_animation.s`.
 
-Va en mapdata y no en wally porque el tope es de mapdata y porque no hay
-que redibujar nada; queda escrito en el `lib.rs` del crate como la única
-cosa que decide sobre lo que se ve. Un mapa que entra no pasa por ahí.
+It goes in mapdata and not in wally because the ceiling is mapdata's and because nothing
+has to be redrawn; it is written in the crate's `lib.rs` as the only
+thing that decides about what is seen. A map that fits doesn't go through there.
 
-* snes-rm2k, rama `cardon-anim-tiles`: `1bdf72a0`. Prueba nueva
-  `mapdata/tests/animation.rs`, vista en roja con `fit` sin hacer nada.
-* ports, rama `cardon-anim-tiles`: `61e11d5`, el 46 de Book of Three y el
-  182 de Desert Nightmare salen de `excluded`; los dos releases enteros
-  arman con la rama.
-* libro, rama `cardon-anim-tiles`: `fcd736f`, la divergencia
-  `la-animacion-del-chipset-que-no-entra-en-la-wram.md` y una línea en el
-  README de cada uno de los tres ports.
+* snes-rm2k, branch `cardon-anim-tiles`: `1bdf72a0`. New test
+  `mapdata/tests/animation.rs`, seen red with `fit` doing nothing.
+* ports, branch `cardon-anim-tiles`: `61e11d5`, Book of Three's 46 and
+  Desert Nightmare's 182 come out of `excluded`; both whole releases
+  build with the branch.
+* book, branch `cardon-anim-tiles`: `fcd736f`, the divergence
+  `la-animacion-del-chipset-que-no-entra-en-la-wram.md` and a line in the
+  README of each of the three ports.
 
-Medido, cada mapa en un cartucho con el de arranque de su juego:
+Measured, each map in a cartridge with its game's start map:
 
-| mapa | queda quieto | después corta |
+| map | stays still | then it stops at |
 |---|---|---|
-| BoT 46 | 9 de 25 de agua (25 de 115 celdas), 2 de 22 animados (2 de 2185) | nada: arma |
-| Desert 182 | 9 de 51 de agua (44 de 1469) | nada: arma |
-| VD 236 | 9 de 51 de agua (26 de 1480) | la música: 281 temas y la pista va en un byte |
-| VD 351 | 5 de 37 de agua (9 de 674) | la música, igual |
-| VD 1 | 100 de 142 de agua (4275 de 262866) | la grilla: 180.000 bytes contra 64 KB de WRAM |
+| BoT 46 | 9 of 25 water (25 of 115 cells), 2 of 22 animated (2 of 2185) | nothing: it builds |
+| Desert 182 | 9 of 51 water (44 of 1469) | nothing: it builds |
+| VD 236 | 9 of 51 water (26 of 1480) | the music: 281 songs and the track goes in a byte |
+| VD 351 | 5 of 37 water (9 of 674) | the music, the same |
+| VD 1 | 100 of 142 water (4275 of 262866) | the grid: 180,000 bytes against 64 KB of WRAM |
 
-Tanda de ABL con `mapdata` local: 1159 verdes; `abl.sfc` sale idéntico,
-`f135f6af…`. `just -f tools/justfile test` en verde.
+A Blurred Line's suite with local `mapdata`: 1159 green; `abl.sfc` comes out identical,
+`f135f6af…`. `just -f tools/justfile test` green.
 
-**Lo que la tanda no cubre**: ningún mapa de ABL pasa del tope, así que el
-corte no lo ejecuta ninguna ROM de la tanda; lo cubren la prueba del crate y
-los cartuchos de BoT y Desert, que arman pero **nadie miró jugando**: que el
-agua cortada se vea bien en la consola está sin ver.
+**What the suite doesn't cover**: no ABL map goes past the ceiling, so the
+cut isn't executed by any ROM in the suite; it is covered by the crate's test and
+the BoT and Desert cartridges, which build but **nobody has looked at while playing**: whether the
+cut water looks right on the console is unseen.
 
-Instalar al mergear: `mapdata` (`just -f tools/justfile install mapdata`).
+Install when merging: `mapdata` (`just -f tools/justfile install mapdata`).
