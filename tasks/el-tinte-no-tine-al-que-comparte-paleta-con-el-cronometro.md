@@ -1,87 +1,90 @@
 ---
-name: "El tinte no tiñe al que comparte paleta con el cronómetro"
-description: "tinte.s subía sin teñir la paleta entera de los dígitos, que desde el 09-07 comparte un personaje; ahora sube sólo las entradas de los dígitos"
+name: "The tint does not tint whoever shares a palette with the timer"
+description: "tinte.s uploaded the digits' whole palette untinted, which since 09-07 a character shares; now it uploads only the digits' entries"
 type: bug
 status: done
 assignee: taro
 ---
 
-Encontrado midiendo si se juntan `release` y `test-main` (ver
-`juntar-release-y-test-main.md`), el 2026-09-25. **Pasaba en `release`.**
-Arreglado en el commit que mueve esta tarea a `testing/`.
+Found while measuring whether `release` and `test-main` can be merged (see
+`juntar-release-y-test-main.md`), on 2026-09-25. **It happened in
+`release`.** Fixed in the commit that moves this task to `testing/`.
 
-# Qué pasaba
+# What was happening
 
-`rom/src/tinte.s` volvía a subir **la paleta entera** de los dígitos sin
-teñir, porque "los dígitos tienen una paleta para ellos solos" (`5be4ade`,
-2026-09-04). Desde `034d721` (2026-09-07) esa paleta la comparten con un
-personaje, y ese personaje quedaba sin teñir. Y no sólo con el cronómetro
-corriendo: la subida miraba si el mapa **llevaba** los glifos, no si se veían,
-y `release` los lleva en todos sus mapas.
+`rom/src/tinte.s` re-uploaded **the whole palette** of the digits untinted,
+because "the digits have a palette all to themselves" (`5be4ade`,
+2026-09-04). Since `034d721` (2026-09-07) they share that palette with a
+character, and that character was left untinted. And not only with the
+timer running: the upload checked whether the map **carried** the glyphs,
+not whether they were visible, and `release` carries them on all its maps.
 
-Las cinco goldens de la puerta del mapa 7 que destapó la medición —`sacudir-60`,
-`cerrar-400`, `cerrar-right-400`, `autocierre-63` y `autocierre-3-185`— lo
-muestran si se arma `test-main` sin `--sin-timer`: **la puerta de la casa de
-Talan** (un evento dibujado con los tiles 111 y 117 de `BLchp1`) queda gris en
-la pantalla teñida de azul. 512 pixeles en cada una con el código de antes, 0
-con el de ahora. **No hay goldens que re-congelar por esto.**
+The five goldens of map 7's door that the measurement uncovered
+—`sacudir-60`, `cerrar-400`, `cerrar-right-400`, `autocierre-63` and
+`autocierre-3-185`— show it if `test-main` is built without `--sin-timer`:
+**the door of Talan's house** (an event drawn with tiles 111 and 117 of
+`BLchp1`) stays grey on the screen tinted blue. 512 pixels in each one with
+the code from before, 0 with the current one. **There are no goldens to
+re-freeze because of this.**
 
-# Lo que se averiguó antes de tocar nada
+# What was found out before touching anything
 
-**RM2k no tiñe el cronómetro.** En easyrpg el tono de `TintScreen` lo aplica
-`Spriteset_Map` a su tilemap, a sus personajes y al panorama, y `Sprite_Timer`
-no es de ahí (`Priority_Timer` 140 contra `Priority_Screen` 90). Así que saltear
-los dígitos estaba bien; lo que estaba mal era saltear la paleta entera.
+**RM2k does not tint the timer.** In easyrpg the tone of `TintScreen` is
+applied by `Spriteset_Map` to its tilemap, its characters and the panorama,
+and `Sprite_Timer` is not part of it (`Priority_Timer` 140 against
+`Priority_Screen` 90). So skipping the digits was right; what was wrong was
+skipping the whole palette.
 
-**Los dígitos usan dos colores**, negro y rojo puro (`colores_del_timer`), y
-el personaje con el que comparten a veces tiene uno de los dos o los dos. Con
-ésos no hay arreglo sin gastar entradas: son **la misma entrada de CGRAM**.
+**The digits use two colours**, black and pure red (`colores_del_timer`),
+and the character they share with sometimes has one of the two or both.
+With those there is no fix without spending entries: they are **the same
+CGRAM entry**.
 
-**Quién comparte**, en `release` —medido corriendo el conversor con
-`digitos_del_timer` envuelto por un script descartable—:
+**Who shares**, in `release` —measured by running the converter with
+`digitos_del_timer` wrapped by a throwaway script—:
 
-| Mapas | Quién | Comparte con los dígitos |
+| Maps | Who | Shares with the digits |
 |---|---|---|
-| 1, 3, 6, 14, 16, 30 | eventos dibujados con un tile del ChipSet | nada |
-| 7 | la puerta de la casa de Talan (`BLchp1` 111 y 117) | nada |
-| 9 | `Future1:7` | nada |
-| 13 | `Future3:5` | nada |
-| 2 | tres tiles de `ChipSet3` | el negro |
-| 10 | `People4:4` | el negro |
-| 11 | `Object2:6` | los dos |
-| 17 | `Men1:5` | los dos |
-| 21 | dos tiles de `caveD` y `Object2:5` | los dos |
-| 8, 20, 23, 26, 28, 32 | el save point | los dos |
-| 4, 5, 12, 18, 19, 29, 33, 34, 36 | nadie: la paleta es de los dígitos | — |
+| 1, 3, 6, 14, 16, 30 | events drawn with a ChipSet tile | nothing |
+| 7 | the door of Talan's house (`BLchp1` 111 and 117) | nothing |
+| 9 | `Future1:7` | nothing |
+| 13 | `Future3:5` | nothing |
+| 2 | three tiles of `ChipSet3` | the black |
+| 10 | `People4:4` | the black |
+| 11 | `Object2:6` | both |
+| 17 | `Men1:5` | both |
+| 21 | two tiles of `caveD` and `Object2:5` | both |
+| 8, 20, 23, 26, 28, 32 | the save point | both |
+| 4, 5, 12, 18, 19, 29, 33, 34, 36 | nobody: the palette is the digits' | — |
 
-**Dónde se usa el cronómetro en el juego** (`TimerOperation` en `data/`): no es
-uno solo. Hay **tres cuentas atrás visibles** —el despertador de Talan (mapa 7,
-600 s), la cantera (mapa 150, 300 s) y el bosque en llamas (311 a 312, 120 s)—,
-y en los mapas 9 y 11 el oficial del tram la pone desde una variable y la para
-en el mismo evento, así que ahí no se ve. **Dos de las tres coinciden con un
-tinte**: el despertador arranca poco después de un `TintScreen` con la
-saturación en 40 que ni el mapa 7 ni el 8 deshacen —la cuenta atrás corre sobre
-la pantalla desaturada hasta que la para el mapa 16—, y la del bosque arranca
-con la pantalla en (120, 50, 50). O sea que el caso no es sólo de la tanda: en
-Lashe City el save point estaba entero sin teñir mientras todo lo demás estaba
-desaturado.
+**Where the timer is used in the game** (`TimerOperation` in `data/`): it
+is not just one. There are **three visible countdowns** —Talan's alarm
+clock (map 7, 600 s), the quarry (map 150, 300 s) and the burning forest
+(311 to 312, 120 s)—, and on maps 9 and 11 the tram officer sets it from a
+variable and stops it in the same event, so there it is not seen. **Two of
+the three coincide with a tint**: the alarm clock starts shortly after a
+`TintScreen` with saturation at 40 that neither map 7 nor map 8 undoes —the
+countdown runs over the desaturated screen until map 16 stops it—, and the
+forest one starts with the screen at (120, 50, 50). So the case is not only
+the suite's: in Lashe City the save point was whole and untinted while
+everything else was desaturated.
 
-# El arreglo
+# The fix
 
-Sin paleta nueva y sin tocar el reparto:
+Without a new palette and without touching the distribution:
 
-* `subir_timer_pal` sube de la ROM **sólo las entradas de los dígitos**, que el
-  conversor emite como `timer_mascara` —una palabra por mapa, aparte de
-  `mapa_tabla` porque el registro está en sus 128 bytes—.
-* Y sólo **mientras el cronómetro se ve**. Al prenderse o apagarse con un tinte
-  puesto, `timer_repintar` pide volver a subir la sombra, porque esas entradas
-  cambian de dueño.
+* `subir_timer_pal` uploads from ROM **only the digits' entries**, which the
+  converter emits as `timer_mascara` —one word per map, separate from
+  `mapa_tabla` because the record is at its 128 bytes—.
+* And only **while the timer is visible**. On turning on or off with a tint
+  in place, `timer_repintar` asks to re-upload the shadow, because those
+  entries change owner.
 
-Lo que queda está en `divergencias/el-cronometro-y-su-vecino-comparten-colores.md`.
+What remains is in `divergencias/el-cronometro-y-su-vecino-comparten-colores.md`.
 
-# Qué mirar jugando
+# What to look at while playing
 
-El save point de Lashe City (mapa 8) con el despertador corriendo: antes se veía
-con todos sus colores sobre la pantalla desaturada; ahora se desatura con el
-resto, **salvo su rojo puro**, que queda rojo mientras se ve el cronómetro. Y la
-puerta de la casa de Talan en cualquier escena teñida del mapa 7.
+The Lashe City save point (map 8) with the alarm clock running: before, it
+showed with all its colours over the desaturated screen; now it desaturates
+with the rest, **except its pure red**, which stays red while the timer is
+visible. And the door of Talan's house in any tinted scene of map 7.

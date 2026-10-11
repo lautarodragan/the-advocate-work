@@ -1,65 +1,68 @@
 ---
-name: "La partida guardada con MSU-1 arranca muda"
-description: "Guardar mientras suena una pista del MSU-1 guarda music_apagada en 1, y al cargar la partida no suena nada"
+name: "The game saved with MSU-1 starts silent"
+description: "Saving while an MSU-1 track plays saves music_apagada as 1, and on loading the game nothing plays"
 type: bug
 status: done
 ---
 
-Visto leyendo el código el 2026-09-26, al arreglar "la pista del título sigue
-al empezar"; no se corrió. La partida guarda `music_apagada` y `tema_actual`
-(`partida_tabla`, en `rom/src/banco1.s`), y con una pista del MSU-1 sonando
-`music_apagada` vale 1 porque el SPC700 está callado a propósito. Al cargar,
-`music_boot_ya` (`rom/src/musica.s`) ve `music_apagada` y toma el camino
-callado: la partida arranca muda hasta el próximo `PlayBGM` o el tema propio
-de un mapa. Antes del arreglo de la pista del título seguía sonando la pista
-del título, que tampoco era la que correspondía.
+Seen reading the code on 2026-09-26, while fixing "the title track keeps
+playing on starting"; it wasn't run. The saved game stores `music_apagada`
+and `tema_actual` (`partida_tabla`, in `rom/src/banco1.s`), and with an
+MSU-1 track playing `music_apagada` is 1 because the SPC700 is silent on
+purpose. On loading, `music_boot_ya` (`rom/src/musica.s`) sees
+`music_apagada` and takes the silent path: the game starts silent until the
+next `PlayBGM` or a map's own theme. Before the fix of the title track, the
+title track kept playing, which wasn't the right one either.
 
-Es la misma pregunta que ya contestan `mapa_tema_callar` y `op_battle`
-—"¿está sonando?" es `MSU_SUENA` o `music_apagada` en cero—, y se la puede
-contestar al guardar o al cargar. Cobrarlo con una prueba con `msu=True`
-(`pruebas/abl/test_msu.py`), guardando en un mapa con tema de pista.
+It is the same question that `mapa_tema_callar` and `op_battle` already
+answer —"is it playing?" is `MSU_SUENA` or `music_apagada` at zero—, and it
+can be answered on saving or on loading. Catch it with a test with
+`msu=True` (`pruebas/abl/test_msu.py`), saving on a map with a track theme.
 
-## Hecho, el 2026-09-27
+## Done, on 2026-09-27
 
-**La intención**, por `git blame`: `music_apagada` y `tema_actual` entraron a
-`partida_tabla` en `a51d2980` (2026-09-10), con el byte queriendo decir "se
-guardó sin música". El MSU-1 llegó al día siguiente (`e6bb4bc`) y le dio a
-`music_apagada` un segundo sentido —"el SPC700 está callado porque suena la
-pista"—, y la partida lo siguió guardando tal cual.
+**The intent**, by `git blame`: `music_apagada` and `tema_actual` went into
+`partida_tabla` in `a51d2980` (2026-09-10), with the byte meaning "it was
+saved without music". MSU-1 arrived the next day (`e6bb4bc`) and gave
+`music_apagada` a second meaning —"the SPC700 is silent because the track is
+playing"—, and the saved game kept storing it as is.
 
-**El arreglo**, en `guardar_partida` (`rom/src/partida.s`): con `MSU_SUENA`
-prendido, `music_apagada` se pone en cero mientras dura la copia a la SRAM y
-se repone después, con las interrupciones cerradas —si `irq_musica` lo viera
-en cero correría el stream del SPC700—. Lo guardado vuelve a ser "¿está
-sonando?", sin decir por dónde: al cargar, `music_boot_ya` llama a
-`music_start`, que elige la pista si hay MSU-1 y el SPC700 si no.
+**The fix**, in `guardar_partida` (`rom/src/partida.s`): with `MSU_SUENA`
+on, `music_apagada` is set to zero while the copy to SRAM lasts and
+restored afterwards, with interrupts disabled —if `irq_musica` saw it at
+zero it would run the SPC700 stream—. What is saved is once again "is it
+playing?", without saying through what: on loading, `music_boot_ya` calls
+`music_start`, which picks the track if there is MSU-1 and the SPC700 if not.
 
-**El formato no cambia**: los mismos bytes en el mismo lugar, con el sentido
-que ya tenían sin MSU-1. `PARTIDA_BYTES` y `PARTIDA_FIRMA` salen iguales, así
-que no se subió nada. Una partida guardada con la pista sonando **por un build
-de antes** sigue cargando muda: guardó un 1, y al cargar no hay forma de
-distinguirlo de un silencio de verdad.
+**The format doesn't change**: the same bytes in the same place, with the
+meaning they already had without MSU-1. `PARTIDA_BYTES` and `PARTIDA_FIRMA`
+come out the same, so nothing was bumped. A game saved with the track
+playing **by an earlier build** still loads silent: it saved a 1, and on
+loading there is no way to tell it apart from a real silence.
 
-**Los cruces**, medidos con la prueba:
+**The crossings**, measured with the test:
 
-* con MSU-1 a con MSU-1: vuelve la pista. Antes, muda.
-* con MSU-1 a sin MSU-1 (un `.srm` del FX Pak en un emulador sin pistas):
-  el tema por el SPC700, con sus muestras en la ARAM. Antes, muda.
-* sin MSU-1 a con MSU-1: la pista. Ya andaba —se guardaba un 0—; queda
-  cobrado.
+* with MSU-1 to with MSU-1: the track comes back. Before, silent.
+* with MSU-1 to without MSU-1 (an `.srm` from the FX Pak in an emulator
+  without tracks): the theme through the SPC700, with its samples in ARAM.
+  Before, silent.
+* without MSU-1 to with MSU-1: the track. It already worked —a 0 was
+  saved—; now it is covered.
 
-**La prueba**: `test_la_partida_guardada_vuelve_con_su_tema`, en
-`pruebas/abl/test_msu.py`, con las tres variantes. Llega al mapa 26 —prende
-`KSSMKEND`, que tiene pista—, guarda por el menú, pasa la SRAM a otra consola
-si la combinación lo pide, y carga con "Resume the Story". Contra la ROM sin
-el arreglo, `msu-a-msu` y `msu-a-spc700` dan rojo (`music_apagada` en 1 y
-`MSU_SUENA` en 0 al cargar) y `spc700-a-msu` verde.
+**The test**: `test_la_partida_guardada_vuelve_con_su_tema`, in
+`pruebas/abl/test_msu.py`, with the three variants. It reaches map 26 —it
+turns on `KSSMKEND`, which has a track—, saves through the menu, moves the
+SRAM to another console if the combination asks for it, and loads with
+"Resume the Story". Against the ROM without the fix, `msu-a-msu` and
+`msu-a-spc700` give red (`music_apagada` at 1 and `MSU_SUENA` at 0 on
+loading) and `spc700-a-msu` green.
 
-## Qué tiene que mirar taro
+## What taro has to look at
 
-Con las pistas al lado, en Mednafen (`-force_module snes_faust`) y en el FX
-Pak: llegar a un lugar con tema de pista, guardar, resetear, "Resume the
-Story", y oír que el tema vuelve. Y el cruce que importa en la práctica: el
-`.srm` guardado en el FX Pak, cargado en Mednafen **sin** las pistas, tiene
-que sonar por el SPC700. Una partida guardada con un build anterior mientras
-sonaba una pista va a cargar muda igual: hay que guardarla de nuevo.
+With the tracks alongside, in Mednafen (`-force_module snes_faust`) and on
+the FX Pak: get to a place with a track theme, save, reset, "Resume the
+Story", and hear the theme come back. And the crossing that matters in
+practice: the `.srm` saved on the FX Pak, loaded in Mednafen **without** the
+tracks, has to play through the SPC700. A game saved with an earlier build
+while a track was playing will load silent all the same: it has to be saved
+again.

@@ -1,67 +1,67 @@
 ---
-name: "Plan: un juego de RM2k para pruebas"
-description: "Un juego sintético, sin assets con derechos, con el que las pruebas de lo que hace RM2k vivan con las herramientas y el runtime y no con ABL"
+name: "Plan: an RM2k game for tests"
+description: "A synthetic game, with no copyrighted assets, so the tests of what RM2k does can live with the tools and the runtime and not with ABL"
 type: research
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-10-02: "empezar el proyecto de tener un juego de rpg maker
-2000 para pruebas". Hoy las pruebas de "lo que hace RM2k"
-(`rom/pruebas/rpgmaker/`) viven del lado de ABL sólo porque necesitan un
-juego. Los crates ya tienen juegos chicos en `tests/game/`. Es un plan, no
-código: de él salen las tareas.
+From taro, on 2026-10-02: "start the project of having an RPG Maker
+2000 game for tests". Today the tests of "what RM2k does"
+(`rom/pruebas/rpgmaker/`) live on ABL's side only because they need a
+game. The crates already have small games in `tests/game/`. It's a plan, not
+code: the tasks come out of it.
 
-# La dirección de taro (2026-10-02)
+# taro's direction (2026-10-02)
 
-"Cuando terminen estos, me gustaría proceder con el juego de pruebas, si
-Leñatero lo encuentra factible":
+"When these are finished, I'd like to go ahead with the test game, if
+Leñatero finds it feasible":
 
-1. **Primero, todo lo de ABL en un solo lugar, fuera de este repo**: un repo
-   propio, con su historia.
-2. **Después, pruebas en este repo 100% originales**, sin referencias a ABL
-   ni assets con copyright.
-3. **Los assets**: el reemplazo del RTP de EasyRPG
-   (https://easyrpg.org/rtp-replacement/), otros assets libres —taro tiene
-   sitios guardados—, o fabricados por ahora; efectos de sonido que taro
-   puede hacer en FL Studio; y MIDIs de obras de dominio público (Bach,
-   Beethoven, Mozart), con la licencia del archivo verificada.
+1. **First, everything of ABL in a single place, outside this repo**: a repo
+   of its own, with its history.
+2. **Then, 100% original tests in this repo**, with no references to ABL
+   nor copyrighted assets.
+3. **The assets**: EasyRPG's RTP replacement
+   (https://easyrpg.org/rtp-replacement/), other free assets —taro has
+   sites saved—, or made up for now; sound effects that taro
+   can make in FL Studio; and MIDIs of public domain works (Bach,
+   Beethoven, Mozart), with the file's licence verified.
 
-## Mientras se trabaja (Leñatero, 2026-10-02)
+## While working (Leñatero, 2026-10-02)
 
-* La tanda de base: `just pruebas --junitxml=…` da 999 en 86,5 s, 643
-  CPU-s. Sin las del motor (`--ignore` de cada archivo M1 y M2), 394 en
-  73 s y 351 CPU-s.
-* El juego sintético se escribió como volcado exacto de Ditto (~8 KB de
-  JSON y texto, con un generador de unas 120 líneas) y armó un cartucho que
-  arranca y camina, con el RTP de EasyRPG y FluidR3. Para llegar hubo que
-  esquivar seis supuestos de ABL en las herramientas: van al estudio.
-* taro, por el coordinador, el mismo día: la primera fase es sacar ABL a un
-  repo propio; después, pruebas 100% originales. El estudio lo incluye.
+* The base suite: `just pruebas --junitxml=…` gives 999 in 86.5 s, 643
+  CPU-s. Without the engine's ones (`--ignore` of each M1 and M2 file), 394 in
+  73 s and 351 CPU-s.
+* The synthetic game was written as an exact Ditto dump (~8 KB of
+  JSON and text, with a generator of about 120 lines) and built a cartridge that
+  boots and walks, with EasyRPG's RTP and FluidR3. To get there six
+  ABL assumptions in the tools had to be dodged: they go into the study.
+* taro, through the coordinator, the same day: the first phase is moving ABL out to a
+  repo of its own; then, 100% original tests. The study includes it.
 
-## Resultado
+## Result
 
-El estudio es `docs/research/2026-10-02-el-juego-de-pruebas.md`. Lo corto:
+The study is `docs/research/2026-10-02-el-juego-de-pruebas.md`. The short version:
 
-* De los 999 casos, 605 en 80 archivos son del motor y se pueden escribir
-  contra un juego sintético; 208 en 20 corren en los dos juegos; 186 en 38
-  son de ABL.
-* El juego se escribe como volcado exacto de Ditto, sin editor ni `.lmu`,
-  con los assets del reemplazo del RTP de EasyRPG (CC0 y CC-BY 4.0) y
-  FluidR3 (MIT); los fondos de pelea y los enemigos se fabrican.
-* Cinco fases: ABL a su repo con `git filter-repo`; el juego mínimo con los
-  siete supuestos de ABL arreglados y el arnés partido; el resto de M1; M2
-  con assets; M3 en los dos. Las tareas que salen están al final del
-  estudio, sin crear: las decide taro.
-* ABL baja de 643 a 351 CPU-s, pero de 86,5 a 73 s de reloj.
+* Of the 999 cases, 605 in 80 files are the engine's and can be written
+  against a synthetic game; 208 in 20 run on both games; 186 in 38
+  are ABL's.
+* The game is written as an exact Ditto dump, without an editor nor `.lmu`,
+  with the assets of EasyRPG's RTP replacement (CC0 and CC-BY 4.0) and
+  FluidR3 (MIT); the battle backgrounds and the enemies are made up.
+* Five phases: ABL to its repo with `git filter-repo`; the minimal game with the
+  seven ABL assumptions fixed and the harness split; the rest of M1; M2
+  with assets; M3 on both. The tasks that come out are at the end of the
+  study, not created: taro decides them.
+* ABL goes down from 643 to 351 CPU-s, but from 86.5 to 73 s of wall clock.
 
-**Al mergear no hay que instalar nada**: son un documento y esta tarea.
-`just pruebas` dio 999 en verde sobre este árbol, y `just -f tools/justfile
+**When merging there's nothing to install**: it's a document and this task.
+`just pruebas` gave 999 green on this tree, and `just -f tools/justfile
 test` 36.
 
-# La historia de ABL: sin filter-repo (taro, 2026-10-02)
+# ABL's history: without filter-repo (taro, 2026-10-02)
 
-"No sé si me preocupa tanto el git-filter-repo. Por ahora, seguimos teniendo
-el git log acá, y lo que va a quedar del lado de ABL debería ser muy poco".
-El repo de ABL nace de cero con los archivos de hoy, y la historia queda en
-este repo.
+"I'm not sure I'm that worried about git-filter-repo. For now, we still have
+the git log here, and what will be left on ABL's side should be very little".
+ABL's repo is born from scratch with today's files, and the history stays in
+this repo.

@@ -1,87 +1,88 @@
 ---
-name: "Traducir las herramientas al inglés, fase 1: el resto de port"
-description: "Comentarios, docstrings, mensajes y prosa al inglés, sin tocar nombres de código: tools/port/, todo menos snes_convert.py"
+name: "Translate the tools into English, phase 1: the rest of port"
+description: "Comments, docstrings, messages and prose into English, without touching code names: tools/port/, everything but snes_convert.py"
 type: refactor
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-09-29: "traducir las herramientas a inglés". Es la regla de
-AGENTS.md para los proyectos aparte, que ahora alcanza a todo `tools/`
-(ver `workflow/decisiones/las-herramientas-se-separan-de-abl.md`).
+From taro, on 2026-09-29: "translate the tools into English". It is the
+AGENTS.md rule for the separate projects, which now reaches all of `tools/`
+(see `workflow/decisiones/las-herramientas-se-separan-de-abl.md`).
 
-**Fase 1**, repartida entre cuatro agentes por área: comentarios, docstrings,
-mensajes de error, `help=` y prosa. **Los nombres de código no se tocan** —
-módulos, funciones, variables, símbolos del runtime, flags—: eso es la fase
-2, de a un área por vez, porque un nombre cambia en todos los que lo
-importan. Los términos salen de `tools/GLOSSARY.md`.
+**Phase 1**, split among four agents by area: comments, docstrings, error
+messages, `help=` and prose. **Code names are not touched** —modules,
+functions, variables, runtime symbols, flags—: that is phase 2, one area at
+a time, because a name changes in everything that imports it. The terms
+come from `tools/GLOSSARY.md`.
 
-Alcance de esta parte: tools/port/, todo menos snes_convert.py.
+Scope of this part: tools/port/, everything but snes_convert.py.
 
-## Cómo se verifica
+## How it is verified
 
-Cada grupo de archivos va en su commit, y se verifica con tres cosas:
+Each group of files goes in its own commit, and is verified with three
+things:
 
-* el AST de cada archivo contra `66152183`, sin docstrings: sólo pueden
-  cambiar strings, y cada string que cambió se mira a mano —mensaje o
-  dato—;
-* `SIN_CACHE=1 just cartuchos` y el sha256 de todos los `.sfc`, `.msu` y
-  `.pcm` de `rom/build/` contra los de antes de empezar;
-* los `.inc` generados, con un diff que sólo puede mostrar comentarios.
+* each file's AST against `66152183`, without docstrings: only strings may
+  change, and every string that changed is looked at by hand —message or
+  data—;
+* `SIN_CACHE=1 just cartuchos` and the sha256 of all the `.sfc`, `.msu` and
+  `.pcm` in `rom/build/` against those from before starting;
+* the generated `.inc` files, with a diff that can only show comments.
 
-## Hecho
+## Done
 
-* Los módulos chicos: `animacion`, `asignador`, `color`, `comprimir`,
+* The small modules: `animacion`, `asignador`, `color`, `comprimir`,
   `constantes`, `experiencia`, `fin_del_juego`, `formato_snes`, `fuente`,
   `imagen`, `msu_datos`, `paleta`, `pantalla_completa`, `reglas`, `textos`,
-  `tiles_bin`, `titulo`, `ventana`. `event_opcodes.py` es generado y ya
-  estaba en inglés.
-* La pelea, los menús y las pantallas: `batalla`, `escena`, `menus`,
+  `tiles_bin`, `titulo`, `ventana`. `event_opcodes.py` is generated and was
+  already in English.
+* The battle, the menus and the screens: `batalla`, `escena`, `menus`,
   `pantallas`, `parches`.
-* `eventos`, que es casi la mitad del alcance.
+* `eventos`, which is almost half of the scope.
 
-## Lo que quedó en castellano a propósito
+## What was left in Spanish on purpose
 
-* **Los comentarios que `parches.py` escribe adentro de los `.toml`** de
-  `rom/parches/auto/`. Son lo versionado del juego: traducirlos acá deja
-  esos archivos viejos en cada comentario hasta el próximo `just parches`,
-  que reescribiría los de `rom/` —fuera del alcance—. `--check` compara lo
-  parseado, así que no falla por eso. Es una decisión para taro: si van en
-  inglés, es cambiar esas líneas y correr `just parches`, en un commit
-  propio.
-* Todo lo que es dato: los términos del LDB, "- Empty -", ">", "Yes" y
-  "No" de repuesto de End Game, las claves de los diccionarios y de los
-  `.toml`, el "(OFF)" de RM2k, el centinela `FONDO_DEL_LUGAR`, los nombres
-  de clase de `pantalla_ranuras` ("cabecera", "menu_opcion"…).
+* **The comments that `parches.py` writes inside the `.toml` files** of
+  `rom/parches/auto/`. They are the game's versioned material: translating
+  them here leaves those files stale in every comment until the next `just
+  parches`, which would rewrite those of `rom/` —out of scope—. `--check`
+  compares what is parsed, so it does not fail because of that. It is a
+  decision for taro: if they go in English, it means changing those lines
+  and running `just parches`, in a commit of its own.
+* Everything that is data: the LDB's terms, "- Empty -", ">", the fallback
+  "Yes" and "No" of End Game, the keys of the dictionaries and of the
+  `.toml` files, RM2k's "(OFF)", the sentinel `FONDO_DEL_LUGAR`, the class
+  names of `pantalla_ranuras` ("cabecera", "menu_opcion"…).
 
-## Lo que quedó colgando
+## What was left hanging
 
-* `docs/port/msu-datos.md` cita dos secciones de `escena.py` por su título
-  en castellano ("El respaldo liviano", "Qué fondos hay"); ahora se llaman
-  "The light fallback" y "Which backdrops there are, and which ones the
-  cartridge carries". `docs/` no es de esta fase.
-* Citas que otros archivos hacen de títulos que cambiaron de nombre, fuera
-  de este alcance: `tools/runtime/ranuras.s` cita "lo que depende del
-  actor" —ahora "what depends on the actor", en `menus.py`—, y
-  `snes_convert.py`, ya traducido por Aromo, sigue citando "Qué
-  fondos hay" (escena.py), GIRO —ahora TURN— y "las variables de RM2k"
-  —ahora "RM2k's variables"— (eventos.py), y "lo que depende del actor".
+* `docs/port/msu-datos.md` cites two sections of `escena.py` by their
+  Spanish titles ("El respaldo liviano", "Qué fondos hay"); now they are
+  called "The light fallback" and "Which backdrops there are, and which ones
+  the cartridge carries". `docs/` is not part of this phase.
+* Citations that other files make of titles that were renamed, outside this
+  scope: `tools/runtime/ranuras.s` cites "lo que depende del actor" —now
+  "what depends on the actor", in `menus.py`—, and `snes_convert.py`,
+  already translated by Aromo, still cites "Qué fondos hay" (escena.py),
+  GIRO —now TURN— and "las variables de RM2k" —now "RM2k's variables"—
+  (eventos.py), and "lo que depende del actor".
 
-## Verificado
+## Verified
 
-Sobre el árbol con `main` mergeado (`106da9f8`, con lo de Aromo, Coronillo y
-Palmar adentro):
+On the tree with `main` merged (`106da9f8`, with Aromo's, Coronillo's and
+Palmar's work inside):
 
-* `SIN_CACHE=1 just cartuchos`: los `.sfc`, `.msu`, `.pcm` y `.sym` de
-  `rom/build/` con el mismo sha256 que antes de empezar. Lo único distinto
-  es `memoria.cfg`, cuyo encabezado tradujo Coronillo. Ningún módulo de
-  esta parte escribe en los `.inc`: antes de mergear salían idénticos, y
-  lo que cambia en ellos después es de `snes_convert.py`.
-* `just pruebas`: 874 pasan.
-* `just -f tools/justfile pruebas`: 132 pasan y 2 se saltean.
+* `SIN_CACHE=1 just cartuchos`: the `.sfc`, `.msu`, `.pcm` and `.sym` of
+  `rom/build/` with the same sha256 as before starting. The only thing
+  different is `memoria.cfg`, whose header Coronillo translated. No module
+  of this part writes into the `.inc` files: before merging they came out
+  identical, and what changes in them afterwards is `snes_convert.py`'s.
+* `just pruebas`: 874 pass.
+* `just -f tools/justfile pruebas`: 132 pass and 2 are skipped.
 
-## Qué mirar
+## What to look at
 
-Nada que se juegue: la ROM es la misma byte por byte. Lo que hay para
-leer es el `git diff`, sobre todo `eventos.py`, y la decisión de los
-comentarios de los `.toml` de `rom/parches/auto/`.
+Nothing to play: the ROM is the same byte for byte. What there is to read
+is the `git diff`, above all `eventos.py`, and the decision about the
+comments in the `.toml` files of `rom/parches/auto/`.

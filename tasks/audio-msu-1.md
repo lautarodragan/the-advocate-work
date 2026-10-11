@@ -1,150 +1,150 @@
 ---
-name: "Música por MSU-1"
-description: "Las pistas de CD que reemplazan a la música sintetizada"
+name: "Music via MSU-1"
+description: "The CD tracks that replace the synthesized music"
 status: done
 ---
 
-### El MSU-1
+### The MSU-1
 
-La música sintetizada suena fea, y la causa está medida: los ocho temas de la
-demo comparten 53 KB de ARAM, así que cada instrumento es una muestra corta y
-recortada. El **MSU-1** es la salida: no es hardware de la
-consola sino una extensión que soportan el FX Pak Pro y los emuladores, con la
-música en archivos PCM al lado de la ROM. El tema sale de un archivo de 44,1
-kHz estéreo en vez de las ocho voces del SPC700.
+The synthesized music sounds ugly, and the cause is measured: the demo's eight
+themes share 53 KB of ARAM, so each instrument is a short, trimmed
+sample. The **MSU-1** is the way out: it isn't hardware of the
+console but an extension supported by the FX Pak Pro and the emulators, with the
+music in PCM files next to the ROM. The theme comes from a 44.1
+kHz stereo file instead of the SPC700's eight voices.
 
-Lo usan **los 21 temas que suenan hasta salir de Lashe City**, más el del
-título: `PISTAS_MSU` en `snes_music.py` dice cuáles tienen pista y con qué
-número, y el conversor emite `tema_msu`, un byte por tema —`$FF` el que no
-tiene—. Los del juego entero son 43, noventa y un minutos, 923 MB de PCM;
-entran el día que haya una ROM que los toque. Que los lleven todos importa
-porque un tema sin pista suena por el SPC700 y ahí puede faltarle del 28% al 88%
-de las notas: ver "Varios temas en el cartucho". **Los números del 1 al 8 no se
-mueven nunca**: son los que ya están en la tarjeta, y renumerarlos obligaría a
-renombrar archivos.
+It's used by **the 21 themes that play until leaving Lashe City**, plus the
+title's: `PISTAS_MSU` in `snes_music.py` says which have a track and with what
+number, and the converter emits `tema_msu`, one byte per theme —`$FF` for the one that
+has none—. The whole game's are 43, ninety-one minutes, 923 MB of PCM;
+they go in the day there is a ROM that plays them. Carrying all of them matters
+because a theme without a track plays through the SPC700, and there it can lose from 28% to 88%
+of its notes: see "Several themes in the cartridge". **The numbers 1 to 8 never
+move**: they are the ones already on the card, and renumbering them would force
+renaming files.
 
-Dos de los temas **no son de ningún mapa** y por eso se escapan de cualquier
-barrido de `PlayBGM`: salen del LDB. `title_music` es el de la pantalla de
-título y `battle_music` el de **todas** las peleas —`T_VGFighterMAX_Masako`—.
+Two of the themes **belong to no map** and so they escape any
+sweep of `PlayBGM`: they come from the LDB. `title_music` is the title
+screen's and `battle_music` the one for **all** battles —`T_VGFighterMAX_Masako`—.
 
-Cuestan 10,6 MB por minuto, o sea unos **423 MB por cartucho** para los 21. Y
-no hay atajo por el loop: de los 21 el único que repite exacto a la mitad es
-`C3classi`, medido nota por nota sobre las dos mitades del MIDI, y son 8,6 MB
-de 423.
+They cost 10.6 MB per minute, that is about **423 MB per cartridge** for the 21. And
+there's no shortcut through the loop: of the 21 the only one that repeats exactly at the half is
+`C3classi`, measured note by note over the two halves of the MIDI, and it's 8.6 MB
+of 423.
 
-Cómo funciona, del lado de la ROM:
+How it works, on the ROM side:
 
-* **La firma se mira una vez, en el reset** (`msu_detectar`): "S-MSU1" en
-  `$2002..$2007`. Si no está —o sea, siempre que no haya MSU-1— `MSU_HAY` queda
-  en cero y **nada más del sistema se enciende**: la música sigue saliendo del
-  SPC700 como antes de todo esto. Esa es la propiedad que importa, porque la
-  ROM tiene que andar igual en una consola sin tarjeta preparada.
-* **`PlayBGM` prueba primero con la pista** (`msu_arrancar`): espera a que el
-  MSU-1 esté libre, escribe el número, espera a que termine de cargarla, y si
-  el MSU-1 dice que la pista no está en la tarjeta se vuelve sin hacer nada y
-  suena el SPC700. Con pista, en cambio, el SPC700 **se calla**:
-  `music_apagada` y un `KOF` de las ocho voces. Los efectos de sonido siguen en
-  el SPC700, así que la ARAM les queda libre.
-* **La espera de `AUDIO_BUSY` es un camino que ningún emulador ejecuta**, y
-  conviene saberlo antes de tocarlo. bsnes no pone `io.audioBusy` nunca —nace
-  en falso en `power()` y no se escribe en ningún lado:
-  `bsnes/sfc/coprocessor/msu1/msu1.cpp`—, así que en toda la tanda y en todas
-  las pruebas de estado el lazo sale en la primera vuelta. En el FX Pak la
-  pista sale de la tarjeta SD y abrirla lleva tiempo de verdad. En el mismo
-  archivo está el porqué de esperar **antes** de escribir y no sólo después:
-  `case 0x2007: if(io.audioBusy) break;`, o sea que con `AUDIO_BUSY` puesto el
-  hardware **ignora** las escrituras a los registros de audio, y un `PlayBGM`
-  que llega mientras la pista anterior todavía se abre se pierde entero. Con
-  pantalla de título eso pasa: se piden dos pistas con 1,8 s de diferencia.
-  El tope de la espera son `$FFFF` vueltas, unas tres décimas de segundo, y
-  quedarse corto no cuesta un cuadro sino el tema entero.
-* **El `FadeOutBGM` baja el volumen del MSU-1**, no el del DSP: el nivel del
-  fundido ya va de 255 a 0, que es justo la escala de `$2006`, y al llegar a
-  cero se corta la pista. El volumen del DSP no se toca **porque es el que
-  oyen los efectos de sonido**: bajarlo en el fundido los dejaba mudos hasta
-  el `PlayBGM` siguiente, que es el único que lo repone. Y el comando tiene
-  que dejarse arrancar con `music_apagada` puesto, que con pista vale 1: sin
-  eso un `FadeOutBGM` no hacía nada y la pista seguía para siempre.
-* **El DSP hay que ponerlo a punto igual**, aunque no lo use la música. Lo
-  hacía el comienzo del stream —sacarlo del mute con que arranca el SPC700, el
-  volumen general, y dónde está el directorio de muestras— y con pista el
-  stream no corre nunca. Sin eso los efectos de sonido se disparan contra un
-  DSP mudo, y el síntoma es música por MSU-1 y **ningún efecto**.
-  El prólogo sale de `dsp_init_reg`/`dsp_init_val`, que el conversor emite de
-  `init_writes`, o sea de la misma lista que ya escribía el stream; copiarla a
-  mano en el 65816 serían dos lados que se pueden equivocar igual. KON y KOF
-  quedan afuera: con pista, KOF se deja en `$FF` para que las voces de la
-  música no suenen, y `se_despues` lo limpia solo al arrancar un efecto.
+* **The signature is checked once, at reset** (`msu_detectar`): "S-MSU1" at
+  `$2002..$2007`. If it's not there —that is, whenever there's no MSU-1— `MSU_HAY` stays
+  at zero and **nothing else of the system turns on**: the music keeps coming from the
+  SPC700 as before all this. That is the property that matters, because the
+  ROM has to work the same on a console without a prepared card.
+* **`PlayBGM` tries the track first** (`msu_arrancar`): it waits for the
+  MSU-1 to be free, writes the number, waits for it to finish loading it, and if
+  the MSU-1 says the track isn't on the card it returns without doing anything and
+  the SPC700 plays. With a track, instead, the SPC700 **goes silent**:
+  `music_apagada` and a `KOF` of the eight voices. Sound effects stay on the
+  SPC700, so the ARAM is left free for them.
+* **The wait on `AUDIO_BUSY` is a path no emulator executes**, and
+  it's worth knowing before touching it. bsnes never sets `io.audioBusy` —it starts
+  false in `power()` and is not written anywhere:
+  `bsnes/sfc/coprocessor/msu1/msu1.cpp`—, so in the whole suite and in all
+  the state tests the loop exits on the first iteration. On the FX Pak the
+  track comes from the SD card and opening it takes real time. In the same
+  file is the reason for waiting **before** writing and not only after:
+  `case 0x2007: if(io.audioBusy) break;`, that is, with `AUDIO_BUSY` set the
+  hardware **ignores** writes to the audio registers, and a `PlayBGM`
+  that arrives while the previous track is still opening is lost entirely. With a
+  title screen that happens: two tracks are requested 1.8 s apart.
+  The wait's ceiling is `$FFFF` iterations, about three tenths of a second, and
+  falling short costs not a frame but the whole theme.
+* **`FadeOutBGM` lowers the MSU-1's volume**, not the DSP's: the fade
+  level already goes from 255 to 0, which is exactly the scale of `$2006`, and on reaching
+  zero the track is cut. The DSP's volume isn't touched **because it's the one
+  the sound effects hear**: lowering it in the fade left them mute until
+  the next `PlayBGM`, which is the only one that restores it. And the command has
+  to be allowed to start with `music_apagada` set, which with a track is 1: without
+  that a `FadeOutBGM` did nothing and the track went on forever.
+* **The DSP has to be set up anyway**, even if the music doesn't use it. The
+  start of the stream did it —taking it out of the mute the SPC700 starts with, the
+  master volume, and where the sample directory is— and with a track the
+  stream never runs. Without that the sound effects fire against a
+  mute DSP, and the symptom is music via MSU-1 and **no effects**.
+  The prologue comes from `dsp_init_reg`/`dsp_init_val`, which the converter emits from
+  `init_writes`, that is, from the same list the stream already wrote; copying it
+  by hand into the 65816 would be two sides that can be wrong in the same way. KON and KOF
+  are left out: with a track, KOF is left at `$FF` so the music's voices don't
+  sound, and `se_despues` clears it by itself when starting an effect.
 
-* **La pista no suena a fondo, y eso no es cautela: es aritmética.** El MSU-1
-  se **suma** a la salida del SPC700 en vez de mezclarse con ella, así que una
-  música que llega al techo no deja lugar para un efecto de sonido. Con el
-  volumen en `$FF`, en la apertura, 42 muestras llegaban al tope —las 42 en
-  cuadros con un efecto sonando— mientras que la misma corrida por el SPC700 no
-  clavetea ni una vez; y la música por pista picaba 28933 contra 23867, o sea
-  1,21 veces más alta, que es lo mismo escuchado al revés: "los efectos se oyen
-  mucho más bajos". `MSU_VOLUMEN_MAX` es `$D8` —ese 0,85— y con eso el clipping
-  se va a cero y la música queda en 24508, al lado de los 23867 del SPC700. Va
-  en el registro y no en las pistas: normalizarlas más abajo sería rehacer todos
-  los PCM del cartucho, y perdería la referencia de nivel entre un tema y otro.
-  El fundido escala contra ese techo y no contra 255, o su primer cuadro
-  **subiría** la música antes de bajarla.
+* **The track doesn't play at full level, and that's not caution: it's arithmetic.** The MSU-1
+  is **added** to the SPC700's output instead of being mixed with it, so a
+  music that reaches the ceiling leaves no room for a sound effect. With the
+  volume at `$FF`, in the opening, 42 samples reached the top —all 42 in
+  frames with an effect playing— while the same run through the SPC700 doesn't
+  clip once; and the music via track peaked at 28933 against 23867, that is
+  1.21 times louder, which is the same thing heard the other way round: "the effects sound
+  much quieter". `MSU_VOLUMEN_MAX` is `$D8` —that 0.85— and with it the clipping
+  goes to zero and the music sits at 24508, next to the SPC700's 23867. It goes
+  in the register and not in the tracks: normalizing them lower would mean redoing all
+  the cartridge's PCMs, and would lose the level reference between one theme and another.
+  The fade scales against that ceiling and not against 255, or its first frame
+  **would raise** the music before lowering it.
 
-Y del lado del cartucho, `tools/audio/msu.py` (receta `msu`): renderiza el MIDI
-con fluidsynth y **con el mismo soundfont con el que el juego sonaba en la PC**
-—el que ya usa `snes_samples.py` para sacar las muestras—, así que no cambia el
-arreglo: cambia que no haya que reducirlo a ocho voces. La pista es "MSU1", el
-punto de loop en muestras, y el audio crudo.
+And on the cartridge side, `tools/audio/msu.py` (recipe `msu`): it renders the MIDI
+with fluidsynth and **with the same soundfont the game sounded with on the PC**
+—the one `snes_samples.py` already uses to extract the samples—, so the
+arrangement doesn't change: what changes is that it doesn't have to be reduced to eight voices. The track is "MSU1", the
+loop point in samples, and the raw audio.
 
-Y correr la receta de nuevo no rehace nada: una pista no depende del
-cartucho sino del MIDI, del soundfont, de fluidsynth y de cómo se normaliza, y
-todo eso está en la clave. Lo que se guarda en `rom/build/cache/msu/` es el
-sha256 del `.pcm`, no el `.pcm`, porque el archivo ya está escrito al lado de
-la ROM.
+And running the recipe again redoes nothing: a track doesn't depend on the
+cartridge but on the MIDI, the soundfont, fluidsynth and how it's normalized, and
+all of that is in the key. What's stored in `rom/build/cache/msu/` is the
+sha256 of the `.pcm`, not the `.pcm`, because the file is already written next to
+the ROM.
 
-Una cosa más del lado del cartucho: **la pista se normaliza a 0,97 de la
-escala**. fluidsynth se corre bajo, en 0,6, porque con 1,0 los temas de muchas
-voces saturan, y sin normalizar después la pista sale a un cuarto del volumen de
-la música del SPC700 —pico 4632 contra 17012— y el cambio de un tema al otro da
-un salto.
+One more thing on the cartridge side: **the track is normalized to 0.97 of the
+scale**. fluidsynth is run low, at 0.6, because at 1.0 the themes with many
+voices saturate, and without normalizing afterwards the track comes out at a quarter of the volume of
+the SPC700's music —peak 4632 against 17012— and changing from one theme to another gives
+a jump.
 
-Cómo se verifica, porque la tanda no escucha: primero el protocolo solo, con
-una ROM mínima aparte que pide la pista y deja los registros en la RAM —la
-firma, el estado antes y después, y cuántas vueltas tardó en cargar—. Y después
-la ROM de verdad, corriendo 1800 cuadros con el núcleo de libretro y grabando
-la salida:
+How it's verified, because the suite doesn't listen: first the protocol alone, with
+a separate minimal ROM that requests the track and leaves the registers in RAM —the
+signature, the status before and after, and how many iterations it took to load—. And then
+the real ROM, running 1800 frames with the libretro core and recording
+the output:
 
-* **el nivel**: picos de 17096 a 20118 en las ventanas de 300 cuadros, contra
-  los 17012 de la música del SPC700;
-* **que suene esa pista y no otra cosa**: la envolvente de energía del audio
-  grabado contra la del WAV renderizado da una correlación de **0,927 con cero
-  desfase**;
-* **el fundido**: pinchando el pedido de `FadeOutBGM`, la pista se corta a los
-  84 cuadros y el pico baja 19059 → 3464 → 0.
+* **the level**: peaks from 17096 to 20118 in the 300-frame windows, against
+  the 17012 of the SPC700's music;
+* **that that track plays and nothing else**: the energy envelope of the recorded
+  audio against that of the rendered WAV gives a correlation of **0.927 with zero
+  lag**;
+* **the fade**: patching in the `FadeOutBGM` request, the track is cut at
+  84 frames and the peak drops 19059 → 3464 → 0.
 
-**Y para los efectos de sonido hay que aislarlos, porque la música los tapa.**
-La forma que sirve es la misma ROM con los dos bytes de volumen de cada fila de
-`sonido_tabla` puestos en cero, y comparar las dos salidas muestra por muestra:
-lo que difiere **son** los efectos. Así se comprobó que el prólogo del DSP es lo
-que los hace sonar con pista: con el prólogo puesto difieren 714382 muestras de
-1027098 desde el cuadro 212, y con un `$FF` en el primer byte de `dsp_init_reg`
-—que lo deshabilita— difieren **cero**.
+**And the sound effects have to be isolated, because the music covers them.**
+The way that works is the same ROM with the two volume bytes of each row of
+`sonido_tabla` set to zero, and comparing the two outputs sample by sample:
+what differs **is** the effects. That's how it was proven that the DSP prologue is what
+makes them sound with a track: with the prologue in place 714382 samples of
+1027098 differ from frame 212 on, and with a `$FF` in the first byte of `dsp_init_reg`
+—which disables it— **zero** differ.
 
-Y la tanda entera sigue en verde **sin** los archivos de MSU-1, que es el
-camino que recorre cualquier prueba de acá.
+And the whole suite stays green **without** the MSU-1 files, which is the
+path any test here takes.
 
-## Pendiente
+## Pending
 
-Lo que falta: el punto de loop. El MSU-1 vuelve al principio del archivo, así
-que un tema con introducción la repite cada vuelta; hoy loopean enteros. Y los
-temas que las demos no tocan.
+What's missing: the loop point. The MSU-1 goes back to the start of the file, so
+a theme with an introduction repeats it on every loop; today they loop whole. And the
+themes the demos don't play.
 
-## Compatibilidad
+## Compatibility
 
-El MSU-1 es emulado correctamente en:
-- FxPak, en SNES real
+The MSU-1 is emulated correctly in:
+- FxPak, on real SNES
 - snes9x
 - Mesen
 
-Y no en:
+And not in:
 - Mednafen

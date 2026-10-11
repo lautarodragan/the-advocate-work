@@ -1,121 +1,121 @@
 ---
-name: "El crítico de los actores"
-description: "El LDB les da golpe crítico a casi todos los actores, y la ROM lo pone en cero con un comentario que dice que ninguno lo tiene"
+name: "The actors' critical hit"
+description: "The LDB gives almost every actor a critical hit, and the ROM sets it to zero with a comment saying none of them has one"
 type: bug
 status: done
 assignee: taro
 ---
 
-Lo encontró Cardón el 2026-09-30, pasando el modelo de la pelea a Rust
-(`rust-el-dominio-de-la-pelea.md`). taro lo pidió como tarea ese día.
+Cardón found it on 2026-09-30, while moving the battle model to Rust
+(`rust-el-dominio-de-la-pelea.md`). taro asked for it as a task that day.
 
-`tools/runtime/battle.s`, al armar un actor para la pelea, guarda
-`BA_CRIT` en cero con el comentario "no actor in ABL has a critical hit".
-El volcado lo desmiente: `critical_hit` está prendido en casi todos los
-actores de `rom/data/db/actors.json`, los del grupo incluidos —Kersh, Core,
-Manta, Talan, Arden, AG7—, casi todos con `critical_hit_chance` 30. En RM2k
-eso es una chance de 1 en 30, no un 30 %: confirmarlo en easyrpg
-(`Game_Actor::GetCriticalHitChance`) antes de tocar nada.
+`tools/runtime/battle.s`, when setting up an actor for battle, stores
+`BA_CRIT` as zero with the comment "no actor in ABL has a critical hit".
+The dump contradicts it: `critical_hit` is turned on in almost every
+actor of `rom/data/db/actors.json`, the party's included —Kersh, Core,
+Manta, Talan, Arden, AG7—, almost all with `critical_hit_chance` 30. In RM2k
+that is a 1 in 30 chance, not 30 %: confirm it in easyrpg
+(`Game_Actor::GetCriticalHitChance`) before touching anything.
 
-El Python viejo tampoco leía el campo, así que la ROM y el modelo se
-equivocaban igual y ninguna prueba lo veía. El modelo en Rust
-(`rm2k-snes-battle`, `Combatant::actor`) lo conserva a propósito, con un
-comentario: arreglarlo **mueve la ROM y el azar de todas las peleas**, y el
-modelo tiene que moverse junto con ella, porque las pruebas lo comparan paso
-a paso.
+The old Python didn't read the field either, so the ROM and the model were
+wrong in the same way and no test saw it. The Rust model
+(`rm2k-snes-battle`, `Combatant::actor`) keeps it on purpose, with a
+comment: fixing it **moves the ROM and the randomness of every battle**, and the
+model has to move along with it, because the tests compare them step
+by step.
 
-El comentario de `battle.s` viene de antes de la traducción al inglés
-(`456dd0d4`): el `git blame` con `-C --diff-algorithm=histogram` dice de
-cuándo es y si fue una decisión o un supuesto.
+The comment in `battle.s` predates the translation into English
+(`456dd0d4`): `git blame` with `-C --diff-algorithm=histogram` says when
+it's from and whether it was a decision or an assumption.
 
-Hecho es: el crítico de los actores leído del LDB en los dos lados, una
-prueba con un actor que lo tiene y un azar que lo dispara, vista en rojo
-antes, y las goldens de la pelea que se muevan mostradas a taro.
+Done means: the actors' critical hit read from the LDB on both sides, a
+test with an actor that has it and a random seed that triggers it, seen red
+before, and the battle goldens that move shown to taro.
 
-# Lo que se hizo (Cardenal, 2026-10-02)
+# What was done (Cardenal, 2026-10-02)
 
-**Qué dijo el blame.** El comentario nace en `9527063d`, "Las peleas de la
-intro se pueden pelear", la primera versión de la pelea (2026-09-12): "ningún
-actor del ABL tiene golpe crítico". Fue un supuesto, no una decisión: el
-modelo de entonces (`tools/batalla.py`) leía `critical_hit` con un
-`getattr(..., False)`, y el lector del LDB de entonces (`tools/lcf.py`) no
-leía ese campo del actor —sólo el del enemigo—, así que daba falso para
-todos y el docstring dijo "en el ABL ninguno lo tiene". La ROM se escribió
-contra ese modelo. Nadie lo midió contra el volcado.
+**What the blame said.** The comment is born in `9527063d`, "Las peleas de la
+intro se pueden pelear", the first version of the battle (2026-09-12): "no
+actor in ABL has a critical hit". It was an assumption, not a decision: the
+model back then (`tools/batalla.py`) read `critical_hit` with a
+`getattr(..., False)`, and the LDB reader back then (`tools/lcf.py`) didn't
+read that field of the actor —only the enemy's—, so it gave false for
+all of them and the docstring said "in ABL none has it". The ROM was written
+against that model. Nobody measured it against the dump.
 
-**Qué es en RM2k** (easyrpg, `Game_Actor::GetCriticalHitChance` y
-`Algo::CalcCriticalHitChance`): `1 / critical_hit_chance` si tiene
-`critical_hit`, más el mejor `critical_hit` de las armas equipadas —en por
-ciento—, sumado **en float** y después `* 100.0` truncado. Con 30 es un 3 %.
-El float importa: `1/25` da 3 y no 4, y un arma de 12 sin crítico propio da
-11. Ningún actor del grupo tiene hoy un arma con bonus, pero hay 70 armas
-que lo tienen.
+**What it is in RM2k** (easyrpg, `Game_Actor::GetCriticalHitChance` and
+`Algo::CalcCriticalHitChance`): `1 / critical_hit_chance` if it has
+`critical_hit`, plus the best `critical_hit` of the equipped weapons —in
+percent—, added **in float** and then `* 100.0` truncated. With 30 it's 3 %.
+The float matters: `1/25` gives 3 and not 4, and a weapon of 12 without its own critical gives
+11. No party actor has a weapon with a bonus today, but there are 70 weapons
+that have one.
 
-**Cómo quedó.**
+**How it ended up.**
 
-- `rm2k-snes-battle`: `rules::critical_percent` hace la cuenta en f32, y
-  `Combatant::actor` y el `ChangeEquipment` de una página la usan. Los
-  enemigos pasan por la misma función (en ABL dan lo mismo que antes).
-- La consola no suma: el conversor escribe `crit_table`, con una fila por
-  cada parte propia distinta y una columna por cada bonus distinto, y la ROM
-  la indexa con `actor_crit_row` y la mejor de las columnas de los slots 0 y
-  1 (`item_crit_k`). `ba_crit_of`, en `battle.s`, la llaman `ba_actor_setup`
-  y `ba_reparam`.
-- **El azar no se movió**: el tiro del crítico ya se hacía siempre, con 0.
-  Por eso ninguna golden cambió: en las peleas de la tanda no sale ningún
-  crítico del grupo con la semilla de fábrica.
-- El juego de prueba de `rm2k-snes-battle` (`tests/game/dump`) tenía a sus
-  actores con crítico; ahora no lo tienen, para que los hashes del Python
-  —que nunca lo leyó— sigan siendo la respuesta correcta. Ver el encabezado
-  de `tests/model.rs`.
+- `rm2k-snes-battle`: `rules::critical_percent` does the arithmetic in f32, and
+  `Combatant::actor` and a page's `ChangeEquipment` use it. The
+  enemies go through the same function (in ABL they give the same as before).
+- The console doesn't add: the converter writes `crit_table`, with one row for
+  each distinct own part and one column for each distinct bonus, and the ROM
+  indexes it with `actor_crit_row` and the best of the columns of slots 0 and
+  1 (`item_crit_k`). `ba_crit_of`, in `battle.s`, is called by `ba_actor_setup`
+  and `ba_reparam`.
+- **The randomness didn't move**: the critical roll was always made already, with 0.
+  That's why no golden changed: in the suite's battles no party critical
+  comes up with the factory seed.
+- The test game of `rm2k-snes-battle` (`tests/game/dump`) had its
+  actors with a critical; now they don't, so that the Python's hashes
+  —which never read it— remain the correct answer. See the header
+  of `tests/model.rs`.
 
-**Pruebas** (en ABL, `pruebas/rpgmaker/test_batalla.py`):
+**Tests** (in ABL, `pruebas/rpgmaker/test_batalla.py`):
 
-- `test_cada_actor_entra_a_la_pelea_con_su_critico`: `BA_CRIT` de Kersh,
-  Core y Manta contra una cuenta de easyrpg hecha en la prueba —del volcado,
-  en float— y contra el modelo. En rojo antes: "el actor 11 entró con un
+- `test_cada_actor_entra_a_la_pelea_con_su_critico`: `BA_CRIT` of Kersh,
+  Core and Manta against an easyrpg computation done in the test —from the dump,
+  in float— and against the model. Red before: "el actor 11 entró con un
   crítico de 0 y easyrpg le da 3".
-- `test_un_critico_del_grupo_da_el_mismo_hp_que_el_modelo`: la primera
-  semilla con la que a alguien del grupo le sale un crítico contra el
-  droide, escrita en `BA_SEED`, turno por turno contra el modelo. En rojo
-  antes: con el modelo viejo, "con ninguna de 200 semillas le sale un
+- `test_un_critico_del_grupo_da_el_mismo_hp_que_el_modelo`: the first
+  seed with which someone in the party lands a critical against the
+  droid, written into `BA_SEED`, turn by turn against the model. Red
+  before: with the old model, "con ninguna de 200 semillas le sale un
   crítico a nadie del grupo".
-- `test_la_cuenta_del_critico_es_la_de_easyrpg`: la cuenta de la prueba con
-  1/25, y que el grupo tenga crítico.
-- En Rust: `the_critical_hit_adds_in_floating_point`.
+- `test_la_cuenta_del_critico_es_la_de_easyrpg`: the test's computation with
+  1/25, and that the party has a critical.
+- In Rust: `the_critical_hit_adds_in_floating_point`.
 
-**Cuánto cambia el balance**, medido con el modelo: 2000 semillas por pelea,
-todos atacando al primer enemigo, sin las páginas de la tropa. Sale un
-crítico del grupo en ~3 % de los golpes que pegan.
+**How much the balance changes**, measured with the model: 2000 seeds per battle,
+everyone attacking the first enemy, without the troop's pages. A party
+critical comes up in ~3 % of the hits that land.
 
-| pelea | turnos antes → ahora | victorias |
+| battle | turns before → now | victories |
 | --- | --- | --- |
-| el droide (82), Kersh, Core y Manta | 2,10 → 2,03 | 100 % |
-| la pandilla LT (86), los tres | 2,00 → 2,00 | 100 % |
-| los Lazer Teeth (86), Kersh y Talan | 4,24 → 4,18 | 100 % |
-| el Rat King (97), AG7 solo, sin ratas | 10,63 → 10,19 | 78,0 % → 81,4 % |
-| los agentes (102), Kersh | 4,25 → 4,19 | 100 % |
-| los merodeadores (222), los tres | 1,87 → 1,85 | 100 % |
+| the droid (82), Kersh, Core and Manta | 2.10 → 2.03 | 100 % |
+| the LT gang (86), the three | 2.00 → 2.00 | 100 % |
+| the Lazer Teeth (86), Kersh and Talan | 4.24 → 4.18 | 100 % |
+| the Rat King (97), AG7 alone, without rats | 10.63 → 10.19 | 78.0 % → 81.4 % |
+| the agents (102), Kersh | 4.25 → 4.19 | 100 % |
+| the marauders (222), the three | 1.87 → 1.85 | 100 % |
 
-Entre 1 % y 4 % más cortas; la única que se nota es la del Rat King, que
-AG7 solo gana tres veces más de cada cien.
+Between 1 % and 4 % shorter; the only noticeable one is the Rat King, which
+AG7 alone wins three more times out of every hundred.
 
-**Lo que queda afuera**: `PreventsCritical` —el Talisman (ítem 76) tiene
-`prevent_critical`, y en RM2k anula los críticos de los enemigos contra el
-que lo lleva—. Ni la ROM ni el modelo lo miran, desde antes de esto.
+**What's left out**: `PreventsCritical` —the Talisman (item 76) has
+`prevent_critical`, and in RM2k it cancels the enemies' criticals against
+whoever carries it—. Neither the ROM nor the model looks at it, since before this.
 
-# Qué tiene que mirar taro
+# What taro has to look at
 
-- **Una pelea cualquiera, varias veces**: de vez en cuando —uno de cada
-  treinta golpes que pegan— un golpe del grupo hace el triple. La pantalla
-  no lo anuncia distinto: RM2k 2000 tampoco dice "crítico" con el ataque
-  normal, sólo se ve el número.
-- **El Rat King con AG7 solo**, que es donde más se nota (78 % → 81 % de
-  victorias en el modelo).
+- **Any battle, several times**: every now and then —one in every
+  thirty hits that land— a party hit does triple. The screen
+  doesn't announce it differently: RM2k 2000 doesn't say "critical" with the normal
+  attack either, only the number shows it.
+- **The Rat King with AG7 alone**, which is where it shows most (78 % → 81 % of
+  victories in the model).
 
-# Al mergear
+# When merging
 
-- Instalar en el global: `just -f tools/justfile install battle mapdata`
-  (y `cartridge`, que arma con el runtime del checkout).
-- Ramas: `worktree-agent-a33a321932dffd972` acá, `cardenal-textos-y-critico`
-  en el clon de ABL (`/extras/scratch/cardenal/abl`).
+- Install globally: `just -f tools/justfile install battle mapdata`
+  (and `cartridge`, which builds with the checkout's runtime).
+- Branches: `worktree-agent-a33a321932dffd972` here, `cardenal-textos-y-critico`
+  in ABL's clone (`/extras/scratch/cardenal/abl`).

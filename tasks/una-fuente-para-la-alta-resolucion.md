@@ -1,161 +1,166 @@
 ---
-name: "Una fuente para la alta resolución, o más angosta"
-description: "Candidatas de fuente que se lean bien en una tele de tubo y entren en 256 o 512 de ancho, parecidas a la de RM2k pero con la legibilidad antes que la fidelidad, para que taro las pruebe en la SNES y las retoque a mano"
+name: "A font for high resolution, or a narrower one"
+description: "Font candidates that read well on a CRT TV and fit in 256 or 512 wide, similar to RM2k's but with legibility before fidelity, for taro to test on the SNES and touch up by hand"
 type: research
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-09-30, después de probar en la SNES la ROM de
-`rom-de-prueba-del-menu-en-modo-5.md` (Carancho): "ninguna me
-convence. Con el texto estirado, se ve raro en la tele de tubo. En algunos
-casos se hace difícil leer". Pero no descarta el modo 5, porque **la pelea
-también tiene muchos problemas de UI por la resolución**, y ahí podría
-ayudar. Lo que propone probar: "una font diseñada para funcionar bien en esa
-resolución, que se parezca lo más posible a la original, pero que sacrifique
-fidelidad antes que legibilidad". Y está dispuesto a retocarla a mano,
-pixel por pixel.
+From taro, on 2026-09-30, after testing on the SNES the ROM from
+`rom-de-prueba-del-menu-en-modo-5.md` (Carancho): "none of them
+convinces me. With the text stretched, it looks weird on the CRT TV. In some
+cases it gets hard to read". But he doesn't rule out mode 5, because **the
+battle also has a lot of UI problems because of the resolution**, and there
+it could help. What he proposes to try: "a font designed to work well at
+that resolution, that looks as much as possible like the original, but that
+sacrifices fidelity before legibility". And he is willing to touch it up by
+hand, pixel by pixel.
 
-## Qué se armó (Espinillo, 2026-09-30)
+## What was built (Espinillo, 2026-09-30)
 
-Tres candidatas, cada una como **una hoja de glifos para editar a mano** en
-`rom/experimentos/fuentes/hojas/`, y **`just fuentes`**, que lee las hojas,
-arma con ellas las maquetas del menú de pausa y de las ventanas de la pelea,
-arma la ROM de prueba con ésas y la verifica en snes9x, bsnes y mesen-s,
-pantalla por pantalla contra su maqueta. Cómo se edita una hoja, en
-`rom/experimentos/fuentes/LEEME.md`; después de editarla alcanza con volver
-a correr la receta.
+Three candidates, each as **a glyph sheet to edit by hand** in
+`rom/experimentos/fuentes/hojas/`, and **`just fuentes`**, which reads the
+sheets, builds with them the mockups of the pause menu and of the battle
+windows, builds the test ROM with those and verifies it on snes9x, bsnes and
+mesen-s, screen by screen against its mockup. How a sheet is edited, in
+`rom/experimentos/fuentes/LEEME.md`; after editing it, running the recipe
+again is enough.
 
-La ROM es la hermana de `menu-modo-5`, con su mismo código: `armar.py` y
-`verificar.py` de ahí aprendieron a recibir otras pantallas —el modo sale del
-ancho, las caras de un `.json` al lado— y a poner los bancos que hagan
-falta. `just menu-modo-5` sigue saliendo byte por byte igual (sha256 antes y
-después: `1b85307e…`).
+The ROM is the sibling of `menu-modo-5`, with the same code: `armar.py` and
+`verificar.py` from there learned to receive other screens —the mode comes
+from the width, the faces from a `.json` alongside— and to set up as many
+banks as needed. `just menu-modo-5` still comes out byte for byte identical
+(sha256 before and after: `1b85307e…`).
 
-Las candidatas, derivadas de la Mincho con reglas mecánicas (un punto de
-partida, no un diseño):
+The candidates, derived from the Mincho with mechanical rules (a starting
+point, not a design):
 
-1. **`baja-ancho-variable`**: la resolución de siempre. Cada glifo recortado
-   a su tinta más un pixel de aire, y de dos columnas interiores iguales
-   queda una —la "o", la "n", la "H" pasan de 5 a 4—: lo que hacen FF6 o
-   Chrono Trigger. Dígitos y barra a mano, de 4 de tinta, todos de 5 de
-   avance. **No tiene el problema de la tele.**
-2. **`alta-ancho-fijo`**: alta resolución, avance fijo de 10 (5 de baja).
-   Cada columna de la Mincho con un trazo vertical de 2 o más filas mide 2
-   pixeles de alta, las demás 1, y las iguales y seguidas se juntan; entre
-   dos trazos el hueco mide 2. Las de tres trazos (m, w, M, W) se angostan a
-   8 con huecos de 1.
-3. **`alta-ancho-variable`**: la misma regla, sin angostar, con 2 de aire.
+1. **`baja-ancho-variable`**: the usual resolution. Each glyph cropped to its
+   ink plus one pixel of air, and of two equal inner columns one remains
+   —the "o", the "n", the "H" go from 5 to 4—: what FF6 or Chrono Trigger
+   do. Digits and slash by hand, 4 of ink, all with an advance of 5. **It
+   doesn't have the TV problem.**
+2. **`alta-ancho-fijo`**: high resolution, fixed advance of 10 (5 in low).
+   Each column of the Mincho with a vertical stroke of 2 or more rows
+   measures 2 pixels in high, the rest 1, and equal consecutive ones are
+   merged; between two strokes the gap measures 2. Those with three strokes
+   (m, w, M, W) are narrowed to 8 with gaps of 1.
+3. **`alta-ancho-variable`**: the same rule, without narrowing, with 2 of air.
 
-La regla de los trazos se probó con "3 o más filas" también: ahorra un 4 %
-más pero deja de 1 pixel las diagonales de 2 filas (la "v", la "w"), que es
-lo que se borronea. Quedó la de 2.
+The stroke rule was also tried with "3 or more rows": it saves 4% more but
+leaves the 2-row diagonals (the "v", the "w") 1 pixel wide, which is what
+blurs. The 2 one stayed.
 
-### Cuánto ancho gana cada una
+### How much width each one gains
 
-El **avance promedio**, pesado por las letras de los nombres, títulos,
-técnicas, ítems, estados y enemigos del juego, en pixeles de baja: la de
-hoy 6; `baja-ancho-variable` 4,7 (78 %); `alta-ancho-fijo` 5 (83 %);
-`alta-ancho-variable` 3,64 (61 %).
+The **average advance**, weighted by the letters of the game's names,
+titles, techniques, items, states and enemies, in low-res pixels: today's
+6; `baja-ancho-variable` 4.7 (78%); `alta-ancho-fijo` 5 (83%);
+`alta-ancho-variable` 3.64 (61%).
 
-Pero lo que importa es si entra la **disposición** de RM2k, y eso lo mide
-`maquetas.py` empaquetándola: cada bloque de texto empieza donde termina el
-anterior más un hueco fijo. Con la fuente de hoy el menú empaquetado mide
-justo 320, así que los huecos son los de RM2k. `just fuentes` lo imprime
-(`build/fuentes/maquetas/medidas.txt`); el 2026-09-30, con las hojas como
-salieron:
+But what matters is whether RM2k's **layout** fits, and that is measured by
+`maquetas.py` packing it: each block of text starts where the previous one
+ends plus a fixed gap. With today's font the packed menu measures exactly
+320, so the gaps are RM2k's. `just fuentes` prints it
+(`build/fuentes/maquetas/medidas.txt`); on 2026-09-30, with the sheets as
+they came out:
 
-| candidata | menú, como RM2k | menú, apretado | pelea, grupo | pelea, peor caso |
+| candidate | menu, like RM2k | menu, tight | battle, party | battle, worst case |
 |-----------|-----------------|----------------|--------------|------------------|
-| baja-ancho-variable (256) | 277: falta 21 | 255: **entra** | 228: entra | 268: falta 12 |
-| alta-ancho-fijo (512)     | 566: falta 54 | 522: falta 10  | 458: entra | 538: falta 26 |
-| alta-ancho-variable (512) | 510: **entra** | 466 | 409: entra | 486: entra |
+| baja-ancho-variable (256) | 277: 21 short | 255: **fits** | 228: fits | 268: 12 short |
+| alta-ancho-fijo (512)     | 566: 54 short | 522: 10 short  | 458: fits | 538: 26 short |
+| alta-ancho-variable (512) | 510: **fits** | 466 | 409: fits | 486: fits |
 
-"Peor caso" es con los textos más largos del juego —"Gang Member" de
-nombre, "Agency Guard" de título, "Brambles" de estado, "Components" de
-técnica—; "grupo", con Kersh, Core y Manta. En el menú los dos casos casi
-no se diferencian, porque lo que manda es la línea del Ex: "Ex" y dos
-campos de 6 cifras, 76 pixeles en baja. **"Apretado" son tres concesiones**:
-4 de aire a cada lado de la cara en vez de 8, la ventana de comandos sin la
-holgura del cursor, y la experiencia en campos de 5 cifras (un actor de ABL
-pasa de 99.999 cerca del nivel 40).
+"Worst case" is with the longest texts in the game —"Gang Member" as name,
+"Agency Guard" as title, "Brambles" as state, "Components" as
+technique—; "party", with Kersh, Core and Manta. In the menu the two cases
+hardly differ, because what rules is the Ex line: "Ex" and two 6-digit
+fields, 76 pixels in low. **"Tight" is three concessions**: 4 of air on
+each side of the face instead of 8, the command window without the cursor's
+slack, and the experience in 5-digit fields (an ABL actor goes past 99,999
+near level 40).
 
-**Así que, con todas las letras: la de ancho variable en baja resolución no
-entra con la disposición de 320 tal cual —le faltan 21 pixeles—, pero con
-esas tres concesiones sí entra, con el peor caso del juego, y le sobra 1.**
-Es la que no tiene el problema de la tele. La pelea entra con el grupo de
-hoy (sobran 28) y no con el peor caso: un nombre de 11 letras, un estado
-de 8 y "Components" en los comandos se pasan por 12.
+**So, spelled out: the variable-width one in low resolution doesn't fit
+with the 320 layout as it is —it is 21 pixels short—, but with those three
+concessions it does fit, with the game's worst case, and has 1 to spare.**
+It is the one without the TV problem. The battle fits with today's party
+(28 to spare) and not with the worst case: an 11-letter name, an 8-letter
+state and "Components" in the commands go over by 12.
 
-`alta-ancho-fijo` no tiene a favor nada más que la legibilidad: en la ROM
-cuesta lo mismo que la de ancho variable (ver abajo) y no entra en el menú.
-Sólo vale si en la tele se lee claramente mejor que la variable.
+`alta-ancho-fijo` has nothing in its favour other than legibility: in the
+ROM it costs the same as the variable-width one (see below) and it doesn't
+fit in the menu. It is only worth it if on the TV it reads clearly better
+than the variable one.
 
-### Qué hay para mirar
+### What there is to look at
 
-* `/shared/capturas/2026-09-30-fuentes/`: las comparaciones lado a lado
-  (RM2k, la ROM de hoy y las tres, al mismo tamaño físico), los recortes ×4
-  de la fila de Kersh, las hojas con la letra arriba, las hojas para editar,
-  las maquetas sueltas y `medidas.txt`. Con un `LEEME.txt`.
-* `/shared/experimentos/2026-09-30-fuentes/`: la ROM, `fuentes.sfc`, con un
-  `LEEME.txt` de qué mirar en la tele.
+* `/shared/capturas/2026-09-30-fuentes/`: the side-by-side comparisons
+  (RM2k, today's ROM and the three, at the same physical size), the ×4 crops
+  of Kersh's row, the sheets with the letter on top, the sheets to edit,
+  the loose mockups and `medidas.txt`. With a `LEEME.txt`.
+* `/shared/experimentos/2026-09-30-fuentes/`: the ROM, `fuentes.sfc`, with a
+  `LEEME.txt` of what to look at on the TV.
 
-### Lo que costaría en la ROM (estimado, sin implementar)
+### What it would cost in the ROM (estimated, not implemented)
 
-**La ROM ya tiene un compositor de texto** (`compose_char` en
-`messages.s`): la ventana de mensajes no usa una letra por celda, compone
-glifos de 6 en un búfer de tiles de 4 bits y lo sube por DMA. Lo que no
-sabe es el ancho variable: calcula la x como `8 + 6 × columna`, que módulo 8
-cae sólo en 0, 2, 4 o 6, y por eso trae la fuente **pre-corrida en esas
-cuatro fases** con el color y la sombra ya puestos: 95 glifos × 156 bytes ×
-4 = 59 KB (`font_prerender` en `screens/src/message_window.rs`).
+**The ROM already has a text compositor** (`compose_char` in
+`messages.s`): the message window doesn't use one letter per cell, it
+composes 6-wide glyphs into a buffer of 4-bit tiles and uploads it by DMA.
+What it doesn't know is variable width: it computes x as `8 + 6 × column`,
+which modulo 8 only lands on 0, 2, 4 or 6, and that is why it carries the
+font **pre-shifted in those four phases** with the colour and the shadow
+already applied: 95 glyphs × 156 bytes × 4 = 59 KB (`font_prerender` in
+`screens/src/message_window.rs`).
 
-* **`baja-ancho-variable`, en baja.** Es el compositor que ya hay con tres
-  cambios: una tabla de avances (95 bytes), la x acumulada en vez de
-  multiplicada, y **las ocho fases** en vez de cuatro. Con las tablas
-  pre-corridas eso duplica la fuente, +59 KB por color, y el menú usa tres
-  (blanco, rojo y gris): no conviene. Lo barato es una fuente de 1 bit
-  (95 × 12 bytes, 1,1 KB) y correrla al componer, que con la pantalla
-  apagada —el menú abre así— no se nota. Lo caro es pasar el menú y la
-  pelea de "una letra por celda" (`layout.rs`, `slot_glyph_cells`) a texto
-  compuesto. Medido sobre la maqueta, el texto del menú toca 299 tiles de
-  8x8 (279 distintos, ~9 KB); con las tres caras, 108 más, son unos 400, y
-  la zona del menú de hoy (`SLOT_VRAM`..`SLOT_MAP` en `vram.py`) llega a
-  448: entra, justo. La pelea toca 158 (~5 KB), y al cambiar los HP se
-  recompone una fila, ~30 tiles en el vblank.
-  **Unos cientos de bytes de código y dos o tres días**, casi todo de mover
-  las pantallas a texto compuesto.
-* **De regalo, en los mensajes**: hoy entran 39 caracteres por línea de 6;
-  con un avance promedio de 4,7, unos 49, que es lo que entra en la ventana
-  de RM2k. Habría muchas menos cajas partidas por el reparto (`refit`). Ahí
-  el compositor corre con el mapa andando y con un tope de 5 letras por
-  cuadro (`MSG_CHARS`), medido con las tablas pre-corridas: con la fuente
-  de 1 bit habría que volver a medirlo, o pagar los 59 KB de las ocho fases
-  sólo para el color de la ventana.
-* **Las de alta**, lo que estimó Ñacurutú para el modo 5 en
-  `maqueta-del-menu-en-alta-resolucion.md`: el cambio de modo y las caras en
-  sprites son baratos; el texto pide el mismo compositor, en alta, y unos
-  25 KB de VRAM. Medido sobre estas maquetas, el texto del menú toca 486
-  tiles con la variable y 531 con la fija (12 KB distintos las dos), y el
-  de la pelea, 246 y 280. **El avance fijo de 10 no ahorra el compositor**: 10 no
-  divide a 16, así que los glifos tampoco caen alineados con las celdas de
-  16x8 del modo 5. Las dos de alta cuestan lo mismo, y es más que la de
-  baja: el compositor de baja ya existe y el de alta hay que escribirlo, más
-  el modo 5 en cada pantalla que lo use.
+* **`baja-ancho-variable`, in low.** It is the compositor already there with
+  three changes: an advance table (95 bytes), x accumulated instead of
+  multiplied, and **the eight phases** instead of four. With the
+  pre-shifted tables that doubles the font, +59 KB per colour, and the menu
+  uses three (white, red and grey): not worth it. The cheap thing is a 1-bit
+  font (95 × 12 bytes, 1.1 KB) and shifting it while composing, which with
+  the screen off —the menu opens that way— isn't noticeable. The expensive
+  thing is moving the menu and the battle from "one letter per cell"
+  (`layout.rs`, `slot_glyph_cells`) to composed text. Measured on the
+  mockup, the menu text touches 299 8x8 tiles (279 distinct, ~9 KB); with
+  the three faces, 108 more, that is about 400, and today's menu area
+  (`SLOT_VRAM`..`SLOT_MAP` in `vram.py`) reaches 448: it fits, just. The
+  battle touches 158 (~5 KB), and when the HP change a row is recomposed,
+  ~30 tiles in vblank.
+  **A few hundred bytes of code and two or three days**, almost all of it
+  moving the screens to composed text.
+* **As a bonus, in the messages**: today 39 characters of 6 fit per line;
+  with an average advance of 4.7, about 49, which is what fits in RM2k's
+  window. There would be many fewer boxes split by the distribution
+  (`refit`). There the compositor runs with the map going and with a cap of
+  5 letters per frame (`MSG_CHARS`), measured with the pre-shifted tables:
+  with the 1-bit font it would have to be measured again, or pay the 59 KB
+  of the eight phases only for the window's colour.
+* **The high-res ones**, what Ñacurutú estimated for mode 5 in
+  `maqueta-del-menu-en-alta-resolucion.md`: the mode change and the faces as
+  sprites are cheap; the text asks for the same compositor, in high, and
+  about 25 KB of VRAM. Measured on these mockups, the menu text touches 486
+  tiles with the variable one and 531 with the fixed one (12 KB distinct,
+  both), and the battle one, 246 and 280. **The fixed advance of 10 doesn't
+  save the compositor**: 10 doesn't divide 16, so the glyphs don't land
+  aligned with mode 5's 16x8 cells either. The two high-res ones cost the
+  same, and it is more than the low one: the low-res compositor already
+  exists and the high-res one has to be written, plus mode 5 on each screen
+  that uses it.
 
-### Falta
+### Missing
 
-Que taro las mire en la tele con la ROM, y que retoque las hojas. Lo que
-más mano pide está en las de alta: la "s", la "c", la "a" y las diagonales
-tienen pixeles sueltos de alta. Con una hoja editada, `just fuentes` vuelve
-a armar todo.
+That taro looks at them on the TV with the ROM, and touches up the sheets.
+What asks for the most hand work is in the high-res ones: the "s", the
+"c", the "a" and the diagonals have loose high-res pixels. With an edited
+sheet, `just fuentes` builds everything again.
 
-Al mergear no hay nada que instalar: no toca Rust ni agrega scripts al PATH.
+On merging there is nothing to install: it doesn't touch Rust or add
+scripts to the PATH.
 
-# Lo que eligió taro
+# What taro chose
 
-El 2026-10-03: le gustan las dos de ancho variable, la de baja y la de
-alta, y quiere probarlas en el juego. Primero la de baja en todo el juego
-—`las-letras-de-ancho-variable.md`, en el repo de las herramientas—, y
-después el modo 5 como perilla del proyecto, para comparar dos builds sin
-revertir nada.
+On 2026-10-03: he likes the two variable-width ones, the low one and the
+high one, and wants to try them in the game. First the low one in the whole
+game —`las-letras-de-ancho-variable.md`, in the tools repo—, and
+then mode 5 as a project knob, to compare two builds without reverting
+anything.

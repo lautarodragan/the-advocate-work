@@ -1,143 +1,142 @@
 ---
-name: "Un linter de 65816, en Rust"
-description: "Chequeos de trampas comunes que ensamblan bien pero están mal: pl* antes de un salto condicional, jsl/rtl contra jsr/rts, la pila desbalanceada, y el ancho de los registros como estudio; una herramienta de tools/ que no sabe de ABL, con las excepciones del juego en rom/"
+name: "A 65816 linter, in Rust"
+description: "Checks for common traps that assemble fine but are wrong: pl* before a conditional branch, jsl/rtl against jsr/rts, the unbalanced stack, and register width as a study; a tool in tools/ that knows nothing about ABL, with the game's exceptions in rom/"
 type: feature
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-10-02: "¿hay equivalentes a linters, formatters u otras
-herramientas de análisis estático para assembler? En particular, tal vez
-aportaría valor algún chequeo de trampas comunes —cosas que compilan bien
-pero seguro estén mal—". Para 65816 no hay nada que valga la pena adoptar,
-así que se hace: "y que esté hecho en Rust".
+From taro, on 2026-10-02: "are there equivalents to linters, formatters or other
+static analysis tools for assembler? In particular, maybe some check for common
+traps —things that compile fine but are surely wrong— would add value". For the 65816 there's nothing worth adopting,
+so it gets made: "and let it be made in Rust".
 
-El antecedente es la guarda de los bancos de Ratona
-(`la-guarda-de-los-bancos.md`), que lee el `.dbg` y marca los saltos
-a otro banco. La trampa 1 es la de `AGENTS.md`, "La trampa que más veces
-mordió".
+The precedent is Ratona's bank guard
+(`la-guarda-de-los-bancos.md`), which reads the `.dbg` and flags branches
+to another bank. Trap 1 is the one in `AGENTS.md`, "The trap that bit
+most often".
 
-## Lo hecho (2026-10-02, Carpintero, sobre `a6ba9693`)
+## What was done (2026-10-02, Carpintero, on `a6ba9693`)
 
-**Goombario**, `tools/snes/goombario/`, en el PATH como `goombario`. El
-nombre es de Goombario, el compañero de Paper Mario cuyo poder es "Tattle":
-contar lo que sabe de cada uno. Un linter es eso. taro lo puede cambiar.
+**Goombario**, `tools/snes/goombario/`, on the PATH as `goombario`. The
+name is from Goombario, the Paper Mario companion whose power is "Tattle":
+telling what he knows about everyone. A linter is that. taro can change it.
 
-Lee **la ROM, el `.dbg` y el fuente**, igual que la guarda de los bancos de
-Ratona: no desensambla adivinando, cada línea del `.dbg` dice dónde fueron
-sus bytes y la instrucción se lee de la ROM ahí. El fuente se lee para los
-anchos declarados —`.a8`/`.a16`, y `rep`/`sep` bajo `.smart`—, siguiendo
-los `.include` desde `main.s` y reproduciendo el cuerpo de cada macro donde
-se usa. **Los inmediatos verifican esa lectura**: el tamaño con que `ca65`
-armó cada uno tiene que ser el ancho que se leyó del fuente, y sobre el
-runtime de hoy son cero los que no cuadran.
+It reads **the ROM, the `.dbg` and the source**, just like Ratona's bank
+guard: it doesn't disassemble by guessing, each line of the `.dbg` says where
+its bytes went and the instruction is read from the ROM there. The source is read for the
+declared widths —`.a8`/`.a16`, and `rep`/`sep` under `.smart`—, following
+the `.include`s from `main.s` and reproducing the body of each macro where
+it's used. **The immediates verify that reading**: the size with which `ca65`
+assembled each one has to be the width read from the source, and on
+today's runtime zero of them don't match.
 
-Cuatro chequeos; el README dice cómo mira cada uno y qué no ve:
+Four checks; the README says how each one looks and what it doesn't see:
 
-1. **`pull-branch`**: desde cada `pl*`, por todos los caminos hasta que
-   cada bandera que puso se vuelva a poner, un salto condicional que la
-   mira. N y Z para `pla`/`plx`/`ply`/`plb`/`pld`; las cuatro para `plp`.
-2. **`call-return`**: camina cada rutina desde su entrada —cada destino de
-   `jsr`, `jsl` y `jsr (tabla, x)`, y los vectores— por todas las ramas y
-   saltos, incluso hacia otras rutinas, y marca cada `rts`/`rtl`/`rti` que
-   no corresponde a cómo la entró algún llamador.
-3. **`stack`**: en la misma caminata, los bytes empujados desde la entrada,
-   con el ancho de cada `pha`/`phx`. Lo que no se sigue —un bucle que
-   empuja, `tcs`/`txs`, un salto por puntero— no es error: `--unfollowed`
-   lo lista. Sobre el release son cuatro lugares: dos bucles que empujan
-   (`big_palette_build`, `pic_tick`) y los dos `jsl` al trampolín en RAM
-   del LZ2.
-4. **`width`**: ver abajo.
+1. **`pull-branch`**: from each `pl*`, along every path until
+   each flag it set is set again, a conditional branch that
+   looks at it. N and Z for `pla`/`plx`/`ply`/`plb`/`pld`; all four for `plp`.
+2. **`call-return`**: it walks each routine from its entry —each target of
+   `jsr`, `jsl` and `jsr (tabla, x)`, and the vectors— along every branch and
+   jump, even into other routines, and flags each `rts`/`rtl`/`rti` that
+   doesn't match how some caller entered it.
+3. **`stack`**: in the same walk, the bytes pushed since the entry,
+   with the width of each `pha`/`phx`. What isn't followed —a loop that
+   pushes, `tcs`/`txs`, a jump through a pointer— isn't an error: `--unfollowed`
+   lists it. On the release there are four places: two loops that push
+   (`big_palette_build`, `pic_tick`) and the two `jsl`s to the LZ2's trampoline in
+   RAM.
+4. **`width`**: see below.
 
-Del lado de ABL: `rom/pruebas/herramientas/test_linter.py`, sobre los tres
-cartuchos, y `rom/excepciones-del-linter.txt`.
+On ABL's side: `rom/pruebas/herramientas/test_linter.py`, over the three
+cartridges, and `rom/excepciones-del-linter.txt`.
 
-### Lo que encontró en el runtime
+### What it found in the runtime
 
-**Tres declaraciones de ancho que no eran lo que corre** (chequeo 4), en su
-commit: `op_var` después de `jsr random_next`, `medicine_use` después de
-cada `jsr per_hundred` —las dos vuelven con A16, y el código lo sabe— y
-`ba_t_sound`, que se entra con A16 (así la llaman los siete `jsl` de la
-pelea) y heredaba el `.a8` del puente anterior. **No cambian un byte**: no
-había ningún inmediato entre la declaración vieja y la siguiente. Eran la
-trampa del encabezado de `main.s` esperando el primero que se agregue.
-`git blame` cae en los commits de traducción; la intención la dicen los
-comentarios de cada lugar ("the dividend, sixteen bits", "returns with
-A16", "A16 the index"). Como no cambian la ROM, la prueba que los muestra
-es la del linter: antes del arreglo daba esas 16 líneas.
+**Three width declarations that weren't what runs** (check 4), in their
+commit: `op_var` after `jsr random_next`, `medicine_use` after
+each `jsr per_hundred` —both return with A16, and the code knows it— and
+`ba_t_sound`, which is entered with A16 (that's how the seven `jsl`s of the
+battle call it) and inherited the `.a8` from the previous bridge. **They don't change a byte**: there
+was no immediate between the old declaration and the next one. They were the
+trap in `main.s`'s header waiting for the first one to be added.
+`git blame` lands on the translation commits; the intent is stated by the
+comments at each place ("the dividend, sixteen bits", "returns with
+A16", "A16 the index"). Since they don't change the ROM, the test that shows them
+is the linter's: before the fix it gave those 16 lines.
 
-**Excepciones**: doce `pull-branch` donde el salto mira a propósito lo que
-se sacó —`pla` y `beq` es también la forma corta de preguntar si es
-cero—, y la salida compartida de `slots_screen` (`close`), que saca la
-dirección de retorno para llegar a lo que empujó su llamador, como dice su
-comentario. Cada una con su porqué en el archivo.
+**Exceptions**: twelve `pull-branch` where the branch looks on purpose at what
+was pulled —`pla` and `beq` is also the short way of asking whether it's
+zero—, and the shared exit of `slots_screen` (`close`), which pulls the
+return address to get to what its caller pushed, as its
+comment says. Each one with its reason in the file.
 
-**Ningún `jsl` contra `rts` ni pila desbalanceada** de verdad.
+**No `jsl` against `rts` nor unbalanced stack** for real.
 
-### El rojo que vi
+### The red I saw
 
-Cuatro roturas a la vez, una por chequeo, y la prueba las marcó en los tres
-cartuchos:
+Four breakages at once, one per check, and the test flagged them in the three
+cartridges:
 
-    event_routes.s:686  sin el `cmp #0` después del `plx` (el error histórico)
+    event_routes.s:686  without the `cmp #0` after the `plx` (the historical bug)
       "pull-branch: in `ev_route_frame`, `bne no_blocked`: `bne` looks at Z,
       and the last instruction to set it is the `plx` at event_routes.s:680"
-    battle_bridges.s:96  el `rtl` de `ba_t_ppu` cambiado a `rts`
+    battle_bridges.s:96  the `rtl` of `ba_t_ppu` changed to `rts`
       "call-return: `ba_t_ppu` is entered with jsl (at menu_experience.s:113),
       and this path out of it is an `rts`, which pulls 2 bytes …"
-    medicine.s:245  un `phx` de más al entrar a `k_in_x`
+    medicine.s:245  an extra `phx` on entering `k_in_x`
       "stack: `rts` leaves `k_in_x` with 2 bytes still pushed, by `phx` at
       medicine.s:245"
-    audio_package.s:170  sin el `sep #$20` antes de `.a8` y `lda #3`
+    audio_package.s:170  without the `sep #$20` before `.a8` and `lda #3`
       "width: `lda` was assembled for a 8-bit A, and on the path from
       `upload_sample` A is 16 bits wide here: the CPU reads it with a
       different length"
 
-La primera vez salieron además dos falsos: el `.align` de `header.s` y un
-`.dword` de `mapdata.inc` leídos como código, porque `ca65` no les pone
-tipo. Se arregló en su propio commit (la directiva de la línea decide) y la
-segunda vez salieron sólo las cuatro. Todo vuelto atrás.
+The first time two false ones came out as well: the `.align` of `header.s` and a
+`.dword` of `mapdata.inc` read as code, because `ca65` doesn't give them a
+type. It was fixed in its own commit (the line's directive decides) and the
+second time only the four came out. All reverted.
 
-### El ancho: salió como chequeo
+### Width: it came out as a check
 
-Medido sobre el release, con `--stats`:
+Measured on the release, with `--stats`:
 
-* **inmediatos** (`lda #`, `ldx #`…): 4010 decididos, 0 mal; 210 sin decidir;
-* **las otras instrucciones que dependen del ancho** (cargas, guardados,
-  aritmética, empujes, transferencias): 13676 decididas, 0 mal; 460 sin
-  decidir.
-  Antes de los arreglos daba 8 mal, todas de las tres declaraciones;
-* **llamadas** contra el ancho que el llamado declara en su entrada, para
-  los registros que usa antes de ponerlos: 2606 decididas, 0 sin decidir.
-  Antes, 8 mal: las siete de `ba_t_sound` y la de adentro.
+* **immediates** (`lda #`, `ldx #`…): 4010 decided, 0 wrong; 210 undecided;
+* **the other instructions that depend on width** (loads, stores,
+  arithmetic, pushes, transfers): 13676 decided, 0 wrong; 460
+  undecided.
+  Before the fixes it gave 8 wrong, all from the three declarations;
+* **calls** against the width the callee declares at its entry, for
+  the registers it uses before setting them: 2606 decided, 0 undecided.
+  Before, 8 wrong: the seven of `ba_t_sound` and the one inside.
 
-Sin decidir es lo que viene después de un `xce`, de un `plp` sin su `php`
-o de una llamada que vuelve con anchos distintos según el camino. Cero
-falsos positivos después de lo de las macros —sus `.a8` de adentro, y los
-`.repeat` adentro de una macro, que el `.dbg` no marca como de macro—, así
-que va como chequeo y no como estudio.
+Undecided is what comes after an `xce`, a `plp` without its `php`
+or a call that returns with different widths depending on the path. Zero
+false positives after the macro business —their inner `.a8`s, and the
+`.repeat`s inside a macro, which the `.dbg` doesn't mark as macro—, so
+it goes as a check and not as a study.
 
-## Los números
+## The numbers
 
-`just pruebas`: 1008 (1005 + los tres cartuchos de `test_linter.py`).
+`just pruebas`: 1008 (1005 + the three cartridges of `test_linter.py`).
 `just -f tools/justfile test`: 39. `cargo test -p goombario`: 5 + 8.
-`abl.sfc` de `release`: `35c76500…`, el de la base: `NO_CACHE=1 just
-cartuchos` antes y después de las declaraciones, y `just cartuchos` al final,
-con los tres `.sfc` y los tres `.msu` byte por byte iguales. Ninguna golden se
-movió. `main` no se movió mientras tanto (`a6ba9693`): no hubo nada que
-mergear.
+`abl.sfc` of `release`: `35c76500…`, the base's: `NO_CACHE=1 just
+cartuchos` before and after the declarations, and `just cartuchos` at the end,
+with the three `.sfc` and the three `.msu` byte for byte the same. No golden
+moved. `main` didn't move in the meantime (`a6ba9693`): there was nothing to
+merge.
 
-## Lo que queda
+## What remains
 
-* El chequeo de `pull-branch` no sabe distinguir el salto que mira lo sacado
-  a propósito del que quería mirar lo de antes: eso lo dice la excepción.
-* Un bucle que empuja deja sin revisar la pila de toda su rutina (hoy dos).
-* Una rutina que vuelve con N/Z de un `pl*` y un llamador que salta sobre eso
-  después del `jsr` no se mira: el chequeo 1 no cruza llamadas.
+* The `pull-branch` check can't tell the branch that looks at what was pulled
+  on purpose from the one that meant to look at what came before: the exception says that.
+* A loop that pushes leaves the stack of its whole routine unchecked (two today).
+* A routine that returns with N/Z from a `pl*` and a caller that branches on that
+  after the `jsr` isn't looked at: check 1 doesn't cross calls.
 
-## Al mergear
+## When merging
 
-**Instalar `goombario` en el global**: `just -f tools/justfile install
-goombario`, desde el checkout principal. Sin eso `test_linter.py` no
-encuentra el ejecutable. Nada más: `cartridge` se instaló en el `bin/` local
-sólo para armar con el runtime del worktree, y no cambió.
+**Install `goombario` globally**: `just -f tools/justfile install
+goombario`, from the main checkout. Without that `test_linter.py` doesn't
+find the executable. Nothing else: `cartridge` was installed in the local `bin/`
+only to build with the worktree's runtime, and didn't change.

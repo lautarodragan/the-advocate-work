@@ -1,96 +1,97 @@
 ---
-name: "Los eventos de tropa"
-description: "Los 32 sistemas de batalla de los personajes, además del de Talan"
+name: "Troop events"
+description: "The characters' 32 battle systems, besides Talan's"
 type: feature
 status: done
 assignee: taro
 ---
 
-**Correr las páginas de evento de las tropas durante la pelea.**
+**Running the troops' event pages during battle.**
 
-Es lo que hace andar los sistemas de cada personaje: una habilidad de tipo switch
-—`Detect Aura`, la de Talan— prende un switch, y las páginas de la tropa que lo
-miran corren en la pelea.
+It's what makes each character's systems work: a switch-type skill
+—`Detect Aura`, Talan's— turns on a switch, and the troop pages that look at
+it run in battle.
 
-**El mecanismo ya existe** desde el 2026-09-21, con el sistema de Talan
-(`el-sistema-de-batalla-de-talan.md`): las páginas de tropa se compilan
-deduplicadas, corren en la pelea con el mismo intérprete de los mapas, sus
-mensajes salen en la pantalla de pelea, y una habilidad de tipo switch prende su
-switch. Lo que falta es **completar comandos**: lo que una página de tropa puede
-hacer es una lista explícita, `TROPA_COMANDOS` en `tools/port/eventos.py`, y
-sólo deja pasar lo que se sabe que anda en la pelea.
+**The mechanism already exists** since 2026-09-21, with Talan's system
+(`el-sistema-de-batalla-de-talan.md`): the troop pages are compiled
+deduplicated, they run in battle with the same interpreter as the maps, their
+messages come out on the battle screen, and a switch-type skill turns on its
+switch. What's missing is **completing commands**: what a troop page can do
+is an explicit list, `TROPA_COMANDOS` in `tools/port/eventos.py`, and it only
+lets through what's known to work in battle.
 
-Medido en el LDB el 2026-09-21:
+Measured in the LDB on 2026-09-21:
 
-- 300 tropas, 163 con páginas, **4287 páginas y sólo 291 distintas** por contenido
-  (el juego las copia en cada pelea);
-- **4278 dependen sólo de `switch_a`**; 9 miran el turno o los HP;
-- **32 switches** las disparan, uno por sistema, cada uno en 140 a 163 tropas.
-  Los de Talan son el 134 (`DetectedAura`) y el 135 (`AbsorbedAura`);
-- `ConditionalBranch_B` ya está: el juego usa sólo 2 de sus 6 tipos, switch y
-  variable, y se traducen a las ramas de los mapas.
+- 300 troops, 163 with pages, **4287 pages and only 291 distinct** by content
+  (the game copies them into each battle);
+- **4278 depend only on `switch_a`**; 9 look at the turn or the HP;
+- **32 switches** trigger them, one per system, each in 140 to 163 troops.
+  Talan's are 134 (`DetectedAura`) and 135 (`AbsorbedAura`);
+- `ConditionalBranch_B` is already there: the game uses only 2 of its 6
+  types, switch and variable, and they translate to the maps' branches.
 
-Lo que traba a las páginas que quedaron afuera, contado por páginas al terminar
-el sistema de Talan:
+What blocks the pages left out, counted by pages when Talan's system was
+finished:
 
-- **`ChangePartyMembers`: 2520**, y es lejos lo que más traba;
-- `PlaySound` 280, `ChangeCondition` 140, `PlayBGM` 140, `ChangeHP` 129 —en la
-  pelea tiene que escribir los HP de la pelea y no `FAR_HP`—, `ChangeMonsterHP` 24;
-- las condiciones de turno, HP del enemigo y HP del actor: 173 páginas;
-- la forma de **equipar** de `ChangeEquipment`, que no compila: sólo está la de
-  sacar una ranura.
+- **`ChangePartyMembers`: 2520**, and it's by far what blocks the most;
+- `PlaySound` 280, `ChangeCondition` 140, `PlayBGM` 140, `ChangeHP` 129 —in
+  battle it has to write the battle HP and not `FAR_HP`—, `ChangeMonsterHP` 24;
+- the conditions on turn, enemy HP and actor HP: 173 pages;
+- the **equip** form of `ChangeEquipment`, which doesn't compile: only the
+  one that removes a slot is there.
 
-**Y el espacio se va a acabar antes que los comandos**: las páginas de tropa del
-juego entero son unos 48 KB entre código y mensajes, y no entran en ningún lado.
-Hoy van en el banco 1, que en los cartuchos grandes quedó con unos 8,8 KB libres.
-Pide comprimir, el acomodo de bloques, o traerlas por MSU-1.
+**And space is going to run out before commands do**: the whole game's troop
+pages are some 48 KB between code and messages, and they don't fit anywhere.
+Today they go in bank 1, which in the big cartridges was left with some
+8.8 KB free. It calls for compressing, the block arrangement, or bringing
+them through MSU-1.
 
-Referencia: `Game_Battle::UpdateEvents` y `Game_Interpreter_Battle` de EasyRPG.
+Reference: EasyRPG's `Game_Battle::UpdateEvents` and `Game_Interpreter_Battle`.
 
-**Lo que ya hizo `tasks/*/eventos-de-tropa-de-release.md`** (2026-09-28), que
-es lo que se nota en las peleas de `release`: las condiciones de turno, de HP
-del enemigo y de HP del actor —las tres, con sus números en una cabecera
-delante del código de la página y no en tablas del banco 1—, los enemigos
-ocultos con `ShowHiddenMonster`, y `PlaySound` y `ShakeScreen` en la página.
-Lo que queda es de los sistemas: `ChangePartyMembers` sigue siendo lejos lo
-que más traba, y después `ChangeHP` y `ChangeMonsterHP` sobre los HP de la
-pelea, `ChangeCondition`, `ChangeMonsterCondition`, `ChangeEquipment` para
-equipar, `PlayBGM` y `FlashScreen`. **Y el audio**: el `PlaySound` de una
-página se pide pero su efecto no entra en el paquete de la pelea salvo que
-esté en `SE_DE_TROPA_AL_PAQUETE`, porque el paquete ya limita muestras; los
-sistemas tienen efectos propios y van a chocar con eso.
+**What `tasks/*/eventos-de-tropa-de-release.md` already did** (2026-09-28),
+which is what's noticeable in `release`'s battles: the conditions on turn,
+enemy HP and actor HP —all three, with their numbers in a header before the
+page's code and not in bank 1 tables—, the hidden enemies with
+`ShowHiddenMonster`, and `PlaySound` and `ShakeScreen` in the page. What
+remains belongs to the systems: `ChangePartyMembers` is still by far what
+blocks the most, and then `ChangeHP` and `ChangeMonsterHP` on the battle HP,
+`ChangeCondition`, `ChangeMonsterCondition`, `ChangeEquipment` to equip,
+`PlayBGM` and `FlashScreen`. **And the audio**: a page's `PlaySound` is
+requested but its effect doesn't go into the battle package unless it's in
+`SE_DE_TROPA_AL_PAQUETE`, because the package already limits samples; the
+systems have effects of their own and are going to clash with that.
 
 # Status
 
-2026-09-30, en `testing/`: hecho por Yarará en su rama, sobre `main` en
-1a82726 y con `main` mergeado en 3afc819. Commits: a23eedf (las tablas por
-página a RODATA, **la decisión de espacio que tiene que ver taro**), 9a5fcb0
-(los sistemas) y e23bd8f (`Play Radio`). Andan 30 de los 32 sistemas; lo que
-queda es de taro: la decisión de espacio, la de la música de la radio, la del
-común 35, y jugarlo (ver abajo).
+2026-09-30, in `testing/`: done by Yarará in their branch, on `main` at
+1a82726 and with `main` merged at 3afc819. Commits: a23eedf (the per-page
+tables to RODATA, **the space decision taro has to look at**), 9a5fcb0 (the
+systems) and e23bd8f (`Play Radio`). 30 of the 32 systems work; what remains
+is taro's: the space decision, the one on the radio's music, the one on
+common event 35, and playing it (see below).
 
-**Al mergear, instalar** `just -f tools/justfile install events battle`: son
-los dos proyectos de Rust que cambiaron. El runtime y el Python no piden nada
-—ningún `.py` se renombró ni se agregó—. `tools/snes/protocol/events.toml`
-suma dos opcodes y los generados ya están en los commits.
+**On merging, install** `just -f tools/justfile install events battle`: they're
+the two Rust projects that changed. The runtime and the Python don't need
+anything —no `.py` was renamed or added—. `tools/snes/protocol/events.toml`
+adds two opcodes and the generated files are already in the commits.
 
-**Ninguna golden se movió**, y `test_musica_techos.py` pasó.
+**No golden moved**, and `test_musica_techos.py` passed.
 
-# Lo medido al empezar (2026-09-30, sobre 1a82726)
+# What was measured at the start (2026-09-30, on 1a82726)
 
-Con un script descartable sobre `rom/data/db/troops.json` y la lista de
-`TROOP_COMMANDS` de `tools/rm2k-snes/events/src/troops.rs` (las ramas de pelea
-cuentan como las del mapa). Cuenta páginas con algún disparador.
+With a throwaway script over `rom/data/db/troops.json` and the list of
+`TROOP_COMMANDS` in `tools/rm2k-snes/events/src/troops.rs` (the battle
+branches count like the map ones). It counts pages with some trigger.
 
-**El juego entero**: 4451 páginas, 1355 entran por sus comandos. **Las 69
-tropas de `release`**: 1671 páginas, 532 entran —lo mismo que dice
-`conversor.log`: "troop pages: 532 of 1671 in 124 distinct body(ies), 8863 B
-of code and 9121 B in 162 message(s)"—.
+**The whole game**: 4451 pages, 1355 fit by their commands. **The 69 troops
+of `release`**: 1671 pages, 532 fit —the same as `conversor.log` says:
+"troop pages: 532 of 1671 in 124 distinct body(ies), 8863 B of code and 9121
+B in 162 message(s)"—.
 
-Lo que traba, en `release` (páginas que lo usan; entre paréntesis, las que
-traba sólo él):
+What blocks, in `release` (pages that use it; in parentheses, the ones only
+it blocks):
 
-    ChangePartyMembers       918 (918)   las 18 invocaciones, 814 a 831
+    ChangePartyMembers       918 (918)   the 18 summons, 814 to 831
     ChangeHP                 203
     ChangeMonsterHP          152
     ChangeCondition          102
@@ -100,166 +101,169 @@ traba sólo él):
     PlayBGM                   51
     ChangeEquipment           51
 
-Por sistema (switch A), en `release`: andan enteros **9 de 32** —134, 135,
-138, 141, 143, 144, 146, 813 y 860—, el 803 anda en 33 de sus 51 páginas y
-el 801 en 1. Lo que traba a cada uno de los demás:
+By system (switch A), in `release`: **9 of 32** work in full —134, 135, 138,
+141, 143, 144, 146, 813 and 860—, 803 works in 33 of its 51 pages and 801 in
+1. What blocks each of the others:
 
     799 Inscribe          ChangeMonsterCondition, ChangeMonsterMP,
                           FlashScreen, ChangeMonsterHP, ChangeCondition,
                           ChangeHP
-    801 LifeForStrength   ChangeHP (restar, letal) y ChangeMonsterHP; y el
-                          ControlVars con los HP de un actor, que no compila
-    802 Sacrifice         ChangeCondition (sacar la muerte) y ChangeHP
-    803 ControlMachines   ChangeMonsterCondition (18 de 51)
-    809 Play Radio        PlayBGM, ChangeEquipment para equipar, ChangeHP,
+    801 LifeForStrength   ChangeHP (subtract, lethal) and ChangeMonsterHP;
+                          and the ControlVars with an actor's HP, which
+                          doesn't compile
+    802 Sacrifice         ChangeCondition (remove death) and ChangeHP
+    803 ControlMachines   ChangeMonsterCondition (18 of 51)
+    809 Play Radio        PlayBGM, ChangeEquipment to equip, ChangeHP,
                           ChangeMonsterHP
-    814-831 invocaciones  ChangePartyMembers (sacar a Emily, 26, y poner a
-                          la invocación, 36 a 53)
+    814-831 summons       ChangePartyMembers (remove Emily, 26, and add the
+                          summon, 36 to 53)
 
-Las formas que usan, del LDB entero: `ChangeMonsterHP` siempre restando una
-constante y letal, al enemigo 0, 1 o 2; `ChangeMonsterMP` restando 40;
-`ChangeMonsterCondition` con los estados 22 (Control) y 23 (BarkWall), que la
-pelea no tiene; `ChangeCondition` siempre "sacar el estado 1 al grupo", que
-es revivir; `ChangeHP` sumando al grupo o a Emily, o restándole 999 a Talan,
-letal.
+The forms they use, from the whole LDB: `ChangeMonsterHP` always subtracting
+a constant and lethal, on enemy 0, 1 or 2; `ChangeMonsterMP` subtracting 40;
+`ChangeMonsterCondition` with states 22 (Control) and 23 (BarkWall), which
+battle doesn't have; `ChangeCondition` always "remove state 1 from the
+party", which is reviving; `ChangeHP` adding to the party or to Emily, or
+subtracting 999 from Talan, lethal.
 
-**El espacio**, `just espacio` sobre los cartuchos de la base:
+**The space**, `just espacio` over the base's cartridges:
 
-    release        bancos de datos 115 de 124, 9 libres; huecos 8.799 B;
-                   banco 0 50 B; banco 1 3.126 B
-    test-special   banco 0 943 B; banco 1 5.630 B
-    encounter-...  banco 0 1.003 B; banco 1 5.901 B
+    release        data banks 115 of 124, 9 free; gaps 8,799 B;
+                   bank 0 50 B; bank 1 3,126 B
+    test-special   bank 0 943 B; bank 1 5,630 B
+    encounter-...  bank 0 1,003 B; bank 1 5,901 B
 
-Lo que la tarea decía del espacio ya no es así: **el código y los mensajes
-de las páginas no están en el banco 1 desde el 2026-09-27**, están en
-RODATA, donde sobran nueve bancos. Lo que sigue en el banco 1 son **las
-tablas por página** —`tpage_flags`, `tpage_sw_a` y `tpage_code`—, cinco
-bytes por página: con las 532 de hoy son 2.660 B, y con las 1671 serían
-8.355 B, que no entran en los 3.126 que quedan. Sólo las 918 de las
-invocaciones son 4.590 B.
+What the task said about space is no longer so: **the pages' code and
+messages haven't been in bank 1 since 2026-09-27**, they're in RODATA, where
+nine banks are to spare. What's still in bank 1 is **the per-page tables**
+—`tpage_flags`, `tpage_sw_a` and `tpage_code`—, five bytes per page: with
+today's 532 that's 2,660 B, and with the 1671 it would be 8,355 B, which
+don't fit in the 3,126 left. Just the summons' 918 are 4,590 B.
 
-# Lo hecho (2026-09-30, Yarará)
+# What was done (2026-09-30, Yarará)
 
-**El espacio**: las tablas por página se fueron a RODATA con el código y los
-mensajes (a23eedf). **Es una decisión de espacio que no pidió nadie** y la
-tiene que ver taro: es el criterio del 2026-09-27 (8d6757e) aplicado a lo que
-quedaba. Sin ella, las 918 páginas de las invocaciones no entraban en el
-banco 1 de `release`. Se revierte sola, y entonces lo de abajo no entra.
+**The space**: the per-page tables went to RODATA with the code and the
+messages (a23eedf). **It's a space decision nobody asked for** and taro has
+to look at it: it's the 2026-09-27 criterion (8d6757e) applied to what was
+left. Without it, the summons' 918 pages didn't fit in `release`'s bank 1.
+It reverts on its own, and then what's below doesn't fit.
 
-**El mecanismo**: una página de tropa corre con los opcodes del mapa, y los
-del grupo —`ChangePartyMembers`, `ChangeHP`, `FullHeal`, el `ChangeCondition`
-que revive, `ControlVars` con los HP de un actor— tocan `party` y `FAR_HP`.
-Así que cada tramo de página pasa por `ba_sync_out` —los HP y SP de la pelea
-a `FAR_HP`/`FAR_SP`— y `ba_sync_in` —de vuelta, y el grupo: el que salió deja
-su lugar vacío, el que entró va al primero vacío, desde `ba_actor_setup`, lo
-de `ba_build` para un actor—. Ver `battle_troop.s`. Lo que eso no hace como
-RM2k está en `divergencias/lo-que-las-paginas-de-tropa-no-modelan.md`.
-
-**Los comandos**, con su prueba en `rom/pruebas/rpgmaker/test_sistemas_de_tropa.py`:
-
-    ChangePartyMembers     el opcode del mapa, OP_PARTY
-    ChangeHP que resta     OP_ACTOR (nuevo, 0x36), con sus bits: resta,
-                           letal, por variable
-    ChangeCondition        sacar la muerte es OP_ACTOR con ACT_REVIVE
-    ChangeSP               OP_ACTOR con ACT_SP (no lo usa ninguna tropa:
-                           es para el común 35, ver abajo)
-    ControlVars de actor   la clase 5 de OP_VAR: HP, SP y sus máximos
-    ChangeMonsterHP y MP   OP_ENEMY (nuevo, 0x37)
-    FullHeal               ya andaba en el mapa; entra por lo mismo
-    ChangeEquipment        equipar armadura, casco o accesorio a un actor:
-                           OP_ACTOR con ACT_EQUIP, y la pelea toma los
-                           parámetros nuevos en `ba_reparam`
-    PlayBGM                se acepta y no se hace (ver abajo)
-
-OP_ACTOR, `ChangeSP` y el `ChangeHP` por variable se prueban también en el
-mapa: `rom/pruebas/rpgmaker/test_curar.py`, con el caso `curar-restar`.
-
-`ChangeMonsterMP` compila y la ROM lo hace, pero **ninguna prueba lo corre**:
-sólo lo usa el 799, que sigue trabado por `ChangeMonsterCondition`.
-
-El modelo de la pelea (`rm2k-snes-battle`) corre lo mismo en las páginas:
-quién entra y sale, los HP del grupo y del enemigo, `ControlVars` y las ramas
-por variable. Una habilidad de switch ahora prende su switch para las
-páginas (`lit_by_skills`), sin cambiar el `state` de la respuesta: los 400
-hashes de `tests/model.rs` siguen iguales, medido.
-
-**Cuántos sistemas andan en `release`**: 30 de 32 —los 9 de antes, el 801,
-el 802, las 18 invocaciones y el 809, `Play Radio`, sin su música—; el 803 en
-33 de sus 51 páginas. Traban el 799 (`Inscribe`) y el resto del 803
-(`ControlMachines`), los dos por `ChangeMonsterCondition`: la pelea no tiene
-estados, y hacerlos es un sistema entero —duración, restricciones, lo que
-hacen BarkWall (23) y Control (22)—. El 799 además pide `FlashScreen` en la
-pelea, que hoy tiñe la paleta del mapa y no la de la escena. "troop pages:
-1602 of 1671 in 149 distinct body(ies), 9941 B of code and 9515 B in 172
-message(s)". En el juego entero entran 4285 de las 4451 páginas.
-
-**La música de `Play Radio` no suena**: el `PlayBGM` de una página de tropa
-se acepta y no se hace, porque su tema iría al paquete de la pelea y le
-bajaría la tasa al de batalla —la misma regla que deja afuera a los efectos
-de las páginas— y ninguno de los tres tiene pista de MSU-1. Es una decisión
-de audio para taro; está en
+**The mechanism**: a troop page runs with the map's opcodes, and the party
+ones —`ChangePartyMembers`, `ChangeHP`, `FullHeal`, the `ChangeCondition`
+that revives, `ControlVars` with an actor's HP— touch `party` and `FAR_HP`.
+So each stretch of a page goes through `ba_sync_out` —the battle HP and SP
+to `FAR_HP`/`FAR_SP`— and `ba_sync_in` —back, and the party: the one who left
+leaves their place empty, the one who joined goes to the first empty one,
+from `ba_actor_setup`, what `ba_build` does for one actor—. See
+`battle_troop.s`. What that doesn't do like RM2k is in
 `divergencias/lo-que-las-paginas-de-tropa-no-modelan.md`.
 
-**El espacio después** (`just espacio`, `release`): banco 0 **13 B** (de 50),
-banco 1 5.054 B (de 3.126, con las tablas afuera), bancos de datos 116 de 124
-y 8 libres. El banco 0 se come con las dos entradas de opcode (9 B cada una),
-la de `ControlVars` de actor (10 B) y los casos nuevos. **Es el límite que
-sigue**: la prueba de `Play Radio` quería a Emily en el grupo del caso, y eso
-la vuelve un actor del cartucho con sus ítems y su nivel en tablas del banco
-0 —medido, 15 B contra 13—, así que la prueba la deja afuera. Lo próximo que
-sume un actor al cartucho, o un opcode, no entra sin mover algo del banco 0.
+**The commands**, with their test in `rom/pruebas/rpgmaker/test_sistemas_de_tropa.py`:
 
-**Números usados**: opcodes 0x36 (OP_ACTOR) y 0x37 (OP_ENEMY). RAM lejana:
-`$7E7A2A` (`BA_SYNC_I`), dentro de lo que ya era de las páginas
-($7A10-$7A3F). Tuplas de `test_*_golden.py`: ninguna.
+    ChangePartyMembers     the map's opcode, OP_PARTY
+    subtracting ChangeHP   OP_ACTOR (new, 0x36), with its bits: subtract,
+                           lethal, by variable
+    ChangeCondition        removing death is OP_ACTOR with ACT_REVIVE
+    ChangeSP               OP_ACTOR with ACT_SP (no troop uses it: it's
+                           for common event 35, see below)
+    actor ControlVars      class 5 of OP_VAR: HP, SP and their maximums
+    ChangeMonsterHP and MP OP_ENEMY (new, 0x37)
+    FullHeal               already worked on the map; fits for the same
+                           reason
+    ChangeEquipment        equip armour, helmet or accessory on an actor:
+                           OP_ACTOR with ACT_EQUIP, and battle takes the
+                           new parameters in `ba_reparam`
+    PlayBGM                accepted and not done (see below)
 
-**Lo que falta en el juego para jugar las invocaciones**: después de la
-pelea el grupo queda con la invocación en lugar de Lerle. En RM2k lo arregla
-el común 35, `ResetAfterBattles`, que corre la automática `AfterBattleMint` de
-los mapas con encuentros; acá no compila —ver
-`divergencias/llamada-salteada.md`—. Medido con el compilador de esta rama:
-**cada uno de sus comandos compila** —lo que faltaba era el `ControlVars` de
-actor, el `ChangeHP` por variable y `ChangeSP`, que ya están—, y el común
-entero compila solo (1.773 bytes) si las variables que nombra tienen ranura.
-Llamado desde un mapa, en cambio, se saltea: **las variables que sólo nombra
-un común no tienen ranura**. El barrido de variables recorre los mapas y las
-tropas y no los comunes (`indices.rs`), y sumarlos corre las ranuras de las
-demás, que es lo que hace que una partida guardada con un cartucho cargue en
-otro. Es una decisión para taro; con ella, el común 35 corre después de cada
-pelea al azar, que es mucho más que las invocaciones —cura a las 18, le saca
-a Emily la radio, le rearma a Talan las habilidades de aura y a AG7 las de
-sus piezas— y hay que medirlo aparte.
+OP_ACTOR, `ChangeSP` and the `ChangeHP` by variable are also tested on the
+map: `rom/pruebas/rpgmaker/test_curar.py`, with the `curar-restar` case.
 
-# Qué tiene que probar taro
+`ChangeMonsterMP` compiles and the ROM does it, but **no test runs it**: only
+799 uses it, which is still blocked by `ChangeMonsterCondition`.
 
-Con una partida donde el grupo tenga a Lerle, a Talan o a Emily y sus
-habilidades de sistema (no se midió en qué punto del juego llegan):
+The battle model (`rm2k-snes-battle`) runs the same thing in the pages: who
+joins and leaves, the party's and the enemy's HP, `ControlVars` and the
+branches by variable. A switch skill now turns on its switch for the pages
+(`lit_by_skills`), without changing the answer's `state`: the 400 hashes of
+`tests/model.rs` stay the same, measured.
 
-- **Una invocación de Lerle** (`Droid`, `Wolf`… 268 a 285): en la pelea, al
-  terminar su acción, Lerle sale y la invocación aparece **en su renglón**, y
-  da órdenes desde el turno siguiente. **Después de la pelea sigue en el
-  grupo en lugar de Lerle**: es el común 35, ver arriba.
-- **`LifeForStrength` y `Sacrifice` de Talan**: con 40 HP o más, Talan cae;
-  la primera le saca 70 al enemigo y la segunda levanta con 1 HP a los
-  caídos. Con menos, el mensaje "TALAN does not have enough HP…".
-- **`Play Radio` de Emily**, con una cinta puesta: el efecto de la cinta
-  sale, y la música no cambia.
+**How many systems work in `release`**: 30 of 32 —the 9 from before, 801,
+802, the 18 summons and 809, `Play Radio`, without its music—; 803 in 33 of
+its 51 pages. Blocked are 799 (`Inscribe`) and the rest of 803
+(`ControlMachines`), both because of `ChangeMonsterCondition`: battle has no
+states, and doing them is a whole system —duration, restrictions, what
+BarkWall (23) and Control (22) do—. 799 also asks for `FlashScreen` in
+battle, which today tints the map's palette and not the scene's. "troop
+pages: 1602 of 1671 in 149 distinct body(ies), 9941 B of code and 9515 B in
+172 message(s)". In the whole game 4285 of the 4451 pages fit.
 
-# Números usados
+**`Play Radio`'s music doesn't play**: a troop page's `PlayBGM` is accepted
+and not done, because its theme would go into the battle package and lower
+the battle theme's rate —the same rule that leaves out the pages' effects—
+and none of the three has an MSU-1 track. It's an audio decision for taro;
+it's in `divergencias/lo-que-las-paginas-de-tropa-no-modelan.md`.
 
-- Opcodes: 0x36 (OP_ACTOR) y 0x37 (OP_ENEMY).
-- RAM lejana: `$7E7A2A`, `BA_SYNC_I`, dentro de lo que ya era de las páginas
-  de tropa ($7A10-$7A3F).
-- Tuplas de `test_*_golden.py`: ninguna.
-- Casos nuevos: `pelea-invocacion`, `pelea-vida-por-fuerza`,
-  `pelea-vida-por-fuerza-sin-hp`, `pelea-sacrificio`, `pelea-radio` y
+**The space afterwards** (`just espacio`, `release`): bank 0 **13 B** (from
+50), bank 1 5,054 B (from 3,126, with the tables out), data banks 116 of 124
+and 8 free. Bank 0 is eaten by the two opcode entries (9 B each), the actor
+`ControlVars` one (10 B) and the new cases. **It's the next limit**: the
+`Play Radio` test wanted Emily in the case's party, and that makes her a
+cartridge actor with her items and her level in bank 0 tables —measured,
+15 B against 13—, so the test leaves her out. The next thing that adds an
+actor to the cartridge, or an opcode, doesn't fit without moving something
+out of bank 0.
+
+**Numbers used**: opcodes 0x36 (OP_ACTOR) and 0x37 (OP_ENEMY). Far RAM:
+`$7E7A2A` (`BA_SYNC_I`), inside what already belonged to the pages
+($7A10-$7A3F). Tuples in `test_*_golden.py`: none.
+
+**What's missing in the game to play the summons**: after battle the party
+is left with the summon in place of Lerle. In RM2k it's fixed by common event
+35, `ResetAfterBattles`, which runs the `AfterBattleMint` autostart of the
+maps with encounters; here it doesn't compile —see
+`divergencias/llamada-salteada.md`—. Measured with this branch's compiler:
+**each of its commands compiles** —what was missing was the actor
+`ControlVars`, the `ChangeHP` by variable and `ChangeSP`, which are there
+now—, and the whole common event compiles on its own (1,773 bytes) if the
+variables it names have a slot. Called from a map, on the other hand, it's
+skipped: **the variables only a common event names have no slot**. The
+variable sweep goes through the maps and the troops and not the common
+events (`indices.rs`), and adding them shifts the other variables' slots,
+which is what makes a game saved with one cartridge load in another. It's a
+decision for taro; with it, common event 35 runs after every random battle,
+which is much more than the summons —it heals the 18, takes the radio away
+from Emily, rebuilds Talan's aura skills and AG7's piece skills— and it has
+to be measured separately.
+
+# What taro has to test
+
+With a saved game where the party has Lerle, Talan or Emily and their system
+skills (it wasn't measured at what point in the game they arrive):
+
+- **One of Lerle's summons** (`Droid`, `Wolf`… 268 to 285): in battle, when
+  her action ends, Lerle leaves and the summon appears **on her row**, and
+  gives orders from the next turn on. **After the battle it stays in the
+  party in place of Lerle**: it's common event 35, see above.
+- **Talan's `LifeForStrength` and `Sacrifice`**: with 40 HP or more, Talan
+  falls; the first takes 70 off the enemy and the second raises the fallen
+  with 1 HP. With less, the message "TALAN does not have enough HP…".
+- **Emily's `Play Radio`**, with a tape on: the tape's effect comes out, and
+  the music doesn't change.
+
+# Numbers used
+
+- Opcodes: 0x36 (OP_ACTOR) and 0x37 (OP_ENEMY).
+- Far RAM: `$7E7A2A`, `BA_SYNC_I`, inside what already belonged to the troop
+  pages ($7A10-$7A3F).
+- Tuples in `test_*_golden.py`: none.
+- New cases: `pelea-invocacion`, `pelea-vida-por-fuerza`,
+  `pelea-vida-por-fuerza-sin-hp`, `pelea-sacrificio`, `pelea-radio` and
   `curar-restar`.
 
-# Las tandas
+# The suites
 
-`just pruebas`: 893 en verde (882 al empezar). `just -f tools/justfile test`:
-49. `cargo test -p rm2k-snes-events -p rm2k-snes-battle` en verde. Con
-`NO_CACHE=1 just cartuchos` las tres ROMs salen iguales que con el caché:
-`abl.sfc` `e20182d1bd905de7…`, `special` `6784ab8fc7161ab7…`,
-`encounter-every-step` `5dc9114cd97ff691…` (antes de mergear 3afc819, que
-sólo movió tareas).
+`just pruebas`: 893 green (882 at the start). `just -f tools/justfile test`:
+49. `cargo test -p rm2k-snes-events -p rm2k-snes-battle` green. With
+`NO_CACHE=1 just cartuchos` the three ROMs come out identical to with the
+cache: `abl.sfc` `e20182d1bd905de7…`, `special` `6784ab8fc7161ab7…`,
+`encounter-every-step` `5dc9114cd97ff691…` (before merging 3afc819, which
+only moved tasks).

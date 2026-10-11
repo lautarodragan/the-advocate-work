@@ -1,202 +1,200 @@
 ---
-name: "Rust: el dominio de las imágenes"
-description: "El escalado y la reducción de colores de las imágenes (palette, picture, title, Game Over, fondos de batalla) y, sobre eso, los dibujos de la pelea (scene, battle_scenes, animation, battle_animations) a Rust, con las ROMs byte por byte iguales"
+name: "Rust: the image domain"
+description: "The scaling and colour reduction of images (palette, picture, title, Game Over, battle backgrounds) and, on top of that, the battle drawings (scene, battle_scenes, animation, battle_animations) to Rust, with the ROMs byte-for-byte identical"
 type: refactor
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-09-30, en la migración del conversor a Rust. Es lo que
-dejaron afuera las pantallas (Tataupá) y la pelea (Cardón), por la misma
-razón: el escalado LANCZOS de Pillow, `palette.reduce` y `color.apply_tint`
-los comparten las imágenes de los mapas (`picture.py`), el título, el Game
-Over, los fondos de batalla que van por MSU-1 (`msu_data.py`), las escenas
-de la pelea (`scene.py`, `battle_scenes.py`) y sus animaciones
-(`animation.py`, `battle_animations.py`). Se mudan juntos, empezando por el
-escalado.
+From taro, on 2026-09-30, in the migration of the converter to Rust. It's what
+the screens (Tataupá) and battle (Cardón) left out, for the same reason:
+Pillow's LANCZOS scaling, `palette.reduce` and `color.apply_tint` are shared
+by the maps' images (`picture.py`), the title, the Game Over, the battle
+backgrounds that go through MSU-1 (`msu_data.py`), the battle scenes
+(`scene.py`, `battle_scenes.py`) and their animations (`animation.py`,
+`battle_animations.py`). They move together, starting with the scaling.
 
-Sale de `main` en el commit que lanza la tarea. Ahí: `NO_CACHE=1 just
-cartuchos` da `abl.sfc` `241dc9ad2bf8b43c…`, `special` `63779e111ee18923…`,
+It starts from `main` at the commit that launches the task. There: `NO_CACHE=1 just
+cartuchos` gives `abl.sfc` `241dc9ad2bf8b43c…`, `special` `63779e111ee18923…`,
 `encounter-every-step` `200a0b7355289700…`; `just pruebas` 882,
 `just -f tools/justfile test` 49.
 
-## El piloto: el LANCZOS de Pillow en Rust
+## The pilot: Pillow's LANCZOS in Rust
 
-**Dio idéntico.** `tools/snes/resample/` es `libImaging/Resample.c` de
-Pillow 12.3.0 —el instalado— copiado hasta el orden de las operaciones: los
-pesos en `double` con el `sin` de la libc, normalizados, a enteros de 22
-bits fraccionarios, dos pasadas (a lo ancho sólo sobre las filas que la
-pasada vertical va a leer) y el `clip8` después de cada una; y lo de
-`Image.resize` alrededor: el mismo tamaño es una copia, RGBA se
-premultiplica (`MULDIV255`) y se divide de vuelta como `Convert.c`, y la
-imagen cien veces más alta que ancha va en dos llamados.
+**It came out identical.** `tools/snes/resample/` is Pillow 12.3.0's
+`libImaging/Resample.c` —the installed one— copied down to the order of
+operations: the weights in `double` with libc's `sin`, normalized, to integers
+with 22 fractional bits, two passes (horizontally only over the rows the
+vertical pass is going to read) and the `clip8` after each one; and what
+`Image.resize` does around it: the same size is a copy, RGBA is premultiplied
+(`MULDIV255`) and divided back like `Convert.c`, and an image a hundred times
+taller than wide goes in two calls.
 
-Medido el 2026-09-30 contra **todo lo que el conversor escala**: un
-`sitecustomize` que envuelve `Image.resize` capturó cada llamado con LANCZOS
-de `NO_CACHE=1 just cartuchos` —entrada, tamaño y salida de Pillow—. Son
-**377 escalados distintos** (64 RGB: el título, el Game Over, la imagen de
-`ShowPicture` y los fondos de pelea, enteros y livianos; 313 RGBA: los
-battlers y los cuadros de las animaciones), **2.826.049 píxeles**, y **no
-difiere ninguno**. Los scripts, en `<scratchpad>/lapacho/` (`hook/`,
+Measured on 2026-09-30 against **everything the converter scales**: a
+`sitecustomize` wrapping `Image.resize` captured every LANCZOS call of
+`NO_CACHE=1 just cartuchos` —Pillow's input, size and output—. That's
+**377 distinct scalings** (64 RGB: the title, the Game Over, the
+`ShowPicture` image and the battle backgrounds, full and lightweight; 313
+RGBA: the battlers and the animation frames), **2,826,049 pixels**, and **not
+one differs**. The scripts, in `<scratchpad>/lapacho/` (`hook/`,
 `piloto/`).
 
-## La frontera
+## The boundary
 
-**Lo que pasa a Rust son los píxeles**: de la imagen —el archivo, o lo que
-dibuja RM2k— a índices y paleta. **Lo que se queda en Python** es qué
-imágenes lleva el cartucho y los bytes que las llevan: la emisión.
+**What moves to Rust is the pixels**: from the image —the file, or what RM2k
+draws— to indices and palette. **What stays in Python** is which images the
+cartridge carries and the bytes that carry them: the emission.
 
-Tres bibliotecas y una etapa:
+Three libraries and a stage:
 
-* **`tools/snes/resample/`** (`resample`, biblioteca nueva): el LANCZOS
-  de Pillow, RGB y RGBA. No sabe de la consola ni de RPG Maker. Va en
-  `snes/` porque es la capa que no depende de nada y la pueden usar las
-  etapas; no en Adeleine porque escalar no es decidir qué color se pierde,
-  aunque cambie píxeles. `rm2k-render` tiene su propio bilineal de Pillow
-  (`resample.rs`, el zoom de las celdas) y no puede usar éste: `rm2k/` no
-  depende de `snes/`. Quedan dos copias de la misma convolución con dos
-  filtros; anotado en "Lo que falta".
-* **`adeleine`** suma **`keep_most_used`**, que es `palette.reduce`: se
-  quedan los más usados y cada uno de los demás va a su vecino más cercano.
-  **Va en Adeleine porque decide qué colores se pierden**, que es la
-  definición de AGENTS.md ("si cambia un pixel de lo que se ve"): es la
-  misma pregunta que `merge_least_visible` contesta de otra manera. Lo que
-  Adeleine no sabe es que el negro es el color de fondo de la PPU: el color
-  que va primero lo pasa quien llama.
-* **El tinte de la consola** (`color.apply_tint`, el `ToneBlit` de RM2k en
-  quince bits) va a la etapa: es de RM2k y de la consola a la vez, y hoy
-  lo usan sólo las celdas de las animaciones. `color.py` se queda con las
-  constantes que emite `mapdata` —el runtime hace la misma cuenta—.
-* **`tools/rm2k-snes/images/`** (`rm2k-snes-images`, la etapa): lee las
-  imágenes con `rm2k-render` como biblioteca —el fondo opaco, el battler
-  con su tono, las celdas de una animación, la imagen de `ShowPicture`—, y
-  hace lo que hoy hacen `palette.convert`, `picture.convert`,
-  `scene.backdrop`, `scene.light_backdrop`, `scene.battler` y
-  `animation.convert`: escalar, tintar, apilar las celdas
-  (`alpha_composite` de Pillow, también a mano), reducir los colores y
-  devolver índices y paleta. Un subcomando por pieza —`fullscreen`,
-  `picture`, `backdrops`, `battlers`, `animations`—, porque el conversor
-  las pide en momentos distintos: la imagen al elegir qué `ShowPicture`
-  entra, antes de compilar; el título y el Game Over, las animaciones y la
-  escena, después.
+* **`tools/snes/resample/`** (`resample`, new library): Pillow's LANCZOS,
+  RGB and RGBA. It knows nothing about the console or RPG Maker. It goes in
+  `snes/` because that's the layer that depends on nothing and the stages can
+  use it; not in Adeleine because scaling isn't deciding which colour is lost,
+  even if it changes pixels. `rm2k-render` has its own Pillow bilinear
+  (`resample.rs`, the cells' zoom) and can't use this one: `rm2k/` doesn't
+  depend on `snes/`. Two copies of the same convolution with two filters
+  remain; noted in "What's missing".
+* **`adeleine`** adds **`keep_most_used`**, which is `palette.reduce`: the
+  most used ones are kept and each of the others goes to its nearest
+  neighbour. **It goes in Adeleine because it decides which colours are
+  lost**, which is AGENTS.md's definition ("if it changes a pixel of what's
+  seen"): it's the same question `merge_least_visible` answers another way.
+  What Adeleine doesn't know is that black is the PPU's backdrop colour: the
+  colour that goes first is passed by the caller.
+* **The console's tint** (`color.apply_tint`, RM2k's `ToneBlit` in fifteen
+  bits) goes to the stage: it belongs to RM2k and to the console at once, and
+  today only the animation cells use it. `color.py` keeps the constants that
+  `mapdata` emits —the runtime does the same arithmetic—.
+* **`tools/rm2k-snes/images/`** (`rm2k-snes-images`, the stage): reads the
+  images with `rm2k-render` as a library —the opaque background, the battler
+  with its tone, an animation's cells, the `ShowPicture` image—, and does what
+  `palette.convert`, `picture.convert`, `scene.backdrop`,
+  `scene.light_backdrop`, `scene.battler` and `animation.convert` do today:
+  scale, tint, stack the cells (Pillow's `alpha_composite`, also by hand),
+  reduce the colours and return indices and palette. One subcommand per piece
+  —`fullscreen`, `picture`, `backdrops`, `battlers`, `animations`—, because
+  the converter asks for them at different moments: the image when choosing
+  which `ShowPicture` goes in, before compiling; the title and the Game Over,
+  the animations and the scene, afterwards.
 
-**Lo que la etapa recibe**: las rutas de las imágenes —las busca
-`resources.find_resource` en el juego y en el RTP, como hoy, y la etapa no
-tiene una segunda copia de esa búsqueda—, y **la geometría**: el tamaño de
-la escena, cuántos colores y desde qué entrada de CGRAM, la caja de las
-animaciones. Son números de la ROM que Python emite al `.inc`; viajan en
-el pedido para que sigan escritos una sola vez.
+**What the stage receives**: the images' paths —`resources.find_resource`
+looks for them in the game and in the RTP, as today, and the stage has no
+second copy of that search—, and **the geometry**: the scene's size, how many
+colours and from which CGRAM entry, the animations' box. They're ROM numbers
+that Python emits to the `.inc`; they travel in the request so that they stay
+written only once.
 
-**Lo que se queda en Python**, y por qué:
+**What stays in Python**, and why:
 
-* **Qué imágenes lleva el cartucho**: `rom_scene`, `patch_uses`,
-  `rom_animations`, `events.Pictures.choose`, `game_backdrops`. Dependen de
-  los mapas elegidos, los encuentros, las tropas y el bytecode emitido: son
-  del orquestador.
-* **Los bytes y el `.inc`**: `backdrop_bytes`, `fallback_bytes`,
+* **Which images the cartridge carries**: `rom_scene`, `patch_uses`,
+  `rom_animations`, `events.Pictures.choose`, `game_backdrops`. They depend on
+  the chosen maps, the encounters, the troops and the emitted bytecode: they
+  belong to the orchestrator.
+* **The bytes and the `.inc`**: `backdrop_bytes`, `fallback_bytes`,
   `battler_bytes`, `scenes_asm`, `animations_asm`, `fullscreen.compressed`
-  (empaquetar y LZ2), `picture.cells`, `animation.cells`, `rom_anchor`. Es
-  la emisión, que el encargo deja en Python.
-* **Lo que usan las pruebas de ABL para saber qué esperar**:
-  `scene.position`, `drawing_order`, `compose`; son geometría de la ROM y no
-  tocan píxeles del juego.
-* **`msu_data.py`**: el formato del `.msu`, que no toca píxeles.
+  (packing and LZ2), `picture.cells`, `animation.cells`, `rom_anchor`. It's
+  the emission, which the assignment leaves in Python.
+* **What ABL's tests use to know what to expect**:
+  `scene.position`, `drawing_order`, `compose`; they're ROM geometry and don't
+  touch the game's pixels.
+* **`msu_data.py`**: the `.msu` format, which doesn't touch pixels.
 
-## Diario
+## Log
 
-* **La etapa, entera de una vez.** Las cinco piezas salieron iguales en la
-  primera corrida: `NO_CACHE=1 just cartuchos`, 1032 archivos de
-  `rom/build/` iguales a la base —con `cartridge` en el `bin/` local
-  también para la base, por la trampa del `.dbg` que anotó Mara—; `just
-  pruebas` 882, `just -f tools/justfile test` 49. Las pruebas del crate
-  comparan contra los sha256 del Python viejo (`<scratchpad>/lapacho/
-  referencia.py`, que corre el `tools/` de `1a827260` sacado con `git
-  archive`) sobre un juego chico que arma `juego_chico.py`; las de
-  `keep_most_used`, en Adeleine, contra `palette.reduce` igual.
-* **Las animaciones se leen del volcado**, por número, y no del pedido
-  como las recibía `rm2k-render battle-animation`: es la forma de una
-  etapa. Salió igual, así que el volcado y lo que armaba
-  `events.ANIMATIONS` dicen lo mismo.
-* **Lo que el conversor imprime** no se comparó contra la base: la base
-  corrió antes de guardar los `conversor.log`. Los de la etapa están en
+* **The stage, whole at once.** The five pieces came out identical on the
+  first run: `NO_CACHE=1 just cartuchos`, 1032 files of `rom/build/`
+  identical to the base —with `cartridge` in the local `bin/` for the base
+  too, because of the `.dbg` trap Mara noted—; `just pruebas` 882, `just -f
+  tools/justfile test` 49. The crate's tests compare against the sha256s of
+  the old Python (`<scratchpad>/lapacho/ referencia.py`, which runs the
+  `tools/` of `1a827260` taken out with `git archive`) over a small game
+  built by `juego_chico.py`; those for `keep_most_used`, in Adeleine, against
+  `palette.reduce` likewise.
+* **The animations are read from the dump**, by number, and not from the
+  request as `rm2k-render battle-animation` received them: that's the shape
+  of a stage. It came out identical, so the dump and what
+  `events.ANIMATIONS` built say the same thing.
+* **What the converter prints** wasn't compared against the base: the base
+  ran before the `conversor.log` files were saved. The stage's are in
   `<scratchpad>/lapacho/logs-etapa/`.
 
-## Hecho
+## Done
 
-**Los píxeles de las imágenes están en Rust**, en `rm2k-snes-images`,
-sobre dos bibliotecas nuevas o crecidas —`resample` y `adeleine`—, y el
-Python que los hacía se borró. Las tres ROMs y todo `rom/build/` salen
-byte por byte iguales a los de `1a827260`; la única diferencia es de la
-prosa del último commit, en los `.dbg`: ver abajo.
+**The images' pixels are in Rust**, in `rm2k-snes-images`, over two new or
+grown libraries —`resample` and `adeleine`—, and the Python that did them was
+deleted. The three ROMs and all of `rom/build/` come out byte-for-byte
+identical to those of `1a827260`; the only difference comes from the prose of
+the last commit, in the `.dbg` files: see below.
 
-| commit | qué |
+| commit | what |
 |---|---|
-| `140c840e` | `resample` —el LANCZOS de Pillow— con el piloto medido, y la frontera en esta tarea |
-| `32e58392` | la etapa `rm2k-snes-images` y `adeleine::keep_most_used`; el conversor la llama por `port/image_stage.py` |
-| `c938b060` | la prueba de la huella de `cartridge`, que el commit anterior dejó en rojo (se me pasó correrla) |
-| `f6877a8b` | el borrado, sólo borrado; `adeleine` y `rm2k-render` salen de la huella, porque el conversor ya no los corre |
-| `0bc9b02c` | `port/adeleine.py` se va: sólo le quedaba `CELL`, que ya estaba en `constants.py` |
-| `b1939e75` | la prosa que nombraba lo borrado |
+| `140c840e` | `resample` —Pillow's LANCZOS— with the measured pilot, and the boundary in this task |
+| `32e58392` | the `rm2k-snes-images` stage and `adeleine::keep_most_used`; the converter calls it through `port/image_stage.py` |
+| `c938b060` | the test of `cartridge`'s fingerprint, which the previous commit left red (I forgot to run it) |
+| `f6877a8b` | the deletion, deletion only; `adeleine` and `rm2k-render` leave the fingerprint, because the converter no longer runs them |
+| `0bc9b02c` | `port/adeleine.py` goes: all it had left was `CELL`, which was already in `constants.py` |
+| `b1939e75` | the prose that named what was deleted |
 
-**Lo que cambió de la frontera planeada**: nada de fondo. Las animaciones
-la etapa las lee del volcado por número, en vez de recibirlas en el pedido.
-El título y el Game Over dejaron de abrirse con Pillow en `snes_convert`:
-`fullscreen.compressed` y `palette.convert` reciben la ruta.
+**What changed from the planned boundary**: nothing substantial. The stage
+reads the animations from the dump by number, instead of receiving them in
+the request. The title and the Game Over stopped being opened with Pillow in
+`snes_convert`: `fullscreen.compressed` and `palette.convert` receive the
+path.
 
-## Cómo se verificó
+## How it was verified
 
-* **El piloto** —arriba—: 377 escalados, ningún píxel distinto.
-* **Los cartuchos**: `NO_CACHE=1 just cartuchos` y el sha256 de 1032
-  archivos de `rom/build/` —sin caché, `.o`, `sello.txt` ni
-  `conversor.log`; el `.dbg` sin `mtime`; los PNG decodificados—, iguales
-  a la base después de cada commit hasta el de `adeleine.py`. Después de
-  la prosa, iguales salvo los tres `.dbg`, que nombran el tamaño de
-  `registers.s`: con el tamaño de antes dan el mismo sha256.
-* **Los sha256 de las ROMs**, los mismos que en `1a827260`:
+* **The pilot** —above—: 377 scalings, not one pixel different.
+* **The cartridges**: `NO_CACHE=1 just cartuchos` and the sha256 of 1032
+  files of `rom/build/` —without cache, `.o`, `sello.txt` or
+  `conversor.log`; the `.dbg` without `mtime`; the PNGs decoded—, identical
+  to the base after each commit up to the `adeleine.py` one. After the
+  prose, identical except the three `.dbg` files, which name the size of
+  `registers.s`: with the previous size they give the same sha256.
+* **The ROMs' sha256s**, the same as in `1a827260`:
   * `release/abl.sfc` `241dc9ad2bf8b43c205a6abef97fbe84ba25f3986626d5f0d058e27c742b123e`
   * `tests/special/prueba.sfc` `63779e111ee18923fc3335b725c92c55a0587f9ecd6e7a1908ae1a852e5e3710`
   * `tests/encounter-every-step/prueba.sfc` `200a0b73552897001dcc22509e356c421cd88cf771dd894e0f13e3e19e4fb89c`
-* **Las tandas**, después de cada commit con código: `just pruebas` 882,
-  `just -f tools/justfile test` 49; `cargo test -p` de `resample`,
-  `adeleine`, `rm2k-snes-images` y `rm2k-snes-cartridge`, en verde.
-* **Las pruebas de los crates no dependen de ABL**: `resample` contra
-  Pillow sobre ruido; `rm2k-snes-images` contra el Python viejo sobre el
-  juego chico de `tests/game/` —dos pantallas completas, dos imágenes, un
-  fondo en sus dos versiones, un battler con y sin tono, tres animaciones
-  con zoom, transparencia, tonos con y sin saturación, una celda inválida y
-  una que la hoja no tiene—; `adeleine` suma `keep_most_used` contra
+* **The suites**, after each commit with code: `just pruebas` 882,
+  `just -f tools/justfile test` 49; `cargo test -p` of `resample`,
+  `adeleine`, `rm2k-snes-images` and `rm2k-snes-cartridge`, green.
+* **The crates' tests don't depend on ABL**: `resample` against Pillow over
+  noise; `rm2k-snes-images` against the old Python over the small game in
+  `tests/game/` —two full screens, two images, a background in its two
+  versions, a battler with and without tone, three animations with zoom,
+  transparency, tones with and without saturation, an invalid cell and one
+  the sheet doesn't have—; `adeleine` adds `keep_most_used` against
   `palette.reduce`.
 
-## Al mergear
+## On merging
 
-* Instalar en el global `images` —el binario nuevo— y `cartridge` —la
-  huella nombra a `rm2k-snes-images` y ya no a `adeleine` ni a
+* Install globally `images` —the new binary— and `cartridge` —the
+  fingerprint names `rm2k-snes-images` and no longer `adeleine` or
   `rm2k-render`—: `just -f tools/justfile install images cartridge`.
-  `resample` es biblioteca, y `adeleine` cambió sólo como biblioteca: su
-  binario no hace falta reinstalarlo. Sin `rm2k-snes-images` en el PATH el
-  conversor para y dice cómo instalarlo, y las pruebas de la escena y de
-  las animaciones también.
-* `install-scripts` no hace falta: se agregó `port/image_stage.py` y se
-  borró `port/adeleine.py`, módulos y no programas.
-* `registers.s` cambia un comentario, con los mismos renglones: si Yarará
-  tocó la misma zona, es un conflicto de prosa.
-* No mueve la ROM ni goldens.
+  `resample` is a library, and `adeleine` only changed as a library: its
+  binary doesn't need reinstalling. Without `rm2k-snes-images` in the PATH
+  the converter stops and says how to install it, and so do the scene and
+  animation tests.
+* `install-scripts` isn't needed: `port/image_stage.py` was added and
+  `port/adeleine.py` deleted, modules and not programs.
+* `registers.s` changes a comment, with the same lines: if Yarará touched
+  the same area, it's a prose conflict.
+* It doesn't move the ROM or goldens.
 
-## Lo que falta
+## What's missing
 
-* **`battle_scenes.py` y `battle_animations.py` siguen en Python**: qué
-  fondos, battlers y animaciones lleva el cartucho, y sus bytes y su
-  `.inc`. Es la emisión y la elección, que dependen de los mapas, las
-  tropas y el bytecode; el encargo dejaba la emisión en Python. Lo mismo
-  `picture.cells`, `animation.cells`, `rom_anchor`, y `scene.position`,
-  `drawing_order` y `compose`, que usan las pruebas.
-* **Dos copias de la convolución de Pillow**: el bilineal de
-  `rm2k-render` (`resample.rs`, el zoom de las celdas) y el LANCZOS de
-  `resample`. `rm2k/` no puede depender de `snes/`; juntarlas pide una
-  capa común o mover el zoom.
-* **Un fondo que va a la ROM se dibuja dos veces**: `rom_scene` pide los de
-  calidad y los livianos en dos llamados. Cuesta poco; se juntan pidiendo
-  las dos versiones por fondo.
-* **Lo que imprime el conversor** no se comparó contra la base (ver el
-  diario).
-* `animation.RM_SCREEN` no lo usa nadie, desde antes de esta tarea.
+* **`battle_scenes.py` and `battle_animations.py` are still in Python**:
+  which backgrounds, battlers and animations the cartridge carries, and their
+  bytes and their `.inc`. It's the emission and the choice, which depend on
+  the maps, the troops and the bytecode; the assignment left the emission in
+  Python. Likewise `picture.cells`, `animation.cells`, `rom_anchor`, and
+  `scene.position`, `drawing_order` and `compose`, which the tests use.
+* **Two copies of Pillow's convolution**: `rm2k-render`'s bilinear
+  (`resample.rs`, the cells' zoom) and `resample`'s LANCZOS. `rm2k/` can't
+  depend on `snes/`; joining them needs a common layer or moving the zoom.
+* **A background that goes to the ROM is drawn twice**: `rom_scene` asks for
+  the quality ones and the lightweight ones in two calls. It costs little;
+  they're joined by asking for both versions per background.
+* **What the converter prints** wasn't compared against the base (see the
+  log).
+* `animation.RM_SCREEN` isn't used by anyone, since before this task.

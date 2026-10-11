@@ -1,180 +1,181 @@
 ---
-name: "Los porqués de los eventos, junto al código en Rust"
-description: "Los comentarios largos de cada comando que quedaron en tools/port/events.py pasan al lado de la línea que protegen, en tools/rm2k-snes/events/"
+name: "The whys of the events, next to the code in Rust"
+description: "The long comments of each command that were left in tools/port/events.py move next to the line they protect, in tools/rm2k-snes/events/"
 type: docs
 status: done
 assignee: taro
 ---
 
-Lo dejó anotado Guazú al pasar el compilador de eventos a Rust
-(`rust-el-compilador-de-eventos.md`): los porqués de cada comando
-—cuánto destrabó, cuándo entró, qué se midió, qué error protege— siguen en
-`tools/port/events.py`, pero el código que protegen está ahora en
-`tools/rm2k-snes/events/`. La regla de AGENTS.md es que un porqué que
-protege una línea va como comentario en esa línea, así que se mudan. Es
-sólo prosa: la ROM no puede cambiar.
+Guazú left it noted when moving the event compiler to Rust
+(`rust-el-compilador-de-eventos.md`): the whys of each command
+—how much it unblocked, when it went in, what was measured, what bug it
+protects against— are still in `tools/port/events.py`, but the code they
+protect is now in `tools/rm2k-snes/events/`. The AGENTS.md rule is that a
+why that protects a line goes as a comment on that line, so they move. It is
+prose only: the ROM cannot change.
 
-## Retomada el 2026-09-29
+## Resumed on 2026-09-29
 
-Tordo arrancó y se cortó: un clasificador de seguridad interrumpió su
-respuesta mientras escribía los comentarios de `branch_bytes` en
-`compile.rs` (el bloque de las condiciones: ítems, preguntas sobre actores,
-habilidades, equipo), sin commitear nada. Lo decidido con taro:
+Tordo started and got cut off: a safety classifier interrupted its
+response while it was writing the comments of `branch_bytes` in
+`compile.rs` (the block of the conditions: items, questions about actors,
+skills, equipment), without committing anything. What was decided with taro:
 
-- se sigue con **todo lo demás**, incluidos los ~1.027 renglones de porqués
-  que el borrado de Guazú (`1487129f`) se llevó junto con el compilador de
-  Python: están en `git show 1487129f^:tools/port/events.py`;
-- **el bloque de `branch_bytes` no se escribe**: queda con los comentarios
-  cortos de Guazú y un puntero a ese commit;
-- si el clasificador vuelve a cortar, el agente no busca la vuelta: avisa, y
-  Hornero —con aviso a taro— aplica a mano el comentario en el worktree.
+- **everything else** goes ahead, including the ~1,027 lines of whys
+  that Guazú's deletion (`1487129f`) took along with the Python compiler:
+  they are in `git show 1487129f^:tools/port/events.py`;
+- **the `branch_bytes` block is not written**: it stays with Guazú's short
+  comments and a pointer to that commit;
+- if the classifier cuts off again, the agent doesn't look for a workaround:
+  it reports it, and Hornero —letting taro know— applies the comment by hand
+  in the worktree.
 
-Lo que dejó Tordo, sin commitear, está en su worktree
-(`agent-a3eccaf0086f4b17e`): comentarios ya mudados a constantes y
-bloques de `compile.rs`. Su mapeo de qué se queda en Python, qué va a los
-dos lados y qué va sólo a Rust está en su informe, copiado abajo por
+What Tordo left, uncommitted, is in its worktree
+(`agent-a3eccaf0086f4b17e`): comments already moved to constants and
+blocks of `compile.rs`. Its mapping of what stays in Python, what goes to
+both sides and what goes only to Rust is in its report, copied below by
 Hornero.
 
-### El mapeo de Tordo
+### Tordo's mapping
 
-- **Se queda en Python** (el código sigue ahí): el fundido, `PAUSE_FRAMES`,
-  `STEP_PER_SPEED`, `JUMP_*`, el modelo de la lluvia, las notas de `KEY_*`,
-  `CELL_*`, `TEST_SWITCH`, `CASE_VARIABLE`, `SWITCH_IMPOSSIBLE`, `ENC_*` y
+- **Stays in Python** (the code is still there): the fade, `PAUSE_FRAMES`,
+  `STEP_PER_SPEED`, `JUMP_*`, the rain model, the notes of `KEY_*`,
+  `CELL_*`, `TEST_SWITCH`, `CASE_VARIABLE`, `SWITCH_IMPOSSIBLE`, `ENC_*` and
   `Encounters`, `PartyState`, `database`, `Pictures`, `SHAKE_SINE`.
-- **Va a los dos lados** (el código existe en los dos): `escape_tail`, el
-  encabezado de los mensajes y `MESSAGES_STEP`, la frecuencia de las rutas,
-  la numeración de `Songs`, `BATTLE_PACKAGE`, los disparadores y el
-  encabezado de las tropas, `encounter_backdrop`, `picture_fits`,
-  `MapEvents` (los 39 mapas).
-- **Va sólo a Rust**: el resto.
-- **No va a ningún lado**: las dos advertencias de "el número se elige
-  mirando los que hay" (OP_ACTOR_SPRITE, OP_PLACE_VAR), que ya cubren
-  AGENTS.md y `test_no_opcode_shares_a_number_with_another`.
-- **Constantes de Python muertas**: `CHOICE_CURSOR` no la usa ningún código;
-  `SHOW_PICTURE` sólo adentro de `events.py`.
-- **Los comentarios de los opcodes** van al brazo de `compile.rs` que emite
-  cada uno, no a `events.toml`: `protocol` descarta los comentarios del
-  TOML, su README dice que qué hace un opcode se escribe a mano, y esos
-  comentarios nombran el juego, que `protocol` no puede conocer.
-- El docstring del módulo `events.py` (renglones 20-21) dice que los porqués
-  siguen al lado de cada constante: se actualiza cuando se muden.
-- Tordo borró sin reponer, en su worktree, una línea de Guazú que estaba
-  mal pegada al doc de `ITEMS_N` (el tope de oro): hay que reponer ese dato
-  en `CHANGE_GOLD`.
+- **Goes to both sides** (the code exists in both): `escape_tail`, the
+  header of the messages and `MESSAGES_STEP`, the frequency of the routes,
+  the numbering of `Songs`, `BATTLE_PACKAGE`, the triggers and the
+  header of the troops, `encounter_backdrop`, `picture_fits`,
+  `MapEvents` (the 39 maps).
+- **Goes only to Rust**: the rest.
+- **Goes nowhere**: the two warnings of "the number is chosen
+  looking at the ones there are" (OP_ACTOR_SPRITE, OP_PLACE_VAR), which
+  AGENTS.md and `test_no_opcode_shares_a_number_with_another` already cover.
+- **Dead Python constants**: `CHOICE_CURSOR` is used by no code;
+  `SHOW_PICTURE` only inside `events.py`.
+- **The comments of the opcodes** go to the arm of `compile.rs` that emits
+  each one, not to `events.toml`: `protocol` discards the comments of the
+  TOML, its README says that what an opcode does is written by hand, and
+  those comments name the game, which `protocol` cannot know.
+- The docstring of the `events.py` module (lines 20-21) says the whys
+  are still next to each constant: it gets updated when they move.
+- Tordo deleted without putting back, in its worktree, a line of Guazú's
+  that was wrongly stuck to the doc of `ITEMS_N` (the gold cap): that fact
+  has to be put back in `CHANGE_GOLD`.
 
-Su diff sin commitear está guardado en
-`<scratchpad>/porques-tordo/tordo-parcial.diff`: sirve de punto de partida,
-salvo que toque el bloque de `branch_bytes`.
+Its uncommitted diff is saved in
+`<scratchpad>/porques-tordo/tordo-parcial.diff`: it works as a starting
+point, unless it touches the `branch_bytes` block.
 
-## Hecho por Churrinche, el 2026-09-29
+## Done by Churrinche, on 2026-09-29
 
-Partió del diff de Tordo (aplicado con `git apply`, revisado: la línea
-del tope de oro volvió a `ChangeGold`, y un `[`refresh`]` que rustdoc
-marcaba como enlace a un privado quedó en `` `refresh` ``). Cuatro
-commits, de a archivo de Rust o grupo:
+It started from Tordo's diff (applied with `git apply`, reviewed: the line
+about the gold cap went back to `ChangeGold`, and a `[`refresh`]` that
+rustdoc flagged as a link to a private item became `` `refresh` ``). Four
+commits, one per Rust file or group:
 
-- `compile.rs`, más `game.rs` (los términos de la posada) y `lib.rs`
-  (los eventos comunes de equipo): cada porqué al brazo de
-  `compile_command` que emite su opcode, o a la constante, la función o
-  el renglón del bucle de la página que protege;
-- `route.rs`: las órdenes de ruta, `decode`, `min_frequency`, `own`;
-- `registry.rs`, `messages.rs` y `pages.rs`;
-- `troops.rs` e `indices.rs`, con el `cargo fmt` de `pages_of`, que
-  venía de main sin formatear y dejaba `cargo fmt --check` en rojo.
+- `compile.rs`, plus `game.rs` (the inn terms) and `lib.rs`
+  (the party common events): each why to the arm of
+  `compile_command` that emits its opcode, or to the constant, the function
+  or the line of the page loop it protects;
+- `route.rs`: the route orders, `decode`, `min_frequency`, `own`;
+- `registry.rs`, `messages.rs` and `pages.rs`;
+- `troops.rs` and `indices.rs`, with the `cargo fmt` of `pages_of`, which
+  came from main unformatted and left `cargo fmt --check` red.
 
-**Al mergear hay que instalar sólo `events`**: `just -f tools/justfile
-install events`. Es sólo prosa, pero el binario se rearma.
+**On merging, only `events` has to be installed**: `just -f tools/justfile
+install events`. It is prose only, but the binary gets rebuilt.
 
-### Lo que cambió del plan: el runtime cita a events.py
+### What changed from the plan: the runtime cites events.py
 
-El mapeo de Tordo decía "va sólo a Rust: el resto". Al borrar apareció
-que **el runtime y `mapdata.inc` citan a events.py por nombre**: "see
+Tordo's mapping said "goes only to Rust: the rest". When deleting, it turned
+out that **the runtime and `mapdata.inc` cite events.py by name**: "see
 OP_KEY in events.py", "see VAR_REFRESH in events.py", "See
-`ChangeScreenTransitions` in tools/port/events.py", unos treinta. Borrar
-esas notas deja las citas colgando, y arreglar las citas cambia los
-`.s` —y con ellos el `.dbg`— y `mapdata.py` —y con él el `mapdata.inc`
-de cada cartucho—: deja de ser sólo prosa y `rom/build/` deja de salir
-igual. Así que **lo citado queda en los dos lados**: en events.py, como
-estaba, y copiado entero en el crate. Son el giro (TURN), las
-transiciones, `VAR_REFRESH` y las variables, `VAR_CHARACTER`,
-`OP_ITEM`, `ACCESS_BIT` y `ChangeEscapeAccess`, `OP_WEATHER`,
-`OP_ANIMATION`, `OP_BATTLE` y `BATTLE_LOSE`, la imagen, `OP_ACTOR_SPRITE`,
-`OP_KEY`, `OP_PLACE_VAR`/`OP_LOCATION`, `OP_SAVE`, `SKILL_SLOT`,
-`PARTY_COMMON_EVENTS`, `MESSAGES_STEP`. El docstring del módulo lo dice.
-Cuando alguien toque esos `.s` por otra razón, puede apuntarlos al crate
-y borrar la nota de acá.
+`ChangeScreenTransitions` in tools/port/events.py", about thirty. Deleting
+those notes leaves the citations dangling, and fixing the citations changes
+the `.s` files —and with them the `.dbg`— and `mapdata.py` —and with it the
+`mapdata.inc` of each cartridge—: it stops being prose only and
+`rom/build/` stops coming out identical. So **what is cited stays on both
+sides**: in events.py, as it was, and copied whole into the crate. They are
+the turn (TURN), the transitions, `VAR_REFRESH` and the variables,
+`VAR_CHARACTER`, `OP_ITEM`, `ACCESS_BIT` and `ChangeEscapeAccess`,
+`OP_WEATHER`, `OP_ANIMATION`, `OP_BATTLE` and `BATTLE_LOSE`, the image,
+`OP_ACTOR_SPRITE`, `OP_KEY`, `OP_PLACE_VAR`/`OP_LOCATION`, `OP_SAVE`,
+`SKILL_SLOT`, `PARTY_COMMON_EVENTS`, `MESSAGES_STEP`. The module docstring
+says so. When someone touches those `.s` files for another reason, they can
+point them to the crate and delete the note here.
 
-De events.py salió sólo lo que nadie cita y ya es sólo del crate:
-`CHANGE_EVENT_LOCATION`, `TILE_SUBSTITUTION`, `SHOW_MESSAGE`, la ruta
-forzada, `FLASH_SPRITE`, `WEATHER_EFFECTS`, `PLAY_SOUND`,
+Only what nobody cites and already belongs only to the crate left events.py:
+`CHANGE_EVENT_LOCATION`, `TILE_SUBSTITUTION`, `SHOW_MESSAGE`, the forced
+route, `FLASH_SPRITE`, `WEATHER_EFFECTS`, `PLAY_SOUND`,
 `SHOW_BATTLE_ANIMATION`, `SHOW_PICTURE`, `OPEN_SHOP`, `TIMER_OPERATION`,
-el bloque de los opcodes salvo `OP_SAVE`, el desplazamiento de
-`OP_MESSAGE`, la vida y el HP, la tienda, el sonido, `HaltAllMovement`,
-los parámetros de `EnemyEncounter`, las ramas de la pelea y la lista de
-`TROOP_COMMANDS`. Y volvió uno: el encabezado de los encuentros
-aleatorios, que el borrado se llevó y protege a `Encounters`, que sigue
-en events.py.
+the opcode block except `OP_SAVE`, the offset of
+`OP_MESSAGE`, life and HP, the shop, the sound, `HaltAllMovement`,
+the parameters of `EnemyEncounter`, the battle branches and the list of
+`TROOP_COMMANDS`. And one came back: the header of the random encounters,
+which the deletion took and which protects `Encounters`, which is still
+in events.py.
 
-### Cuánto
+### How much
 
-Medido con `git diff` sobre los cuatro commits: al crate entran 2257
-renglones de comentario y salen 235 —los cortos de Guazú que se
-reemplazaron por el porqué entero, reenvueltos a otro ancho—; de
-events.py salen 369 y entran 44 —el docstring y el encabezado de los
-encuentros—. El borrado de Guazú se había llevado 1027 renglones `#`;
-`b0001b6b` repuso unos 170.
+Measured with `git diff` over the four commits: 2257 comment lines go into
+the crate and 235 leave it —Guazú's short ones that were replaced by the
+whole why, rewrapped to another width—; 369 leave events.py and 44 go in
+—the docstring and the header of the encounters—. Guazú's deletion had
+taken 1027 `#` lines; `b0001b6b` put back about 170.
 
-### Lo que no fue a ningún lado, y por qué
+### What went nowhere, and why
 
-- **Los porqués largos de las condiciones** —la tabla de cuánto
-  destraba cada tipo, las preguntas del actor, el docstring y los
-  comentarios de `branch_bytes`, `OP_IF_VAR`, `OP_IF_ACTOR`—: por la
-  restricción del clasificador. `branch_bytes` tiene un renglón que
-  apunta a `git show 1487129f^:tools/port/events.py`, y los que estaban
-  en el events.py de hoy (`COND_*`, `OP_IF_VAR`, `OP_IF_ACTOR`) siguen
-  ahí, sin tocar. El `OP_IF` sí fue: al brazo de `COND_BRANCH` del bucle
-  de la página, que está fuera de `branch_bytes`.
-- **Las dos advertencias de "el número se elige mirando los que hay"**
-  (`OP_ACTOR_SPRITE`, `OP_PLACE_VAR`): las cubren AGENTS.md y
-  `test_no_opcode_shares_a_number_with_another`. Se borraron también de
-  events.py.
-- **Viejas, que describen un estado que ya no existe**: la deuda de
-  `ChangeItems`/`ChangeGold` de antes del inventario ("nobody reads the
-  inventory"), la frase de `ShowBattleAnimation` que decía que la ROM no
-  dibuja animaciones, y la nota de `CONTROL_VARS` sobre "la lista de
-  acá".
-- **Lo que protegía código de Python que ya no existe**: el docstring de
-  `Messages.tail`, el campo `visible` de `MapEvents`, "Returns copies" de
-  `troop_commands` —en Rust la entrada es inmutable—, `_Commands`, los
-  `index_*` (cuándo los llama el conversor), `ENC_DEFAULT_STEPS`, y que
-  los `se_*` se lean al usarse y no al importar.
-- **Lo que decide el conversor y no el crate**: la página imposible por
-  ítem y `SWITCH_IMPOSSIBLE`, el gráfico y el `tile_pass` de cada página.
+- **The long whys of the conditions** —the table of how much each type
+  unblocks, the actor's questions, the docstring and the comments of
+  `branch_bytes`, `OP_IF_VAR`, `OP_IF_ACTOR`—: because of the classifier's
+  restriction. `branch_bytes` has a line that points to
+  `git show 1487129f^:tools/port/events.py`, and the ones that were in
+  today's events.py (`COND_*`, `OP_IF_VAR`, `OP_IF_ACTOR`) are still
+  there, untouched. `OP_IF` did go: to the `COND_BRANCH` arm of the page
+  loop, which is outside `branch_bytes`.
+- **The two warnings of "the number is chosen looking at the ones there
+  are"** (`OP_ACTOR_SPRITE`, `OP_PLACE_VAR`): AGENTS.md and
+  `test_no_opcode_shares_a_number_with_another` cover them. They were also
+  deleted from events.py.
+- **Old ones, describing a state that no longer exists**: the debt of
+  `ChangeItems`/`ChangeGold` from before the inventory ("nobody reads the
+  inventory"), the sentence of `ShowBattleAnimation` saying the ROM doesn't
+  draw animations, and the note of `CONTROL_VARS` about "the list
+  here".
+- **What protected Python code that no longer exists**: the docstring of
+  `Messages.tail`, the `visible` field of `MapEvents`, "Returns copies" of
+  `troop_commands` —in Rust the input is immutable—, `_Commands`, the
+  `index_*` (when the converter calls them), `ENC_DEFAULT_STEPS`, and that
+  the `se_*` are read when used and not on import.
+- **What the converter decides and not the crate**: the page made
+  impossible by item and `SWITCH_IMPOSSIBLE`, the graphic and the
+  `tile_pass` of each page.
 
-### Tres cosas que se mudaron tal cual y parecen mal
+### Three things that were moved as they were and look wrong
 
-Se copiaron enteras porque la tarea era sólo mudar; quien las lea con
-el código al lado puede decidir:
+They were copied whole because the task was only to move; whoever reads
+them with the code alongside can decide:
 
-- `OP_LOCATION` dice "when **recalling** bits 7, 6 and 5 are the
-  VAR_REFRESH of each of the three writes", pero los bits los pone
-  `MemorizeLocation`, que es el que escribe las variables.
-- `can_trigger` dice que la acción sobre la celda propia "we do not do
-  those", y el comentario de abajo dice que se hace desde el 2026-09-07.
-- El brazo de `ChangeEquipment` dice que las tropas "this port does not
-  run", y desde el 2026-09-21 las corre; el de la pelea sin manejadores
-  dice que `ChangeEscapeAccess` "is accepted and not done", y hoy se
-  guarda.
+- `OP_LOCATION` says "when **recalling** bits 7, 6 and 5 are the
+  VAR_REFRESH of each of the three writes", but the bits are set by
+  `MemorizeLocation`, which is the one that writes the variables.
+- `can_trigger` says about the action on the own cell "we do not do
+  those", and the comment below says it is done since 2026-09-07.
+- The arm of `ChangeEquipment` says that troops "this port does not
+  run", and since 2026-09-21 it runs them; the one of the battle without
+  handlers says that `ChangeEscapeAccess` "is accepted and not done", and
+  today it is stored.
 
-### Verificación
+### Verification
 
-- `cargo test -p rm2k-snes-events`, `cargo fmt --check` y `cargo doc`
-  sin advertencias.
-- `NO_CACHE=1 just cartuchos`: los 999 archivos de `rom/build/` —sin el
-  caché, los `.o`, `sello.txt` ni `conversor.log`, y el `.dbg` sin
-  `mtime`— iguales a los de antes de empezar.
-- `just pruebas`: 872 en verde; `just -f tools/justfile test`: 88 en
-  verde. Las dos sobre el árbol final, con `events` reinstalado.
+- `cargo test -p rm2k-snes-events`, `cargo fmt --check` and `cargo doc`
+  without warnings.
+- `NO_CACHE=1 just cartuchos`: the 999 files of `rom/build/` —without the
+  cache, the `.o` files, `sello.txt` or `conversor.log`, and the `.dbg`
+  without `mtime`— identical to the ones before starting.
+- `just pruebas`: 872 green; `just -f tools/justfile test`: 88
+  green. Both on the final tree, with `events` reinstalled.
 
-Lo que taro tiene que mirar no es jugar: es leer el diff de los
-comentarios, sobre todo las tres cosas de arriba.
+What taro has to look at is not playing: it is reading the diff of the
+comments, especially the three things above.

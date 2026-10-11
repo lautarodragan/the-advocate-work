@@ -1,25 +1,25 @@
 ---
-name: "Los sonidos adentro de las rutas"
-description: "El conversor descarta los efectos de sonido que una ruta forzada pide entre pasos"
+name: "The sounds inside move routes"
+description: "The converter drops the sound effects a forced move route asks for between steps"
 type: feature
 status: done
 ---
 
-Visto el 2026-09-26 midiendo el mapa 3: la escena de evilrhys pide una
-docena de sonidos adentro de rutas forzadas (Decision1, Blow1 a Blow6, Shot2,
-Switch1), y el conversor los descarta a propósito (`RUTA_SONIDO` en
-`tools/port/eventos.py`: leer su comentario y `git blame` para saber por
-qué). En RM2k suenan cuando la ruta llega a ese paso.
+Seen on 2026-09-26 while measuring map 3: evilrhys's scene asks for a
+dozen sounds inside forced move routes (Decision1, Blow1 to Blow6, Shot2,
+Switch1), and the converter drops them on purpose (`RUTA_SONIDO` in
+`tools/port/eventos.py`: read its comment and `git blame` to know
+why). In RM2k they play when the route reaches that step.
 
-Mirar cuántas rutas del juego lo usan, qué haría falta en la ROM (la ruta
-tendría que poder disparar un efecto en el paso: ver cómo lo hace
-`sonido_de_codigo` para las páginas) y si los efectos ya están en el paquete
-del mapa (lo están si la página también los pide).
+Look at how many routes in the game use it, what the ROM would need (the route
+would have to be able to fire an effect on the step: see how
+`sonido_de_codigo` does it for pages) and whether the effects are already in the map's
+package (they are if the page asks for them too).
 
-# Hecho
+# Done
 
-2026-09-27, en `carrera-3-lo-que-se-ve-y-se-oye.md`: la orden 35
-suena en los `MoveEvent`, sobre el héroe y sobre los eventos. En el mapa 3 no:
-los efectos de la escena de `evilrhys` no entran en su paquete. Qué mapas
-ganaron efectos y cuáles no, y por qué, está allá y en
+2026-09-27, in `carrera-3-lo-que-se-ve-y-se-oye.md`: order 35
+plays in `MoveEvent`s, on the hero and on events. On map 3 it doesn't:
+the effects of `evilrhys`'s scene don't fit in its package. Which maps
+gained effects and which didn't, and why, is there and in
 `SE_DE_RUTA_SIN_PAQUETE` (tools/audio/snes_music.py).
