@@ -1,164 +1,164 @@
 ---
-name: "rm2k-render dibuja la pelea"
-description: "Otra parte de que rm2k-render dibuje todo lo de RPG Maker: las animaciones de pelea (battle_animations.py, animation.py), los enemigos y los fondos de batalla (battle_scenes.py, scene.py)"
+name: "rm2k-render draws the battle"
+description: "Another part of rm2k-render drawing everything RPG Maker draws: the battle animations (battle_animations.py, animation.py), the enemies and the battle backgrounds (battle_scenes.py, scene.py)"
 type: refactor
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-09-30: "seguí con todos esos", después de los CharSets
-(`rm2k-render-los-charsets.md`, Yaguarundí). Es otra parte de
-`rm2k-render-dibuja-todo-rm2k.md`, en paralelo con la otra
-(`rm2k-render-pelea.md` y `rm2k-render-pantallas.md`).
+From taro, on 2026-09-30: "keep going with all of those", after the CharSets
+(`rm2k-render-los-charsets.md`, Yaguarundí). It's another part of
+`rm2k-render-dibuja-todo-rm2k.md`, in parallel with the other
+(`rm2k-render-pelea.md` and `rm2k-render-pantallas.md`).
 
-Alcance: las animaciones de pelea (battle_animations.py, animation.py), los enemigos y los fondos de batalla (battle_scenes.py, scene.py).
+Scope: the battle animations (battle_animations.py, animation.py), the enemies and the battle backgrounds (battle_scenes.py, scene.py).
 
-El criterio es el mismo que usó Yaguarundí: va a `rm2k-render` lo que un
-visor de RM2k en una PC dibujaría igual; lo que el port decide por la
-consola se queda del lado del conversor, o en Adeleine si es decidir
-colores.
+The criterion is the same one Yaguarundí used: what goes to `rm2k-render` is what an
+RM2k viewer on a PC would draw the same way; what the port decides because of the
+console stays on the converter's side, or in Adeleine if it's deciding
+colours.
 
-## Lo hecho (Coatí, 2026-09-30)
+## What was done (Coatí, 2026-09-30)
 
-Dos subcomandos nuevos, con la forma de `charset`: un pedido JSON que es
-una lista, y una salida por entrada.
+Two new subcommands, shaped like `charset`: a JSON request that is
+a list, and one output per entry.
 
-* `rm2k-render battle-animation --request <json> --out <dir>`: cada
-  entrada es `{"sheet_file": ruta, "animation": {...}}`, la animación con
-  los nombres del volcado de Ditto (`large` y `frames` con sus `cells`).
-  Para la animación `i` escribe `<i>.json` —`{"box": [x, y, ancho, alto],
-  "frames": [[{"x", "y", "tone"}, …], …]}`, la caja relativa al ancla o
-  `null` si no hay celdas— y cada celda que RM2k dibuja del cuadro `f`
-  como `<i>-<f>-<k>.png`, ya recortada, con su zoom y su transparencia.
-* `rm2k-render battle --request <json> --out <dir>`: cada entrada es
-  `{"backdrop_file": ruta}` o `{"monster_file": ruta, "hue": grados}`, y
-  sale `<i>.png`.
+* `rm2k-render battle-animation --request <json> --out <dir>`: each
+  entry is `{"sheet_file": ruta, "animation": {...}}`, the animation with
+  the names from Ditto's dump (`large` and `frames` with their `cells`).
+  For animation `i` it writes `<i>.json` —`{"box": [x, y, ancho, alto],
+  "frames": [[{"x", "y", "tone"}, …], …]}`, the box relative to the anchor or
+  `null` if there are no cells— and each cell RM2k draws of frame `f`
+  as `<i>-<f>-<k>.png`, already cropped, with its zoom and its transparency.
+* `rm2k-render battle --request <json> --out <dir>`: each entry is
+  `{"backdrop_file": ruta}` or `{"monster_file": ruta, "hue": grados}`, and
+  out comes `<i>.png`.
 
-El código es `src/battle_animation.rs`, `src/battle.rs` y
-`src/resample.rs`; la hoja de las animaciones (cinco celdas por fila, de 96
-o de 128) fue a `rm2k-rules`, `battle_animation.rs`.
+The code is `src/battle_animation.rs`, `src/battle.rs` and
+`src/resample.rs`; the animations' sheet (five cells per row, of 96
+or of 128) went to `rm2k-rules`, `battle_animation.rs`.
 
-### Qué fue a cada lado, y por qué
+### What went to each side, and why
 
-A `rm2k-render`, porque un visor de RM2k en una PC lo haría igual:
+To `rm2k-render`, because an RM2k viewer on a PC would do it the same way:
 
-* **Cargar la hoja de la animación, el Monster y el Backdrop** con lo que
-  RM2k hace con cada uno: la hoja y el Monster con el color clave; **el
-  fondo opaco**, porque RM2k no le aplica color clave (el `Cache` de
-  easyrpg: `Backdrop` no es `transparent`). El Python lo lograba con el
-  `convert("RGB")`; ahora es una regla dicha.
-* **Las celdas de cada cuadro**: cuáles se dibujan (`valid`, y las que la
-  hoja no tiene no), de dónde se recortan, el zoom —con el bilinear de
-  Pillow copiado al bit, premultiplicando el alfa—, la transparencia, y
-  **la caja de la animación**, la unión de todas las celdas de todos los
-  cuadros, con la posición de cada celda adentro.
-* **El tono del battler** (`battler_hue`, el `HueChangeBlit` de easyrpg):
-  es lo que hace que un `BLmouse` sea tres enemigos.
+* **Loading the animation sheet, the Monster and the Backdrop** with what
+  RM2k does with each: the sheet and the Monster with the key colour; **the
+  background opaque**, because RM2k doesn't apply a key colour to it (easyrpg's
+  `Cache`: `Backdrop` isn't `transparent`). The Python achieved it with
+  `convert("RGB")`; now it's a stated rule.
+* **The cells of each frame**: which ones are drawn (`valid`, and the ones the
+  sheet doesn't have aren't), where they're cropped from, the zoom —with Pillow's
+  bilinear copied to the bit, premultiplying alpha—, the transparency, and
+  **the animation's box**, the union of all the cells of all the
+  frames, with the position of each cell inside.
+* **The battler's hue** (`battler_hue`, easyrpg's `HueChangeBlit`):
+  it's what makes a `BLmouse` three enemies.
 
-Se quedó del lado del conversor, porque es del port:
+What stayed on the converter's side, because it's the port's:
 
-* **El tono de cada celda, y por eso el apilado.** El Python tiñe con
-  `color.apply_tint`, que es el tinte de pantalla **de la consola**: a 15
-  bits y con la aritmética que puede hacer el 65816 (el truncado de la
-  sobresaturación, por ejemplo). Un visor de PC teñiría a 8 bits. Y como
-  RM2k tiñe cada celda **antes** de apilarla, no hay forma de dejarle el
-  apilado a `rm2k-render` sin meterle la matemática de la consola: por eso
-  sale **cada celda con su tono sin aplicar**, y el conversor tiñe y apila
-  (`_paint_frame`, que quedó en diez líneas). Pensé en una tabla de colores
-  por tono que el conversor le pasara a `rm2k-render`: la tabla tendría
-  que estar indexada por los 15 bits, que es otra vez la consola adentro.
-* **Achicar**: la animación a la caja de 64 de OAM (`fit_size`, LANCZOS),
-  el fondo y los battlers al 80% de la pantalla de la SNES, y el respaldo
-  liviano a 128x64.
-* **Los colores**: la paleta de 15 de la animación (`palette.reduce`), los
-  96 del fondo, los 16 del respaldo y los 15 de cada battler (Adeleine),
-  el corte del alfa a la mitad.
-* **El ancla de la ROM** (`rom_anchor`, con el corrimiento de
-  `Animation::Position` horneado), los tiles, los bytes, las tablas.
-* **Qué fondos y qué battlers lleva el cartucho** (`battle_scenes.py`), y
-  dónde se para cada enemigo y quién tapa a quién (`position`,
-  `drawing_order`): son para las tablas de la ROM, que compone sola. Nadie
-  compone una tropa como la dibujaría RM2k —`compose` es de las pruebas, en
-  índices de la consola—, así que `rm2k-render` no la compone: sería un
-  camino que nadie ejecuta.
+* **Each cell's tone, and therefore the stacking.** The Python tints with
+  `color.apply_tint`, which is **the console's** screen tint: at 15
+  bits and with the arithmetic the 65816 can do (the truncation of
+  oversaturation, for example). A PC viewer would tint at 8 bits. And since
+  RM2k tints each cell **before** stacking it, there's no way to leave the
+  stacking to `rm2k-render` without putting the console's maths into it: that's why
+  **each cell comes out with its tone unapplied**, and the converter tints and stacks
+  (`_paint_frame`, which ended up at ten lines). I thought of a colour table
+  per tone that the converter would pass to `rm2k-render`: the table would have
+  to be indexed by the 15 bits, which is the console inside again.
+* **Shrinking**: the animation to OAM's 64 box (`fit_size`, LANCZOS),
+  the background and the battlers to 80% of the SNES screen, and the light
+  fallback to 128x64.
+* **The colours**: the animation's palette of 15 (`palette.reduce`), the
+  background's 96, the fallback's 16 and each battler's 15 (Adeleine),
+  the alpha cut at half.
+* **The ROM anchor** (`rom_anchor`, with `Animation::Position`'s
+  offset baked in), the tiles, the bytes, the tables.
+* **Which backgrounds and which battlers the cartridge carries** (`battle_scenes.py`), and
+  where each enemy stands and who covers whom (`position`,
+  `drawing_order`): they're for the ROM's tables, which composes on its own. Nobody
+  composes a troop the way RM2k would draw it —`compose` belongs to the tests, in
+  console indices—, so `rm2k-render` doesn't compose it: it would be a
+  path nobody runs.
 
-### Cuánto cuesta
+### What it costs
 
-Medido con un envoltorio que anotaba cada llamada, en `NO_CACHE=1 just
-cartuchos`: **14 llamadas a `battle-animation`** (150 ms en total; una por
-mapa que muestra animaciones nuevas, y una por lote en `rom_animations`) y
-**204 a `battle`** (715 ms; una por fondo o battler, la mayoría en
-paralelo). El build tardó 47 s, como antes (46 s). `by_numbers` pide por
-lote; `battle` no, porque no se nota.
+Measured with a wrapper that logged each call, in `NO_CACHE=1 just
+cartuchos`: **14 calls to `battle-animation`** (150 ms in total; one per
+map that shows new animations, and one per batch in `rom_animations`) and
+**204 to `battle`** (715 ms; one per background or battler, most of them in
+parallel). The build took 47 s, as before (46 s). `by_numbers` requests per
+batch; `battle` doesn't, because it isn't noticeable.
 
-### La comparación
+### The comparison
 
-Descartable, en el scratchpad (`coati/comparar.py`): `animation.py` y
-`scene.py` de `d4120186` copiados aparte contra los nuevos, byte por byte.
-**Ninguna distinta**:
+Throwaway, in the scratchpad (`coati/comparar.py`): `animation.py` and
+`scene.py` from `d4120186` copied aside against the new ones, byte by byte.
+**None different**:
 
-* **las 180 animaciones del LDB** (161 con hoja, 19 sin): los 3623
-  cuadros en pixeles de RM2k (`_paint_frame`, RGBA) y la caja de cada una,
-  y el `convert` entero —índices, paleta, ancla, tamaños— de las 180;
-* **585 battlers**: cada Monster del juego con cada tono que le da un
-  enemigo, y además con 0, 17, -45, 181, 359, 360 y 720; el RGBA y el
-  `battler` entero;
-* **los 70 fondos** del juego y del RTP: el RGB, `backdrop` y
-  `light_backdrop` enteros.
+* **the LDB's 180 animations** (161 with a sheet, 19 without): the 3623
+  frames in RM2k pixels (`_paint_frame`, RGBA) and each one's box,
+  and the whole `convert` —indices, palette, anchor, sizes— of the 180;
+* **585 battlers**: each Monster in the game with each hue an
+  enemy gives it, and also with 0, 17, -45, 181, 359, 360 and 720; the RGBA and the
+  whole `battler`;
+* **the 70 backgrounds** of the game and the RTP: the RGB, `backdrop` and
+  `light_backdrop` whole.
 
-Todo lo que entra en `release` y `test-special` está adentro.
+Everything that goes into `release` and `test-special` is inside.
 
-Y las ROMs: `NO_CACHE=1 just cartuchos` antes y después, con el sha256 de
-los 1032 archivos de `rom/build/` (menos caché, `.o`, `sello.txt` y el log;
-el `.dbg` sin mtime): **todo igual**.
+And the ROMs: `NO_CACHE=1 just cartuchos` before and after, with the sha256 of
+the 1032 files in `rom/build/` (minus cache, `.o`, `sello.txt` and the log;
+the `.dbg` without mtime): **everything identical**.
 
     905decd20b48411fb509d60ca7a61b3ddbfe1fd5fcf618519972ddba86b83cee  release/abl.msu
     d098a86fbd7fb9bd41b6ccbea3dba3d0ee2b214e1d7e75a911577b95f6b3be10  release/abl.sfc
     616d8bf8e1e9bebf4293bf39f5ddc4211df26f18fe62e2076470808966b1312b  tests/special/prueba.sfc
 
-### La prueba del crate
+### The crate's test
 
-`tests/battle.rs` guarda los sha256 de lo que dibujaba el Python sobre las
-dos imágenes de `tests/common/` (una indexada y una RGBA con medias
-transparencias): las celdas de dos animaciones —zoom para arriba, para
-abajo y a un pixel, transparencias de 37, 100, -5 y 150, una inválida, una
-que la hoja no tiene, una grande— con su posición y la caja; los battlers
-con seis tonos; y el RGB de los fondos, además de que salen opacos. Los
-hashes salieron del Python viejo (`coati/hashes_python.py`), que corre los
-mismos pasos por celda del `_paint_frame` viejo, y dieron todos iguales.
-Las pruebas del ejecutable —pedidos, rutas relativas, códigos de salida—
-están en el mismo archivo, para no tocar `command_line.rs`, que tiene
-Hurra.
+`tests/battle.rs` stores the sha256 of what the Python drew over the
+two images in `tests/common/` (one indexed and one RGBA with partial
+transparencies): the cells of two animations —zoom up, down
+and to one pixel, transparencies of 37, 100, -5 and 150, an invalid one, one
+the sheet doesn't have, a large one— with their position and the box; the battlers
+with six hues; and the RGB of the backgrounds, besides their coming out opaque. The
+hashes came from the old Python (`coati/hashes_python.py`), which runs the
+same per-cell steps as the old `_paint_frame`, and they all matched.
+The executable's tests —requests, relative paths, exit codes—
+are in the same file, so as not to touch `command_line.rs`, which Hurra
+has.
 
-### Lo que se borró
+### What was deleted
 
-De `animation.py`: `sheet_of` (ahora `sheet_file`, que da la ruta),
-`_live_cells`, `_side`, `rm_box`, `CELL`, `BIG_CELL`, `COLUMNS` y, de
-`_paint_frame`, el recorte, el zoom y la transparencia. De `scene.py`:
-`rotate_hue`, `_to_hsl`, `_from_hsl` y `_div`, y leer con `load_image`.
-`load_image` se quedaba porque la usaban `snes_convert.py`, `window.py` y
-`menus.py`; después del merge con Hurra ya no, y se borró: ver abajo.
+From `animation.py`: `sheet_of` (now `sheet_file`, which gives the path),
+`_live_cells`, `_side`, `rm_box`, `CELL`, `BIG_CELL`, `COLUMNS` and, from
+`_paint_frame`, the cropping, the zoom and the transparency. From `scene.py`:
+`rotate_hue`, `_to_hsl`, `_from_hsl` and `_div`, and reading with `load_image`.
+`load_image` stayed because `snes_convert.py`, `window.py` and
+`menus.py` used it; after the merge with Hurra they no longer did, and it was deleted: see below.
 
-**Los commits:** el cambio (`d8a56790`), con las ROMs byte por byte
-iguales, y la prosa (`a13b4b6a`): README del crate, AGENTS.md,
-`tools/README.md` y los docstrings de `animation.py` y `scene.py`. No toqué
-`render_map.py`, `command_line.rs`, el `about` de `main.rs` ni la
-descripción del `Cargo.toml`, que son de los dos lados: el mensaje de
-`MISSING` en `render_map.py` sigue diciendo "las capas y los CharSets".
+**The commits:** the change (`d8a56790`), with the ROMs identical byte for byte,
+and the prose (`a13b4b6a`): the crate's README, AGENTS.md,
+`tools/README.md` and the docstrings of `animation.py` and `scene.py`. I didn't touch
+`render_map.py`, `command_line.rs`, the `about` in `main.rs` or the
+description in `Cargo.toml`, which belong to both sides: the
+`MISSING` message in `render_map.py` still says "las capas y los CharSets".
 
-**Las tandas:** `just pruebas` 882 y `just -f tools/justfile test` 90, en
-verde; `cargo test` de `rm2k-render` y de `rm2k-rules`, en verde, y
-`rm2k-render` sin avisos de clippy (el de `rules/src/tree.rs` ya estaba).
+**The suites:** `just pruebas` 882 and `just -f tools/justfile test` 90,
+green; `cargo test` of `rm2k-render` and `rm2k-rules`, green, and
+`rm2k-render` with no clippy warnings (the one in `rules/src/tree.rs` was already there).
 
-**Al mergear:** `just -f tools/justfile install rm2k-render` (lleva
-`rules` adentro). Nada de Python se renombró ni se agregó, así que
-`install-scripts` no hace falta.
+**On merging:** `just -f tools/justfile install rm2k-render` (it carries
+`rules` inside). Nothing in Python was renamed or added, so
+`install-scripts` isn't needed.
 
-**Después del merge con Hurra** (`d23f52f4`, los dos lados en cada
-choque): `battle` y `battle-animation` leen el pedido con su `request.rs`,
-`scene._open` llama a `render_map.draw`, y **`load_image` se borró**, porque
-ya no la usa nadie (`c523d9ff`). Sobre el árbol mergeado, otra vez: la
-comparación sin diferencias, los 1032 sha256 iguales a los de antes de
-todo, `just pruebas` 882 y `just -f tools/justfile test` 90 en verde.
+**After the merge with Hurra** (`d23f52f4`, both sides in each
+clash): `battle` and `battle-animation` read the request with its `request.rs`,
+`scene._open` calls `render_map.draw`, and **`load_image` was deleted**, because
+nobody uses it anymore (`c523d9ff`). On the merged tree, again: the
+comparison with no differences, the 1032 sha256 identical to those from before
+everything, `just pruebas` 882 and `just -f tools/justfile test` 90 green.
 
-**Para taro:** no hay nada que jugar, porque no cambia un pixel.
+**For taro:** there's nothing to play, because not a pixel changes.

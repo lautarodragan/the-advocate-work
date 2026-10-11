@@ -1,64 +1,64 @@
 ---
-name: "Las herramientas encuentran el proyecto"
-description: "Las herramientas dejan de saber que ABL vive en rom/ y de leer ABL_*: buscan rm2k-snes.toml hacia arriba, sus rutas salen del archivo, y el ambiente llega por flags"
+name: "The tools find the project"
+description: "The tools stop knowing that ABL lives in rom/ and stop reading ABL_*: they look for rm2k-snes.toml upwards, their paths come from the file, and the environment arrives through flags"
 type: refactor
 status: done
 assignee: taro
 ---
 
-Lo que queda para que `tools/` no sepa nada de dónde ni cómo está ABL, después
-de `el-archivo-de-proyecto.md` (Molle). Lo decidió Hornero, con la
-autorización de taro del 2026-09-29 para decidir sin esperarlo:
+What's left so that `tools/` knows nothing about where or how ABL is, after
+`el-archivo-de-proyecto.md` (Molle). Hornero decided it, with taro's
+authorisation of 2026-09-29 to decide without waiting for him:
 
-- **Las herramientas encuentran el proyecto como cargo encuentra el suyo**:
-  buscan `rm2k-snes.toml` hacia arriba desde el directorio actual, o lo
-  reciben por `--proyecto <dir>`. `proyecto.abl()` desaparece.
-- **Las rutas del proyecto** (`data/`, `parches/`, `build/`, lo que haga
-  falta) **las declara el archivo**, relativas a él. El runtime no: es de
-  las herramientas.
-- **El ambiente llega por flags** (`--game-dir`, `--rtp-dir`,
-  `--soundfont`…), como dejó escrito Molle en su tarea; `rom/justfile`
-  traduce `$ABL_GAME_DIR` y las demás. Las herramientas no leen ninguna
+- **The tools find the project the way cargo finds its own**:
+  they look for `rm2k-snes.toml` upwards from the current directory, or
+  receive it through `--proyecto <dir>`. `proyecto.abl()` disappears.
+- **The project's paths** (`data/`, `parches/`, `build/`, whatever is
+  needed) **are declared by the file**, relative to it. The runtime isn't: it belongs to
+  the tools.
+- **The environment arrives through flags** (`--game-dir`, `--rtp-dir`,
+  `--soundfont`…), as Molle left written in his task; `rom/justfile`
+  translates `$ABL_GAME_DIR` and the rest. The tools don't read any
   `ABL_*`.
 
-## Cómo va (Timbó, 2026-09-29)
+## How it's going (Timbó, 2026-09-29)
 
-La red de cada commit: `SIN_CACHE=1 just cartuchos` antes de tocar nada y
-después de cada uno, con los sha256 de todo `rom/build/` —el script de Molle,
-con el mismo criterio: sin `cache/`, `.o`, `sello.txt` ni `conversor.log`, y
-los `.dbg` sin `mtime`—.
+Each commit's safety net: `SIN_CACHE=1 just cartuchos` before touching anything and
+after each one, with the sha256 of all of `rom/build/` —Molle's script,
+with the same criterion: without `cache/`, `.o`, `sello.txt` or `conversor.log`, and
+the `.dbg` files without `mtime`—.
 
-1. **Encontrar el proyecto.** `proyecto.directorio()` busca `rm2k-snes.toml`
-   desde el directorio actual hacia arriba la primera vez que alguien lo
-   pide, y `proyecto.fijar()` lo fija sin buscar. `--proyecto` lo lee cada
-   ejecutable con `desde_la_linea_de_comandos`, que toma sólo ese flag
-   antes del `parse_args` de su `main`: `cartuchos` y `entregar` leen el
-   archivo al importarse, así que en ésos va antes que nada. Si no lo
-   encuentra, `NoHayProyecto` —un `SystemExit`, así el ejecutable corta con
-   el mensaje y sin traza— dice desde dónde buscó.
-   - **Nada se calcula al importar.** Las constantes que salían del proyecto
+1. **Finding the project.** `proyecto.directorio()` looks for `rm2k-snes.toml`
+   from the current directory upwards the first time someone asks for
+   it, and `proyecto.fijar()` sets it without searching. `--proyecto` is read by each
+   executable with `desde_la_linea_de_comandos`, which takes only that flag
+   before its `main`'s `parse_args`: `cartuchos` and `entregar` read the
+   file on import, so in those it goes before anything else. If it doesn't
+   find it, `NoHayProyecto` —a `SystemExit`, so the executable stops with
+   the message and no traceback— says where it searched from.
+   - **Nothing is computed on import.** The constants that came from the project
      —`lcf.DATOS`, `fork.MAPAS`/`NUEVOS`/`CHIPSETS`/`DEL_JUEGO`,
      `chipset_del_fork.GENERADO`, `snes_music.TECHOS`, `cache_disco.DONDE`,
-     `techos.MEDIDA`— pasaron a ser funciones o a calcularse adentro de la
-     que las usa. Si no, importar el conversor desde `tools/` —lo que hacen
-     las pruebas de las herramientas— buscaría un juego. La prueba de
-     `test_perillas.py` que lo cuidaba ahora corre parada en un directorio
-     vacío, y al final pide el proyecto para ver que no había uno.
-   - **`parches.py` recibía la raíz del repo** y le sumaba
-     `rom/parches/auto/`: ahora sus funciones reciben el directorio de lo
-     automático (`proyecto.parches_auto()`), y los mensajes nombran las
-     rutas relativas al directorio actual.
-   - **El conversor corre parado en la raíz del repo** —ahí están las rutas
-     relativas que terminan en el `.dbg`—, así que `cartuchos` le pasa
+     `techos.MEDIDA`— became functions or are computed inside the one
+     that uses them. Otherwise, importing the converter from `tools/` —which the
+     tools' tests do— would look for a game. The
+     `test_perillas.py` test that guarded it now runs from an empty
+     directory, and at the end asks for the project to check there wasn't one.
+   - **`parches.py` received the repo root** and added
+     `rom/parches/auto/` to it: now its functions receive the automatic
+     directory (`proyecto.parches_auto()`), and the messages name the
+     paths relative to the current directory.
+   - **The converter runs from the repo root** —that's where the relative
+     paths that end up in the `.dbg` are—, so `cartuchos` passes it
      `--proyecto`.
-   - **Las pruebas de ABL fijan el proyecto por su ubicación**:
-     `pruebas/arnes/lugares.py`, que importan primero `conftest.py`,
-     `consola.py` y `video.py`.
-   - `render_map` sigue buscando recursos también en `proyecto.raiz()`: es
-     de 2026-08-31 (`00d96428`, cuando el RTP podía vivir en el repo) y hoy
-     no encuentra nada ahí, porque la raíz no tiene carpetas de RM2k. No es
-     llegar a ABL, así que no se tocó.
-2. **`[paths]` en el archivo**, con claves en inglés y relativas a él:
+   - **ABL's tests set the project by their location**:
+     `pruebas/arnes/lugares.py`, which `conftest.py`,
+     `consola.py` and `video.py` import first.
+   - `render_map` still also looks for resources in `proyecto.raiz()`: it's
+     from 2026-08-31 (`00d96428`, when the RTP could live in the repo) and today
+     it finds nothing there, because the root has no RM2k folders. It isn't
+     reaching ABL, so it wasn't touched.
+2. **`[paths]` in the file**, with keys in English and relative to it:
 
        [paths]
        data = "data"
@@ -66,140 +66,140 @@ los `.dbg` sin `mtime`—.
        build = "build"
        cases = "pruebas/casos"
 
-   `proyecto.build()`, `data()`, `parches()` y `casos()` las leen de ahí.
-   Lo de adentro de `parches/` (`manual/`, `auto/`) y de `build/`
-   (`release/`, `tests/`, `cache/`, `techos/`) sigue siendo de las
-   herramientas: es la forma que le dan ellas, no una decisión del juego.
-   - **Qué entra y qué no, con el criterio del encargo: es del archivo si lo
-     lee una herramienta.** `cases` entra aunque viva en `pruebas/`, porque
-     la lee `rm2k-snes-cartridges`. Las goldens y los snapshots no: sólo los
-     leen las pruebas de ABL, que los saben por su propia ubicación, en
+   `proyecto.build()`, `data()`, `parches()` and `casos()` read them from there.
+   What's inside `parches/` (`manual/`, `auto/`) and `build/`
+   (`release/`, `tests/`, `cache/`, `techos/`) still belongs to the
+   tools: it's the shape they give it, not a decision of the game.
+   - **What goes in and what doesn't, with the brief's criterion: it belongs in the file if
+     a tool reads it.** `cases` goes in even though it lives in `pruebas/`, because
+     `rm2k-snes-cartridges` reads it. The goldens and snapshots don't: only
+     ABL's tests read them, which know them by their own location, in
      `pruebas/arnes/lugares.py` (`GOLDENS`, `SNAPSHOTS`).
-     `proyecto.pruebas()`, `goldens()` y `snapshots()` desaparecen.
-   - `test_perillas_repetidas.py` no mira `[paths]`: sus valores son nombres
-     de carpeta, y las herramientas usan `parches/auto/` como forma del
-     directorio de cada cartucho. Armar a mano una ruta del juego con esas
-     palabras lo cobra `test_proyecto.py`, que mira rutas.
-3. **El ambiente por flags**, con el plan de Molle: `comun/ambiente.py` es
-   **un solo lugar que se configura**. Cada ejecutable suma los flags de lo
-   que usa (`ambiente.argumentos`) y los fija (`desde_argumentos`); el resto
-   de las herramientas lee de ahí. `recursos.GAME_DIR`, `recursos.RTP_DIR` y
-   `snes_samples.SOUNDFONT` siguen existiendo, pero se resuelven al leerlos
-   con un `__getattr__` de módulo, y sin fijar fallan con
-   `FaltaElAmbiente`, que dice qué flag falta. Se eligió esto y no pasar el
-   valor por parámetro porque se leen adentro de unas cuarenta funciones
-   —lo que contó Molle—: con esto cambiaron las doce firmas que los tenían
-   de default (`game_dir=GAME_DIR` pasa a `None`, que se resuelve adentro),
-   y ninguna más.
-   - Los flags: `--game-dir`, `--rtp-dir`, `--soundfont`, `--reemplazos`
-     (el de `rm2k-snes-msu`, que ya existía), `--cache` y
-     `--test-cartridges` en la suite; `--compartido` en `abl-entregar`.
-     Los valores se guardan absolutos, porque el conversor corre parado en
-     otro directorio que el que lo llamó.
-   - **Sin valor por omisión**, salvo el caché y los cartuchos de prueba,
-     que tienen su lugar adentro del `build` del proyecto y el flag sólo los
-     mueve. Los reemplazos de MSU-1 son opcionales: sin `--reemplazos`,
-     cada pista sale de su MIDI.
-   - `rm2k-snes-cartridges` le pasa al conversor lo suyo con
-     `ambiente.como_flags` (`AL_CONVERSOR`), y `rm2k-snes-volume-ceilings`
-     toma esos mismos.
-   - **`rom/justfile` traduce.** Exporta `ABL_GAME_DIR`, `ABL_RTP_DIR`,
-     `ABL_SOUNDFONT` y `SHARED` con los mismos valores por omisión de
-     antes, y `ABL_CACHE` y `CARTUCHOS` vacías si no están; arma
-     `al_conversor` y `al_armar` y se los pasa a cada receta que corre una
-     herramienta. Los reemplazos, que no tenían variable, quedan como
-     `reemplazos_msu` del `justfile`. `datos` y `datos-vuelta` usan la
-     exportada en vez de repetir el valor.
-   - **Las pruebas de ABL leen las variables ellas**, en
-     `pruebas/arnes/lugares.py`, y fijan `ambiente` con eso: son las que
-     exporta el `justfile`. Sin ellas —un `pytest` suelto sin las
-     variables— cortan diciendo cuál falta, en vez de tener una segunda
-     copia de los valores de la máquina. `test_hover_tram.py` dejó de
-     repetir el suyo.
-   - **Dos pruebas de las herramientas leen un SoundFont de verdad**
-     (`test_musica_stream.py`, las envolventes): antes caían en el de
-     `ABL_SOUNDFONT` por omisión. Ahora lo reciben en `SOUNDFONT`, como
-     Ditto su corpus en `DITTO_CORPUS`, y sin la variable se saltean con un
-     mensaje. `just -f tools/justfile pruebas` da 120 y 2 salteadas; con
+     `proyecto.pruebas()`, `goldens()` and `snapshots()` disappear.
+   - `test_perillas_repetidas.py` doesn't look at `[paths]`: its values are folder
+     names, and the tools use `parches/auto/` as the shape of each
+     cartridge's directory. Building a game path by hand with those
+     words is caught by `test_proyecto.py`, which looks at paths.
+3. **The environment through flags**, with Molle's plan: `comun/ambiente.py` is
+   **a single place that gets configured**. Each executable adds the flags of what
+   it uses (`ambiente.argumentos`) and sets them (`desde_argumentos`); the rest
+   of the tools read from there. `recursos.GAME_DIR`, `recursos.RTP_DIR` and
+   `snes_samples.SOUNDFONT` still exist, but they're resolved on reading
+   with a module `__getattr__`, and when unset they fail with
+   `FaltaElAmbiente`, which says which flag is missing. This was chosen over passing the
+   value as a parameter because they're read inside some forty functions
+   —what Molle counted—: with this the twelve signatures that had them as
+   default changed (`game_dir=GAME_DIR` becomes `None`, which is resolved inside),
+   and no others.
+   - The flags: `--game-dir`, `--rtp-dir`, `--soundfont`, `--reemplazos`
+     (`rm2k-snes-msu`'s, which already existed), `--cache` and
+     `--test-cartridges` in the suite; `--compartido` in `abl-entregar`.
+     The values are stored absolute, because the converter runs from
+     a different directory from the one that called it.
+   - **No default value**, except the cache and the test cartridges,
+     which have their place inside the project's `build` and the flag only
+     moves them. The MSU-1 replacements are optional: without `--reemplazos`,
+     each track comes from its MIDI.
+   - `rm2k-snes-cartridges` passes the converter its own with
+     `ambiente.como_flags` (`AL_CONVERSOR`), and `rm2k-snes-volume-ceilings`
+     takes those same ones.
+   - **`rom/justfile` translates.** It exports `ABL_GAME_DIR`, `ABL_RTP_DIR`,
+     `ABL_SOUNDFONT` and `SHARED` with the same default values as
+     before, and `ABL_CACHE` and `CARTUCHOS` empty if they're not set; it builds
+     `al_conversor` and `al_armar` and passes them to each recipe that runs a
+     tool. The replacements, which had no variable, are left as the
+     `justfile`'s `reemplazos_msu`. `datos` and `datos-vuelta` use the
+     exported one instead of repeating the value.
+   - **ABL's tests read the variables themselves**, in
+     `pruebas/arnes/lugares.py`, and set `ambiente` with that: they're the ones the
+     `justfile` exports. Without them —a standalone `pytest` without the
+     variables— they stop saying which is missing, instead of having a second
+     copy of the machine's values. `test_hover_tram.py` stopped
+     repeating its own.
+   - **Two of the tools' tests read a real SoundFont**
+     (`test_musica_stream.py`, the envelopes): before, they fell back on
+     `ABL_SOUNDFONT`'s by default. Now they receive it in `SOUNDFONT`, as
+     Ditto its corpus in `DITTO_CORPUS`, and without the variable they're skipped with a
+     message. `just -f tools/justfile pruebas` gives 120 and 2 skipped; with
      `SOUNDFONT=…`, 122.
-   - `snes_convert.args_game_dir` arranca en `None` y `_juego()` cae en el
-     del ambiente: las pruebas llaman a `lideres_posibles` sin pasar por
+   - `snes_convert.args_game_dir` starts as `None` and `_juego()` falls back on
+     the environment's: the tests call `lideres_posibles` without going through
      `main`.
-4. **La red: `test_ninguna_herramienta_sabe_de_abl`**, en
-   `tools/pruebas/test_proyecto.py`, al lado de la de Tipa porque comparte
-   cómo se lee una variable de ambiente. Falla si un `.py` de `tools/` lee
-   cualquier variable `ABL_*`, o escribe `rom/` como pedazo de ruta: un
-   string sin blancos que empieza por `rom/` o tiene `/rom/`. No mira la
-   prosa —docstrings, `help=`, los mensajes, que llevan blancos— ni la
-   sección `[rom]` del archivo de proyecto, que es un nombre de clave. Y
-   `proyecto.py` deja de ser la excepción de la de Tipa: ya no tiene los
-   valores de la máquina.
-   - Mostrado que falla: con `os.environ.get("ABL_GAME_DIR")` agregado a
-     `comun/ambiente.py` y `"rom/data/maps"` a `rpgmaker/fork.py`, las dos
-     pruebas dan rojo y nombran archivo y línea; sacados, verde.
-5. **La prosa**, en su commit: `tools/README.md` ("Cómo encuentran el
-   juego"), `AGENTS.md` (los valores de la máquina los pone `rom/justfile`,
-   y cómo correr acá las dos de `SOUNDFONT`), `README.md` y los índices de
-   las dos carpetas de pruebas.
+4. **The safety net: `test_ninguna_herramienta_sabe_de_abl`**, in
+   `tools/pruebas/test_proyecto.py`, next to Tipa's because it shares
+   how an environment variable is read. It fails if a `.py` in `tools/` reads
+   any `ABL_*` variable, or writes `rom/` as a piece of a path: a
+   string without blanks that starts with `rom/` or has `/rom/`. It doesn't look at the
+   prose —docstrings, `help=`, the messages, which carry blanks— nor the
+   `[rom]` section of the project file, which is a key name. And
+   `proyecto.py` stops being the exception in Tipa's: it no longer has the
+   machine's values.
+   - Shown to fail: with `os.environ.get("ABL_GAME_DIR")` added to
+     `comun/ambiente.py` and `"rom/data/maps"` to `rpgmaker/fork.py`, both
+     tests go red and name file and line; removed, green.
+5. **The prose**, in its own commit: `tools/README.md` ("Cómo encuentran el
+   juego"), `AGENTS.md` (the machine's values are set by `rom/justfile`,
+   and how to run the two `SOUNDFONT` ones here), `README.md` and the indices of
+   the two test folders.
 
-## Qué cambia para taro en el host
+## What changes for taro on the host
 
-**Nada en las recetas ni en las variables**: `just cartuchos`, `just build
+**Nothing in the recipes or in the variables**: `just cartuchos`, `just build
 release`, `just pruebas`, `just espacio`, `just parches`, `just techos`,
-`just entregar` y `just video` se llaman igual, y `ABL_GAME_DIR`,
-`ABL_RTP_DIR`, `ABL_SOUNDFONT`, `ABL_CACHE`, `CARTUCHOS` y `SHARED` apuntan
-a lo mismo, con los mismos valores por omisión —ahora en `rom/justfile`—.
-Lo que cambia:
+`just entregar` and `just video` are called the same way, and `ABL_GAME_DIR`,
+`ABL_RTP_DIR`, `ABL_SOUNDFONT`, `ABL_CACHE`, `CARTUCHOS` and `SHARED` point
+to the same things, with the same default values —now in `rom/justfile`—.
+What changes:
 
-* **Un script de la suite corrido a mano**, fuera de `just`, ya no cae en
-  los valores de esta máquina: hay que pasarle `--game-dir` y los demás, y
-  correrlo desde adentro de `rom/` o con `--proyecto`. Corta diciendo qué
-  falta.
-* **Un `pytest` suelto** de las pruebas de ABL necesita las variables
-  puestas; por `just` las pone el `justfile`.
-* **`just -f tools/justfile pruebas`** saltea dos si no se le pasa
+* **A suite script run by hand**, outside `just`, no longer falls back on
+  this machine's values: it has to be passed `--game-dir` and the rest, and
+  run from inside `rom/` or with `--proyecto`. It stops saying what's
+  missing.
+* **A standalone `pytest`** of ABL's tests needs the variables
+  set; through `just` the `justfile` sets them.
+* **`just -f tools/justfile pruebas`** skips two if not given
   `SOUNDFONT`.
 
-## Verificado
+## Verified
 
-* `SIN_CACHE=1 just cartuchos` y los sha256 de `rom/build/` antes de tocar
-  nada y después de cada commit que toca lo que arma (1, 2 y 3) y al final:
-  **995 archivos iguales**, con los `.sfc`, `.msu`, `.pcm`, `.sym` y los
-  `.inc` adentro. Las dos pistas que salen de un reemplazo salieron de él
-  las dos veces.
+* `SIN_CACHE=1 just cartuchos` and the sha256 of `rom/build/` before touching
+  anything and after each commit that touches what it builds (1, 2 and 3) and at the end:
+  **995 files identical**, with the `.sfc`, `.msu`, `.pcm`, `.sym` and the
+  `.inc` files inside. The two tracks that come from a replacement came from it
+  both times.
 
       7a3c6483…a6552  build/release/abl.sfc
       905decd2…6cee   build/release/abl.msu
       fb6db844…0617   build/tests/special/prueba.sfc
       d9e96eab…1578   build/tests/special/prueba.msu
 
-* `just pruebas`: 867, en cada commit y al final.
-  `just -f tools/justfile pruebas`: 132 y 2 salteadas, y 134 con
-  `SOUNDFONT`. Eran 122: las diez nuevas son las de la red del paso 4.
-* Sin ABL: `rm2k-snes-cartridges --lista` desde `/tmp` corta con "no
+* `just pruebas`: 867, at each commit and at the end.
+  `just -f tools/justfile pruebas`: 132 and 2 skipped, and 134 with
+  `SOUNDFONT`. It was 122: the ten new ones are the step 4 safety net's.
+* Without ABL: `rm2k-snes-cartridges --lista` from `/tmp` stops with "no
   encontré un rm2k-snes.toml en /tmp ni en ninguna carpeta de más
-  arriba…"; desde `rom/data/maps/` encuentra el proyecto; con `--proyecto`
-  desde `/tmp` andan `rm2k-snes-cartridges --lista`, `rm2k-snes-patches
-  --check` y `rm2k-snes-space release`. El conversor sin `--game-dir` corta
-  con "falta --game-dir…".
-* A mano: `just espacio release`, `just parches-check`, `just techos
-  --medir`, `rm2k-snes-msu` sobre `release`, y `video.py --help` con y sin
-  las variables.
-* `test_lado_de_abl.py` no se tocó.
-* `main` no se movió desde `9e276429`: no hubo nada que mergear.
+  arriba…"; from `rom/data/maps/` it finds the project; with `--proyecto`
+  from `/tmp`, `rm2k-snes-cartridges --lista`, `rm2k-snes-patches
+  --check` and `rm2k-snes-space release` work. The converter without `--game-dir` stops
+  with "falta --game-dir…".
+* By hand: `just espacio release`, `just parches-check`, `just techos
+  --medir`, `rm2k-snes-msu` on `release`, and `video.py --help` with and without
+  the variables.
+* `test_lado_de_abl.py` wasn't touched.
+* `main` hasn't moved since `9e276429`: there was nothing to merge.
 
-## Lo que no se hizo
+## What wasn't done
 
-* **`just entregar` no se corrió**: se miró su línea con `--dry-run`.
-  Tampoco `just techos` entero —escribe la tabla—, sólo `--medir`.
-* **`raiz()` sigue en dos lugares que no son para llegar a ABL**: el
-  directorio donde corren el conversor y `ca65` —de ahí salen las rutas
-  relativas del `.dbg` y de los `.inc`, y cambiarlo cambia el `.dbg`—, y la
-  búsqueda de recursos de `render_map`, que no encuentra nada ahí. Cuando
-  las herramientas sean otro repo, las dos hay que pensarlas.
-* **El pre-parseo de `--proyecto`** existe porque `cartuchos` y `entregar`
-  leen el archivo al importarse. Si dejan de hacerlo, alcanza con el
-  `parse_args` de cada `main`.
-* **La forma de adentro de `build/` y de `parches/`** —`release/`,
-  `tests/`, `manual/`, `auto/`— sigue siendo de las herramientas. Si otro
-  juego quisiera otra, serían más claves de `[paths]`.
+* **`just entregar` wasn't run**: its line was looked at with `--dry-run`.
+  Nor the whole of `just techos` —it writes the table—, only `--medir`.
+* **`raiz()` remains in two places that aren't for reaching ABL**: the
+  directory where the converter and `ca65` run —the relative paths of the
+  `.dbg` and of the `.inc` files come from there, and changing it changes the `.dbg`—, and
+  `render_map`'s resource search, which finds nothing there. When
+  the tools are another repo, both have to be thought through.
+* **The pre-parsing of `--proyecto`** exists because `cartuchos` and `entregar`
+  read the file on import. If they stop doing that, each `main`'s
+  `parse_args` is enough.
+* **The internal shape of `build/` and `parches/`** —`release/`,
+  `tests/`, `manual/`, `auto/`— still belongs to the tools. If another
+  game wanted a different one, it would mean more `[paths]` keys.

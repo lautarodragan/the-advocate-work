@@ -1,217 +1,216 @@
 ---
-name: "Mundo 6: Yun Town y Drust Camp"
-description: "Lo opcional del mundo en release: Yun Town (67, 70 a 73) y Drust Camp (68, 103, 199 a 201); el cronómetro por alcance, el InputNumber y comparar contra más de 32767"
+name: "World 6: Yun Town and Drust Camp"
+description: "The optional part of the world in release: Yun Town (67, 70 to 73) and Drust Camp (68, 103, 199 to 201); the timer by reach, InputNumber and comparing against more than 32767"
 type: feature
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-10-01: "sumemos mapas primero". Con el cartucho en 8 MB y
-la fase 1 de compresión, `release` usa 58 de 128 bancos. El plan es
-`el-mundo-y-lo-que-sigue.md`, hito 5: Yun Town (el cronómetro por
-alcance, y el reparto del 2 para su capa de encima) y Drust Camp (comparar
-contra más de 32767, el `InputNumber` del 68 ev10).
+From taro, on 2026-10-01: "let's add maps first". With the cartridge at 8 MB and
+phase 1 of compression, `release` uses 58 of 128 banks. The plan is
+`el-mundo-y-lo-que-sigue.md`, milestone 5: Yun Town (the timer by
+reach, and layout 2 for its upper layer) and Drust Camp (comparing
+against more than 32767, the `InputNumber` of 68 ev10).
 
-Sale de `main` en `2de10ea4`, mergeado `a0863e9e` (Mulita) al rato.
+It comes from `main` at `2de10ea4`, with `a0863e9e` (Mulita) merged shortly after.
 
-# Qué faltaba, contado
+# What was missing, counted
 
-Con el compilador instrumentado (un `eprintln` en el `scan` con el último
-comando de nivel 0 de cada página que no compila, en un `target/` del
-scratchpad, no commiteado), sobre el request que arma `release` con los diez
-mapas: **en Yun y Drust no compila una sola página**, el 68 ev10. Y no
-compila por el `InputNumber`, antes de llegar a la comparación contra 35421:
-la ROM no tenía `InputNumber`.
+With the compiler instrumented (an `eprintln` in the `scan` with the last
+level-0 command of each page that doesn't compile, in a `target/` in the
+scratchpad, not committed), over the request `release` builds with the ten
+maps: **in Yun and Drust a single page doesn't compile**, 68 ev10. And it doesn't
+compile because of the `InputNumber`, before reaching the comparison against 35421:
+the ROM didn't have `InputNumber`.
 
-Lo que el plan contaba y ya no hacía falta:
+What the plan counted and was no longer needed:
 
-* **El reparto del 2 para la capa de encima del 67** (163 tiles) ya está:
-  lo trajo Sorbe (el hito 2). El 67 convierte sin tocar nada.
-* **El cronómetro del 67** sí: con los dígitos en todos los mapas el
-  conversor corta ("the timer doesn't fit: the map already uses the 8 sprite
-  palettes"). Ver abajo.
+* **Layout 2 for 67's upper layer** (163 tiles) is already there:
+  Sorbe brought it (milestone 2). 67 converts without touching anything.
+* **67's timer** is: with the digits in every map the
+  converter stops ("the timer doesn't fit: the map already uses the 8 sprite
+  palettes"). See below.
 
-Las condiciones de página de los mapas nuevos son de switches, de actor (68
-ev7) y de ítem (71 y 103): las tres las evalúa la ROM.
+The page conditions of the new maps are switch ones, actor ones (68
+ev7) and item ones (71 and 103): the ROM evaluates all three.
 
-# El cronómetro por alcance
+# The timer by reach
 
-Los dígitos del cronómetro ocupan lugar en una paleta de sprite, y hasta hoy
-iban en **todos** los mapas de `release`. Ahora van en los que el cronómetro
-puede estar corriendo: `timer_reach` en `tools/port/game_scan.py`, con las
-páginas que compilan (la respuesta del `scan`).
+The timer's digits take up room in a sprite palette, and until today
+they went in **every** map of `release`. Now they go in the ones where the timer
+can be running: `timer_reach` in `tools/port/game_scan.py`, with the
+pages that compile (the `scan`'s answer).
 
-Cada página se recorre en orden y sin mirar sus ramas, siguiendo el mapa en
-que está: un arranque después de un `Teleport` es del destino —las latas del
-311 lo arrancan después de saltar al 312—, y un `Teleport` después de una
-parada no lo lleva —la salida del 312 lo para y después va al 313—. Una
-página de un mapa al que llega el cronómetro empieza con él corriendo; un
-`CallEvent` a un común recorre el común.
+Each page is walked in order and without looking at its branches, following the map
+it's in: a start after a `Teleport` belongs to the destination —the cans in
+311 start it after jumping to 312—, and a `Teleport` after a
+stop doesn't carry it —312's exit stops it and then goes to 313—. A
+page in a map the timer reaches starts with it running; a
+`CallEvent` to a common event walks the common event.
 
-**Por mapa solo no alcanza**, medido: desde el 7, por las puertas, se llega a
-los 96 mapas de `release` (Lashe City lleva al 64, el 64 al mundo). Ni con el
-corte en los mapas que paran. Hace falta decir dónde no corre nunca, y es
-una lista del proyecto: `[graphics] timer_never_runs_in = [66]`, con su
-porqué (el de la mañana para al llegar al trabajo, días antes de salir de
-Lashe; el del bosque en llamas para en la salida del 312). Con eso:
+**Per map alone isn't enough**, measured: from 7, through the doors, you reach
+all 96 maps of `release` (Lashe City leads to 64, 64 to the world). Not even with the
+cut at the maps that stop it. You have to say where it never runs, and it's
+a project list: `[graphics] timer_never_runs_in = [66]`, with its
+why (the morning one stops on arriving at work, days before leaving
+Lashe; the burning forest one stops at 312's exit). With that:
 
-* llevan los dígitos 56 de los 105 mapas (el conversor lo imprime: "the
-  timer's digits go in…"): Lashe City, el 64, el 164, el 312, el 133 (un
-  mapa de prueba) y el 95, por el contador;
-* no los llevan el mundo y todo lo que cuelga de él, el 17, el 18, el 310,
-  el 311 y el 313, ni los demás mapas de prueba.
+* 56 of the 105 maps carry the digits (the converter prints it: "the
+  timer's digits go in…"): Lashe City, 64, 164, 312, 133 (a
+  test map) and 95, because of the counter;
+* the world and everything hanging from it, 17, 18, 310,
+  311 and 313, and the other test maps don't carry them.
 
-**El contador de Fortitude del 95 usa los mismos dígitos** (`OP_COUNTER`), y
-la primera versión lo dejó sin ellos: lo cobró `test_contador`. Los mapas
-que llaman a un común de `[events] counters` los llevan siempre; se miran por
-la llamada y no por el bytecode porque el `scan` no conoce los contadores y
-ahí la compila en el lugar.
+**Fortitude's counter in 95 uses the same digits** (`OP_COUNTER`), and
+the first version left it without them: `test_contador` caught it. The maps
+that call a common event from `[events] counters` always carry them; they're found by
+the call and not by the bytecode because the `scan` doesn't know about the counters and
+compiles it in place there.
 
-La aproximación **sólo puede fallar dejando un mapa sin dígitos**, que
-entonces no se ven: no rompe nada más.
+The approximation **can only fail by leaving a map without digits**, which
+then aren't visible: it doesn't break anything else.
 
-# El `InputNumber`
+# The `InputNumber`
 
-Es el 68 ev10, la puerta de la tienda de Net:
+It's 68 ev10, the door of Net's shop:
 
     VOICE  "What's the password?"
-    InputNumber: seis dígitos a la variable 143
-    si la 143 es 35421: "Fine... come on in." y al 201
+    InputNumber: six digits to variable 143
+    if 143 is 35421: "Fine... come on in." and to 201
 
-El otro del juego es el 278 ev8 (cuatro dígitos, contra 727), que no está en
-ningún cartucho.
+The other one in the game is 278 ev8 (four digits, against 727), which isn't in
+any cartridge.
 
-**En RM2k el número va en la ventana del mensaje**, en la línea de abajo de
-su texto, y el mensaje no espera la A: `CommandShowMessage` mira el comando
-siguiente, y si es un `InputNumber` y el mensaje deja una línea, lo mete
-adentro. Así que el compilador junta los dos en un opcode: `OP_NUMBER`
-(`0x38`), con la ranura de la variable, cuántos dígitos y la caja del
-mensaje. Un `InputNumber` suelto, o después de un mensaje de cuatro líneas,
-sigue sin compilar (no hay ninguno en el juego), y más de seis dígitos
-tampoco.
+**In RM2k the number goes in the message window**, on the line below
+its text, and the message doesn't wait for A: `CommandShowMessage` looks at the
+next command, and if it's an `InputNumber` and the message leaves a line free, it puts it
+inside. So the compiler joins the two into one opcode: `OP_NUMBER`
+(`0x38`), with the variable's slot, how many digits and the message's
+box. A lone `InputNumber`, or one after a four-line message,
+still doesn't compile (there are none in the game), and neither do more than six digits.
 
-En la ROM (`tools/runtime/number_input.s`): `op_number` abre la ventana del
-mensaje como `op_message`, y cuando sus líneas están, la de los dígitos se
-compone **con el mismo compositor del texto**, desde una línea en la RAM
-lejana (`NUMBER_LINE`, `$7E25B0`) en vez del bloque de textos. Es
-`pick_active` en `PICK_NUMBER`: la elección y el número comparten la ventana,
-la página bloqueada y los bytes de `pick_`. El cursor es el de la elección,
-un `>` en la columna de antes del dígito: no hay sprite ni dibujo.
+In the ROM (`tools/runtime/number_input.s`): `op_number` opens the message
+window like `op_message`, and when its lines are done, the digits line is
+composed **with the same text compositor**, from a line in far
+RAM (`NUMBER_LINE`, `$7E25B0`) instead of the text block. It's
+`pick_active` at `PICK_NUMBER`: the choice and the number share the window,
+the blocked page and the `pick_` bytes. The cursor is the choice's,
+a `>` in the column before the digit: there's no sprite or drawing.
 
-Las teclas son las de `Window_NumberInput::Update`: arriba y abajo cambian el
-dígito y dan la vuelta, izquierda y derecha mueven el cursor y dan la vuelta,
-A entra el número, B no hace nada. Arranca en cero con el cursor en el último
-dígito (`SetNumber(0)`, `ResetIndex`). La A refresca las páginas siempre,
-como `Window_Message::InputNumber`.
+The keys are those of `Window_NumberInput::Update`: up and down change the
+digit and wrap around, left and right move the cursor and wrap around,
+A enters the number, B does nothing. It starts at zero with the cursor on the last
+digit (`SetNumber(0)`, `ResetIndex`). A always refreshes the pages,
+like `Window_Message::InputNumber`.
 
-Dos diferencias declaradas, en los comentarios: las teclas cuentan por
-**flanco**, como la elección, y easyrpg las repite sostenidas; y el número
-se guarda **saturado en 65535**, porque las variables son de dieciséis bits.
+Two declared differences, in the comments: the keys count by
+**edge**, like the choice, and easyrpg repeats them when held; and the number
+is stored **saturated at 65535**, because variables are sixteen bits.
 
-**Comparar contra 35421**: el compilador acepta en "igual" y "distinto" una
-constante de 32768 a 65534, como los dieciséis bits de la variable —la ROM
-compara las palabras, y ahí el signo no importa—. 65535 no, porque sería
-también cualquier número saturado; y ninguna comparación de orden, que sería
-con signo. Saturar es lo que hace que 100957 (35421 + 65536) no abra.
+**Comparing against 35421**: the compiler accepts in "equal" and "not equal" a
+constant from 32768 to 65534, as the variable's sixteen bits —the ROM
+compares the words, and there the sign doesn't matter—. 65535 not, because it would
+also be any saturated number; and no ordering comparison, which would be
+signed. Saturating is what makes 100957 (35421 + 65536) not open.
 
-Confirmado contra el fuente de easyrpg (no está compilado acá):
-`CommandShowMessage` (el `InputNumber` en la misma ventana si
+Confirmed against easyrpg's source (it isn't compiled here):
+`CommandShowMessage` (the `InputNumber` in the same window if
 `pm.NumLines() < 4`), `CommandInputNumber`, `Window_NumberInput::Update`,
-`SetMaxDigits` y `ResetIndex`, y `Window_Message::InputNumber` (la variable,
-`SetNeedRefresh(true)` y `SetNumber(0)`).
+`SetMaxDigits` and `ResetIndex`, and `Window_Message::InputNumber` (the variable,
+`SetNeedRefresh(true)` and `SetNumber(0)`).
 
-# Pruebas
+# Tests
 
-Lo de Mulita entró al rato de empezar, así que hay casos nuevos posibles;
-no hizo falta ninguno: las pruebas usan las páginas del juego.
+Mulita's work went in shortly after starting, so there are possible new cases;
+none was needed: the tests use the game's pages.
 
-* `rpgmaker/test_numero.py`: la puerta del 68. Los dígitos arrancan en cero
-  con el cursor en el último, y las teclas dan la vuelta; 35421 abre y lleva
-  al 201; 100957 queda en 65535 y no abre. **Las tres en rojo** con el
-  compilador global (la página no compila: los dígitos no se abren), y en
-  verde con el de esta rama.
-* `abl/test_yun_y_drust.py`: el 67, el 68 y las minas (103) recién llegados,
-  con golden y `celdas_mal_dibujadas` en cero; y las dos entradas del mundo
-  (66 ev9 y ev11), caminando, que llevan al pueblo.
-* Las tres del compilador en `compile.rs`: el número en la ventana del
-  mensaje, los que no compilan, y la comparación como dieciséis bits.
+* `rpgmaker/test_numero.py`: 68's door. The digits start at zero
+  with the cursor on the last, and the keys wrap around; 35421 opens and leads
+  to 201; 100957 stays at 65535 and doesn't open. **All three red** with the
+  global compiler (the page doesn't compile: the digits don't open), and
+  green with this branch's.
+* `abl/test_yun_y_drust.py`: 67, 68 and the mines (103) just arrived at,
+  with golden and `celdas_mal_dibujadas` at zero; and the world's two entrances
+  (66 ev9 and ev11), walking, which lead to the town.
+* The compiler's three in `compile.rs`: the number in the message
+  window, the ones that don't compile, and the comparison as sixteen bits.
 
-`just pruebas`: 952 en verde, y **`test_musica_techos.py` en rojo**, que es lo
-esperado: faltan los temas nuevos, `arc1_v2` y `piperdun`. No se corrió `just
-techos`. `just -f tools/justfile test`: 39 en verde. `cargo test -p
-rm2k-snes-events` en verde. `NO_CACHE=1 just cartuchos` da las tres ROMs
-iguales que con caché (difieren los `.o` y `.dbg`, que llevan la fecha de los
-`.inc` generados).
+`just pruebas`: 952 green, and **`test_musica_techos.py` red**, which is
+expected: the new themes, `arc1_v2` and `piperdun`, are missing. `just
+techos` wasn't run. `just -f tools/justfile test`: 39 green. `cargo test -p
+rm2k-snes-events` green. `NO_CACHE=1 just cartuchos` gives the three ROMs
+identical to the cached ones (the `.o` and `.dbg` differ, which carry the date of the
+generated `.inc` files).
 
 # Goldens
 
-* **Nuevas**: `yun-67-llegada`, `drust-68-llegada` y `drust-103-llegada`.
-* **Movidas**: las cinco del Hover-Tram (mapa 13: `tram-900`, `tram-1200`,
-  `tram-viaje-10`, `-30` y `-60`), 183 pixeles —61 en la de 1200— de la fila
-  de pasajeros de abajo. No es el cronómetro: el 13 lo sigue llevando, y para
-  hacerle lugar baja a trece colores un personaje. Era Future3:5, el 53% de
-  sus pixeles; desde que está también en la posada de Yun (72), el conversor
-  elige uno que esté en menos mapas, Future3:1, el 25%, con un banco de
-  poses propio.
+* **New**: `yun-67-llegada`, `drust-68-llegada` and `drust-103-llegada`.
+* **Moved**: the five of the Hover-Tram (map 13: `tram-900`, `tram-1200`,
+  `tram-viaje-10`, `-30` and `-60`), 183 pixels —61 in the 1200 one— of the
+  bottom row of passengers. It isn't the timer: 13 still carries it, and to
+  make room for it a character goes down to thirteen colours. It was Future3:5, 53% of
+  its pixels; since it's also in Yun's inn (72), the converter
+  picks one that's in fewer maps, Future3:1, 25%, with its own pose
+  bank.
 
-En su commit, sólo de goldens; el antes y el después en
-`/shared/capturas/2026-10-01-yun-y-drust/`, con la ventana de la clave.
-**El merge espera a taro.**
+In their commit, goldens only; the before and after in
+`/shared/capturas/2026-10-01-yun-y-drust/`, with the password window.
+**The merge awaits taro.**
 
-# Espacio
+# Space
 
-Con `just espacio`. La base es `a0863e9e` (la ROM de `main`, `6809f47d…`).
+With `just espacio`. The baseline is `a0863e9e` (`main`'s ROM, `6809f47d…`).
 
-    release        bancos   banco 0   banco 1    textos
-    la base        58/128   245 B     3.828 B     94.417 B
-    esta rama      62/128   101 B     3.423 B    101.513 B
+    release        banks    bank 0    bank 1     texts
+    the baseline   58/128   245 B     3,828 B     94,417 B
+    this branch    62/128   101 B     3,423 B    101,513 B
 
-BSS 128 B y ZEROPAGE 4 B en las dos. De los 144 bytes del banco 0, 42 son el
-código (`op_number` y la entrada de `choice_tick`; medido en `test-special`,
-que no cambia de mapas: 1.045 → 1.003) y unos 100 las tablas de los mapas
-nuevos —ítems y temas, como dice el plan—. **El banco 0 queda en 101 bytes**:
-las tablas de ítems al banco 1, que el plan pone en este hito, no se hicieron
-(son diecinueve lecturas en el runtime); con Puma sumando tres mapas
-encima, conviene medirlo al mergear.
+BSS 128 B and ZEROPAGE 4 B in both. Of bank 0's 144 bytes, 42 are the
+code (`op_number` and `choice_tick`'s entry; measured in `test-special`,
+which doesn't change maps: 1,045 → 1,003) and about 100 the tables of the new
+maps —items and themes, as the plan says—. **Bank 0 is left at 101 bytes**:
+the item tables to bank 1, which the plan puts in this milestone, weren't done
+(they're nineteen reads in the runtime); with Puma adding three maps
+on top, it's worth measuring on merging.
 
-# Lo que no está hecho
+# What isn't done
 
-* **`test_musica_techos.py` falla** (ver arriba).
-* **La música de antes baja un poco**: comparando las tasas del
-  `conversor.log` contra el de la base, cuatro muestras de la base
-  "limited by 311" bajan de ~19 a 17,6 kHz (COWBL66, METRO60, SBRS160A,
-  SYBS233), una copia de CRASH60B a 22 kHz se va, y suben dos (SIDE_60,
-  ATMOS60A). Es el paquete del 311 otra vez, ahora con las muestras nuevas
-  de los temas de Yun y Drust en la base. No se cambió nada; lo decide taro
-  escuchando.
-* **Las tablas de ítems al banco 1** (ver "Espacio").
-* **Un `InputNumber` suelto** o después de un mensaje de cuatro líneas no
-  compila: el juego no tiene ninguno.
+* **`test_musica_techos.py` fails** (see above).
+* **The earlier music drops a bit**: comparing the rates in
+  `conversor.log` against the baseline's, four of the baseline's samples
+  "limited by 311" go down from ~19 to 17.6 kHz (COWBL66, METRO60, SBRS160A,
+  SYBS233), a copy of CRASH60B at 22 kHz goes away, and two go up (SIDE_60,
+  ATMOS60A). It's 311's package again, now with the new samples
+  of Yun's and Drust's themes in the baseline. Nothing was changed; taro decides it
+  by listening.
+* **The item tables to bank 1** (see "Space").
+* **A lone `InputNumber`** or one after a four-line message doesn't
+  compile: the game has none.
 
-# Lo que no cubre `just pruebas`
+# What `just pruebas` doesn't cover
 
-* Las peleas de las minas (103) y del ring (199): los encuentros, sus
-  fondos y los battlers nuevos (Slime2, bat, krawlie, spider, anima).
-* Las tiendas de la armería (71) y de Net (201), y la posada (72).
-* Las demás páginas de Yun y Drust: se cobra que compilan, no que hagan lo
-  que tienen que hacer.
-* Un `InputNumber` desde una página paralela (la espera, como la de un
-  mensaje): el juego no lo hace.
+* The battles in the mines (103) and the ring (199): the encounters, their
+  backgrounds and the new battlers (Slime2, bat, krawlie, spider, anima).
+* The shops of the armoury (71) and of Net (201), and the inn (72).
+* The other pages of Yun and Drust: it's checked that they compile, not that they do
+  what they have to do.
+* An `InputNumber` from a parallel page (the wait, like a
+  message's): the game doesn't do it.
 
-# Al mergear
+# On merging
 
-Instalar `events` (`just -f tools/justfile install events`). `cartridge` no
-cambió: arma `number_input.s` desde el runtime del checkout. Los `.py` sólo
-cambiaron de contenido.
+Install `events` (`just -f tools/justfile install events`). `cartridge` didn't
+change: it builds `number_input.s` from the checkout's runtime. The `.py` files only
+changed in content.
 
-# Qué tiene que probar taro
+# What taro has to test
 
-* Entrar a Yun Town y a Drust Camp desde el mundo, caminar, hablar, la
-  armería, la posada, la casa del alcalde y la fiambrería.
-* La puerta de la tienda de Net, en Drust: la ventana de los dígitos, el
-  cursor (un `>`), y la clave (35421) que abre; un número equivocado te
-  devuelve un paso.
-* Las minas: los encuentros y sus peleas.
-* Que el cronómetro de la mañana se siga viendo en Lashe City, y el del
-  bosque en llamas en el 312.
-* Escuchar los temas que bajan (ver arriba).
+* Enter Yun Town and Drust Camp from the world, walk, talk, the
+  armoury, the inn, the mayor's house and the delicatessen.
+* The door of Net's shop, in Drust: the digits window, the
+  cursor (a `>`), and the password (35421) that opens it; a wrong number sends you
+  back one step.
+* The mines: the encounters and their battles.
+* That the morning timer is still visible in Lashe City, and the
+  burning forest one in 312.
+* Listen to the themes that drop (see above).

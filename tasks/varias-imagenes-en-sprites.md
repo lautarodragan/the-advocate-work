@@ -1,166 +1,166 @@
 ---
-name: "Varias imágenes en sprites"
-description: "El plano de objetos del sistema de imágenes: ShowPicture, MovePicture y ErasePicture con varias imágenes a la vez, para las chicas sobre el mapa, escondiendo los eventos si no hay lugar"
+name: "Several pictures in sprites"
+description: "The object plane of the picture system: ShowPicture, MovePicture and ErasePicture with several pictures at once, for the girls over the map, hiding the events if there's no room"
 type: feature
 status: done
 assignee: taro
 ---
 
-Fase 2 de `docs/research/2026-10-01-el-sistema-de-imagenes.md` (Jilguero),
-de taro el 2026-10-01. El plano de BG1 en modo 1 para las imágenes grandes
-es la fase 3, aparte: taro aprobó el modo 1 sólo mientras una imagen grande
-tapa el mapa (`decisiones/las-imagenes-grandes-en-modo-1.md`).
+Phase 2 of `docs/research/2026-10-01-el-sistema-de-imagenes.md` (Jilguero),
+from taro on 2026-10-01. The BG1 plane in mode 1 for large pictures
+is phase 3, separately: taro approved mode 1 only while a large picture
+covers the map (`decisiones/las-imagenes-grandes-en-modo-1.md`).
 
-Hecha por Gallareta, desde `main` en `71782626`, con `main` mergeado en
-`7d4c1c7b` (Label y JumpToLabel, de Pitogüé). **Espera el visto bueno de
-taro a las goldens** —dos commits sólo de goldens— y que la juegue.
+Done by Gallareta, from `main` at `71782626`, with `main` merged at
+`7d4c1c7b` (Label and JumpToLabel, by Pitogüé). **It awaits taro's approval
+of the goldens** —two goldens-only commits— and for him to play it.
 
-## Para mergear
+## For merging
 
-* **Reinstalar en el global**: `just -f tools/justfile install events images
-  wally mapdata cartridge` —`map-sprites` es biblioteca de `wally`—. Lo de
-  Python no agregó ni renombró ningún script.
-* **`rom/parches/manual/mapas/Map0081.*` se borró**: el fork del 81 cambiaba
-  el cartel por un mensaje "hasta que la ROM lleve más de una imagen".
-* **El experimento de la translucidez es su propio commit**, `Imágenes: el
-  experimento de la translucidez…`, con sus goldens en el que le sigue:
-  para sacarlo se revierten los dos, y el texto de la divergencia vuelve
-  solo a la versión opaca.
-* Números de hoy, sobre el árbol mergeado: `just pruebas` da **981** (969
-  de `main` más 12 nuevas), `just -f tools/justfile test` **39**, `cargo
-  test` de events, images, wally, map-sprites y mapdata en verde.
-  `NO_CACHE=1 just cartuchos` y el armado con caché dan el mismo `abl.sfc`,
-  `57ce2e2a…`. `test_musica_techos.py` siguió en verde.
-* RAM lejana: `$30EC` a `$30FA` —la de la imagen de antes— y `$2580` a
-  `$258F`, la que me tocó. Ningún opcode nuevo: `OP_PICTURE`,
-  `OP_PICTURE_MOVE` y `OP_PICTURE_ERASE` cambiaron de operandos.
-* Espacio, `just espacio` sobre `release`: banco 0 de 1.053 a 1.340 B
-  libres (el código salió al banco 1), banco 1 de 3.204 a 2.000 B.
+* **Reinstall in the global**: `just -f tools/justfile install events images
+  wally mapdata cartridge` —`map-sprites` is a library of `wally`—. The
+  Python side didn't add or rename any script.
+* **`rom/parches/manual/mapas/Map0081.*` was deleted**: the fork of 81 replaced
+  the sign with a message "until the ROM carries more than one picture".
+* **The translucency experiment is its own commit**, `Imágenes: el
+  experimento de la translucidez…`, with its goldens in the one that follows:
+  to remove it both are reverted, and the divergence's text goes back on its own
+  to the opaque version.
+* Today's numbers, on the merged tree: `just pruebas` gives **981** (969
+  from `main` plus 12 new), `just -f tools/justfile test` **39**, `cargo
+  test` of events, images, wally, map-sprites and mapdata green.
+  `NO_CACHE=1 just cartuchos` and the cached build give the same `abl.sfc`,
+  `57ce2e2a…`. `test_musica_techos.py` stayed green.
+* Far RAM: `$30EC` to `$30FA` —the previous picture's— and `$2580` to
+  `$258F`, the one allotted to me. No new opcode: `OP_PICTURE`,
+  `OP_PICTURE_MOVE` and `OP_PICTURE_ERASE` changed operands.
+* Space, `just espacio` on `release`: bank 0 from 1,053 to 1,340 B
+  free (the code moved out to bank 1), bank 1 from 3,204 to 2,000 B.
 
-## El diseño
+## The design
 
-**Cada mapa lleva en su banco de sprites las imágenes que pueden mostrar
-sus páginas y las páginas de prueba que corren en él**, después de sus
-personajes, y se suben con el banco: mostrar una imagen sube sólo su
-paleta, y volver de la pelea o del menú las encuentra donde estaban. El
-camino:
+**Each map carries in its sprite bank the pictures its pages can show
+and the test pages that run in it**, after its
+characters, and they're uploaded with the bank: showing a picture uploads only its
+palette, and returning from the battle or the menu finds them where they were. The
+path:
 
-1. El scan del compilador junta por mapa las claves de cada `ShowPicture`
-   que la consola puede hacer —`PictureKey`: número, nombre, zoom, color
-   transparente, con el mapa, por variables, y la posición sólo si cambia
-   los pixeles—. Compila cada página con todo lo que tiene una compilación
-   de verdad: con las del scan, sin canciones, el cartel del 81 quedaba
-   detrás de un `PlayBGM`. Y con los contadores, para que los dígitos de la
-   Fortitude sigan siendo del contador.
-2. `picture.py` convierte cada una con `rm2k-snes-images picture`, que ahora
-   sabe del zoom, del color transparente —índice 0— y de las que van con el
-   mapa, que **no se escalan** a 256x224 porque el mapa tampoco; les da una
-   ranura por número —las dos primeras— y las corta en objetos de 32x32,
-   sin los vacíos.
-3. `wally` las pone al final del banco, con **una paleta por ranura desde la
-   7 para abajo** —son las que la consola puede mezclar—. Si la caja de la
-   animación de batalla deja sin paletas, o si con ellas el mapa no entra
-   en ningún reparto de VRAM, las saca y lo dice; sus comandos se aceptan
-   sin hacerse.
-4. El compilador recibe la tabla de cada mapa; `rm2k-snes-mapdata` emite
-   `picture_maps` y `picture_data`; el runtime (`picture_far.s`, banco 1)
-   calcula la esquina al mostrarla —cuatro quintos y catorce quinceavos,
-   para abajo con negativos, como `Screens::place`; para las del mapa, la
-   vista de RM2k centrada en la cámara de la consola— y dibuja después del
-   contador.
+1. The compiler's scan gathers per map the keys of each `ShowPicture`
+   the console can do —`PictureKey`: number, name, zoom, transparent
+   colour, with the map, by variables, and the position only if it changes
+   the pixels—. It compiles each page with everything a real
+   compilation has: with the scan's, without songs, the sign in 81 was left
+   behind a `PlayBGM`. And with the counters, so that Fortitude's digits
+   remain the counter's.
+2. `picture.py` converts each one with `rm2k-snes-images picture`, which now
+   knows about zoom, the transparent colour —index 0— and the ones that go with the
+   map, which **aren't scaled** to 256x224 because the map isn't either; it gives them a
+   slot per number —the first two— and cuts them into 32x32 objects,
+   without the empty ones.
+3. `wally` puts them at the end of the bank, with **one palette per slot from
+   7 down** —they're the ones the console can blend—. If the battle animation's
+   box leaves no palettes, or if with them the map doesn't fit
+   in any VRAM layout, it removes them and says so; their commands are accepted
+   without being carried out.
+4. The compiler receives each map's table; `rm2k-snes-mapdata` emits
+   `picture_maps` and `picture_data`; the runtime (`picture_far.s`, bank 1)
+   computes the corner when showing it —four fifths and fourteen fifteenths,
+   rounding down with negatives, like `Screens::place`; for the map ones, RM2k's
+   view centred on the console's camera— and draws after the
+   counter.
 
-**Dos ranuras.** Es lo que piden las escenas sobre el mapa: el máximo a la
-vez es el rótulo del contador y sus dos dígitos, que son del contador. La
-consola de la fase 6 pide nueve; la RAM que había son treinta y un bytes, y
-con dos ranuras la rampa de `MovePicture` es una sola para todas —una nueva
-termina la de otra ranura—.
+**Two slots.** That's what the scenes over the map ask for: the maximum at the same
+time is the counter's label and its two digits, which belong to the counter. The
+phase 6 console asks for nine; the RAM there was is thirty-one bytes, and
+with two slots `MovePicture`'s ramp is a single one for all —a new one
+ends another slot's—.
 
-**Opción B (esconder los eventos) no está.** En el cartucho sólo el
-hovertram del 32 la pediría —165x151, no entra en ningún reparto con los
-personajes—, y su escena es Talan, Arden y los guardias hablando alrededor
-del tram: esconderlos es esconder la escena. ABLEndBox8 (309) va sobre el
-mapa en negro: es de la fase 3.
+**Option B (hiding the events) isn't there.** In the cartridge only the
+hovertram of 32 would ask for it —165x151, it doesn't fit in any layout with the
+characters—, and its scene is Talan, Arden and the guards talking around
+the tram: hiding them is hiding the scene. ABLEndBox8 (309) goes over the
+map in black: it's phase 3's.
 
-## Qué se hace de cada opción
+## What's done with each option
 
-    posición por constante            sí
-    posición por variables            sí (dos variables, leídas al mostrarla)
-    con el mapa (fixed_to_map)        sí, sin escalar: el mapa no se escala
-    color transparente                sí, índice 0
-    zoom                              sí, achicando; agrandar no compila
-    tono, y su rampa en MovePicture   sí, como el cartel de antes
-    transparencia                     tres escalones: ≥76 % no se ve; 25-75 %
-                                      al 50 % con el experimento, opaca sin él;
-                                      <25 % opaca
-    MovePicture de lugar o de zoom    no: no compila, se acepta sin hacerse
-    rotar, ondear, saturación         no compila
-    borrar al cambiar de mapa         sí (`pic_clear`)
-    volver de la pelea y del menú     sí: el menú las tapa, y vuelven como
-                                      estaban
+    position by constant              yes
+    position by variables             yes (two variables, read when shown)
+    with the map (fixed_to_map)       yes, unscaled: the map isn't scaled
+    transparent colour                yes, index 0
+    zoom                              yes, shrinking; enlarging doesn't compile
+    tone, and its ramp in MovePicture yes, like the sign before
+    transparency                      three steps: ≥76 % not visible; 25-75 %
+                                      at 50 % with the experiment, opaque without it;
+                                      <25 % opaque
+    MovePicture of place or of zoom   no: doesn't compile, accepted without being done
+    rotate, wave, saturation          doesn't compile
+    erase on changing map             yes (`pic_clear`)
+    return from battle and menu       yes: the menu covers them, and they come back as
+                                      they were
 
-Las deudas, en `divergencias/lo-que-las-imagenes-en-sprites-no-modelan.md`.
+The debts, in `divergencias/lo-que-las-imagenes-en-sprites-no-modelan.md`.
 
-## Las escenas
+## The scenes
 
-Las que se dibujan ahora en `release`, contra el estudio:
+The ones drawn now in `release`, against the study:
 
-    4    Oneyearprev     ya estaba
-    81   MeanwhileLashe  nueva; el fork del mapa se borró
-    95   Fortitude       nueva, arriba del contador
-    311  hovershadow     nueva; con el experimento, al 50 % como el original
+    4    Oneyearprev     already there
+    81   MeanwhileLashe  new; the map's fork was deleted
+    95   Fortitude       new, above the counter
+    311  hovershadow     new; with the experiment, at 50 % like the original
 
-Las que siguen sin entrar, con su porqué:
+The ones that still don't fit, with their why:
 
-    45   ABLrec          siete paletas de personajes y la caja de la animación:
-                         no queda una para la imagen
-    32   hovertram2      165x151: no entra con los personajes, y B la tapa
-    98, 207, 285, 295    sus mapas no están en el cartucho; el conversor las
-                         haría igual (el 207 es el caso de por variables, con
-                         el mapa y al 40 %)
-    309, 49, 285 Advo…   grandes: la fase 3
+    45   ABLrec          seven character palettes and the animation's box:
+                         there's none left for the picture
+    32   hovertram2      165x151: doesn't fit with the characters, and B covers it
+    98, 207, 285, 295    their maps aren't in the cartridge; the converter would
+                         do them anyway (207 is the by-variables case, with
+                         the map and at 40 %)
+    309, 49, 285 Advo…   large: phase 3
 
-De las 11 de 21 que el estudio daba a A y B juntas, en el cartucho hay 5 y
-se dibujan 4.
+Of the 11 of 21 that the study gave to A and B together, 5 are in the cartridge and
+4 are drawn.
 
-## Las pruebas
+## The tests
 
-`rom/pruebas/rpgmaker/test_imagenes_golden.py`, contra goldens, en el mapa
-12 —el 4 corre la apertura encima de las páginas de prueba—. Cada comando
-visto en rojo con una mutación del runtime, medido: las dos ranuras en la
-misma paleta (325 pixeles), la transparencia de la rampa sin guardar (674),
-la variable de la x leída para la y (1.172), y la del mapa dibujada como de
-la pantalla (349). La vuelta de la pelea **no cobra** la restauración de
-las paletas: la tropa 82 no llega a las paletas 6 y 7 —cortar la
-restauración antes de ésas la deja en verde—; cobra que las imágenes
-vuelvan. El `pic_restore` que había escrito para eso se sacó: la pelea ya
-repone las paletas altas desde `cgram_shadow`, donde las deja `pic_palette`,
-y el menú no las toca.
+`rom/pruebas/rpgmaker/test_imagenes_golden.py`, against goldens, in map
+12 —4 runs the opening on top of the test pages—. Each command
+seen red with a mutation of the runtime, measured: the two slots in the
+same palette (325 pixels), the ramp's transparency not saved (674),
+the x variable read for the y (1,172), and the map one drawn as a
+screen one (349). The return from battle **doesn't cover** the restoring of
+the palettes: troop 82 doesn't reach palettes 6 and 7 —cutting the
+restore before those leaves it green—; it covers the pictures
+coming back. The `pic_restore` I had written for that was removed: the battle already
+restores the high palettes from `cgram_shadow`, where `pic_palette` leaves them,
+and the menu doesn't touch them.
 
-Las escenas se llaman con `CallEvent` sobre la página del mapa
-(`escena-81`, `-95`, `-311`). Comparadas contra el RPG_RT de 2015 con Wine,
-con una copia del juego que arranca en el mapa con la página automática y
-sin condiciones —se arma con `ditto`, ver el scratchpad de Gallareta—: la
-sombra cae en el mismo lugar del mapa, (39,59)-(140,179) allá y
-(40,60)-(138,178) acá.
+The scenes are called with `CallEvent` on the map's page
+(`escena-81`, `-95`, `-311`). Compared against the 2015 RPG_RT under Wine,
+with a copy of the game that starts in the map with the autorun page and
+no conditions —built with `ditto`, see Gallareta's scratchpad—: the
+shadow falls in the same place on the map, (39,59)-(140,179) there and
+(40,60)-(138,178) here.
 
-`test_cores.py` suma tres: dos ranuras, la rampa y la del mapa con la
-cámara corrida, en snes9x y bsnes.
+`test_cores.py` adds three: two slots, the ramp and the map one with the
+camera shifted, in snes9x and bsnes.
 
-Y `test_recorrido_sorbe_golden.py` saca la foto del cartel cuando está
-arriba y quieto, en vez de al componer el mensaje del fork.
+And `test_recorrido_sorbe_golden.py` takes the photo of the sign when it's
+up and still, instead of when the fork's message is composed.
 
-## Las goldens
+## The goldens
 
-Dos commits sólo de goldens. Lado a lado —antes, después y el RPG_RT— en
-`/shared/capturas/2026-10-01-imagenes-en-sprites/`, y las dos de la
-translucidez —opaca, mezclada, original— en `…/translucidez/`. Ninguna
-golden que existía se movió.
+Two goldens-only commits. Side by side —before, after and RPG_RT— in
+`/shared/capturas/2026-10-01-imagenes-en-sprites/`, and the two for
+translucency —opaque, blended, original— in `…/translucidez/`. No
+existing golden moved.
 
-## Lo que falta
+## What's missing
 
-* Más ranuras, para la consola: es RAM.
-* Mover y agrandar con `MovePicture`: la rampa de posición es RAM también.
-* Que una imagen comparta una paleta de personaje con lugar, para el
-  `ABLrec` del 45.
-* Las imágenes por encima de la ventana de mensaje: en RM2k la ventana las
-  tapa.
+* More slots, for the console: it's RAM.
+* Moving and enlarging with `MovePicture`: the position ramp is RAM too.
+* Letting a picture share a character palette that has room, for
+  `ABLrec` in 45.
+* The pictures above the message window: in RM2k the window covers
+  them.
