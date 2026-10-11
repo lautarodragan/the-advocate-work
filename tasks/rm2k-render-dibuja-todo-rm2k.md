@@ -1,41 +1,41 @@
 ---
-name: "rm2k-render dibuja todo lo de RPG Maker"
-description: "Llevar a rm2k-render lo que hoy dibuja el conversor en Python: CharSets, animaciones de pelea, enemigos y fondos, FaceSets, System y el cartel de ShowPicture"
+name: "rm2k-render draws everything from RPG Maker"
+description: "Move into rm2k-render what the converter draws in Python today: CharSets, battle animations, enemies and backgrounds, FaceSets, System and the ShowPicture sign"
 type: refactor
 status: done
 assignee: taro
 ---
 
-Decidido con taro el 2026-09-29 (ver
+Decided with taro on 2026-09-29 (see
 `workflow/decisiones/las-herramientas-se-separan-de-abl.md`): `rm2k-render`
-es el dueño de dibujar gráficos de RPG Maker, sin saber de la SNES.
+owns drawing RPG Maker graphics, without knowing about the SNES.
 
-Hoy lo dibuja el Python del conversor:
+Today the converter's Python draws:
 
-- los CharSets —poses, translúcidos horneados, los hechos con un tile—:
-  `tools/port/sprites.py` y `render_map.Charsets`;
-- las animaciones de pelea: `battle_animations.py` y `animation.py`;
-- los fondos de batalla y los enemigos: `battle_scenes.py` y `scene.py`;
-- las FaceSets (`menus.py`), el System (`window.py`) y el cartel de
-  `ShowPicture` (`picture.py`);
-- la base de todo: `render_map.load_image`, que ya tiene su par en
-  `picture.rs`.
+- the CharSets —poses, baked translucent ones, the ones made from a tile—:
+  `tools/port/sprites.py` and `render_map.Charsets`;
+- the battle animations: `battle_animations.py` and `animation.py`;
+- the battle backgrounds and the enemies: `battle_scenes.py` and `scene.py`;
+- the FaceSets (`menus.py`), the System (`window.py`) and the
+  `ShowPicture` sign (`picture.py`);
+- the base of it all: `render_map.load_image`, which already has its
+  counterpart in `picture.rs`.
 
-Va por partes, un subcomando por tipo de asset, cada una con las ROMs byte
-por byte iguales, igual que las capas de los mapas. Lo que sea decidir
-colores o cortar en 8x8 se queda del lado de Adeleine y de `voodoo`.
+It goes in parts, one subcommand per asset type, each with the ROMs byte
+for byte identical, same as the map layers. Anything that is deciding
+colors or cutting into 8x8 stays on Adeleine's and `voodoo`'s side.
 
-## Hecho, el 2026-09-30
+## Done, on 2026-09-30
 
-En tres partes, cada una con las ROMs byte por byte iguales y todo lo que
-dibuja comparado pixel por pixel contra el Python:
+In three parts, each with the ROMs byte for byte identical and everything
+it draws compared pixel by pixel against the Python:
 
-- los CharSets: `rm2k-render-los-charsets.md` (Yaguarundí);
-- la pelea —animaciones, enemigos, fondos—: `rm2k-render-pelea.md`
+- the CharSets: `rm2k-render-los-charsets.md` (Yaguarundí);
+- the battle —animations, enemies, backgrounds—: `rm2k-render-pelea.md`
   (Coatí);
-- las pantallas —caras, System, cartel de `ShowPicture`—:
+- the screens —faces, System, `ShowPicture` sign—:
   `rm2k-render-pantallas.md` (Hurra).
 
-`load_image` se fue. Lo que el port hace con esas imágenes para la consola
-—achicar, cortar en 8x8, la trama, el horneado, los colores— sigue en el
-conversor y en Adeleine.
+`load_image` is gone. What the port does with those images for the console
+—shrinking, cutting into 8x8, the dithering, the baking, the colors— stays
+in the converter and in Adeleine.

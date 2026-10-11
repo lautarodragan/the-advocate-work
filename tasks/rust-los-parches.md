@@ -1,100 +1,104 @@
 ---
-name: "Rust: los parches"
-description: "tools/port/patches.py (rm2k-snes-patches: escribe y verifica los TOML de rom/parches/auto/) a Rust, con el mismo ejecutable y los mismos archivos byte por byte"
+name: "Rust: the patches"
+description: "tools/port/patches.py (rm2k-snes-patches: writes and checks the TOML of rom/parches/auto/) to Rust, with the same executable and the same files byte for byte"
 type: refactor
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-09-30, en la migración del conversor a Rust. `patches.py`
-ya es un ejecutable propio (`rm2k-snes-patches`, que llaman `just parches`
-y `just parches-check`) con entrada y salida claras.
+From taro, on 2026-09-30, in the converter's migration to Rust. `patches.py`
+is already an executable of its own (`rm2k-snes-patches`, called by `just
+parches` and `just parches-check`) with clear input and output.
 
-## Dónde quedó y por qué (Yacutoro, 2026-09-30)
+## Where it ended up and why (Yacutoro, 2026-09-30)
 
-Un crate propio, `tools/rm2k-snes/patches/` (`rm2k-snes-patches`, proyecto
-`patches` del justfile), y no un binario más de `cartridge`. La capa es
-`rm2k-snes/` porque sabe de las dos cosas —ids de mapa, animaciones y
-battlers de RM2k, colores de 15 bits y CGRAM—. Crate aparte porque es otra
-responsabilidad: `cartridge` arma cartuchos, y esto escribe, copia y
-compara decisiones; lo único que le pide a `cartridge` es la lista de
-cartuchos y dónde se arma cada uno, para `--check` sin argumentos, y eso lo
-toma como biblioteca (`Cartridges::load`, `names`, `directory`) en vez de
-correr `rm2k-snes-cartridges --list --json` como hacía el Python.
+A crate of its own, `tools/rm2k-snes/patches/` (`rm2k-snes-patches`, the
+justfile's `patches` project), and not one more binary of `cartridge`. The
+layer is `rm2k-snes/` because it knows about both things —RM2k map ids,
+animations and battlers, 15-bit colors and CGRAM—. A separate crate because
+it's another responsibility: `cartridge` builds cartridges, and this writes,
+copies and compares decisions; the only thing it asks of `cartridge` is the
+list of cartridges and where each one is built, for `--check` without
+arguments, and it takes that as a library (`Cartridges::load`, `names`,
+`directory`) instead of running `rm2k-snes-cartridges --list --json` like the
+Python did.
 
-## La frontera con el conversor
+## The boundary with the converter
 
-El conversor importaba `patches.py` en el mismo proceso: `write_maps`,
-`write_animations` y `write_battlers` armaban el texto de los TOML desde lo
-que el conversor decidió, y `write_uses` escribía `parches/usos.json`.
+The converter imported `patches.py` in the same process: `write_maps`,
+`write_animations` and `write_battlers` built the TOML text from what the
+converter decided, and `write_uses` wrote `parches/usos.json`.
 
-* **Lo que viaja es la decisión**, en un pedido JSON: el conversor corre
-  `rm2k-snes-patches --request <pedido> <build>` —`stage.hand_over`, nuevo,
-  al lado de `stage.run`—, y el ejecutable vacía y escribe
-  `<build>/parches/auto/{mapas,animaciones,battlers}/` e imprime las mismas
-  tres líneas que imprimía el conversor. El pedido lo arman
-  `patch_of_map`, `patch_of_animation` y `patch_of_battler` en
-  `snes_convert.py`. De un battler viaja **cuántas** fusiones, que es lo
-  único que se escribe, y no la lista.
-* **`usos.json` lo sigue escribiendo el conversor**, que es quien sabe
-  quién pidió cada cosa: `write_patch_uses` pasó a `battle_scenes.py`, al
-  lado de `patch_uses`, y el ejecutable sólo lo lee. Así además el archivo
-  sale byte por byte igual sin reimplementar en Rust el orden de
-  `sorted(..., key=str)` sobre pares de Python.
-* `--request` es un flag nuevo; los de antes —`--project`,
-  `--test-cartridges`, los directorios y `--check`— siguen iguales, así que
-  `just parches` y `just parches-check` no cambian. `--request` no busca el
-  proyecto: sólo escribe en el build lo que le dan.
-* `rm2k-snes-patches` entra en la huella de los cartuchos
-  (`CONVERTER_TOOLS` de `cartridge`): lo que escribe va al lado de la ROM y
-  el check lo lee de ahí.
+* **What travels is the decision**, in a JSON request: the converter runs
+  `rm2k-snes-patches --request <pedido> <build>` —`stage.hand_over`, new,
+  next to `stage.run`—, and the executable empties and writes
+  `<build>/parches/auto/{mapas,animaciones,battlers}/` and prints the same
+  three lines the converter used to print. The request is built by
+  `patch_of_map`, `patch_of_animation` and `patch_of_battler` in
+  `snes_convert.py`. Of a battler, **how many** merges travels, which is the
+  only thing that gets written, and not the list.
+* **`usos.json` is still written by the converter**, which is the one that
+  knows who asked for each thing: `write_patch_uses` moved to
+  `battle_scenes.py`, next to `patch_uses`, and the executable only reads it.
+  That way the file also comes out byte for byte identical without
+  reimplementing in Rust the order of `sorted(..., key=str)` over Python
+  pairs.
+* `--request` is a new flag; the earlier ones —`--project`,
+  `--test-cartridges`, the directories and `--check`— stay the same, so `just
+  parches` and `just parches-check` don't change. `--request` doesn't look
+  for the project: it only writes into the build what it's given.
+* `rm2k-snes-patches` goes into the cartridges' fingerprint
+  (`CONVERTER_TOOLS` of `cartridge`): what it writes goes next to the ROM and
+  the check reads it from there.
 
-## La comparación
+## The comparison
 
-Guiones descartables en el scratchpad (`yacutoro/`): `base.sh` arma con
-`NO_CACHE=1 just cartuchos` y saca el sha256 de todo `rom/build/` (menos
-caché, `.o`, `sello.txt` y `conversor.log`; el `.dbg` sin `mtime`);
-`salidas.sh` corre `just parches-check` limpio, `just parches-check` con
-cinco TOML tocados a mano —el `colores` de un mapa, el tamaño y la hoja de
-una animación, un color, el tono y las fusiones de un battler, un mapa
-versionado borrado y uno de más— y `just parches` sobre un battler tocado y
-un mapa de más, y guarda salida, error, código y el sha256 de los 137 TOML.
+Throwaway scripts in the scratchpad (`yacutoro/`): `base.sh` builds with
+`NO_CACHE=1 just cartuchos` and takes the sha256 of all of `rom/build/`
+(except the cache, `.o`, `sello.txt` and `conversor.log`; the `.dbg` without
+`mtime`); `salidas.sh` runs `just parches-check` clean, `just parches-check`
+with five TOML edited by hand —a map's `colores`, an animation's size and
+sheet, a battler's color, hue and merges, a versioned map deleted and an
+extra one— and `just parches` on an edited battler and an extra map, and
+saves output, error, exit code and the sha256 of the 137 TOML.
 
-* Python contra el ejecutable de Rust sobre los mismos builds: todo igual,
-  salida de error incluida.
-* Con el conversor ya pasando el pedido (`NO_CACHE=1`): las 1032 huellas
-  iguales salvo los `.dbg` de los tres cartuchos, y `salidas.sh` igual a
-  Python otra vez.
-* `cargo test` del crate compara contra lo que `patches.py` contestó, antes
-  de borrarlo, para el juego de `tests/game/` (`tests/python.json`): los
-  sha256 de los diez TOML, lo que copia y borra, lo versionado, las quejas
-  del check y lo propio de cada cartucho.
+* Python against the Rust executable on the same builds: all identical,
+  error output included.
+* With the converter already passing the request (`NO_CACHE=1`): the 1032
+  hashes identical except the `.dbg` of the three cartridges, and
+  `salidas.sh` identical to Python again.
+* The crate's `cargo test` compares against what `patches.py` answered,
+  before deleting it, for the game in `tests/game/` (`tests/python.json`):
+  the sha256 of the ten TOML, what it copies and deletes, what's versioned,
+  the check's complaints and what belongs to each cartridge.
 
-## Al mergear
+## When merging
 
-* `just -f tools/justfile install patches cartridge`, desde el checkout
-  principal: `patches` es nuevo, y `cartridge` cambió la huella. Esa receta
-  borra primero los symlinks `rm2k-snes-*` y rearma los de Python, así que
-  el symlink global de `rm2k-snes-patches` a `port/patches.py`, que queda
-  colgando, lo reemplaza el binario. No hace falta `install-scripts` aparte.
-* Todos los cartuchos quedan viejos (cambió la huella): `just cartuchos`.
+* `just -f tools/justfile install patches cartridge`, from the main checkout:
+  `patches` is new, and `cartridge` changed the fingerprint. That recipe
+  first deletes the `rm2k-snes-*` symlinks and rebuilds the Python ones, so
+  the global symlink from `rm2k-snes-patches` to `port/patches.py`, which is
+  left dangling, gets replaced by the binary. No separate `install-scripts`
+  needed.
+* All cartridges become stale (the fingerprint changed): `just cartuchos`.
 
-## Las tandas
+## The suites
 
-Sobre el árbol con `main` mergeado (`550ccfeb`): `just cartuchos`,
-`just parches-check` en verde, `just pruebas` **878** —eran 880: las dos
-que no dependían del juego, que armar otra vez no deja parches viejos y qué
-es "sólo de la tanda", pasaron al crate—, `just -f tools/justfile test`
-**85** (`main` sacó cinco), y `cargo test` de `patches` y de `cartridge`.
-Las ROMs, iguales a las de antes de empezar.
+On the tree with `main` merged (`550ccfeb`): `just cartuchos`, `just
+parches-check` green, `just pruebas` **878** —it was 880: the two that didn't
+depend on the game, that building again doesn't leave stale patches and what
+is "suite-only", moved to the crate—, `just -f tools/justfile test` **85**
+(`main` removed five), and `cargo test` of `patches` and of `cartridge`. The
+ROMs, identical to the ones from before starting.
 
-## Qué se borró
+## What was deleted
 
-`tools/port/patches.py` entero (792 líneas) y su symlink en `install`. De lo
-que hacía, `write_uses` no se fue: pasó a `battle_scenes.py` como
-`write_patch_uses`. Las dos pruebas de `rom/pruebas/herramientas/test_parches.py`
-que no dependían del juego pasaron a `tools/rm2k-snes/patches/tests/`; las
-otras dos quedaron, llamando al ejecutable y leyendo los TOML con `tomllib`.
+`tools/port/patches.py` whole (792 lines) and its symlink in `install`. Of
+what it did, `write_uses` didn't go away: it moved to `battle_scenes.py` as
+`write_patch_uses`. The two tests of
+`rom/pruebas/herramientas/test_parches.py` that didn't depend on the game
+moved to `tools/rm2k-snes/patches/tests/`; the other two stayed, calling the
+executable and reading the TOML with `tomllib`.
 
-Sin README propio el crate: su documentación es el `//!` de `lib.rs`, que
-trae la del docstring de `patches.py`.
+No README of its own for the crate: its documentation is `lib.rs`'s `//!`,
+which carries `patches.py`'s docstring.

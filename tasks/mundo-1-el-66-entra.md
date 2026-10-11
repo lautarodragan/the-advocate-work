@@ -1,86 +1,89 @@
 ---
-name: "Mundo 1: el 66 entra"
-description: "El hito 1 de el-mundo-y-lo-que-sigue: el mapa del mundo en release, con el quinto reparto de VRAM, el fondo en dos flujos de LZ2 y el fin de la demo al pisar Sorbe"
+name: "World 1: map 66 fits"
+description: "Milestone 1 of el-mundo-y-lo-que-sigue: the world map in release, with the fifth VRAM layout, the background in two LZ2 streams and the end of the demo on stepping on Sorbe"
 type: feature
 status: done
 ---
 
-# Qué
+# What
 
-El hito 1 de `el-mundo-y-lo-que-sigue.md`, que tiene todo lo medido
-antes. Sale de `2be61a9`.
+Milestone 1 of `el-mundo-y-lo-que-sigue.md`, which has everything measured
+beforehand. It starts from `2be61a9`.
 
-* **El quinto reparto** al final de `LAYOUTS`, `LAYOUT_VENTANA_FONDO_TECHO`:
-  256 sprites, 544 tiles de fondo en `$1000`, ventana_map en `$5400`, tilemap
-  en `$5800`, 128 de encima y 256 de ventana.
-* **El fondo de más de 32 KB en dos flujos de LZ2**: `partes_comprimidas` lo
-  parte en tramos de `LZ2_TOPE_FONDO`, y `lz2_fondo` (en `descomprimir.s`)
-  descomprime y sube uno antes de descomprimir el otro. El tope ahora se cobra
-  **por flujo** (`controlar_flujos`), y también cuántos flujos lee la ROM: con
-  un fondo de tres, o un flujo que se pasa de su lugar, el conversor no arma.
-* **El 66 en `release`**, por `AGREGADOS` de `cartuchos.py`: subir `MENOR_A`
-  a 67 metería al 65, que es una carpeta.
-* **El fin de la demo** pasa del fork del 64 (borrado) a un fork del 66: el
-  evento 10, la entrada de Sorbe Village, muestra "END OF THE DEMO" y vuelve
-  al título.
-* **`Comment` se saltea al compilar**, que estaba en el hito 2 y hubo que
-  adelantar: sin el fork, la página de la despedida del 64 no compilaba, y su
-  único comando que no compilaba era la nota "LYS" que el autor dejó detrás del
-  `Teleport` al mundo (medido con `culpables.py` de `mundo-plan`). Ningún otro
-  mapa de los dos cartuchos tiene un `Comment`: el recuento de páginas de
-  `test-special` sale igual.
+* **The fifth layout** at the end of `LAYOUTS`, `LAYOUT_VENTANA_FONDO_TECHO`:
+  256 sprites, 544 background tiles at `$1000`, ventana_map at `$5400`,
+  tilemap at `$5800`, 128 overlay and 256 window.
+* **The background larger than 32 KB in two LZ2 streams**:
+  `partes_comprimidas` splits it into chunks of `LZ2_TOPE_FONDO`, and
+  `lz2_fondo` (in `descomprimir.s`) decompresses and uploads one before
+  decompressing the other. The cap is now enforced **per stream**
+  (`controlar_flujos`), and so is how many streams the ROM reads: with a
+  three-stream background, or a stream that overflows its place, the
+  converter doesn't build.
+* **Map 66 in `release`**, through `cartuchos.py`'s `AGREGADOS`: raising
+  `MENOR_A` to 67 would bring in map 65, which is a folder.
+* **The end of the demo** moves from the fork of map 64 (deleted) to a fork of
+  map 66: event 10, the entrance to Sorbe Village, shows "END OF THE DEMO" and
+  returns to the title.
+* **`Comment` is skipped when compiling**, which was in milestone 2 and had to
+  be brought forward: without the fork, the page of map 64's farewell didn't
+  compile, and its only command that didn't compile was the "LYS" note the
+  author left behind the `Teleport` to the world (measured with `mundo-plan`'s
+  `culpables.py`). No other map of the two cartridges has a `Comment`: the
+  page count of `test-special` comes out the same.
 
-# Hecho y comprobado
+# Done and checked
 
-* **El conversor solo no cambia nada**: con el `snes_convert.py` del primer
-  commit sobre una copia de `2be61a9`, `release` y `test-special` salen byte
-  por byte iguales (`cmp` de `abl.sfc`, `prueba.sfc` y `abl.msu`). Ningún mapa
-  cambia de reparto ni de flujos.
-* **`test_carga_descomprimida.py`** ya recorre todos los mapas de `release`,
-  así que mira el fondo de dos flujos del 66 en snes9x y en bsnes. Y una prueba
-  nueva, `test_un_fondo_de_dos_flujos_no_se_sale_del_buffer`, escribe un
-  testigo en `GRILLA_ALTA`, carga el 66 y mira que siga ahí. **Se vio fallar
-  con el error puesto**: sobre la misma copia de `2be61a9` con el 66 metido a
-  lo bruto (el quinto reparto y sin el tope del fondo, como la variante `m0p2`
-  del plan), el testigo sale pisado.
-* **`test_mundo.py`**, nueva: el 66 recién llegado (golden
-  `mundo-66-llegada`, `celdas_mal_dibujadas` en cero) y una pelea pedida con
-  `ENC_PIDE` que Kersh gana y vuelve al mapa (golden
-  `mundo-66-despues-de-pelear`, celdas en cero). Talan solo, con lo que tiene
-  al empezar la partida, pierde contra el lobo.
-* **El recorrido de la carrera** sigue de la despedida al mundo, camina de
-  (71, 29) a Sorbe (75, 10) con los encuentros apagados y termina en el cartel
-  nuevo. Sus capturas de `pruebas/snapshots/playthrough/carrera-*/` no están
-  bendecidas, como antes.
+* **The converter alone changes nothing**: with the first commit's
+  `snes_convert.py` on a copy of `2be61a9`, `release` and `test-special` come
+  out byte for byte identical (`cmp` of `abl.sfc`, `prueba.sfc` and
+  `abl.msu`). No map changes layout or streams.
+* **`test_carga_descomprimida.py`** already walks all the maps of `release`,
+  so it looks at map 66's two-stream background in snes9x and in bsnes. And a
+  new test, `test_un_fondo_de_dos_flujos_no_se_sale_del_buffer`, writes a
+  witness into `GRILLA_ALTA`, loads map 66 and checks that it's still there.
+  **It was seen failing with the bug in place**: on the same copy of
+  `2be61a9` with map 66 shoved in by brute force (the fifth layout and
+  without the background cap, like the plan's `m0p2` variant), the witness
+  comes out overwritten.
+* **`test_mundo.py`**, new: map 66 just arrived (golden `mundo-66-llegada`,
+  `celdas_mal_dibujadas` at zero) and a battle requested with `ENC_PIDE` that
+  Kersh wins and returns to the map (golden `mundo-66-despues-de-pelear`,
+  cells at zero). Talan alone, with what he has at the start of the game,
+  loses against the wolf.
+* **The race walkthrough** continues from the farewell to the world, walks
+  from (71, 29) to Sorbe (75, 10) with encounters off and ends at the new
+  sign. Its screenshots in `pruebas/snapshots/playthrough/carrera-*/` aren't
+  blessed, as before.
 
-# Espacio
+# Space
 
-Medido con el método de `AGENTS.md` sobre lo que dejó `just cartuchos`:
+Measured with `AGENTS.md`'s method on what `just cartuchos` left:
 
-    release        75,6 %   banco 0 261 B   banco 1 8.185 B   BSS 138   ZEROPAGE 4
-    test-special   19,2 %   banco 0 1.073 B banco 1 9.977 B   BSS 138   ZEROPAGE 4
+    release        75.6 %   bank 0 261 B   bank 1 8,185 B   BSS 138   ZEROPAGE 4
+    test-special   19.2 %   bank 0 1,073 B bank 1 9,977 B   BSS 138   ZEROPAGE 4
 
-El banco 0 **ganó** 37 bytes en los dos: el DMA de los tiles del fondo se mudó
-de `load_map` a `lz2_fondo`, en el banco 1.
+Bank 0 **gained** 37 bytes in both: the DMA of the background tiles moved from
+`load_map` to `lz2_fondo`, in bank 1.
 
-# Deuda
+# Debt
 
-* **La pelea en el mundo sale sin fondo.** El cartucho lleva tres fondos de
-  batalla y el mundo usa otros cinco terrenos (plains5, desert1, forest5,
-  forest6, mroad2). Es la pregunta 6 del plan; la recomendación es dejarlo para
-  después del hito 3. No se resuelve acá.
-* Las demás entradas del mundo no hacen nada —sus destinos no están—, y
-  `DaliaGoingToTasgarde` (ev14) no compila por `ChangeEncounterSteps`, que es
-  del hito 2.
+* **The battle in the world comes out without a background.** The cartridge
+  carries three battle backgrounds and the world uses five other terrains
+  (plains5, desert1, forest5, forest6, mroad2). It's question 6 of the plan;
+  the recommendation is to leave it for after milestone 3. Not solved here.
+* The world's other entrances do nothing —their destinations aren't in—, and
+  `DaliaGoingToTasgarde` (ev14) doesn't compile because of
+  `ChangeEncounterSteps`, which belongs to milestone 2.
 
-# Qué tiene que probar taro
+# What taro has to test
 
-* Terminar la carrera y la despedida: tiene que aparecer en el mundo con los
-  mensajes de Talan ("Outside Lashe City at last…"), y poder caminar.
-* Caminar por el mundo y pelear: los encuentros son por zona, cada 65 pasos.
-  Al volver de la pelea el mapa tiene que estar bien dibujado. La pelea sale
-  sin fondo, y eso es sabido.
-* Pisar Sorbe Village, arriba a la derecha del punto de llegada: el cartel de
-  fin de demo y la vuelta al título.
-* Guardar en el mundo: la paralela 26 prende el guardado con el switch 236,
-  que pone la despedida. No lo mira ninguna prueba.
+* Finish the race and the farewell: he has to appear in the world with
+  Talan's messages ("Outside Lashe City at last…"), and be able to walk.
+* Walk around the world and fight: encounters are per zone, every 65 steps.
+  On returning from the battle the map has to be drawn correctly. The battle
+  comes out without a background, and that's known.
+* Step on Sorbe Village, up and to the right of the arrival point: the
+  end-of-demo sign and the return to the title.
+* Save in the world: parallel 26 turns saving on with switch 236, which the
+  farewell sets. No test looks at it.
