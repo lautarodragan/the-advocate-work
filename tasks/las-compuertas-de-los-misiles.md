@@ -1,57 +1,57 @@
 ---
-name: "Las compuertas de los misiles se vuelven militares"
-description: "En la cinemática del pasado, cuando se disparan los misiles, los eventos que hacen de compuertas toman el gráfico de una persona militar"
+name: "The missile hatches turn into soldiers"
+description: "In the cutscene of the past, when the missiles fire, the events that act as hatches take on the graphic of a military person"
 type: bug
 status: done
 agents: [Hurón, Tijereta]
 assignee: taro
 ---
 
-De taro, el 2026-10-05: "Otro bug, similar al del tanque: en la cinemática
-del pasado, cuando se disparan los misiles, los eventos que hacen de
-compuertas se convierten en gráficos de persona militar". Puede ser la
-misma causa que `el-tanque-de-dalia-se-vuelve-dalia.md`: un gráfico que
-pone un evento y otra cosa le cambia.
+From taro, on 2026-10-05: "Another bug, similar to the tank one: in the
+cutscene of the past, when the missiles fire, the events that act as hatches
+turn into military-person graphics". It may be the same cause as
+`el-tanque-de-dalia-se-vuelve-dalia.md`: a graphic that an event sets and
+something else changes.
 
-# Lo medido (Tijereta, 2026-10-05)
+# What was measured (Tijereta, 2026-10-05)
 
-Base: ABL `c988101`, herramientas `d0e2e16c`.
+Base: ABL `c988101`, tools `d0e2e16c`.
 
-**Se reproduce, y no es la animación de batalla**: las compuertas ya son
-soldados hacia el tick 150, cuando los `MoveEvent` del evento 4 las giran
-(`face_down`, `face_left`), bastante antes de los `ShowBattleAnimation`.
-La caja de 64 tiles de la animación cae en el tile 128 y no pisa a nadie.
+**It reproduces, and it isn't the battle animation**: the hatches are already
+soldiers around tick 150, when event 4's `MoveEvent`s turn them
+(`face_down`, `face_left`), well before the `ShowBattleAnimation`s.
+The animation's 64-tile box lands on tile 128 and steps on no one.
 
-**La causa.** Los silos son `Missiles` índice 1, con la animación
-`fixed_graphic` (4) y la columna 0. En esa hoja la columna 0 de cada fila
-es la compuerta —cerrada, entreabierta, abierta— y las columnas 1 y 2 son
-un soldado. RM2k no le cambia nunca la columna a un `fixed_graphic`
-(`IsAnimated` en `Game_Character::UpdateAnimation`): girar muestra la
-columna 0 de la fila nueva. La ROM, al darle lugar de ruta a un evento
-(`route_for_event`), lo ponía siempre en la columna del medio, y
-`animate_ev_route` lo dejaba ahí: la compuerta giraba al soldado.
+**The cause.** The silos are `Missiles` index 1, with the `fixed_graphic`
+animation (4) and column 0. In that sheet column 0 of each row is the
+hatch —closed, ajar, open— and columns 1 and 2 are a soldier. RM2k never
+changes a `fixed_graphic`'s column (`IsAnimated` in
+`Game_Character::UpdateAnimation`): turning shows column 0 of the new row.
+The ROM, when giving an event a route slot (`route_for_event`), always put
+it in the middle column, and `animate_ev_route` left it there: the hatch
+turned into the soldier.
 
-No es una regresión: es así desde que los eventos que mueve una ruta
-tienen sus doce poses.
+It isn't a regression: it has been like this since the events a route moves
+have had their twelve poses.
 
-# El arreglo
+# The fix
 
-En las herramientas, rama `worktree-agent-ac0c3db5dd60db962` (commit "Eventos
+In the tools, branch `worktree-agent-ac0c3db5dd60db962` (commit "Eventos
 que una ruta mueve: la columna del gráfico fijo y el gráfico de la página"):
-la página lleva en su +15 si su gráfico es fijo y su columna, y el lugar de
-ruta —forzada o propia— la conserva y no la anima, como RM2k. RAM nueva:
-`FOUND_SPEED`, $7E30CB. Ningún opcode.
+the page carries in its +15 whether its graphic is fixed and its column, and
+the route slot —forced or its own— keeps it and doesn't animate it, like
+RM2k. New RAM: `FOUND_SPEED`, $7E30CB. No opcode.
 
-Comparado con el original con Wine (copia que arranca en el 92): las
-compuertas se abren —cerrada, entreabierta, luces rojas— sin ningún
-soldado, y la ROM ahora igual. Capturas en
+Compared with the original under Wine (a copy that starts in 92): the
+hatches open —closed, ajar, red lights— without any soldier, and the ROM
+now the same. Screenshots in
 `/shared/capturas/2026-10-05-compuertas-y-wick/`.
 
-Movió dos goldens, a propósito: `tram-320` y `tram-620`, el Hover-Tram del
-9, también de gráfico fijo en la columna 0, que pierde la llama de abajo.
+It moved two goldens, on purpose: `tram-320` and `tram-620`, the Hover-Tram
+of 9, also a fixed graphic in column 0, which loses the flame underneath.
 
-La prueba es `rpgmaker/test_grafico_de_pagina.py`: la silueta de cada
-compuerta en la VRAM contra la celda de la hoja. Roja con las herramientas
-de main, verde con las de la rama.
+The test is `rpgmaker/test_grafico_de_pagina.py`: the silhouette of each
+hatch in VRAM against the sheet's cell. Red with main's tools, green with
+the branch's.
 
-**Al mergear**: instalar `cartridge`, `convert`, `mapdata` y `wally`.
+**When merging**: install `cartridge`, `convert`, `mapdata` and `wally`.

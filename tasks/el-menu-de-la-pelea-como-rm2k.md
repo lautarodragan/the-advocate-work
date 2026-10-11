@@ -1,181 +1,179 @@
 ---
-name: "El menú de la pelea como el de RM2k"
-description: "Todo el menú y el texto de la pelea en la franja de abajo, sobre negro, como RM2k: los comandos a la izquierda, el grupo a la derecha, la lista de enemigos, ítems y habilidades abajo y la descripción arriba; sin el menú Engage/Automatic/Escape, con Escape como quinta opción"
+name: "The battle menu like RM2k's"
+description: "The whole battle menu and text in the bottom strip, on black, like RM2k: the commands on the left, the party on the right, the list of enemies, items and skills below and the description above; without the Engage/Automatic/Escape menu, with Escape as a fifth option"
 type: feature
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-10-04: "el menú de las peleas. Hoy es muy distinto al
-original. En el original, todos los menús y texto aparece abajo de la
-pantalla". Sus decisiones:
+From taro, on 2026-10-04: "the battle menu. Today it's very different from
+the original. In the original, all the menus and text appear at the bottom of
+the screen". His decisions:
 
-* Nada de texto sobre el fondo ni sobre los enemigos: los nombres de los
-  enemigos van en una lista sobre negro, abajo. La franja de abajo puede
-  ser de otro modo (HDMA) mientras arriba sigue el 3.
-* Sin el menú inicial Engage / Automatic / Escape. Los comandos de cada
-  personaje: Attack, Special, Defend, Use Item, y **Escape como quinta**
-  (elegido por taro el 2026-10-04), sólo en las peleas de las que se puede
-  huir: un agregado de RPG Maker 2000 PLUS.
-* El estado del grupo, una línea por personaje: `Talan  Normal  HP 49 / 49
+* No text over the background or over the enemies: the enemies' names go in
+  a list on black, below. The bottom strip can be in another mode (HDMA)
+  while the top stays in 3.
+* Without the initial Engage / Automatic / Escape menu. Each character's
+  commands: Attack, Special, Defend, Use Item, and **Escape as the fifth**
+  (chosen by taro on 2026-10-04), only in battles that can be fled: an
+  addition of RPG Maker 2000 PLUS.
+* The party's status, one line per character: `Talan  Normal  HP 49 / 49
   SP 46`.
-* Use Item y Special: la lista en esa franja y la descripción arriba.
-  Attack: la lista de enemigos a la izquierda, sin movimiento.
-* El deslizamiento horizontal del original es opcional: si se complica, una
-  primera versión sin él.
+* Use Item and Special: the list in that strip and the description above.
+  Attack: the list of enemies on the left, with no movement.
+* The original's horizontal slide is optional: if it gets complicated, a
+  first version without it.
 
 ## Cardón, 2026-10-04
 
-Worktree de las herramientas desde `d06a5779`; ABL en el clon
-`/extras/scratch/cardon/abl`, rama `menu-de-la-pelea`, desde `5b29ba9`.
+Tools worktree from `d06a5779`; ABL in the clone `/extras/scratch/cardon/abl`,
+branch `menu-de-la-pelea`, from `5b29ba9`.
 
-### El original, mirado
+### The original, looked at
 
-Con Wine, en la prueba de pelea del runtime de 2015 (`RPG_RT_2015.exe
-BattleTest ShowTitle Window <tropa>`, sin jugar hasta un encuentro), tropas
-82 y 87. La franja de abajo son 80 de 240 líneas, sobre negro; arriba, la
-escena sin nada encima. Lo que se ve, de izquierda a derecha:
+With Wine, in the 2015 runtime's battle test (`RPG_RT_2015.exe BattleTest
+ShowTitle Window <tropa>`, without playing up to an encounter), troops 82 and
+87. The bottom strip is 80 of 240 lines, on black; above, the scene with
+nothing on top. What's seen, from left to right:
 
-* **elegir la orden**: el grupo a la izquierda (`Talan  Normal  HP 49/ 49
-  SP 49`, una línea por actor, la del que elige resaltada) y las órdenes a
-  la derecha, cuatro renglones;
-* **Attack**: la lista de enemigos tapa el nombre y el estado del grupo;
-  se ven los HP y SP;
-* **Use Item / Special**: la lista en dos columnas de cuatro renglones
-  (`Potion   : 99`, `Memorize   -  5`) ocupa toda la franja, y la
-  descripción va en una ventana de 32 líneas arriba de todo, tapando la
-  escena;
-* **los mensajes** ("attacks the enemy" / "health lost." / "collapses!")
-  y la **victoria** van en una ventana del ancho entero, de arriba hacia
-  abajo, y no se ve nada más.
+* **choosing the order**: the party on the left (`Talan  Normal  HP 49/ 49
+  SP 49`, one line per actor, the one choosing highlighted) and the orders on
+  the right, four rows;
+* **Attack**: the list of enemies covers the party's name and status; the HP
+  and SP are visible;
+* **Use Item / Special**: the list in two columns of four rows (`Potion   :
+  99`, `Memorize   -  5`) takes the whole strip, and the description goes in a
+  32-line window at the very top, covering the scene;
+* **the messages** ("attacks the enemy" / "health lost." / "collapses!") and
+  the **victory** go in a full-width window, from top to bottom, and nothing
+  else is visible.
 
-Las capturas, en `/shared/capturas/2026-10-04-menu-de-la-pelea/original/`.
+The screenshots, in `/shared/capturas/2026-10-04-menu-de-la-pelea/original/`.
 
-### El plan
+### The plan
 
-* La franja de abajo **sigue en modo 3**: el texto ya es BG2 de 4bpp sobre
-  el negro que deja la escena de 128 líneas, y los 447 pares alcanzan. Sin
-  deslizamiento no hace falta otra capa; un cambio de modo por HDMA pediría
-  otro tilemap y otros tiles para nada.
-* Los renglones de la franja, en las filas **impares** 17 a 25: cinco de 16
-  líneas, con 10 de aire arriba y 8 abajo.
-* La descripción, en una franja de 32 líneas arriba: las cuatro primeras
-  filas de tiles del tilemap de la escena pasan al tile transparente
-  mientras está abierta una lista, y vuelven al cerrarla.
-* Escape, quinta, sólo si la pelea deja huir: `escape_mode` distinto de 0
-  en `EnemyEncounter`, siempre en un encuentro al azar
-  (`args.allow_escape` de easyrpg). Viaja en el destino de huida de
-  `OP_BATTLE`, que con `escape_mode` 0 no se usa nunca.
-* Huir es del grupo, como en RM2k: el que la elige lo intenta; si falla,
-  se olvidan las órdenes del turno, sale el mensaje y los enemigos actúan
-  (`ProcessSceneActionEscape`, `eFailure`).
+* The bottom strip **stays in mode 3**: the text is already 4bpp BG2 on the
+  black the 128-line scene leaves, and the 447 pairs are enough. Without the
+  slide no other layer is needed; a mode change via HDMA would require another
+  tilemap and other tiles for nothing.
+* The strip's rows, on the **odd** rows 17 to 25: five of 16 lines, with 10 of
+  headroom above and 8 below.
+* The description, in a 32-line strip at the top: the first four tile rows of
+  the scene's tilemap switch to the transparent tile while a list is open, and
+  come back when it closes.
+* Escape, fifth, only if the battle allows fleeing: `escape_mode` other than 0
+  in `EnemyEncounter`, always in a random encounter (easyrpg's
+  `args.allow_escape`). It travels in `OP_BATTLE`'s escape destination, which
+  with `escape_mode` 0 is never used.
+* Fleeing belongs to the party, as in RM2k: whoever picks it tries; if it
+  fails, the turn's orders are forgotten, the message appears and the enemies
+  act (`ProcessSceneActionEscape`, `eFailure`).
 
-### Hecho
+### Done
 
-Herramientas, rama `worktree-agent-a299fc4e75fe398cc`:
+Tools, branch `worktree-agent-a299fc4e75fe398cc`:
 
 * `Compilador: una pelea de la que no se puede huir lo dice en OP_BATTLE`
-  —`BATTLE_NO_ESCAPE`, $FFFE, en el destino de huida con `escape_mode` 0—.
-* `Pelea: las ventanas en la franja de abajo, como RM2k, y Escape del
-  grupo` —el runtime, la geometría de `rm2k-snes-battle` y el conversor—.
-  Va en un solo commit lo que se pidió separar (las ventanas, las órdenes y
-  Escape, el modelo en Rust): comparten `ba_compose`, `battle_run.s`,
-  `far_ram.s` y `model.rs`, y por separado la ROM no armaba. No hubo
-  cambio de modo.
+  —`BATTLE_NO_ESCAPE`, $FFFE, in the escape destination with `escape_mode`
+  0—.
+* `Pelea: las ventanas en la franja de abajo, como RM2k, y Escape del grupo`
+  —the runtime, `rm2k-snes-battle`'s geometry and the converter—. What was
+  asked to be split (the windows, the orders and Escape, the Rust model) goes
+  in a single commit: they share `ba_compose`, `battle_run.s`, `far_ram.s` and
+  `model.rs`, and separately the ROM didn't build. There was no mode change.
 
-ABL, rama `menu-de-la-pelea` del clon `/extras/scratch/cardon/abl`: las
-pruebas en un commit y las goldens en otro.
+ABL, branch `menu-de-la-pelea` of the clone `/extras/scratch/cardon/abl`: the
+tests in one commit and the goldens in another.
 
-Lo que quedó:
+What remained:
 
-* La franja **sigue en modo 3**; el **deslizamiento no se hizo**.
-* El cursor sigue siendo ">": la barra de Tijereta (`window_bar`, y
-  `rm2k_render::system::cursor_over` del lado del conversor) se compone en
-  los tiles de la ventana de mensajes, y el texto de la pelea es BG2 sin
-  fondo encima de la escena de 8bpp, sin una capa libre debajo. Para la
-  barra haría falta la franja en otro modo por HDMA —el modo 1 deja BG1 y
-  BG2 de 4bpp y BG3—, que es el siguiente paso si se quiere.
-* Lo que no es igual al original está en
-  `workflow/divergencias/lo-que-el-menu-de-la-pelea-no-modela.md`, y Escape
-  en `workflow/divergencias/escape-es-la-quinta-orden.md`.
-* La victoria parte su término por letras (31) y no por pixeles: "The
-  combat has resulted in victory!" va en dos renglones.
-* Con la fuente de ABL y +1, el conversor avisa que se cortan tres nombres
-  de actor (DummyHero, Gang Member, MobilizedCar: ninguno es del grupo),
-  siete habilidades y cuatro ítems —"Pungent Elixir-LIFE", "Jumper
-  Cable-LIFE", "HerbSproutSalad-HP", "Healing Draught-HP"—: dos columnas de
-  doce celdas, que es lo que RM2k también deja.
+* The strip **stays in mode 3**; the **slide wasn't done**.
+* The cursor is still ">": Tijereta's bar (`window_bar`, and
+  `rm2k_render::system::cursor_over` on the converter's side) is composed into
+  the message window's tiles, and the battle's text is BG2 with no background,
+  on top of the 8bpp scene, without a free layer below. The bar would require
+  the strip in another mode via HDMA —mode 1 leaves 4bpp BG1 and BG2 and
+  BG3—, which is the next step if wanted.
+* What isn't the same as the original is in
+  `workflow/divergencias/lo-que-el-menu-de-la-pelea-no-modela.md`, and Escape
+  in `workflow/divergencias/escape-es-la-quinta-orden.md`.
+* The victory splits its term by letters (31) and not by pixels: "The combat
+  has resulted in victory!" goes on two rows.
+* With ABL's font and +1, the converter warns that three actor names get cut
+  (DummyHero, Gang Member, MobilizedCar: none is in the party), seven skills
+  and four items —"Pungent Elixir-LIFE", "Jumper Cable-LIFE",
+  "HerbSproutSalad-HP", "Healing Draught-HP"—: two columns of twelve cells,
+  which is what RM2k also allows.
 
-RAM: `$7E3CB3`-`$7E3CB7` (`FAR_BATTLE + 691` a `+ 695`). VRAM: nada nuevo
-—la franja de la descripción es el tilemap de la escena apuntado al tile
-transparente—. Opcodes: ninguno.
+RAM: `$7E3CB3`-`$7E3CB7` (`FAR_BATTLE + 691` to `+ 695`). VRAM: nothing new
+—the description's strip is the scene's tilemap pointed at the transparent
+tile—. Opcodes: none.
 
-### Verificado
+### Verified
 
-* La tanda de ABL con `battle`, `events`, `mapdata`, `convert` y
-  `cartridge` de este árbol: cambian **dieciocho goldens**, todas de la
-  pelea, miradas lado a lado; repetida hasta que no apareció ninguna roja
-  nueva (las dos `msu-*-msu` aparecieron en la segunda vuelta, porque su
-  prueba cortaba en la primera golden): **1072 en verde**.
-* Dos pruebas nuevas: `test_huir_es_del_grupo` y
-  `test_sin_huida_no_hay_escape`.
-* `cargo test` de `rm2k-snes-battle`, `-events`, `-mapdata` y `-convert`;
+* ABL's suite with this tree's `battle`, `events`, `mapdata`, `convert` and
+  `cartridge`: **eighteen goldens** change, all from the battle, looked at
+  side by side; repeated until no new red appeared (the two `msu-*-msu`
+  appeared in the second round, because their test stopped at the first
+  golden): **1072 green**.
+* Two new tests: `test_huir_es_del_grupo` and `test_sin_huida_no_hay_escape`.
+* `cargo test` of `rm2k-snes-battle`, `-events`, `-mapdata` and `-convert`;
   `just -f tools/justfile test`: 27.
-* Lo que la tanda no cubre: el desplazamiento de la lista de enemigos
-  —ninguna tropa de prueba pasa de cinco— y el ítem que vuelve al
-  inventario con la huida fallida.
+* What the suite doesn't cover: the scrolling of the enemy list —no test troop
+  has more than five— and the item that goes back to the inventory with a
+  failed escape.
 
-## Para taro
+## For taro
 
-Una pelea de la que se puede huir y una de las que no; las listas de ítems y
-habilidades con el cursor recorriéndolas; Attack con varios enemigos;
-Escape, y que si falla actúen sólo los enemigos. Las capturas, con el
-original con Wine al lado, en `/shared/capturas/2026-10-04-menu-de-la-pelea/`.
+A battle that can be fled and one that can't; the item and skill lists with
+the cursor going through them; Attack with several enemies; Escape, and that
+if it fails only the enemies act. The screenshots, with the original under
+Wine alongside, in `/shared/capturas/2026-10-04-menu-de-la-pelea/`.
 
-La segunda vuelta, abajo, reemplaza lo que hay que reinstalar.
+The second round, below, replaces what needs reinstalling.
 
-## Cardón, segunda vuelta, 2026-10-04
+## Cardón, second round, 2026-10-04
 
-Lo que pidió el coordinador después de comparar con el original: el grupo a
-la izquierda y las órdenes a la derecha; las ventanas del System con su
-borde y la barra del cursor; la victoria partida por pixeles.
+What the coordinator asked for after comparing with the original: the party on
+the left and the orders on the right; the System's windows with their border
+and the cursor bar; the victory split by pixels.
 
-### Lo que se hizo
+### What was done
 
-* **Las ventanas van en BG1, la capa de la escena, en modo 3**, en las filas
-  del tilemap que la escena no usa. Se pidió modo 1 por HDMA en la franja;
-  no se hizo porque en modo 1 BG1 necesita una paleta entre la 0 y la 7, y
-  en la pelea están todas tomadas (texto y los 96 colores del fondo). En
-  8bpp las ventanas usan la última paleta de los battlers: una tropa queda
-  en siete battlers distintos (ABL usa tres a lo sumo; el conversor se
-  niega con ocho). Sí va por HDMA (canal 5) el desplazamiento horizontal de
-  BG1 por franja, para que el temblor no mueva las ventanas: mirado a mano
-  en la pelea de los agentes.
-* **VRAM**: el texto, de 447 pares a 255 (palabras 0 a $1FFF; la lista más
-  ancha de ABL pide 170); las ventanas, en $2000-$37FF: ABL usa 34 tiles de
-  192 y 4 colores. Ver `docs/port/vram.md`.
-* La barra: `Skin::cursor` de `rm2k-snes-screens`, que es el `cursor_over`
-  de Tijereta en rm2k-render; las ventanas se dibujan en el conversor
-  (`battle.rs`) y la ROM las pone en el vblank cuando el texto ya está.
-* La victoria se parte con la fuente del juego: "The combat has resulted in
-  victory!" en un renglón.
-* La descripción va en un renglón; la de los ítems, entera (`ba_item_desc`).
-* Mientras corre una página sin mensaje, la ventana de mensajes vacía: antes
-  se veían las órdenes con basura en la de habilidad.
+* **The windows go on BG1, the scene's layer, in mode 3**, on the tilemap rows
+  the scene doesn't use. Mode 1 via HDMA in the strip was asked for; it wasn't
+  done because in mode 1 BG1 needs a palette between 0 and 7, and in battle
+  they're all taken (text and the background's 96 colors). In 8bpp the windows
+  use the battlers' last palette: a troop is limited to seven distinct
+  battlers (ABL uses three at most; the converter refuses with eight). BG1's
+  horizontal scroll per strip does go via HDMA (channel 5), so the shaking
+  doesn't move the windows: looked at by hand in the agents' battle.
+* **VRAM**: the text, from 447 pairs to 255 (words 0 to $1FFF; ABL's widest
+  list asks for 170); the windows, at $2000-$37FF: ABL uses 34 tiles of 192
+  and 4 colors. See `docs/port/vram.md`.
+* The bar: `rm2k-snes-screens`'s `Skin::cursor`, which is Tijereta's
+  `cursor_over` in rm2k-render; the windows are drawn in the converter
+  (`battle.rs`) and the ROM puts them in during vblank once the text is ready.
+* The victory is split with the game's font: "The combat has resulted in
+  victory!" on one row.
+* The description goes on one row; the items' one, whole (`ba_item_desc`).
+* While a page runs without a message, the message window is empty: before,
+  the orders showed with garbage in the skill one.
 
-RAM: `$7E3CB6`-`$7E3CC8` (`FAR_BATTLE + 694` a `+ 712`), además de los tres
-de la primera vuelta (`+ 691` a `+ 693`). Opcodes: ninguno. No se tocaron
-`text_layer.s` ni el menú de pausa.
+RAM: `$7E3CB6`-`$7E3CC8` (`FAR_BATTLE + 694` to `+ 712`), besides the three of
+the first round (`+ 691` to `+ 693`). Opcodes: none. `text_layer.s` and the
+pause menu weren't touched.
 
-### Verificado
+### Verified
 
-La tanda de ABL con `battle`, `screens`, `mapdata`, `convert`, `events` y
-`cartridge` de este árbol: las mismas dieciocho goldens, miradas lado a lado
-con el original; **1072 en verde**, tres vueltas sin rojas nuevas. cargo
-test de los crates tocados y `just -f tools/justfile test`: 27. Sin cubrir:
-el temblor con las ventanas (mirado a mano), una pelea sin escena y el
-desplazamiento de la lista de enemigos.
+ABL's suite with this tree's `battle`, `screens`, `mapdata`, `convert`,
+`events` and `cartridge`: the same eighteen goldens, looked at side by side
+with the original; **1072 green**, three rounds with no new reds. cargo test
+of the touched crates and `just -f tools/justfile test`: 27. Not covered: the
+shaking with the windows (looked at by hand), a battle without a scene and the
+scrolling of the enemy list.
 
-Capturas: `/shared/capturas/2026-10-04-menu-de-la-pelea-2/`.
+Screenshots: `/shared/capturas/2026-10-04-menu-de-la-pelea-2/`.
 
-Al mergear, reinstalar `battle`, `events`, `screens`, `mapdata` y `convert`.
+When merging, reinstall `battle`, `events`, `screens`, `mapdata` and
+`convert`.

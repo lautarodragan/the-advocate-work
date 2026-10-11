@@ -1,31 +1,31 @@
 ---
-name: "El sistema de batalla de Talan"
-description: "Detect Aura y Absorb Aura corren las páginas de su tropa"
+name: "Talan's battle system"
+description: "Detect Aura and Absorb Aura run their troop's pages"
 status: done
 ---
 
-**El sistema de batalla de Talan: `Detect Aura` y `Absorb Aura` en la pelea.**
+**Talan's battle system: `Detect Aura` and `Absorb Aura` in battle.**
 
-Es el primer tramo de `eventos-de-tropa-en-la-pelea.md`, acotado a Talan: si anda,
-el mecanismo está probado y los otros 31 sistemas son completar comandos.
+It is the first stretch of `eventos-de-tropa-en-la-pelea.md`, narrowed to Talan: if it works,
+the mechanism is proven and the other 31 systems are a matter of completing commands.
 
-Las dos habilidades son de tipo switch (3), sólo en pelea y sin costo de SP:
+Both skills are of the switch type (3), battle-only and with no SP cost:
 
-- `Detect Aura` (133) prende el switch 134 (`DetectedAura`);
-- `Absorb Aura` (134) prende el switch 135 (`AbsorbedAura`).
+- `Detect Aura` (133) turns on switch 134 (`DetectedAura`);
+- `Absorb Aura` (134) turns on switch 135 (`AbsorbedAura`).
 
-Cada switch dispara una página en 142 tropas:
+Each switch triggers a page in 142 troops:
 
-- **134**: 7 cuerpos distintos, y sólo usan comandos que el port ya tiene
+- **134**: 7 distinct bodies, and they only use commands the port already has
   (`ChangeSkills`, `ShowMessage`, `ControlSwitches`, `ControlVars`);
-- **135**: 86 cuerpos distintos, y suman el único comando nuevo que hace falta:
-  `ConditionalBranch_B`, el de pelea.
+- **135**: 86 distinct bodies, and they add the only new command needed:
+  `ConditionalBranch_B`, the battle one.
 
-Lo que falta: que una habilidad de tipo switch se pueda usar en la pelea y prenda
-su switch, que corran las páginas de la tropa que lo miran —con sus mensajes en la
-ventana de batalla—, y `ConditionalBranch_B`.
+What's missing: that a switch-type skill can be used in battle and turn on
+its switch, that the troop pages watching it run —with their messages in the
+battle window—, and `ConditionalBranch_B`.
 
-Hecho es: en una pelea, Talan usa `Detect Aura` y después `Absorb Aura`, y pasa lo
-que pasa en RM2k, con una prueba que lo recorra.
+Done means: in a battle, Talan uses `Detect Aura` and then `Absorb Aura`, and what
+happens in RM2k happens, with a test that walks through it.
 
-Referencia: `Game_Battle::UpdateEvents` y `Game_Interpreter_Battle` de EasyRPG.
+Reference: EasyRPG's `Game_Battle::UpdateEvents` and `Game_Interpreter_Battle`.

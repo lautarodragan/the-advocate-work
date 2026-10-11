@@ -1,69 +1,69 @@
 ---
-name: "just video con jugadas"
-description: "just video está roto con jugadas desde 991bf935: la fábrica de recorrido de video.py no acepta caso, y sin el mapa de debug talan se traba en el 900"
+name: "just video with playthroughs"
+description: "just video is broken with playthroughs since 991bf935: video.py's walkthrough factory doesn't accept a case, and without the debug map talan gets stuck on 900"
 type: bug
 status: done
 assignee: taro
 ---
 
-Lo encontró Irupé el 2026-09-29 (`las-pruebas-sin-agujeros-callados.md`):
-desde `991bf935` (2026-09-27), `just video … apertura` da `TypeError`
-porque la fábrica de `recorrido` de `rom/pruebas/arnes/video.py` no acepta
-`caso`, y `talan` se traba en el mapa 900 porque no elige la página sin el
-mapa de debug. `quieto:120` graba bien. taro usa `just video` para pedir
-videos de un build.
+Irupé found it on 2026-09-29 (`las-pruebas-sin-agujeros-callados.md`):
+since `991bf935` (2026-09-27), `just video … apertura` gives a `TypeError`
+because the `recorrido` factory in `rom/pruebas/arnes/video.py` doesn't
+accept `caso`, and `talan` gets stuck on map 900 because it doesn't pick the
+page without the debug map. `quieto:120` records fine. taro uses `just video`
+to ask for videos of a build.
 
-Se arregla la regresión. Sacar `video.py` de las pruebas —que las jugadas
-sean funciones de un módulo de escenarios que llaman las pruebas y el
-video— es otra tarea, más grande.
+The regression gets fixed. Taking `video.py` out of the tests —making the
+playthroughs functions of a scenarios module called by both the tests and the
+video— is another task, a bigger one.
 
-## Qué estaba roto
+## What was broken
 
-Las dos cosas son la misma: `video.py` armaba la `Partida` a mano, con una
-fábrica que copiaba la del conftest de antes del mapa de debug.
+Both things are the same one: `video.py` built the `Partida` by hand, with a
+factory that copied the conftest's from before the debug map.
 
-* La firma era `(_nombre, switch=())`. La apertura pide
-  `recorrido("apertura", caso=ENTRADA_AL_MAPA_DE_DEBUG)` desde `991bf935`:
+* The signature was `(_nombre, switch=())`. The opening asks for
+  `recorrido("apertura", caso=ENTRADA_AL_MAPA_DE_DEBUG)` since `991bf935`:
   `TypeError`.
-* Elegía siempre la página 0. Desde `991bf935`, en `release` la 0 es la
-  entrada al mapa de debug, y el conftest pide `LA_PARTIDA_DE_VERDAD` por su
-  número —lo hace `tanda.partida(None)`—. `talan` prendía el switch del año
-  antes y esperaba el mapa 7 parado en el 900. `quieto:N` "grababa bien"
-  porque no espera nada, pero grababa el mapa de debug y no la apertura con
-  la lluvia que dice su ayuda.
+* It always picked page 0. Since `991bf935`, in `release` page 0 is the entry
+  to the debug map, and the conftest asks for `LA_PARTIDA_DE_VERDAD` by its
+  number —`tanda.partida(None)` does it—. `talan` turned on the year switch
+  before and waited for map 7 standing on 900. `quieto:N` "recorded fine"
+  because it doesn't wait for anything, but it recorded the debug map and not
+  the opening with the rain that its help text mentions.
 
-## Cómo se arregló
+## How it was fixed
 
-`video.fabrica(cartucho, msu)` es la fábrica, a nivel de módulo, con la firma
-del fixture y la partida de `tanda.partida(caso, en=cartucho, …)`: la página
-la elige el mismo código que en las pruebas. `tanda.partida` pasa `msu` a la
-`Partida`. `video.py` recibe el nombre del cartucho y no su directorio
-—`tanda.cartucho` sabe dónde está y se niega si está viejo—, y `just video`
-depende de `build`, como `entregar`, así que un checkout cambiado se arma
-antes de grabar.
+`video.fabrica(cartucho, msu)` is the factory, at module level, with the
+fixture's signature and the save from `tanda.partida(caso, en=cartucho, …)`:
+the page is picked by the same code as in the tests. `tanda.partida` passes
+`msu` to the `Partida`. `video.py` receives the cartridge's name and not its
+directory —`tanda.cartucho` knows where it is and refuses if it's stale—, and
+`just video` depends on `build`, like `entregar`, so a changed checkout is
+built before recording.
 
-La red es `rom/pruebas/abl/test_video.py`: misma firma que el fixture, y que
-las dos fábricas arranquen en la misma página, mapa y celda para cada forma
-de pedir que usan las jugadas (nada, switches, caso). No graba ni juega.
-Con la fábrica vieja pegada adentro de `fabrica`, las cuatro dan rojo: la
-firma, `caso` con `TypeError`, y las otras dos por página 0 contra 111
-—el mapa y la celda coinciden en el tick 0, así que mirar sólo el mapa no
-lo habría visto—.
+The safety net is `rom/pruebas/abl/test_video.py`: same signature as the
+fixture, and that both factories start on the same page, map and cell for
+each way of asking that the playthroughs use (nothing, switches, case). It
+neither records nor plays. With the old factory pasted inside `fabrica`, all
+four go red: the signature, `caso` with `TypeError`, and the other two on
+page 0 against 111 —the map and the cell match at tick 0, so looking only at
+the map wouldn't have seen it—.
 
-## Cómo sería sacar `video.py` de las pruebas
+## What taking `video.py` out of the tests would look like
 
-Lo que queda feo es que un script del arnés importe un `test_*` y dependa de
-un fixture de pytest reimplementado. Lo otro: un módulo `pruebas/arnes/`
-de escenarios —`escenarios.apertura(r)`, `escenarios.talan(r)`— que reciben
-un `Recorrido` ya armado, con las fotos y los `assert` como ganchos que la
-prueba pasa y el video no; la prueba sería "armar el recorrido con el
-fixture y llamar al escenario", y el video "armar con `fabrica` y llamar al
-mismo". Con eso `-O` deja de hacer falta —el video no tendría los `assert`
-de velocidad—, `IMPORTAN_PRUEBAS` de `test_indice.py` queda vacío, y
-`just video` podría jugar también los tramos de `tramo_*.py` y los otros
-`test_recorrido_*`, que hoy no alcanza porque sólo busca en
-`test_recorrido_golden.py`.
+What remains ugly is that a harness script imports a `test_*` and depends on a
+reimplemented pytest fixture. The alternative: a `pruebas/arnes/` module of
+scenarios —`escenarios.apertura(r)`, `escenarios.talan(r)`— that receive an
+already built `Recorrido`, with the snapshots and the `assert`s as hooks that
+the test passes and the video doesn't; the test would be "build the walkthrough
+with the fixture and call the scenario", and the video "build it with
+`fabrica` and call the same one". With that `-O` is no longer needed —the
+video wouldn't have the speed `assert`s—, `IMPORTAN_PRUEBAS` in
+`test_indice.py` becomes empty, and `just video` could also play the stretches
+of `tramo_*.py` and the other `test_recorrido_*`, which it can't reach today
+because it only looks in `test_recorrido_golden.py`.
 
-Y de paso, que no es de esta tarea: un `video.py` que se corta deja su
-`video.mkv` crudo en el temporal —unos 200 MB por minuto—, porque los
-`os.remove` del final no están en el `finally`.
+And in passing, which isn't part of this task: a `video.py` that gets cut off
+leaves its raw `video.mkv` in the temp directory —about 200 MB per minute—,
+because the `os.remove`s at the end aren't in the `finally`.

@@ -1,60 +1,61 @@
 ---
-name: "ROM de prueba: el menú en modo 5, en la SNES"
-description: "Una ROM mínima que muestra la maqueta del menú en modo 5 (×1,5) como imagen fija, para que taro vea en la SNES con el FX Pak si la alta resolución se lee por su salida de video"
+name: "Test ROM: the menu in mode 5, on the SNES"
+description: "A minimal ROM that shows the mockup of the menu in mode 5 (×1.5) as a still image, so taro can see on the SNES with the FX Pak whether high resolution reads well through its video output"
 type: research
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-09-30, después de la maqueta
-(`maqueta-del-menu-en-alta-resolucion.md`, Ñacurutú). El modo 5 con
-la fuente ×1,5 por glifo es lo que mejor se lee en la maqueta, pero hay un
-riesgo que sólo se ve en la consola: las columnas de un pixel de alta
-resolución están en el límite del ancho de banda de NTSC y pueden verse
-borrosas por compuesto o RF. Esta ROM lo contesta antes de invertir en el
-texto de ancho variable.
+From taro, on 2026-09-30, after the mockup
+(`maqueta-del-menu-en-alta-resolucion.md`, Ñacurutú). Mode 5 with the
+×1.5 font per glyph is what reads best in the mockup, but there is a risk
+that only shows on the console: one-pixel high-resolution columns are at the
+limit of NTSC's bandwidth and may look blurry over composite or RF. This ROM
+answers that before investing in variable-width text.
 
-taro, sobre la fuente: si hace falta, se puede hacer una a mano, con el ×1,5
-pensado letra por letra —la L y la I, por ejemplo, tratadas aparte—.
+taro, about the font: if needed, one can be made by hand, with the ×1.5
+thought out letter by letter —the L and the I, for example, treated
+separately—.
 
-No es el juego: no pasa por el conversor ni por `cartuchos`.
+It isn't the game: it goes through neither the converter nor `cartuchos`.
 
-## Qué se armó (Carancho, 2026-09-30)
+## What was built (Carancho, 2026-09-30)
 
-La ROM está en `rom/experimentos/menu-modo-5/` y se arma con `just
-menu-modo-5`, que después la corre en snes9x, bsnes y mesen-s y compara cada
-pantalla con su maqueta a 15 bits. Va en `rom/justfile` y no en el de
-`tools/` porque lo que muestra es el menú de ABL. La entrega, con un
-`LEEME.txt` de qué mirar, está en `/shared/experimentos/2026-09-30-menu-modo-5/`.
+The ROM is in `rom/experimentos/menu-modo-5/` and is built with `just
+menu-modo-5`, which then runs it in snes9x, bsnes and mesen-s and compares
+each screen with its mockup at 15 bits. It goes in `rom/justfile` and not in
+the `tools/` one because what it shows is ABL's menu. The delivery, with a
+`LEEME.txt` of what to look at, is in `/shared/experimentos/2026-09-30-menu-modo-5/`.
 
-Tres pantallas: 1 la ×1,5 (modo 5), 2 la ×1,6 por posición (modo 5), 3 el
-menú de hoy (modo 3). Derecha o A pasa a la siguiente, izquierda a la
-anterior, B esconde el número de la esquina.
+Three screens: 1 the ×1.5 (mode 5), 2 the ×1.6 by position (mode 5), 3
+today's menu (mode 3). Right or A goes to the next one, left to the previous
+one, B hides the number in the corner.
 
-**Iguales a la maqueta en los tres emuladores**, pixel por pixel, sin el
-número. La comparación cobra lo que importa del modo: con BG1 fuera de la
-subpantalla da catorce mil pixeles distintos por pantalla (probado a mano,
-no queda como caso).
+**Identical to the mockup in all three emulators**, pixel by pixel, without
+the number. The comparison catches what matters about the mode: with BG1 off
+the subscreen it gives fourteen thousand differing pixels per screen (tested
+by hand, it isn't kept as a case).
 
-Lo que se aprendió de paso, para el menú de verdad:
+What was learned along the way, for the real menu:
 
-* **Las caras no entran en el fondo**: una celda de 16x8 que cruza una cara
-  lleva hasta 19 colores. Como sprites entran enteras, sin que Adeleine
-  pierda nada, cortando cada cara en bandas de filas de hasta 15 colores
-  con una paleta cada una.
-* **El resto entra en las ocho paletas de BG1** sin perder un color, así
-  que no hizo falta Adeleine; la agrupación la hace el script.
-* **Voodoo no sabe de las celdas de 16x8 del modo 5**: numera los tiles de
-  a uno y los reusa espejados, y en modo 5 una entrada del tilemap nombra
-  un par consecutivo. Para esta prueba lo resuelve el script; el menú de
-  verdad, si hornea algo en modo 5, le va a pedir ese modo a Voodoo.
-* En modo 5 la subpantalla vacía muestra COLDATA, así que va en negro.
-* **La lectura del control tiene que esperar que la automática empiece**, y
-  no sólo que termine: al entrar al vblank todavía no empezó, y leer JOY1L
-  mientras se llena hacía que bsnes perdiera un toque o contara dos.
+* **The faces don't fit in the background**: a 16x8 cell that crosses a face
+  carries up to 19 colors. As sprites they fit whole, without Adeleine losing
+  anything, by cutting each face into bands of rows of up to 15 colors with a
+  palette each.
+* **The rest fits in BG1's eight palettes** without losing a color, so
+  Adeleine wasn't needed; the script does the grouping.
+* **Voodoo doesn't know about mode 5's 16x8 cells**: it numbers the tiles one
+  by one and reuses them mirrored, and in mode 5 a tilemap entry names a
+  consecutive pair. For this test the script solves it; the real menu, if it
+  bakes anything in mode 5, will ask Voodoo for that mode.
+* In mode 5 the empty subscreen shows COLDATA, so it goes in black.
+* **Reading the controller has to wait for auto-read to start**, and not just
+  for it to finish: on entering vblank it hasn't started yet, and reading
+  JOY1L while it fills made bsnes lose a press or count two.
 
-Al mergear no hay nada que instalar: no toca Rust ni agrega scripts al
-PATH.
+When merging there's nothing to install: it doesn't touch Rust nor add
+scripts to the PATH.
 
-**Falta**: que taro la mire en la SNES con el FX Pak, por su salida de
-video, y diga si las columnas de un pixel se leen y si ×1,5 gana a ×1,6.
+**Pending**: that taro look at it on the SNES with the FX Pak, through its
+video output, and say whether the one-pixel columns are readable and whether
+×1.5 beats ×1.6.

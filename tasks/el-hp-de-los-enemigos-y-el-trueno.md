@@ -1,98 +1,101 @@
 ---
-name: "El HP de los enemigos escondido, y el trueno del despegue"
-description: "Esconder los HP de los enemigos como RM2k (con flag para depurar) y grabar el tema de batalla con y sin Thunder9 para que taro decida"
+name: "The enemies' HP hidden, and the takeoff's thunder"
+description: "Hide the enemies' HP like RM2k (with a flag for debugging) and record the battle theme with and without Thunder9 so taro can decide"
 type: feature
 status: done
 assignee: Ombú
 ---
 
-Dos cosas chicas de la pelea, del 2026-09-28.
+Two small battle things, from 2026-09-28.
 
-**El HP de los enemigos.** RM2k no lo muestra nunca y ABL no tiene cómo verlo
-(lo midió Tero: `el-menu-como-rm2k.md`). taro aceptó la propuesta:
-esconderlo por defecto con un flag de armado, `CON_HP_DE_ENEMIGOS = False` en
-`cartuchos.py`, como `CON_MAPA_DE_DEBUG`. Hoy lo dibuja `ba_renglon` en
-`rom/src/batalla.s`; en `pantallas.py` está anotado como decisión propia.
+**The enemies' HP.** RM2k never shows it and ABL has no way to see it (Tero
+measured it: `el-menu-como-rm2k.md`). taro accepted the proposal: hide it by
+default with a build flag, `CON_HP_DE_ENEMIGOS = False` in `cartuchos.py`,
+like `CON_MAPA_DE_DEBUG`. Today `ba_renglon` in `rom/src/batalla.s` draws it;
+in `pantallas.py` it's noted as our own decision.
 
-**El trueno del despegue.** La página de turno 1 de las tropas 102 y 104 pide
-Thunder9, y no suena porque meterlo en el paquete de la pelea le baja al tema
-de batalla seis instrumentos de ~14 a ~11,5 kHz y el BRASS64 de 16,3 a 10,8
-(lo midió Ceibo: `eventos-de-tropa-de-release.md`). Se decide
-escuchando.
+**The takeoff's thunder.** The turn-1 page of troops 102 and 104 asks for
+Thunder9, and it doesn't play because putting it in the battle package lowers
+six instruments of the battle theme from ~14 to ~11.5 kHz and BRASS64 from
+16.3 to 10.8 (Ceibo measured it: `eventos-de-tropa-de-release.md`). It's
+decided by listening.
 
-2026-09-28, en `testing/`: hecho por Ombú en su rama, sobre `main` en
-8da66c4, en e15fd72; `just cartuchos` y `just pruebas` en verde. Lo que queda
-es de taro: mirar las goldens y escuchar el trueno (ver abajo).
+2026-09-28, in `testing/`: done by Ombú on his branch, on `main` at 8da66c4,
+in e15fd72; `just cartuchos` and `just pruebas` green. What's left is
+taro's: look at the goldens and listen to the thunder (see below).
 
-# El HP de los enemigos — hecho
+# The enemies' HP — done
 
-Como lo propuso Tero: `CON_HP_DE_ENEMIGOS = False` en
-`tools/ensamblado/cartuchos.py`, al lado de `CON_MAPA_DE_DEBUG`, que pasa
-`--hp-de-enemigos` al conversor **en los dos cartuchos**; el conversor emite
-`BA_HP_ENEMIGOS` junto a `BA_HP_NUM_DX`, y `ba_renglon` (`rom/src/batalla.s`)
-corta después del nombre si el renglón no es del grupo. En `pantallas.py` no
-hay una referencia que dibuje la pelea, sólo la geometría y la decisión
-escrita arriba de `BA_ENEMIGO_FILA0`: se reescribió.
+As Tero proposed: `CON_HP_DE_ENEMIGOS = False` in
+`tools/ensamblado/cartuchos.py`, next to `CON_MAPA_DE_DEBUG`, which passes
+`--hp-de-enemigos` to the converter **in both cartridges**; the converter
+emits `BA_HP_ENEMIGOS` next to `BA_HP_NUM_DX`, and `ba_renglon`
+(`rom/src/batalla.s`) cuts after the name if the row isn't the party's. In
+`pantallas.py` there's no reference that draws the battle, only the geometry
+and the decision written above `BA_ENEMIGO_FILA0`: it was rewritten.
 
-Una trampa de `ca65` que costó un armado: adentro de un `.proc`, `.if
-BA_HP_ENEMIGOS = 0` da "Constant expression expected" aunque la constante
-esté definida antes; con `::BA_HP_ENEMIGOS` anda. Está comentado ahí.
+A `ca65` trap that cost a build: inside a `.proc`, `.if BA_HP_ENEMIGOS = 0`
+gives "Constant expression expected" even though the constant is defined
+earlier; with `::BA_HP_ENEMIGOS` it works. It's commented there.
 
-**Con el flag prendido la ROM es la de antes, byte por byte**: armado un
-`release` aparte con `--hp-de-enemigos` y ensamblado el `rom/src/` de 8da66c4
-contra su mismo `mapdata.inc`, los dos `.sfc` salen iguales (`cmp`). Ese
-camino no lo corre `just pruebas`: la tanda corre con el flag apagado.
+**With the flag on the ROM is the one from before, byte for byte**: building
+a separate `release` with `--hp-de-enemigos` and assembling 8da66c4's
+`rom/src/` against its same `mapdata.inc`, both `.sfc` come out identical
+(`cmp`). `just pruebas` doesn't run that path: the suite runs with the flag
+off.
 
-**Las goldens que cambian son nueve**, y en todas lo único distinto es el
-rectángulo x 145-191 de los renglones de enemigos: `batalla`,
-`batalla-blanco`, `batalla-droide`, `batalla-textos-lejos`, `encuentro`,
-`msu-datos-rom`, `msu-datos-msu`, `msu-mundo-rom` y `msu-mundo-msu`. Antes y
-después, lado a lado, en `/shared/capturas/2026-09-28-hp-de-enemigos/`.
+**Nine goldens change**, and in all of them the only difference is the
+rectangle x 145-191 of the enemy rows: `batalla`, `batalla-blanco`,
+`batalla-droide`, `batalla-textos-lejos`, `encuentro`, `msu-datos-rom`,
+`msu-datos-msu`, `msu-mundo-rom` and `msu-mundo-msu`. Before and after, side
+by side, in `/shared/capturas/2026-09-28-hp-de-enemigos/`.
 
-**Ninguna prueba leía el HP de un enemigo en la pantalla** salvo esas
-goldens, y ninguna de ellas muestra un golpe: todas son la pelea recién
-abierta o eligiendo blanco, con los HP enteros. Las que miran cuánto le queda
-a un enemigo ya lo leen de la RAM (`Pelea.hp_del_combatiente`), así que no
-hubo nada que pasar de la pantalla a la RAM.
+**No test read an enemy's HP on the screen** except those goldens, and none of
+them shows a hit: all are the battle just opened or picking a target, with
+the HP full. The ones that look at how much an enemy has left already read it
+from RAM (`Pelea.hp_del_combatiente`), so there was nothing to move from the
+screen to RAM.
 
-# El trueno — grabado, para que taro decida
+# The thunder — recorded, so taro can decide
 
-Nada en `main`. Armados aparte, con un envoltorio del conversor que suma
-`Thunder9` a `SE_DE_TROPA_AL_PAQUETE` sin tocar el fuente; el control (el
-mismo envoltorio sin sumarlo) sale byte por byte igual al `release`. Los wav y
-lo que hay que escuchar en cada uno, en `/shared/audio/2026-09-28-trueno/`
-(`LEEME.txt`).
+Nothing in `main`. Built separately, with a converter wrapper that adds
+`Thunder9` to `SE_DE_TROPA_AL_PAQUETE` without touching the source; the
+control (the same wrapper without adding it) comes out byte for byte
+identical to `release`. The wavs and what to listen for in each one, in
+`/shared/audio/2026-09-28-trueno/` (`LEEME.txt`).
 
-Lo medido, comparando las líneas del reparto del `conversor.log`:
+What was measured, comparing the allocation lines of `conversor.log`:
 
-- **a 6000 Hz**, la tasa que Thunder9 ya tiene en los mapas 3, 20 y 32:
-  BRASS64 de 16,3 a 10,8 kHz —lo usa sólo el tema de batalla— y trece más de
-  `T_VGFighterMAX_Masako` de 13,6-14,1 a 11,5-11,7: cinco programas (DSTGT48,
-  NYLON48A, FANTA81, STLGT57B, STRNG71B) y **ocho de la batería**, que la
-  cuenta de Ceibo no traía.
-- **con MSU-1** el tema no pierde nada, pero los efectos de calidad del
-  paquete de la pelea en el `.msu` bajan de 14000 a 12000 Hz: los siete que
-  ya estaban, más el trueno.
-- **sin bajar nada no entra**: el paquete de la pelea tiene 896 B libres y el
-  trueno ocupa 6462 B a 6000 Hz, 5382 a 5000, 4302 a 4000 y 3231 a 3000. A
-  las cuatro tasas BRASS64 baja igual a 10,8, y los otros trece bajan menos
-  cuanto más baja la tasa (a 3000: 12,6-13,0). Entrar en 896 B pediría unos
-  800 Hz. Compartir: ningún efecto de la pelea usa esa muestra.
-- **de paso**: Thunder9 a 3000 Hz en todos lados le sube a `evilrhys`, en el
-  mapa 3, nueve instrumentos de 4,5-5,2 a 6,5-6,8 kHz, porque el 3 hoy paga
-  el trueno a 6000.
+- **at 6000 Hz**, the rate Thunder9 already has in maps 3, 20 and 32:
+  BRASS64 from 16.3 to 10.8 kHz —only the battle theme uses it— and thirteen
+  more of `T_VGFighterMAX_Masako` from 13.6-14.1 to 11.5-11.7: five programs
+  (DSTGT48, NYLON48A, FANTA81, STLGT57B, STRNG71B) and **eight from the drum
+  kit**, which Ceibo's count didn't include.
+- **with MSU-1** the theme loses nothing, but the quality sound effects of
+  the battle package in the `.msu` go down from 14000 to 12000 Hz: the seven
+  that were already there, plus the thunder.
+- **without lowering anything it doesn't fit**: the battle package has 896 B
+  free and the thunder takes 6462 B at 6000 Hz, 5382 at 5000, 4302 at 4000
+  and 3231 at 3000. At all four rates BRASS64 drops to 10.8 just the same,
+  and the other thirteen drop less the lower the rate (at 3000:
+  12.6-13.0). Fitting in 896 B would require about 800 Hz. Sharing: no
+  battle sound effect uses that sample.
+- **in passing**: Thunder9 at 3000 Hz everywhere raises nine instruments of
+  `evilrhys`, on map 3, from 4.5-5.2 to 6.5-6.8 kHz, because map 3 today pays
+  for the thunder at 6000.
 
-Lo que queda es de taro: escuchar y decir si entra, y a qué tasa. Si entra,
-es sumar `"Thunder9"` a `SE_DE_TROPA_AL_PAQUETE` (y, para otra tasa sólo en
-la pelea, un alias como `Thunder9@entero`), rehacer `just techos`, y
-`test_el_despegue_pide_su_efecto` deja de decir "no suena".
+What's left is taro's: listen and say whether it goes in, and at what rate.
+If it does, it's adding `"Thunder9"` to `SE_DE_TROPA_AL_PAQUETE` (and, for a
+different rate only in the battle, an alias like `Thunder9@entero`), redoing
+`just techos`, and `test_el_despegue_pide_su_efecto` stops saying "no
+suena".
 
-# Números usados
+# Numbers used
 
-Ninguno: ni el opcode 0x34 ni la RAM lejana `$7E7A30`-`$7E7A3F`.
+None: neither opcode 0x34 nor far RAM `$7E7A30`-`$7E7A3F`.
 
-# Lo que decidió taro
+# What taro decided
 
-El 2026-09-28, después de escuchar las ocho grabaciones: el trueno entra a
-6000 Hz (`SE_DE_TROPA_AL_PAQUETE`), con lo que les baja al tema de batalla
-y a los efectos de calidad de la pelea.
+On 2026-09-28, after listening to the eight recordings: the thunder goes in
+at 6000 Hz (`SE_DE_TROPA_AL_PAQUETE`), with what it costs the battle theme
+and the battle's quality sound effects.

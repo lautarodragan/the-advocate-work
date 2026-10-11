@@ -1,114 +1,116 @@
 ---
-name: "La pantalla de ítems como el original"
-description: "Los colores del texto y los separadores de ventana del original en la pantalla de ítems, dentro de lo que deja la resolución de la SNES"
+name: "The items screen like the original"
+description: "The original's text colors and window separators on the items screen, within what the SNES's resolution allows"
 type: feature
 status: done
 assignee: Jacarandá
 ---
 
-De taro, el 2026-09-28: "mejorar un poco la estética de la pantalla de
-items. el limite de resolución de la snes complica las cosas, pero
-deberíamos poder usar los colores de texto igual que en el original, y los
-mismos separadores".
+From taro, on 2026-09-28: "improve the look of the items screen a bit. the
+snes's resolution limit complicates things, but we should be able to use the
+text colors the same as in the original, and the same separators".
 
-Lo más cercano ya hecho: `el-menu-como-rm2k.md` (Tero), que sacó los
-colores del skin del juego y comparó contra capturas del original con Wine.
+The closest thing already done: `el-menu-como-rm2k.md` (Tero), which took the
+colors from the game's skin and compared against screenshots of the original
+with Wine.
 
-## Qué hace el original
+## What the original does
 
-Mirado con el RPG_RT de 2015 corriendo con Wine, sobre una copia del juego
-cuyo mapa 4 arranca con Kersh y Core en el grupo y nueve ítems en el
-inventario —usables, de equipo y de switch—, y en easyrpg-player
+Looked at with the 2015 RPG_RT running under Wine, on a copy of the game
+whose map 4 starts with Kersh and Core in the party and nine items in the
+inventory —usable, equipment and switch ones—, and in easyrpg-player
 (`Scene_Item`, `Window_Item`, `Window_Help`, `Window::RefreshFrame`,
-`RefreshBackground` y `RefreshCursor`). Las capturas, a 320x240, están en
+`RefreshBackground` and `RefreshCursor`). The screenshots, at 320x240, are in
 `/shared/capturas/2026-09-28-items/original-*.png`.
 
-- **Dos ventanas pegadas**: la de ayuda arriba, de 32 de alto, y la de la
-  lista abajo. Cada una es `Window` con el System del juego (`ablskin`): el
-  fondo es el recuadro de 32x32 de arriba a la izquierda **estirado** a la
-  ventana —`message_stretch` en 0—, que es negro con dos franjas apenas más
-  claras (15,15,15) en la fila 27-28 y la columna 29; y el marco son dos
-  pixeles, uno gris (67,67,67) afuera y uno oscuro (29,29,30) adentro. El
-  separador entre las dos ventanas no es un dibujo aparte: son los dos marcos
-  juntos, cuatro pixeles.
-- **El cursor es una barra roja** (83,0,0), el recuadro del System en x=64,
-  con un pixel transparente alrededor; no hay ">".
-- **Colores del texto**: el nombre, los ":" y la cantidad en el color 0 si el
-  ítem se puede usar y en el 3 —el gris— si no (`Window_Item::DrawItem`). La
-  descripción en el 0. Los colores 0 y 3 del skin, medidos en la captura, son
-  **los mismos** que ya daba la ROM a 15 bits: el degradé del blanco
-  (239/231/247/255) y el del gris (181/156/123/99/74), con la sombra.
-- La lista va en dos columnas de 144 pixeles con la fuente a 6.
-- La elección de actor (`Scene_ActorTarget`) tiene a la izquierda el nombre
-  del ítem y "Owned Items" en rojo —el color 1— con la cantidad, y a la
-  derecha el grupo con la fila elegida en la barra roja.
+- **Two adjoining windows**: the help one on top, 32 tall, and the list one
+  below. Each is a `Window` with the game's System (`ablskin`): the
+  background is the 32x32 box at the top left **stretched** to the window
+  —`message_stretch` at 0—, which is black with two barely lighter stripes
+  (15,15,15) at row 27-28 and column 29; and the frame is two pixels, a gray
+  one (67,67,67) outside and a dark one (29,29,30) inside. The separator
+  between the two windows isn't a separate drawing: it's both frames
+  together, four pixels.
+- **The cursor is a red bar** (83,0,0), the System's box at x=64, with a
+  transparent pixel around it; there's no ">".
+- **Text colors**: the name, the ":" and the quantity in color 0 if the item
+  can be used and in 3 —the gray— if not (`Window_Item::DrawItem`). The
+  description in 0. The skin's colors 0 and 3, measured in the screenshot,
+  are **the same** the ROM already gave at 15 bits: the white gradient
+  (239/231/247/255) and the gray one (181/156/123/99/74), with the shadow.
+- The list goes in two columns of 144 pixels with the font at 6.
+- The actor choice (`Scene_ActorTarget`) has the item's name on the left and
+  "Owned Items" in red —color 1— with the quantity, and on the right the
+  party with the chosen row in the red bar.
 
-## Qué difería en la ROM
+## What differed in the ROM
 
-- Colores del texto: **nada**, ya salían del skin (`pantalla_items`).
-- Qué va en gris: los materiales, libros y especiales van en gris y en el
-  original en blanco, porque la ROM todavía no sabe usarlos. No es un color:
-  es `item_usable`, y cambiarlo sin implementarlos sería mentir. Queda así.
-- **Sin ventanas ni separadores**: todo sobre negro.
-- **El cursor era un ">"**.
-- Una columna de once filas desde y=48, con la fuente a una letra por celda.
+- Text colors: **nothing**, they already came from the skin
+  (`pantalla_items`).
+- What goes in gray: materials, books and specials go in gray and in the
+  original in white, because the ROM doesn't know how to use them yet. It
+  isn't a color: it's `item_usable`, and changing it without implementing
+  them would be lying. It stays that way.
+- **No windows or separators**: everything on black.
+- **The cursor was a ">"**.
+- One column of eleven rows from y=48, with the font at one letter per cell.
 
-## Qué se hizo
+## What was done
 
-- Las dos ventanas con el System del juego, en **BG1**, que en esta pantalla
-  estaba apagado: el texto sigue en BG2 sin saber nada de ellas. Los
-  glifos ya tenían el bit de prioridad (por la pelea), así que el texto queda
-  arriba de las franjas del fondo. Los tiles, de 8bpp, van en el banco de la
-  fuente detrás de ella y el tilemap en $3800; el conversor comprueba que
-  entren (`_controlar_marco_de_items`). Deduplicados también espejados, son
-  17 tiles.
-- El cursor es la barra del System, cuatro pixeles más ancha que el texto de
-  cada lado. Moverlo es copiar dos filas de celdas de BG1 —de un tilemap con
-  la barra o del de sin barra—: 128 bytes por DMA en el vblank.
-- La ayuda mide 48 —dos renglones— y la lista arranca en y=56 con **diez**
-  filas y no once: con once la última tocaba el marco de abajo.
-- El código nuevo va en el banco 1 (`banco_de_la_pantalla.s`); el banco 0
-  ganó bytes, porque el ">" se escribía desde ahí.
+- The two windows with the game's System, on **BG1**, which on this screen
+  was off: the text stays on BG2 without knowing anything about them. The
+  glyphs already had the priority bit (because of the battle), so the text
+  stays above the background's stripes. The tiles, 8bpp, go in the font's
+  bank behind it and the tilemap at $3800; the converter checks that they fit
+  (`_controlar_marco_de_items`). Deduplicated, mirrored too, they are 17
+  tiles.
+- The cursor is the System's bar, four pixels wider than the text on each
+  side. Moving it means copying two rows of BG1 cells —from a tilemap with the
+  bar or from the one without it—: 128 bytes by DMA in vblank.
+- The help is 48 tall —two lines— and the list starts at y=56 with **ten**
+  rows and not eleven: with eleven the last one touched the bottom frame.
+- The new code goes in bank 1 (`banco_de_la_pantalla.s`); bank 0 gained
+  bytes, because the ">" was written from there.
 
-## Qué no entra
+## What doesn't fit
 
-- Las dos columnas: con letras de ocho pixeles no entran dos nombres de
-  veinte letras en 256. Sigue una columna.
-- La fuente a seis pixeles: ya estaba declarado.
-- La ventana de "Owned Items" en la elección de actor: esa pantalla es la del
-  menú, con su banco, y no se tocó.
+- The two columns: with eight-pixel letters two twenty-letter names don't fit
+  in 256. It stays one column.
+- The font at six pixels: that was already declared.
+- The "Owned Items" window in the actor choice: that screen is the menu's,
+  with its own bank, and wasn't touched.
 
-## Equipar y habilidades
+## Equip and skills
 
-**No se tocaron.** Lo que sirve para ellas es el mecanismo —`ventana.cursor`,
-`marco_items` a partir de una lista de ventanas, BG1 detrás del texto y la
-barra por DMA de filas—, pero no es gratis: equipar tiene otra distribución
-—el actor, los parámetros, las ranuras y la lista—, así que lleva su propio
-juego de ventanas y su propio tilemap, y compone la pantalla entera en
-`texto_buf` cada cuadro, así que la barra se haría distinto. Los tiles de sus
-ventanas entrarían en el mismo lugar de VRAM, porque las dos pantallas no
-están abiertas a la vez. Habilidades no tiene pantalla todavía ("Tech Skill"
-va en gris en el menú). La tienda, que usa la misma fuente, igual que equipar.
+**Not touched.** What's useful for them is the mechanism —`ventana.cursor`,
+`marco_items` from a list of windows, BG1 behind the text and the bar by DMA
+of rows—, but it isn't free: equip has another layout —the actor, the
+parameters, the slots and the list—, so it takes its own set of windows and
+its own tilemap, and it composes the whole screen in `texto_buf` every frame,
+so the bar would be done differently. The tiles of its windows would fit in
+the same VRAM place, because the two screens aren't open at the same time.
+Skills doesn't have a screen yet ("Tech Skill" is grayed out in the menu).
+The shop, which uses the same font, same as equip.
 
-## Pruebas
+## Tests
 
-- `items` e `items-2` cambian: las ventanas, la barra en lugar del ">", y la
-  lista una celda más abajo. Nueva `items-gris`: el cursor sobre el Club, en
-  gris, con su descripción. La elección de actor no cambia: es la pantalla del
-  menú.
-- `render_items` dibuja las ventanas y la barra, y
-  `test_la_lista_se_corre_cuando_el_cursor_se_sale` cuenta con `ITEM_FILAS`.
-- Antes, ahora y el original, lado a lado, en
+- `items` and `items-2` change: the windows, the bar instead of the ">", and
+  the list one cell lower. New `items-gris`: the cursor on the Club, in gray,
+  with its description. The actor choice doesn't change: it's the menu's
+  screen.
+- `render_items` draws the windows and the bar, and
+  `test_la_lista_se_corre_cuando_el_cursor_se_sale` counts with `ITEM_FILAS`.
+- Before, now and the original, side by side, in
   `/shared/capturas/2026-09-28-items/`.
-- Verificado con `just cartuchos` y `just pruebas` sobre esta rama: todo en
-  verde. `just espacio release`: el banco 0 pasó de 175 a 205 B libres.
+- Verified with `just cartuchos` and `just pruebas` on this branch: all green.
+  `just espacio release`: bank 0 went from 175 to 205 B free.
 
-## Qué tiene que mirar taro
+## What taro has to look at
 
-- Abrir los ítems: las dos ventanas con su marco gris, y las franjas apenas
-  más claras del fondo —a la derecha y abajo—, que en el original también
-  están y cuestan verlas.
-- Mover el cursor: la barra roja sigue, y cuando la lista se corre también.
-- Usar una poción y volver con B: la lista vuelve con las ventanas.
-- Cerrar el menú: el mapa con sus colores y su scroll de siempre (BG1 se
-  prende en esta pantalla y el mapa lo repone al volver).
+- Open the items: the two windows with their gray frame, and the barely
+  lighter stripes of the background —on the right and at the bottom—, which
+  are also in the original and are hard to see.
+- Move the cursor: the red bar follows, and also when the list scrolls.
+- Use a potion and go back with B: the list comes back with the windows.
+- Close the menu: the map with its usual colors and scroll (BG1 is turned on
+  on this screen and the map restores it on returning).

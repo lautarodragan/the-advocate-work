@@ -1,83 +1,84 @@
 ---
-name: "La terraza pierde cuadros en los destellos"
-description: "Recalcular las paletas de FlashSprite y FlashScreen se come casi todo el cuadro en la terraza del mapa 32"
+name: "The terrace drops frames during the flashes"
+description: "Recomputing FlashSprite's and FlashScreen's palettes eats almost the whole frame on map 32's terrace"
 type: bug
 status: done
 ---
 
-taro nota lag en la escena de la terraza (mapa 32) y en el destello azul de
-Kersh (`dos-destellos-a-la-vez.md`: "mejoró, pero no es perfecto; lo que
-queda es lag"). La investigación de los chips (`chips-sa-1-y-s-dd1.md`,
-"Dónde se va el cuadro hoy") midió que en las vueltas pesadas casi 200 de las
-262 líneas se van en recalcular paletas: `destello_tick` ~103 y
-`flashes_tick` ~94. Es CPU pura, y medida en snes9x: en el hardware puede ser
-peor (ver lo que dé la medición en bsnes del minijuego del mapa 11).
+taro notices lag in the terrace scene (map 32) and in Kersh's blue flash
+(`dos-destellos-a-la-vez.md`: "it got better, but it isn't perfect; what's
+left is lag"). The chips research (`chips-sa-1-y-s-dd1.md`, "Dónde se va el
+cuadro hoy") measured that in the heavy loop iterations almost 200 of the 262
+lines go into recomputing palettes: `destello_tick` ~103 and `flashes_tick`
+~94. It's pure CPU, and measured in snes9x: on hardware it may be worse (see
+what the bsnes measurement of map 11's minigame gives).
 
-Ideas que propuso esa investigación, sin chip: calcular la paleta destellada
-una vez por paso de intensidad y no cada cuadro, o repartir el trabajo entre
-cuadros. Medir primero en bsnes.
+Ideas that research proposed, without a chip: computing the flashed palette
+once per intensity step and not every frame, or spreading the work across
+frames. Measure in bsnes first.
 
 # Status
 
-2026-09-26, en `testing/`: las dos cuentas rehechas sin cambiar un solo
-valor. `just pruebas` en verde y ninguna golden se movió; `test_cores.py`
-dos veces en verde. Lo que queda es que taro juegue la terraza —ranura 2 de
-los `.srm` de `/shared/experimentos/2026-09-26-paralelos-cada-n/`— y diga si
-el lag se fue, también en el destello azul de Kersh.
+2026-09-26, in `testing/`: both computations redone without changing a single
+value. `just pruebas` green and no golden moved; `test_cores.py` green twice.
+What's left is for taro to play the terrace —slot 2 of the `.srm`s in
+`/shared/experimentos/2026-09-26-paralelos-cada-n/`— and say whether the lag
+is gone, also in Kersh's blue flash.
 
-Además de las goldens, la escena de la terraza se corrió con la ROM de antes
-y la de después apretando la A por vuelta del lazo y no por cuadro —así un
-cuadro perdido de menos no corre la escena—, y las 1971 pantallas, una por
-vuelta, salieron iguales en snes9x y en bsnes.
+Besides the goldens, the terrace scene was run with the ROM from before and
+the one from after pressing A once per loop iteration and not per frame —that
+way one dropped frame fewer doesn't shift the scene—, and the 1971 screens,
+one per iteration, came out identical in snes9x and in bsnes.
 
-# Dónde se iba el tiempo
+# Where the time went
 
-Medido con las sondas de línea de la investigación de los chips
-(`/extras/scratch/chips/instrumentar.py`, adaptado), en la escena de siempre:
-`ir_al_mapa(32, 41, 8)`, arriba, y A cada 20 cuadros hasta la pelea. snes9x y
-bsnes dieron lo mismo a una línea.
+Measured with the chips research's line probes
+(`/extras/scratch/chips/instrumentar.py`, adapted), in the usual scene:
+`ir_al_mapa(32, 41, 8)`, up, and A every 20 frames until the battle. snes9x
+and bsnes agreed to within one line.
 
-* **`flashes_tick`, ~94 líneas por destello de personaje.** Casi todo era
-  `tabla_canal_flash`: por cada una de las 96 entradas de las tres tablas, dos
-  productos y una división del hardware con sus esperas, unos 150 ciclos cada
-  una. `armar_paleta` (16 colores), la copia a `FAR_FLASH_PAL` y
-  `restaurar_tablas` son lo de menos.
-* **`destello_tick`, ~104 líneas en el cuadro impar.** Dos partes: armar las
-  tres tablas (`una_tabla_de_destello`, unos 70 ciclos por entrada: comparar,
-  restar y un `jsr` que armaba el índice de `prod31_tabla`) y pasar las
-  paletas por ellas (`destellar_rango`, ~135 ciclos por color). La segunda es
-  la que queda.
+* **`flashes_tick`, ~94 lines per character flash.** Almost all of it was
+  `tabla_canal_flash`: for each of the 96 entries of the three tables, two
+  products and a hardware division with their waits, some 150 cycles each.
+  `armar_paleta` (16 colors), the copy to `FAR_FLASH_PAL` and
+  `restaurar_tablas` are the least of it.
+* **`destello_tick`, ~104 lines on the odd frame.** Two parts: building the
+  three tables (`una_tabla_de_destello`, some 70 cycles per entry: compare,
+  subtract and a `jsr` that built the `prod31_tabla` index) and passing the
+  palettes through them (`destellar_rango`, ~135 cycles per color). The second
+  is the one that remains.
 
-# Lo que se hizo
+# What was done
 
-Las dos tablas se arman caminando en vez de calculando cada entrada, con el
-mismo resultado entrada por entrada (comprobado para todos los destinos y
-fuerzas posibles, 32 x 32 en cada una):
+Both tables are built by walking instead of computing each entry, with the
+same result entry by entry (checked for every possible target and strength,
+32 x 32 in each):
 
-* `tabla_canal_flash`: el numerador de la mezcla crece siempre lo mismo de una
-  entrada a la siguiente (255 - alfa), así que se divide una vez y después se
-  lleva el resto. ~30 ciclos por entrada.
-* `una_tabla_de_destello`: la distancia al destino baja de a uno y después
-  sube de a uno, así que X camina la fila de `prod31_tabla`. <30 ciclos.
+* `tabla_canal_flash`: the blend's numerator always grows by the same amount
+  from one entry to the next (255 - alpha), so it divides once and then
+  carries the remainder. ~30 cycles per entry.
+* `una_tabla_de_destello`: the distance to the target goes down by one and
+  then up by one, so X walks the `prod31_tabla` row. <30 cycles.
 
-No se probó "una vez por paso de fuerza": la fuerza de un `FlashSprite` cambia
-casi en cada cuadro, y el paso del `FlashScreen` está atado a la fase par e
-impar; con lo de arriba ya no hacía falta.
+"Once per strength step" wasn't tried: a `FlashSprite`'s strength changes
+almost every frame, and the `FlashScreen`'s step is tied to the even and odd
+phase; with the above it was no longer needed.
 
-# Lo medido
+# What was measured
 
-    terraza, A cada 20 cuadros        antes    después
-    cuadros perdidos, ROM de verdad     9         0      (snes9x y bsnes)
-    vueltas de más de 262 (sondeada)   62         0
-    flashes_tick, peor vuelta         101        42
-    destello_tick, peor vuelta        110        91
-    los dos juntos, peor vuelta       198       132
-    peor vuelta con destellos         290       224      (sondeada: ~27 de sondas)
+    terrace, A every 20 frames         before   after
+    dropped frames, real ROM             9         0      (snes9x and bsnes)
+    iterations over 262 (probed)        62         0
+    flashes_tick, worst iteration      101        42
+    destello_tick, worst iteration     110        91
+    both together, worst iteration     198       132
+    worst iteration with flashes       290       224      (probed: ~27 from probes)
 
-Banco 0 (`TABLAS`, release): de 721 bytes libres a 777. BSS: un byte más
-libre (`dest_v` y `dest_d` ya no se usan; `dest_hacia` pasó a dos bytes).
+Bank 0 (`TABLAS`, release): from 721 free bytes to 777. BSS: one more byte
+free (`dest_v` and `dest_d` are no longer used; `dest_hacia` became two
+bytes).
 
-Lo que queda, si hiciera falta más: `destellar_rango`, 72-91 líneas en cada
-cuadro de un `FlashScreen`. Con tablas de palabras ya corridas a su lugar se
-ahorraría ~20% por color, pero piden 64 bytes más de la RAM del banco 0 o
-pasarlas a la lejana con los índices cambiados de registro.
+What's left, if more were needed: `destellar_rango`, 72-91 lines on each
+frame of a `FlashScreen`. With word tables already shifted into place it
+would save ~20% per color, but they need 64 more bytes of bank 0's RAM or
+moving them to the far one with the indices swapped to another register.

@@ -1,67 +1,69 @@
 ---
-name: "La partida lleva su versión"
-description: "Que una partida de otro build se rechace limpia en vez de cargar corrupta"
+name: "The save carries its version"
+description: "That a save from another build be rejected cleanly instead of loading corrupted"
 type: bug
 status: done
 ---
 
-Desde que `release` y `test-main` son un solo cartucho (2026-09-25), la
-partida guardada cambia de tamaño cada vez que un caso nombra una variable
-nueva o trae una tropa nueva: los casos viajan en la ROM que se juega. Medido
-al juntar: una partida del `release` de antes, cargada en el unido, **no
-carga** si detrás quedó lo que deja snes9x en la SRAM, y **carga corrupta**
-(inventario, HP, SP, equipo, gráficos de actor y habilidades corridos) si
-detrás hay ceros, porque la suma de control igual cuadra.
+Since `release` and `test-main` are a single cartridge (2026-09-25), the
+saved game changes size every time a case names a new variable or brings a
+new troop: the cases travel in the ROM that gets played. Measured when
+merging them: a save from the earlier `release`, loaded in the merged one,
+**doesn't load** if what snes9x leaves in SRAM is left behind it, and
+**loads corrupted** (inventory, HP, SP, equipment, actor graphics and skills
+shifted) if there are zeros behind it, because the checksum still adds up.
 
-Que la cabecera de la partida lleve su tamaño o una versión derivada del
-formato (`partida_tabla`), y que una que no coincide se trate como "no hay
-partida". Ver `tasks/juntar-release-y-test-main.md`.
+That the save's header carry its size or a version derived from the format
+(`partida_tabla`), and that one that doesn't match be treated as "there is no
+save". See `tasks/juntar-release-y-test-main.md`.
 
-No urge: taro prueba siempre desde cero y no comparte partidas entre builds.
-Importa el día que un `.srm` viaje para reproducir un bug, o para quien juegue
-builds seguidos.
+Not urgent: taro always tests from scratch and doesn't share saves between
+builds. It matters the day an `.srm` travels to reproduce a bug, or for
+whoever plays consecutive builds.
 
-# Lo que se hizo (2026-09-26)
+# What was done (2026-09-26)
 
-La cabecera de cada ranura pasa de seis bytes a diez:
+Each slot's header goes from six bytes to ten:
 
-    $0100  "ABLS"          la magia, como antes
-    $0104  suma            la suma de los bytes de la partida, como antes
-    $0106  PARTIDA_BYTES   el largo, que el ensamblador saca de las mismas
-                           constantes que `partida_tabla`
-    $0108  PARTIDA_FIRMA   16 bits del CRC32 de qué variable de RM2k va en
-                           cada ranura, de qué actor es cada par de habilidad y
-                           cada ranura de experiencia, más ITEMS_N, SWITCH_BYTES
-                           y ACTORES_N: `firma_de_la_partida`, en el conversor
-    $010A  los datos
+    $0100  "ABLS"          the magic, as before
+    $0104  suma            the sum of the save's bytes, as before
+    $0106  PARTIDA_BYTES   the length, which the assembler takes from the same
+                           constants as `partida_tabla`
+    $0108  PARTIDA_FIRMA   16 bits of the CRC32 of which RM2k variable goes in
+                           each slot, which actor each skill pair and each
+                           experience slot belongs to, plus ITEMS_N, SWITCH_BYTES
+                           and ACTORES_N: `firma_de_la_partida`, in the converter
+    $010A  the data
 
-Ninguna de las dos palabras se sube a mano. La firma cubre lo que el largo no
-ve: dos builds con la misma cantidad de variables y otra variable en la misma
-ranura. Lo que **no** cubre: reordenar dos renglones de `partida_tabla` sin
-cambiar el total, porque la tabla es fuente a mano y el conversor no la lee
-(comentado arriba de la tabla).
+Neither of the two words is bumped by hand. The signature covers what the
+length doesn't see: two builds with the same number of variables and a
+different variable in the same slot. What it does **not** cover: reordering
+two lines of `partida_tabla` without changing the total, because the table is
+hand-written source and the converter doesn't read it (commented above the
+table).
 
-`ranura_de_este_formato` (en `partida.s`) mira magia, largo y firma, y la usan
-la pantalla de ranuras y `cargar_partida`: una partida de otro build **se ve
-vacía** ("- Empty -") y elegirla empieza de cero, como una ranura vacía.
+`ranura_de_este_formato` (in `partida.s`) looks at magic, length and
+signature, and the slots screen and `cargar_partida` use it: a save from
+another build **shows as empty** ("- Empty -") and choosing it starts from
+scratch, like an empty slot.
 
-Vacía y no "corrupta": EasyRPG pone "Savegame corrupted" en `Window_SaveFile`,
-pero es un texto suyo en inglés escrito en el código, no un término del LDB, y
-la ROM saca del LDB todo lo que dice. Y es lo que la ROM ya hacía con una suma
-que no cuadra.
+Empty and not "corrupted": EasyRPG puts "Savegame corrupted" in
+`Window_SaveFile`, but that's its own English text written in the code, not
+an LDB term, and the ROM takes everything it says from the LDB. And it's what
+the ROM already did with a checksum that doesn't add up.
 
-La prueba: `test_una_partida_de_otro_build_se_ve_vacia_y_no_carga`, en
-`pruebas/rpgmaker/test_titulo_dibujo.py`, con tres variantes: la partida de un
-build de antes de este cambio (`sin-cabecera`), otro largo y otra firma. Guarda
-de verdad por el menú, rearma la ranura corrida dos bytes con ceros detrás
-—el caso que antes cargaba corrupto— y la escribe en la SRAM
-(`retro.escribir_sram`, nuevo). Compara la pantalla de ranuras contra la de
-cuatro vacías pixel por pixel y después elige la ranura.
+The test: `test_una_partida_de_otro_build_se_ve_vacia_y_no_carga`, in
+`pruebas/rpgmaker/test_titulo_dibujo.py`, with three variants: the save of a
+build from before this change (`sin-cabecera`), another length and another
+signature. It saves for real through the menu, rebuilds the slot shifted two
+bytes with zeros behind it —the case that used to load corrupted— and writes
+it into SRAM (`retro.escribir_sram`, new). It compares the slots screen
+against one with four empty slots pixel by pixel and then picks the slot.
 
-Contra la ROM de `b581d4e`, `sin-cabecera` da rojo en 570 pixeles —la ranura 2
-muestra a Talan con nivel "L 0"— y, salteando la comparación, en el mapa: la
-partida corrida carga (mapa 5 y no el 4). Las otras dos no existen sin el
-cambio (piden `PARTIDA_FIRMA`).
+Against the ROM of `b581d4e`, `sin-cabecera` goes red in 570 pixels —slot 2
+shows Talan at level "L 0"— and, skipping the comparison, on the map: the
+shifted save loads (map 5 and not 4). The other two don't exist without the
+change (they ask for `PARTIDA_FIRMA`).
 
-`release` y `test-special` hoy salen con firmas distintas, así que una partida
-de uno no carga en el otro.
+`release` and `test-special` today come out with different signatures, so a
+save from one doesn't load in the other.

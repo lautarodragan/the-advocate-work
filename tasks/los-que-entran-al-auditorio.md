@@ -1,111 +1,112 @@
 ---
-name: "Los que entran caminando al auditorio"
-description: "En el mapa 18 (Auditorium), WalkIn1 y WalkIn2 entran caminando en RM2k y en la ROM no"
+name: "The ones who walk into the auditorium"
+description: "On map 18 (Auditorium), WalkIn1 and WalkIn2 walk in in RM2k and not in the ROM"
 type: bug
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-09-30, jugando: "en el auditorio hay dos NPCs que entran
-caminando; en el juego original entran caminando y en la ROM no".
+From taro, on 2026-09-30, while playing: "in the auditorium there are two
+NPCs who walk in; in the original game they walk in and in the ROM they
+don't".
 
-Son `WalkIn1` (evento 16, en (13,10)) y `WalkIn2` (evento 9, en (6,8)) del
-mapa 18. Los mueve la página 1 del evento 36, automática con el switch 77:
+They are `WalkIn1` (event 16, at (13,10)) and `WalkIn2` (event 9, at (6,8))
+of map 18. They're moved by page 1 of event 36, an autorun with switch 77:
 
     ChangeEventLocation 16 → (10,14)
-    ControlSwitches 86 ON          ; WalkIn1 pasa a su página 2
-    MoveEvent 16 (frecuencia 8): 0,0,0,0,1,1,1,12
+    ControlSwitches 86 ON          ; WalkIn1 moves to its page 2
+    MoveEvent 16 (frequency 8): 0,0,0,0,1,1,1,12
     Wait 5
     ChangeEventLocation 9 → (8,14)
-    ControlSwitches 87 ON          ; WalkIn2 pasa a su página 2
+    ControlSwitches 87 ON          ; WalkIn2 moves to its page 2
     MoveEvent 9: 0,0,0,0,0,0,3,3,12
     Wait 10
     …
 
-Sospecha de Hornero, sin verificar: el cambio de página por el switch, justo
-después del `ChangeEventLocation` y antes del `MoveEvent`, pisa la posición o
-la ruta. Ver `decisiones/la-pagina-activa-se-congela-hasta-el-refresco.md`.
+Hornero's suspicion, unverified: the page change from the switch, right after
+the `ChangeEventLocation` and before the `MoveEvent`, overwrites the position
+or the route. See `decisiones/la-pagina-activa-se-congela-hasta-el-refresco.md`.
 
-# Lo que se vio en la ROM
+# What was seen in the ROM
 
-Con `grupo-11-en-18` y el switch 77 prendido desde afuera, cuadro a cuadro
-(RAM: `ev_pos_buf`, `npc_buf`, `route_ev` y la OAM):
+With `grupo-11-en-18` and switch 77 turned on from outside, frame by frame
+(RAM: `ev_pos_buf`, `npc_buf`, `route_ev` and the OAM):
 
-* **la posición y la ruta están bien**: el 16 aparece en (10,14), sube a
-  (10,10) y dobla hasta (13,10), un paso cada 16 ticks; el 9 aparece en
-  (8,14) unos 30 ticks después y termina en (6,8). La ruta forzada sobrevive
-  al cambio de página —la ranura queda con el bit 0 apagado, y
-  `remove_page_from_slot` no toca una forzada—. La sospecha de Hornero no era.
-* **lo que no anda es el dibujo**: la fila está visible, sigue al evento y su
-  objeto está en la OAM, pero la pantalla no cambia ni un pixel en todo el
-  camino. El objeto dibuja un gráfico vacío.
+* **the position and the route are fine**: 16 appears at (10,14), goes up to
+  (10,10) and turns to (13,10), one step every 16 ticks; 9 appears at (8,14)
+  some 30 ticks later and ends at (6,8). The forced route survives the page
+  change —the slot keeps bit 0 off, and `remove_page_from_slot` doesn't touch
+  a forced one—. Hornero's suspicion wasn't it.
+* **what doesn't work is the drawing**: the row is visible, follows the event
+  and its object is in the OAM, but the screen doesn't change a single pixel
+  along the whole way. The object draws an empty graphic.
 
-# Lo que hace RM2k
+# What RM2k does
 
-* easyrpg, `Game_Event::RefreshPage`: un cambio de página no toca la posición
-  ni la ruta forzada; cambia el gráfico (`SetSpriteGraphic`), la velocidad y
-  la frecuencia.
-* El RPG_RT de 2015 con Wine, con una copia del juego que arranca en el 18 con
-  la escena (la página 1 del 36 sin condición y un `ControlSwitches 77`
-  adelante, escrita con `ditto write`): **los dos se ven subir por los
-  pasillos**, con el gráfico verde de `Future2` índice 6, de corrido.
+* easyrpg, `Game_Event::RefreshPage`: a page change doesn't touch the
+  position nor the forced route; it changes the graphic (`SetSpriteGraphic`),
+  the speed and the frequency.
+* The 2015 RPG_RT with Wine, with a copy of the game that starts on 18 with
+  the scene (page 1 of 36 without a condition and a `ControlSwitches 77` in
+  front, written with `ditto write`): **both are seen going up the aisles**,
+  with the green graphic of `Future2` index 6, without stopping.
 
-# La causa
+# The cause
 
-La página 1 de los dos dibuja `Future2` en el **índice 7, que es un hueco
-vacío de la hoja** —un solo color, el transparente—, y la página 2 el índice
-6. Un evento que camina y cambia de gráfico se queda con uno solo —"walking
-wins", `divergencias/un-evento-que-camina-no-cambia-de-grafico.md`—, y ése
-era el de su fila: como ninguna página está activa al cargar, el de la
-primera página que dibuja algo, que es el hueco.
+Page 1 of both draws `Future2` at **index 7, which is an empty slot of the
+sheet** —a single color, the transparent one—, and page 2 index 6. An event
+that walks and changes graphic keeps only one —"walking wins",
+`divergencias/un-evento-que-camina-no-cambia-de-grafico.md`—, and that was
+the one of its row: since no page is active on load, the one of the first
+page that draws something, which is the empty slot.
 
-No hay un commit que lo rompiera: "walking wins" es de `403eea38`
-(2026-09-08) y desde ahí el elegido era el primero. Nunca se vieron. No tiene
-nada que ver con la página congelada hasta el refresco: la decisión no se
-toca.
+There's no commit that broke it: "walking wins" is from `403eea38`
+(2026-09-08) and since then the chosen one was the first. They were never
+seen. It has nothing to do with the page frozen until the refresh: that
+decision isn't touched.
 
-# El arreglo
+# The fix
 
-En `rm2k-snes-maps`, antes de contar poses y paletas: `pin_walkers`
-(`tools/rm2k-snes/map-sprites/src/npc.rs`). A un evento que camina y cambia
-de gráfico, **un hueco de la hoja cuenta como "no dibuja nada"**, que es lo
-que es en RM2k: la fila camina con el primer gráfico de sus páginas que tiene
-pixeles, y las páginas con el hueco la esconden —van con los gráficos
-`outside`, así la página no lleva pose con el bit 7—.
+In `rm2k-snes-maps`, before counting poses and palettes: `pin_walkers`
+(`tools/rm2k-snes/map-sprites/src/npc.rs`). For an event that walks and
+changes graphic, **an empty slot of the sheet counts as "draws nothing"**,
+which is what it is in RM2k: the row walks with the first graphic of its
+pages that has pixels, and the pages with the empty slot hide it —they go
+with the `outside` graphics, so the page doesn't carry a pose with bit 7—.
 
-La prueba es `rom/pruebas/rpgmaker/test_rutas_auditorio.py`: que pasen por
-la puerta y por el medio del pasillo y terminen sentados, y que donde la ROM
-pone su objeto la pantalla sea distinta del pasillo vacío. Con la ROM de
-antes, las de posición daban verde y las de dibujo **rojo, 0 pixeles en los
-16 ticks** de cada uno.
+The test is `rom/pruebas/rpgmaker/test_rutas_auditorio.py`: that they pass
+through the door and the middle of the aisle and end up seated, and that
+where the ROM puts its object the screen differs from the empty aisle. With
+the earlier ROM, the position ones were green and the drawing ones **red, 0
+pixels in the 16 ticks** of each.
 
-Cambia la ROM en dos mapas: el 18 y el 44 (Talan Stats), donde Arden y
-Saldra tienen el mismo patrón —página 1 con `BLPeople` índice 3, vacío;
-página 2 con `Chara2`/`Chara3`—. El 44 no lo miré en pantalla.
+The ROM changes on two maps: 18 and 44 (Talan Stats), where Arden and Saldra
+have the same pattern —page 1 with `BLPeople` index 3, empty; page 2 with
+`Chara2`/`Chara3`—. I didn't look at 44 on screen.
 
-No se movió ninguna golden. Capturas, antes, después y el RPG_RT lado a lado,
-en `/shared/capturas/2026-09-30-auditorio/`.
+No golden moved. Screenshots, before, after and the RPG_RT side by side, in
+`/shared/capturas/2026-09-30-auditorio/`.
 
-# El mismo patrón en otros mapas
+# The same pattern on other maps
 
-`ChangeEventLocation`, un switch que le cambia la página al mismo evento y
-`MoveEvent` del mismo, en todos los mapas del volcado: **4 veces en 2
-mapas**. Las dos del 18, y Drago y Sern del 167, que tienen una sola página
-—el switch los hace aparecer, que la ROM ya hace— y además el 167 no está en
-el cartucho. Lo que tenía en común el bug no era el patrón sino el hueco de
-la hoja, y eso lo cubre el arreglo en todo el juego: el build cambia sólo el
-18 y el 44.
+`ChangeEventLocation`, a switch that changes the same event's page and a
+`MoveEvent` of it, across all maps of the dump: **4 times on 2 maps**. The
+two of 18, and Drago and Sern of 167, which have a single page —the switch
+makes them appear, which the ROM already does— and besides, 167 isn't in the
+cartridge. What the bug had in common wasn't the pattern but the sheet's
+empty slot, and the fix covers that across the whole game: the build changes
+only 18 and 44.
 
-# Queda aparte
+# Left aside
 
-La frecuencia: easyrpg, en `RefreshPage`, le pone al evento la frecuencia de
-la página nueva (3) aunque tenga una ruta forzada de frecuencia 8, y con eso
-pararía 64 cuadros entre paso y paso. En el video del RPG_RT caminan de
-corrido, como la ROM, así que no se tocó; no lo medí cuadro a cuadro.
+The frequency: easyrpg, in `RefreshPage`, gives the event the new page's
+frequency (3) even if it has a forced route of frequency 8, and with that it
+would stop 64 frames between steps. In the RPG_RT video they walk without
+stopping, like the ROM, so it wasn't touched; I didn't measure it frame by
+frame.
 
-# Al mergear
+# When merging
 
-Instalar `maps` en el global —`just -f tools/justfile install maps`—: el
-arreglo es de `rm2k-snes-maps` y de su biblioteca `rm2k-snes-map-sprites`.
-Correr `just pruebas` y `just -f tools/justfile test` sobre el árbol
-mergeado.
+Install `maps` in the global —`just -f tools/justfile install maps`—: the fix
+is in `rm2k-snes-maps` and its library `rm2k-snes-map-sprites`. Run `just
+pruebas` and `just -f tools/justfile test` on the merged tree.

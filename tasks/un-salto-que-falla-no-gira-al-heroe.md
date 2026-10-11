@@ -1,72 +1,70 @@
 ---
-name: "Un salto que falla no gira al héroe"
-description: "RM2k fija la dirección del salto antes de ver si puede caer; la ROM sólo si puede"
+name: "A jump that fails doesn't turn the hero"
+description: "RM2k sets the jump's direction before checking whether it can land; the ROM only if it can"
 type: bug
 status: done
 assignee: taro
 ---
 
-Apareció leyendo la reja del mapa 12 —el evento 1 de (1,47)— para
-`pruebas/abl/test_recorrido_vipers_otras_ramas_golden.py`, y **no se ve en
-ningún caso cubierto**: ahí el héroe ya mira hacia abajo cuando el salto falla.
+It showed up while reading the gate of map 12 —event 1 at (1,47)— for
+`pruebas/abl/test_recorrido_vipers_otras_ramas_golden.py`, and **it isn't
+visible in any covered case**: there the hero is already facing down when
+the jump fails.
 
-En easyrpg, `Game_Character::Jump` fija la dirección —y el `facing`, si no
-está trabado— **antes** de llamar a `MakeWay`, así que un salto que no puede
-caer deja al personaje mirando hacia donde quiso saltar. En la ROM,
-`armar_salto_heroe` sólo llama a `direccion_del_salto` en `se_puede`: si
-`puede_caer` dice que no, el héroe queda mirando como estaba.
+In easyrpg, `Game_Character::Jump` sets the direction —and the `facing`, if
+it isn't locked— **before** calling `MakeWay`, so a jump that can't land
+leaves the character facing where it wanted to jump. In the ROM,
+`armar_salto_heroe` only calls `direccion_del_salto` in `se_puede`: if
+`puede_caer` says no, the hero stays facing as he was.
 
-Además RM2k, con la ruta sin "saltear si no puede", **reintenta** el salto; la
-ROM lo saltea, y eso sí es a propósito —el comentario de `paso_de_ruta` lo
-dice—. Lo que falta es sólo el giro.
+Besides, RM2k, with the route lacking "skip if it can't", **retries** the
+jump; the ROM skips it, and that one is on purpose —`paso_de_ruta`'s comment
+says so—. What's missing is only the turn.
 
-Hecho es: un caso con un salto bloqueado hacia un costado distinto del que
-mira el héroe, que compruebe `hero_dir` después, visto en rojo antes del
-arreglo. Hay que ver también los saltos de eventos, que tienen su propio
-armado.
+Done means: a case with a jump blocked towards a side different from the one
+the hero faces, which checks `hero_dir` afterwards, seen red before the fix.
+The events' jumps need looking at too, since they have their own setup.
 
-# Lo hecho (Guanaco, 2026-09-30; el cierre, Hornero)
+# What was done (Guanaco, 2026-09-30; the wrap-up, Hornero)
 
-Lo escribe Hornero con el informe de Guanaco: a Guanaco el clasificador de
-auto mode le negó leer este archivo, y también regenerar los cuadros que
-quedaban.
+Hornero writes it with Guanaco's report: auto mode's classifier denied
+Guanaco reading this file, and also regenerating the frames that were left.
 
-**Confirmado en easyrpg** (`Game_Character::Jump` y `UpdateMoveRoute`),
-para el héroe y los eventos: `Jump` fija la dirección —y el `facing` si no
-está trabado— antes de `MakeWay`. Si el salto falla y la ruta no se puede
-saltear, RM2k lo reintenta y el giro queda; si se puede saltear, RM2k
-restaura la dirección y el `facing`. La ROM recibe toda ruta forzada como
-salteable y no las distingue, así que gira siempre: de las 410 rutas
-forzadas del juego con un salto, sólo 6 son salteables y ninguna es del
-héroe. El comentario del código lo dice. **No se confirmó con el RPG_RT
-bajo Wine**: pedía armar un mapa de RM2k con el salto bloqueado.
+**Confirmed in easyrpg** (`Game_Character::Jump` and `UpdateMoveRoute`),
+for the hero and the events: `Jump` sets the direction —and the `facing` if
+it isn't locked— before `MakeWay`. If the jump fails and the route can't be
+skipped, RM2k retries it and the turn stays; if it can be skipped, RM2k
+restores the direction and the `facing`. The ROM receives every forced route
+as skippable and doesn't tell them apart, so it always turns: of the game's
+410 forced routes with a jump, only 6 are skippable and none is the hero's.
+The code's comment says so. **It wasn't confirmed with RPG_RT under Wine**:
+it required building an RM2k map with the jump blocked.
 
-**El arreglo** (`7fd79fa6`, `tools/runtime/oam.s`): en `build_hero_jump` y
-`build_ev_jump` el giro va antes de `can_fall`, y el de eventos mira además
-el bit de dirección trabada (+18 `$08`). Salió un segundo error al escribir
-el caso trabado: la ROM giraba a un evento trabado aunque el salto cayera
-bien. Se arregló en el mismo commit.
+**The fix** (`7fd79fa6`, `tools/runtime/oam.s`): in `build_hero_jump` and
+`build_ev_jump` the turn goes before `can_fall`, and the events' one also
+looks at the locked-direction bit (+18 `$08`). A second bug came up while
+writing the locked case: the ROM turned a locked event even if the jump
+landed fine. It was fixed in the same commit.
 
-**Las pruebas** (`rom/pruebas/rpgmaker/test_salto_bloqueado.py`), las cuatro
-contra el borde del mapa 6: el héroe (quedaba mirando arriba en vez de a la
-izquierda), Kersh (abajo en vez de arriba), Kersh trabado con un salto que
-cae (a la derecha en vez de abajo) y Kersh trabado con uno que no cae, que
-ya pasaba. Las tres primeras, en rojo antes del arreglo.
+**The tests** (`rom/pruebas/rpgmaker/test_salto_bloqueado.py`), all four
+against the edge of map 6: the hero (he ended up facing up instead of left),
+Kersh (down instead of up), Kersh locked with a jump that lands (right
+instead of down) and Kersh locked with one that doesn't land, which already
+passed. The first three, red before the fix.
 
-**Las goldens**: el droide del mapa 2 (EV0040) tiene la dirección fija
-mirando arriba y salta hacia abajo; la ROM lo dejaba mirando abajo después
-de cada salto y ahora sigue mirando arriba. Cambian doce cuadros de
-`bloqueo`, `droide` y `droide-tapado`, sólo en el droide: tres en
-`915a4801` (Guanaco) y nueve en `255c7252` (Hornero, mirados uno por uno).
-El antes y el después están en `/shared/capturas/2026-09-30-salto-que-falla/`.
-**El merge espera el visto bueno de taro.** (El mensaje de `915a4801` dice
-que esos tres son todo lo que cambia, y el de `7fd79fa6` nombra sólo tres
-cuadros: los dos se quedaron cortos.)
+**The goldens**: the droid of map 2 (EV0040) has a fixed direction facing up
+and jumps downwards; the ROM left it facing down after each jump and now it
+keeps facing up. Twelve frames of `bloqueo`, `droide` and `droide-tapado`
+change, only in the droid: three in `915a4801` (Guanaco) and nine in
+`255c7252` (Hornero, looked at one by one). The before and after are in
+`/shared/capturas/2026-09-30-salto-que-falla/`. **The merge awaits taro's
+approval.** (The message of `915a4801` says those three are all that
+changes, and the one of `7fd79fa6` names only three frames: both fell
+short.)
 
-**Al mergear**: nada de Rust que instalar. La ROM se mueve, así que puede
-hacer falta volver a medir los techos de la música; `test_musica_techos.py`
-pasó en la rama.
+**When merging**: no Rust to install. The ROM moves, so the music ceilings
+may need measuring again; `test_musica_techos.py` passed on the branch.
 
-**Lo que queda**: la divergencia de las rutas salteables, donde RM2k
-restaura el `facing` y la ROM no; y lo mismo con un `move_*` bloqueado de
-un evento: la ROM deja el giro y RM2k lo deshace. No se tocó.
+**What's left**: the divergence of skippable routes, where RM2k restores the
+`facing` and the ROM doesn't; and the same with an event's blocked
+`move_*`: the ROM keeps the turn and RM2k undoes it. Not touched.

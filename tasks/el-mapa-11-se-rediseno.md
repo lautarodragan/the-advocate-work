@@ -1,211 +1,213 @@
 ---
-name: "El mapa 11 rediseñado"
-description: "Las 52 baldosas de luz pasan a ser tiles: de 30 fps a fluido"
+name: "Map 11 redesigned"
+description: "The 52 light tiles become tiles: from 30 fps to smooth"
 status: done
 ---
 
-# Qué
+# What
 
-El HQ de los Lazer Teeth —el mapa 11— **no entraba en el cuadro donde se juega
-el minijuego de las piedras**, y lo que lo sacaba eran sus **52 baldosas de
-luz**: 52 eventos dibujados con el mismo tile opaco del ChipSet, el charco de
-luz en el piso.
+The Lazer Teeth HQ —map 11— **didn't fit in a frame where the stones minigame
+is played**, and what pushed it over was its **52 light tiles**: 52 events
+drawn with the same opaque ChipSet tile, the pool of light on the floor.
 
-Se arregló **rediseñando el minijuego**, no optimizando el motor: las baldosas
-dejaron de ser eventos. La decisión, y los dos caminos de optimización que se
-descartaron para llegar a ella, están abajo.
+It was fixed **by redesigning the minigame**, not by optimizing the engine:
+the light tiles stopped being events. The decision, and the two optimization
+paths that were discarded on the way to it, are below.
 
 # Status
 
-**Hecho el 2026-09-21.** Las 52 baldosas de luz dejaron de ser eventos: el
-charco es un tile del mapa, apagar un cono es un `TileSubstitution` y atrapar
-al héroe es un paralelo que mira el terreno de la celda. El mapa vive forkeado
-en `juego/mapas/Map0011.json`, con ChipSet propio.
+**Done on 2026-09-21.** The 52 light tiles stopped being events: the pool is a
+map tile, turning off a cone is a `TileSubstitution` and catching the hero is
+a parallel that looks at the cell's terrain. The map lives forked in
+`juego/mapas/Map0011.json`, with its own ChipSet.
 
-Cuadros perdidos caminando 1200 cuadros, medidos con
+Dropped frames walking 1200 frames, measured with
 `/extras/scratch/mapa11-cierre/perdidos.py`:
 
-    celda     diagnóstico   los dos caminos   rediseñado
+    cell      diagnosis     the two paths     redesigned
     (50,50)       231             153              0
     (26,47)       625             475              2
     (18,50)      1200               9              0
     (19,46)      1196            1141             11
     ( 5,50)      1200              19              0
 
-**La celda donde el minijuego se juega pasó de 30 fps clavados a once cuadros
-perdidos de 1200**, por debajo del techo que el diagnóstico había medido —23—.
-Los eventos dibujados del mapa pasan de 69 a 17.
+**The cell where the minigame is played went from 30 fps flat to eleven
+dropped frames out of 1200**, below the ceiling the diagnosis had measured
+—23—. The map's drawn events go from 69 to 17.
 
-Y se juega: `pruebas/abl/test_luces.py` mide que pararse en una baldosa
-iluminada abra el mensaje del "me atraparon", y que la piedra en `Light5`
-apague su cono y deje puesto el switch de la lámpara rota.
+And it plays: `pruebas/abl/test_luces.py` measures that standing on a lit tile
+opens the "they caught me" message, and that the stone on `Light5` turns off
+its cone and leaves the broken lamp's switch set.
 
-**Lo que se descartó**, y es la decisión que abrió todo esto: los caminos 3 y
-4, que eran optimizaciones del motor. Ver "Por qué no se optimiza" más abajo.
+**What was discarded**, and it's the decision that opened all this: paths 3
+and 4, which were engine optimizations. See "Why it isn't optimized" below.
 
-# Lo medido
+# What was measured
 
-Cuadros perdidos caminando 1200 cuadros, con el contador leído y puesto en cero
-cada 50 porque **`cuadros_perdidos` satura en 255**. Es el mismo método con que
-salieron el 450 y el 228 de `eventos-opacos-al-mapa.md`, y ese 228 se
-reprodujo clavado.
+Dropped frames walking 1200 frames, with the counter read and reset to zero
+every 50 because **`cuadros_perdidos` saturates at 255**. It's the same method
+that gave the 450 and the 228 in `eventos-opacos-al-mapa.md`, and that 228 was
+reproduced exactly.
 
-**La celda desde la que se mide cambia la respuesta por un factor de cinco**, y
-eso es lo primero que hay que saber: el caso `en-11` deja al héroe en (50,50),
-que es una **zona vacía**, y ahí **ninguna** baldosa cae en pantalla. Lo que se
-venía midiendo era el costo de filas que nunca se dibujan.
+**The cell it's measured from changes the answer by a factor of five**, and
+that's the first thing to know: the `en-11` case leaves the hero at (50,50),
+which is an **empty area**, and there **no** light tile falls on screen. What
+had been measured was the cost of rows that are never drawn.
 
-    celda     en pantalla   como está hoy   sin las baldosas   sin nada dibujado
+    cell      on screen     as it is today   without the tiles  with nothing drawn
     (50,50)         0            231                75                 0
     (26,47)        17            625               108                73
     (18,50)        26           1200                 3                 3
     (19,46)        31           1196                23                10
     ( 5,50)        23           1200                 3                 3
 
-"Como está hoy" son 50 filas dibujadas de 69 —los 18 horneados ya están
-escondidos—; "sin las baldosas" son 16; "sin nada dibujado", 0.
+"As it is today" is 50 drawn rows out of 69 —the 18 baked ones are already
+hidden—; "without the tiles" is 16; "with nothing drawn", 0.
 
-**1200 de 1200 es 30 fps clavados**: perder el vblank cuesta el cuadro entero,
-no medio. O sea que en la zona del minijuego el mapa hoy **no gana un solo
-cuadro** caminando, y sin las baldosas pierde tres.
+**1200 out of 1200 is 30 fps flat**: missing the vblank costs the whole frame,
+not half. That is, in the minigame's area the map today **doesn't gain a
+single frame** while walking, and without the tiles it drops three.
 
-Quieto el margen es fino y alcanza: 176 vueltas en 180 cuadros con las baldosas
-en pantalla, 179 sin ellas. Lo que lo tira abajo es el redibujado del scroll
-sumado a los sprites.
+Standing still the margin is thin and enough: 176 iterations in 180 frames
+with the tiles on screen, 179 without them. What brings it down is the scroll
+redraw added to the sprites.
 
-## Un evento estacionado fuera del mapa **sí cuesta hoy**
+## An event parked outside the map **does cost today**
 
-Es la pregunta barata, y la respuesta es que cuesta, aunque menos que uno en
-pantalla. Medido con una tercera variante que deja las 52 baldosas **dibujadas**
-pero las estaciona en (97,97), que es lo que el juego hace al apagar una luz:
+It's the cheap question, and the answer is that it costs, though less than one
+on screen. Measured with a third variant that leaves the 52 tiles **drawn**
+but parks them at (97,97), which is what the game does when turning off a
+light:
 
-    celda     como está hoy   estacionadas afuera   sin dibujarlas
+    cell      as it is today   parked outside   without drawing them
     (50,50)        231               231                  75
     (19,46)       1196                75                  23
 
-La fila sigue costando su vuelta del lazo, la comparación contra la clave del
-héroe y la cuenta de `place_npc`; lo único que se ahorra es el cuerpo de
-`emit_object`, que descarta lo que cae fuera de pantalla. **34 filas escondidas
-de más valen 156 cuadros de 1200 en (50,50) y 52 en (19,46).** Estar en pantalla
-vale mucho más que existir: 75 contra 1196 en la misma celda.
+The row still costs its iteration of the loop, the comparison against the
+hero's key and `place_npc`'s computation; the only thing saved is the body of
+`emit_object`, which discards what falls off screen. **34 extra hidden rows are
+worth 156 frames out of 1200 at (50,50) and 52 at (19,46).** Being on screen
+costs much more than existing: 75 against 1196 on the same cell.
 
-## Los 84 eventos, por lo que hacen
+## The 84 events, by what they do
 
-    grupo                        n   dibujados  visibles  los reubican  tile
-    baldosa de luz              52      52        52          30        80
-    sin gráfico                 15       0         0           4        —
-    fuente de luz (Light1..6)    6       6         6           4        73 (y 53)
-    personaje (Chara3)           6       6         6           6        CharSet
-    la piedra (Stone)            1       1         1           1        CharSet
-    el ídolo (TheIdol)           1       1         1           1        65
-    la consola del ResetPuzzle   1       1         1           0        33
-    el LTComputer                1       1         1           0        49
+    group                        n   drawn     visible   relocated     tile
+    light tile                  52      52        52          30        80
+    no graphic                  15       0         0           4        —
+    light source (Light1..6)     6       6         6           4        73 (and 53)
+    character (Chara3)           6       6         6           6        CharSet
+    the stone (Stone)            1       1         1           1        CharSet
+    the idol (TheIdol)           1       1         1           1        65
+    the ResetPuzzle console      1       1         1           0        33
+    the LTComputer               1       1         1           0        49
     EV0017                       1       1         0           0        13
 
-Las **52 baldosas** son el grupo, y el nombre las agrupa sin identificarlas: hay
-19 eventos llamados `B3`. Son A 10, B 22, C 10, D 4, E 6. Las 52 se dibujan con
-el tile 80 y ninguna camina. **33 tienen comandos en alguna página y 19 no
-tienen ninguno**: ésas no hacen nada más que dibujarse.
+The **52 light tiles** are the group, and the name groups them without
+identifying them: there are 19 events called `B3`. They're A 10, B 22, C 10,
+D 4, E 6. All 52 are drawn with tile 80 and none walks. **33 have commands on
+some page and 19 have none**: those do nothing but get drawn.
 
-**Dos mecanismos que conviene no mezclar**, porque conviven en el mismo
-minijuego:
+**Two mechanisms best not mixed**, because they coexist in the same minigame:
 
-* las **fuentes** —las seis `Light*`, y con ellas la PC y el ídolo— tienen una
-  **segunda página condicionada por un switch** con **otro tile**: es la lámpara
-  rota. Su página paralela compara la posición de la piedra con la suya y, si
-  coinciden, corre los `ChangeEventLocation`;
-* las **baldosas** del cono **no cambian de página: se mueven**. Apagar un cono
-  es mandar sus baldosas a (54,82), (97,97) o (98,97), y no vuelven salvo por
-  `ResetPuzzle`, que reubica 42 eventos de un saque.
+* the **sources** —the six `Light*`, and with them the PC and the idol— have a
+  **second page conditioned on a switch** with **another tile**: it's the
+  broken lamp. Their parallel page compares the stone's position with their
+  own and, if they match, runs the `ChangeEventLocation`s;
+* the cone's **light tiles** **don't change page: they move**. Turning off a
+  cone means sending its tiles to (54,82), (97,97) or (98,97), and they don't
+  come back except through `ResetPuzzle`, which relocates 42 events in one go.
 
-Los **15 sin gráfico** son los que no cuestan nada de dibujo: los cuatro
-`Block*` del modo de tiro —que `ChangeEventLocation` pone alrededor del héroe—,
-las tres rejillas, los dos `EV008x` de la escalera, y el resto son
-disparadores de escena y carteles de examinar.
+The **15 without a graphic** are the ones that cost nothing to draw: the four
+`Block*` of the shooting mode —which `ChangeEventLocation` places around the
+hero—, the three grates, the two `EV008x` of the stairs, and the rest are scene
+triggers and examine signs.
 
-**Las cajas que se examinan y no tienen nada adentro son reales, y son las
-rejillas**: `EV0078` (3,51) y `EV0079` (6,38) contestan "There's nothing in the
-grate, except for a lot of dirt", y `Grate1` (26,51), una vez que le sacaron las
-piedras, contesta "There's nothing else within the grate". **Ninguna de las tres
-se dibuja**, así que no cuestan un solo cuadro y sacarlas no gana nada. Son
-prosa del juego, no lastre.
+**The boxes that get examined and have nothing inside are real, and they're
+the grates**: `EV0078` (3,51) and `EV0079` (6,38) answer "There's nothing in
+the grate, except for a lot of dirt", and `Grate1` (26,51), once the stones
+have been taken out, answers "There's nothing else within the grate". **None
+of the three is drawn**, so they don't cost a single frame and removing them
+gains nothing. They're the game's prose, not dead weight.
 
-## Cuatro baldosas quietas las rechaza la regla por una sola cosa
+## Four still tiles are rejected by the rule for a single reason
 
-De las 52, **22 no las reubica nadie** y la regla del horneado hornea **18**.
-Las cuatro que sobran son los eventos **31 (`B1`), 32 (`B2`), 33 (`B3`) y 46
-(`B2`)**, y el motivo es uno solo: **tienen dos o tres páginas**, y la regla pide
-una. Pero **todas sus páginas dibujan el mismo tile 80, en la misma capa, y la
-primera no tiene condición**, así que su dibujo es tan fijo como el de las otras
-18. Lo que cambia entre sus páginas es el script, no el gráfico —de hecho
-`collect_npcs` ya lo sabe: les da `cambia` falso—. (Eso es el camino 1, que ya
-está hecho: hoy la regla las hornea y son 22.)
+Of the 52, **22 aren't relocated by anyone** and the baking rule bakes **18**.
+The four left over are events **31 (`B1`), 32 (`B2`), 33 (`B3`) and 46
+(`B2`)**, and the reason is a single one: **they have two or three pages**, and
+the rule asks for one. But **all their pages draw the same tile 80, on the same
+layer, and the first one has no condition**, so their drawing is as fixed as
+the other 18's. What changes between their pages is the script, not the
+graphic —in fact `collect_npcs` already knows it: it gives them `cambia`
+false—. (That's path 1, which is already done: today the rule bakes them and
+they're 22.)
 
-# Los caminos, con lo que cuesta cada uno
+# The paths, with what each one costs
 
-## 1. Aflojar la regla del horneado — HECHO
+## 1. Loosening the baking rule — DONE
 
-La condición es la primera página sin condición y **todas** las páginas con el
-mismo gráfico, la misma capa y sin animación continua. Está en
-`eventos_horneables`, con el porqué de cada cosa.
+The condition is the first page without a condition and **all** the pages with
+the same graphic, the same layer and no continuous animation. It's in
+`eventos_horneables`, with the why of each thing.
 
-Lo previsto era **26 → 31** con el mapa 2 sumándose. Lo que salió es **26 → 29
-en 7 mapas**, con el mapa 11 de 18 a 22, porque el mapa 2 **movía una golden** y
-eso obligó a una sexta condición: **hornear no puede abrir la celda**.
+What was expected was **26 → 31** with map 2 joining in. What came out is
+**26 → 29 on 7 maps**, with map 11 from 18 to 22, because map 2 **moved a
+golden** and that forced a sixth condition: **baking can't open the cell**.
 
-El `MovinDoor` del mapa 2 está en un rincón, fuera de cualquier cámara, y
-hornearlo movía `puerta-izq-950` en 113 pixeles —una puerta a sesenta celdas de
-ahí, con los mismos switches puestos—. Lo medido antes de decidir: la CGRAM del
-mapa sale idéntica, el fondo dibuja lo mismo salvo la celda horneada, la tabla
-de NPCs cambia **un solo byte** —el "se ve" de esa fila— y las páginas
-compiladas no cambian. Lo único que queda es que **su celda está cerrada en la
-tabla del mapa y su tile se pisa**, así que hornearlo la abría; `pasa_con_evento`
-consulta la fila, pero la tabla la lee más de uno. **El mecanismo completo no se
-desarmó**: si alguien quiere tirar de ese hilo, la comparación está en el commit.
+Map 2's `MovinDoor` is in a corner, outside any camera, and baking it moved
+`puerta-izq-950` by 113 pixels —a door sixty cells away, with the same
+switches set—. What was measured before deciding: the map's CGRAM comes out
+identical, the background draws the same except for the baked cell, the NPC
+table changes **a single byte** —that row's "is visible"— and the compiled
+pages don't change. The only thing left is that **its cell is closed in the
+map's table and its tile gets overwritten**, so baking it opened it;
+`pasa_con_evento` checks the row, but more than one reads the table. **The
+whole mechanism wasn't taken apart**: if someone wants to pull on that thread,
+the comparison is in the commit.
 
-Cerrar de más se sigue permitiendo, que es el caso normal. Sale también el
-`EV0004` del mapa 141, que estaba en el mismo caso y no lo corre ninguna prueba.
+Closing too much is still allowed, which is the normal case. Map 141's
+`EV0004` also comes out, which was in the same situation and no test runs.
 
-**Lo que no arregla**, como estaba previsto: nada del lag donde se juega. Esas
-cuatro baldosas están dentro del grupo B, que ya está casi entero horneado. En
-(26,47) baja de 625 a 527 y en (19,46) de 1196 a 1150.
+**What it doesn't fix**, as expected: nothing of the lag where the game is
+played. Those four tiles are inside group B, which is already almost entirely
+baked. At (26,47) it goes from 625 to 527 and at (19,46) from 1196 to 1150.
 
-## 2. No procesar la fila de un evento que cae fuera de pantalla — HECHO
+## 2. Not processing the row of an event that falls off screen — DONE
 
-No quedó como un `cmp` en `build_oam` antes de `place_npc` sino **adentro de
-`place_npc`**, partido en dos: la X apenas está calculada y la Y recién después
-del salto. Sale más barato que el `cmp` de afuera —la mitad de los descartes no
-lee nada más de la fila, y el que se dibuja no paga ninguna cuenta de más— y no
-hay que elegir margen: es la misma comparación de `emit_object`, con el mismo
-corrimiento de 32 y el mismo corte en 224 por abajo, así que descarta objeto por
-objeto lo mismo y la OAM sale idéntica.
+It didn't end up as a `cmp` in `build_oam` before `place_npc` but **inside
+`place_npc`**, split in two: the X as soon as it's computed and the Y right
+after the jump. It comes out cheaper than the outer `cmp` —half the discards
+read nothing else from the row, and the one that does get drawn pays no extra
+computation— and there's no margin to choose: it's the same comparison as
+`emit_object`'s, with the same offset of 32 and the same cut at 224 at the
+bottom, so it discards object by object the same and the OAM comes out
+identical.
 
-**Gana muchísimo más de lo previsto.** La estimación era "parte de los 156
-cuadros de (50,50) y de los 52 de (19,46)"; lo medido es 231 → 153 en (50,50),
-y **1200 → 9 en (18,50) y 1200 → 19 en (5,50)**: dos celdas que estaban en 30
-fps clavados y ahora entran en el cuadro. Estaban justo del otro lado del borde.
+**It gains far more than expected.** The estimate was "part of the 156 frames
+at (50,50) and of the 52 at (19,46)"; what was measured is 231 → 153 at
+(50,50), and **1200 → 9 at (18,50) and 1200 → 19 at (5,50)**: two cells that
+were at 30 fps flat and now fit in the frame. They were just on the other side
+of the edge.
 
-Cuesta 21 bytes de banco 0 y **gana en todos los mapas**, no sólo en el 11.
+It costs 21 bytes of bank 0 and **gains on every map**, not only on 11.
 
-**No arregla el caso que importa**, como estaba previsto: con el cono prendido
-las baldosas están en pantalla y siguen costando. En (19,46) baja de 1150 a
-1141.
+**It doesn't fix the case that matters**, as expected: with the cone on the
+tiles are on screen and keep costing. At (19,46) it goes from 1150 to 1141.
 
-# Por qué no se optimiza
+# Why it isn't optimized
 
-## 3. Hornear cada posición conocida y prender/apagar el tilemap — DESCARTADO
+## 3. Baking each known position and turning the tilemap on/off — DISCARDED
 
-Era el único camino que atacaba los 1141 cuadros: una baldosa que se mueve
-**entre dos celdas conocidas** se hornea en la suya, y al apagarse el cono se
-cambia el tile del mapa en vez de mover una fila de OAM. Techo medido, **1196 →
-23 cuadros perdidos de 1200**.
+It was the only path that attacked the 1141 frames: a tile that moves
+**between two known cells** gets baked into its own, and when the cone turns
+off the map's tile changes instead of moving an OAM row. Measured ceiling,
+**1196 → 23 dropped frames out of 1200**.
 
-La regla es general —es la del horneado de hoy con "nunca se mueve" cambiado
-por "se mueve sólo a celdas constantes"— y **no sabe nada de ABL**. Lo que la
-descartó es cuánto rinde, medido el 2026-09-21 sobre los 328 mapas con
-`/extras/scratch/horneado-movil/contar.py`:
+The rule is general —it's today's baking one with "never moves" swapped for
+"moves only to constant cells"— and **knows nothing about ABL**. What
+discarded it is how much it yields, measured on 2026-09-21 over the 328 maps
+with `/extras/scratch/horneado-movil/contar.py`:
 
-    mapa   eventos   posiciones por evento
+    map    events   positions per event
       11      30       3
        3      24       2
       28       2       2
@@ -213,236 +215,248 @@ descartó es cuánto rinde, medido el 2026-09-21 sobre los 328 mapas con
       17       1       3
       83       1       3
 
-**59 eventos en 6 mapas**, de 123 con dibujo fijo de ChipSet en todo el juego,
-y es la cota de arriba: el script no mira opacidad ni si hornear abriría la
-celda. O sea que **54 de los 59 están en dos mapas**, y el segundo —el 3, la
-sala destrozada del Emitter Room, con unos veinte eventos en pantalla a la
-vez— **no molesta jugando**: taro nunca notó lag ahí.
+**59 events on 6 maps**, out of 123 with a fixed ChipSet drawing in the whole
+game, and that's the upper bound: the script doesn't look at opacity or at
+whether baking would open the cell. That is, **54 of the 59 are on two maps**,
+and the second one —3, the Emitter Room's wrecked hall, with some twenty
+events on screen at once— **isn't a problem while playing**: taro never
+noticed lag there.
 
-Decisión de taro: no se paga una tabla de celdas pisadas en RAM, más el
-consultarla en `stream_map`, por un mapa. **Promediando otros juegos, rinde
-menos de un mapa.**
+taro's decision: a table of overwritten cells in RAM, plus checking it in
+`stream_map`, isn't paid for one map. **Averaged over other games, it yields
+less than one map.**
 
-## 4. Un caso especial del conversor para las baldosas — DESCARTADO
+## 4. A converter special case for the light tiles — DISCARDED
 
-Lo descarta lo mismo que al 3, y antes ya lo descartaba que **reconoce este
-minijuego por dentro**, que es lo que el port no hace en ningún lado.
+It's discarded by the same thing as 3, and it was already discarded before
+because **it recognizes this minigame from the inside**, which is what the
+port does nowhere.
 
-Emitir las 52 como una estructura propia —un mapa de bits de "esta celda está
-iluminada"— en vez de 52 eventos. Gana lo mismo que el 3 y además ahorra 52
-filas de la tabla de NPCs y 52 entradas del recorrido de `pasa_con_evento`.
+Emitting the 52 as their own structure —a bitmap of "this cell is lit"—
+instead of 52 events. It gains the same as 3 and also saves 52 rows of the NPC
+table and 52 entries of `pasa_con_evento`'s walk.
 
-Lo que rompe: es **reconocer este minijuego por dentro**, que es exactamente lo
-que el port no hace en ningún lado. El resto del motor no sabe nada de ABL, y
-esto lo sabría. Si el camino 3 alcanza, éste no hace falta.
+What it breaks: it's **recognizing this minigame from the inside**, which is
+exactly what the port does nowhere. The rest of the engine knows nothing about
+ABL, and this would. If path 3 is enough, this one isn't needed.
 
-## 5. Liberarles la paleta de sprite y la ranura de VRAM a los horneados
+## 5. Freeing the sprite palette and the VRAM slot of the baked ones
 
-Está anotado en `eventos-opacos-al-mapa.md` y sigue valiendo: hoy un evento
-horneado sigue entrando en el reparto de `npcs_dibujables` como si se dibujara.
-Sacarlo libera una paleta y **cambia lo que se ve** —el mapa 11 tiene un gráfico
-dibujado con una paleta ajena, `@tile:lasheint:49`—, así que **mueve goldens** y
-es una decisión aparte. No gana cuadros: gana colores.
+It's noted in `eventos-opacos-al-mapa.md` and still holds: today a baked event
+still goes into `npcs_dibujables`'s allocation as if it were drawn. Removing
+it frees a palette and **changes what's seen** —map 11 has a graphic drawn
+with someone else's palette, `@tile:lasheint:49`—, so it **moves goldens** and
+is a separate decision. It doesn't gain frames: it gains colors.
 
-# El rediseño
+# The redesign
 
-Decidido el 2026-09-21. **Las 52 baldosas dejan de ser eventos**: el charco de
-luz pasa a ser un tile del mapa, y prender o apagar un cono es cambiar ese tile.
-Con eso no queda nada que optimizar, y lo que el motor gana son **dos comandos
-de RM2k que hoy no implementa**, útiles para cualquier juego que se porte.
+Decided on 2026-09-21. **The 52 light tiles stop being events**: the pool of
+light becomes a map tile, and turning a cone on or off is changing that tile.
+With that there's nothing left to optimize, and what the engine gains is **two
+RM2k commands it doesn't implement today**, useful for any game that gets
+ported.
 
-Gana lo mismo que ganaba el camino 3 —de 1141 cuadros perdidos al piso— y
-además saca 52 filas de la tabla de NPCs, que `pasa_con_evento` recorre en cada
-paso.
+It gains the same as path 3 did —from 1141 dropped frames down to the floor—
+and also removes 52 rows of the NPC table, which `pasa_con_evento` walks on
+every step.
 
-## Los dos comandos, verificados contra liblcf y el intérprete de EasyRPG
+## The two commands, verified against liblcf and EasyRPG's interpreter
 
-* **`TileSubstitution` (11750)**, parámetros `[capa alta?, tile viejo, tile
-  nuevo]`. Sustituye **todas** las celdas con ese tile, en esa capa, en todo el
-  mapa. Es por **número de tile y no por celda**, así que en la ROM es una
-  tabla chica en RAM que `stream_map` consulta al escribir cada tile —bastante
-  más barato que la tabla de celdas pisadas que pedía el camino 3—.
+* **`TileSubstitution` (11750)**, parameters `[capa alta?, tile viejo, tile
+  nuevo]`. It substitutes **all** the cells with that tile, on that layer, in
+  the whole map. It's by **tile number and not by cell**, so in the ROM it's a
+  small table in RAM that `stream_map` checks when writing each tile —quite a
+  bit cheaper than the table of overwritten cells path 3 required—.
 
-  Que sea global por tile es lo que obliga a **duplicar el tile**: un número
-  por cono, o apagar uno los apagaría todos. Y duplicar **sale gratis**: Voodoo
-  deduplica a nivel 8x8 y reusa el espejado, así que un tile de ChipSet
-  repetido son cuatro celdas que ya estaban.
+  Being global per tile is what forces **duplicating the tile**: one number per
+  cone, or turning off one would turn them all off. And duplicating **comes
+  for free**: Voodoo deduplicates at the 8x8 level and reuses the mirrored
+  ones, so a repeated ChipSet tile is four cells that were already there.
 
-* **`StoreTerrainID` (10910)**, parámetros `[modo, x, y, variable]`. El terreno
-  sale del tile de la **capa de abajo** —"RPG_RT always uses the terrain of the
-  first lower tile"—, no del de la capa alta. O sea que el terreno **no puede
-  decir "estoy iluminada"**, porque esa capa no cambia al apagarse el cono:
-  dice **"esta celda es del cono C"**, y si C está prendido ya lo sabe un
-  switch que el juego tiene.
+* **`StoreTerrainID` (10910)**, parameters `[modo, x, y, variable]`. The
+  terrain comes from the **lower layer**'s tile —"RPG_RT always uses the
+  terrain of the first lower tile"—, not from the upper layer's. That is, the
+  terrain **can't say "I'm lit"**, because that layer doesn't change when the
+  cone turns off: it says **"this cell belongs to cone C"**, and whether C is on
+  is already known by a switch the game has.
 
-  De ahí sale que hagan falta unos pocos pisos duplicados y no 52: uno por
-  cono. El paralelo queda en leer el terreno bajo el héroe, y si es de un cono,
-  mirar su switch.
+  From that it follows that a few duplicated floors are needed and not 52: one
+  per cone. The parallel boils down to reading the terrain under the hero, and
+  if it's a cone's, checking its switch.
 
-  **Son tres y no seis**, medido al hacerlo: sólo tres grupos de celdas
-  atrapan. Los tres terrenos son el 27, el 28 y el 29, que no los usa ningún
-  ChipSet del juego y traen los mismos valores que el 1 —el que el mapa tiene
-  hoy en todas sus celdas—, así que estrenarlos no cambia nada más que lo que
-  `StoreTerrainID` contesta.
+  **They're three and not six**, measured when doing it: only three groups of
+  cells catch. The three terrains are 27, 28 and 29, which no ChipSet of the
+  game uses and which carry the same values as 1 —the one the map has today on
+  all its cells—, so using them for the first time changes nothing but what
+  `StoreTerrainID` answers.
 
-El port tiene que emitir además la **tabla de terrenos por ChipSet**, que
-`lcf.py` ya lee (`terrain_data`) y nadie usa. Va al banco 1, que tiene unos
-21 KB libres.
+The port also has to emit the **terrain table per ChipSet**, which `lcf.py`
+already reads (`terrain_data`) and nobody uses. It goes to bank 1, which has
+about 21 KB free.
 
-## Lo medido del ChipSet
+## What was measured of the ChipSet
 
-El mapa 11 usa el **ChipSet 10**, que comparten siete mapas. Entre todos ocupan
-55 de los 144 tiles de la capa alta: **quedan 89 libres**. La capa de abajo
-tiene 162 ranuras, y el `terrain_data` del ChipSet 10 es **todo 1** — ABL no usa
-terrenos en ningún lado.
+Map 11 uses **ChipSet 10**, which seven maps share. Together they take 55 of
+the upper layer's 144 tiles: **89 are left free**. The lower layer has 162
+slots, and ChipSet 10's `terrain_data` is **all 1** — ABL doesn't use terrains
+anywhere.
 
-Aun así, el rediseño va con **un ChipSet propio para el mapa 11**, decisión de
-taro: no comparte con nadie, así que duplicar pisos con su terreno no le toca
-un pixel a los otros seis mapas, y la deduplicación hace que un ChipSet casi
-igual al 10 no cueste tiles.
+Even so, the redesign goes with **a ChipSet of its own for map 11**, taro's
+decision: it shares with no one, so duplicating floors with their terrain
+doesn't touch a pixel of the other six maps, and deduplication means that a
+ChipSet almost the same as 10 costs no tiles.
 
-## Lo que el reset pide
+## What the reset requires
 
-`ResetPuzzle` reubica hoy 42 eventos **sin recargar el mapa**. Recargarlo no es
-equivalente —movería también al héroe y a la piedra—, así que **la baldosa
-apagada también es un tile propio**: prender es `80 → 80A` y apagar es
-`80A → 80`, la sustitución es simétrica y el reset es volver a sustituir.
+`ResetPuzzle` today relocates 42 events **without reloading the map**.
+Reloading it isn't equivalent —it would also move the hero and the stone—, so
+**the turned-off light tile is also a tile of its own**: turning on is
+`80 → 80A` and turning off is `80A → 80`, the substitution is symmetric and the
+reset is substituting again.
 
-**Que `TileSubstitution` no persista es canon y se deja así**: en el intérprete
-se aplica al spriteset de la escena, o sea que se pierde al recargar el mapa. En
-ABL nunca se vuelve a este mapa, así que no hay nada que reaplicar.
+**That `TileSubstitution` doesn't persist is canon and is left that way**: in
+the interpreter it's applied to the scene's spriteset, that is, it's lost when
+the map reloads. In ABL this map is never returned to, so there's nothing to
+reapply.
 
-El único caso donde el rediseño podría diferir del original es **volver de una
-pelea**: en canon se perderían las sustituciones, pero los eventos de hoy
-sobreviven. No pasa, y está verificado: `Lazer Teeth HQ` tiene `encounters: []`,
-o sea ninguna tropa asignada. Queda anotado porque es lo que se reintroduce sin
-querer el día que alguien le ponga tropas a un mapa.
+The only case where the redesign could differ from the original is **returning
+from a battle**: in canon the substitutions would be lost, but today's events
+survive. It doesn't happen, and it's verified: `Lazer Teeth HQ` has
+`encounters: []`, that is, no troop assigned. It's noted because it's what gets
+reintroduced by accident the day someone puts troops on a map.
 
-De ahí sale una decisión de implementación que conviene tomar a propósito: **la
-tabla de sustituciones vive lo que vive el mapa cargado, no lo que vive la
-ventana del tilemap**. Limpiarla al cargar un mapa y no al rellenar la ventana
-la deja canónica y además correcta si algún día se vuelve de una pelea.
+From that comes an implementation decision best taken on purpose: **the
+substitutions table lives as long as the loaded map lives, not as long as the
+tilemap window**. Clearing it when loading a map and not when refilling the
+window leaves it canonical and also correct if some day you come back from a
+battle.
 
-## Las 33 baldosas con comandos
+## The 33 light tiles with commands
 
-Se dieron por copy-paste y **no lo son**, aunque casi: al mirarlas una por una
-—el 2026-09-21, antes de borrarlas— salieron cinco scripts distintos y cuatro
-celdas con páginas propias.
+They were assumed to be copy-paste and **they aren't**, though almost: looking
+at them one by one —on 2026-09-21, before deleting them— five different
+scripts and four cells with their own pages came out.
 
-Los cinco scripts son el mismo "me atraparon, se reinicia el minijuego" con el
-guardia que mira y el texto cambiados: el del cono C lo agarra el `LTSentry2` y
-no el `LTSentry1`, la `A1` dice "avoid the light" donde las del B dicen "avoid
-the light, or not be seen", y hay una variante "avoid being seen" para cuando
-el guardia está caminando. Se copian tal cual a un evento de cinco páginas y
-el paralelo llama a la que toca, que es la forma que el mapa ya usaba.
+The five scripts are the same "they caught me, the minigame restarts" with the
+guard who's watching and the text changed: on cone C it's `LTSentry2` who
+catches you and not `LTSentry1`, `A1` says "avoid the light" where the B ones
+say "avoid the light, or not be seen", and there's an "avoid being seen"
+variant for when the guard is walking. They're copied as is into a five-page
+event and the parallel calls the right one, which is the shape the map already
+used.
 
-Las cuatro celdas con páginas propias son del grupo B y miran dos switches: el
-46 —el guardia se fue a ver el ruido— y el 51 —está caminando—. Una deja pasar,
-dos contestan "Something behind me?!" y tres cambian el texto. El paralelo las
-distingue por celda, y esa comparación **sólo corre cuando el héroe ya está
-parado en una del grupo B**, o sea una vez por partida y no una por cuadro.
+The four cells with their own pages are from group B and look at two switches:
+46 —the guard went to check the noise— and 51 —he's walking—. One lets you
+through, two answer "Something behind me?!" and three change the text. The
+parallel tells them apart by cell, and that comparison **only runs when the
+hero is already standing on one of group B**, that is once per playthrough and
+not once per frame.
 
-## El fork del mapa, no el parche
+## The map's fork, not the patch
 
-El mapa 11 rediseñado es un **reemplazo entero del archivo**, no una
-descripción de cambios, y el pipeline ignora el original si existe. Tres cosas
-que lo sostienen:
+The redesigned map 11 is a **whole replacement of the file**, not a
+description of changes, and the pipeline ignores the original if it exists.
+Three things support it:
 
-* **No va en `parches/`**, que hoy es **salida generada** —las fusiones de
-  color que decidió el asignador—. Esto es entrada escrita a mano que manda
-  sobre todo lo demás: dos direcciones opuestas en un directorio es lo que
-  alguien regenera sin mirar.
-* **El original sigue versionado en `data/`**, así que el diff no se pierde: se
-  computa cuando haga falta. Y nada se pisa, porque `unpack` escribe en `data/`
-  y nunca en el fork.
-* **Es todo o nada.** Las capas viven afuera del JSON, así que un `.json` sin
-  su `.tiles` dejaría el build con las capas viejas y los eventos nuevos, y eso
-  **se ve bien** hasta que no. Falta una pieza, el build se niega.
+* **It doesn't go in `parches/`**, which today is **generated output** —the
+  color merges the allocator decided—. This is hand-written input that
+  overrides everything else: two opposite directions in one directory is what
+  someone regenerates without looking.
+* **The original stays versioned in `data/`**, so the diff isn't lost: it's
+  computed when needed. And nothing gets overwritten, because `unpack` writes
+  into `data/` and never into the fork.
+* **It's all or nothing.** The layers live outside the JSON, so a `.json`
+  without its `.tiles` would leave the build with the old layers and the new
+  events, and that **looks fine** until it doesn't. If a piece is missing, the
+  build refuses.
 
-Las pruebas que pide, de taro y de acá: que el **id de adentro coincida con el
-nombre del archivo** —si no, se rompen los teleports—, y que **los teleports
-que entran a ese mapa desde el resto del juego sigan cayendo en celdas
-pisables**, que es la que rompe el juego de verdad y el id no cubre. El mapa 11
-está en `abl`, así que su golden cubre lo demás.
+The tests it requires, from taro and from here: that the **id inside match the
+file's name** —otherwise the teleports break—, and that **the teleports that
+enter that map from the rest of the game still land on walkable cells**,
+which is the one that really breaks the game and the id doesn't cover. Map 11
+is in `abl`, so its golden covers the rest.
 
-Todo el fork es data y **Ditto lo puede escribir**: lee y escribe `.ldb`,
-`.lmu` y `.lmt`, con round-trip sobre los 330 archivos. Son cuatro cosas: el
-ChipSet nuevo en la base con su pasabilidad y sus terrenos, el `chipset_id` del
-mapa, el `upper_layer` con los charcos horneados, y los 52 eventos reemplazados
-por uno paralelo.
+The whole fork is data and **Ditto can write it**: it reads and writes `.ldb`,
+`.lmu` and `.lmt`, with a round-trip over the 330 files. It's four things: the
+new ChipSet in the database with its passability and its terrains, the map's
+`chipset_id`, the `upper_layer` with the baked pools, and the 52 events
+replaced by a single parallel one.
 
-**Hecho el 2026-09-21**, con tres cosas que se decidieron al hacerlo y que este
-documento no preveía —el porqué de cada una, en `juego/README.md`—:
+**Done on 2026-09-21**, with three things decided while doing it that this
+document didn't foresee —the why of each one, in `juego/README.md`—:
 
-* el fork del mapa lleva adentro un campo `id` que el volcado de Ditto no
-  tiene. Es lo único que hace real la prueba que taro pidió: el pipeline elige
-  el mapa por el **nombre del archivo** y los teleports lo nombran por su
-  **id**, y sin ese campo no hay "id de adentro" que comparar;
-* **el ChipSet nuevo no reemplaza la sección de la base: se agrega**, en un
-  archivo propio. Un fork que pisara `db/chipsets.json` envejecería sin avisar
-  el día que `just datos` la cambie;
-* **su imagen no se versiona: se arma.** El arte del juego no es nuestro para
-  redistribuir —vive en `/extras`—, así que lo commiteado es la receta —qué
-  bloque y qué tile se copian adónde— y el PNG sale a `rom/build/juego/`.
+* the map's fork carries inside it an `id` field that Ditto's dump doesn't
+  have. It's the only thing that makes the test taro asked for real: the
+  pipeline picks the map by the **file's name** and the teleports name it by
+  its **id**, and without that field there's no "id inside" to compare;
+* **the new ChipSet doesn't replace the database's section: it's added**, in a
+  file of its own. A fork that overwrote `db/chipsets.json` would go stale
+  without warning the day `just datos` changes it;
+* **its image isn't versioned: it's built.** The game's art isn't ours to
+  redistribute —it lives in `/extras`—, so what's committed is the recipe
+  —which block and which tile get copied where— and the PNG goes to
+  `rom/build/juego/`.
 
-## La trampa que apareció al armarlo: el bloque de destino
+## The trap that showed up when building it: the destination block
 
-`TileSubstitution` cambia un tile por otro, pero la ROM dibuja **bloques de
-16x16 con las dos capas juntas**. Si el mapa ya dibuja en alguna celda la
-combinación que la sustitución va a dejar, el bloque existe y no hay nada que
-armar; si no, el conversor lo arma, y **no puede cuando alguno de los dos tiles
-se hornea en el fondo** —un tile alto sin el bit `Above` no va a BG2, y ahí las
-dos mitades del bloque dejan de ser independientes—.
+`TileSubstitution` swaps one tile for another, but the ROM draws **16x16
+blocks with both layers together**. If the map already draws, on some cell,
+the combination the substitution is going to leave, the block exists and
+there's nothing to build; if not, the converter builds it, and **it can't when
+either of the two tiles gets baked into the background** —an upper tile
+without the `Above` bit doesn't go to BG2, and there the block's two halves
+stop being independent—.
 
-Los charcos de luz son exactamente ese caso: van **debajo** del héroe, así que
-no llevan `Above`. Darles el bit para que el bloque se pueda armar los pondría
-por encima, y el charco es opaco: **el jugador desaparecería al pararse en la
-luz**.
+The pools of light are exactly that case: they go **under** the hero, so they
+don't carry `Above`. Giving them the bit so the block can be built would put
+them on top, and the pool is opaque: **the player would vanish when standing in
+the light**.
 
-La salida no toca cómo se ve: se le **dibujan al mapa las combinaciones que
-faltan**, una celda cada una, en la última fila. El mapa es de 100x100 y todo
-su contenido entra en x 1..28, y 35..58, así que ahí no llega ni el héroe ni la
-cámara —es donde el propio juego estaciona los eventos que apaga—. Son quince,
-y no son una lista escrita a mano: las deduce
-`/extras/scratch/mapa11-cierre/faltantes.py` del mapa y de sus propias
-sustituciones, y después de aplicarlas contesta cero.
+The way out doesn't touch how it looks: **the missing combinations get drawn
+onto the map**, one cell each, in the last row. The map is 100x100 and all its
+content fits in x 1..28, and 35..58, so neither the hero nor the camera gets
+there —it's where the game itself parks the events it turns off—. They're
+fifteen, and they aren't a hand-written list: they're deduced by
+`/extras/scratch/mapa11-cierre/faltantes.py` from the map and its own
+substitutions, and after applying them it answers zero.
 
-**Le va a pasar a cualquier fork que sustituya un tile que no lleve `Above`.**
+**It'll happen to any fork that substitutes a tile that doesn't carry
+`Above`.**
 
-## Lo que queda distinto del original, y taro lo tiene que juzgar
+## What remains different from the original, and taro has to judge it
 
-* **El cono tarda en apagarse.** El tilemap se rehace de a una columna por
-  cuadro, así que la sustitución no se ve en el acto como en RM2k: quieto puede
-  tardar hasta `WINDOW_COLS` = 64 cuadros. Caminando se disimula. Subir dos
-  columnas por cuadro no entra: `push_strips` sube una sola.
-* **Cuándo salta el "me atraparon"**: antes era contacto —dispara en el paso—,
-  ahora es un paralelo que mira la celda. Un cuadro de diferencia.
+* **The cone takes a while to turn off.** The tilemap is redone one column per
+  frame, so the substitution isn't seen instantly as in RM2k: standing still it
+  can take up to `WINDOW_COLS` = 64 frames. Walking, it's less noticeable.
+  Uploading two columns per frame doesn't fit: `push_strips` uploads only one.
+* **When the "they caught me" triggers**: before it was touch —it fires on the
+  step—, now it's a parallel that looks at the cell. One frame of difference.
 
-## El reparto
+## The split
 
-**Del motor, y general**: `TileSubstitution`, `StoreTerrainID`, la tabla de
-terrenos, y el mecanismo del fork con sus pruebas. **Hecho**; lo que no
-resultó como se había supuesto está arriba, en "Status", y es que la
-sustitución tarda en verse.
+**The engine's, and general**: `TileSubstitution`, `StoreTerrainID`, the
+terrain table, and the fork mechanism with its tests. **Done**; what didn't
+turn out as assumed is above, in "Status", and it's that the substitution takes
+a while to show.
 
-Y dos cosas que el motor pide y este documento no preveía —las dos son lo que
-hoy frena al mapa 11, ver "Status"—: **el tile hacia el que se sustituye tiene
-que estar dibujado en alguna celda del mapa**, en su capa, porque los 8x8 que
-entran en la VRAM son los de las celdas del mapa; y **si es un tile alto, con
-el bit `Above` puesto**, porque sin él se hornea en el fondo y las dos capas
-del bloque dejan de ser independientes.
+And two things the engine requires that this document didn't foresee —both
+are what's holding back map 11 today, see "Status"—: **the tile being
+substituted to has to be drawn on some cell of the map**, on its layer, because
+the 8x8s that go into VRAM are those of the map's cells; and **if it's an upper
+tile, with the `Above` bit set**, because without it it gets baked into the
+background and the block's two layers stop being independent.
 
-**De ABL**: el ChipSet propio, los tiles duplicados, los terrenos por cono y el
-mapa rediseñado. **Hecho.**
+**ABL's**: its own ChipSet, the duplicated tiles, the terrains per cone and the
+redesigned map. **Done.**
 
-# Cómo se reproduce
+# How to reproduce it
 
-Los scripts descartables quedaron en `/extras/scratch/mapa11/`: `grupos.py`
-clasifica los 84, `porque_no.py` dice por qué la regla rechaza cada baldosa
-quieta, `perdidos_zona.py` mide los cuadros perdidos por celda y `capturar.py`
-saca las capturas. Las capturas y su `LEEME.txt` están en
+The throwaway scripts were left in `/extras/scratch/mapa11/`: `grupos.py`
+classifies the 84, `porque_no.py` says why the rule rejects each still tile,
+`perdidos_zona.py` measures the dropped frames per cell and `capturar.py` takes
+the screenshots. The screenshots and their `LEEME.txt` are in
 `/extras/capturas/mapa11/`.
 
-`perdidos_zona.py` lleva la raíz del worktree escrita adentro: hay que cambiarla
-antes de correrlo, y hay que armar los cartuchos antes. Es el que da la tabla de
-arriba, y tarda cinco segundos.
+`perdidos_zona.py` has the worktree's root written inside it: it has to be
+changed before running it, and the cartridges have to be built first. It's the
+one that gives the table above, and it takes five seconds.

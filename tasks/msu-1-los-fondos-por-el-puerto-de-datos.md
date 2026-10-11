@@ -1,144 +1,150 @@
 ---
-name: "MSU-1: los fondos por el puerto de datos"
-description: "Piloto: los fondos de batalla también en el .msu, y con MSU-1 la ROM los lee de ahí; sin él, de sí misma"
+name: "MSU-1: the backgrounds through the data port"
+description: "Pilot: the battle backgrounds also in the .msu, and with MSU-1 the ROM reads them from there; without it, from itself"
 type: feature
 status: done
 ---
 
-Idea de taro, el 2026-09-25: usar el **puerto de datos** del MSU-1 para
-guardar cosas fuera de la ROM, empezando por los fondos de batalla. Es un
-piloto: **probar el mecanismo, no ahorrar espacio todavía**. La condición que
-no se negocia es que sin MSU-1 el juego ande igual, porque taro juega en
-Mednafen.
+taro's idea, on 2026-09-25: use MSU-1's **data port** to store things outside
+the ROM, starting with the battle backgrounds. It's a pilot: **test the
+mechanism, not save space yet**. The non-negotiable condition is that without
+MSU-1 the game work the same, because taro plays in Mednafen.
 
-## Qué anduvo
+## What worked
 
-El conversor escribe en el `.msu` de cada cartucho los mismos fondos que lleva
-la ROM, con una firma del contenido adelante —formato y mecanismo en
-`docs/port/msu-datos.md`, referencia en `tools/port/msu_datos.py`—. Al
-empezar una pelea con fondo, la ROM mira si hay MSU-1 y si el `.msu` tiene su
-firma; si sí, trae los 32 KB por DMA desde `$2001` a los dos búferes de la
-WRAM y los colores a la CGRAM, y deja `ESC_MSU` en 1. Si no —sin MSU-1, con
-otro `.msu`, vacío, o si el MSU-1 no termina de buscar—, todo sale de la ROM
-como antes.
+The converter writes into each cartridge's `.msu` the same backgrounds the ROM
+carries, with a signature of the contents in front —format and mechanism in
+`docs/port/msu-datos.md`, reference in `tools/port/msu_datos.py`—. When a
+battle with a background starts, the ROM checks whether there's MSU-1 and
+whether the `.msu` has its signature; if so, it brings the 32 KB by DMA from
+`$2001` into the two WRAM buffers and the colors into CGRAM, and leaves
+`ESC_MSU` at 1. If not —without MSU-1, with another `.msu`, an empty one, or
+if MSU-1 doesn't finish seeking—, everything comes from the ROM as before.
 
-## En qué está verificado
+## What it's verified on
 
-* **Sin MSU-1**: la tanda entera. En el piloto, sin ninguna golden
-  cambiada; con el respaldo liviano, con las diez de batalla cambiadas.
-* **Con MSU-1, en snes9x y en bsnes**: `pruebas/abl/test_msu_datos.py`. La
-  pelea de Sector 27, cada camino contra su golden y el fondo limpio de la
-  WRAM contra los bytes del conversor; un control con los tiles del `.msu`
-  cambiados se ve distinto —que es lo que prueba que la imagen salió del
-  `.msu`—, y un `.msu` de otro build o vacío cae a la ROM.
-* **mesen-s**: los mismos tres casos, a mano, con el mismo resultado —en el
-  piloto; con el respaldo liviano no se volvió a mirar—. No va
-  en la tanda por el arrastre de estado entre consolas del mismo proceso que
-  documenta `test_cores.py`.
-* **No verificado: el FX Pak Pro.** Es lo que falta que taro pruebe: con
-  `abl.sfc`, `abl.msu` y las pistas en la misma carpeta, entrar a una pelea
-  con fondo —la del droide, o un encuentro al azar en Sector 27 o 30— y ver
-  que el fondo es el de siempre. Con el respaldo liviano es más fácil: con
-  MSU-1 tiene que verse el de calidad, y en Mednafen el de 16 colores. Si el
-  fondo sale bien pero la entrada tarda más que en un emulador, es la
-  búsqueda en la SD.
-* **La espera del bit de datos ocupados: en Mednafen, a mano.** Es el único
-  emulador que lo prende —400.000 ciclos maestros por búsqueda, ver
-  `docs/snes/emulators.md`—, y el 2026-09-26 la pelea del droide leyó el
-  fondo del `.msu` ahí, jugando desde el título. Lo que no corre nadie es
-  el corte por tope.
-* **No lo cubre la firma**: un `.msu` con la cabecera intacta y los datos
-  dañados. La ROM no hashea los fondos al empezar cada pelea.
+* **Without MSU-1**: the whole suite. In the pilot, with no golden changed;
+  with the lightweight fallback, with the ten battle ones changed.
+* **With MSU-1, in snes9x and in bsnes**: `pruebas/abl/test_msu_datos.py`. The
+  Sector 27 battle, each path against its golden and the clean WRAM
+  background against the converter's bytes; a control with the `.msu`'s tiles
+  changed looks different —which is what proves the image came from the
+  `.msu`—, and a `.msu` from another build or an empty one falls back to the
+  ROM.
+* **mesen-s**: the same three cases, by hand, with the same result —in the
+  pilot; with the lightweight fallback it wasn't looked at again—. It isn't
+  in the suite because of the state carry-over between consoles of the same
+  process that `test_cores.py` documents.
+* **Not verified: the FX Pak Pro.** That's what's left for taro to test: with
+  `abl.sfc`, `abl.msu` and the tracks in the same folder, enter a battle with
+  a background —the droid one, or a random encounter in Sector 27 or 30— and
+  see that the background is the usual one. With the lightweight fallback
+  it's easier: with MSU-1 the quality one has to show, and in Mednafen the
+  16-color one. If the background comes out fine but the entry takes longer
+  than in an emulator, it's the seek on the SD card.
+* **The wait on the data-busy bit: in Mednafen, by hand.** It's the only
+  emulator that sets it —400,000 master cycles per seek, see
+  `docs/snes/emulators.md`—, and on 2026-09-26 the droid battle read the
+  background from the `.msu` there, playing from the title. What nobody runs
+  is the cutoff by limit.
+* **Not covered by the signature**: a `.msu` with the header intact and the
+  data damaged. The ROM doesn't hash the backgrounds at the start of each
+  battle.
 
-## Cuánto tarda
+## How long it takes
 
-En snes9x, bsnes y mesen-s buscar es instantáneo, y el DMA va a 8 ciclos
-maestros por byte venga de donde venga. En Mednafen cada una de las cuatro
-búsquedas por pelea —la firma, los tiles dos veces (uno por búfer) y los
-colores— cuesta uno o dos cuadros: unos siete en total, medido. En el FX Pak
-no están medidas. Ver "Cuánto tarda" en `docs/port/msu-datos.md`.
+In snes9x, bsnes and mesen-s seeking is instant, and the DMA goes at 8 master
+cycles per byte wherever it comes from. In Mednafen each of the four seeks per
+battle —the signature, the tiles twice (one per buffer) and the colors— costs
+one or two frames: about seven in total, measured. On the FX Pak they aren't
+measured. See "Cuánto tarda" in `docs/port/msu-datos.md`.
 
-## Cómo viaja a taro
+## How it travels to taro
 
-`just entregar` copia el `abl.msu` al build, al lado del `abl.sfc`, y
-**siempre** a `/shared/msu/`, porque es del build y no de las pistas. Con el
-`abl.sfc` de otro build no se rompe nada: la ROM no encuentra su firma y lee
-los fondos de sí misma.
+`just entregar` copies the `abl.msu` into the build, next to the `abl.sfc`,
+and **always** to `/shared/msu/`, because it belongs to the build and not to
+the tracks. With another build's `abl.sfc` nothing breaks: the ROM doesn't
+find its signature and reads the backgrounds from itself.
 
-## El respaldo liviano (en su rama, sin mergear)
+## The lightweight fallback (on its branch, not merged)
 
-Pedido de taro el mismo día: *"quiero poder confirmar que está efectivamente
-cargando por MSU, pudiendo comparar y ver que carga otro fondo en
-Mednafen"*. Con los dos fondos iguales no había cómo.
+taro's request the same day: *"I want to be able to confirm it's actually
+loading via MSU, by being able to compare and see it loads a different
+background in Mednafen"*. With both backgrounds the same there was no way.
 
-* **Qué es**: la ROM lleva cada fondo en **4bpp y 16 colores**; el `.msu`
-  sigue con el de 8bpp y 96, byte por byte el de antes —la firma no cambió—.
-  La capa sigue siendo de 8bpp: `esc_llenar` agranda el respaldo al copiarlo
-  a la WRAM, dos DMA por tile (el tile por el canal 0, los planos 4 a 7 fijos
-  por el 7). El porqué de esta forma y no otra, en "El respaldo liviano" de
-  `tools/port/escena.py`.
-* **Cuánto ahorra**: lo imprime el conversor en `conversor.log` ("fondo de
-  batalla …: en la ROM … B, en el .msu … B"). Es propiedad del formato:
-  16.384 B de tiles y 160 de colores por fondo, menos 32 B de patrón para
-  todos.
-* **Cuánto tarda**: el respaldo un cuadro más que el `.msu` en la pelea del
-  droide (`ESC_CUADROS`, en snes9x y en bsnes): copiar de a un tile rearma
-  los registros 512 veces por búfer.
-* **Cambia lo que ve la tanda**: las diez goldens de batalla, sólo en la
-  escena. Vieja y nueva lado a lado en
-  `/shared/goldens/2026-09-25-fondo-liviano/`. **taro decide** si se queda.
-* **Build para mirar**: `/shared/builds/2026-09-25-demo-fondo-liviano/`, con
-  su `LEEME.txt` y dos capturas de la misma pelea por los dos caminos.
-* **Lo que se ve raro**: en Sector 27 el cartel verde se ve **en el liviano y
-  no en el de calidad**. No es del respaldo: `titulo.reducir`, que arma los
-  96, se queda con los colores más usados y el verde del cartel no está entre
-  ellos; `merge_least_visible`, que arma los 16, lo conserva. Cambiar los 96
-  de reductor cambia el `.msu` y su firma, y queda para después.
-* **No lo corre ninguna prueba**: que una búsqueda del MSU-1 no llegue a
-  tiempo a mitad de camino. Con fondos distintos eso dejaría colores de uno y
-  tiles del otro, así que `escena_subir` rehace el fondo entero desde la ROM;
-  ningún emulador busca con demora.
+* **What it is**: the ROM carries each background in **4bpp and 16 colors**;
+  the `.msu` keeps the 8bpp, 96-color one, byte for byte the earlier one —the
+  signature didn't change—. The layer is still 8bpp: `esc_llenar` widens the
+  fallback when copying it to WRAM, two DMAs per tile (the tile through
+  channel 0, the fixed planes 4 to 7 through channel 7). The why of this shape
+  and not another, in "El respaldo liviano" of `tools/port/escena.py`.
+* **How much it saves**: the converter prints it in `conversor.log` ("fondo de
+  batalla …: en la ROM … B, en el .msu … B"). It's a property of the format:
+  16,384 B of tiles and 160 of colors per background, minus 32 B of pattern
+  for all of them.
+* **How long it takes**: the fallback one frame more than the `.msu` in the
+  droid battle (`ESC_CUADROS`, in snes9x and in bsnes): copying one tile at a
+  time re-sets the registers 512 times per buffer.
+* **It changes what the suite sees**: the ten battle goldens, only in the
+  scene. Old and new side by side in
+  `/shared/goldens/2026-09-25-fondo-liviano/`. **taro decides** whether it
+  stays.
+* **Build to look at**: `/shared/builds/2026-09-25-demo-fondo-liviano/`, with
+  its `LEEME.txt` and two screenshots of the same battle through both paths.
+* **What looks odd**: in Sector 27 the green sign shows **in the lightweight
+  one and not in the quality one**. It isn't the fallback's fault:
+  `titulo.reducir`, which builds the 96, keeps the most used colors and the
+  sign's green isn't among them; `merge_least_visible`, which builds the 16,
+  keeps it. Changing the 96's reducer changes the `.msu` and its signature,
+  and is left for later.
+* **No test runs it**: an MSU-1 seek not arriving in time halfway through.
+  With different backgrounds that would leave colors from one and tiles from
+  the other, so `escena_subir` redoes the whole background from the ROM; no
+  emulator seeks with a delay.
 
-## El paso siguiente
+## The next step
 
-* **Los demás fondos.** El juego nombra una quincena; en el `.msu` no cuestan
-  cartucho, así que el respaldo de los que no están en `FONDOS` puede seguir
-  siendo el fondo liso.
-* **Medir en el FX Pak** cuánto tarda buscar, antes de mover algo que se lea
-  en cada cuadro y no una vez por pelea.
-* Si se suman otras cosas al `.msu`, la firma sigue cubriendo todo el archivo:
-  cualquier cambio en cualquier entrada invalida el `.msu` entero, que es lo
-  simple y lo correcto mientras el `.msu` viaje con el build.
+* **The other backgrounds.** The game names about fifteen; in the `.msu` they
+  cost no cartridge, so the fallback for those not in `FONDOS` can stay the
+  plain background.
+* **Measure on the FX Pak** how long seeking takes, before moving something
+  that is read every frame and not once per battle.
+* If other things are added to the `.msu`, the signature still covers the
+  whole file: any change in any entry invalidates the whole `.msu`, which is
+  the simple and correct thing while the `.msu` travels with the build.
 
-**Lo que dijo taro mirando las goldens lado a lado, el 2026-09-25**: "en el
-celular se nota, pero no es tan grave. Sospecho que en la tele de tubo casi no
-se va a notar." Falta que lo vea en la consola.
+**What taro said looking at the goldens side by side, on 2026-09-25**: "on the
+phone it shows, but it isn't that bad. I suspect on the CRT it'll barely be
+noticeable." It remains for him to see it on the console.
 
-## "En Mednafen y en ares no veo ninguna diferencia" (2026-09-26)
+## "In Mednafen and in ares I don't see any difference" (2026-09-26)
 
-taro jugó la pelea del droide en Mednafen (`snes_faust`) y en ares, con y
-sin el `.msu`, y vio lo mismo. La sospecha era la espera: que Mednafen tarda
-en buscar y los cores de la tanda no. **No se reprodujo**:
+taro played the droid battle in Mednafen (`snes_faust`) and in ares, with and
+without the `.msu`, and saw the same thing. The suspicion was the wait: that
+Mednafen takes time to seek and the suite's cores don't. **It didn't
+reproduce**:
 
-* Mednafen sí tarda —`MSU1_WriteDataSeek` prende el bit 7 por 400.000
-  ciclos maestros—, y la espera de la ROM llega: su tope es unas diez veces
-  eso.
-* Con el build que jugó taro (`d7056b6`) y con `main`, jugando desde el
-  título hasta el droide en el Mednafen de acá (1.32.1, el mismo paquete de
-  Arch), la pelea sale con `ESC_MSU` en 1 y el fondo del `.msu`: leído del
-  estado guardado con F5 y comparado contra las capturas de los dos caminos.
-  Sin el `.msu`, `ESC_MSU` en 0 y el liviano.
-* ares busca en el acto (`dataBusy` no se prende nunca), así que corre el
-  mismo camino que bsnes, que la tanda prueba.
+* Mednafen does take time —`MSU1_WriteDataSeek` sets bit 7 for 400,000 master
+  cycles—, and the ROM's wait is long enough: its limit is about ten times
+  that.
+* With the build taro played (`d7056b6`) and with `main`, playing from the
+  title up to the droid in the Mednafen here (1.32.1, the same Arch package),
+  the battle comes out with `ESC_MSU` at 1 and the `.msu`'s background: read
+  from the state saved with F5 and compared against the screenshots of both
+  paths. Without the `.msu`, `ESC_MSU` at 0 and the lightweight one.
+* ares seeks instantly (`dataBusy` never gets set), so it runs the same path
+  as bsnes, which the suite tests.
 
-Lo más probable es que **la diferencia no se vea a tamaño de juego**: en la
-pared violeta, el de calidad es un degradé con la cara y el liviano la misma
-cara posterizada en dos o tres violetas. Lado a lado y agrandado se nota;
-jugando, no tanto. Las capturas, en `/shared/capturas/2026-09-26-msu-mednafen/`.
+The most likely thing is that **the difference doesn't show at game size**: on
+the violet wall, the quality one is a gradient with the face and the
+lightweight one the same face posterized into two or three violets. Side by
+side and enlarged it shows; while playing, not so much. The screenshots, in
+`/shared/capturas/2026-09-26-msu-mednafen/`.
 
-**Lo que tiene que mirar taro**, si quiere confirmarlo sin mirar el fondo:
-en Mednafen, Alt+D abre el depurador y Alt+3 su editor de memoria; con la
-pelea abierta, el byte `$664A` del espacio `wram` —`$7E664A`— es `ESC_MSU`:
-1 si el fondo salió del `.msu`, 0 si salió de la ROM.
+**What taro has to look at**, if he wants to confirm it without looking at the
+background: in Mednafen, Alt+D opens the debugger and Alt+3 its memory editor;
+with the battle open, byte `$664A` of the `wram` space —`$7E664A`— is
+`ESC_MSU`: 1 if the background came from the `.msu`, 0 if it came from the
+ROM.
 
-**Confirmado por taro el 2026-09-26, en Mednafen con `snes_faust`**: el fondo del `.msu` carga y la diferencia con el de la ROM existe, pero tuvo que sacar capturas para verla: jugando no es obvia, y en la tele de tubo lo será menos. Queda sin probar el FX Pak Pro (el riesgo de la lectura de 32 KB en un solo DMA).
+**Confirmed by taro on 2026-09-26, in Mednafen with `snes_faust`**: the `.msu`'s background loads and the difference from the ROM's exists, but he had to take screenshots to see it: while playing it isn't obvious, and on the CRT it will be even less so. The FX Pak Pro remains untested (the risk of the 32 KB read in a single DMA).

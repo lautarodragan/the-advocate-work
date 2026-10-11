@@ -1,55 +1,55 @@
 ---
-name: "Desenredar el grafo de tools/"
-description: "El paso 1 del plan del research: romper los ciclos y las violaciones de capa de tools/ moviendo funciones, sin cambiar lógica y con las ROMs byte por byte iguales"
+name: "Untangle the tools/ graph"
+description: "Step 1 of the research's plan: break the cycles and layer violations of tools/ by moving functions, without changing logic and with the ROMs byte for byte identical"
 type: refactor
 status: done
 assignee: taro
 ---
 
-Paso 1 del plan de `docs/research/el-mapa-de-las-herramientas-de-python.md`
-(§4), aprobado por taro el 2026-09-28. taro autorizó a Hornero a avanzar con
-los pasos mecánicos sin esperar su feedback el 2026-09-29.
+Step 1 of the plan in `docs/research/el-mapa-de-las-herramientas-de-python.md`
+(§4), approved by taro on 2026-09-28. taro authorized Hornero to move ahead
+with the mechanical steps without waiting for his feedback on 2026-09-29.
 
-Entra: los ítems 1.1, 1.2, 1.3, 1.5 y 1.6 del research, y el 1.7 (partir
-`titulo.py`) si todo lo anterior quedó mergeado y en verde.
+In scope: items 1.1, 1.2, 1.3, 1.5 and 1.6 of the research, and 1.7 (splitting
+`titulo.py`) if everything before it ended up merged and green.
 
-No entra: el 1.4 (`cartuchos` deja de importar `port/` y `audio/`), porque
-qué hacer con `cartuchos.py` es una pregunta abierta de taro (ver
+Out of scope: 1.4 (`cartuchos` stops importing `port/` and `audio/`), because
+what to do with `cartuchos.py` is an open question for taro (see
 `workflow/decisiones/las-herramientas-se-separan-de-abl.md`).
 
-## Lo hecho (Lapacho)
+## What was done (Lapacho)
 
-Un commit por ítem, cada uno mudanza sin lógica nueva:
+One commit per item, each one a move with no new logic:
 
-- **1.1** `GAME_DIR`, `RTP_DIR` y `find_resource` a `rpgmaker/recursos.py`.
-  `audio/` deja de importar `render/`.
-- **1.2** `TILE`, `caja_de_terreno`, `caja_de_comun`, `SPRITE_*` y
-  `OFFSET_*` a `rpgmaker/rm2k.py`. `render/charset.py` quedó vacío y se
-  borró.
-- **1.3** `lcf`↔`fork`: la parte de imagen de `fork` sube a
-  `render/chipset_del_fork.py`, la opción que el research prefería. La otra
-  —que `fork` reciba el `Map`— cambiaba una firma; ésta es sólo mudanza.
-  `rpgmaker/` ya no carga PIL.
-- **1.5** Las siete movidas, a cuatro módulos nuevos de `port/` que no
-  importan nada del port (salvo `paleta`, que importa `constantes`):
-  `reglas`, `constantes`, `color` y `paleta`. Importar `eventos` ya no carga
-  PIL, numpy ni `render_map` (medido con `sys.modules`).
-- **1.6** `pack_tile`, `cgram_word` y `entry` a `port/formato_snes.py`.
-- **1.7, la mitad**: `titulo.py` se corta en `titulo.py` (la pantalla de
-  título) y `menus.py` (ranuras, pausa, ítems, elegir a quién). Ninguna
-  mitad usa nada de la otra, medido en el AST.
-- Prosa: `tools/README.md`, las capas y los ciclos.
+- **1.1** `GAME_DIR`, `RTP_DIR` and `find_resource` to `rpgmaker/recursos.py`.
+  `audio/` stops importing `render/`.
+- **1.2** `TILE`, `caja_de_terreno`, `caja_de_comun`, `SPRITE_*` and
+  `OFFSET_*` to `rpgmaker/rm2k.py`. `render/charset.py` was left empty and
+  deleted.
+- **1.3** `lcf`↔`fork`: the image part of `fork` moves up to
+  `render/chipset_del_fork.py`, the option the research preferred. The other
+  one —having `fork` receive the `Map`— changed a signature; this one is only
+  a move. `rpgmaker/` no longer loads PIL.
+- **1.5** The seven moved ones, to four new modules of `port/` that import
+  nothing from the port (except `paleta`, which imports `constantes`):
+  `reglas`, `constantes`, `color` and `paleta`. Importing `eventos` no longer
+  loads PIL, numpy or `render_map` (measured with `sys.modules`).
+- **1.6** `pack_tile`, `cgram_word` and `entry` to `port/formato_snes.py`.
+- **1.7, half of it**: `titulo.py` is cut into `titulo.py` (the title screen)
+  and `menus.py` (slots, pause, items, choosing whom). Neither half uses
+  anything from the other, measured in the AST.
+- Prose: `tools/README.md`, the layers and the cycles.
 
-Verificado en cada ítem: `SIN_CACHE=1 just cartuchos` da iguales los
-archivos de `rom/build/release/` y `rom/build/tests/special/` que se
-comparan —el `.sfc`, el `.msu`, las pistas, los `.inc`, el `.sym`, el
-`conversor.log`, y los `.dbg` sin los `mtime` de los fuentes—. No se
-comparan los `.o`, que llevan adentro los `mtime` de los `.inc` regenerados,
-ni `sello.txt`, que lleva la huella de los `.py` y cambia a propósito.
-`just pruebas` y `just -f tools/justfile pruebas` en verde en cada commit
-desde el 1.3; en el 1.2, sólo la ROM.
+Verified on each item: `SIN_CACHE=1 just cartuchos` gives identical the files
+of `rom/build/release/` and `rom/build/tests/special/` that are compared —the
+`.sfc`, the `.msu`, the tracks, the `.inc`s, the `.sym`, the
+`conversor.log`, and the `.dbg`s without the sources' `mtime`s—. Not compared:
+the `.o`s, which carry inside them the `mtime`s of the regenerated `.inc`s,
+nor `sello.txt`, which carries the fingerprint of the `.py`s and changes on
+purpose. `just pruebas` and `just -f tools/justfile pruebas` green on every
+commit from 1.3 on; on 1.2, only the ROM.
 
-El script del apéndice D, sobre el árbol final:
+Appendix D's script, on the final tree:
 
     ## VIOLACIONES DE CAPA
     ensamblado.cartuchos:31 -> audio.muestras_brr [import]
@@ -63,41 +63,43 @@ El script del apéndice D, sobre el árbol final:
     ## CICLOS
     import + lazy + ruta SCC: ensamblado.cartuchos, port.parches, port.snes_convert
 
-Sin la clase `ruta` no queda ningún ciclo, y todas las violaciones son de
-`cartuchos`, que es el 1.4.
+Without the `ruta` class no cycle remains, and all the violations are
+`cartuchos`'s, which is 1.4.
 
-### La clave del caché
+### The cache key
 
-Entró **un** archivo en la lista de `_version_capas`: `rpgmaker/recursos.py`,
-porque `render_map` encuentra el ChipSet con `find_resource`, y ese código
-entraba en la clave por vivir en `render_map.py`. Los demás módulos nuevos
-no entran: o salen de archivos que no estaban en la lista (`fork`,
-`eventos`, `titulo`, `pantallas`, `batalla`), o lo que se cachea no los usa
-(`formato_snes`: medido recorriendo en el AST las llamadas de
-`capas_convertidas`). La huella de `cartuchos` los cubre sola, con su glob
-de `tools/*/*.py`.
+**One** file went into `_version_capas`'s list: `rpgmaker/recursos.py`,
+because `render_map` finds the ChipSet with `find_resource`, and that code
+was part of the key by living in `render_map.py`. The other new modules
+don't go in: either they come from files that weren't in the list (`fork`,
+`eventos`, `titulo`, `pantallas`, `batalla`), or what's cached doesn't use
+them (`formato_snes`: measured by walking `capas_convertidas`'s calls in the
+AST). `cartuchos`'s fingerprint covers them on its own, with its glob of
+`tools/*/*.py`.
 
-### Lo que no entró, y lo que quedó para mirar
+### What didn't go in, and what was left to look at
 
-- **El 1.4**, por lo que dice arriba.
-- **La otra mitad del 1.7: la fuente de los menús aparte.** No es mudanza.
-  La fuente de la pantalla de ítems (`pantalla_items`, `texto_de_item`,
-  `ITEM_BLANCO`…`ITEM_ROJO`, `ITEM_PRIMER_CARACTER`, `ITEMS_TILES_MAX`) y los
-  marcos (`marcos`, `ITEM_MARCO_CGRAM`) están entreverados con la geometría
-  de esa pantalla en los mismos bloques de comentario, se llaman `ITEM_*`, y
-  `_bloque_de_celdas` lo usan también las ranuras. Separarlos pide decidir
-  dónde va cada constante y probablemente cómo se llama: es criterio.
-- **`BA_TERMINOS` se fue a `reglas` con `terminos_batalla`**, porque la
-  función la recorre. Pero es también el orden en que la ROM lee los
-  términos (`ba_vic_mensaje`), así que dónde vive es discutible.
-- **`pack_tiles`**, la de numpy, sigue en `snes_convert`: no cerraba ningún
-  ciclo. Es candidata al próximo corte de `snes_convert`.
-- **Dos comentarios nombran lo viejo** y no se tocaron: el que
-  `snes_convert` escribe en `mapdata.inc` ("lo que depende del actor' en
-  titulo.py"), porque cambiarlo cambia el `.inc` que se comparaba byte por
-  byte, y el de `rom/src/registros.s:39` (`eventos.tenir`, que ahora es
-  `color.tenir`), porque `rom/src/` no se tocaba. También nombran lo viejo
-  dos tareas de `wishlist/`: `test-declarative-script` e
-  `inventario-de-imagenes-en-python`.
-- **Tres imports sin usar que ya estaban antes**: `ELEGIR_CURSOR` en
-  `pantallas`, `collections` en `imagen` y `load_image` en `snes_convert`.
+- **1.4**, for the reason stated above.
+- **The other half of 1.7: the menus' font separately.** It isn't a move.
+  The items screen's font (`pantalla_items`, `texto_de_item`,
+  `ITEM_BLANCO`…`ITEM_ROJO`, `ITEM_PRIMER_CARACTER`, `ITEMS_TILES_MAX`) and
+  the frames (`marcos`, `ITEM_MARCO_CGRAM`) are intertwined with that
+  screen's geometry in the same comment blocks, they're called `ITEM_*`, and
+  `_bloque_de_celdas` is also used by the slots. Separating them requires
+  deciding where each constant goes and probably what it's called: it's
+  judgement.
+- **`BA_TERMINOS` went to `reglas` with `terminos_batalla`**, because the
+  function walks it. But it's also the order in which the ROM reads the terms
+  (`ba_vic_mensaje`), so where it lives is debatable.
+- **`pack_tiles`**, the numpy one, stays in `snes_convert`: it didn't close
+  any cycle. It's a candidate for the next cut of `snes_convert`.
+- **Two comments name the old thing** and weren't touched: the one
+  `snes_convert` writes into `mapdata.inc` ("lo que depende del actor' en
+  titulo.py"), because changing it changes the `.inc` that was being
+  compared byte for byte, and the one at `rom/src/registros.s:39`
+  (`eventos.tenir`, which is now `color.tenir`), because `rom/src/` wasn't
+  being touched. Two tasks of `wishlist/` also name the old thing:
+  `test-declarative-script` and `inventario-de-imagenes-en-python`.
+- **Three unused imports that were already there before**: `ELEGIR_CURSOR`
+  in `pantallas`, `collections` in `imagen` and `load_image` in
+  `snes_convert`.

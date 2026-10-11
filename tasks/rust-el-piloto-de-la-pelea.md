@@ -1,133 +1,130 @@
 ---
-name: "Rust: el piloto del conversor, las tablas de pelea"
-description: "El primer dominio del conversor en Rust: el crate rm2k-snes-battle con las tablas de experiencia y encuentros (battle_tables.py), llamado por el Python por el PATH, con las ROMs byte por byte iguales"
+name: "Rust: the converter's pilot, the battle tables"
+description: "The converter's first domain in Rust: the rm2k-snes-battle crate with the experience and encounter tables (battle_tables.py), called by the Python from the PATH, with the ROMs byte for byte identical"
 type: refactor
 status: done
 assignee: taro
 ---
 
-Paso 4 del camino a Rust, con lo que se charló con taro el 2026-09-29:
+Step 4 of the road to Rust, with what was discussed with taro on 2026-09-29:
 
-- el conversor se migra **por etapas**, con el Python orquestando y
-  llamando a cada etapa de Rust por el PATH, como `rm2k-render` y
+- the converter is migrated **in stages**, with the Python orchestrating and
+  calling each Rust stage from the PATH, like `rm2k-render` and
   `rm2k-snes-audio`;
-- en Rust queda **un crate por dominio**, porque Cargo no permite ciclos
-  entre crates y así la frontera la hace cumplir el compilador; el
-  orquestador (`rm2k-snes-convert`, más adelante) no tiene lógica de ningún
-  recurso;
-- el piloto es chico a propósito para fijar la forma: `battle_tables.py`
-  (experiencia y encuentros) va a `tools/rm2k-snes/battle/`, el crate
-  `rm2k-snes-battle`, que después va a recibir el resto de la pelea.
+- in Rust there's **one crate per domain**, because Cargo doesn't allow
+  cycles between crates and that way the compiler enforces the boundary; the
+  orchestrator (`rm2k-snes-convert`, later on) has no logic of any resource;
+- the pilot is small on purpose to settle the shape: `battle_tables.py`
+  (experience and encounters) goes to `tools/rm2k-snes/battle/`, the
+  `rm2k-snes-battle` crate, which will later receive the rest of the battle.
 
-## La forma que quedó fijada (Surubí, 2026-09-29)
+## The shape that got settled (Surubí, 2026-09-29)
 
-Es la plantilla de los dominios que siguen. Está en el README del crate,
-en inglés, que es donde la va a buscar el que arme el próximo:
+It's the template for the domains that follow. It's in the crate's README, in
+English, which is where whoever builds the next one will look for it:
 `tools/rm2k-snes/battle/README.md`, "One stage of a converter".
 
-- **Un crate por dominio, con biblioteca y ejecutable**:
-  `tools/rm2k-snes/battle/`, paquete `rm2k-snes-battle`, binario
-  `rm2k-snes-battle`, nombre de proyecto `battle` para `install` e
-  `install-local` (es el directorio: `_install` lo busca como
-  `<capa>/<nombre>`). Capa `rm2k-snes`, porque emite tablas para ca65.
-- **Lee el juego él mismo, del volcado de Ditto** (`--data`, el
-  directorio con `maps.json` y `db/`), sólo los campos que usa y con
-  tipos propios chicos: `src/game.rs`. Un campo que falta es un error que
-  lo nombra, igual que en `lcf.py`. **Se reemplaza por Ditto como
-  biblioteca cuando exista**; hasta entonces no se copia el modelo entero.
-- **Lo que el volcado no dice viene en un pedido** (`--request`, un JSON):
-  lo que decidió el cartucho —qué actores pelean, qué mapas lleva y su
-  tamaño, los pasos forzados de un cartucho de prueba— y lo que el
-  proyecto parchea encima del volcado —los nodos del árbol de los mapas
-  nuevos, que en ABL es el cuarto de debug—. El pedido lleva decisiones y
-  parches, nunca datos que el volcado ya tiene.
-- **La lógica de otro dominio entra como dato, no como código**: qué
-  actores pueden pelear es del grupo, y llega como lista; qué tropas lleva
-  el cartucho es de las tropas, y vuelve como lista para que el Python
-  las pida con `troops.request`, en el mismo orden que antes.
-- **Escribe pedazos del `.inc`, uno por archivo, y un JSON** con lo que el
-  resto de la conversión necesita (`--out`): `experience.inc`,
-  `encounters.inc` y `battle.json`. El Python los intercala donde
-  estaban; no sabe dónde se arma un cartucho.
-- **Dos códigos de salida**, como `rm2k-render`: 1 si la respuesta es no
-  (no entra, el volcado está roto), 2 si la llamada está mal.
-- **Sus pruebas no necesitan el juego**: `tests/python.rs` arma uno chico
-  y compara contra los sha256 de lo que daba el Python;
-  `tests/command_line.rs`, el binario visto de afuera.
+- **One crate per domain, with a library and an executable**:
+  `tools/rm2k-snes/battle/`, package `rm2k-snes-battle`, binary
+  `rm2k-snes-battle`, project name `battle` for `install` and
+  `install-local` (it's the directory: `_install` looks for it as
+  `<capa>/<nombre>`). Layer `rm2k-snes`, because it emits tables for ca65.
+- **It reads the game itself, from Ditto's dump** (`--data`, the directory
+  with `maps.json` and `db/`), only the fields it uses and with small types of
+  its own: `src/game.rs`. A missing field is an error that names it, same as
+  in `lcf.py`. **It gets replaced by Ditto as a library when that exists**;
+  until then the whole model isn't copied.
+- **What the dump doesn't say comes in a request** (`--request`, a JSON): what
+  the cartridge decided —which actors fight, which maps it carries and their
+  size, the forced steps of a test cartridge— and what the project patches on
+  top of the dump —the tree nodes of the new maps, which in ABL is the debug
+  room—. The request carries decisions and patches, never data the dump
+  already has.
+- **Another domain's logic comes in as data, not as code**: which actors can
+  fight belongs to the party, and arrives as a list; which troops the
+  cartridge carries belongs to the troops, and comes back as a list so the
+  Python requests them with `troops.request`, in the same order as before.
+- **It writes pieces of the `.inc`, one per file, and a JSON** with what the
+  rest of the conversion needs (`--out`): `experience.inc`, `encounters.inc`
+  and `battle.json`. The Python interleaves them where they were; it doesn't
+  know where a cartridge is built.
+- **Two exit codes**, like `rm2k-render`: 1 if the answer is no (it doesn't
+  fit, the dump is broken), 2 if the call is wrong.
+- **Its tests don't need the game**: `tests/python.rs` builds a small one and
+  compares against the sha256 of what the Python gave;
+  `tests/command_line.rs`, the binary seen from outside.
 
-Del lado de Python, **el que llama es el orquestador**: `snes_convert.py`
-arma el pedido y corre la etapa una vez, en el lugar donde antes corría
-`rom_encounters`, y le pasa lo escrito a `mapdata.emit`, que lo intercala
-donde estaba. Correr una etapa es `port/stage.py`, uno solo para todas:
-busca el binario en el PATH, escribe el pedido, lo corre en un directorio
-temporal y devuelve `{archivo: texto}`. No queda un módulo envoltorio por
-etapa. El árbol de `lcf.TreeMap` ahora dice de qué volcado salió (`dump`)
-y qué nodos le agregó el proyecto (`added_nodes`), que es lo que la etapa
-necesita para ver el mismo árbol.
+On the Python side, **the caller is the orchestrator**: `snes_convert.py`
+builds the request and runs the stage once, where `rom_encounters` used to
+run, and passes what was written to `mapdata.emit`, which interleaves it where
+it was. Running a stage is `port/stage.py`, a single one for all: it looks for
+the binary in the PATH, writes the request, runs it in a temporary directory
+and returns `{archivo: texto}`. No wrapper module per stage remains.
+`lcf.TreeMap`'s tree now says which dump it came from (`dump`) and which nodes
+the project added to it (`added_nodes`), which is what the stage needs to see
+the same tree.
 
-## Lo que usaba de otros módulos
+## What it used from other modules
 
-- De `events.py`: `ENC_DEFAULT_STEPS`, `ENC_RATE` y las filas de
-  `ENC_TABLE` son **constantes**, y se trajeron. `enc_base`,
-  `enc_step_thresholds` y `encounter_zones` **son de este dominio** —los
-  encuentros— aunque vivan en `events.py`, y se reimplementaron. Las de
-  Python **se quedan**: las usan el modelo `Encounters` de las pruebas,
-  `battle_scenes.py` (`encounter_zones`) y `test_encuentros.py` /
-  `test_pasos_de_encuentro.py`, que comparan la ROM contra ellas. Así que
-  una divergencia entre las dos copias la cobra la tanda.
-- De `experience.py`: `max_level`, `exp_for`, `exp_list`, `next_exp`,
-  `initial_level` e `initial_exp`, reimplementadas. **No se borra nada de
-  `experience.py`**: `menus.py` usa `initial_level`, `initial_exp` y
-  `next_exp`, y las pruebas de la ROM usan todo el resto (`add_exp`,
-  `troop_exp`, `exp_list`, `max_level`, `EXP_MAX`).
-- `troops.request` (de `battle.py`, las tropas) queda en Python: ver
-  arriba.
-- `lcf.CURVES`, el orden de las seis curvas, es del formato: constante.
+- From `events.py`: `ENC_DEFAULT_STEPS`, `ENC_RATE` and the rows of
+  `ENC_TABLE` are **constants**, and were brought over. `enc_base`,
+  `enc_step_thresholds` and `encounter_zones` **belong to this domain** —the
+  encounters— even though they live in `events.py`, and were reimplemented.
+  The Python ones **stay**: they're used by the tests' `Encounters` model,
+  `battle_scenes.py` (`encounter_zones`) and `test_encuentros.py` /
+  `test_pasos_de_encuentro.py`, which compare the ROM against them. So a
+  divergence between the two copies gets caught by the suite.
+- From `experience.py`: `max_level`, `exp_for`, `exp_list`, `next_exp`,
+  `initial_level` and `initial_exp`, reimplemented. **Nothing is deleted from
+  `experience.py`**: `menus.py` uses `initial_level`, `initial_exp` and
+  `next_exp`, and the ROM tests use all the rest (`add_exp`, `troop_exp`,
+  `exp_list`, `max_level`, `EXP_MAX`).
+- `troops.request` (from `battle.py`, the troops) stays in Python: see above.
+- `lcf.CURVES`, the order of the six curves, belongs to the format: a
+  constant.
 
-## Lo que se encontró
+## What was found
 
-- **`enc_base` de un mapa con `encounter_steps` 1 da 65536**, que no
-  entra en el `.word` de `enc_base`: el Python lo emitía igual y el Rust
-  también, porque la prueba fija lo que daba. Ningún mapa de ABL tiene 1;
-  un `--test-encounters 1` rompería el ensamblado. Queda anotado, no
-  arreglado: es un cambio de salida.
-- **Nada de esto va al caché en disco**: las tablas se calculan en cada
-  conversión, así que la clave del caché no tiene por qué llevar el
-  binario. La huella de los cartuchos sí: `CONVERTER_TOOLS` en
+- **`enc_base` of a map with `encounter_steps` 1 gives 65536**, which doesn't
+  fit in `enc_base`'s `.word`: the Python emitted it anyway and the Rust does
+  too, because the test pins what it gave. No ABL map has 1; a
+  `--test-encounters 1` would break the assembly. Noted, not fixed: it's an
+  output change.
+- **None of this goes into the on-disk cache**: the tables are computed on
+  each conversion, so the cache key has no reason to carry the binary. The
+  cartridges' fingerprint does: `CONVERTER_TOOLS` in
   `tools/rm2k-snes/cartridge/src/cartridges.rs`.
 
-## Verificación
+## Verification
 
-- `NO_CACHE=1 just cartuchos` antes (con `battle_tables.py`) y después
-  (con `rm2k-snes-battle`): los 999 archivos de `rom/build/` iguales —los
-  `.sfc`, `.msu`, `.pcm` y `.inc`— salvo los dos `.dbg`. Esos difieren
-  **sólo en cómo escriben la ruta de cada fuente**, que depende de qué
-  `rm2k-snes-assemble` arma —el global o el del worktree—, no del
-  conversor: rearmado con el global, el `.dbg` es el mismo con el prefijo
-  `.claude/worktrees/<agente>/` en cada `name=`, y nada más.
-- Después de mergear `main` (el renombre a Adeleine), otra vez con
-  `NO_CACHE=1 just cartuchos` sobre el árbol mergeado: los `.sfc`, `.msu`,
-  `.pcm` y `.inc` iguales a los de antes de empezar. Difieren los `.toml`
-  de `parches/auto/battlers/`, que traen `adeleine.` en su comentario (es
-  de `main`), y el `.dbg`, en el tamaño de `far_ram.s`: el commit de prosa
-  le cambió un comentario.
-- `just pruebas` (874) y `just -f tools/justfile test` (83) en verde sobre
-  el árbol mergeado; `cargo test -p rm2k-snes-battle -p
-  rm2k-snes-cartridge` en verde.
+- `NO_CACHE=1 just cartuchos` before (with `battle_tables.py`) and after (with
+  `rm2k-snes-battle`): the 999 files of `rom/build/` identical —the `.sfc`,
+  `.msu`, `.pcm` and `.inc`— except the two `.dbg`. Those differ **only in how
+  they write each source's path**, which depends on which
+  `rm2k-snes-assemble` builds —the global one or the worktree's—, not on the
+  converter: rebuilt with the global one, the `.dbg` is the same with the
+  `.claude/worktrees/<agente>/` prefix in each `name=`, and nothing else.
+- After merging `main` (the rename to Adeleine), again with `NO_CACHE=1 just
+  cartuchos` on the merged tree: the `.sfc`, `.msu`, `.pcm` and `.inc`
+  identical to those from before starting. The `.toml`s of
+  `parches/auto/battlers/` differ, since they carry `adeleine.` in their
+  comment (that's from `main`), and so does the `.dbg`, in the size of
+  `far_ram.s`: the prose commit changed a comment in it.
+- `just pruebas` (874) and `just -f tools/justfile test` (83) green on the
+  merged tree; `cargo test -p rm2k-snes-battle -p rm2k-snes-cartridge` green.
 
-## Al mergear
+## When merging
 
-Instalar en el global `battle` —el binario nuevo— y `cartridge`, porque
-la huella de los cartuchos ahora incluye `rm2k-snes-battle`:
+Install in the global `battle` —the new binary— and `cartridge`, because the
+cartridges' fingerprint now includes `rm2k-snes-battle`:
 
     just -f tools/justfile install battle cartridge
 
-Sin `battle` instalado, el conversor se niega y dice qué correr. Hay un
-`.py` nuevo, `port/stage.py`, pero no es un ejecutable: no hace falta
-`install-scripts`.
+Without `battle` installed, the converter refuses and says what to run.
+There's a new `.py`, `port/stage.py`, but it isn't an executable: no
+`install-scripts` needed.
 
-## Para taro
+## For taro
 
-Nada para jugar: las ROMs salen byte por byte iguales. Lo que hay que
-mirar es la forma, en el README del crate, antes de que la copie el
-próximo dominio.
+Nothing to play: the ROMs come out byte for byte identical. What needs looking
+at is the shape, in the crate's README, before the next domain copies it.

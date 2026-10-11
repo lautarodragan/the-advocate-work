@@ -1,216 +1,214 @@
 ---
-name: "El piloto del modo 7, para el zoom de las fotos Diff"
-description: "Una ROM de prueba que haga el zoom de 100 a 0 % de una foto Diff en modo 7, con las variantes que entren en sus 256 tiles, para que taro la vea en la tele"
+name: "The mode 7 pilot, for the zoom of the Diff photos"
+description: "A test ROM that does the 100 to 0 % zoom of a Diff photo in mode 7, with the variants that fit in its 256 tiles, so taro can see it on the TV"
 type: research
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-10-02, después de ver el video de Bandurria
-(`/shared/capturas/2026-10-01-escenas-diff/`): "me gustaría explorar usar el
-modo 7. Lo descartamos porque es muy breve el uso, pero ahora que vi el
-video, me doy cuenta que es emocionalmente impactante, y el zoom ayuda
-mucho más a transmitir la emoción". El estudio de Jilguero lo había
-descartado (opción F): el mapa del modo 7 admite 256 tiles de 8 bits y una
-foto entera necesita 896.
+From taro, on 2026-10-02, after seeing Bandurria's video
+(`/shared/capturas/2026-10-01-escenas-diff/`): "I'd like to explore using mode
+7. We ruled it out because its use is very brief, but now that I've seen the
+video, I realize it's emotionally striking, and the zoom helps convey the
+emotion much more". Jilguero's study had ruled it out (option F): mode 7's map
+allows 256 8-bit tiles and a whole photo needs 896.
 
-Hecho por Chimango, desde `main` en `cb333da4`.
+Done by Chimango, from `main` at `cb333da4`.
 
-## Lo medido del original
+## What was measured of the original
 
-De la grabación cruda de Bandurria (`raw.mkv`, 60 cuadros por segundo),
-cuadro a cuadro, en el 212 y el 213, con el ancho de lo que no es negro:
+From Bandurria's raw recording (`raw.mkv`, 60 frames per second), frame by
+frame, on 212 and 213, with the width of what isn't black:
 
-* **El destello** es un `FlashScreen` blanco de fuerza 31 y 0,2 s
-  (`11040 [31, 31, 31, 31, 2, 0]` en el 213, el 214 y el 216; el 212 no
-  lo tiene, y lo que destella ahí es la animación de batalla 93 de las
-  explosiones, encima de la foto). La foto aparece **debajo** del blanco,
-  en el mismo cuadro: el brillo medio va de 246 a 102 en 12 cuadros, en
-  línea recta.
-* **La foto se queda quieta 93 cuadros** en el 213 (el `Wait` de 1,5 s más
-  los cuadros de los comandos; en el 212, 118, con la animación de las
-  explosiones encima) y **el zoom es lineal**: el ancho baja 1/120 por
-  cuadro, de 640 a 0 en 120 cuadros justos, con el centro en el centro de
-  la pantalla. No hay aceleración ni frenado: escala = 1 − t/120. Medido
-  igual en el 212 y en el 213.
-* **El recorte**: los cuatro mapas son de 20x15 —la pantalla de RM2k
-  entera—, así que la cámara de RM2k está en (0, 0) y la de la ROM
-  (`follow_camera`) donde la deja el héroe, que entra por un `Teleport` y
-  no se mueve: PhoneCallDiff y SurlGravesDiff se recortan desde (8, 16) y
-  SurlBroDiff y ThreeRubbleDiff desde (0, 16), a 256x224. Lo calcula
-  `recorte()` en `armar.py`; la comparación con capturas que pide
-  `las-fotos-diff-recortadas-y-el-montaje.md` no se hizo.
+* **The flash** is a white `FlashScreen` of strength 31 and 0.2 s
+  (`11040 [31, 31, 31, 31, 2, 0]` on 213, 214 and 216; 212 doesn't have it,
+  and what flashes there is battle animation 93 of the explosions, on top of
+  the photo). The photo appears **under** the white, on the same frame: the
+  mean brightness goes from 246 to 102 in 12 frames, in a straight line.
+* **The photo stays still for 93 frames** on 213 (the 1.5 s `Wait` plus the
+  commands' frames; on 212, 118, with the explosions animation on top) and
+  **the zoom is linear**: the width drops by 1/120 per frame, from 640 to 0 in
+  exactly 120 frames, centered on the center of the screen. There's no
+  acceleration or braking: scale = 1 − t/120. Measured the same on 212 and
+  213.
+* **The crop**: the four maps are 20x15 —the whole RM2k screen—, so RM2k's
+  camera is at (0, 0) and the ROM's (`follow_camera`) wherever the hero leaves
+  it, who enters through a `Teleport` and doesn't move: PhoneCallDiff and
+  SurlGravesDiff are cropped from (8, 16) and SurlBroDiff and ThreeRubbleDiff
+  from (0, 16), at 256x224. `recorte()` in `armar.py` computes it; the
+  comparison with screenshots that `las-fotos-diff-recortadas-y-el-montaje.md`
+  asks for wasn't done.
 
-## La ROM
+## The ROM
 
-`just zoom-modo-7` la arma (`rom/experimentos/zoom-modo-7/`) y la verifica
-en snes9x, bsnes y mesen-s; `just zoom-modo-7-videos <originales>
-<salida>` graba cada combinación al lado del original. Muestra las
-**cuatro fotos** —no sólo PhoneCallDiff: las otras tres tienen ruido, 896
-tiles distintos de 896, y son el caso difícil— con **cuatro variantes**
-cada una, en loop: negro, la foto con el destello, quieta, el zoom, negro.
-Arriba y abajo cambian de foto, izquierda y derecha de variante, B esconde
-los dos números de la esquina (foto y variante), Start pausa e Y es cámara
-lenta (×8).
+`just zoom-modo-7` builds it (`rom/experimentos/zoom-modo-7/`) and verifies it
+in snes9x, bsnes and mesen-s; `just zoom-modo-7-videos <originales> <salida>`
+records each combination next to the original. It shows the **four photos**
+—not just PhoneCallDiff: the other three have noise, 896 distinct tiles out of
+896, and are the hard case— with **four variants** each, in a loop: black, the
+photo with the flash, still, the zoom, black. Up and down change photo, left
+and right change variant, B hides the two numbers in the corner (photo and
+variant), Start pauses and Y is slow motion (×8).
 
-1. **media**: la foto a 128x112, promediando de a 2x2 —188 tiles en
-   PhoneCallDiff, 225 en las otras—, agrandada al doble con la matriz. Toda
-   la escena en modo 7: la foto quieta ya se ve borrosa y pixelada.
-2. **híbrida, media**: quieta en modo 1, entera a 4 bits, como la muestra
-   hoy el juego (Adeleine en siete paletas, Voodoo), y al primer cuadro del
-   zoom pasa a modo 7 con la textura de la 1.
-3. **vq**: la foto a resolución completa con 255 tiles distintos, por
-   cuantización vectorial: los 896 tiles se agrupan en 255 por su forma
-   —promediados de a 2x2, para que el ruido del pasto no decida— y cada
-   lugar muestra el tile de la foto más representativo de su grupo. Toda la
-   escena en modo 7.
-4. **híbrida, vq**: quieta en modo 1 y el zoom con la textura de la 3.
+1. **media**: the photo at 128x112, averaging 2x2 —188 tiles in PhoneCallDiff,
+   225 in the others—, enlarged to double with the matrix. The whole scene in
+   mode 7: the still photo already looks blurry and pixelated.
+2. **hybrid, media**: still in mode 1, whole at 4 bits, as the game shows it
+   today (Adeleine in seven palettes, Voodoo), and on the first frame of the
+   zoom it switches to mode 7 with 1's texture.
+3. **vq**: the photo at full resolution with 255 distinct tiles, through
+   vector quantization: the 896 tiles are grouped into 255 by their shape
+   —averaged 2x2, so the grass's noise doesn't decide— and each place shows the
+   photo's most representative tile of its group. The whole scene in mode 7.
+4. **hybrid, vq**: still in mode 1 and the zoom with 3's texture.
 
-**El destello** es `COLDATA` sumado a BG1 y al fondo, y la tabla de cuánto
-blanco va en cada uno de los 12 cuadros se elige por foto para que el
-brillo medio siga a RM2k, que mezcla hacia el blanco en vez de sumar. Está
-en las cuatro fotos, aunque el 212 original no lo tiene.
+**The flash** is `COLDATA` added to BG1 and the backdrop, and the table of how
+much white goes into each of the 12 frames is chosen per photo so that the
+mean brightness follows RM2k, which blends towards white instead of adding.
+It's on all four photos, even though the original 212 doesn't have it.
 
-### Lo que no se pudo: la híbrida con umbral
+### What couldn't be done: the hybrid with a threshold
 
-El encargo pedía resolución completa en otro modo **mientras la escala
-baja hasta un umbral** (60 o 50 %) y el modo 7 de ahí para abajo. **No se
-puede**: ni el modo 1 ni el 3 escalan, y achicar una foto de 256x224 por
-cuadro en la CPU pide subir decenas de KB por cuadro. Lo único que se puede
-mostrar a resolución completa en otro modo es la foto **quieta**, y por eso
-las híbridas cambian al empezar el zoom. Y lo que el umbral buscaba —que el
-zoom arranque nítido y la falta de resolución aparezca cuando ya no se
-nota— lo da la textura vq: es de resolución completa, así que no hay umbral
-que esperar. Por debajo del 53 % cualquier textura de 256 tiles alcanza (la
-pantalla muestra menos pixeles de los que tiene), y por eso cambiar de
-textura a mitad del zoom no aportaría: costaría además tres o cuatro
-vblanks de basura, porque los 256 tiles se pisan mientras se ven.
+The assignment asked for full resolution in another mode **while the scale
+goes down to a threshold** (60 or 50 %) and mode 7 from there down. **It can't
+be done**: neither mode 1 nor 3 scales, and shrinking a 256x224 photo per
+frame on the CPU means uploading tens of KB per frame. The only thing that can
+be shown at full resolution in another mode is the **still** photo, and that's
+why the hybrids switch when the zoom starts. And what the threshold was after
+—that the zoom start sharp and the lack of resolution appear when it no longer
+shows— is given by the vq texture: it's full resolution, so there's no
+threshold to wait for. Below 53 % any 256-tile texture is enough (the screen
+shows fewer pixels than it has), and that's why switching texture halfway
+through the zoom wouldn't add anything: it would also cost three or four
+vblanks of garbage, because the 256 tiles get overwritten while they're being
+shown.
 
-### Lo medido en la ROM
+### What was measured in the ROM
 
-* **La foto quieta**, pixel por pixel a 15 bits contra la esperada: igual
-  en las dieciséis combinaciones y los tres cores. Eso cubre la textura
-  entera en la VRAM, la matriz a escala 1 y el centro.
-* **La curva**: el ancho y el alto de lo que no es negro, en doce cuadros
-  del zoom, contra 256·(1 − t/120) por 224·(1 − t/120): dentro de un pixel
-  y centrado, en todas. Por ejemplo, t = 30: 191x167 (media) y 193x168
-  (vq) contra 192x168; t = 60: 128x112 justo; t = 120: nada.
-* **Las híbridas** suben la textura del modo 7 en **8 o 9 vblanks** de 4 KB
-  con la foto en pantalla (el mapa de 128x128 entero y los tiles: 30 KB), y
-  el cambio de modo con la paleta de 256 colores entra en un vblank: **cero
-  cuadros en negro**. El vblank más largo termina en la línea 251 de 261.
-* **Los tres cores dan lo mismo** en cada cuadro mirado.
-* **Cuánto se parece a la foto**, en dB (pixel a pixel / promediadas de a
-  4x4, que mide la forma y no el grano), lo imprime la receta:
+* **The still photo**, pixel by pixel at 15 bits against the expected one:
+  identical in all sixteen combinations and the three cores. That covers the
+  whole texture in VRAM, the matrix at scale 1 and the center.
+* **The curve**: the width and height of what isn't black, on twelve frames of
+  the zoom, against 256·(1 − t/120) by 224·(1 − t/120): within one pixel and
+  centered, in all of them. For example, t = 30: 191x167 (media) and 193x168
+  (vq) against 192x168; t = 60: exactly 128x112; t = 120: nothing.
+* **The hybrids** upload the mode 7 texture in **8 or 9 vblanks** of 4 KB with
+  the photo on screen (the whole 128x128 map and the tiles: 30 KB), and the
+  mode change with the 256-color palette fits in one vblank: **zero frames in
+  black**. The longest vblank ends on line 251 of 261.
+* **The three cores give the same** on every frame looked at.
+* **How close it is to the photo**, in dB (pixel to pixel / averaged 4x4,
+  which measures shape and not grain), is printed by the recipe:
 
       PhoneCallDiff    modo 1 42.5/47.3   media 30.8/42.4   vq 32.7/44.5
       SurlBroDiff      modo 1 27.8/34.1   media 19.3/34.5   vq 17.8/30.5
       SurlGravesDiff   modo 1 33.0/39.5   media 18.3/35.8   vq 16.8/30.1
       ThreeRubbleDiff  modo 1 33.1/37.7   media 16.8/36.1   vq 15.0/27.5
 
-  En PhoneCallDiff, la sepia con zonas lisas, vq gana en todo. En las de
-  ruido, media conserva mejor la forma y vq el grano: vq a la vista se ve
-  "foto" pero con tiles cambiados de lugar —una lápida o un pedazo de árbol
-  que no es el suyo—, y media se ve lavada. Eso lo decide la tele.
-* **El salto de las híbridas** es esa misma diferencia: de 42,5 dB (modo
-  1) a 30,8 (media) o 32,7 (vq) en PhoneCallDiff. Con media se ve que la
-  foto se ablanda en el primer cuadro del zoom; con vq el grano sigue y el
-  salto se nota menos.
-* **La textura media más grande que entra** en 256 tiles, deduplicando, es
-  de 152x136 en PhoneCallDiff y de 136x120 en las otras tres: un 6 % más de
-  resolución que 128x112 en las de ruido. No vale una variante.
+  In PhoneCallDiff, the sepia one with smooth areas, vq wins at everything. In
+  the noisy ones, media keeps the shape better and vq the grain: vq to the eye
+  looks like a "photo" but with tiles swapped around —a tombstone or a piece of
+  tree that isn't its own—, and media looks washed out. The TV decides that.
+* **The hybrids' jump** is that same difference: from 42.5 dB (mode 1) to
+  30.8 (media) or 32.7 (vq) in PhoneCallDiff. With media the photo visibly
+  softens on the zoom's first frame; with vq the grain stays and the jump is
+  less noticeable.
+* **The largest media texture that fits** in 256 tiles, deduplicating, is
+  152x136 in PhoneCallDiff and 136x120 in the other three: 6 % more resolution
+  than 128x112 in the noisy ones. Not worth a variant.
 
-### Lo que se ve distinto de RM2k
+### What looks different from RM2k
 
-* **La foto recortada achica lo recortado**: en RM2k, al achicarse, se ve
-  la foto entera de 320x240; en la ROM, la parte de 256x224 que estaba en
-  pantalla. Con la foto chica no se nota; al 80 % sí, si uno compara.
-* **El centro** es el de la pantalla de la ROM, que no es el de la foto de
-  RM2k: por el recorte, el centro de la foto cae 24 pixeles a la derecha y
-  8 arriba del de la pantalla, en PhoneCallDiff. La foto se achica hacia el
-  centro de lo que se ve.
-* **El modo 7 no filtra**: al achicarse, el grano de las fotos con ruido
-  titila de un cuadro al otro, más con vq —que tiene todo el grano— que con
-  media. Si en RM2k titila igual, no se midió: está en los videos.
-* **El destello suma**: arranca y termina como el de RM2k, y en el medio
-  sigue su brillo medio, pero los claros saturan antes.
+* **The cropped photo shrinks what was cropped**: in RM2k, when shrinking, the
+  whole 320x240 photo is seen; in the ROM, the 256x224 part that was on
+  screen. With the photo small it doesn't show; at 80 % it does, if one
+  compares.
+* **The center** is the ROM screen's, which isn't the center of RM2k's photo:
+  because of the crop, the photo's center falls 24 pixels to the right and 8
+  up from the screen's, in PhoneCallDiff. The photo shrinks towards the center
+  of what's visible.
+* **Mode 7 doesn't filter**: when shrinking, the grain of the noisy photos
+  flickers from one frame to the next, more with vq —which has all the grain—
+  than with media. Whether it flickers the same in RM2k wasn't measured: it's
+  in the videos.
+* **The flash adds**: it starts and ends like RM2k's, and in the middle it
+  follows its mean brightness, but the light areas saturate sooner.
 
-## El costo de llevarlo al juego
+## The cost of bringing it into the game
 
-Lo que hoy hace `big_picture.s` con las fotos: los tiles de la foto en modo
-1 desde la palabra 0 hasta `$3FFF`, su tilemap en `$4000`, la ventana de
-mensajes corrida a `$4800`, sus tiles y los de BG2 arriba de `$5000`; dos
-cuadros con la pantalla apagada al mostrarla y catorce al borrarla, que
-recarga el mapa. **El modo 7 es dueño de `$0000`-`$3FFF` y no se mueve**:
-el mapa de 128x128 en los bytes bajos y los 256 tiles en los altos.
+What `big_picture.s` does with the photos today: the photo's tiles in mode 1
+from word 0 up to `$3FFF`, its tilemap at `$4000`, the message window moved to
+`$4800`, its tiles and BG2's above `$5000`; two frames with the screen off when
+showing it and fourteen when erasing it, which reloads the map. **Mode 7 owns
+`$0000`-`$3FFF` and doesn't move**: the 128x128 map in the low bytes and the
+256 tiles in the high ones.
 
-**Variantes 1 y 3, sólo modo 7** —lo más barato—:
+**Variants 1 and 3, mode 7 only** —the cheapest—:
 
-* VRAM: **cero de más**. La textura ocupa exactamente el lugar de los tiles
-  de la foto de hoy, y la ventana no se toca.
-* CGRAM: la paleta del modo 7 es de 256 y pisa la de la ventana (la 0):
-  la textura se limita a los colores 16 a 255 —240; en el piloto ninguna
-  pasa de 239— y la ventana queda como estaba.
-* ROM: por foto, media son 12 a 14 KB de tiles, 1,8 KB de filas del mapa
-  (casi todo ceros: con LZ2, casi nada) y 512 bytes de
-  paleta; vq, 16 KB, 3,5 KB y 512. **Las cuatro: unos 62 KB con media y 80
-  con vq**, más de un banco de 64 KB. Las versiones en modo 1 se quedan,
-  porque el montaje del 217 usa las cuatro fotos.
-* `big_picture.s`: una entrada de `big_table` con la textura del modo 7;
-  `big_load` que la suba —tres DMA: filas por los bytes bajos, el resto del
-  mapa en cero con la fuente fija, tiles por los altos— con la pantalla
-  apagada, como hoy; `BGMODE` 7, `M7SEL` en `$80`; y `big_move` que, con la
-  rampa de magnificación, escriba A y D en el vblank: **una división del
-  hardware por cuadro**, K·d / (d − t) con K = 128 (media) o 256 (vq) —16
-  bits entre 8—, que es la tabla del piloto sin tabla. Al llegar a 0, BG1
-  apagado y `BGMODE` 1, para que los mensajes que siguen en negro vean la
-  ventana.
-* El conversor (`rm2k-snes-images`): media es un promedio de 2x2 y reducir
-  a 240 colores, que es Adeleine `merge`; vq es k-medias determinístico
-  sobre los tiles promediados y elegir representantes, unas cien líneas
-  nuevas en Rust.
-* **Cuadros en negro: los mismos de hoy.** Dos al mostrarla —debajo del
-  destello en el 213, el 214 y el 216; sobre el mapa en el 212, el parpadeo
-  que ya tiene—, ninguno en el zoom ni al terminar, y los catorce del
-  `ErasePicture`, sobre negro.
+* VRAM: **zero extra**. The texture takes exactly the place of today's photo
+  tiles, and the window isn't touched.
+* CGRAM: mode 7's palette is 256 colors and overwrites the window's (palette
+  0): the texture is limited to colors 16 to 255 —240; in the pilot none goes
+  over 239— and the window stays as it was.
+* ROM: per photo, media is 12 to 14 KB of tiles, 1.8 KB of map rows (almost
+  all zeros: with LZ2, almost nothing) and 512 bytes of palette; vq, 16 KB,
+  3.5 KB and 512. **All four: about 62 KB with media and 80 with vq**, more
+  than one 64 KB bank. The mode 1 versions stay, because 217's montage uses
+  the four photos.
+* `big_picture.s`: an entry of `big_table` with the mode 7 texture; `big_load`
+  uploading it —three DMAs: rows through the low bytes, the rest of the map as
+  zero with the fixed source, tiles through the high ones— with the screen
+  off, as today; `BGMODE` 7, `M7SEL` at `$80`; and `big_move` which, with the
+  magnification ramp, writes A and D in vblank: **one hardware division per
+  frame**, K·d / (d − t) with K = 128 (media) or 256 (vq) —16 bits by 8—,
+  which is the pilot's table without a table. On reaching 0, BG1 off and
+  `BGMODE` 1, so that the messages that follow in black see the window.
+* The converter (`rm2k-snes-images`): media is a 2x2 average and reducing to
+  240 colors, which is Adeleine's `merge`; vq is deterministic k-means over
+  the averaged tiles and picking representatives, about a hundred new lines in
+  Rust.
+* **Frames in black: the same as today.** Two when showing it —under the flash
+  on 213, 214 and 216; over the map on 212, the flicker it already has—, none
+  in the zoom or at the end, and the fourteen of the `ErasePicture`, over
+  black.
 
-**Variantes 2 y 4, híbridas**, todo lo anterior y además:
+**Variants 2 and 4, hybrids**, all of the above and also:
 
-* VRAM: las dos fotos a la vez. La del modo 1 se tiene que ir de
-  `$0000`-`$3FFF` a `$4000`-`$7FFF` —28 KB de tiles con ruido, y su
-  tilemap—, que **pisa la ventana y los tiles de BG2**. En las cuatro
-  escenas no hay mensaje mientras la foto está, así que se puede, si la
-  ventana se repone después: unos 10 KB en dos o tres vblanks durante el
-  `Wait` de 1 s que sigue al zoom en las cuatro páginas.
-* La subida de la textura del modo 7 en el vblank mientras la foto está
-  quieta: en el piloto, 8 o 9 vblanks de 4 KB; en el juego el vblank ya
-  hace otras cosas, y a 2 KB serían unos 16, contra los 93 cuadros de foto
-  quieta. Y el cambio de paleta y de modo en el vblank del primer cuadro
-  del zoom, que en el piloto entra.
-* ROM: lo mismo que 1 y 3; la foto del modo 1 ya está.
-* `big_picture.s`: además, el otro lugar de la foto en modo 1 para estas
-  cuatro, la cola de la subida, el cambio, y reponer la ventana.
-* **Cuadros en negro: los mismos de hoy**, y cero en el cambio.
+* VRAM: both photos at once. The mode 1 one has to move from `$0000`-`$3FFF` to
+  `$4000`-`$7FFF` —28 KB of noisy tiles, and its tilemap—, which **overwrites
+  the window and BG2's tiles**. In the four scenes there's no message while the
+  photo is up, so it can be done, if the window is restored afterwards: about
+  10 KB in two or three vblanks during the 1 s `Wait` that follows the zoom on
+  all four pages.
+* Uploading the mode 7 texture in vblank while the photo is still: in the
+  pilot, 8 or 9 vblanks of 4 KB; in the game the vblank already does other
+  things, and at 2 KB it would be about 16, against the 93 frames of still
+  photo. And the palette and mode change in the vblank of the zoom's first
+  frame, which in the pilot fits.
+* ROM: the same as 1 and 3; the mode 1 photo is already there.
+* `big_picture.s`: also, the other place for the mode 1 photo for these four,
+  the upload queue, the switch, and restoring the window.
+* **Frames in black: the same as today**, and zero at the switch.
 
-**Aparte del modo 7**: el destello con `COLDATA` sirve también para la foto
-en modo 1 de hoy —el blanco del 213, 214 y 216 que hoy se corta al
-aparecer la foto, `divergencias/lo-que-las-imagenes-grandes-no-modelan.md`—
-y para el montaje del 217 de `las-fotos-diff-recortadas-y-el-montaje.md`.
+**Apart from mode 7**: the flash with `COLDATA` also works for today's mode 1
+photo —the white on 213, 214 and 216 that today gets cut off when the photo
+appears, `divergencias/lo-que-las-imagenes-grandes-no-modelan.md`— and for
+217's montage in `las-fotos-diff-recortadas-y-el-montaje.md`.
 
-## Qué hay en `/shared/experimentos/2026-10-02-modo-7/`
+## What's in `/shared/experimentos/2026-10-02-modo-7/`
 
-La ROM, un `LEEME.txt` con las fotos, las variantes, los botones y qué
-mirar en la tele, y `videos/`: dieciséis, uno por foto y variante, con el
-original a la izquierda y la ROM a la derecha.
+The ROM, a `LEEME.txt` with the photos, the variants, the buttons and what to
+look at on the TV, and `videos/`: sixteen, one per photo and variant, with the
+original on the left and the ROM on the right.
 
-**Falta**: que taro la vea en la tele y elija variante —o ninguna—. Al
-mergear no hay nada que instalar: no toca Rust ni `tools/`.
+**Pending**: that taro see it on the TV and choose a variant —or none—. When
+merging there's nothing to install: it touches neither Rust nor `tools/`.
 
-# Lo que dijo taro en la tele
+# What taro said at the TV
 
-El 2026-10-03, después de verla en la SNES: "el modo 7 es definitivamente
-la forma de encarar las fotos". Falta elegir variante —media, híbrida
-media, vq o híbrida vq— para llevarlo al juego.
+On 2026-10-03, after seeing it on the SNES: "mode 7 is definitely the way to
+approach the photos". It remains to choose a variant —media, hybrid media, vq
+or hybrid vq— to bring it into the game.
 
-taro eligió la **híbrida vq** (variante 4), el 2026-10-03. Va al motor en
-`las-fotos-en-modo-7.md`, en el repo de las herramientas.
+taro chose the **hybrid vq** (variant 4), on 2026-10-03. It goes into the
+engine in `las-fotos-en-modo-7.md`, in the tools repo.

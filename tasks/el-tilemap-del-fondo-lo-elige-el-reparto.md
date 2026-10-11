@@ -1,143 +1,148 @@
 ---
-name: "El tilemap del fondo lo elige el reparto"
-description: "Un cuarto reparto de VRAM que baja el tilemap de BG1 a $1800 y le hace lugar al mapa 38"
+name: "The layout picks the background's tilemap"
+description: "A fourth VRAM layout that moves BG1's tilemap down to $1800 and makes room for map 38"
 type: refactor
 status: done
 ---
 
-La opción (d) de la pregunta 2 del 38 en `lashe-city-hasta-la-carrera.md`:
-que la dirección del tilemap de BG1 la elija el conversor por mapa, como ya
-elige `OBSEL` y `BG12NBA`. Medido e implementado el 2026-09-25 sobre `dd73115`.
+Option (d) of question 2 about map 38 in `lashe-city-hasta-la-carrera.md`:
+that the converter pick BG1's tilemap address per map, as it already picks
+`OBSEL` and `BG12NBA`. Measured and implemented on 2026-09-25 on `dd73115`.
 
-## Lo medido
+## What was measured
 
-**El 38 pide 476 tiles de fondo y 347 de sprite** (lo imprime el conversor con
-`--map-id 38`). Los tres repartos que había daban 448/448, 480/256 y 384/512.
+**Map 38 asks for 476 background tiles and 347 sprite tiles** (the converter
+prints it with `--map-id 38`). The three layouts there were gave 448/448,
+480/256 and 384/512.
 
-**El techo, enumerando todas las bases que el hardware permite** —sprites de a
-$2000 palabras, fondos de a $1000, tilemaps de a $400; encima y ventana pegadas
-en BG2; el tilemap de encima fijo en $7800—. El script fue descartable; lo que
-sale:
+**The ceiling, enumerating every base the hardware allows** —sprites in steps
+of $2000 words, backgrounds in steps of $1000, tilemaps in steps of $400;
+overlay and window together on BG2; the overlay's tilemap fixed at $7800—.
+The script was throwaway; what comes out:
 
-    sprites                        256   320   384   448   512
-    fondo, tilemap libre           544   512   480   448   416
-    fondo, tilemap en $5800        544   512   480   448   416
-    ídem, respetando las ranuras   544   512   448   448   416
+    sprites                           256   320   384   448   512
+    background, free tilemap          544   512   480   448   416
+    background, tilemap at $5800      544   512   480   448   416
+    same, respecting the slots        544   512   448   448   416
 
-"Respetando las ranuras" es que `RANURA_VRAM..RANURA_MAP+1024` ($2000..$4000)
-no pise nada que `volver_al_mapa` no reponga (sprites, BG2, los tilemaps).
+"Respecting the slots" means that `RANURA_VRAM..RANURA_MAP+1024`
+($2000..$4000) doesn't overwrite anything `volver_al_mapa` doesn't restore
+(sprites, BG2, the tilemaps).
 
-Así que **mover el tilemap no corre el techo**: para 347 sprites el máximo es
-480 esté donde esté. Lo que cambia es la tercera fila. Con el tilemap clavado
-hay un 480/384 —sprites en $4000, fondo en $0000, tilemap de la ventana en
-$3C00— pero ese tilemap cae justo en `RANURA_MAP`, y volver del menú o de las
-ranuras lo dejaría pisado. Con el tilemap libre, el 480/384 que respeta las
-ranuras es:
+So **moving the tilemap doesn't shift the ceiling**: for 347 sprites the
+maximum is 480 wherever it is. What changes is the third row. With the tilemap
+pinned there's a 480/384 —sprites at $4000, background at $0000, the window's
+tilemap at $3C00— but that tilemap lands right on `RANURA_MAP`, and coming back
+from the menu or the slots would leave it overwritten. With the tilemap free,
+the 480/384 that respects the slots is:
 
-    sprites     $0000  384 tiles     mapa        $1800  el tilemap de BG1
+    sprites     $0000  384 tiles     mapa        $1800  BG1's tilemap
     tiles       $2000  480 tiles     ventana_map $5C00
     encima      $6000  128 tiles     ventana     $6800  256 tiles
-    tilemap de encima $7800
+    overlay tilemap $7800
 
-**Al 38 le sobran 4 tiles de fondo y 37 de sprite.** 480 y no los ~483 de la
-cuenta en bytes porque el tilemap de la ventana necesita una base múltiplo de
-1024 palabras detrás del fondo: el fondo termina como mucho en $5C00.
+**Map 38 has 4 background tiles and 37 sprite tiles to spare.** 480 and not
+the ~483 of the count in bytes because the window's tilemap needs a base that
+is a multiple of 1024 words after the background: the background ends at
+$5C00 at most.
 
-La alternativa sin mover el tilemap —sprites en $4000 y que `volver_al_mapa`
-vuelva a subir el tilemap de la ventana cuando cae en `RANURA_MAP`— daría lo
-mismo, con el costo en `volver_al_mapa` y no en el streaming. No se eligió
-porque lo pedido era (d), y porque su costo lo pagaría otro contrato
-(`_controlar_ranuras`) en vez de una suma.
+The alternative without moving the tilemap —sprites at $4000 and having
+`volver_al_mapa` upload the window's tilemap again when it lands on
+`RANURA_MAP`— would give the same, with the cost in `volver_al_mapa` and not
+in the streaming. It wasn't chosen because what was asked for was (d), and
+because its cost would be paid by another contract (`_controlar_ranuras`)
+instead of an addition.
 
-**Dos repartos de hoy están debajo del techo**: "+fondo" podría dar 544 y
-"+sprite" 416. Subirlos cambia el reparto de los mapas que ya los usan, así
-que no va acá; queda anotado en `docs/port/vram.md`.
+**Two of today's layouts are below the ceiling**: "+fondo" could give 544 and
+"+sprite" 416. Raising them changes the layout of the maps that already use
+them, so it doesn't go here; it's noted in `docs/port/vram.md`.
 
-## Quién suponía $5800
+## Who assumed $5800
 
-Todo en `rom/src/`, más el arnés:
+Everything in `rom/src/`, plus the harness:
 
-| dónde | qué hacía | cómo quedó |
+| where | what it did | how it ended up |
 |---|---|---|
-| `arranque.s`, `ppu_init` | `lda #>VRAM_MAP \| MAP_LAYOUT` a `BG1SC` | ya no lo escribe: lo pone el mapa, como `BG12NBA` |
-| `cargar_mapa.s`, `puesto` | — | copia `M_VRAM_MAP` a `FAR_VRAM_MAPA` y arma `BG1SC` |
-| `cargar_mapa.s`, `volver_al_mapa` | `BG1SC` venía de `ppu_init` | lo arma de `M_VRAM_MAP + 1` (la pelea lo deja en su escena) |
+| `arranque.s`, `ppu_init` | `lda #>VRAM_MAP \| MAP_LAYOUT` to `BG1SC` | no longer writes it: the map sets it, like `BG12NBA` |
+| `cargar_mapa.s`, `puesto` | — | copies `M_VRAM_MAP` to `FAR_VRAM_MAPA` and builds `BG1SC` |
+| `cargar_mapa.s`, `volver_al_mapa` | `BG1SC` came from `ppu_init` | builds it from `M_VRAM_MAP + 1` (the battle leaves it at its scene's) |
 | `ventana_del_mapa.s`, `build_column` | `adc #VRAM_MAP` | `adc f:FAR_VRAM_MAPA` |
 | `ventana_del_mapa.s`, `build_row` | `adc #VRAM_MAP` | `adc f:FAR_VRAM_MAPA` |
-| `ventana_del_mapa.s`, `limpiar_tilemaps` | `ldx #VRAM_MAP` | la lee de `FAR_VRAM_MAPA` |
+| `ventana_del_mapa.s`, `limpiar_tilemaps` | `ldx #VRAM_MAP` | reads it from `FAR_VRAM_MAPA` |
 | `vblank.s`, `push_una_columna` | `adc #(VRAM_ABOVE_MAP - VRAM_MAP)` | `and #$07FF` / `ora #VRAM_ABOVE_MAP` |
-| `vblank.s`, `push_una_fila` | `lda #(VRAM_ABOVE_MAP - VRAM_MAP - 1024)` | `and #$03FF` / `ora #VRAM_ABOVE_MAP`, y entra por `fila_en_a` |
-| `pruebas/arnes/consola.py`, `ventana` | leía el símbolo `VRAM_MAP` | lee `FAR_VRAM_MAPA` de la WRAM |
+| `vblank.s`, `push_una_fila` | `lda #(VRAM_ABOVE_MAP - VRAM_MAP - 1024)` | `and #$03FF` / `ora #VRAM_ABOVE_MAP`, and enters through `fila_en_a` |
+| `pruebas/arnes/consola.py`, `ventana` | read the `VRAM_MAP` symbol | reads `FAR_VRAM_MAPA` from WRAM |
 
-Ninguna tabla precalculada ni aritmética escondida: eran siete usos de la
-constante en la ROM, dos de ellos como distancia entre los dos tilemaps. Lo
-demás que toca tilemaps no mira el del fondo: la escena de batalla tiene el
-suyo (`ESCENA_MAPA`, $3800) y lo repone `volver_de_batalla` con `fill_window`;
-el título, el menú y las ranuras usan `TITULO_MAP` y `RANURA_MAP`; la ventana de
-mensaje ya leía su tilemap del registro (`M_VRAM_VENTANA_MAP`); el HDMA y
-`vblank.s` sólo reescriben `BG2SC`.
+No precomputed table nor hidden arithmetic: they were seven uses of the
+constant in the ROM, two of them as the distance between the two tilemaps.
+Everything else that touches tilemaps doesn't look at the background's: the
+battle scene has its own (`ESCENA_MAPA`, $3800) and `volver_de_batalla`
+restores it with `fill_window`; the title, the menu and the slots use
+`TITULO_MAP` and `RANURA_MAP`; the message window already read its tilemap
+from the record (`M_VRAM_VENTANA_MAP`); the HDMA and `vblank.s` only rewrite
+`BG2SC`.
 
-Los pasos a la capa de encima enmascaran en vez de sumar una distancia, que
-dependería del mapa. Eso pide que los dos tilemaps arranquen en múltiplos de
-2048 palabras: `.assert` en `vblank.s` para el de encima, `_controlar_repartos`
-para el del fondo, que además se niega a un tilemap en $0000 (`col_addr` en cero
-es "no hay columna").
+The steps to the overlay layer mask instead of adding a distance, which would
+depend on the map. That requires both tilemaps to start at multiples of 2048
+words: an `.assert` in `vblank.s` for the overlay's, `_controlar_repartos` for
+the background's, which also refuses a tilemap at $0000 (`col_addr` at zero
+means "no column").
 
-**El registro del mapa estaba en sus 128 bytes justos**, así que `M_VRAM_MAP`
-ocupa el lugar de `M_VRAM_ABOVE`: la base de BG2 es el nibble alto de
-`BG12NBA_VALUE`, y `load_above` la saca de ahí. Era $6000 en todos los mapas.
+**The map record was at exactly its 128 bytes**, so `M_VRAM_MAP` takes the
+place of `M_VRAM_ABOVE`: BG2's base is the high nibble of `BG12NBA_VALUE`, and
+`load_above` takes it from there. It was $6000 on every map.
 
-**`FAR_VRAM_MAPA` es $7E6B80**, la palabra que sigue a las tiras de repuesto:
-la BSS y la página directa están llenas. **Es una dirección de la RAM lejana
-elegida mirando esta copia**: al mergear, mirar que ninguna otra rama haya
-tomado $6B80.
+**`FAR_VRAM_MAPA` is $7E6B80**, the word that follows the spare strips: the
+BSS and the direct page are full. **It's a far RAM address chosen by looking
+at this copy**: when merging, check that no other branch has taken $6B80.
 
-## El costo en ciclos
+## The cost in cycles
 
-Con el acumulador en dieciséis bits:
+With the accumulator in sixteen bits:
 
-* `build_column` y `build_row`: `adc #imm` (3) pasa a `adc largo` (6), **+3
-  ciclos por fila o columna armada**, un byte más cada una.
-* `push_una_columna`: `clc` + `adc #` (5) pasa a `and #` + `ora #` (6), **+1
-  ciclo por columna subida**, en el vblank.
-* `push_una_fila`: `lda #` + `jsr` + `clc` + `adc abs` (16) pasa a `lda abs` +
-  `and #` + `ora #` + `jsr` (17), **+1 ciclo por fila subida**, en el vblank.
-* Por carga de mapa, unos cuarenta ciclos entre `puesto`, `limpiar_tilemaps` y
-  `load_above`; en `volver_al_mapa`, once, menos los seis que `ppu_init` deja
-  de gastar.
+* `build_column` and `build_row`: `adc #imm` (3) becomes `adc largo` (6), **+3
+  cycles per row or column built**, one more byte each.
+* `push_una_columna`: `clc` + `adc #` (5) becomes `and #` + `ora #` (6), **+1
+  cycle per column uploaded**, in vblank.
+* `push_una_fila`: `lda #` + `jsr` + `clc` + `adc abs` (16) becomes `lda abs`
+  + `and #` + `ora #` + `jsr` (17), **+1 cycle per row uploaded**, in vblank.
+* Per map load, some forty cycles between `puesto`, `limpiar_tilemaps` and
+  `load_above`; in `volver_al_mapa`, eleven, minus the six `ppu_init` stops
+  spending.
 
-El peor cuadro arma dos filas y dos columnas: **doce ciclos en el lazo y cuatro
-en el vblank**.
+The worst frame builds two rows and two columns: **twelve cycles in the loop
+and four in vblank**.
 
-## Cómo se verificó
+## How it was verified
 
-* **Ningún mapa de los cartuchos cambió de reparto.** Diff de los `mapdata.inc`
-  de `release`, `test-main` y `test-special` contra los de `dd73115`: lo único
-  que cambia en cada registro es el campo +18, que era `VRAM_ABOVE` = 24576 y es
-  `VRAM_MAP` = 22528 en los 76 registros; ningún otro campo, ni `OBSEL_VALUE`,
-  ni `BG12NBA_VALUE`, ni `VRAM_VENTANA_MAP`.
-* **Las ROMs no salen byte por byte iguales, y no pueden**: el código que lee
-  una variable en vez de una constante es otro código, y corre todo lo que
-  viene después. Lo que cobra es la tanda: `just cartuchos` + `just pruebas` en
-  verde, sin tocar ninguna golden.
-* **El 38 en un cartucho de prueba en el scratchpad** (`--map-id 38
-  --sin-titulo`): convierte, toma `LAYOUT_VENTANA_AMBOS` y la ROM deja
-  `FAR_VRAM_MAPA` en $1800. Corriendo en snes9x: la captura se ve bien, sin
-  tiles corridos; caminando, la cámara se movió 112 px en x y 32 en y, y
-  `Partida.celdas_mal_dibujadas` dio 0 de 957; después de abrir el menú y
-  guardar por las ranuras —`volver_al_mapa`—, 0 pixeles distintos y 0 celdas mal
-  dibujadas. Con un `ShowMessage` de prueba la ventana se dibuja bien.
-* El 38 no tiene problema de eventos horneados como el de `PawnDoorTop` en el
-  37: convierte solo.
+* **No map of the cartridges changed layout.** Diff of the `mapdata.inc`s of
+  `release`, `test-main` and `test-special` against those of `dd73115`: the
+  only thing that changes in each record is field +18, which was
+  `VRAM_ABOVE` = 24576 and is `VRAM_MAP` = 22528 in the 76 records; no other
+  field, neither `OBSEL_VALUE`, nor `BG12NBA_VALUE`, nor `VRAM_VENTANA_MAP`.
+* **The ROMs don't come out byte for byte identical, and can't**: code that
+  reads a variable instead of a constant is different code, and it shifts
+  everything that comes after it. What enforces it is the suite: `just
+  cartuchos` + `just pruebas` green, without touching any golden.
+* **Map 38 in a test cartridge in the scratchpad** (`--map-id 38
+  --sin-titulo`): it converts, takes `LAYOUT_VENTANA_AMBOS` and the ROM leaves
+  `FAR_VRAM_MAPA` at $1800. Running in snes9x: the screenshot looks right,
+  without shifted tiles; walking, the camera moved 112 px in x and 32 in y,
+  and `Partida.celdas_mal_dibujadas` gave 0 of 957; after opening the menu and
+  saving through the slots —`volver_al_mapa`—, 0 differing pixels and 0
+  wrongly drawn cells. With a test `ShowMessage` the window is drawn right.
+* Map 38 doesn't have a baked-events problem like `PawnDoorTop`'s on 37: it
+  converts on its own.
 
-## Lo que no se verificó
+## What wasn't verified
 
-* **Ningún caso de `just pruebas` corre el reparto nuevo**: el 38 no está en
-  ningún cartucho. Lo de arriba es a mano, en snes9x, y nada lo va a volver a
-  correr hasta que el 38 entre (la etapa de Lashe City).
-* **Una pelea en el 38**: `volver_de_batalla` repone `BG1SC` por
-  `volver_al_mapa`, que sí se ejecutó por el camino del menú; la pelea en sí no.
-* **bsnes**: `test_cores.py` corre sobre los cartuchos de siempre, en $5800.
-  `FAR_VRAM_MAPA` se escribe al cargar el mapa, antes de cualquier lectura, así
-  que la basura de la WRAM no debería alcanzarla.
-* **Hardware real.**
+* **No case of `just pruebas` runs the new layout**: map 38 isn't in any
+  cartridge. The above is by hand, in snes9x, and nothing will run it again
+  until 38 goes in (the Lashe City stage).
+* **A battle on 38**: `volver_de_batalla` restores `BG1SC` through
+  `volver_al_mapa`, which did run along the menu path; the battle itself
+  didn't.
+* **bsnes**: `test_cores.py` runs on the usual cartridges, at $5800.
+  `FAR_VRAM_MAPA` is written when the map loads, before any read, so WRAM
+  garbage shouldn't reach it.
+* **Real hardware.**

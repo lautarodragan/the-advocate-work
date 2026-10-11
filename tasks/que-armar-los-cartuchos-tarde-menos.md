@@ -1,69 +1,69 @@
 ---
-name: "Que armar los cartuchos tarde menos"
-description: "Optimizar el tiempo de `just cartuchos` sin refactors: memoizar, paralelizar y numpy, con las ROMs byte por byte iguales"
+name: "Make building the cartridges take less time"
+description: "Optimize the time of `just cartuchos` without refactors: memoizing, parallelizing and numpy, with the ROMs byte for byte identical"
 type: refactor
 status: done
 ---
 
-Pedido de taro, el 2026-09-26: optimizar el tiempo de `snes_convert.py` y
-de lo que lo llama, **sin refactors** y sin cambiar qué produce; Python,
-paralelizar donde se pueda y numpy si aporta. El refactor del archivo es
-otra tarea: `las-responsabilidades-de-snes-convert.md`.
+Request from taro, on 2026-09-26: optimize the time of `snes_convert.py` and
+of what calls it, **without refactors** and without changing what it
+produces; Python, parallelizing where possible and numpy if it helps. The
+file's refactor is another task: `las-responsabilidades-de-snes-convert.md`.
 
-Los números medidos, antes y después de cada paso, están en el mensaje de
-cada commit, que es donde no envejecen. Lo que no se deduce de ellos:
+The measured numbers, before and after each step, are in each commit's
+message, which is where they don't go stale. What can't be deduced from them:
 
-## Dónde se iba el tiempo
+## Where the time went
 
-Medido con `cProfile` sobre la conversión de `release` y cronometrando cada
-subproceso de `cartuchos.py`:
+Measured with `cProfile` on the `release` conversion and timing each
+subprocess of `cartuchos.py`:
 
-* `lideres_posibles` corría una vez por cada caso de prueba que toca el
-  grupo y cada vez cargaba y compilaba todos los mapas: la mitad del
-  conversor en caliente.
-* `getpixel` en `sprite_colors` y `pose_tiles`, por millones.
-* En frío, o en caliente después de tocar `snes_convert.py` —que entra en
-  la clave de las capas guardadas—, las capas de los mapas, en serie.
-* Las pistas de MSU-1 normalizadas muestra por muestra en Python.
-* Los cartuchos y las pistas, uno detrás del otro.
-* Los subprocesos (`gunter`, `voodoo`, `lz2`, `ca65`, `ld65`) pesan poco:
-  casi todo es Python puro.
+* `lideres_posibles` ran once per test case that touches the party and each
+  time loaded and compiled all the maps: half of the converter, warm.
+* `getpixel` in `sprite_colors` and `pose_tiles`, by the millions.
+* Cold, or warm after touching `snes_convert.py` —which is part of the key of
+  the saved layers—, the map layers, serially.
+* The MSU-1 tracks normalized sample by sample in Python.
+* The cartridges and the tracks, one after the other.
+* The subprocesses (`gunter`, `voodoo`, `lz2`, `ca65`, `ld65`) weigh little:
+  almost everything is pure Python.
 
-## Lo hecho, un commit por cosa
+## What was done, one commit per thing
 
-1. `lideres_posibles`: los cambios de grupo por mapa, una vez por conversión.
-2. Los pixeles de los CharSets por `load()`.
-3. Las capas de todos los mapas en paralelo (`precalcular_capas`), con
-   procesos bifurcados que devuelven lo calculado con la clave del caché.
-4. `cartuchos.py` arma los cartuchos y las pistas a la vez, en hilos.
-5. `msu.pista` con numpy.
-6. `textos.reajustar` y `asignador.merge_least_visible` recordados.
+1. `lideres_posibles`: the party changes per map, once per conversion.
+2. The CharSets' pixels through `load()`.
+3. The layers of all the maps in parallel (`precalcular_capas`), with forked
+   processes that return what they computed with the cache key.
+4. `cartuchos.py` builds the cartridges and the tracks at the same time, in
+   threads.
+5. `msu.pista` with numpy.
+6. `textos.reajustar` and `asignador.merge_least_visible` memoized.
 
-Cada uno verificado igual: `cartuchos.py` en frío (`SIN_CACHE=1`), con el
-caché borrado, en la corrida que lo llena y en caliente, y todo
-`rom/build/release` y `rom/build/tests` comparado por sha256 contra lo que
-armaba 8ffc2ce, salvo el `.o` y los `mtime` del `.dbg`, que cambian con
-cada checkout. `just pruebas` en verde al final.
+Each one verified the same way: `cartuchos.py` cold (`SIN_CACHE=1`), with the
+cache deleted, in the run that fills it and warm, and all of
+`rom/build/release` and `rom/build/tests` compared by sha256 against what
+8ffc2ce built, except the `.o` and the `.dbg`'s `mtime`s, which change with
+each checkout. `just pruebas` green at the end.
 
-## Lo que queda, y por qué no se hizo
+## What's left, and why it wasn't done
 
-* **El piso de las capas en frío es el mapa más caro** (hoy el 2), que no
-  se reparte. Bajarlo es cambiar el modelo de datos de `_convert_layers`
-  —`quantize`, `cut_tiles`, `build_palette` trabajan con tuplas de Python
-  por pixel— a numpy de punta a punta: un cambio grande, que ésta no era.
-* **Paralelizar `convertir` por mapa** no: arrastra estado entre mapas
-  (`args.imagenes`, el cartel del primer mapa que lo muestra, los índices
-  que llenan las pasadas) y el orden importa. Las capas eran la parte pura.
-* **Superponer las etapas del conversor** —la música, la escena, las
-  capas— pide saber qué depende de qué en un `main` de mil líneas: es el
-  inventario de la tarea de responsabilidades, no algo para hacer a ciegas.
-* **Las `gunter sf2 --extract --json` de cada zona** (más de mil llamadas
-  por conversión) se podrían guardar en el caché en disco; es poco tiempo
-  y otra categoría de caché que mantener.
-* **`fork.mapas()` valida el fork entero en cada `lcf.Map`**, a propósito
-  según su docstring; recordarlo por proceso ahorraría poco.
-* **`lcf.Map` cacheado** no: los mapas se modifican después de cargarlos
-  (la página de prueba, el horneado, los translúcidos decorados).
-* **Pistas en paralelo adentro de `msu.armar`**: con numpy tardan menos que
-  el conversor de `release`, al lado del cual ya corren. Serviría sólo al
-  rehacer las pistas solas.
+* **The floor of the cold layers is the most expensive map** (map 2 today),
+  which can't be split. Lowering it means changing `_convert_layers`'s data
+  model —`quantize`, `cut_tiles`, `build_palette` work with Python tuples per
+  pixel— to numpy end to end: a big change, which this one wasn't.
+* **Parallelizing `convertir` per map**, no: it carries state between maps
+  (`args.imagenes`, the sign of the first map that shows it, the indices the
+  passes fill in) and the order matters. The layers were the pure part.
+* **Overlapping the converter's stages** —the music, the scene, the layers—
+  requires knowing what depends on what in a thousand-line `main`: it's the
+  inventory of the responsibilities task, not something to do blindly.
+* **Each zone's `gunter sf2 --extract --json`** (more than a thousand calls
+  per conversion) could be kept in the on-disk cache; it's little time and
+  another category of cache to maintain.
+* **`fork.mapas()` validates the whole fork on each `lcf.Map`**, on purpose
+  according to its docstring; memoizing it per process would save little.
+* **Caching `lcf.Map`**, no: the maps are modified after loading them (the
+  test page, the baking, the decorated translucent ones).
+* **Tracks in parallel inside `msu.armar`**: with numpy they take less than
+  the `release` converter, alongside which they already run. It would only
+  help when redoing the tracks alone.

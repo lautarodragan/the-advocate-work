@@ -1,27 +1,27 @@
 ---
-name: "La lista de habilidades de la pelea no se desplaza"
-description: "La pelea junta 16 habilidades a lo sumo y muestra 14: con más, las otras no se pueden usar, y las dos últimas se eligen sin verlas"
+name: "The battle's skill list doesn't scroll"
+description: "The battle gathers at most 16 skills and shows 14: with more, the others can't be used, and the last two are picked without being seen"
 type: bug
 status: done
 assignee: Chingolo
 ---
 
-Lo encontró Carpintero el 2026-10-04, midiendo el pozo de pares con Talan
-sabiendo sus 54 (`workflow/tasks/*/la-lista-de-habilidades-agota-el-pozo.md`).
+Carpintero found it on 2026-10-04, measuring the pair pool with Talan
+knowing all 54 of his (`workflow/tasks/*/la-lista-de-habilidades-agota-el-pozo.md`).
 
-`ba_skill_list` (`tools/runtime/battle_skills.s`) junta las habilidades que
-el actor sabe y la pelea ofrece hasta `BA_SKILL_MAX`, 16, y la pantalla
-dibuja `BA_SKILL_ROWS * BA_SKILL_COLUMNS`, 14. El cursor llega hasta la 16
-(`mode_skill`, en `battle_run.s`, sólo mira `BA_SKILL_N`), así que las dos
-últimas se eligen sin verlas, y de la 17 en adelante no están. RM2k
-desplaza la lista.
+`ba_skill_list` (`tools/runtime/battle_skills.s`) gathers the skills the
+actor knows and the battle offers, up to `BA_SKILL_MAX`, 16, and the screen
+draws `BA_SKILL_ROWS * BA_SKILL_COLUMNS`, 14. The cursor reaches the 16th
+(`mode_skill`, in `battle_run.s`, only looks at `BA_SKILL_N`), so the last
+two are picked without being seen, and from the 17th onwards they aren't
+there. RM2k scrolls the list.
 
-Para ABL importa: Talan aprende habilidades con su sistema de auras y puede
-llegar a saber 54.
+It matters for ABL: Talan learns skills with his aura system and can end up
+knowing 54.
 
-Lo que pide: que la lista se desplace como la de ítems (`ba_item_see`,
-la ventana de ocho renglones), con la lista entera en `BA_SKILL_LIST` —que
-hoy es de 16 y la comparte la elección de acciones de los enemigos— o
-juntando sólo la página visible. La capa de texto ya no es el límite: la
-pelea tiene 447 pares, una pantalla entera, y una fila que dice lo que otra
-decía toma sus tiles.
+What it asks for: that the list scroll like the item list (`ba_item_see`,
+the eight-row window), with the whole list in `BA_SKILL_LIST` —which today
+holds 16 and is shared with the enemies' choice of actions— or gathering
+only the visible page. The text layer is no longer the limit: the battle
+has 447 pairs, a whole screen, and a row that says what another one said
+takes its tiles.

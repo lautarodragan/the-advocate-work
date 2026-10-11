@@ -1,302 +1,307 @@
 ---
-name: "La carrera y lo que sigue"
-description: "Plan: la persecución en auto (49 a 54) y el 64 en release, el fin de la demo detrás de la carrera, y la regla de mapas por id"
+name: "The race and what comes next"
+description: "Plan: the car chase (49 to 54) and 64 in release, the end of the demo after the race, and the map rule by id"
 type: feature
 status: done
 ---
 
-# Qué
+# What
 
-Lo que sigue a `lashe-city-hasta-la-carrera.md`. Lo pidió taro el
-2026-09-27: si entra, **la carrera** (49 a 54, y el 55 si hace falta) **y el
-64**; después, si sigue habiendo lugar, **el 83 y el 84**, para que la regla de
-qué mapas lleva `release` deje de ser la lista de `MAPAS_DEL_JUEGO` en
-`tools/ensamblado/cartuchos.py` y pase a ser "los mapas con id menor a X" más
-un `--exclude-maps` corto. El fin de la demo, que hoy está en el fork del 36
-(`parches/manual/mapas/Map0036.json`), se muda a después de la carrera.
+What follows `lashe-city-hasta-la-carrera.md`. taro asked for it on
+2026-09-27: if it fits, **the race** (49 to 54, and 55 if needed) **and 64**;
+then, if there's still room, **83 and 84**, so that the rule for which maps
+`release` carries stops being the `MAPAS_DEL_JUEGO` list in
+`tools/ensamblado/cartuchos.py` and becomes "the maps with an id below X" plus
+a short `--exclude-maps`. The end of the demo, which today is in the fork of
+36 (`parches/manual/mapas/Map0036.json`), moves to after the race.
 
-Esto es el plan; los hitos de abajo se vuelven tareas propias al lanzarlos.
+This is the plan; the milestones below become tasks of their own when
+launched.
 
-Todo lo medido acá es del 2026-09-27 sobre `91a84c4` (el merge del hito 4 de
-Lashe City), con variantes de `release` armadas aparte —`release` ni
-`cartuchos.py` se tocaron—. Los scripts quedaron en `/extras/scratch/carrera-plan/`:
-`armar.py` arma una variante (`release` con mapas de más o de menos),
-`medir.py` saca el espacio con el método de `AGENTS.md` (un `.res N, $00` en el
-segmento y el mensaje de `ld65`; el banco 1, hasta el último byte distinto de
-cero), `far.py` mide el banco 1 aunque ya no entre, `culpables.py` es el
-`medir.py` del plan anterior (qué comando frena cada página),
-`perdidos.py`/`seguir.py`/`foto.py`/`intro.py`/`volante.py` corren la carrera
-en el emulador, y `arreglos-temporales.diff` son los dos arreglos del
-conversor que hicieron falta para armar la variante de X = 85 (ver el hito 4).
+Everything measured here is from 2026-09-27 on `91a84c4` (the merge of Lashe
+City's milestone 4), with variants of `release` built separately —neither
+`release` nor `cartuchos.py` were touched—. The scripts were left in
+`/extras/scratch/carrera-plan/`: `armar.py` builds a variant (`release` with
+extra or fewer maps), `medir.py` gets the space with `AGENTS.md`'s method (a
+`.res N, $00` in the segment and `ld65`'s message; bank 1, up to the last
+non-zero byte), `far.py` measures bank 1 even when it no longer fits,
+`culpables.py` is the previous plan's `medir.py` (which command stops each
+page), `perdidos.py`/`seguir.py`/`foto.py`/`intro.py`/`volante.py` run the race
+in the emulator, and `arreglos-temporales.diff` is the two converter fixes
+that were needed to build the X = 85 variant (see milestone 4).
 
-# El recorrido
+# The walkthrough
 
-    36  "We've got to get out of here" ......... Teleport [49, 1, 26]  (hoy: fin de la demo, fork)
-    49  primera vuelta. RaceControllerZERO: cuatro mensajes, pantalla negra,
-        el cartel de los controles (ShowPicture 'EscapeInst') y un
-        KeyInputProc que espera cualquier tecla; prende 171
-        RaceController1 (auto): tema, saca a todos del grupo y mete a CarRED
-        (19) o CarBLUE (20) según el 130/131, PanScreen, prende 170
-        RaceController2 (paralela, 170): empuja al héroe a la derecha cada
-        cuadro y lo cambia de carril con arriba/abajo (KeyInputProc sin espera)
-        eventos 4 a 37 (paralelas): los autos. Cada uno lee su celda
-        (ControlVars clase 6) y la compara con la del héroe; si coinciden,
-        cambia el gráfico del auto, anima el choque, prende 172 y salta al 50
-        eventos 38 a 43 (paralelas), x = 255: la meta, salta al 52
-    50  ResetRace: cuenta los choques (var 38); con cinco o más el compañero se
-        ofrece a manejar (ShowChoice) y salta al 51; si no, vuelve a la vuelta
-        que estaba (49, 52 o 54, por los switches 174 y 178)
-    52  segunda vuelta: lo mismo, sin la intro. Meta -> 54
-    54  tercera vuelta. Meta -> 51
-    51  el puente: 12 páginas paralelas en la columna 75, el salto (una ruta
-        forzada con sonidos adentro) -> 53
-    53  RaceFinished (auto): el premio según los choques —oro e ítems— -> 64
-    64  Leaving Lashe City Scene (auto): la escena con el compañero; termina en
-        Teleport [66, 71, 29], el mapa del mundo, que no entra en la VRAM
+    36  "We've got to get out of here" ......... Teleport [49, 1, 26]  (today: end of the demo, fork)
+    49  first lap. RaceControllerZERO: four messages, black screen,
+        the controls sign (ShowPicture 'EscapeInst') and a
+        KeyInputProc that waits for any key; turns on 171
+        RaceController1 (autorun): theme, removes everyone from the party and
+        adds CarRED (19) or CarBLUE (20) depending on 130/131, PanScreen,
+        turns on 170
+        RaceController2 (parallel, 170): pushes the hero to the right every
+        frame and changes his lane with up/down (KeyInputProc without waiting)
+        events 4 to 37 (parallel): the cars. Each one reads its cell
+        (ControlVars class 6) and compares it with the hero's; if they match,
+        it changes the car's graphic, animates the crash, turns on 172 and
+        jumps to 50
+        events 38 to 43 (parallel), x = 255: the finish line, jumps to 52
+    50  ResetRace: counts the crashes (var 38); with five or more the companion
+        offers to drive (ShowChoice) and jumps to 51; if not, it goes back to
+        the lap it was on (49, 52 or 54, through switches 174 and 178)
+    52  second lap: the same, without the intro. Finish -> 54
+    54  third lap. Finish -> 51
+    51  the bridge: 12 parallel pages on column 75, the jump (a forced route
+        with sounds inside) -> 53
+    53  RaceFinished (autorun): the reward according to the crashes —gold and
+        items— -> 64
+    64  Leaving Lashe City Scene (autorun): the scene with the companion; it
+        ends in Teleport [66, 71, 29], the world map, which doesn't fit in VRAM
 
-El 55 es la carpeta de la carrera: nadie salta ahí, y no hace falta.
+55 is the race's folder: nobody jumps there, and it isn't needed.
 
-**El 83 y el 84 no se alcanzan**: al 83 se llega desde el 82 y el 84 sale al
-66, y los dos cuelgan del mundo (el 66), que no entra. Meterlos es sólo para la
-regla.
+**83 and 84 aren't reachable**: 83 is reached from 82 and 84 exits to 66, and
+both hang from the world (66), which doesn't fit. Putting them in is only for
+the rule.
 
-# Espacio
+# Space
 
-Medido con `medir.py`. "Banco 0" es lo que queda en `TABLAS`+`CODE`; `BSS` y
-`ZEROPAGE` no se mueven en ninguna variante (109 y 4 bytes) y se omiten.
+Measured with `medir.py`. "Bank 0" is what's left in `TABLAS`+`CODE`; `BSS`
+and `ZEROPAGE` don't move in any variant (109 and 4 bytes) and are omitted.
 
-    variante                                cartucho  banco 0  banco 1
-    release hoy                              70,9%     211     10.266
-    (a) + 49 50 51 53 54                     72,3%     205     10.266
-        + el 55                              72,3%     205     10.266
-    (b) + 64                                 71,1%     211     10.266
-    (c) + 83 84                              71,1%     211     10.266
-    (a)+(b)+(c)                              72,6%     205     10.266
-    la carrera + 64 (lo del hito 1)          72,5%     205     10.266
-    (d) X = 65, todos                        73,9%     201     10.266
-        X = 65 sin 15 22 46 55 58            72,5%     205     10.266
-    (d) X = 85 sin 66 67 69 (*)              82,3%     129     10.033
-        X = 85 sin 15 22 46 55 58 66 67 69   81,0%     133     10.033
+    variant                                 cartridge bank 0  bank 1
+    release today                            70.9%     211     10,266
+    (a) + 49 50 51 53 54                     72.3%     205     10,266
+        + 55                                 72.3%     205     10,266
+    (b) + 64                                 71.1%     211     10,266
+    (c) + 83 84                              71.1%     211     10,266
+    (a)+(b)+(c)                              72.6%     205     10,266
+    the race + 64 (milestone 1's)            72.5%     205     10,266
+    (d) X = 65, all                          73.9%     201     10,266
+        X = 65 without 15 22 46 55 58        72.5%     205     10,266
+    (d) X = 85 without 66 67 69 (*)          82.3%     129     10,033
+        X = 85 without 15 22 46 55 58 66 67 69  81.0%  133     10,033
 
-    (*) sólo arma con los dos arreglos del conversor del hito 4
+    (*) only builds with milestone 4's two converter fixes
 
-El hito 4 de Lashe City ya está adentro de estos números: el banco 0 que dejó
-es el de la primera fila. `test-special` no lleva ninguno de estos mapas.
+Lashe City's milestone 4 is already inside these numbers: the bank 0 it left
+is the first row's. `test-special` carries none of these maps.
 
-**El cartucho sobra**: lo que cuesta cada mapa en ROM son decenas de KB y queda
-casi un 30% libre. **Lo que aprieta es el banco 0**: la carrera se come 6
-bytes, y cada arreglo de motor que pida la carrera cuesta del orden de diez
-(ver "Qué le falta"). X = 85 se come 72 más.
+**The cartridge has room to spare**: what each map costs in ROM is tens of KB
+and almost 30% is left free. **What's tight is bank 0**: the race eats 6
+bytes, and each engine fix the race asks for costs on the order of ten (see
+"What it's missing"). X = 85 eats 72 more.
 
-El banco 1 está holgado desde el hito 4, que mudó `tropa_codigo` y
-`mensajes_tropa` a RODATA. Antes de eso X = 85 no entraba: el 76 (Sorbe
-Mountain) trae tropas nuevas y se pasaba por 2.314 bytes.
+Bank 1 has had slack since milestone 4, which moved `tropa_codigo` and
+`mensajes_tropa` to RODATA. Before that X = 85 didn't fit: 76 (Sorbe Mountain)
+brings new troops and overflowed by 2,314 bytes.
 
-Sin MSU-1, la carrera y el 64 (dos temas nuevos, `Fire_Mustang_…` y `prepara`)
-bajan seis pares (tema, instrumento) y suben dos; el peor es `wb3mlair`
-programa 33, de 23,3 a 13,3 kHz. Va a `el-audio-despues-de-lashe-city.md`.
+Without MSU-1, the race and 64 (two new themes, `Fire_Mustang_…` and
+`prepara`) lower six (theme, instrument) pairs and raise two; the worst is
+`wb3mlair` program 33, from 23.3 to 13.3 kHz. It goes to
+`el-audio-despues-de-lashe-city.md`.
 
-## Lo que no entra con X = 85
+## What doesn't fit with X = 85
 
-    66  Lashe Area: "no puede llevar ventana de mensaje: gasta 527 tiles de
-        fondo y 222 de sprite" (la misma razón por la que está afuera hoy)
-    67  Yun Town: "el cronómetro no entra: el mapa ya usa las 8 paletas de sprite"
-    69  Sorbe Village: "con este reparto de VRAM, encima necesita 157 tiles y
-        entran 128"
+    66  Lashe Area: "can't carry a message window: it spends 527 background
+        tiles and 222 sprite tiles" (the same reason it's left out today)
+    67  Yun Town: "the timer doesn't fit: the map already uses the 8 sprite
+        palettes"
+    69  Sorbe Village: "with this VRAM layout, the overlay needs 157 tiles and
+        128 fit"
 
-Y **dos errores latentes del conversor**, que esta variante destapó y que no
-son de X = 85 sino de cualquier cartucho con otro acomodo:
+And **two latent converter bugs**, which this variant uncovered and which
+aren't X = 85's but any cartridge's with another layout:
 
-* **La ruta propia de una página apunta al bloque de código equivocado** cuando
-  el bloque está deduplicado: `tabla_de_paginas` en `snes_convert.py` arma el
-  puntero de la ruta con `"evcodigo_%d" % numero` —el mismo error que su propio
-  docstring cuenta que se arregló para el código— y el ensamblado se cae con
-  "Symbol 'evcodigo_82' is undefined". El arreglo es usar la etiqueta
-  `evcodigo` que ya recibe.
-* **`actor_hpmax` y `actor_spmax` van a RODATA sin `.bloque`**
-  (`words_asm(..., declarar=False)`), así que `bancos.py` las puede partir entre
-  dos bancos. Con la variante de X = 85 el corte cayó en el medio de una
-  palabra y `bancos.py` se negó; si cae entre dos palabras no se niega, y la
-  ROM lee lo que hay en `$xx:0000` para los actores de la cola. Hay que mirar si
-  hay más tablas así.
+* **A page's own route points to the wrong code block** when the block is
+  deduplicated: `tabla_de_paginas` in `snes_convert.py` builds the route's
+  pointer with `"evcodigo_%d" % numero` —the same bug its own docstring says
+  was fixed for the code— and the assembly fails with "Symbol 'evcodigo_82' is
+  undefined". The fix is to use the `evcodigo` label it already receives.
+* **`actor_hpmax` and `actor_spmax` go to RODATA without `.bloque`**
+  (`words_asm(..., declarar=False)`), so `bancos.py` can split them across two
+  banks. With the X = 85 variant the cut fell in the middle of a word and
+  `bancos.py` refused; if it falls between two words it doesn't refuse, and
+  the ROM reads whatever is at `$xx:0000` for the actors at the tail. Need to
+  check whether there are more tables like that.
 
-## Lo que sale de X
+## What comes out of X
 
-**Recomendado: X = 65**, o sea todo el capítulo de Lashe City. Convierten todos;
-la lista de exclusión sería
+**Recommended: X = 65**, that is the whole Lashe City chapter. They all
+convert; the exclusion list would be
 
-    58  Aura Tutorial: de otro capítulo (cuelga de Tutorials, 161). Trae su
-        propio tema y dos animaciones: 46,7 KB y 4 bytes de banco 0
-    15 22 55   carpetas (Lashe City, The Rat Tracks, la de la carrera): negras,
-        nadie salta ahí
-    46  Security Footage 2: un respaldo inalcanzable
-        (los cuatro juntos: 12,9 KB y nada de banco 0)
+    58  Aura Tutorial: from another chapter (hangs from Tutorials, 161). It
+        brings its own theme and two animations: 46.7 KB and 4 bytes of bank 0
+    15 22 55   folders (Lashe City, The Rat Tracks, the race's): black,
+        nobody jumps there
+    46  Security Footage 2: an unreachable backup
+        (the four together: 12.9 KB and no bank 0)
 
-más el 164 (el tutorial de AG7) como agregado explícito, porque la regla por id
-no lo alcanza, y los `MAPAS_DE_PRUEBA` como hoy (el 52 pasa a ser del juego).
+plus 164 (AG7's tutorial) as an explicit addition, because the rule by id
+doesn't reach it, and the `MAPAS_DE_PRUEBA` as today (52 becomes part of the
+game).
 
-X = 85 mete 18 mapas que no se alcanzan (el mundo no entra), cuesta 8,5% del
-cartucho y 72 bytes de banco 0 más que X = 65, y su lista de exclusión arranca
-con ocho ids. Tiene sentido el día que entre el 66.
+X = 85 brings in 18 maps that can't be reached (the world doesn't fit), costs
+8.5% of the cartridge and 72 bytes of bank 0 more than X = 65, and its
+exclusion list starts with eight ids. It makes sense the day 66 goes in.
 
-# Qué le falta para funcionar
+# What it's missing to work
 
-Contado con `culpables.py` sobre la variante con la carrera y el 64:
+Counted with `culpables.py` on the variant with the race and 64:
 
-    mapa  compilan  lo que frena
-    49    43 de 44  KeyInputProc sin espera (RaceController2)
-    50     1 de 1
-    51     8 de 9   KeyInputProc sin espera
-    52    42 de 43  KeyInputProc sin espera
-    53     1 de 1
-    54    42 de 43  KeyInputProc sin espera
-    64     3 de 4   Teleport -> 66
-    83    58 de 58
-    84     3 de 4   Teleport -> 66
+    map   compile   what stops it
+    49    43 of 44  KeyInputProc without waiting (RaceController2)
+    50     1 of 1
+    51     8 of 9   KeyInputProc without waiting
+    52    42 of 43  KeyInputProc without waiting
+    53     1 of 1
+    54    42 of 43  KeyInputProc without waiting
+    64     3 of 4   Teleport -> 66
+    83    58 of 58
+    84     3 of 4   Teleport -> 66
 
-Ningún evento de estos mapas llama a un común, y ningún común paralelo o
-automático mira los switches de la carrera (el 37 de AG7 queda afuera: la
-carrera saca a AG7 del grupo).
+No event of these maps calls a common event, and no parallel or autorun common
+event looks at the race's switches (AG7's 37 is left out: the race removes AG7
+from the party).
 
-**Lo que ya se sabía, corregido:**
+**What was already known, corrected:**
 
-* **`ControlVars` de clase 6 no falta.** Las 268 de la carrera piden la x o la
-  y (sub-operandos 1 y 2, 134 cada uno), que la ROM hace desde antes de este
-  plan. El
-  comentario de `MAPAS_DEL_JUEGO` que dice que la carrera queda afuera "por
-  `ControlVars` de clase 6" está viejo.
-* **Páginas paralelas: 41** en el 49, el 52 y el 54 (40 autos y metas, más el
-  volante) y **13** en el 51. Entran en `PARALELO_MAX` (48).
-* **`KeyInputProc` sin espera**: cuatro páginas, el volante de cada vuelta. El
-  `raise` de `KEY_INPUT_PROC` en `eventos.py` lo frena por una razón que ya no
-  existe —la referencia en Python se fue el 2026-09-16—, y la ROM lo tiene hecho.
+* **Class 6 `ControlVars` isn't missing.** The race's 268 ask for x or y
+  (sub-operands 1 and 2, 134 each), which the ROM has done since before this
+  plan. The comment in `MAPAS_DEL_JUEGO` that says the race is left out
+  "because of class 6 `ControlVars`" is stale.
+* **Parallel pages: 41** on 49, 52 and 54 (40 cars and finish lines, plus the
+  steering wheel) and **13** on 51. They fit in `PARALELO_MAX` (48).
+* **`KeyInputProc` without waiting**: four pages, each lap's steering wheel.
+  The `raise` of `KEY_INPUT_PROC` in `eventos.py` stops it for a reason that no
+  longer exists —the Python reference went away on 2026-09-16—, and the ROM
+  has it done.
 
-**Lo que se midió corriendo la carrera** (variante con `TECLA_SIN_ESPERA=1`,
-que acepta el volante), en orden de cuánto destraba:
+**What was measured running the race** (a variant with
+`TECLA_SIN_ESPERA=1`, which accepts the steering wheel), in order of how much
+it unblocks:
 
-1. **Un `Teleport` desde una página paralela no se atiende si no corre ninguna
-   página de primer plano.** `op_teleport` prende `salto_hay`, y `eventos_tick`
-   sólo lo mira después de correr una página de primer plano: con el primer
-   plano quieto sale por `nada`. En el 49 el choque prende el 172 y el auto se
-   queda en (104, 26) para siempre —400 ticks mirados—, sin saltar al 50. **Son
-   126 páginas, todas las salidas de la carrera** —40 por vuelta más 6 del
-   puente— y ningún mapa de `release` tiene hoy una: es un camino que nada
-   ejecuta. General (es lo que hace RM2k con cualquier paralelo), del orden de
-   diez bytes de banco 0 y nada de RAM.
-2. **El volante no dobla.** `op_key` usa `tecla_valor`, que mira **flancos**
-   (`pad eor pad_ant`) en las dos formas; easyrpg usa `Input::IsPressed` para la
-   que no espera (`game_interpreter.cpp:3222`, `wait ? IsTriggered :
-   IsPressed`), y el comentario de `KEY_INPUT_PROC` en `eventos.py` dice lo
-   mismo. Sosteniendo arriba, la variable 33 queda en 0 y el auto cambia de
-   carril una sola vez. General, unos diez bytes de banco 0. Arreglado eso, hay
-   que ver que el cambio de carril sobreviva a que el volante le vuelva a
-   poner la ruta hacia la derecha cada cuadro (el orden entre la ruta del héroe
-   y los paralelos).
-3. **La carrera corre a la mitad de la velocidad.** Con las 40 páginas de los
-   autos, **cada tick cuesta dos cuadros**: 2,07 cuadros por tick en el 49 y
-   2,02 en el 52, medido con `cuadros_perdidos` durante 300 ticks. El 51, con
-   13 páginas de la misma forma, no pierde ninguno, y `release` en el 52 (con
-   las páginas de los autos sin compilar) tampoco. Coincide con lo que estimaba
-   `chips-sa-1-y-s-dd1.md` (~9 líneas por página, ~370 líneas). Se
-   juega, pero a 30 cuadros. Lo general es
-   `optimizar-los-eventos-paralelos-al-compilar.md`: las 40 páginas
-   son el mismo patrón —leer la celda propia en dos variables y compararlas con
-   otras dos— y un opcode fundido lo haría en código nativo. Un opcode, del
-   orden de diez bytes de banco 0 para su entrada y cien de banco 1, más el
-   reconocedor en el compilador. Sirve también para las luces del mapa 11.
-4. **El cartel de los controles no se ve.** El `ShowPicture 'EscapeInst'` de
-   la intro está aceptado sin hacer, y la ROM lleva un solo cartel, que es el de
-   "One year previously". El jugador ve la pantalla negra y tiene que apretar
-   una tecla sin que nada se lo diga. Es una imagen de 276x205 sobre negro con
-   el texto "Use the UP and DOWN arrow keys to change lanes, and avoid the
-   traffic! Fewer crashes means better rewards! Press any key to begin."
-5. **Los sonidos del salto del puente** (orden 35 de ruta, seis rutas del 51)
-   se tiran al compilar. Es `los-sonidos-adentro-de-las-rutas.md`.
-6. **El fin de la demo**: el 64 salta al 66, que no entra. Va un fork del 64
-   con el mismo cartel y el `ReturntoTitleScreen` que hoy tiene el del 36, y el
-   fork del 36 se borra.
+1. **A `Teleport` from a parallel page isn't handled if no foreground page is
+   running.** `op_teleport` sets `salto_hay`, and `eventos_tick` only looks at
+   it after running a foreground page: with the foreground idle it exits
+   through `nada`. On 49 the crash turns on 172 and the car stays at (104, 26)
+   forever —400 ticks looked at—, without jumping to 50. **They're 126 pages,
+   all the race's exits** —40 per lap plus 6 on the bridge— and no `release`
+   map has one today: it's a path nothing runs. General (it's what RM2k does
+   with any parallel), on the order of ten bytes of bank 0 and no RAM.
+2. **The steering wheel doesn't turn.** `op_key` uses `tecla_valor`, which
+   looks at **edges** (`pad eor pad_ant`) in both forms; easyrpg uses
+   `Input::IsPressed` for the one that doesn't wait
+   (`game_interpreter.cpp:3222`, `wait ? IsTriggered : IsPressed`), and the
+   comment of `KEY_INPUT_PROC` in `eventos.py` says the same. Holding up,
+   variable 33 stays at 0 and the car changes lane only once. General, about
+   ten bytes of bank 0. Once that's fixed, need to check that the lane change
+   survives the steering wheel setting the route to the right again every
+   frame (the order between the hero's route and the parallels).
+3. **The race runs at half speed.** With the 40 car pages, **each tick costs
+   two frames**: 2.07 frames per tick on 49 and 2.02 on 52, measured with
+   `cuadros_perdidos` over 300 ticks. 51, with 13 pages of the same shape,
+   doesn't drop any, and neither does `release` on 52 (with the car pages not
+   compiled). It matches what `chips-sa-1-y-s-dd1.md` estimated (~9 lines per
+   page, ~370 lines). It's playable, but at 30 frames. The general thing is
+   `optimizar-los-eventos-paralelos-al-compilar.md`: the 40 pages are the same
+   pattern —read its own cell into two variables and compare them with two
+   others— and a fused opcode would do it in native code. One opcode, on the
+   order of ten bytes of bank 0 for its entry and a hundred of bank 1, plus the
+   recognizer in the compiler. It also works for map 11's lights.
+4. **The controls sign isn't visible.** The intro's `ShowPicture
+   'EscapeInst'` is accepted without being done, and the ROM carries a single
+   sign, which is the "One year previously" one. The player sees the black
+   screen and has to press a key without anything telling them. It's a 276x205
+   image on black with the text "Use the UP and DOWN arrow keys to change
+   lanes, and avoid the traffic! Fewer crashes means better rewards! Press any
+   key to begin."
+5. **The bridge jump's sounds** (route order 35, six routes of 51) are dropped
+   when compiling. It's `los-sonidos-adentro-de-las-rutas.md`.
+6. **The end of the demo**: 64 jumps to 66, which doesn't fit. A fork of 64
+   goes in with the same sign and the `ReturntoTitleScreen` that 36's has
+   today, and 36's fork is deleted.
 
-Lo que anduvo, visto en el emulador: la intro con sus mensajes y la espera, el
-171, el cambio de grupo al auto, el `PanScreen`, el empuje hacia la derecha,
-los autos que se mueven solos y el choque (el gráfico que cambia y la
-animación). No se llegó a ver el 50, el 52 por su entrada, el 51 por su
-entrada, el 53 ni el 64: sin el punto 1 no se sale del 49.
+What worked, seen in the emulator: the intro with its messages and the wait,
+171, the party change to the car, the `PanScreen`, the push to the right, the
+cars that move on their own and the crash (the graphic that changes and the
+animation). 50, 52 through its entrance, 51 through its entrance, 53 and 64
+weren't reached: without point 1 you don't get out of 49.
 
-**Las pruebas del 52.** El 52 es mapa de prueba (`test_caminar_golden.py`,
-`en-52`, `grupo-11-en-52`, `pelea-en-52`, `ev41`). Con el 50 y el 54 en el
-cartucho compilan sus 40 páginas de autos, y con el volante aceptado el héroe
-ahí es empujado a la derecha cada cuadro: el comentario de `KEY_INPUT_PROC`
-ya avisa que `heroe 52` deja de terminar. Hay que elegir otro mapa grande para
-`heroe`, y mirar las demás goldens del 52 antes de dar por bueno el hito.
+**52's tests.** 52 is a test map (`test_caminar_golden.py`, `en-52`,
+`grupo-11-en-52`, `pelea-en-52`, `ev41`). With 50 and 54 in the cartridge its
+40 car pages compile, and with the steering wheel accepted the hero there gets
+pushed to the right every frame: `KEY_INPUT_PROC`'s comment already warns that
+`heroe 52` stops ending. Another big map has to be picked for `heroe`, and 52's
+other goldens looked at before considering the milestone good.
 
-# Hitos
+# Milestones
 
-**1. La carrera entra y se puede correr, a 30 cuadros.** 49 a 54 y el 64 en
-`release`; el fin de la demo pasa al fork del 64 y el del 36 se borra; el
-`Teleport` desde un paralelo (1) y el volante con `IsPressed` (2); el
-`KeyInputProc` sin espera aceptado, sin el interruptor de medición. Las
-pruebas: el 52 fuera de `heroe`, las goldens del 52 revisadas, el cierre del
-36 que ahora entra al 49 (`test_recorrido_lashe_*` cambian: "irse termina la
-demo" pasa a ser "irse lleva a la carrera") y un recorrido de la carrera
-entera, que el arnés puede manejar sosteniendo teclas. Banco 0: 6 bytes de los
-mapas más los dos arreglos, del orden de veinte.
+**1. The race goes in and can be raced, at 30 frames.** 49 to 54 and 64 in
+`release`; the end of the demo moves to 64's fork and 36's is deleted; the
+`Teleport` from a parallel (1) and the steering wheel with `IsPressed` (2); the
+`KeyInputProc` without waiting accepted, without the measurement switch. The
+tests: 52 out of `heroe`, 52's goldens reviewed, the close of 36 which now
+goes into 49 (`test_recorrido_lashe_*` change: "leaving ends the demo" becomes
+"leaving leads to the race") and a walkthrough of the whole race, which the
+harness can drive by holding keys. Bank 0: 6 bytes from the maps plus the two
+fixes, on the order of twenty.
 
-   **Hecho el 2026-09-27**, con las preguntas 1, 3, 5 y 6 contestadas con la
-   recomendación: ver `carrera-1-entra-y-se-corre.md`.
+   **Done on 2026-09-27**, with questions 1, 3, 5 and 6 answered with the
+   recommendation: see `carrera-1-entra-y-se-corre.md`.
 
-**2. La carrera a 60 cuadros.** El opcode fundido (3), o lo que diga la
-medición de `optimizar-los-eventos-paralelos-al-compilar.md`. Se da por hecho
-con `cuadros_perdidos` en cero —o casi— en el 49, el 52 y el 54 manejando.
-Independiente del 3 y del 4.
+**2. The race at 60 frames.** The fused opcode (3), or whatever the
+measurement in `optimizar-los-eventos-paralelos-al-compilar.md` says. It's
+considered done with `cuadros_perdidos` at zero —or almost— on 49, 52 and 54
+while driving. Independent of 3 and 4.
 
-   **Hecho el 2026-09-27**, con el opcode fundido y lo que dijo la medición:
-   ver `carrera-2-a-sesenta-cuadros.md`, que tiene el límite de cada
-   camino.
+   **Done on 2026-09-27**, with the fused opcode and what the measurement said:
+   see `carrera-2-a-sesenta-cuadros.md`, which has each path's limit.
 
-**3. Lo que se ve y se oye.** El cartel de los controles (4) y los sonidos del
-salto (5), según lo que conteste taro.
+**3. What's seen and heard.** The controls sign (4) and the jump's sounds (5),
+according to what taro answers.
 
-   **Hecho el 2026-09-27**, con la opción (a) de la pregunta 4: ver
+   **Done on 2026-09-27**, with option (a) of question 4: see
    `carrera-3-lo-que-se-ve-y-se-oye.md`.
 
-**4. La regla de los mapas por id.** `release` pasa a ser "los mapas con id
-menor a X, sin los de `--exclude-maps`, más los agregados" —hoy el 164— y los
-de prueba como hasta ahora. Primero los dos errores latentes del conversor
-(la ruta propia deduplicada y las tablas de actores sin `.bloque`), cada uno en
-su commit y con la ROM byte por byte igual donde no cambia nada. Después el
-cambio de regla, que **no debe mover la ROM**: con X = 65 y la exclusión de
-arriba, la lista resultante tiene que ser la misma que la de este hito 1, y
-eso se compara. Puede ir antes, en paralelo o después del 2.
+**4. The map rule by id.** `release` becomes "the maps with an id below X,
+without those in `--exclude-maps`, plus the additions" —today 164— and the
+test ones as up to now. First the two latent converter bugs (the deduplicated
+own route and the actor tables without `.bloque`), each in its commit and with
+the ROM byte for byte identical where nothing changes. Then the rule change,
+which **must not move the ROM**: with X = 65 and the exclusion above, the
+resulting list has to be the same as this milestone 1's, and that gets
+compared. It can go before, in parallel with or after 2.
 
-   **Hecho el 2026-09-27**: los errores en `9d6c0d3`, la regla en
-   `la-regla-de-mapas-por-id.md`. La exclusión no es un flag del
-   conversor sino un valor de `cartuchos.py`; el porqué está ahí.
+   **Done on 2026-09-27**: the bugs in `9d6c0d3`, the rule in
+   `la-regla-de-mapas-por-id.md`. The exclusion isn't a converter flag but a
+   value in `cartuchos.py`; the why is there.
 
-**5. (Condicional) X = 85.** Sólo si taro lo quiere antes de que entre el
-mundo: los 18 mapas inalcanzables, con 66, 67 y 69 en la exclusión.
+**5. (Conditional) X = 85.** Only if taro wants it before the world goes in:
+the 18 unreachable maps, with 66, 67 and 69 in the exclusion.
 
-Lo que hay que repartir si el 1 y el 2 van en paralelo: el opcode del 2, en
-`tools/protocol/events.toml`; y `cartuchos.py`, que lo tocan el 1 y el 4.
+What has to be split if 1 and 2 go in parallel: 2's opcode, in
+`tools/protocol/events.toml`; and `cartuchos.py`, which 1 and 4 touch.
 
-# Preguntas para taro
+# Questions for taro
 
-1. **¿X = 65 u 85?** 65 es todo Lashe City y deja el 83 y el 84 afuera: no se
-   alcanzan hasta que entre el mundo (el 66). 85 los mete junto con otros 16
-   igual de inalcanzables, por 8,5% del cartucho y 72 bytes de banco 0.
-   **Recomendado: 65.**
-2. **La exclusión de X = 65**: ¿el 58 solo (el tutorial de otro capítulo, que
-   es el que cuesta: 46,7 KB), o también las tres carpetas y el respaldo (15,
-   22, 55, 46: 12,9 KB)? **Recomendado: los cinco**, así lo que entra es lo que
-   se puede pisar.
-3. **¿La carrera a 30 cuadros vale como paso intermedio** (hito 1 entregado
-   antes que el 2), o no se entrega hasta que corra a 60?
-4. **El cartel de los controles**: (a) un fork del 49 que cambie el
-   `ShowPicture` por un `ShowMessage` con el mismo texto —barato, y la
-   pantalla ya está negra—; (b) un segundo cartel por ROM
-   (`sistema-de-imagenes.md`); (c) deuda. **Recomendado: (a).**
-5. **Dónde termina la demo**: ¿al final de la escena del 64, en vez del salto
-   al mundo, o antes, al salir del 53 con el premio? **Recomendado: el 64**, que
-   cierra la escena con el compañero.
-6. **El mapa grande de `heroe`**: el 52 deja de servir (la carrera corre ahí).
-   ¿Se reemplaza por otro de los grandes que ya están (el 8, el 11 y el 20 ya
-   son de la lista), o alcanza con sacarlo?
+1. **X = 65 or 85?** 65 is all of Lashe City and leaves 83 and 84 out: they
+   can't be reached until the world (66) goes in. 85 brings them in together
+   with another 16 equally unreachable ones, for 8.5% of the cartridge and 72
+   bytes of bank 0. **Recommended: 65.**
+2. **The X = 65 exclusion**: only 58 (the other chapter's tutorial, which is
+   the costly one: 46.7 KB), or also the three folders and the backup (15, 22,
+   55, 46: 12.9 KB)? **Recommended: all five**, so that what goes in is what
+   can be stepped on.
+3. **Is the race at 30 frames OK as an intermediate step** (milestone 1
+   delivered before 2), or isn't it delivered until it runs at 60?
+4. **The controls sign**: (a) a fork of 49 that swaps the `ShowPicture` for a
+   `ShowMessage` with the same text —cheap, and the screen is already black—;
+   (b) a second sign per ROM (`sistema-de-imagenes.md`); (c) debt.
+   **Recommended: (a).**
+5. **Where the demo ends**: at the end of 64's scene, instead of the jump to
+   the world, or earlier, on leaving 53 with the reward? **Recommended: 64**,
+   which closes the scene with the companion.
+6. **`heroe`'s big map**: 52 stops being useful (the race runs there). Is it
+   replaced by another of the big ones already in (8, 11 and 20 are already on
+   the list), or is removing it enough?

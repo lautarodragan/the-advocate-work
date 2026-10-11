@@ -1,63 +1,65 @@
 ---
-name: "El auto de la huida no se ve"
-description: "Con una automática corriendo, el refresco completo sólo mira las automáticas"
+name: "The getaway car isn't visible"
+description: "With an autorun running, the full refresh only looks at autoruns"
 type: bug
 status: done
 ---
 
-**Después de elegir el auto en el techo, la cinemática del mapa 4 corre con la
-pantalla negra**: se ven los textos y no el auto. En RM2k el fondo también es
-negro, pero el auto está, animado. taro lo vio el 2026-09-23 jugando el build de
-`3e028a0` —`pruebas-manuales/2026-09-23-3e028a0-snes/talan-arden-car-escape.png`—,
-y no es nuevo.
+**After choosing the car on the rooftop, map 4's cutscene runs with a black
+screen**: the texts are visible and the car isn't. In RM2k the background is
+black too, but the car is there, animated. taro saw it on 2026-09-23 playing
+the build of `3e028a0`
+—`pruebas-manuales/2026-09-23-3e028a0-snes/talan-arden-car-escape.png`—,
+and it isn't new.
 
-El auto es `EV0002` o `EV0003` del mapa 4: `BLVehicles/2`, con la página
-condicionada a 130 (rojo) o 131 (azul) **y** 132, que prende el mapa 33 antes
-de la elección. La cinemática es la página 4 de `EV0001`, una automática que
-también pide el 132.
+The car is `EV0002` or `EV0003` of map 4: `BLVehicles/2`, with the page
+conditioned on 130 (red) or 131 (blue) **and** 132, which map 33 turns on
+before the choice. The cutscene is page 4 of `EV0001`, an autorun that also
+asks for 132.
 
-# La causa, medida
+# The cause, measured
 
-Arrancando el cartucho de pruebas en el mapa 4 con 130 y 132 prendidos
-—`en-4`—, los dos autos quedan con `npc_buf + 14` en cero y
-`eleg_por_ev` en `$FFFF` para los eventos 1 y 2: **ninguna pasada de refresco
-miró sus páginas**, ni la de la carga del mapa ni una forzada después.
+Starting the test cartridge on map 4 with 130 and 132 on —`en-4`—, both cars
+end up with `npc_buf + 14` at zero and `eleg_por_ev` at `$FFFF` for events
+1 and 2: **no refresh pass looked at their pages**, neither the one from
+loading the map nor a forced one afterwards.
 
-Es `elegir_con_filtro`: para decidir entre el filtro corto (`$80`, sólo
-automáticas) y el completo (`$E0`) hace `ldx solo_auto` con X en 16 bits, y eso
-lee también `auto_n`, el byte de al lado. Con alguna automática activa `auto_n`
-no es cero, X tampoco, y la pasada completa filtra como la corta: los eventos
-que sólo tienen ruta propia o gráfico por página no eligen página nunca
-mientras dure la automática.
+It's `elegir_con_filtro`: to decide between the short filter (`$80`, only
+autoruns) and the full one (`$E0`) it does `ldx solo_auto` with X in 16 bits,
+and that also reads `auto_n`, the byte next to it. With some autorun active
+`auto_n` isn't zero, neither is X, and the full pass filters like the short
+one: events that only have their own route or a per-page graphic never pick
+a page while the autorun lasts.
 
-Nació en `348cf58` (2026-09-06). Dos líneas más arriba la misma función lee
-`solo_auto` con `lda`, en 8 bits, así que el `ldx` no está puesto a propósito.
+It was born in `348cf58` (2026-09-06). Two lines above, the same function
+reads `solo_auto` with `lda`, in 8 bits, so the `ldx` isn't there on purpose.
 
-**No es de este mapa**: le pasa a cualquier refresco con una automática
-corriendo, que en una cinemática es lo normal.
+**It isn't specific to this map**: it happens to any refresh with an autorun
+running, which in a cutscene is the norm.
 
-# El arreglo
+# The fix
 
-`solo_auto` se lee con `lda`, antes que la página. Con eso, en el mismo
-arranque de `en-4` con 130 y 132, el evento 1 elige su página (`$A0`) y el 2
-queda escondido (`$FFFD`): **el auto rojo aparece, y anima** —cambia de pose
-cada diez cuadros—. El azul no, que es lo que corresponde.
+`solo_auto` is read with `lda`, before the page. With that, in the same
+`en-4` start with 130 and 132, event 1 picks its page (`$A0`) and event 2
+stays hidden (`$FFFD`): **the red car appears, and animates** —it changes
+pose every ten frames—. The blue one doesn't, which is as it should be.
 
-Y como la página de prueba de cada caso de la tanda **es una automática**,
-todos los refrescos de la tanda corrían con el error puesto: el arreglo puede
-mover goldens que no tienen nada que ver con autos. El primero que apareció es
-`destello-compartido-2`: el héroe ya no destella junto con el evento 4.
+And since every case of the suite's test page **is an autorun**, every
+refresh in the suite ran with the bug in place: the fix may move goldens
+that have nothing to do with cars. The first one that showed up is
+`destello-compartido-2`: the hero no longer flashes together with event 4.
 
-**No movió ninguna golden**: `just pruebas` en verde con el arreglo. Lo
-de `destello-compartido-2` que se ve arriba no era esto sino el caso de la otra
-tarea, que destellaba al héroe y le cambiaba al conversor el reparto de paletas
-del mapa 6: ver `dos-destellos-a-la-vez`.
+**It moved no golden**: `just pruebas` green with the fix. The
+`destello-compartido-2` thing mentioned above wasn't this but the case of the
+other task, which flashed the hero and changed the converter's palette
+allocation for map 6: see `dos-destellos-a-la-vez`.
 
-Lo cuida `pruebas/rpgmaker/test_refresco_con_automatica.py`, que arranca en
-`en-4` con 130 y 132 y mira que el rojo se dibuje y el azul no. Se la vio en
-rojo contra el `main.s` de antes del arreglo: las dos filas en cero.
+It is guarded by `pruebas/rpgmaker/test_refresco_con_automatica.py`, which
+starts in `en-4` with 130 and 132 and checks that the red one is drawn and
+the blue one isn't. It was seen red against the `main.s` from before the
+fix: both rows at zero.
 
-Lo que **no** se corrió: la huida jugada entera, desde el techo. La prueba
-llega al mapa 4 con los switches puestos a mano.
+What was **not** run: the getaway played in full, from the rooftop. The test
+reaches map 4 with the switches set by hand.
 
-**Confirmado por taro jugando el 2026-09-26: anda perfecto.**
+**Confirmed by taro playing on 2026-09-26: works perfectly.**

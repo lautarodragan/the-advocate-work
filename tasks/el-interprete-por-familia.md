@@ -1,71 +1,72 @@
 ---
-name: "El intérprete por familia"
-description: "Los manejadores de opcode juntados por familia, y eventos_tick fuera de cargar_mapa.s: hecha"
+name: "The interpreter by family"
+description: "The opcode handlers grouped by family, and eventos_tick out of cargar_mapa.s: done"
 type: refactor
 status: done
 ---
 
-El despacho es por tabla desde el 2026-09-25 (la parte C de
-`main-s-segunda-etapa.md`), así que ya se puede hacer. Ojo: la prueba
-`test_la_entrada_k_de_la_tabla_salta_al_manejador_del_opcode_k` exige que
-cada manejador siga en el banco de `correr_codigo`.
+Dispatch has been by table since 2026-09-25 (part C of
+`main-s-segunda-etapa.md`), so it can be done now. Watch out: the test
+`test_la_entrada_k_de_la_tabla_salta_al_manejador_del_opcode_k` requires each
+handler to stay in `correr_codigo`'s bank.
 
-Desde la parte B cada manejador de opcode es su propio `.proc`, repartidos en
-`rom/src/interprete_*.s` por tramo contiguo con un tema, no por familia: las
-familias están intercaladas en el orden de la ROM (las escenas caen en cinco
-tramos) y juntarlas era mover código. Con el despacho por tabla, dónde vive
-cada manejador deja de importar, así que juntar cada familia en su archivo es
-mover `.proc` enteros **dentro del mismo segmento**, igual que las once
-mudanzas de la segunda etapa.
+Since part B each opcode handler is its own `.proc`, spread across
+`rom/src/interprete_*.s` by contiguous stretch with a theme, not by family:
+the families are interleaved in the ROM's order (the scenes fall in five
+stretches) and grouping them meant moving code. With dispatch by table, where
+each handler lives stops mattering, so grouping each family into its file is
+moving whole `.proc`s **within the same segment**, same as the eleven moves
+of the second stage.
 
-Se verifica igual que ellas: `just pruebas` sin ninguna golden cambiada, y el
-listado de `ca65` comparado rutina por rutina para que ningún manejador quede
-con otro ancho (el script de esa comparación estaba en el scratchpad de la
-segunda etapa: rehacerlo si se perdió). Una familia por commit, sin tocar el
-texto movido, para que `git blame -C --diff-algorithm=histogram` la siga.
+It's verified the same way as those: `just pruebas` without any golden
+changed, and the `ca65` listing compared routine by routine so that no
+handler ends up with a different width (the script for that comparison was in
+the second stage's scratchpad: redo it if it got lost). One family per
+commit, without touching the moved text, so that `git blame -C
+--diff-algorithm=histogram` follows it.
 
-Decidido con taro el 2026-09-25: el intérprete sí, y **no** reordenar todo
-`rom/src/` —el banco 0 va justo, hay código sensible al tiempo, choca con
-cada rama abierta, y para depurar en un emulador alcanza con los símbolos del
-`.dbg`—.
+Decided with taro on 2026-09-25: the interpreter yes, and **not** reordering
+all of `rom/src/` —bank 0 is tight, there's timing-sensitive code, it clashes
+with every open branch, and for debugging in an emulator the `.dbg`'s symbols
+are enough—.
 
-**De paso, otra mudanza del mismo tipo**, vista depurando en Mesen2:
-`eventos_tick` —con `espera_boton` adentro, lo que corre las páginas cada
-cuadro— vive en `rom/src/cargar_mapa.s`, junto con `entrar_en_panico`,
-`empezar_fundido` y `fundido_tick`. Quedaron ahí porque el corte cortó por
-tramos y ése empezaba con `cargar_mapa`. Mirar si tienen un archivo mejor
-(mismo segmento) y moverlas con las mismas verificaciones.
+**Along the way, another move of the same kind**, seen while debugging in
+Mesen2: `eventos_tick` —with `espera_boton` inside, what runs the pages every
+frame— lives in `rom/src/cargar_mapa.s`, together with `entrar_en_panico`,
+`empezar_fundido` and `fundido_tick`. They stayed there because the cut cut
+by stretches and that one started with `cargar_mapa`. See whether they have a
+better file (same segment) and move them with the same checks.
 
-## Hecha
+## Done
 
-El 2026-09-26, sobre `b581d4e` y con `main` mergeado dos veces en el medio
-(`7d7528a`, antes de tocar los archivos de los otros agentes, y al final).
-Una mudanza por commit, cada `.proc` entero con su comentario y sin tocar el
-texto:
+On 2026-09-26, on `b581d4e` and with `main` merged twice along the way
+(`7d7528a`, before touching the other agents' files, and at the end). One
+move per commit, each `.proc` whole with its comment and without touching the
+text:
 
-| commit | qué | de → a |
+| commit | what | from → to |
 |---|---|---|
-| `f043c13` | `op_choice` | permisos/saltos/switches → `interprete_mensaje.s`, al final |
-| `bfd27c8` | `op_if_var`, `op_goto` | variables y permisos → `interprete_condiciones.s` (`op_if_var` detrás de `op_if`) |
-| `d4aa17a` | `op_switch` | permisos → `interprete_variables.s`, al final |
-| `d8ebb29` | `pelea_arrancar` | teletransporte → `interprete_tienda_y_pelea.s`, al final |
-| `4b441c9` | el archivo del teletransporte, renombrado | `interprete_teletransporte_y_pelea.s` → `interprete_teletransporte.s` |
-| `e7cac13` | `eventos_de_mapa`, `eventos_tick` | `cargar_mapa.s` → `paginas_de_eventos.s`, delante de los paralelos |
-| `52a788a` | `tinte_de_evento` | `cargar_mapa.s` → `tinte.s`, detrás de `aplicar_tinte` |
-| `40873aa` | `entrar_en_panico` | `cargar_mapa.s` → `arranque.s`, detrás de `contar_perdidos` |
-| `a0510b4` | `op_wait_routes`, `op_stop_routes` | `interprete_esperar_rutas.s` (se va) → `interprete_movimiento.s` |
-| `33a29df` | `op_sound` | efectos → `interprete_musica.s`, al final |
-| `7bdb733` | `op_access` | permisos (se va) → `interprete_guardar.s`, al final |
-| `2ef02b8` | los encabezados | sólo comentarios |
+| `f043c13` | `op_choice` | permissions/jumps/switches → `interprete_mensaje.s`, at the end |
+| `bfd27c8` | `op_if_var`, `op_goto` | variables and permissions → `interprete_condiciones.s` (`op_if_var` after `op_if`) |
+| `d4aa17a` | `op_switch` | permissions → `interprete_variables.s`, at the end |
+| `d8ebb29` | `pelea_arrancar` | teleport → `interprete_tienda_y_pelea.s`, at the end |
+| `4b441c9` | the teleport file, renamed | `interprete_teletransporte_y_pelea.s` → `interprete_teletransporte.s` |
+| `e7cac13` | `eventos_de_mapa`, `eventos_tick` | `cargar_mapa.s` → `paginas_de_eventos.s`, before the parallels |
+| `52a788a` | `tinte_de_evento` | `cargar_mapa.s` → `tinte.s`, after `aplicar_tinte` |
+| `40873aa` | `entrar_en_panico` | `cargar_mapa.s` → `arranque.s`, after `contar_perdidos` |
+| `a0510b4` | `op_wait_routes`, `op_stop_routes` | `interprete_esperar_rutas.s` (goes away) → `interprete_movimiento.s` |
+| `33a29df` | `op_sound` | sound effects → `interprete_musica.s`, at the end |
+| `7bdb733` | `op_access` | permissions (goes away) → `interprete_guardar.s`, at the end |
+| `2ef02b8` | the headers | only comments |
 
-Queda así —la lista y el orden en la ROM son los de `main.s`—:
+It ends up like this —the list and the order in the ROM are `main.s`'s—:
 
-| archivo | manejadores |
+| file | handlers |
 |---|---|
 | `interprete_mensaje.s` | message, choice |
 | `interprete_condiciones.s` | if, if_var, if_actor, goto |
 | `interprete_oro_e_items.s` | gold, item |
-| `interprete_tienda_y_pelea.s` | shop, battle, battle_destination, y `pelea_arrancar` |
+| `interprete_tienda_y_pelea.s` | shop, battle, battle_destination, and `pelea_arrancar` |
 | `interprete_efectos.s` | picture, picture_move, picture_erase, animation, weather |
 | `interprete_movimiento.s` | route, place, place_var, swap, wait_routes, stop_routes |
 | `interprete_destellos.s` | shake, flash_screen, flash |
@@ -80,40 +81,40 @@ Queda así —la lista y el orden en la ROM son los de `main.s`—:
 | `interprete_camara_y_tinte.s` | pan, tint |
 | `interprete_teletransporte.s` | teleport |
 
-Lo que se decidió en el camino:
+What was decided along the way:
 
-* **Los archivos que ya tenían nombre de familia se quedaron con el suyo**,
-  aunque la tabla de "Cuánto se toca cada parte" de la segunda etapa junte
-  más (el oro con el grupo, el cronómetro con las variables, las escenas en
-  una). Separarlos no cuesta nada y renombrar choca con cada rama abierta;
-  se renombró sólo el que mentía (`..._y_pelea`).
-* **`op_access` va con guardar**: los permisos son estado de la partida, y
-  el primero es el de guardar. **`op_goto` con las condiciones**: es el
-  salto que el conversor pone en el `else`.
-* **`empezar_fundido` y `fundido_tick` se quedan en `cargar_mapa.s`**: son
-  el fundido del teletransporte, y `fundido_tick` llama a
-  `cargar_lo_pedido`, que está detrás en el mismo archivo con
-  `mapa_tema_callar` y `mover_heroe_a`. `eventos_de_mapa`, que la tarea no
-  nombraba, se fue con `eventos_tick` porque es su otra mitad, y
-  `tinte_de_evento`, que tampoco, porque sin ellas quedaba sola entre la
-  vuelta de la pelea y el fundido.
+* **The files that already had a family name kept theirs**, even though the
+  second stage's "Cuánto se toca cada parte" table groups more (gold with the
+  party, the timer with the variables, the scenes in one). Keeping them
+  separate costs nothing and renaming clashes with every open branch; only the
+  one that lied (`..._y_pelea`) was renamed.
+* **`op_access` goes with saving**: the permissions are game state, and the
+  first one is the save one. **`op_goto` with the conditions**: it's the jump
+  the converter puts in the `else`.
+* **`empezar_fundido` and `fundido_tick` stay in `cargar_mapa.s`**: they're
+  the teleport's fade, and `fundido_tick` calls `cargar_lo_pedido`, which is
+  after them in the same file with `mapa_tema_callar` and `mover_heroe_a`.
+  `eventos_de_mapa`, which the task didn't name, went with `eventos_tick`
+  because it's its other half, and `tinte_de_evento`, which it didn't name
+  either, because without them it was left alone between the return from the
+  battle and the fade.
 
-**Cómo se verificó.** Cada commit con `just cartuchos` y `just pruebas` en
-verde (707 hasta el primer merge de `main`, 719 después), sin ninguna golden
-cambiada ni ninguna prueba tocada. Que ningún manejador quedara ensamblado
-con otro ancho, con el script de la segunda etapa —`ca65 -l` del árbol de
-antes y del de después contra los mismos generados de release y
-tests/special, rutina por rutina—: en cada mudanza, 0 bloques con bytes
-distintos, y lo mismo entre `main` y el final de la rama (2955 y 1589
-bloques). La única diferencia de texto es la lista de `.include`. Probado al
-revés: un `.a16` al principio de `op_choice` lo marca. El renombre y los
-encabezados salieron con las dos ROMs byte por byte iguales a las del
-commit anterior. `test_cores.py` dos veces al final, en verde.
+**How it was verified.** Each commit with `just cartuchos` and `just pruebas`
+green (707 until the first merge of `main`, 719 after), with no golden changed
+and no test touched. That no handler ended up assembled with a different
+width, with the second stage's script —`ca65 -l` of the tree from before and
+of the one from after against the same generated files of release and
+tests/special, routine by routine—: on each move, 0 blocks with differing
+bytes, and the same between `main` and the end of the branch (2955 and 1589
+blocks). The only text difference is the `.include` list. Tested the other
+way round: an `.a16` at the start of `op_choice` gets flagged. The rename and
+the headers came out with both ROMs byte for byte identical to those of the
+previous commit. `test_cores.py` twice at the end, green.
 
-**`git blame -C --diff-algorithm=histogram`** sigue a las trece rutinas
-movidas: de 683 líneas, 648 dan el mismo commit que en el origen. De las 35
-que no, 30 van a los cortes de `main.s` (`391930c`) y de `interprete.s`
-(`a1547b9`), que tienen el mismo texto en otro archivo —`jmp
-correr_codigo::otro`, `.endproc`, `rts`, `phb`/`phk`/`plb`—, y 5 a la
-mudanza misma, apareadas con las vecinas del destino: `si_var_sigue:` y dos
-`iny` de `op_if_var`, un `rts` y `sin_espera:` de `eventos_tick`.
+**`git blame -C --diff-algorithm=histogram`** follows the thirteen moved
+routines: of 683 lines, 648 give the same commit as in the origin. Of the 35
+that don't, 30 go to the cuts of `main.s` (`391930c`) and of `interprete.s`
+(`a1547b9`), which have the same text in another file —`jmp
+correr_codigo::otro`, `.endproc`, `rts`, `phb`/`phk`/`plb`—, and 5 to the move
+itself, paired with the destination's neighbors: `si_var_sigue:` and two
+`iny` of `op_if_var`, an `rts` and `sin_espera:` of `eventos_tick`.

@@ -1,178 +1,172 @@
 ---
-name: "Las reglas repetidas, en un solo lugar"
-description: "Lo que varios agentes dejaron anotado dos o tres veces: las reglas del actor, las constantes del motor, equip y la cola de escapes; cada una a un solo lugar, con las ROMs byte por byte iguales"
+name: "The repeated rules, in a single place"
+description: "What several agents noted two or three times: the actor rules, the engine constants, equip and the escapes tail; each to a single place, with the ROMs byte for byte identical"
 type: refactor
 status: done
 assignee: taro
 ---
 
-Del 2026-10-02, mientras taro no puede revisar nada: un refactor que se
-verifica solo. Lo anotaron:
+From 2026-10-02, while taro can't review anything: a refactor that verifies
+itself. Noted by:
 
-- Cardón (`rust-el-dominio-de-la-pelea.md`): el parámetro del actor
-  en su nivel y el equipo sumado están en `rm2k-snes-battle`, en
-  `rm2k-snes-screens` y en `port/rules.py`; su lugar es `rm2k-rules`.
-- Timbó (`rust-la-emision.md`): las constantes del motor están en
-  `engine.rs` de `rm2k-snes-mapdata` y en `events.py`, que leen las pruebas
-  de ABL; lo mismo `SUB_MAX`, `PARALLEL_MAX`, `ROUTE_EV_MAX`, `OBJ_PRIORITY`
-  y `block_tile`.
-- Tataupá (`rust-el-dominio-de-las-pantallas.md`): `equip` en la
-  etapa y en el arnés de pruebas; la cola de escapes en el compilador de
-  eventos y en `rm2k-snes-text`.
+- Cardón (`rust-el-dominio-de-la-pelea.md`): the actor's parameter at its
+  level and the summed equipment are in `rm2k-snes-battle`, in
+  `rm2k-snes-screens` and in `port/rules.py`; their place is `rm2k-rules`.
+- Timbó (`rust-la-emision.md`): the engine constants are in
+  `rm2k-snes-mapdata`'s `engine.rs` and in `events.py`, which ABL's tests
+  read; likewise `SUB_MAX`, `PARALLEL_MAX`, `ROUTE_EV_MAX`, `OBJ_PRIORITY`
+  and `block_tile`.
+- Tataupá (`rust-el-dominio-de-las-pantallas.md`): `equip` in the stage and
+  in the test harness; the escapes tail in the event compiler and in
+  `rm2k-snes-text`.
 
-Sale de `main` en `5a93a5ca`. Ahí: `NO_CACHE=1 just cartuchos` da
-`abl.sfc` `35c765009320d436…`, 1418 archivos en `rom/build/`;
-`just pruebas` 1001, `just -f tools/justfile test` 39.
+It starts from `main` at `5a93a5ca`. There: `NO_CACHE=1 just cartuchos`
+gives `abl.sfc` `35c765009320d436…`, 1418 files in `rom/build/`; `just
+pruebas` 1001, `just -f tools/justfile test` 39.
 
-## Cómo se verifica cada paso
+## How each step is verified
 
-`NO_CACHE=1 just cartuchos` con los crates que se tocan en el `bin/`
-local, y el sha256 de todo `rom/build/` —menos el caché, los `.o`,
-`sello.txt` y `conversor.log`; el `.dbg` sin `mtime`— contra la base.
+`NO_CACHE=1 just cartuchos` with the crates being touched in the local
+`bin/`, and the sha256 of all of `rom/build/` —except the cache, the `.o`s,
+`sello.txt` and `conversor.log`; the `.dbg` without `mtime`— against the
+baseline.
 
-Una trampa que apareció a mitad de camino: **el ensamblador global arma
-con el runtime del checkout principal**, así que si `main` cambia
-`tools/runtime/` mientras uno trabaja, los `.dbg` cambian aunque la rama
-no toque nada. Pasó con el merge de Ratona (`main.s`): la base se volvió
-a sacar sobre el merge, con el commit en cuestión revertido.
+A trap that showed up halfway: **the global assembler builds with the main
+checkout's runtime**, so if `main` changes `tools/runtime/` while one is
+working, the `.dbg`s change even though the branch touches nothing. It
+happened with Ratona's merge (`main.s`): the baseline was taken again on the
+merge, with the commit in question reverted.
 
-## 1. Las reglas del actor → `rm2k-rules`
+## 1. The actor rules → `rm2k-rules`
 
-`157ecf82`. Quedan en `tools/rm2k/rules/src/actor.rs`: `level_of`,
-`curve`, `curve_at`, `points`, `with_equipment`, `PARAM_MAX`,
-`EQUIPPED`, `initial_equipment`, `learned_skills`, `level_learned`.
-`rm2k-snes-battle` (`rules.rs`) y `rm2k-snes-screens` (`texts.rs`) ponen
-arriba sólo qué es un error para cada una; la pelea reexporta lo que la
-emisión le pide, para no sumarle a `rm2k-snes-mapdata` una dependencia.
+`157ecf82`. They stay in `tools/rm2k/rules/src/actor.rs`: `level_of`,
+`curve`, `curve_at`, `points`, `with_equipment`, `PARAM_MAX`, `EQUIPPED`,
+`initial_equipment`, `learned_skills`, `level_learned`. `rm2k-snes-battle`
+(`rules.rs`) and `rm2k-snes-screens` (`texts.rs`) put on top only what counts
+as an error for each; the battle re-exports what the emission asks of it, so
+as not to add a dependency to `rm2k-snes-mapdata`.
 
-`port/rules.py` se borró: el conversor ya no lo usaba y las pruebas de
-ABL, lo único que lo leía, piden los máximos al modelo de la pelea
-(`datos.maximos()`). Comparados los 60 actores contra el Python borrado:
-iguales.
+`port/rules.py` was deleted: the converter no longer used it and ABL's tests,
+the only thing that read it, ask the battle model for the maximums
+(`datos.maximos()`). The 60 actors compared against the deleted Python:
+identical.
 
-## 2. Las constantes del motor → `engine.rs`
+## 2. The engine constants → `engine.rs`
 
-`bb4fdeda`. **Se eligió preguntarle al ejecutable**: `rm2k-snes-mapdata
-engine` contesta por nombre todas las de `engine.rs` y las dos topes de
-`record.rs` que mira el conversor (`PARALLEL_MAX`, `ROUTE_EV_MAX`), y
-`port/engine.py` las pide una vez por proceso. Por qué ésa:
+`bb4fdeda`. **Asking the executable was the chosen option**:
+`rm2k-snes-mapdata engine` answers by name all those in `engine.rs` and the
+two caps of `record.rs` the converter looks at (`PARALLEL_MAX`,
+`ROUTE_EV_MAX`), and `port/engine.py` asks for them once per process. Why
+that one:
 
-* es la que ya usan `port/vram.py`, `screen_stage.layout()` y
-  `modelo.disposicion()`: no hay mecanismo nuevo;
-* el `.sym` sólo existe después de armar, y el conversor las necesita
-  antes —`ITEMS_N`, `MESSAGES_STEP`, `ROUTE_FREQUENCY`, los
-  disparadores—;
-* generarlas de una declaración, como `tools/snes/protocol/`, era pasar
-  ciento diez constantes a otro formato para lo mismo.
+* it's the one `port/vram.py`, `screen_stage.layout()` and
+  `modelo.disposicion()` already use: no new mechanism;
+* the `.sym` only exists after building, and the converter needs them before
+  —`ITEMS_N`, `MESSAGES_STEP`, `ROUTE_FREQUENCY`, the triggers—;
+* generating them from a declaration, like `tools/snes/protocol/`, meant
+  moving a hundred and ten constants to another format for the same thing.
 
-`events.py` las sigue contestando con sus nombres por un `__getattr__` de
-módulo, así que ninguna prueba cambió; donde estaba cada asignación queda
-una línea con el nombre, porque los porqués siguen ahí y el runtime y el
-`.inc` los citan como "see X in events.py". Una prueba de `engine.rs`
-compara la lista que contesta contra sus `pub const`.
+`events.py` still answers them with their names through a module
+`__getattr__`, so no test changed; where each assignment was there's a line
+with the name, because the whys are still there and the runtime and the `.inc`
+cite them as "see X in events.py". A test of `engine.rs` compares the list it
+answers against its `pub const`s.
 
-`345001f6`: **lo que dibuja una página** (`oam`) lo arma la emisión
-(`objects::page_oam`), con lo que `OBJ_PRIORITY`, `OBJ_PRIORITY_ABOVE` y
-`block_tile` se fueron de `sprites.py`. El conversor manda el bloque y la
-paleta. Cambiaron tres hashes de `rm2k-snes-mapdata`: el mapa inventado
-traía unos bytes que ningún bloque da; está explicado en el commit y en
-la prueba.
+`345001f6`: **what a page draws** (`oam`) is built by the emission
+(`objects::page_oam`), with which `OBJ_PRIORITY`, `OBJ_PRIORITY_ABOVE` and
+`block_tile` left `sprites.py`. The converter sends the block and the palette.
+Three hashes of `rm2k-snes-mapdata` changed: the made-up map carried some
+bytes no block gives; it's explained in the commit and in the test.
 
-**`SUB_MAX` quedó en dos lados**, a propósito: es del runtime
-(`low_ram.s`), no de `engine.rs`, y la copia del conversor la compara
-`test_substitutions.py`. Pasarlo al motor es emitirlo en el `.inc` y
-sacarlo de `low_ram.s`: cambia el `.inc` y el `.dbg`, y no entraba en un
-refactor que tiene que salir igual.
+**`SUB_MAX` stayed in two places**, on purpose: it belongs to the runtime
+(`low_ram.s`), not to `engine.rs`, and the converter's copy is compared by
+`test_substitutions.py`. Moving it to the engine means emitting it in the
+`.inc` and removing it from `low_ram.s`: that changes the `.inc` and the
+`.dbg`, and didn't fit in a refactor that has to come out identical.
 
-`9826efd1`: al sacar el `block_tile` de Python apareció que la emisión
-tenía su propia copia de cuatro números de `rm2k-snes-map-sprites`
-—`block_tile`, `OBJ_COLORS`, `SPRITE_POSES`, `POSE_BYTES`— y de los dos
-de los glifos del cronómetro. La emisión depende ahora de esa etapa y los
-nombra desde ahí.
+`9826efd1`: when removing the Python `block_tile` it turned out the emission
+had its own copy of four numbers of `rm2k-snes-map-sprites` —`block_tile`,
+`OBJ_COLORS`, `SPRITE_POSES`, `POSE_BYTES`— and of the two of the timer's
+glyphs. The emission now depends on that stage and names them from there.
 
-## 3. `equip` → `rm2k-rules`, y el arnés le pregunta a la etapa
+## 3. `equip` → `rm2k-rules`, and the harness asks the stage
 
-`e9eb697a`. `Game_Actor::ChangeEquipment` es de RM2k: queda en
-`rm2k-rules` (`actor::change_equipment`). La etapa la usa para dibujar la
-lista y contesta `rm2k-snes-screens equip`; `pantallas.equipar` se lo
-pide por `screen_stage.equip`. Se eligió en ese sentido porque la etapa
-es la que corre la regla, en Rust, y el arnés ya le pide todo lo demás
-de las pantallas.
+`e9eb697a`. `Game_Actor::ChangeEquipment` belongs to RM2k: it stays in
+`rm2k-rules` (`actor::change_equipment`). The stage uses it to draw the list
+and answers `rm2k-snes-screens equip`; `pantallas.equipar` asks it through
+`screen_stage.equip`. It was chosen in that direction because the stage is
+the one that runs the rule, in Rust, and the harness already asks it for
+everything else about the screens.
 
-## 4. La cola de escapes → `rm2k-snes-text`
+## 4. The escapes tail → `rm2k-snes-text`
 
-`e7022dfe`. Queda la de `refit.rs`, y el compilador de eventos depende de
-`rm2k-snes-text`; al revés se traería el compilador a la pelea y a las
-pantallas, que dependen de `text`. `tests/escapes.json` se mudó con ella
-y `events/tests/escapes.rs`, que comparaba las dos copias, se borró. El
-porqué de qué escapes compilan sigue en el `escape_tail` del compilador,
-que sólo traduce el error.
+`e7022dfe`. The one in `refit.rs` stays, and the event compiler depends on
+`rm2k-snes-text`; the other way round would bring the compiler into the battle
+and the screens, which depend on `text`. `tests/escapes.json` moved with it
+and `events/tests/escapes.rs`, which compared the two copies, was deleted. The
+why of which escapes compile is still in the compiler's `escape_tail`, which
+only translates the error.
 
-## 5. Las que aparecieron por el camino
+## 5. The ones that showed up along the way
 
-Arregladas, porque eran una línea cada una:
+Fixed, because they were one line each:
 
-* `8ccdbf82`: `EQUIPMENT_SLOTS` en `engine.rs`, `layout.rs` y
-  `compile.rs` → `rm2k-rules`; `ENEMIES_MAX` en `engine.rs` → el de
-  `db.rs` de la pelea.
-* `1bca3fdc`: `RAIN_COLORS`, `rain_pixels` y `CHOICE_CURSOR` en
-  `events.py`, copias sin uso de las de `map-sprites` y del compilador.
-  Y antes, en `bb4fdeda`, `wait_after_step`, `wait_after_turn`,
-  `fade_step`, `fade_ramp` y `SHAKE_SINE`, también sin uso.
+* `8ccdbf82`: `EQUIPMENT_SLOTS` in `engine.rs`, `layout.rs` and `compile.rs`
+  → `rm2k-rules`; `ENEMIES_MAX` in `engine.rs` → the battle's `db.rs` one.
+* `1bca3fdc`: `RAIN_COLORS`, `rain_pixels` and `CHOICE_CURSOR` in
+  `events.py`, unused copies of those of `map-sprites` and the compiler. And
+  before, in `bb4fdeda`, `wait_after_step`, `wait_after_turn`, `fade_step`,
+  `fade_ramp` and `SHAKE_SINE`, also unused.
 
-Anotadas y sin tocar:
+Noted and untouched:
 
-* **Dos reglas para el nivel inicial en `rm2k-rules`**: `level_of`
-  (`initial_level`, un 0 es 1) y `initial_level` (lo mismo, topado contra
-  el nivel final). Los parámetros y las habilidades se leen con la
-  primera, la experiencia con la segunda; sólo difieren si el nivel
-  inicial pasa al final. Unirlas puede cambiar la ROM de un juego así.
-* **`port/constants.py`**: `CELL`, `COLUMNS`, `ENEMIES_MAX` y
-  `MENU_CGRAM` están también en `engine.rs`; `rpgmaker/lcf.py` tiene
-  `EQUIPMENT_SLOTS`; `picture.py` y `animation.py` tienen `GRID` y
-  `OBJ_SIDE`, y `picture.py` su propio `block_tile` para el banco de las
-  imágenes. Se importan con `from … import` a nivel de módulo: pasarlos a
-  `port.engine` obliga a leerlos al importar, o a cambiar cada uso.
-* **`ITEMS_N`** está en `compile.rs` del compilador y en `engine.rs`: la
-  emisión no depende del compilador.
-* **`events.py` y el compilador** siguen compartiendo los códigos de
-  comando de RM2k (`codes.rs` contra `event_codes.py`, que sale de liblcf)
-  y unas constantes del compilador que leen las pruebas de ABL
-  —`WALK_SPEED`, `ENC_RATE`, `ENC_TABLE`, `CELL_DEST_A/B`, `BATTLE_LOSE`,
-  `ROUTE_HERO`, `PLACE_BACKDROP` (que además está en `battle_scenes.py`
-  y en `scene.rs`)—. Es el mismo arreglo que el de `engine.rs`: que el
-  compilador las publique.
-* **Contra el runtime**: `STEP_PER_SPEED` y `JUMP_PER_SPEED` de
-  `events.py` son tablas que el runtime tiene escritas
-  (`chipset_animation.s`, `jump_per_speed`); `SUB_MAX`, ver arriba.
-* `rm2k.py` tiene `ANIMATED_*` y `WATER_*`, que también están en
-  `engine.rs`; es la copia de Python de `rm2k-rules`, y la ata
-  `test_rm2k_rules.py`.
+* **Two rules for the initial level in `rm2k-rules`**: `level_of`
+  (`initial_level`, a 0 is 1) and `initial_level` (the same, capped against
+  the final level). The parameters and the skills are read with the first, the
+  experience with the second; they only differ if the initial level exceeds
+  the final one. Merging them may change the ROM of such a game.
+* **`port/constants.py`**: `CELL`, `COLUMNS`, `ENEMIES_MAX` and `MENU_CGRAM`
+  are also in `engine.rs`; `rpgmaker/lcf.py` has `EQUIPMENT_SLOTS`;
+  `picture.py` and `animation.py` have `GRID` and `OBJ_SIDE`, and
+  `picture.py` its own `block_tile` for the pictures' bank. They're imported
+  with `from … import` at module level: moving them to `port.engine` forces
+  reading them on import, or changing each use.
+* **`ITEMS_N`** is in the compiler's `compile.rs` and in `engine.rs`: the
+  emission doesn't depend on the compiler.
+* **`events.py` and the compiler** still share RM2k's command codes
+  (`codes.rs` against `event_codes.py`, which comes from liblcf) and some
+  compiler constants that ABL's tests read —`WALK_SPEED`, `ENC_RATE`,
+  `ENC_TABLE`, `CELL_DEST_A/B`, `BATTLE_LOSE`, `ROUTE_HERO`, `PLACE_BACKDROP`
+  (which is also in `battle_scenes.py` and in `scene.rs`)—. It's the same fix
+  as `engine.rs`'s: have the compiler publish them.
+* **Against the runtime**: `STEP_PER_SPEED` and `JUMP_PER_SPEED` of
+  `events.py` are tables the runtime has written out (`chipset_animation.s`,
+  `jump_per_speed`); `SUB_MAX`, see above.
+* `rm2k.py` has `ANIMATED_*` and `WATER_*`, which are also in `engine.rs`;
+  it's the Python copy of `rm2k-rules`, and `test_rm2k_rules.py` ties it.
 
-`6501dadf` es la prosa que nombraba las copias que se fueron.
+`6501dadf` is the prose that named the copies that went away.
 
-## Los números al final
+## The numbers at the end
 
-Sobre el último merge de `main` (`4248d4f4`): `NO_CACHE=1 just
-cartuchos`, los 1418 archivos de `rom/build/` iguales a la base sacada
-sobre ese merge; `just pruebas` 1005 —las cuatro de más son las de
-Ratona—; `just -f tools/justfile test` 39; `cargo test` de `rm2k-rules`,
-`rm2k-snes-battle`, `rm2k-snes-screens`, `rm2k-snes-events`,
-`rm2k-snes-text` y `rm2k-snes-mapdata` en verde. Cambiaron tres hashes de
-pruebas, los de `rm2k-snes-mapdata` en `345001f6`, explicado ahí.
+On the last merge of `main` (`4248d4f4`): `NO_CACHE=1 just cartuchos`, the
+1418 files of `rom/build/` identical to the baseline taken on that merge;
+`just pruebas` 1005 —the four extra are Ratona's—; `just -f tools/justfile
+test` 39; `cargo test` of `rm2k-rules`, `rm2k-snes-battle`,
+`rm2k-snes-screens`, `rm2k-snes-events`, `rm2k-snes-text` and
+`rm2k-snes-mapdata` green. Three test hashes changed, those of
+`rm2k-snes-mapdata` in `345001f6`, explained there.
 
-## Al mergear
+## When merging
 
-* **Reinstalar en el global**: `just -f tools/justfile install battle
-  screens mapdata events`. `rules` y `text` son bibliotecas: lo que
-  cambió de ellas lo usan esos cuatro. Los demás que dependen de
-  `rm2k-rules` (`cartridge`, `wally`, `rm2k-snes-audio`,
-  `map-background`) sólo ganaron funciones que no llaman, y
-  `map-sprites` no se tocó.
-* **Python**: se agregó `tools/port/engine.py` y se borró
-  `tools/port/rules.py`; son módulos y no scripts, así que
-  `install-scripts` no hace falta.
-* **El orden importa**: el Python nuevo le pide a `rm2k-snes-mapdata
-  engine` y a `rm2k-snes-screens equip`, y manda `draws` en vez de `oam`
-  a la emisión: con los binarios viejos en el global, el conversor y las
-  pruebas fallan. Instalar antes de correr nada.
+* **Reinstall in the global**: `just -f tools/justfile install battle screens
+  mapdata events`. `rules` and `text` are libraries: what changed in them is
+  used by those four. The others that depend on `rm2k-rules` (`cartridge`,
+  `wally`, `rm2k-snes-audio`, `map-background`) only gained functions they
+  don't call, and `map-sprites` wasn't touched.
+* **Python**: `tools/port/engine.py` was added and `tools/port/rules.py`
+  deleted; they're modules and not scripts, so `install-scripts` isn't needed.
+* **The order matters**: the new Python asks `rm2k-snes-mapdata engine` and
+  `rm2k-snes-screens equip`, and sends `draws` instead of `oam` to the
+  emission: with the old binaries in the global, the converter and the tests
+  fail. Install before running anything.

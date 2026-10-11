@@ -1,229 +1,228 @@
 ---
-name: "Las responsabilidades de snes_convert.py"
-description: "snes_convert.py partido en dieciocho módulos por recurso de la consola, sin cambiar la ROM; queda main()"
+name: "The responsibilities of snes_convert.py"
+description: "snes_convert.py split into eighteen modules by console resource, without changing the ROM; main() remains"
 type: refactor
 status: done
 assignee: taro
 ---
 
-`tools/port/snes_convert.py` es enorme (cuántas líneas y funciones: `wc -l` y
-`grep -c '^def '`). taro quiere repasar sus responsabilidades, el
-2026-09-26, sin urgencia.
+`tools/port/snes_convert.py` is huge (how many lines and functions: `wc -l`
+and `grep -c '^def '`). taro wants to go over its responsibilities, on
+2026-09-26, with no urgency.
 
-Primero un inventario: qué partes tiene (la conversión de mapas, gráficos,
-paletas, eventos, audio, el reparto de la VRAM, la escritura de los `.inc`,
-los casos de prueba, la línea de comandos, …), cuáles ya tienen su módulo
-(`eventos.py`, `escena.py`, `asignador.py`, `batalla.py`, `tools/audio/`) y
-qué quedó en el archivo grande que es de otra cosa. Después, una propuesta de
-partición con el criterio del corte de `main.s`: primero lo mecánico (mover
-sin cambiar), verificado con los cartuchos byte por byte iguales, y después
-lo de criterio.
+First an inventory: what parts it has (the conversion of maps, graphics,
+palettes, events, audio, the VRAM layout, writing the `.inc`s, the test cases,
+the command line, …), which already have their module (`eventos.py`,
+`escena.py`, `asignador.py`, `batalla.py`, `tools/audio/`) and what was left
+in the big file that belongs to something else. Then, a partition proposal
+with the criterion of the `main.s` cut: first the mechanical part (moving
+without changing), verified with the cartridges byte for byte identical, and
+then the judgement part.
 
-**Va después de la optimización de tiempo del conversor** (en curso el
-2026-09-26), que no tiene que refactorizar nada para no mezclar las dos
-cosas.
+**It goes after the converter's time optimization** (in progress on
+2026-09-26), which mustn't refactor anything so as not to mix the two things.
 
-Relacionado: taro quiere que todas las herramientas terminen en Rust, no por
-velocidad; cuando se encare eso se decide qué partes tienen sentido.
+Related: taro wants all the tools to end up in Rust, not for speed; when that
+is tackled, it'll be decided which parts make sense.
 
-El inventario por secciones, con rangos de líneas y qué es motor y qué es
-herramienta de RM2k, está en
-`docs/research/el-mapa-de-las-herramientas-de-python.md` (§2), con una foto
-del 2026-09-28.
+The inventory by sections, with line ranges and what is engine and what is
+RM2k tooling, is in `docs/research/el-mapa-de-las-herramientas-de-python.md`
+(§2), with a snapshot from 2026-09-28.
 
-## Tomada el 2026-09-29
+## Taken on 2026-09-29
 
-Para el paso 4 del camino a Rust (`docs/research/las-herramientas-hoy.md`):
-el conversor se migra por partes, y antes hay que partirlo. La optimización
-de tiempo que la frenaba ya pasó. El archivo se sigue llamando
-`tools/port/snes_convert.py`, pero ahora está en inglés y usa `rm2k-render`
-y `rm2k-snes-audio` por el PATH.
+For step 4 of the road to Rust (`docs/research/las-herramientas-hoy.md`): the
+converter is migrated in parts, and first it has to be split. The time
+optimization that was holding it back has happened. The file is still called
+`tools/port/snes_convert.py`, but it's now in English and uses `rm2k-render`
+and `rm2k-snes-audio` from the PATH.
 
-## El inventario
+## The inventory
 
-Sobre `d4811ece`: 9.680 líneas y 135 funciones de nivel superior. Las
-dependencias salen de un script de AST que mira, para cada función o
-constante, a qué otros nombres del archivo se refiere; se tiró. Los rangos
-son de ese commit.
+On `d4811ece`: 9,680 lines and 135 top-level functions. The dependencies come
+from an AST script that looks, for each function or constant, at which other
+names in the file it refers to; it was thrown away. The ranges are from that
+commit.
 
-| líneas | parte | qué hace | depende de | quién la usa |
+| lines | part | what it does | depends on | who uses it |
 |---|---|---|---|---|
-| 1-101 | imports y ganchos | le pone a `lcf` `DECORATE_TRANSLUCENT` y `REFIT_TEXTS` **al importarse** | — | todo el proceso, y cualquier prueba que importe `snes_convert` |
-| 102-386 | las capas del fondo, 1 | el reparto de la CGRAM entre el fondo de 8 bpp y la capa de encima de 4 bpp, la cuantización a 15 bits, la capa de encima como PNG indexado | `allocator`, `tiles_bin` | `_convert_layers`, `convert_window`, `emit` (constantes) |
-| 387-723 | el personaje como sprite | colores, poses, paleta de cada CharSet, qué poses muestra cada gráfico en el mapa, el peso para el reparto | `allocator`, `rm2k`, `settings` | `drawable_npcs`, `build_characters`, `convert_map`, `emit` |
-| 724-940 | eventos horneados | qué eventos opacos se pintan en la capa de encima, y sólo si no mueven la CGRAM | las capas convertidas, `render_map`, `events` | `convert_map`, `_map_layers`, `test_horneados` |
-| 941-1338 | NPCs dibujables y banco de sprites | qué NPCs entran en las ocho paletas de OBJ y el banco de poses de la VRAM | lo del personaje | `convert_map`, pruebas del cronómetro y del destello |
-| 1339-1716 | los extras del banco de sprites | cronómetro, lluvia, la imagen de `ShowPicture`, el recuadro de animación de pelea, y cuántas paletas quedan; `npc_table`, `maps_per_character` y `has_rain` quedaron acá por vecindad | lo del personaje, `picture`, `animation` | `convert_map`, `main` |
-| 1718-2121 | las capas del fondo, 2 | la paleta, la conversión de las dos capas con Voodoo, y el caché en disco y en paralelo de las capas | lo de 102-386, `render_map`, `tiles_bin`, `disk_cache` | `convert_map`, `main` (`precompute_layers`) |
-| 2123-2612 | la ventana del tilemap y los repartos de VRAM | los seis repartos, las ranuras de partida, y los controles de que cada pantalla cae donde la ROM supone | `menus`, `screens` | `convert_map`, `main`, `emit`, `test_vram_layouts` |
-| 2613-2812 | la ventana de mensajes y la fuente | tiles, paleta y celdas de la ventana, la fuente y su prerender por fase | `window`, `font`, `constants` | `main`, `emit` |
-| 2814-3088 | los bloques de 16x16 | el mapa como índices a bloques con pasabilidad, y `TileSubstitution` traducido a bloques | `rm2k`, `events` | `convert_map`, `main`, `test_substitutions` |
-| 3089-3340 | el registro de cada mapa | los campos del registro de 128 bytes, sus desplazamientos, y la tabla de mapas | los tamaños de NPC, eventos y terreno | `emit`, `main` |
-| 3341-3417 | las animaciones del ChipSet | las corridas de agua y de las familias animadas, por mapa | `FAMILIES` | `convert_map`, `emit` |
-| 3418-3572 | las animaciones de pelea | qué animaciones pide el bytecode, y sus cuadros como los guarda el cartucho | `animation`, `events` | `main`, `emit`, `test_animacion_cuadros` |
-| 3573-3654 | la experiencia | las tablas de experiencia por actor | `experience`, `lcf` | `emit` |
-| 3655-4069 | los fondos y los battlers | cuáles lleva el cartucho, quién los pide, y su emisión con los fondos livianos | `scene`, `events` | `main`, `emit`, `test_msu_datos` |
-| 4070-4100 | `block` | la primitiva de emisión: un bloque `.byte` con su `.block` o `.align` | — | casi todos los que emiten |
-| 4101-4246 | la tabla de páginas | las páginas de eventos de un mapa, con el puntero a su código | `events` | `map_data`, `test_paginas` |
-| 4247-4500 | el material y la compresión | los bloques con identidad propia (`Materials`), qué va comprimido, en cuántos flujos, los topes de la WRAM, y los crudos | `compress` (el `lz2` del PATH) | `emit`, `main`, `test_lz2` |
-| 4501-4633 | los datos de cada mapa, encuentros, identidad | los bloques de un mapa, los encuentros aleatorios, el título de la cabecera | lo de NPCs y páginas, `settings` | `emit`, `main` |
-| 4634-6868 | **`emit()`** | el `mapdata.inc` entero, en una función de 2.234 líneas | casi todo lo de arriba | `main` |
-| 6869-7288 | tablas de NPC y eventos | tamaños de NPC y eventos, el orden de dibujo, el orden de mapas, qué eventos se mueven, la firma de la partida, el seno, las tablas de NPC y de actores | `events`, `rm2k` | `emit`, `convert_map`, `main` |
-| 7289-7396 | la línea de comandos | `flags_parser` | `environment`, `project` | `main` |
-| 7398-8360 | **`main()`** | orquesta todo | todo | el ejecutable |
-| 8361-8692 | la música | el trabajo para `rm2k-snes-audio`, los temas separados, el tope del arranque, el `.msu` de datos, qué temas heredan los paquetes | `msu_data`, `settings`, `project` | `main`, `test_inherited_songs` |
-| 8693-9012 | el análisis del juego | dónde arranca el héroe, qué actores pueden liderar, qué ítems y miembros pueden estar, qué deja caer cada tropa; con la global `args_game_dir` | `events`, `lcf`, `resources` | `main`, `convert_map`, `test_lideres` y las del cronómetro y el destello |
-| 9013-9133 | los casos de prueba | partir la línea de comandos en `--case`, la página de cada caso, en qué mapa corre | `events`, `lcf` | `main`, `convert_map` |
-| 9134-9677 | **`convert_map()`** | un mapa entero: capas, sprites, bloques, reparto | casi todo lo de las capas, sprites, bloques, VRAM y casos | `main`, `_map_layers` |
+| 1-101 | imports and hooks | sets `DECORATE_TRANSLUCENT` and `REFIT_TEXTS` on `lcf` **on import** | — | the whole process, and any test that imports `snes_convert` |
+| 102-386 | the background layers, 1 | the CGRAM split between the 8 bpp background and the 4 bpp overlay layer, the quantization to 15 bits, the overlay layer as an indexed PNG | `allocator`, `tiles_bin` | `_convert_layers`, `convert_window`, `emit` (constants) |
+| 387-723 | the character as a sprite | colors, poses, each CharSet's palette, which poses each graphic shows on the map, the weight for the allocation | `allocator`, `rm2k`, `settings` | `drawable_npcs`, `build_characters`, `convert_map`, `emit` |
+| 724-940 | baked events | which opaque events get painted onto the overlay layer, and only if they don't move the CGRAM | the converted layers, `render_map`, `events` | `convert_map`, `_map_layers`, `test_horneados` |
+| 941-1338 | drawable NPCs and the sprite bank | which NPCs fit in the eight OBJ palettes and the VRAM pose bank | the character part | `convert_map`, timer and flash tests |
+| 1339-1716 | the sprite bank's extras | timer, rain, the `ShowPicture` image, the battle animation box, and how many palettes are left; `npc_table`, `maps_per_character` and `has_rain` stayed here by proximity | the character part, `picture`, `animation` | `convert_map`, `main` |
+| 1718-2121 | the background layers, 2 | the palette, the conversion of both layers with Voodoo, and the on-disk and parallel cache of the layers | the 102-386 part, `render_map`, `tiles_bin`, `disk_cache` | `convert_map`, `main` (`precompute_layers`) |
+| 2123-2612 | the tilemap window and the VRAM layouts | the six layouts, the save slots, and the checks that each screen lands where the ROM assumes | `menus`, `screens` | `convert_map`, `main`, `emit`, `test_vram_layouts` |
+| 2613-2812 | the message window and the font | the window's tiles, palette and cells, the font and its per-phase prerender | `window`, `font`, `constants` | `main`, `emit` |
+| 2814-3088 | the 16x16 blocks | the map as indices into blocks with passability, and `TileSubstitution` translated into blocks | `rm2k`, `events` | `convert_map`, `main`, `test_substitutions` |
+| 3089-3340 | each map's record | the fields of the 128-byte record, their offsets, and the map table | the NPC, event and terrain sizes | `emit`, `main` |
+| 3341-3417 | the ChipSet animations | the runs of water and of the animated families, per map | `FAMILIES` | `convert_map`, `emit` |
+| 3418-3572 | the battle animations | which animations the bytecode asks for, and their frames as the cartridge stores them | `animation`, `events` | `main`, `emit`, `test_animacion_cuadros` |
+| 3573-3654 | experience | the experience tables per actor | `experience`, `lcf` | `emit` |
+| 3655-4069 | the backgrounds and the battlers | which ones the cartridge carries, who asks for them, and their emission with the lightweight backgrounds | `scene`, `events` | `main`, `emit`, `test_msu_datos` |
+| 4070-4100 | `block` | the emission primitive: a `.byte` block with its `.block` or `.align` | — | almost everything that emits |
+| 4101-4246 | the pages table | a map's event pages, with the pointer to their code | `events` | `map_data`, `test_paginas` |
+| 4247-4500 | the material and the compression | the blocks with their own identity (`Materials`), what goes compressed, in how many streams, the WRAM caps, and the raw ones | `compress` (the `lz2` from the PATH) | `emit`, `main`, `test_lz2` |
+| 4501-4633 | each map's data, encounters, identity | a map's blocks, the random encounters, the header's title | the NPC and pages parts, `settings` | `emit`, `main` |
+| 4634-6868 | **`emit()`** | the whole `mapdata.inc`, in a 2,234-line function | almost everything above | `main` |
+| 6869-7288 | NPC and event tables | NPC and event sizes, the drawing order, the map order, which events move, the save signature, the sine, the NPC and actor tables | `events`, `rm2k` | `emit`, `convert_map`, `main` |
+| 7289-7396 | the command line | `flags_parser` | `environment`, `project` | `main` |
+| 7398-8360 | **`main()`** | orchestrates everything | everything | the executable |
+| 8361-8692 | the music | the job for `rm2k-snes-audio`, the separate themes, the boot cap, the data `.msu`, which themes the packages inherit | `msu_data`, `settings`, `project` | `main`, `test_inherited_songs` |
+| 8693-9012 | the analysis of the game | where the hero starts, which actors can lead, which items and members can be there, what each troop drops; with the global `args_game_dir` | `events`, `lcf`, `resources` | `main`, `convert_map`, `test_lideres` and the timer and flash ones |
+| 9013-9133 | the test cases | splitting the command line into `--case`, each case's page, which map it runs on | `events`, `lcf` | `main`, `convert_map` |
+| 9134-9677 | **`convert_map()`** | a whole map: layers, sprites, blocks, layout | almost everything of the layers, sprites, blocks, VRAM and cases | `main`, `_map_layers` |
 
-Lo que ya tiene su módulo y **no** está acá: el bytecode (`events.py`), la
-escena (`scene.py`), el asignador (`allocator.py`), la pelea (`battle.py`),
-los menús y pantallas, el título, la imagen, la ventana de RM2k
-(`window.py`), las fuentes (`font.py`), las animaciones como imagen
-(`animation.py`), las reglas de RM2k (`rules.py`), el formato de la PPU
-(`snes_format.py`), y la música en sí (`rm2k-snes-audio`).
+What already has its module and is **not** here: the bytecode (`events.py`),
+the scene (`scene.py`), the allocator (`allocator.py`), the battle
+(`battle.py`), the menus and screens, the title, the picture, RM2k's window
+(`window.py`), the fonts (`font.py`), the animations as images
+(`animation.py`), RM2k's rules (`rules.py`), the PPU format
+(`snes_format.py`), and the music itself (`rm2k-snes-audio`).
 
-Lo que quedó acá y es de otra cosa: **tres partes que no convierten nada**
-—el análisis del juego, los casos de prueba y la línea de comandos—, **las
-emisiones que no son del mapa** —experiencia, fondos, animaciones de pelea,
-música y `.msu`—, y **los planes de recursos** —CGRAM, VRAM, banco de
-sprites, compresión— mezclados con sus emisiones.
+What was left here and belongs to something else: **three parts that convert
+nothing** —the analysis of the game, the test cases and the command line—,
+**the emissions that aren't the map's** —experience, backgrounds, battle
+animations, music and `.msu`—, and **the resource plans** —CGRAM, VRAM, sprite
+bank, compression— mixed in with their emissions.
 
-## La propuesta
+## The proposal
 
-Un módulo por pieza que se pueda reemplazar sola cuando se migre a Rust: cada
-uno con una entrada que se puede escribir como datos —el mapa leído, las
-imágenes, los números del plan— y una salida que también. `snes_convert.py`
-queda con `main()`, los ganchos a `lcf` y los imports.
+One module per piece that can be replaced on its own when migrating to Rust:
+each one with an input that can be written as data —the map read, the images,
+the plan's numbers— and an output that can too. `snes_convert.py` keeps
+`main()`, the `lcf` hooks and the imports.
 
-Las cuentas de líneas salen de simular la mudanza entera sobre una copia, con
-el mismo script que la hace. Todos en `tools/port/`, en inglés.
+The line counts come from simulating the whole move on a copy, with the same
+script that does it. All in `tools/port/`, in English.
 
-| módulo | qué tiene | entra | sale | líneas |
+| module | what it has | input | output | lines |
 |---|---|---|---|---|
-| `snes_format.py` (ya existe) | `COLORS_PER_PALETTE` y `BYTES_PER_TILE` | — | — | +2 |
-| `asm.py` | `block` y `pointer`, las primitivas de emisión | bytes | texto de ca65 | 38 |
-| `map_layers.py` | las dos capas del fondo: el reparto de la CGRAM, la cuantización, la conversión con Voodoo, y su caché | las capas dibujadas | tiles, CGRAM, tilemaps | 615 |
-| `sprites.py` | los personajes como OBJ: poses, paletas, qué NPCs se dibujan, el banco de poses, qué se mueve, el héroe que destella | el mapa, los CharSets, los líderes | el banco de sprites y su reparto de paletas | 897 |
-| `obj_extras.py` | lo que va al final del banco de sprites: cronómetro, lluvia, imagen, animación de pelea, y el tope de paletas | el System, la imagen, la animación | tiles y la paleta de cada uno | 315 |
-| `baking.py` | los eventos horneados en la capa de encima | el mapa y su render | el mapa con los tiles puestos | 224 |
-| `vram.py` | los repartos de la VRAM, las ranuras, y sus controles | cuánto gasta cada capa | qué reparto le toca | 472 |
-| `message_window.py` | la ventana de mensajes y la fuente | el System, la fuente | tiles, paleta, celdas, prerender | 238 |
-| `blocks.py` | los bloques de 16x16 y las sustituciones | tilemaps y pasabilidad | índices y la tabla de bloques | 280 |
-| `materials.py` | `Materials`, qué va comprimido, los flujos, los topes de la WRAM, los crudos | los datos de cada mapa | flujos LZ2 y los crudos | 245 |
-| `map_record.py` | el registro de cada mapa, páginas, NPCs, actores, animaciones del ChipSet, y los bloques de datos de un mapa | lo que devuelve `convert_map` | texto de ca65 | 865 |
-| `battle_animations.py` | las animaciones de pelea | el bytecode emitido | cuadros y su texto | 161 |
-| `battle_scenes.py` | los fondos y los battlers | tropas, mapas, árbol | qué lleva el cartucho y su texto | 429 |
-| `battle_tables.py` | la experiencia y los encuentros | la base de datos, los mapas | tablas | 137 |
-| `music.py` | el trabajo para `rm2k-snes-audio`, los temas, la herencia, el arranque y el `.msu` de datos | los mapas y el árbol | el trabajo, y el `.msu` | 348 |
-| `game_scan.py` | lo que se deduce del juego entero: líderes, ítems, miembros, arranque, lluvia | los mapas y la base de datos | conjuntos de ids | 294 |
-| `options.py` | `flags_parser` y `map_order` | `argv` | `args` | 127 |
-| `cases.py` | los casos de prueba | `argv` y los archivos de casos | las páginas y sus mapas | 158 |
-| `mapdata.py` | `emit()`, con la identidad de la ROM, la firma de la partida y el seno | los mapas convertidos y todo lo demás | `mapdata.inc` | 2.366 |
-| `map_convert.py` | `convert_map()` y su precómputo en paralelo | un id de mapa y `args` | el `map_info` | 627 |
-| `snes_convert.py` | `main()` y los ganchos a `lcf` | — | — | 1.077 |
+| `snes_format.py` (already exists) | `COLORS_PER_PALETTE` and `BYTES_PER_TILE` | — | — | +2 |
+| `asm.py` | `block` and `pointer`, the emission primitives | bytes | ca65 text | 38 |
+| `map_layers.py` | the two background layers: the CGRAM split, the quantization, the conversion with Voodoo, and their cache | the drawn layers | tiles, CGRAM, tilemaps | 615 |
+| `sprites.py` | the characters as OBJ: poses, palettes, which NPCs get drawn, the pose bank, what moves, the hero that flashes | the map, the CharSets, the leaders | the sprite bank and its palette allocation | 897 |
+| `obj_extras.py` | what goes at the end of the sprite bank: timer, rain, picture, battle animation, and the palette cap | the System, the picture, the animation | each one's tiles and palette | 315 |
+| `baking.py` | the events baked into the overlay layer | the map and its render | the map with the tiles set | 224 |
+| `vram.py` | the VRAM layouts, the slots, and their checks | how much each layer spends | which layout it gets | 472 |
+| `message_window.py` | the message window and the font | the System, the font | tiles, palette, cells, prerender | 238 |
+| `blocks.py` | the 16x16 blocks and the substitutions | tilemaps and passability | indices and the block table | 280 |
+| `materials.py` | `Materials`, what goes compressed, the streams, the WRAM caps, the raw ones | each map's data | LZ2 streams and the raw ones | 245 |
+| `map_record.py` | each map's record, pages, NPCs, actors, ChipSet animations, and a map's data blocks | what `convert_map` returns | ca65 text | 865 |
+| `battle_animations.py` | the battle animations | the emitted bytecode | frames and their text | 161 |
+| `battle_scenes.py` | the backgrounds and the battlers | troops, maps, tree | what the cartridge carries and its text | 429 |
+| `battle_tables.py` | the experience and the encounters | the database, the maps | tables | 137 |
+| `music.py` | the job for `rm2k-snes-audio`, the themes, the inheritance, the boot and the data `.msu` | the maps and the tree | the job, and the `.msu` | 348 |
+| `game_scan.py` | what's deduced from the whole game: leaders, items, members, start, rain | the maps and the database | sets of ids | 294 |
+| `options.py` | `flags_parser` and `map_order` | `argv` | `args` | 127 |
+| `cases.py` | the test cases | `argv` and the case files | the pages and their maps | 158 |
+| `mapdata.py` | `emit()`, with the ROM's identity, the save signature and the sine | the converted maps and everything else | `mapdata.inc` | 2,366 |
+| `map_convert.py` | `convert_map()` and its parallel precomputation | a map id and `args` | the `map_info` | 627 |
+| `snes_convert.py` | `main()` and the `lcf` hooks | — | — | 1,077 |
 
-**El porqué del corte.** Sigue las etapas que proponía
-`docs/research/inspeccion-integral-del-repo.md` —entrada y opciones,
-planificación, emisión, diagnóstico—, pero no las junta en cuatro módulos:
-las junta por **recurso de la consola**, porque eso es lo que una pieza de
-Rust puede tomar entera. La CGRAM y la VRAM del fondo son `map_layers`; la
-CGRAM y la VRAM de los objetos, `sprites` y `obj_extras`; el orden de la
-VRAM, `vram`; la WRAM de lo comprimido, `materials`. Y las emisiones van
-aparte de los planes cuando lo que cruza entre los dos son datos: `map_record`
-y `mapdata` sólo leen lo que `convert_map` ya dejó en el `map_info`. El
-diagnóstico no tiene módulo propio porque no es una etapa: son los
-`SystemExit` y los `print` de cada parte, y se van con ella.
+**The why of the cut.** It follows the stages that
+`docs/research/inspeccion-integral-del-repo.md` proposed —input and options,
+planning, emission, diagnostics—, but doesn't group them into four modules: it
+groups them by **console resource**, because that's what a Rust piece can take
+whole. The background's CGRAM and VRAM are `map_layers`; the objects' CGRAM
+and VRAM, `sprites` and `obj_extras`; the VRAM ordering, `vram`; the WRAM of
+the compressed stuff, `materials`. And the emissions go separately from the
+plans when what crosses between the two is data: `map_record` and `mapdata`
+only read what `convert_map` already left in the `map_info`. Diagnostics don't
+have their own module because they aren't a stage: they're each part's
+`SystemExit`s and `print`s, and they go with it.
 
-**Lo que no se parte ahora, a propósito:** `emit()`. Sus tramos comparten
-decenas de locales, así que partirlo es decidir qué pasa de uno a otro, y eso
-es criterio. Se muda entero a `mapdata.py`, y partirlo queda para otro
-commit. Lo mismo `main()` y `convert_map()`.
+**What isn't split now, on purpose:** `emit()`. Its stretches share dozens of
+locals, so splitting it means deciding what passes from one to another, and
+that's judgement. It moves whole to `mapdata.py`, and splitting it is left for
+another commit. The same for `main()` and `convert_map()`.
 
-**Cómo se muda.** Un script que corta los nodos de nivel superior con los
-comentarios que tienen arriba, arma los imports del módulo nuevo copiando los
-de `snes_convert`, y le agrega a éste un `from port.<módulo> import …` con lo
-que le quedó faltando. El orden de los commits es el de las dependencias —un
-módulo sólo importa de los anteriores—, así que no puede quedar un ciclo, y
-ninguno importa de `snes_convert`. Sin re-exports: las pruebas importan del
-módulo nuevo. Los nombres no cambian, tampoco los privados que cruzan de
-módulo (`_check_slots`, `_tile_alphas`): renombrarlos es otro commit.
+**How it's moved.** A script that cuts the top-level nodes with the comments
+above them, builds the new module's imports by copying `snes_convert`'s, and
+adds to the latter a `from port.<módulo> import …` with what it ended up
+missing. The order of the commits is the dependency order —a module only
+imports from the earlier ones—, so no cycle can remain, and none imports from
+`snes_convert`. No re-exports: the tests import from the new module. The names
+don't change, neither do the private ones that cross modules (`_check_slots`,
+`_tile_alphas`): renaming them is another commit.
 
-**Lo que ya se ve que no se puede partir sin cambiar lógica**, y se anota en
-vez de arreglarse:
+**What can already be seen can't be split without changing logic**, and gets
+noted instead of fixed:
 
-* **los ganchos a `lcf`** se ponen al importar `snes_convert`. Una prueba que
-  importe sólo `sprites` o `game_scan` lee los mapas sin ellos. Las que hoy
-  importan `snes_convert` y dejan de usarlo lo siguen importando por eso;
-* **`_layers_in_memory`** es un diccionario de `map_layers` que llena
-  `precompute_layers`, en `map_convert`: estado mutable entre dos módulos;
-* **`args_game_dir`** es una lista global de `game_scan` que `main` escribe;
-* **los textos del `.inc` que nombran `snes_convert.py`** —el encabezado,
-  `anim_table`, `escribir_msu`— siguen diciendo eso: corregirlos cambia el
-  `.inc`, y cada commit de éstos lo deja igual.
+* **the `lcf` hooks** are set when importing `snes_convert`. A test that
+  imports only `sprites` or `game_scan` reads the maps without them. The ones
+  that today import `snes_convert` and stop using it keep importing it because
+  of that;
+* **`_layers_in_memory`** is a `map_layers` dictionary filled by
+  `precompute_layers`, in `map_convert`: mutable state between two modules;
+* **`args_game_dir`** is a global list in `game_scan` that `main` writes;
+* **the `.inc` texts that name `snes_convert.py`** —the header, `anim_table`,
+  `escribir_msu`— still say that: correcting them changes the `.inc`, and each
+  of these commits leaves it the same.
 
-## Hecho, el 2026-09-29
+## Done, on 2026-09-29
 
-La propuesta, tal cual, en un commit por módulo y en el orden de las
-dependencias: `snes_format` (+2 constantes), `asm`, `map_layers`, `sprites`,
-`obj_extras`, `baking`, `vram`, `message_window`, `blocks`, `materials`,
-`map_record`, `battle_animations`, `battle_scenes`, `battle_tables`, `music`,
-`game_scan`, `options`, `cases`, `mapdata` y `map_convert`. Después, un
-commit de prosa guiado por el diff de ésos. Cuántas líneas tiene cada uno lo
-dice `wc -l tools/port/*.py`; `snes_convert.py` quedó con una sola función,
-`main()`.
+The proposal, as is, in one commit per module and in dependency order:
+`snes_format` (+2 constants), `asm`, `map_layers`, `sprites`, `obj_extras`,
+`baking`, `vram`, `message_window`, `blocks`, `materials`, `map_record`,
+`battle_animations`, `battle_scenes`, `battle_tables`, `music`, `game_scan`,
+`options`, `cases`, `mapdata` and `map_convert`. Then, a prose commit guided by
+the diff of those. How many lines each has is told by `wc -l
+tools/port/*.py`; `snes_convert.py` was left with a single function, `main()`.
 
-**Cómo se verificó cada commit:** `NO_CACHE=1 just cartuchos` con
-`rom/build/release` y `rom/build/tests` borrados, y el sha256 de todo
-`rom/build/` salvo el caché, los `.o`, `sello.txt` y `conversor.log`
-—`.sfc`, `.msu`, `.pcm`, `.inc`, `.sym`, `.dbg` sin `mtime`, `.json`,
-crudos—: los 999 archivos iguales al de `d4811ece` en los veinte. Además
-`just pruebas` y `just -f tools/justfile test`, en verde en todos. Con el
-caché prendido, frío y tibio, también iguales, en los dos commits que tocan
-lo cacheado (`map_layers` y `map_convert`). Y un chequeo con `symtable` de
-que ningún módulo nuevo usa un nombre que no define ni importa. El merge de
-`main` con lo de Hocó no movió ninguno de los 999.
+**How each commit was verified:** `NO_CACHE=1 just cartuchos` with
+`rom/build/release` and `rom/build/tests` deleted, and the sha256 of all of
+`rom/build/` except the cache, the `.o`s, `sello.txt` and `conversor.log`
+—`.sfc`, `.msu`, `.pcm`, `.inc`, `.sym`, `.dbg` without `mtime`, `.json`,
+raw ones—: the 999 files identical to `d4811ece`'s in all twenty. Also `just
+pruebas` and `just -f tools/justfile test`, green on all of them. With the
+cache on, cold and warm, also identical, in the two commits that touch the
+cached stuff (`map_layers` and `map_convert`). And a check with `symtable` that
+no new module uses a name it doesn't define or import. The merge of `main`
+with Hocó's work didn't move any of the 999.
 
-**La clave del caché de las capas** suma `port/snes_format.py` y
-`port/map_layers.py`, en el commit que mudó lo que usan. `port/snes_convert.py`
-sigue en la lista aunque ya no tiene nada de las capas: sacarlo es una
-decisión aparte —dejaría de invalidar el caché cada vez que se toca
-`main()`—, y el docstring de `_layers_version` lo dice.
+**The layers' cache key** adds `port/snes_format.py` and
+`port/map_layers.py`, in the commit that moved what they use.
+`port/snes_convert.py` stays in the list even though it no longer has anything
+of the layers: removing it is a separate decision —it would stop invalidating
+the cache every time `main()` is touched—, and `_layers_version`'s docstring
+says so.
 
-## Lo que no se pudo partir sin cambiar lógica
+## What couldn't be split without changing logic
 
-* **Los ganchos a `lcf`.** `snes_convert` le pone a `lcf`
-  `DECORATE_TRANSLUCENT` y `REFIT_TEXTS` al importarse, así que un proceso
-  que importe sólo `sprites`, `game_scan` o `map_record` lee los mapas sin
-  ellos. Las seis pruebas que importaban `snes_convert` y ya no usan nada de
-  él —`test_horneados`, `test_paginas`, `test_lideres`, `test_timer_paleta`,
-  `test_destello_paleta` y `test_msu_datos`— lo siguen importando por eso,
-  con un comentario. Lo limpio sería que `lcf` los reciba como parámetro o
-  que los ponga un módulo del port que todos importen; las dos cosas cambian
-  cuándo se ponen.
-* **`_layers_in_memory`** es un diccionario de `map_layers` que llena
-  `precompute_layers`, en `map_convert`. No pudieron quedar juntos:
-  `_map_layers` prepara el mapa como `convert_map` —hornea, separa del
-  héroe, lee los casos— y eso arriba de `map_layers` es un ciclo.
-* **`args_game_dir`** es una lista global de `game_scan` que `main` escribe
-  y `_game` lee. Ya era así; ahora cruza de módulo.
-* **Los privados que cruzan de módulo**: `main` llama a `_check_slots`,
-  `_check_items_border`, `_check_target`, `_check_shop` y `_check_splits`
-  de `vram`; `mapdata` usa `_columns` de `message_window`; `map_convert`
-  usa `_bake_unless_cgram_moves` de `baking` y `_layers_in_memory` de
-  `map_layers`; `test_horneados` usa `_tile_alphas`. Renombrarlos es un
-  commit mecánico aparte.
-* **`emit()`, `main()` y `convert_map()` enteros**, de 2.234, ~960 y ~540
-  líneas. Sus tramos comparten locales, y partirlos es decidir qué pasa de
-  uno a otro. La tabla de tramos de `emit()` está en
+* **The `lcf` hooks.** `snes_convert` sets `DECORATE_TRANSLUCENT` and
+  `REFIT_TEXTS` on `lcf` when imported, so a process that imports only
+  `sprites`, `game_scan` or `map_record` reads the maps without them. The six
+  tests that imported `snes_convert` and no longer use anything from it
+  —`test_horneados`, `test_paginas`, `test_lideres`, `test_timer_paleta`,
+  `test_destello_paleta` and `test_msu_datos`— keep importing it because of
+  that, with a comment. The clean thing would be for `lcf` to receive them as a
+  parameter or for a port module everyone imports to set them; both change
+  when they're set.
+* **`_layers_in_memory`** is a `map_layers` dictionary filled by
+  `precompute_layers`, in `map_convert`. They couldn't stay together:
+  `_map_layers` prepares the map like `convert_map` —bakes, separates from the
+  hero, reads the cases— and that above `map_layers` is a cycle.
+* **`args_game_dir`** is a global list in `game_scan` that `main` writes and
+  `_game` reads. It was already like that; now it crosses modules.
+* **The private ones that cross modules**: `main` calls `_check_slots`,
+  `_check_items_border`, `_check_target`, `_check_shop` and `_check_splits` of
+  `vram`; `mapdata` uses `message_window`'s `_columns`; `map_convert` uses
+  `baking`'s `_bake_unless_cgram_moves` and `map_layers`'s
+  `_layers_in_memory`; `test_horneados` uses `_tile_alphas`. Renaming them is a
+  separate mechanical commit.
+* **`emit()`, `main()` and `convert_map()` whole**, of 2,234, ~960 and ~540
+  lines. Their stretches share locals, and splitting them means deciding what
+  passes from one to another. The table of `emit()`'s stretches is in
   `docs/research/el-mapa-de-las-herramientas-de-python.md`, §2.
-* **Los textos del `.inc` que nombran `snes_convert.py`**: el encabezado de
-  `mapdata.inc`, el comentario de `anim_table` (que además nombra
-  `rom/src/`) y el del `.msu` (que dice `escribir_msu`). Corregirlos cambia
-  los `.inc` y no la ROM; va en un commit que acepte eso.
+* **The `.inc` texts that name `snes_convert.py`**: the header of
+  `mapdata.inc`, the comment of `anim_table` (which also names `rom/src/`) and
+  the `.msu`'s (which says `escribir_msu`). Correcting them changes the `.inc`s
+  and not the ROM; it goes in a commit that accepts that.
 
-## Para taro
+## For taro
 
-No hay nada que jugar: la ROM sale byte por byte igual. Lo que hay que
-mirar es si el corte es el que querés para la migración a Rust; la tabla
-de la propuesta dice qué entra y qué sale de cada módulo.
+There's nothing to play: the ROM comes out byte for byte identical. What needs
+looking at is whether the cut is the one you want for the migration to Rust;
+the proposal's table says what goes into and out of each module.
