@@ -1,193 +1,195 @@
 ---
-name: "Ordenar pruebas/"
-description: "Los bugs de las pruebas, los helpers a arnes/, la organización y una pasada de prosa, en cuatro trabajos"
+name: "Tidy up pruebas/"
+description: "The tests' bugs, the helpers to arnes/, the organization and a prose pass, in four jobs"
 status: done
 ---
 
-**Lo que encontró una revisión de `pruebas/` el 2026-09-25, contra `43bd1aa`.**
-Decidido con taro: se hace **después de que se mergee el cambio de MSU-1**
-—que toca `tools/emulador/retro.py` y el arnés—, y en tres trabajos
-separados, en este orden. Los números de línea son de ese commit: verificar
-antes de tocar. **Los cuatro están hechos.**
+**What a review of `pruebas/` found on 2026-09-25, against `43bd1aa`.** Decided
+with taro: it's done **after the MSU-1 change is merged** —which touches
+`tools/emulador/retro.py` and the harness—, and in three separate jobs, in this
+order. The line numbers are from that commit: verify before touching. **All
+four are done.**
 
-## 1. Los bugs — hecho el 2026-09-25
+## 1. The bugs — done on 2026-09-25
 
-Lo que era cada uno y qué se hizo. Las goldens que cambiaron están lado a lado
-en `/shared/goldens/2026-09-25-pruebas-bugs/`, con su `LEEME.txt`.
+What each one was and what was done. The goldens that changed are side by side
+in `/shared/goldens/2026-09-25-pruebas-bugs/`, with their `LEEME.txt`.
 
-- **`ev41` estaba mal armado, no la ROM.** El EV0041 es de la capa de abajo, y
-  a esos se les habla **desde su celda** (`CheckEventTriggerHere`); de frente
-  sólo los de la capa del héroe (`CheckEventTriggerThere` pide
-  `Layers_same`, en easyrpg-player). El caso lo ponía en (52,24) mirando al
-  (52,23): medido con un caso temporal, de frente la página no corre nunca,
-  igual que en RM2k, y sus capturas son byte por byte las goldens viejas.
-  Ahora arranca en (52,23), la página corre y la ruta termina en (55,18), que
-  es la cuenta de su `MoveEvent`. Ticks 30/60/108/200: mensaje, subida,
-  salto, llegada (el 120 salía igual que el 200 y se fue).
-- **`varios-18-down` tampoco era la ROM**: `RunDirectorScene` del mapa 19 es
-  automática y sin condiciones, y compila desde que sus mensajes compilan
-  (`6cfce1e`); en RM2k el héroe no camina mientras corre. `down` usa ahora
-  `grupo-11-en-19-sin-escena`, con el switch 90 que deja al mapa después de
-  la escena, y camina las cinco celdas del plan. `none` queda igual.
-- **`plan-73`, `plan-17` y `plan-8` para abajo son correctos**: el plan dice
-  cero celdas y es verdad —pared en el 17 y el 8, la Receptionist en (15,7)
-  del 73—; que la foto sea la de parado es lo que prueba la colisión.
-- **Las caminatas ahora miran la RAM**: `test_heroe` y `test_varios` exigen
-  que el héroe haya caminado las celdas del plan (`tanda.celdas_del_plan`,
-  `Partida.heroe`). Salvo cuando cambia de mapa —el 8 a la derecha pisa la
-  puerta al 16, que la referencia no modelaba—.
-- **`ruta-vel` / `ruta-vel-lenta`**: además de la golden, `BAJO_EN_EL_TICK`
-  pide la celda y la velocidad del héroe en los ticks que son byte por byte
-  `6-none`. No se movieron de mapa: habría cambiado trece goldens.
-- **El chequeo de capturas iguales**: `conftest._capturas_distintas` falla si
-  todas las goldens de una prueba son la misma pantalla. Las que lo eran
-  a propósito y están en `MISMA_PANTALLA` con su porqué.
-- **`test_los_largos_de_opcode_cuadran_en_todo_el_juego`**: `paginas_del_juego`
-  llena todos los índices que llena el conversor, no sólo el de variables.
-  El `skipif` del juego pasó a esa prueba, que es la que lo lee.
-- **`test_paginas`** repone `VARIABLE_SLOT` aunque la aserción falle.
-- **`test_parches` mira `release`**, y exige que esté armado. Se fue la
-  sección de `UNTESTED.md` que decía que no.
-- **`ABL_GAME_DIR`** en `test_timer_paleta` y `test_destello_paleta`, vía
+- **`ev41` was badly set up, not the ROM.** EV0041 is on the lower layer, and
+  those are talked to **from their cell** (`CheckEventTriggerHere`); from the
+  front only those on the hero's layer (`CheckEventTriggerThere` asks for
+  `Layers_same`, in easyrpg-player). The case put it at (52,24) facing
+  (52,23): measured with a temporary case, from the front the page never runs,
+  same as in RM2k, and its screenshots are byte for byte the old goldens. Now
+  it starts at (52,23), the page runs and the route ends at (55,18), which is
+  its `MoveEvent`'s count. Ticks 30/60/108/200: message, going up, jump,
+  arrival (120 came out the same as 200 and was removed).
+- **`varios-18-down` wasn't the ROM either**: map 19's `RunDirectorScene` is
+  an autorun without conditions, and it compiles since its messages compile
+  (`6cfce1e`); in RM2k the hero doesn't walk while it runs. `down` now uses
+  `grupo-11-en-19-sin-escena`, with switch 90 which leaves the map after the
+  scene, and walks the plan's five cells. `none` stays the same.
+- **`plan-73`, `plan-17` and `plan-8` going down are correct**: the plan says
+  zero cells and it's true —a wall on 17 and 8, the Receptionist at (15,7) of
+  73—; that the snapshot is the standing one is what proves the collision.
+- **The walks now look at RAM**: `test_heroe` and `test_varios` require the
+  hero to have walked the plan's cells (`tanda.celdas_del_plan`,
+  `Partida.heroe`). Except when it changes map —8 to the right steps on the
+  door to 16, which the reference didn't model—.
+- **`ruta-vel` / `ruta-vel-lenta`**: besides the golden, `BAJO_EN_EL_TICK`
+  asks for the hero's cell and speed on the ticks that are byte for byte
+  `6-none`. They weren't moved to another map: it would have changed thirteen
+  goldens.
+- **The identical-screenshots check**: `conftest._capturas_distintas` fails
+  if all of a test's goldens are the same screen. The ones that were so on
+  purpose are in `MISMA_PANTALLA` with their why.
+- **`test_los_largos_de_opcode_cuadran_en_todo_el_juego`**:
+  `paginas_del_juego` fills every index the converter fills, not only the
+  variables one. The game's `skipif` moved to that test, which is the one that
+  reads it.
+- **`test_paginas`** restores `VARIABLE_SLOT` even if the assertion fails.
+- **`test_parches` looks at `release`**, and requires it to be built. The
+  section of `UNTESTED.md` that said it didn't went away.
+- **`ABL_GAME_DIR`** in `test_timer_paleta` and `test_destello_paleta`, via
   `render_map.GAME_DIR`.
 
-Los sospechosos:
+The suspects:
 
-- **`Partida.reiniciar` no reponía `llegada` ni `hardware`: confirmado.** Un
-  `correr(10)` después de un reset corría 81 ticks en `guardar-198`. Los tres
-  resets pasan ahora por `_resetear`, que los pone en cero.
-- **"Viaja en la partida" dependía de la WRAM: confirmado a medias.** El
-  reset de snes9x deja la WRAM como estaba y la ROM no la limpia entera, así
-  que un valor que la carga no repusiera seguía ahí. `_resetear` la pisa con
-  `$55` antes. Con eso las pruebas que resetean siguen en verde: hoy no
-  había ninguna pasando por eso.
-- **`test_piedras` y el fork: descartado.** `lcf.Map` sobre `GAME_DIR` lee el
-  volcado de `data/` con el fork encima (34 eventos, el original tiene 84).
-- **Las fotos del recorrido por número de orden: confirmado y cubierto.** Una
-  foto sin golden sigue sin fallar, a propósito; pero si su hito tiene golden
-  con otro número, falla diciendo que se corrió la numeración.
-- **Las siete goldens negras: descartado.** Las cuatro `puerta-*-40` y
-  `manta-2800` están a mitad de un fundido (`fundido` = 1), `cartel-880` es
-  la imagen ya borrada sobre el mapa 4, que es negro, y `saturar-120` es el
-  tinte a negro que el caso pide.
+- **`Partida.reiniciar` didn't restore `llegada` nor `hardware`: confirmed.**
+  A `correr(10)` after a reset ran 81 ticks in `guardar-198`. The three resets
+  now go through `_resetear`, which sets them to zero.
+- **"Viaja en la partida" depended on WRAM: half confirmed.** snes9x's reset
+  leaves WRAM as it was and the ROM doesn't clear it entirely, so a value the
+  load didn't restore stayed there. `_resetear` overwrites it with `$55`
+  first. With that the tests that reset stay green: today none was passing
+  because of that.
+- **`test_piedras` and the fork: ruled out.** `lcf.Map` on `GAME_DIR` reads
+  the `data/` dump with the fork on top (34 events, the original has 84).
+- **The walkthrough snapshots by sequence number: confirmed and covered.** A
+  snapshot without a golden still doesn't fail, on purpose; but if its
+  milestone has a golden with another number, it fails saying the numbering
+  shifted.
+- **The seven black goldens: ruled out.** The four `puerta-*-40` and
+  `manta-2800` are halfway through a fade (`fundido` = 1), `cartel-880` is the
+  image already erased over map 4, which is black, and `saturar-120` is the
+  tint to black that the case asks for.
 
-Lo que quedó sin cubrir: las siete fotos del recorrido `vipers` no tienen
-golden, así que pasan siempre hasta que taro las bendiga; y las goldens
-nuevas de `ev41` y `varios-18-down` las tiene que mirar él.
+What was left uncovered: the seven snapshots of the `vipers` walkthrough don't
+have goldens, so they always pass until taro blesses them; and he has to look
+at the new goldens of `ev41` and `varios-18-down`.
 
-## 2. Los helpers a `arnes/` — hecho el 2026-09-25
+## 2. The helpers to `arnes/` — done on 2026-09-25
 
-Un commit por tema, cada uno con `just pruebas` en verde; el detalle y lo
-medido está en cada mensaje. Lo que quedó y dónde buscarlo:
+One commit per topic, each with `just pruebas` green; the detail and what was
+measured is in each message. What remained and where to look for it:
 
-- **Ninguna prueba importa de otra.** El arnés creció: `menu.py` (abrir y
-  tocar el menú, `GRUPO`, `ORO`), `batalla.py` (`Pelea`, el droide, perder
-  sin pelear, `sabe`), `datos.py` (lo que se lee del juego original: la base,
-  el System, `maximos`, `pagina_de`, `DEMO` y los índices de variables y de
-  habilidades del cartucho), `dibujo.py` (`comparar_pantalla` contra
-  `titulo.render_*`) y `piedras.py`. `LINKAGE` está en `tanda.py`,
-  `UN_ANO_DESPUES` en `recorrido.py`, `EMPEZAR` y `SEGUIR` en `consola.py`.
-  La única excepción es `video.py`, que importa `test_recorrido` para correr
-  sus jugadas, a propósito.
-- **`arnes/lcf.py` se llama `datos.py`**: `import lcf` suelto tiene que
-  fallar —`tools/README.md`, "Cómo se importa"— y un `lcf` en el arnés lo
-  haría andar con otro módulo.
-- **No hay fixture de sesión para la base y el skin**: son `datos.base()` y
-  `datos.skin()`, con caché, porque casi todas las lecturas estaban adentro de
-  funciones de ayuda que no pueden pedir fixtures.
-- **Las ranuras de variable se contaban de cinco maneras** y no eran la misma
-  cuenta; queda la del conversor. Antes de unificar se comparó número por
-  número lo que pide cada prueba: daban lo mismo.
-- **`Pelea.modo()` contesta el nombre** del modo (`"ORDEN"`, `"FIN"`), de la
-  tabla de símbolos. La marca `b"ABLS"` se queda escrita, una vez
-  (`consola.MAGIA`): la ROM no la tiene como símbolo.
-- **`tocar` sigue teniendo tres relojes** —`Partida.tocar` en ticks,
-  `menu.tocar` y `Pelea.tocar` en cuadros con distinto aire—: unificarlos
-  cambia cuándo cae cada toque. El docstring de `menu.tocar` lo dice.
-- **Nuevos métodos de `Partida`** para lo que estaba copiado: `evento`,
+- **No test imports from another.** The harness grew: `menu.py` (opening and
+  pressing the menu, `GRUPO`, `ORO`), `batalla.py` (`Pelea`, the droid, losing
+  without fighting, `sabe`), `datos.py` (what's read from the original game:
+  the base, the System, `maximos`, `pagina_de`, `DEMO` and the cartridge's
+  variable and skill indices), `dibujo.py` (`comparar_pantalla` against
+  `titulo.render_*`) and `piedras.py`. `LINKAGE` is in `tanda.py`,
+  `UN_ANO_DESPUES` in `recorrido.py`, `EMPEZAR` and `SEGUIR` in `consola.py`.
+  The only exception is `video.py`, which imports `test_recorrido` to run its
+  playthroughs, on purpose.
+- **`arnes/lcf.py` is called `datos.py`**: a bare `import lcf` has to fail
+  —`tools/README.md`, "Cómo se importa"— and an `lcf` in the harness would
+  make it work with another module.
+- **There's no session fixture for the base and the skin**: they're
+  `datos.base()` and `datos.skin()`, cached, because almost all the reads were
+  inside helper functions that can't ask for fixtures.
+- **The variable slots were counted in five ways** and they weren't the same
+  count; the converter's stays. Before unifying, what each test asks for was
+  compared number by number: they gave the same.
+- **`Pelea.modo()` answers the name** of the mode (`"ORDEN"`, `"FIN"`), from
+  the symbol table. The `b"ABLS"` mark stays written, once (`consola.MAGIA`):
+  the ROM doesn't have it as a symbol.
+- **`tocar` still has three clocks** —`Partida.tocar` in ticks, `menu.tocar`
+  and `Pelea.tocar` in frames with different spacing—: unifying them changes
+  when each press lands. `menu.tocar`'s docstring says so.
+- **New `Partida` methods** for what was copied around: `evento`,
   `oro`/`poner_oro`, `equipo`, `hay_partida`/`magia`,
   `celdas_mal_dibujadas`.
-- **Se borraron tres casos** que corrían lo mismo que otro —`batalla-segunda`,
-  `tabla` y `ventana-7-y-269`, con sus goldens y el caso JSON del último—:
-  las goldens eran byte por byte las del caso que queda.
-- `test_teleport.py` vive ahora al final de `test_protocolo.py`; las capturas
-  de `test_cores` van a `pruebas/snapshots/cores/`.
+- **Three cases that ran the same as another were deleted** —`batalla-segunda`,
+  `tabla` and `ventana-7-y-269`, with their goldens and the last one's JSON
+  case—: the goldens were byte for byte those of the case that remains.
+- `test_teleport.py` now lives at the end of `test_protocolo.py`; the
+  screenshots of `test_cores` go to `pruebas/snapshots/cores/`.
 
-## 3. La pasada de prosa — hecho el 2026-09-25
+## 3. The prose pass — done on 2026-09-25
 
-Un commit por zona —`arnes/`, `rpgmaker/`, `abl/`, `herramientas/`,
-`UNTESTED.md` y el `LEEME.md` de las goldens, y lo de afuera de `pruebas/`—,
-cada uno con `just pruebas` en verde; qué se sacó, qué se arregló y qué se
-dejó a propósito está en cada mensaje. Antes, el índice:
+One commit per area —`arnes/`, `rpgmaker/`, `abl/`, `herramientas/`,
+`UNTESTED.md` and the goldens' `LEEME.md`, and what's outside `pruebas/`—,
+each with `just pruebas` green; what was removed, what was fixed and what was
+left on purpose is in each message. Before that, the index:
 
-- **`pruebas/README.md` tiene un índice por sistema** de todos los
-  `test_*.py`, la convención de nombres y qué hacer cuando se pone rojo cada
-  tipo. Lo cuida `herramientas/test_indice.py`: falla si un archivo de prueba
-  no está nombrado ahí, o si el README nombra uno que no existe. Lo que no
-  puede cuidar es que la descripción de cada uno sea verdad.
-- **Prosa que contradecía al código**, además de la que listaba la revisión
-  (`PASO_TOPE`, los 8 KB que son 32, "hay una sola voz", las tres cosas que
-  eran dos): `Partida.tocar` y `sostener` decían que `correr` sólo sabe de A;
-  `test_textos` decía que el conversor no llama a la función que su último
-  caso cobra que llame; `test_un_ano_antes` decía que no hay menú;
-  `test_condicional`, que la rama que corre no se puede probar con una página
-  del juego por un orden de switches que `Partida.prender` ya resolvió.
-- **Se quedan**, aunque cuenten historia, los porqués que protegen una línea:
-  los cuatro que nombraba la revisión y otros con el mismo criterio —el
-  `inc a` del permiso de escapar, `vueltas` y no `mapa_actual` después del
-  Game Over, `nmi_boot` y la cuarta ranura, la SRAM que pasaba en vacío—, y
-  los números que una aserción clava a propósito (`test_cuantos_mapas`, las
-  123 ranuras de `test_paginas`).
+- **`pruebas/README.md` has an index by system** of all the `test_*.py`, the
+  naming convention and what to do when each kind goes red.
+  `herramientas/test_indice.py` guards it: it fails if a test file isn't named
+  there, or if the README names one that doesn't exist. What it can't guard is
+  that each one's description is true.
+- **Prose that contradicted the code**, besides what the review listed
+  (`PASO_TOPE`, the 8 KB that are 32, "there's a single voice", the three
+  things that were two): `Partida.tocar` and `sostener` said `correr` only
+  knows about A; `test_textos` said the converter doesn't call the function
+  its last case checks it calls; `test_un_ano_antes` said there's no menu;
+  `test_condicional`, that the branch that runs can't be tested with a game
+  page because of a switch order that `Partida.prender` already solved.
+- **They stay**, even though they tell history, the whys that protect a line:
+  the four the review named and others by the same criterion —the `inc a` of
+  the escape permission, `vueltas` and not `mapa_actual` after the Game Over,
+  `nmi_boot` and the fourth slot, the SRAM that passed vacuously—, and the
+  numbers an assertion pins on purpose (`test_cuantos_mapas`, the 123 slots of
+  `test_paginas`).
 
-Lo que quedó sin hacer:
+What was left undone:
 
-- `AGENTS.md` cita todavía el glob `pruebas/*/test_tanda*.py` en
-  "Repartirles los números de antemano"; hoy es `pruebas/*/test_*_golden.py`.
-  No lo tocó el sub-agente de esta pasada porque es el archivo de
-  instrucciones del agente.
-- `workflow/tasks/done/` y los registros de lo que se corrió en `wishlist/`
-  siguen con los nombres viejos, a propósito: son historia.
+- `AGENTS.md` still cites the glob `pruebas/*/test_tanda*.py` in "Repartirles
+  los números de antemano"; today it's `pruebas/*/test_*_golden.py`. This
+  pass's sub-agent didn't touch it because it's the agent's instructions file.
+- `workflow/tasks/done/` and the logs of what was run in `wishlist/` keep the
+  old names, on purpose: they're history.
 
-## 4. Organización — hecho el 2026-09-25
+## 4. Organization — done on 2026-09-25
 
-Cuatro propuestas que taro aprobó, cada una en su commit y con `just
-pruebas` en verde; lo medido está en cada mensaje. Hecha **antes** que la 3,
-así que la prosa tiene que tener en cuenta también esto.
+Four proposals taro approved, each in its commit and with `just pruebas`
+green; what was measured is in each message. Done **before** 3, so the prose
+has to take this into account too.
 
-- **HP y SP de la partida**: `Partida.hp` / `poner_hp` / `sp` / `poner_sp`,
-  sobre `FAR_HP` y `FAR_SP`. Los de la pelea son otra cosa —la ranura
-  `BA_UNO` por puesto de combatiente— y quedan en
-  `Pelea.hp_del_combatiente` / `sp_del_combatiente`. Se fueron
-  `palabra_de`, `hp_guardado`, `sp_guardado`, `hp_de` y los dos `poner_hp`
-  de prueba.
-- **El 370 de `apertura`** era byte por byte el de `cinematica`, de la misma
-  corrida: se fue de `apertura`, con su golden. El porqué de cuál, en el
+- **The save's HP and SP**: `Partida.hp` / `poner_hp` / `sp` / `poner_sp`, on
+  `FAR_HP` and `FAR_SP`. The battle's are something else —the `BA_UNO` slot
+  per combatant position— and stay in `Pelea.hp_del_combatiente` /
+  `sp_del_combatiente`. `palabra_de`, `hp_guardado`, `sp_guardado`, `hp_de`
+  and the two test `poner_hp`s went away.
+- **`apertura`'s 370** was byte for byte `cinematica`'s, from the same run: it
+  went away from `apertura`, with its golden. The why of which one, in the
   commit.
-- **El mapa 11** se lee en `piedras.mapa11()` / `eventos_del_11()`, de
-  `GAME_DIR`: comparado campo por campo, es lo mismo que leían las dos.
-- **Los nombres**: `test_<sistema>[_<detalle>][_golden|_dibujo].py`. El
-  sufijo dice contra qué se compara la pantalla —las goldens de
-  `pruebas/golden/`, o lo que dibuja `tools/port/`—; sin sufijo, la prueba
-  mira estado o no corre ROM. Por qué sufijo y no prefijo ni carpeta, en el
-  commit de los renombres. `test_tanda_pantallas` se partió en
-  `test_batalla_golden`, `test_menu_golden`, `test_guardar_golden` y
-  `test_titulo_golden`, y su `test_espera` pasó a `test_comandos_golden`.
+- **Map 11** is read in `piedras.mapa11()` / `eventos_del_11()`, from
+  `GAME_DIR`: compared field by field, it's the same thing the two read.
+- **The names**: `test_<sistema>[_<detalle>][_golden|_dibujo].py`. The suffix
+  says what the screen is compared against —the goldens of `pruebas/golden/`,
+  or what `tools/port/` draws—; without a suffix, the test looks at state or
+  doesn't run a ROM. Why a suffix and not a prefix or a folder, in the renames
+  commit. `test_tanda_pantallas` was split into `test_batalla_golden`,
+  `test_menu_golden`, `test_guardar_golden` and `test_titulo_golden`, and its
+  `test_espera` moved to `test_comandos_golden`.
 
-Para la 3:
+For 3:
 
-- **Las citas en prosa de los nombres viejos no se tocaron**: el commit de
-  los renombres es sólo eso más el import de `video.py`. Se buscan con los
-  nombres viejos —`test_tanda`, `test_tanda_*`, `test_menu`,
-  `test_items_pantalla`, `test_equipo`, `test_curar_menu`,
-  `test_hp_de_batalla`, `test_tienda`, `test_titulo`, `test_experiencia`,
-  `test_escena`, `test_recorrido`, `test_recorrido_vipers`— como palabra
-  entera; el glob `pruebas/*/test_tanda*.py` aparece en `AGENTS.md`, el
-  `justfile` y varias cabeceras, y hoy es `pruebas/*/test_*_golden.py`.
-- `pruebas/README.md` no tiene índice de pruebas; el inventario por tipo y
-  por sistema que armó la 4 sirve para hacerlo.
-- `herramientas/test_pila.py` corre la ROM, y el README dice que
-  `herramientas/` son las que no. No se movió: es una decisión de carpeta,
-  no de nombre.
-- Dos cuentas de goldens quedaron viejas por el 370: "las diecisiete" de la
-  lápida al final de `test_titulo_golden.py`, y "las seis de `apertura`" en
-  `test_escenas_golden.py::test_cinematica`, que ahora son cinco.
+- **The prose citations of the old names weren't touched**: the renames commit
+  is only that plus `video.py`'s import. They're searched for with the old
+  names —`test_tanda`, `test_tanda_*`, `test_menu`, `test_items_pantalla`,
+  `test_equipo`, `test_curar_menu`, `test_hp_de_batalla`, `test_tienda`,
+  `test_titulo`, `test_experiencia`, `test_escena`, `test_recorrido`,
+  `test_recorrido_vipers`— as a whole word; the glob `pruebas/*/test_tanda*.py`
+  appears in `AGENTS.md`, the `justfile` and several headers, and today it's
+  `pruebas/*/test_*_golden.py`.
+- `pruebas/README.md` has no test index; the inventory by type and by system
+  that 4 built is useful for making it.
+- `herramientas/test_pila.py` runs the ROM, and the README says `herramientas/`
+  are the ones that don't. It wasn't moved: it's a folder decision, not a
+  naming one.
+- Two golden counts went stale because of the 370: "the seventeen" of the
+  tombstone at the end of `test_titulo_golden.py`, and "the six of
+  `apertura`" in `test_escenas_golden.py::test_cinematica`, which are now
+  five.

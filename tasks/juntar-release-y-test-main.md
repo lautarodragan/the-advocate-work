@@ -1,259 +1,266 @@
 ---
-name: "Juntar release y test-main"
-description: "Un solo cartucho que se juega y que corre la tanda: medido lo que cuesta, y el espacio que manda"
+name: "Merge release and test-main"
+description: "A single cartridge that gets played and runs the suite: what it costs, measured, and the space that rules"
 type: refactor
 status: done
 ---
 
-# Qué
+# What
 
-Que `release` y `test-main` sean un solo cartucho: el que se entrega, con
-título y cronómetro, que además lleva todos los mapas y los casos de
-`pruebas/casos/`, apagados en la partida de verdad. `test-special` queda como
-está.
+That `release` and `test-main` be a single cartridge: the one that gets
+delivered, with title and timer, which also carries all the maps and the cases
+of `pruebas/casos/`, turned off in the real save. `test-special` stays as it
+is.
 
-Lo que sigue se midió el 2026-09-25 sobre `d118bc8`, armando en un worktree un
-`release` con `--grupo 10`, `--map-id 4` y los `MAPAS` de `cartuchos.py`, con
-los `--grafico-de-prueba` y con todos los casos, y corriendo la tanda entera
-con `PRUEBAS = RELEASE`. Los números son de ese día: el que retome esto los
-vuelve a medir, no los copia (el método está al final).
+What follows was measured on 2026-09-25 on `d118bc8`, building in a worktree a
+`release` with `--grupo 10`, `--map-id 4` and `cartuchos.py`'s `MAPAS`, with
+the `--grafico-de-prueba` and with all the cases, and running the whole suite
+with `PRUEBAS = RELEASE`. The numbers are from that day: whoever picks this up
+measures them again, doesn't copy them (the method is at the end).
 
-# Qué diferencia es de fondo y cuál es configuración
+# Which difference is fundamental and which is configuration
 
-| Diferencia | Qué es | Lo medido |
+| Difference | What it is | What was measured |
 |---|---|---|
-| `--grupo 10` | nada | Es el grupo por omisión (`system.json`: `party: [10]`): los dos cartuchos arrancan con el 10, y el 11 lo pone el caso `grupo-11`. |
-| Título | configuración del arnés | Con el título pasado por "Begin the Story" antes de elegir el caso, **cero goldens se mueven**. Lo que pide es que `tanda.partida` pase `titulo=EMPEZAR` en el cartucho con título, y que `reiniciar()` vuelva por "Resume the Story" (sin eso caen 13 pruebas de "viaja en la partida", que eligen "Begin" al resetear y arrancan de cero). Y las dos de `test_game_over.py` que esperan el arranque después del GameOver: con título la ROM vuelve **al título**, que es lo que hace RM2k, así que la prueba tiene que pasarlo. |
-| Cronómetro | configuración, más **un error de verdad** | 14 goldens se mueven con el cronómetro en todos los mapas (el comentario de `snes_convert.py` decía quince, en el 9f). 9 son recuantizaciones chicas —de 2 a 166 pixeles: `gemelo-20`, `gemelo-ruta-20`, `gemelo-fija-20`, `tram-200`, `tram-viaje-10`, `autos9-2`, `npc-diagonal-10`, `tram-26`, `puerta-8-9-120`—, porque los colores de los dígitos entran en el reparto de paletas. Las otras **5 son un error**: `sacudir-60`, `cerrar-400`, `cerrar-right-400`, `autocierre-63` y `autocierre-3-185`, la puerta del mapa 7 sin teñir en una pantalla teñida. Ver abajo. |
-| Mapa de arranque (6 contra 4) | de fondo, pero barato | Los casos viven en el evento 0 del mapa de arranque. Los 24 de `test-main` que no empiezan con un `Teleport` corrían en el 6, y en el unido corren en el 4: 27 goldens se mueven, de 15 a 89%. **Con un `Teleport` al 6, (50,50) —la celda donde caía el héroe—, delante de cada uno, vuelven las 27 a cero**: el arnés ya cuenta desde la llegada. Son `anclada`, `animacion`, `animacion-dibujo`, `atravesar-sin-paso`, `grupo-11`, `pan*`, `rama-grupo*`, `ruta*`, `sacudir-fuerte`, `sacudir-lluvia`, `salto`, `switch-171`, `tropa-talan-aura`, `ventana-6`, `vuelta-ventana`. La cinemática del 4 no se mete: ninguno de los ~150 casos con `Teleport` se movió. |
-| Gráficos de prueba | configuración | Van en los mapas donde corre un caso, y eso incluye mapas que el recorrido camina: aun así **ninguna golden de `release` se movió** —recorrido, título, escenas, pila, MSU-1, cores—. |
-| Casos en la ROM que se juega | de fondo, chico | Ver la sección siguiente. |
-| Mapas de más (52, 70, 73, 74, 119, 121, 133, 255, 261, 269, 348) | de fondo: espacio y parches | 282 KB en el cartucho, y `test_parches` exige que todo lo que entra en el jugable esté versionado. |
+| `--grupo 10` | nothing | It's the default party (`system.json`: `party: [10]`): both cartridges start with 10, and 11 is set by the `grupo-11` case. |
+| Title | harness configuration | With the title passed through "Begin the Story" before choosing the case, **zero goldens move**. What it requires is that `tanda.partida` pass `titulo=EMPEZAR` on the cartridge with a title, and that `reiniciar()` come back through "Resume the Story" (without that 13 "viaja en la partida" tests fail, which choose "Begin" on reset and start from scratch). And the two of `test_game_over.py` that expect the start after the GameOver: with a title the ROM goes back **to the title**, which is what RM2k does, so the test has to get past it. |
+| Timer | configuration, plus **a real bug** | 14 goldens move with the timer on every map (the comment in `snes_convert.py` said fifteen, in 9f). 9 are small requantizations —from 2 to 166 pixels: `gemelo-20`, `gemelo-ruta-20`, `gemelo-fija-20`, `tram-200`, `tram-viaje-10`, `autos9-2`, `npc-diagonal-10`, `tram-26`, `puerta-8-9-120`—, because the digits' colors go into the palette allocation. The other **5 are a bug**: `sacudir-60`, `cerrar-400`, `cerrar-right-400`, `autocierre-63` and `autocierre-3-185`, map 7's door untinted on a tinted screen. See below. |
+| Start map (6 against 4) | fundamental, but cheap | The cases live in event 0 of the start map. The 24 of `test-main` that don't start with a `Teleport` ran on 6, and in the merged one they run on 4: 27 goldens move, from 15 to 89%. **With a `Teleport` to 6, (50,50) —the cell where the hero landed—, in front of each one, all 27 go back to zero**: the harness already counts from the arrival. They are `anclada`, `animacion`, `animacion-dibujo`, `atravesar-sin-paso`, `grupo-11`, `pan*`, `rama-grupo*`, `ruta*`, `sacudir-fuerte`, `sacudir-lluvia`, `salto`, `switch-171`, `tropa-talan-aura`, `ventana-6`, `vuelta-ventana`. Map 4's cutscene doesn't interfere: none of the ~150 cases with a `Teleport` moved. |
+| Test graphics | configuration | They go on the maps where a case runs, and that includes maps the walkthrough walks: even so **no golden of `release` moved** —walkthrough, title, scenes, stack, MSU-1, cores—. |
+| Cases in the ROM that gets played | fundamental, small | See the next section. |
+| Extra maps (52, 70, 73, 74, 119, 121, 133, 255, 261, 269, 348) | fundamental: space and patches | 282 KB in the cartridge, and `test_parches` requires everything that goes into the playable one to be versioned. |
 
-## Los casos en la ROM que se juega
+## The cases in the ROM that gets played
 
-La página 0 **no pide nada** y corre siempre, en el mapa de arranque, al
-empezar; la k pide `VARIABLE_DE_CASO >= k`, y el juego no toca la 1000. Así
-que el caso 0 no garantiza que no corran: **es el que corre**. Hoy es
-`grupo-11`, que mete a Kersh y rompe la apertura. Para apagarlos alcanza con
-que `PRIMERO` sea `nada`, que ya existe: la partida corre entonces una página
-que sólo prende el switch 1023 y se apaga, y las demás no corren nunca. Medido:
-con `PRIMERO = "nada"` las pruebas que juegan pasan todas sobre el unido.
+Page 0 **asks for nothing** and always runs, on the start map, at the start;
+page k asks for `VARIABLE_DE_CASO >= k`, and the game doesn't touch 1000. So
+case 0 doesn't guarantee they don't run: **it's the one that runs**. Today it's
+`grupo-11`, which puts Kersh in and breaks the opening. To turn them off it's
+enough for `PRIMERO` to be `nada`, which already exists: the save then runs a
+page that only turns on switch 1023 and turns itself off, and the others never
+run. Measured: with `PRIMERO = "nada"` the tests that play all pass on the
+merged one.
 
-Lo que queda, y no es gratis:
+What's left, and isn't free:
 
-* **La ROM que taro juega lleva las páginas de prueba y los mapas de prueba**,
-  inalcanzables pero adentro: 3,75 MB contra 3,01 MB de `release` hoy.
-* **Las variables de los casos entran en el índice** —`datos.ranuras_de_variable`
-  lo explica—, así que la disposición de la partida guardada del juego
-  depende de qué casos haya. Un caso nuevo que nombre una variable nueva
-  corre las ranuras de las que vienen detrás.
-* La partida guardada lleva el switch 1023 prendido.
+* **The ROM taro plays carries the test pages and the test maps**, unreachable
+  but inside: 3.75 MB against 3.01 MB of `release` today.
+* **The cases' variables go into the index** —`datos.ranuras_de_variable`
+  explains it—, so the layout of the game's saved data depends on which cases
+  there are. A new case that names a new variable shifts the slots of the ones
+  that come after it.
+* The saved game carries switch 1023 on.
 
-## El error que destapa el cronómetro
+## The bug the timer uncovers
 
-`tinte.s`, al final de `tenir`, vuelve a subir la paleta del cronómetro sin
-teñir, y el comentario dice por qué: "los dígitos tienen una paleta para ellos
-solos". Era cierto cuando se escribió (`5be4ade`, 2026-09-04); desde
-`034d721` (2026-09-07) los dígitos **comparten** paleta con un personaje que
-tenga lugar, así que ese personaje se queda sin teñir. En la tanda se ve en la
-puerta del mapa 7. **Pasa hoy en `release`**, que lleva el cronómetro en todos
-los mapas: en cualquier mapa teñido donde un personaje comparta la paleta de
-los dígitos. Va antes que regenerar las 9 goldens restantes.
+`tinte.s`, at the end of `tenir`, uploads the timer's palette untinted again,
+and the comment says why: "the digits have a palette all to themselves". It
+was true when it was written (`5be4ade`, 2026-09-04); since `034d721`
+(2026-09-07) the digits **share** a palette with a character that has room, so
+that character stays untinted. In the suite it shows on map 7's door. **It
+happens today in `release`**, which carries the timer on every map: on any
+tinted map where a character shares the digits' palette. It goes before
+regenerating the remaining 9 goldens.
 
-# Fuera de la tanda
+# Outside the suite
 
-* `just entregar` y `just video` leen `rom/build/release/` y no se rompen: el
-  unido sale en el mismo lugar y con el mismo nombre. `test_msu` pasa.
-* `test_parches` cae: los once mapas de prueba entran en el jugable sin parche
-  versionado. O se versionan —`just parches` los copiaría a `parches/`—, o
-  `parches.revisar` aprende qué mapas son de prueba. Es una decisión.
-* **Los parches del directorio de build no se limpian**: al volver a armar
-  `release` sin los mapas de prueba, `rom/build/release/parches/auto/mapas/`
-  seguía teniendo el `0052.toml` y los demás, y `test_parches` cayó por eso.
-  Cualquier cartucho que pierda un mapa lo va a tener; conviene arreglarlo con
-  esto.
-* `test_protocolo` y `test_ensamblar` se parametrizan por cartucho: dos casos
-  menos.
-* Nombran `test-main`: `cartuchos.py` (5), `pruebas/README.md` (3), `justfile`
-  (2), `test_guardar_save_point.py` (1, con `en="test-main"`),
-  `la-carrera-en-release.md` (2). `conftest.py` afirma que `release`
-  no lleva casos. Y `donde_esta` depende del orden del diccionario: con
-  `test-special` primero, `parado-tapado` —que está en los dos— se corrió en
-  el chico y movió su golden.
+* `just entregar` and `just video` read `rom/build/release/` and don't break:
+  the merged one comes out in the same place and with the same name.
+  `test_msu` passes.
+* `test_parches` fails: the eleven test maps go into the playable one without
+  a versioned patch. Either they get versioned —`just parches` would copy them
+  to `parches/`—, or `parches.revisar` learns which maps are test ones. It's a
+  decision.
+* **The build directory's patches aren't cleaned**: when building `release`
+  again without the test maps, `rom/build/release/parches/auto/mapas/` still
+  had `0052.toml` and the others, and `test_parches` failed because of that.
+  Any cartridge that loses a map will have it; best to fix it along with this.
+* `test_protocolo` and `test_ensamblar` are parametrized by cartridge: two
+  cases fewer.
+* Things that name `test-main`: `cartuchos.py` (5), `pruebas/README.md` (3),
+  `justfile` (2), `test_guardar_save_point.py` (1, with `en="test-main"`),
+  `la-carrera-en-release.md` (2). `conftest.py` asserts that `release` carries
+  no cases. And `donde_esta` depends on the dictionary's order: with
+  `test-special` first, `parado-tapado` —which is in both— ran on the small
+  one and moved its golden.
 
-# Espacio
+# Space
 
-| | `release` | `test-main` | unido |
+| | `release` | `test-main` | merged |
 |---|---|---|---|
-| Banco 0 libre (de 32.704) | 2.320 | 1.950 | 1.946 |
-| `BSS` libre (de 7.808) | 108 | 108 | 108 |
-| `ZEROPAGE` libre (de 256) | 3 | 3 | 3 |
-| `FAR` libre (de 32.768) | 11.179 | 5.489 | 5.489 |
-| Cartucho usado | 72% (98 bancos) | 87,7% (120) | 89,6% (124) |
+| Bank 0 free (of 32,704) | 2,320 | 1,950 | 1,946 |
+| `BSS` free (of 7,808) | 108 | 108 | 108 |
+| `ZEROPAGE` free (of 256) | 3 | 3 | 3 |
+| `FAR` free (of 32,768) | 11,179 | 5,489 | 5,489 |
+| Cartridge used | 72% (98 banks) | 87.7% (120) | 89.6% (124) |
 
-`test-special`: banco 0 2.644, 27,5% del cartucho.
+`test-special`: bank 0 2,644, 27.5% of the cartridge.
 
-**Lo que manda no es el banco 0: es el cartucho.** `test-main` ya está en
-87,7%, y `el-cartucho-se-queda-en-4-mb.md` dice que se revisa al 85-90%. Juntar
-casi no lo cambia (+1,9 puntos: el título y el cronómetro), porque `test-main`
-ya lleva todos los mapas de `release`; lo que cambia es que ese 89,6% pasa a
-ser **la ROM que se entrega**, en vez del 72% de hoy.
+**What rules isn't bank 0: it's the cartridge.** `test-main` is already at
+87.7%, and `el-cartucho-se-queda-en-4-mb.md` says it gets revisited at 85-90%.
+Merging barely changes it (+1.9 points: the title and the timer), because
+`test-main` already carries all of `release`'s maps; what changes is that this
+89.6% becomes **the ROM that gets delivered**, instead of today's 72%.
 
-## Qué ocupa cada región
+## What takes up each region
 
-**Banco 0**: 29.467 B son `CODE` —el 90%— y el conversor emite ahí sólo
-~1.300 B de `TABLAS`. **No crece por mapa**: la diferencia entre `release` y
-`test-main`, con once mapas de más, son 370 B, y son todos ítems (6 B cada uno:
-`item_id`, `item_precio`, `item_tipo`, `item_uso`), temas (4 B: `tema_lo/hi/bk/msu`),
-caras (1 B) y 6 B de `ranura_bloque_*`. Las tablas por mapa viven en sus
-bancos. Si hace falta lugar, lo que hay que mover es código; el más pesado:
-`paginas_de_eventos.s` 2.295, `oam.s` 1.261, `rutas_de_eventos.s` 1.235,
-`menu.s` 1.188, `paquete_de_audio.s` 1.157, `tinte.s` 1.131, `items.s` 1.044.
-Los candidatos naturales son pantallas que no corren con el mapa, como ya se
-hizo con la tienda y el equipo en `FAR`: `menu.s`, `items.s`, `ranuras.s`
-(884), `titulo.s` (422), `pantallas_de_texto.s` (264), unos 3,8 KB.
+**Bank 0**: 29,467 B are `CODE` —90%— and the converter emits only ~1,300 B of
+`TABLAS` there. **It doesn't grow per map**: the difference between `release`
+and `test-main`, with eleven extra maps, is 370 B, and it's all items (6 B
+each: `item_id`, `item_precio`, `item_tipo`, `item_uso`), themes (4 B:
+`tema_lo/hi/bk/msu`), faces (1 B) and 6 B of `ranura_bloque_*`. The per-map
+tables live in their banks. If room is needed, what has to move is code; the
+heaviest: `paginas_de_eventos.s` 2,295, `oam.s` 1,261, `rutas_de_eventos.s`
+1,235, `menu.s` 1,188, `paquete_de_audio.s` 1,157, `tinte.s` 1,131, `items.s`
+1,044. The natural candidates are screens that don't run with the map, as
+was already done with the shop and the equipment in `FAR`: `menu.s`,
+`items.s`, `ranuras.s` (884), `titulo.s` (422), `pantallas_de_texto.s` (264),
+about 3.8 KB.
 
-**`FAR`**: 10.729 B son tablas del conversor —`mensajes_tropa` 5.065,
-`tropa_codigo` 4.541, `tpag_*` 1.000— y **crecen con las tropas** que pidan los
-mapas; el resto es el código de la pelea, la tienda, el equipo y el nivel. En
-el unido le quedan 5.489: las peleas de Lashe City van a comer de ahí.
+**`FAR`**: 10,729 B are converter tables —`mensajes_tropa` 5,065,
+`tropa_codigo` 4,541, `tpag_*` 1,000— and **they grow with the troops** the
+maps ask for; the rest is the code of the battle, the shop, the equipment and
+the level. In the merged one 5,489 are left: Lashe City's battles will eat
+from there.
 
-**`BSS` y `ZEROPAGE`**: no dependen de los mapas, dependen del código, y están
-al tope: 3 bytes de página cero. Lo grande de `BSS` es `texto_buf` 1.968,
-`npc_buf` 1.664 (`NPC_MAX × NPC_STRIDE`), `oam`, `cgram_sombra` y `pal_buf` 512
-cada uno, `ev_pos_buf` 480; el lugar para sacarlos es `ram_lejana`.
+**`BSS` and `ZEROPAGE`**: they don't depend on the maps, they depend on the
+code, and they're at the limit: 3 bytes of zero page. The big things in `BSS`
+are `texto_buf` 1,968, `npc_buf` 1,664 (`NPC_MAX × NPC_STRIDE`), `oam`,
+`cgram_sombra` and `pal_buf` 512 each, `ev_pos_buf` 480; the place to move them
+to is `ram_lejana`.
 
-**El cartucho** (unido, 3,76 MB usados): `tema_stream` 789 KB (21%),
-`anim_batalla` 561 KB (15%), `map_tiles` 470 KB (12,5%), `sprite_poses`
-375 KB (10%), `sprite_tiles` 295 KB, `map_celdas` 285 KB, `muestra` 269 KB,
-`fondo` 98 KB, `battler` 77 KB, `mensajes` 66 KB. Además hay 312 KB sueltos
-adentro de bancos a medio llenar, que sólo sirven para piezas chicas.
+**The cartridge** (merged, 3.76 MB used): `tema_stream` 789 KB (21%),
+`anim_batalla` 561 KB (15%), `map_tiles` 470 KB (12.5%), `sprite_poses` 375 KB
+(10%), `sprite_tiles` 295 KB, `map_celdas` 285 KB, `muestra` 269 KB, `fondo`
+98 KB, `battler` 77 KB, `mensajes` 66 KB. There are also 312 KB scattered
+inside half-filled banks, which only serve for small pieces.
 
-**Cuánto pesa un mapa**: sumando lo que lleva el sufijo del mapa (tiles,
-celdas, bloques, sprites, poses, eventos, NPCs), los 29 del juego dan 39,5 KB
-de media —de 16 a 69 KB—, sin contar la música ni las animaciones de batalla
-nuevas que traigan. En el unido quedan ~436 KB: **unos diez mapas medios**, y
-menos si traen temas (~25 KB cada uno) o animaciones. Los once mapas de prueba
-pesan 282 KB juntos; saber qué prueba necesita cada uno es la otra palanca.
+**How much a map weighs**: adding up what carries the map's suffix (tiles,
+cells, blocks, sprites, poses, events, NPCs), the game's 29 average 39.5 KB
+—from 16 to 69 KB—, without counting the music or the new battle animations
+they bring. In the merged one ~436 KB are left: **about ten average maps**,
+and fewer if they bring themes (~25 KB each) or animations. The eleven test
+maps weigh 282 KB together; knowing which test needs each one is the other
+lever.
 
-# Tiempo
+# Time
 
-| | tres cartuchos (hoy) | dos (unido + `test-special`) |
+| | three cartridges (today) | two (merged + `test-special`) |
 |---|---|---|
-| `cartuchos`, caché en frío | 177 s (137,7 + 12,7 + 27,0) | 149 s (136,8 + 12,4) |
-| `cartuchos`, caché caliente, todo rearmado | 114 s (76,4 + 12,4 + 24,9) | 97 s (83,9 + 12,9) |
-| pytest de `just pruebas` | 61 s, 623 casos | 57 s, 621 |
+| `cartuchos`, cold cache | 177 s (137.7 + 12.7 + 27.0) | 149 s (136.8 + 12.4) |
+| `cartuchos`, warm cache, everything rebuilt | 114 s (76.4 + 12.4 + 24.9) | 97 s (83.9 + 12.9) |
+| pytest of `just pruebas` | 61 s, 623 cases | 57 s, 621 |
 
-Las pistas de MSU-1 suman 71 s en frío a cualquiera de los dos. Tocar
-`rom/src/` rearma todos, así que la vuelta típica ahorra unos 17 s.
+The MSU-1 tracks add 71 s cold to either. Touching `rom/src/` rebuilds all of
+them, so the typical round saves about 17 s.
 
-# Recomendación
+# Recommendation
 
-**Juntar vale la pena, con la forma "`release` es el unido"**: un cartucho con
-título y cronómetro, `--map-id 4`, todos los mapas, los casos con `PRIMERO =
-"nada"`, y el arnés pasando el título solo. Lo que cuesta, medido:
+**Merging is worth it, in the "`release` is the merged one" form**: a
+cartridge with title and timer, `--map-id 4`, all the maps, the cases with
+`PRIMERO = "nada"`, and the harness getting past the title on its own. What it
+costs, measured:
 
-1. arreglar el tinte de la paleta compartida del cronómetro (un error de hoy,
-   con o sin juntar);
-2. un `Teleport` al 6 delante de 24 casos —cero goldens—;
-3. en el arnés, el título automático y el reset por "Resume" —unas diez
-   líneas—, y las dos pruebas del GameOver pasando el título;
-4. regenerar a propósito las 9 goldens que recuantiza el cronómetro;
-5. decidir qué hace `test_parches` con los mapas de prueba, y limpiar los
-   parches viejos del build;
-6. renombrar lo que dice `test-main`.
+1. fixing the tint of the timer's shared palette (a bug today, merging or
+   not);
+2. a `Teleport` to 6 in front of 24 cases —zero goldens—;
+3. in the harness, the automatic title and the reset through "Resume" —about
+   ten lines—, and the two GameOver tests getting past the title;
+4. regenerating on purpose the 9 goldens the timer requantizes;
+5. deciding what `test_parches` does with the test maps, and cleaning the
+   build's stale patches;
+6. renaming what says `test-main`.
 
-**Antes de Lashe City**, porque el costo en goldens es chico —14, y 5 de ésas
-son un error que hay que arreglar igual— y crece con cada mapa que se agregue
-sobre dos configuraciones distintas. Pero **el espacio va antes que los dos**:
-`test-main` ya está en 87,7% y cada mapa nuevo entra en todos los cartuchos,
-así que Lashe City choca contra los 4 MB con o sin juntar. Juntar sólo hace
-que el choque se vea en la ROM que se entrega. El orden que sale de los
-números es: el error del tinte, el espacio (dónde está el peso: música,
-animaciones, tiles; y qué mapas de prueba se pueden sacar), juntar, Lashe City.
+**Before Lashe City**, because the cost in goldens is small —14, and 5 of those
+are a bug that has to be fixed anyway— and it grows with each map added on
+top of two different configurations. But **space comes before both**:
+`test-main` is already at 87.7% and each new map goes into every cartridge, so
+Lashe City runs into the 4 MB with or without merging. Merging only makes the
+collision show in the ROM that gets delivered. The order that comes out of the
+numbers is: the tint bug, the space (where the weight is: music, animations,
+tiles; and which test maps can be removed), merging, Lashe City.
 
-**La variante intermedia** —`test-main` con la misma configuración que
-`release` pero siguiendo aparte— cuesta casi lo mismo: el cronómetro (14
-goldens) y el título (arnés, GameOver), sin el `Teleport` si sigue arrancando
-en el 6. Deja limpia la ROM que se entrega (72% y sin páginas de prueba) y
-mantiene los tres cartuchos. Tiene sentido **sólo si se decide que la ROM que
-se juega no puede llevar los mapas y las páginas de prueba**; si eso no
-importa, no ahorra nada que valga dos cartuchos.
+**The intermediate variant** —`test-main` with the same configuration as
+`release` but staying separate— costs almost the same: the timer (14 goldens)
+and the title (harness, GameOver), without the `Teleport` if it keeps starting
+on 6. It leaves the delivered ROM clean (72% and with no test pages) and keeps
+the three cartridges. It makes sense **only if it's decided that the ROM that
+gets played can't carry the test maps and pages**; if that doesn't matter, it
+saves nothing worth two cartridges.
 
-# Cómo se midió
+# How it was measured
 
-El espacio sale del `.sym`/`.dbg` de `ld65`: los tamaños de los segmentos, y
-lo que ocupa cada etiqueta sumando los `span` que tienen línea de fuente. El
-libre de `FAR` es el relleno del `.align` que cierra `cabecera.s`. El banco 0
-coincide con el método del `.res` de AGENTS.md. Los tiempos son de un worktree
-con `rom/build/` vacío (frío) o con el caché lleno y los cartuchos borrados
-(caliente), con otro agente usando CPU a la vez.
+The space comes from `ld65`'s `.sym`/`.dbg`: the segment sizes, and what each
+label takes up by adding the `span`s that have a source line. `FAR`'s free
+space is the padding of the `.align` that closes `cabecera.s`. Bank 0 agrees
+with AGENTS.md's `.res` method. The times are from a worktree with
+`rom/build/` empty (cold) or with the cache full and the cartridges deleted
+(warm), with another agent using CPU at the same time.
 
-# Lo hecho (2026-09-25, en curso)
+# What was done (2026-09-25, in progress)
 
-taro decidió juntar con la forma recomendada: `release` pasa a ser el unido y
-`test-main` deja de existir. `test-special` queda.
+taro decided to merge in the recommended form: `release` becomes the merged
+one and `test-main` ceases to exist. `test-special` stays.
 
-Antes de empezar, sobre `cfb100e` (con el tinte ya arreglado y el respaldo
-liviano adentro): `just cartuchos` en frío 266 s —`test-main` 154, 
-`test-special` 13, `release` 28 y las pistas de MSU-1 71—, y `just pruebas`
-632 casos en verde.
+Before starting, on `cfb100e` (with the tint already fixed and the lightweight
+fallback in): `just cartuchos` cold 266 s —`test-main` 154, `test-special` 13,
+`release` 28 and the MSU-1 tracks 71—, and `just pruebas` 632 cases green.
 
-1. El `Teleport` al 6 delante de los 24 casos que corrían en el mapa de
-   arranque: commit aparte, 632 en verde, ninguna golden se movió.
-2. El conversor vacía `rom/build/<cartucho>/parches/` antes de escribir
-   (cierra `el-conversor-no-limpia-los-parches-viejos.md`).
-3. `donde_esta` ya no depende del orden de `CARTUCHOS`.
-4. `parches.revisar` sabe qué es de prueba: los mapas salen de
-   `cartuchos.MAPAS_DE_PRUEBA`, y para las animaciones y los battlers —la 91 y
-   doce battlers existen sólo por los mapas de prueba o por un caso, cosa que
-   la medición no había visto— el conversor deja un `usos.json` sin versionar
-   con quién pide cada uno.
-5. La junta: `release` lleva todos los mapas y todos los casos, con
-   `PRIMERO = "nada"`; `test-main` no existe más. El arnés pasa el título solo
-   (`Cartucho.titulo`), `reiniciar()` vuelve por "Resume" y las dos pruebas
-   del GameOver pasan el título. El control "sin título" de
-   `test_guardar_save_point` se perdió: no queda ninguna ROM sin título que
-   llegue al 8.
+1. The `Teleport` to 6 in front of the 24 cases that ran on the start map:
+   separate commit, 632 green, no golden moved.
+2. The converter empties `rom/build/<cartucho>/parches/` before writing (closes
+   `el-conversor-no-limpia-los-parches-viejos.md`).
+3. `donde_esta` no longer depends on `CARTUCHOS`'s order.
+4. `parches.revisar` knows what's a test thing: the maps come from
+   `cartuchos.MAPAS_DE_PRUEBA`, and for the animations and the battlers —91
+   and twelve battlers exist only because of the test maps or a case, which
+   the measurement hadn't seen— the converter leaves an unversioned
+   `usos.json` with who asks for each one.
+5. The merge: `release` carries all the maps and all the cases, with
+   `PRIMERO = "nada"`; `test-main` no longer exists. The harness gets past the
+   title on its own (`Cartucho.titulo`), `reiniciar()` comes back through
+   "Resume" and the two GameOver tests get past the title. The "no title"
+   control of `test_guardar_save_point` was lost: there's no ROM without a
+   title left that reaches 8.
 
-Medido en la junta:
+Measured at the merge:
 
-* Se mueven **36 goldens de 9 pruebas**, todas por el cronómetro (lado a lado
-  en `/shared/goldens/2026-09-25-juntar-cartuchos/`). Las cinco de la puerta
-  del mapa 7 ya no, por `c3910f4`. Lo nuevo es lo que el `release` de antes ya
-  dibujaba: el mapa 9 da igual pixel por pixel en las dos ROMs.
-* **Las partidas guardadas con el `release` de antes no sirven en el unido.**
-  `PARTIDA_BYTES` pasa de 1850 a 1868: una variable más (la del caso, que va
-  última, así que las del juego no se corren) y cuatro entradas más de
-  `EXP_K` (las tropas de los mapas de prueba). Todo lo que va detrás de las
-  variables se corre dos bytes. Con la SRAM que deja snes9x detrás de la
-  partida (bytes `$60`) la suma no da y la partida **no carga**; con ceros
-  detrás la suma da igual y **carga corrupta**: inventario, HP, SP, equipo,
-  gráficos y habilidades corridos. Y el formato va a seguir cambiando cada vez
-  que un caso nombre una variable nueva o traiga una tropa nueva, porque ahora
-  los casos son parte de la ROM que se juega.
+* **36 goldens of 9 tests** move, all because of the timer (side by side in
+  `/shared/goldens/2026-09-25-juntar-cartuchos/`). The five of map 7's door no
+  longer do, thanks to `c3910f4`. The new thing is what the earlier `release`
+  already drew: map 9 comes out identical pixel by pixel in both ROMs.
+* **Saves made with the earlier `release` don't work in the merged one.**
+  `PARTIDA_BYTES` goes from 1850 to 1868: one more variable (the case one,
+  which goes last, so the game's ones don't shift) and four more `EXP_K`
+  entries (the test maps' troops). Everything after the variables shifts two
+  bytes. With the SRAM snes9x leaves behind the save (bytes `$60`) the checksum
+  doesn't add up and the save **doesn't load**; with zeros behind it the
+  checksum adds up anyway and it **loads corrupted**: inventory, HP, SP,
+  equipment, graphics and skills shifted. And the format will keep changing
+  every time a case names a new variable or brings a new troop, because now
+  the cases are part of the ROM that gets played.
 
-Después, sobre la rama con `main` mergeado (`4d33549`):
+Then, on the branch with `main` merged (`4d33549`):
 
-* `just pruebas`: 640 en verde. Sin `main` eran 633: las 632 de antes, más
-  tres pruebas nuevas (parches viejos, `donde_esta`, `de_prueba`) y menos los
-  dos casos de `test_protocolo` y `test_ensamblar` que se parametrizaban por
-  `test-main`. `test_cores.py` tres veces en verde.
-* `just cartuchos` en frío: 235 s —`release` 150, las pistas y
-  `test-special` 85—, contra 266 antes. El `gunter` del PATH cambió a mitad
-  de `test-special`, así que ese tramo no es limpio.
-* Espacio, sumando los segmentos del `.dbg`: `release` pasa de 70,9% a
-  86,5% del cartucho (último banco $76); `test-main` estaba en 86,6%. El
-  estudio daba 89,6% para el unido con otro método y antes del respaldo
-  liviano.
+* `just pruebas`: 640 green. Without `main` it was 633: the 632 from before,
+  plus three new tests (stale patches, `donde_esta`, `de_prueba`) and minus the
+  two cases of `test_protocolo` and `test_ensamblar` that were parametrized by
+  `test-main`. `test_cores.py` green three times.
+* `just cartuchos` cold: 235 s —`release` 150, the tracks and `test-special`
+  85—, against 266 before. The `gunter` on the PATH changed in the middle of
+  `test-special`, so that stretch isn't clean.
+* Space, adding up the `.dbg`'s segments: `release` goes from 70.9% to 86.5%
+  of the cartridge (last bank $76); `test-main` was at 86.6%. The study gave
+  89.6% for the merged one with another method and before the lightweight
+  fallback.
 
-# Lo que queda para taro
+# What's left for taro
 
-* Mirar las 36 goldens de `/shared/goldens/2026-09-25-juntar-cartuchos/`
-  antes del merge.
-* Jugar la ROM: arranca como antes (el recorrido, el título y las escenas
-  pasan), pero ahora lleva las páginas y los mapas de prueba adentro.
-* **Las partidas de antes no sirven**: ver arriba. Si importa, lo que falta
-  es que la partida lleve su tamaño o una versión y la ROM rechace las que no
-  son suyas; hoy, con ceros detrás, carga una corrupta.
+* Look at the 36 goldens in `/shared/goldens/2026-09-25-juntar-cartuchos/`
+  before the merge.
+* Play the ROM: it starts as before (the walkthrough, the title and the scenes
+  pass), but now it carries the test pages and maps inside.
+* **Earlier saves don't work**: see above. If it matters, what's missing is
+  for the save to carry its size or a version and for the ROM to reject the
+  ones that aren't its own; today, with zeros behind it, it loads a corrupted
+  one.

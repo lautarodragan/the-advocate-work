@@ -1,221 +1,226 @@
 ---
-name: "Carrera 2: a 60 cuadros"
-description: "Las tres vueltas de la carrera (49, 52, 54) sin perder cuadros manejando: perfilar dónde se va el tiempo y medir el límite de cada camino"
+name: "Race 2: at 60 frames"
+description: "The race's three laps (49, 52, 54) without dropping frames while driving: profile where the time goes and measure the limit of each path"
 type: refactor
 status: done
 assignee: taro
 ---
 
-# Qué
+# What
 
-El hito 2 de `la-carrera-y-lo-que-sigue.md`. Sale de `main` en `69e66ed`.
-Se da por hecho con los cuadros perdidos en cero o casi en el 49, el 52 y el 54
-manejando, y lo tiene que cobrar una prueba: el recorrido
-`pruebas/abl/test_recorrido_carrera_golden.py` ya maneja con un piloto.
+Milestone 2 of `la-carrera-y-lo-que-sigue.md`. It starts from `main` at
+`69e66ed`. It's considered done with dropped frames at zero or nearly so on
+49, 52 and 54 while driving, and a test has to enforce it: the walkthrough
+`pruebas/abl/test_recorrido_carrera_golden.py` already drives with a pilot.
 
-Lo medido antes de empezar (hito 1), manejando y sólo en ticks con el switch
-170, sin mensaje ni fundido:
+What was measured before starting (milestone 1), driving and only on ticks
+with switch 170, with no message or fade:
 
-    mapa   cuadros de hardware por tick
-    49     2,07
-    52     2,04
-    54     2,04
-    51     1,00   (13 páginas)
+    map    hardware frames per tick
+    49     2.07
+    52     2.04
+    54     2.04
+    51     1.00   (13 pages)
 
-Números reservados: opcode 0x31 (y 0x33 si hace falta un segundo) y la RAM
-lejana $7E7980-$7E799F. Se usaron el 0x31 (`OP_CELL_TEST`) y los primeros 16
-bytes de la RAM (`NPC_FILA_APARTE`); el 0x33 no hizo falta.
+Reserved numbers: opcode 0x31 (and 0x33 if a second one is needed) and far
+RAM $7E7980-$7E799F. Used: 0x31 (`OP_CELL_TEST`) and the first 16 bytes of
+the RAM (`NPC_FILA_APARTE`); 0x33 wasn't needed.
 
-# Dónde se va el tiempo
+# Where the time goes
 
-Medido con un perfilador de líneas que no se commitea: una marca en cada
-frontera lee el contador vertical del PPU (`SLHV`/`OPVCT`) y suma las líneas
-desde la marca anterior al cubo que corresponde. Cada marca cuesta ~1,4 líneas,
-así que se corre dos veces —una marca por sitio y dos— y el costo se descuenta
-(`2 * simple - doble`). El trabajo del cuadro es todo lo que no es esperar el
-vblank; **entra en un cuadro si es menos de 262 líneas**.
+Measured with a line profiler that isn't committed: a mark at each boundary
+reads the PPU's vertical counter (`SLHV`/`OPVCT`) and adds the lines since the
+previous mark to the corresponding bucket. Each mark costs ~1.4 lines, so it's
+run twice —one mark per site and two— and the cost is subtracted (`2 * simple
+- doble`). The frame's work is everything that isn't waiting for vblank; **it
+fits in one frame if it's under 262 lines**.
 
-Líneas por tick, en `69e66ed`:
+Lines per tick, at `69e66ed`:
 
-    cubo                               49     52     54     51
-    bytecode de los paralelos         201    195    196     27
-    lazo de paralelos (estado, lista)  66     68     69     12
-    buscar la ranura de ruta + cola    41     36     10      2
-    refrescar_npc de los que andan     37     28      -      -
-    cuadro_de_ruta_ev de los que andan  9      6      -      -
+    bucket                             49     52     54     51
+    parallels' bytecode               201    195    196     27
+    parallels' loop (state, list)      66     68     69     12
+    finding the route slot + queue     41     36     10      2
+    refrescar_npc of the moving ones   37     28      -      -
+    cuadro_de_ruta_ev of moving ones    9      6      -      -
     build_oam                          44     43     40     20
-    cámara y stream                    26     21     20     15
-    héroe, menú, cronómetro            15     13     13      1
-    principio del vblank               16     14     12     11
-    lo demás                           ~9     ~8     ~9     ~6
-    TRABAJO                           464    432    367     94
+    camera and stream                  26     21     20     15
+    hero, menu, timer                  15     13     13      1
+    start of vblank                    16     14     12     11
+    everything else                    ~9     ~8     ~9     ~6
+    WORK                              464    432    367     94
 
-Por página paralela de auto (41 en cada vuelta): ~4,8 líneas de bytecode
-—`OP_VAR` clase 6 dos veces, un `OP_IF_VAR` que falla y el `OP_DONE`—, ~1,6
-del lazo que carga y guarda su estado, y ~0,25 de buscar si tiene ranura de
-ruta. Los cinco autos que andan en el 49 (cuatro en el 52) cuestan ~16 líneas
-cada uno entre su ruta y `refrescar_npc`, y eso no es de los paralelos: sería
-igual con las páginas sin compilar.
+Per car parallel page (41 on each lap): ~4.8 lines of bytecode —`OP_VAR` class
+6 twice, an `OP_IF_VAR` that fails and the `OP_DONE`—, ~1.6 of the loop that
+loads and saves its state, and ~0.25 of finding whether it has a route slot.
+The five moving cars on 49 (four on 52) cost ~16 lines each between their
+route and `refrescar_npc`, and that isn't the parallels': it would be the same
+with the pages not compiled.
 
-Para entrar en un cuadro el 49 tiene que bajar de 464 a menos de 262, o sea
-~200 líneas, y con margen para los ticks más pesados.
+To fit in one frame, 49 has to go from 464 to under 262, that is ~200 lines,
+and with margin for the heaviest ticks.
 
-# Los caminos, cada uno con su límite medido
+# The paths, each with its measured limit
 
-Cada fila es un paso sobre el anterior, en el orden en que se hizo: líneas de
-trabajo por tick (promedio, corregido por las marcas) y cuadros de hardware
-por tick manejando. Lo que cada paso ahorra está medido, no estimado.
+Each row is a step on top of the previous one, in the order it was done: work
+lines per tick (average, corrected for the marks) and hardware frames per tick
+while driving. What each step saves is measured, not estimated.
 
-    paso                                        trabajo 49/52/54   cuadros/tick 49/52/54
-    69e66ed                                       464/432/367       2,07/2,04/2,04
-    1 variables por direccionamiento largo,       417/ - /325       2,03/2,03/2,04
-      igualdad sin comparar_var, clase 6 primero
-    2 OP_CELL_TEST por el despacho                352/324/262       2,02/2,01/1,53
-    3 lista y estado de paralelos, largo          337/ - /248       2,02/1,92/1,36
-    4 la ranura de ruta recordada (PAR_RANURA)    303/280/ -        2,00/1,75/1,23
-    5 el atajo: OP_CELL_TEST sin el intérprete    280/252/207       1,61/1,29/1,07
-    6 la fila del NPC recordada en la ranura      262/243/ -        1,32/1,18/1,07
-    7 el banco 1 por el espejo rápido, OP_CELL_TEST                 1,18/1,13/1,05
-      con desplazamientos, par_dir de una vez     236/ - / -        1,12/1,09/1,05
-    8 clear_oam desenrollado en el banco 1        226/ - / -        1,10/1,08/1,04
-    9 los choques y el paso de a dos ciclos       220/ - / -        1,07/1,05/1,04
-      menos: celda_bloqueada y pasa_con_evento de
-      atrás para adelante, npc_swap desenrollado,
-      el descarte por X de build_oam en el lazo
-   10 pasa_hay: sin eventos de tile que impongan,                  1,03/1,03/1,04
-      pasa_con_evento no recorre nada
-   11 ptr_de_celda con el multiplicador                            1,03/1,03/1,04
-   12 los paralelos de OP_CELL_TEST de corrido     p50 197/186/157  1,03/1,02/1,04
-      (paralelos_celda, en el banco 1)
-   13 acomodar: buscar el lugar y correr las                        1,02/1,02/1,04
-      demás con mvn/mvp, en vez de intercambiar
+    step                                        work 49/52/54      frames/tick 49/52/54
+    69e66ed                                       464/432/367       2.07/2.04/2.04
+    1 variables via long addressing,              417/ - /325       2.03/2.03/2.04
+      equality without comparar_var, class 6 first
+    2 OP_CELL_TEST through the dispatch           352/324/262       2.02/2.01/1.53
+    3 parallels' list and state, long             337/ - /248       2.02/1.92/1.36
+    4 the route slot remembered (PAR_RANURA)      303/280/ -        2.00/1.75/1.23
+    5 the shortcut: OP_CELL_TEST without the      280/252/207       1.61/1.29/1.07
+      interpreter
+    6 the NPC's row remembered in the slot        262/243/ -        1.32/1.18/1.07
+    7 bank 1 through the fast mirror,                               1.18/1.13/1.05
+      OP_CELL_TEST with offsets, par_dir at once  236/ - / -        1.12/1.09/1.05
+    8 clear_oam unrolled in bank 1                226/ - / -        1.10/1.08/1.04
+    9 the collisions and the step two cycles      220/ - / -        1.07/1.05/1.04
+      cheaper: celda_bloqueada and pasa_con_evento
+      back to front, npc_swap unrolled, build_oam's
+      discard by X in the loop
+   10 pasa_hay: with no tile events that impose,                    1.03/1.03/1.04
+      pasa_con_evento walks nothing
+   11 ptr_de_celda with the multiplier                              1.03/1.03/1.04
+   12 the OP_CELL_TEST parallels in one go         p50 197/186/157  1.03/1.02/1.04
+      (paralelos_celda, in bank 1)
+   13 acomodar: find the place and shift the                        1.02/1.02/1.04
+      rest with mvn/mvp, instead of swapping
 
-(Los 1,04 del 54 son un solo tick de 27 cuadros al largar la vuelta, cuando
-suena el tema y se suben sus muestras: con el auto quieto en la largada. Sin
-los ticks de antes de que el auto salga, ver abajo.)
+(The 1.04 of 54 is a single tick of 27 frames when the lap starts, when the
+theme plays and its samples get uploaded: with the car still at the start.
+Without the ticks before the car sets off, see below.)
 
-Lo que dice cada camino, como límite:
+What each path says, as a limit:
 
-* **El intérprete general** (pasos 1 y, estimado, un despacho más corto): el
-  bytecode baja de 201 a 155 líneas en el 49, un 23%, y el despacho con el
-  opcode ya duplicado en el bytecode ahorraría ~10 ciclos por opcode, unas
-  ocho líneas más. Con eso el 49 queda en ~410 líneas: **sigue a dos cuadros
-  por tick**. No alcanza solo, pero es general y quedó.
-* **El opcode fundido por el despacho** (paso 2): baja el bytecode a ~90
-  líneas, 2,3 por página. Solo, el 49 y el 52 **siguen a dos cuadros**: lo
-  que quedaba era el lazo de los paralelos (cargar y guardar el estado de
-  cada uno), buscar la ranura de ruta y el paso de los autos que andan.
-* **El fundido sin el intérprete** (pasos 5 y 12): una página que empieza con
-  `OP_CELL_TEST`, no está a mitad de nada y no pasa de la condición no
-  necesita ni `correr_codigo` ni guardar su estado. El piso de este diseño es
-  la condición misma —dos escrituras y una comparación, ~200 ciclos, una
-  línea— más leer la lista y el estado: **~1,7 líneas por página**, ~70 para
-  las 41 de una vuelta, contra ~310 al empezar.
-* **"Correr las paralelas sólo cuando algo cambia de celda"** (la idea 2 de
-  `optimizar-los-eventos-paralelos-al-compilar.md`): no se hizo, y
-  su límite es cero para lo que importa. El héroe avanza media celda por tick,
-  así que cambia de celda cada dos ticks y en ésos corren las 41 igual: el
-  tick más pesado no baja. Además las 41 escriben las mismas dos variables
-  (la 36 y la 37) en cada cuadro, y saltearlas cambia lo que queda en ellas.
-* **El resto del cuadro**, que no es de los paralelos: los autos que andan
-  (su ruta, `refrescar_npc`, reacomodar su fila), `build_oam`, la cámara.
-  Con los paralelos ya en ~70, lo que perdía cuadros eran **los ticks en que
-  cuatro o cinco autos que andan arrancan su paso a la vez**: cada paso nuevo
-  pregunta si puede entrar en la celda (`puede_celda`: la grilla, los eventos
-  de tile, quién está parado ahí) y el auto que cambia de carril pasa de una
-  vez a los siete u ocho del carril de al lado en el orden de dibujado. Los
-  pasos 6 y 8 a 13 son eso, y son generales: cualquier mapa con eventos que
-  andan los aprovecha.
+* **The general interpreter** (step 1 and, estimated, a shorter dispatch): the
+  bytecode drops from 201 to 155 lines on 49, 23%, and the dispatch with the
+  opcode already doubled in the bytecode would save ~10 cycles per opcode,
+  some eight more lines. With that 49 ends up at ~410 lines: **still at two
+  frames per tick**. It isn't enough on its own, but it's general and it
+  stayed.
+* **The fused opcode through the dispatch** (step 2): it brings the bytecode
+  down to ~90 lines, 2.3 per page. On its own, 49 and 52 **stay at two
+  frames**: what was left was the parallels' loop (loading and saving each
+  one's state), finding the route slot and the step of the moving cars.
+* **The fused one without the interpreter** (steps 5 and 12): a page that
+  starts with `OP_CELL_TEST`, isn't in the middle of anything and doesn't get
+  past the condition needs neither `correr_codigo` nor saving its state. This
+  design's floor is the condition itself —two writes and a comparison, ~200
+  cycles, one line— plus reading the list and the state: **~1.7 lines per
+  page**, ~70 for the 41 of a lap, against ~310 at the start.
+* **"Run the parallels only when something changes cell"** (idea 2 of
+  `optimizar-los-eventos-paralelos-al-compilar.md`): not done, and its limit
+  is zero for what matters. The hero advances half a cell per tick, so he
+  changes cell every two ticks and on those all 41 run anyway: the heaviest
+  tick doesn't go down. Besides, all 41 write the same two variables (36 and
+  37) every frame, and skipping them changes what's left in them.
+* **The rest of the frame**, which isn't the parallels': the moving cars
+  (their route, `refrescar_npc`, reordering their row), `build_oam`, the
+  camera. With the parallels already at ~70, what dropped frames were **the
+  ticks on which four or five moving cars start their step at the same
+  time**: each new step asks whether it can enter the cell (`puede_celda`: the
+  grid, the tile events, who's standing there) and the car changing lane
+  jumps at once past the seven or eight of the neighbouring lane in the
+  drawing order. Steps 6 and 8 to 13 are that, and they're general: any map
+  with moving events takes advantage of them.
 
-# Cómo quedó
+# How it ended up
 
-Dos commits: `2345738` (las variables y `OP_CELL_TEST`, con el compilador) y
-`da466bb` (los paralelos sin el intérprete, las ranuras y las filas
-recordadas, los choques, `acomodar_npc` y la OAM); después el merge con
-`main` y los techos. Lo que hace cada pieza
-está en su comentario; acá, lo que no se ve en el código.
+Two commits: `2345738` (the variables and `OP_CELL_TEST`, with the compiler)
+and `da466bb` (the parallels without the interpreter, the remembered slots and
+rows, the collisions, `acomodar_npc` and the OAM); then the merge with `main`
+and the ceilings. What each piece does is in its comment; here, what isn't
+visible in the code.
 
-* **`OP_CELL_TEST` no cambia la semántica.** Hace las dos escrituras —con su
-  refresco— y las dos comparaciones, cada una con su destino, igual que los
-  cuatro opcodes sueltos. El compilador lo arma con lo que emitirían ellos
-  (`_pieza_de_celdas`), así que las validaciones son las mismas.
-* **El atajo tampoco**: es la primera vuelta del intérprete y la segunda
-  (`OP_DONE`), sin pasar por el despacho. Lo que se saltea es guardar un
-  estado que queda igual: sin espera y sin página a medio correr.
-* **`PAR_RANURA` se borra en `limpiar_paralelos`**, pegado a `load_npcs`, que
-  es donde se sueltan todas las ranuras: dentro de un mapa una ranura no se
-  suelta nunca. La fila recordada de `npc_de_ranura` y `pasa_hay` sí pueden
-  quedar viejas, y por eso la fila se valida y `pasa_hay` sólo se prende.
-* **`acomodar_npc` deja el mismo orden** que los intercambios uno por uno:
-  busca con la clave de la fila que cambió y corre las del medio. Lo cobran
-  las goldens de los recorridos que caminan NPC.
+* **`OP_CELL_TEST` doesn't change the semantics.** It does the two writes
+  —with their refresh— and the two comparisons, each with its destination,
+  same as the four separate opcodes. The compiler builds it with what they
+  would emit (`_pieza_de_celdas`), so the validations are the same.
+* **Neither does the shortcut**: it's the interpreter's first iteration and
+  the second (`OP_DONE`), without going through the dispatch. What's skipped
+  is saving a state that stays the same: with no wait and no page half run.
+* **`PAR_RANURA` is cleared in `limpiar_paralelos`**, right next to
+  `load_npcs`, which is where all the slots get released: within a map a slot
+  is never released. The remembered row of `npc_de_ranura` and `pasa_hay` can
+  go stale, and that's why the row is validated and `pasa_hay` is only ever
+  turned on.
+* **`acomodar_npc` leaves the same order** as the one-by-one swaps: it
+  searches with the key of the row that changed and shifts the ones in
+  between. The goldens of the walkthroughs that walk NPCs enforce it.
 
-## Cuadros por tick al final
+## Frames per tick at the end
 
-Manejando: con el 170, sin mensaje ni fundido, en el mismo mapa al empezar y
-al terminar el tick, **y con el auto fuera de la largada** (x >= 4). Esto
-último saca los ticks en que la vuelta pone su tema y se suben sus muestras,
-con el auto quieto: uno de 27 cuadros en el 54 y uno de 8 en el 52, que ya
-estaban en `69e66ed` y no son de manejar.
+Driving: with 170, no message or fade, on the same map at the start and end of
+the tick, **and with the car off the starting line** (x >= 4). That last part
+removes the ticks on which the lap sets its theme and its samples get
+uploaded, with the car still: one of 27 frames on 54 and one of 8 on 52, which
+were already there at `69e66ed` and aren't about driving.
 
-    mapa   69e66ed        al final
-    49     2,06 (979)     1,02   (21 de 979 ticks con un cuadro de más)
-    52     2,04 (546)     1,004  (2 de 546)
-    54     2,00 (574)     1,00   (0)
-    51     1,00           1,00
+    map    69e66ed        at the end
+    49     2.06 (979)     1.02   (21 of 979 ticks with an extra frame)
+    52     2.04 (546)     1.004  (2 of 546)
+    54     2.00 (574)     1.00   (0)
+    51     1.00           1.00
 
-Lo que le queda al 49: los ticks en que los cinco autos que andan arrancan su
-paso a la vez —cinco `puede_celda`, y el reacomodo de sus filas—, que pasan
-de 262 líneas por 1 a 35.
+What's left for 49: the ticks on which the five moving cars start their step
+at the same time —five `puede_celda`, and the reordering of their rows—,
+which exceed 262 lines by 1 to 35.
 
-## La prueba
+## The test
 
-`test_la_carrera_entera` cuenta los cuadros de hardware de los ticks
-manejando de cada vuelta, con el mismo criterio, y falla con más de
-`CUADROS_DE_MAS` (5) de más por cada cien. Contra `69e66ed` falla: "la vuelta
-del mapa 49 gastó 2017 cuadros de hardware en 977 ticks: 1040 de más".
+`test_la_carrera_entera` counts the hardware frames of the driving ticks of
+each lap, with the same criterion, and fails with more than `CUADROS_DE_MAS`
+(5) extra per hundred. Against `69e66ed` it fails: "la vuelta del mapa 49
+gastó 2017 cuadros de hardware en 977 ticks: 1040 de más".
 
-## Espacio
+## Space
 
-Medido con el método de `AGENTS.md` sobre el merge con `main` (`fdf7593`):
+Measured with `AGENTS.md`'s method on the merge with `main` (`fdf7593`):
 
-    cartucho      banco 0            BSS   ZEROPAGE   banco 1
-    release       344 B (189 antes)  138   4          ~9,3 KB
-    test-special  1.120 B            138   4          ~10,4 KB
+    cartridge     bank 0             BSS   ZEROPAGE   bank 1
+    release       344 B (189 before) 138   4          ~9.3 KB
+    test-special  1,120 B            138   4          ~10.4 KB
 
-(Los 29 bytes de BSS de más son de `main`: la ruta del héroe dejó de copiarse
-a un búfer.) El banco 0 ganó: `clear_oam`, `npc_swap`, `npc_va_antes` y el
-lazo de `acomodar_npc` se fueron al banco 1, y lo nuevo vive allá.
+(The 29 extra BSS bytes are `main`'s: the hero's route stopped being copied to
+a buffer.) Bank 0 gained: `clear_oam`, `npc_swap`, `npc_va_antes` and
+`acomodar_npc`'s loop went to bank 1, and the new code lives there.
 
-## Los techos
+## The ceilings
 
-Sobre el merge, `test_el_tema_no_recorta_en_su_pico[dcbest]` dio rojo (dos
-muestras en el tope); por separado las dos ramas pasaban. Es lo que avisa esa
-prueba: el pico se mueve con cuándo cae cada escritura al DSP dentro del
-cuadro, y el hito cambió la duración de casi todos los cuadros con NPC que
-andan. `just techos` lo remidió (`33e78c4`).
+On the merge, `test_el_tema_no_recorta_en_su_pico[dcbest]` went red (two
+samples at the cap); separately both branches passed. It's what that test
+warns about: the peak moves with when each DSP write lands within the frame,
+and the milestone changed the duration of almost every frame with moving
+NPCs. `just techos` re-measured it (`33e78c4`).
 
-# Pruebas
+# Tests
 
-`just pruebas` en verde sobre `da466bb`, y sobre el merge con `main` con la
-tabla de techos remedida. Ninguna golden cambió. Casos nuevos en `pruebas/herramientas/test_paginas.py`: la
-forma de `OP_CELL_TEST`, el destino del `else` de la rama de adentro, y que
-sin la forma exacta no se funde.
+`just pruebas` green on `da466bb`, and on the merge with `main` with the
+ceilings table re-measured. No golden changed. New cases in
+`pruebas/herramientas/test_paginas.py`: the shape of `OP_CELL_TEST`, the
+destination of the inner branch's `else`, and that without the exact shape it
+doesn't get fused.
 
-# Qué tiene que probar taro jugando
+# What taro has to test while playing
 
-* Las tres vueltas: que se sientan a velocidad entera y no a media, y que el
-  volante responda igual que antes. Chocar, y que el 50 vuelva a la vuelta.
-* Que los autos que andan (los que suben y bajan de carril) se dibujen bien
-  al cruzarse con los otros: quién tapa a quién cambia con `acomodar_npc`.
-* En cualquier otro mapa con gente caminando —Lashe City, el 11— que el orden
-  de dibujado y los choques con los NPC sigan como antes.
-* Las luces del mapa 11 y cualquier página que mire si el héroe está en una
-  celda: van por `OP_CELL_TEST`.
+* The three laps: that they feel at full speed and not at half, and that the
+  steering responds the same as before. Crash, and that 50 returns to the lap.
+* That the moving cars (the ones that change lanes up and down) are drawn
+  right when crossing the others: who covers whom changes with
+  `acomodar_npc`.
+* On any other map with people walking —Lashe City, 11— that the drawing
+  order and the collisions with NPCs stay as before.
+* Map 11's lights and any page that checks whether the hero is on a cell: they
+  go through `OP_CELL_TEST`.
 
-# Probado
+# Tested
 
-taro, el 2026-09-27, en la SNES con el FX Pak: anduvo todo, incluido el camino
-de vender el Idol, sobornar al guardia y llevar a AG7; la carrera sin lag ni
-bugs (el compañero al volante, también). Queda aparte el héroe negro después
-de cambiar de gráfico en el mismo mapa (HQ de Lazer Teeth, Boss Wick).
+taro, on 2026-09-27, on the SNES with the FX Pak: everything worked, including
+the path of selling the Idol, bribing the guard and taking AG7 along; the race
+without lag or bugs (the companion at the wheel, too). Separate from this: the
+black hero after changing graphic on the same map (Lazer Teeth HQ, Boss Wick).

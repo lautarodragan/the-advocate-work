@@ -1,229 +1,225 @@
 ---
-name: "Rust: el dominio de la pelea"
-description: "El modelo de la pelea, sus escenas, sus animaciones y su pantalla de texto (battle, battle_scenes, scene, animation, battle_animations, battle_screen) al crate rm2k-snes-battle, con las ROMs byte por byte iguales"
+name: "Rust: the battle domain"
+description: "The battle's model, its scenes, its animations and its text screen (battle, battle_scenes, scene, animation, battle_animations, battle_screen) to the rm2k-snes-battle crate, with the ROMs byte for byte identical"
 type: refactor
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-09-30, en la migración del conversor a Rust: después de las
-pantallas (Tataupá) va la pelea. `tools/rm2k-snes/battle/` ya tiene la
-experiencia y los encuentros; lo que queda en Python es `tools/port/battle.py`,
-`battle_scenes.py`, `scene.py`, `animation.py`, `battle_animations.py` y
-`battle_screen.py` —este último es la pantalla de texto de la pelea que las
-pantallas dejaron afuera—.
+From taro, on 2026-09-30, in the converter's migration to Rust: after the
+screens (Tataupá) comes the battle. `tools/rm2k-snes/battle/` already has the
+experience and the encounters; what remains in Python is
+`tools/port/battle.py`, `battle_scenes.py`, `scene.py`, `animation.py`,
+`battle_animations.py` and `battle_screen.py` —the last one is the battle's
+text screen that the screens left out—.
 
-Sale de `main` en el commit que lanza la tarea. Ahí: `NO_CACHE=1 just
-cartuchos` da `abl.sfc` `cdcc323197ee6c66…`, `special` `15e4f331fe8ff812…`,
-`encounter-every-step` `dc83ed698b348032…`; `just pruebas` 878,
-`just -f tools/justfile test` 49.
+It starts from `main` at the commit that launches the task. There:
+`NO_CACHE=1 just cartuchos` gives `abl.sfc` `cdcc323197ee6c66…`, `special`
+`15e4f331fe8ff812…`, `encounter-every-step` `dc83ed698b348032…`; `just
+pruebas` 878, `just -f tools/justfile test` 49.
 
-## Inventario: qué hace hoy el Python
+## Inventory: what the Python does today
 
-Leído el 2026-09-30:
+Read on 2026-09-30:
 
-| módulo | qué hace | quién lo usa |
+| module | what it does | who uses it |
 |---|---|---|
-| `battle.py` | **las reglas** que la emisión escribe —qué habilidades sabe ofrecer la pelea (`skill_usable`, `skills_of`, `level_learned`, `skill_command_name`), qué acciones tiene cada enemigo (`actions_of_enemy`), qué ítems se ofrecen (`item_usable_in_battle`), el SP del arma, el oro de una tropa— y **el simulador**: `Rng`, `Combatant`, `Battle` y `TroopPage`, que juegan la pelea con el mismo azar que la ROM | `mapdata` (las reglas), y las pruebas de ABL (el simulador, turno por turno contra la consola) |
-| `battle_screen.py` | la pantalla de texto de la pelea: la geometría (`BA_*`, las cinco órdenes), los renglones de la victoria y su chequeo de que entran, las órdenes recortadas, el texto del revivido, e `item_text` —la regla de las pantallas para escribir con su fuente— | `mapdata`, y las pruebas (`arnes/batalla.py`, `test_victoria.py`) |
-| `scene.py`, `battle_scenes.py` | los fondos y los battlers: cuáles lleva el cartucho, sus píxeles —escalados con el `LANCZOS` de Pillow, reducidos con `palette.reduce` o `adeleine`— y sus bytes para el `.inc` y el `.msu` | `snes_convert`, `mapdata`, `msu_data`, las pruebas de la escena |
-| `animation.py`, `battle_animations.py` | las animaciones de batalla: sus celdas por `rm2k-render`, el tono de la consola (`color.apply_tint`), el achique con `LANCZOS`, `palette.reduce`, y los cuadros para el `.inc` | `snes_convert`, `map_convert`, `obj_extras`, `mapdata`, `test_parches`, `test_animacion_cuadros` |
+| `battle.py` | **the rules** the emission writes —which skills the battle can offer (`skill_usable`, `skills_of`, `level_learned`, `skill_command_name`), which actions each enemy has (`actions_of_enemy`), which items are offered (`item_usable_in_battle`), the weapon's SP, a troop's gold— and **the simulator**: `Rng`, `Combatant`, `Battle` and `TroopPage`, which play the battle with the same randomness as the ROM | `mapdata` (the rules), and ABL's tests (the simulator, turn by turn against the console) |
+| `battle_screen.py` | the battle's text screen: the geometry (`BA_*`, the five orders), the victory rows and their check that they fit, the cropped orders, the revived text, and `item_text` —the screens' rule for writing with their font— | `mapdata`, and the tests (`arnes/batalla.py`, `test_victoria.py`) |
+| `scene.py`, `battle_scenes.py` | the backgrounds and the battlers: which ones the cartridge carries, their pixels —scaled with Pillow's `LANCZOS`, reduced with `palette.reduce` or `adeleine`— and their bytes for the `.inc` and the `.msu` | `snes_convert`, `mapdata`, `msu_data`, the scene's tests |
+| `animation.py`, `battle_animations.py` | the battle animations: their cells via `rm2k-render`, the console's tint (`color.apply_tint`), the shrinking with `LANCZOS`, `palette.reduce`, and the frames for the `.inc` | `snes_convert`, `map_convert`, `obj_extras`, `mapdata`, `test_parches`, `test_animacion_cuadros` |
 
-## La frontera
+## The boundary
 
-**Entra a `rm2k-snes-battle`: el modelo de la pelea y su pantalla de texto**
-—`battle.py` y `battle_screen.py` enteros—. **Quedan afuera los dibujos de
-la pelea** —`scene.py`, `battle_scenes.py`, `animation.py`,
-`battle_animations.py`—: ver "Lo que queda afuera".
+**Into `rm2k-snes-battle` goes: the battle's model and its text screen**
+—`battle.py` and `battle_screen.py` whole—. **The battle's drawings stay
+out** —`scene.py`, `battle_scenes.py`, `animation.py`,
+`battle_animations.py`—: see "What stays out".
 
-La etapa suma cuatro subcomandos a `tables`, que no cambia:
+The stage adds four subcommands to `tables`, which doesn't change:
 
-* **`model`**, el segundo llamado del conversor, después de compilar.
-  **Recibe** lo que decidió el cartucho y lo que contestaron otros
-  dominios: los actores que pueden estar en el grupo (`possible_members`),
-  las tropas que pide el cartucho (las del compilador), los ítems que
-  conoce (`items_rom`), los pares (actor, habilidad) del compilador
-  (`events.SKILL_SLOT`, en el orden de su ranura) y el ancho del nombre de
-  un ítem, que es de las pantallas. **Lee del volcado** los actores, las
-  habilidades, los ítems, los enemigos, las tropas, los términos y los
-  estados. **Devuelve** en `model.json`: la geometría de la pantalla
-  (`layout`, con `BATTLE_SEED` y `ACTIONS_MAX`); los enemigos de las tropas,
-  con sus acciones; las habilidades que lleva el cartucho y las que enseña
-  subir de nivel; en qué nivel enseña el LDB cada par; qué ítems se ofrecen
-  en la pelea; el oro y la experiencia de cada tropa; y los textos que la
-  pelea escribe, ya recortados —los renglones de la victoria, las órdenes,
-  el de cada actor para su habilidad, el revivido, los nombres de enemigos
-  y habilidades—. Y dice que no si la victoria no entra en su ventana o un
-  enemigo trae más acciones de las que pesa la ROM.
-* **`simulate`**, para las pruebas: una pelea —actores con su equipo, su
-  nivel y sus habilidades si se las cambia; enemigos sueltos o una tropa;
-  la semilla, las páginas de una tropa y sus switches— y una lista de
-  pasos —empezar, un turno con sus órdenes, huir, una acción de enemigo,
-  poner HP—; contesta el estado entero al final y lo que devolvió cada
-  paso. Las pruebas de ABL lo piden por `rom/pruebas/arnes/modelo.py`, que
-  guarda los pasos y vuelve a jugar la pelea cada vez que hay que mirarla:
-  es determinista, y así la etapa no guarda estado entre llamados.
-* **`lines`**, para las pruebas: los renglones de la victoria armados como
-  los arma la ROM —"90 EXP", "Kersh LEVEL 21 achieved!"—.
-* **`layout`**: la geometría sola.
+* **`model`**, the converter's second call, after compiling. **It receives**
+  what the cartridge decided and what other domains answered: the actors that
+  can be in the party (`possible_members`), the troops the cartridge asks for
+  (the compiler's), the items it knows (`items_rom`), the (actor, skill) pairs
+  of the compiler (`events.SKILL_SLOT`, in the order of their slot) and the
+  width of an item's name, which belongs to the screens. **It reads from the
+  dump** the actors, the skills, the items, the enemies, the troops, the terms
+  and the states. **It returns** in `model.json`: the screen's geometry
+  (`layout`, with `BATTLE_SEED` and `ACTIONS_MAX`); the troops' enemies, with
+  their actions; the skills the cartridge carries and those that levelling up
+  teaches; at what level the LDB teaches each pair; which items are offered in
+  battle; each troop's gold and experience; and the texts the battle writes,
+  already cropped —the victory rows, the orders, each actor's for their
+  skill, the revived one, the enemy and skill names—. And it says no if the
+  victory doesn't fit in its window or an enemy brings more actions than the
+  ROM weighs.
+* **`simulate`**, for the tests: a battle —actors with their equipment, their
+  level and their skills if they're changed; separate enemies or a troop; the
+  seed, a troop's pages and its switches— and a list of steps —start, a turn
+  with its orders, flee, an enemy action, set HP—; it answers the whole state
+  at the end and what each step returned. ABL's tests ask for it through
+  `rom/pruebas/arnes/modelo.py`, which keeps the steps and replays the battle
+  every time it needs to be looked at: it's deterministic, and that way the
+  stage doesn't keep state between calls.
+* **`lines`**, for the tests: the victory rows built as the ROM builds them
+  —"90 EXP", "Kersh LEVEL 21 achieved!"—.
+* **`layout`**: the geometry alone.
 
-**La emisión sigue en Python** (`mapdata`): lee de `model.json` lo que hoy
-le pregunta a `battle.py` y a `battle_screen.py`, y los campos crudos del
-LDB —el HP de un enemigo, el costo de una habilidad— los sigue leyendo de
-`lcf`, como hoy: son datos, no reglas. `item_text`, la regla de las
-pantallas con que la emisión escribe todos sus textos, pasa a
-`screen_stage.py`, que es donde vive lo de las pantallas del lado de
-Python.
+**The emission stays in Python** (`mapdata`): it reads from `model.json` what
+today it asks `battle.py` and `battle_screen.py`, and the LDB's raw fields
+—an enemy's HP, a skill's cost— it still reads from `lcf`, as today: they're
+data, not rules. `item_text`, the screens' rule with which the emission writes
+all its texts, moves to `screen_stage.py`, which is where the screens' stuff
+lives on the Python side.
 
-**El compilador de eventos no se duplica**: las páginas de tropa las
-compila `rm2k-snes-events`, y lo que la etapa lee de ellas es sólo lo del
-simulador —cuándo corre una página y qué `ShowHiddenMonster`,
-`ControlSwitches` y ramas de switch tiene—, que el compilador no modela.
+**The event compiler isn't duplicated**: the troop pages are compiled by
+`rm2k-snes-events`, and what the stage reads from them is only what the
+simulator needs —when a page runs and which `ShowHiddenMonster`,
+`ControlSwitches` and switch branches it has—, which the compiler doesn't
+model.
 
-**Las reglas de RM2k que ya usan otras etapas** —el parámetro de un actor en
-su nivel, el equipo sumado— se copian adentro de la etapa, como las tiene
-`rm2k-snes-screens` en su `texts.rs`: pasarlas a `rm2k-rules` es tocar
-otras dos etapas, y queda anotado.
+**The RM2k rules other stages already use** —an actor's parameter at its
+level, the summed equipment— are copied inside the stage, as
+`rm2k-snes-screens` has them in its `texts.rs`: moving them to `rm2k-rules`
+means touching two other stages, and it's noted.
 
-## Lo que queda afuera
+## What stays out
 
-* **Los dibujos de la pelea**: los fondos, los battlers y las animaciones.
-  Los tres pasan por el escalado de Pillow (`LANCZOS`) y por
-  `palette.reduce`, que son los mismos de `palette.convert` —el título, el
-  Game Over, las imágenes—, y las animaciones además por `color.apply_tint`,
-  que es el del tinte de la pantalla. Llevarlos sin eso sería mudarlos a
-  medias: el escalado tiene que pasar primero, para todos juntos. Lo que no
-  es de píxeles —cuáles fondos y battlers van, `patch_uses`, el formato de
-  sus bytes— se queda con ellos, porque sin los píxeles no hace nada.
+* **The battle's drawings**: the backgrounds, the battlers and the
+  animations. All three go through Pillow's scaling (`LANCZOS`) and through
+  `palette.reduce`, which are the same as `palette.convert`'s —the title, the
+  Game Over, the pictures—, and the animations also through
+  `color.apply_tint`, which is the screen tint's. Bringing them over without
+  that would be moving them halfway: the scaling has to move first, for all of
+  them together. What isn't about pixels —which backgrounds and battlers go,
+  `patch_uses`, their bytes' format— stays with them, because without the
+  pixels it does nothing.
 
-## Hecho
+## Done
 
-**El modelo de la pelea y su pantalla de texto están en Rust**, en
-`rm2k-snes-battle`, y `battle.py` y `battle_screen.py` se borraron. Las
-tres ROMs y todo `rom/build/` salen byte por byte iguales a los de `main`;
-la única diferencia es de la prosa del último commit, en los `.dbg`: ver
-abajo. Los dibujos de la pelea siguen en Python: ver "Lo que queda
-afuera".
+**The battle's model and its text screen are in Rust**, in
+`rm2k-snes-battle`, and `battle.py` and `battle_screen.py` were deleted. The
+three ROMs and all of `rom/build/` come out byte for byte identical to
+`main`'s; the only difference comes from the last commit's prose, in the
+`.dbg`s: see below. The battle's drawings stay in Python: see "What stays
+out".
 
-| commit | qué |
+| commit | what |
 |---|---|
-| `254a53a3` | la tarea: inventario y frontera |
-| `e9441441` | la etapa con `model`, `simulate`, `lines` y `layout`; `snes_convert` la llama por `port/battle_stage.py` y `mapdata` escribe lo que contesta; las pruebas de ABL piden la pelea por `rom/pruebas/arnes/modelo.py` |
-| `ee79eefe` | las pruebas del crate contra los hashes del Python, con su juego chico en `tests/game/` |
-| `382c046c` | el borrado, sólo borrado |
-| `cd570252` | la prosa que nombraba lo borrado —el runtime, `mapdata`, `lcf`, las pruebas, `tools/README.md`, `AGENTS.md`— |
-| `a784774c` | merge de `main` (`0cb3625c`) |
+| `254a53a3` | the task: inventory and boundary |
+| `e9441441` | the stage with `model`, `simulate`, `lines` and `layout`; `snes_convert` calls it through `port/battle_stage.py` and `mapdata` writes what it answers; ABL's tests ask for the battle through `rom/pruebas/arnes/modelo.py` |
+| `ee79eefe` | the crate's tests against the Python's hashes, with its small game in `tests/game/` |
+| `382c046c` | the deletion, only deletion |
+| `cd570252` | the prose that named what was deleted —the runtime, `mapdata`, `lcf`, the tests, `tools/README.md`, `AGENTS.md`— |
+| `a784774c` | merge of `main` (`0cb3625c`) |
 
-**El crate** suma a `tables`, que no cambió:
+**The crate** adds to `tables`, which didn't change:
 
-* `db.rs`: la base como la lee la pelea —actores, habilidades, ítems,
-  enemigos, estados, términos y, sólo si el pedido nombra una, las
-  tropas, que son casi toda la base—;
-* `rules.rs`: lo que RM2k dice de la base, recortado a lo que hace esta
-  pelea —qué habilidades ofrece y a quién, qué hace cada enemigo, qué
-  ítems van en la lista, el SP del arma, lo que da una tropa—;
-* `screen.rs`: la geometría de la pantalla y los textos —las órdenes,
-  los renglones de la victoria, el revivido— y el chequeo de que entran;
-* `simulate.rs`: la pelea turno por turno —el azar, los combatientes, las
-  páginas de tropa—, con cada fórmula nombrando su función de easyrpg;
-* `model.rs`: los pedidos y las respuestas de `model`, `simulate` y
-  `lines`. Su README dice la forma de cada uno.
+* `db.rs`: the database as the battle reads it —actors, skills, items,
+  enemies, states, terms and, only if the request names one, the troops,
+  which are almost the whole database—;
+* `rules.rs`: what RM2k says about the database, trimmed to what this battle
+  does —which skills it offers and to whom, what each enemy does, which items
+  go in the list, the weapon's SP, what a troop gives—;
+* `screen.rs`: the screen's geometry and the texts —the orders, the victory
+  rows, the revived one— and the check that they fit;
+* `simulate.rs`: the battle turn by turn —the randomness, the combatants, the
+  troop pages—, with each formula naming its easyrpg function;
+* `model.rs`: the requests and answers of `model`, `simulate` and `lines`.
+  Its README states the shape of each one.
 
-Del lado de Python queda `port/battle_stage.py` —el pedido de `model`—,
-`item_text` pasó a `port/screen_stage.py`, y las pruebas tienen
-`arnes/modelo.py`, con los mismos nombres del modelo de antes
-(`Battle`, `play_turn`, `actor_of`), que guarda los pasos y vuelve a jugar
-la pelea entera cada vez que hay que mirarla.
+On the Python side, `port/battle_stage.py` remains —`model`'s request—,
+`item_text` moved to `port/screen_stage.py`, and the tests have
+`arnes/modelo.py`, with the same names as the earlier model (`Battle`,
+`play_turn`, `actor_of`), which keeps the steps and replays the whole battle
+every time it needs to be looked at.
 
-**Lo que cambió de la frontera planeada**: nada de fondo. Dos cosas que
-no estaban escritas:
+**What changed from the planned boundary**: nothing substantial. Two things
+that weren't written down:
 
-* **`CheckTurns` dejó de probarse en las pruebas de ABL**: era
-  `modelo._turns`, una función del modelo que la prueba llamaba directo.
-  Los cuatro casos pasaron al crate (`check_turns_is_easyrpgs`), y la
-  prueba de los Lazer Teeth espera los turnos 1 y 4 escritos.
-* **Las órdenes con ítem o habilidad llevan su número**, no el objeto de
-  `lcf`; y la tropa de una pelea va por número (`troop=`, `pages=`).
+* **`CheckTurns` stopped being tested in ABL's tests**: it was
+  `modelo._turns`, a model function the test called directly. The four cases
+  moved to the crate (`check_turns_is_easyrpgs`), and the Lazer Teeth test
+  expects turns 1 and 4 written out.
+* **Orders with an item or skill carry its number**, not the `lcf` object; and
+  a battle's troop goes by number (`troop=`, `pages=`).
 
-## Cómo se verificó
+## How it was verified
 
-Con scripts descartables en `<scratchpad>/cardon/`:
+With throwaway scripts in `<scratchpad>/cardon/`:
 
-* **`compara_model.py`**: lo que `mapdata` le preguntaba a `battle.py` y
-  a `battle_screen.py`, contra `model`, en 41 juegos de entradas sobre el
-  juego entero —todos los actores, tropas e ítems, y cuarenta al azar con
-  pares (actor, habilidad) de más—, y la geometría nombre por nombre:
-  igual.
-* **`compara_simulate.py`**: 5500 peleas al azar sobre el juego entero
-  —con ataques, defensas, huidas, ítems, habilidades, acciones de
-  enemigo sueltas, HP puestos a mano, páginas de tropa con sus switches—,
-  el estado entero de cada combatiente y lo que devolvió cada paso:
-  iguales, y las que el Python rechazaba, rechazadas.
-* **`referencia.py`**: el juego chico de las pruebas del crate y los
-  hashes del Python —400 peleas, 1808 turnos, 30 que se niegan; 26
-  modelos; los renglones de la victoria—, que ahora son
-  `cargo test -p rm2k-snes-battle`.
-* **Los cartuchos**: `NO_CACHE=1 just cartuchos` y el sha256 de todo
-  `rom/build/` —1032 archivos, sin el caché, los `.o`, `sello.txt` ni
-  `conversor.log`; el `.dbg` sin `mtime`; los PNG decodificados—, iguales
-  a la base después de cada commit hasta el borrado. Después de la prosa,
-  iguales salvo los tres `.dbg`, que nombran el tamaño de los fuentes del
-  runtime: con los tamaños de antes dan el mismo sha256
-  (`verifica_dbg.py`); los comentarios se reescribieron sin cambiar
-  cuántos renglones tiene cada archivo, así que ninguna línea se corrió.
-* **Los sha256 de las ROMs**, iguales en `main` y acá, también después
-  del merge:
+* **`compara_model.py`**: what `mapdata` asked `battle.py` and
+  `battle_screen.py`, against `model`, on 41 sets of inputs over the whole
+  game —all the actors, troops and items, and forty random ones with extra
+  (actor, skill) pairs—, and the geometry name by name: identical.
+* **`compara_simulate.py`**: 5500 random battles over the whole game —with
+  attacks, defends, escapes, items, skills, separate enemy actions, HP set by
+  hand, troop pages with their switches—, each combatant's whole state and
+  what each step returned: identical, and the ones the Python rejected,
+  rejected.
+* **`referencia.py`**: the crate tests' small game and the Python's hashes
+  —400 battles, 1808 turns, 30 that refuse; 26 models; the victory rows—,
+  which are now `cargo test -p rm2k-snes-battle`.
+* **The cartridges**: `NO_CACHE=1 just cartuchos` and the sha256 of all of
+  `rom/build/` —1032 files, without the cache, the `.o`s, `sello.txt` or
+  `conversor.log`; the `.dbg` without `mtime`; the PNGs decoded—, identical to
+  the baseline after each commit up to the deletion. After the prose,
+  identical except the three `.dbg`s, which name the size of the runtime's
+  sources: with the earlier sizes they give the same sha256
+  (`verifica_dbg.py`); the comments were rewritten without changing how many
+  lines each file has, so no line shifted.
+* **The ROMs' sha256**, identical on `main` and here, also after the merge:
   * `release/abl.sfc` `cdcc323197ee6c66d82b1304ce20c3c37f4124d13a6867e851fd13226046b7df`
   * `tests/special/prueba.sfc` `15e4f331fe8ff8123803ae3819a2212a5b84d71cd0a053b7261a9188bbab84b9`
   * `tests/encounter-every-step/prueba.sfc` `dc83ed698b348032514dbb76eaf5f535b6296944075fcba786087533ed5b8a4b`
-* **Las tandas**, después de cada commit y sobre el merge: `just pruebas`
-  878, `just -f tools/justfile test` 49, `cargo test -p rm2k-snes-battle`
-  en verde.
+* **The suites**, after each commit and on the merge: `just pruebas` 878,
+  `just -f tools/justfile test` 49, `cargo test -p rm2k-snes-battle` green.
 
-## Al mergear
+## When merging
 
-* Instalar en el global `battle`: `just -f tools/justfile install
-  battle`. Sin el `rm2k-snes-battle` nuevo el conversor para en el
-  segundo llamado —el viejo no sabe `model`— y las pruebas de la pelea
-  también.
-* `install-scripts` no hace falta: se agregaron y se borraron módulos
-  (`port/battle_stage.py`, `rom/pruebas/arnes/modelo.py`), no programas,
-  y ningún symlink del global apunta a ellos.
-* No mueve la ROM ni goldens.
+* Install `battle` in the global: `just -f tools/justfile install battle`.
+  Without the new `rm2k-snes-battle` the converter stops at the second call
+  —the old one doesn't know `model`— and so do the battle tests.
+* `install-scripts` isn't needed: modules were added and deleted
+  (`port/battle_stage.py`, `rom/pruebas/arnes/modelo.py`), not programs, and
+  no global symlink points at them.
+* It moves neither the ROM nor goldens.
 
-## Lo que queda afuera
+## What stays out
 
-* **Los dibujos de la pelea**: los fondos, los battlers y las animaciones.
-  Los tres pasan por el escalado de Pillow (`LANCZOS`) y por
-  `palette.reduce`, que son los mismos de `palette.convert` —el título, el
-  Game Over, las imágenes—, y las animaciones además por `color.apply_tint`,
-  que es el del tinte de la pantalla. Llevarlos sin eso sería mudarlos a
-  medias: el escalado tiene que pasar primero, para todos juntos. Lo que no
-  es de píxeles —cuáles fondos y battlers van, `patch_uses`, el formato de
-  sus bytes— se queda con ellos, porque sin los píxeles no hace nada.
+* **The battle's drawings**: the backgrounds, the battlers and the
+  animations. All three go through Pillow's scaling (`LANCZOS`) and through
+  `palette.reduce`, which are the same as `palette.convert`'s —the title, the
+  Game Over, the pictures—, and the animations also through
+  `color.apply_tint`, which is the screen tint's. Bringing them over without
+  that would be moving them halfway: the scaling has to move first, for all of
+  them together. What isn't about pixels —which backgrounds and battlers go,
+  `patch_uses`, their bytes' format— stays with them, because without the
+  pixels it does nothing.
 
-## Lo que falta
+## What's missing
 
-* **Los dibujos de la pelea**, de arriba: `scene.py`, `battle_scenes.py`,
-  `animation.py` y `battle_animations.py`, después del escalado.
-* **Los actores no tienen crítico, ni en la ROM ni en el modelo, y el LDB
-  dice que sí.** El modelo de Python leía `critical_hit` con un `getattr`
-  que siempre caía en el default —`lcf.Actor` no guarda el campo—, y
-  `battle.s` pone `BA_CRIT` en cero con el comentario "no actor in ABL has
-  a critical hit". El volcado dice lo contrario: Kersh, Core, Manta,
-  Talan, Arden y AG7 tienen `critical_hit` prendido, la mayoría con
-  `critical_hit_chance` 30. Los dos lados se equivocan igual, así que
-  ninguna prueba lo ve. Se conservó —con un comentario en
-  `Combatant::actor`—, porque arreglarlo mueve la ROM y el azar de todas
-  las peleas: es de otra tarea, y habría que medirlo contra el original.
-* **Las reglas del actor están tres veces en Rust**: el parámetro en su
-  nivel y el equipo sumado viven en `rm2k-snes-battle` (`rules.rs`), en
-  `rm2k-snes-screens` (`texts.rs`) y, en Python, en `port/rules.py`, que
-  todavía usan la emisión y el compilador. Su lugar es `rm2k-rules`; no se
-  movieron para no tocar otras dos etapas.
-* **`lcf` guarda campos que sólo leía `battle.py`**: `Enemy.actions` y
-  `EnemyAction`, `Actor.rename_skill` y `skill_name`, `Skill.id`. Quedaron
-  sin uso; se pueden borrar.
-* **Una pelea de las pruebas se vuelve a jugar entera en cada turno**:
-  cuesta un proceso por turno —diez milisegundos, noventa con una tropa,
-  que son casi toda la base—, y ninguna prueba juega más de treinta.
+* **The battle's drawings**, from above: `scene.py`, `battle_scenes.py`,
+  `animation.py` and `battle_animations.py`, after the scaling.
+* **The actors have no critical hit, neither in the ROM nor in the model, and
+  the LDB says they do.** The Python model read `critical_hit` with a
+  `getattr` that always fell to the default —`lcf.Actor` doesn't store the
+  field—, and `battle.s` sets `BA_CRIT` to zero with the comment "no actor in
+  ABL has a critical hit". The dump says the opposite: Kersh, Core, Manta,
+  Talan, Arden and AG7 have `critical_hit` on, most with
+  `critical_hit_chance` 30. Both sides are wrong the same way, so no test sees
+  it. It was kept —with a comment in `Combatant::actor`—, because fixing it
+  moves the ROM and the randomness of every battle: it belongs to another
+  task, and it would have to be measured against the original.
+* **The actor rules are in Rust three times**: the parameter at its level and
+  the summed equipment live in `rm2k-snes-battle` (`rules.rs`), in
+  `rm2k-snes-screens` (`texts.rs`) and, in Python, in `port/rules.py`, which
+  the emission and the compiler still use. Their place is `rm2k-rules`; they
+  weren't moved so as not to touch two other stages.
+* **`lcf` stores fields only `battle.py` read**: `Enemy.actions` and
+  `EnemyAction`, `Actor.rename_skill` and `skill_name`, `Skill.id`. They were
+  left unused; they can be deleted.
+* **A test battle is replayed in full on every turn**: it costs one process
+  per turn —ten milliseconds, ninety with a troop, which is almost the whole
+  database—, and no test plays more than thirty.

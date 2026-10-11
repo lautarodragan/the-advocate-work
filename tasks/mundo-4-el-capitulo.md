@@ -1,167 +1,167 @@
 ---
-name: "Mundo 4: Tasgarde, Eisen y el puente"
-description: "El hito 4 de el-mundo-y-lo-que-sigue: el camino principal del capítulo del mundo en release, el alternar switches, el corte para borrar, y el fin de la demo en la entrada de Tangle Forest"
+name: "World 4: Tasgarde, Eisen and the bridge"
+description: "Milestone 4 of el-mundo-y-lo-que-sigue: the main path of the world chapter in release, toggling switches, the cut for erasing, and the end of the demo at the entrance to Tangle Forest"
 type: feature
 status: done
 ---
 
-# Qué
+# What
 
-El hito 4 de `el-mundo-y-lo-que-sigue.md`. Sale de `3c16a17`, con los
-hitos 1 a 3 (`testing/mundo-1-*`, `mundo-2-sorbe`, `mundo-3-el-espacio`), y
-mergea `main` con el mapa de debug (`455f9fc`).
+Milestone 4 of `el-mundo-y-lo-que-sigue.md`. It starts from `3c16a17`, with
+milestones 1 to 3 (`testing/mundo-1-*`, `mundo-2-sorbe`, `mundo-3-el-espacio`),
+and merges `main` with the debug map (`455f9fc`).
 
-* **La regla de mapas pasa a `MENOR_A = 105`**, por id, como contestó taro
-  (pregunta 5). La exclusión crece a dieciséis —65 carpeta, 75 96 97 98
-  inalcanzables, 104 de otro capítulo, y lo opcional: 67 71 72 de Yun Town,
-  68 103 de Drust Camp— y los agregados quedan en 164, 259, 255 y, detrás de
-  `CON_MAPA_DE_DEBUG`, el 900. El 70, el 73 y el 74, que eran mapas de prueba,
-  pasan a ser del juego por la regla; el 255, por agregado. El 348 sigue de
-  prueba: es la tienda opcional del mundo.
-* **`ControlSwitches` que alterna**: sin opcode, una rama por switch con lo
-  que ya hay (`_compilar_alternar`). El juego alterna uno solo, el 286, doce
-  veces, en el 89 y el 93.
-* **`ChangeScreenTransitions` al corte para borrar** (19, el 95 ev55) y a
-  "ninguna" (20, el 93 ev4), que compila al corte: `TRANSICION_CORTE`, y
-  `fundido_desde` arranca el fundido en su último cuadro de ida. El corte y
-  "ninguna" para mostrar siguen sin compilar: nadie los pide.
-* **El fin de la demo** pasa del 66 ev13 (vuelve al original: lleva a
-  Tasgarde) al **66 ev19, la entrada de Tangle Forest**, y no al 18 como
-  decía el encargo: ver abajo.
-* **El contador de Fortitude** queda como deuda
-  (`el-contador-de-fortitude-no-se-ve.md`, con lo medido: el minijuego
-  se puede perder). El minijuego se juega hasta el final sin él.
+* **The map rule moves to `MENOR_A = 105`**, by id, as taro answered
+  (question 5). The exclusion grows to sixteen —65 a folder, 75 96 97 98
+  unreachable, 104 from another chapter, and the optional ones: 67 71 72 of
+  Yun Town, 68 103 of Drust Camp— and the additions stay at 164, 259, 255 and,
+  behind `CON_MAPA_DE_DEBUG`, 900. 70, 73 and 74, which were test maps, become
+  part of the game by the rule; 255, by addition. 348 stays a test map: it's
+  the world's optional shop.
+* **`ControlSwitches` that toggles**: no opcode, one branch per switch with
+  what already exists (`_compilar_alternar`). The game toggles only one, 286,
+  twelve times, on 89 and 93.
+* **`ChangeScreenTransitions` to the cut for erasing** (19, 95 ev55) and to
+  "none" (20, 93 ev4), which compiles to the cut: `TRANSICION_CORTE`, and
+  `fundido_desde` starts the fade at its last outgoing frame. The cut and
+  "none" for showing still don't compile: nobody asks for them.
+* **The end of the demo** moves from 66 ev13 (it goes back to the original:
+  it leads to Tasgarde) to **66 ev19, the entrance to Tangle Forest**, and not
+  to 18 as the assignment said: see below.
+* **The Fortitude counter** stays as debt
+  (`el-contador-de-fortitude-no-se-ve.md`, with what was measured: the
+  minigame can be lost). The minigame is played to the end without it.
 
-No hizo falta ningún opcode ni RAM lejana nueva: el 0x33 y $7E7A10-$7E7A2F
-quedan libres. Ningún índice nuevo en tuplas de pruebas.
+No opcode nor new far RAM was needed: 0x33 and $7E7A10-$7E7A2F stay free. No
+new index in test tuples.
 
-# El túnel está del otro lado del bosque
+# The tunnel is on the other side of the forest
 
-El plan daba a Tangle Forest por opcional porque ningún switch del camino
-principal depende de él (`dependencias.py`). Pero depende el mapa: del lado
-oeste del puente, el 66 es una isla que llega a la entrada de Tangle Forest
-(43, 57) y a ningún lado más, y el túnel a Paradise (el 18, en (5, 64)) está
-en otra, la del sudoeste, que sólo se alcanza por el bosque: 310 → 311 → 313
-→ 312, que sale al 66 en (34, 56). Lo dice también el juego: al entrar,
-Talan dice "If Vago's right, Paradise should be just a short journey to the
-west, on the other side of this forest."
+The plan considered Tangle Forest optional because no switch of the main path
+depends on it (`dependencias.py`). But the map does: on the west side of the
+bridge, 66 is an island that reaches the entrance to Tangle Forest (43, 57)
+and nowhere else, and the tunnel to Paradise (18, at (5, 64)) is on another
+one, the southwest one, which can only be reached through the forest: 310 →
+311 → 313 → 312, which comes out onto 66 at (34, 56). The game says so too: on
+entering, Talan says "If Vago's right, Paradise should be just a short journey
+to the west, on the other side of this forest."
 
-Así que la demo termina al entrar al bosque: el fork del 66 le saca el
-`Teleport` al 310 a la página 1 del 19 y le pone el cartel del fin detrás de
-los dos mensajes de Talan. El 18 quedó como el original (su `Teleport` al 105
-no compila y la página no hace nada). **Tangle Forest es el hito siguiente del
-camino principal**, no lo opcional; lo que pide está en el plan (el
-`EraseEvent` del 311, las condiciones de cronómetro del 312). Anotado en
-`el-mundo-y-lo-que-sigue.md`, hito 4.
+So the demo ends on entering the forest: the fork of 66 removes the `Teleport`
+to 310 from page 1 of 19 and puts the end sign after Talan's two messages. 18
+stayed as the original (its `Teleport` to 105 doesn't compile and the page
+does nothing). **Tangle Forest is the next milestone of the main path**, not
+the optional part; what it requires is in the plan (311's `EraseEvent`, 312's
+timer conditions). Noted in `el-mundo-y-lo-que-sigue.md`, milestone 4.
 
-# Hecho y comprobado
+# Done and checked
 
-* **Todas las páginas disparables de los mapas nuevos compilan**, contadas
-  con `culpables.py` de `mundo-plan` contra la lista de `release`: 74, 85 a
-  95, 99 a 102, 259 y 255. En el 66 no compilan cinco, las de los destinos
-  que no están: el 67, el 68, el 105 (el 18, el túnel) y dos al 312.
-* **`test_recorrido_capitulo_golden.py`**, nueva: de la entrada de Tasgarde
-  al título. El guardia, el laboratorio, la historia de Eisen, **el minijuego
-  del 95 jugado entero** —tres palancas y la escotilla, con saltos (eventos
-  de acción que mueven al héroe) y escaleras (de contacto); la ruta termina
-  con 4 de 99 de fortaleza—, la vuelta a Sorbe, el puente, el plan de Arden,
-  debajo del puente con la pelea del séptimo crujido (con los HP en 999; los
-  diez crujidos que hay que pisar salen de un BFS que los minimiza) y el fin
-  de la demo. Cobra en la RAM los grupos de cada tramo y lo que dejan las
-  transiciones: el corte al llegar al 95, el mosaico al volver a Sorbe y el
-  fundido después de Vago. Sus capturas no están bendecidas.
-* **`test_capitulo.py`**, nueva: goldens de la llegada al 74, al 85, al 95,
-  al 259 y al 255, con `celdas_mal_dibujadas` en cero.
-* **`test_borrar_con_el_corte`** (casos `transicion-corte` y
-  `transicion-ninguna`): el brillo en cero y el mapa cargado en el primer
-  tick del fundido, contra la rampa entera del zoom. **Se vio fallar** con
-  `fundido_desde` ignorando el corte: llega a cero en el tick 23.
-* **`test_recorrido_sorbe_golden.py`** termina ahora al entrar Dalia a
-  Tasgarde, sola, al final de la ruta del auto.
-* **Al mergear `main`** (el mapa de debug) chocó `AGREGADOS`: quedó
-  `(164, 259, 255)` más el 900 detrás del flag. `just techos` otra vez sobre
-  el árbol mergeado, por los cinco temas nuevos del capítulo.
-* **El directorio del SPC700 se llena** con los temas del capítulo: la
-  segunda tanda de `snes_music.copias` para por falta de entradas.
+* **Every triggerable page of the new maps compiles**, counted with
+  `mundo-plan`'s `culpables.py` against `release`'s list: 74, 85 to 95, 99 to
+  102, 259 and 255. On 66 five don't compile, those of the destinations that
+  aren't in: 67, 68, 105 (18, the tunnel) and two to 312.
+* **`test_recorrido_capitulo_golden.py`**, new: from the entrance to Tasgarde
+  to the title. The guard, the lab, Eisen's story, **95's minigame played in
+  full** —three levers and the hatch, with jumps (action events that move the
+  hero) and stairs (touch ones); the route ends with 4 of 99 fortitude—, the
+  return to Sorbe, the bridge, Arden's plan, under the bridge with the battle
+  of the seventh creak (with HP at 999; the ten creaks that have to be stepped
+  on come from a BFS that minimizes them) and the end of the demo. It checks in
+  RAM the parties of each stretch and what the transitions leave: the cut on
+  arriving at 95, the mosaic on returning to Sorbe and the fade after Vago. Its
+  screenshots aren't blessed.
+* **`test_capitulo.py`**, new: goldens of the arrival at 74, 85, 95, 259 and
+  255, with `celdas_mal_dibujadas` at zero.
+* **`test_borrar_con_el_corte`** (cases `transicion-corte` and
+  `transicion-ninguna`): the brightness at zero and the map loaded on the
+  fade's first tick, against the zoom's whole ramp. **It was seen failing**
+  with `fundido_desde` ignoring the cut: it reaches zero on tick 23.
+* **`test_recorrido_sorbe_golden.py`** now ends when Dalia enters Tasgarde,
+  alone, at the end of the car's route.
+* **When merging `main`** (the debug map) `AGREGADOS` clashed: it ended up as
+  `(164, 259, 255)` plus 900 behind the flag. `just techos` again on the
+  merged tree, because of the chapter's five new themes.
+* **The SPC700 directory fills up** with the chapter's themes: the second
+  batch of `snes_music.copias` stops for lack of entries.
   `test_los_efectos_comparten_lugares_y_a_las_copias_les_sobran_entradas`
-  pedía que no pasara; ahora es `test_los_efectos_comparten_lugares_del_directorio`
-  y pide que los efectos ocupen menos entradas que las de siempre. Es un
-  límite de cuánto se puede mejorar la música, y va a volver con cada tema.
-* **`just cartuchos` y `just pruebas` en verde** sobre el árbol mergeado.
+  asked for that not to happen; now it's
+  `test_los_efectos_comparten_lugares_del_directorio` and asks that the
+  sound effects take fewer entries than the usual ones. It's a limit on how
+  much the music can be improved, and it'll come back with each theme.
+* **`just cartuchos` and `just pruebas` green** on the merged tree.
 
-# Espacio
+# Space
 
-`just espacio release` sobre el árbol mergeado (con el mapa de debug):
-115 de 124 bancos de datos, 9 libres; banco 0 137 B; banco 1 7.722 B; BSS 138
-y ZEROPAGE 4; textos 142.138 de 262.144 B. Antes del merge, sin el mapa de
-debug, eran 114 bancos, que es lo que el hito 3 midió para este camino.
+`just espacio release` on the merged tree (with the debug map): 115 of 124
+data banks, 9 free; bank 0 137 B; bank 1 7,722 B; BSS 138 and ZEROPAGE 4;
+texts 142,138 of 262,144 B. Before the merge, without the debug map, it was
+114 banks, which is what milestone 3 measured for this path.
 
-# La música de antes, sin MSU-1
+# The earlier music, without MSU-1
 
-Medido par por par con `Banco`, como en `el-audio-despues-de-lashe-city.md`
-(los argumentos de `build_varios` capturados de cada árbol y el reparto
-rearmado; baja = más de 0,5 kHz), contra `main` 455f9fc1: **bajan 43 pares
-(tema, instrumento) de 15 temas que ya estaban, y suben 51.** Los peores, golpes
-de batería y algún instrumento de ~22 a ~14,4 kHz (Lunar_Pyramid, wb3shop,
-escape_newyork, Deflector1, bubstix…). La lista entera está en el `LEEME.txt`
-de las grabaciones.
+Measured pair by pair with `Banco`, as in `el-audio-despues-de-lashe-city.md`
+(the arguments of `build_varios` captured from each tree and the allocation
+rebuilt; a drop = more than 0.5 kHz), against `main` 455f9fc1: **43 (theme,
+instrument) pairs of 15 themes that were already there go down, and 51 go
+up.** The worst, drum hits and some instrument from ~22 to ~14.4 kHz
+(Lunar_Pyramid, wb3shop, escape_newyork, Deflector1, bubstix…). The whole list
+is in the recordings' `LEEME.txt`.
 
-No es el directorio lleno: la causa son los cinco temas nuevos, que comparten
-muestras con los de antes y cambian qué copias hace `snes_music.copias`
-(sacándolos de la captura, bajan 0; con sólo jackalstg2, 36; con sólo Story
-Music, 26). Sin dejar que la segunda tanda copie para los temas nuevos queda
-lugar en el directorio y bajan igual 42. Probado sin recuperarlos:
-`TEMAS_APARTE` no aplica (cada tema nuevo ya va solo en su paquete); la
-primera tanda más corta o más larga (`SE_DE_SIEMPRE` de 70 a 130: lo mejor
-son 29, y cambia la tanda que taro aprobó); `COPIA_HASTA` 0,85 y 0,95; sin la
-herencia de jackalstg2 ni el paquete del 259. **No se cambió nada**: por la
-regla de taro, los quince temas están grabados antes y después, sin MSU-1, en
-el directorio de audio del 2026-09-27 para el mundo 4, con un `LEEME.txt` que
-dice qué escuchar. Recuperarlos pediría tocar cómo `copias` elige, que es su
-propia tarea.
+It isn't the full directory: the cause is the five new themes, which share
+samples with the earlier ones and change which copies `snes_music.copias`
+makes (removing them from the capture, 0 go down; with only jackalstg2, 36;
+with only Story Music, 26). Without letting the second batch copy for the new
+themes there's room left in the directory and 42 go down anyway. Tried without
+recovering them: `TEMAS_APARTE` doesn't apply (each new theme already goes
+alone in its package); a shorter or longer first batch (`SE_DE_SIEMPRE` from
+70 to 130: the best is 29, and it changes the batch taro approved);
+`COPIA_HASTA` 0.85 and 0.95; without jackalstg2's inheritance or 259's
+package. **Nothing was changed**: per taro's rule, the fifteen themes are
+recorded before and after, without MSU-1, in the audio directory of 2026-09-27
+for world 4, with a `LEEME.txt` that says what to listen for. Recovering them
+would require touching how `copias` chooses, which is its own task.
 
-# Deuda
+# Debt
 
-* **Los panoramas no se dibujan**: el puente (259), debajo (255), el 95, el
-  94 y el 99 tienen uno y se ven en negro detrás del mapa, como todo panorama
-  del port (`panorama-del-mapa-2.md`).
-* **El contador de Fortitude no se ve**: `el-contador-de-fortitude-no-se-ve.md`.
-* Borrar con "ninguna" es un cuadro negro y no el fundido del mapa viejo al
-  nuevo: `divergencias/las-transiciones-del-teletransporte.md`.
-* Una partida guardada en el save point del minijuego vuelve con el fundido
-  en vez del corte (la transición no viaja en la partida): sólo se nota en el
-  salto al principio cuando se acaba la fortaleza. Ver `TRANSICION_BORRAR` en
+* **The panoramas aren't drawn**: the bridge (259), under it (255), 95, 94 and
+  99 have one and show black behind the map, like every panorama in the port
+  (`panorama-del-mapa-2.md`).
+* **The Fortitude counter isn't visible**: `el-contador-de-fortitude-no-se-ve.md`.
+* Erasing with "none" is a black frame and not the fade from the old map to
+  the new one: `divergencias/las-transiciones-del-teletransporte.md`.
+* A save made at the minigame's save point comes back with the fade instead of
+  the cut (the transition doesn't travel in the save): it's only noticeable in
+  the jump to the start when fortitude runs out. See `TRANSICION_BORRAR` in
   `rom/src/ram_lejana.s`.
-* El mapa de debug no tiene una puerta a Tasgarde ni al puente.
+* The debug map has no door to Tasgarde or to the bridge.
 
-# Lo que no cubre `just pruebas`
+# What `just pruebas` doesn't cover
 
-* La rama de Saldra y la de AG7 en el puente: el plan de Arden es la página
-  del 54; con Saldra (56) o AG7 (150) corren las del 13-14 y el 15-16 del
-  259, que ninguna prueba juega.
-* Las demás elecciones: "Not yet" en el puente (vuelve al 66 y prende el 851,
-  con otra página después) y el camino por debajo con otros crujidos (hay
-  peleas en 13, 20, 26…: la prueba juega sólo la del 7).
-* Perder el minijuego del 95 (la paralela 56) y volver a empezarlo.
-* Los save points del 74 y del 95.
+* Saldra's branch and AG7's on the bridge: Arden's plan is 54's page; with
+  Saldra (56) or AG7 (150) those of 13-14 and 15-16 of 259 run, which no test
+  plays.
+* The other choices: "Not yet" on the bridge (it goes back to 66 and turns on
+  851, with another page afterwards) and the path underneath with other creaks
+  (there are battles at 13, 20, 26…: the test only plays the 7th).
+* Losing 95's minigame (parallel 56) and starting it over.
+* The save points of 74 and 95.
 
-# Qué tiene que probar taro
+# What taro has to test
 
-* **Escuchar los wav de antes y después** de los quince temas cuya música
-  baja sin MSU-1 (ver "La música de antes"), y decir si se acepta.
+* **Listen to the before and after wavs** of the fifteen themes whose music
+  drops without MSU-1 (see "The earlier music"), and say whether it's
+  accepted.
 
-* Desde el viaje de Dalia: Tasgarde, el guardia, el laboratorio, Eisen y el
-  interruptor, y la historia de Eisen entera (86 a 94): que los mensajes y
-  las cinemáticas se vean bien, y el salto del 93 al 95 (un cuadro negro en
-  vez del fundido cruzado del original).
-* **El minijuego del 95, sin ver la fortaleza**: se puede perder, y con la
-  ruta directa sobran 4 de 99. ¿Se entiende qué hacer? ¿Y qué pasa al
-  perder?
-* La salida del minijuego (el corte), la simulación del trono (el mosaico) y
-  la vuelta a Sorbe con Talan.
-* El puente: la charla de los guardias, el plan de Arden, y **debajo del
-  puente**: los crujidos, las peleas (¿se ganan con el grupo de una partida
-  jugada?) y la salida del otro lado. El fondo del puente es negro
-  (panorama).
-* La entrada al bosque: los dos mensajes de Talan, el cartel del fin y la
-  vuelta al título.
+* From Dalia's trip: Tasgarde, the guard, the lab, Eisen and the switch, and
+  Eisen's whole story (86 to 94): that the messages and the cutscenes look
+  right, and the jump from 93 to 95 (a black frame instead of the original's
+  crossfade).
+* **95's minigame, without seeing the fortitude**: it can be lost, and with
+  the direct route 4 of 99 are left over. Is it clear what to do? And what
+  happens on losing?
+* The exit from the minigame (the cut), the throne simulation (the mosaic) and
+  the return to Sorbe with Talan.
+* The bridge: the guards' talk, Arden's plan, and **under the bridge**: the
+  creaks, the battles (can they be won with the party of a played save?) and
+  the exit on the other side. The bridge's background is black (panorama).
+* The entrance to the forest: Talan's two messages, the end sign and the
+  return to the title.
