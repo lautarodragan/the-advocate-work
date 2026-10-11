@@ -1,57 +1,57 @@
 ---
-name: "Optimizar los eventos paralelos al compilar"
-description: "Detectar patrones en las páginas paralelas y generar algo más barato: correr menos seguido, o sólo cuando algo se mueve"
+name: "Optimise parallel events when compiling"
+description: "Detect patterns in the parallel pages and generate something cheaper: run less often, or only when something moves"
 type: refactor
 status: wishlist
 ---
 
-Idea de taro, el 2026-09-26, a partir de lo que midió la investigación de
-los chips (`chips-sa-1-y-s-dd1.md`): en el mapa 11 las 13 páginas paralelas
-sin espera se comen ~123 de las 262 líneas del cuadro, y casi todas
-comparan coordenadas. *"Es completamente normal que los compiladores
-optimicen código"*: el conversor ya es un compilador de RM2k a bytecode.
+taro's idea, on 2026-09-26, from what the chips investigation measured
+(`chips-sa-1-y-s-dd1.md`): on map 11 the 13 parallel pages
+without a wait eat ~123 of the frame's 262 lines, and almost all of them
+compare coordinates. *"It is completely normal for compilers to
+optimise code"*: the converter already is a compiler from RM2k to bytecode.
 
-Ideas, de la más barata a la más ambiciosa:
+Ideas, from the cheapest to the most ambitious:
 
-1. **Correr las paralelas cada N cuadros** en vez de cada cuadro. Se probó
-   el 2026-09-26 (`PARALELOS_CADA`, en `ef59e199`) y se descartó el
-   2026-09-30 sin mergear; la rama se borró. Lo que midió:
-   - en el mapa 11 el costo promedio de las paralelas bajó de 125 líneas
-     por vuelta a 36 (N = 60), pero **el peor cuadro no bajó** (~344),
-     porque en la vuelta que toca corren las 13 páginas juntas: para bajar
-     el pico hay que repartirlas entre vueltas, no espaciarlas;
-   - en la terraza el gasto no eran las paralelas sino el recálculo de
-     paletas de los destellos, y en el mapa 8 no había nada que ganar;
-   - la reacción del "me atraparon" pasó de 62 cuadros a 65-69 con N = 4 y
-     a 149-160 con N = 60; con N = 4 fallaban 7 casos de la tanda,
-     animaciones de paralelas con Wait en otra fase y dos de las piedras;
-   - el 50 % de lag que siente taro en el mapa 11 no se reprodujo en
-     ningún emulador: hace falta su camino exacto.
-2. **Un disparador sintético "al moverse"**: además de "paralelo", páginas
-   que corren sólo cuando un evento (o el héroe) **cambia de celda** —no de
-   pixel—. El código que mueve un evento hace una llamada que recorre las
-   páginas con ese disparador. El conversor detecta qué paralelas son
-   "comparar coordenadas y hacer algo" y las compila así. Y en build time se
-   sabe si un mapa tiene alguna: un booleano por mapa, así el runtime no paga
-   nada en los mapas sin ellas.
-   - El caso de las luces del mapa 11 es el primero.
-   - El segundo: **el evento paralelo que prende y apaga el guardado en el
-     menú según si el héroe está parado sobre un save point** (compara
-     coordenadas). Hoy no está implementado.
-3. **Hornear patrones que se repiten** en las paralelas ("leer la X de un
-   evento y compararla"), en opcodes compuestos. Sólo en paralelas, que son
-   las que pesan.
-4. **Eliminar código que no puede correr** y otras optimizaciones clásicas,
-   si aparecen.
+1. **Run the parallel ones every N frames** instead of every frame. It was tried
+   on 2026-09-26 (`PARALELOS_CADA`, in `ef59e199`) and discarded on
+   2026-09-30 without merging; the branch was deleted. What it measured:
+   - on map 11 the average cost of the parallel ones went down from 125 lines
+     per pass to 36 (N = 60), but **the worst frame didn't go down** (~344),
+     because on the pass when they're due the 13 pages run together: to lower
+     the peak they have to be spread across passes, not spaced out;
+   - on the terrace the cost wasn't the parallel ones but the recomputation of
+     the flashes' palettes, and on map 8 there was nothing to gain;
+   - the reaction of "me atraparon" went from 62 frames to 65-69 with N = 4 and
+     to 149-160 with N = 60; with N = 4, 7 cases of the suite failed,
+     animations of parallel events with Wait in another phase and two of the stones;
+   - the 50 % lag taro feels on map 11 wasn't reproduced in
+     any emulator: his exact path is needed.
+2. **A synthetic "on move" trigger**: besides "parallel", pages
+   that run only when an event (or the hero) **changes cell** —not
+   pixel—. The code that moves an event makes a call that walks over the
+   pages with that trigger. The converter detects which parallel ones are
+   "compare coordinates and do something" and compiles them that way. And at build time
+   it is known whether a map has any: one boolean per map, so the runtime pays
+   nothing on maps without them.
+   - The case of the lights on map 11 is the first.
+   - The second: **the parallel event that turns saving in the menu on and off
+     depending on whether the hero is standing on a save point** (it compares
+     coordinates). Today it isn't implemented.
+3. **Bake patterns that repeat** in the parallel ones ("read an event's X
+   and compare it"), into compound opcodes. Only in parallel ones, which are
+   the ones that weigh.
+4. **Eliminate code that can't run** and other classic optimisations,
+   if they turn up.
 
-Lo que tiene que cuidar: la semántica de RM2k (el orden de `Game_Map::Update`,
-qué ve una página en el cuadro en que otra la cambia), y que sea general del
-motor y no específico de ABL.
+What it has to take care of: RM2k's semantics (the order of `Game_Map::Update`,
+what a page sees in the frame in which another one changes it), and that it be
+general to the engine and not specific to ABL.
 
-**El 2026-09-27 se hizo la 3 para un patrón**, el de "¿está este personaje en
-la celda de estas variables?", que es el de los autos de la carrera, las luces
-del mapa 11 y unas doscientas cincuenta páginas del juego: `OP_CELL_TEST`, y
-un atajo que corre esas páginas sin el intérprete cuando no pasan de la
-condición. Ver `carrera-2-a-sesenta-cuadros.md`, que tiene medido
-también el límite de la 2 para la carrera: cero en el tick más pesado,
-porque el héroe cambia de celda cada dos ticks.
+**On 2026-09-27 number 3 was done for one pattern**, the one of "is this character
+on the cell of these variables?", which is the one of the race cars, the lights
+on map 11 and some two hundred and fifty pages of the game: `OP_CELL_TEST`, and
+a shortcut that runs those pages without the interpreter when they don't get past the
+condition. See `carrera-2-a-sesenta-cuadros.md`, which also has measured
+the limit of number 2 for the race: zero on the heaviest tick,
+because the hero changes cell every two ticks.

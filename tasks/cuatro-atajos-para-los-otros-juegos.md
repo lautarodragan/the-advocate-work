@@ -1,137 +1,137 @@
 ---
-name: "Cuatro atajos para los otros juegos"
-description: "La condición por dirección, las órdenes de ruta que faltan, PlayerVisibility y los Comment en las páginas de las tropas: lo barato que más páginas destraba en los siete juegos"
+name: "Four shortcuts for the other games"
+description: "The direction condition, the missing route orders, PlayerVisibility and Comment in troop pages: the cheap stuff that unblocks the most pages in the seven games"
 type: feature
 status: testing
 agents: [Chajá]
 assignee: taro
 ---
 
-Medido por Hornero el 2026-10-06 con `rm2k-snes-events culprits --every-map`
-sobre los siete juegos, después del merge de los códigos de color. Las
-páginas que **sólo** ese comando deja afuera:
+Measured by Hornero on 2026-10-06 with `rm2k-snes-events culprits --every-map`
+over the seven games, after the merge of the colour codes. The
+pages that **only** that command leaves out:
 
-* `ConditionalBranch` tipo 6, por la dirección de un personaje: Sunset 111,
-  Vampires Dawn 37, El Dorado 23, Desert 21. Ya en
-  `los-comandos-sueltos-de-los-mapas.md`, para ABL (31 páginas).
-* `MoveEvent` con órdenes que la ROM no entiende: el paso al azar (8) en
-  Desert (39) y Vampires Dawn (16), alejarse del héroe (10) en Vampires Dawn
-  (48) y El Dorado (9), y rutas de Sunset con 36/37 (unas 40; falta ver qué
-  orden es la que traba). `ruta-los-movimientos-que-faltan.md` dice
-  que no rendían: en ABL era cierto, en estos juegos no.
+* `ConditionalBranch` type 6, by a character's direction: Sunset 111,
+  Vampires Dawn 37, El Dorado 23, Desert 21. Already in
+  `los-comandos-sueltos-de-los-mapas.md`, for ABL (31 pages).
+* `MoveEvent` with orders the ROM doesn't understand: the random step (8) in
+  Desert (39) and Vampires Dawn (16), move away from the hero (10) in Vampires Dawn
+  (48) and El Dorado (9), and Sunset's routes with 36/37 (about 40; it remains to see which
+  order is the one that blocks). `ruta-los-movimientos-que-faltan.md` says
+  they didn't pay off: in ABL it was true, in these games it isn't.
 * `PlayerVisibility`: El Dorado 170.
-* `Comment` en las páginas de las tropas: The Book of Three 153. En los mapas
-  ya se ignora.
+* `Comment` in troop pages: The Book of Three 153. In maps
+  it is already ignored.
 
-taro, el 2026-10-06: "Dale!", con Sonnet.
+taro, on 2026-10-06: "Go ahead!", with Sonnet.
 
 ## Chajá, 2026-10-06
 
-Cuatro commits en las herramientas, uno por atajo, más uno que salió de
-medirlos, y cuatro en ABL (rama `chaja-atajos` de su clon). Cada comando con
-su prueba en el crate, mostrada en rojo antes del arreglo.
+Four commits in the tools, one per shortcut, plus one that came out of
+measuring them, and four in ABL (branch `chaja-atajos` of its clone). Each command with
+its test in the crate, shown red before the fix.
 
-**Los opcodes que se tomaron**: `OP_IF_FACING = 0x47` y `OP_HERO_VISIBLE =
-0x48`. El siguiente libre es el 0x49.
+**The opcodes taken**: `OP_IF_FACING = 0x47` and `OP_HERO_VISIBLE =
+0x48`. The next free one is 0x49.
 
-**1. La condición por dirección** (`OP_IF_FACING`: personaje, dirección,
-destino). El personaje es el héroe, "este evento" o un evento por su número,
-con el mismo `target_of` que las rutas. La dirección del héroe es `hero_dir`;
-la de un evento, de donde la lee `face_diagonal`: la ranura de su ruta si ya
-la giró, y si no la fila de la tabla de NPC. **Un evento sin fila contesta
-abajo**, que es el valor por omisión de RM2k; difiere sólo para un evento
-invisible cuya página mira a otro lado y al que una condición le pregunta.
+**1. The direction condition** (`OP_IF_FACING`: character, direction,
+destination). The character is the hero, "this event" or an event by its number,
+with the same `target_of` as routes. The hero's direction is `hero_dir`;
+an event's, from where `face_diagonal` reads it: its route's slot if it has already
+turned it, and otherwise the row of the NPC table. **An event without a row answers
+down**, which is RM2k's default value; it differs only for an
+invisible event whose page faces elsewhere and which a condition asks about.
 
-**2. Las rutas.** Entran las órdenes 8 (paso al azar), 10 (alejarse del
-héroe) y 22 (mirar para el otro lado), **sólo sobre eventos** y no adentro de
-un salto, como 9 y 21. Alejarse es `toward_hero` dado vuelta medio círculo,
-idéntico en todos los casos incluido el empate; el paso al azar toma dos bits
-del xorshift del mapa, así que es al azar pero no es el generador de RM2k.
+**2. Routes.** Orders 8 (random step), 10 (move away from the
+hero) and 22 (face the other way) go in, **only on events** and not inside
+a jump, like 9 and 21. Moving away is `toward_hero` turned half a circle,
+identical in all cases including the tie; the random step takes two bits
+from the map's xorshift, so it is random but it isn't RM2k's generator.
 
-**Lo que traba las rutas de Sunset con 36/37 no son 36/37**, que ya
-compilaban: son **las diagonales del héroe** (4 a 7), que el compilador
-rechaza a propósito. Es lo que más páginas deja ahora: unas 51 en Sunset y 45
-en Vampires Dawn, medido. **No se hizo**, y por qué está en
-`ruta-los-movimientos-que-faltan.md`: es un paso nuevo del héroe, no
-cuatro rutinas copiadas, y no hay con qué compararlo. Los giros relativos (16
-a 20) y avanzar (11) del héroe tampoco: unas 8 páginas en Sunset.
+**What blocks Sunset's routes with 36/37 isn't 36/37**, which already
+compiled: it is **the hero's diagonals** (4 to 7), which the compiler
+rejects on purpose. It is what leaves the most pages now: about 51 in Sunset and 45
+in Vampires Dawn, measured. **It wasn't done**, and why is in
+`ruta-los-movimientos-que-faltan.md`: it is a new hero step, not
+four copied routines, and there is nothing to compare it with. The hero's relative turns (16
+to 20) and move forward (11) weren't either: about 8 pages in Sunset.
 
-**3. `PlayerVisibility`** (`OP_HERO_VISIBLE`, un byte). El héroe escondido no
-se dibuja y todo lo demás sigue igual. El estado es del jugador: sobrevive al
-mapa, arranca visible en el boot y **viaja en la partida guardada** —una línea
-de `save_table` y un byte de `SAVE_BYTES`—, así que **las partidas guardadas
-con la ROM de antes dejan de cargar**.
+**3. `PlayerVisibility`** (`OP_HERO_VISIBLE`, one byte). The hidden hero isn't
+drawn and everything else stays the same. The state is the player's: it survives the
+map, starts visible at boot and **travels in the saved game** —one line
+of `save_table` and one byte of `SAVE_BYTES`—, so **games saved
+with the previous ROM stop loading**.
 
-**4. `Comment` en las páginas de las tropas**: dos líneas en
-`TROOP_COMMANDS`. No emite un byte, así que no hay camino de ROM que ejecutar.
+**4. `Comment` in troop pages**: two lines in
+`TROOP_COMMANDS`. It doesn't emit a byte, so there is no ROM path to execute.
 
-**Lo que salió de medir: `SUB_MAX` de 8 a 16.** Con todo lo anterior El
-Dorado dejó de armar: el mapa 7 pide nueve bloques sustituidos y la tabla
-llevaba ocho; el noveno lo trae una página que antes no compilaba. 32 bytes
-de BSS del banco 0, que quedan con 1.995 B libres en `abl`. **Cada vez que
-entren páginas va a poder pasar de nuevo**; nadie midió cuántos pide el mapa
-que más pide de los siete.
+**What came out of measuring: `SUB_MAX` from 8 to 16.** With all of the above El
+Dorado stopped building: map 7 asks for nine substituted blocks and the table
+carried eight; the ninth is brought by a page that didn't compile before. 32 bytes
+of bank 0 BSS, which is left with 1,995 B free in `abl`. **Every time
+pages get in it may happen again**; nobody measured how many the map
+that asks for the most among the seven asks for.
 
-### Páginas que compilan, antes y después
+### Pages that compile, before and after
 
-`culprits --every-map`, con el mismo request por juego y los binarios de
-`main` contra los del worktree. Mapas, salvo donde dice.
+`culprits --every-map`, with the same request per game and the binaries from
+`main` against those from the worktree. Maps, except where stated.
 
-| juego | antes | después | |
+| game | before | after | |
 |---|---|---|---|
-| The Book of Three | 206 de 746 (tropas) | 359 de 746 (tropas) | +153, las de los `Comment`; los mapas no cambian |
-| Desert Nightmare | 7034 de 7340 | 7150 de 7340 | +116 |
-| El Dorado | 710 de 972 | 963 de 972 | +253, y un común más (9 a 10 de 10) |
-| Sunset Over Imdahl | 1151 de 1369 | 1266 de 1369 | +115 |
-| Vampires Dawn | 21214 de 22977 | 21272 de 22977 | +58 |
-| ABL | 5560 de 5601 | 5592 de 5601 | +32: las 31 de Eisen y una más |
+| The Book of Three | 206 of 746 (troops) | 359 of 746 (troops) | +153, the `Comment` ones; the maps don't change |
+| Desert Nightmare | 7034 of 7340 | 7150 of 7340 | +116 |
+| El Dorado | 710 of 972 | 963 of 972 | +253, and one more common event (9 to 10 of 10) |
+| Sunset Over Imdahl | 1151 of 1369 | 1266 of 1369 | +115 |
+| Vampires Dawn | 21214 of 22977 | 21272 of 22977 | +58 |
+| ABL | 5560 of 5601 | 5592 of 5601 | +32: Eisen's 31 and one more |
 
-Vampires Dawn **no termina de armar** por otra cosa —el mapa 1 y sus
-imágenes de final, igual que antes de esto—, así que su número sale de
-`scan`, no de un cartucho. Ahí quedan por debajo de lo esperado porque tiene
-más de un comando trabando la misma página; lo que le queda en `MoveEvent` son
-las diagonales del héroe.
+Vampires Dawn **doesn't finish building** because of something else —map 1 and its
+ending pictures, same as before this—, so its number comes from
+`scan`, not from a cartridge. There they fall below what was expected because it has
+more than one command blocking the same page; what it has left in `MoveEvent` is
+the hero's diagonals.
 
-Las ROMs de los juegos que arman —The Book of Three, Desert Nightmare, El
-Dorado y Sunset— están en `/shared/builds/otros-juegos/<juego>.sfc`.
+The ROMs of the games that build —The Book of Three, Desert Nightmare, El
+Dorado and Sunset— are in `/shared/builds/otros-juegos/<juego>.sfc`.
 
 ### ABL
 
-**La tanda: 1147 en verde** con las herramientas del worktree (1136 de antes
-y las 11 pruebas nuevas), y **ninguna golden cambió**. `abl.sfc` pasó de
-`27e94e67039533a2…` a `602b60e0e0635bfb…`, y es reproducible: la misma con
-`NO_CACHE=1`. Cambia por cuatro cosas, todas esperadas: el runtime lleva
-rutinas y opcodes nuevos; las 32 páginas que ahora compilan; `hero_hidden`
-en la partida guardada y `SUB_MAX`; y los siete casos de prueba nuevos, que
-`release` lleva todos. **No se miró si las 32 páginas se pueden alcanzar
-jugando**: son la simulación de Eisen, y ninguna golden las ve cambiar.
+**The suite: 1147 green** with the worktree's tools (1136 from before
+and the 11 new tests), and **no golden changed**. `abl.sfc` went from
+`27e94e67039533a2…` to `602b60e0e0635bfb…`, and it is reproducible: the same with
+`NO_CACHE=1`. It changes because of four things, all expected: the runtime carries
+new routines and opcodes; the 32 pages that now compile; `hero_hidden`
+in the saved game and `SUB_MAX`; and the seven new test cases, which
+`release` carries all of. **Whether the 32 pages can be reached while
+playing wasn't looked at**: they are Eisen's simulation, and no golden sees them change.
 
-Rama `chaja-atajos` del clon `/extras/scratch/chaja/abl-atajos`: tres pruebas
+Branch `chaja-atajos` of the clone `/extras/scratch/chaja/abl-atajos`: three tests
 (`test_condicional_por_direccion.py`, `test_rutas_que_se_alejan.py`,
-`test_heroe_oculto.py`), sus casos, y dos arreglos que pidió la tanda sola:
-el índice del README de las pruebas, y la resta de `test_la_musica_viaja_en_la_partida`,
-que duplica `save_table` y avisa cada vez que la partida crece.
+`test_heroe_oculto.py`), their cases, and two fixes the suite asked for by itself:
+the index in the tests' README, and the subtraction in `test_la_musica_viaja_en_la_partida`,
+which duplicates `save_table` and warns every time the save grows.
 
-### Lo que la tanda no cubre
+### What the suite doesn't cover
 
-* **Que `hero_hidden` viaje en un guardado y se cargue.** Sólo se prueba que
-  el formato cierra y que el estado vive en la RAM.
-* **Un evento cuya dirección ya cambió una ruta**, en la condición por
-  dirección: las pruebas miran la de su página, no la de la ranura. Lo mismo
-  para un evento sin fila que mire a otro lado.
-* **El empate de alejarse del héroe**: lo cubre sólo el razonamiento —es
-  `toward_hero` dado vuelta—, no hay caso con el héroe en una diagonal
-  exacta.
-* **Que el paso al azar sea al azar**: la prueba mira que no vaya siempre para
-  el mismo lado en dieciséis pasos, con la semilla del arranque.
-* **Los juegos mismos**: ninguna de las páginas nuevas de los otros juegos se
-  jugó; lo que se mira es que compilan y que los cartuchos arman.
+* **That `hero_hidden` travels in a save and is loaded.** It is only tested that
+  the format adds up and that the state lives in RAM.
+* **An event whose direction a route has already changed**, in the direction
+  condition: the tests look at its page's, not the slot's. The same
+  for an event without a row that faces elsewhere.
+* **The tie when moving away from the hero**: it is covered only by reasoning —it is
+  `toward_hero` turned around—, there is no case with the hero on an exact
+  diagonal.
+* **That the random step is random**: the test checks that it doesn't always go
+  the same way in sixteen steps, with the boot seed.
+* **The games themselves**: none of the new pages of the other games was
+  played; what is checked is that they compile and that the cartridges build.
 
-## Al mergear
+## When merging
 
-Reinstalar en el global `events cartridge convert`: el compilador, el runtime
-y el bytecode, y el conversor por `SUB_MAX`. `bytecode` cambió, y lo compila
-adentro `rm2k-snes-audio`: si algo de música se arma con esa herramienta,
-también; el stream de música no cambió.
+Reinstall in the global `events cartridge convert`: the compiler, the runtime
+and the bytecode, and the converter because of `SUB_MAX`. `bytecode` changed, and
+`rm2k-snes-audio` compiles it in: if any music is built with that tool,
+it too; the music stream didn't change.
 
-ABL: `git pull` de la rama `chaja-atajos` del clon de Chajá.
+ABL: `git pull` of the `chaja-atajos` branch of Chajá's clone.

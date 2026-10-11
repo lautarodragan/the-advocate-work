@@ -1,16 +1,16 @@
 ---
-name: "Las caras y los escapes de espera en los mensajes"
-description: "ChangeFaceGraphic y los escapes \\. \\! \\| en mitad de una caja dejan afuera su página; en Dooms 2 la escena de arranque del mapa 2 no corre y nada se dispara. Barato: aceptar la cara como deuda (sin dibujarla) y tomar los escapes como esperas"
+name: "Faces and wait escapes in messages"
+description: "ChangeFaceGraphic and the escapes \\. \\! \\| in the middle of a box leave their page out; in Dooms 2 the start scene of map 2 doesn't run and nothing triggers. Cheap: accept the face as debt (without drawing it) and take the escapes as waits"
 type: feature
 status: testing
 agents: [Aguará, Tijereta]
 assignee: taro
 ---
 
-Del análisis breve de Aguará (Sonnet), el 2026-10-05, sobre lo que taro vio jugando las ROMs de los otros juegos. Afecta a Dooms 2, Desert Nightmare y Sunset Over Imdahl.
+From Aguará's (Sonnet) brief analysis, on 2026-10-05, of what taro saw playing the ROMs of the other games. It affects Dooms 2, Desert Nightmare and Sunset Over Imdahl.
 
-## Hecho (Tijereta)
+## Done (Tijereta)
 
-`ChangeFaceGraphic` entra en `ACCEPTED_UNDONE` y `\.`, `\!` y `\|` en el medio de una caja se descartan en `escape_tail` (`without_waits`, en `rm2k-snes-text`): la ROM no sabe esperar a mitad de caja, así que es deuda, anotada en `las-caras-y-las-esperas.md`. EasyRPG sí espera (`Window_Message`), y de ahí sale la medida: `\.` 1/4 s, `\|` 1 s, `\!` una tecla.
+`ChangeFaceGraphic` goes into `ACCEPTED_UNDONE` and `\.`, `\!` and `\|` in the middle of a box are discarded in `escape_tail` (`without_waits`, in `rm2k-snes-text`): the ROM can't wait mid-box, so it is debt, noted in `las-caras-y-las-esperas.md`. EasyRPG does wait (`Window_Message`), and that is where the measure comes from: `\.` 1/4 s, `\|` 1 s, `\!` a key press.
 
-**Verificado**: pruebas de `rm2k-snes-text` y `rm2k-snes-events`, con los casos del medio en rojo antes. ABL no usa caras ni escapes en el medio (todos son cola): `release` da `abl.sfc` `27e94e67039533a2…`, igual. La tanda no se corrió. Dooms 2: con estas herramientas la escena del mapa 2 corre (diálogo de Jack en captura de snes9x), **pero** al compilar más páginas el directorio de muestras pasó de 255 entradas (263) y el cartucho no armaba: para armarlo se excluyeron en el `rm2k-snes.toml` del proyecto los mapas 40 a 93 (salvo los ya excluidos). Habrá que decidir qué excluir de verdad.
+**Verified**: tests of `rm2k-snes-text` and `rm2k-snes-events`, with the middle cases red before. ABL doesn't use faces or escapes in the middle (they are all at the tail): `release` gives `abl.sfc` `27e94e67039533a2…`, the same. The suite wasn't run. Dooms 2: with these tools the scene on map 2 runs (Jack's dialogue in a snes9x capture), **but** by compiling more pages the samples directory went past 255 entries (263) and the cartridge didn't build: to build it, maps 40 to 93 were excluded in the project's `rm2k-snes.toml` (except those already excluded). What to really exclude will have to be decided.

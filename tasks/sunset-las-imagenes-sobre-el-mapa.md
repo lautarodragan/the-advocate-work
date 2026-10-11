@@ -1,100 +1,100 @@
 ---
-name: "Sunset: las imágenes sobre el mapa"
-description: "Sunset dibuja techos, luces, sombras y nieblas como imágenes de pantalla entera sobre el mapa; la ROM las lleva como imágenes grandes, que tapan el mapa, y la escena queda negra"
+name: "Sunset: the pictures over the map"
+description: "Sunset draws roofs, lights, shadows and fogs as full-screen pictures over the map; the ROM carries them as large pictures, which cover the map, and the scene goes black"
 type: feature
 status: testing
 assignee: Mulita
 agents: [Mulita]
 ---
 
-Medido por Mulita el 2026-10-11 en `sunset-el-mapa-22-en-negro.md`:
-la escena que abre el juego queda negra porque `WinterMist`, una niebla al
-95 % de transparencia, va como imagen grande —en lugar del mapa— y la
-transparencia oscurece hacia negro.
+Measured by Mulita on 2026-10-11 in `sunset-el-mapa-22-en-negro.md`:
+the scene that opens the game goes black because `WinterMist`, a fog at
+95 % transparency, goes as a large picture —instead of the map— and the
+transparency darkens towards black.
 
-Unas 140 imágenes de Sunset son así: techos y cielorrasos con el color
-transparente (índice 0 en 50-99 % de la imagen), luces y sombras
-translúcidas, nieblas al 45-95 %. Casi todos los mapas tienen alguna. Las
-imágenes grandes de ABL son pantallas opacas sobre negro, y para eso se
-diseñaron (`lo-que-las-imagenes-grandes-no-modelan.md` del libro).
+About 140 of Sunset's pictures are like that: roofs and ceilings with the
+transparent colour (index 0 in 50-99 % of the picture), translucent lights and
+shadows, fogs at 45-95 %. Almost every map has one. ABL's large
+pictures are opaque screens over black, and that is what they were
+designed for (`lo-que-las-imagenes-grandes-no-modelan.md` in the book).
 
-Los dos caminos están en la tarea de arriba: dejarlas afuera con un
-criterio, o hacerlas como una capa sobre el mapa.
+The two paths are in the task above: leave them out with a
+criterion, or do them as a layer over the map.
 
-## La decisión de taro, el 2026-10-11
+## taro's decision, on 2026-10-11
 
-Dejarlas afuera no: "Sunset es un juego muy artístico. Sin esas imágenes
-probablemente pierda totalmente la gracia." Primero analizar cómo las usa
-—si hacen de más capas de mapa, de movimientos panorámicos, etc.— y con eso
-inventar una solución que funcione bien; si van como capa de mapa sin perder
-mucho, bienvenido.
+Not leaving them out: "Sunset is a very artistic game. Without those pictures
+it would probably lose all its charm." First analyse how it uses them
+—whether they act as extra map layers, as panoramic movements, etc.— and with that
+invent a solution that works well; if they go as a map layer without losing
+much, welcome.
 
-## Bitácora de Mulita
+## Mulita's log
 
-Base: the-advocate `6f933ff8`, ports `b499ab4`, libro `491624d`. Ramas
-`mulita-sunset-imagenes` en los tres, worktrees en `~/scratch/mulita/`
-(`the-advocate`, `ports`, `docs-wt`). Scripts del análisis en
+Base: the-advocate `6f933ff8`, ports `b499ab4`, book `491624d`. Branches
+`mulita-sunset-imagenes` in the three, worktrees in `~/scratch/mulita/`
+(`the-advocate`, `ports`, `docs-wt`). Analysis scripts in
 `~/scratch/mulita/imagenes/` (`recolectar.py`, `pormapa.py`, `ubicar.py`,
 `grupos.py`, `capas.py`).
 
-### Lo que se midió (2026-10-11)
+### What was measured (2026-10-11)
 
-* 1.678 comandos de imágenes, 164 archivos. Siguiendo los `Teleport` de
-  cada página —Sunset muestra las imágenes del mapa de destino en la puerta
-  del de origen, después del salto—, **62 de los 65 mapas** muestran
-  alguna imagen que se queda quieta sobre el mapa.
-* **Sunset es un juego pintado**: el mapa es el panorama (del tamaño del
-  mapa, fijo a él) y las capas del ChipSet están vacías en casi todos.
-  El conversor ya lo lleva: el panorama en BG2 a 4 bits, 576 tiles
-  agrupadas, y BG1 vacío. Sin imágenes el mapa se ve bien (las capturas de
-  `mira-*`), pero el héroe camina por encima de los techos y faltan luces,
-  sombras y nieblas.
-* **Los techos son recortes del panorama**: el 83,7 % de sus píxeles es
-  igual al panorama debajo (100 % en las plazas, la calle de la estatua y
-  el bar de primavera; los interiores de otras estaciones difieren). Son
-  "lo que va delante del héroe" de un mapa pintado.
-* Las imágenes fijas al mapa caen **siempre** en la esquina del mapa con la
-  cámara de RM2k del `Teleport` que las precede (`ubicar.py`); las que se
-  muestran sin salto previo (10, 5, 58) no tienen cámara conocida, y
-  centradas en el mapa coinciden con las demás.
-* ABL con la misma regla atraparía 2 (MeanwhileLashe en 81 y el montaje de
-  217): la regla va como perilla del proyecto, apagada por omisión.
+* 1,678 picture commands, 164 files. Following each page's `Teleport`s
+  —Sunset shows the destination map's pictures at the door
+  of the origin one, after the jump—, **62 of the 65 maps** show
+  some picture that stays still over the map.
+* **Sunset is a painted game**: the map is the panorama (the size of the
+  map, fixed to it) and the ChipSet's layers are empty in almost all of them.
+  The converter already carries it: the panorama in BG2 at 4 bits, 576 tiles
+  grouped, and BG1 empty. Without pictures the map looks fine (the captures from
+  `mira-*`), but the hero walks over the roofs and lights,
+  shadows and fogs are missing.
+* **The roofs are cut-outs of the panorama**: 83.7 % of their pixels are
+  equal to the panorama beneath (100 % in the plazas, the statue street and
+  the spring bar; the interiors of other seasons differ). They are
+  "what goes in front of the hero" on a painted map.
+* The pictures fixed to the map **always** fall at the map's corner with
+  RM2k's camera from the `Teleport` that precedes them (`ubicar.py`); the ones
+  shown without a previous jump (10, 5, 58) have no known camera, and
+  centred on the map they match the others.
+* ABL with the same rule would catch 2 (MeanwhileLashe on 81 and the montage on
+  217): the rule goes as a project knob, off by default.
 
-### El análisis
+### The analysis
 
-En el libro: `ports/sunset-over-imdahl/research/2026-10-11-las-imagenes.md`.
-Por grupo: techos y cielorrasos (61 mapas, recortes del panorama: van con
-la prioridad de sus celdas, gratis), luces (50) y sombras (22) —máscaras
-planas al 10-35 %—, nieblas (38, texturas de pantalla), animadas (banderas,
-pasto, nubes), el menú propio y las placas de título y créditos. En modo 3
-no queda capa para las translúcidas: van mezcladas en el panorama. Lo que
-daría el modo 1 para un mapa pintado (techos exactos, sombras por
-matemática de color) está escrito ahí, sin hacer: es decisión de taro.
+In the book: `ports/sunset-over-imdahl/research/2026-10-11-las-imagenes.md`.
+By group: roofs and ceilings (61 maps, cut-outs of the panorama: they go with
+their cells' priority, free), lights (50) and shadows (22) —flat
+masks at 10-35 %—, fogs (38, screen textures), animated ones (flags,
+grass, clouds), the game's own menu and the title and credits plates. In mode 3
+there is no layer left for the translucent ones: they go blended into the panorama. What
+mode 1 would give for a painted map (exact roofs, shadows through
+colour math) is written there, not done: it is taro's decision.
 
-### La primera versión
+### The first version
 
-* the-advocate `06b8321f`: `map_pictures.rs` en el conversor (la regla) y en
-  Wally (las dibuja). Perilla `[graphics] map_pictures`, apagada por
-  omisión. Wally mezcla las imágenes en el panorama fijo al mapa y sube
-  la prioridad de las celdas de BG2 que tapan las opacas; un mapa con
-  techos ya no va horneado. El compilador no recibe esas imágenes: sus
-  comandos se aceptan sin hacerse.
-* ports `ce01ff9`: Sunset la prende. 183 imágenes en 64 mapas.
-* libro `a5554be`: la investigación, la divergencia
-  `las-imagenes-dentro-del-mapa.md` y la página del port.
-* Visto con capturas (snes9x) de 28, 2, 13, 33, 7 y la escena del 22,
-  contra el original con Wine en la misma celda: en
-  `/shared/capturas/2026-10-11-sunset-imagenes/`. Para el original armé
-  variantes del juego que empiezan en el mapa con las imágenes de la
-  puerta (`~/scratch/mulita/wine3/variante.py`).
-* Rojo antes: la escena del 22 negra (tarea `sunset-el-mapa-22-en-negro.md`),
-  y cualquier mapa con techos tapado por una imagen grande.
+* the-advocate `06b8321f`: `map_pictures.rs` in the converter (the rule) and in
+  Wally (draws them). Knob `[graphics] map_pictures`, off by
+  default. Wally blends the pictures into the panorama fixed to the map and raises
+  the priority of the BG2 cells that the opaque ones cover; a map with
+  roofs is no longer baked. The compiler doesn't receive those pictures: their
+  commands are accepted without being carried out.
+* ports `ce01ff9`: Sunset turns it on. 183 pictures on 64 maps.
+* book `a5554be`: the investigation, the divergence
+  `las-imagenes-dentro-del-mapa.md` and the port's page.
+* Seen with captures (snes9x) of 28, 2, 13, 33, 7 and the scene on 22,
+  against the original with Wine on the same cell: in
+  `/shared/capturas/2026-10-11-sunset-imagenes/`. For the original I built
+  variants of the game that start on the map with the door's
+  pictures (`~/scratch/mulita/wine3/variante.py`).
+* Red before: the scene on 22 black (task `sunset-el-mapa-22-en-negro.md`),
+  and any map with roofs covered by a large picture.
 
-### Lo que vi y no es de esto
+### What I saw and isn't part of this
 
-Las plazas (40x30) y las calles (20x30) ya salían granuladas en main: el
-panorama trae 2.000 a 4.800 celdas distintas y entran 576 tiles; en la
-plaza de primavera el canal y el pabellón salen rotos. Es el presupuesto de
-tiles del panorama. Lo que lo arreglaría es subir al panorama sólo lo que
-se ve (una ventana de ~33x29 celdas), con DMA al moverse la cámara: es la
-siguiente tarea que más pesa para Sunset.
+The plazas (40x30) and the streets (20x30) were already coming out grainy on main: the
+panorama brings 2,000 to 4,800 distinct cells and 576 tiles fit; in the
+spring plaza the canal and the pavilion come out broken. It is the panorama's tile
+budget. What would fix it is uploading to the panorama only what
+is seen (a window of ~33x29 cells), with DMA when the camera moves: it is the
+next task that weighs most for Sunset.

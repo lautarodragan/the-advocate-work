@@ -1,101 +1,101 @@
 ---
-name: "Vampires Dawn con MSU-1 obligatorio"
-description: "VD no entra en los 127 bancos ni con lo razonable comprimido (faltan ~1 MB con las poses en LZ2, más sin ellas): que un proyecto pueda pedir el MSU-1 obligatorio y lleve al .msu lo que no entra"
+name: "Vampires Dawn with mandatory MSU-1"
+description: "VD doesn't fit in the 127 banks even with the reasonable stuff compressed (~1 MB short with the poses in LZ2, more without them): let a project ask for mandatory MSU-1 and carry to the .msu what doesn't fit"
 type: feature
 status: testing
 assignee: taro
 agents: [Hornero, Tijereta]
 ---
 
-Sigue de `vampires-dawn-entra-comprimido.md`, donde Tijereta midió todo: las poses en LZ2 son lo único que rinde en serio (−2,86 MB) y le cuestan a ABL cuadros —ocho rojas por CPU—; con ellas VD queda en 8,91 MB contra 7,94, y lo demás suma a lo sumo ~0,84 MB. El experimento está en las ramas locales `tijereta-vd-comprimido` de the-advocate y de los ports, sin mergear.
+It follows from `vampires-dawn-entra-comprimido.md`, where Tijereta measured everything: the poses in LZ2 are the only thing that really pays off (−2.86 MB) and they cost ABL frames —eight reds because of CPU—; with them VD stays at 8.91 MB against 7.94, and the rest adds at most ~0.84 MB. The experiment is in the local branches `tijereta-vd-comprimido` of the-advocate and the ports, unmerged.
 
-La decisión de taro, el 2026-10-11: antes que dos cartuchos, el MSU-1 obligatorio **para este juego**; ABL y los demás siguen jugables sin él ([[sin-msu-jugable]] en la memoria). Un chip de compresión no, mientras el MSU-1 siga siendo opcional en general.
+taro's decision, on 2026-10-11: rather than two cartridges, mandatory MSU-1 **for this game**; ABL and the others stay playable without it ([[sin-msu-jugable]] in the memory). Not a compression chip, as long as MSU-1 remains optional in general.
 
-Ya hay un camino: los fondos de batalla viajan en el `.msu` y la ROM los lee si encuentra su firma (`internals/msu-datos.md` del libro). Lo que haría falta: una perilla del proyecto que lo pida obligatorio, el reparto de qué va a la ROM y qué al `.msu` —las poses, que se suben en caliente, piden mirar cuánto tarda el MSU-1 en entregarlas—, y una pantalla que diga que falta el MSU-1 si no está. Tijereta anotó una opción sin CPU que no probó: las poses sin sus tiles en cero, por DMA directo en el vblank (−2,44 MB en VD), que achicaría lo que tenga que ir al `.msu`.
+There is already a path: the battle backgrounds travel in the `.msu` and the ROM reads them if it finds its signature (`internals/msu-datos.md` in the book). What it would take: a project knob that asks for it as mandatory, the split of what goes to the ROM and what to the `.msu` —the poses, which are uploaded on the fly, call for looking at how long the MSU-1 takes to deliver them—, and a screen that says the MSU-1 is missing if it isn't there. Tijereta noted an option without CPU that wasn't tried: the poses without their zero tiles, by direct DMA in vblank (−2.44 MB in VD), which would shrink what has to go to the `.msu`.
 
-## Lo que pidió taro al confirmarlo, el 2026-10-11
+## What taro asked for when confirming it, on 2026-10-11
 
-"Vamos con el msu, pero dejemos el código del runtime y las herramientas lo más genérico posible, siempre apuntando a que todos los juegos tengan msu opcional." O sea: nada que sea "el modo de VD"; el mecanismo —qué datos pueden viajar en el `.msu` y cómo los lee la ROM— es el mismo para todos, y lo obligatorio es sólo que a un juego no le alcance la ROM sin él. La meta de fondo sigue siendo que cada juego entre sin MSU-1.
+"Let's go with the msu, but let's keep the runtime and tools code as generic as possible, always aiming for all games to have optional msu." That is: nothing that is "VD's mode"; the mechanism —what data can travel in the `.msu` and how the ROM reads it— is the same for all, and the mandatory part is only that a game doesn't have enough ROM without it. The underlying goal is still that every game fits without MSU-1.
 
-## Hecho, el 2026-10-11 (Tijereta)
+## Done, on 2026-10-11 (Tijereta)
 
-Sobre the-advocate `origin/main` 2fc37808 y ports `main` f8407dc, ramas
-`tijereta-vd-msu` en los dos. VD se arma como siempre en esta tarea: con las
-82 exclusiones de Aguará y arrancando en 8 (`~/scratch/tijereta/vdmsu/vd.py`).
+On the-advocate `origin/main` 2fc37808 and ports `main` f8407dc, branches
+`tijereta-vd-msu` in both. VD is built as always in this task: with
+Aguará's 82 exclusions and starting on 8 (`~/scratch/tijereta/vdmsu/vd.py`).
 
-**El mecanismo, genérico.** Un proyecto pide `[rom] msu = "required"`; sin
-la clave es `"optional"`, lo de siempre. El conversor **no** lo decide solo:
-necesitar el MSU-1 cambia lo que el jugador necesita, y un mapa más no tiene
-que cambiar eso sin que nadie lo decida. Con la perilla:
+**The mechanism, generic.** A project asks for `[rom] msu = "required"`; without
+the key it is `"optional"`, as always. The converter does **not** decide it on its own:
+needing the MSU-1 changes what the player needs, and one more map shouldn't
+change that without anyone deciding it. With the knob:
 
-* el emisor marca con `.msu` las piezas que la ROM sólo lee por un camino
-  que sabe leer el `.msu`, y que se leen al cargar un mapa o una pelea, no
-  por cuadro: los flujos LZ2 de cada mapa, los de los battlers y respaldos de
-  pelea y los mapas de las imágenes grandes (`lz2_decompress` → `lz2_msu`),
-  los tiles de panoramas e imágenes grandes (`msu_dma0`), y las muestras
-  (`upload_sample` → `msu_sample_l`). Las poses no: se suben en caliente;
-* el empaquetado (`pack_with_msu`) manda al `.msu` las menos posibles, de la
-  más grande a la más chica, hasta que el resto entra; en una región al final
-  del `.msu`, con su firma, y cada etiqueta queda como banco `$3D` y unidad de
+* the emitter marks with `.msu` the pieces the ROM only reads through a path
+  that knows how to read the `.msu`, and that are read when loading a map or a battle, not
+  per frame: each map's LZ2 streams, those of the battlers and battle
+  fallbacks and the maps of the large pictures (`lz2_decompress` → `lz2_msu`),
+  the tiles of panoramas and large pictures (`msu_dma0`), and the samples
+  (`upload_sample` → `msu_sample_l`). Not the poses: they are uploaded on the fly;
+* the packing (`pack_with_msu`) sends to the `.msu` as few as possible, from the
+  largest to the smallest, until the rest fits; in a region at the end
+  of the `.msu`, with its signature, and each label stays as bank `$3D` and a unit of
   256 bytes;
-* la ROM, al arrancar, mira MSU-1, firma del `.msu` y firma de la región, y
-  si algo falla muestra una pantalla (dibujada por el conversor con la
-  fuente del juego) y se queda ahí.
+* the ROM, on starting, checks MSU-1, the `.msu` signature and the region's signature, and
+  if something fails it shows a screen (drawn by the converter with the
+  game's font) and stays there.
 
-Todo el runtime nuevo está bajo `.ifdef MSU_REQUIRED`: `abl.sfc` sale
-`24dd24adb52f…`, igual que en la base.
+All the new runtime is under `.ifdef MSU_REQUIRED`: `abl.sfc` comes out
+`24dd24adb52f…`, same as in the base.
 
-**VD arma**: 13241 piezas en los 127 bancos y **1533 piezas, 5,26 MB, en el
-`.msu`** (19 MB el `.msu` entero, con los fondos y los efectos). Lo que se
-fue: 313 `map_tiles`, 293 muestras, 280 `map_cells`, 236 `sprite_tiles`, 127
-`above_tiles`, 102 battlers, 49 `anim_tiles`, 43 `big_tiles`, 36 respaldos,
-31 `pano_tiles`, 16 `big_map`, 7 `map_code`: casi todo lo que puede ir, porque
-lo que se queda —4,27 MB de poses, 0,91 de la música en `.crossbank`, 0,39 de
-páginas…— son 7,10 MB para 7,94. Arranca en snes9x y en Mednafen
-(`snes_faust`) con su `.msu`, en el 8, y sin él muestra la pantalla.
+**VD builds**: 13241 pieces in the 127 banks and **1533 pieces, 5.26 MB, in the
+`.msu`** (19 MB the whole `.msu`, with the backgrounds and the sound effects). What
+went: 313 `map_tiles`, 293 samples, 280 `map_cells`, 236 `sprite_tiles`, 127
+`above_tiles`, 102 battlers, 49 `anim_tiles`, 43 `big_tiles`, 36 fallbacks,
+31 `pano_tiles`, 16 `big_map`, 7 `map_code`: almost everything that can go, because
+what stays —4.27 MB of poses, 0.91 of music in `.crossbank`, 0.39 of
+pages…— is 7.10 MB for 7.94. It starts in snes9x and in Mednafen
+(`snes_faust`) with its `.msu`, on 8, and without it shows the screen.
 
-Para que entrara hizo falta otra cosa: la cadena de `.crossbank` iba última,
-y para entonces las piezas enteras habían tomado todos los bancos enteros; si
-no entra, el empaquetado ahora prueba con la cadena primero. ABL entra de la
-primera manera y no cambia.
+For it to fit something else was needed: the `.crossbank` chain went last,
+and by then the whole pieces had taken all the whole banks; if
+it doesn't fit, the packing now tries with the chain first. ABL fits the
+first way and doesn't change.
 
-**Cuánto tarda**, en snes9x, que no demora los seeks: cargar del `.msu` le
-cuesta a cada mapa de 1 a 8 cuadros más que de la ROM (el 66, con el fondo
-más grande, 94 contra 86), porque los literales del LZ2 van de a un byte por
-la CPU. **En Mednafen cada seek son uno o dos cuadros** (medido el
-2026-09-26, ver `internals/msu-datos.md`), y un mapa de VD hace de 0 a 5 por
-sus flujos —la mayoría 3 o 4— más uno por panorama y uno por cada muestra
-del `.msu` que su paquete sube: eso no lo medí cuadro a cuadro.
+**How long it takes**, in snes9x, which doesn't delay seeks: loading from the `.msu` costs
+each map 1 to 8 frames more than from the ROM (map 66, with the largest
+background, 94 against 86), because the LZ2 literals go one byte at a time through
+the CPU. **In Mednafen each seek is one or two frames** (measured on
+2026-09-26, see `internals/msu-datos.md`), and a VD map does 0 to 5 for
+its streams —most 3 or 4— plus one per panorama and one per each sample
+from the `.msu` its package uploads: I didn't measure that frame by frame.
 
-**Lo que corta a VD después**: nada al armar; jugarlo es otra tarea. Las 82
-exclusiones siguen —son mapas que no convierten por otras razones— y cuando
-entren van a pedir más ROM: lo que queda para mandar es poco, porque lo que
-se queda son las poses. Ahí sirve lo que ya está anotado arriba: las poses
-sin los tiles en cero, por DMA directo.
+**What stops VD next**: nothing when building; playing it is another task. The 82
+exclusions remain —they are maps that don't convert for other reasons— and when
+they get in they will ask for more ROM: what's left to send is little, because what
+stays is the poses. That's where what is already noted above helps: the poses
+without the zero tiles, by direct DMA.
 
-**Las pruebas.** ABL entra, así que el camino lo corren dos cartuchos nuevos
-de su tanda: `test-msu`, con `--msu-everything` —todo lo que puede ir, al
-`.msu`, aunque entre— y `test-msu-rom`, su gemelo con todo en la ROM. Lo que
-se carga con cada mapa, contra el conversor (`test_carga_descomprimida.py`);
-el arranque cuadro por cuadro con el panorama del 6, una pelea con sus
-battlers y la envolvente de la música del 66, contra el gemelo
-(`test_msu_gemelos.py`); y la pantalla, sin `.msu` y con la región de otro
-armado (`test_msu_obligatorio.py`, golden nueva `msu-falta`). La tanda: **1202
-en verde**, con `abl.sfc` = `24dd24adb52f…`. Capturas en
+**The tests.** ABL fits, so the path is run by two new cartridges
+of its suite: `test-msu`, with `--msu-everything` —everything that can go, to the
+`.msu`, even if it fits— and `test-msu-rom`, its twin with everything in the ROM. What
+is loaded with each map, against the converter (`test_carga_descomprimida.py`);
+the boot frame by frame with map 6's panorama, a battle with its
+battlers and the envelope of map 66's music, against the twin
+(`test_msu_gemelos.py`); and the screen, without `.msu` and with another
+build's region (`test_msu_obligatorio.py`, new golden `msu-falta`). The suite: **1202
+green**, with `abl.sfc` = `24dd24adb52f…`. Captures in
 `/shared/capturas/2026-10-11-msu-obligatorio/`.
 
-**Lo que la tanda no corre**: una imagen grande leída del `.msu` —ningún mapa
-de `test-msu` la muestra—, el respaldo liviano de un fondo de pelea leído de
-ahí —con MSU-1 la pelea usa el de calidad—, la espera de los seeks —ningún
-core de la tanda la demora; Mednafen sí, y no la medí—, la consola de verdad,
-y VD jugado más allá de su primer mapa.
+**What the suite doesn't run**: a large picture read from the `.msu` —no map
+of `test-msu` shows one—, a battle background's light fallback read from
+there —with MSU-1 the battle uses the quality one—, the wait for seeks —no
+core in the suite delays it; Mednafen does, and I didn't measure it—, the real console,
+and VD played beyond its first map.
 
-RAM nueva: ninguna. Opcode: ninguno.
+New RAM: none. Opcode: none.
 
-## Al mergear
+## When merging
 
-Ramas `tijereta-vd-msu` en the-advocate (e9a9488f), en los ports (3a6ca29,
-con la golden en su propio commit, 6dc0ca2) y en el libro (1d5a4f8).
-Reinstalar `just install cartridge rm2k-snes-audio mapdata convert` —no tocó
-`project`—, y correr la tanda de ABL, que ahora arma también `test-msu` y
+Branches `tijereta-vd-msu` in the-advocate (e9a9488f), in the ports (3a6ca29,
+with the golden in its own commit, 6dc0ca2) and in the book (1d5a4f8).
+Reinstall `just install cartridge rm2k-snes-audio mapdata convert` —it didn't touch
+`project`—, and run A Blurred Line's suite, which now also builds `test-msu` and
 `test-msu-rom`.

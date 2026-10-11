@@ -1,498 +1,498 @@
 ---
-name: "Chips de expansión: SA-1 y S-DD1"
-description: "Si conviene pasar el cartucho a SA-1 o a S-DD1: soporte, lo que da cada uno medido, lo que cuesta, y cuándo"
+name: "Expansion chips: SA-1 and S-DD1"
+description: "Whether it is worth moving the cartridge to SA-1 or S-DD1: support, what each one gives measured, what it costs, and when"
 type: refactor
 status: wishlist
 ---
 
-# Qué
+# What
 
-taro preguntó el 2026-09-26 si conviene usar un **chip de expansión** de los que
-usaron juegos oficiales y que el FX Pak Pro soporte, limitado a dos: el
-**SA-1** (un segundo 65816 a 10,74 MHz, Super Mario RPG, Kirby Super Star) y el
-**S-DD1** (un descompresor por hardware, Star Ocean y Street Fighter Alpha 2).
+taro asked on 2026-09-26 whether it is worth using an **expansion chip** of those
+used by official games and supported by the FX Pak Pro, limited to two: the
+**SA-1** (a second 65816 at 10.74 MHz, Super Mario RPG, Kirby Super Star) and the
+**S-DD1** (a hardware decompressor, Star Ocean and Street Fighter Alpha 2).
 
-Esto es la investigación, no la implementación: ninguna línea de la ROM cambió.
-Lo que sigue sale del código de los emuladores y del firmware del FX Pak
-—clonados en `/extras/ref/`—, de fullsnes, y de mediciones hechas con el arnés
-sobre `8527f44`. Cómo se reproduce cada cosa está al final.
+This is the investigation, not the implementation: not a single line of the ROM changed.
+What follows comes from the emulators' code and the FX Pak's firmware
+—cloned in `/extras/ref/`—, from fullsnes, and from measurements made with the harness
+on `8527f44`. How each thing is reproduced is at the end.
 
 # Status
 
-Investigado el 2026-09-26. **La recomendación es no migrar ahora a ninguno**, y
-tener al S-DD1 como la respuesta preparada para cuando el cartucho llegue al
-umbral de `decisiones/el-cartucho-se-queda-en-4-mb.md`. El SA-1 se vuelve a
-mirar recién cuando se encare la carrera en auto, y sólo si antes no alcanzó
-con optimizar el intérprete. El porqué está en "La recomendación".
+Investigated on 2026-09-26. **The recommendation is not to migrate to either now**, and
+to keep the S-DD1 as the prepared answer for when the cartridge reaches the
+threshold in `decisiones/el-cartucho-se-queda-en-4-mb.md`. The SA-1 is to be looked
+at again only when the car race is tackled, and only if optimising the
+interpreter wasn't enough first. The why is in "The recommendation".
 
-# El soporte
+# Support
 
-| | SA-1 | S-DD1 | MSU-1 junto con el chip |
+| | SA-1 | S-DD1 | MSU-1 together with the chip |
 | --- | --- | --- | --- |
-| **FX Pak Pro** | Sí, desde el firmware **v1.9.0** (RedGuy). Hasta 8 MB | Sí, desde **v1.10.0** (magno) | **Sí en los dos.** El core de SA-1 compila el MSU-1 sólo en el Mk3, que es el Pro: en un sd2snes Mk2 no hay MSU-1 con SA-1 |
-| **Mednafen**, módulo `snes` (el que usa por omisión, un fork de bsnes v0.059) | Sí | Sí | **No**: ese módulo no tiene MSU-1, igual que hoy |
-| **Mednafen**, módulo `snes_faust` (experimental, se pide con `-force_module snes_faust`) | Sí | Sí | **Sí**. Su documentación dice "timing is approximate" |
-| **snes9x** (el core de la tanda) | Sí | Sí, por HLE: descomprime la transferencia entera al arrancar el DMA | Sí |
-| **bsnes** (el de `test_cores.py`) | Sí | Sí | Sí |
-| **mesen-s** (libretro) y **Mesen2** | Sí | Sí | Sí |
-| **ares** | Sí | Sí | Sí |
+| **FX Pak Pro** | Yes, since firmware **v1.9.0** (RedGuy). Up to 8 MB | Yes, since **v1.10.0** (magno) | **Yes for both.** The SA-1 core compiles the MSU-1 only on the Mk3, which is the Pro: on an sd2snes Mk2 there is no MSU-1 with SA-1 |
+| **Mednafen**, `snes` module (the one it uses by default, a fork of bsnes v0.059) | Yes | Yes | **No**: that module has no MSU-1, same as today |
+| **Mednafen**, `snes_faust` module (experimental, requested with `-force_module snes_faust`) | Yes | Yes | **Yes**. Its documentation says "timing is approximate" |
+| **snes9x** (the suite's core) | Yes | Yes, by HLE: it decompresses the whole transfer when the DMA starts | Yes |
+| **bsnes** (the one in `test_cores.py`) | Yes | Yes | Yes |
+| **mesen-s** (libretro) and **Mesen2** | Yes | Yes | Yes |
+| **ares** | Yes | Yes | Yes |
 
-Lo que dice cada fila, con dónde está escrito:
+What each row says, with where it is written:
 
-* **FX Pak.** `CHANGELOG` de `sd2snes` (clonado en `cf7e21d`, que es el v1.11.2):
+* **FX Pak.** `sd2snes`'s `CHANGELOG` (cloned at `cf7e21d`, which is v1.11.2):
   "v1.9.0 — add SA-1 support by RedGuy", "v1.10.0 — add S-DD1 support by
-  magno". La detección es `src/smc.c:232-257`: `map & 0xEF` —o sea que el bit de
-  FastROM da igual— en `$23` con tipo `$32/$34/$35/$36` es SA-1, en `$22` con
-  `$43/$45` es S-DD1. Los dos cores de FPGA traen su `msu.v`
-  (`verilog/sd2snes_sa1/` y `verilog/sd2snes_sdd1/`), y el decodificador de
-  direcciones de los dos habilita el MSU-1 en `$2000-$2007` igual que el core
-  base (`address.v:116` y `:105`). La diferencia es que `sd2snes_sa1/msu.v`
-  envuelve todo en `` `ifdef MK3 ``. El mapeador del SA-1 guarda tres bits por
-  bloque de 1 MB (`sd2snes_sa1/address.v:73`): 8 MB. Los save states **no**
-  andan con juegos de chip (nota del v1.11.0).
-* **Mednafen.** `Documentation/snes.html` y `snes_faust.html` del tarball de la
-  1.32.1, que es la instalada. El módulo `snes` detecta el SA-1 y el S-DD1 en
-  `src/snes/src/cartridge/header.cpp:151` y `:160`, y no trae nada de MSU-1.
-  `snes_faust` lista "CX4, DSP-1, DSP-2, MSU1, S-DD1, SA1, Super FX"
-  (`src/snes_faust/cart.cpp:352-354` detecta, `msu1.cpp:430` mapea el MSU-1
-  aparte del chip). **De paso**: `docs/snes/emulators.md` dice que Mednafen no
-  tiene MSU-1, y es cierto sólo del módulo por omisión. Con
-  `mednafen -force_module snes_faust abl.sfc` debería sonar el MSU-1 hoy mismo;
-  no lo probé.
-* **snes9x.** `memmap.cpp:2172-2225`: la clave es `(tipo << 8) | mapeo`, y el
-  SA-1 es **sólo `0x3423` o `0x3523`**, o sea mapeo `$23` exacto. Con `$33` —el
-  mismo con el bit de FastROM— no lo reconoce. El S-DD1 es `0x4332` o `0x4532`.
-  El MSU-1 va por `ppu.cpp:241` y `:989`, que no miran el chip. El S-DD1 es
-  HLE: `dma.cpp:131-155` descomprime todo al arrancar el DMA, sólo si el canal
-  está en modo de dirección fija, y limpia `$4801` entero en vez de canal por
-  canal como bsnes.
-* **bsnes.** `heuristics/super-famicom.cpp:255-293`: mapeo `$22/$32` es S-DD1,
-  `$23/$33` es SA-1, y el nibble alto del tipo lo confirma. Los tableros son
-  `SA1-RAM` y `SDD1-RAM` de `boards.bml`. El MSU-1 se carga si existe
-  `msu1/data.rom`, sin mirar el tablero (`sfc/cartridge/load.cpp:72`).
-* **Mesen2** (`Core/SNES/BaseCartridge.cpp:274-275`, por el nibble alto del tipo)
-  y **mesen-s** (`Core/Sa1.cpp`, `Core/Sdd1.cpp`): el MSU-1 lo arma
-  `SnesConsole.cpp:127` aparte. **ares**: `mia/medium/super-famicom.cpp:556-600`
-  es la misma heurística de bsnes, y el MSU-1 va aparte
+  magno". The detection is `src/smc.c:232-257`: `map & 0xEF` —that is, the
+  FastROM bit doesn't matter— at `$23` with type `$32/$34/$35/$36` is SA-1, at `$22` with
+  `$43/$45` is S-DD1. Both FPGA cores carry their `msu.v`
+  (`verilog/sd2snes_sa1/` and `verilog/sd2snes_sdd1/`), and the address decoder
+  of both enables the MSU-1 at `$2000-$2007` the same as the
+  base core (`address.v:116` and `:105`). The difference is that `sd2snes_sa1/msu.v`
+  wraps everything in `` `ifdef MK3 ``. The SA-1 mapper keeps three bits per
+  1 MB block (`sd2snes_sa1/address.v:73`): 8 MB. Save states do **not**
+  work with chip games (note in v1.11.0).
+* **Mednafen.** `Documentation/snes.html` and `snes_faust.html` from the tarball of
+  1.32.1, which is the installed one. The `snes` module detects the SA-1 and the S-DD1 in
+  `src/snes/src/cartridge/header.cpp:151` and `:160`, and carries nothing of MSU-1.
+  `snes_faust` lists "CX4, DSP-1, DSP-2, MSU1, S-DD1, SA1, Super FX"
+  (`src/snes_faust/cart.cpp:352-354` detects, `msu1.cpp:430` maps the MSU-1
+  separately from the chip). **In passing**: `docs/snes/emulators.md` says Mednafen doesn't
+  have MSU-1, and it is true only of the default module. With
+  `mednafen -force_module snes_faust abl.sfc` the MSU-1 should play today;
+  I didn't try it.
+* **snes9x.** `memmap.cpp:2172-2225`: the key is `(tipo << 8) | mapeo`, and the
+  SA-1 is **only `0x3423` or `0x3523`**, that is, exactly mapping `$23`. With `$33` —the
+  same with the FastROM bit— it doesn't recognise it. The S-DD1 is `0x4332` or `0x4532`.
+  The MSU-1 goes through `ppu.cpp:241` and `:989`, which don't look at the chip. The S-DD1 is
+  HLE: `dma.cpp:131-155` decompresses everything when the DMA starts, only if the channel
+  is in fixed address mode, and clears `$4801` entirely instead of channel by
+  channel like bsnes.
+* **bsnes.** `heuristics/super-famicom.cpp:255-293`: mapping `$22/$32` is S-DD1,
+  `$23/$33` is SA-1, and the high nibble of the type confirms it. The boards are
+  `SA1-RAM` and `SDD1-RAM` from `boards.bml`. The MSU-1 is loaded if
+  `msu1/data.rom` exists, without looking at the board (`sfc/cartridge/load.cpp:72`).
+* **Mesen2** (`Core/SNES/BaseCartridge.cpp:274-275`, by the high nibble of the type)
+  and **mesen-s** (`Core/Sa1.cpp`, `Core/Sdd1.cpp`): the MSU-1 is set up by
+  `SnesConsole.cpp:127` separately. **ares**: `mia/medium/super-famicom.cpp:556-600`
+  is the same heuristic as bsnes, and the MSU-1 goes separately
   (`ares/sfc/cartridge/load.cpp:54`).
 
-O sea que **la cabecera tendría que decir `$23` y `$35` para el SA-1** —SA-1,
-RAM y batería; `$23` porque snes9x no acepta otra cosa— y **`$32` y `$45` para el
-S-DD1**. Ningún emulador de los que importan es un obstáculo, y Mednafen tampoco:
-queda como está hoy, sin MSU-1, que es el camino que la ROM ya soporta.
+So **the header would have to say `$23` and `$35` for the SA-1** —SA-1,
+RAM and battery; `$23` because snes9x accepts nothing else— and **`$32` and `$45` for the
+S-DD1**. None of the emulators that matter is an obstacle, and neither is Mednafen:
+it stays as it is today, without MSU-1, which is the path the ROM already supports.
 
-# Qué daría cada uno
+# What each one would give
 
-## Más de 4 MB
+## More than 4 MB
 
-La decisión de 4 MB dice que pasar de ahí es ExHiROM. Los dos chips tienen su
-propio mapeador, y ninguno pide ExHiROM:
+The 4 MB decision says that going past that is ExHiROM. Both chips have their
+own mapper, and neither asks for ExHiROM:
 
-* **SA-1**: hasta **8 MB**, en bloques de 1 MB (`$2220-$2223`, fullsnes "SNES
-  Cart SA-1 Memory Control"). Se ven **cuatro a la vez**: con 4 MB no hay que
-  conmutar nada, y de 4 a 8 hay que elegir qué bloque va en cada ventana.
-* **S-DD1**: bloques de 1 MB en cuatro ventanas `$C0-$FF` (`$4804-$4807`). Star
-  Ocean usa 6 MB; bsnes acepta 4 bits por registro, y el FX Pak desde el v1.11.1
-  detecta S-DD1 de más de 48 Mbit ("fixes the PT-BR translation of Star
-  Ocean"). La ventana LoROM `$00-$3F:8000` ve **sólo los primeros 2 MB**
+* **SA-1**: up to **8 MB**, in 1 MB blocks (`$2220-$2223`, fullsnes "SNES
+  Cart SA-1 Memory Control"). **Four are visible at once**: with 4 MB nothing has to be
+  switched, and from 4 to 8 you have to choose which block goes in each window.
+* **S-DD1**: 1 MB blocks in four windows `$C0-$FF` (`$4804-$4807`). Star
+  Ocean uses 6 MB; bsnes accepts 4 bits per register, and the FX Pak since v1.11.1
+  detects S-DD1 of more than 48 Mbit ("fixes the PT-BR translation of Star
+  Ocean"). The LoROM window `$00-$3F:8000` sees **only the first 2 MB**
   (`sfc/coprocessor/sdd1/sdd1.cpp`, `mcuRead`).
 
-Pero con S-DD1 la pregunta de los 4 MB cambia de forma, porque **comprime**: lo
-medido abajo dice que los gráficos que viajan por DMA quedan en menos de un
-tercio. El juego entero se estimó en ~7 MB sin comprimir, y el grueso son
-gráficos.
+But with S-DD1 the 4 MB question changes shape, because **it compresses**: what
+is measured below says that the graphics that travel by DMA end up at less than a
+third. The whole game was estimated at ~7 MB uncompressed, and the bulk is
+graphics.
 
-## Compresión: el S-DD1
+## Compression: the S-DD1
 
-**El formato.** No es un LZ: es un codificador **binario adaptativo por
-contexto**, bit por bit, con corridas codificadas en Golomb y ocho "buckets" de
-corrida según la probabilidad estimada (fullsnes, "SNES Cart S-DD1
-Decompression Algorithm"; la descripción original es de Andreas Naive). Lo que
-lo hace bueno para esta consola es que **entiende los tiles planares**: tiene
-modos de 2, 4 y 8 bitplanes, y el contexto de cada bit es la historia de su
-propio plano, incluida la fila de arriba. Tiene además un modo "8 bits" para
-datos que no son tiles.
+**The format.** It isn't an LZ: it is a **context-adaptive binary
+coder**, bit by bit, with runs coded in Golomb and eight run
+"buckets" according to the estimated probability (fullsnes, "SNES Cart S-DD1
+Decompression Algorithm"; the original description is by Andreas Naive). What
+makes it good for this console is that **it understands planar tiles**: it has
+2, 4 and 8 bitplane modes, and the context of each bit is the history of its
+own plane, including the row above. It also has an "8 bits" mode for
+data that isn't tiles.
 
-**Hay compresor, y ahora hay uno nuestro.** Andreas Naive publicó un compresor
-en C++ en la wiki de superfamicom.org (`CompressionExample.7z`, página "S-DD1"),
-sin licencia explícita. Para medir sin depender de eso escribí uno desde el
-pseudocódigo de fullsnes: `/extras/scratch/chips/sdd1.py`, unas 150 líneas.
-**Lo verifica un decodificador que no es el mío**: cada bloque comprimido se
-descomprime con el de snes9x —`sdd1.c`, compilado aparte— y sale byte por byte
-igual. Lo que **no** está verificado es contra el chip de verdad; el FX Pak
-tampoco lo es: es una reimplementación en VHDL del mismo algoritmo.
+**There is a compressor, and now there is one of our own.** Andreas Naive published a compressor
+in C++ on the superfamicom.org wiki (`CompressionExample.7z`, page "S-DD1"),
+with no explicit licence. To measure without depending on that I wrote one from
+fullsnes's pseudocode: `/extras/scratch/chips/sdd1.py`, about 150 lines.
+**It is verified by a decoder that isn't mine**: each compressed block is
+decompressed with snes9x's —`sdd1.c`, compiled separately— and comes out byte for byte
+the same. What is **not** verified is against the real chip; the FX Pak
+isn't either: it is a VHDL reimplementation of the same algorithm.
 
-**El ratio, medido el 2026-09-26** sobre los bloques de `release` de `8527f44`,
-eligiendo por bloque la mejor de las cuatro configuraciones de contexto. zlib
--9 va de referencia, como techo de lo que da el software —un descompresor en
-65816 queda bastante por debajo de zlib—:
+**The ratio, measured on 2026-09-26** on the blocks of `release` at `8527f44`,
+choosing per block the best of the four context configurations. zlib
+-9 serves as a reference, as a ceiling for what software gives —a decompressor in
+65816 stays well below zlib—:
 
-    clase          bpp  unidad          crudo      S-DD1            zlib -9
-    map_tiles       8   el mapa       458,9 KB   252,7 KB (55%)   223,9 KB (49%)
-    sprite_poses    4   la pose, 512  366,0 KB   108,1 KB (30%)   135,0 KB (37%)
-    sprite_tiles    4   el bloque     287,8 KB    61,3 KB (21%)    53,2 KB (18%)
-    anim_batalla    4   el bloque     548,0 KB    17,5 KB ( 3%)    21,6 KB ( 4%)
-    battler         4   el bloque      74,8 KB    34,2 KB (46%)    32,9 KB (44%)
-    fondo           8   el fondo       48,0 KB    27,6 KB (58%)    31,1 KB (65%)
-    titulo_tiles    8   la imagen      31,0 KB    13,3 KB (43%)    13,7 KB (44%)
-    above_tiles     4   el mapa        19,3 KB    10,6 KB (55%)    11,3 KB (59%)
-    map_celdas      8b  el mapa       278,2 KB    38,4 KB (14%)    22,9 KB ( 8%)
-    map_bloques     8b  el mapa        51,8 KB    23,4 KB (45%)    20,2 KB (39%)
-    evcodigo        8b  el mapa        39,1 KB    29,7 KB (76%)    16,1 KB (41%)
-    mensajes        8b  el bloque      64,8 KB    55,7 KB (86%)    26,0 KB (40%)
-    total                            2267,7 KB   672,6 KB (30%)   608,1 KB (27%)
+    class          bpp  unit            raw        S-DD1            zlib -9
+    map_tiles       8   the map       458.9 KB   252.7 KB (55%)   223.9 KB (49%)
+    sprite_poses    4   the pose, 512 366.0 KB   108.1 KB (30%)   135.0 KB (37%)
+    sprite_tiles    4   the block     287.8 KB    61.3 KB (21%)    53.2 KB (18%)
+    anim_batalla    4   the block     548.0 KB    17.5 KB ( 3%)    21.6 KB ( 4%)
+    battler         4   the block      74.8 KB    34.2 KB (46%)    32.9 KB (44%)
+    fondo           8   the backdrop   48.0 KB    27.6 KB (58%)    31.1 KB (65%)
+    titulo_tiles    8   the image      31.0 KB    13.3 KB (43%)    13.7 KB (44%)
+    above_tiles     4   the map        19.3 KB    10.6 KB (55%)    11.3 KB (59%)
+    map_celdas      8b  the map       278.2 KB    38.4 KB (14%)    22.9 KB ( 8%)
+    map_bloques     8b  the map        51.8 KB    23.4 KB (45%)    20.2 KB (39%)
+    evcodigo        8b  the map        39.1 KB    29.7 KB (76%)    16.1 KB (41%)
+    mensajes        8b  the block      64.8 KB    55.7 KB (86%)    26.0 KB (40%)
+    total                            2267.7 KB   672.6 KB (30%)   608.1 KB (27%)
 
-Tres lecturas:
+Three readings:
 
-* **En tiles le gana o empata a zlib**, y en las poses, que es lo que más
-  importa, le gana claro: 30% contra 37%. En lo que no son tiles —bytecode,
-  texto— pierde feo: su modo de 8 bits no ve repeticiones de bytes, sólo
-  estadística de bits.
-* **`anim_batalla` es 97,8% ceros** —medido: 931 tiles distintos de 17.536—.
-  Esos 530 KB los recupera cualquier RLE o deduplicación por software y no son
-  un argumento para el chip. Se lo paso al que investiga la compresión por
-  software. Sin ella, los gráficos que viajan por DMA bajan de 1286 KB a 507 KB
-  con el S-DD1.
-* **Lo que sólo el chip da es descomprimir sin CPU**: el S-DD1 entrega un byte
-  por ciclo de DMA, así que una pose comprimida se sube en vblank en el mismo
-  tiempo que una cruda y sin una sola instrucción de más. Por software, las
-  poses en caliente —que se suben por DMA en el vblank, como FF5— costarían
-  CPU en el peor lugar.
+* **In tiles it beats or ties zlib**, and in the poses, which is what matters
+  most, it clearly beats it: 30% against 37%. In what isn't tiles —bytecode,
+  text— it loses badly: its 8-bit mode doesn't see byte repetitions, only
+  bit statistics.
+* **`anim_batalla` is 97.8% zeros** —measured: 931 distinct tiles out of 17,536—.
+  Those 530 KB are recovered by any RLE or software deduplication and aren't
+  an argument for the chip. I pass it on to whoever investigates software
+  compression. Without it, the graphics that travel by DMA go down from 1286 KB to 507 KB
+  with the S-DD1.
+* **What only the chip gives is decompressing without CPU**: the S-DD1 delivers one byte
+  per DMA cycle, so a compressed pose is uploaded in vblank in the same
+  time as a raw one and without a single extra instruction. In software, the
+  on-the-fly poses —which are uploaded by DMA in vblank, like FF5— would cost
+  CPU in the worst place.
 
-**Las restricciones**, todas en el código de los emuladores:
+**The restrictions**, all in the emulators' code:
 
-* **Sólo por DMA.** Leer los datos comprimidos con la CPU devuelve los bytes
-  comprimidos. El DMA tiene que salir de `$C0-$FF`, con el canal prendido en
-  `$4800` y `$4801`, y **con la dirección de origen fija** —el bit 3 de `DMAP`,
-  el mismo truco que ya usa el puerto de datos del MSU-1—: bsnes compara cada
-  lectura contra la dirección con que arrancó el DMA (`sdd1.cpp`, `mcuRead`), y
-  snes9x sólo descomprime con `AAddressFixed`.
-* **Un DMA es un flujo**, que arranca de cero, de hasta 64 KB. No hay acceso
-  aleatorio adentro: **la grilla del mapa, que se recorre con un puntero al
-  caminar, no puede quedar comprimida en la ROM**. Se podría descomprimir a la
-  WRAM al cargar el mapa —el DMA llega a `$2180`— y el banco `$7F` está libre,
-  pero eso es otra decisión.
-* **El destino puede ser cualquiera del bus B**: VRAM, CGRAM, o la WRAM por
+* **Only by DMA.** Reading the compressed data with the CPU returns the
+  compressed bytes. The DMA has to come from `$C0-$FF`, with the channel enabled in
+  `$4800` and `$4801`, and **with a fixed source address** —bit 3 of `DMAP`,
+  the same trick the MSU-1 data port already uses—: bsnes compares each
+  read against the address the DMA started with (`sdd1.cpp`, `mcuRead`), and
+  snes9x only decompresses with `AAddressFixed`.
+* **A DMA is a stream**, starting from zero, of up to 64 KB. There is no random
+  access inside: **the map's grid, which is walked with a pointer while
+  walking, can't stay compressed in the ROM**. It could be decompressed to
+  WRAM when loading the map —the DMA reaches `$2180`— and bank `$7F` is free,
+  but that is another decision.
+* **The destination can be anything on bus B**: VRAM, CGRAM, or WRAM through
   `$2180`.
-* **El mapa de memoria cambia**, y no poco: la ventana LoROM ve sólo los
-  primeros 2 MB, así que todo lo que hoy vive en los bancos `$40-$7D` —los 2 MB
-  de arriba— pasa a `$C0-$FF`, en bancos de 64 KB. La SRAM queda donde está,
-  en `$70` (tablero `SDD1-RAM` de bsnes, `Sdd1.cpp:25` de Mesen2, snes9x mapea
-  `$70-$7F`), y **el FastROM se conserva**: `$32` es el mapeo rápido que usan
-  los dos juegos, y `$80-$BF` sigue siendo el espejo de `$00-$3F`.
+* **The memory map changes**, and not a little: the LoROM window sees only the
+  first 2 MB, so everything that today lives in banks `$40-$7D` —the upper 2 MB—
+  moves to `$C0-$FF`, in 64 KB banks. SRAM stays where it is,
+  at `$70` (bsnes's `SDD1-RAM` board, Mesen2's `Sdd1.cpp:25`, snes9x maps
+  `$70-$7F`), and **FastROM is kept**: `$32` is the fast mapping both
+  games use, and `$80-$BF` is still the mirror of `$00-$3F`.
 
-## CPU: el SA-1
+## CPU: the SA-1
 
-Un 65816 a 10,74 MHz con 2 KB de I-RAM, la BW-RAM del cartucho —que es la SRAM,
-con batería—, interrupciones cruzadas, multiplicación y división, conversión
-de bitmap a planar por DMA y lectura de bits de largo variable (fullsnes, "SNES
-Cart SA-1"). **No ve la WRAM de la consola, ni el PPU, ni el APU, ni los DMA de
-la CPU principal.**
+A 65816 at 10.74 MHz with 2 KB of I-RAM, the cartridge's BW-RAM —which is the SRAM,
+with battery—, cross interrupts, multiplication and division, bitmap to
+planar conversion by DMA and variable-length bit reading (fullsnes, "SNES
+Cart SA-1"). **It doesn't see the console's WRAM, nor the PPU, nor the APU, nor the main
+CPU's DMAs.**
 
-Lo que rinde de verdad está en `sfc/coprocessor/sa1/memory.cpp` de bsnes:
+What it really yields is in bsnes's `sfc/coprocessor/sa1/memory.cpp`:
 
-    el SA-1 lee...          ciclos   o sea         si la CPU principal está
-                                                   en la misma memoria
-    ROM                        1     10,74 MHz     2 ciclos: 5,37 MHz
-    I-RAM                      1     10,74 MHz     3 ciclos
-    BW-RAM                     2      5,37 MHz     4 ciclos
+    the SA-1 reads...       cycles   that is       if the main CPU is
+                                                   on the same memory
+    ROM                        1     10.74 MHz     2 cycles: 5.37 MHz
+    I-RAM                      1     10.74 MHz     3 cycles
+    BW-RAM                     2      5.37 MHz     4 cycles
 
-La CPU principal, contra eso, lee la ROM a 3,58 MHz con FastROM y la WRAM a
-2,68. **La trampa es la columna de la derecha**: nuestro código entero corre
-desde la ROM, así que mientras la CPU principal trabaja, cada lectura de ROM del
-SA-1 cuesta el doble. Un intérprete que lee bytecode de la ROM y estado de la
-BW-RAM rinde entre **1,5 y 3 veces** el de hoy, no cuatro, y el extremo bueno
-pide que la CPU principal espere con `wai` o desde la WRAM.
+The main CPU, against that, reads ROM at 3.58 MHz with FastROM and WRAM at
+2.68. **The trap is the right-hand column**: our whole code runs
+from ROM, so while the main CPU works, each ROM read by the
+SA-1 costs double. An interpreter that reads bytecode from ROM and state from
+BW-RAM yields between **1.5 and 3 times** today's, not four, and the good end
+requires the main CPU to wait with `wai` or from WRAM.
 
-**Y el FastROM con SA-1 no está claro.** fullsnes: "The SNES CPU can access
+**And FastROM with SA-1 isn't clear.** fullsnes: "The SNES CPU can access
 memory at 2.68MHz rate (or 3.5MHz, but that mode may not be used in combination
-with the SA-1)". bsnes y snes9x respetan `MEMSEL` igual, y Mesen2 hasta modela
-el FastROM contra los conflictos del SA-1 (`Sa1Cpu.cpp:141`), así que **ningún
-emulador lo cobraría**. El FX Pak no es el chip de verdad sino una FPGA, así que
-lo que haga ahí tampoco prueba lo que haría un SA-1 real, pero es lo que importa
-para taro. Perder el FastROM es perder lo que ganó `RAPIDO` el 2026-09-11 —la
-apertura perdía un cuadro de cada tres sin él— en todo lo que se quede en la
-CPU principal.
+with the SA-1)". bsnes and snes9x respect `MEMSEL` anyway, and Mesen2 even models
+FastROM against the SA-1's conflicts (`Sa1Cpu.cpp:141`), so **no
+emulator would catch it**. The FX Pak isn't the real chip but an FPGA, so
+what it does there doesn't prove what a real SA-1 would do either, but it is what matters
+for taro. Losing FastROM means losing what `RAPIDO` gained on 2026-09-11 —the
+opening lost one frame in three without it— in everything that stays on the
+main CPU.
 
-# Dónde se va hoy el cuadro
+# Where the frame goes today
 
-## El método
+## The method
 
-La ROM no tiene perfilador, así que armé **una copia sondeada**:
-`/extras/scratch/chips/instrumentar.py` copia `rom/src/` a un directorio aparte,
-pone después de cada `jsr` del lazo principal un `jsl` a una sonda que lee la
-línea del contador vertical (`$2137`/`$213D`) y acumula en `$7F:F000` cuántas
-líneas pasaron desde la sonda anterior, y hace lo mismo alrededor de
-`music_tick` en `irq_musica`. Arma contra los `.inc` de `rom/build/release`, sin
-tocar el árbol. `medir.py` corre escenas y, en cada vuelta del lazo, reparte sus
-líneas por rutina.
+The ROM has no profiler, so I built **a probed copy**:
+`/extras/scratch/chips/instrumentar.py` copies `rom/src/` to a separate directory,
+puts after each `jsr` of the main loop a `jsl` to a probe that reads the
+vertical counter's line (`$2137`/`$213D`) and accumulates at `$7F:F000` how many
+lines passed since the previous probe, and does the same around
+`music_tick` in `irq_musica`. It builds against the `.inc` files in `rom/build/release`, without
+touching the tree. `medir.py` runs scenes and, on each pass of the loop, splits its
+lines by routine.
 
-**Cada sonda cuesta una línea** —medido: dos sondas seguidas dan 1,0 entre
-ellas—, y en una vuelta normal corren unas 27. O sea que las vueltas sondeadas
-están **~27 líneas infladas**, y lo que dicen de "cuadros perdidos" es
-pesimista. Por eso cada escena se corrió también en la ROM de verdad
-(`REAL=1`), contando vueltas contra cuadros. Una vuelta tiene 262 líneas.
+**Each probe costs one line** —measured: two probes in a row give 1.0 between
+them—, and in a normal pass about 27 run. That is, the probed passes
+are **~27 lines inflated**, and what they say about "lost frames" is
+pessimistic. That's why each scene was also run on the real ROM
+(`REAL=1`), counting passes against frames. A pass has 262 lines.
 
-## El minijuego de las piedras (mapa 11)
+## The stones minigame (map 11)
 
-    escena                                  ROM de verdad            sondeada
-    caminando en (19,46), sin piedras       599 vueltas / 600        598 / 600
-    modo piedras, quieto                     60 / 60                  60 / 60
-    modo piedras, tirando dos piedras       139 / 140                138 / 140
-    modo piedras, caminando                 240 / 240                239 / 240
+    scene                                   real ROM                 probed
+    walking at (19,46), no stones           599 passes / 600         598 / 600
+    stones mode, still                       60 / 60                  60 / 60
+    stones mode, throwing two stones        139 / 140                138 / 140
+    stones mode, walking                    240 / 240                239 / 240
 
-En el emulador, **hoy el minijuego casi no pierde cuadros**: uno cada 140 a 600.
-Lo que sí dice la sonda es que **el margen es fino y dónde está el gasto**:
+In the emulator, **today the minigame hardly loses frames**: one every 140 to 600.
+What the probe does say is that **the margin is thin and where the cost is**:
 
-    modo piedras, quieto — 191 líneas por vuelta (~164 sin las sondas)
-       paralelos (eventos_de_mapa)    123   el 47% de las 262
+    stones mode, still — 191 lines per pass (~164 without the probes)
+       parallel (eventos_de_mapa)     123   47% of the 262
        build_oam                       28
        flush_video                      6
-       el resto, de a una o dos       ~34   (casi todo, la sonda misma)
+       the rest, one or two each      ~34   (almost all of it, the probe itself)
 
-Las vueltas que se pasan son las que suman al paralelo un paso del héroe
-(`move_hero` 14, `stream_map` 30) o un refresco de páginas (21). **El que come
-es el intérprete de los paralelos**: el mapa tiene **13 páginas paralelas
-sin espera** —las seis `Light*`, el ídolo, tres guardias, la PC, `EV0017` y el
-`LightFloor` de 145 comandos—, y cada una corre entera en cada cuadro. Salen a
-unas 9 líneas por página.
+The passes that overrun are those that add to the parallel ones a hero step
+(`move_hero` 14, `stream_map` 30) or a page refresh (21). **What eats
+is the interpreter of the parallel ones**: the map has **13 parallel pages
+without a wait** —the six `Light*`, the idol, three guards, the PC, `EV0017` and the
+145-command `LightFloor`—, and each one runs entirely every frame. They come to
+about 9 lines per page.
 
-No reproduje un lag fuerte. Si taro lo ve jugando, lo más probable es que sea
-alguno de esos picos sumado a algo que estas escenas no tocan —un guardia
-caminando, un mensaje—, y con 60 líneas de margen alcanza con poco. **Es CPU**, y
-es justo lo que el SA-1 acelera.
+I didn't reproduce heavy lag. If taro sees it while playing, it is most likely
+one of those peaks added to something these scenes don't touch —a guard
+walking, a message—, and with 60 lines of margin little is needed. **It is CPU**, and
+it is exactly what the SA-1 speeds up.
 
-## La terraza (mapa 32)
+## The terrace (map 32)
 
-La cinemática de `EV0005` no tiene ningún `TintScreen`: **los "tintes" son
-destellos**, siete `FlashSprite` —Kersh azul, Arden celeste, el héroe rojo— y
-tres `FlashScreen`. Jugada hasta la pelea con A cada 20 cuadros, **la ROM de
-verdad pierde 9 cuadros sueltos en ~2100**. Las vueltas pesadas, sondeadas:
+`EV0005`'s cutscene has no `TintScreen`: **the "tints" are
+flashes**, seven `FlashSprite` —Kersh blue, Arden light blue, the hero red— and
+three `FlashScreen`. Played up to the battle with A every 20 frames, **the real
+ROM loses 9 isolated frames in ~2100**. The heavy passes, probed:
 
-    121 vueltas de más de 224 líneas, 260 en promedio; la peor, 289 (~262 sin
-    las sondas):
-       destello_tick     103   FlashScreen: rehace la paleta entera
-       flashes_tick       94   FlashSprite: rehace la paleta del evento
+    121 passes of more than 224 lines, 260 on average; the worst, 289 (~262 without
+    the probes):
+       destello_tick     103   FlashScreen: redoes the whole palette
+       flashes_tick       94   FlashSprite: redoes the event's palette
        build_oam          32
        flush_video        11
-       paralelos          11
+       parallel           11
 
-**Casi 200 de las 262 líneas se van en rehacer paletas** cuando un
-`FlashScreen` y un `FlashSprite` coinciden. Es CPU pura: multiplicaciones y
-divisiones por color, igual que el tinte (ver `tabla_canal` en
-`rom/src/tinte.s`, que ya tuvo que sacarse noventa y seis `jsr` para entrar).
-Subir la paleta a CGRAM en el vblank son 512 bytes: no es eso.
+**Almost 200 of the 262 lines go into redoing palettes** when a
+`FlashScreen` and a `FlashSprite` coincide. It is pure CPU: multiplications and
+divisions per colour, same as the tint (see `tabla_canal` in
+`rom/src/tinte.s`, which already had to drop ninety-six `jsr` to fit).
+Uploading the palette to CGRAM in vblank is 512 bytes: it isn't that.
 
-## La carrera (mapas 49-54)
+## The race (maps 49-54)
 
-No está en ninguna ROM, así que **no está medida**. Lo que se puede contar es
-el trabajo (`/extras/scratch/chips/carrera.py`): los mapas 49, 52 y 54 tienen
-**41 páginas paralelas cada uno** —`RaceController2` y cuarenta eventos de ~17
-comandos que leen coordenadas, comparan y cambian el sprite—, contra las 13 del
-mapa 11. A las 9 líneas por página del mapa 11, son **~370 líneas: no entra en
-un cuadro** tal como está el intérprete hoy. Es una estimación de orden de
-magnitud: las páginas del 11 no son iguales a éstas.
+It isn't in any ROM, so **it isn't measured**. What can be counted is
+the work (`/extras/scratch/chips/carrera.py`): maps 49, 52 and 54 have
+**41 parallel pages each** —`RaceController2` and forty events of ~17
+commands that read coordinates, compare and change the sprite—, against the 13 of
+map 11. At map 11's 9 lines per page, that's **~370 lines: it doesn't fit in
+a frame** with the interpreter as it is today. It is an order-of-magnitude
+estimate: map 11's pages aren't the same as these.
 
-# Las ideas de taro, una por una
+# taro's ideas, one by one
 
-**El minijuego de las piedras.** El gasto es el intérprete de los paralelos
-(~123 líneas). En el SA-1 esas páginas correrían 1,5 a 3 veces más rápido, o
-sea que el margen pasaría de ~60 a ~110-140 líneas. Pero hoy casi no pierde
-cuadros en el emulador, así que el SA-1 arreglaría un problema que por
-software se arregla más barato: ver "Sin chip".
+**The stones minigame.** The cost is the interpreter of the parallel ones
+(~123 lines). On the SA-1 those pages would run 1.5 to 3 times faster, that
+is, the margin would go from ~60 to ~110-140 lines. But today it hardly loses
+frames in the emulator, so the SA-1 would fix a problem that in
+software is fixed more cheaply: see "Without a chip".
 
-**La terraza.** Es el mejor candidato del SA-1 por forma —rehacer una paleta es
-una función pura: entra la paleta y el destello, sale la paleta—, y el SA-1 la
-haría en su I-RAM mientras la CPU principal sigue; el DMA de la CPU principal
-lee la I-RAM y la BW-RAM, que están en el bus A. Pero también es el caso más
-fácil sin chip: la paleta de un destello se puede calcular una vez por paso de
-fuerza, o repartir entre cuadros, o no rehacer lo que no cambió.
+**The terrace.** It is the SA-1's best candidate by shape —redoing a palette is
+a pure function: in go the palette and the flash, out comes the palette—, and the SA-1 would
+do it in its I-RAM while the main CPU carries on; the main CPU's DMA
+reads I-RAM and BW-RAM, which are on bus A. But it is also the
+easiest case without a chip: a flash's palette can be computed once per
+strength step, or spread across frames, or not redo what didn't change.
 
-**La carrera en auto.** Es el único caso donde el SA-1 podría ser la diferencia
-entre 60 y 30 fps, porque ~370 líneas de paralelos no entran ni con un
-intérprete el doble de rápido en la CPU principal. Con el SA-1, a 1,5-3 veces,
-quedan 120-250. **Antes de decidir hay que medirla**: meter el 52 en un cartucho
-de prueba y correr la sonda.
+**The car race.** It is the only case where the SA-1 could be the difference
+between 60 and 30 fps, because ~370 lines of parallel ones don't fit even with an
+interpreter twice as fast on the main CPU. With the SA-1, at 1.5-3 times,
+they come to 120-250. **Before deciding it has to be measured**: put 52 in a test
+cartridge and run the probe.
 
-**Mover los eventos paralelos al SA-1.** Es lo general, y por eso es la versión
-que vale: no sabe nada de ABL. Lo que pide:
+**Move the parallel events to the SA-1.** It is the general one, and that's why it is the version
+that counts: it knows nothing about ABL. What it requires:
 
-* **todo lo que el bytecode toca tiene que vivir en la BW-RAM o la I-RAM**: las
-  variables (hoy en `$7E:2600`, por la ventana de `WMADD`), los switches, la
-  tabla de eventos con sus posiciones, el estado de cada paralelo
-  (`FAR_PAR_ESTADO`), el azar, el inventario. Son todos los usuarios de
-  `WMDATA` —unos 190 en 17 archivos— y los de la BSS que el intérprete mire;
-* **lo que el bytecode hace con el hardware no lo puede hacer el SA-1**:
-  `PlayBGM`, `PlaySound`, un mensaje que sube glifos, un teletransporte que
-  recarga la VRAM, un tinte que sube paletas. Esos opcodes pasan a ser pedidos
-  en una cola que la CPU principal atiende;
-* **el orden de `Game_Map::Update` no se puede romper**: los paralelos van
-  antes del héroe y las goldens son de pixel exacto. O sea que la CPU principal
-  **espera** a que el SA-1 termine, y lo que se gana es la velocidad del
-  segmento, no el paralelismo. Lo único que se puede solapar es lo que no mira
-  el estado de los eventos.
+* **everything the bytecode touches has to live in BW-RAM or I-RAM**: the
+  variables (today at `$7E:2600`, through the `WMADD` window), the switches, the
+  event table with their positions, the state of each parallel one
+  (`FAR_PAR_ESTADO`), the randomness, the inventory. They are all the users of
+  `WMDATA` —about 190 in 17 files— and those of the BSS the interpreter looks at;
+* **what the bytecode does with the hardware can't be done by the SA-1**:
+  `PlayBGM`, `PlaySound`, a message that uploads glyphs, a teleport that
+  reloads VRAM, a tint that uploads palettes. Those opcodes become requests
+  in a queue the main CPU serves;
+* **the order of `Game_Map::Update` can't be broken**: the parallel ones go
+  before the hero and the goldens are pixel exact. That is, the main CPU
+  **waits** for the SA-1 to finish, and what is gained is the segment's speed,
+  not parallelism. The only thing that can overlap is what doesn't look at
+  the events' state.
 
-**Que la CPU principal procese las transiciones y el SA-1 haga los chequeos.**
-En el mapa 11 "los chequeos" —dónde está la piedra, si pisé una luz— **son
-páginas de RM2k**: las `Light*` y el `LightFloor`. Hacer que el SA-1 las haga sin
-código de ABL es exactamente la idea anterior. Cualquier versión más fina —el
-SA-1 compara posiciones y la CPU principal decide— necesita saber qué página
-es "un chequeo", y eso es reconocer el minijuego por dentro, que es lo que
-`el-mapa-11-se-rediseno.md` ya descartó con el camino 4.
+**Have the main CPU process the transitions and the SA-1 do the checks.**
+On map 11 "the checks" —where the stone is, whether I stepped on a light— **are
+RM2k pages**: the `Light*` and the `LightFloor`. Having the SA-1 do them without
+ABL code is exactly the previous idea. Any finer version —the
+SA-1 compares positions and the main CPU decides— needs to know which page
+is "a check", and that means recognising the minigame from the inside, which is what
+`el-mapa-11-se-rediseno.md` already discarded with path 4.
 
-# Diseños
+# Designs
 
-**A. El intérprete de eventos en el SA-1, la CPU principal con el video y el
-audio.** Es la idea anterior llevada a todo el intérprete: `eventos_de_mapa`,
-`eventos_tick` y las rutas. Gana en los tres casos medidos y en la carrera.
-Pide mudar el estado de los eventos a la BW-RAM y la cola de pedidos. El
-problema grande es la sincronización: cada opcode que toca hardware es un ida y
-vuelta, y un mensaje o una pelea son muchos.
+**A. The event interpreter on the SA-1, the main CPU with video and
+audio.** It is the previous idea taken to the whole interpreter: `eventos_de_mapa`,
+`eventos_tick` and the routes. It wins in the three measured cases and in the race.
+It requires moving the events' state to BW-RAM and the request queue. The
+big problem is synchronisation: each opcode that touches hardware is a round
+trip, and a message or a battle are many.
 
-**B. Todo el juego en el SA-1, la CPU principal como sirvienta de E/S.** Es como
-están hechos Super Mario RPG y Kirby: el lazo entero corre en el SA-1, y la CPU
-principal sólo hace el DMA del vblank desde sombras en la BW-RAM, lee el
-control y toca la música por su IRQ. Gana todo, `build_oam` y `stream_map`
-incluidos, y no hay sincronización dentro del cuadro. Tiene a su favor que el
-SA-1 ve la I-RAM en `$0000-$07FF`, así que la página directa y la pila quedan
-donde están. Pero la BSS —7680 bytes, llena— no entra en los 2 KB de I-RAM y
-va a la BW-RAM a 5,37 MHz, y **la BW-RAM es la SRAM con batería**: trabajar
-en ella cambia su CRC en cada cuadro, y el FX Pak graba la SRAM a la tarjeta
-cuando la ve cambiar (`msu_savecheck` en `src/msu1.c:73`, en las pausas del MSU-1). Es el refactor
-más grande de los tres.
+**B. The whole game on the SA-1, the main CPU as an I/O servant.** It is how
+Super Mario RPG and Kirby are made: the whole loop runs on the SA-1, and the main
+CPU only does the vblank DMA from shadows in BW-RAM, reads the
+controller and plays the music from its IRQ. It wins everything, `build_oam` and `stream_map`
+included, and there is no synchronisation within the frame. In its favour, the
+SA-1 sees I-RAM at `$0000-$07FF`, so the direct page and the stack stay
+where they are. But the BSS —7680 bytes, full— doesn't fit in the 2 KB of I-RAM and
+goes to BW-RAM at 5.37 MHz, and **the BW-RAM is the battery-backed SRAM**: working
+in it changes its CRC every frame, and the FX Pak writes the SRAM to the card
+when it sees it change (`msu_savecheck` in `src/msu1.c:73`, in the MSU-1's pauses). It is the
+biggest refactor of the three.
 
-**C. Trabajos puntuales.** Todo queda en la CPU principal y el SA-1 recibe
-funciones puras: la paleta de un tinte o un destello, una descompresión por
-software a 10 MHz. Es lo más incremental y lo más barato, pero **no toca el
-intérprete**, que es lo que come en el mapa 11 y en la carrera.
+**C. Specific jobs.** Everything stays on the main CPU and the SA-1 receives
+pure functions: the palette of a tint or a flash, a software
+decompression at 10 MHz. It is the most incremental and the cheapest, but **it doesn't touch the
+interpreter**, which is what eats on map 11 and in the race.
 
-# Qué costaría migrar
+# What migrating would cost
 
-## El paso cero: cambiar el mapeo sin usar el chip
+## Step zero: change the mapping without using the chip
 
-Es el camino incremental, y es el mismo para los dos: la ROM pasa a declarar el
-chip, se reacomoda, y **no lo usa**. Lo verifican las goldens —la ROM tiene que
-dibujar exactamente lo mismo— y `test_cores.py`.
+It is the incremental path, and it is the same for both: the ROM starts declaring the
+chip, is rearranged, and **doesn't use it**. It is verified by the goldens —the ROM has to
+draw exactly the same— and `test_cores.py`.
 
-Lo que toca:
+What it touches:
 
-* **`tools/ensamblado/bancos.py`**, el `.cfg` de `ld65`. Hoy son 126 áreas LoROM
-  de 32 KB en `$00-$7D` y dos reservadas. Con S-DD1, los 2 MB de arriba van a
-  `$C0-$FF` en bancos de 64 KB; con SA-1, o a `$80-$BF` (el mapeo por omisión de
-  su MMC pone ahí los MB 2 y 3, en LoROM) o a `$C0-$DF`. Los dos reservados
-  para `$7E-$7F` dejan de hacer falta.
-* **`RAPIDO`**, en tres lugares. Con S-DD1 no cambia nada. Con SA-1 depende del
-  FastROM: si vale, el MMC se programa para que `$80-$BF` sea espejo de
-  `$00-$3F` (`$2222 = $80`, `$2223 = $81`) y los MB altos van a `$C0-$DF`; si no
-  vale, el código se queda en `$00` y el espejo se va.
-* **La cabecera** (`rom/src/cabecera.s`): dos bytes, y el checksum sigue en el
-  mismo lugar.
-* **La SRAM**: con S-DD1 queda en `$70`. Con SA-1 pasa a `$40` y hay que
-  habilitarle la escritura a la CPU principal (`$2226`), que arranca protegida.
-  `SRAM_BANCO` está en `partida.s`, `ranuras.s` y `nivel.s`.
-* **El arnés**: `en_la_rom` de `pruebas/arnes/consola.py` es la fórmula LoROM y
-  la usan las pruebas que leen tablas de la ROM. Y el conversor tiene dos
-  supuestos de LoROM escritos (`snes_convert.py:2977` y `:3634`) y un puntero de
-  grilla que cruza de banco sumando uno: un bloque no puede quedar a caballo de
-  los 2 MB.
-* **`just entregar`** y el `.sym` no cambian: los arma el mismo `ld65`.
-* **El MSU-1** tampoco: `$2000-$2007` no choca con ninguno de los dos
-  (`$2200-$23FF` del SA-1, `$4800-$4807` del S-DD1).
+* **`tools/ensamblado/bancos.py`**, `ld65`'s `.cfg`. Today they are 126 LoROM areas
+  of 32 KB in `$00-$7D` and two reserved. With S-DD1, the upper 2 MB go to
+  `$C0-$FF` in 64 KB banks; with SA-1, either to `$80-$BF` (its MMC's default
+  mapping puts MB 2 and 3 there, in LoROM) or to `$C0-$DF`. The two reserved
+  for `$7E-$7F` are no longer needed.
+* **`RAPIDO`**, in three places. With S-DD1 nothing changes. With SA-1 it depends on
+  FastROM: if it is valid, the MMC is programmed so that `$80-$BF` mirrors
+  `$00-$3F` (`$2222 = $80`, `$2223 = $81`) and the high MBs go to `$C0-$DF`; if it isn't
+  valid, the code stays at `$00` and the mirror goes away.
+* **The header** (`rom/src/cabecera.s`): two bytes, and the checksum stays in the
+  same place.
+* **The SRAM**: with S-DD1 it stays at `$70`. With SA-1 it moves to `$40` and writing
+  has to be enabled for the main CPU (`$2226`), which starts protected.
+  `SRAM_BANCO` is in `partida.s`, `ranuras.s` and `nivel.s`.
+* **The harness**: `en_la_rom` in `pruebas/arnes/consola.py` is the LoROM formula and
+  it is used by the tests that read tables from the ROM. And the converter has two
+  written LoROM assumptions (`snes_convert.py:2977` and `:3634`) and a grid
+  pointer that crosses banks by adding one: a block can't straddle
+  the 2 MB.
+* **`just entregar`** and the `.sym` don't change: they are built by the same `ld65`.
+* **The MSU-1** doesn't either: `$2000-$2007` doesn't clash with either of the two
+  (the SA-1's `$2200-$23FF`, the S-DD1's `$4800-$4807`).
 
-Del orden de **100 a 200 líneas**, casi todas en Python.
+On the order of **100 to 200 lines**, almost all in Python.
 
-## Lo que viene después
+## What comes after
 
-* **S-DD1, las poses comprimidas.** El conversor comprime —el compresor de
-  `/extras/scratch/chips/sdd1.py` va al caché de disco, porque en Python tarda
-  minutos—, y el DMA de las poses pasa a modo de origen fijo desde `$C0-$FF`.
-  Chico: el formato no toca la ROM más que en cómo se arma el DMA. Después, los
-  tiles de los mapas y de los fondos al cargar.
-* **SA-1, el diseño A o el B.** Semanas. Mudar el estado, el arranque del SA-1
-  (arranca en reset y hay que darle su vector), el buzón y la cola de pedidos.
+* **S-DD1, the compressed poses.** The converter compresses —the compressor in
+  `/extras/scratch/chips/sdd1.py` goes into the disk cache, because in Python it takes
+  minutes—, and the poses' DMA switches to fixed-source mode from `$C0-$FF`.
+  Small: the format touches the ROM only in how the DMA is set up. Then, the
+  tiles of maps and backgrounds on load.
+* **SA-1, design A or B.** Weeks. Moving the state, the SA-1's boot
+  (it starts at reset and has to be given its vector), the mailbox and the request queue.
 
-## Lo que cobrarían las pruebas y lo que no
+## What the tests would catch and what they wouldn't
 
-**Lo cobran**: cualquier dato mal leído por el mapeo nuevo —las goldens, en
-pixeles—; la memoria sin inicializar —`test_cores.py`, que con SA-1 también
-tendría que mirar la BW-RAM—; la partida guardada —`test_guardar.py` y los de
-ranuras, por la SRAM que expone snes9x—; un cuadro de más —`cuadros_perdidos` y
+**They catch**: any data misread by the new mapping —the goldens, in
+pixels—; uninitialised memory —`test_cores.py`, which with SA-1 would also
+have to look at the BW-RAM—; the saved game —`test_guardar.py` and the slot ones,
+through the SRAM that snes9x exposes—; an extra frame —`cuadros_perdidos` and
 `test_el_hq_de_los_lazer_teeth_entra_en_el_cuadro`—.
 
-**No lo cobra nada**, y hay que llevarlo al FX Pak:
+**Nothing catches**, and it has to be taken to the FX Pak:
 
-* **el FastROM con SA-1**: los emuladores lo dejan andar;
-* **el MSU-1 junto al chip** en el FX Pak, y el puerto de datos por DMA ahí;
-* **la SRAM en el FX Pak**: dónde la mapea el core de S-DD1 —el v1.11.1 menciona
-  un "mixed mapper SRAM layout"— y cómo graba la BW-RAM el de SA-1;
-* **el tiempo del SA-1**: snes9x lo aproxima y bsnes no, así que en un mapa que
-  entra justo `test_cores.py` podría empezar a dar rojo por un cuadro perdido en
-  uno y no en el otro;
-* **Mednafen**, que ninguna prueba corre.
+* **FastROM with SA-1**: the emulators let it work;
+* **the MSU-1 together with the chip** on the FX Pak, and the data port by DMA there;
+* **the SRAM on the FX Pak**: where the S-DD1 core maps it —v1.11.1 mentions
+  a "mixed mapper SRAM layout"— and how the SA-1 one writes the BW-RAM;
+* **the SA-1's timing**: snes9x approximates it and bsnes doesn't, so on a map that
+  just fits `test_cores.py` could start going red because of a lost frame in
+  one and not in the other;
+* **Mednafen**, which no test runs.
 
-# La recomendación
+# The recommendation
 
-**No migrar ahora.** Ninguno de los dos arregla algo que hoy no tenga un
-arreglo más barato:
+**Don't migrate now.** Neither of the two fixes anything that doesn't have a
+cheaper fix today:
 
-* el mapa 11 casi no pierde cuadros, y lo que come es el intérprete;
-* la terraza son paletas que se pueden calcular menos veces;
-* el cartucho no llegó al umbral que la decisión de 4 MB se puso para
-  revisarse (`radio.py` del estudio de compresión, sobre el `.dbg`, da ~77% el
+* map 11 hardly loses frames, and what eats is the interpreter;
+* the terrace is palettes that can be computed fewer times;
+* the cartridge hasn't reached the threshold the 4 MB decision set itself to be
+  revisited (`radio.py` from the compression study, over the `.dbg`, gives ~77% on
   2026-09-26).
 
-**El S-DD1 es la respuesta para el espacio**, y conviene tenerlo preparado para
-cuando el cartucho llegue al 85-90%. Frente a la compresión por software gana
-en lo que ésta no puede: descomprime **sin CPU**, en el mismo DMA, así que sirve
-también para las poses que se suben cada cuadro. Deja todos los gráficos en
-menos de un tercio, conserva el FastROM y la SRAM en `$70`, y lo corren el FX
-Pak con MSU-1, los cuatro emuladores del arnés y Mednafen sin MSU-1. En contra:
-lo usaron dos juegos, el compresor es nuestro, y la ROM se ata a un chip que
-ningún cartucho común tiene.
+**The S-DD1 is the answer for space**, and it is worth having it ready for
+when the cartridge reaches 85-90%. Against software compression it wins
+where software can't: it decompresses **without CPU**, in the same DMA, so it also serves
+for the poses that are uploaded every frame. It leaves all graphics at
+less than a third, keeps FastROM and the SRAM at `$70`, and it is run by the FX
+Pak with MSU-1, the harness's four emulators and Mednafen without MSU-1. Against:
+two games used it, the compressor is ours, and the ROM gets tied to a chip that
+no ordinary cartridge has.
 
-**El SA-1 es la respuesta para la carrera**, si hace falta. Antes, dos cosas en
-este orden: medir la carrera en un cartucho de prueba, y optimizar el
-intérprete, que es general y sirve en cualquier consola. Si con eso los
-paralelos de la carrera siguen sin entrar en el cuadro, el diseño A es el
-camino. No se pueden tener los dos: son tableros distintos.
+**The SA-1 is the answer for the race**, if needed. Before that, two things in
+this order: measure the race in a test cartridge, and optimise the
+interpreter, which is general and works on any console. If with that the
+race's parallel ones still don't fit in the frame, design A is the
+way. You can't have both: they are different boards.
 
-## Sin chip
+## Without a chip
 
-* **El intérprete de los paralelos**, que es lo que más come en el mapa 11 y en
-  la carrera. Lo general: fundir en el compilador los patrones de RM2k que se
-  repiten en cada página —leer la X de un evento en una variable y compararla—,
-  y leer las variables con `lda f:$7E2600, x` en vez de la ventana de `WMADD`
-  (tres escrituras y dos lecturas por variable). El comentario de
-  `ram_lejana.s` dice que esa memoria "no se puede indexar"; con
-  direccionamiento largo sí se puede. Hay que ver con `git blame` por qué se
-  eligió la ventana antes de tocarlo. No está medido cuánto ganaría.
-* **Las paletas de los destellos**: calcular la paleta de cada paso de fuerza
-  una sola vez, repartir el trabajo entre cuadros, o no rehacer lo que no
-  cambió. La suma de color del hardware no sirve: da `c + f·s` y no la mezcla
-  de RM2k.
-* **La compresión por software**, que investiga otro agente: para
-  `anim_batalla` alcanza con un RLE, y para los mapas se descomprime al cargar,
-  que es cuando sobra tiempo. Lo que no puede hacer bien son las poses.
-* **ExHiROM**, que el FX Pak soporta (`smc.c:259`, `mapper_id = 2`), sigue
-  valiendo lo que dice la decisión: cambia cómo se calcula cada dirección, igual
-  que el paso cero de cualquiera de los dos chips, y no da ni compresión ni CPU.
+* **The interpreter of the parallel ones**, which is what eats the most on map 11 and in
+  the race. The general approach: fuse in the compiler the RM2k patterns that
+  repeat in each page —read an event's X into a variable and compare it—,
+  and read variables with `lda f:$7E2600, x` instead of the `WMADD` window
+  (three writes and two reads per variable). The comment in
+  `ram_lejana.s` says that memory "can't be indexed"; with
+  long addressing it can. It has to be checked with `git blame` why the
+  window was chosen before touching it. How much it would gain isn't measured.
+* **The flashes' palettes**: compute each strength step's palette
+  only once, spread the work across frames, or not redo what didn't
+  change. The hardware's colour addition doesn't help: it gives `c + f·s` and not RM2k's
+  blend.
+* **Software compression**, which another agent is investigating: for
+  `anim_batalla` an RLE is enough, and for maps it is decompressed on load,
+  which is when there is time to spare. What it can't do well is the poses.
+* **ExHiROM**, which the FX Pak supports (`smc.c:259`, `mapper_id = 2`), is still
+  worth what the decision says: it changes how each address is computed, same
+  as step zero of either chip, and gives neither compression nor CPU.
 
-# Cómo se reproduce
+# How it is reproduced
 
-Los scripts quedaron en `/extras/scratch/chips/`, y todos llevan la raíz del
-worktree escrita adentro (`WT`): hay que cambiarla antes de correrlos, y hay que
-armar `release` antes.
+The scripts stayed in `/extras/scratch/chips/`, and they all carry the
+worktree's root written inside (`WT`): it has to be changed before running them, and
+`release` has to be built first.
 
-* `instrumentar.py` arma la ROM sondeada en su propio directorio;
-* `medir.py <escena>` corre `mapa11_caminar`, `mapa11_piedras`, `terraza` o
-  `terraza_real`, sondeada o con `REAL=1` en la ROM de verdad;
-* `sdd1.py` es el compresor y descompresor, con su prueba de ida y vuelta;
-  `armar_s9x.py` arma el decodificador de snes9x para compilarlo con
-  `gcc -O2 -o s9x_sdd1 s9x_sdd1.c`, y `ratio.py` da la tabla de arriba
-  (`ratio.log` es la corrida);
-* `paralelos.py` y `carrera.py` cuentan las páginas paralelas de un mapa.
+* `instrumentar.py` builds the probed ROM in its own directory;
+* `medir.py <escena>` runs `mapa11_caminar`, `mapa11_piedras`, `terraza` or
+  `terraza_real`, probed or with `REAL=1` on the real ROM;
+* `sdd1.py` is the compressor and decompressor, with its round-trip test;
+  `armar_s9x.py` sets up snes9x's decoder to compile it with
+  `gcc -O2 -o s9x_sdd1 s9x_sdd1.c`, and `ratio.py` gives the table above
+  (`ratio.log` is the run);
+* `paralelos.py` and `carrera.py` count a map's parallel pages.
 
-Los clones: `/extras/ref/sd2snes` (el firmware del FX Pak), `/extras/ref/ares`,
-`/extras/ref/mednafen-src` (el tarball de la 1.32.1) y `/extras/ref/fullsnes`.
-bsnes, snes9x, mesen-s y Mesen2 ya estaban; el snes9x de `/extras/ref` es el
-mismo commit que el core instalado.
+The clones: `/extras/ref/sd2snes` (the FX Pak's firmware), `/extras/ref/ares`,
+`/extras/ref/mednafen-src` (the 1.32.1 tarball) and `/extras/ref/fullsnes`.
+bsnes, snes9x, mesen-s and Mesen2 were already there; the snes9x in `/extras/ref` is the
+same commit as the installed core.

@@ -1,27 +1,27 @@
 ---
-name: "Los sonidos de la música, en más de un banco"
-description: "Vampires Dawn corta en 'rm2k-snes-audio: the music's sounds go over one bank: 41118 B': la tabla de sonidos de todos los temas no puede pasar de un banco de 32 KB"
+name: "The music's sounds, in more than one bank"
+description: "Vampires Dawn stops at 'rm2k-snes-audio: the music's sounds go over one bank: 41118 B': the sounds table of all the songs can't go past a 32 KB bank"
 type: feature
 status: testing
 assignee: taro
 agents: [Tijereta]
 ---
 
-Medido por Tijereta el 2026-10-10, al cerrar `la-musica-y-las-tropas-en-dos-bytes.md`: con `Music/` entero (281 temas), arrancando en 8 y sin los 82 mapas que excluyó Aguará, VD pasa la música, las tropas y las acciones y corta acá (`emit.rs` de `rm2k-snes-audio`). Es el muro siguiente de todo el juego.
+Measured by Tijereta on 2026-10-10, when closing `la-musica-y-las-tropas-en-dos-bytes.md`: with the whole `Music/` (281 songs), starting on 8 and without the 82 maps Aguará excluded, VD gets past the music, the troops and the actions and stops here (`emit.rs` of `rm2k-snes-audio`). It is the next wall of the whole game.
 
-## Hecho, el 2026-10-11 (Tijereta)
+## Done, on 2026-10-11 (Tijereta)
 
-Sobre the-advocate `main` 5094ef11 y ports `main` 038ea64, rama `tijereta-sonidos` en the-advocate. Los ports no se tocaron.
+On the-advocate `main` 5094ef11 and ports `main` 038ea64, branch `tijereta-sonidos` in the-advocate. The ports weren't touched.
 
-**El "banco" del tope era el de LoROM.** `if body.len() > 0x8000` es del 2026-09-29 (29c710cf), dos días antes de que el cartucho pasara a ExHiROM. Hoy el empaquetado (`pack`, en `rm2k-snes-cartridge`) deja un `.block` de hasta 64 KB entero adentro de un banco, y `note_sound` lee `music_sounds + k` con X de 16 bits —la base del tema más seis por sonido—, así que con la tabla entera en un banco cualquier índice queda adentro. El cambio más chico que sirve es subir el tope a 0x10000: ni el runtime ni la tabla cambian, y la de ABL sale byte por byte igual.
+**The ceiling's "bank" was LoROM's.** `if body.len() > 0x8000` is from 2026-09-29 (29c710cf), two days before the cartridge moved to ExHiROM. Today the packing (`pack`, in `rm2k-snes-cartridge`) leaves a `.block` of up to 64 KB whole inside a bank, and `note_sound` reads `music_sounds + k` with 16-bit X —the song's base plus six per sound—, so with the whole table in one bank any index stays inside. The smallest change that works is to raise the ceiling to 0x10000: neither the runtime nor the table change, and ABL's comes out byte for byte the same.
 
-Partir la tabla en varios bancos —un byte de banco por tema, y leerla de otra manera, porque `note_sound` usa Y para el registro de la voz y un `lda [dp], y` se lo pisaría: o un puntero en la página cero y salvar Y, o cambiar el DBR para copiar los seis bytes a la RAM lejana— queda para cuando un juego pase de 64 KB. VD usa 41118 B con sus 281 temas.
+Splitting the table across several banks —one bank byte per song, and reading it some other way, because `note_sound` uses Y for the voice's register and an `lda [dp], y` would overwrite it: either a pointer in the zero page and saving Y, or changing the DBR to copy the six bytes to far RAM— is left for when a game goes past 64 KB. VD uses 41118 B with its 281 songs.
 
-* Prueba nueva, `the_music_s_sounds_take_a_whole_bank_and_no_more` en `tests/python.rs` de `rm2k-snes-audio`: estira los temas del juego de prueba hasta 38736 B y después hasta pasar de 64 KB. **En rojo antes del cambio**, con el mismo error de VD (`the music's sounds go over one bank: 38736 B`); en verde después. El hash de `musicdata.inc` del juego de prueba no se movió.
-* `abl.sfc` = `5852b72358b685be…`, igual que en `main`, y la tanda de ABL con mis herramientas: 1174 en verde.
+* New test, `the_music_s_sounds_take_a_whole_bank_and_no_more` in `tests/python.rs` of `rm2k-snes-audio`: it stretches the test game's songs up to 38736 B and then until going past 64 KB. **Red before the change**, with the same error as VD (`the music's sounds go over one bank: 38736 B`); green after. The hash of the test game's `musicdata.inc` didn't move.
+* `abl.sfc` = `5852b72358b685be…`, same as on `main`, and A Blurred Line's suite with my tools: 1174 green.
 
-**Qué corta ahora a VD**: con las 82 exclusiones de Aguará y arrancando en 8 (`~/scratch/tijereta/musica/vd.py`), pasa la música y corta en el empaquetado: `the data does not fit: a piece of 512 bytes needs a new bank, and the 127 banks the cartridge has for data are taken`. Los `.block` suman 11,69 MB contra 7,94 MB de los 127 bancos —sin contar las 82 muestras `.crossbank`—: 4,27 MB son `pose_N`, 2,21 MB `map_tiles_N`, 0,54 `map_cells_N`, 0,51 `pano_tiles_N`, 0,42 `big_tiles_N`, 0,39 `pages_N`; la música, 0,71 MB, y sus sonidos 0,04. Es otro muro, y grande: no se toca acá.
+**What stops VD now**: with Aguará's 82 exclusions and starting on 8 (`~/scratch/tijereta/musica/vd.py`), it gets past the music and stops at the packing: `the data does not fit: a piece of 512 bytes needs a new bank, and the 127 banks the cartridge has for data are taken`. The `.block`s add up to 11.69 MB against 7.94 MB of the 127 banks —without counting the 82 `.crossbank` samples—: 4.27 MB are `pose_N`, 2.21 MB `map_tiles_N`, 0.54 `map_cells_N`, 0.51 `pano_tiles_N`, 0.42 `big_tiles_N`, 0.39 `pages_N`; the music, 0.71 MB, and its sounds 0.04. It is another wall, and a big one: not touched here.
 
-**Lo que la tanda no cubre**: una tabla de sonidos de más de 32 KB en una ROM que corra. ABL tiene una chica, y VD no linkea todavía; que `note_sound` la lea bien en un banco entero sale del razonamiento de arriba, no de una corrida.
+**What the suite doesn't cover**: a sounds table of more than 32 KB in a ROM that runs. ABL has a small one, and VD doesn't link yet; that `note_sound` reads it correctly across a whole bank comes from the reasoning above, not from a run.
 
-Al mergear: `just install rm2k-snes-audio`.
+When merging: `just install rm2k-snes-audio`.

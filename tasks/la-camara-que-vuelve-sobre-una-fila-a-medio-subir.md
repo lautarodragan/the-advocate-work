@@ -1,22 +1,22 @@
 ---
-name: "La cámara que vuelve sobre una fila a medio subir pierde un cuadro"
-description: "En un mapa pintado, si la cámara da la vuelta mientras sube adelantada una fila de la pintura, la sube entera en ese tick y se pierde un cuadro"
+name: "The camera turning back over a half-uploaded row loses a frame"
+description: "On a painted map, if the camera turns around while a row of the painting is being uploaded ahead, it uploads it whole in that tick and a frame is lost"
 type: bug
 status: draft
 ---
 
-Medido por Mulita el 2026-10-11 (`sunset-en-modo-1-con-color-math.md`),
-con `modo1/chequear.py` —VRAM contra el `.inc`, cuadro a cuadro— en el
-mapa 2 de Sunset Over Imdahl: la fila que viene se sube adelantada, 11
-tiles por cuadro, y "una vuelta atrás de la cámara con una fila a medio
-subir la sube entera en ese tick, y en la plaza eso costó un cuadro
-perdido". Lo dejó en "Lo que queda". El código de los mapas pintados
-(`runtime/`, `.ifdef paint_table`) no cambió desde entonces
-(the-advocate `fc6f7456`); no comprobado hoy.
+Measured by Mulita on 2026-10-11 (`sunset-en-modo-1-con-color-math.md`),
+with `modo1/chequear.py` —VRAM against the `.inc`, frame by frame— on
+map 2 of Sunset Over Imdahl: the upcoming row is uploaded ahead, 11
+tiles per frame, and "a turn back of the camera with a half-uploaded
+row uploads it whole in that tick, and in the plaza that cost a lost
+frame". It was left in "Lo que queda". The code for painted maps
+(`runtime/`, `.ifdef paint_table`) hasn't changed since then
+(the-advocate `fc6f7456`); not checked today.
 
-**Qué se ve jugando**: un tirón de un cuadro al dar la vuelta caminando
-en una plaza de Sunset. Nadie dijo haberlo notado.
+**What you see while playing**: a one-frame hitch when turning around while
+walking in a plaza in Sunset. Nobody has said they noticed it.
 
-**Cómo verlo**: el script de Mulita, `~/scratch/mulita/modo1/chequear.py`,
-sobre el release de Sunset, caminando en la plaza (mapa 2) y volviendo
-sobre los pasos.
+**How to see it**: Mulita's script, `~/scratch/mulita/modo1/chequear.py`,
+on Sunset's release, walking in the plaza (map 2) and going back over
+one's steps.

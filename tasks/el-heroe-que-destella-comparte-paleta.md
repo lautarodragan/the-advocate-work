@@ -1,31 +1,31 @@
 ---
-name: "El héroe que destella comparte paleta con un NPC"
-description: "Si una página hace destellar al héroe y su gráfico lo usa también un NPC del mapa, el conversor corta: en la consola compartirían paleta y destellarían los dos. Deja afuera el mapa 1 de The Frozen World"
+name: "The flashing hero shares a palette with an NPC"
+description: "If a page makes the hero flash and its graphic is also used by an NPC on the map, the converter stops: on the console they would share a palette and both would flash. It leaves out map 1 of The Frozen World"
 type: bug
 status: draft
 ---
 
-Medido por Calandria el 2026-10-11 (`las-exclusiones-que-sobran.md`)
-y **comprobado hoy** (the-advocate `fc6f7456`, ports `a85b7e3`): con el 1
-devuelto a The Frozen World (y el 2 todavía afuera), `just cartuchos
-release` corta en "map 1: a page makes the hero flash, and actor 11 is
+Measured by Calandria on 2026-10-11 (`las-exclusiones-que-sobran.md`)
+and **checked today** (the-advocate `fc6f7456`, ports `a85b7e3`): with map 1
+returned to The Frozen World (and map 2 still out), `just cartuchos
+release` stops at "map 1: a page makes the hero flash, and actor 11 is
 drawn with rangedmelee[0], which an NPC of the map also uses. On the
 console they share a palette and both would flash".
 
-El corte es a propósito, y no degrada: `crate::stop!` en
-`rm2k-snes/convert/src/convert.rs`, que mira cada `OP_FLASH` sobre el
-héroe en las páginas que corren en el mapa. Lo que se sabe de la causa
-está en el mensaje: el destello es de la paleta, y el héroe y el NPC
-dibujados con el mismo CharSet comparten una.
+The stop is on purpose, and doesn't degrade: `crate::stop!` in
+`rm2k-snes/convert/src/convert.rs`, which looks at each `OP_FLASH` on the
+hero in the pages that run on the map. What is known of the cause
+is in the message: the flash is the palette's, and the hero and the NPC
+drawn with the same CharSet share one.
 
-**Qué se ve jugando**: el mapa 1 de Frozen se llama "Battle Screen", y no
-está en el cartucho; un evento que lleve ahí pierde la página entera (un
-`Teleport` a un mapa que no está no compila). Qué parte del juego se
-pierde con eso no se miró.
+**What you see while playing**: Frozen's map 1 is called "Battle Screen", and it
+isn't in the cartridge; an event that leads there loses the whole page (a
+`Teleport` to a map that isn't there doesn't compile). Which part of the game
+is lost with that wasn't looked at.
 
-Y no es lo único del 1: según la página de Frozen en el libro, "map 1 asks
-for 1.8 MB of code alone" (el re-barrido del 2026-10-10), es decir que
-detrás de éste puede estar el de `los-flujos-de-un-mapa-que-no-entran-en-la-wram`.
+And it isn't the only thing about map 1: according to Frozen's page in the book,
+"map 1 asks for 1.8 MB of code alone" (the re-sweep of 2026-10-10), that is,
+behind this one may be the one from `los-flujos-de-un-mapa-que-no-entran-en-la-wram`.
 
-**Cómo verlo**: sacar el 1 de `excluded` en `frozen-world/rm2k-snes.toml` y
-`just cartuchos release` en `frozen-world/`.
+**How to see it**: remove 1 from `excluded` in `frozen-world/rm2k-snes.toml` and
+`just cartuchos release` in `frozen-world/`.

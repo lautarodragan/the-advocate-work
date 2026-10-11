@@ -1,79 +1,79 @@
 ---
-name: "Los eventos decorativos, al fondo"
-description: "Eventos que son sólo estética —una página, sin comandos, que nadie mueve— se hornean en el fondo como tiles animados, mezclados contra su celda si son translúcidos, en vez de gastar sprites"
+name: "Decorative events, into the background"
+description: "Events that are only aesthetic —one page, no commands, nobody moves them— are baked into the background as animated tiles, blended against their cell if they are translucent, instead of spending sprites"
 type: feature
 status: testing
 agents: [Calandria]
 assignee: taro
 ---
 
-Medido por Hornero el 2026-10-06 en el mapa 95 de Vampires Dawn (Weg):
-209 eventos `water1`, translúcidos, animados, sin comandos y de una sola
-página, pintan un río. Hoy `wally` mezcla cada translúcido contra su celda
-como un gráfico propio: 206 gráficos y 4096 tiles de sprite, el banco
-entero. Sin esos eventos, o con el agua opaca, son 384; pero opaca son 247
-eventos para un cache de 18 ranuras, con hasta 30 en pantalla.
+Measured by Hornero on 2026-10-06 on Vampires Dawn's map 95 (Weg):
+209 `water1` events, translucent, animated, without commands and with a single
+page, paint a river. Today `wally` blends each translucent one against its cell
+as a graphic of its own: 206 graphics and 4096 sprite tiles, the whole
+bank. Without those events, or with opaque water, they are 384; but opaque they are 247
+events for a cache of 18 slots, with up to 30 on screen.
 
-taro, el 2026-10-06: "sospecho que optimizaciones generales para casos en
-los que los eventos se usan puramente por estética, como una nueva capa de
-mapa, podría aprovecharse en muchos mapas y muchos juegos". Y: "No quiero
-que sobre-optimicemos un edge case". Sus capturas, de RM2k en ejecución:
-`Map0095-runtime*.png` del juego; EV0016 corre algunos eventos de agua un
-tile al arrancar, porque en el editor no pueden compartir celda.
+taro, on 2026-10-06: "I suspect that general optimisations for cases where
+events are used purely for aesthetics, like a new map
+layer, could be leveraged on many maps and many games". And: "I don't want
+us to over-optimise an edge case". His captures, of RM2k running:
+the game's `Map0095-runtime*.png`; EV0016 shifts some water events by one
+tile at start, because in the editor they can't share a cell.
 
-# Hecho (Calandria, 2026-10-06)
+# Done (Calandria, 2026-10-06)
 
-`[graphics] decorative_events = true` en el `rm2k-snes.toml`, **apagada por
-omision**: ABL tiene 502 candidatos en 328 mapas, asi que prenderla le
-cambia la ROM, y el encargo era que `abl.sfc` saliera identico (sale
-`8bb36b99312730ef`, armado con las herramientas del cambio). Se prende en los
-juegos que la usen. El conversor se lo pasa a Wally como `decorative` y,
-con ella, `test_commands`: lo que nombran las paginas de prueba.
+`[graphics] decorative_events = true` in `rm2k-snes.toml`, **off by
+default**: ABL has 502 candidates on 328 maps, so turning it on
+changes its ROM, and the brief was that `abl.sfc` came out identical (it comes out
+`8bb36b99312730ef`, built with the change's tools). It is turned on in the
+games that use it. The converter passes it to Wally as `decorative` and,
+with it, `test_commands`: what the test pages name.
 
-Un evento es decorativo si tiene una sola pagina, sin comandos, sin
-condiciones, con CharSet, sin tipo de movimiento ni ruta, no es de giro
-(animacion 5), esta en la capa de abajo o en la del heroe, y nada lo
-nombra: ni las paginas del mapa, ni los comunes, ni las de prueba
+An event is decorative if it has a single page, without commands, without
+conditions, with a CharSet, without movement type or route, isn't a turning one
+(animation 5), is on the lower layer or on the hero's, and nothing
+names it: neither the map's pages, nor common events, nor the test ones
 (`MoveEvent`, `SetEventLocation`, `SwapEventLocations`, `FlashSprite`,
-`ShowBattleAnimation`, la condicion por direccion). En la capa del heroe,
-ademas, su dibujo tiene que quedar dentro de la celda: si se sale, el heroe
-parado en la celda de abajo caminaria por encima de el. Codigo en
+`ShowBattleAnimation`, the direction condition). On the hero's layer,
+in addition, its drawing has to stay inside the cell: if it sticks out, the hero
+standing on the cell below would walk over it. Code in
 `tools/rm2k-snes/wally/src/decor.rs`.
 
-* Se pinta en la capa de abajo, en cada dibujo de su animacion; uno que
-  anima en el lugar va con la **familia del agua**, que recorre el mismo
-  ciclo 0, 1, 2, 1 que las columnas de un personaje. Translucido se mezcla
-  con lo que tiene debajo; dos en una celda se mezclan en orden.
-* **Deja de ser un evento**: sin fila, sin ranura, sin pagina en la tabla
-  (`maps::pages` salta sus registros; el indice de los demas no se corre,
-  como ya pasa con los eventos que se dejan afuera). Sus pixeles no pasan
-  por el reparto de paletas de sprites.
-* **El bloqueo** de uno en la capa del heroe pasa a la grilla de
-  pasabilidad, en su celda.
-* Si el fondo no entra —la paleta—, la ruta es: todo mezclado; los
-  translucidos tramados (`five_of_eight`); por CharSet, el mas numeroso
-  primero; y si no, siguen siendo objetos. Lo que entra es lo que le cuesta
-  al suelo hasta `GROUND_LOST_MAX` pixeles de sus colores, no uno solo.
+* It is painted on the lower layer, in each drawing of its animation; one that
+  animates in place goes with the **water family**, which goes through the same
+  0, 1, 2, 1 cycle as a character's columns. Translucent, it is blended
+  with what is beneath it; two in one cell are blended in order.
+* **It stops being an event**: no row, no slot, no page in the table
+  (`maps::pages` skips its records; the index of the others doesn't shift,
+  as already happens with the events that are left out). Its pixels don't go
+  through the sprite palette allocation.
+* **The blocking** of one on the hero's layer goes into the passability
+  grid, in its cell.
+* If the background doesn't fit —the palette—, the route is: all blended; the
+  translucent ones dithered (`five_of_eight`); by CharSet, the most numerous
+  first; and if not, they remain objects. What fits is what costs
+  the ground up to `GROUND_LOST_MAX` pixels of its colours, not just one.
 
-Medido con `wally map` sobre el request de Weg (mapa 95), tiles de sprite /
-tiles de fondo / eventos que quedan como objetos: antes 4096 / 327 / 247;
-con la perilla, 960 / 394 / 59 —el agua trameada—; con `water1` en
-`[graphics] opaque`, 384 / 312 / 59. Mezclado contra su celda no entra: le
-cuesta 1557 px al suelo, y el tope es 1024. Uruya (165): sus 8 decorativos
-no entran (paleta llena) y todo queda igual; Shannar (15): ninguno.
-Candidatos por juego, sin mirar el dibujo ni la capa de arriba:
+Measured with `wally map` on Weg's request (map 95), sprite tiles /
+background tiles / events that remain as objects: before 4096 / 327 / 247;
+with the knob, 960 / 394 / 59 —the water dithered—; with `water1` in
+`[graphics] opaque`, 384 / 312 / 59. Blended against its cell it doesn't fit: it
+costs the ground 1557 px, and the ceiling is 1024. Uruya (165): its 8 decorative ones
+don't fit (palette full) and everything stays the same; Shannar (15): none.
+Candidates per game, without looking at the drawing or the upper layer:
 book-of-three 87, desert-nightmare 2887, dooms2 39, el-dorado 26,
 frozen-world 117, sunset-over-imdahl 209, vampires-dawn 5483, ABL 502.
 
-Divergencias en `workflow/divergencias/los-eventos-decorativos-horneados.md`
-—el ritmo y la fase de la animacion—. Capturas en
+Divergences in `workflow/divergencias/los-eventos-decorativos-horneados.md`
+—the animation's pace and phase—. Captures in
 `/shared/capturas/2026-10-06-decorativos/`.
 
-**Lo que no se probo:** ninguna ROM con la perilla puesta —la tanda de ABL
-no la prende—; que en la ROM el agua animada del fondo se mueva y que el
-heroe no cruce el rio es lo que hay que jugar en Vampires Dawn con
-`decorative_events = true`. Lo cubre solo `wally/tests/decorative.rs` —la
-pasabilidad de la celda, la corrida del agua, los indices— y el conversor
-no tiene prueba de que `pages` salte los decorativos.
+**What wasn't tested:** any ROM with the knob set —A Blurred Line's suite
+doesn't turn it on—; that in the ROM the animated water in the background moves and that the
+hero doesn't cross the river is what has to be played in Vampires Dawn with
+`decorative_events = true`. It is covered only by `wally/tests/decorative.rs` —the
+cell's passability, the water's run, the indices— and the converter
+has no test that `pages` skips the decorative ones.
 
-**Al mergear, reinstalar:** `wally` y `convert`.
+**When merging, reinstall:** `wally` and `convert`.

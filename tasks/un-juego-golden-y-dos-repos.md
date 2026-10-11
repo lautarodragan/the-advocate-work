@@ -1,73 +1,73 @@
 ---
-name: "El juego golden y dos repos"
-description: "Un juego de prueba para el motor, y ABL en su propio repo"
+name: "The golden game and two repos"
+description: "A test game for the engine, and ABL in its own repo"
 type: refactor
 status: wishlist
 ---
 
-# Qué
+# What
 
-**Un juego de RM2k hecho a propósito —el "juego golden"— que pruebe el motor**,
-y **ABL en su propio repo**, separado de lo que no depende de él.
+**An RM2k game made on purpose —the "golden game"— that tests the engine**,
+and **ABL in its own repo**, separate from what doesn't depend on it.
 
-Dos capas de pruebas en vez de una:
+Two layers of tests instead of one:
 
-* **Conformidad del motor**, contra el juego golden: un mapa por funcionalidad,
-  chico y determinista, y el juego entero es el golden. Es **la regla del
-  cartucho único resuelta de raíz** —un juego, un ROM— y es la especificación
-  de qué soporta el port. Portar otro juego lo reusa entero.
-* **Aceptación de ABL**: que se juegue y se vea así.
-  Sigue haciendo falta, porque los errores más caros salieron de contenido real
-  que nadie escribiría a propósito. **El juego golden crece con ésos**: cada
-  error que aparezca en un juego real se abstrae y se suma como un caso.
+* **Engine conformance**, against the golden game: one map per feature,
+  small and deterministic, and the whole game is the golden. It is **the
+  single-cartridge rule solved at the root** —one game, one ROM— and it is the
+  specification of what the port supports. Porting another game reuses it whole.
+* **ABL acceptance**: that it plays and looks like this.
+  It is still needed, because the most expensive errors came from real content
+  that nobody would write on purpose. **The golden game grows with those**: each
+  error that turns up in a real game is abstracted and added as a case.
 
-Y **dos repos**: lo que no depende de ABL —el motor, las herramientas, el juego
-golden— se puede publicar, porque el juego golden usa material de dominio
-público o con licencia que lo permita. ABL queda en el suyo, y si alguna vez hay
-que bajarlo, se baja sin arrastrar lo valioso.
+And **two repos**: what doesn't depend on ABL —the engine, the tools, the golden
+game— can be published, because the golden game uses public domain material
+or material with a licence that allows it. ABL stays in its own, and if it ever
+has to be taken down, it is taken down without dragging along what is valuable.
 
 # Status
 
-Idea de taro, el 2026-09-17. Anotada, sin empezar: **hoy lo único hecho es el
-embrión**, `pruebas/casos/`, que son eventos de RM2k en el JSON de Ditto y no
-una tabla especial de la ROM.
+taro's idea, on 2026-09-17. Noted, not started: **today the only thing done is the
+embryo**, `pruebas/casos/`, which are RM2k events in Ditto's JSON and not
+a special table of the ROM.
 
 # Blockers
 
-* **Lo que el juego golden no puede heredar sin revisar**: el RTP de Don Miguel
-  es de Enterbrain; las muestras salen de los SoundFonts de
-  `/extras/soundfonts`, cuya licencia hay que mirar una por una; y la fuente del
-  sistema de RM2k tiene dueño. Los MIDIs de ABL son música de otros juegos:
-  quedan del lado de ABL.
-* **Hace falta armar el juego**, mapa por funcionalidad, con assets propios.
+* **What the golden game can't inherit without review**: Don Miguel's RTP
+  belongs to Enterbrain; the samples come from the SoundFonts in
+  `/extras/soundfonts`, whose licence has to be checked one by one; and RM2k's
+  system font has an owner. ABL's MIDIs are music from other games:
+  they stay on ABL's side.
+* **The game has to be built**, map by feature, with our own assets.
 
-# Decisiones a tomar
+# Decisions to make
 
-* **Qué pruebas van con el motor y cuáles con ABL.** El reparto de hoy dejó
-  casos del lado dudoso, y son éstos:
+* **Which tests go with the engine and which with ABL.** Today's split left
+  cases on the doubtful side, and they are these:
 
-  Lo que quedó del lado dudoso, y conviene revisar al armar el juego golden:
+  What ended up on the doubtful side, and is worth reviewing when building the golden game:
 
-  * **`rpgmaker/` es más "motor" que "RM2k"**: `test_cores`, `test_compositor`,
-    `test_paralelos` y `test_musica_paquete` cuidan propiedades del port —la
-    WRAM sin inicializar, el buffer del texto, el presupuesto del cuadro, las
-    muestras en la ARAM— y no comportamiento de RM2k. Van con el motor igual.
-  * **`abl/test_escenas_golden.py` tiene casos que ejercitan comandos
-    genéricos** —`elegir`, `tienda`, `savepoint-guarda`, las puertas— con
-    páginas del juego, y `factoria`, que es el tercer reparto de VRAM. Partirlo
-    por caso pedía duplicar la función de la familia; se partió sólo por
-    familia: `hablar` se fue a `rpgmaker/test_hablar_golden.py`.
-  * **`herramientas/` se decidió por la forma** —no corre ROM— y varias miran
-    el conversor sobre mapas de ABL: `test_lideres`, `test_destello_paleta`,
-    `test_timer_paleta`, `test_encuentros`. `test_bancos` lee la tabla de
-    símbolos del cartucho armado, sin correrlo. Si van "con su herramienta",
-    el lugar natural es al lado de `tools/`, y eso se decide cuando `tools/`
-    se reparta entre los dos repos.
-* **Dónde queda `tools/`**, que es de las dos clases: el conversor es del motor,
-  pero `port/` todavía sabe cosas de ABL.
-* **Qué pasa con `golden/` y `casos/`**, que hoy sirven a las dos capas.
+  * **`rpgmaker/` is more "engine" than "RM2k"**: `test_cores`, `test_compositor`,
+    `test_paralelos` and `test_musica_paquete` look after properties of the port —the
+    uninitialised WRAM, the text buffer, the frame budget, the
+    samples in ARAM— and not RM2k behaviour. They go with the engine anyway.
+  * **`abl/test_escenas_golden.py` has cases that exercise generic
+    commands** —`elegir`, `tienda`, `savepoint-guarda`, the doors— with
+    the game's pages, and `factoria`, which is the third VRAM layout. Splitting it
+    by case required duplicating the family's function; it was split only by
+    family: `hablar` went to `rpgmaker/test_hablar_golden.py`.
+  * **`herramientas/` was decided by form** —it doesn't run a ROM— and several look at
+    the converter over ABL's maps: `test_lideres`, `test_destello_paleta`,
+    `test_timer_paleta`, `test_encuentros`. `test_bancos` reads the symbol table
+    of the built cartridge, without running it. If they go "with their tool",
+    the natural place is next to `tools/`, and that is decided when `tools/`
+    is split between the two repos.
+* **Where `tools/` ends up**, which is of both kinds: the converter belongs to the engine,
+  but `port/` still knows things about ABL.
+* **What happens with `golden/` and `casos/`**, which today serve both layers.
 
-El 2026-09-28 se midió qué del repo es de ABL y qué no, con un plan por
-partes para llegar a dos repos que no pide esperar a este juego: ver
-`docs/research/el-mapa-de-las-herramientas-de-python.md`. Sus preguntas de
-la §5 tocan las tres decisiones de acá.
+On 2026-09-28 it was measured what in the repo is ABL's and what isn't, with a
+plan in parts to reach two repos that doesn't require waiting for this game: see
+`docs/research/el-mapa-de-las-herramientas-de-python.md`. Its questions in
+§5 touch the three decisions here.

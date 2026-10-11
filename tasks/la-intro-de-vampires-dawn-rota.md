@@ -1,46 +1,46 @@
 ---
-name: "La intro de Vampires Dawn, rota"
-description: "El mapa 3 de VD ('Intro') arma solo, pero en vez del panorama con el título muestra rayas y bloques rojos quietos; no es BOOT_FRAMES"
+name: "Vampires Dawn's intro, broken"
+description: "VD's map 3 ('Intro') builds alone, but instead of the panorama with the title it shows still stripes and red blocks; it isn't BOOT_FRAMES"
 type: bug
 status: testing
 assignee: taro
 agents: [Hurón]
 ---
 
-Visto por Carpintero el 2026-10-11 (`boot-frames-por-cartucho.md`): con el piso en 90 se ve igual, así que no es el arranque. Si es un error del motor con los panoramas, puede estar en otros juegos también.
+Seen by Carpintero on 2026-10-11 (`boot-frames-por-cartucho.md`): with the floor at 90 it looks the same, so it isn't the boot. If it is an engine error with panoramas, it may be in other games too.
 
-## La causa (Hurón, 2026-10-11)
+## The cause (Hurón, 2026-10-11)
 
-**Es del motor, y está en cualquier juego**: un DMA de cero bytes en la SNES es uno de 65536, y `load_map`, `load_sprite` y `load_above` (`runtime/load_graphics.s`) disparaban el suyo con lo que dice el registro del mapa sin mirar si era cero.
+**It's the engine's, and it's in any game**: a zero-byte DMA on the SNES is a 65536-byte one, and `load_map`, `load_sprite` and `load_above` (`runtime/load_graphics.s`) fired theirs with what the map's record said without checking whether it was zero.
 
-* **Los tiles de sprites en cero borran la VRAM.** El mapa 3 de VD, solo en el cartucho (`maps = [3]`, `party = []`), no dibuja a nadie: `SPRITE_TILES = 0` y `SPRITE_CGRAM = 0` en su registro. El DMA subía 64 KB del búfer de LZ2 —WRAM sin inicializar, que snes9x llena de `$55`— sobre la VRAM entera desde `$0000`: volcada, toda la VRAM es `$5555` salvo los tilemaps, que se escriben después. Las rayas son ese patrón (columnas alternadas de color 1) y los bloques rojos, el tilemap del panorama con sus paletas. El lazo corre bien (`ticks` avanza); no es un cuelgue.
-* **Los colores del fondo en cero ensucian la CGRAM.** Un fondo que es todo panorama no tiene colores (`MAP_CGRAM = 0`): la paleta pasaba 128 veces por la CGRAM entera, ventana incluida. Con el 3 junto al 4 y al 27 —así su página compila y se ve el mensaje—, el mapa ya tiene sprites y el panorama sale, pero la ventana de "Skip Intro ?" sale **blanca**. **ABL lo tiene hoy en el 94 y el 99** (todo panorama, `MAP_CGRAM = 0`); no se veía porque las otras paletas se suben después y ninguna prueba lee la CGRAM.
+* **Zero sprite tiles wipe VRAM.** VD's map 3, alone in the cartridge (`maps = [3]`, `party = []`), draws nobody: `SPRITE_TILES = 0` and `SPRITE_CGRAM = 0` in its record. The DMA uploaded 64 KB of the LZ2 buffer —uninitialised WRAM, which snes9x fills with `$55`— over the whole VRAM from `$0000`: dumped, the whole VRAM is `$5555` except the tilemaps, which are written afterwards. The stripes are that pattern (alternating columns of colour 1) and the red blocks, the panorama's tilemap with its palettes. The loop runs fine (`ticks` advances); it isn't a hang.
+* **Zero background colours dirty CGRAM.** A background that is all panorama has no colours (`MAP_CGRAM = 0`): the palette went 128 times over the whole CGRAM, window included. With map 3 together with 4 and 27 —so that its page compiles and the message shows—, the map now has sprites and the panorama comes out, but the "Skip Intro ?" window comes out **white**. **ABL has it today on maps 94 and 99** (all panorama, `MAP_CGRAM = 0`); it didn't show because the other palettes are uploaded afterwards and no test reads CGRAM.
 
-Con el 4 y el 27 en el cartucho, el 3 ya tiene 52 tiles de sprites —dos candidatos a líder, que salen de los otros mapas—: en el juego entero lo que se vería es la ventana blanca, no las rayas, que son de armarlo solo.
+With 4 and 27 in the cartridge, map 3 already has 52 sprite tiles —two leader candidates, which come from the other maps—: in the whole game what would be seen is the white window, not the stripes, which come from building it alone.
 
-Contra RM2k (el original con Wine, `RPG_RT_2015.exe`): el panorama entero y el "Skip Intro ?" sin fondo, abajo, con Yes/No.
+Against RM2k (the original with Wine, `RPG_RT_2015.exe`): the whole panorama and the "Skip Intro ?" without background, at the bottom, with Yes/No.
 
-## El arreglo
+## The fix
 
-Un `beq` después de cada `sep #$20` que sigue al cálculo del largo (Z es del `asl`): rama `huron-vd-intro` de the-advocate, `6f933ff8`. Prueba nueva en ABL, `pruebas/rpgmaker/test_dma_de_cero.py`: una copia de `release` con los sprites del 94 en cero en el registro; la VRAM desde `M_VRAM_MAP` tiene que quedar igual que sin tocar. **En rojo antes del arreglo**, con las globales: "sin sprites, 19050 palabras de la VRAM desde $1800 quedaron distintas".
+A `beq` after each `sep #$20` that follows the length calculation (Z is from the `asl`): branch `huron-vd-intro` of the-advocate, `6f933ff8`. New test in ABL, `pruebas/rpgmaker/test_dma_de_cero.py`: a copy of `release` with map 94's sprites at zero in the record; VRAM from `M_VRAM_MAP` on has to stay the same as untouched. **Red before the fix**, with the global tools: "sin sprites, 19050 palabras de la VRAM desde $1800 quedaron distintas".
 
-## Verificado
+## Verified
 
-* El mapa 3 de VD armado solo con el arreglo: el panorama, quieto, como el original. Con el 4 y el 27 en el cartucho, la ventana del "Skip Intro ?" ya no es blanca. Las capturas, con el original al lado: `/shared/capturas/2026-10-11-vd-intro/`.
-* ABL, con the-advocate `6f933ff8` (`cartridge` y `project` instalados en local) y los ports en `b499ab4`: la tanda, 1177 en verde (1176 + la nueva), ninguna golden se movió. `abl.sfc` `24dd24adb52f…` (antes `ea49ff07fd9d…`).
+* VD's map 3 built alone with the fix: the panorama, still, like the original. With 4 and 27 in the cartridge, the "Skip Intro ?" window is no longer white. The captures, with the original alongside: `/shared/capturas/2026-10-11-vd-intro/`.
+* ABL, with the-advocate `6f933ff8` (`cartridge` and `project` installed locally) and the ports at `b499ab4`: the suite, 1177 green (1176 + the new one), no golden moved. `abl.sfc` `24dd24adb52f…` (before `ea49ff07fd9d…`).
 
-## Lo que no cubre la tanda
+## What the suite doesn't cover
 
-* **La CGRAM**: el emulador no la deja leer, así que la guarda de los colores —la que cambia algo en ABL, en el 94 y el 99— sólo la cubre el haberla mirado en VD. Ninguna golden de ABL la veía: ninguna muestra la ventana en esos mapas.
-* Los tiles y colores de la capa de arriba en cero (`load_above`): no los vi en ningún mapa; las guardas están por lo mismo, sin camino que las ejecute.
-* Un mapa de verdad sin sprites: la prueba lo fabrica parchando el registro del 94.
+* **CGRAM**: the emulator doesn't let it be read, so the guard for the colours —the one that changes something in ABL, on 94 and 99— is covered only by having looked at it in VD. No ABL golden saw it: none shows the window on those maps.
+* Zero tiles and colours of the upper layer (`load_above`): I didn't see them on any map; the guards are there for the same reason, with no path that executes them.
+* A real map without sprites: the test fabricates it by patching map 94's record.
 
-## Lo que queda y no es de esto
+## What remains and isn't part of this
 
-* El mensaje sin fondo de la intro sale sobre una franja negra: en un mapa con el panorama en modo 3, el panorama es el BG2 que la ventana usa en sus 80 líneas. Ya era una divergencia (la ventana sin fondo y la capa de arriba); quedó dicho en ella, rama `huron-vd-intro` del libro, `88c8b9c`.
+* The intro's message without background comes out over a black band: on a map with the panorama in mode 3, the panorama is the BG2 that the window uses in its 80 lines. It was already a divergence (the window without background and the upper layer); it was stated in it, branch `huron-vd-intro` of the book, `88c8b9c`.
 
-## Al mergear
+## When merging
 
-* the-advocate: `huron-vd-intro` (`6f933ff8`), sólo el runtime. Reinstalar `cartridge` en el global no hace falta si se mergea en `~/the-advocate`: el runtime lo arma desde ahí.
-* the-advocate-ports: `huron-vd-intro` (`b499ab4`), la prueba y su línea en el README. Sin goldens.
+* the-advocate: `huron-vd-intro` (`6f933ff8`), only the runtime. Reinstalling `cartridge` in the global isn't needed if it is merged in `~/the-advocate`: the runtime is built from there.
+* the-advocate-ports: `huron-vd-intro` (`b499ab4`), the test and its line in the README. No goldens.
 * the-advocate-docs: `huron-vd-intro` (`88c8b9c`).

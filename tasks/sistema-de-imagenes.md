@@ -1,31 +1,31 @@
 ---
-name: "El sistema de imágenes"
-description: "ShowPicture entero, más allá del cartel"
+name: "The picture system"
+description: "ShowPicture in full, beyond the sign"
 type: feature
 status: wishlist
 ---
 
-# Qué
+# What
 
-El sistema de imágenes más allá del cartel: que la ROM dibuje más de un
-`ShowPicture` por cartucho.
+The picture system beyond the sign: have the ROM draw more than one
+`ShowPicture` per cartridge.
 
 # Status
 
-Anotado, sin empezar. Los comandos que no entran se siguen aceptando sin
-hacerse.
+Noted, not started. The commands that don't fit are still accepted without
+being carried out.
 
-# Por qué
+# Why
 
-La ROM dibuja **un** `ShowPicture` por cartucho, que es el caso fácil: ver
-`show-picture-phase-1.md`, que dice también cómo.
+The ROM draws **one** `ShowPicture` per cartridge, which is the easy case: see
+`show-picture-phase-1.md`, which also says how.
 
-Lo que costaría el resto está medido, y el detalle está en "Lo que costaría el
-sistema de imágenes entero", en esa misma tarea: **34 `ShowPicture` en el juego, 20
-carteles distintos**, y 7 de esos 34 comandos son de los que el modelo de hoy
-sabe hacer.
+What the rest would cost is measured, and the detail is in "Lo que costaría el
+sistema de imágenes entero", in that same task: **34 `ShowPicture` in the game,
+20 different signs**, and 7 of those 34 commands are of the kind today's model
+knows how to do.
 
-Y el sub-dato que decide la forma de la solución: **cinco de esos carteles son
-de 320x240 exactos, y con objetos no se pueden hacer** —serían 56 de los 128 de
-OAM y 32 de los 34 tiles por línea—. Ésas piden prestarle una capa al cartel, y
-con eso el mapa se recarga al borrarlo.
+And the sub-fact that decides the shape of the solution: **five of those signs
+are exactly 320x240, and they can't be done with objects** —they would be 56 of
+the 128 in OAM and 32 of the 34 tiles per line—. Those call for lending a layer
+to the sign, and with that the map gets reloaded when it is erased.

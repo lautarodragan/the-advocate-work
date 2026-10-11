@@ -1,44 +1,45 @@
 ---
-name: "Elegir otro System desde el proyecto"
-description: "Una perilla del rm2k-snes.toml que dice qué System usar en lugar del que nombra la base de datos: uno del juego, del RTP o del proyecto"
+name: "Choose another System from the project"
+description: "A knob in rm2k-snes.toml that says which System to use instead of the one the database names: one from the game, from the RTP or from the project"
 type: feature
 status: testing
 agents: [Calandria]
 assignee: taro
 ---
 
-De taro, el 2026-10-05: los cuatro juegos que no arman por la ventana
-arman y corren con el System de ABL puesto a mano en una copia. "lancémosla
-ahora! … un paso hacia adelante barato y atómico, sin introducir hacks ni
-complejidad". Es el camino 2: elegir otro System, no una receta sobre el
-del juego.
+From taro, on 2026-10-05: the four games that don't build because of the window
+build and run with ABL's System put in by hand in a copy. "let's launch it
+now! … a cheap and atomic step forward, without introducing hacks or
+complexity". It is path 2: choose another System, not a recipe over the
+game's own.
 
-## Lo hecho
+## What was done
 
-`[graphics] system`, **opcional**: un nombre, que se busca como el de la
-base de datos —el juego, su carpeta, el RTP—, o la ruta de una imagen
-propia, relativa al `rm2k-snes.toml` y terminada en `.png` o `.bmp`. La
-lee `system_choice` en `game.rs` del conversor, que la deja absoluta si
-es una ruta; de ahí van dos caminos, los únicos que buscaban el System:
+`[graphics] system`, **optional**: a name, which is looked up like the
+database's —the game, its folder, the RTP—, or the path to an image
+of its own, relative to `rm2k-snes.toml` and ending in `.png` or `.bmp`. It
+is read by `system_choice` in the converter's `game.rs`, which makes it absolute
+if it is a path; from there it goes down two paths, the only ones that looked
+up the System:
 
-* `rm2k-snes-screens --system`, en todas las llamadas con juego
-  (`window`, `convert`, `render`): `Game::use_system` cambia el nombre
-  que busca `Game::skin`, o le da el archivo. La ventana, el menú, la
-  pelea y el título salen de ese `skin`.
-* `system_path` en `maps.rs`, los dígitos del cronómetro que dibuja
-  `wally`.
+* `rm2k-snes-screens --system`, in every call with a game
+  (`window`, `convert`, `render`): `Game::use_system` changes the name
+  that `Game::skin` looks up, or gives it the file. The window, the menu, the
+  battle and the title come out of that `skin`.
+* `system_path` in `maps.rs`, the timer digits that `wally`
+  draws.
 
-Prueba: `tools/rm2k-snes/screens/tests/system_choice.rs`, roja con
-`use_system` vacío (dos de tres).
+Test: `tools/rm2k-snes/screens/tests/system_choice.rs`, red with
+`use_system` empty (two of three).
 
-Comprobado con ROMs: ABL sin la perilla sale igual, `abl.sfc`
-`27e94e67039533a2…`, y la tanda da 1136. Frozen World, Book of Three y
-Desert Nightmare, armados con el juego original y
-`system = "ablskin.png"`, arrancan: capturas en
-`/shared/capturas/2026-10-05-otros-juegos/system-elegido*.png`, ROMs en
-`/shared/builds/otros-juegos/<juego>.sfc`, y la perilla commiteada en
-cada repo. Dooms2 no arma por otra cosa: sus CharSets son BMP.
+Checked with ROMs: ABL without the knob comes out the same, `abl.sfc`
+`27e94e67039533a2…`, and the suite gives 1136. Frozen World, Book of Three and
+Desert Nightmare, built with the original game and
+`system = "ablskin.png"`, start: captures in
+`/shared/capturas/2026-10-05-otros-juegos/system-elegido*.png`, ROMs in
+`/shared/builds/otros-juegos/<juego>.sfc`, and the knob committed in
+each repo. Dooms2 doesn't build for another reason: its CharSets are BMP.
 
-Lo que no cubre nada en la tanda: ningún caso de ABL pone la perilla.
+What nothing in the suite covers: no ABL case sets the knob.
 
-Al mergear: reinstalar `convert` y `screens`.
+When merging: reinstall `convert` and `screens`.

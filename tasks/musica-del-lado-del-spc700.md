@@ -1,28 +1,27 @@
 ---
-name: "La música en el SPC700"
-description: "Un secuenciador en el SPC700 en vez del 65816"
+name: "Music on the SPC700"
+description: "A sequencer on the SPC700 instead of the 65816"
 type: refactor
 status: wishlist
 ---
 
-# Qué
+# What
 
-Que la música la toque el SPC700 y no el 65816: un secuenciador chico que lea
-**el mismo stream de hoy** desde un buffer circular en la ARAM, a su propio
-ritmo, y que el 65816 sólo mantenga lleno. Los efectos de sonido pasarían allá
-también.
+Have the SPC700 play the music instead of the 65816: a small sequencer that
+reads **today's same stream** from a ring buffer in ARAM, at its own pace, and
+that the 65816 only keeps full. Sound effects would move there too.
 
 # Status
 
-Anotado, sin empezar. Acordado con taro el 2026-09-11 como el paso que sigue.
-**No** es un secuenciador en
-el SPC700 como los de los juegos comerciales, y el conversor no cambia.
+Noted, not started. Agreed with taro on 2026-09-11 as the next step.
+It is **not** a sequencer on the SPC700 like those of commercial games, and
+the converter doesn't change.
 
-Se encara cuando haga falta el margen del lazo, o si en la consola el audio
-muestra algo que el emulador no.
+It gets tackled when the loop's headroom is needed, or if on the console the
+audio shows something the emulator doesn't.
 
-# Por qué
+# Why
 
-Hoy la música la toca el 65816 desde una IRQ —ver "La música no espera al lazo"
-en `docs/port/events.md`— y funciona, pero cuesta **hasta veinte líneas por
-cuadro** y obliga a las reglas de la interrupción.
+Today the 65816 plays the music from an IRQ —see "La música no espera al lazo"
+in `docs/port/events.md`— and it works, but it costs **up to twenty lines per
+frame** and imposes the interrupt's rules.

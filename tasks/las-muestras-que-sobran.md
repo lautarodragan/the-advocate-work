@@ -1,31 +1,32 @@
 ---
-name: "Las muestras que sobran no suenan"
-description: "Cuando un cartucho pide más de 255 muestras (SRCN es un byte), las que sobran se dejan afuera con un aviso, en vez de cortar el armado"
+name: "The surplus samples don't play"
+description: "When a cartridge asks for more than 255 samples (SRCN is a byte), the surplus ones are left out with a warning, instead of stopping the build"
 type: feature
 status: testing
 agents: [Mulita]
 assignee: taro
 ---
 
-De taro, el 2026-10-06: "en vez de lograr que entren las muestras, estaría
-bueno no necesitar excluir a esos mapas, y simplemente droppear las muestras
-> 255 y ya. Que el juego no falle — simplemente, que no emita sonido, donde
-no puede." Dooms 2 hoy arma sólo excluyendo los mapas 40 a 93.
+From taro, on 2026-10-06: "instead of getting the samples to fit, it would
+be nice not to need to exclude those maps, and just drop the samples
+> 255 and that's it. That the game doesn't fail — simply, that it doesn't
+make a sound, where it can't." Dooms 2 today builds only by excluding maps
+40 to 93.
 
-## Hecho (Mulita, 2026-10-06)
+## Done (Mulita, 2026-10-06)
 
-- `bank::drop_surplus`, llamada en `compile.rs` antes de repartir copias:
-  si las muestras de las canciones no caben en `255 - lugares de efectos`,
-  se dejan afuera las **menos usadas** (por cantidad de canciones; empate:
-  la última en el orden de `Key`), con un `WARNING` en el log del conversor.
-  Una clave descartada queda fuera de todos los conjuntos de claves, igual
-  que una que el SoundFont no tiene: esas notas no suenan y nada apunta a
-  una muestra inexistente. Prueba: `over_255_keys_the_least_used_are_left_out`.
-- **La causa real de Dooms 2 no era ésa**: tenía 247 claves o menos y el
-  corte venía de las *copias* (`bank::copies`), que llenaban el directorio
-  hasta 255 contando sólo `usual` (min de efectos y ranuras) y no los lugares
-  reales de los efectos (8). Ahora `usual` nunca baja de `places`. Con eso
-  Dooms 2 arma con los mapas 40 a 93 y el drop no llega a dispararse.
-- Verificado: `release` de ABL con estas herramientas, `abl.sfc`
-  `27e94e67...` igual; Dooms 2 arma, arranca y muestra el diálogo (captura
-  a los 3 s). La tanda de ABL no se corrió.
+- `bank::drop_surplus`, called in `compile.rs` before handing out copies:
+  if the songs' samples don't fit in `255 - sound effect slots`,
+  the **least used** are left out (by number of songs; tie: the last one
+  in `Key` order), with a `WARNING` in the converter's log. A discarded key
+  stays out of every key set, just like one the SoundFont doesn't have:
+  those notes don't play and nothing points to a nonexistent sample.
+  Test: `over_255_keys_the_least_used_are_left_out`.
+- **The real cause in Dooms 2 wasn't that**: it had 247 keys or fewer and the
+  stop came from the *copies* (`bank::copies`), which filled the directory
+  up to 255 counting only `usual` (min of effects and slots) and not the
+  real slots of the effects (8). Now `usual` never goes below `places`. With
+  that, Dooms 2 builds with maps 40 to 93 and the drop doesn't get to trigger.
+- Verified: ABL's `release` with these tools, `abl.sfc`
+  `27e94e67...` the same; Dooms 2 builds, starts and shows the dialogue
+  (capture at 3 s). A Blurred Line's suite wasn't run.

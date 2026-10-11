@@ -1,17 +1,17 @@
 ---
-name: "Partir el sello del conversor"
-description: "Un sello para el conversor y otro para rom/src/, para que editar ensamblador no reconvierta todo"
+name: "Split the converter's seal"
+description: "One seal for the converter and another for rom/src/, so that editing assembly doesn't reconvert everything"
 type: refactor
 status: wishlist
 ---
 
-Propuesto el 2026-09-26 por la optimización de `just cartuchos` (ver
-`cartuchos-en-caliente-en-diez-segundos.md`): hoy tocar cualquier
-archivo de `rom/src/` reconvierte todo, pero el conversor lee de `rom/src/`
-un solo archivo, `ram_lejana.s` (medido con un audit hook). Con un sello para
-el conversor (flags, casos, `tools/`, binarios, `parches/manual`, techos y
-`ram_lejana.s`) y otro para `rom/src/`, `ca65` y `ld65`, editar ensamblador
-costaría unos 4 s en vez de ~15. Es un cambio de estructura en
+Proposed on 2026-09-26 by the `just cartuchos` optimisation (see
+`cartuchos-en-caliente-en-diez-segundos.md`): today touching any file in
+`rom/src/` reconverts everything, but the converter reads a single file from
+`rom/src/`, `ram_lejana.s` (measured with an audit hook). With one seal for
+the converter (flags, cases, `tools/`, binaries, `parches/manual`, ceilings and
+`ram_lejana.s`) and another for `rom/src/`, `ca65` and `ld65`, editing assembly
+would cost about 4 s instead of ~15. It is a structural change in
 `tools/ensamblado/cartuchos.py`.
 
-taro lo dejó en wishlist: no es mucho lo que se gana.
+taro left it in wishlist: the gain is not much.

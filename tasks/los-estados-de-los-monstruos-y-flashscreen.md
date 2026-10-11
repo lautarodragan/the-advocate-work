@@ -1,9 +1,9 @@
 ---
-name: "Los estados de los monstruos y FlashScreen en la pelea"
-description: "ChangeMonsterCondition deja afuera 164 páginas de tropa —140 con FlashScreen—: Inscribe (799) y ControlMachines (803), al menos 66 de encuentros de release. FlashScreen en la escena es barato; los estados de verdad son grandes y taro decide si se hacen o se aceptan como deuda"
+name: "Monster conditions and FlashScreen in battle"
+description: "ChangeMonsterCondition leaves out 164 troop pages —140 with FlashScreen—: Inscribe (799) and ControlMachines (803), at least 66 of them from release encounters. FlashScreen in the scene is cheap; real conditions are big, and taro decides whether they get done or are accepted as debt"
 type: feature
 status: todo
 agents: [Aguará]
 ---
 
-Del estudio de Aguará, `docs/research/2026-10-05-los-comandos-que-faltan.md`; lo midió `rm2k-snes-events culprits`. taro, el 2026-10-05: dejarlas en todo, sin lanzar todavía. Falta la decisión de taro sobre los estados.
+From Aguará's study, `docs/research/2026-10-05-los-comandos-que-faltan.md`; measured by `rm2k-snes-events culprits`. taro, on 2026-10-05: leave them in todo, without launching yet. taro's decision on conditions is still pending.

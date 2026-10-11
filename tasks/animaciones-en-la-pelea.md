@@ -1,48 +1,48 @@
 ---
-name: "Animaciones en la pelea"
-description: "El animation_id de las habilidades y las armas, dibujado sobre la escena"
+name: "Animations in battle"
+description: "The animation_id of skills and weapons, drawn over the scene"
 type: feature
 status: wishlist
 ---
 
-# Qué
+# What
 
-Que una habilidad —del grupo o de un enemigo— dibuje su `animation_id` sobre
-la escena de la pelea, como `Game_BattleAlgorithm::GetAnimationId`. Hoy no se
-dibuja ninguna: ni las siete del grupo de la intro ni `ShortCircuit` (la 62),
-que el hito 4 de Lashe City (`lashe-4-ag7-en-la-pelea.md`) pedía.
+Have a skill —the party's or an enemy's— draw its `animation_id` over
+the battle scene, like `Game_BattleAlgorithm::GetAnimationId`. Today none is
+drawn: neither the seven of the intro's party nor `ShortCircuit` (number 62),
+which milestone 4 of Lashe City (`lashe-4-ag7-en-la-pelea.md`) asked for.
 
 # Status
 
-Anotado el 2026-09-27, sin empezar. Se dejó afuera del hito 4 por tamaño: es
-un subsistema nuevo adentro de la pelea, y la mecánica del hito no dependía de
-él.
+Noted on 2026-09-27, not started. It was left out of milestone 4 for size: it
+is a new subsystem inside the battle, and the milestone's mechanics didn't
+depend on it.
 
-# Lo que se sabe
+# What is known
 
-El dibujo de las animaciones existe **para el mapa** —`OP_ANIMATION`,
-`rom/src/animacion_de_batalla.s`—: cuatro objetos de 32x32 en una caja de
-64x64, una paleta de sprite y los cuadros subidos por DMA en el vblank. En la
-pelea no corre nada de eso, y lo que haría falta, mirado el 2026-09-27:
+The drawing of animations exists **for the map** —`OP_ANIMATION`,
+`rom/src/animacion_de_batalla.s`—: four 32x32 objects in a 64x64 box,
+a sprite palette and the frames uploaded by DMA in vblank. In the
+battle none of that runs, and what it would take, looked at on 2026-09-27:
 
-* **VRAM**: la pelea usa de `$2000` en adelante —el texto, sus dos tilemaps y
-  los 32 KB de la escena— y deja libre `$0000`-`$1FFF`, que alcanza para los
-  64 tiles de la caja con el `OBSEL` apuntado ahí.
-* **CGRAM**: la escena reparte **una paleta por battler distinto desde la 8**
-  (`ESC_PAL_N` en `batalla_escena.s`), que son las de los objetos. Con los
-  battlers de una tropa quedan libres las de arriba, salvo en una tropa de
-  ocho battlers distintos.
-* **La pantalla**: `TM` prende sólo BG1 y BG2; habría que prender los objetos y
-  armar la OAM en el lazo de la pelea, que hoy no la toca.
-* **El tiempo**: el mensaje de la acción dura `BA_MSG_CUADROS`, y la animación
-  tendría que caber adentro o estirarlo.
-* **El cartucho**: una animación son decenas de KB (la 77, 40 KB), y el
-  cartucho lleva sólo las que algún `ShowBattleAnimation` de un mapa pide. La 62
-  ya está (`parches/auto/animaciones/0062.toml`); de las de las habilidades de
-  AG7 —1, 118, 145, 78, 8, 95, 119, 30, 93, 60, 38, 115, 151— sólo la 1 y la
-  78.
+* **VRAM**: the battle uses from `$2000` onwards —the text, its two tilemaps
+  and the 32 KB of the scene— and leaves `$0000`-`$1FFF` free, which is
+  enough for the box's 64 tiles with `OBSEL` pointed there.
+* **CGRAM**: the scene hands out **one palette per distinct battler from 8
+  on** (`ESC_PAL_N` in `batalla_escena.s`), which are the objects' ones. With
+  a troop's battlers the upper ones stay free, except in a troop of eight
+  distinct battlers.
+* **The screen**: `TM` turns on only BG1 and BG2; objects would have to be
+  turned on and OAM built in the battle loop, which today doesn't touch it.
+* **The time**: the action's message lasts `BA_MSG_CUADROS`, and the animation
+  would have to fit inside it or stretch it.
+* **The cartridge**: an animation is tens of KB (number 77, 40 KB), and the
+  cartridge carries only those some map's `ShowBattleAnimation` asks for.
+  Number 62 is already there (`parches/auto/animaciones/0062.toml`); of those
+  from AG7's skills —1, 118, 145, 78, 8, 95, 119, 30, 93, 60, 38, 115, 151—
+  only 1 and 78.
 
-# Por qué
+# Why
 
-Se ve. taro lo confirma jugando: hoy una habilidad es un mensaje y un número
-que baja.
+It shows. taro confirms it by playing: today a skill is a message and a number
+going down.

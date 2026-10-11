@@ -1,37 +1,37 @@
 ---
-name: "BOOT_FRAMES por cartucho"
-description: "El mapa de arranque de Vampires Dawn pide 46 cuadros de BOOT_FRAMES y la ROM tiene 44, una constante: que cada cartucho lleve el suyo sin mover a ABL"
+name: "BOOT_FRAMES per cartridge"
+description: "Vampires Dawn's start map asks for 46 frames of BOOT_FRAMES and the ROM has 44, a constant: have each cartridge carry its own without moving ABL"
 type: feature
 status: testing
 assignee: taro
 agents: [Carpintero]
 ---
 
-Del re-barrido del 2026-10-10 (`otros-juegos-el-rebarrido.md`): el mapa 3 de VD no entra en `BOOT_FRAMES` (46 de 44). Subir la constante mueve en ABL el cuadro en que arranca el lazo, y con él las pruebas que cuentan cuadros. La propuesta de Tijereta: que el conversor emita el de cada cartucho, `max(44, la estimación)`, así ABL no se mueve.
+From the re-sweep of 2026-10-10 (`otros-juegos-el-rebarrido.md`): VD's map 3 doesn't fit in `BOOT_FRAMES` (46 of 44). Raising the constant moves, in ABL, the frame in which the loop starts, and with it the tests that count frames. Tijereta's proposal: have the converter emit each cartridge's own, `max(44, the estimate)`, so ABL doesn't move.
 
-## Lo hecho
+## What was done
 
-La propuesta de Tijereta, tal cual (rama `carpintero-boot-frames` de the-advocate: `3b03dffc` y el merge de `main`):
+Tijereta's proposal, as is (branch `carpintero-boot-frames` of the-advocate: `3b03dffc` and the merge of `main`):
 
-* `runtime/far_ram.s` ya no tiene `BOOT_FRAMES`: tiene `BOOT_FRAMES_FLOOR = 44`, con el porqué.
-* `rm2k-snes-audio cartridge` lee ese piso —como antes leía la constante— y escribe en el `musicdata.inc` del cartucho `BOOT_FRAMES = max(piso, techo de la estimación)`, junto al encabezado (más abajo, `rm2k-snes-assemble` reparte el archivo en bancos y los comentarios se pierden). Ya no se niega a armar; el único tope es el byte de `boot_frames`: más de 255 no arma.
-* El piso queda en el runtime y no como perilla del `rm2k-snes.toml`: lo que protege es del runtime, y ningún juego pide otro.
-* El libro (rama `carpintero-boot-frames` de the-advocate-docs): la decisión `el-arranque-esta-dimensionado-para-el-paquete-de-arranque.md` y `internals/audio.md`.
+* `runtime/far_ram.s` no longer has `BOOT_FRAMES`: it has `BOOT_FRAMES_FLOOR = 44`, with the why.
+* `rm2k-snes-audio cartridge` reads that floor —as it used to read the constant— and writes into the cartridge's `musicdata.inc` `BOOT_FRAMES = max(floor, ceiling of the estimate)`, next to the header (further down, `rm2k-snes-assemble` splits the file into banks and the comments are lost). It no longer refuses to build; the only ceiling is the `boot_frames` byte: more than 255 doesn't build.
+* The floor stays in the runtime and not as a knob in `rm2k-snes.toml`: what it protects belongs to the runtime, and no game asks for another.
+* The book (branch `carpintero-boot-frames` of the-advocate-docs): the decision `el-arranque-esta-dimensionado-para-el-paquete-de-arranque.md` and `internals/audio.md`.
 
-No hizo falta opcode.
+No opcode was needed.
 
-## Verificado
+## Verified
 
-* Antes, con las globales: el mapa 3 de VD solo (`maps = [3]`, sobre la copia del juego de Aguará con `Music/` recortado) no arma: "the boot doesn't fit in BOOT_FRAMES ... 46 frames, against 44".
-* Después: arma, `BOOT_FRAMES = 46`, y en snes9x sale de la espera en el cuadro 46 (`nmi_seen`): no se pasó.
-* ABL: `abl.sfc` `5852b72358b6…`, igual que main; ABL estima 40,5 y queda en 44. La tanda, con mis herramientas sobre the-advocate `main` 0b1ed124 mergeado y los ports en 493f39e: 1174 en verde.
-* `just crate-test rm2k-snes-audio` y `just test` en verde sobre el merge.
+* Before, with the global ones: VD's map 3 alone (`maps = [3]`, on Aguará's copy of the game with `Music/` trimmed) doesn't build: "the boot doesn't fit in BOOT_FRAMES ... 46 frames, against 44".
+* After: it builds, `BOOT_FRAMES = 46`, and in snes9x it leaves the wait at frame 46 (`nmi_seen`): it didn't overrun.
+* ABL: `abl.sfc` `5852b72358b6…`, same as main; ABL estimates 40.5 and stays at 44. The suite, with my tools on the-advocate `main` 0b1ed124 merged and the ports at 493f39e: 1174 green.
+* `just crate-test rm2k-snes-audio` and `just test` green on the merge.
 
-## Lo que no cubre la tanda
+## What the suite doesn't cover
 
-* Ningún cartucho de ABL pasa el piso: el camino "gana la estimación" lo ejecutan sólo la prueba unitaria de `cartridge::boot_frames` y el VD armado a mano de arriba.
-* **El mapa 3 de VD ("Intro") se ve roto**: en vez del panorama (el título de Vampires Dawn, `mode3`) la pantalla muestra rayas y bloques rojos, quietos. No es por el arranque: con el piso en 90 se ve igual. Queda para otra tarea.
+* No ABL cartridge goes past the floor: the "the estimate wins" path is executed only by the unit test of `cartridge::boot_frames` and the hand-built VD above.
+* **VD's map 3 ("Intro") looks broken**: instead of the panorama (Vampires Dawn's title, `mode3`) the screen shows stripes and red blocks, still. It isn't because of the boot: with the floor at 90 it looks the same. Left for another task.
 
-## Al mergear
+## When merging
 
-Reinstalar `rm2k-snes-audio` (`just install rm2k-snes-audio` en `~/the-advocate`), **junto con el merge**: el binario lee `runtime/far_ram.s` del checkout del que se instaló, y uno viejo con el runtime nuevo no encuentra `BOOT_FRAMES`, y uno nuevo con el runtime viejo define dos veces el símbolo. Lo demás que arma (`cartridge`, `convert`, `project`) no cambia de código.
+Reinstall `rm2k-snes-audio` (`just install rm2k-snes-audio` in `~/the-advocate`), **together with the merge**: the binary reads `runtime/far_ram.s` from the checkout it was installed from, and an old one with the new runtime doesn't find `BOOT_FRAMES`, and a new one with the old runtime defines the symbol twice. The rest of what it builds (`cartridge`, `convert`, `project`) doesn't change code.
