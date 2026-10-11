@@ -1,35 +1,35 @@
 ---
-name: "Notas que se sueltan antes de tiempo"
-description: "Cuando una nota le roba la voz a otra, el release agendado de la robada suelta a la nueva"
+name: "Notes released too early"
+description: "When a note steals another's voice, the stolen note's scheduled release cuts off the new one"
 type: bug
 status: done
 ---
 
-Visto midiendo el stream de música el 2026-09-25 (ver `la-musica-pesa-789-kb.md`),
-sin oírlo todavía. En `tools/audio/snes_music.py` (`build_events`): cuando
-una nota le gana la voz a otra, el release que la nota robada tenía agendado
-sigue en pie y suelta a la nueva antes de tiempo. **686 notas, 10.308 cuadros**
-en los temas de `test-main`; 329 en `escape_newyork`.
+Seen while measuring the music stream on 2026-09-25 (see `la-musica-pesa-789-kb.md`),
+without hearing it yet. In `tools/audio/snes_music.py` (`build_events`): when
+a note wins another's voice, the release the stolen note had scheduled
+still stands and cuts off the new one too early. **686 notes, 10,308 frames**
+in the `test-main` themes; 329 in `escape_newyork`.
 
-Y otro del mismo lugar: una nota cuya muestra no está en el banco igual ocupa
-la voz, porque `busy` se anota antes del `continue`.
+And another from the same place: a note whose sample is not in the bank still
+takes up the voice, because `busy` is set before the `continue`.
 
-Conviene arreglarlo **antes o después** del cambio de formato del stream (la
-idea 1 de `la-musica-pesa-789-kb.md`), no junto: ese cambio se verifica con que
-las escrituras al DSP salgan idénticas, y este arreglo las cambia a propósito.
+It is better to fix it **before or after** the change to the stream format (idea
+1 of `la-musica-pesa-789-kb.md`), not together with it: that change is verified by
+the DSP writes coming out identical, and this fix changes them on purpose.
 
-# Hecho, el 2026-09-25
+# Done, on 2026-09-25
 
-Los dos, en `build_events`: el release se agenda al final y sólo para las
-notas que siguen siendo dueñas de su voz, y la nota sin muestra sale antes de
-elegir voz. En los 22 temas del `release` eran 564 notas soltadas antes de
-tiempo y 11.024 notas sin muestra ocupando voz; el stream bajó 11,3%. Los
-números tema por tema y cómo se midieron, en el punto 1 de
-`la-calidad-de-la-musica.md`; lo cobra
+Both, in `build_events`: the release is scheduled at the end and only for the
+notes that still own their voice, and the note without a sample leaves before
+a voice is chosen. Across the 22 themes of `release` there were 564 notes released too
+early and 11,024 notes without a sample taking up a voice; the stream shrank 11.3%. The
+numbers theme by theme and how they were measured, in point 1 of
+`la-calidad-de-la-musica.md`; it is enforced by
 `pruebas/herramientas/test_musica_stream.py`.
 
-**Para taro**: está en `testing/` porque se oye —poco: sobre todo el bajo de
-`escape_newyork` y el de `cd4`, que ya no se cortan antes—. Las grabaciones,
-en `/shared/audio/2026-09-25-pasos-1-y-2/` (las `-1-`).
+**For taro**: it is in `testing/` because it can be heard —a little: mostly the bass of
+`escape_newyork` and that of `cd4`, which are no longer cut off early—. The recordings,
+in `/shared/audio/2026-09-25-pasos-1-y-2/` (the `-1-` ones).
 
-**taro escuchó las grabaciones y lo dio por bueno el 2026-09-26.**
+**taro listened to the recordings and approved it on 2026-09-26.**

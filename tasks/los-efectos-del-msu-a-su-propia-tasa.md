@@ -1,221 +1,221 @@
 ---
-name: "Los efectos del .msu, cada uno a su tasa y sólo los que conviven"
-description: "Con MSU-1 todos los efectos de un paquete van a una sola tasa, la que entra con todos juntos en la ARAM: uno largo baja a los demás"
+name: "The .msu's sound effects, each at its own rate and only those that coexist"
+description: "With MSU-1 all the sound effects of a package go at a single rate, the one at which they all fit together in ARAM: one long one drags the others down"
 type: feature
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-09-28, al meter el `Thunder9` del despegue en la pelea: con
-MSU-1, los efectos de calidad de la pelea bajaron de 14000 a 12000 Hz, todos,
-por un solo trueno de dos segundos. No urge, porque 12000 Hz con MSU-1 sigue
-sonando bien. El 2026-09-30 pidió que se haga.
+From taro, on 2026-09-28, when putting the take-off's `Thunder9` into the battle: with
+MSU-1, the battle's quality sound effects went down from 14000 to 12000 Hz, all of them,
+because of a single two-second thunder. It is not urgent, because 12000 Hz with MSU-1 still
+sounds good. On 2026-09-30 he asked for it to be done.
 
-# Por qué pasa
+# Why it happens
 
-`rates_per_package` (`tools/rm2k-snes/rm2k-snes-audio/src/effects.rs`, antes
-`tools/audio/efectos_msu.py`) elegía **una tasa por paquete**: la más alta de
-`RATES` a la que entran **todos** los efectos del paquete, enteros, en lo que
-la música deja libre de la ARAM. La ROM los sube todos al cargar el paquete
-(`se_msu_prepare` y `se_msu_upload`, en `tools/runtime/msu_effects.s`). El
-`.msu` no tiene tope: el límite son los 64 KB de ARAM.
+`rates_per_package` (`tools/rm2k-snes/rm2k-snes-audio/src/effects.rs`, formerly
+`tools/audio/efectos_msu.py`) chose **one rate per package**: the highest of
+`RATES` at which **all** the package's sound effects fit, whole, in what
+the music leaves free of ARAM. The ROM uploads them all when loading the package
+(`se_msu_prepare` and `se_msu_upload`, in `tools/runtime/msu_effects.s`). The
+`.msu` has no ceiling: the limit is the 64 KB of ARAM.
 
-# Dos ideas, de menos a más
+# Two ideas, from less to more
 
-1. **Una tasa por efecto dentro del paquete.** Es del conversor; hay que
-   mirar si el runtime supone una tasa común en algún lado.
-2. **Que en la ARAM esté sólo lo que puede sonar junto**: subir un efecto
-   cuando se pide, o por grupos que salen de un análisis estático de las
-   páginas.
+1. **One rate per sound effect within the package.** It belongs to the converter; it needs
+   checking whether the runtime assumes a common rate anywhere.
+2. **That only what can sound together is in ARAM**: uploading a sound effect
+   when it is requested, or by groups that come from a static analysis of the
+   pages.
 
-# Lo medido (2026-09-30, Zorzal, sobre `f7e53b3a`)
+# What was measured (2026-09-30, Zorzal, on `f7e53b3a`)
 
-Todo sobre `release`. Cada paquete tiene 62.395 B para efectos (63.419 de
-muestras menos el margen de 1 KB; con MSU-1 la música de todos los paquetes
-tiene pista y no ocupa nada). Los scripts, en `<scratchpad>/zorzal/`.
+All on `release`. Each package has 62,395 B for sound effects (63,419 of
+samples minus the 1 KB margin; with MSU-1 the music of all the packages
+has a track and takes up nothing). The scripts, in `<scratchpad>/zorzal/`.
 
-**Con qué se mide "cuánto pierde"**: la parte de lo que se oye de cada WAV
-—su espectro ponderado con la curva A— que queda arriba de lo que deja pasar
-el remuestreo a esa tasa (0,9 de la mitad). Sin la ponderación, el retumbo
-de un trueno, que lleva casi toda la energía, dice que no se pierde nada
-cuando se va el chasquido.
+**What "how much it loses" is measured with**: the part of what is heard of each WAV
+—its spectrum weighted with the A curve— that lies above what
+resampling to that rate lets through (0.9 of half). Without the weighting, the rumble
+of a thunder, which carries almost all the energy, says nothing is lost
+when the crack goes.
 
-**El runtime no supone una tasa común**: la altura de cada sonido sale de
-`se_msu_pitch`, que el conversor arma por paquete con la tasa de la versión
-de cada efecto. La idea 1 es sólo del conversor.
+**The runtime does not assume a common rate**: the pitch of each sound comes from
+`se_msu_pitch`, which the converter builds per package with the rate of each
+sound effect's version. Idea 1 belongs only to the converter.
 
-## Tres criterios para la idea 1
+## Three criteria for idea 1
 
-Sobre los catorce paquetes que no entran enteros a 22050 Hz:
+Over the fourteen packages that do not fit whole at 22050 Hz:
 
-* **tasa única** (lo de antes);
-* **baja primero el más pesado**, lo que proponía esta tarea;
-* **baja primero el que menos pierde de lo audible por byte que libera**, y
-  a igual pérdida el más pesado; al final lo que sobra vuelve al que más
-  recupera por byte, sólo si recupera algo.
+* **single rate** (what there was before);
+* **lower the heaviest first**, what this task proposed;
+* **lower first the one that loses least of the audible per byte it frees**, and
+  at equal loss the heaviest; at the end what is left over goes back to the one that
+  recovers most per byte, only if it recovers something.
 
-"El más pesado primero" dejaba **al peor efecto del paquete peor que la tasa
-única en cinco paquetes**: el 1 (`Rain1` 12→33%), el 11 (`Glass` 37→79%), el
-19 (`Glass` 56→84%), el 39 (`Sand Storm` 7→48%) y el 99 (`misslesnd`
-3→48%). Los efectos largos son muchas veces los agudos —un vidrio, una
-tormenta de arena—, y bajarlos por pesados es lo contrario de lo que se
-quería. "El que menos pierde" **no empeora al peor de ningún paquete** y
-mejora la media en todos. Se implementó ése; el porqué está en el comentario
-de `fit`, en `effects.rs`.
+"The heaviest first" left **the package's worst sound effect worse than the single
+rate in five packages**: 1 (`Rain1` 12→33%), 11 (`Glass` 37→79%),
+19 (`Glass` 56→84%), 39 (`Sand Storm` 7→48%) and 99 (`misslesnd`
+3→48%). The long sound effects are often the high-pitched ones —a glass, a
+sandstorm—, and lowering them for being heavy is the opposite of what was
+wanted. "The one that loses least" **does not make the worst of any package worse** and
+improves the mean in all of them. That one was implemented; the why is in the comment
+of `fit`, in `effects.rs`.
 
-## Antes y después, por paquete
+## Before and after, per package
 
-Pierde: peor efecto del paquete / media. Bytes: lo que se sube al cargarlo.
+Loses: the package's worst sound effect / mean. Bytes: what is uploaded when loading it.
 
-| paquete | antes | después | bytes antes → después |
+| package | before | after | bytes before → after |
 |---|---|---|---|
-| pelea | 57,5% / 9,1% | 5,4% / 1,0% | 62.010 → 62.280 |
-| 2 | 68,9% / 18,3% | 41,6% / 10,0% | 59.121 → 62.316 |
-| 3 | 90,4% / 35,4% | 90,4% / 27,8% | 61.992 → 62.370 |
-| 7 | 14,5% / 3,2% | 5,8% / 1,6% | 58.563 → 62.037 |
-| 11 | 36,7% / 7,7% | 7,0% / 2,1% | 62.235 → 62.370 |
-| 19 | 56,0% / 7,6% | 2,8% / 0,7% | 57.312 → 62.316 |
-| 26 | 2,2% / 0,4% | 0,2% / 0,0% | 62.190 → 62.361 |
-| 32 | 1,2% / 0,7% | 0,1% / 0,0% | 58.572 → 61.542 |
-| 39 | 18,4% / 8,9% | 14,5% / 5,7% | 61.479 → 62.208 |
-| 99 | 6,1% / 2,0% | 0,7% / 0,3% | 53.901 → 62.028 |
-| 261 | 1,2% / 0,3% | 0,0% / 0,0% | 58.806 → 61.902 |
-| 9, 20, 49 | 0% | 0% | +45, +2.430, +1.629 |
-| 1 | 12,4% / 6,8% | igual: `Rain1` y el trueno quedan a 16000 | igual |
+| battle | 57.5% / 9.1% | 5.4% / 1.0% | 62,010 → 62,280 |
+| 2 | 68.9% / 18.3% | 41.6% / 10.0% | 59,121 → 62,316 |
+| 3 | 90.4% / 35.4% | 90.4% / 27.8% | 61,992 → 62,370 |
+| 7 | 14.5% / 3.2% | 5.8% / 1.6% | 58,563 → 62,037 |
+| 11 | 36.7% / 7.7% | 7.0% / 2.1% | 62,235 → 62,370 |
+| 19 | 56.0% / 7.6% | 2.8% / 0.7% | 57,312 → 62,316 |
+| 26 | 2.2% / 0.4% | 0.2% / 0.0% | 62,190 → 62,361 |
+| 32 | 1.2% / 0.7% | 0.1% / 0.0% | 58,572 → 61,542 |
+| 39 | 18.4% / 8.9% | 14.5% / 5.7% | 61,479 → 62,208 |
+| 99 | 6.1% / 2.0% | 0.7% / 0.3% | 53,901 → 62,028 |
+| 261 | 1.2% / 0.3% | 0.0% / 0.0% | 58,806 → 61,902 |
+| 9, 20, 49 | 0% | 0% | +45, +2,430, +1,629 |
+| 1 | 12.4% / 6.8% | same: `Rain1` and the thunder stay at 16000 | same |
 
-La pelea, efecto por efecto:
+The battle, sound effect by sound effect:
 
-| efecto | dura | antes | después | pierde antes → después |
+| sound effect | lasts | before | after | loses before → after |
 |---|---|---|---|---|
-| `Attack2` | 0,70 s | 12000 | 22050 | 57,5% → 5,4% |
-| `Escape` | 0,46 s | 12000 | 20000 | 11,6% → 0,0% |
-| `Thunder9` | 1,92 s | 12000 | 14000 | 1,8% → 1,6% |
-| `Item2` | 1,14 s | 12000 | 14000 | 1,0% → 0,3% |
-| `Bite` | 1,00 s | 12000 | 14000 | 0,4% → 0,1% |
-| `Damage1` | 0,61 s | 12000 | 12000 | 0,3% |
-| `Evasion1` | 0,38 s | 12000 | 11025 | 0,0% |
-| `Monster1` | 2,99 s | 12000 | 6000 | 0,0% → 0,5% |
+| `Attack2` | 0.70 s | 12000 | 22050 | 57.5% → 5.4% |
+| `Escape` | 0.46 s | 12000 | 20000 | 11.6% → 0.0% |
+| `Thunder9` | 1.92 s | 12000 | 14000 | 1.8% → 1.6% |
+| `Item2` | 1.14 s | 12000 | 14000 | 1.0% → 0.3% |
+| `Bite` | 1.00 s | 12000 | 14000 | 0.4% → 0.1% |
+| `Damage1` | 0.61 s | 12000 | 12000 | 0.3% |
+| `Evasion1` | 0.38 s | 12000 | 11025 | 0.0% |
+| `Monster1` | 2.99 s | 12000 | 6000 | 0.0% → 0.5% |
 
-El 5,4% del `Attack2` es lo que pierde a 22050 Hz también: es el tope.
+The 5.4% of `Attack2` is what it loses at 22050 Hz too: it is the ceiling.
 
-**Lo que empeora**: la regla minimiza lo que pierde el paquete sumado, así
-que en los muy cargados algunos bajan para que otros suban mucho. En el 2
-(18 efectos) `Explosion3` va de 6500 a 4000 (5% → 23%) y `Holy3` de 6500 a
-16000 (69% → 10%); en el 3 (20 efectos) `Flash3` de 4000 a 3000 (64% →
-77%) y `Key` de 6000 a 16000 (47% → 8%). En el resto, lo que baja pierde
-menos de un punto.
+**What gets worse**: the rule minimises what the package loses in total, so
+in the very loaded ones some go down so that others go up a lot. In 2
+(18 sound effects) `Explosion3` goes from 6500 to 4000 (5% → 23%) and `Holy3` from 6500 to
+16000 (69% → 10%); in 3 (20 sound effects) `Flash3` from 4000 to 3000 (64% →
+77%) and `Key` from 6000 to 16000 (47% → 8%). In the rest, what goes down loses
+less than one point.
 
-**Lo que cuesta**: más bytes que subir en las cargas donde la tasa única
-dejaba lugar sin usar, a 1,5–1,65 cuadros por KB (abajo): el 99 unos 13
-cuadros más, el 19 unos 8, el 2, el 7, el 32 y el 261 unos 5, la pelea
-menos de uno. Un paquete que entra entero a 22050 no cambia. Es "calidad de
-audio antes que carga"; si pesa, `fit` no sube lo que no recupera nada, y
-lo que se podría tocar es no llenar hasta arriba los paquetes que ya
-quedaron bien.
+**What it costs**: more bytes to upload in the loads where the single rate
+left room unused, at 1.5–1.65 frames per KB (below): 99 some 13
+frames more, 19 some 8, 2, 7, 32 and 261 some 5, the battle
+less than one. A package that fits whole at 22050 does not change. It is "audio
+quality before load time"; if it weighs, `fit` does not upload what recovers nothing, and
+what could be touched is not filling to the top the packages that already
+ended up fine.
 
-## La idea 2: cuánto ganaría y cuánto costaría
+## Idea 2: how much it would gain and how much it would cost
 
-**Subir un efecto por el puerto del MSU-1** cuesta lo mismo que subirlo de
-la ROM —el mismo comando 3 del driver, de a tres bytes, con la CPU
-dedicada— más tres lecturas de `MSU_DATA` por trío. De la tabla de cargas
-de `efectos-de-calidad-con-msu-1.md` (snes9x, `.msu` del cartucho contra
-efectos de la ROM) y los bytes de cada lado: **1,64 cuadros por KB** en el 8,
-**1,51** en el 10 y **1,58** en la pelea; de la ROM, 1,45 (`emit.rs`). Más
-una búsqueda por paquete, uno o dos cuadros en Mednafen. Que suene la
-música no cambia nada: con MSU-1 la música es del MSU-1 y no pasa por el
-puerto.
+**Uploading a sound effect through the MSU-1 port** costs the same as uploading it from
+the ROM —the same command 3 of the driver, three bytes at a time, with the CPU
+dedicated— plus three reads of `MSU_DATA` per trio. From the loads table
+of `efectos-de-calidad-con-msu-1.md` (snes9x, the cartridge's `.msu` against
+sound effects from the ROM) and the bytes of each side: **1.64 frames per KB** on 8,
+**1.51** on 10 and **1.58** in the battle; from the ROM, 1.45 (`emit.rs`). Plus
+one lookup per package, one or two frames in Mednafen. Music playing
+changes nothing: with MSU-1 the music belongs to the MSU-1 and does not go through the
+port.
 
-Así que **subir al pedir no sirve**: el `Thunder9` a 22050 son 23,8 KB,
-unos 38 cuadros —más de medio segundo— con el juego congelado antes de que
-suene, y un golpe de la pelea tiene que sonar en el cuadro en que pega.
-Subirlo de a pedazos por cuadro sin congelar lo atrasaría más todavía.
-Lo único que tendría sentido son **grupos subidos en un borde** —al empezar
-una escena, al abrir la pelea—, que es otra carga de paquete: ~100 cuadros
-por grupo lleno.
+So **uploading on request does not work**: `Thunder9` at 22050 is 23.8 KB,
+some 38 frames —more than half a second— with the game frozen before it
+sounds, and a battle hit has to sound on the frame it lands.
+Uploading it in pieces per frame without freezing would delay it even more.
+The only thing that would make sense is **groups uploaded at a boundary** —when starting
+a scene, when opening the battle—, which is another package load: ~100 frames
+per full group.
 
-**Cuánto ganaría**: el techo es que cada efecto suene a 22050 Hz, y con la
-idea 1 ya se está a menos de un punto de eso (media) en todos los paquetes
-salvo cuatro:
+**How much it would gain**: the ceiling is every sound effect sounding at 22050 Hz, and with
+idea 1 it is already less than a point away from that (mean) in all the packages
+except four:
 
-| paquete | a 22050 pesa | idea 1: peor / media | techo: peor / media |
+| package | at 22050 weighs | idea 1: worst / mean | ceiling: worst / mean |
 |---|---|---|---|
-| 3 | 291 KB | 90,4% / 27,8% | 2,8% / 0,3% |
-| 2 | 201 KB | 41,6% / 10,0% | 1,5% / 0,2% |
-| 39 | 90 KB | 14,5% / 5,7% | 5,8% / 0,8% |
-| 1 | 86 KB | 12,4% / 6,8% | 1,3% / 0,7% |
+| 3 | 291 KB | 90.4% / 27.8% | 2.8% / 0.3% |
+| 2 | 201 KB | 41.6% / 10.0% | 1.5% / 0.2% |
+| 39 | 90 KB | 14.5% / 5.7% | 5.8% / 0.8% |
+| 1 | 86 KB | 12.4% / 6.8% | 1.3% / 0.7% |
 
-El 1 difícilmente se arregle con grupos: son dos efectos, `Rain1` (5 s) y
-un trueno, la lluvia y el trueno de una misma tormenta (no lo verifiqué en
-las páginas). En
-el 3 el único momento medido con tres a la vez —`Glass`, `Flash3` y `Earth4`
-en la escena de `evilrhys`, `test_msu_efectos.py`— pesa 77 KB a 22050 Hz:
-ese solo grupo ya no entra. La idea 2 serviría de verdad en los mapas 2 y 3
-y en ningún otro, y costaría: un análisis de páginas que diga qué
-`PlaySound` conviven, una tabla de grupos en la ROM, una carga de ~100
-cuadros en cada borde de grupo, y el caso de los efectos del sistema.
+1 is hardly fixable with groups: it is two sound effects, `Rain1` (5 s) and
+a thunder, the rain and the thunder of the same storm (I did not verify it in
+the pages). In
+3 the only moment measured with three at once —`Glass`, `Flash3` and `Earth4`
+in the `evilrhys` scene, `test_msu_efectos.py`— weighs 77 KB at 22050 Hz:
+that group alone no longer fits. Idea 2 would really help on maps 2 and 3
+and on no other, and it would cost: a page analysis that says which
+`PlaySound` coexist, a table of groups in the ROM, a load of ~100
+frames at each group boundary, and the case of the system sound effects.
 
-**Los efectos del sistema**: hoy la ROM no toca ninguno fuera de la pelea
-—el menú no suena— y los de la pelea (`BATTLE_AUDIO_SE`) ya están en su
-paquete. Cuando el menú los toque, `Cursor1`, `Key`, `Cansel1` y `Fog1` a
-22050 son 16,2 KB que tienen que estar **en todos los paquetes**, con
-cualquiera de las dos ideas; con la 2, además, en todos los grupos.
+**The system sound effects**: today the ROM plays none outside the battle
+—the menu makes no sound— and the battle's (`BATTLE_AUDIO_SE`) are already in its
+package. When the menu plays them, `Cursor1`, `Key`, `Cansel1` and `Fog1` at
+22050 are 16.2 KB that have to be **in every package**, with
+either idea; with 2, also in every group.
 
-**La idea 2 no se implementó**, como pedía el encargo. Mi lectura: no hace
-falta salvo para los mapas 2 y 3, y ahí el costo es alto.
+**Idea 2 was not implemented**, as the assignment asked. My reading: it is not
+needed except for maps 2 and 3, and there the cost is high.
 
-## La música de la radio (lo de Yarará)
+## The radio's music (Yarará's thing)
 
-Esto no la destraba ni la traba. Con MSU-1 un tema con pista no ocupa ARAM,
-así que meter la radio en el paquete de la pelea no les cambia la tasa a los
-efectos; lo que baja es la música **sin** MSU-1, que es el reparto del banco
-y no esto. Si el tema de la radio no tuviera pista, le quitaría lugar a los
-efectos de la pelea, y ahora bajarían primero `Monster1` y los que menos
-pierden en vez de todos juntos.
+This neither unblocks it nor blocks it. With MSU-1 a theme with a track takes no ARAM,
+so putting the radio into the battle package does not change the sound effects' rate;
+what goes down is the music **without** MSU-1, which is the bank's allocation
+and not this. If the radio's theme had no track, it would take room from the
+battle's sound effects, and now `Monster1` and the ones that lose least
+would go down first instead of all of them together.
 
-# Lo hecho
+# What was done
 
-| commit | qué |
+| commit | what |
 |---|---|
-| `19272b9d` | `rates_per_package` con una tasa por efecto; `audible.rs`, lo que pierde cada WAV a cada tasa |
-| `85631dc0` | la prosa del runtime y de `docs/port/` que decía "la tasa del paquete" |
+| `19272b9d` | `rates_per_package` with one rate per sound effect; `audible.rs`, what each WAV loses at each rate |
+| `85631dc0` | the prose of the runtime and of `docs/port/` that said "the package's rate" |
 
-La prueba del crate contra lo que escribía el Python (`tests/python.rs`)
-cambió a propósito su hash de los efectos de MSU-1, con el cambio escrito al
-lado: sólo las tasas del paquete 3 del juego de prueba, y el `Rumble` del 1
-—un WAV a 11025 Hz— anotado a esa tasa en vez de 22050, con los mismos
+The crate's test against what the Python wrote (`tests/python.rs`)
+changed on purpose its hash of the MSU-1 sound effects, with the change written
+next to it: only the rates of package 3 of the test game, and the `Rumble` of 1
+—a WAV at 11025 Hz— noted at that rate instead of 22050, with the same
 bytes.
 
-**Mueve la ROM y el `.msu`**: la ROM sólo por las alturas de `se_msu_pitch`.
-No mueve goldens: la tanda corre sin MSU-1.
+**It moves the ROM and the `.msu`**: the ROM only through the pitches of `se_msu_pitch`.
+It does not move goldens: the suite runs without MSU-1.
 
-# Cómo se verificó
+# How it was verified
 
-* `NO_CACHE=1 just cartuchos` en la base: los sha256 del encargo
+* `NO_CACHE=1 just cartuchos` on the baseline: the assignment's sha256
   (`abl.sfc` `e20182d1…`, `abl.msu` `905decd2…`, `special` `6784ab8f…`,
   `encounter-every-step` `5dc9114c…`).
-* Después, dos veces igual: `abl.sfc` `0d43de3c…`, `abl.msu` `e53bc400…`,
-  `special` `ea444940…`, `encounter-every-step` `54ef5505…`. El
-  `conversor.log` cambia sólo en las líneas de las tasas y en el tamaño y la
-  firma del `.msu`.
+* After, twice the same: `abl.sfc` `0d43de3c…`, `abl.msu` `e53bc400…`,
+  `special` `ea444940…`, `encounter-every-step` `54ef5505…`. The
+  `conversor.log` changes only in the lines of the rates and in the size and
+  signature of the `.msu`.
 * `just pruebas` 893, `just -f tools/justfile test` 46, `cargo test -p
-  rm2k-snes-audio` con `SOUNDFONT` en verde. `test_musica_techos.py` pasa.
-* **Lo que ninguna prueba mira**: que suene mejor. Para eso, lo de abajo.
+  rm2k-snes-audio` with `SOUNDFONT` green. `test_musica_techos.py` passes.
+* **What no test looks at**: that it sounds better. For that, what is below.
 
-# Para escuchar
+# To listen to
 
-`/shared/audio/2026-09-30-efectos-msu/`, con un `LEEME.txt`: los efectos de
-la pelea que cambian, antes y después, y los que más cambian en otros mapas,
-sacados del `.msu` y decodificados a su tasa (sin la interpolación del DSP),
-con el nombre y la tasa en el archivo; y los WAV originales de cuatro.
+`/shared/audio/2026-09-30-efectos-msu/`, with a `LEEME.txt`: the battle's
+sound effects that change, before and after, and the ones that change most on other maps,
+taken out of the `.msu` and decoded at their rate (without the DSP's interpolation),
+with the name and the rate in the file; and the original WAVs of four.
 
-Lo que hay que escuchar sobre todo: si `Monster1` a 6000 Hz se nota, y si
-`Attack2` y `Glass` ganan lo que dicen los números.
+What has to be listened to above all: whether `Monster1` at 6000 Hz is noticeable, and whether
+`Attack2` and `Glass` gain what the numbers say.
 
-# Al mergear
+# On merging
 
-* Instalar en el global **`rm2k-snes-audio`**: `just -f tools/justfile
-  install rm2k-snes-audio`. Sin él, el `.msu` sale con la tasa única de
-  antes.
-* No agrega ni renombra scripts de Python.
-* Toca un comentario de `tools/runtime/msu_effects.s`: la ROM no cambia por
-  eso.
+* Install in the global **`rm2k-snes-audio`**: `just -f tools/justfile
+  install rm2k-snes-audio`. Without it, the `.msu` comes out with the old single
+  rate.
+* It adds or renames no Python script.
+* It touches a comment of `tools/runtime/msu_effects.s`: the ROM does not change because of
+  that.

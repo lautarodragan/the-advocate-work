@@ -1,61 +1,61 @@
 ---
-name: "La victoria avisa la experiencia"
-description: "Que la pelea diga N EXP received y Level up"
+name: "Victory announces the experience"
+description: "Make the battle say N EXP received and Level up"
 type: feature
 status: done
 assignee: taro
 ---
 
-**Que la victoria diga la experiencia ganada y quién subió de nivel.**
+**Make victory say the experience gained and who levelled up.**
 
-La experiencia y la subida de nivel ya andan (`experiencia-y-subida-de-nivel.md`),
-pero la pelea no las cuenta: ni "N EXP received" ni "Level up!". El estado cambia
-igual; se ve recién en el menú.
+Experience and levelling up already work (`experiencia-y-subida-de-nivel.md`),
+but the battle does not tell them: neither "N EXP received" nor "Level up!". The state changes
+anyway; it only shows in the menu.
 
-Los textos salen de `terms` del LDB, como en RM2k (`Scene_Battle_Rpg2k`).
-Mueve las goldens de fin de pelea de la tanda.
+The texts come from the LDB's `terms`, as in RM2k (`Scene_Battle_Rpg2k`).
+It moves the end-of-battle goldens of the suite.
 
-## Cómo quedó, el 2026-09-26
+## How it turned out, on 2026-09-26
 
-Al ganar, la ventana de mensaje tapa al grupo —los cuatro renglones de
-`BA_PAG_MSG_FILA0`, los mismos del mensaje de una página de tropa— y cuenta
-lo que `ProcessSceneActionVictory` cuenta, página por página, cada una
-esperando a A:
+On winning, the message window covers the party —the four rows of
+`BA_PAG_MSG_FILA0`, the same ones as a troop page's message— and tells
+what `ProcessSceneActionVictory` tells, page by page, each one
+waiting for A:
 
-* la victoria y la experiencia: " The combat has resulted in" / "victory!" /
-  "90 EXP". El término del ABL no entraba en un renglón y se pasaba al de
-  abajo cortado a la mitad; ahora el conversor lo parte en un espacio
+* the victory and the experience: " The combat has resulted in" / "victory!" /
+  "90 EXP". ABL's term did not fit in one row and spilled into the one
+  below cut in half; now the converter splits it at a space
   (`pantallas.renglones_de_la_victoria`);
-* una por cada actor que subió, en el orden del grupo: "Arden LEVEL 6
-  achieved!" y un renglón por habilidad aprendida ("Pickpocket acquired!").
-  Si son más de tres, siguen en otra página sin repetir el nivel.
+* one for each actor that levelled up, in party order: "Arden LEVEL 6
+  achieved!" and a row per skill learned ("Pickpocket acquired!").
+  If there are more than three, they continue on another page without repeating the level.
 
-Los textos son `victory`, `exp_received`, `level`, `level_up` y
-`skill_learned` del LDB, armados como `game_message_terms.cpp` para RM2k en
-inglés. El conversor corta si alguno no entra en los 31 caracteres
+The texts are `victory`, `exp_received`, `level`, `level_up` and
+`skill_learned` from the LDB, put together like `game_message_terms.cpp` does for RM2k in
+English. The converter stops if any of them does not fit in the 31 characters
 (`pantallas.cobrar_la_victoria`).
 
-La experiencia se reparte ahora **al ganar**, antes de mostrar nada, como en
-RM2k; antes se repartía al cerrar la pantalla.
+Experience is now handed out **on winning**, before showing anything, as in
+RM2k; before, it was handed out when closing the screen.
 
-Lo que queda afuera, a propósito:
+What stays out, on purpose:
 
-* **El oro y los ítems**: RM2k los cuenta en la misma página, pero el port
-  todavía no los da al ganar.
-* **Una habilidad que ya sabía se cuenta igual**: RM2k sólo avisa las
-  nuevas. Difieren sólo si un `ChangeSkills` enseña antes una que después
-  enseña un nivel, y en el ABL ninguno lo hace (mirado en `data/`).
+* **Gold and items**: RM2k tells them on the same page, but the port
+  does not give them on winning yet.
+* **A skill already known is announced anyway**: RM2k only announces the
+  new ones. They differ only if a `ChangeSkills` first teaches one that a level
+  later teaches, and in ABL none does (checked in `data/`).
 
-Lo cubre `pruebas/rpgmaker/test_victoria.py`, que lee el texto del tilemap.
-Usa la RAM lejana `$7E7810-$7E781F` (`BA_VIC*` en `ram_lejana.s`); ningún
-opcode nuevo.
+It is covered by `pruebas/rpgmaker/test_victoria.py`, which reads the text from the tilemap.
+It uses far RAM `$7E7810-$7E781F` (`BA_VIC*` in `ram_lejana.s`); no
+new opcode.
 
-Falta que taro lo juegue: que el ritmo de las páginas con A se sienta bien y
-que la pelea se cierre en la última. Las capturas de antes y después están
-en `/shared/goldens/2026-09-26-victoria/`. Ninguna golden de la tanda se
-movió: ninguna captura la pantalla de la victoria. `test_cores.py` tampoco
-pasa por ella, así que la comparación entre snes9x y bsnes no cobra la RAM
-nueva; `ba_vic_empezar` escribe las ocho posiciones antes de que nadie las
-lea.
+taro still has to play it: that the pace of the pages with A feels right and
+that the battle closes on the last one. The before and after captures are
+in `/shared/goldens/2026-09-26-victoria/`. No golden of the suite
+moved: no capture takes the victory screen. `test_cores.py` does not
+go through it either, so the comparison between snes9x and bsnes does not enforce the new
+RAM; `ba_vic_empezar` writes the eight positions before anyone
+reads them.
 
-**taro miró las capturas el 2026-09-26 y las ve bien.** Falta jugarlo.
+**taro looked at the captures on 2026-09-26 and finds them fine.** It still has to be played.

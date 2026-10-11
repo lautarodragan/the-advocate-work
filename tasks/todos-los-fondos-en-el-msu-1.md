@@ -1,160 +1,160 @@
 ---
-name: "Todos los fondos de batalla en el MSU-1"
-description: "Cada fondo del juego en el .msu en alta calidad; en la ROM sólo los que entran, y los demás comparten uno de reemplazo en baja calidad"
+name: "All the battle backgrounds in the MSU-1"
+description: "Every background of the game in the .msu in high quality; in the ROM only those that fit, and the rest share a low-quality replacement"
 type: feature
 status: done
 ---
 
-De taro, el 2026-09-27, al ver que las peleas del mundo (66) salían en negro
-porque el cartucho no lleva sus cinco terrenos:
+From taro, on 2026-09-27, on seeing that the battles in the world (66) came out black
+because the cartridge does not carry its five terrains:
 
-- **Todos los fondos de batalla del juego van al `.msu`**, en alta calidad,
-  estén o no en los mapas del cartucho. Con eso la parte del `.msu` dedicada
-  a fondos queda fija: se sabe qué sector exacto ocupa, y no se mueve cuando
-  entra un mapa.
-- **En la ROM, cada pelea cuyo fondo no entra usa un mismo fondo de
-  reemplazo**, uno de los que ya hay, en baja calidad. No negro: negro
-  confunde.
-- **Con MSU-1, cada pelea muestra su fondo correcto**, aunque no esté en la
+- **All the game's battle backgrounds go to the `.msu`**, in high quality,
+  whether or not they are on the cartridge's maps. With that the part of the `.msu` dedicated
+  to backgrounds stays fixed: the exact sector it takes up is known, and it does not move when
+  a map goes in.
+- **In the ROM, each battle whose background does not fit uses the same
+  replacement background**, one of those already there, in low quality. Not black: black
+  is confusing.
+- **With MSU-1, each battle shows its correct background**, even if it is not in the
   ROM.
 
-Ver `docs/port/msu-datos.md` y `msu-1-los-fondos-por-el-puerto-de-datos.md`
-para cómo se leen hoy. Hay que medir cuánto pesan todos los fondos del juego
-en el `.msu` y decidir el orden (por id del fondo, así el sector de cada uno
-no depende de qué mapas entran).
+See `docs/port/msu-datos.md` and `msu-1-los-fondos-por-el-puerto-de-datos.md`
+for how they are read today. It needs measuring how much all the game's backgrounds weigh
+in the `.msu` and deciding the order (by background id, so that each one's sector
+does not depend on which maps go in).
 
-# De dónde saca RM2k el fondo de una pelea
+# Where RM2k gets a battle's background from
 
-De easyrpg-player, no de memoria: `CommandEnemyEncounter` (el parámetro
-`[2]`: 0 "del lugar", 1 el que nombra el comando, 2 un terreno, de RM2k3),
-`Game_Map::SetupBattle` (sube por el árbol mientras el nodo diga "el del
-padre"; sólo el tipo 2 trae nombre) y `Spriteset_Battle` (sin nombre, el
-fondo del terreno de la celda del héroe). O sea que **llegar a la raíz sin un
-tipo 2 también es "el del terreno"**, y el port lo trataba como "sin fondo".
+From easyrpg-player, not from memory: `CommandEnemyEncounter` (parameter
+`[2]`: 0 "the place's", 1 the one the command names, 2 a terrain, from RM2k3),
+`Game_Map::SetupBattle` (it goes up the tree while the node says "the
+parent's"; only type 2 carries a name) and `Spriteset_Battle` (without a name, the
+background of the terrain of the hero's cell). So **reaching the root without a
+type 2 is also "the terrain's"**, and the port treated it as "no background".
 
-Medido sobre el juego el 2026-09-27 (script descartable):
+Measured over the game on 2026-09-27 (throwaway script):
 
-* `EnemyEncounter`: 51; 49 nombran fondo (14 nombres distintos) y 2 piden el
-  del lugar, en el 105 y en el 141. **Ningún `ChangeBattleBG`** en todo el
-  juego (mapas, comunes, tropas).
-* Árbol: 58 nodos con fondo propio (24 nombres), 24 con el del terreno, el
-  resto heredan.
-* Terrenos: 30, 21 con fondo (19 nombres).
-* **La unión son 45 fondos, y existen todos**: 32 en el juego y 13 en el RTP
-  (`Cave1`, `Castle`, `Swamp` y los de los terrenos genéricos). Hasta hoy
-  `escena._abrir` no buscaba en el RTP; ahora sí, sólo para los fondos.
-* Los terrenos del mundo, por celda del 66: forest5 (16), river5 (21), mroad2
-  (15), plains5 (20), desert1 (19), plains6 (25) y Galaxy (1). No son los
-  cinco que decía el plan: forest6 es el 17, que el 66 no pisa. En la llegada
-  (71, 29) es plains6. El 158 y el 210 también son de terreno.
+* `EnemyEncounter`: 51; 49 name a background (14 distinct names) and 2 ask for
+  the place's, on 105 and on 141. **No `ChangeBattleBG`** in the whole
+  game (maps, common events, troops).
+* Tree: 58 nodes with their own background (24 names), 24 with the terrain's, the
+  rest inherit.
+* Terrains: 30, 21 with a background (19 names).
+* **The union is 45 backgrounds, and they all exist**: 32 in the game and 13 in the RTP
+  (`Cave1`, `Castle`, `Swamp` and those of the generic terrains). Until today
+  `escena._abrir` did not look in the RTP; now it does, only for the backgrounds.
+* The world's terrains, by cell of 66: forest5 (16), river5 (21), mroad2
+  (15), plains5 (20), desert1 (19), plains6 (25) and Galaxy (1). They are not the
+  five the plan said: forest6 is 17, which 66 does not step on. At the arrival
+  (71, 29) it is plains6. 158 and 210 are also terrain-based.
 
-# Qué se hizo
+# What was done
 
-* **El número de un fondo** es su lugar en la lista de los 45 ordenada por
-  nombre sin mayúsculas (`escena.fondos_del_juego`). No depende del
-  cartucho. Un byte alcanza con margen: `$FE` es "del lugar" y `$FF` el liso.
-* **El `.msu`, versión 2**: la cabecera y el índice rellenos hasta `$10000`,
-  y desde ahí el fondo k en `$10000 + k × $8200` (tiles; colores `$8000` más
-  adelante; el resto relleno hasta el sector de 512). Los efectos detrás del
-  último lugar. Documentado en `docs/port/msu-datos.md`.
-* **En la ROM**: `escena_tropa_fondo` y `escena_mapa_fondo` llevan números
-  del juego; `fondo_terreno` (por terreno) y `fondo_respaldo` (por número,
-  cuál de la ROM se dibuja sin MSU-1). `esc_terreno` lee el terreno bajo el
-  héroe como `op_terrain`. `ESC_FONDO` es el número del juego y el nuevo
-  `ESC_RESPALDO` ($7E664B, en el tramo de la escena) el de la ROM.
-* **El reemplazo es `ABLBackdropSJ08`**, el de los Rat Tracks: una cueva de
-  roca gris, el único de los tres que no dice dónde se está (el del droide es
-  una nave con la Tierra en un monitor; el de los Back Alleys, una calle con
-  carteles). Ya lo lleva `release`, así que no cuesta nada.
+* **A background's number** is its place in the list of the 45 sorted by
+  case-insensitive name (`escena.fondos_del_juego`). It does not depend on the
+  cartridge. A byte is enough with margin: `$FE` is "the place's" and `$FF` the plain one.
+* **The `.msu`, version 2**: the header and the index padded up to `$10000`,
+  and from there background k at `$10000 + k × $8200` (tiles; colours `$8000`
+  further on; the rest padded up to the 512 sector). The sound effects after the
+  last slot. Documented in `docs/port/msu-datos.md`.
+* **In the ROM**: `escena_tropa_fondo` and `escena_mapa_fondo` carry the game's
+  numbers; `fondo_terreno` (per terrain) and `fondo_respaldo` (per number,
+  which of the ROM's is drawn without MSU-1). `esc_terreno` reads the terrain under the
+  hero like `op_terrain`. `ESC_FONDO` is the game's number and the new
+  `ESC_RESPALDO` ($7E664B, in the scene's stretch) the ROM's.
+* **The replacement is `ABLBackdropSJ08`**, the Rat Tracks one: a cave of
+  grey rock, the only one of the three that does not say where you are (the droid's is
+  a ship with Earth on a monitor; the Back Alleys', a street with
+  signs). `release` already carries it, so it costs nothing.
 
-# Las cifras
+# The figures
 
-* `.msu` de `release`: 3.347.116 B, con los 45 fondos y 212 efectos. La
-  región de fondos son 45 × 33.280 = 1.497.600 B desde `$10000`. Antes, con 3
-  fondos, los fondos eran unos 99 KB.
-* Cada fondo que la ROM lleva son 16.416 B (tiles y colores) más 8 de
-  punteros.
-* **Tres en la ROM (lo que queda) contra sólo el reemplazo**, medido
-  armando `release` de las dos maneras: 75,6 % contra 74,8 %, o sea 32.848 B
-  (dos respaldos). Banco 0, BSS y ZEROPAGE, iguales en los dos.
-* **Recomendación: que sigan los tres.** El criterio de taro es que sin
-  MSU-1 se vea algo razonable: con los tres, las peleas que ya andaban —el
-  droide, Sector 27 y 30, los Rat Tracks— siguen con su fondo; con sólo el
-  reemplazo, el droide pelea en una cueva. 32 KB son un banco, y el día que
-  el espacio apriete es una línea: `escena.FONDOS = (REEMPLAZO,)`.
+* `.msu` of `release`: 3,347,116 B, with the 45 backgrounds and 212 sound effects. The
+  backgrounds region is 45 × 33,280 = 1,497,600 B from `$10000`. Before, with 3
+  backgrounds, the backgrounds were some 99 KB.
+* Each background the ROM carries is 16,416 B (tiles and colours) plus 8 of
+  pointers.
+* **Three in the ROM (what remains) against only the replacement**, measured
+  building `release` both ways: 75.6 % against 74.8 %, that is 32,848 B
+  (two fallbacks). Bank 0, BSS and ZEROPAGE, identical in both.
+* **Recommendation: keep the three.** taro's criterion is that without
+  MSU-1 something reasonable shows: with the three, the battles that already worked —the
+  droid, Sector 27 and 30, the Rat Tracks— keep their background; with only the
+  replacement, the droid fights in a cave. 32 KB is one bank, and the day
+  space gets tight it is one line: `escena.FONDOS = (REEMPLAZO,)`.
 
-# Lo que no escala del formato de hoy
+# What does not scale in today's format
 
-* **Los números de fondo son de 8 bits**: 45 de 254 posibles. Sobra.
-* **`msu_fondo_pos` crece 8 B por fondo** (360 B) pero va en un banco
-  generado, no en el 0. Las tablas nuevas también (31 + 45 B).
-* **El índice del `.msu` tiene tope** en `$10000`: 8.190 entradas. Con 90 de
-  fondos quedan unas 8.100 para efectos; `armar` se niega si se pasa.
-* **`se_msu_altura`, la tabla de alturas de los efectos**, es la que no
-  escala: el plan del mundo la mide en 33,8 KB con el capítulo entero, y
-  `escribir_msu` se niega a pasar de un banco. No es de esta tarea: es por
-  paquete × sonido y crece con el audio, no con los fondos.
+* **Background numbers are 8 bits**: 45 of 254 possible. Plenty.
+* **`msu_fondo_pos` grows 8 B per background** (360 B) but goes in a
+  generated bank, not in 0. The new tables too (31 + 45 B).
+* **The `.msu`'s index has a ceiling** at `$10000`: 8,190 entries. With 90 for
+  backgrounds some 8,100 are left for sound effects; `armar` refuses if it goes over.
+* **`se_msu_altura`, the sound effects' height table**, is the one that does not
+  scale: the world plan measures it at 33.8 KB with the whole chapter, and
+  `escribir_msu` refuses to go past one bank. It is not part of this task: it is per
+  package × sound and grows with the audio, not with the backgrounds.
 
-# Pruebas
+# Tests
 
-* `test_msu_una_pelea_del_mundo_lee_su_terreno_o_el_reemplazo` (nueva, en
-  snes9x y bsnes): pelea en la llegada al 66. Sin `.msu`, `ESC_FONDO` es el
-  número de plains6 calculado del juego (tile → terreno del ChipSet → fondo
-  del terreno) y el fondo limpio de la WRAM es el reemplazo liviano, no
-  ceros: golden `msu-mundo-rom`. Con `.msu`, `ESC_MSU` en 1 y el limpio es
-  plains6 de calidad: golden `msu-mundo-msu`.
-* `test_msu_la_rom_sabe_donde_esta_cada_fondo`: además, cada fondo en su
-  lugar fijo, `MSU_FONDOS_N == FONDOS_JUEGO == 45`, y la región de fondos
-  byte por byte igual en el `.msu` de los dos cartuchos.
-* `test_batalla_escena_dibujo`: los colores del respaldo se leen con
+* `test_msu_una_pelea_del_mundo_lee_su_terreno_o_el_reemplazo` (new, in
+  snes9x and bsnes): a battle at the arrival on 66. Without `.msu`, `ESC_FONDO` is the
+  number of plains6 computed from the game (tile → ChipSet terrain → terrain
+  background) and the clean background in WRAM is the light replacement, not
+  zeros: golden `msu-mundo-rom`. With `.msu`, `ESC_MSU` at 1 and the clean one is
+  quality plains6: golden `msu-mundo-msu`.
+* `test_msu_la_rom_sabe_donde_esta_cada_fondo`: in addition, each background in its
+  fixed place, `MSU_FONDOS_N == FONDOS_JUEGO == 45`, and the backgrounds region
+  byte-for-byte identical in the `.msu` of both cartridges.
+* `test_batalla_escena_dibujo`: the fallback's colours are read with
   `ESC_RESPALDO`.
-* `test_escena_una_pelea_del_lugar_usa_el_fondo_del_mapa` (nueva): el caso
-  `pelea-113` pelea con el fondo "del lugar" en el 60, que nombra
-  `SJBackdropABL01`; `ESC_FONDO` es ése y el limpio es el reemplazo.
-* **Verificado** con `just cartuchos` y `just pruebas` sobre esta rama antes
-  del merge: todo en verde, y **ninguna golden vieja cambió**. Las únicas
-  nuevas son `msu-mundo-rom` y `msu-mundo-msu`.
-* Lo que **no corre ninguna prueba**: el terreno bajo el héroe con una
-  `TileSubstitution` puesta (la búsqueda de `esc_terreno` está copiada de
-  `celda_sustituida`, que la tanda sí ejercita por `op_terrain`), y un mapa
-  de un solo terreno que pida el del terreno (la rama de `TERRENO_PLANO`).
+* `test_escena_una_pelea_del_lugar_usa_el_fondo_del_mapa` (new): the case
+  `pelea-113` fights with "the place's" background on 60, which names
+  `SJBackdropABL01`; `ESC_FONDO` is that one and the clean one is the replacement.
+* **Verified** with `just cartuchos` and `just pruebas` on this branch before
+  the merge: all green, and **no old golden changed**. The only
+  new ones are `msu-mundo-rom` and `msu-mundo-msu`.
+* What **no test runs**: the terrain under the hero with a
+  `TileSubstitution` set (the lookup of `esc_terreno` is copied from
+  `celda_sustituida`, which the suite does exercise through `op_terrain`), and a map
+  with a single terrain that asks for the terrain's (the `TERRENO_PLANO` branch).
 
-# Lo que cambia a propósito
+# What changes on purpose
 
-Sin MSU-1, las peleas que antes salían en negro porque su fondo no estaba en
-la ROM ahora salen sobre el reemplazo: el mundo, el 158 y el 210 (terreno), y
-en `release` también las de los mapas que nombran un fondo que la ROM no
-lleva, como el Warehouse de Sector 27 (`SJBackdropABL01`). Y dos cosas que el
-port hacía distinto de RM2k y ahora no: un `EnemyEncounter` con el fondo "del
-lugar" (el 105 y el 141 del juego, y el caso `pelea-113`) salía sin fondo, y un
-mapa que sube hasta la raíz sin nombrar fondo se trataba como sin fondo; los
-dos son "el del terreno" en easyrpg. Ninguna golden de la tanda mira esas
-peleas.
+Without MSU-1, the battles that used to come out black because their background was not in
+the ROM now come out on the replacement: the world, 158 and 210 (terrain), and
+in `release` also those of the maps that name a background the ROM does not
+carry, like Sector 27's Warehouse (`SJBackdropABL01`). And two things the
+port did differently from RM2k and now does not: an `EnemyEncounter` with "the
+place's" background (105 and 141 in the game, and the case `pelea-113`) came out without a background, and a
+map that goes up to the root without naming a background was treated as without one; both
+are "the terrain's" in easyrpg. No golden of the suite looks at those
+battles.
 
-# Espacio
+# Space
 
-Medido relinkeando el `.o` de `release` con el mapa de `ld65`:
+Measured by relinking the `.o` of `release` with `ld65`'s map:
 
-    release   75,6 %   banco 0 261 B   banco 1 ~8.090 B   BSS 138   ZEROPAGE 4
+    release   75,6 %   bank 0 261 B    bank 1 ~8.090 B    BSS 138   ZEROPAGE 4
 
-El banco 0 no cambió: todo el código nuevo es del banco 1 (unos 95 B, en
-`escena_subir` y `esc_terreno`) y las tablas van en bancos generados.
+Bank 0 did not change: all the new code is in bank 1 (some 95 B, in
+`escena_subir` and `esc_terreno`) and the tables go in generated banks.
 
-# Qué tiene que mirar taro
+# What taro has to look at
 
-* **Sin MSU-1 (Mednafen)**: caminar por el mundo desde la llegada y pelear.
-  El fondo tiene que ser la cueva gris de los Rat Tracks, en 16 colores, y
-  **no negro**. Las peleas de siempre —el droide, Sector 27 y 30, los Rat
-  Tracks— tienen que verse como antes.
-* **Con MSU-1 (el `abl.msu` al lado, en un emulador que lo tenga o en el FX
-  Pak)**: la misma pelea en el mundo tiene que mostrar **el terreno que se
-  pisa**: pradera en la llegada (plains6), bosque (forest5), montaña (mroad2),
-  desierto (desert1), según la celda. Las peleas de siempre, con el fondo de
-  calidad.
-* **Decidir** si los tres fondos siguen en la ROM (lo recomendado) o si
-  todos pasan a reemplazo más MSU-1, que ahorra 32 KB y pone al droide en la
-  cueva sin MSU-1.
-  Decidido el mismo día, al revés: todos los de `release` en la ROM, a
-  128x64. Ver `todos-los-fondos-en-la-rom.md`.
-* El `.msu` pasó de unos cientos de KB a unos 3,3 MB (los 45 fondos son 1,4
-  MB): copiarlo entero al lado del `abl.sfc`.
+* **Without MSU-1 (Mednafen)**: walk through the world from the arrival and fight.
+  The background has to be the grey cave of the Rat Tracks, in 16 colours, and
+  **not black**. The usual battles —the droid, Sector 27 and 30, the Rat
+  Tracks— have to look as before.
+* **With MSU-1 (the `abl.msu` next to it, in an emulator that supports it or on the FX
+  Pak)**: the same battle in the world has to show **the terrain being
+  stepped on**: grassland at the arrival (plains6), forest (forest5), mountain (mroad2),
+  desert (desert1), depending on the cell. The usual battles, with the quality
+  background.
+* **Decide** whether the three backgrounds stay in the ROM (the recommendation) or whether
+  all of them move to replacement plus MSU-1, which saves 32 KB and puts the droid in the
+  cave without MSU-1.
+  Decided the same day, the other way round: all of `release`'s in the ROM, at
+  128x64. See `todos-los-fondos-en-la-rom.md`.
+* The `.msu` went from a few hundred KB to some 3.3 MB (the 45 backgrounds are 1.4
+  MB): copy it whole next to `abl.sfc`.

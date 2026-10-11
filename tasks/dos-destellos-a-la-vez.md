@@ -1,60 +1,60 @@
 ---
-name: "Dos destellos a la vez"
-description: "Kersh se queda azul en la terraza: dos destellos juntos suben una sola paleta"
+name: "Two flashes at once"
+description: "Kersh stays blue on the terrace: two flashes together upload only one palette"
 type: bug
 status: done
 ---
 
-**En la terraza del mapa 32, el Agency Captain —Kersh— se queda teñido de azul
-varios mensajes**, hasta el `FlashScreen` de pantalla completa. En RM2k el
-destello se apaga solo mientras sigue la conversación. taro lo vio el
-2026-09-23 con el build de `3e028a0`: `kersh-blue-{1,2,3}.png` y las tres
-`kersh-blue-original-*` de `pruebas-manuales/2026-09-23-3e028a0-snes/`. No es
-nuevo.
+**On the terrace of map 32, the Agency Captain —Kersh— stays tinted blue
+for several messages**, until the full-screen `FlashScreen`. In RM2k the
+flash fades out on its own while the conversation goes on. taro saw it on
+2026-09-23 with the build of `3e028a0`: `kersh-blue-{1,2,3}.png` and the three
+`kersh-blue-original-*` in `pruebas-manuales/2026-09-23-3e028a0-snes/`. It is not
+new.
 
-Son dos `FlashSprite` de `EV0005` casi seguidos: comando 97 sobre el evento 2
-—azul, 40 décimas— y comando 101 sobre el 6 —Arden, celeste, 40 décimas—, con
-un solo mensaje en el medio.
+They are two `FlashSprite` of `EV0005` almost back to back: command 97 on event 2
+—blue, 40 tenths— and command 101 on event 6 —Arden, light blue, 40 tenths—, with
+a single message in between.
 
-# La causa, leída en el código
+# The cause, read in the code
 
-Hay `FLASH_MAX` ranuras de destello (4), pero **un solo `flash_buf` de 32
-bytes y un solo `flash_pend`**. `flashes_tick` corre todas las ranuras y cada
-una copia su paleta ahí, así que en un cuadro con dos destellos vivos el vblank
-sube sólo la del último. Cuando termina el de Kersh, su último cuadro —fuerza
-cero, o sea la paleta como estaba— lo pisa el de Arden y no llega nunca a
-CGRAM: la paleta de Kersh se queda con el último tinte que sí subió. La arregla
-la siguiente subida entera de paletas, que es el `FlashScreen`.
+There are `FLASH_MAX` flash slots (4), but **a single 32-byte `flash_buf`
+and a single `flash_pend`**. `flashes_tick` runs all the slots and each
+one copies its palette there, so on a frame with two live flashes the vblank
+uploads only the last one's. When Kersh's ends, its last frame —strength
+zero, that is, the palette as it was— is overwritten by Arden's and never reaches
+CGRAM: Kersh's palette keeps the last tint that did get uploaded. It is fixed by
+the next full palette upload, which is the `FlashScreen`.
 
-Nació así con `FlashSprite`, en `7340b1a` (2026-09-04): la prueba que lo
-acompañó tiene un destello solo, y ningún caso de la tanda tiene dos que se
-pisen.
+It was born like this with `FlashSprite`, in `7340b1a` (2026-09-04): the test that
+came with it has a single flash, and no case in the suite has two that
+overlap.
 
-# El arreglo
+# The fix
 
-**Una paleta por ranura**, en la RAM lejana: `FAR_FLASH_PAL`, $6900 a $69FF,
-reservado el 2026-09-23 —en la BSS quedaban 75 bytes y hacían falta 96 más—.
-Lo que está pendiente de subir va en el byte +7 de cada ranura de `flash_ev`,
-que estaba libre: la entrada de CGRAM de su paleta, que nunca es cero porque
-las de sprite arrancan en la 128. El vblank sube todas las pendientes. Salen de
-la BSS `flash_buf`, `flash_pend` y `flash_pend_cgadd`: 34 bytes.
+**One palette per slot**, in far RAM: `FAR_FLASH_PAL`, $6900 to $69FF,
+reserved on 2026-09-23 —the BSS had 75 bytes left and 96 more were needed—.
+What is pending upload goes in byte +7 of each slot of `flash_ev`,
+which was free: the CGRAM entry of its palette, which is never zero because
+the sprite ones start at 128. The vblank uploads all the pending ones. `flash_buf`,
+`flash_pend` and `flash_pend_cgadd` leave the BSS: 34 bytes.
 
-Lo cuida `test_destellos_encimados`, con el caso `destellos-encimados`: el
-evento 1 destella diez décimas, y dos décimas después el 4 destella treinta. En
-el tick 90 el 1 tiene que verse como en el tick de llegada. Se la vio en rojo
-contra el `main.s` de antes.
+It is guarded by `test_destellos_encimados`, with the case `destellos-encimados`: event
+1 flashes for ten tenths, and two tenths later event 4 flashes for thirty. At
+tick 90, event 1 has to look as it did at the arrival tick. It was seen red
+against the `main.s` from before.
 
-Dos cosas que costaron y conviene saber:
+Two things that were hard and are worth knowing:
 
-* **La comparación tiene que ser contra el tick de llegada**, no contra uno de
-  después de los dos destellos: con el error el primero **no vuelve nunca**, así
-  que el final también está teñido y la primera versión de la prueba pasaba con
-  la ROM rota.
-* **Destellar al héroe en el mapa 6 cambia el reparto de paletas del mapa
-  entero**: la primera versión del caso lo hacía, y se movieron las goldens de
-  `grafico`, `grafico-heroe`, `sprite-actor` y `destello-compartido` —con
-  cualquiera de los dos `main.s`—. Por eso el segundo blanco es el 4.
+* **The comparison has to be against the arrival tick**, not against one
+  after both flashes: with the bug the first one **never comes back**, so
+  the end is tinted too and the first version of the test passed with
+  the ROM broken.
+* **Flashing the hero on map 6 changes the palette allocation of the whole
+  map**: the first version of the case did that, and the goldens of
+  `grafico`, `grafico-heroe`, `sprite-actor` and `destello-compartido` moved —with
+  either of the two `main.s`—. That is why the second target is event 4.
 
-Con todo, `just pruebas` en verde y ninguna golden se movió.
+With all that, `just pruebas` green and no golden moved.
 
-**taro, el 2026-09-26: mejoró, pero no es perfecto; sospecha que lo que queda es lag y no un bug.** La investigación de los chips midió que en la terraza, en las vueltas pesadas, casi 200 de las 262 líneas se van en recalcular paletas (`destello_tick` + `flashes_tick`): sigue en `la-terraza-pierde-cuadros-en-los-destellos.md`.
+**taro, on 2026-09-26: it improved, but it is not perfect; he suspects what is left is lag and not a bug.** The chips investigation measured that on the terrace, in the heavy loops, almost 200 of the 262 lines go to recomputing palettes (`destello_tick` + `flashes_tick`): it continues in `la-terraza-pierde-cuadros-en-los-destellos.md`.

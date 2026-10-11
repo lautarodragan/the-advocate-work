@@ -1,38 +1,38 @@
 ---
-name: "Los tres relojes de tocar"
-description: "Partida.tocar cuenta en ticks, menu.tocar y Pelea.tocar en cuadros: tres verbos iguales con relojes distintos"
+name: "The three clocks of tocar"
+description: "Partida.tocar counts in ticks, menu.tocar and Pelea.tocar in frames: three identical verbs with different clocks"
 type: refactor
 status: done
 ---
 
-En el arnés de `pruebas/` hay tres `tocar`: `Partida.tocar` en ticks, y
-`menu.tocar` y `Pelea.tocar` en cuadros, con distinto aire entre toques. El
-mismo nombre para tres relojes confunde a quien escribe una prueba nueva.
-Quedó sin unificar en `ordenar-pruebas` (2026-09-25) porque unificarlos
-**cambia cuándo cae cada toque**, y eso puede cambiar lo que ven las pruebas.
-El docstring de `menu.tocar` explica los tres.
+In the harness in `pruebas/` there are three `tocar`: `Partida.tocar` in ticks, and
+`menu.tocar` and `Pelea.tocar` in frames, with different gaps between presses. The
+same name for three clocks confuses whoever writes a new test.
+It was left un-unified in `ordenar-pruebas` (2026-09-25) because unifying them
+**changes when each press lands**, and that can change what the tests see.
+The docstring of `menu.tocar` explains the three.
 
-Lo barato es renombrar para que el nombre diga el reloj; lo caro, unificar y
-volver a medir cada prueba que los usa. Medir primero cuántas pruebas dependen
-del aire exacto.
+The cheap option is renaming so the name says the clock; the expensive one, unifying and
+measuring again every test that uses them. Measure first how many tests depend
+on the exact gap.
 
-## Hecho, 2026-09-26
+## Done, 2026-09-26
 
-Medido primero: con `Pelea.tocar` cambiado a llamar a `menu.tocar` —dos
-cuadros apretado en vez de tantos como de aire—, las cinco pruebas que usan
+Measured first: with `Pelea.tocar` changed to call `menu.tocar` —two
+frames pressed instead of as many as the gap—, the five tests that use
 `Pelea` (`test_batalla`, `test_tropa`, `test_victoria`,
-`test_experiencia_dibujo`, `test_menu_hp_de_la_pelea_dibujo`: 45 casos)
-siguieron en verde, y ninguna compara contra una golden. Así que esos dos se
-unificaron; el de ticks no se puede, porque en una pantalla que congela el
-reloj no termina nunca.
+`test_experiencia_dibujo`, `test_menu_hp_de_la_pelea_dibujo`: 45 cases)
+stayed green, and none of them compares against a golden. So those two were
+unified; the tick one cannot be, because on a screen that freezes the
+clock it never finishes.
 
-Quedaron dos, con el reloj en el nombre, y los dos en `Partida`:
+Two were left, with the clock in the name, and both in `Partida`:
 
-* `Partida.tocar_ticks(*botones)`: el que era `Partida.tocar`.
-* `Partida.tocar_cuadros(boton, aire=4)`: el que era `menu.tocar`.
-  `Pelea.tocar_cuadros(boton="a", aire=3)` le pasa a éste.
+* `Partida.tocar_ticks(*botones)`: the one that was `Partida.tocar`.
+* `Partida.tocar_cuadros(boton, aire=4)`: the one that was `menu.tocar`.
+  `Pelea.tocar_cuadros(boton="a", aire=3)` hands off to this one.
 
-Y dos locales que se quedan, con el nombre alineado: `Grabador.tocar_cuadros`
-en `test_fundido_de_pelea.py` —el mismo toque, fotografiando cada cuadro— y
-`_tocar_cuadros` en `test_pila.py` —sin `Partida`, un cuadro apretado—.
-El `tocar=` de `Partida.correr` no se tocó: es una lista agendada, no un verbo.
+And two local ones that stay, with their names aligned: `Grabador.tocar_cuadros`
+in `test_fundido_de_pelea.py` —the same press, photographing each frame— and
+`_tocar_cuadros` in `test_pila.py` —without `Partida`, one frame pressed—.
+The `tocar=` of `Partida.correr` was not touched: it is a scheduled list, not a verb.

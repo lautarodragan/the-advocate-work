@@ -1,96 +1,96 @@
 ---
-name: "El PlayBGM del mapa 3 congela en silencio"
-description: "Sin MSU-1, al aparecer el mapa 3 el juego queda 86 cuadros congelado y en silencio subiendo TF3_1_awe, y la mitad es volver a subir lo que ya estaba"
+name: "Map 3's PlayBGM freezes in silence"
+description: "Without MSU-1, when map 3 appears the game stays frozen and silent for 86 frames uploading TF3_1_awe, and half of it is uploading again what was already there"
 type: bug
 status: done
 assignee: taro
 ---
 
-Medido el 2026-09-26 al verificar `al-mapa-3-le-falta-un-efecto.md`:
-sin MSU-1, apenas aparece el mapa 3 (después del fundido) el `PlayBGM
-TF3_1_awe` congela **86 cuadros (1,4 s) con la imagen quieta y en silencio**.
-TF3 no está en el paquete del 3 y hay que subirlo, pero de los 61.614 B que
-se suben, **25.623 ya estaban en la ARAM** (evilrhys y los 5 primeros
-efectos): `compactar` rearma todo desde cero cuando el paquete quedó
-incompleto, y rearmar gana a lo sumo un efecto que no se usa hasta después.
-Con MSU-1 no pasa.
+Measured on 2026-09-26 while verifying `al-mapa-3-le-falta-un-efecto.md`:
+without MSU-1, as soon as map 3 appears (after the fade) the `PlayBGM
+TF3_1_awe` freezes **86 frames (1.4 s) with the picture still and in silence**.
+TF3 is not in map 3's package and has to be uploaded, but of the 61,614 B that
+are uploaded, **25,623 were already in ARAM** (evilrhys and the first 5
+sound effects): `compactar` rebuilds everything from scratch when the package was left
+incomplete, and rebuilding gains at most one sound effect that is not used until later.
+With MSU-1 it does not happen.
 
-Propuestas del agente, sin implementar, sin bajarle calidad a nada:
-1. **No compactar cuando lo que se quiere igual no entra en la ARAM**
-   (sumar los tamaños de las muestras marcadas antes de rearmar): ~36
-   cuadros menos, el congelamiento bajaría a ~50, lo que tarda TF3 solo.
-2. **Subir TF3 al lado de escape_newyork sin callarlo** (entran juntos:
-   61.668 de 63.419 B): seguiría congelado pero sin el silencio. Toca
+The agent's proposals, not implemented, without lowering the quality of anything:
+1. **Do not compact when what is wanted would not fit in ARAM anyway**
+   (add up the sizes of the marked samples before rebuilding): ~36
+   frames fewer, the freeze would go down to ~50, what TF3 alone takes.
+2. **Upload TF3 next to escape_newyork without silencing it** (they fit together:
+   61,668 of 63,419 B): it would still be frozen but without the silence. It touches
    `tema_asegurar`.
 
-De paso: el docstring de `test_el_paquete_que_no_entro_con_otro_tema_sonando_se_completa`
-y el comentario de `tema_asegurar` dicen que el paso real del 2 al 3 se hace
-"con el tema del 2 sonando"; no es así (en el 2 suena escape_newyork, que
-viene del 1). El caso `paquete-incompleto` prende TF3 a mano y ejercita el
-mismo mecanismo: corregir la prosa.
+Incidentally: the docstring of `test_el_paquete_que_no_entro_con_otro_tema_sonando_se_completa`
+and the comment of `tema_asegurar` say that the real transition from 2 to 3 happens
+"with 2's theme playing"; that is not so (on 2 escape_newyork plays, which
+comes from 1). The case `paquete-incompleto` turns on TF3 by hand and exercises the
+same mechanism: fix the prose.
 
-## Tomada el 2026-09-30
+## Taken on 2026-09-30
 
-Decidido por Hornero: se hace la propuesta 1 —no rearmar la ARAM cuando lo
-que se quiere igual no entra— y, si el tiempo medido lo justifica, la 2 —no
-callar el tema que suena mientras sube el nuevo—. Sin bajarle calidad a
-nada. De paso, la prosa que dice mal cómo se llega del 2 al 3.
+Decided by Hornero: proposal 1 is done —do not rebuild ARAM when what
+is wanted would not fit anyway— and, if the measured time justifies it, proposal 2 —do not
+silence the theme that is playing while the new one uploads—. Without lowering the quality of
+anything. Incidentally, the prose that gets wrong how one gets from 2 to 3.
 
-## Lo hecho, el 2026-09-30 (Cachirla)
+## What was done, on 2026-09-30 (Cachirla)
 
-**Propuesta 1, hecha.** `package_load_done` suma, en `exit_q`, lo que el
-paquete quiere —el tema que suena, el extra, los temas del paquete y sus
-efectos; no los de salida, que no tienen por qué entrar— con
-`wanted_fits`, y si no entra ni con la ARAM vacía deja `PKG_COMPACT` en 2
-y no rearma. Salvo que lo que quedó afuera sea un tema: ahí rearmar sí
-sirve, porque pone los temas primero, y se rearma como antes.
+**Proposal 1, done.** `package_load_done` adds up, in `exit_q`, what the
+package wants —the theme that is playing, the extra, the package's themes and their
+sound effects; not the exit ones, which have no reason to fit— with
+`wanted_fits`, and if it does not fit even with ARAM empty it leaves `PKG_COMPACT` at 2
+and does not rebuild. Unless what was left out is a theme: there rebuilding does
+help, because it puts themes first, and it rebuilds as before.
 
-Medido con el caso nuevo `paso-al-3` —escape_newyork en el 2, `Teleport`
-al 3 y `PlayBGM` de TF3_1_awe, como la página del ascensor—, en
-cuadros de hardware con la música callada y la imagen quieta:
+Measured with the new case `paso-al-3` —escape_newyork on 2, `Teleport`
+to 3 and `PlayBGM` of TF3_1_awe, like the lift page—, in
+hardware frames with the music silent and the picture still:
 
-    antes (3d83de68)    86
-    con la propuesta 1  38
+    before (3d83de68)   86
+    with proposal 1     38
 
-Y la llegada, bajo el fundido, 53 en vez de 55: ahí tampoco se rearma.
-Con TF3 sonando quedan diez efectos del paquete en vez de nueve, y
-evilrhys, Earth2 y Open1 no se mueven de donde estaban.
+And the arrival, under the fade, 53 instead of 55: there it does not rebuild either.
+With TF3 playing ten of the package's sound effects remain instead of nine, and
+evilrhys, Earth2 and Open1 do not move from where they were.
 
-**Propuesta 2, no se hizo.** Subir TF3 al lado de escape_newyork sin
-callarlo no alcanza sólo con no callar: a la llegada, al lado de escape
-ya están evilrhys y los cinco primeros efectos, y TF3 no entra con ellos.
-Habría que soltarlos para subir TF3, y ahí se pierden Earth2 y Open1, que
-el mapa pide antes del `PlayBGM` de evilrhys —el temblor y la puerta—:
-escape (35.793) + TF3 (25.875) + esos dos (3.780) pasan la ARAM de
-muestras (63.419). Volver a subirlos con TF3 ya sonando sería una segunda
-carga y un segundo congelamiento, con la imagen quieta más tiempo en
-total, a cambio de que no haya silencio. Con 38 cuadros la cuenta no da;
-si taro oye que el hueco molesta, es por ahí.
+**Proposal 2, not done.** Uploading TF3 next to escape_newyork without
+silencing it is not achieved just by not silencing: on arrival, next to escape
+evilrhys and the first five sound effects are already there, and TF3 does not fit with them.
+They would have to be released to upload TF3, and then Earth2 and Open1 are lost, which
+the map asks for before the `PlayBGM` of evilrhys —the tremor and the door—:
+escape (35,793) + TF3 (25,875) + those two (3,780) exceed the sample
+ARAM (63,419). Uploading them again with TF3 already playing would be a second
+load and a second freeze, with the picture still for longer in
+total, in exchange for there being no silence. With 38 frames the numbers do not add up;
+if taro hears that the gap is bothersome, that is the way.
 
-**La prueba:** `test_el_paso_del_2_al_3_no_vuelve_a_subir_lo_que_estaba`,
-en `rom/pruebas/rpgmaker/test_musica_paquete.py`. Pide que lo que estaba en
-la ARAM antes del `PlayBGM` no se mueva y que el silencio no pase de
-`TOPE_DEL_PASO_AL_3`, un segundo. Con el runtime de antes da rojo: se
-mueven 26 muestras. Para mirar dónde está cada una, `lugares_en_la_aram`
-en el arnés.
+**The test:** `test_el_paso_del_2_al_3_no_vuelve_a_subir_lo_que_estaba`,
+in `rom/pruebas/rpgmaker/test_musica_paquete.py`. It requires that what was in
+ARAM before the `PlayBGM` does not move and that the silence does not exceed
+`TOPE_DEL_PASO_AL_3`, one second. With the old runtime it goes red: 26 samples
+move. To see where each one is, `lugares_en_la_aram`
+in the harness.
 
-**La prosa**, en su commit: el docstring de
-`test_el_paquete_que_no_entro_con_otro_tema_sonando_se_completa` y el
-comentario de `song_ensure`.
+**The prose**, in its own commit: the docstring of
+`test_el_paquete_que_no_entro_con_otro_tema_sonando_se_completa` and the
+comment of `song_ensure`.
 
-**El audio**, para escuchar: `/shared/audio/2026-09-30-mapa-3/`, el paso
-antes y después, con el SPC700 solo.
+**The audio**, to listen to: `/shared/audio/2026-09-30-mapa-3/`, the transition
+before and after, with the SPC700 alone.
 
-**Lo que se paga, y no se vio en ningún mapa:** sin rearmar, qué efectos
-entran en los huecos lo decide el orden en que quedaron, no el de la
-lista. En el 3 entran más que antes; en otro paso con un paquete que no
-entra podría quedar afuera uno de adelante de la lista que antes entraba,
-hasta el próximo `PlayBGM`. `just pruebas` no mira eso fuera del 3.
+**What is paid, and was not seen on any map:** without rebuilding, which sound effects
+fit in the gaps is decided by the order they were left in, not that of the
+list. On 3 more fit than before; in another transition with a package that does not
+fit, one from the front of the list that used to fit could be left out,
+until the next `PlayBGM`. `just pruebas` does not look at that outside 3.
 
-**Al mergear:** no hay que instalar nada. Cambió `tools/runtime/`, que el
-global arma desde el checkout principal, y ningún proyecto de Rust.
-Ninguna golden se movió.
+**On merging:** nothing needs to be installed. `tools/runtime/` changed, which the
+global one builds from the main checkout, and no Rust project.
+No golden moved.
 
-**Qué jugar:** sin MSU-1, el ascensor del 2 al 3. Entre que el mapa 3
-aparece y suena TF3_1_awe hay un hueco callado con la imagen quieta: tiene
-que ser más corto que antes. Y en el 3, que el temblor y la puerta suenen.
+**What to play:** without MSU-1, the lift from 2 to 3. Between map 3
+appearing and TF3_1_awe playing there is a silent gap with the picture still: it has
+to be shorter than before. And on 3, that the tremor and the door sound.

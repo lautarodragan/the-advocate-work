@@ -1,78 +1,78 @@
 ---
-name: "ShowPicture, fase 1"
-description: "El cartel de One year previously"
+name: "ShowPicture, phase 1"
+description: "The One year previously card"
 status: done
 ---
 
 ### ShowPicture
 
-El cartel de "One year previously" es el único `ShowPicture` que el port hace.
+The "One year previously" card is the only `ShowPicture` the port does.
 
-Es el caso fácil del sistema de imágenes: 
-- aparece una sola vez, entre dos fundidos, 
-- sobre un mapa de un solo tile, 
-- así que no le pelea VRAM ni colores a ningún ChipSet ni CharSet. 
+It is the easy case of the picture system: 
+- it appears only once, between two fades, 
+- over a single-tile map, 
+- so it fights no ChipSet or CharSet for VRAM or colours. 
 
-Lo que hay que tener a mano para tocarlo:
+What to keep at hand when touching it:
 
-* **Un cartel por ROM**, y quién se queda con la ranura lo decide
-  `Imagenes.elegir` mirando todos los mapas en el orden de la tabla, antes de
-  compilar nada. Con "el primero que pase" los dos lados podían elegir
-  distinto, porque los mapas se compilan en un orden que depende de si la ROM
-  lleva ventana.
-* **El fundido es de tono y no de transparencia.** Los dos `MovePicture` dejan
-  `top_trans` en cero y mueven (r, g, b). Y **la duración viene en décimas**:
-  los 35 del primero son 210 cuadros. Eso subió la página del "1 year earlier"
-  de 105 décimas a 160, y por eso `test_un_ano_antes.py` pasó de 900 cuadros a
+* **One card per ROM**, and who keeps the slot is decided by
+  `Imagenes.elegir` looking at all the maps in table order, before
+  compiling anything. With "the first that comes along" the two sides could choose
+  differently, because the maps are compiled in an order that depends on whether the ROM
+  carries a window.
+* **The fade is a tone fade, not a transparency one.** The two `MovePicture` leave
+  `top_trans` at zero and move (r, g, b). And **the duration comes in tenths**:
+  the 35 of the first one are 210 frames. That raised the "1 year earlier" page
+  from 105 tenths to 160, and that is why `test_un_ano_antes.py` went from 900 frames to
   1200.
-* **Quince colores de los 226 del PNG**, y el degradé del resplandor se
-  escalona. Es lo cosmético declarado de esta vuelta; falta que taro lo
-  confirme jugando.
-* **El estado vive en `$7E30E8`, en la RAM lejana**, porque en el banco 0 no
-  entraba: la BSS estaba en **7680 de 7680**. Lo que siga pidiendo RAM del
-  banco 0 va a tener que aflojar algo.
-* **`armar_paleta` deja Y en 32.** Llamarla desde un opcode sin `phy` le mueve
-  el cursor al intérprete. Costó el primer rojo y no se veía como un cartel
-  roto: la página seguía corriendo, sólo que otra.
+* **Fifteen colours out of the PNG's 226**, and the glow's gradient
+  bands. It is the declared cosmetic of this round; taro still has to
+  confirm it by playing.
+* **The state lives at `$7E30E8`, in far RAM**, because it did not fit in bank 0:
+  the BSS was at **7680 of 7680**. Whatever asks for bank 0
+  RAM next will have to loosen something.
+* **`armar_paleta` leaves Y at 32.** Calling it from an opcode without `phy` moves
+  the interpreter's cursor. It cost the first red and did not look like a broken
+  card: the page kept running, just a different one.
 
-#### Lo que costaría el sistema de imágenes entero
+#### What the whole picture system would cost
 
-Medido sobre los 328 mapas del juego, no estimado:
+Measured over the game's 328 maps, not estimated:
 
-    ShowPicture en el juego                    34, en 23 páginas
-    carteles distintos                         20
-    páginas que muestran 2, 3 y 4 a la vez     2, 3 y 1
-    comandos que el modelo de hoy sabe hacer    7 de 34
-    con la pantalla ya teñida a negro          10 de 34
+    ShowPicture in the game                    34, in 23 pages
+    distinct cards                             20
+    pages that show 2, 3 and 4 at once         2, 3 and 1
+    commands today's model can do               7 of 34
+    with the screen already tinted to black    10 of 34
 
-Y lo que cada uno pediría, contado por comando —un mismo comando puede pedir
-varias—:
+And what each one would ask for, counted per command —one command can ask for
+several—:
 
-    el color transparente del PNG              21
-    pegada al mapa (fixed_to_map)               9
-    translúcida (top_trans)                     8
-    zoom distinto de 100                        7
-    rotar u ondear                              6
-    saturación distinta de 100                  5
-    la posición desde una variable              2
+    the PNG's transparent colour               21
+    stuck to the map (fixed_to_map)             9
+    translucent (top_trans)                     8
+    zoom other than 100                         7
+    rotate or wave                              6
+    saturation other than 100                   5
+    the position from a variable                2
 
-Lo que esa tabla dice es que **la parte cara no son los carteles**. De los 20
-distintos, seis son carteles de texto que entran en un objeto de alto
-—`Oneyearprev`, `MeanwhileLashe`, `SevDaysPrev`, `Ready`, `Fortitude` y el
-`9` de 16x16— y los otros catorce son ilustraciones grandes, cinco de ellas de
-**320x240 exactos**, o sea la pantalla entera.
+What that table says is that **the expensive part is not the cards**. Of the 20
+distinct ones, six are text cards that fit in a tall object
+—`Oneyearprev`, `MeanwhileLashe`, `SevDaysPrev`, `Ready`, `Fortitude` and the
+16x16 `9`— and the other fourteen are large illustrations, five of them
+**exactly 320x240**, that is, the whole screen.
 
-Una de 320x240 **no se puede hacer con objetos**: escalada son 256x224, que son
-8x7 objetos de 32x32 —56 de los 128 de OAM, 896 tiles de 8x8, 28 KB de un banco
-de sprites que mide 8 o 16— y en cada una de sus 224 líneas gasta 32 de los 34
-tiles por línea, o sea que se lleva puestos a todos los personajes del mapa.
-Para ésas hay que prestarle una capa al cartel, con lo que eso implica: el mapa
-se recarga al borrarlo. Es exactamente el caso que la nota de `eventos.py` ya
-anticipaba, y por eso el atajo de las cinemáticas —teñir a negro antes— vale
-para diez de los 34 y no para los otros veinticuatro.
+A 320x240 one **cannot be done with objects**: scaled it is 256x224, which is
+8x7 objects of 32x32 —56 of OAM's 128, 896 tiles of 8x8, 28 KB of a sprite
+bank that measures 8 or 16— and on each of its 224 lines it spends 32 of the 34
+tiles per line, which means it takes out every character on the map.
+For those a layer has to be lent to the card, with all that implies: the map
+is reloaded when it is erased. It is exactly the case the note in `eventos.py` already
+anticipated, and that is why the cutscene shortcut —tinting to black first— works
+for ten of the 34 and not for the other twenty-four.
 
-Si algún día se hace completo, el orden que sale de estos números es: primero
-**el color transparente** (21 comandos, y es un color menos en la paleta),
-después **más de un cartel a la vez** (seis páginas), después **la capa
-prestada** para las ilustraciones, y al final el zoom, la rotación y la onda,
-que son cinco o seis comandos cada uno y cada uno un sistema.
+If some day it is done in full, the order that comes out of these numbers is: first
+**the transparent colour** (21 commands, and it is one colour less in the palette),
+then **more than one card at once** (six pages), then **the borrowed
+layer** for the illustrations, and at the end zoom, rotation and wave,
+which are five or six commands each and each one a system.

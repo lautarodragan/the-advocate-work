@@ -1,87 +1,87 @@
 ---
-name: "El salto que queda colgado"
-description: "Un salto al final de una ruta forzada deja al héroe flotando para siempre"
+name: "The jump that hangs"
+description: "A jump at the end of a forced route leaves the hero floating forever"
 status: done
 ---
 
-**Un salto del héroe que es la última orden de su ruta forzada no termina
-nunca**: el héroe queda flotando a mitad del arco. taro lo vio en el mapa 11,
-cuando Talan salta del susto y se queda a mitad de camino mientras habla.
+**A hero jump that is the last order of its forced route never
+ends**: the hero stays floating halfway through the arc. taro saw it on map 11,
+when Talan jumps in fright and stays halfway while talking.
 
-Medido el 2026-09-22, con el caso `camara-salto-colgado` que quedó en el repo
-sin prueba: `ruta_salto` se queda en 232 y `hero_y` en 323, con la celda de
-destino en `tile_y = 22`, indefinidamente.
+Measured on 2026-09-22, with the case `camara-salto-colgado` which was left in the repo
+without a test: `ruta_salto` stays at 232 and `hero_y` at 323, with the
+destination cell at `tile_y = 22`, indefinitely.
 
-La causa: `move_hero` llama a `paso_de_ruta` sólo mientras `ruta_i < ruta_n`, y
-`paso_de_ruta` es el único que baja `ruta_salto`. Con el salto como última
-orden, el contador ya llegó al final y nadie lo termina. Y `hay_rutas` tampoco
-mira `ruta_salto`, así que un `ProceedWithMovement` pegado atrás no lo espera.
+The cause: `move_hero` calls `paso_de_ruta` only while `ruta_i < ruta_n`, and
+`paso_de_ruta` is the only one that lowers `ruta_salto`. With the jump as the last
+order, the counter has already reached the end and nobody finishes it. And `hay_rutas` does not
+look at `ruta_salto` either, so a `ProceedWithMovement` right after does not wait for it.
 
-**196 de las 410 rutas con salto del juego terminan en el salto**, así que no
-es un caso de borde.
+**196 of the game's 410 routes with a jump end in the jump**, so it is not
+an edge case.
 
-Hecho es: el salto termina, el héroe aterriza, y hay una prueba que lo mira.
+Done is: the jump ends, the hero lands, and there is a test that looks at it.
 
-# Lo hecho, el 2026-09-23
+# What was done, on 2026-09-23
 
-**La causa era la de arriba, tal cual.** El descuento se mudó de `paso_de_ruta`
-a `salto_avanzar_heroe`, y lo llama `move_hero` en el mismo lugar donde ya
-termina un paso en curso: eso es lo que hace RM2k, donde el que baja el salto es
-`Game_Character::Update` —pregunta `IsJumping()` **antes** de mirar si quedan
-órdenes, porque estar en el aire no es estar quieto: `IsStopping()` es
-`!(IsMoving() || IsJumping())`— y el que lo apaga es
-`Game_Character::UpdateMovement`. Con la ruta todavía con órdenes queda
-exactamente lo de antes, porque ahí `paso_de_ruta` miraba el salto primero
-igual.
+**The cause was the one above, exactly.** The countdown moved from `paso_de_ruta`
+to `salto_avanzar_heroe`, and `move_hero` calls it in the same place where it already
+finishes a step in progress: that is what RM2k does, where the one that lowers the jump is
+`Game_Character::Update` —it asks `IsJumping()` **before** looking at whether there are
+orders left, because being in the air is not being still: `IsStopping()` is
+`!(IsMoving() || IsJumping())`— and the one that turns it off is
+`Game_Character::UpdateMovement`. With the route still having orders it stays
+exactly as before, because there `paso_de_ruta` looked at the jump first
+anyway.
 
-Y `hay_rutas` ahora mira `ruta_salto`: es `IsAnyMovePending`, y allá
-`MoveRouteFinished` se prende adentro de `UpdateMovement`, o sea al aterrizar.
-Va pelado, sin el cuidado que necesita `step_left`, porque el único que pone
-`ruta_salto` es `armar_salto_heroe` y a ése lo llama sólo `paso_de_ruta`: del
-pad no sale ningún salto.
+And `hay_rutas` now looks at `ruta_salto`: it is `IsAnyMovePending`, and there
+`MoveRouteFinished` is set inside `UpdateMovement`, that is, on landing.
+It goes bare, without the care `step_left` needs, because the only one that sets
+`ruta_salto` is `armar_salto_heroe` and that one is called only by `paso_de_ruta`: no jump
+comes out of the pad.
 
-**Los eventos no lo tenían.** `mover_eventos` les llama a `cuadro_de_ruta_ev`
-una vez por cuadro para toda ranura ocupada, sin mirar el contador de órdenes, y
-`hay_rutas` ya miraba su `ruta_ev + 13`. Lo sostiene una prueba, para que se
-vea si alguien les pone la guarda que tenía `move_hero`.
+**The events did not have it.** `mover_eventos` calls `cuadro_de_ruta_ev` for them
+once per frame for every occupied slot, without looking at the order counter, and
+`hay_rutas` already looked at their `ruta_ev + 13`. A test holds it, so that it
+shows if someone gives them the guard `move_hero` had.
 
-**Ninguna golden se movió, y eso no es que el arreglo no se vea**: el único caso
-de la tanda que pisa el mapa 11 es `en-11`, que entra y nada más —lo usa
-`test_paralelos`, sin golden—. El momento que taro ve no lo ejecuta ninguna
-prueba, que es el modo de falla de siempre.
+**No golden moved, and that does not mean the fix does not show**: the only case
+in the suite that steps on map 11 is `en-11`, which goes in and nothing more —it is used by
+`test_paralelos`, without a golden—. The moment taro sees is not executed by any
+test, which is the usual failure mode.
 
-## El tirón de cámara, comprobado
+## The camera jerk, checked
 
-Con el arreglo **no queda ningún caso que deslice la cámara más de una fila por
-vuelta que no sea el héroe a velocidad 6 más un pan**. Medido sobre los casos
-del cartucho de pruebas, 240 vueltas cada uno, contando sólo las vueltas sin
-cambio de mapa ni salto de celda: los únicos que pasan de 8 px son
-`camara-veloz` y `camara-veloz-x`, con 16 px justos, que es el peor caso que ya
-estaba medido.
+With the fix **there is no case left that slides the camera more than one row per
+loop other than the hero at speed 6 plus a pan**. Measured over the cases
+of the test cartridge, 240 loops each, counting only the loops without
+a map change or a cell jump: the only ones over 8 px are
+`camara-veloz` and `camara-veloz-x`, with exactly 16 px, which is the worst case that was already
+measured.
 
-Lo que apareció midiendo: **el tirón del aterrizaje de golpe no lo reproduce
-ningún caso del cartucho**, ni antes ni después del arreglo. Los tirones grandes
-de `en-4` y `talan` —256 y 192 px— son teletransportes al mismo mapa, que
-escriben `hero_y` y llaman a `fill_window`, así que nunca le debieron una fila a
+What showed up while measuring: **no case in the cartridge reproduces the jerk of the sudden landing**,
+neither before nor after the fix. The big jerks
+of `en-4` and `talan` —256 and 192 px— are teleports to the same map, which
+write `hero_y` and call `fill_window`, so they never owed a row to
 `stream_map`.
 
-Y de ahí salió lo único que había que cuidar: ese atajo del teletransporte no
-toca `ruta_salto`, así que con arco pendiente el héroe se correría hasta 29 px
-de donde el teletransporte lo puso, con la ventana recién llena. **No pasa, por
-plazos**: el `Teleport` cuesta el fundido —unos noventa ticks hasta que la celda
-nueva aparece— y un salto dura once. Quedó el caso
-`salto-teleport-en-el-aire` con su prueba, para que se sepa si ese orden deja de
-valer.
+And from there came the only thing that needed care: that teleport shortcut does not
+touch `ruta_salto`, so with an arc pending the hero would move up to 29 px
+from where the teleport put him, with the window just filled. **It does not happen, because of
+timing**: the `Teleport` costs the fade —some ninety ticks until the new
+cell appears— and a jump lasts eleven. The case
+`salto-teleport-en-el-aire` was left with its test, so that it is known if that order stops
+holding.
 
-## Lo que no se hizo
+## What was not done
 
-* **El salto del héroe no respeta la velocidad.** `SALTO_VELOCIDAD` es fijo, el
-  de la velocidad 4, mientras los eventos lo sacan de `salto_por_vel` como
-  `jump_speed[move_speed - 1]` de RM2k. Un `increase_movement_speed` sobre el
-  héroe le cambia el paso y no el salto. Ya estaba, y este arreglo no lo toca.
-* **taro no lo jugó todavía.** Lo que se corrió es `just pruebas`.
+* **The hero's jump does not respect speed.** `SALTO_VELOCIDAD` is fixed, the one
+  of speed 4, while the events take it from `salto_por_vel` like
+  RM2k's `jump_speed[move_speed - 1]`. An `increase_movement_speed` on the
+  hero changes its step and not its jump. It was already like that, and this fix does not touch it.
+* **taro has not played it yet.** What was run is `just pruebas`.
 
-# Jugado
+# Played
 
-taro lo jugó el 2026-09-23 con el build de `3e028a0`: el salto ya no queda
-colgado.
+taro played it on 2026-09-23 with the build of `3e028a0`: the jump no longer
+hangs.

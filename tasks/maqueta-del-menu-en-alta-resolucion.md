@@ -1,153 +1,153 @@
 ---
-name: "Maqueta: el menú en alta resolución"
-description: "Antes de tocar la ROM, cómo se vería el menú de pausa en modo 5 (512 de ancho) con la fuente de RM2k escalada ×1,6, al lado de dos alternativas baratas, para que taro elija mirando"
+name: "Mock-up: the menu in high resolution"
+description: "Before touching the ROM, how the pause menu would look in mode 5 (512 wide) with RM2k's font scaled ×1.6, next to two cheap alternatives, so that taro chooses by looking"
 type: research
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-09-30. El menú original muestra, por actor, el **título**
-(`title` en el LDB: "Agency Capt.", "Fugitive"…) y los **SP**, y el nuestro
-no, porque a 256 de ancho no entran. Sumar filas estira cada entrada, puede
-pedir scroll y queda feo.
+From taro, on 2026-09-30. The original menu shows, per actor, the **title**
+(`title` in the LDB: "Agency Capt.", "Fugitive"…) and the **SP**, and ours
+does not, because at 256 wide they do not fit. Adding rows stretches each entry, may
+require scrolling and looks ugly.
 
-La idea de taro: el modo 5 de la PPU da 512 de ancho. El menú original mide
-320, y 320 × 1,6 = 512, así que entraría el menú de RM2k entero al 80 % del
-ancho. Lo que no se sabe es cómo se ve la fuente escalada ×1,6: unas
-columnas de cada letra salen dobles y otras simples. En modo 5 el texto va
-en 4 bits, y las caras irían como sprites, que ya son de 15 colores.
+taro's idea: the PPU's mode 5 gives 512 wide. The original menu measures
+320, and 320 × 1.6 = 512, so RM2k's whole menu would fit at 80 % of the
+width. What is not known is how the font looks scaled ×1.6: some
+columns of each letter come out double and others single. In mode 5 the text goes
+in 4 bits, and the faces would go as sprites, which are already 15 colours.
 
-Esto es sólo la maqueta: imágenes para mirar, sin cambiar la ROM.
+This is only the mock-up: images to look at, without changing the ROM.
 
-## Qué se armó (Ñacurutú, 2026-09-30)
+## What was built (Ñacurutú, 2026-09-30)
 
-Las imágenes están en `/shared/capturas/2026-09-30-menu-alta-resolucion/`,
-con un `LEEME.txt` que dice qué es cada una: el original, el menú de hoy, el
-modo 5 con tres criterios de escalado, las dos alternativas a 256, cada una
-como la muestra un emulador (512x448), una hoja con todas al mismo tamaño
-físico y recortes ×4 de la fila de Kersh. Los scripts quedaron en el
-scratchpad; se usaron `rm2k-render` (ventanas, cursores, colores del texto,
-sombra y caras del juego) y `rm2k-snes-screens render` (el menú de hoy). El
-menú a 320 que arman los scripts se comparó contra la captura del RPG_RT:
-las posiciones coinciden; lo que difiere es la fuente del RPG_RT, que no es
-la Mincho de easyrpg, y los degradés de los 16 bits de Wine.
+The images are in `/shared/capturas/2026-09-30-menu-alta-resolucion/`,
+with a `LEEME.txt` that says what each one is: the original, today's menu,
+mode 5 with three scaling criteria, the two alternatives at 256, each one
+as an emulator shows it (512x448), a sheet with all of them at the same physical
+size and ×4 crops of Kersh's row. The scripts stayed in the
+scratchpad; `rm2k-render` (windows, cursors, text colours,
+shadow and the game's faces) and `rm2k-snes-screens render` (today's menu) were used. The
+menu at 320 the scripts build was compared against the RPG_RT capture:
+the positions match; what differs is RPG_RT's font, which is not
+easyrpg's Mincho, and the gradients of Wine's 16 bits.
 
-**Lo que se ve:**
+**What is seen:**
 
-* **×1,6 por posición** (02): se lee, pero cada letra sale distinta según
-  la columna donde cae; se nota en los dígitos repetidos ("168/168").
-* **×1,6 por glifo** (03): letras parejas —tinta 2,2,1,2,2 y aire 1, 10 de
-  avance—, pero 10 es más que los 9,6 que deja la disposición de RM2k, y
-  donde RM2k empaqueta justo el texto choca: "HP168" y "/168" quedan
-  pegados. Arreglarlo sería mover la disposición.
-* **×1,5 por glifo** (04): la que mejor se lee según Ñacurutú. 2,1,2,1,2 + 1
-  son 9, exactamente ×1,5: letras parejas, simétricas y sin choques. El menú
-  mide 480, así que no hizo falta recortar la disposición: sobran 32 de
-  alta, que pueden ir de margen —así está— o ensanchar la ventana del grupo.
-* **A** (05): "HP168/168 SP168/168" entra en una línea con dígitos de 4
-  (termina en x=238). El título al lado del nombre entra para Core y Manta,
-  pero **no para Kersh**: la ROM compone el nombre una letra por celda de 8,
-  y "Agency Capt." se pasa 14 px del borde. Ninguna variante a 256 lo hace
-  entrar para todos: con el nombre a 6 se pasaría igual.
-* **B** (06): título y SP del elegido en una línea abajo del grupo, con los
-  SP compuestos como hoy los HP. Entra sin tocar nada de arriba.
+* **×1.6 by position** (02): it reads, but each letter comes out different depending on
+  the column where it falls; it shows in repeated digits ("168/168").
+* **×1.6 by glyph** (03): even letters —ink 2,2,1,2,2 and gap 1, 10 of
+  advance—, but 10 is more than the 9.6 RM2k's layout allows, and
+  where RM2k packs the text tightly it collides: "HP168" and "/168" end up
+  stuck together. Fixing it would mean moving the layout.
+* **×1.5 by glyph** (04): the most readable according to Ñacurutú. 2,1,2,1,2 + 1
+  is 9, exactly ×1.5: even, symmetric letters without collisions. The menu
+  measures 480, so there was no need to trim the layout: 32 high-resolution
+  pixels are left over, which can go as margin —as it is now— or widen the party window.
+* **A** (05): "HP168/168 SP168/168" fits on one line with 4-wide digits
+  (it ends at x=238). The title next to the name fits for Core and Manta,
+  but **not for Kersh**: the ROM composes the name one letter per 8-wide cell,
+  and "Agency Capt." goes 14 px past the edge. No variant at 256 makes it
+  fit for everyone: with the name at 6 it would still go over.
+* **B** (06): title and SP of the selected one in a line below the party, with the
+  SP composed as the HP are today. It fits without touching anything above.
 
-**La fuente en 4 bits entra.** Medido sobre los glifos: el color 0 del
-System usa 4 colores, el 1 (rojo) 8, el 3 (gris) 8, y la sombra 1. Blanco,
-rojo y sombra son 13: una paleta para el panel del grupo, donde un mismo
-tile mezcla "HP" y "168"; el gris de lo deshabilitado, otra. El peor bloque
-de 16x8 lleva 7 colores.
+**The font fits in 4 bits.** Measured over the glyphs: the System's colour 0
+uses 4 colours, 1 (red) 8, 3 (grey) 8, and the shadow 1. White,
+red and shadow are 13: one palette for the party panel, where the same
+tile mixes "HP" and "168"; the grey of disabled items, another. The worst 16x8
+block carries 7 colours.
 
-## Lo que costaría cada una en la ROM (estimado, sin implementar)
+## What each one would cost in the ROM (estimated, not implemented)
 
-Mirando `menu.s`, `slots.s`, `screen_bank.s`, `enter_map.s`,
-`screens/src/layout.rs` y `docs/port/vram.md`.
+Looking at `menu.s`, `slots.s`, `screen_bank.s`, `enter_map.s`,
+`screens/src/layout.rs` and `docs/port/vram.md`.
 
-### Modo 5
+### Mode 5
 
-* **Cambiar de modo es barato.** El menú ya abre con la pantalla apagada y
-  sube su banco entero (`menu_upload` → `slot_bank_upload`), y al cerrar
-  `back_to_map` rearma el mapa con `ppu_init` + `load_map`. Es un
-  `BGMODE = 5` al abrir, y lo de volver ya existe. Dos cosas del modo que
-  hay que respetar: en modo 5 **las columnas pares salen de la subpantalla**,
-  así que BG1, BG2 y los sprites van en `TS` además de `TM`, o falta la
-  mitad de los pixeles; y el modo 5 sin entrelazado sigue en 224 líneas: el
-  menú de 240 pierde 16, que salen de la ventana del grupo y del oro (así
-  está la maqueta).
-* **Las capas cambian de profundidad.** Hoy el menú es modo 3 y todo va en
-  BG2 de 4 bits (texto y caras, una paleta por cara) y la barra en BG1. En
-  modo 5, BG1 es de 4 bits y BG2 de 2: el texto a BG1, y las ventanas, la
-  barra y el cursor a BG2 —las ventanas de ablskin tienen 4 colores con el
-  negro, que puede ser el fondo, y la barra y el cursor, uno cada uno—.
-* **Las caras, a sprites.** En modo 5 los sprites siguen a 256: cada pixel
-  ocupa 2 de alta, en X par, que es lo que se quiere. Una cara de 48x48 son
-  36 tiles; tres, 108 tiles, unos 3,5 KB. Los colores son los de hoy: 21 a
-  29 por cara, que Adeleine baja a 15, y cada una con su paleta de sprite
-  (hay 8; hoy una se usa para el Ex, que en modo 5 pasaría al fondo).
-  `menu_exp_paint`/`menu_exp_close` ya cambian y reponen `OBSEL` al entrar y
-  salir, así que ese camino existe.
-* **El texto no se puede componer como hoy.** Hoy el nombre, el nivel y los
-  HP van una letra por celda de 8 (`layout.rs`, "composed one letter per
-  cell"), y el Ex en sprites. En modo 5 una celda del tilemap mide 16 de
-  alta —dos tiles de 8 lado a lado—, y un glifo mide 9,6, 10 o 9: no cae
-  alineado con nada, y dos glifos comparten tile. Hay dos caminos:
-  - **Hornear todo en el conversor.** Las órdenes, los términos y "Normal"
-    sí, porque son pocos. Los nombres y títulos de los 50 actores con nombre
-    suman 548 letras: a 10 de avance y dos filas de tiles son unos 1.400
-    tiles, **~44 KB de ROM** sin comprimir. Y los números (HP, SP, Ex,
-    nivel, oro) no se pueden hornear: son demasiados.
-  - **Una fuente de ancho variable en la ROM** (el "VWF" de los juegos de
-    SNES traducidos): la fuente escalada guardada como máscaras de 1 bit
-    —95 glifos × 12 filas × 2 bytes, ~2,3 KB— y una rutina que la corre y
-    la mezcla en un búfer de tiles de 4 bits en la RAM, con la sombra y el
-    color de cada fila del degradé, y lo sube por DMA. Es la opción
-    realista: unos cientos de bytes de código nuevo, y con la pantalla
-    apagada el costo de CPU no se ve (~150 glifos por menú).
-  - Una intermedia para los números: pares de dígitos pre-armados en
-    celdas de 16 (100 pares, ~6 KB de VRAM), con los dígitos a 8 de avance
-    en vez de 9,6: más angostos que las letras.
-* **VRAM.** Medido sobre la maqueta: el texto ocupa entre 515 y 560 tiles
-  de 8x8 con algo (**16 a 18 KB**), de los que 413 a 486 son distintos. Más
-  dos tilemaps de 2 KB y ~3,5 KB de caras: **unos 25 KB**. Entra en los
-  64 KB, pero pisa más que lo que pisa hoy la pantalla de ranuras
-  ($2000..$4000, `SLOT_VRAM`/`SLOT_MAP` de `tools/port/vram.py`): hay que
-  confirmar que `load_map` repone todo lo que el menú pise, sprites
-  incluidos.
-* **Riesgo que la maqueta no muestra**: por compuesto o RF, una columna de
-  un pixel de alta resolución está al borde del ancho de banda del video
-  NTSC y se borronea; por RGB, HDMI o un emulador se ve como la maqueta.
-  Algunos emuladores, además, mezclan los pixeles de alta resolución por
-  omisión. Conviene que taro lo mire en la SNES con la salida que usa.
+* **Changing mode is cheap.** The menu already opens with the screen off and
+  uploads its whole bank (`menu_upload` → `slot_bank_upload`), and on closing
+  `back_to_map` rebuilds the map with `ppu_init` + `load_map`. It is a
+  `BGMODE = 5` on opening, and the return already exists. Two things about the mode that
+  have to be respected: in mode 5 **the even columns come from the subscreen**,
+  so BG1, BG2 and the sprites go in `TS` as well as `TM`, or half
+  the pixels are missing; and mode 5 without interlacing stays at 224 lines: the
+  240-line menu loses 16, which come out of the party window and the gold (that is how
+  the mock-up is).
+* **The layers change depth.** Today the menu is mode 3 and everything goes in
+  4-bit BG2 (text and faces, one palette per face) and the bar in BG1. In
+  mode 5, BG1 is 4 bits and BG2 2: the text to BG1, and the windows, the
+  bar and the cursor to BG2 —ablskin's windows have 4 colours with
+  black, which can be the background, and the bar and the cursor, one each—.
+* **The faces, to sprites.** In mode 5 sprites stay at 256: each pixel
+  takes up 2 in high resolution, at even X, which is what is wanted. A 48x48 face is
+  36 tiles; three, 108 tiles, some 3.5 KB. The colours are today's: 21 to
+  29 per face, which Adeleine brings down to 15, and each with its sprite palette
+  (there are 8; today one is used for the Ex, which in mode 5 would move to the background).
+  `menu_exp_paint`/`menu_exp_close` already change and restore `OBSEL` on entering and
+  leaving, so that path exists.
+* **The text cannot be composed as today.** Today the name, the level and the
+  HP go one letter per 8-wide cell (`layout.rs`, "composed one letter per
+  cell"), and the Ex in sprites. In mode 5 a tilemap cell measures 16 high-resolution
+  pixels —two 8-wide tiles side by side—, and a glyph measures 9.6, 10 or 9: it does not fall
+  aligned with anything, and two glyphs share a tile. There are two paths:
+  - **Bake everything in the converter.** The orders, the terms and "Normal"
+    yes, because they are few. The names and titles of the 50 named actors
+    add up to 548 letters: at an advance of 10 and two rows of tiles that is some 1,400
+    tiles, **~44 KB of ROM** uncompressed. And the numbers (HP, SP, Ex,
+    level, gold) cannot be baked: there are too many.
+  - **A variable-width font in the ROM** (the "VWF" of translated SNES
+    games): the scaled font stored as 1-bit masks
+    —95 glyphs × 12 rows × 2 bytes, ~2.3 KB— and a routine that shifts it and
+    mixes it into a buffer of 4-bit tiles in RAM, with the shadow and the
+    colour of each row of the gradient, and uploads it by DMA. It is the
+    realistic option: a few hundred bytes of new code, and with the screen
+    off the CPU cost does not show (~150 glyphs per menu).
+  - An intermediate one for the numbers: pre-built digit pairs in
+    16-wide cells (100 pairs, ~6 KB of VRAM), with the digits at an advance of 8
+    instead of 9.6: narrower than the letters.
+* **VRAM.** Measured on the mock-up: the text takes between 515 and 560 8x8
+  tiles with something in them (**16 to 18 KB**), of which 413 to 486 are distinct. Plus
+  two 2 KB tilemaps and ~3.5 KB of faces: **some 25 KB**. It fits in the
+  64 KB, but it overwrites more than the slots screen overwrites today
+  ($2000..$4000, `SLOT_VRAM`/`SLOT_MAP` of `tools/port/vram.py`): it needs
+  confirming that `load_map` restores everything the menu overwrites, sprites
+  included.
+* **A risk the mock-up does not show**: over composite or RF, a column of
+  one high-resolution pixel is at the edge of the NTSC video bandwidth
+  and blurs; over RGB, HDMI or an emulator it looks like the mock-up.
+  Some emulators, moreover, blend high-resolution pixels by
+  default. It is worth taro looking at it on the SNES with the output he uses.
 
-**En resumen**: el modo y las caras son baratos porque el menú ya apaga la
-pantalla y rearma el mapa; lo caro es el texto, que pide un renderizador de
-ancho variable en la ROM.
+**In summary**: the mode and the faces are cheap because the menu already turns off the
+screen and rebuilds the map; the expensive part is the text, which asks for a
+variable-width renderer in the ROM.
 
-### Si el mismo camino serviría para otras pantallas
+### Whether the same path would serve other screens
 
-Sí, y es el argumento más fuerte a favor. Una vez que existen el cambio de
-modo, la VWF y las caras en sprites, **cualquier pantalla de RM2k entra con
-su disposición de 320 entera**: la lista de ítems en dos columnas (hoy una
-sola, `layout.rs`: "RM2k's two do not fit"), el equipamiento con sus
-parámetros y la lista, las técnicas, la tienda y las ranuras. Cada pantalla
-sigue pidiendo su port de disposición, como hoy. Lo que se agrega en las
-que tienen lista con scroll: redibujar la fila que entra —dos ítems en dos
-columnas son ~80 tiles, 2,5 KB— en el vblank, que entra en lo que el DMA
-llega a subir por cuadro.
+Yes, and it is the strongest argument in favour. Once the mode
+change, the VWF and the faces in sprites exist, **any RM2k screen fits with
+its whole 320 layout**: the item list in two columns (today a
+single one, `layout.rs`: "RM2k's two do not fit"), the equipment with its
+parameters and the list, the techniques, the shop and the slots. Each screen
+still asks for its layout port, as today. What is added on those
+that have a scrolling list: redrawing the row that comes in —two items in two
+columns are ~80 tiles, 2.5 KB— in the vblank, which fits in what the DMA
+manages to upload per frame.
 
-### A: dígitos angostos
+### A: narrow digits
 
-Los dígitos a 4 no caben en una celda de 8 uno por celda: dos comparten
-tile. Van en **sprites**, como hoy el Ex (`menu_exp_paint`), con 11 tiles
-nuevos (0-9 y la barra). Por actor son 16 sprites más para la línea del HP y
-el SP, 48 para tres: con el Ex, que ya usa 15 por actor, van ~93 de 128. Lo
-que puede morder es el **límite de 32 sprites por línea**: la línea del HP
-(16) y la del Ex (15) se tocan en una fila, la de la sombra, y ahí son 31.
-El título: entra sólo cuando es corto —no entra el de Kersh—, y sería texto
-por actor horneado o en sprites. Un día de trabajo.
+4-wide digits do not fit one per 8-wide cell: two share a
+tile. They go in **sprites**, like the Ex today (`menu_exp_paint`), with 11 new
+tiles (0-9 and the slash). Per actor that is 16 more sprites for the HP and
+SP line, 48 for three: with the Ex, which already uses 15 per actor, it comes to ~93 of 128. What
+can bite is the **limit of 32 sprites per line**: the HP line
+(16) and the Ex line (15) touch in one row, the shadow's, and there they are 31.
+The title: it fits only when it is short —Kersh's does not fit—, and it would be text
+per actor baked or in sprites. A day of work.
 
-### B: sólo el elegido
+### B: only the selected one
 
-La más barata: una línea más con el título —en sprites a 6, como el Ex— y
-los SP compuestos una cifra por celda como hoy los HP (`menu_hp_write`). Se
-redibuja cuando la barra cambia de actor. Horas, no días.
+The cheapest: one more line with the title —in sprites at 6, like the Ex— and
+the SP composed one digit per cell as the HP are today (`menu_hp_write`). It is
+redrawn when the bar changes actor. Hours, not days.

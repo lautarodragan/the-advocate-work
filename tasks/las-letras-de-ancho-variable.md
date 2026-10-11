@@ -1,112 +1,112 @@
 ---
-name: "Las letras de ancho variable, en baja"
-description: "La fuente baja-ancho-variable de Espinillo en todo el juego: la ventana de mensajes, el menú, la pelea y las tiendas con texto compuesto y avance por letra, y el reparto de las cajas por ancho en pixeles"
+name: "Variable-width letters, in low resolution"
+description: "Espinillo's low-variable-width font across the whole game: the message window, the menu, the battle and the shops with composed text and per-letter advance, and box layout by pixel width"
 type: feature
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-10-03, después de ver `2026-09-30-fuentes` en la SNES: le
-gustan las dos de ancho variable y quiere probarlas en el juego. Esta es la
-fase 1, la de baja (256, la resolución de siempre). La fase 2 es el modo 5
-como perilla del proyecto, sobre lo que deje ésta: el compositor, la tabla
-de avances, el reparto por pixeles y las pantallas en texto compuesto se
-aprovechan las dos.
+From taro, on 2026-10-03, after seeing `2026-09-30-fuentes` on the SNES: he
+likes both variable-width ones and wants to try them in the game. This is
+phase 1, the low-resolution one (256, the usual resolution). Phase 2 is mode 5
+as a project knob, on top of what this one leaves: the compositor, the table
+of advances, the layout by pixels and the screens in composed text are
+reused by both.
 
-El estudio, la hoja y lo que costaría: `tasks/una-fuente-para-la-alta-resolucion.md`,
-en ABL, y `experimentos/fuentes/` allá.
+The study, the sheet and what it would cost: `tasks/una-fuente-para-la-alta-resolucion.md`,
+in ABL, and `experimentos/fuentes/` there.
 
-## Hecho (Calandria)
+## Done (Calandria)
 
-### La fuente
+### The font
 
-La hoja `baja-ancho-variable` es ahora `low-variable`, una fuente **del
-motor**: `tools/rm2k-snes/text/fonts/low-variable.png`, con un README que
-dice cómo editarla. El juego elige en `rm2k-snes.toml`, `[text] font`: `rm2k`
-—la de RM2k, que sigue siendo una fuente más, de avance fijo—, una del motor,
-o la ruta de una hoja suya. Una hoja propia entra en la huella de los
-cartuchos. Para retocarla sin reinstalar: se copia al juego y se apunta la
-clave a la copia.
+The sheet `baja-ancho-variable` is now `low-variable`, a font **of the
+engine**: `tools/rm2k-snes/text/fonts/low-variable.png`, with a README that
+says how to edit it. The game chooses in `rm2k-snes.toml`, `[text] font`: `rm2k`
+—RM2k's, which is still one more font, with fixed advance—, one of the engine's,
+or the path to a sheet of its own. A sheet of its own goes into the cartridges'
+fingerprint. To retouch it without reinstalling: copy it into the game and point the
+key at the copy.
 
-Un glifo más en las tablas de la consola, el 95: un blanco tan ancho como el
-`>` (DEL en el texto), para los `ShowChoice` y los `InputNumber`, que con un
-espacio se movían con el cursor.
+One more glyph in the console's tables, 95: a blank as wide as the
+`>` (DEL in the text), for the `ShowChoice` and the `InputNumber`, which with a
+space moved along with the cursor.
 
-### El conversor
+### The converter
 
-`refit` mide en pixeles (`Measure`), con los costos en letras de `n`: con la
-fuente de RM2k da lo mismo que antes, al bit. La ventana de los mensajes mide
-240 pixeles. Sobre los cuadros del ABL, con `rm2k-snes-screens boxes`:
+`refit` measures in pixels (`Measure`), with the costs in letters of `n`: with
+RM2k's font it gives the same as before, to the bit. The message window measures
+240 pixels. Over ABL's boxes, with `rm2k-snes-screens boxes`:
 
-    39 columnas:          1245 cajas rearmadas, 299 partidas en varias
-    240 px, low-variable:    1 caja rearmada,     0 partidas
+    39 columns:           1245 boxes rebuilt, 299 split into several
+    240 px, low-variable:    1 box rebuilt,       0 split
 
-La única es "Isabella!!" del mapa 157, que trae una cola de espacios.
+The only one is "Isabella!!" on map 157, which carries a trail of spaces.
 
-### La ventana de mensajes
+### The message window
 
-x acumulada en `msg_x`, ocho fases, y el tope de pixeles con `font_reach`.
+Accumulated x in `msg_x`, eight phases, and the pixel limit with `font_reach`.
 
-**Precompuesta, con el número.** Se escribieron las dos y dibujan igual pixel
-por pixel. Sobre el mapa 6 con la cámara andando, contando cuadros de hardware
-contra ticks mientras compone (el caso `anclada` y uno de cuatro renglones
-llenos):
+**Precomposed, with the number.** Both were written and they draw identically pixel
+by pixel. On map 6 with the camera moving, counting hardware frames
+against ticks while composing (the case `anclada` and one with four full
+rows):
 
-    letras por vuelta   precompuesta (8 fases)   de un bit
-    5                   0 perdidos               0
-    6                   0                        1 (una vez)
+    letters per loop    precomposed (8 phases)   one-bit
+    5                   0 lost                   0
+    6                   0                        1 (once)
     7-10                0                        0
-    11-12               0                        se pierden
+    11-12               0                        frames lost
     16-18               0
-    20 en adelante      se pierden
+    20 and up           frames lost
 
-La de un bit cuesta casi el doble por letra. Las tablas son 117 KB; la de un
-bit, 1,1 KB y una tabla de 4,5 KB. Van las tablas, y `MSG_CHARS` queda en 5.
+The one-bit one costs almost twice as much per letter. The tables are 117 KB; the one-bit
+one, 1.1 KB and a table of 4.5 KB. The tables go in, and `MSG_CHARS` stays at 5.
 
-### Las pantallas de texto
+### The text screens
 
-Ítems, equipo, tienda y pelea **componen** su texto: `text_layer.s`, que
-explica el diseño (registros por fila, sólo se compone lo que cambió, una
-fila que dice lo que otra decía toma sus tiles, el tilemap cambia de una vez).
-La letra va precompuesta como en la ventana (`scr_pre0..7`, 117 KB más): de a
-un bit, una descripción tardaba nueve cuadros.
+Items, equipment, shop and battle **compose** their text: `text_layer.s`, which
+explains the design (records per row, only what changed is composed, a
+row that says what another said takes its tiles, the tilemap changes all at once).
+The letters are precomposed as in the window (`scr_pre0..7`, 117 KB more): one
+bit at a time, a description took nine frames.
 
-**Deuda declarada: el texto llega después del cursor.** Medido en ítems con
-catorce: 4 cuadros un paso, 6 uno que corre la lista. Las pruebas de dibujo
-esperan a que se asiente.
+**Declared debt: the text arrives after the cursor.** Measured in items with
+fourteen: 4 frames for a step, 6 for one that scrolls the list. The drawing tests
+wait for it to settle.
 
-VRAM: el pozo de pares de tiles va debajo de las ventanas, en el banco de
-`SLOT_VRAM`: 167 pares en ítems y equipo (las ventanas al final del banco),
-191 en tienda y pelea. En reposo la lista de catorce ítems usa unos 104.
-RAM: `$7E3D20-$7E5FFF` (`FAR_TEXT_LAYER`), fuera de `FAR_PAIR_LIST` y del
-búfer de mensajes de la pelea.
+VRAM: the pool of tile pairs goes below the windows, in the bank of
+`SLOT_VRAM`: 167 pairs in items and equipment (the windows at the end of the bank),
+191 in shop and battle. At rest the list of fourteen items uses about 104.
+RAM: `$7E3D20-$7E5FFF` (`FAR_TEXT_LAYER`), outside `FAR_PAIR_LIST` and the
+battle's message buffer.
 
-El tope de un texto (`scr_cap`) es de celdas, en pixeles; la pelea corta sus
-renglones (`ba_flow`, la página de tropa) en pixeles, y el conversor rearma
-las cajas de las páginas para esa ventana.
+The limit of a text (`scr_cap`) is per cell, in pixels; the battle breaks its
+rows (`ba_flow`, the troop page) in pixels, and the converter rebuilds
+the pages' boxes for that window.
 
-### Menú, elección de actor y ranuras
+### Menu, actor selection and slots
 
-Los nombres se componen en tiras (`tl_strip`) con la fuente precompuesta
-para la paleta de texto del banco (`slot_pre0..7`). Los números siguen una
-letra por celda: se reescriben en el vblank. El banco de `release` baja de
-385 a 314 tiles de 448, y los nombres piden como mucho 78 de los 134 libres
-(lo imprime el conversor: "menu bank").
+Names are composed in strips (`tl_strip`) with the font precomposed
+for the bank's text palette (`slot_pre0..7`). Numbers stay one
+letter per cell: they are rewritten in the vblank. The bank of `release` goes down from
+385 to 314 tiles out of 448, and the names ask for at most 78 of the 134 free ones
+(the converter prints it: "menu bank").
 
-### Para el modo 5
+### For mode 5
 
-Se aprovecha: la hoja como fuente de verdad (con celdas de cualquier ancho
-hasta 16), la tabla de avances, `refit` en pixeles, el compositor con x
-acumulada, `text_layer.s` y `tl_strip`. Lo que es de baja: las ocho fases y
-las tablas precompuestas por fase (en alta serían otras), y `TL_COLS`.
+Reused: the sheet as the source of truth (with cells of any width
+up to 16), the table of advances, `refit` in pixels, the compositor with accumulated
+x, `text_layer.s` and `tl_strip`. What belongs to low resolution: the eight phases and
+the precomposed tables per phase (in high resolution they would be different ones), and `TL_COLS`.
 
-## Para taro
+## For taro
 
-Jugar: los mensajes, el menú y sus pantallas, una tienda y una pelea. Mirar
-el retraso del texto en ítems/equipo/tienda y si molesta. Las goldens están
-lado a lado en `/shared/capturas/2026-10-03-ancho-variable/` (con LEEME):
-cambian sólo letras, y no están bendecidas.
+Play: the messages, the menu and its screens, a shop and a battle. Look at
+the delay of the text in items/equipment/shop and whether it bothers. The goldens are
+side by side in `/shared/capturas/2026-10-03-ancho-variable/` (with LEEME):
+only letters change, and they are not blessed.
 
-Ramas: herramientas, la de Calandria; ABL, `ancho-variable` de su clon.
-Al mergear, reinstalar `text` no hace falta (es biblioteca): sí `screens`,
-`events`, `convert`, `mapdata` y `cartridge`.
+Branches: tools, Calandria's; ABL, `ancho-variable` of her clone.
+On merging, reinstalling `text` is not needed (it is a library): `screens`,
+`events`, `convert`, `mapdata` and `cartridge` are.

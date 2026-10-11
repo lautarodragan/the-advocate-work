@@ -1,212 +1,212 @@
 ---
-name: "Los comunes automáticos, el CallEvent compartido y \\V[n]"
-description: "Fases 4 y 5 del sistema de imágenes: lo que le falta al compilador y al intérprete para la portable console de ABL, todo genérico"
+name: "Automatic common events, the shared CallEvent and \\V[n]"
+description: "Phases 4 and 5 of the picture system: what the compiler and the interpreter lack for ABL's portable console, all generic"
 type: feature
 status: done
 assignee: taro
 ---
 
-Fases 4 y 5 de `docs/research/2026-10-01-el-sistema-de-imagenes.md`
-(Jilguero), de taro el 2026-10-02. La portable console no hace falta para
-jugar, pero sus piezas sirven a los sistemas custom de muchos juegos. Lo que
-falta: los eventos comunes automáticos (los paralelos no), un `CallEvent`
-que comparta el cuerpo en vez de pegarlo (pegado, el común 39 son 140.193
-comandos; compartido, unos 2.400), y `\V[n]` en los mensajes. `Label` y
-`JumpToLabel` ya están (`label-y-jumptolabel.md`, Pitogüé).
+Phases 4 and 5 of `docs/research/2026-10-01-el-sistema-de-imagenes.md`
+(Jilguero), from taro on 2026-10-02. The portable console is not needed to
+play, but its pieces serve the custom systems of many games. What
+is missing: automatic common events (not the parallel ones), a `CallEvent`
+that shares the body instead of pasting it (pasted, common event 39 is 140,193
+commands; shared, some 2,400), and `\V[n]` in messages. `Label` and
+`JumpToLabel` are already there (`label-y-jumptolabel.md`, Pitogüé).
 
-## Qué hace RM2k con los comunes automáticos
+## What RM2k does with automatic common events
 
-De easyrpg, `Game_Map::UpdateForegroundEvents`, `Game_CommonEvent` y
+From easyrpg, `Game_Map::UpdateForegroundEvents`, `Game_CommonEvent` and
 `Game_Interpreter`:
 
-- **Cuándo**: cada vez que el intérprete de primer plano queda libre, el
-  primer común automático —en orden de número— con su switch prendido se
-  empuja a la pila. No hace falta que algo lo marque: lo mira en cada vuelta,
-  así que mientras su switch siga prendido vuelve a correr, como una página
-  automática del mapa. Uno sin switch corre siempre; acá no se toma —una ROM
-  que corre uno para siempre no se juega— y el juego no tiene ninguno.
-- **El orden contra las del mapa**: en la misma vuelta empuja primero el común
-  y **después** el evento del mapa que esté esperando, que queda arriba y
-  corre primero. O sea: la página del mapa, y en el mismo cuadro el común.
-  Acá el común espera a que la cola del mapa se vacíe: es lo mismo con un
-  evento esperando, y el común unos turnos después con varios. Declarado en
+- **When**: every time the foreground interpreter becomes free, the
+  first automatic common event —in number order— with its switch on is
+  pushed onto the stack. Nothing needs to mark it: it is checked on every loop,
+  so while its switch stays on it runs again, like an automatic page
+  of the map. One without a switch always runs; here it is not taken —a ROM
+  that runs one forever cannot be played— and the game has none.
+- **The order against the map's**: in the same loop it pushes the common event first
+  and **then** the map event that is waiting, which ends up on top and
+  runs first. That is: the map's page, and in the same frame the common event.
+  Here the common event waits for the map's queue to empty: it is the same with one
+  event waiting, and the common event a few turns later with several. Declared in
   `common_start`.
-- **Con un mensaje abierto**: se empuja, pero `Game_Interpreter::Update`
-  corta en `IsMessagePending` antes del primer comando. Acá `events_tick`
-  sale antes de mirar nada con un mensaje abierto, así que tampoco arranca.
-- **Al cambiar de mapa a la mitad**: el marco es una copia de la lista de
-  comandos, así que sigue en el mapa nuevo. Acá el cuerpo vive en el
-  cartucho y no se mueve.
-- **"Este evento"** en un común es nadie: el marco de un común tiene
-  `event_id` 0. Sin mapa, lo que lo nombra no compila.
-- **El héroe**: `IsAnyEventStarting` mira también los comunes automáticos,
-  así que con uno por arrancar el héroe no camina. Acá `common_waiting`, en
+- **With a message open**: it is pushed, but `Game_Interpreter::Update`
+  stops at `IsMessagePending` before the first command. Here `events_tick`
+  leaves before looking at anything with a message open, so it does not start either.
+- **On changing map halfway**: the frame is a copy of the command
+  list, so it continues on the new map. Here the body lives in the
+  cartridge and does not move.
+- **"This event"** in a common event is nobody: a common event's frame has
+  `event_id` 0. Without a map, whatever names it does not compile.
+- **The hero**: `IsAnyEventStarting` also looks at automatic common events,
+  so with one about to start the hero does not walk. Here `common_waiting`, in
   `move_hero`.
-- **`EndEventProcessing`** termina **sólo el marco** en que corre, no la pila:
-  en un cuerpo compartido, escapar de una pelea con `escape_mode` 1 es un
+- **`EndEventProcessing`** ends **only the frame** it runs in, not the stack:
+  in a shared body, escaping from a battle with `escape_mode` 1 is an
   `OP_RETURN`.
 
-## Qué se hizo
+## What was done
 
-**Un cuerpo por común, en el cartucho, y `OP_CALL`/`OP_RETURN`** (`0x3F` y
-`0x40`). `tools/rm2k-snes/events/src/commons.rs` decide antes de compilar
-ninguna página qué comunes tienen cuerpo —los automáticos, los que llaman las
-páginas de primer plano y lo que ésos llaman, si compilan sin mapa— y los
-compila al final, cada uno una vez. `rm2k-snes-mapdata` emite las tablas, y
-`tools/runtime/common_events.s` arranca los automáticos, empuja y saca
-marcos.
+**One body per common event, in the cartridge, and `OP_CALL`/`OP_RETURN`** (`0x3F` and
+`0x40`). `tools/rm2k-snes/events/src/commons.rs` decides before compiling
+any page which common events have a body —the automatic ones, the ones the
+foreground pages call and what those call, if they compile without a map— and
+compiles them at the end, each one once. `rm2k-snes-mapdata` emits the tables, and
+`tools/runtime/common_events.s` starts the automatic ones, pushes and pops
+frames.
 
-**La pila de llamadas** es una sola, la del primer plano: tres niveles de
-cinco bytes. La cadena más honda del juego son cuatro marcos —39, 21, 25 y
-uno de los 23 a 31—, o sea tres niveles: entra justo. El conversor la emite
-como `COMMON_DEPTH` y el ensamblado se niega si no entra. Una llamada con la
-pila llena se saltea.
+**The call stack** is a single one, the foreground's: three levels of
+five bytes. The deepest chain in the game is four frames —39, 21, 25 and
+one of 23 to 31—, that is, three levels: it fits exactly. The converter emits it
+as `COMMON_DEPTH` and the assembly refuses if it does not fit. A call with the
+stack full is skipped.
 
-**Una página del mapa llama en vez de pegar** cuando corre en primer plano y
-el cuerpo compilado con su mapa es byte por byte el de sin mapa; si no, pega
-como siempre. Lo que se perdona es el refresco de variables, y por qué está
-en `shares` y en `decisiones/call-event-a-un-cuerpo-compartido.md`. Las
-paralelas pegan siempre: comparten las globales del primer plano.
+**A map page calls instead of pasting** when it runs in the foreground and
+the body compiled with its map is byte for byte the one without a map; if not, it pastes
+as always. What is forgiven is the variable refresh, and why is
+in `shares` and in `decisiones/call-event-a-un-cuerpo-compartido.md`. Parallel
+pages always paste: they share the foreground's globals.
 
-**`CODE_CARRY` con la pila**: un cuerpo vive en el cartucho y no se mueve,
-pero la página que lo llamó está en la WRAM; `code_carry_before` muda ahora
-también los marcos de la pila.
+**`CODE_CARRY` with the stack**: a body lives in the cartridge and does not move,
+but the page that called it is in WRAM; `code_carry_before` now also
+moves the stack's frames.
 
-**`\V[n]`**: el compilador lo cambia por una marca con la ranura de la
-variable, y el bloque de textos lo lleva como el byte `$FF` y la ranura. El
-`$FF` era el último par de letras: la tabla de pares baja de 161 a 160. El
-compositor (`msg_letter`) escribe el número al abrir la caja, con el menos si
-es negativo, y le suma al largo del renglón lo que mide menos uno —el
-conversor lo contó como una letra—; si se pasa de la ventana, el tope de
-columnas lo corta en el borde. Sólo la forma simple, `\V[` dígitos `]`,
-mayúscula o minúscula; la anidada sigue sin compilar.
+**`\V[n]`**: the compiler replaces it with a mark with the
+variable's slot, and the text block carries it as byte `$FF` and the slot. The
+`$FF` was the last letter pair: the pair table goes down from 161 to 160. The
+compositor (`msg_letter`) writes the number when opening the box, with the minus if
+it is negative, and adds to the row's length what it measures minus one —the
+converter counted it as one letter—; if it goes past the window, the column
+limit cuts it at the edge. Only the simple form, `\V[` digits `]`,
+upper or lower case; the nested one still does not compile.
 
-## Lo que se encontró en el camino
+## What was found along the way
 
-- **La RAM que me tocó, `$2560` a `$256F`, está adentro de
-  `FAR_PAIR_LIST`**: son `PARALLEL_MAX` (48) entradas de ocho bytes desde
-  `$2400`, hasta `$257F`, y la persecución del auto tiene cuarenta paralelas.
-  Usé `$6110` a `$6127`, detrás de `MAP_SONG` (un byte) y antes de `FAR_EXP`;
-  verificado con grep sobre `tools/runtime/` que nada más cae ahí. **Lo de
-  Aguilucho, si le tocó `$2570`, tiene el mismo problema.**
-- **Los opcodes `0x39` a `0x3E` no existen en `main`**, y la tabla del
-  despacho no admite huecos: los declaré como `OP_RESERVED_39` a `_3E`, que
-  terminan la página. El que traiga el de verdad reemplaza su entrada; los de
-  Aguilucho son `0x3D` y `0x3E`.
-- **La WRAM no arranca en cero**, y el núcleo de la tanda la llena de `$55`:
-  la primera versión no ponía la pila en cero al arrancar una página del
-  mapa, y la profundidad basura salteaba todas las llamadas. Lo cobraron
-  cuatro pruebas —el común 35 después de la pelea dejaba el 498 prendido y
-  el héroe trabado—; ahora `start_waiting` y `common_start` la ponen en cero.
-- **El signo de `\V`**: un `ldx` entre la lectura y el `bpl` le pisaba la N,
-  y -1234 salía como 64302. Lo cobró `test_variable_en_texto.py`.
-- **El efecto con otra muestra en un mapa**: `shares` compilaba el cuerpo
-  "sin mapa" con el paquete del mapa puesto, y un efecto que en ese mapa
-  suena con otra muestra salía igual en los dos. Lo cobró la prueba de
-  `compile.rs`; ahora se compila sin paquete, como el del cartucho.
+- **The RAM assigned to me, `$2560` to `$256F`, is inside
+  `FAR_PAIR_LIST`**: it is `PARALLEL_MAX` (48) eight-byte entries from
+  `$2400`, up to `$257F`, and the car chase has forty parallel pages.
+  I used `$6110` to `$6127`, after `MAP_SONG` (one byte) and before `FAR_EXP`;
+  verified with grep over `tools/runtime/` that nothing else falls there. **Aguilucho's,
+  if he got `$2570`, has the same problem.**
+- **Opcodes `0x39` to `0x3E` do not exist in `main`**, and the dispatch
+  table does not allow gaps: I declared them as `OP_RESERVED_39` to `_3E`, which
+  end the page. Whoever brings the real one replaces its entry;
+  Aguilucho's are `0x3D` and `0x3E`.
+- **WRAM does not start at zero**, and the suite's core fills it with `$55`:
+  the first version did not set the stack to zero when starting a map
+  page, and the garbage depth skipped all the calls. Four
+  tests enforced it —common event 35 after the battle left 498 on and
+  the hero stuck—; now `start_waiting` and `common_start` set it to zero.
+- **The sign of `\V`**: an `ldx` between the read and the `bpl` clobbered N,
+  and -1234 came out as 64302. `test_variable_en_texto.py` enforced it.
+- **The sound effect with another sample on a map**: `shares` compiled the body
+  "without a map" with the map's package set, and a sound effect that on that map
+  sounds with another sample came out the same in both. The test in
+  `compile.rs` enforced it; now it is compiled without a package, like the cartridge's.
 
-## Cuántas páginas compilan
+## How many pages compile
 
-- **Del juego, por página**: las mismas que antes, 5560 —`rm2k-snes-events
-  scan` sobre todos los mapas, el binario global contra el nuevo—. Ninguna
-  página de mapa usa `\V`, y lo compartido no cambia qué compila.
-- **Los comunes**: en `release` hay 25 cuerpos, 8.176 bytes. Corren los
-  automáticos 7 (`AbsorbAuraAbilities`), 11 (el menú viejo, que nadie
-  prende), **39 (la consola)**, 43 (la cinta de Emily) y 50 (`RadinUses`).
-  No compilan: el 16 (`DisplayNameMenu`, del menú viejo), y el 42 y el 44,
-  los menús de Radin y de Sern, que mandan al héroe una ruta que le cambia
-  el gráfico —el comando 34 necesita el banco de sprites de un mapa, y un
-  cuerpo no tiene mapa—. Los de la consola compilan todos: 39, 21, 25, 23
-  a 31, 40, 48 y 49 (el 22 compila a nada: son sólo imágenes).
-- **Las llamadas de las páginas**: 32 `OP_CALL` en 24 mapas de `release`,
-  casi todas al común 35 desde `AfterBattleMint`. El bytecode de los mapas
-  pasó de 136,4 KB crudos (89,1 en LZ2) a 89,4 (46,8); sin ninguna llamada
-  serían 81,5.
+- **From the game, per page**: the same as before, 5560 —`rm2k-snes-events
+  scan` over all maps, the global binary against the new one—. No
+  map page uses `\V`, and sharing does not change what compiles.
+- **The common events**: in `release` there are 25 bodies, 8,176 bytes. The
+  automatic ones that run: 7 (`AbsorbAuraAbilities`), 11 (the old menu, which nobody
+  turns on), **39 (the console)**, 43 (Emily's tape) and 50 (`RadinUses`).
+  Not compiling: 16 (`DisplayNameMenu`, from the old menu), and 42 and 44,
+  Radin's and Sern's menus, which send the hero a route that changes
+  his graphic —command 34 needs a map's sprite bank, and a
+  body has no map—. The console's all compile: 39, 21, 25, 23
+  to 31, 40, 48 and 49 (22 compiles to nothing: it is only pictures).
+- **The pages' calls**: 32 `OP_CALL` in 24 maps of `release`,
+  almost all to common event 35 from `AfterBattleMint`. The maps' bytecode
+  went from 136.4 KB raw (89.1 in LZ2) to 89.4 (46.8); without any call
+  it would be 81.5.
 
-## La consola
+## The console
 
-**Anda**, sin imágenes: el ítem 81 desde el menú prende el 710 y el común
-39 corre; las flechas recorren personajes y rótulos; A sobre Skills de Sern
-abre su mensaje con las almas (`\V[0173]`); B la cierra; el héroe no camina
-mientras está abierta. **No se ve ninguna imagen**: las de la consola no las
-lleva ningún mapa, y las grandes —las páginas de texto, la tabla de auras,
-la ventana de 302x202 al 50%— son de Aguilucho. Faltan todas: 17
+**It works**, without pictures: item 81 from the menu turns on 710 and common event
+39 runs; the arrows go through characters and labels; A on Sern's Skills
+opens his message with the souls (`\V[0173]`); B closes it; the hero does not walk
+while it is open. **No picture shows**: the console's are not
+carried by any map, and the large ones —the text pages, the auras table,
+the 302x202 window at 50%— are Aguilucho's. They are all missing: 17
 (`NewMenu<nombre>`, `<nombre>Skill1`, `<nombre>Tutorial1`), 18
-(`SkillSelect`, `TutorialSelect`), 19 (`ArrowTest`), y las del 21 y del 23
-a 31 (`Aura<color>Menu`, `Aura0` a `Aura24`). Además los efectos de un común
-automático (`Decision1`, `Cansel1`, `Failure1`) suenan sólo si el paquete
-del mapa ya los lleva: un cuerpo sin mapa no anota nada en ninguno.
+(`SkillSelect`, `TutorialSelect`), 19 (`ArrowTest`), and those of 21 and of 23
+to 31 (`Aura<color>Menu`, `Aura0` to `Aura24`). In addition the sound effects of an
+automatic common event (`Decision1`, `Cansel1`, `Failure1`) sound only if the map's
+package already carries them: a body without a map notes nothing in any.
 
-## Pruebas, y su rojo
+## Tests, and their red
 
-- `rpgmaker/test_consola_portatil.py` (cuatro): el ítem 81 corre el común,
-  las flechas, el héroe quieto y el mensaje de Sern contra el mismo escrito
-  con 42. **Rojo**: con `common_start` devolviendo cero, las cuatro.
-- `rpgmaker/test_variable_en_texto.py`: tres `\V` —negativo, cero, dos en un
-  renglón, con ceros adelante y en minúscula— contra el mismo mensaje escrito
-  a mano. **Rojo**: con el compilador de la base, `just cartuchos` se niega
-  ("a test page's text box does not compile"); y con el signo mal, 776
-  pixeles.
-- `rpgmaker/test_llamada_compartida.py` (dos): una página llama al común
-  43, se pide un salto con la elección abierta, y la página sigue después.
-  Las dos variantes: la página en su mapa y ya acarreada. **Rojo**: sin mirar
-  los marcos de la pila en `code_carry_before`, las dos. Ningún común que hoy
-  se comparta salta de mapa, así que **es el único camino que lo ejecuta**.
-- Unitarias en `compile.rs` y `messages.rs`: los cuerpos y sus índices, el
-  automático que no compila, la pelea que termina sólo su marco, la
-  profundidad de un lazo, una página que llama o pega según el mapa, `\V`
-  como ranura y lo que no compila, y que un par no salte una variable.
-- `test_compositor.py` pone en cero también los dígitos pendientes, que es lo
-  otro que el arranque del renglón deja puesto.
-- `empujon.json`: el bloque de textos se movió —un par menos y los textos de
-  los comunes—, y el cuadro de `texto-cruza` quedó del otro lado del borde.
-  Le saqué los dos cuadros de relleno del final, `Z1` y `Z2`.
-- `rm2k-snes-mapdata/tests/python.rs`: las tablas de los comunes se sacan
-  antes del hash, como la de pares; los hashes no cambiaron.
+- `rpgmaker/test_consola_portatil.py` (four): item 81 runs the common event,
+  the arrows, the hero still and Sern's message against the same one written
+  with 42. **Red**: with `common_start` returning zero, all four.
+- `rpgmaker/test_variable_en_texto.py`: three `\V` —negative, zero, two in one
+  row, with leading zeros and in lower case— against the same message written
+  by hand. **Red**: with the baseline compiler, `just cartuchos` refuses
+  ("a test page's text box does not compile"); and with the wrong sign, 776
+  pixels.
+- `rpgmaker/test_llamada_compartida.py` (two): a page calls common event
+  43, a jump is requested with the choice open, and the page continues afterwards.
+  The two variants: the page on its map and already carried. **Red**: without looking at
+  the stack's frames in `code_carry_before`, both. No common event shared today
+  jumps map, so **it is the only path that executes it**.
+- Unit tests in `compile.rs` and `messages.rs`: the bodies and their indices, the
+  automatic one that does not compile, the battle that ends only its frame, the
+  depth of a loop, a page that calls or pastes depending on the map, `\V`
+  as a slot and what does not compile, and that a pair does not skip a variable.
+- `test_compositor.py` also sets to zero the pending digits, which is the
+  other thing the start of a row leaves set.
+- `empujon.json`: the text block moved —one pair fewer and the texts of
+  the common events—, and the box of `texto-cruza` ended up on the other side of the border.
+  I removed the two padding boxes at the end, `Z1` and `Z2`.
+- `rm2k-snes-mapdata/tests/python.rs`: the common events' tables are removed
+  before the hash, like the pairs one; the hashes did not change.
 
-Las dos tandas en verde: `just pruebas` da 988 (981 + 7) y `just -f
+Both suites green: `just pruebas` gives 988 (981 + 7) and `just -f
 tools/justfile test` 39. `cargo test -p rm2k-snes-events -p
-rm2k-snes-mapdata` en verde.
+rm2k-snes-mapdata` green.
 
 ## Goldens
 
-**Ninguna se movió.** Las tres ROMs cambian —tablas nuevas, el par de menos,
-los comunes—, pero ninguna golden.
+**None moved.** The three ROMs change —new tables, the pair fewer,
+the common events—, but no golden.
 
-## Espacio, en `release`
+## Space, in `release`
 
-Contra la base (`57ce2e2a…`), con `just espacio`: de 62 bancos de datos a
-61; el banco 0 de 1.340 a 1.275 bytes libres; el banco 1 de 2.000 a 1.498;
-el bloque de textos de 112.697 a 116.014 bytes. `NO_CACHE=1 just
-cartuchos` da las mismas tres ROMs que con caché.
+Against the baseline (`57ce2e2a…`), with `just espacio`: from 62 data banks to
+61; bank 0 from 1,340 to 1,275 bytes free; bank 1 from 2,000 to 1,498;
+the text block from 112,697 to 116,014 bytes. `NO_CACHE=1 just
+cartuchos` gives the same three ROMs as with the cache.
 
-## Lo que falta
+## What is missing
 
-- **Las imágenes de la consola**: Aguilucho.
-- **Los menús de Radin y de Sern (42, 44)**: un cuerpo compartido no puede
-  cambiar el gráfico de una ruta, porque eso es del banco de sprites de cada
-  mapa. Serviría si el gráfico fuera uno de los `associations`, que todos los
-  mapas reservan en el mismo lugar; no se miró si lo es.
-- **Los comunes paralelos**: no se hicieron. Lo que harían falta: un
-  intérprete paralelo por común —estado como el de `FAR_PAIR_STATE`, que hoy
-  es por evento del mapa— corriendo en `parallel_tick` en cualquier mapa, y
-  decidir qué pasa con el 2, `DisableSaving`, que no tiene switch y correría
-  siempre. Los de equipo ya corren a su manera (`equipment_commons`).
-- **Las llamadas de las paralelas** siguen pegando: necesitarían una pila por
-  intérprete.
-- **Los efectos de un común automático** suenan sólo donde el paquete del
-  mapa los trae.
+- **The console's pictures**: Aguilucho.
+- **Radin's and Sern's menus (42, 44)**: a shared body cannot
+  change a route's graphic, because that belongs to each map's sprite
+  bank. It would work if the graphic were one of the `associations`, which all
+  maps reserve in the same place; whether it is was not checked.
+- **Parallel common events**: not done. What would be needed: one
+  parallel interpreter per common event —state like that of `FAR_PAIR_STATE`, which today
+  is per map event— running in `parallel_tick` on any map, and
+  deciding what happens with 2, `DisableSaving`, which has no switch and would run
+  always. The equipment ones already run their own way (`equipment_commons`).
+- **The parallel pages' calls** still paste: they would need a stack per
+  interpreter.
+- **The sound effects of an automatic common event** sound only where the map's
+  package carries them.
 
-## Al mergear
+## On merging
 
-- **Instalar** `events`, `mapdata` y `cartridge`: `just -f tools/justfile
-  install events mapdata cartridge`. Y `install-scripts` no hace falta: no
-  hay scripts nuevos ni renombrados.
-- Los opcodes reservados `0x39` a `0x3E`: los de Aguilucho reemplazan
-  `OP_RESERVED_3D` y `_3E`, y `op_reserved_3d`/`_3e` de `interpreter.s` se
-  van con ellos.
-- La RAM: `$6110` a `$6127` es mía, no `$2560`.
-- `test_musica_techos.py` pasó; no corrí `just techos`.
-- Para jugar: los comunes automáticos 7, 43 y 50 ahora corren en el juego
-  —las auras de Talan, la cinta de Emily y lo que Radin repara—, y la
-  consola se abre con el ítem 81.
+- **Install** `events`, `mapdata` and `cartridge`: `just -f tools/justfile
+  install events mapdata cartridge`. And `install-scripts` is not needed: there are
+  no new or renamed scripts.
+- The reserved opcodes `0x39` to `0x3E`: Aguilucho's replace
+  `OP_RESERVED_3D` and `_3E`, and `op_reserved_3d`/`_3e` of `interpreter.s` go
+  with them.
+- The RAM: `$6110` to `$6127` is mine, not `$2560`.
+- `test_musica_techos.py` passed; I did not run `just techos`.
+- To play: automatic common events 7, 43 and 50 now run in the game
+  —Talan's auras, Emily's tape and what Radin repairs—, and the
+  console opens with item 81.
