@@ -7,7 +7,7 @@ assignee: Chajá
 ---
 
 From taro, on 2026-09-28, after the Game Over screen
-(`la-pantalla-de-game-over.md`). Carpincho left `pantalla_subir` and
+(`game-over-screen.md`). Carpincho left `pantalla_subir` and
 `tools/port/pantalla_completa.py` not knowing which screen they upload, so
 that the title could use them, and measured:
 
@@ -28,7 +28,7 @@ same pixel for pixel: the `titulo` golden does not change.
   Story" with B: the title has to come back without a long flicker.
 * Start and load a game from the title, and a Game Over that returns to the
   title: the title track that keeps playing on starting
-  (`la-pista-del-titulo-sigue-al-empezar.md`) was not touched, but it goes
+  (`title-track-keeps-playing-on-starting.md`) was not touched, but it goes
   through the same place.
 
 # What was done

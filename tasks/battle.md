@@ -108,14 +108,14 @@ What there is, and what there is not:
     skills                          yes: see below
     statuses                        no
     experience and levelling up     yes, since 2026-09-21: see
-                                    `experiencia-y-subida-de-nivel.md`
+                                    `experience-and-levelling-up.md`
     gold on winning                 no
     music and sound effects         yes: see below
     drawn battlers                  yes; since 2026-09-21 composed on the
-                                    console: `escena-de-pelea-compuesta-en-runtime.md`
+                                    console: `battle-scene-on-the-console.md`
     the background image            yes
     troop event pages               yes, since 2026-09-21, the switch and
-                                    variable ones: `el-sistema-de-batalla-de-talan.md`
+                                    variable ones: `talan-battle-system.md`
     random encounters               yes: see below
 
 The screen shows the enemies' HP, which RM2k does not. It is on purpose:
@@ -171,7 +171,7 @@ What goes into the list and how much it heals comes from easyrpg-player:
   that went from impossible to debt—, and the reviving ones because reviving is removing the
   dead status and statuses do not exist. (That last part was not true: EasyRPG
   decides whether someone is down by HP, and that is how it was solved in the menu; in the
-  battle it is still pending in `el-elixir-en-la-pelea.md`.) It is 12 of the game's 22
+  battle it is still pending in `elixir-in-battle.md`.) It is 12 of the game's 22
   medicines, from the Potion of 50 to the Miracle Drop, which heals everything.
 * **How much it heals**: `Game_BattleAlgorithm::Item::vExecute`, that is
   `recover_hp_rate * GetMaxHp() / 100 + recover_hp`, capped against what the
@@ -313,7 +313,7 @@ Two non-obvious things about the PPU —the text's priority bit and tile
 in `main.s`, which is where they bite.
 
 **What it cost, declared** —solved on 2026-09-21: the scene is composed on
-the console and the dead one disappears, see `escena-de-pelea-compuesta-en-runtime.md`—:
+the console and the dead one disappears, see `battle-scene-on-the-console.md`—:
 a dead enemy was still visible. In RM2k it disappears; here what says it died is its row —the name in grey and the
 HP at zero—, which is the same reason why this screen shows the
 enemies' HP and RM2k does not. And a scene is **per troop** and not per background: two

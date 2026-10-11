@@ -7,7 +7,7 @@ status: wishlist
 
 # What
 
-What was left out of `los-panoramas.md`, for any game:
+What was left out of `panoramas.md`, for any game:
 
 * **A `ChangePBG` that names another image.** Today it changes the loops and the
   speed and leaves the image. It would require converting each image that the

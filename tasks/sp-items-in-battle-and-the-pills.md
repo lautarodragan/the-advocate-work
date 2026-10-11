@@ -36,7 +36,7 @@ branch `mulita-items`, from `88c00a4`.
   went back to the rule. The ROM also didn't know how to restore SP in battle.
 * **Materials (type 8)**: they were never implemented. `item_usable` in
   `rm2k-snes-screens` (`2b017b2e`, which comes from `0b060661` and `ced94647`)
-  only allows using medicines and switches; `la-pantalla-de-items-como-el-original`
+  only allows using medicines and switches; `items-screen-like-the-original`
   noted it: "materials […] go greyed out […] because the ROM doesn't yet
   know how to use them".
 

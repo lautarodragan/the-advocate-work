@@ -31,6 +31,6 @@ windows look still.
 
 # Done
 
-On 2026-10-05, with all the panoramas —`los-panoramas.md`—: map 2 goes
+On 2026-10-05, with all the panoramas —`panoramas.md`—: map 2 goes
 flattened, with the big screen on BG2, and `ChangePBG` compiles to
 `OP_PANORAMA`.

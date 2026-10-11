@@ -7,7 +7,7 @@ assignee: taro
 ---
 
 It came up on 2026-09-28, looking at the actor choice's `equipo-a-quien`
-golden (`la-eleccion-de-actor-como-el-original.md`, Ñandú): choosing
+golden (`actor-selection-like-the-original.md`, Ñandú): choosing
 who to equip uses the actor choice screen without the item's
 windows, and the left half is left black. Before that change it was already like that,
 on black and with the ">".

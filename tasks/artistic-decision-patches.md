@@ -171,7 +171,7 @@ tells apart two battlers with the same drawing.
   the palette it reserves isn't free. That's the case taro asked to look at and in
   the layers it doesn't exist, so that's where it will really be decided.
 * **The voices dropped from a MIDI and the trimmed samples.** It has its
-  own task, `el-audio-en-dos-pasos-lossy.md`. The most expensive one, and
+  own task, `audio-in-two-lossy-steps.md`. The most expensive one, and
   the one worth stopping before forcing it. What's dropped isn't decided by a song
   but by the ARAM allocation among **all** of the cartridge's, with a priority
   that depends on where the ROM starts: the key "the song" isn't enough to

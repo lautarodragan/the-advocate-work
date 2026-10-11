@@ -5,7 +5,7 @@ type: bug
 status: done
 ---
 
-Seen while measuring the music stream on 2026-09-25 (see `la-musica-pesa-789-kb.md`),
+Seen while measuring the music stream on 2026-09-25 (see `music-weighs-789-kb.md`),
 without hearing it yet. In `tools/audio/snes_music.py` (`build_events`): when
 a note wins another's voice, the release the stolen note had scheduled
 still stands and cuts off the new one too early. **686 notes, 10,308 frames**
@@ -15,7 +15,7 @@ And another from the same place: a note whose sample is not in the bank still
 takes up the voice, because `busy` is set before the `continue`.
 
 It is better to fix it **before or after** the change to the stream format (idea
-1 of `la-musica-pesa-789-kb.md`), not together with it: that change is verified by
+1 of `music-weighs-789-kb.md`), not together with it: that change is verified by
 the DSP writes coming out identical, and this fix changes them on purpose.
 
 # Done, on 2026-09-25
@@ -25,7 +25,7 @@ notes that still own their voice, and the note without a sample leaves before
 a voice is chosen. Across the 22 themes of `release` there were 564 notes released too
 early and 11,024 notes without a sample taking up a voice; the stream shrank 11.3%. The
 numbers theme by theme and how they were measured, in point 1 of
-`la-calidad-de-la-musica.md`; it is enforced by
+`quality-of-the-music.md`; it is enforced by
 `pruebas/herramientas/test_musica_stream.py`.
 
 **For taro**: it is in `testing/` because it can be heard —a little: mostly the bass of

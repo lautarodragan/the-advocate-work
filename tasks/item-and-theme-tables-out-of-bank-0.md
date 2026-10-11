@@ -8,7 +8,7 @@ assignee: taro
 
 After Yun, Drust and Paradise (2026-10-01), bank 0 of `release`
 was down to 95 B free. What grows there with each map are the item and
-theme tables; the world plan (`el-mundo-y-lo-que-sigue.md`, milestone 5)
+theme tables; the world plan (`world-and-what-follows.md`, milestone 5)
 already said to move the item ones to bank 1. Zorro counted 19 reads in the
 runtime.
 

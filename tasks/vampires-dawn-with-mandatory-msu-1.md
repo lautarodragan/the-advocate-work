@@ -7,7 +7,7 @@ assignee: taro
 agents: [Hornero, Tijereta]
 ---
 
-It follows from `vampires-dawn-entra-comprimido.md`, where Tijereta measured everything: the poses in LZ2 are the only thing that really pays off (−2.86 MB) and they cost ABL frames —eight reds because of CPU—; with them VD stays at 8.91 MB against 7.94, and the rest adds at most ~0.84 MB. The experiment is in the local branches `tijereta-vd-comprimido` of the-advocate and the ports, unmerged.
+It follows from `vampires-dawn-fits-in-the-cartridge-compressed.md`, where Tijereta measured everything: the poses in LZ2 are the only thing that really pays off (−2.86 MB) and they cost ABL frames —eight reds because of CPU—; with them VD stays at 8.91 MB against 7.94, and the rest adds at most ~0.84 MB. The experiment is in the local branches `tijereta-vd-comprimido` of the-advocate and the ports, unmerged.
 
 taro's decision, on 2026-10-11: rather than two cartridges, mandatory MSU-1 **for this game**; ABL and the others stay playable without it ([[sin-msu-jugable]] in the memory). Not a compression chip, as long as MSU-1 remains optional in general.
 

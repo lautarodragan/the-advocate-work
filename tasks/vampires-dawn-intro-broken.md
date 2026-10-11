@@ -7,7 +7,7 @@ assignee: taro
 agents: [Hurón]
 ---
 
-Seen by Carpintero on 2026-10-11 (`boot-frames-por-cartucho.md`): with the floor at 90 it looks the same, so it isn't the boot. If it is an engine error with panoramas, it may be in other games too.
+Seen by Carpintero on 2026-10-11 (`boot-frames-per-cartridge.md`): with the floor at 90 it looks the same, so it isn't the boot. If it is an engine error with panoramas, it may be in other games too.
 
 ## The cause (Hurón, 2026-10-11)
 

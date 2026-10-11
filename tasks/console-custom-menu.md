@@ -15,7 +15,7 @@ system into something custom but generic — a feature designed to build
 custom menus, that follows the same rules as the rest of the
 items/etc. menu. Then we would not need any picture. Or maybe only
 the ones that show the characters' art". It is the idea of
-`un-menu-custom-propio.md`, without mode 5: today there is variable width
+`custom-menu-of-our-own-not-made-of-pictures.md`, without mode 5: today there is variable width
 in low resolution.
 
 And two decisions of his for the design: **it is one more option of the pause

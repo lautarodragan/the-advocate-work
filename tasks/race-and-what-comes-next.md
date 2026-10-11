@@ -7,7 +7,7 @@ status: done
 
 # What
 
-What follows `lashe-city-hasta-la-carrera.md`. taro asked for it on
+What follows `lashe-city-with-the-car-up-to-the-race.md`. taro asked for it on
 2026-09-27: if it fits, **the race** (49 to 54, and 55 if needed) **and 64**;
 then, if there's still room, **83 and 84**, so that the rule for which maps
 `release` carries stops being the `MAPAS_DEL_JUEGO` list in
@@ -99,7 +99,7 @@ brings new troops and overflowed by 2,314 bytes.
 Without MSU-1, the race and 64 (two new themes, `Fire_Mustang_…` and
 `prepara`) lower six (theme, instrument) pairs and raise two; the worst is
 `wb3mlair` program 33, from 23.3 to 13.3 kHz. It goes to
-`el-audio-despues-de-lashe-city.md`.
+`audio-after-lashe-city.md`.
 
 ## What doesn't fit with X = 85
 
@@ -202,9 +202,9 @@ it unblocks:
    two frames**: 2.07 frames per tick on 49 and 2.02 on 52, measured with
    `cuadros_perdidos` over 300 ticks. 51, with 13 pages of the same shape,
    doesn't drop any, and neither does `release` on 52 (with the car pages not
-   compiled). It matches what `chips-sa-1-y-s-dd1.md` estimated (~9 lines per
+   compiled). It matches what `expansion-chips-sa-1-and-s-dd1.md` estimated (~9 lines per
    page, ~370 lines). It's playable, but at 30 frames. The general thing is
-   `optimizar-los-eventos-paralelos-al-compilar.md`: the 40 pages are the same
+   `optimise-parallel-events-when-compiling.md`: the 40 pages are the same
    pattern —read its own cell into two variables and compare them with two
    others— and a fused opcode would do it in native code. One opcode, on the
    order of ten bytes of bank 0 for its entry and a hundred of bank 1, plus the
@@ -217,7 +217,7 @@ it unblocks:
    lanes, and avoid the traffic! Fewer crashes means better rewards! Press any
    key to begin."
 5. **The bridge jump's sounds** (route order 35, six routes of 51) are dropped
-   when compiling. It's `los-sonidos-adentro-de-las-rutas.md`.
+   when compiling. It's `sounds-inside-move-routes.md`.
 6. **The end of the demo**: 64 jumps to 66, which doesn't fit. A fork of 64
    goes in with the same sign and the `ReturntoTitleScreen` that 36's has
    today, and 36's fork is deleted.
@@ -248,21 +248,21 @@ harness can drive by holding keys. Bank 0: 6 bytes from the maps plus the two
 fixes, on the order of twenty.
 
    **Done on 2026-09-27**, with questions 1, 3, 5 and 6 answered with the
-   recommendation: see `carrera-1-entra-y-se-corre.md`.
+   recommendation: see `race-1-it-goes-in-and-it-runs-at-30-frames.md`.
 
 **2. The race at 60 frames.** The fused opcode (3), or whatever the
-measurement in `optimizar-los-eventos-paralelos-al-compilar.md` says. It's
+measurement in `optimise-parallel-events-when-compiling.md` says. It's
 considered done with `cuadros_perdidos` at zero —or almost— on 49, 52 and 54
 while driving. Independent of 3 and 4.
 
    **Done on 2026-09-27**, with the fused opcode and what the measurement said:
-   see `carrera-2-a-sesenta-cuadros.md`, which has each path's limit.
+   see `race-2-at-60-frames.md`, which has each path's limit.
 
 **3. What's seen and heard.** The controls sign (4) and the jump's sounds (5),
 according to what taro answers.
 
    **Done on 2026-09-27**, with option (a) of question 4: see
-   `carrera-3-lo-que-se-ve-y-se-oye.md`.
+   `race-3-what-is-seen-and-heard.md`.
 
 **4. The map rule by id.** `release` becomes "the maps with an id below X,
 without those in `--exclude-maps`, plus the additions" —today 164— and the
@@ -274,7 +274,7 @@ resulting list has to be the same as this milestone 1's, and that gets
 compared. It can go before, in parallel with or after 2.
 
    **Done on 2026-09-27**: the bugs in `9d6c0d3`, the rule in
-   `la-regla-de-mapas-por-id.md`. The exclusion isn't a converter flag but a
+   `map-by-id-rule.md`. The exclusion isn't a converter flag but a
    value in `cartuchos.py`; the why is there.
 
 **5. (Conditional) X = 85.** Only if taro wants it before the world goes in:
@@ -297,7 +297,7 @@ What has to be split if 1 and 2 go in parallel: 2's opcode, in
    delivered before 2), or isn't it delivered until it runs at 60?
 4. **The controls sign**: (a) a fork of 49 that swaps the `ShowPicture` for a
    `ShowMessage` with the same text —cheap, and the screen is already black—;
-   (b) a second sign per ROM (`sistema-de-imagenes.md`); (c) debt.
+   (b) a second sign per ROM (`picture-system.md`); (c) debt.
    **Recommended: (a).**
 5. **Where the demo ends**: at the end of 64's scene, instead of the jump to
    the world, or earlier, on leaving 53 with the reward? **Recommended: 64**,

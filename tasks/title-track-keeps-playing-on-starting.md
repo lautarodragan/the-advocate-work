@@ -31,4 +31,4 @@ playing** saves `music_apagada` as 1 —the SPC700 is silent on
 purpose—, so on loading it `music_boot` takes the silent path and the
 game starts mute until the next `PlayBGM` (before this fix, the title
 track kept playing). Noted in
-`tasks/la-partida-guardada-con-msu-arranca-muda.md`.
+`tasks/game-saved-with-msu-1-starts-silent.md`.

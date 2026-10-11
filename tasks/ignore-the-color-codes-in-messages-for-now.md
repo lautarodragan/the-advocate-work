@@ -20,7 +20,7 @@ count in the width. Cases in `text/tests/escapes.json`; the red was seen with
 the rule disabled.
 
 **Declared debt**: the color and the speed are lost. It's noted here and in
-`las-caras-y-las-esperas.md`, where `without_waits` already lives.
+`draw-the-faces-and-really-wait-on-the-escapes.md`, where `without_waits` already lives.
 
 Map pages that compile (`rm2k-snes-events culprits --every-map`, before
 -> after): Desert Nightmare 5738 -> 7034 of 7340; Sunset Over Imdahl 898 ->
@@ -29,5 +29,5 @@ fingerprint, `27e94e67039533a2…`.
 
 `-p rm2k-snes-screens`: `the_boxes_of_the_maps_and_the_common_events` fails
 (`left: 5, right: 4`), **and fails the same without this change**: it's the case of
-`una-prueba-de-screens-cambia-con-el-workspace.md`, which here fails too
+`screens-test-gives-a-different-result-with-the-whole-workspace.md`, which here fails too
 with `-p`. On merging: install `text events screens convert cartridge`.

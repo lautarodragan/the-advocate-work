@@ -13,7 +13,7 @@ sound effect gets dropped.
 
 # Where it comes from
 
-From the investigation of `efectos-de-sonido-sin-recortes.md`, on 2026-09-24.
+From the investigation of `sound-effects-without-cuts.md`, on 2026-09-24.
 **It is a calculation, not something measured in the ROM**: a sub-agent added
 up the sizes from `abl`'s `musicdata.inc`.
 

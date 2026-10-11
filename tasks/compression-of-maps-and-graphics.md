@@ -114,7 +114,7 @@ Adding up by symbol prefix the blocks of `mapdata.inc`, which is the
 exact content of each one (the count by symbols from the `.dbg` works for
 almost everything, but **it gets `map_celdas` wrong**: the grid crosses banks, and
 subtracting the address of the next symbol cuts it at the border. That is why the
-X-ray in `juntar-release-y-test-main.md` gave 285 KB and the `.dbg` one
+X-ray in `merge-release-and-test-main.md` gave 285 KB and the `.dbg` one
 208: it is 278).
 
     release, 03c21fb           used 3162 KB of 4096 (77,2%), last bank $6B
@@ -183,7 +183,7 @@ What the domain columns say:
   already seen: the left of many CharSets is the right flipped.
 
 The S-DD1 agent measured the same with the chip's algorithm
-(`chips-sa-1-y-s-dd1.md`) and the numbers agree: `map_celdas` 278.2
+(`expansion-chips-sa-1-and-s-dd1.md`) and the numbers agree: `map_celdas` 278.2
 KB, zlib 22.9 against 22.7.
 
 ## The four grid variants

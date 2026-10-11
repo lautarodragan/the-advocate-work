@@ -9,7 +9,7 @@ assignee: taro
 From taro, on 2026-10-02: "map-background could just become part of wally,
 couldn't it?" and, for both, "go ahead". Mara split them into three crates
 so that Cargo would make sure the background does not know about the
-objects and vice versa (`rust-el-dominio-de-los-mapas.md`, "Un crate o
+objects and vice versa (`rust-the-maps-domain.md`, "Un crate o
 varios"); that boundary is now looked after by a test.
 
 ## How it ended up

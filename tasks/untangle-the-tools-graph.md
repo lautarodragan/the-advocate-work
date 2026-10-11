@@ -99,7 +99,7 @@ AST). `cartuchos`'s fingerprint covers them on its own, with its glob of
   compared byte for byte, and the one at `rom/src/registros.s:39`
   (`eventos.tenir`, which is now `color.tenir`), because `rom/src/` wasn't
   being touched. Two tasks of `wishlist/` also name the old thing:
-  `test-declarative-script` and `inventario-de-imagenes-en-python`.
+  `declarative-tests` and `inventory-images-to-tiles-in-python`.
 - **Three unused imports that were already there before**: `ELEGIR_CURSOR`
   in `pantallas`, `collections` in `imagen` and `load_image` in
   `snes_convert`.

@@ -7,7 +7,7 @@ assignee: taro
 ---
 
 From taro, on 2026-09-30, after testing on the SNES the ROM from
-`rom-de-prueba-del-menu-en-modo-5.md` (Carancho): "none of them
+`test-rom-the-menu-in-mode-5-on-the-snes.md` (Carancho): "none of them
 convinces me. With the text stretched, it looks weird on the CRT TV. In some
 cases it gets hard to read". But he doesn't rule out mode 5, because **the
 battle also has a lot of UI problems because of the resolution**, and there
@@ -136,7 +136,7 @@ already applied: 95 glyphs × 156 bytes × 4 = 59 KB (`font_prerender` in
   with the 1-bit font it would have to be measured again, or pay the 59 KB
   of the eight phases only for the window's colour.
 * **The high-res ones**, what Ñacurutú estimated for mode 5 in
-  `maqueta-del-menu-en-alta-resolucion.md`: the mode change and the faces as
+  `mock-up-the-menu-in-high-resolution.md`: the mode change and the faces as
   sprites are cheap; the text asks for the same compositor, in high, and
   about 25 KB of VRAM. Measured on these mockups, the menu text touches 486
   tiles with the variable one and 531 with the fixed one (12 KB distinct,
@@ -161,6 +161,6 @@ scripts to the PATH.
 
 On 2026-10-03: he likes the two variable-width ones, the low one and the
 high one, and wants to try them in the game. First the low one in the whole
-game —`las-letras-de-ancho-variable.md`, in the tools repo—, and
+game —`variable-width-letters-in-low-resolution.md`, in the tools repo—, and
 then mode 5 as a project knob, to compare two builds without reverting
 anything.

@@ -195,7 +195,7 @@ green. `NO_CACHE=1 just cartuchos` gives the same fingerprints as with cache.
 three and the walkthrough's photos are in `/shared/capturas/2026-10-01-paradise/`.
 **The merge awaits taro.** 105's sky comes out black: its panorama
 (Evening1) isn't drawn, as in every map with a panorama
-(`panorama-del-mapa-2.md`).
+(`panorama-of-map-2.md`).
 
 ## Space
 

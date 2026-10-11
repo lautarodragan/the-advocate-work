@@ -48,6 +48,6 @@ What was left mentioning it on purpose, or untouched:
   comment says so, and changing it is a change in behaviour;
 * `titulo.render` and `ventana.pagina` have no callers and their comments
   describe the reference's comparison: the right thing is to delete them
-  (the first is already in `inventario-de-imagenes-en-python.md`);
+  (the first is already in `inventory-images-to-tiles-in-python.md`);
 * the "capped at 999 as in the reference" in `batalla.s`: it's unknown whether
   it's the Python one or the `escena` drawing.

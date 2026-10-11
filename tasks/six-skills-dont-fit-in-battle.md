@@ -7,13 +7,13 @@ assignee: taro
 ---
 
 Tordo measured it on 2026-10-03, counting by hand against the cell cap, while
-making the spacing knob (`tasks/el-espaciado-entre-letras.md`).
+making the spacing knob (`tasks/letter-spacing-as-a-knob.md`).
 It wasn't run in the ROM: it remains to see which ones they are, what's shown, and whether the converter
 should warn about it.
 
 ## What Benteveo found, on 2026-10-03
 
-Since `el-espaciado-sin-tocar-codigo` the converter names them: a WARNING
+Since `spacing-without-touching-code` the converter names them: a WARNING
 in `conversor.log`, "skill names in the battle don't fit in 11 cells", with
 each name, its pixels and what's shown.
 
@@ -34,7 +34,7 @@ more letters). It wasn't done.
 
 Tools worktree from `fe0f90ee`; ABL in the clone
 `/extras/scratch/carpintero/abl`, branch `texto-de-la-pelea`. It goes together with
-`la-lista-de-habilidades-agota-el-pozo`: it's the same text layer.
+`battle-skill-list-exhausts-the-pair-pool`: it's the same text layer.
 
 **The cartridge stores skill and enemy names whole**, and the
 console cuts them in their cells, by pixels, as it already did. With that none

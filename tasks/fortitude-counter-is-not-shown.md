@@ -6,7 +6,7 @@ status: done
 assignee: taro
 ---
 
-From the plan `el-mundo-y-lo-que-sigue.md` (question 4). The minigame on 95
+From the plan `world-and-what-follows.md` (question 4). The minigame on 95
 compiles and is playable, but without seeing how much Eisen can endure: the
 Fortitude counter is a picture the ROM does not draw. taro left it as a debt on
 2026-09-27.
@@ -16,7 +16,7 @@ which are already in the ROM; a message when it goes down. Before choosing one
 has to check whether the minigame can be lost: if not, the counter is only
 information.
 
-**It can be lost**, checked in milestone 4 (`mundo-4-el-capitulo.md`): each
+**It can be lost**, checked in milestone 4 (`world-4-tasgarde-eisen-and-the-bridge.md`): each
 jump and each ladder on 95 subtracts 5 from variable 48, which starts at 99,
 and with the variable at zero parallel 56 says "So... tired... can't go
 on...", sends Eisen back to the entrance, turns off the three levers and resets

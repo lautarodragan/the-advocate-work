@@ -6,7 +6,7 @@ status: wishlist
 ---
 
 taro's idea, on 2026-09-26, from what the chips investigation measured
-(`chips-sa-1-y-s-dd1.md`): on map 11 the 13 parallel pages
+(`expansion-chips-sa-1-and-s-dd1.md`): on map 11 the 13 parallel pages
 without a wait eat ~123 of the frame's 262 lines, and almost all of them
 compare coordinates. *"It is completely normal for compilers to
 optimise code"*: the converter already is a compiler from RM2k to bytecode.
@@ -52,6 +52,6 @@ general to the engine and not specific to ABL.
 on the cell of these variables?", which is the one of the race cars, the lights
 on map 11 and some two hundred and fifty pages of the game: `OP_CELL_TEST`, and
 a shortcut that runs those pages without the interpreter when they don't get past the
-condition. See `carrera-2-a-sesenta-cuadros.md`, which also has measured
+condition. See `race-2-at-60-frames.md`, which also has measured
 the limit of number 2 for the race: zero on the heaviest tick,
 because the hero changes cell every two ticks.

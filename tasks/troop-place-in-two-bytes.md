@@ -7,7 +7,7 @@ agents: [Hurón]
 assignee: taro
 ---
 
-From `vampires-dawn-arma-desde-su-toml.md` (Aguará, 2026-10-11):
+From `vampires-dawn-builds-from-its-toml.md` (Aguará, 2026-10-11):
 "277 troops of 255, 554 members" stops VD's whole cartridge, not one
 map. The check is `used.len() > 255` in mapdata's `emit.rs`; on
 2026-10-10 (406fc5e0) only the start of the members was widened to a word.

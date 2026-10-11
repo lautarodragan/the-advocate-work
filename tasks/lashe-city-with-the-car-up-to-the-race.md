@@ -17,12 +17,12 @@ race, exclusive."
 
 This is the plan; what gets executed are each milestone's tasks:
 
-    0. elegir-una-opcion-en-el-recorrido.md   the harness chooses option N
-    1. lashe-1-los-cuatro-sectores-con-auto.md  37, 38, 47, 48 (+39, 56) and 36
-    2. lashe-2-boss-wick-y-los-vidcasts.md     40 to 45: the favour and the ankle
-    3. lashe-3-la-planta-y-el-droide.md        57, 59 to 63, 164: AG7 joins the party
-    4. lashe-4-ag7-en-la-pelea.md              his skills, and the enemies'
-    5. lashe-5-la-cola-del-auto.md             36's closing through the three branches
+    0. playthrough-picks-option-n.md   the harness chooses option N
+    1. lashe-1-the-four-sectors-with-a-car.md  37, 38, 47, 48 (+39, 56) and 36
+    2. lashe-2-boss-wick-and-the-vidcasts.md     40 to 45: the favour and the ankle
+    3. lashe-3-the-recycling-plant-and-the-droid.md        57, 59 to 63, 164: AG7 joins the party
+    4. lashe-4-ag7-in-battle.md              his skills, and the enemies'
+    5. lashe-5-the-car-tail-end.md             36's closing through the three branches
 
 Everything measured here is from 2026-09-25 on `d118bc8`, with cartridges built
 separately in the scratchpad —`release` wasn't touched—. The scripts that measured it
@@ -376,16 +376,16 @@ armour 282. What it asks for:
 
 Each one is playable and is verified separately. The order is the list's.
 
-**1 is done** (2026-09-27, `lashe-1-los-cuatro-sectores-con-auto.md`):
+**1 is done** (2026-09-27, `lashe-1-the-four-sectors-with-a-car.md`):
 the six maps in `release`, 37 without stopping the converter and 36 forked
 with the end of the demo. What it leaves for the next ones: the dead doors
 from 37 to 41 and from 48 to 57, and the audio packages 38 brought —see there—.
 
-**2 is done** (2026-09-27, `lashe-2-boss-wick-y-los-vidcasts.md`):
+**2 is done** (2026-09-27, `lashe-2-boss-wick-and-the-vidcasts.md`):
 from 40 to 45 in `release`, `ChangeScreenTransitions` with the mosaic, and the cap
 of chained teleports raised from 8 to 32, which Wick's scene exceeded.
 
-**3 is done** (2026-09-27, `lashe-3-la-planta-y-el-droide.md`):
+**3 is done** (2026-09-27, `lashe-3-the-recycling-plant-and-the-droid.md`):
 57, 59 to 63 and 164 in `release`, `RecallToLocation`/`MemorizeLocation` and the
 remembered theme, and AG7-17 joins the party. Along the way the variable slot became
 eight bits (the game's no longer fit in seven). What it leaves for 4: AG7
@@ -428,7 +428,7 @@ confirmation between milestones.
 * **(2026-09-26)** AG7 **can't lose skills**, and the weapons charge SP
   if they do in the original: **faithful to the original**.
 * **(2026-09-26)** The droid's tutorial (164): **it's kept**.
-* **(2026-09-26)** 38 now fits in VRAM (`el-tilemap-del-fondo-lo-elige-el-reparto.md`): there's no need to split it.
+* **(2026-09-26)** 38 now fits in VRAM (`layout-picks-the-background-tilemap.md`): there's no need to split it.
 * **(2026-09-26)** The "REC" sign in 45: **stays as debt** for now.
 * **(2026-09-26)** Bribing the guard (switch 29) **can be played**: the
   `DetourOfficer` (event 19 of map 8, (62,32)) offers the bribe on his
@@ -474,7 +474,7 @@ confirmation between milestones.
    **(d) is done (2026-09-25)**: a fourth layout moves BG1's tilemap down to
    $1800 and gives 480 background with 384 sprite; 38 converts with 4
    background tiles and 37 sprite ones to spare, without changing any map's layout. See
-   `el-tilemap-del-fondo-lo-elige-el-reparto.md`.
+   `layout-picks-the-background-tilemap.md`.
 3. **The cartridge.** `release` with this is around 86% —the threshold for revisiting the
    4 MB decision— and the race comes after. And `test-main` doesn't fit with the
    18 maps. Does `test-main` stop carrying all maps (and the tests of the
@@ -505,7 +505,7 @@ confirmation between milestones.
 
 - **The lost frames** walking through 37 (23 events) and 38 (47): 8,
   which is the same size, was among the busiest; it's best to measure them like 11
-  (`el-mapa-11-se-rediseno.md`) before approving milestone 1.
+  (`map-11-redesigned.md`) before approving milestone 1.
 - **How much 38 weighs** in ROM: it doesn't convert.
 
 The hero's title isn't a risk: the comment on `CHANGE_HERO_TITLE` in

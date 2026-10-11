@@ -19,7 +19,7 @@ ROM tests of its own. That's why phase 2 comes right after.
 
 # The classification (Ñandú-petiso, 2026-10-02, before moving anything)
 
-The criterion is that of `decisiones-y-divergencias-por-repo.md`: what goes with
+The criterion is that of `decisions-and-divergences-by-repo.md`: what goes with
 ABL is what belongs to this game —its content, its tests, its recipes, its
 experiments, what decides what its cartridge carries—; what stays is what would hold
 for any game ported with the tools, even if it was
@@ -60,7 +60,7 @@ a judgement call that isn't mine to make.
 
 ## workflow/decisiones/ and divergencias/
 
-The table in `decisiones-y-divergencias-por-repo.md` (Hornero) holds as
+The table in `decisions-and-divergences-by-repo.md` (Hornero) holds as
 it is; what was added or changed afterwards:
 
 | file | where to | why |
@@ -93,25 +93,25 @@ tests, its recipes or its experiments, or decide what its cartridge carries.
 An engine bug found on an ABL map stays here: the fix lives
 in the runtime or the converter.
 
-* `todo/`: `cobertura-del-msu-1`, `el-audio-en-dos-pasos-lossy`,
-  `el-mundo-y-lo-que-sigue`, `las-fotos-diff-recortadas-y-el-montaje`,
-  `las-goldens-del-recorrido-vipers`, `las-goldens-pendientes-del-recorrido`.
-* `testing/`: `el-cartucho-a-8-mb` (the test ROM belongs to
-  `experimentos/`), `el-comun-35-y-la-radio`,
-  `el-contador-de-fortitude-no-se-ve`, `el-hp-de-los-enemigos-y-el-trueno`,
-  `el-juego-entero-sin-msu-1-cuenta`, `el-piloto-del-modo-7`,
-  `eventos-de-tropa-en-la-pelea` (the battle systems of ABL's
-  characters), `just-video-con-jugadas`, `la-guarda-de-los-bancos`
-  (the test lives in ABL), `las-pruebas-sin-agujeros-callados`,
-  `los-mapas-por-el-msu-1`, `maqueta-del-menu-en-alta-resolucion`,
-  `rom-de-prueba-del-menu-en-modo-5`, `una-fuente-para-la-alta-resolucion`,
-  `mundo-1-el-66-entra` to `mundo-7-camino-a-paradise`.
-* `wishlist/`: `caso-propio-para-la-escena-del-ascensor`,
-  `partir-test-comandos-golden`.
+* `todo/`: `msu-1-coverage`, `audio-in-two-lossy-steps`,
+  `world-and-what-follows`, `diff-photos-cropped-and-217-montage-as-in-rm2k`,
+  `goldens-of-the-neon-vipers-playthrough`, `playthrough-pending-goldens`.
+* `testing/`: `cartridge-at-8-mb-exhirom` (the test ROM belongs to
+  `experimentos/`), `common-35-and-the-radio-music`,
+  `fortitude-counter-is-not-shown`, `enemies-hp-hidden-and-the-takeoff-thunder`,
+  `plan-the-whole-game-without-msu-1-the-count`, `mode-7-pilot-for-the-zoom-of-the-diff-photos`,
+  `troop-events` (the battle systems of ABL's
+  characters), `just-video-with-playthroughs`, `bank-guard`
+  (the test lives in ABL), `tests-without-silent-holes`,
+  `plan-the-maps-via-the-msu-1`, `mock-up-the-menu-in-high-resolution`,
+  `test-rom-the-menu-in-mode-5-on-the-snes`, `font-for-high-resolution-or-a-narrower-one`,
+  `world-1-map-66-fits` to `world-7-the-road-to-paradise`.
+* `wishlist/`: `elevator-scene`,
+  `split-test-comandos-golden`.
 
-`las-pruebas-sin-opcodes.md` (Cotorra) touches both halves and stays
-here, with the Rust half, and so do `el-juego-de-pruebas.md` and
-`decisiones-y-divergencias-por-repo.md`: they're this repo's plan.
+`abl-tests-without-opcodes.md` (Cotorra) touches both halves and stays
+here, with the Rust half, and so do `plan-an-rm2k-game-for-tests.md` and
+`decisions-and-divergences-by-repo.md`: they're this repo's plan.
 
 # What was done
 

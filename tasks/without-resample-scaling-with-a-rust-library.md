@@ -88,7 +88,7 @@ The binaries, in `release`, before and after: `rm2k-render` 1,458,328 →
 
 ## In ABL
 
-In a clone of ABL outside `/shared`, branch `sin-resample` on `d6053f5`, with
+In a clone of ABL outside `/shared`, branch `without-resample-scaling-with-a-rust-library` on `d6053f5`, with
 this branch's tools first in the PATH:
 
 * `abl.sfc` goes from `35c76500…` to `0072d314…`, the same with `NO_CACHE=1`
@@ -124,6 +124,6 @@ without failures.
 
 * Install `rm2k-render` and `images`: `just -f tools/justfile install
   rm2k-render images`. No Python changed.
-* Bring into `/shared/abl-snes` the two commits of the clone's `sin-resample`
+* Bring into `/shared/abl-snes` the two commits of the clone's `without-resample-scaling-with-a-rust-library`
   branch (`/extras/scratch/corbatita/abl`): the battler patches and the
   goldens.

@@ -13,7 +13,7 @@ as a project knob, on top of what this one leaves: the compositor, the table
 of advances, the layout by pixels and the screens in composed text are
 reused by both.
 
-The study, the sheet and what it would cost: `tasks/una-fuente-para-la-alta-resolucion.md`,
+The study, the sheet and what it would cost: `tasks/font-for-high-resolution-or-a-narrower-one.md`,
 in ABL, and `experimentos/fuentes/` there.
 
 ## Done (Calandria)

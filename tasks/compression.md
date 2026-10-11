@@ -28,7 +28,7 @@ Compressing maps has an extra challenge, because we stream them live from the
 cartridge, and changing their format would affect random access.
 
 **Measured by class and algorithm, with the cost of decompressing each thing and the
-order in which it is best done**: `tasks/la-compresion-de-mapas-y-graficos.md`,
+order in which it is best done**: `tasks/compression-of-maps-and-graphics.md`,
 from 2026-09-26. The battle animations are already stored without their empty tiles,
 the maps' tiles and grids go in LZ2 —the grid is decompressed
 whole to WRAM, so random access stayed the same— and identical poses

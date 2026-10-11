@@ -6,9 +6,9 @@ status: draft
 ---
 
 What is left out of Vampires Dawn because of VRAM, measured by Aguará on
-2026-10-11 (`vampires-dawn-arma-desde-su-toml.md`) and confirmed
+2026-10-11 (`vampires-dawn-builds-from-its-toml.md`) and confirmed
 by Mulita when returning the eleven from "the ROM"
-(`una-cuantizacion-por-personaje.md`, 10 out). Each one with its
+(`one-quantization-per-character-for-the-poses.md`, 10 out). Each one with its
 error in the comment of `excluded` in `vampires-dawn/rm2k-snes.toml`
 (ports `a85b7e3`); not checked today.
 
@@ -24,13 +24,13 @@ error in the comment of `excluded` in `vampires-dawn/rm2k-snes.toml`
 | 402, 403 Schneeklippe | "there is no layout for a panorama in mode 1 that holds … 435 panorama tiles" |
 
 **What is known of the cause**: it isn't the background. Tile merging
-(`fusionar-tiles-parecidos.md`, Cardón, 2026-10-06) brings any
+(`merge-similar-tiles-when-the-background-doesnt-fit.md`, Cardón, 2026-10-06) brings any
 background down to the ceiling and "it is no longer what blocks any of them"; what
 doesn't fit is the sprites and the upper layer, and merging background doesn't fix
 it. Cardón left noted the possible next step: degrade the sprites with the same
 criterion, "another kind of merging, more expensive: they are poses and palettes". The
 window of 15 and 150 isn't the System's: its bank is 256 fixed tiles
-(Tijereta, `la-ventana-en-el-banco-de-tiles.md`). That 150, 165 and
+(Tijereta, `window-in-the-tile-bank.md`). That 150, 165 and
 225 fit alone and not in the whole cartridge is because in the whole one
 more pages compile and more events fit (Aguará).
 

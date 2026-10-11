@@ -7,8 +7,8 @@ assignee: taro
 ---
 
 From taro, on 2026-10-03: "let's go with 1", among the paths for ABL's
-farm (`tasks/mundo-8-paradise.md` and
-`mundo-7-camino-a-paradise.md`, option D, in ABL). It belongs to the engine: it serves
+farm (`tasks/world-8-distant-paradise-inside.md` and
+`world-7-the-road-to-paradise.md`, option D, in ABL). It belongs to the engine: it serves
 any crowded map, of any game.
 
 What was measured (Puma, 2026-10-01) on 127: 22 events that walk and 18
@@ -261,7 +261,7 @@ whether baking leaves them standing right.
 
 # ABL
 
-On its branch `cache-de-ranuras` (see its `tasks/mundo-9-la-granja.md`):
+On its branch `cache-de-ranuras` (see its `tasks/world-9-the-celebration-at-the-farm.md`):
 
 * **`below = 129`**: 127 and the grove (128), which is the following night.
 * **The cut**: 108's fork returns the exit to the farm to the game's

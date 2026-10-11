@@ -7,7 +7,7 @@ assignee: taro
 agents: [Tijereta]
 ---
 
-From the re-sweep of 2026-10-10 (research `2026-10-10-otros-juegos-de-nuevo` in the book): they are the two whole-game walls Vampires Dawn has left. The music ceiling counts every file in `Music/`, used or not. Same line as `los-encuentros-en-dos-bytes.md`.
+From the re-sweep of 2026-10-10 (research `2026-10-10-otros-juegos-de-nuevo` in the book): they are the two whole-game walls Vampires Dawn has left. The music ceiling counts every file in `Music/`, used or not. Same line as `encounters-with-two-byte-indices.md`.
 
 ## Done, on 2026-10-10 (Tijereta)
 

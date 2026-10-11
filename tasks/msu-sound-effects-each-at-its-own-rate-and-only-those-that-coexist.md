@@ -118,7 +118,7 @@ ended up fine.
 **Uploading a sound effect through the MSU-1 port** costs the same as uploading it from
 the ROM —the same command 3 of the driver, three bytes at a time, with the CPU
 dedicated— plus three reads of `MSU_DATA` per trio. From the loads table
-of `efectos-de-calidad-con-msu-1.md` (snes9x, the cartridge's `.msu` against
+of `quality-sound-effects-with-msu-1.md` (snes9x, the cartridge's `.msu` against
 sound effects from the ROM) and the bytes of each side: **1.64 frames per KB** on 8,
 **1.51** on 10 and **1.58** in the battle; from the ROM, 1.45 (`emit.rs`). Plus
 one lookup per package, one or two frames in Mednafen. Music playing

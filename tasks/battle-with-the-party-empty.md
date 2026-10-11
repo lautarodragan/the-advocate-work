@@ -6,7 +6,7 @@ status: draft
 ---
 
 Mulita left it on 2026-10-10 in "Lo que no cubre" of
-`el-grupo-vacio-al-empezar.md`: "A battle with the party empty.
+`empty-party-at-the-start.md`: "A battle with the party empty.
 RM2k loses it immediately (`Game_Battle::CheckLose` with nobody who can
 act); the runtime wasn't looked at or tested." The rest of the empty party
 —not drawing itself, walking, the menu, saving and loading— is covered by

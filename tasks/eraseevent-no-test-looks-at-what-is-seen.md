@@ -5,7 +5,7 @@ type: test
 status: draft
 ---
 
-Hurón left it on 2026-10-06 in `eraseevent-de-verdad.md`: the
+Hurón left it on 2026-10-06 in `eraseevent-for-real.md`: the
 `EraseEvent` tests (three from the events crate and
 ABL's `pruebas/rpgmaker/test_borrar_evento_de_verdad.py`, in
 `test-special`) "do not cover that the event stops being drawn, that it stops

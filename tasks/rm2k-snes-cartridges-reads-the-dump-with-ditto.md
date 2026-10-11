@@ -6,7 +6,7 @@ status: done
 assignee: taro
 ---
 
-Zorzal noted it on 2026-09-29 (`rust-ditto-como-biblioteca.md`):
+Zorzal noted it on 2026-09-29 (`rust-ditto-as-a-library-and-rm2k-rules.md`):
 since Ditto's library is the only place in Rust that knows how to read the
 dump, there's one hand-written reader left in `tools/rm2k-snes/cartridge/src/cartridges.rs`,
 which reads `maps.json` to know the type of each node of the tree. Move it to

@@ -19,7 +19,7 @@ status: done
 To take it the `ShowChoice` cursor has to be moved, which the harness does not do today;
 see `Recorrido.activar` and `mirar_a`. The rest is already there: the path up to the
 cutscene is the same, and the detail of each event is written in
-`tasks/el-recorrido-de-los-neon-vipers.md`.
+`tasks/neon-vipers-walkthrough.md`.
 
 Why it is worth it: the long jumps are the extreme case of `salto_avanzar_heroe`, and
 this week's stuck-jump bug lived right there.
@@ -47,7 +47,7 @@ which nobody returns, and the original RPG_RT stays just as shifted. See
 ## As of 2026-09-26: covered
 
 `pruebas/abl/test_recorrido_vipers_otras_ramas_golden.py`, with
-`Recorrido.elegir` —see `elegir-una-opcion-en-el-recorrido.md`—. Three
+`Recorrido.elegir` —see `playthrough-picks-option-n.md`—. Three
 cases, which start with `ir_al_mapa` on the HQ's roof and go in through the door:
 the pipe path is already played by the "Yes" stretch.
 

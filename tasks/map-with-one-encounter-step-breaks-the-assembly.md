@@ -7,7 +7,7 @@ assignee: taro
 ---
 
 Surubí found it on 2026-09-29 while moving the battle tables to Rust
-(`rust-el-piloto-de-la-pelea.md`): a map with `encounter_steps` 1 gives
+(`rust-the-converter-pilot-the-battle-tables.md`): a map with `encounter_steps` 1 gives
 `enc_base` 65536, which does not fit in a `.word`. The Python emitted it
 anyway and the Rust reproduces it on purpose, because its test pins the
 Python's output. No ABL map has 1, but `--test-encounters 1` would break the

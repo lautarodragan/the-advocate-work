@@ -6,7 +6,7 @@ status: done
 assignee: taro
 ---
 
-From taro, on 2026-09-30, answering about `eventos-de-tropa-en-la-pelea.md`
+From taro, on 2026-09-30, answering about `troop-events.md`
 (Yarará):
 
 - **Common 35 (`ResetAfterBattles`).** Without it, the summon stays in the

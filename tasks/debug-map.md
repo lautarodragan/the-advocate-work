@@ -82,7 +82,7 @@ Two paths, and it ended up a mix:
 
 # The doors
 
-*Since `el-mapa-de-debug-2.md` the branch isn't fixed: it's chosen by the companion
+*Since `debug-map-2-the-companion-picks-the-branch.md` the branch isn't fixed: it's chosen by the companion
 who joins via an NPC, one at a time, and the Back Alleys leave Talan where
 the cutscene ends. What's below is how Arden's branch was built, which
 still holds for that branch.*
@@ -142,7 +142,7 @@ race yes: without it, reaching the start line means the four sectors with the ca
 
 # The companions
 
-*Changed in `el-mapa-de-debug-2.md`: the NPCs turn on their branch and remove the other
+*Changed in `debug-map-2-the-companion-picks-the-branch.md`: the NPCs turn on their branch and remove the other
 companion.*
 
 One NPC for each —Arden (15), Saldra (17), AG7-17 (18)— with the

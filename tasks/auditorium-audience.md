@@ -107,7 +107,7 @@ open cells go from 197 to 166: the 31, no more.
 # What was needed from the mechanism
 
 The map fork already existed —map 11 debuted it, see
-`el-mapa-11-se-rediseno.md`— and was not touched. The only thing added to it is
+`map-11-redesigned.md`— and was not touched. The only thing added to it is
 a third operation in the ChipSet picture's recipe, `desde_charset`, which is
 the first that **brings pixels from outside the ChipSet**.
 

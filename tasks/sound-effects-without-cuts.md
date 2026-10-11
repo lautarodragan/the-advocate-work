@@ -9,7 +9,7 @@ assignee: taro
 # What
 
 Improve how the sound effects sound. The limits they had —see
-`audio-sound-effects.md`— were intentional, all because of ARAM: they go in
+`sound-effects.md`— were intentional, all because of ARAM: they go in
 each map's audio package, at 6 kHz and at most three quarters of a second
 (a longer one repeats its last 0.4 s until it lasts as long as in RM2k).
 
@@ -37,7 +37,7 @@ proposals there taro chose the thunder one, which leaves the rain whole for free
 What the battle and map 3 still cost waits for freeing up entries in the
 directory, in another task.
 
-Done the same day, in `el-directorio-de-los-efectos.md`: of the 175 pairs
+Done the same day, in `effects-directory.md`: of the 175 pairs
 that went down, 117 remain, and none goes down compared with before. **To the themes of
 the packages that pay for the sound effects it gives nothing back** —the battle one,
 `evilrhys`, `TF3_1_awe`, `3D-Galax` and `Gaden`—: they're limited by their own
@@ -191,7 +191,7 @@ costs the last copy of `snes_music.copias`: **the first, the `SPACE79` of
 `T_ProjectJustice_DiscLoad` and `dcbest`, 17.9 → 16.0 kHz**; the second, the
 copy before it, and so on. Freeing up entries is "giving the sound effects their own
 place in the directory" (see "Sin el techo del mapa 3" in
-`la-calidad-de-la-musica.md`), which means redoing `paquete_de_audio.s`.
+`quality-of-the-music.md`), which means redoing `paquete_de_audio.s`.
 
 **The ones that cost no instrument but do cost the sound effects**: in
 packages 9, 18, 20, 28 and 32, with some theme that may already be playing, the
@@ -317,7 +317,7 @@ without a theme; in the game they'd pay what's in the table.
 
 **Without MSU-1, `FadeOutBGM` also silences the sound effects** until another
 theme starts. The thunder at the end of map 3 is one of those that fall there.
-Fixed on 2026-09-26: `tasks/el-fundido-del-tema-calla-los-efectos.md`.
+Fixed on 2026-09-26: `tasks/theme-fade-silences-the-sound-effects.md`.
 
 # The earlier work: 2026-09-24
 

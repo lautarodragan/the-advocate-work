@@ -10,7 +10,7 @@ status: wishlist
 Have a skill —the party's or an enemy's— draw its `animation_id` over
 the battle scene, like `Game_BattleAlgorithm::GetAnimationId`. Today none is
 drawn: neither the seven of the intro's party nor `ShortCircuit` (number 62),
-which milestone 4 of Lashe City (`lashe-4-ag7-en-la-pelea.md`) asked for.
+which milestone 4 of Lashe City (`lashe-4-ag7-in-battle.md`) asked for.
 
 # Status
 

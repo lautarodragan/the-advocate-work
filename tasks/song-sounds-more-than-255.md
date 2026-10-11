@@ -7,7 +7,7 @@ assignee: taro
 agents: [Hornero, Tijereta]
 ---
 
-Measured by Calandria on 2026-10-11 (`las-exclusiones-que-sobran.md`). Same family as `la-musica-y-las-tropas-en-dos-bytes.md`. First check how Tijereta's task on sounds in more than one bank turned out, since it touches the same thing.
+Measured by Calandria on 2026-10-11 (`exclusions-left-over-in-the-ports.md`). Same family as `music-and-troop-members-without-the-one-byte-ceiling.md`. First check how Tijereta's task on sounds in more than one bank turned out, since it touches the same thing.
 
 ## Done, on 2026-10-11 (Tijereta)
 

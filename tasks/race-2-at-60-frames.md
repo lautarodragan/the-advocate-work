@@ -8,7 +8,7 @@ assignee: taro
 
 # What
 
-Milestone 2 of `la-carrera-y-lo-que-sigue.md`. It starts from `main` at
+Milestone 2 of `race-and-what-comes-next.md`. It starts from `main` at
 `69e66ed`. It's considered done with dropped frames at zero or nearly so on
 49, 52 and 54 while driving, and a test has to enforce it: the walkthrough
 `pruebas/abl/test_recorrido_carrera_golden.py` already drives with a pilot.
@@ -114,7 +114,7 @@ What each path says, as a limit:
   cycles, one line— plus reading the list and the state: **~1.7 lines per
   page**, ~70 for the 41 of a lap, against ~310 at the start.
 * **"Run the parallels only when something changes cell"** (idea 2 of
-  `optimizar-los-eventos-paralelos-al-compilar.md`): not done, and its limit
+  `optimise-parallel-events-when-compiling.md`): not done, and its limit
   is zero for what matters. The hero advances half a cell per tick, so he
   changes cell every two ticks and on those all 41 run anyway: the heaviest
   tick doesn't go down. Besides, all 41 write the same two variables (36 and

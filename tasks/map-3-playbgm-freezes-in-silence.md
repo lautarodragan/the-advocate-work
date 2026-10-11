@@ -6,7 +6,7 @@ status: done
 assignee: taro
 ---
 
-Measured on 2026-09-26 while verifying `al-mapa-3-le-falta-un-efecto.md`:
+Measured on 2026-09-26 while verifying `map-3-may-be-missing-a-sound-effect.md`:
 without MSU-1, as soon as map 3 appears (after the fade) the `PlayBGM
 TF3_1_awe` freezes **86 frames (1.4 s) with the picture still and in silence**.
 TF3 is not in map 3's package and has to be uploaded, but of the 61,614 B that

@@ -8,7 +8,7 @@ assignee: taro
 
 # What taro reported
 
-Playing `tasks/el-mapa-de-debug.md` (it starts from `main` at `455f9fc1`,
+Playing `tasks/debug-map.md` (it starts from `main` at `455f9fc1`,
 brought to `8308033b` with the world's milestone 4):
 
 > - Choosing the Back Alleys (AFTER THE DIRECTOR IS SHOT) leaves you where the

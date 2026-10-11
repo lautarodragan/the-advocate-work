@@ -6,7 +6,7 @@ status: wishlist
 ---
 
 Proposed on 2026-09-26 by the `just cartuchos` optimisation (see
-`cartuchos-en-caliente-en-diez-segundos.md`): today touching any file in
+`warm-cartridges-in-ten-seconds.md`): today touching any file in
 `rom/src/` reconverts everything, but the converter reads a single file from
 `rom/src/`, `ram_lejana.s` (measured with an audit hook). With one seal for
 the converter (flags, cases, `tools/`, binaries, `parches/manual`, ceilings and

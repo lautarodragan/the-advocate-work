@@ -57,4 +57,4 @@ Two things that were hard and are worth knowing:
 
 With all that, `just pruebas` green and no golden moved.
 
-**taro, on 2026-09-26: it improved, but it is not perfect; he suspects what is left is lag and not a bug.** The chips investigation measured that on the terrace, in the heavy loops, almost 200 of the 262 lines go to recomputing palettes (`destello_tick` + `flashes_tick`): it continues in `la-terraza-pierde-cuadros-en-los-destellos.md`.
+**taro, on 2026-09-26: it improved, but it is not perfect; he suspects what is left is lag and not a bug.** The chips investigation measured that on the terrace, in the heavy loops, almost 200 of the 262 lines go to recomputing palettes (`destello_tick` + `flashes_tick`): it continues in `terrace-drops-frames-during-the-flashes.md`.

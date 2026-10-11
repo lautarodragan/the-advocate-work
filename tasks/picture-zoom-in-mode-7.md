@@ -11,7 +11,7 @@ definitely the way to approach the photos", and he chose variant 4, the
 **vq hybrid**: the still photo at full resolution in mode 1, as today, and
 when the zoom starts mode 7 with a texture of 255 tiles chosen by
 vector quantization. The pilot, what was measured and the cost of bringing it to the
-game: `tasks/el-piloto-del-modo-7.md`, in ABL. It belongs to the engine:
+game: `tasks/mode-7-pilot-for-the-zoom-of-the-diff-photos.md`, in ABL. It belongs to the engine:
 any large picture with zoom, from any game.
 
 Done by Chajá, from `main` at `2c05f8a0`; ABL in a clone, branch

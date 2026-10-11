@@ -7,9 +7,9 @@ assignee: taro
 ---
 
 From taro, on 2026-09-30: "keep going with all of those", after the CharSets
-(`rm2k-render-los-charsets.md`, Yaguarundí). It's another part of
-`rm2k-render-dibuja-todo-rm2k.md`, in parallel with the other
-(`rm2k-render-pelea.md` and `rm2k-render-pantallas.md`).
+(`rm2k-render-draws-the-charsets.md`, Yaguarundí). It's another part of
+`rm2k-render-draws-everything-from-rpg-maker.md`, in parallel with the other
+(`rm2k-render-draws-the-battle.md` and `rm2k-render-draws-the-screens.md`).
 
 Scope: the battle animations (battle_animations.py, animation.py), the enemies and the battle backgrounds (battle_scenes.py, scene.py).
 

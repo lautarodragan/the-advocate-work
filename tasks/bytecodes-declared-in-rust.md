@@ -6,7 +6,7 @@ status: done
 assignee: taro
 ---
 
-From taro, on 2026-10-02. It goes **after** `las-pruebas-sin-opcodes.md`,
+From taro, on 2026-10-02. It goes **after** `abl-tests-without-opcodes.md`,
 so that no Python test needs the numbers.
 
 - A crate in `tools/rm2k-snes/` (for example `rm2k-snes-bytecode`) declares

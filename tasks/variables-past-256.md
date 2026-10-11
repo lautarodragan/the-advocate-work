@@ -6,7 +6,7 @@ status: draft
 ---
 
 Carpintero declared it on 2026-10-06 as a degradation
-(`degradar-en-vez-de-fallar.md`, point 2): the variables that don't have
+(`degrade-instead-of-failing.md`, point 2): the variables that don't have
 room drop out of the list with a WARNING, the page that uses one is left
 out, and so is an event whose page condition uses one. Before, it stopped
 the build; now it is a loss that no task follows.

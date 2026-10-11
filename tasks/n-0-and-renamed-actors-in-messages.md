@@ -6,7 +6,7 @@ status: draft
 ---
 
 Debt that Carpintero declared on 2026-10-05 when baking the names
-(`el-nombre-del-heroe-en-los-mensajes.md`): `with_names`, in
+(`n-n-in-messages.md`): `with_names`, in
 `rm2k-snes/events/src/compile.rs`, writes the name from the database
 into each `\N[n]` only if no `ChangeHeroName` in the game touches that
 actor. `\N[0]` —the leader, which depends on who is in the party— and the
@@ -17,7 +17,7 @@ page drops whole. It is still like that in the-advocate `fc6f7456`; the test
 What is known about the cause: the ROM's compositor doesn't write a name
 at run time. `ChangeHeroName` doesn't compile today either, so a
 page that renames is already out on its own (the
-`EnterHeroName` screen is something else: `la-pantalla-del-nombre-del-heroe.md`).
+`EnterHeroName` screen is something else: `hero-name-screen.md`).
 
 **Not measured today**: how many pages it leaves out in each game. On 2026-10-05
 `\N[n]` in general affected four games —The Frozen World cut

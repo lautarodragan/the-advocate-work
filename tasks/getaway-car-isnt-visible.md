@@ -52,7 +52,7 @@ that have nothing to do with cars. The first one that showed up is
 **It moved no golden**: `just pruebas` green with the fix. The
 `destello-compartido-2` thing mentioned above wasn't this but the case of the
 other task, which flashed the hero and changed the converter's palette
-allocation for map 6: see `dos-destellos-a-la-vez`.
+allocation for map 6: see `two-flashes-at-once`.
 
 It is guarded by `pruebas/rpgmaker/test_refresco_con_automatica.py`, which
 starts in `en-4` with 130 and 132 and checks that the red one is drawn and

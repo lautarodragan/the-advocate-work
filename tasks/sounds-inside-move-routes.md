@@ -18,7 +18,7 @@ package (they are if the page asks for them too).
 
 # Done
 
-2026-09-27, in `carrera-3-lo-que-se-ve-y-se-oye.md`: order 35
+2026-09-27, in `race-3-what-is-seen-and-heard.md`: order 35
 plays in `MoveEvent`s, on the hero and on events. On map 3 it doesn't:
 the effects of `evilrhys`'s scene don't fit in its package. Which maps
 gained effects and which didn't, and why, is there and in

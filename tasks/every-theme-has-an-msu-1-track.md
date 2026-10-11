@@ -20,7 +20,7 @@ What it implies:
 * Each theme's track number is decided today by `PISTAS_MSU`; with all of
   them, the numbering can come from the theme's index.
 * Consequences in the ROM: with MSU-1 **no** music sample is uploaded
-  (`done/` or `con-msu-1-no-se-suben-las-muestras-del-tema.md`), so the whole
+  (`done/` or `with-msu-1-the-theme-samples-arent-uploaded.md`), so the whole
   ARAM is left for the sound effects; it is better done **after** the task of
   the sound effects with MSU-1, or coordinated with it.
 * The tracks go to `/shared/msu/` with `just entregar --actualizar-msu` (the

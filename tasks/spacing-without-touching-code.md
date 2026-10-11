@@ -11,7 +11,7 @@ with +1. I like all of them, anyway, and I'd like to keep the knob". And
 he asked whether changing the spacing requires touching code. Today it does, in three fixed
 places: the menu's bank (with +1 it is 2 tiles short, with +2 26), the names in
 counted cells (slots, battle skills) and the pair pool of the
-shop and the battle. See `tasks/el-espaciado-entre-letras.md`.
+shop and the battle. See `tasks/letter-spacing-as-a-knob.md`.
 
 ## Done (Benteveo)
 
@@ -104,7 +104,7 @@ come to know 54 skills) knowing all of them, with the list open.
 **Already with 0 the pool runs out**: the seventh row of skills comes out half drawn
 and the first line of the commands doesn't come out. With 1 it runs out at the sixth.
 It predates the knob and wasn't fixed: see
-`tasks/la-lista-de-habilidades-agota-el-pozo.md`.
+`tasks/battle-skill-list-exhausts-the-pair-pool.md`.
 
 ### ABL at +1
 

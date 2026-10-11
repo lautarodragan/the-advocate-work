@@ -13,7 +13,7 @@ It's what makes each character's systems work: a switch-type skill
 it run in battle.
 
 **The mechanism already exists** since 2026-09-21, with Talan's system
-(`el-sistema-de-batalla-de-talan.md`): the troop pages are compiled
+(`talan-battle-system.md`): the troop pages are compiled
 deduplicated, they run in battle with the same interpreter as the maps, their
 messages come out on the battle screen, and a switch-type skill turns on its
 switch. What's missing is **completing commands**: what a troop page can do

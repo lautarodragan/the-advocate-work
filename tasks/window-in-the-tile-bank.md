@@ -7,7 +7,7 @@ agents: [Tijereta]
 assignee: taro
 ---
 
-What was left behind `la-ventana-con-mas-colores` (Tijereta, 2026-10-05).
+What was left behind `window-with-more-than-15-colors` (Tijereta, 2026-10-05).
 With the original System and the colors already reduced by Adeleine, the message
 window of The Frozen World asks for 266 tiles of 256 and that of The Book of
 Three 267; Dooms 2's actor choice goes over `$4800`.

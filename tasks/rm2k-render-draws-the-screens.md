@@ -7,9 +7,9 @@ assignee: taro
 ---
 
 From taro, on 2026-09-30: "go on with all of those", after the CharSets
-(`rm2k-render-los-charsets.md`, Yaguarundí). It is another part of
-`rm2k-render-dibuja-todo-rm2k.md`, in parallel with the other one
-(`rm2k-render-pelea.md` and `rm2k-render-pantallas.md`).
+(`rm2k-render-draws-the-charsets.md`, Yaguarundí). It is another part of
+`rm2k-render-draws-everything-from-rpg-maker.md`, in parallel with the other one
+(`rm2k-render-draws-the-battle.md` and `rm2k-render-draws-the-screens.md`).
 
 Scope: the FaceSets (menus.py), the System of the windows (window.py) and the ShowPicture sign (picture.py).
 
@@ -175,7 +175,7 @@ From `menus.face_of`, the crop. From `events.Pictures._read`, the
 System. The unused import of `load_image` in `snes_convert.py`.
 
 **`load_image` stays**: it is used by `scene.py` and `animation.py`, which
-belong to the battle (Coatí, `rm2k-render-pelea.md`). If that task moves
+belong to the battle (Coatí, `rm2k-render-draws-the-battle.md`). If that task moves
 them to `rm2k-render`, it can be deleted.
 
 **Dead and not mine**: `picture.render` and `picture.report` are called by

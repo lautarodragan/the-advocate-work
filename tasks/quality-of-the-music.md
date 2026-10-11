@@ -91,7 +91,7 @@ overwrite each other and the last one plays: 864 notes.
 Every steal of a voice that is playing is a `KON`, which sets the envelope to
 zero at once: a click. Today there are **204 notes cut while playing**,
 **~1,100 release tails cut** on reusing the voice, and the **329 notes released
-early** of `notas-que-se-sueltan-antes-de-tiempo.md`. It is what best explains
+early** of `notes-released-too-early.md`. It is what best explains
 "notes that cut off very abruptly".
 
 ## The samples, at 4-8 kHz
@@ -496,7 +496,7 @@ per-key panning and the ramp of 5.
 Done on 2026-09-26 (commits "Música: el stream es por nota, y el 65816 lo
 expande a las mismas escrituras" and "Música: la ROM anota lo que le pide al
 DSP, y una prueba lo compara cuadro a cuadro"). It is idea 1 of
-`la-musica-pesa-789-kb.md`. The reason for each decision is where it lives:
+`music-weighs-789-kb.md`. The reason for each decision is where it lives:
 "the per-note format" in `tools/audio/snes_music.py`, the header of
 `tools/protocol/music.toml` and `music_frame` in `rom/src/musica.s`.
 
@@ -1156,8 +1156,8 @@ in parentheses in the phrase.
 ## 6. The samples: budget per package and zones
 
 It is what changes the sound the most (10 alone already gets closer than 07)
-and the most expensive: it is `presupuesto-de-muestras-por-paquete.md`, and
-behind it `una-muestra-por-instrumento.md`. taro listened to variant 08/10 and
+and the most expensive: it is `samples-per-package.md`, and
+behind it `several-samples-per-instrument.md`. taro listened to variant 08/10 and
 said it makes "a noticeable difference", and approved starting.
 
 ### Done, on 2026-09-26
@@ -1357,7 +1357,7 @@ per-note format, the allocation and the ramp, the air per theme and the
 samples. What is left are details, in the order I would do them:
 
 1. **Covering it**: the battle's fade
-   (`el-fundido-al-entrar-y-salir-de-la-pelea.md`), which is the only thing of
+   (`fade-on-entering-and-leaving-battle.md`), which is the only thing of
    step 6 that is seen often.
 2. ~~**Map 3's sound effects**~~: done without touching them, in "Without map
    3's ceiling". If more is needed —the kick at the 19 from before—, giving the
@@ -1717,7 +1717,7 @@ The table above has each package's upload. Where it falls:
   second more, in each battle.
 * **`wishlist/velocidad-presupuesto-percusion.md` goes away with A**: the loop
   that lowers the percussion 10% at a time is `Banco`'s, which A replaces.
-* **`musica-del-lado-del-spc700.md`**: if the sequencer ever goes to the SPC700,
+* **`music-on-the-spc700.md`**: if the sequencer ever goes to the SPC700,
   it needs a buffer in the ARAM, and with A each package fills it. It would
   have to be reserved in the budget (it is changing the margin).
 

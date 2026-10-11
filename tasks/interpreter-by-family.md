@@ -6,7 +6,7 @@ status: done
 ---
 
 Dispatch has been by table since 2026-09-25 (part C of
-`main-s-segunda-etapa.md`), so it can be done now. Watch out: the test
+`second-stage-of-splitting-main-s.md`), so it can be done now. Watch out: the test
 `test_la_entrada_k_de_la_tabla_salta_al_manejador_del_opcode_k` requires each
 handler to stay in `correr_codigo`'s bank.
 

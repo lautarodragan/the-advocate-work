@@ -9,7 +9,7 @@ assignee: taro
 From taro, on 2026-09-28: "Now I want to implement the UI improvements
 we made in the item menu for the equipment menu".
 
-The item work is in `la-pantalla-de-items-como-el-original.md`
+The item work is in `items-screen-like-the-original.md`
 (Jacarandá, `f3b0cc90`): the System windows on BG1 behind BG2's
 text, and the red bar as the cursor instead of the ">". Its "Equipar y
 habilidades" section already said what was useful: the mechanism, but with its own set of
@@ -38,7 +38,7 @@ The captures with RPG_RT and Wine, at 320x240, in
 Everything on black, one column, the ">" as cursor, the parameters in two
 columns of two —"Attack 280> 95 Defense 147>147" reached the edge of the
 screen— and the terms in white. The "up" and "down" colours were already
-there (Tero, `el-menu-como-rm2k.md`).
+there (Tero, `menu-like-rm2k.md`).
 
 ## What was done
 

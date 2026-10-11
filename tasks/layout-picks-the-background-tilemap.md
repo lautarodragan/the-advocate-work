@@ -5,7 +5,7 @@ type: refactor
 status: done
 ---
 
-Option (d) of question 2 about map 38 in `lashe-city-hasta-la-carrera.md`:
+Option (d) of question 2 about map 38 in `lashe-city-with-the-car-up-to-the-race.md`:
 that the converter pick BG1's tilemap address per map, as it already picks
 `OBSEL` and `BG12NBA`. Measured and implemented on 2026-09-25 on `dd73115`.
 

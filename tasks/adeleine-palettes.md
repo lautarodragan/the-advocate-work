@@ -7,7 +7,7 @@ agents: [Codex, Hornero]
 assignee: taro
 ---
 
-Measured by Calandria on 2026-10-06, in `uruya-en-4bpp.md`: with the
+Measured by Calandria on 2026-10-06, in `experiment-uruya-in-4bpp.md`: with the
 8 palettes of 15 that `adeleine reduce` decides, Uruya (Vampires Dawn, map
 165) ends up with 19 distinct colors and 33.5% of the pixels changed;
 with a grouping of tiles and 15 colors per group, 73 colors and 17.7%.

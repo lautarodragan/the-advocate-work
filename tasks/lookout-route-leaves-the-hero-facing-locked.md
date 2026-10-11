@@ -125,7 +125,7 @@ RM2k's, and the suite only looks at it up to talking to Emily—, and nothing of
 
 ## Speed 3 was not the game's (2026-10-05)
 
-I found it with Dalia's tank (ABL, `el-tanque-de-dalia-se-vuelve-dalia.md`):
+I found it with Dalia's tank (ABL, `dalia-tank-turns-into-dalia-on-the-bridge.md`):
 in RM2k Talan does **not** reach Paradise at 3. Dr. Vago heals his ankle
 (map 81, event 6, page 1) with a `[28]` that runs during a
 `TintScreen` with wait, and the ROM dropped that wait: the next route

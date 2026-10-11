@@ -8,7 +8,7 @@ assignee: taro
 
 # What
 
-Milestone 1 of `lashe-city-hasta-la-carrera.md`, which is where the whole context
+Milestone 1 of `lashe-city-with-the-car-up-to-the-race.md`, which is where the whole context
 and the measurements are. It blocks the others.
 
 Put into `_DE_RELEASE` the four sectors with a car —**37, 38, 47 and 48**—, which
@@ -84,7 +84,7 @@ symbol is still at $01:F874 (~1.9 KB free), unchanged. **Cartridge**: from
 measured. **CGRAM**: 37 draws 5 graphics with a borrowed palette (the two tile
 doors, `Chara2:4`, `Crown1:3`, `Future2:5`), 38 three (`BLObjs:2`, `Chara2:2`,
 `People4:0`). **Frames lost** walking 1200 frames in steps of 50, there and back,
-the method of `el-mapa-11-se-rediseno.md`: 0 on the four cells of 37,
+the method of `map-11-redesigned.md`: 0 on the four cells of 37,
 0 or 1 on the five of 38, 0 on 47 and 48 (8, under the same
 conditions, gives 0 to 2).
 

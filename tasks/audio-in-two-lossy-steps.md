@@ -21,7 +21,7 @@ deciding anything.
 # Status
 
 Noted on 2026-09-21, not started. It is the third and fourth class of patch in
-`parches-de-decisiones-artisticas.md`, which were left out because the key "the
+`artistic-decision-patches.md`, which were left out because the key "the
 track" doesn't identify the decision.
 
 # Today's four sacrifices, and which step they belong to
@@ -39,7 +39,7 @@ track" doesn't identify the decision.
 SoundFont + the ARAM budget + the priority.
 
 (On 2026-09-26, with the per-package budget —step 6 of
-`la-calidad-de-la-musica.md`—, 2 disappeared: they all contribute. 3 and 4
+`quality-of-the-music.md`—, 2 disappeared: they all contribute. 3 and 4
 are now a single one: each sample with what its worst package leaves it, and the
 function becomes one of all the tracks + the SoundFont + **the packages of each
 map, with its effects and what may come in already playing**. The priority is gone.)
@@ -76,7 +76,7 @@ Adeleine leaves in `rom/build/<cartucho>/adeleine/`: the lossy step is judged by
 
 taro does that, so the artifact has to open with everyday
 tools, and **that is the reason the envelopes come out of the
-SoundFont** —`ataque-y-decaimiento-desde-el-soundfont.md`—: if the ROM uses the
+SoundFont** —`attack-and-decay.md`—: if the ROM uses the
 eight families in `sdsp.py` and the DAW uses the SoundFont's, the attacks sound
 different and the artifact lies where it shows the most.
 

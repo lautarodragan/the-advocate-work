@@ -7,7 +7,7 @@ agents: [Mulita]
 assignee: taro
 ---
 
-From `vampires-dawn-arma-desde-su-toml.md` (Aguará, 2026-10-11):
+From `vampires-dawn-builds-from-its-toml.md` (Aguará, 2026-10-11):
 mapdata's `record.rs` stores a bank of twelve poses per (CharSet, index,
 data), and a character that comes out quantized differently in another map
 carries a bank of its own —506 "goes with a pose bank of its own" warnings in

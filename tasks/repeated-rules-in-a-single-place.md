@@ -9,14 +9,14 @@ assignee: taro
 From 2026-10-02, while taro can't review anything: a refactor that verifies
 itself. Noted by:
 
-- Cardón (`rust-el-dominio-de-la-pelea.md`): the actor's parameter at its
+- Cardón (`rust-the-battle-domain.md`): the actor's parameter at its
   level and the summed equipment are in `rm2k-snes-battle`, in
   `rm2k-snes-screens` and in `port/rules.py`; their place is `rm2k-rules`.
-- Timbó (`rust-la-emision.md`): the engine constants are in
+- Timbó (`rust-the-emission.md`): the engine constants are in
   `rm2k-snes-mapdata`'s `engine.rs` and in `events.py`, which ABL's tests
   read; likewise `SUB_MAX`, `PARALLEL_MAX`, `ROUTE_EV_MAX`, `OBJ_PRIORITY`
   and `block_tile`.
-- Tataupá (`rust-el-dominio-de-las-pantallas.md`): `equip` in the stage and
+- Tataupá (`rust-the-screens-domain.md`): `equip` in the stage and
   in the test harness; the escapes tail in the event compiler and in
   `rm2k-snes-text`.
 

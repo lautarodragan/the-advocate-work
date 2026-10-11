@@ -135,7 +135,7 @@ three numbers) and the baking, which make no sense outside the stage.
 the hooks into `lcf`. The first exists because converting the layers in Python
 is expensive and is spread across processes; in Rust, if converting a map costs
 milliseconds, the in-memory cache and the precomputation go with it.
-`las-variables-globales-chocan.md` is about the ROM's RAM and not about this.
+`global-variables-collide.md` is about the ROM's RAM and not about this.
 
 ## The plan
 

@@ -8,7 +8,7 @@ assignee: taro
 
 It showed up on 2026-09-29 while measuring against RPG_RT the three
 divergences that came from the Python reference
-(`tres-divergencias-contra-rm2k.md`, Caranday). The one in
+(`three-divergences-against-rm2k.md`, Caranday). The one in
 `move-event-tras-teleport-interno.md` didn't hold, but measuring it this came
 out.
 

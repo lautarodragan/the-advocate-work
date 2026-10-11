@@ -7,7 +7,7 @@ status: done
 
 # Done, on 2026-09-26
 
-It is step 6 of `tasks/la-calidad-de-la-musica.md`, option A, with what was
+It is step 6 of `tasks/quality-of-the-music.md`, option A, with what was
 measured and what came out: each sample with the budget of its worst package,
 the sound effects subtracted, and the theme that may come in already playing
 counted only as a theme

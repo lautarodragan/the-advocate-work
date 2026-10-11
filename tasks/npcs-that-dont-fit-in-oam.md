@@ -7,4 +7,4 @@ assignee: taro
 agents: [Carpintero]
 ---
 
-From taro, on 2026-10-10, in the proposed order. From 2026-10-06: it is what cuts 24 maps of Vampires Dawn and 3 of Desert Nightmare ("more than 104 NPCs in OAM"). Same line as `degradar-en-vez-de-fallar.md`.
+From taro, on 2026-10-10, in the proposed order. From 2026-10-06: it is what cuts 24 maps of Vampires Dawn and 3 of Desert Nightmare ("more than 104 NPCs in OAM"). Same line as `degrade-instead-of-failing.md`.

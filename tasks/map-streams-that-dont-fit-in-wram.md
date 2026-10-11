@@ -11,17 +11,17 @@ stopping the build.
 
 * **The Frozen World, map 2** ("Plate Placement"): "a stream of map_code
   is 38179 bytes and 19968 fit in WRAM". Measured by Calandria on 2026-10-11
-  (`las-exclusiones-que-sobran.md`) and **checked today**
+  (`exclusions-left-over-in-the-ports.md`) and **checked today**
   (the-advocate `fc6f7456`, ports `a85b7e3`): with 2 brought back, `just
   cartuchos release` in `frozen-world/` stops there. According to the re-sweep of
   2026-10-10, map 1 of the same game asks for 1.8 MB of code alone.
 * **Vampires Dawn, map 1** ("Weltkarte", the world map, 300x300):
   "a stream of map_cells is 147232 bytes and 32768 fit in WRAM". Measured by
-  Aguará on 2026-10-11 (`vampires-dawn-arma-desde-su-toml.md`); the
+  Aguará on 2026-10-11 (`vampires-dawn-builds-from-its-toml.md`); the
   comment of `excluded` in `vampires-dawn/rm2k-snes.toml` says so. Not
   checked today (VD takes about two minutes to build). Before, it stopped at
   the ChipSet's animation, which now degrades
-  (`las-animaciones-de-tiles-en-wram.md`: "the grid: 180,000 bytes
+  (`tile-animations-that-dont-fit-in-wram.md`: "the grid: 180,000 bytes
   against 64 KB of WRAM").
 
 Tile animations, which had the same kind of limit, now degrade

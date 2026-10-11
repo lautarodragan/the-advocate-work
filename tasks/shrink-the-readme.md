@@ -47,7 +47,7 @@ and that this pass fixes or removes:
   `tools/audio/snes_music.py`).
 * "Varios temas en el cartucho" (~lines 130-200) went entirely stale on
   2026-09-26, with the per-package budget (step 6 of
-  `tasks/la-calidad-de-la-musica.md`): there's no longer trimming of
+  `tasks/quality-of-the-music.md`): there's no longer trimming of
   contributors —all themes contribute all their samples—, `build_bank`, the
   allocation of leftovers, the percussion "with whatever is left" and
   `--banco-entero` are gone, and "Por qué el límite sigue estando" is exactly

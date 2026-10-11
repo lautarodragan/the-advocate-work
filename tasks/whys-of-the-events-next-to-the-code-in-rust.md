@@ -7,7 +7,7 @@ assignee: taro
 ---
 
 Guazú left it noted when moving the event compiler to Rust
-(`rust-el-compilador-de-eventos.md`): the whys of each command
+(`rust-the-event-compiler.md`): the whys of each command
 —how much it unblocked, when it went in, what was measured, what bug it
 protects against— are still in `tools/port/events.py`, but the code they
 protect is now in `tools/rm2k-snes/events/`. The AGENTS.md rule is that a

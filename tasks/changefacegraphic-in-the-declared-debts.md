@@ -10,9 +10,9 @@ assignee: taro
 Aguará found it on 2026-10-06 while building the board against RM2k: the branch
 for `ChangeFaceGraphic` in `compile_command` gives `Ok(vec![])`, but the code
 is not in `ACCEPTED_UNDONE` —the list has 8—, even though the task
-`las-caras-y-los-escapes-de-espera.md` and commit 73b263a3 say
+`faces-and-wait-escapes-in-messages.md` and commit 73b263a3 say
 it went in. Besides, that branch's comment refers to
-`las-caras-y-las-esperas.md` without saying where it lives today.
+`draw-the-faces-and-really-wait-on-the-escapes.md` without saying where it lives today.
 
 taro, on 2026-10-06: Codex's first task, to try out the circuit.
 

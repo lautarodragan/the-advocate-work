@@ -10,14 +10,14 @@ status: done
 `jump_speed[move_speed - 1]`. An `increase_movement_speed` on the hero
 changes its step and not its jump.
 
-It showed up on 2026-09-22, while fixing `el-salto-que-queda-colgado.md`, and
+It showed up on 2026-09-22, while fixing `jump-that-hangs.md`, and
 was noted in the comment of `salto_avanzar_heroe`. It was already like that
 before: that fix didn't touch it.
 
 Done means: the hero jumps with its speed, like the events, with a test that
 checks it. Watch out: changing the jump's duration **moves the camera
 faster** and the map is drawn one row per loop: see
-`el-mapa-corrido-al-volver-de-una-cinematica.md`.
+`map-shifted-after-returning-from-a-cutscene.md`.
 
 # What was done, on 2026-09-26
 

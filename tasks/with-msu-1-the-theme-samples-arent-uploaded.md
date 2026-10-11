@@ -31,7 +31,7 @@ track and the sound effects fit whole in ARAM without competing with the music.
 
 ## And the other half: quality sound effects from the `.msu`
 
-Done on 2026-09-26, requested by taro: see `efectos-de-calidad-con-msu-1.md`.
+Done on 2026-09-26, requested by taro: see `quality-sound-effects-with-msu-1.md`.
 What follows is how it was laid out. Without MSU-1 nothing was touched: the
 cartridge's sound effects are the usual ones, not lighter.
 

@@ -47,7 +47,7 @@ and 4, which were engine optimizations. See "Why it isn't optimized" below.
 
 Dropped frames walking 1200 frames, with the counter read and reset to zero
 every 50 because **`cuadros_perdidos` saturates at 255**. It's the same method
-that gave the 450 and the 228 in `eventos-opacos-al-mapa.md`, and that 228 was
+that gave the 450 and the 228 in `opaque-events-into-the-map.md`, and that 228 was
 reproduced exactly.
 
 **The cell it's measured from changes the answer by a factor of five**, and
@@ -243,7 +243,7 @@ ABL, and this would. If path 3 is enough, this one isn't needed.
 
 ## 5. Freeing the sprite palette and the VRAM slot of the baked ones
 
-It's noted in `eventos-opacos-al-mapa.md` and still holds: today a baked event
+It's noted in `opaque-events-into-the-map.md` and still holds: today a baked event
 still goes into `npcs_dibujables`'s allocation as if it were drawn. Removing
 it frees a palette and **changes what's seen** —map 11 has a graphic drawn
 with someone else's palette, `@tile:lasheint:49`—, so it **moves goldens** and

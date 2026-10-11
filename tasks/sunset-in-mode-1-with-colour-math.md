@@ -7,7 +7,7 @@ assignee: taro
 agents: [Mulita]
 ---
 
-It follows from `sunset-las-imagenes-sobre-el-mapa.md` and from its research in the book (`ports/sunset-over-imdahl/research/2026-10-11-las-imagenes.md`), which already wrote what mode 1 would give.
+It follows from `sunset-the-pictures-over-the-map.md` and from its research in the book (`ports/sunset-over-imdahl/research/2026-10-11-las-imagenes.md`), which already wrote what mode 1 would give.
 
 taro, on 2026-10-11, after seeing the captures: "it really isn't playable. It isn't a good game to port to SNES, but I'd try Mode 1 and Color Math before anything else." And he clarified that **there never was a decision forbidding another mode or colour math**: mode 3 was what suited ABL, and colour math was discarded for something specific. The book said it as a rule and was corrected (`cartridge/mode-3.md`, `decisions/el-color-math-no-se-usa.md`).
 

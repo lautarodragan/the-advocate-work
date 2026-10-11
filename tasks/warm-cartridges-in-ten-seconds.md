@@ -5,7 +5,7 @@ type: refactor
 status: done
 ---
 
-Request from taro, on 2026-09-26, after `que-armar-los-cartuchos-tarde-menos.md`:
+Request from taro, on 2026-09-26, after `make-building-the-cartridges-take-less-time.md`:
 `just cartuchos` warm under 10 s, and also bring down the cold
 path. Same rules as the previous round: no unnecessary refactors,
 without changing what the converter produces, and all of `rom/build/release` and
@@ -73,7 +73,7 @@ green at the end.
   the compression, the bank packing. None goes over a couple of tenths
   alone; lowering them all together requires parallelising `convertir` per map or
   overlapping stages of `main`, which is the responsibilities task
-  (`las-responsabilidades-de-snes-convert.md`).
+  (`responsibilities-of-snes-convert-py.md`).
 * **`release`'s `ca65` is a floor**: it assembles the whole `mapdata.inc`, which
   is megabytes of `.byte` in text. Lowering it means emitting the big blocks as
   binary (`.incbin`), which changes what the converter produces.

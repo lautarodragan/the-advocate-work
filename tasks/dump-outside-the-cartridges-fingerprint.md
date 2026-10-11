@@ -7,7 +7,7 @@ assignee: taro
 agents: [Hornero, Cardón]
 ---
 
-Seen by Mulita on 2026-10-11 (`sunset-el-mapa-22-en-negro.md`): for the cartridge to notice an edited `Map0022.json` she had to delete its directory.
+Seen by Mulita on 2026-10-11 (`sunset-the-map-22-scene-in-black.md`): for the cartridge to notice an edited `Map0022.json` she had to delete its directory.
 
 It's intentional: `fingerprint_files`, in `rm2k-snes/cartridge/src/cartridges.rs` of `the-advocate`, says "The game's dump does not: it is regenerated from the game". What hasn't been looked at is the other half: whether a change in `GAME_DIR` —a new `.lmu` from the game— regenerates the dump and rebuilds, or whether it also goes stale without warning. If it's the latter, it's a path to a stale ROM that no test sees. And if editing the dump by hand is a legitimate way to measure —Mulita used it to isolate a cause—, the recipe should say so or see it.
 

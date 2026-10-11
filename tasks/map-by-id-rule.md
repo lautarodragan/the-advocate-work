@@ -7,7 +7,7 @@ status: done
 
 # What
 
-The second half of milestone 4 of `la-carrera-y-lo-que-sigue.md`. The
+The second half of milestone 4 of `race-and-what-comes-next.md`. The
 first —the converter's two latent bugs— is already on `main`
 (`9d6c0d3`).
 

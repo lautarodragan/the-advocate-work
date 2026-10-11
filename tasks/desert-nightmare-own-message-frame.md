@@ -6,7 +6,7 @@ status: draft
 ---
 
 Seen by Calandria on 2026-10-11, in passing
-(`rescatar-los-hallazgos.md`), tools `fc6f7456`, ports
+(`rescue-the-findings.md`), tools `fc6f7456`, ports
 `a85b7e3`: the Desert Nightmare release build warns that in 157
 maps it does not draw the pictures `TextboxInnen` and `TextboxRahmen`, which are
 its messages' own frame.

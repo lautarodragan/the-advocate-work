@@ -10,7 +10,7 @@ From taro, on 2026-10-02: "the refactor to free up those banks". Bank 1
 of `release` was left with 131 B free (`just espacio`), between the autorun
 common events and the shared `CallEvent` (Picaflor) and the large pictures
 (Aguilucho). It's like what Pirincho did with bank 0's tables
-(`las-tablas-de-items-al-banco-1.md`), but with code.
+(`item-and-theme-tables-out-of-bank-0.md`), but with code.
 
 ## What was measured before (2026-10-02, Pepitero, on `cb333da4`)
 

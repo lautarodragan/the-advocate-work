@@ -7,7 +7,7 @@ assignee: Mulita
 agents: [Mulita]
 ---
 
-Measured by Mulita on 2026-10-11 in `sunset-el-mapa-22-en-negro.md`:
+Measured by Mulita on 2026-10-11 in `sunset-the-map-22-scene-in-black.md`:
 the scene that opens the game goes black because `WinterMist`, a fog at
 95 % transparency, goes as a large picture —instead of the map— and the
 transparency darkens towards black.
@@ -87,7 +87,7 @@ colour math) is written there, not done: it is taro's decision.
   `/shared/capturas/2026-10-11-sunset-imagenes/`. For the original I built
   variants of the game that start on the map with the door's
   pictures (`~/scratch/mulita/wine3/variante.py`).
-* Red before: the scene on 22 black (task `sunset-el-mapa-22-en-negro.md`),
+* Red before: the scene on 22 black (task `sunset-the-map-22-scene-in-black.md`),
   and any map with roofs covered by a large picture.
 
 ### What I saw and isn't part of this

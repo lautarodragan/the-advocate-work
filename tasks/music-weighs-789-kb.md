@@ -95,7 +95,7 @@ gives −23.0%, and `fold` gets −23.5%.
 
 ### The cycles
 
-`la-calidad-de-la-musica.md`'s probe —the scanline on entering and leaving
+`quality-of-the-music.md`'s probe —the scanline on entering and leaving
 `music_tick`—, in a throwaway copy, in snes9x, the 50 `release` themes with
 music, each one whole from its loop back to the start (385,910 frames). The
 IRQ lands on line 112.
@@ -138,7 +138,7 @@ in `music.s`.
 # What came before
 
 **Idea 1, the per-note format, has been done since 2026-09-26**: it's step 4
-of `la-calidad-de-la-musica.md`, which has the format, the bytes, the cycles
+of `quality-of-the-music.md`, which has the format, the bytes, the cycles
 and how it was verified. The 32 `release` themes went from 730,695 B to
 209,720 counting their tables, and the cartridge from 87% to 74.6%. **2, 3 and
 4 remain**, and their numbers below are measured on the prototype's format
@@ -152,7 +152,7 @@ dropped today, samples): if the format were built first, it would have to be
 changed afterwards. Meanwhile, what's below stays as a measurement.
 
 
-The x-ray in `juntar-release-y-test-main.md` puts `tema_stream` at the very
+The x-ray in `merge-release-and-test-main.md` puts `tema_stream` at the very
 top: 789 KB in the merged cartridge, 21%. This is **why it weighs that and
 what could be gained**, measured on 2026-09-25 on `6f1dc4a`, when nothing was
 implemented.
@@ -193,7 +193,7 @@ What there **isn't**, and that the question assumed:
   or bends. The MIDIs do carry them —4,427 CC11, 3,851 CC7, 1,532 CC10 and
   1,058 bends among the 32—: adding them some day **adds** bytes, it doesn't
   remove them. (They were added on 2026-09-26, in step 3 of
-  `la-calidad-de-la-musica.md`: +2.7% of stream, and the list of what the
+  `quality-of-the-music.md`: +2.7% of stream, and the list of what the
   stream carries since then is there.)
 * **No unrolled loops.** No MIDI carries CC111, the loop point RM2k honors,
   so the stream is the MIDI once and on finishing it starts over
@@ -258,7 +258,7 @@ Ordered by bytes against risk. The sizes are over `test-main`'s 768,863 B.
 
 ## 1. A per-note format, which the 65816 expands into the same writes: done
 
-Done on 2026-09-26: see step 4 of `la-calidad-de-la-musica.md`. It isn't
+Done on 2026-09-26: see step 4 of `quality-of-the-music.md`. It isn't
 exactly the prototype's: the pitch doesn't go in a separate dictionary but
 together with the instrument, in a *sound* per note, because the drums change
 instrument on almost every hit; and the volume goes per side, because since
@@ -301,7 +301,7 @@ frame closes 14.4%, releases 14.1%, instrument 8%, volume 5%.
   looking at two tables; a few hundred cycles. The writes per frame stay the
   same —median 5, 99% of frames up to 32, the worst 56—, and what dominates
   today is waiting for the SPC700's token on each one, which doesn't change.
-  `musica-del-lado-del-spc700.md` puts today's cost at up to twenty lines per
+  `music-on-the-spc700.md` puts today's cost at up to twenty lines per
   frame; this would add on the order of a few.
 * **RAM**: the shadow of the eight voices —64 B— plus current volume, high
   pitch, instrument and GAIN per voice, about 100 B. `BSS` has 108 free and the
@@ -403,7 +403,7 @@ The per-theme tables —instruments and pitches, 3,504 B— are included in the
 * **Sound effects: 92, 211,509 B.** 50 are at the cap, 2,529 B —0.75 s at 6
   kHz, `SE_MAX_SEGUNDOS` and `SE_TASA`—, and the opening's whole thunder is
   23,760 (`el-trueno-va-entero-y-paga-la-lluvia.md`). They all go into some
-  map's package, so none is dead. `efectos-de-sonido-sin-recortes.md` wants to
+  map's package, so none is dead. `sound-effects-without-cuts.md` wants to
   lift those caps, and that will make it **grow**.
 * **Nothing obvious to compress**: BRR is already 9 bytes for every 16
   samples, and zlib over all the samples gives 92%.

@@ -6,7 +6,7 @@ status: draft
 ---
 
 Carpintero declared it on 2026-10-06 as a degradation
-(`degradar-en-vez-de-fallar.md`, point 5): the converter checks the
+(`degrade-instead-of-failing.md`, point 5): the converter checks the
 title against the limits that `title.s` asserts —544 picture tiles, 704
 for the menu— and, if it doesn't fit, the game starts without a title, with
 a WARNING. No task follows it.

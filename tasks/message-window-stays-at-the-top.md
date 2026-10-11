@@ -12,7 +12,7 @@ bottom. I think it should have gone back to the bottom at some point". The Bum
 next to Talan's house, the worried worker, the hover tram officer, several
 NPCs on the left side of Lashe City, the Neon Vipers: all at the top.
 
-It comes from `la-ventana-arriba-al-medio-y-sin-fondo.md` (Quirquincho). A
+It comes from `message-window-at-the-top-in-the-middle-and-without-background.md` (Quirquincho). A
 candidate, unconfirmed: common 15, `CustomMenuSideQuests`, ends with
 `MessageOptions [0,0,0,0]` —top— and the console's other menus with
 `[0,2,0,0]`.

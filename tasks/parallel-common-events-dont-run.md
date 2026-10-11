@@ -6,7 +6,7 @@ status: draft
 ---
 
 Aguará saw it on 2026-10-06 while building the board against RM2k
-(`el-tablero-contra-rm2k.md`): "parallel common events don't run
+(`dashboard-against-the-whole-of-rm2k.md`): "parallel common events don't run
 —6 in ABL, 35 in Vampires Dawn—, which wasn't in any study". It's still
 the same in the-advocate `fc6f7456`: the comment of `party_common_events`,
 in `rm2k-snes/events/src/indices.rs`, says "The ROM does not run parallel
@@ -34,7 +34,7 @@ looked at in an emulator, and some may be covered by another path (a
 `CallEvent` from a map). What was measured on 2026-09-27 about doing them
 for real —another interpreter, the body on each frame while the switch
 is on— and why it wasn't done then is in that same comment
-and in `los-comunes-automaticos-y-la-consola.md`: ABL's 2,
+and in `automatic-common-events-the-shared-callevent-and-v-n.md`: ABL's 2,
 `DisableSaving`, has no switch and would always run.
 
 **How to see it**: the list comes from each port's `commonevents.json`

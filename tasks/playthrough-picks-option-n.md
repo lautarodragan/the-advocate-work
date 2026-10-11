@@ -12,7 +12,7 @@ with the top option: it presses A without moving the cursor. We need to
 **pick option N**: move the cursor down N times, check in RAM that it ended
 up where requested, and only then confirm.
 
-It is milestone 0 of `lashe-city-hasta-la-carrera.md` and can be done in
+It is milestone 0 of `lashe-city-with-the-car-up-to-the-race.md` and can be done in
 parallel with 1. Without this no Lashe City playthrough with the car can be
 written:
 
@@ -23,7 +23,7 @@ written:
 - the car's queue (36, page 2) is "Stay / We've got to get out of here": the
   one that leads to the limit is the second.
 
-And it unblocks `la-otra-rama-de-los-neon-vipers.md`, which was left undone
+And it unblocks `other-branch-of-the-neon-vipers-cutscene.md`, which was left undone
 precisely because of this.
 
 # What is already known
@@ -31,7 +31,7 @@ precisely because of this.
 - **A press can get lost**: the ROM reads the pad once per loop and a loop
   can last several frames. `Recorrido.mirar_a` already solved the same thing
   for turning while checking RAM; the same method is advisable (see
-  `el-recorrido-de-los-neon-vipers.md`, "Un agujero del arnés").
+  `neon-vipers-walkthrough.md`, "Un agujero del arnés").
 - **The window ignores the button while composing**: no presses in the
   first thirty frames since it opens (see `ESTADO.md`, "Lo que la tanda no
   cubre").
@@ -76,7 +76,7 @@ Everything through RAM and no frames counted:
 
 **The test**: `pruebas/abl/test_recorrido_vipers_otras_ramas_golden.py`,
 which plays the "No" branch of the hotplate cinematic, the two options of
-the fence and map 14 —see `la-otra-rama-de-los-neon-vipers.md`—. **Seen
+the fence and map 14 —see `other-branch-of-the-neon-vipers-cutscene.md`—. **Seen
 red** with the top option instead of the second: the "No" one ends at
 (44,13) without switch 38, which is the "Yes" branch, and the fence with
 "Climb the Fence" instead of "Don't Bother".

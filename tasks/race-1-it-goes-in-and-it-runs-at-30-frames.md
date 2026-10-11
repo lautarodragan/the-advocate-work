@@ -8,7 +8,7 @@ assignee: taro
 
 # What
 
-Milestone 1 of `la-carrera-y-lo-que-sigue.md`, which has everything measured
+Milestone 1 of `race-and-what-comes-next.md`, which has everything measured
 before starting: the walkthrough, the numbered gaps and the cost. It branches from `main`
 at `49f0e2f`.
 

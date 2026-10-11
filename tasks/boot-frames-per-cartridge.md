@@ -7,7 +7,7 @@ assignee: taro
 agents: [Carpintero]
 ---
 
-From the re-sweep of 2026-10-10 (`otros-juegos-el-rebarrido.md`): VD's map 3 doesn't fit in `BOOT_FRAMES` (46 of 44). Raising the constant moves, in ABL, the frame in which the loop starts, and with it the tests that count frames. Tijereta's proposal: have the converter emit each cartridge's own, `max(44, the estimate)`, so ABL doesn't move.
+From the re-sweep of 2026-10-10 (`other-games-the-re-sweep.md`): VD's map 3 doesn't fit in `BOOT_FRAMES` (46 of 44). Raising the constant moves, in ABL, the frame in which the loop starts, and with it the tests that count frames. Tijereta's proposal: have the converter emit each cartridge's own, `max(44, the estimate)`, so ABL doesn't move.
 
 ## What was done
 

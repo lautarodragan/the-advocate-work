@@ -6,7 +6,7 @@ status: todo
 ---
 
 From taro, on 2026-10-02, looking at the goldens of
-`las-imagenes-grandes-en-modo-1.md` (Aguilucho):
+`large-pictures-on-bg1-in-mode-1.md` (Aguilucho):
 
 - **The Diff photos** (212, 213, 214, 216) are captures of the map at that
   moment, and the original uses them for a "live to photo" effect that
@@ -27,5 +27,5 @@ From taro, on 2026-10-02, looking at the goldens of
   `tira-destellos.png` is only those flashes, without photo: that is why
   they are gray rectangles.
 
-If the mode 7 pilot (`el-piloto-del-modo-7.md`) turns out well, the zoom
+If the mode 7 pilot (`mode-7-pilot-for-the-zoom-of-the-diff-photos.md`) turns out well, the zoom
 of the photos comes back, and this goes together with it.

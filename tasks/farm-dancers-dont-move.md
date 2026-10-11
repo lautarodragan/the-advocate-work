@@ -7,7 +7,7 @@ assignee: taro
 ---
 
 Yaguareté saw it on 2026-10-03, while putting in the farm with the slot cache
-(`tasks/la-cache-de-ranuras.md`). It predates the cache and was not followed
+(`tasks/sprite-slot-cache.md`). It predates the cache and was not followed
 up.
 
 Base: tools `fe0f90ee`, ABL `4cd8eb6`.

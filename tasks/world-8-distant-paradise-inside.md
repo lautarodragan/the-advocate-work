@@ -42,8 +42,8 @@ turns on:
 **The natural cut is the farm (127)**: the celebration starts there, which is
 the choice of profession —and behind it, the rest of the chapter: the quarry,
 the bandits, the theatre—. And 127 is one of the maps that do not fit in VRAM
-(731 sprite tiles, 22 events that walk: `mundo-7-camino-a-paradise.md`). In
-`el-108-con-poses-compartidas.md` the next cut was the jump to the dream (109
+(731 sprite tiles, 22 events that walk: `world-7-the-road-to-paradise.md`). In
+`108-with-shared-poses.md` the next cut was the jump to the dream (109
 ev6); the next day fits whole without asking for anything more than 126 and
 113, so the cut moved all the way to the farm's door.
 
@@ -180,11 +180,11 @@ for taro's approval.**
 # What is not done, and what looks different
 
 * **The farm (127)**, and with it the rest of the chapter: it needs the slot
-  cache (option D of `mundo-7-camino-a-paradise.md`), and even so it does not
+  cache (option D of `world-7-the-road-to-paradise.md`), and even so it does not
   fit with room to spare. It is what comes next, and it is taro's choice.
 * **The panoramas** of the lookout (109, Night1), of the day one (126,
   Morning1) and of the memory (175 and 176, Night1) come out black, as on all
-  maps with a panorama: `panorama-del-mapa-2.md`.
+  maps with a panorama: `panorama-of-map-2.md`.
 * **The night rain is not seen** on 108, 110, 114 and 118: the drops do not fit
   in the sprite palettes (the converter says so). `Rain1` plays; on 125 it does
   rain.

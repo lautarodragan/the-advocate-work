@@ -17,7 +17,7 @@ Two cases, both on the battle screen:
   "Talan has absorbed the enemy aura!". It was already like that before the troop
   pages.
 
-They come from `el-sistema-de-batalla-de-talan.md`.
+They come from `talan-battle-system.md`.
 
 **Another case, seen on 2026-09-26 while doing the elixir in battle**: "Kersh
 Pungent Elixir-LIFE  used." goes past 32 columns and the full stop falls in column
@@ -27,7 +27,7 @@ item with a long name, and the name in the LDB has a trailing space.
 **Two more, since the per-turn and per-HP pages run (2026-09-28)**: the
 take-off in the agents' battle comes out "The Captain has taken off in th", and
 the Rat King's second call loses the "s" of "sounds". See
-`tasks/eventos-de-tropa-de-release.md`.
+`tasks/release-troop-events.md`.
 
 # What was done (Cardenal, 2026-10-02)
 

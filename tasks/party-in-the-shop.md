@@ -20,7 +20,7 @@ The captures of the original are in
 `/shared/capturas/2026-09-28-tienda/original-comprar-arco.png` and
 `original-comprar-chaqueta.png`.
 
-The ROM's shop (`la-tienda-como-el-original.md`, Aguaribay) doesn't
+The ROM's shop (`shop-like-the-original.md`, Aguaribay) doesn't
 have it: at 256 wide the list runs across and "Owned Items" with the gold
 below, so that window has nowhere to go without taking rows away from the
 buy list, which already has five. Before implementing it, it has to be

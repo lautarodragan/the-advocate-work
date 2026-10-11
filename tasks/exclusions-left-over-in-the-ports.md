@@ -7,7 +7,7 @@ assignee: taro
 agents: [Calandria]
 ---
 
-From the re-sweep of 2026-10-10 (`otros-juegos-el-rebarrido.md`): the committed exclusions are the survey's and are too many. Back then Book of Three needed only 46, Dooms 2 needed 1, 10, 14 and 63, Frozen 1 and 2, and Desert the sweep's twelve. Since then the twins and the event trimming, the music and the troops in words, and the empty party have come in, so it has to be measured again.
+From the re-sweep of 2026-10-10 (`other-games-the-re-sweep.md`): the committed exclusions are the survey's and are too many. Back then Book of Three needed only 46, Dooms 2 needed 1, 10, 14 and 63, Frozen 1 and 2, and Desert the sweep's twelve. Since then the twins and the event trimming, the music and the troops in words, and the empty party have come in, so it has to be measured again.
 
 ## How it is measured (Calandria, 2026-10-11)
 
@@ -53,7 +53,7 @@ For the tools: the sound index error does not say which song or which map; the m
 | 2 | "a stream of map_code is 38179 bytes and 19968 fit in WRAM: see the LZ2 reservation in runtime/far_ram.s" |
 | `system = "ablskin.png"` | with its own: "the window needs 266 tiles —26 of its frame and its arrow— and the bank has 256" |
 
-`below` goes from 135 to 156, all the maps: the cap of 255 in the sample directory no longer cuts (it degrades since `las-muestras-que-sobran`). 69 and 84 build.
+`below` goes from 135 to 156, all the maps: the cap of 255 in the sample directory no longer cuts (it degrades since `surplus-samples-dont-play`). 69 and 84 build.
 
 ### Desert Nightmare
 

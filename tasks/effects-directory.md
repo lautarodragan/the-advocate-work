@@ -14,7 +14,7 @@ more copies, so when a full package ate the ARAM —battle's and map 3's full
 effects, which go in full whatever the cost— the instrument dropped in **all**
 the themes that shared the sample, not only in the package's. With the full
 effects, 175 (theme, instrument) pairs dropped without MSU-1: the table is in
-`efectos-de-sonido-sin-recortes.md`. taro accepted it, and the request was to
+`sound-effects-without-cuts.md`. taro accepted it, and the request was to
 free the directory to give it back.
 
 # Status
@@ -194,7 +194,7 @@ separate them lowers some other theme a bit: the rule rejects it.
   because none added anything—, that no package has two effects in one slot
   and that the slots are those of the most loaded package. With main it
   fails: 255 entries. Since milestone 4 of the world
-  (`mundo-4-el-capitulo.md`) it's called
+  (`world-4-tasgarde-eisen-and-the-bridge.md`) it's called
   `test_los_efectos_comparten_lugares_del_directorio` and no longer asks for
   the directory not to be full: with the chapter's themes it fills up.
 * `test_un_efecto_no_suena_con_la_muestra_de_otro`: `Success2` on map 10

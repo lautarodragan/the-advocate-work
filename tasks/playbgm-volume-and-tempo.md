@@ -7,7 +7,7 @@ assignee: taro
 ---
 
 From taro, on 2026-09-30, as the next task after
-`la-musica-que-ya-suena-sigue.md` (Yacaré), which left it measured: of
+`theme-that-is-already-playing-does-not-start-over.md` (Yacaré), which left it measured: of
 the game's 168 `PlayBGM`s, 69 ask for a volume other than the default
 and 13 another tempo, and the ROM uses neither. Also, in
 RM2k, a `PlayBGM` of the theme already playing with another volume or tempo adjusts them

@@ -18,7 +18,7 @@ the three-theme package; part is copies that the second batch of
 
 With MSU-1 it is not heard (all the themes have a track). It is tackled **when
 Lashe City's maps are finished** (each milestone adds packages and moves it
-again), with the same method as `el-directorio-de-los-efectos.md`:
+again), with the same method as `effects-directory.md`:
 measuring pair by pair with `Banco` against the `main` from before the new maps,
 and seeking that no instrument of the themes already there ends up worse.
 

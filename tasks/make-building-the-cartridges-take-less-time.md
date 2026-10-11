@@ -8,7 +8,7 @@ status: done
 Request from taro, on 2026-09-26: optimize the time of `snes_convert.py` and
 of what calls it, **without refactors** and without changing what it
 produces; Python, parallelizing where possible and numpy if it helps. The
-file's refactor is another task: `las-responsabilidades-de-snes-convert.md`.
+file's refactor is another task: `responsibilities-of-snes-convert-py.md`.
 
 The measured numbers, before and after each step, are in each commit's
 message, which is where they don't go stale. What can't be deduced from them:

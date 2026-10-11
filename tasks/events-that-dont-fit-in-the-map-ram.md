@@ -7,7 +7,7 @@ assignee: taro
 agents: [Carpintero]
 ---
 
-From the report of `los-npcs-que-no-entran.md`: `EV_MAX`, 120 events per map, RAM of bank 0. 38 maps of Vampires Dawn and 11 of Desert Nightmare exceed it.
+From the report of `npcs-that-dont-fit-in-oam.md`: `EV_MAX`, 120 events per map, RAM of bank 0. 38 maps of Vampires Dawn and 11 of Desert Nightmare exceed it.
 
 ## What was measured (2026-10-10, the-advocate 27010065, ports bd64aed)
 

@@ -8,7 +8,7 @@ assignee: taro
 
 From taro, on 2026-10-04: "Go ahead", to carry on with the two differences
 Quirquincho found comparing against the original under Wine
-(`tasks/la-ventana-arriba-al-medio-y-sin-fondo.md`; the captures in
+(`tasks/message-window-at-the-top-in-the-middle-and-without-background.md`; the captures in
 `/shared/capturas/2026-10-04-ventana-de-mensajes/original/`).
 
 ## Done (Tijereta)

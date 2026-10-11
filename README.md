@@ -20,7 +20,12 @@ address, and it is linked from the other repos and from the book
 —`tasks/<name>.md` on GitHub—. It is taro's, from 2026-10-11, the same day
 this repo went public. Until that day there was one folder per state, and
 every task that moved broke the citations to it; old citations with a
-folder —`testing/x.md`, `tasks/todo/x.md`— are `tasks/x.md`.
+folder —`testing/x.md`, `tasks/todo/x.md`— are `tasks/x.md`. The same
+day, after translating the repo, every file was renamed once from its
+Spanish name to one made from its English title, and that is the only
+exception: a citation with an old Spanish name is found in
+[RENAMES.md](RENAMES.md). A new task's name comes from its title the same
+way —lowercase, hyphens, no leading article—.
 `nu tasks/tasks.nu ls -s <state>` lists them.
 
 **This repo is public**: nothing written here can be private.

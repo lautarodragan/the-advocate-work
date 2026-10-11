@@ -13,11 +13,11 @@ pages that **only** that command leaves out:
 
 * `ConditionalBranch` type 6, by a character's direction: Sunset 111,
   Vampires Dawn 37, El Dorado 23, Desert 21. Already in
-  `los-comandos-sueltos-de-los-mapas.md`, for ABL (31 pages).
+  `maps-loose-commands.md`, for ABL (31 pages).
 * `MoveEvent` with orders the ROM doesn't understand: the random step (8) in
   Desert (39) and Vampires Dawn (16), move away from the hero (10) in Vampires Dawn
   (48) and El Dorado (9), and Sunset's routes with 36/37 (about 40; it remains to see which
-  order is the one that blocks). `ruta-los-movimientos-que-faltan.md` says
+  order is the one that blocks). `route-the-missing-moves.md` says
   they didn't pay off: in ABL it was true, in these games it isn't.
 * `PlayerVisibility`: El Dorado 170.
 * `Comment` in troop pages: The Book of Three 153. In maps
@@ -52,7 +52,7 @@ from the map's xorshift, so it is random but it isn't RM2k's generator.
 compiled: it is **the hero's diagonals** (4 to 7), which the compiler
 rejects on purpose. It is what leaves the most pages now: about 51 in Sunset and 45
 in Vampires Dawn, measured. **It wasn't done**, and why is in
-`ruta-los-movimientos-que-faltan.md`: it is a new hero step, not
+`route-the-missing-moves.md`: it is a new hero step, not
 four copied routines, and there is nothing to compare it with. The hero's relative turns (16
 to 20) and move forward (11) weren't either: about 8 pages in Sunset.
 

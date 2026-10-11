@@ -10,7 +10,7 @@ From taro, on 2026-09-28: "improve the look of the items screen a bit. the
 snes's resolution limit complicates things, but we should be able to use the
 text colors the same as in the original, and the same separators".
 
-The closest thing already done: `el-menu-como-rm2k.md` (Tero), which took the
+The closest thing already done: `menu-like-rm2k.md` (Tero), which took the
 colors from the game's skin and compared against screenshots of the original
 with Wine.
 

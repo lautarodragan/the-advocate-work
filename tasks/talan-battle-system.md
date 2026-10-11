@@ -7,7 +7,7 @@ status: done
 
 **Talan's battle system: `Detect Aura` and `Absorb Aura` in battle.**
 
-It is the first stretch of `eventos-de-tropa-en-la-pelea.md`, narrowed to Talan: if it works,
+It is the first stretch of `troop-events.md`, narrowed to Talan: if it works,
 the mechanism is proven and the other 31 systems are a matter of completing commands.
 
 Both skills are of the switch type (3), battle-only and with no SP cost:

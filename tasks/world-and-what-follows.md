@@ -7,7 +7,7 @@ status: todo
 
 # What
 
-What follows `la-carrera-y-lo-que-sigue.md`. Today the demo ends at the end
+What follows `race-and-what-comes-next.md`. Today the demo ends at the end
 of the scene in 64, with a fork (`parches/manual/mapas/Map0064.json`) that
 replaces the `Teleport [66, 71, 29]` with the end card. This is **what is
 needed for the world map, 66, to fit, along with what can be reached from it**
@@ -166,7 +166,7 @@ unblock:
 * **`Comment`** does nothing in RM2k: it is skipped when compiling.
 * **The two transitions** are the instant ones; the ROM already has
   `TRANSICION_BORRAR/MOSTRAR` (`op_transition`) and is missing the "no
-  fade" value. See `las-otras-transiciones-de-rm2k.md`.
+  fade" value. See `other-transitions.md`.
 
 And what is already accepted without being done (`ACEPTADOS_SIN_HACER`), which compiles and doesn't
 show:
@@ -310,8 +310,8 @@ fits (121 of 124) and the whole chapter still doesn't fit (125). It is an
 optimistic bound: `ffd.py` ignores any ordering constraint between blocks, and
 it would have to be checked which ones there are (the `.cruza`, the tables that are walked in sequence).
 What comes after that is measured elsewhere: the mirrored poses
-(`la-compresion-de-mapas-y-graficos.md`, point 5) and the music
-(`la-musica-pesa-789-kb.md`, ideas 2 to 4). And
+(`compression-of-maps-and-graphics.md`, point 5) and the music
+(`music-weighs-789-kb.md`, ideas 2 to 4). And
 `decisiones/el-cartucho-se-queda-en-4-mb.md` says it is revisited on reaching
 85-90%: `m3` is already there.
 
@@ -336,7 +336,7 @@ Tangle Forest (310 to 313) stays out of both while there is no room.
 
 # Milestones
 
-**1. 66 fits.** (Done: `mundo-1-el-66-entra.md`.) The fifth layout at the end of `LAYOUTS` and the background over
+**1. 66 fits.** (Done: `world-1-map-66-fits.md`.) The fifth layout at the end of `LAYOUTS` and the background over
 32 KB in two LZ2 streams. 66 in `release`; the fork in 64 is deleted and
 the end of the demo moves to a fork of 66 that cuts when stepping on Sorbe (ev10), so
 the world can be walked and fought in. The other entrances of 66 do nothing
@@ -346,20 +346,20 @@ just arrived, `celdas_mal_dibujadas` at zero, a battle in 66 that returns
 to the map (it is the one that would overwrite the upper half of the grid if LZ2 isn't split),
 and `test_carga_descomprimida` with a two-stream background.
 
-**2. Sorbe and the healing.** (Done: `mundo-2-sorbe.md`.) The layout with the layer above at 256 (69), the
+**2. Sorbe and the healing.** (Done: `world-2-sorbe-and-the-healing.md`.) The layout with the layer above at 256 (69), the
 `Comment` skipped, and `ChangeEncounterSteps` done. 69 and 76 to 84 in
 `release`; the end of the demo moves to the entrance of Tasgarde (66 ev13), which is
 where Dalia's trip leads. 81.4%, bank 0 192 minus what
 `ChangeEncounterSteps` takes.
 
-**3. Space.** (Done: `mundo-3-el-espacio.md`; the main path has ten banks left, and it fits along with one or two of the optional zones, not all three.) Packing with first-fit decreasing in `bancos.py`, with the
+**3. Space.** (Done: `world-3-the-space.md`; the main path has ten banks left, and it fits along with one or two of the optional zones, not all three.) Packing with first-fit decreasing in `bancos.py`, with the
 ROM building the same and the goldens not moving; the `.msu` height table per
 package; the text block in steps of 4 bytes; and `medir.py` —or whatever
 replaces it— reporting free banks and not a percentage. It can go in parallel with
 1 and 2; **it has to be before 4**, which leaves three banks.
 
 **4. Tasgarde, Eisen and the bridge: the chapter.** (Done:
-`mundo-4-el-capitulo.md`. **The demo ends at the entrance of Tangle
+`world-4-tasgarde-eisen-and-the-bridge.md`. **The demo ends at the entrance of Tangle
 Forest (66 ev19), not at 18**: the tunnel to Paradise is on the other side of the
 forest, and from the bridge to the tunnel you can't get there walking across the world —you cross through
 310, 311, 313 and 312, which exits to the west—. That is, Tangle Forest is not
@@ -370,7 +370,7 @@ of the demo to the fork of 66 ev18, "Continue onward". The map rule according to
 question 5.
 
 **5. The optional parts**, behind 3 (Tangle Forest, which turned out to be on the main
-path, done: `mundo-5-tangle-forest.md`; the demo now ends
+path, done: `world-5-tangle-forest.md`; the demo now ends
 at the "Continue onward" of 66 ev18, which was the goal, and there is no bank
 left free): Yun Town (the timer by reach, and the
 layout from 2 for its layer above), Drust Camp (comparing against more than
@@ -392,13 +392,13 @@ it's better to use the same agent or one after the other; an opcode for
 3. **The "Meanwhile in Lashe City" card**: a fork of 81 with a
    `ShowMessage`, like the one in the race.
 4. **The Fortitude counter**: debt, in
-   `el-contador-de-fortitude-no-se-ve.md`.
+   `fortitude-counter-is-not-shown.md`.
 5. **The map rule**: either of the two is fine with him; it stays by id,
    as was decided in the race.
 6. **The battle backgrounds**: they all go to the `.msu`, whether or not they are in the
    cartridge, and the battles whose background doesn't fit in the ROM share one of the
    ones already there, in low quality, instead of coming out black. It is its own task:
-   `todos-los-fondos-en-el-msu-1.md`.
+   `all-the-battle-backgrounds-in-the-msu-1.md`.
 7. **The cartridge**: squeeze first. taro: "at this rate, neither 6 MB nor 8 MB
    will let us cover the whole game".
 
@@ -414,7 +414,7 @@ it's better to use the same agent or one after the other; an opcode for
 3. **The "Meanwhile in Lashe City" card** in 81, which is the change of
    protagonist to Dalia: (a) a fork that replaces it with a `ShowMessage` with the
    same text, like the one in the race; (b) a second card per ROM
-   (`sistema-de-imagenes.md`); (c) debt. **Recommended: (a).**
+   (`picture-system.md`); (c) debt. **Recommended: (a).**
 4. **The Fortitude counter** of the minigame in 95: without it you play without seeing
    how much Eisen can take. (a) show variable 48 with the timer
    digits, which are already in the ROM; (b) a message when it drops; (c) debt.
@@ -432,6 +432,6 @@ it's better to use the same agent or one after the other; an opcode for
    debt until after milestone 3.**
 7. **The cartridge**: `m3` is already at the 88.5% that the 4 MB decision says
    triggers the review. Is it opened now (ExHiROM, SA-1, S-DD1:
-   `chips-sa-1-y-s-dd1.md`) or do we keep squeezing? **Recommended:
+   `expansion-chips-sa-1-and-s-dd1.md`) or do we keep squeezing? **Recommended:
    squeeze first** —the packing gives eight banks without touching the ROM—, and open it
    with the next chapter's number in front of us.

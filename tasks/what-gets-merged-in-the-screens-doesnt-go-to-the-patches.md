@@ -6,10 +6,10 @@ status: draft
 ---
 
 Tijereta said it on 2026-10-05 in
-`la-ventana-con-mas-colores.md`: the colours that get merged in the
+`window-with-more-than-15-colors.md`: the colours that get merged in the
 8bpp windows (`borders.rs`: items, equipment, shop, actor choice)
 "aren't written to the patches yet: that's what's missing from this task". And
-`la-ventana-en-el-banco-de-tiles.md` (2026-10-11) added more of the
+`window-in-the-tile-bank.md` (2026-10-11) added more of the
 same kind: the cells Adeleine merges so they fit in their bank
 (`fit.rs`, `merge_least_visible_tiles`), the message window's background
 that shows through the frame (`group_cells`) and End Game's colours

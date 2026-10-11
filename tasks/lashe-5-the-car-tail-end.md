@@ -8,7 +8,7 @@ assignee: taro
 
 # What
 
-The last milestone of `lashe-city-hasta-la-carrera.md`. It goes when 1, 2
+The last milestone of `lashe-city-with-the-car-up-to-the-race.md`. It goes when 1, 2
 and 3 are in —and 4 if you want to play the droid branch fighting it—.
 
 Make the three branches reach the end: page 2 of event 3 of 36, with 161

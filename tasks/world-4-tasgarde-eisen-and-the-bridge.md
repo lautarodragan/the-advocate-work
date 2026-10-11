@@ -7,8 +7,8 @@ status: done
 
 # What
 
-Milestone 4 of `el-mundo-y-lo-que-sigue.md`. It starts from `3c16a17`, with
-milestones 1 to 3 (`testing/mundo-1-*`, `mundo-2-sorbe`, `mundo-3-el-espacio`),
+Milestone 4 of `world-and-what-follows.md`. It starts from `3c16a17`, with
+milestones 1 to 3 (`testing/mundo-1-*`, `world-2-sorbe-and-the-healing`, `world-3-the-space`),
 and merges `main` with the debug map (`455f9fc`).
 
 * **The map rule moves to `MENOR_A = 105`**, by id, as taro answered
@@ -29,7 +29,7 @@ and merges `main` with the debug map (`455f9fc`).
   it leads to Tasgarde) to **66 ev19, the entrance to Tangle Forest**, and not
   to 18 as the assignment said: see below.
 * **The Fortitude counter** stays as debt
-  (`el-contador-de-fortitude-no-se-ve.md`, with what was measured: the
+  (`fortitude-counter-is-not-shown.md`, with what was measured: the
   minigame can be lost). The minigame is played to the end without it.
 
 No opcode nor new far RAM was needed: 0x33 and $7E7A10-$7E7A2F stay free. No
@@ -51,7 +51,7 @@ to 310 from page 1 of 19 and puts the end sign after Talan's two messages. 18
 stayed as the original (its `Teleport` to 105 doesn't compile and the page
 does nothing). **Tangle Forest is the next milestone of the main path**, not
 the optional part; what it requires is in the plan (311's `EraseEvent`, 312's
-timer conditions). Noted in `el-mundo-y-lo-que-sigue.md`, milestone 4.
+timer conditions). Noted in `world-and-what-follows.md`, milestone 4.
 
 # Done and checked
 
@@ -98,7 +98,7 @@ texts 142,138 of 262,144 B. Before the merge, without the debug map, it was
 
 # The earlier music, without MSU-1
 
-Measured pair by pair with `Banco`, as in `el-audio-despues-de-lashe-city.md`
+Measured pair by pair with `Banco`, as in `audio-after-lashe-city.md`
 (the arguments of `build_varios` captured from each tree and the allocation
 rebuilt; a drop = more than 0.5 kHz), against `main` 455f9fc1: **43 (theme,
 instrument) pairs of 15 themes that were already there go down, and 51 go
@@ -124,8 +124,8 @@ would require touching how `copias` chooses, which is its own task.
 
 * **The panoramas aren't drawn**: the bridge (259), under it (255), 95, 94 and
   99 have one and show black behind the map, like every panorama in the port
-  (`panorama-del-mapa-2.md`).
-* **The Fortitude counter isn't visible**: `el-contador-de-fortitude-no-se-ve.md`.
+  (`panorama-of-map-2.md`).
+* **The Fortitude counter isn't visible**: `fortitude-counter-is-not-shown.md`.
 * Erasing with "none" is a black frame and not the fade from the old map to
   the new one: `divergencias/las-transiciones-del-teletransporte.md`.
 * A save made at the minigame's save point comes back with the fade instead of

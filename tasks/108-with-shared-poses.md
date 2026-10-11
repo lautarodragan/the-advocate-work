@@ -6,7 +6,7 @@ status: done
 assignee: taro
 ---
 
-From taro, on 2026-10-01, among the options of `mundo-7-camino-a-paradise.md`
+From taro, on 2026-10-01, among the options of `world-7-the-road-to-paradise.md`
 (Puma): option A. 108 asks for 42 still-pose slots (15 characters facing 3 or 4
 sides) and the VRAM gives 24, but on screen at the same time there are between
 12 and 19. It extends the decision of hot poses

@@ -10,7 +10,7 @@ assignee: taro
 From taro, on 2026-10-05: "Another bug, similar to the tank one: in the
 cutscene of the past, when the missiles fire, the events that act as hatches
 turn into military-person graphics". It may be the same cause as
-`el-tanque-de-dalia-se-vuelve-dalia.md`: a graphic that an event sets and
+`dalia-tank-turns-into-dalia-on-the-bridge.md`: a graphic that an event sets and
 something else changes.
 
 # What was measured (Tijereta, 2026-10-05)

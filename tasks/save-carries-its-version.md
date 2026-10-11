@@ -15,7 +15,7 @@ shifted) if there are zeros behind it, because the checksum still adds up.
 
 That the save's header carry its size or a version derived from the format
 (`partida_tabla`), and that one that doesn't match be treated as "there is no
-save". See `tasks/juntar-release-y-test-main.md`.
+save". See `tasks/merge-release-and-test-main.md`.
 
 Not urgent: taro always tests from scratch and doesn't share saves between
 builds. It matters the day an `.srm` travels to reproduce a bug, or for

@@ -12,9 +12,9 @@ taro's request, on 2026-09-26: **when the music goes through MSU-1, the sound
 effects have to sound at their maximum quality, with their full length, and
 with all the voices possible.** Without MSU-1 nothing changes.
 
-It absorbs point 1 of `mas-voces-para-los-efectos.md` (with MSU-1, all the
+It absorbs point 1 of `more-voices-for-the-sound-effects.md` (with MSU-1, all the
 voices for effects) and plan B of
-`con-msu-1-no-se-suben-las-muestras-del-tema.md` ("the quality effects from
+`with-msu-1-the-theme-samples-arent-uploaded.md` ("the quality effects from
 the `.msu`").
 
 # The design, with its numbers
@@ -76,7 +76,7 @@ What ended up in `release` after merging `d44b906`: at 22,050 Hz packages 8,
 6 and 4 kHz** —the nine the cartridge already carries in full at 6, the
 eleven it carries trimmed at 4—, and 261 and 121 low because their themes
 have no track and take up the ARAM. When all themes have a track
-(`todos-los-temas-tienen-pista-de-msu-1.md`) those two go up on their own.
+(`every-theme-has-an-msu-1-track.md`) those two go up on their own.
 
 ## Where they come from: the `.msu`
 

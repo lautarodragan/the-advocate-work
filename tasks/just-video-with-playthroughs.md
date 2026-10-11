@@ -6,7 +6,7 @@ status: done
 assignee: taro
 ---
 
-Irupé found it on 2026-09-29 (`las-pruebas-sin-agujeros-callados.md`):
+Irupé found it on 2026-09-29 (`tests-without-silent-holes.md`):
 since `991bf935` (2026-09-27), `just video … apertura` gives a `TypeError`
 because the `recorrido` factory in `rom/pruebas/arnes/video.py` doesn't
 accept `caso`, and `talan` gets stuck on map 900 because it doesn't pick the

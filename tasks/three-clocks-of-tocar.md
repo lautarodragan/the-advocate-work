@@ -8,7 +8,7 @@ status: done
 In the harness in `pruebas/` there are three `tocar`: `Partida.tocar` in ticks, and
 `menu.tocar` and `Pelea.tocar` in frames, with different gaps between presses. The
 same name for three clocks confuses whoever writes a new test.
-It was left un-unified in `ordenar-pruebas` (2026-09-25) because unifying them
+It was left un-unified in `tidy-up-pruebas` (2026-09-25) because unifying them
 **changes when each press lands**, and that can change what the tests see.
 The docstring of `menu.tocar` explains the three.
 

@@ -8,7 +8,7 @@ agents: [Aguará]
 ---
 
 From taro, on 2026-10-10: the board that Aguará inventoried and Hornero published
-on 2026-10-06 (`el-tablero-contra-rm2k.md`) moves into the book "copying
+on 2026-10-06 (`dashboard-against-the-whole-of-rm2k.md`) moves into the book "copying
 its .html as is, and linking it from the book, instead of converting it
 all to markdown. I would translate it to English, though." It is the fifth of the
 parallel tasks of moving the documentation into the book.

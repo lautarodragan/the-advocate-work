@@ -9,7 +9,7 @@ assignee: Ombú
 Two small battle things, from 2026-09-28.
 
 **The enemies' HP.** RM2k never shows it and ABL has no way to see it (Tero
-measured it: `el-menu-como-rm2k.md`). taro accepted the proposal: hide it by
+measured it: `menu-like-rm2k.md`). taro accepted the proposal: hide it by
 default with a build flag, `CON_HP_DE_ENEMIGOS = False` in `cartuchos.py`,
 like `CON_MAPA_DE_DEBUG`. Today `ba_renglon` in `rom/src/batalla.s` draws it;
 in `pantallas.py` it's noted as our own decision.
@@ -17,7 +17,7 @@ in `pantallas.py` it's noted as our own decision.
 **The takeoff's thunder.** The turn-1 page of troops 102 and 104 asks for
 Thunder9, and it doesn't play because putting it in the battle package lowers
 six instruments of the battle theme from ~14 to ~11.5 kHz and BRASS64 from
-16.3 to 10.8 (Ceibo measured it: `eventos-de-tropa-de-release.md`). It's
+16.3 to 10.8 (Ceibo measured it: `release-troop-events.md`). It's
 decided by listening.
 
 2026-09-28, in `testing/`: done by Ombú on his branch, on `main` at 8da66c4,

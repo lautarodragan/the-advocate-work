@@ -7,7 +7,7 @@ status: done
 
 # What
 
-Milestone 4 of `lashe-city-hasta-la-carrera.md` —the context is there—. It has
+Milestone 4 of `lashe-city-with-the-car-up-to-the-race.md` —the context is there—. It has
 two halves that don't step on each other:
 
 - **the plant's enemies** (troops 108 to 114);
@@ -74,7 +74,7 @@ In short:
 
 **Animation 62 isn't drawn**, nor any skill's: it's a new subsystem inside the
 battle (objects, OAM, a palette, the frames by DMA), and it stays with what was
-looked at in `animaciones-en-la-pelea.md`.
+looked at in `animations-in-battle.md`.
 
 # Numbers used
 

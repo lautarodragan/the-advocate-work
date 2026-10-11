@@ -49,7 +49,7 @@ tiles of 256 (Book of Three 267), and Dooms 2's actor choice goes over
 `$4800`. Continuing to merge until the tiles fit was tried
 (`merge_until`): Frozen ended up with 4 colors and Book of Three with 2, which
 destroys the window. It's not the tool; it goes separately (wishlist
-`la-ventana-en-el-banco-de-tiles`). Desert stops at End Game and Dooms 2
+`window-in-the-tile-bank`). Desert stops at End Game and Dooms 2
 also at its BMPs.
 
 Captures: `/shared/capturas/2026-10-05-ventana-con-mas-colores/`, Dooms 2's

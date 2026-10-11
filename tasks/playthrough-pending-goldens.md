@@ -5,7 +5,7 @@ type: test
 status: todo
 ---
 
-Irupé measured it on 2026-09-29 (`las-pruebas-sin-agujeros-callados.md`):
+Irupé measured it on 2026-09-29 (`tests-without-silent-holes.md`):
 of the 135 shots that the playthrough tests take, only the 8 in
 `apertura/` and `talan/` had a golden. The other 127 are in
 `rom/pruebas/golden/playthrough/pendientes.txt`, grouped by test. Until

@@ -41,7 +41,7 @@ The scripts that did the counting, in case they need redoing, are in
 | `install` | `cargo install` of the named projects, or of all of them, into `CARGO_ROOT` | AGENTS.md, `tools/README.md`, the converter's `stage.rs` error | 2026-10-04 | keep |
 | `install-local` | the same into a `bin/` of a worktree; refuses in the main checkout | AGENTS.md, `.claude/agentes.md`, `tools/README.md` | 2026-10-04 | keep |
 | `_not_in_main_checkout`, `_install` | private ones of the two above | `install`, `install-local` | — | keep; the symlink cleanup of `_install`, **question 2** |
-| `which` | which binary this checkout resolves for each tool | one task (`los-bytecodes-en-rust`) | 2026-10-02 | keep, and **fix**: it was missing `rm2k-snes-mapdata` and `rm2k-snes-audio` |
+| `which` | which binary this checkout resolves for each tool | one task (`bytecodes-declared-in-rust`) | 2026-10-02 | keep, and **fix**: it was missing `rm2k-snes-mapdata` and `rm2k-snes-audio` |
 
 ### ABL's `justfile`
 
@@ -61,10 +61,10 @@ The scripts that did the counting, in case they need redoing, are in
 | `build` | `rm2k-snes-cartridges` with a name: **the same as `cartuchos <name>`** | `parches`, `entregar`, `video`; `test_msu.py`, `docs/port/pipeline.md`, a wishlist task | 2026-10-02 | **question 4** |
 | `entregar` | `entregar.py` after building `release` | AGENTS.md of both repos, `docs/snes/emulators.md` | 2026-10-02 | keep |
 | `video` | `pruebas/arnes/video.py` | `test_video.py`, `pruebas/README.md` | 2026-10-02 (6 in `done/`) | keep |
-| `menu-modo-5`, `fuentes` | test ROM of the menu in mode 5 and of the fonts, and their verification | `experimentos/` | 2026-10-02 (`una-fuente-para-la-alta-resolucion`) | **question 6** |
+| `menu-modo-5`, `fuentes` | test ROM of the menu in mode 5 and of the fonts, and their verification | `experimentos/` | 2026-10-02 (`font-for-high-resolution-or-a-narrower-one`) | **question 6** |
 | `msu-puerto` | test ROM of the MSU-1 data port | the study of maps over the MSU-1 (its phase 0 is measuring the FX Pak) | 2026-10-02 | **question 6** |
 | `exhirom` | ExHiROM test ROM | `docs/snes/emulators.md`, `experimentos/` | 2026-10-02 | **question 6** |
-| `zoom-modo-7`, `zoom-modo-7-videos` | test ROM of the mode 7 zoom, and its videos next to the original | `experimentos/` | 2026-10-02 (`el-piloto-del-modo-7`) | **question 6** |
+| `zoom-modo-7`, `zoom-modo-7-videos` | test ROM of the mode 7 zoom, and its videos next to the original | `experimentos/` | 2026-10-02 (`mode-7-pilot-for-the-zoom-of-the-diff-photos`) | **question 6** |
 
 What I did **not** find: any Python recipe wrapping a script
 that no longer exists, any from `rom/`, and any `just X` invocation in the

@@ -12,7 +12,7 @@ calls from Eisen's rooms get skipped.
 ## Already done
 
 Two of the ones on the list came out on 2026-10-06 with
-`cuatro-atajos-para-los-otros-juegos` (Chajá), because they paid off in the other
+`four-shortcuts-for-the-other-games` (Chajá), because they paid off in the other
 games:
 
 * **The condition on a character's direction**, `OP_IF_FACING`: the 31

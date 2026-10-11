@@ -8,7 +8,7 @@ assignee: taro
 
 # What
 
-Milestone 2 of `lashe-city-hasta-la-carrera.md` —the context and what was measured are
+Milestone 2 of `lashe-city-with-the-car-up-to-the-race.md` —the context and what was measured are
 there—. It goes after 1 and in parallel with 3.
 
 The mandatory stretch of the three branches: the neighbour's door in Sector 35
@@ -58,7 +58,7 @@ What can be done and what can't (question 4 of the plan):
   RAM (BSS has ~100 bytes free), and it's saved in the game if the
   original saves it.
 
-And the debt in `las-otras-transiciones-de-rm2k.md` shrinks: the
+And the debt in `other-transitions.md` shrinks: the
 mosaic stops being there.
 
 **Two new themes without samples in the bank**: `Kfmus5` (the den, plays
@@ -152,7 +152,7 @@ tenths —`evilrhys`'s cymbals from 4.6 to 4.5—. The converter doesn't know th
 `Kfmus5` keeps playing from 41 to 45 —it comes from 37's page and the rule in
 `temas_heredados` cuts at 41, which has its own `PlayBGM`s— so those
 packages don't reserve room for it. Nobody listened to it without MSU-1: it goes with the
-audio pass (`el-audio-despues-de-lashe-city.md`). `just techos` redone: no
+audio pass (`audio-after-lashe-city.md`). `just techos` redone: no
 theme clips.
 
 # Tests

@@ -112,7 +112,7 @@ With all three everything shows: `pozo-despues-0.png`, `-1` and `-2`.
 ### What was found along the way
 
 **The battle's list does not scroll**: it gathers 16 at most and shows 14.
-It goes in `tasks/la-lista-de-habilidades-de-la-pelea-no-se-desplaza.md`.
+It goes in `tasks/battle-skill-list-doesnt-scroll.md`.
 
 ## For taro
 

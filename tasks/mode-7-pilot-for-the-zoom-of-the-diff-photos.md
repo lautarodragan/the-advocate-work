@@ -36,7 +36,7 @@ frame, on 212 and 213, with the width of what isn't black:
   it, who enters through a `Teleport` and doesn't move: PhoneCallDiff and
   SurlGravesDiff are cropped from (8, 16) and SurlBroDiff and ThreeRubbleDiff
   from (0, 16), at 256x224. `recorte()` in `armar.py` computes it; the
-  comparison with screenshots that `las-fotos-diff-recortadas-y-el-montaje.md`
+  comparison with screenshots that `diff-photos-cropped-and-217-montage-as-in-rm2k.md`
   asks for wasn't done.
 
 ## The ROM
@@ -193,7 +193,7 @@ showing it and fourteen when erasing it, which reloads the map. **Mode 7 owns
 **Apart from mode 7**: the flash with `COLDATA` also works for today's mode 1
 photo —the white on 213, 214 and 216 that today gets cut off when the photo
 appears, `divergencias/lo-que-las-imagenes-grandes-no-modelan.md`— and for
-217's montage in `las-fotos-diff-recortadas-y-el-montaje.md`.
+217's montage in `diff-photos-cropped-and-217-montage-as-in-rm2k.md`.
 
 ## What's in `/shared/experimentos/2026-10-02-modo-7/`
 
@@ -211,4 +211,4 @@ approach the photos". It remains to choose a variant —media, hybrid media, vq
 or hybrid vq— to bring it into the game.
 
 taro chose the **hybrid vq** (variant 4), on 2026-10-03. It goes into the
-engine in `las-fotos-en-modo-7.md`, in the tools repo.
+engine in `picture-zoom-in-mode-7.md`, in the tools repo.

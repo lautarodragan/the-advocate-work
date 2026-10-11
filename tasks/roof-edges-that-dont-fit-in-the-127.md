@@ -5,7 +5,7 @@ type: bug
 status: draft
 ---
 
-Measured by Mulita on 2026-10-11 (`sunset-en-modo-1-con-color-math.md`):
+Measured by Mulita on 2026-10-11 (`sunset-in-mode-1-with-colour-math.md`):
 on a painted map, the cells the roof partly covers go in BG2 with
 only the roof's pixels; 127 tiles fit (`roofs(…, 127)` in
 `rm2k-snes/wally/src/background/painted.rs`, the-advocate `fc6f7456`), and
@@ -15,7 +15,7 @@ maps, 34,895 of 1,586,793 roof pixels end up on the wrong side
 which way it could go: "256 could be given by moving the base of BG2 and
 the window to index 256".
 
-Cardón saw it while playing on 2026-10-11 (`los-otros-juegos-arman-y-arrancan.md`):
+Cardón saw it while playing on 2026-10-11 (`other-games-build-and-boot.md`):
 a normal-layer guard, event 8 at (36,13) on map 2, with its
 legs over the edge of the orange roof; "probably one of the edges
 that don't fit in the 127", not checked. The walks of the goldens in

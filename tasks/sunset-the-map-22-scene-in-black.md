@@ -7,7 +7,7 @@ assignee: taro
 agents: [Mulita]
 ---
 
-Seen by Mulita on 2026-10-10, while closing `el-grupo-vacio-al-empezar.md`: it is not about the empty party, it also happens with `party = [1]`.
+Seen by Mulita on 2026-10-10, while closing `empty-party-at-the-start.md`: it is not about the empty party, it also happens with `party = [1]`.
 
 ## The cause: there are two, one behind the other
 
@@ -72,7 +72,7 @@ Two paths, not chosen:
   color math for the transparency, in a map that is already in
   mode 3 with the panorama. It is a whole feature.
 
-See `sunset-las-imagenes-sobre-el-mapa.md`.
+See `sunset-the-pictures-over-the-map.md`.
 
 ## Log
 

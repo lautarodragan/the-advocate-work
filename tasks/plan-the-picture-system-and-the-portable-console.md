@@ -21,7 +21,7 @@ not showing events while a picture is shown. It isn't something that always
 works, but I think in many cases it does".
 
 Our own custom menu, with mode 5 and a font, went to the wishlist:
-`un-menu-custom-propio.md`. This comes before: the pictures as RM2k uses
+`custom-menu-of-our-own-not-made-of-pictures.md`. This comes before: the pictures as RM2k uses
 them.
 
 ## The study (Jilguero, 2026-10-01)

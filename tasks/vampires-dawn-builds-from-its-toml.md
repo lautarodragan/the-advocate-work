@@ -19,7 +19,7 @@ sounds (28 maps), the NPCs that don't fit in OAM (25) and
 the events that don't fit in RAM (15) were fixed. What remains is measuring it.
 
 The window of map 15 is being fixed by Tijereta in parallel
-(`la-ventana-en-el-banco-de-tiles`): here it is excluded like any other, and
+(`window-in-the-tile-bank`): here it is excluded like any other, and
 taken off the list when that arrives.
 
 ## What was done (Aguará, 2026-10-11)

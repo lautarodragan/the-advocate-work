@@ -5,7 +5,7 @@ type: bug
 status: draft
 ---
 
-Seen by Hurón on 2026-10-06 (`eraseevent-de-verdad.md`): in the
+Seen by Hurón on 2026-10-06 (`eraseevent-for-real.md`): in the
 WC scene of Desert Nightmare (map 7), event 4 is a parallel one
 that shows `Lichteffekt_Tankstelle_WC` and erases itself. In RM2k it is a
 dark 35% mask over the room; in the ROM "it comes out opaque and covers the
@@ -18,7 +18,7 @@ takes the map off the screen; its transparency darkens towards the black
 behind (`divergences/lo-que-las-imagenes-grandes-no-modelan.md` in the book).
 It is the same thing Sunset had with its roofs and fogs, which since
 2026-10-11 are drawn inside the map with `[graphics] map_pictures`
-(`sunset-las-imagenes-sobre-el-mapa.md`); that knob is turned
+(`sunset-the-pictures-over-the-map.md`); that knob is turned
 on only in Sunset.
 
 **Not checked today on the console.** Built today (the-advocate `fc6f7456`,

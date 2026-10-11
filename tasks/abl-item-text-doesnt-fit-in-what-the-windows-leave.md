@@ -5,7 +5,7 @@ type: bug
 status: draft
 ---
 
-Seen by Tijereta on 2026-10-11 (`las-ventanas-mas-eficientes.md`),
+Seen by Tijereta on 2026-10-11 (`most-efficient-windows.md`),
 tools `fc6f7456`, ports `a85b7e3`, building ABL's `release`.
 
 **What is seen**: in the build, not when playing. `rm2k-snes-screens convert` says

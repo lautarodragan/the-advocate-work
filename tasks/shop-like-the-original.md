@@ -14,8 +14,8 @@ screen is `rom/src/tienda.s`, and the reference is
 `pantallas.pantalla_tienda`.
 
 What has been done so far, which is where the mechanism comes from:
-`la-pantalla-de-items-como-el-original.md` (Jacarandá) and
-`la-pantalla-de-equipo-como-el-original.md` (Ñandú). Both build the windows
+`items-screen-like-the-original.md` (Jacarandá) and
+`equipment-screen-like-the-original.md` (Ñandú). Both build the windows
 in BG1 behind BG2's text, share tiles and colours (`titulo.marcos`), and each
 uploads its tilemap. The original shop still has to be captured with Wine, as
 was done for the other two.
@@ -49,7 +49,7 @@ comment.
 
 ## Measured on 2026-09-28, with the actor choice
 
-The actor choice (`la-eleccion-de-actor-como-el-original.md`) already uses
+The actor choice (`actor-selection-like-the-original.md`) already uses
 that way out: BG1 with its base at `$4000`, 60 tiles at 8bpp and its tilemap
 at `$4800`. Measured against the allocations (`_controlar_objetivo`): the
 smallest BG1 bank is `VENTANA_FONDO`'s, `$1000..$4C00`; all the others reach

@@ -5,14 +5,14 @@ type: chore
 status: draft
 ---
 
-Tijereta, on 2026-10-11 (`la-ventana-en-el-banco-de-tiles.md`):
+Tijereta, on 2026-10-11 (`window-in-the-tile-bank.md`):
 the five games went back to their System except Vampires Dawn, "its screens
 fit, but the ROM goes over by one 64 KB piece". The
 comment of `system = "ablskin.png"` in `vampires-dawn/rm2k-snes.toml` says so
 (ports `a85b7e3`).
 
 **It's no longer true.** That measurement is from before
-`una-cuantizacion-por-personaje.md` (Mulita), which brought the poses down
+`one-quantization-per-character-for-the-poses.md` (Mulita), which brought the poses down
 from 4.93 to 3.28 MB. Checked today, the-advocate `fc6f7456` and ports
 `a85b7e3`, in an own worktree: with the `system` line commented out,
 `just cartuchos release` in `vampires-dawn/` builds (rc 0, 2 min 12 s):

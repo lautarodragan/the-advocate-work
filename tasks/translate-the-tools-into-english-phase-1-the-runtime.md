@@ -53,7 +53,7 @@ and on the tree merged with `main` both suites pass.
   (`docs/port/msu-datos.md`), "Qué fondos hay" and "El respaldo liviano"
   (`tools/port/escena.py`), "el formato por nota" (`tools/audio/snes_music.py`),
   "lo que depende del actor" (`titulo.py`), and the section title of
-  `tasks/audio-bgm.md` that `paquete_de_audio.s` cites. **If the
+  `tasks/music-through-the-spc700.md` that `paquete_de_audio.s` cites. **If the
   phase 1 of those files translates the title, the citation is left dangling**: each one
   has to be grepped;
 * a phrase of taro's quoted verbatim in `nivel.s`, with the translation next to it;

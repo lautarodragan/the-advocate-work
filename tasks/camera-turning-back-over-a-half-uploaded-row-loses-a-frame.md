@@ -5,7 +5,7 @@ type: bug
 status: draft
 ---
 
-Measured by Mulita on 2026-10-11 (`sunset-en-modo-1-con-color-math.md`),
+Measured by Mulita on 2026-10-11 (`sunset-in-mode-1-with-colour-math.md`),
 with `modo1/chequear.py` —VRAM against the `.inc`, frame by frame— on
 map 2 of Sunset Over Imdahl: the upcoming row is uploaded ahead, 11
 tiles per frame, and "a turn back of the camera with a half-uploaded

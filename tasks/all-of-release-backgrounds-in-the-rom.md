@@ -10,7 +10,7 @@ ROM (it saved 32 KB, from 75.8 % to 75.0 %, and he thought it made little differ
 opposite, put in the ROM all the backgrounds `release`'s maps use,
 with quality as low as needed**, and leave the replacement only for
 what doesn't fit. With MSU-1 nothing changes. It follows
-`todos-los-fondos-en-el-msu-1.md`.
+`all-the-battle-backgrounds-in-the-msu-1.md`.
 
 Everything measured here is from 2026-09-27, on `91b5a37d` (before) and this branch
 (after), with throwaway scripts.
@@ -58,7 +58,7 @@ grew are 17 KB, half a bank, and the other half is the sequential packing of
 `bancos.py`, which leaves a block that doesn't fit for the next bank.
 
 **The remaining main path** (Tasgarde, Eisen, 259 and 255) is about ten
-banks according to `el-mundo-y-lo-que-sigue.md` (`m2` 112 against `m4` 122,
+banks according to `world-and-what-follows.md` (`m2` 112 against `m4` 122,
 measured with the three backgrounds from before). With this it has **one** left instead of
 two, plus the backgrounds of its own maps, at 4 KB each. Milestone 3 of that
 plan (first-fit decreasing) gave eight more.

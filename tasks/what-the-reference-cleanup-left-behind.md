@@ -5,7 +5,7 @@ type: refactor
 status: todo
 ---
 
-The cleanup of 2026-09-26 (`restos-de-la-referencia-en-eventos-py.md`)
+The cleanup of 2026-09-26 (`leftovers-of-the-reference.md`)
 removed the comments that relied on the Python reference and left
 out, on purpose, these four things: each one asks for something more than
 rewriting a comment.
@@ -21,7 +21,7 @@ rewriting a comment.
    is drawn then) or whether aborting is still right, and leave the why.
 3. **`titulo.render` and `ventana.pagina` have no callers** and describe the
    old comparison: delete them (`titulo.render` is already named in
-   `inventario-de-imagenes-en-python.md`). `git blame` and `git grep`
+   `inventory-images-to-tiles-in-python.md`). `git blame` and `git grep`
    first.
 4. **"Topado en 999 como en la referencia"** (`rom/src/batalla.s`): it isn't known
    whether it speaks of the Python reference or of `escena`'s drawing. Find out with

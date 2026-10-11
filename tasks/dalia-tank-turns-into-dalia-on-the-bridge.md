@@ -97,12 +97,12 @@ hero stays at 3— and green with the fix.
 
 ## The other two of the family
 
-* **The missile hatches** (`las-compuertas-de-los-misiles.md`,
+* **The missile hatches** (`missile-hatches-turn-into-soldiers.md`,
   map 92): it is not this. There there is no `TintScreen` between the hatches'
   routes —they are turns (14, 15) separated by `Wait`—, and the graphic
   change lands with the three `ShowBattleAnimation` on the launchers. I did not
   reproduce it.
-* **Boss Wick** (`boss-wick-se-vuelve-una-de-sus-chicas.md`): I did not look at it
+* **Boss Wick** (`boss-wick-turns-into-one-of-his-girls.md`): I did not look at it
   beyond the dump. 40 changes who plays Wick per page (event
   1 becomes `BLPeople` 3 and 3 becomes `People7` 2 with 160), which
   smells of pages or sprite slots, not of this. The vidcasts do

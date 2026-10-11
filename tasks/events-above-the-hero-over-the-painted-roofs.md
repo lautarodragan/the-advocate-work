@@ -5,7 +5,7 @@ type: bug
 status: draft
 ---
 
-Seen by Cardón on 2026-10-11 (`los-otros-juegos-arman-y-arrancan.md`),
+Seen by Cardón on 2026-10-11 (`other-games-build-and-boot.md`),
 tools `fc6f7456`, ports `a85b7e3`, the same in snes9x and bsnes.
 
 **What is seen**: Sunset Over Imdahl, map 2 (the square), the DummyGuard at
@@ -25,5 +25,5 @@ release; go to map 2 and look at the guard. The walks of the goldens of
 Nearby, without checking whether it is the same thing: a normal-layer guard at (36,13)
 on the same map has its legs over the edge of a roof; it may be one
 of the edges that do not fit in the 127 (the debt in
-`sunset-en-modo-1-con-color-math.md`, now
-`los-bordes-de-techo-que-no-entran.md`).
+`sunset-in-mode-1-with-colour-math.md`, now
+`roof-edges-that-dont-fit-in-the-127.md`).

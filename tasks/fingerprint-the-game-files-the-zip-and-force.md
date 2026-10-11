@@ -7,7 +7,7 @@ assignee: taro
 agents: [Cardón]
 ---
 
-It follows from `el-volcado-fuera-de-la-huella.md`: with Sunset's ChipSet retouched, `just cartuchos` says "up to date" and the ROM stays stale.
+It follows from `dump-outside-the-cartridges-fingerprint.md`: with Sunset's ChipSet retouched, `just cartuchos` says "up to date" and the ROM stays stale.
 
 taro's decision, on 2026-10-11: don't hash the RTP or the SoundFont; at most invalidate if the path changes, or a `--force` to use by hand if they are modified (it should never happen). He considered an RTP in `.zip` validated by path, date and size, without making up his mind. Hornero chose: the path of the RTP and the SoundFont in the fingerprint, a `--force`, and the game files the converter reads, by content —those do change if the game is retouched—. taro can adjust it.
 

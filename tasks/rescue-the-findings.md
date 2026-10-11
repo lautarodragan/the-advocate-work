@@ -10,7 +10,7 @@ assignee: taro
 taro, on 2026-10-11, created the `draft` status (see this repo's README and
 "Un hallazgo que no se arregla" in `AGENTS.md`). The findings from before
 stayed in the agents' tasks; this one rescues them. The example of the
-format is `los-eventos-encima-del-heroe-sobre-los-techos-pintados.md`,
+format is `events-above-the-hero-over-the-painted-roofs.md`,
 and the one for "Known issues", Sunset's page in the book.
 
 ## How it was done (Calandria, 2026-10-11)
@@ -27,24 +27,24 @@ maps 1 and 2, VD without the `system` knob). The one-off scripts, in
 
 ## New drafts (17)
 
-* `los-comunes-paralelos-no-corren` — from `el-tablero-contra-rm2k`.
-* `el-lider-y-los-renombrados-en-los-mensajes` — from `el-nombre-del-heroe-en-los-mensajes`.
-* `lo-que-se-funde-en-las-pantallas-no-va-a-los-parches` — from `la-ventana-con-mas-colores` and `la-ventana-en-el-banco-de-tiles`.
-* `las-ranuras-y-el-menu-de-dooms2-no-entran` — from `las-exclusiones-que-sobran`, `la-ventana-en-el-banco-de-tiles` and point 4 of `degradar-en-vez-de-fallar`.
-* `el-heroe-que-destella-comparte-paleta` — from `las-exclusiones-que-sobran` (Frozen 1).
-* `los-flujos-de-un-mapa-que-no-entran-en-la-wram` — from `las-exclusiones-que-sobran` (Frozen 2) and `vampires-dawn-arma-desde-su-toml` (VD 1).
-* `los-mapas-de-vampires-dawn-que-no-entran-en-la-vram` — from `vampires-dawn-arma-desde-su-toml`, `una-cuantizacion-por-personaje` and `fusionar-tiles-parecidos`.
-* `vampires-dawn-con-su-system` — from `la-ventana-en-el-banco-de-tiles`: **it already builds with `VDBlutsys`**, measured today.
-* `las-paredes-invisibles-que-se-pierden` — from `los-eventos-que-no-entran-en-la-ram`.
-* `las-imagenes-sobre-el-mapa-fuera-de-sunset` — from `eraseevent-de-verdad` (Desert's WC).
-* `el-titulo-que-no-entra-en-la-vram` — from `degradar-en-vez-de-fallar` (Desert, Frozen, VD).
-* `las-variables-que-pasan-de-256` — from `degradar-en-vez-de-fallar` (VD).
-* `los-bordes-de-techo-que-no-entran` — from `sunset-en-modo-1-con-color-math` and `los-otros-juegos-arman-y-arrancan`.
-* `la-camara-que-vuelve-sobre-una-fila-a-medio-subir` — from `sunset-en-modo-1-con-color-math`.
-* `textos-que-quedaron-viejos` — from `el-libro-docs-y-ports` and `el-justfile-mas-chico`.
-* `una-pelea-con-el-grupo-vacio` and `borrar-un-evento-sin-prueba-de-lo-que-se-ve` — coverage, from `el-grupo-vacio-al-empezar` and `eraseevent-de-verdad`.
+* `parallel-common-events-dont-run` — from `dashboard-against-the-whole-of-rm2k`.
+* `n-0-and-renamed-actors-in-messages` — from `n-n-in-messages`.
+* `what-gets-merged-in-the-screens-doesnt-go-to-the-patches` — from `window-with-more-than-15-colors` and `window-in-the-tile-bank`.
+* `dooms-2-slots-and-menu-dont-fit-in-their-bank` — from `exclusions-left-over-in-the-ports`, `window-in-the-tile-bank` and point 4 of `degrade-instead-of-failing`.
+* `flashing-hero-shares-a-palette-with-an-npc` — from `exclusions-left-over-in-the-ports` (Frozen 1).
+* `map-streams-that-dont-fit-in-wram` — from `exclusions-left-over-in-the-ports` (Frozen 2) and `vampires-dawn-builds-from-its-toml` (VD 1).
+* `vampires-dawn-maps-that-dont-fit-in-vram` — from `vampires-dawn-builds-from-its-toml`, `one-quantization-per-character-for-the-poses` and `merge-similar-tiles-when-the-background-doesnt-fit`.
+* `vampires-dawn-now-builds-with-its-own-system` — from `window-in-the-tile-bank`: **it already builds with `VDBlutsys`**, measured today.
+* `invisible-walls-lost-when-trimming-events` — from `los-eventos-que-no-entran-en-la-ram`.
+* `pictures-that-go-over-the-map-outside-sunset` — from `eraseevent-for-real` (Desert's WC).
+* `title-that-doesnt-fit-in-vram` — from `degrade-instead-of-failing` (Desert, Frozen, VD).
+* `variables-past-256` — from `degrade-instead-of-failing` (VD).
+* `roof-edges-that-dont-fit-in-the-127` — from `sunset-in-mode-1-with-colour-math` and `other-games-build-and-boot`.
+* `camera-turning-back-over-a-half-uploaded-row-loses-a-frame` — from `sunset-in-mode-1-with-colour-math`.
+* `three-texts-that-went-stale` — from `book-the-tools-and-abl-docs-and-the-ports-section` and `justfiles-smaller`.
+* `battle-with-the-party-empty` and `eraseevent-no-test-looks-at-what-is-seen` — coverage, from `empty-party-at-the-start` and `eraseevent-for-real`.
 
-And a line in two tasks in `todo/`: `eraseScreen-y-showscreen` (it no longer
+And a line in two tasks in `todo/`: `erasescreen-and-showscreen` (it no longer
 leaves pages out, it is debt; what is seen in Desert and El Dorado) and
 `changesystemgraphics` (also VD and Desert, which plays entirely with the
 intro's System). The example draft now names the edges one.
@@ -57,48 +57,48 @@ port"). Each line names its draft or its task in `todo/`.
 
 ## Discarded: already fixed or covered
 
-* Sunset black at 30 s (`ignorar-changesystemgraphics`) and the opaque
-  orange window (`sunset-el-mapa-22-en-negro`): they were fixed by the
+* Sunset black at 30 s (`ignore-changesystemgraphics-for-now`) and the opaque
+  orange window (`sunset-the-map-22-scene-in-black`): they were fixed by the
   pictures inside the map and mode 1; the capture `modo1-22-01600` in
   `/shared/capturas/2026-10-11-sunset-modo-1/` shows the scene with the
   window without background.
 * Desert's intro that ended in black because of the excluded map 2
-  (`eraseevent-de-verdad`): Desert no longer excludes anything.
-* Sunset takes hours (`sunset-tarda-horas-en-armar`, `otros-juegos-el-rebarrido`):
-  it builds in 33 s (`los-otros-juegos-arman-y-arrancan`).
-* The stripes in VD's intro (`boot-frames-por-cartucho`):
-  `la-intro-de-vampires-dawn-rota`.
-* Dooms 2's maps 40 to 93 (`las-caras-y-los-escapes-de-espera`):
-  `las-muestras-que-sobran`.
+  (`eraseevent-for-real`): Desert no longer excludes anything.
+* Sunset takes hours (`sunset-over-imdahl-takes-hours-to-build`, `other-games-the-re-sweep`):
+  it builds in 33 s (`other-games-build-and-boot`).
+* The stripes in VD's intro (`boot-frames-per-cartridge`):
+  `vampires-dawn-intro-broken`.
+* Dooms 2's maps 40 to 93 (`faces-and-wait-escapes-in-messages`):
+  `surplus-samples-dont-play`.
 * The own System of Book of Three, Frozen, Desert and Dooms 2:
-  `la-ventana-en-el-banco-de-tiles`.
-* The game's resources outside the fingerprint (`el-volcado-fuera-de-la-huella`):
-  `la-huella-con-el-juego-y-force`.
-* `ChangeFaceGraphic` outside `ACCEPTED_UNDONE` (`el-tablero-contra-rm2k`):
-  `changefacegraphic-en-las-deudas`.
+  `window-in-the-tile-bank`.
+* The game's resources outside the fingerprint (`dump-outside-the-cartridges-fingerprint`):
+  `fingerprint-the-game-files-the-zip-and-force`.
+* `ChangeFaceGraphic` outside `ACCEPTED_UNDONE` (`dashboard-against-the-whole-of-rm2k`):
+  `changefacegraphic-in-the-declared-debts`.
 * The red of `the_layers_are_the_ones_the_python_made` and the screens
-  test that changed: `los-colores-de-la-ventana-en-el-pedido-de-wally`
+  test that changed: `window-colors-in-wally-request`
   and `00710e92`.
 * VD's walls of music, troops, poses, boot and the
   errors without a map: their tasks in `testing/`.
-* The hero's diagonals and turns in routes (`cuatro-atajos-para-los-otros-juegos`):
-  `ruta-los-movimientos-que-faltan.md`.
+* The hero's diagonals and turns in routes (`four-shortcuts-for-the-other-games`):
+  `route-the-missing-moves.md`.
 * `EraseScreen`/`ShowScreen`, `ChangeSystemGraphics`, the faces, the
   colours and the waits: their tasks in `todo/` (with the line above).
 
 ## Not rescued, by judgement
 
-* `SUB_MAX` could be exceeded again (`cuatro-atajos-para-los-otros-juegos`):
+* `SUB_MAX` could be exceeded again (`four-shortcuts-for-the-other-games`):
   it wasn't seen being exceeded.
 * ABL's routes that get cut at speed 3
-  (`la-ruta-del-mirador-deja-trabada-la-direccion`): they do what RM2k does, and
+  (`lookout-route-leaves-the-hero-facing-locked`): they do what RM2k does, and
   the model was without the tints' waits.
 * The copies in `build/cache/zip/` that aren't deleted
-  (`la-huella-con-el-juego-y-force`), the 168 pose banks that remain
-  (`una-cuantizacion-por-personaje`: VD fits now) and the painted maps with
-  mandatory MSU-1 (`sunset-en-modo-1-con-color-math`): nothing is broken.
+  (`fingerprint-the-game-files-the-zip-and-force`), the 168 pose banks that remain
+  (`one-quantization-per-character-for-the-poses`: VD fits now) and the painted maps with
+  mandatory MSU-1 (`sunset-in-mode-1-with-colour-math`): nothing is broken.
 * Desert's "light-blue garbage" panorama from 2026-10-05
-  (`otros-juegos-el-relevamiento`): the panoramas were redone afterwards and
+  (`other-games-the-survey`): the panoramas were redone afterwards and
   nobody saw it again; not checked.
 * The "it wasn't played" and "the suite doesn't cover" that don't name a concrete case.
 

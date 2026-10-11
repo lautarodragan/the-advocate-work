@@ -30,11 +30,11 @@ colors or cutting into 8x8 stays on Adeleine's and `voodoo`'s side.
 In three parts, each with the ROMs byte for byte identical and everything
 it draws compared pixel by pixel against the Python:
 
-- the CharSets: `rm2k-render-los-charsets.md` (Yaguarundí);
-- the battle —animations, enemies, backgrounds—: `rm2k-render-pelea.md`
+- the CharSets: `rm2k-render-draws-the-charsets.md` (Yaguarundí);
+- the battle —animations, enemies, backgrounds—: `rm2k-render-draws-the-battle.md`
   (Coatí);
 - the screens —faces, System, `ShowPicture` sign—:
-  `rm2k-render-pantallas.md` (Hurra).
+  `rm2k-render-draws-the-screens.md` (Hurra).
 
 `load_image` is gone. What the port does with those images for the console
 —shrinking, cutting into 8x8, the dithering, the baking, the colors— stays

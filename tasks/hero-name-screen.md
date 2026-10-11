@@ -34,7 +34,7 @@ System's, stretched to the cell, and it blinks.
   is saved is mixing the face with the System, not color
   memory.
 * **The gradient through HDMA.** What ran over in tiles in the windows
-  (`la-ventana-en-el-banco-de-tiles`) wasn't colors but cells: a
+  (`window-in-the-tile-bank`) wasn't colors but cells: a
   stretched gradient is a different cell in each row. If the background of
   each window uses a single CGRAM entry and an HDMA channel
   rewrites it on each line, the background becomes a single repeated cell.

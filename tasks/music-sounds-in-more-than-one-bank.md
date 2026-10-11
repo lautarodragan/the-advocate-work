@@ -7,7 +7,7 @@ assignee: taro
 agents: [Tijereta]
 ---
 
-Measured by Tijereta on 2026-10-10, when closing `la-musica-y-las-tropas-en-dos-bytes.md`: with the whole `Music/` (281 songs), starting on 8 and without the 82 maps Aguará excluded, VD gets past the music, the troops and the actions and stops here (`emit.rs` of `rm2k-snes-audio`). It is the next wall of the whole game.
+Measured by Tijereta on 2026-10-10, when closing `music-and-troop-members-without-the-one-byte-ceiling.md`: with the whole `Music/` (281 songs), starting on 8 and without the 82 maps Aguará excluded, VD gets past the music, the troops and the actions and stops here (`emit.rs` of `rm2k-snes-audio`). It is the next wall of the whole game.
 
 ## Done, on 2026-10-11 (Tijereta)
 

@@ -5,7 +5,7 @@ type: feature
 status: done
 ---
 
-It was left out of `la-victoria-avisa-la-experiencia.md` (2026-09-26): in
+It was left out of `victory-announces-the-experience.md` (2026-09-26): in
 RM2k, on winning, the same victory page reports the gold won and the items the
 enemies dropped (`ProcessSceneActionVictory` in EasyRPG), and the party
 receives them. The port does not give gold or items on winning yet. The data

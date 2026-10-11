@@ -6,7 +6,7 @@ status: done
 assignee: taro
 ---
 
-From taro, on 2026-09-29, after step 1 (`el-justfile-no-sabe-que-existe-python.md`):
+From taro, on 2026-09-29, after step 1 (`justfile-doesnt-know-python-exists.md`):
 the problem is the one `npm link` tries to solve, with N sub-agents in
 parallel modifying the tools often. What was agreed:
 

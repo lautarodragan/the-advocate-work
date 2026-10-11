@@ -7,7 +7,7 @@ assignee: taro
 ---
 
 From taro, on 2026-09-30, after the mockup
-(`maqueta-del-menu-en-alta-resolucion.md`, Ñacurutú). Mode 5 with the
+(`mock-up-the-menu-in-high-resolution.md`, Ñacurutú). Mode 5 with the
 ×1.5 font per glyph is what reads best in the mockup, but there is a risk
 that only shows on the console: one-pixel high-resolution columns are at the
 limit of NTSC's bandwidth and may look blurry over composite or RF. This ROM

@@ -7,7 +7,7 @@ assignee: taro
 ---
 
 Guayabo flagged them on 2026-09-29, when classifying the divergences by repo
-(`decisiones-y-divergencias-por-repo.md`): they were measured against the
+(`decisions-and-divergences-by-repo.md`): they were measured against the
 Python reference that existed until 2026-09-16, not against RM2k, so it is
 not known whether the ROM differs from RM2k.
 
@@ -58,7 +58,7 @@ at— walks the same 88 frames and the camera scrolls the same 176 pixels as
 in the others. Nothing starts four ticks early and no screen is shifted
 eight pixels. What does differ is the length of each round: 161 ticks in
 the ROM and 158 in the original. It is a new task:
-`el-teletransporte-tarda-tres-cuadros-de-mas.md`.
+`teleport-takes-three-frames-too-many.md`.
 
 **The phase of the animated tiles — deleted.** The ten pixels are the water
 of map 6's ChipSet, visible after the `grafico-heroe` route lowers the

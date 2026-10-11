@@ -7,7 +7,7 @@ assignee: taro
 ---
 
 Second step of the road to Rust of `docs/research/las-herramientas-hoy.md`,
-in parallel with Carancho (`rust-el-armado-de-cartuchos.md`). Hornero
+in parallel with Carancho (`rust-the-project-library-and-the-building-of-cartridges.md`). Hornero
 decided it: the converter uses the render for two things, `Renderer` (the layers of
 each map, which are cached) and `load_image` (loading an image with its key
 colour, from several modules). The first goes to Rust, as an executable

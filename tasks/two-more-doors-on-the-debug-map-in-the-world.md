@@ -19,7 +19,7 @@ map?
    left of EV0020, having finished the sequence of the forest that
    catches fire, fought the agents and the Hover Tram."
 
-It follows `dos-puertas-mas-en-el-mapa-de-debug.md`: same method.
+It follows `two-more-doors-in-the-debug-map.md`: same method.
 
 ## Where they ended up
 

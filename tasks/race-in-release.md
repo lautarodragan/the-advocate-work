@@ -13,7 +13,7 @@ Put the car chase —maps 49 to 54— into `release`, when it is taken on. (Unti
 # Status
 
 **It went in on 2026-09-27**, with milestone 1 of
-`la-carrera-y-lo-que-sigue.md`: see `carrera-1-entra-y-se-corre.md`. What is
+`race-and-what-comes-next.md`: see `race-1-it-goes-in-and-it-runs-at-30-frames.md`. What is
 below is what was known before.
 
 Until 2026-09-24 it had its own ROM, `just build carrera` —formerly

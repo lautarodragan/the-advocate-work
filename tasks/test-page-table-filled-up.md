@@ -6,7 +6,7 @@ status: done
 assignee: taro
 ---
 
-Tacuarita found it on 2026-10-01 (`mundo-5-tangle-forest.md`): the `release`
+Tacuarita found it on 2026-10-01 (`world-5-tangle-forest.md`): the `release`
 test page table is full, because the page number is a byte and there are
 already 256. One more case breaks the assembly with `Range error`. Meanwhile,
 no new map can add cases of its own.

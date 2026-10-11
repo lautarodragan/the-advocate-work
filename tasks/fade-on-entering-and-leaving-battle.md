@@ -7,11 +7,11 @@ status: done
 
 Today the battle enters and leaves without a transition. In RM2k there is
 one (the one in the system database, "Battle Start" and "Battle End"; see
-`las-otras-transiciones-de-rm2k.md` for those that are not the fade).
+`other-transitions.md` for those that are not the fade).
 
 Besides looking like the original, taro pointed out on 2026-09-26 that **it
 covers the loading time**: with the samples distributed per map package
-(step 6 of `la-calidad-de-la-musica.md`), uploading the battle package goes
+(step 6 of `quality-of-the-music.md`), uploading the battle package goes
 from ~0.7 s to ~1.3 s frozen on entering, and as much again on leaving.
 With a fade, that load falls inside the black screen, as already happens on
 map changes.

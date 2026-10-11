@@ -8,7 +8,7 @@ assignee: taro
 
 **Make victory say the experience gained and who levelled up.**
 
-Experience and levelling up already work (`experiencia-y-subida-de-nivel.md`),
+Experience and levelling up already work (`experience-and-levelling-up.md`),
 but the battle does not tell them: neither "N EXP received" nor "Level up!". The state changes
 anyway; it only shows in the menu.
 

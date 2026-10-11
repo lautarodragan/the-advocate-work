@@ -7,7 +7,7 @@ assignee: taro
 ---
 
 Found while measuring whether `release` and `test-main` can be merged (see
-`juntar-release-y-test-main.md`), on 2026-09-25. **It happened in
+`merge-release-and-test-main.md`), on 2026-09-25. **It happened in
 `release`.** Fixed in the commit that moves this task to `testing/`.
 
 # What was happening

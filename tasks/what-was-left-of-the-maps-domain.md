@@ -6,7 +6,7 @@ status: done
 assignee: taro
 ---
 
-From `rust-el-dominio-de-los-mapas.md` (Mara, 2026-09-30):
+From `rust-the-maps-domain.md` (Mara, 2026-09-30):
 
 - that `rm2k-snes-events scan` answer each page's route targets, so that
   `movable_events` leaves Python;

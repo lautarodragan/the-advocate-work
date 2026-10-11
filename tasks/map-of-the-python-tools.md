@@ -20,8 +20,8 @@ It is research and a plan, not code. **The result is
 it, and above all answer the questions in its §5, which are the ones that
 decide where to start.
 
-Related: `las-responsabilidades-de-snes-convert.md` and
-`un-juego-golden-y-dos-repos.md`.
+Related: `responsibilities-of-snes-convert-py.md` and
+`golden-game-and-two-repos.md`.
 
 # Log
 

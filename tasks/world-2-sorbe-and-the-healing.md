@@ -7,8 +7,8 @@ status: done
 
 # What
 
-Milestone 2 of `el-mundo-y-lo-que-sigue.md`, which has everything measured
-beforehand. It starts from `3aac634`, with milestone 1 (`mundo-1-el-66-entra.md`).
+Milestone 2 of `world-and-what-follows.md`, which has everything measured
+beforehand. It starts from `3aac634`, with milestone 1 (`world-1-map-66-fits.md`).
 
 * **The sixth layout**, `LAYOUT_VENTANA_ENCIMA`: BG2's base at `$5000`,
   the above layer in 256 tiles, 384 background and 384 sprite, for 69
@@ -93,7 +93,7 @@ these maps.
 # Debt
 
 * **The battle on the world and Vago's come out without a background.** That belongs to
-  `todos-los-fondos-en-el-msu-1.md`, which goes in parallel.
+  `all-the-battle-backgrounds-in-the-msu-1.md`, which goes in parallel.
 * **The sign comes out in the usual window**, at the bottom: the original's `MessageOptions`
   (transparent and in the middle) isn't done by the ROM, same as in the
   rest of the game.

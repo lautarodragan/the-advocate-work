@@ -79,7 +79,7 @@ regenerating the remaining 9 goldens.
   cases fewer.
 * Things that name `test-main`: `cartuchos.py` (5), `pruebas/README.md` (3),
   `justfile` (2), `test_guardar_save_point.py` (1, with `en="test-main"`),
-  `la-carrera-en-release.md` (2). `conftest.py` asserts that `release` carries
+  `race-in-release.md` (2). `conftest.py` asserts that `release` carries
   no cases. And `donde_esta` depends on the dictionary's order: with
   `test-special` first, `parado-tapado` —which is in both— ran on the small
   one and moved its golden.
@@ -209,7 +209,7 @@ fallback in): `just cartuchos` cold 266 s —`test-main` 154, `test-special` 13,
 1. The `Teleport` to 6 in front of the 24 cases that ran on the start map:
    separate commit, 632 green, no golden moved.
 2. The converter empties `rom/build/<cartucho>/parches/` before writing (closes
-   `el-conversor-no-limpia-los-parches-viejos.md`).
+   `converter-does-not-clean-up-old-patches.md`).
 3. `donde_esta` no longer depends on `CARTUCHOS`'s order.
 4. `parches.revisar` knows what's a test thing: the maps come from
    `cartuchos.MAPAS_DE_PRUEBA`, and for the animations and the battlers —91

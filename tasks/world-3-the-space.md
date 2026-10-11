@@ -8,7 +8,7 @@ assignee: taro
 
 # What
 
-Milestone 3 of `el-mundo-y-lo-que-sigue.md`, which has what was measured
+Milestone 3 of `world-and-what-follows.md`, which has what was measured
 before (section "Espacio"). It starts from `2ca861a`, with milestones 1 and 2
 already in `release`. One commit per thing, each one with its before and after
 in the message:

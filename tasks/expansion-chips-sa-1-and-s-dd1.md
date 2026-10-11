@@ -338,7 +338,7 @@ RM2k pages**: the `Light*` and the `LightFloor`. Having the SA-1 do them without
 ABL code is exactly the previous idea. Any finer version —the
 SA-1 compares positions and the main CPU decides— needs to know which page
 is "a check", and that means recognising the minigame from the inside, which is what
-`el-mapa-11-se-rediseno.md` already discarded with path 4.
+`map-11-redesigned.md` already discarded with path 4.
 
 # Designs
 

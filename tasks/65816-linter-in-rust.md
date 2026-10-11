@@ -12,7 +12,7 @@ traps —things that compile fine but are surely wrong— would add value". For 
 so it gets made: "and let it be made in Rust".
 
 The precedent is Ratona's bank guard
-(`la-guarda-de-los-bancos.md`), which reads the `.dbg` and flags branches
+(`bank-guard.md`), which reads the `.dbg` and flags branches
 to another bank. Trap 1 is the one in `AGENTS.md`, "The trap that bit
 most often".
 

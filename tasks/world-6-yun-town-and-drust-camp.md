@@ -8,7 +8,7 @@ assignee: taro
 
 From taro, on 2026-10-01: "let's add maps first". With the cartridge at 8 MB and
 phase 1 of compression, `release` uses 58 of 128 banks. The plan is
-`el-mundo-y-lo-que-sigue.md`, milestone 5: Yun Town (the timer by
+`world-and-what-follows.md`, milestone 5: Yun Town (the timer by
 reach, and layout 2 for its upper layer) and Drust Camp (comparing
 against more than 32767, the `InputNumber` of 68 ev10).
 

@@ -8,14 +8,14 @@ assignee: taro
 
 # What
 
-Milestone 3 of `la-carrera-y-lo-que-sigue.md`: gaps 4 and 5. It branches from
+Milestone 3 of `race-and-what-comes-next.md`: gaps 4 and 5. It branches from
 `main` at `69e66ed`.
 
 * **The controls card** (`EscapeInst`): decided, option (a). A
   fork of 49 that changes the `ShowPicture` for a `ShowMessage` with the same
   text as the image.
 * **The sounds inside the routes**: what
-  `los-sonidos-adentro-de-las-rutas.md` asked for. The case that asks for it is the race's
+  `sounds-inside-move-routes.md` asked for. The case that asks for it is the race's
   bridge, but general.
 
 Reserved numbers: opcode 0x32 and far RAM $7E79A0-$7E79BF. Neither

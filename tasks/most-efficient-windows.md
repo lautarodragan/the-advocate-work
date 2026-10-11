@@ -8,7 +8,7 @@ assignee: taro
 ---
 
 taro, on 2026-10-11, after talking about the name screen
-(`la-pantalla-del-nombre-del-heroe.md`): that it be analyzed for
+(`hero-name-screen.md`): that it be analyzed for
 all the windows, not only that one. "If we can make the windows, in
 general, more efficient, it's a win all around."
 
@@ -96,4 +96,4 @@ and where the face tiles would go in objects.
 
 Nothing to install. Only the book.
 
-Finding not fixed: `el-texto-de-objetos-de-abl-no-entra.md`.
+Finding not fixed: `abl-item-text-doesnt-fit-in-what-the-windows-leave.md`.

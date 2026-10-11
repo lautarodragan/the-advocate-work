@@ -18,7 +18,7 @@ being carried out.
 # Why
 
 The ROM draws **one** `ShowPicture` per cartridge, which is the easy case: see
-`show-picture-phase-1.md`, which also says how.
+`showpicture-phase-1.md`, which also says how.
 
 What the rest would cost is measured, and the detail is in "Lo que costaría el
 sistema de imágenes entero", in that same task: **34 `ShowPicture` in the game,

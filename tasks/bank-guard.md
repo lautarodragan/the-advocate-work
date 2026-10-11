@@ -6,7 +6,7 @@ status: done
 assignee: taro
 ---
 
-Pepitero proposed it (`el-banco-1-se-lleno.md`), without doing it: the
+Pepitero proposed it (`bank-1-filled-up.md`), without doing it: the
 throwaway script with which he verified the moves to `FAR2` gave 0 before and
 after each one, and the rule for where the code goes (header of
 `tools/runtime/main.s`) "nada de esto lo revisa el ensamblador". A `jsr` to

@@ -5,13 +5,13 @@ type: bug
 status: draft
 ---
 
-Measured by Calandria on 2026-10-11 (`las-exclusiones-que-sobran.md`):
+Measured by Calandria on 2026-10-11 (`exclusions-left-over-in-the-ports.md`):
 with map 1 in, "the slot screen and the menu gather 524 tiles and
 their bank fits 448" with ABL's System, and 482 with the game's own
-(Tijereta, `la-ventana-en-el-banco-de-tiles.md`, who left it as a
+(Tijereta, `window-in-the-tile-bank.md`, who left it as a
 "separate task": "they are faces, not windows"). It is probably the same
 thing Carpintero left undone on 2026-10-06 in
-`degradar-en-vez-de-fallar.md`, point 4: "the names that don't
+`degrade-instead-of-failing.md`, point 4: "the names that don't
 fit in the menu's bank… try it in Dooms 2"; it wasn't checked that it is
 the same stop.
 

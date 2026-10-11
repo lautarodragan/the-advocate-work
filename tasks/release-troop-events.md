@@ -8,7 +8,7 @@ assignee: taro
 
 # What
 
-The part of `eventos-de-tropa-en-la-pelea.md` that's noticeable **in the battles
+The part of `troop-events.md` that's noticeable **in the battles
 `release` can fight today**, which is what taro asked for on 2026-09-28 with
 two cases from the first big milestone:
 
@@ -189,7 +189,7 @@ the HP of an actor who isn't fighting, the shake of the scene only, and the thun
   troops), and then `ChangeHP` on the battle's HP.
 - **Long messages are cut at 31 letters**: the take-off comes out "The Captain
   has taken off in th" and the king's second call loses the "s" of
-  "sounds". It's `los-textos-de-la-pelea-no-entran.md`, which already had it with
+  "sounds". It's `battle-texts.md`, which already had it with
   Absorb Aura.
 - **Common event 35** doesn't run: see `divergencias/llamada-salteada.md`.
 

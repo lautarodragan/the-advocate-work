@@ -7,15 +7,15 @@ assignee: taro
 ---
 
 From taro, on 2026-10-02 (the game's task is in ABL:
-`tasks/las-fotos-diff-recortadas-y-el-montaje.md`): the Diff photos are
+`tasks/diff-photos-cropped-and-217-montage-as-in-rm2k.md`): the Diff photos are
 captures of the map at 320x240, and the original uses them for a "live to
 photo" effect. Scaled to 256 they no longer match the ROM's map. Cropped they
 do, because the ROM does not scale the map.
 
-It goes on top of `sin-resample` (Corbatita): with `image` instead of Pillow's
+It goes on top of `without-resample-scaling-with-a-rust-library` (Corbatita): with `image` instead of Pillow's
 LANCZOS, the scaled photos pick other colours when reduced and the tree's
 shadow goes from green to blue. Cropped, they do not go through the scaler.
-Hornero proposed waiting for this before merging `sin-resample`, so that that
+Hornero proposed waiting for this before merging `without-resample-scaling-with-a-rust-library`, so that that
 version never goes in, and taro said to go with whatever seemed right. The
 montage of 217 is left for after the mode 7 pilot.
 
@@ -115,7 +115,7 @@ banks, same as before; the gaps of the used banks go down from 62,373 B to
 59,217 B: the cropped photos ask for some 3 KB more than the scaled ones (why,
 I did not measure).
 
-Side by side —before `sin-resample`, with `sin-resample` and cropped, and the
+Side by side —before `without-resample-scaling-with-a-rust-library`, with `without-resample-scaling-with-a-rust-library` and cropped, and the
 map right before each photo against the photo— in
 `/shared/capturas/2026-10-02-fotos-recortadas/`, with its `LEEME.txt`. **The
 merge waits for taro's approval of the seven goldens.**

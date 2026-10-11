@@ -18,7 +18,7 @@ because the cartridge does not carry its five terrains:
 - **With MSU-1, each battle shows its correct background**, even if it is not in the
   ROM.
 
-See `docs/port/msu-datos.md` and `msu-1-los-fondos-por-el-puerto-de-datos.md`
+See `docs/port/msu-datos.md` and `msu-1-the-backgrounds-through-the-data-port.md`
 for how they are read today. It needs measuring how much all the game's backgrounds weigh
 in the `.msu` and deciding the order (by background id, so that each one's sector
 does not depend on which maps go in).
@@ -155,6 +155,6 @@ Bank 0 did not change: all the new code is in bank 1 (some 95 B, in
   all of them move to replacement plus MSU-1, which saves 32 KB and puts the droid in the
   cave without MSU-1.
   Decided the same day, the other way round: all of `release`'s in the ROM, at
-  128x64. See `todos-los-fondos-en-la-rom.md`.
+  128x64. See `all-of-release-backgrounds-in-the-rom.md`.
 * The `.msu` went from a few hundred KB to some 3.3 MB (the 45 backgrounds are 1.4
   MB): copy it whole next to `abl.sfc`.

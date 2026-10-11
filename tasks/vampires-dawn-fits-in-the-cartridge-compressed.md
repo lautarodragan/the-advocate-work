@@ -7,7 +7,7 @@ assignee: taro
 agents: [Tijereta]
 ---
 
-Measured by Tijereta on 2026-10-11 (`los-sonidos-de-la-musica-en-mas-de-un-banco.md`), with Aguará's 82 exclusions and starting at 8: `the data does not fit: … the 127 banks the cartridge has for data are taken`.
+Measured by Tijereta on 2026-10-11 (`music-sounds-in-more-than-one-bank.md`), with Aguará's 82 exclusions and starting at 8: `the data does not fit: … the 127 banks the cartridge has for data are taken`.
 
 taro's decision, on 2026-10-11: try compression. Not two cartridges —saves would have to be migrated, and nothing guarantees splitting it elegantly—. If it does not fit without compression, before two cartridges, MSU-1 mandatory for this game; a compression chip only if the numbers work out, and better not if MSU-1 is still optional in general, because of the complexity.
 

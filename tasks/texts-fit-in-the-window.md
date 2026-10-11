@@ -15,7 +15,7 @@ window's width. RM2k has no auto-wrap: the author put each break by hand,
 thinking of a 320 px screen.
 
 It is an artistic decision —it changes what is read— so it goes as a
-**patch**, in the line of `parches-de-decisiones-artisticas.md`.
+**patch**, in the line of `artistic-decision-patches.md`.
 
 # Status
 
@@ -36,7 +36,7 @@ complex". How it ended up:
   splitting boxes pushed it past the 64 KB the operand of `OP_MESSAGE`
   reaches.
 * The battle texts have another width and continue in
-  `los-textos-de-la-pelea-no-entran.md`.
+  `battle-texts.md`.
 
 What is below is how it was arrived at, on 2026-09-24:
 
@@ -180,7 +180,7 @@ converter decides on its own in each build.
 3. **The rest of the game**, in batches. The roughly 310 boxes that do not fit
    ask for a decision each.
 4. **The options of `ShowChoice` and the battle texts**, with their own width.
-   It is what `los-textos-de-la-pelea-no-entran.md` asks for, and the same
+   It is what `battle-texts.md` asks for, and the same
    mechanism solves it.
 
 # Open questions

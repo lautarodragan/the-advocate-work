@@ -15,7 +15,7 @@ places, pictures, the acronym) gives 125 lines in some 50 files of `tools/`.
 care"), and the limits measured against ABL keep their comment. What is
 cleaned up is the rest: test data and fixtures, defaults, literals in the
 code. And it is needed for the test game: this repo must not carry anything of
-ABL (`el-juego-de-pruebas.md`).
+ABL (`plan-an-rm2k-game-for-tests.md`).
 
 # What was found (Monterita, 2026-10-02)
 

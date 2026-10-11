@@ -8,7 +8,7 @@ assignee: taro
 
 # What
 
-Milestone 3 of `lashe-city-hasta-la-carrera.md` —the context and what was measured are
+Milestone 3 of `lashe-city-with-the-car-up-to-the-race.md` —the context and what was measured are
 there—. It comes after 1 and in parallel with 2.
 
 The droid's path from Sector 32 (48): Stash's door, the scene with the
@@ -79,7 +79,7 @@ bank $61). BSS and ZEROPAGE unchanged.
 164 compile (120 before).
 
 **Dropped frames**, walking 1200 frames 50 at a time back and forth (the method of
-`el-mapa-11-se-rediseno.md`), with encounters turned off: 0 on 57, 59,
+`map-11-redesigned.md`), with encounters turned off: 0 on 57, 59,
 60, 61, 62 and 63. The only 10 came from accidentally stepping on the hole at (15,7)
 of 62 and falling to 60: a teleport.
 

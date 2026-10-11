@@ -7,7 +7,7 @@ assignee: taro
 ---
 
 Cardón found it on 2026-09-30, while moving the battle model to Rust
-(`rust-el-dominio-de-la-pelea.md`). taro asked for it as a task that day.
+(`rust-the-battle-domain.md`). taro asked for it as a task that day.
 
 `tools/runtime/battle.s`, when setting up an actor for battle, stores
 `BA_CRIT` as zero with the comment "no actor in ABL has a critical hit".

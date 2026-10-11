@@ -7,7 +7,7 @@ assignee: taro
 agents: [Cardón]
 ---
 
-From taro, on 2026-10-10, in the proposed order. From 2026-10-06: Vampires Dawn's map 1 ("a stream of anim_tiles is 27264 bytes and 8192 fit in WRAM"), one in Book of Three and one in Desert Nightmare. Same line as `degradar-en-vez-de-fallar.md`.
+From taro, on 2026-10-10, in the proposed order. From 2026-10-06: Vampires Dawn's map 1 ("a stream of anim_tiles is 27264 bytes and 8192 fit in WRAM"), one in Book of Three and one in Desert Nightmare. Same line as `degrade-instead-of-failing.md`.
 
 ## What the stream is and who sets the ceiling (Cardón, 2026-10-10)
 

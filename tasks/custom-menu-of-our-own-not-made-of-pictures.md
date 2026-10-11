@@ -17,9 +17,9 @@ It is an addition of the port, not something from RM2k: the game describes its
 menu with pictures and event logic, and this would replace it with a
 description of our own. It would serve other games with menus made of
 pictures, which are many. The font and mode 5 part comes from
-`una-fuente-para-la-alta-resolucion.md` (Espinillo) and from Carancho's test
+`font-for-high-resolution-or-a-narrower-one.md` (Espinillo) and from Carancho's test
 ROM; taro said that on the CRT TV stretched text looks odd, so the font
 would have to be designed for that.
 
 The picture system as RM2k uses it comes first
-(`el-sistema-de-imagenes.md`): this comes after, on top of that.
+(`plan-the-picture-system-and-the-portable-console.md`): this comes after, on top of that.

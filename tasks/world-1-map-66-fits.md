@@ -7,7 +7,7 @@ status: done
 
 # What
 
-Milestone 1 of `el-mundo-y-lo-que-sigue.md`, which has everything measured
+Milestone 1 of `world-and-what-follows.md`, which has everything measured
 beforehand. It starts from `2be61a9`.
 
 * **The fifth layout** at the end of `LAYOUTS`, `LAYOUT_VENTANA_FONDO_TECHO`:

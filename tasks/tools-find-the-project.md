@@ -7,7 +7,7 @@ assignee: taro
 ---
 
 What's left so that `tools/` knows nothing about where or how ABL is, after
-`el-archivo-de-proyecto.md` (Molle). Hornero decided it, with taro's
+`abl-project-file.md` (Molle). Hornero decided it, with taro's
 authorisation of 2026-09-29 to decide without waiting for him:
 
 - **The tools find the project the way cargo finds its own**:

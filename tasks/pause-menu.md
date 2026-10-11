@@ -135,7 +135,7 @@ commands, and common events do not run yet.
 
 **The medicines go in white and open the actor choice**, which is the menu's
 party panel with a cursor at the side —`render_objetivo`—. A did nothing
-—**solved on 2026-09-21**, see `curar-fuera-de-pelea.md`—, and that was a
+—**solved on 2026-09-21**, see `healing-outside-battle.md`—, and that was a
 debt: `UseItem` only spends the medicine if something goes up, and since there
 are battles the HP go down, so using it would have something to do. Until
 2026-09-12 it did not, because outside battle nobody ever went below the
@@ -187,7 +187,7 @@ reset— and travels in the save. It is 610 more bytes, and with them the save
 went past the slot's 1024: **the SRAM is 32 KB** and the slots go every 2048.
 `ChangeEquipment` did not compile —the game uses it on two maps that are in the
 demo today—: **since 2026-09-21 it compiles** the form that removes a slot, see
-`change-equipment-skills-game-over.md`.
+`equipment-skills-and-game-over.md`.
 
 The equipment screen —and the shop, which follows— are **text screens**: they
 carry no drawn blocks but the items screen's font, and they are composed whole

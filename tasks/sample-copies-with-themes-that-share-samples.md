@@ -13,7 +13,7 @@ the after and accepted them, so the chapter did not have to be held back, but **
 happen again with every theme that gets added**.
 
 What was tried without getting them back (see
-`mundo-4-el-capitulo.md`, "La música de antes, sin MSU-1"):
+`world-4-tasgarde-eisen-and-the-bridge.md`, "La música de antes, sin MSU-1"):
 `TEMAS_APARTE` (the new ones already go alone), `SE_DE_SIEMPRE` from 70 to 130 (the
 best, 29 pairs, and it moves the batch of effects taro approved), `COPIA_HASTA`
 at 0.85 and 0.95, without jackalstg2's inheritance, without the package of 259. The
@@ -28,7 +28,7 @@ taro to listen to.
 
 # What was thought on 2026-09-30, and why it goes to the wishlist
 
-With the radio of the troop pages (`el-comun-35-y-la-radio.md`)
+With the radio of the troop pages (`common-35-and-the-radio-music.md`)
 it happened again: without MSU-1, the battle theme went down from 11.5 to 10 kHz and another
 34 themes lost some sample, the worst from 20.4 to 6.8 kHz. taro
 proposed going beyond "choosing better what to copy", and what came out of the conversation:

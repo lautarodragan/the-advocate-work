@@ -12,7 +12,7 @@ play, but its pieces serve the custom systems of many games. What
 is missing: automatic common events (not the parallel ones), a `CallEvent`
 that shares the body instead of pasting it (pasted, common event 39 is 140,193
 commands; shared, some 2,400), and `\V[n]` in messages. `Label` and
-`JumpToLabel` are already there (`label-y-jumptolabel.md`, Pitogüé).
+`JumpToLabel` are already there (`label-and-jumptolabel.md`, Pitogüé).
 
 ## What RM2k does with automatic common events
 

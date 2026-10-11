@@ -6,7 +6,7 @@ status: done
 assignee: taro
 ---
 
-It comes from what `el-justfile-de-las-herramientas.md` left open
+It comes from what `tools-justfile.md` left open
 (Espinillo). taro asked on 2026-09-29 for Hornero to decide what was open and make
 a first version without waiting for him. What was decided:
 
