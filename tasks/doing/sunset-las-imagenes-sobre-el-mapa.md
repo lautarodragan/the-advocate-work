@@ -2,6 +2,7 @@
 name: "Sunset: las imágenes sobre el mapa"
 description: "Sunset dibuja techos, luces, sombras y nieblas como imágenes de pantalla entera sobre el mapa; la ROM las lleva como imágenes grandes, que tapan el mapa, y la escena queda negra"
 type: feature
+assignee: Mulita
 agents: [Mulita]
 ---
 
@@ -18,3 +19,11 @@ diseñaron (`lo-que-las-imagenes-grandes-no-modelan.md` del libro).
 
 Los dos caminos están en la tarea de arriba: dejarlas afuera con un
 criterio, o hacerlas como una capa sobre el mapa.
+
+## La decisión de taro, el 2026-10-11
+
+Dejarlas afuera no: "Sunset es un juego muy artístico. Sin esas imágenes
+probablemente pierda totalmente la gracia." Primero analizar cómo las usa
+—si hacen de más capas de mapa, de movimientos panorámicos, etc.— y con eso
+inventar una solución que funcione bien; si van como capa de mapa sin perder
+mucho, bienvenido.
