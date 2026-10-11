@@ -1,24 +1,55 @@
 ---
-name: "Traducir el repo de tareas al inglés"
-description: "the-advocate-work pasa a inglés entero, como el libro, sus commits incluidos: primero el README, tasks.nu, AGENTS.md y .claude/; después las tareas que no están hechas; después las hechas"
+name: "Translate the tasks repo into English"
+description: "the-advocate-work goes entirely into English, like the book, its commits included: first the README, tasks.nu, AGENTS.md and .claude/; then the tasks that aren't done; then the done ones"
 type: docs
-status: doing
+status: testing
 agents: [Hornero, Chajá, Carpintero, Aguará, Cardón, Hurón, Mulita, Calandria, Tijereta]
-assignee: Hornero
+assignee: taro
 ---
 
-taro, el 2026-10-11, el mismo día que el repo se hizo público: "podrías
-traducir todo el repo de work a inglés? Puede ir en commits separados,
-empezando por el readme y tasks.nu, luego tareas que no están done, y
-luego las que están en done."
+taro, on 2026-10-11, the same day the repo went public: "could you
+translate the whole work repo into English? It can go in separate
+commits, starting with the readme and tasks.nu, then the tasks that
+aren't done, and then the ones that are."
 
-Los nombres de archivo no se traducen: no cambian nunca, son links.
+File names are not translated: they never change, they are links.
 
-Reparto, por tamaño parejo (las listas, en el encargo de cada uno):
+## How it was split
 
-- Chajá: `README.md`, `tasks/tasks.nu`, `AGENTS.md`, `.claude/`.
-- Carpintero y Aguará: las 130 que no están en `done`, 65 cada uno.
-- Cardón, Hurón, Mulita, Calandria y Tijereta: las 227 de `done`, ~46
-  cada uno.
+By even size, with one shared guide —what to translate, what not to
+touch, the book's vocabulary—:
 
-Se mergean en ese orden.
+- Chajá: `README.md`, `tasks/tasks.nu`, `AGENTS.md`, `.claude/`. It also
+  wrote the new rule in `AGENTS.md`: this repo is in English, commits
+  included; the other repos stay in Spanish, and the `Agente: <name>`
+  trailer is the same in all four, so `git log --grep` still finds it.
+- Carpintero and Aguará: the 130 tasks that aren't done, 65 each.
+- Cardón, Hurón, Mulita, Calandria and Tijereta: the 227 done ones, ~46
+  each.
+
+Merged in that order. Hornero translated this one.
+
+## Criteria the translators converged on
+
+- Numbers in English notation (12,5 → 12.5; 7.761 → 7,761).
+- Hand-written tables and notes inside indented blocks are translated;
+  literal program output, code quoted from a source in another repo,
+  quoted commit subjects and section titles of other documents stay as
+  they were, because they are searched for verbatim.
+- Spelling: mostly American ("color"), as most of the book.
+
+## What it left
+
+Content errors the translators saw and left as they were —each task is a
+record of its date—: old paths (`/extras/…`, `tools/`, `rom/src/`), the
+repos' old `snes-rm2k` names, a few inner contradictions in long done
+tasks. What could be fixed without judgment went in one commit after the
+merges: 30 old tasks without a `type`, two `testing` tasks whose
+assignee was still an agent, and two citations that kept a state folder.
+
+## Verified
+
+`nu tasks/tasks.nu ls -s "*"` parses all of them. Each translator
+compared the backticked spans of its files against the originals; the
+only ones that changed are Spanish formulas written as prose inside
+backticks.

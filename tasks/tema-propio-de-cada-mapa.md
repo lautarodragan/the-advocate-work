@@ -1,6 +1,7 @@
 ---
 name: "Each map's theme"
 description: "On entering a map, the theme it carries in its properties plays"
+type: feature
 status: done
 ---
 

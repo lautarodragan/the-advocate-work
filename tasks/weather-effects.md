@@ -1,6 +1,7 @@
 ---
 name: "The weather"
 description: "The opening's rain"
+type: feature
 status: done
 ---
 

@@ -1,6 +1,7 @@
 ---
 name: "The map shifted after returning from a cutscene"
 description: "The drawn tiles end up one or two cells above the collision"
+type: bug
 status: done
 ---
 

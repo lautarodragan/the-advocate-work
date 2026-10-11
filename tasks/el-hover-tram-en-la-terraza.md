@@ -1,6 +1,7 @@
 ---
 name: "The Hover Tram on the terrace"
 description: "Draw the ship on the Warehouse roof, baked into a fork of the map"
+type: feature
 status: done
 ---
 

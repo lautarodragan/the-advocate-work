@@ -1,6 +1,7 @@
 ---
 name: "Music via MSU-1"
 description: "The CD tracks that replace the synthesized music"
+type: feature
 status: done
 ---
 

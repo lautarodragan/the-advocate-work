@@ -1,6 +1,7 @@
 ---
 name: "Animated tiles"
 description: "The two families of animated tiles of the ChipSet"
+type: feature
 status: done
 ---
 

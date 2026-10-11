@@ -1,6 +1,7 @@
 ---
 name: "Map 11 redesigned"
 description: "The 52 light tiles become tiles: from 30 fps to smooth"
+type: bug
 status: done
 ---
 

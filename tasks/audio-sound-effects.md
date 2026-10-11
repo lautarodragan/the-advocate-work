@@ -1,6 +1,7 @@
 ---
 name: "Sound effects"
 description: "PlaySound plays, with its samples in the map's package"
+type: feature
 status: done
 ---
 

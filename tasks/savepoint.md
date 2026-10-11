@@ -1,6 +1,7 @@
 ---
 name: "The save point"
 description: "Saving from the save point, with its animation"
+type: feature
 status: done
 ---
 

@@ -1,6 +1,7 @@
 ---
 name: "The battle"
 description: "EnemyEncounter opens a turn-based battle"
+type: feature
 status: done
 ---
 

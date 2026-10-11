@@ -1,6 +1,7 @@
 ---
 name: "Tidy up pruebas/"
 description: "The tests' bugs, the helpers to arnes/, the organization and a prose pass, in four jobs"
+type: refactor
 status: done
 ---
 

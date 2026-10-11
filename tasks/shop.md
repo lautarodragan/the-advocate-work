@@ -1,6 +1,7 @@
 ---
 name: "The shop"
 description: "OpenShop opens RM2k's shop"
+type: feature
 status: done
 ---
 

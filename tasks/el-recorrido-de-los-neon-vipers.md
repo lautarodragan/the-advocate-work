@@ -1,6 +1,7 @@
 ---
 name: "The Neon Vipers walkthrough"
 description: "A long playthrough that covers the scene where the two bugs showed up"
+type: test
 status: done
 ---
 

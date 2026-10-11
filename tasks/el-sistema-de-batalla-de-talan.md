@@ -1,6 +1,7 @@
 ---
 name: "Talan's battle system"
 description: "Detect Aura and Absorb Aura run their troop's pages"
+type: feature
 status: done
 ---
 
