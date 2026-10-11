@@ -24,4 +24,5 @@ release; ir al mapa 2 y mirar el guardia. Las caminatas de las goldens de
 Cerca, sin comprobar si es lo mismo: un guardia de capa normal en (36,13)
 del mismo mapa tiene las piernas sobre el borde de un techo; puede ser uno
 de los bordes que no entran en los 127 (la deuda de
-`testing/sunset-en-modo-1-con-color-math.md`).
+`testing/sunset-en-modo-1-con-color-math.md`, ahora
+`draft/los-bordes-de-techo-que-no-entran.md`).
