@@ -1,32 +1,32 @@
 ---
-name: "Ruta: transparencia"
-description: "Las órdenes 40 y 41, que suben y bajan la transparencia"
+name: "Route: transparency"
+description: "Orders 40 and 41, which raise and lower transparency"
 type: feature
 status: wishlist
 ---
 
-# Qué
+# What
 
-Las órdenes de ruta **40 y 41**, subir y bajar la transparencia de a un octavo.
-Hoy se aceptan y se tiran al compilar.
+Route orders **40 and 41**, raising and lowering transparency by one eighth.
+Today they are accepted and dropped when compiling.
 
 # Status
 
-Anotado, sin empezar.
+Noted, not started.
 
-# Por qué
+# Why
 
-Las **ocho rutas del juego** que las usan son las cuatro pantallas del mapa 2
-atenuándose mientras Manta hackea. Tirarlas —y no rechazar la página— es lo que
-deja compilar esa escena entera; lo que se pierde es el fundido, que **sobre
-tiles de fondo la SNES no hace barato**: atenuar un sprite por partes pide color
+The **eight routes in the game** that use them are the four screens in map 2
+dimming while Manta hacks. Dropping them —and not rejecting the page— is what
+lets that whole scene compile; what is lost is the fade, which **on
+background tiles the SNES doesn't do cheaply**: dimming a sprite in parts asks for color
 math.
 
-Ojo con el efecto de borde al hacerlo: una ruta que se quedara sin órdenes por
-esto **no se emite**, porque RM2k la consume entera en el cuadro y no deja nada
-que esperar.
+Careful with the edge effect when doing it: a route left without orders because of
+this **is not emitted**, because RM2k consumes it whole in the frame and leaves nothing
+to wait for.
 
-La otra orden que corre la misma suerte es **`play_sound_effect`**, que también
-se acepta y se tira; las dos juntas en `traducir`, en `tools/port/eventos.py`.
-Tirarlas no cuesta cuadros —RM2k no le toca el contador de parada— y con eso el
-bytecode sigue siendo un byte por orden.
+The other order that meets the same fate is **`play_sound_effect`**, which is also
+accepted and dropped; the two together in `traducir`, in `tools/port/eventos.py`.
+Dropping them costs no frames —RM2k doesn't touch the stop counter for them— and with that the
+bytecode is still one byte per order.

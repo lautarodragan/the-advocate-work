@@ -1,34 +1,34 @@
 ---
-name: "Los errores que no nombran el mapa ni la canción"
-description: "'the song uses N sounds…' no dice qué canción ni qué mapa, y 'this map can't carry a message window' no lleva el número de mapa en su línea"
+name: "The errors that name neither the map nor the song"
+description: "'the song uses N sounds…' does not say which song or which map, and 'this map can't carry a message window' does not carry the map number on its line"
 type: chore
 status: testing
 assignee: taro
 agents: [Hornero, Cardón]
 ---
 
-Anotado por Calandria el 2026-10-11, al barrer las exclusiones de los ports: para saber qué mapa sacar hubo que sacarlos de a uno, o buscar el encabezado anterior en el log. Barato y le ahorra vueltas a cada barrido.
+Noted by Calandria on 2026-10-11, while sweeping the ports' exclusions: to know which map to take out they had to be taken out one at a time, or the previous header looked up in the log. Cheap, and it saves every sweep some rounds.
 
-## Lo hecho (Cardón, 2026-10-11)
+## What was done (Cardón, 2026-10-11)
 
-En `the-advocate`, rama `cardon-errores-y-huella`:
+In `the-advocate`, branch `cardon-errores-y-huella`:
 
-* **El conversor** (`rm2k-snes/convert`): `Stop::in_map`, en `fail.rs`, le pone `map N: ` adelante a un corte que no nombra al mapa en su primera línea —y no lo repite si ya lo nombra—. Lo usan las tres etapas por mapa: `maps::prepare`, cada llamada a Wally de `run_all` y `maps::map_info`. Con eso, "this map can't carry a message window" sale `map 15: this map can't carry…`, y también los de Wally que no lo decían (los `attempt` del panorama, `drawable_npcs`…). El de `vram_layout` en `map_info` lo dice además explícito, como ya lo hacía el del panorama.
-* **La música** (`rm2k-snes/rm2k-snes-audio`): `in_song`, en `compile.rs`, le pone a lo que corta una canción —`build_events`, `pack`, `fold`— la canción y los paquetes que la llevan, que en un cartucho son los mapas: `song "Graig", in map 10: the song uses 291 sounds and the index is one byte`. Un paquete que no es de un mapa sale por su nombre (`package pelea`). `check` ya nombraba la canción.
-* **`rm2k-snes-mapdata`**: los dos de `ev_pos_bytes` ("the map has N events…", "a twin at…") no llevaban el número; ahora sí.
+* **The converter** (`rm2k-snes/convert`): `Stop::in_map`, in `fail.rs`, puts `map N: ` in front of a stop that does not name the map on its first line —and does not repeat it if it already names it—. The three per-map stages use it: `maps::prepare`, each call to Wally from `run_all` and `maps::map_info`. With that, "this map can't carry a message window" comes out `map 15: this map can't carry…`, and so do Wally's that did not say it (the panorama's `attempt`s, `drawable_npcs`…). The one from `vram_layout` in `map_info` also says it explicitly, as the panorama's already did.
+* **The music** (`rm2k-snes/rm2k-snes-audio`): `in_song`, in `compile.rs`, puts on what stops a song —`build_events`, `pack`, `fold`— the song and the packages that carry it, which in a cartridge are the maps: `song "Graig", in map 10: the song uses 291 sounds and the index is one byte`. A package that is not a map's comes out by its name (`package pelea`). `check` already named the song.
+* **`rm2k-snes-mapdata`**: the two from `ev_pos_bytes` ("the map has N events…", "a twin at…") did not carry the number; now they do.
 
-Los demás de la misma clase que se miraron y ya lo dicen: los `stop!` de las dos vueltas por mapa de `convert.rs`, `map_entry`, `pages`, los de `record.rs` y `materials.rs` de mapdata. No se tocaron los que cortan por algo interno —`bytecode::walk`— ni los de la emisión que comprime todo junto (`compress_many` no sabe de qué mapa es cada bloque; `materials.rs` corta antes, con el número).
+The others of the same class that were looked at and already say it: the `stop!`s of the two per-map passes of `convert.rs`, `map_entry`, `pages`, those of mapdata's `record.rs` and `materials.rs`. The ones that stop on something internal —`bytecode::walk`— were not touched, nor those of the emission that compresses everything together (`compress_many` does not know which map each block belongs to; `materials.rs` stops earlier, with the number).
 
-Verificado, con las herramientas de la rama adelante en el PATH, en un worktree de los ports:
+Verified, with the branch's tools first in the PATH, in a worktree of the ports:
 
-* Dooms 2 sin excluir el 10: `rm2k-snes-audio: song "Graig", in map 10: the song uses 291 sounds and the index is one byte`.
-* Vampires Dawn con su toml: `map 15: this map can't carry a message window: it spends 576 background tiles, …`.
-* Pruebas nuevas: `a_stop_in_a_map_names_it_once` (convert) y `a_song_that_stops_says_which_maps_carry_it` (audio). Son de funciones nuevas: antes no compilaban, no hay rojo que mostrar.
+* Dooms 2 without excluding 10: `rm2k-snes-audio: song "Graig", in map 10: the song uses 291 sounds and the index is one byte`.
+* Vampires Dawn with its toml: `map 15: this map can't carry a message window: it spends 576 background tiles, …`.
+* New tests: `a_stop_in_a_map_names_it_once` (convert) and `a_song_that_stops_says_which_maps_carry_it` (audio). They are of new functions: before they did not compile, there is no red to show.
 
-## Resultado
+## Result
 
-Rama `cardon-errores-y-huella` de `the-advocate` (con las dos tareas, y `tijereta-sonidos-de-una-cancion` mergeada); en los ports no hay commits. Con las herramientas de la rama adelante en el PATH (`convert`, `mapdata`, `rm2k-snes-audio`, `cartridge`), en un worktree de los ports con `main` 4072372: la tanda de ABL da 1176 passed, y `abl.sfc` = `ea49ff07fd9d…`, la misma de `main` con lo de Tijereta. `just test` y las pruebas de los cuatro crates, en verde.
+Branch `cardon-errores-y-huella` of `the-advocate` (with the two tasks, and `tijereta-sonidos-de-una-cancion` merged); in the ports there are no commits. With the branch's tools first in the PATH (`convert`, `mapdata`, `rm2k-snes-audio`, `cartridge`), in a worktree of the ports with `main` 4072372: ABL's suite gives 1176 passed, and `abl.sfc` = `ea49ff07fd9d…`, the same as `main` with Tijereta's work. `just test` and the tests of the four crates, green.
 
-Al mergear, reinstalar: `just install convert mapdata rm2k-snes-audio cartridge`.
+At merge time, reinstall: `just install convert mapdata rm2k-snes-audio cartridge`.
 
-Lo que la tanda no cubre: ningún mensaje de error —ninguna prueba de ABL corta un cartucho—; se vieron a mano en Dooms 2 y Vampires Dawn. Y la huella: la tanda arma desde un `data/` que no cambia; el rearmado se midió a mano en Sunset.
+What the suite does not cover: no error message —no ABL test stops a cartridge—; they were seen by hand in Dooms 2 and Vampires Dawn. And the fingerprint: the suite builds from a `data/` that does not change; the rebuild was measured by hand in Sunset.

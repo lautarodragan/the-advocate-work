@@ -1,33 +1,33 @@
 ---
-name: "Ignorar los códigos de color en los mensajes, por ahora"
-description: "\\c[n], \\C[n] y \\s[n] en una caja la dejan afuera entera; que se ignoren como ya se ignoran las esperas, como deuda"
+name: "Ignore the color codes in messages, for now"
+description: "\\c[n], \\C[n] and \\s[n] in a box leave it out entirely; have them ignored as the waits already are, as debt"
 type: feature
 status: testing
 agents: [Tijereta]
 assignee: taro
 ---
 
-Del análisis de Aguará del 2026-10-06: Desert Nightmare (`\c[1]Sandra: \c[0]`
-en casi todos los mensajes, 1345 páginas afuera), Sunset Over Imdahl (unas 870)
-y Dooms 2 (`\S[n]`). taro, el 2026-10-06: "Vamos con el 1 en sonnet".
+From Aguará's analysis of 2026-10-06: Desert Nightmare (`\c[1]Sandra: \c[0]`
+in almost every message, 1345 pages out), Sunset Over Imdahl (about 870)
+and Dooms 2 (`\S[n]`). taro, on 2026-10-06: "Let's go with 1 on sonnet".
 
-## Hecho (Tijereta, 2026-10-06)
+## Done (Tijereta, 2026-10-06)
 
-`without_waits` de `tools/rm2k-snes/text/src/refit.rs` descarta también
-`\c[n]`, `\C[n]`, `\s[n]` y `\S[n]` (con dígitos y `]`; otra cosa, como
-`\c[x]`, sigue sin compilar). Como `escape_tail` los saca antes de medir, no
-cuentan en el ancho. Casos en `text/tests/escapes.json`; el rojo se vio con
-la regla desactivada.
+`without_waits` of `tools/rm2k-snes/text/src/refit.rs` also discards
+`\c[n]`, `\C[n]`, `\s[n]` and `\S[n]` (with digits and `]`; anything else, like
+`\c[x]`, still doesn't compile). Since `escape_tail` removes them before measuring, they don't
+count in the width. Cases in `text/tests/escapes.json`; the red was seen with
+the rule disabled.
 
-**Deuda declarada**: se pierde el color y la velocidad. Está anotada acá y en
-`las-caras-y-las-esperas.md`, donde ya vive `without_waits`.
+**Declared debt**: the color and the speed are lost. It's noted here and in
+`las-caras-y-las-esperas.md`, where `without_waits` already lives.
 
-Páginas de mapa que compilan (`rm2k-snes-events culprits --every-map`, antes
--> después): Desert Nightmare 5738 -> 7034 de 7340; Sunset Over Imdahl 898 ->
-1151 de 1369. ABL no usa los códigos en `data/` y `abl.sfc` sale con la misma
-huella, `27e94e67039533a2…`.
+Map pages that compile (`rm2k-snes-events culprits --every-map`, before
+-> after): Desert Nightmare 5738 -> 7034 of 7340; Sunset Over Imdahl 898 ->
+1151 of 1369. ABL doesn't use the codes in `data/` and `abl.sfc` comes out with the same
+fingerprint, `27e94e67039533a2…`.
 
-`-p rm2k-snes-screens`: `the_boxes_of_the_maps_and_the_common_events` falla
-(`left: 5, right: 4`), **y falla igual sin este cambio**: es el caso de
-`una-prueba-de-screens-cambia-con-el-workspace.md`, que acá falla también
-con `-p`. Al mergear: instalar `text events screens convert cartridge`.
+`-p rm2k-snes-screens`: `the_boxes_of_the_maps_and_the_common_events` fails
+(`left: 5, right: 4`), **and fails the same without this change**: it's the case of
+`una-prueba-de-screens-cambia-con-el-workspace.md`, which here fails too
+with `-p`. On merging: install `text events screens convert cartridge`.

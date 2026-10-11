@@ -1,29 +1,29 @@
 ---
-name: "Varias muestras por instrumento"
-description: "Multimuestrear como un piano de verdad"
+name: "Several samples per instrument"
+description: "Multisample like a real piano"
 type: feature
 status: wishlist
 ---
 
-# Qué
+# What
 
-Más de una muestra por instrumento: multi-muestrear como lo hace un piano de
-verdad, en vez de tomar una sola y transponerla.
+More than one sample per instrument: multi-sample the way a real
+piano is, instead of taking a single one and transposing it.
 
 # Status
 
-Anotado, sin empezar.
+Noted, not started.
 
-# Por qué
+# Why
 
-Un piano real está muestreado **cada pocas notas**; nosotros tomamos la del do
-central y transponemos. **En los extremos del teclado eso se nota.**
+A real piano is sampled **every few notes**; we take the one at middle
+C and transpose. **At the ends of the keyboard that shows.**
 
-Lo que hay que mirar antes de encararlo es el otro lado de la cuenta: más
-muestras por instrumento es más ARAM por programa, y desde el presupuesto por
-paquete cada paquete lleno la reparte entera. Lo que ya se hizo, el
-2026-09-26: cada programa lleva la muestra de la zona que más suena en el
-cartucho, no la del do central (`most_used_zones` en
-`tools/rm2k-snes/rm2k-snes-audio/src/bank.rs`). Dos zonas por programa se midieron en el paso 6
-de `tasks/la-calidad-de-la-musica.md`: 149 muestras en vez de 116, cada
-una a menos tasa.
+What has to be looked at before tackling it is the other side of the account: more
+samples per instrument is more ARAM per program, and since the per-package
+budget each full package hands it out entirely. What was already done, on
+2026-09-26: each program carries the sample of the zone that sounds the most in the
+cartridge, not the middle C one (`most_used_zones` in
+`tools/rm2k-snes/rm2k-snes-audio/src/bank.rs`). Two zones per program were measured in step 6
+of `tasks/la-calidad-de-la-musica.md`: 149 samples instead of 116, each
+one at a lower rate.

@@ -1,26 +1,26 @@
 ---
-name: "EraseEvent: ninguna prueba mira lo que se ve"
-description: "Que un evento borrado deje de dibujarse, deje de bloquear y que una paralela que se borra se corte no lo cobra ninguna prueba: se miró jugando Desert Nightmare"
+name: "EraseEvent: no test looks at what is seen"
+description: "That an erased event stops being drawn, stops blocking, and that a parallel one that erases itself is cut, is enforced by no test: it was looked at playing Desert Nightmare"
 type: test
 status: draft
 ---
 
-Lo dejó Hurón el 2026-10-06 en `eraseevent-de-verdad.md`: las
-pruebas de `EraseEvent` (tres del crate de eventos y
-`pruebas/rpgmaker/test_borrar_evento_de_verdad.py` de ABL, en
-`test-special`) "no cubren que el evento se deje de dibujar, que deje de
-bloquear ni que la paralela se corte: el evento de prueba no tiene gráfico
-ni es paralelo. Eso se miró jugando Desert Nightmare, no lo cobra ninguna
-prueba."
+Hurón left it on 2026-10-06 in `eraseevent-de-verdad.md`: the
+`EraseEvent` tests (three from the events crate and
+ABL's `pruebas/rpgmaker/test_borrar_evento_de_verdad.py`, in
+`test-special`) "do not cover that the event stops being drawn, that it stops
+blocking or that the parallel is cut: the test event has no graphic
+and is not parallel. That was looked at playing Desert Nightmare, no
+test enforces it."
 
-Son tres caminos del runtime que existen sólo por esto: `apply_pages`
-le esconde la fila al evento borrado y le suelta la ruta, `conditions_ok`
-lo saca de la lista de paralelas, y `pair_ev` corta la paralela que lo
-corre (`op_erase_event`, `runtime/interpreter_movement.s`). ABL usa
-`EraseEvent` en la cantera (mapa 150 y común 36), y Desert Nightmare en
-157 páginas paralelas sin gráfico.
+They are three runtime paths that exist only for this: `apply_pages`
+hides the erased event's row and releases its route, `conditions_ok`
+takes it off the list of parallels, and `pair_ev` cuts the parallel that
+runs it (`op_erase_event`, `runtime/interpreter_movement.s`). ABL uses
+`EraseEvent` in the quarry (map 150 and common event 36), and Desert Nightmare in
+157 parallel pages without a graphic.
 
-**Cómo verlo**: en los casos de `test_borrar_evento_de_verdad.py`, un
-evento con gráfico y en la capa del héroe que se borra (que no se dibuje y
-que se pueda pasar por su celda), y una paralela que se borra a mitad de
-su página (que lo de después no corra).
+**How to see it**: in the cases of `test_borrar_evento_de_verdad.py`, an
+event with a graphic and on the hero's layer that erases itself (that it is not drawn and
+that its cell can be walked through), and a parallel that erases itself in the middle of
+its page (that what comes after does not run).

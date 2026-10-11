@@ -1,66 +1,66 @@
 ---
-name: "El S-DD1 para las poses: medir antes de decidir"
-description: "Comprimir las poses con LZ2 le cuesta cuadros a ABL; el S-DD1 descomprime en el camino del DMA, sin CPU. Medir cuánto rinde, si convive con el mapa del cartucho y qué soporta el hardware, sin tocar el cartucho"
+name: "The S-DD1 for the poses: measure before deciding"
+description: "Compressing the poses with LZ2 costs ABL frames; the S-DD1 decompresses on the DMA path, with no CPU. Measure how much it yields, whether it coexists with the cartridge's memory map and what the hardware supports, without touching the cartridge"
 type: research
 status: testing
 assignee: taro
 agents: [Carpintero]
 ---
 
-taro, el 2026-10-11, después de ver lo que costaban las poses en LZ2 (`vampires-dawn-entra-comprimido.md`): "¿el S-DD1 nos permitiría comprimirlas sin introducir lag?". Y: "en el fx pak el star ocean corre, así que ese chip tiene que soportarlo. lo que nunca probé es msu + otro chip".
+taro, on 2026-10-11, after seeing what the poses in LZ2 cost (`vampires-dawn-entra-comprimido.md`): "would the S-DD1 let us compress them without introducing lag?". And: "on the fx pak star ocean runs, so it has to support that chip. what I never tried is msu + another chip".
 
-Antes, el mismo día, había dicho que evitaría otro chip mientras el MSU-1 sea opcional, por la complejidad: esto es para decidir con números.
+Earlier, the same day, he had said he would avoid another chip as long as the MSU-1 is optional, because of the complexity: this is for deciding with numbers.
 
-## La medición, 2026-10-11 (Carpintero)
+## The measurement, 2026-10-11 (Carpintero)
 
-Todo en `~/scratch/carpintero/sdd1/`. No hay compresor S-DD1 libre a mano
-(ni en `~/ref` ni en GitHub): escribí uno descartable, `src/sdd1c.cpp`, el
-inverso exacto del descompresor de Andreas Naive. Cada bloque comprimido se
-descomprime con **el descompresor de bsnes sin tocar**, incluido desde
-`~/ref/bsnes-libretro` (`src/ref.cpp`), con basura después del bloque, y
-vuelve byte por byte igual: 0 diferencias en las ~60.000 piezas de ABL y VD.
-`medir.py` arma la tabla; `carga.py`, lo que cuesta el fondo al cargar.
+Everything in `~/scratch/carpintero/sdd1/`. There is no free S-DD1 compressor at hand
+(neither in `~/ref` nor on GitHub): I wrote a disposable one, `src/sdd1c.cpp`, the
+exact inverse of Andreas Naive's decompressor. Each compressed block is
+decompressed with **bsnes's decompressor untouched**, included from
+`~/ref/bsnes-libretro` (`src/ref.cpp`), with garbage after the block, and it
+comes back byte for byte identical: 0 differences in the ~60,000 pieces of ABL and VD.
+`medir.py` builds the table; `carga.py`, what the background costs at load time.
 
-Lo de ABL sale de `build/release` de los ports (b499ab4, herramientas
-6f933ff8, `abl.sfc` 24dd24adb52f3187); lo de VD, de `vd-bloques/` de Tijereta
-(herramientas 6f933ff8).
+ABL's data comes from `build/release` in the ports (b499ab4, tools
+6f933ff8, `abl.sfc` 24dd24adb52f3187); VD's, from Tijereta's `vd-bloques/`
+(tools 6f933ff8).
 
-**Lo que rinde** (crudo → LZ2 → S-DD1; las poses, en cuatro streams de 128
-porque cada fila del bloque 4x4 es un DMA aparte y cada DMA arranca un
+**What it yields** (raw → LZ2 → S-DD1; the poses, in four streams of 128
+because each row of the 4x4 block is a separate DMA and each DMA starts a
 stream):
 
     ABL poses       752 KB →  317 (42%) →  245 (33%)
-    ABL fondo      1165 KB →  710 (61%) →  691 (59%)
+    ABL background 1165 KB →  710 (61%) →  691 (59%)
     VD  poses      4374 KB → 1604 (37%) → 1232 (28%)
-    VD  fondo      3196 KB → 2268 (71%) → 2172 (68%)
+    VD  background 3196 KB → 2268 (71%) → 2172 (68%)
 
-El banco de sprites y la animación del ChipSet rinden mejor en LZ2. Sumando
-donde gana: ABL ~641 KB (usa 86 de 127 bancos: no le hace falta), VD ~3,46 MB
-contra 3,75 que le faltan, antes del desperdicio y de los 82 mapas
-excluidos: **VD no entra tampoco**. Sin lag: el DMA mueve los mismos 512
-bytes por pose en el vblank, más un `sta $4801` por DMA. Al cargar un mapa,
-el fondo pasa de 3,1 cuadros de LZ2 (mediana) a 0,2 de DMA.
+The sprite bank and the ChipSet animation do better in LZ2. Adding up
+where it wins: ABL ~641 KB (it uses 86 of 127 banks: it doesn't need it), VD ~3.46 MB
+against the 3.75 it is short, before the waste and the 82 excluded
+maps: **VD doesn't fit either**. No lag: the DMA moves the same 512
+bytes per pose in vblank, plus one `sta $4801` per DMA. When loading a map,
+the background goes from 3.1 frames of LZ2 (median) to 0.2 of DMA.
 
-**El mapa**: el S-DD1 saca los bancos `$40`–`$7D`; los 4 MB de arriba se ven
-sólo por cuatro ventanas de 1 MB en `$C0`–`$FF`, con registros. El FX Pak y
-Mednafen llegan a 8 MB (bsnes, Mesen2 y snes9x a 16): no agranda nada. Es
-un mapper nuevo, con cambios de ventana en el runtime y páginas por mapa en
-el empaquetador; eso es lo caro.
+**The memory map**: the S-DD1 takes away banks `$40`–`$7D`; the upper 4 MB are seen
+only through four 1 MB windows at `$C0`–`$FF`, with registers. The FX Pak and
+Mednafen reach 8 MB (bsnes, Mesen2 and snes9x, 16): it makes nothing bigger. It is
+a new mapper, with window switches in the runtime and pages per map in
+the packer; that is the expensive part.
 
-**El hardware**: el core S-DD1 del firmware del FX Pak instancia el MSU-1, y
-el firmware lo prende para cualquier ROM con `.msu`; el changelog de v1.10.2
-arregla el volumen del MSU-1 "en Cx4, OBC1, SuperFX, SA-1, S-DD1". En Zeldix
-reportan el hack de MSU-1 de SFA2 andando en el sd2snes Pro (no dice si el
-hack sigue usando el chip). Con nuestra ROM nadie lo probó: la prueba en el
-hardware está en el research. Los cuatro emuladores cargan el MSU-1 con
-cualquier placa.
+**The hardware**: the S-DD1 core in the FX Pak firmware instantiates the MSU-1, and
+the firmware turns it on for any ROM with a `.msu`; the v1.10.2 changelog
+fixes the MSU-1 volume "in Cx4, OBC1, SuperFX, SA-1, S-DD1". On Zeldix
+they report SFA2's MSU-1 hack working on the sd2snes Pro (it doesn't say whether the
+hack still uses the chip). Nobody tried it with our ROM: the hardware test
+is in the research. The four emulators load the MSU-1 with
+any board.
 
-**Recomendación: ahora no.** ABL no necesita el espacio y VD no entra igual.
+**Recommendation: not now.** ABL doesn't need the space and VD doesn't fit anyway.
 
-Todo, en el libro: `src/research/2026-10-11-el-s-dd1.md`, rama
-`carpintero-s-dd1` de the-advocate-docs (7aaaa6f).
+All of it, in the book: `src/research/2026-10-11-el-s-dd1.md`, branch
+`carpintero-s-dd1` of the-advocate-docs (7aaaa6f).
 
-## Al mergear
+## On merging
 
-Nada que instalar. Mergear `carpintero-s-dd1` del libro. No se tocó código
-de the-advocate ni de los ports.
+Nothing to install. Merge `carpintero-s-dd1` of the book. No code
+in the-advocate or the ports was touched.

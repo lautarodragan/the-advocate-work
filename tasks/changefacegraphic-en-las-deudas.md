@@ -1,36 +1,36 @@
 ---
-name: "ChangeFaceGraphic en las deudas declaradas"
-description: "ChangeFaceGraphic compila a nada pero no está en ACCEPTED_UNDONE, así que page_debts no avisa que la cara se pierde"
+name: "ChangeFaceGraphic in the declared debts"
+description: "ChangeFaceGraphic compiles to nothing but is not in ACCEPTED_UNDONE, so page_debts does not warn that the face is lost"
 type: bug
 status: testing
 agents: [Codex]
 assignee: taro
 ---
 
-Lo encontró Aguará el 2026-10-06 armando el tablero contra RM2k: la rama
-de `ChangeFaceGraphic` en `compile_command` da `Ok(vec![])`, pero el código
-no está en `ACCEPTED_UNDONE` —la lista tiene 8—, aunque la tarea
-`las-caras-y-los-escapes-de-espera.md` y el commit 73b263a3 dicen
-que entró. Además, el comentario de esa rama remite a
-`las-caras-y-las-esperas.md` sin decir dónde vive hoy.
+Aguará found it on 2026-10-06 while building the board against RM2k: the branch
+for `ChangeFaceGraphic` in `compile_command` gives `Ok(vec![])`, but the code
+is not in `ACCEPTED_UNDONE` —the list has 8—, even though the task
+`las-caras-y-los-escapes-de-espera.md` and commit 73b263a3 say
+it went in. Besides, that branch's comment refers to
+`las-caras-y-las-esperas.md` without saying where it lives today.
 
-taro, el 2026-10-06: la primera tarea de Codex, para probar el circuito.
+taro, on 2026-10-06: Codex's first task, to try out the circuit.
 
-Codex, el 2026-10-06: `git blame` y `git log -S` muestran que no se perdió en
-un merge. El commit 73b263a3 agregó la rama y su prueba de compilación, pero
-dejó `ACCEPTED_UNDONE` con las mismas seis entradas; los merges posteriores
-sólo agregaron otras deudas.
+Codex, on 2026-10-06: `git blame` and `git log -S` show that it was not lost in
+a merge. Commit 73b263a3 added the branch and its compilation test, but
+left `ACCEPTED_UNDONE` with the same six entries; the later merges
+only added other debts.
 
-La prueba `change_face_graphic_is_reported_as_debt` dio rojo antes del arreglo:
-`page_debts` devolvía `[]` en vez de `[10130]`.
+The test `change_face_graphic_is_reported_as_debt` gave red before the fix:
+`page_debts` returned `[]` instead of `[10130]`.
 
-Hecho: `CHANGE_FACE_GRAPHIC` entra en `ACCEPTED_UNDONE`, y el comentario de su
-rama sigue la tarea sin depender de la carpeta en la que esté. Verificado con
-`just -f tools/justfile crate-test events` y, en un clon de ABL usando la
-instalación local de `events`, con `just cartuchos` y `just pruebas`.
+Done: `CHANGE_FACE_GRAPHIC` goes into `ACCEPTED_UNDONE`, and the comment of its
+branch follows the task without depending on the folder it is in. Verified with
+`just -f tools/justfile crate-test events` and, in a clone of ABL using the
+local install of `events`, with `just cartuchos` and `just pruebas`.
 
-La tanda no ejecuta el aviso nuevo: ABL no tiene el comando 10130 en sus JSON.
-Sí verifica que el cartucho y el resto de la tanda no cambien; el aviso lo
-cubre directamente la prueba unitaria nueva.
+The suite does not run the new warning: ABL does not have command 10130 in its JSON.
+It does verify that the cartridge and the rest of the suite do not change; the warning is
+covered directly by the new unit test.
 
-Al mergear, instalar `events`.
+At merge time, install `events`.

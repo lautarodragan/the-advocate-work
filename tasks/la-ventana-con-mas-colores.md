@@ -1,65 +1,65 @@
 ---
-name: "La ventana con más de 15 colores"
-description: "Un System cuya ventana (fondo, marco, flecha, cursor, letra y sombra) pasa de los colores que caben corta hoy el juego entero; que Adeleine la reduzca en vez de cortar, para cualquier juego"
+name: "The window with more than 15 colors"
+description: "A System whose window (background, frame, arrow, cursor, font and shadow) goes over the colors that fit stops the whole game today; have Adeleine reduce it instead of stopping, for any game"
 type: feature
 status: testing
 agents: [Tijereta]
 assignee: taro
 ---
 
-Del relevamiento de Aguará (`docs/research/2026-10-05-otros-juegos.md`): le
-pasa a 5 de los 7 juegos, que hoy arman sólo con el System reducido a mano
-en una copia del juego. taro, el 2026-10-05, eligió esto como el primero,
-de a uno por el límite de uso: sin maquetas previas, con capturas antes y
-después.
+From Aguará's survey (`docs/research/2026-10-05-otros-juegos.md`): it
+happens to 5 of the 7 games, which today build only with the System reduced by hand
+in a copy of the game. taro, on 2026-10-05, chose this as the first,
+one at a time because of the usage limit: without prior mockups, with before and
+after captures.
 
-## Cómo quedó (Tijereta, 2026-10-05)
+## How it ended up (Tijereta, 2026-10-05)
 
-`message_window::draw`, en `rm2k-snes-screens`, ya no corta cuando la
-ventana pasa de quince colores: se los pasa a `adeleine::merge_least_visible`
-y repinta todo —fondo, marco, flecha, cursor, filas de la letra y sombra—
-con lo que quedó. El peso de cada color es lo que cubre en la ventana vacía,
-la flecha y el cursor, y la letra y la sombra pesan una fila entera del área
-de texto por línea, para que no sean lo primero en irse. Un System que entra
-no pasa por ahí.
+`message_window::draw`, in `rm2k-snes-screens`, no longer stops when the
+window goes over fifteen colors: it passes them to `adeleine::merge_least_visible`
+and repaints everything —background, frame, arrow, cursor, font rows and shadow—
+with what's left. The weight of each color is what it covers in the empty window,
+the arrow and the cursor, and the font and the shadow weigh a whole row of the text
+area per line, so they aren't the first to go. A System that fits
+doesn't go through there.
 
-Lo perdido viaja en la respuesta de `window` (`brought`, `merges`, `system`)
-y el conversor lo escribe en los parches como un tipo nuevo,
-`parches/auto/ventanas/<System>.toml`, sólo si hubo fusiones.
+What's lost travels in `window`'s answer (`brought`, `merges`, `system`)
+and the converter writes it in the patches as a new type,
+`parches/auto/ventanas/<System>.toml`, only if there were merges.
 
-Con el System original, `rm2k-snes-screens window` contesta:
+With the original System, `rm2k-snes-screens window` answers:
 
     dooms2          18 -> 15
     frozen-world    16 -> 15
-    book-of-three   23 -> 15 (pero el marco estirado no entra en el banco de tiles)
-    desert          15, entra (lo que cortaba era End Game, otro límite)
-    el-dorado, sunset: entran
-    vampires-dawn   su System no está en el juego copiado
+    book-of-three   23 -> 15 (but the stretched frame doesn't fit in the tile bank)
+    desert          15, fits (what stopped it was End Game, another limit)
+    el-dorado, sunset: fit
+    vampires-dawn   its System isn't in the copied game
 
-Lo mismo en las ventanas de 8bpp de las pantallas de texto (`borders.rs`:
-ítems, equipo, tienda, elección de actor), que tenían su propio "the
-windows use N colours and from 128 there is room for 16": el System de
-Dooms 2 traía 26 y el de Frozen World 17. Ahí **lo fusionado todavía no se
-escribe en los parches**: es lo que falta de esta tarea.
+The same in the 8bpp windows of the text screens (`borders.rs`:
+items, equipment, shop, actor choice), which had their own "the
+windows use N colours and from 128 there is room for 16": Dooms 2's System
+brought 26 and Frozen World's 17. There **what's merged isn't yet
+written in the patches**: that's what's missing from this task.
 
-**Ningún juego arranca todavía con el System original.** Detrás de los
-colores aparece el banco de tiles: un fondo en degradé estirado es un tile
-por tono, y con 15 colores la ventana de mensajes de Frozen World pide 266
-tiles de 256 (Book of Three 267), y la elección de actor de Dooms 2 se pasa
-de `$4800`. Se probó seguir fusionando hasta que entren los tiles
-(`merge_until`): Frozen quedaba en 4 colores y Book of Three en 2, que
-destruye la ventana. No es la herramienta; va aparte (wishlist
-`la-ventana-en-el-banco-de-tiles`). Desert corta en End Game y Dooms 2
-además en sus BMP.
+**No game starts yet with the original System.** Behind the
+colors the tile bank shows up: a stretched gradient background is one tile
+per shade, and with 15 colors Frozen World's message window asks for 266
+tiles of 256 (Book of Three 267), and Dooms 2's actor choice goes over
+`$4800`. Continuing to merge until the tiles fit was tried
+(`merge_until`): Frozen ended up with 4 colors and Book of Three with 2, which
+destroys the window. It's not the tool; it goes separately (wishlist
+`la-ventana-en-el-banco-de-tiles`). Desert stops at End Game and Dooms 2
+also at its BMPs.
 
-Capturas: `/shared/capturas/2026-10-05-ventana-con-mas-colores/`, la ventana
-de Dooms 2 decodificada de lo que arma el cartucho, antes (System reducido a
-mano) y después (Adeleine): la letra conserva el degradé.
+Captures: `/shared/capturas/2026-10-05-ventana-con-mas-colores/`, Dooms 2's
+window decoded from what the cartridge builds, before (System reduced by
+hand) and after (Adeleine): the font keeps the gradient.
 
-Verificado: las pruebas de `screens`, `patches` y `convert`; la tanda de ABL
-con estas herramientas, 1136, y `abl.sfc` igual, 27e94e67…, con la primera
-versión y con la final. Las dos pruebas nuevas de `screens`
-(`window_colors.rs`) se vieron en rojo antes del arreglo. Lo que ninguna
-prueba corre: una ROM con una ventana reducida, porque ningún juego arma.
+Verified: the tests of `screens`, `patches` and `convert`; ABL's suite
+with these tools, 1136, and `abl.sfc` the same, 27e94e67…, with the first
+version and with the final one. The two new tests of `screens`
+(`window_colors.rs`) were seen red before the fix. What no
+test runs: a ROM with a reduced window, because no game builds.
 
-Al mergear se reinstalan `screens`, `patches` y `convert`.
+On merging, `screens`, `patches` and `convert` are reinstalled.

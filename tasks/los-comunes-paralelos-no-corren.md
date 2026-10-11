@@ -1,42 +1,42 @@
 ---
-name: "Los comunes paralelos no corren"
-description: "La ROM no corre los eventos comunes paralelos, salvo los del equipo de ABL; cinco juegos tienen alguno —Vampires Dawn 35, entre ellos las transformaciones— y no está mirado qué se pierde en cada uno"
+name: "Parallel common events don't run"
+description: "The ROM doesn't run parallel common events, except ABL's equipment ones; five games have some —Vampires Dawn 35, among them the transformations— and it hasn't been looked at what is lost in each one"
 type: feature
 status: draft
 ---
 
-Lo vio Aguará el 2026-10-06 armando el tablero contra RM2k
-(`el-tablero-contra-rm2k.md`): "los comunes en paralelo no corren
-—6 en ABL, 35 en Vampires Dawn—, que no estaba en ningún estudio". Sigue
-igual en the-advocate `fc6f7456`: el comentario de `party_common_events`,
-en `rm2k-snes/events/src/indices.rs`, dice "The ROM does not run parallel
-common events", y la única excepción son los que sólo miran el equipo,
-que corren al cerrar el menú (la divergencia
-`los-comunes-del-equipo-corren-al-cerrar-el-menu` del libro).
+Aguará saw it on 2026-10-06 while building the board against RM2k
+(`el-tablero-contra-rm2k.md`): "parallel common events don't run
+—6 in ABL, 35 in Vampires Dawn—, which wasn't in any study". It's still
+the same in the-advocate `fc6f7456`: the comment of `party_common_events`,
+in `rm2k-snes/events/src/indices.rs`, says "The ROM does not run parallel
+common events", and the only exception are the ones that only look at the equipment,
+which run when closing the menu (the book's divergence
+`los-comunes-del-equipo-corren-al-cerrar-el-menu`).
 
-**Cuáles son**, contados el 2026-10-11 en el `data/db/commonevents.json`
-de cada port (ports `a85b7e3`; disparador paralelo y con comandos):
+**Which ones they are**, counted on 2026-10-11 in each port's `data/db/commonevents.json`
+(ports `a85b7e3`; parallel trigger and with commands):
 
 * ABL: 1 `TalanLateForWork`, 2 `DisableSaving`, 3 `Raining`, 36
-  `ManageQuarryTimer`, y 37 `UpdateAG7 Skills`, que es el del equipo y sí
-  corre a su manera;
+  `ManageQuarryTimer`, and 37 `UpdateAG7 Skills`, which is the equipment one and does
+  run in its own way;
 * The Book of Three: 16 `DisableSaving`, 18 `Reraise KO'd chars`, 21
   `Eilonwy's Upgrades`, 22 `LegendariesActivated`;
 * Desert Nightmare: 4 `Hauptmenü`, 23 `Vergiftet`;
 * Sunset Over Imdahl: 4 `MenuCaller`;
-* Vampires Dawn: 35, entre ellos las invocaciones (`Skelett beschwören`,
-  `Dämon beschwören`…) y las transformaciones (`Wolfsverwandlung`,
+* Vampires Dawn: 35, among them the summons (`Skelett beschwören`,
+  `Dämon beschwören`…) and the transformations (`Wolfsverwandlung`,
   `Fledermausverwandlun`, `Verwandlung beenden`);
-* Dooms 2, El Dorado y The Frozen World: ninguno.
+* Dooms 2, El Dorado and The Frozen World: none.
 
-**Lo que no se sabe**: qué se pierde jugando en cada juego. Ninguno se
-miró en un emulador, y alguno puede estar cubierto por otro camino (un
-`CallEvent` desde un mapa). Lo que se midió el 2026-09-27 sobre hacerlos
-de verdad —otro intérprete, el cuerpo en cada cuadro mientras el switch
-esté prendido— y por qué no se hizo entonces está en ese mismo comentario
-y en `los-comunes-automaticos-y-la-consola.md`: el 2 de ABL,
-`DisableSaving`, no tiene switch y correría siempre.
+**What isn't known**: what is lost when playing each game. None was
+looked at in an emulator, and some may be covered by another path (a
+`CallEvent` from a map). What was measured on 2026-09-27 about doing them
+for real —another interpreter, the body on each frame while the switch
+is on— and why it wasn't done then is in that same comment
+and in `los-comunes-automaticos-y-la-consola.md`: ABL's 2,
+`DisableSaving`, has no switch and would always run.
 
-**Cómo verlo**: la lista sale de `commonevents.json` de cada port
-(`trigger` 4); lo que se pierde, jugando hasta donde el switch de cada uno
-se prende y comparando con el original en Wine.
+**How to see it**: the list comes from each port's `commonevents.json`
+(`trigger` 4); what's lost, by playing up to where each one's switch
+turns on and comparing with the original in Wine.

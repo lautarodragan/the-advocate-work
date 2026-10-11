@@ -1,45 +1,45 @@
 ---
-name: "El volcado, fuera de la huella de los cartuchos"
-description: "just cartuchos dijo 'up to date' con data/maps/Map0022.json de Sunset tocado a mano: el volcado no entra en la huella, a propósito; falta confirmar que un cambio en el juego original sí rearma"
+name: "The dump, outside the cartridges' fingerprint"
+description: "just cartuchos said 'up to date' with Sunset's data/maps/Map0022.json edited by hand: the dump isn't in the fingerprint, on purpose; it remains to confirm that a change in the original game does rebuild"
 type: chore
 status: testing
 assignee: taro
 agents: [Hornero, Cardón]
 ---
 
-Visto por Mulita el 2026-10-11 (`sunset-el-mapa-22-en-negro.md`): para que el cartucho se enterara de un `Map0022.json` editado tuvo que borrar su directorio.
+Seen by Mulita on 2026-10-11 (`sunset-el-mapa-22-en-negro.md`): for the cartridge to notice an edited `Map0022.json` she had to delete its directory.
 
-Es intencional: `fingerprint_files`, en `rm2k-snes/cartridge/src/cartridges.rs` de `the-advocate`, dice "The game's dump does not: it is regenerated from the game". Lo que no está mirado es la otra mitad: si un cambio en `GAME_DIR` —un `.lmu` nuevo del juego— regenera el volcado y rearma, o si también queda viejo sin avisar. Si es lo segundo, es un camino a una ROM vieja que ninguna prueba ve. Y si editar el volcado a mano es una forma legítima de medir —Mulita la usó para aislar una causa—, conviene que la receta lo diga o que lo vea.
+It's intentional: `fingerprint_files`, in `rm2k-snes/cartridge/src/cartridges.rs` of `the-advocate`, says "The game's dump does not: it is regenerated from the game". What hasn't been looked at is the other half: whether a change in `GAME_DIR` —a new `.lmu` from the game— regenerates the dump and rebuilds, or whether it also goes stale without warning. If it's the latter, it's a path to a stale ROM that no test sees. And if editing the dump by hand is a legitimate way to measure —Mulita used it to isolate a cause—, the recipe should say so or see it.
 
-## Lo medido (Cardón, 2026-10-11)
+## What was measured (Cardón, 2026-10-11)
 
-Nadie regenera el volcado solo: `data/` se commitea y lo reescribe la receta `datos` de cada juego, a mano. Así que la respuesta es "queda viejo", en dos tiempos. Medido en Sunset, en un worktree de los ports, con una copia del juego en `~/scratch/cardon/huella/juego` como `GAME_DIR` y `release` armado con las globales de 70d4348a (scripts `medir.sh` y `activos.sh` de esa carpeta; los logs, `antes.log` y `despues.log`):
+Nobody regenerates the dump on their own: `data/` is committed and rewritten by each game's `datos` recipe, by hand. So the answer is "it goes stale", in two steps. Measured in Sunset, in a worktree of the ports, with a copy of the game in `~/scratch/cardon/huella/juego` as `GAME_DIR` and `release` built with the global tools of 70d4348a (scripts `medir.sh` and `activos.sh` in that folder; the logs, `antes.log` and `despues.log`):
 
-| paso | `just cartuchos release` | ROM |
+| step | `just cartuchos release` | ROM |
 |---|---|---|
-| armado desde cero | built | `54ceac6f9556b0a8` |
-| Map0039.lmu con un tile cambiado (5092 -> 5001) | up to date | `54ceac6f…` |
-| `just datos` con ese juego: `data/maps/Map0039.tiles` cambia | **up to date** | `54ceac6f…` (viejo) |
-| desde cero, con ese `data/` | built | `c6f43b98638ad200` |
-| el ChipSet del juego retocado entero, `data/` igual | **up to date** | `c6f43b98…` (viejo) |
-| desde cero, con ese ChipSet | built | `41b52b748ba44dcd` |
+| built from scratch | built | `54ceac6f9556b0a8` |
+| Map0039.lmu with one tile changed (5092 -> 5001) | up to date | `54ceac6f…` |
+| `just datos` with that game: `data/maps/Map0039.tiles` changes | **up to date** | `54ceac6f…` (stale) |
+| from scratch, with that `data/` | built | `c6f43b98638ad200` |
+| the game's whole ChipSet retouched, `data/` the same | **up to date** | `c6f43b98…` (stale) |
+| from scratch, with that ChipSet | built | `41b52b748ba44dcd` |
 
-* El `.lmu` solo no cambia la ROM, y está bien: el port lee el volcado, no el `.lmu` (`data/README.md` de cada juego). El cambio llega con `just datos`, y ahí se quedaba viejo sin avisar.
-* **Editar el volcado a mano es el mismo camino**: un `data/` distinto del que armó la ROM. Lo que hizo Mulita es legítimo —el volcado es texto a propósito—, así que la receta tiene que **verlo**, no decirlo.
-* Lo que el conversor lee del juego original mismo —PNG, MIDI— tampoco está en la huella, y queda viejo igual (la última fila). El RTP y el SoundFont, lo mismo, sin medir.
+* The `.lmu` alone doesn't change the ROM, and that's fine: the port reads the dump, not the `.lmu` (`data/README.md` of each game). The change arrives with `just datos`, and there it went stale without warning.
+* **Editing the dump by hand is the same path**: a `data/` different from the one that built the ROM. What Mulita did is legitimate —the dump is text on purpose—, so the recipe has to **see it**, not say it.
+* What the converter reads from the original game itself —PNG, MIDI— isn't in the fingerprint either, and goes stale just the same (the last row). The RTP and the SoundFont, the same, unmeasured.
 
-## Lo hecho
+## What was done
 
-`the-advocate`, rama `cardon-errores-y-huella`, commit "Cartuchos: el volcado entra en la huella": `fingerprint_files` suma todo `data/`, y su comentario dice ahora qué queda afuera y por qué. La prueba `everything_that_builds_the_rom_is_in_the_fingerprint` pide `data/maps.json` y `data/ditto.json`; en rojo sin el arreglo (`cartridges.rs:307`), verde con él.
+`the-advocate`, branch `cardon-errores-y-huella`, commit "Cartuchos: el volcado entra en la huella": `fingerprint_files` adds all of `data/`, and its comment now says what stays out and why. The test `everything_that_builds_the_rom_is_in_the_fingerprint` asks for `data/maps.json` and `data/ditto.json`; red without the fix (`cartridges.rs:307`), green with it.
 
-Con el arreglo, la misma corrida: después de `just datos` el cartucho se rearma solo y da `c6f43b98…`, igual que desde cero; devolver `data/` con `git checkout` lo rearma a `54ceac6f…`, la de antes. La ROM de Sunset con las herramientas de la rama es `54ceac6f…`, igual que con las globales.
+With the fix, the same run: after `just datos` the cartridge rebuilds on its own and gives `c6f43b98…`, same as from scratch; restoring `data/` with `git checkout` rebuilds it to `54ceac6f…`, the previous one. Sunset's ROM with the branch's tools is `54ceac6f…`, same as with the global ones.
 
-**No se arregló lo del juego original**: meterlo en la huella pide `--game-dir` en los que sólo la leen —`rm2k-snes-space` (`just espacio` no se lo pasa) y el `--list --json` del arnés de ABL—, que si no verían viejo todo cartucho. El juego original no se edita, y cuando cambia de verdad lo que cambia es el `.lmu`, que llega por el volcado. Queda dicho en el comentario de `fingerprint_files`; si taro lo quiere, es una tarea aparte, que toca los dos repos.
+**The original game part wasn't fixed**: putting it in the fingerprint requires `--game-dir` in the ones that only read it —`rm2k-snes-space` (`just espacio` doesn't pass it) and the `--list --json` of ABL's harness—, which otherwise would see every cartridge as stale. The original game isn't edited, and when it really changes what changes is the `.lmu`, which arrives through the dump. It's stated in the comment of `fingerprint_files`; if taro wants it, it's a separate task, touching both repos.
 
-## Resultado
+## Result
 
-Rama `cardon-errores-y-huella` de `the-advocate` (con las dos tareas, y `tijereta-sonidos-de-una-cancion` mergeada); en los ports no hay commits. Con las herramientas de la rama adelante en el PATH (`convert`, `mapdata`, `rm2k-snes-audio`, `cartridge`), en un worktree de los ports con `main` 4072372: la tanda de ABL da 1176 passed, y `abl.sfc` = `ea49ff07fd9d…`, la misma de `main` con lo de Tijereta. `just test` y las pruebas de los cuatro crates, en verde.
+Branch `cardon-errores-y-huella` of `the-advocate` (with both tasks, and `tijereta-sonidos-de-una-cancion` merged); there are no commits in the ports. With the branch's tools first in the PATH (`convert`, `mapdata`, `rm2k-snes-audio`, `cartridge`), in a worktree of the ports with `main` 4072372: ABL's suite gives 1176 passed, and `abl.sfc` = `ea49ff07fd9d…`, the same as `main` with Tijereta's work. `just test` and the tests of the four crates, green.
 
-Al mergear, reinstalar: `just install convert mapdata rm2k-snes-audio cartridge`.
+On merging, reinstall: `just install convert mapdata rm2k-snes-audio cartridge`.
 
-Lo que la tanda no cubre: ningún mensaje de error —ninguna prueba de ABL corta un cartucho—; se vieron a mano en Dooms 2 y Vampires Dawn. Y la huella: la tanda arma desde un `data/` que no cambia; el rearmado se midió a mano en Sunset.
+What the suite doesn't cover: any error message —no ABL test stops a cartridge—; they were seen by hand in Dooms 2 and Vampires Dawn. And the fingerprint: the suite builds from a `data/` that doesn't change; the rebuild was measured by hand in Sunset.

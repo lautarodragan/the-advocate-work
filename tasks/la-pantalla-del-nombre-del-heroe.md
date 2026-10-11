@@ -1,44 +1,44 @@
 ---
-name: "La pantalla del nombre del héroe"
-description: "EnterHeroName (10740) no existe en el motor: sólo lo usa Dooms 2, una vez. Diseño conversado con taro: el cursor en objetos, el fondo de BG1 sólo del System, la cara fuera de BG1 y el degradé por HDMA"
+name: "The hero name screen"
+description: "EnterHeroName (10740) doesn't exist in the engine: only Dooms 2 uses it, once. Design discussed with taro: the cursor in objects, the BG1 background only from the System, the face outside BG1 and the gradient through HDMA"
 type: feature
 status: wishlist
 agents: [Hornero]
 ---
 
-taro, el 2026-10-11: a la lista de deseos, no frena a ningún juego entero.
-De los ocho, sólo Dooms 2 la usa, una vez.
+taro, on 2026-10-11: to the wishlist, it doesn't block any game as a whole.
+Of the eight, only Dooms 2 uses it, once.
 
-## Cómo es en RM2k
+## What it's like in RM2k
 
-Tres ventanas sobre negro (`scene_name.cpp` de EasyRPG): la cara del
-actor (64x64, de su FaceSet), el nombre (192x32) al lado, y el teclado
-(256x160) abajo. En 256x224 no entra tal cual: el teclado ya mide el
-ancho entero, y en alto suman 232 con los márgenes. El cursor es el del
-System, estirado a la celda, y parpadea.
+Three windows over black (EasyRPG's `scene_name.cpp`): the actor's
+face (64x64, from their FaceSet), the name (192x32) beside it, and the keyboard
+(256x160) below. At 256x224 it doesn't fit as is: the keyboard already takes the
+full width, and in height they add up to 232 with the margins. The cursor is the
+System's, stretched to the cell, and it blinks.
 
-## Lo que se habló
+## What was discussed
 
-* **El cursor en la capa de objetos.** Las pantallas de hoy hornean el
-  cursor sobre el fondo: por cada posición guardan el rectángulo de celdas
-  que cambia, y lo copian al tilemap (`target_bar` en `actor_choice.s`,
-  `borders.rs` de screens). Con ~90 teclas eso no escala; con sprites se
-  mueve sin tocar BG1. Los pixeles del System son opacos o transparentes,
-  así que el cursor como sprite se ve igual.
-* **BG1 sólo con el System** (idea de taro): una imagen de RM2k es de 256
-  colores indexados, y el System también. Sin la cara, todo lo que hay en
-  pantalla —fondo, marco, cursor, colores de la letra— sale de su paleta,
-  así que entra entero a 8bpp sin perder nada. La cara iría en objetos o
-  en BG2. Ojo: la CGRAM es una sola. Las paletas de BG2 son las entradas
-  0–127 y las de objetos las 128–255, las mismas que usa BG1 a 8bpp: lo
-  que se ahorra es mezclar la cara con el System, no la memoria de
-  colores.
-* **El degradé por HDMA.** Lo que se pasaba de tiles en las ventanas
-  (`la-ventana-en-el-banco-de-tiles`) no eran colores sino celdas: un
-  degradé estirado es una celda distinta en cada fila. Si el fondo de
-  cada ventana usa una sola entrada de la CGRAM y un canal de HDMA la
-  reescribe en cada línea, el fondo pasa a ser una sola celda repetida.
-  Ventanas que comparten filas —la cara y el nombre— tienen degradés
-  distintos: una entrada y un canal por ventana. Sólo sirve para un
-  fondo estirado en vertical, no para uno con textura o en mosaico.
-  Serviría también para las otras pantallas, no sólo ésta.
+* **The cursor in the object layer.** Today's screens bake the
+  cursor onto the background: for each position they store the rectangle of cells
+  that changes, and copy it to the tilemap (`target_bar` in `actor_choice.s`,
+  `borders.rs` in screens). With ~90 keys that doesn't scale; with sprites it
+  moves without touching BG1. The System's pixels are opaque or transparent,
+  so the cursor as a sprite looks the same.
+* **BG1 only with the System** (taro's idea): an RM2k image is 256
+  indexed colors, and so is the System. Without the face, everything on
+  screen —background, frame, cursor, font colors— comes from its palette,
+  so it fits whole at 8bpp without losing anything. The face would go in objects or
+  in BG2. Careful: there is only one CGRAM. BG2's palettes are entries
+  0–127 and the objects' are 128–255, the same ones BG1 uses at 8bpp: what
+  is saved is mixing the face with the System, not color
+  memory.
+* **The gradient through HDMA.** What ran over in tiles in the windows
+  (`la-ventana-en-el-banco-de-tiles`) wasn't colors but cells: a
+  stretched gradient is a different cell in each row. If the background of
+  each window uses a single CGRAM entry and an HDMA channel
+  rewrites it on each line, the background becomes a single repeated cell.
+  Windows that share rows —the face and the name— have different
+  gradients: one entry and one channel per window. It only works for a
+  vertically stretched background, not for one with texture or tiled.
+  It would also work for the other screens, not just this one.

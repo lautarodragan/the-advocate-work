@@ -1,42 +1,42 @@
 ---
-name: "Los comandos que faltan"
-description: "Qué comandos de eventos de RM2k el compilador todavía no sabe compilar, medido sobre el juego entero: cuántas páginas se caen por cada uno, y qué cuesta cada uno"
+name: "The missing commands"
+description: "Which RM2k event commands the compiler still can't compile, measured over the whole game: how many pages drop because of each one, and what each one costs"
 type: research
 status: testing
 agents: [Aguará]
 assignee: taro
 ---
 
-De taro, el 2026-10-05: "qué comandos del sistema de eventos nos falta
-implementar?". El compilador lo sabe página por página, pero no hay un
-reporte del juego entero.
+From taro, on 2026-10-05: "which event system commands are we still missing
+implementing?". The compiler knows it page by page, but there is no
+report for the whole game.
 
-# Lo hecho (Aguará, 2026-10-05)
+# What was done (Aguará, 2026-10-05)
 
-El estudio está en `docs/research/2026-10-05-los-comandos-que-faltan.md`,
-con la tabla de cada comando del juego, lo que falta ordenado por páginas
-que destraba, lo que se acepta sin hacer, y la recomendación.
+The study is in `docs/research/2026-10-05-los-comandos-que-faltan.md`,
+with the table of every command in the game, what's missing sorted by pages
+it unblocks, what is accepted without being done, and the recommendation.
 
-Para medirlo quedó una herramienta: **`rm2k-snes-events culprits`**, que
-persigue cada página que no compila hasta encontrar todos sus culpables,
-y cuenta cuántas páginas deja afuera cada comando solo. Mira mapas,
-comunes y tropas, y las llamadas a comunes que se saltean. Ver el README
-del crate.
+A tool was left for measuring it: **`rm2k-snes-events culprits`**, which
+chases each page that doesn't compile until it finds all its culprits,
+and counts how many pages each command alone leaves out. It looks at maps,
+common events and troops, and the calls to common events that are skipped. See the
+crate's README.
 
-Lo que salió, en corto: en los mapas faltan siete cosas para 36 páginas,
-ninguna en `release`; lo único entre la granja y el día siguiente son dos
-`EraseEvent` de la cantera (mapa 150 y común 36); y en la pelea,
-`ChangeMonsterCondition` y `FlashScreen` dejan afuera `Inscribe` y
-`ControlMachines`, 164 páginas.
+What came out, in short: in the maps seven things are missing for 36 pages,
+none in `release`; the only thing between the farm and the next day is two
+`EraseEvent` in the quarry (map 150 and common event 36); and in battle,
+`ChangeMonsterCondition` and `FlashScreen` leave out `Inscribe` and
+`ControlMachines`, 164 pages.
 
-**Al mergear**: reinstalar `events` (`just -f tools/justfile install
-events`). La ROM no cambia: `release` sale byte por byte igual con el
-binario nuevo, y el `events.json` de `scan` y `compile` también.
+**On merging**: reinstall `events` (`just -f tools/justfile install
+events`). The ROM doesn't change: `release` comes out byte for byte identical with the
+new binary, and so does the `events.json` from `scan` and `compile`.
 
-# Lo que queda para taro
+# What's left for taro
 
-* Elegir por dónde seguir: la recomendación del estudio es la cantera
-  primero.
-* La decisión sobre `ChangeMonsterCondition`: estados de verdad en la
-  pelea (grande) o aceptarlo como deuda declarada para destrabar las dos
-  habilidades.
+* Choosing where to go next: the study's recommendation is the quarry
+  first.
+* The decision on `ChangeMonsterCondition`: real states in
+  battle (big) or accepting it as declared debt to unblock the two
+  skills.

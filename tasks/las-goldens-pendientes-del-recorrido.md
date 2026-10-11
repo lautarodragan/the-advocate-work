@@ -1,27 +1,27 @@
 ---
-name: "Las goldens pendientes del recorrido"
-description: "127 de las 135 fotos del recorrido no tienen golden: sacarlas, que taro las mire, y aprobarlas o arreglar lo que muestren"
+name: "The playthrough's pending goldens"
+description: "127 of the playthrough's 135 shots have no golden: take them, have taro look at them, and approve them or fix what they show"
 type: test
 status: todo
 ---
 
-Lo midió Irupé el 2026-09-29 (`las-pruebas-sin-agujeros-callados.md`):
-de las 135 fotos que sacan las pruebas de recorrido, sólo las 8 de
-`apertura/` y `talan/` tenían golden. Las otras 127 están en
-`rom/pruebas/golden/playthrough/pendientes.txt`, agrupadas por prueba. Hasta
-ahora esas pruebas miraban el estado del juego, pero ningún pixel.
+Irupé measured it on 2026-09-29 (`las-pruebas-sin-agujeros-callados.md`):
+of the 135 shots that the playthrough tests take, only the 8 in
+`apertura/` and `talan/` had a golden. The other 127 are in
+`rom/pruebas/golden/playthrough/pendientes.txt`, grouped by test. Until
+now those tests looked at the game state, but at no pixel.
 
-Aprobar una golden es de taro (AGENTS.md, "Cambiar una golden es un acto
-deliberado"). Lo que hay que hacer:
+Approving a golden is taro's (AGENTS.md, "Changing a golden is a deliberate
+act"). What has to be done:
 
-- sacar las 127 capturas de un build de `main`, tramo por tramo;
-- mostrárselas a taro lado a lado con el original cuando haya captura del
-  original, o solas; una golden nueva hornea el bug que tenga, así que se
-  miran antes de aprobarlas;
-- las que apruebe salen de `pendientes.txt` y entran a git; las que no,
-  son una tarea cada una.
+- take the 127 captures from a `main` build, stretch by stretch;
+- show them to taro side by side with the original when there is a capture of the
+  original, or alone; a new golden bakes in whatever bug it has, so they are
+  looked at before approving them;
+- the ones he approves leave `pendientes.txt` and go into git; the ones he doesn't
+  are a task each.
 
-Una decisión de taro antes de empezar: las 14 `debug-*` de
-`test_mapa_de_debug.py` van sin golden **a propósito** según su docstring.
-¿Son pendientes o permanentes? Si son permanentes, conviene que la lista
-las distinga, para que no queden como deuda.
+A decision for taro before starting: the 14 `debug-*` of
+`test_mapa_de_debug.py` go without a golden **on purpose** according to their docstring.
+Are they pending or permanent? If they are permanent, the list should
+tell them apart, so they don't remain as debt.

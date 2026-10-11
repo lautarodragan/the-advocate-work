@@ -1,75 +1,75 @@
 ---
-name: "Las exclusiones que sobran en los ports"
-description: "Los rm2k-snes.toml de los ports excluyen mapas del relevamiento que ya entran: dejar sólo los que hacen falta, medidos con las herramientas de hoy"
+name: "The exclusions left over in the ports"
+description: "The ports' rm2k-snes.toml exclude maps from the survey that already fit: leave only the ones needed, measured with today's tools"
 type: chore
 status: testing
 assignee: taro
 agents: [Calandria]
 ---
 
-Del re-barrido del 2026-10-10 (`otros-juegos-el-rebarrido.md`): las exclusiones commiteadas son las del relevamiento y sobran. Entonces Book of Three necesitaba sólo la 46, Dooms 2 la 1, la 10, la 14 y la 63, Frozen la 1 y la 2, y Desert las doce del barrido. Desde entonces entraron los gemelos y el recorte de eventos, la música y las tropas en palabras, y el grupo vacío, así que hay que medir de nuevo.
+From the re-sweep of 2026-10-10 (`otros-juegos-el-rebarrido.md`): the committed exclusions are the survey's and are too many. Back then Book of Three needed only 46, Dooms 2 needed 1, 10, 14 and 63, Frozen 1 and 2, and Desert the sweep's twelve. Since then the twins and the event trimming, the music and the troops in words, and the empty party have come in, so it has to be measured again.
 
-## Cómo se mide (Calandria, 2026-10-11)
+## How it is measured (Calandria, 2026-10-11)
 
-Herramientas globales de the-advocate `5094ef11`; ports en `038ea64`, worktree propio (rama `calandria-exclusiones`). Para cada juego, el toml sin muletas —`excluded = []`, sin `system`, Dooms 2 con `start_map = 1`, Frozen con `below = 156`— y `just cartuchos release`; si el error nombra un mapa, se lo excluye y se vuelve a armar. Si el que corta es el System propio (no nombra mapa), se devuelve `system` y se repite.
+Global tools of the-advocate `5094ef11`; ports at `038ea64`, own worktree (branch `calandria-exclusiones`). For each game, the toml without crutches —`excluded = []`, without `system`, Dooms 2 with `start_map = 1`, Frozen with `below = 156`— and `just cartuchos release`; if the error names a map, it is excluded and built again. If what cuts it is its own System (it names no map), `system` is put back and it is repeated.
 
-## Por juego
+## Per game
 
 ### El Dorado
 
-Arma tal como está commiteado: no excluye nada ni tiene muletas.
+It builds as committed: it excludes nothing and has no crutches.
 
 ### The Book of Three
 
-| qué | por qué |
+| what | why |
 |---|---|
-| (ningún mapa) | el 46 volvió el 2026-10-10 con la animación recortada (Cardón); los 44, 69 y 74 arman |
-| `system = "ablskin.png"` | con el suyo: "the window needs 267 tiles —27 of its frame and its arrow— and the bank has 256" |
+| (no map) | 46 came back on 2026-10-10 with its animation trimmed (Cardón); 44, 69 and 74 build |
+| `system = "ablskin.png"` | with its own: "the window needs 267 tiles —27 of its frame and its arrow— and the bank has 256" |
 
 ### Sunset Over Imdahl
 
-Arma tal como está commiteado —sin exclusiones ni muletas desde el grupo vacío (Mulita)—; no se tocó su toml.
+It builds as committed —without exclusions or crutches since the empty party (Mulita)—; its toml was not touched.
 
 ### Dooms 2
 
-Los errores de abajo no nombran el mapa: los cuatro son los del re-barrido, y se comprobó sacando cada uno de la lista (con los otros tres adentro, no arma).
+The errors below do not name the map: the four are the re-sweep's, and it was checked by taking each one out of the list (with the other three in, it does not build).
 
-| qué | por qué |
+| what | why |
 |---|---|
-| 1 | elegir personaje; con él, "the slot screen and the menu gather 524 tiles and their bank fits 448" (482 con su System) |
+| 1 | choosing a character; with it, "the slot screen and the menu gather 524 tiles and their bank fits 448" (482 with its System) |
 | 10 | "the song uses 291 sounds and the index is one byte" |
 | 14 | "the song uses 411 sounds and the index is one byte" |
 | 63 | "the song uses 291 sounds and the index is one byte" |
-| `start_map = 2` | porque el 1 queda afuera |
-| `system = "ablskin.png"` | con el suyo, aun sin el 1: "the actor choice's windows are 66 8bpp tiles and reach $4840, and their tilemap is at $4800" |
+| `start_map = 2` | because 1 stays out |
+| `system = "ablskin.png"` | with its own, even without 1: "the actor choice's windows are 66 8bpp tiles and reach $4840, and their tilemap is at $4800" |
 
-Para las herramientas: el error del índice de sonidos no dice qué canción ni qué mapa; hubo que sacar el mapa de a uno.
+For the tools: the sound index error does not say which song or which map; the map had to be taken out one at a time.
 
 ### The Frozen World
 
-| qué | por qué |
+| what | why |
 |---|---|
-| 1 | "a page makes the hero flash, and actor 11 is drawn with rangedmelee[0], which an NPC of the map also uses. On the console they share a palette and both would flash" (también con el System de ABL y el 2 afuera) |
+| 1 | "a page makes the hero flash, and actor 11 is drawn with rangedmelee[0], which an NPC of the map also uses. On the console they share a palette and both would flash" (also with ABL's System and 2 out) |
 | 2 | "a stream of map_code is 38179 bytes and 19968 fit in WRAM: see the LZ2 reservation in runtime/far_ram.s" |
-| `system = "ablskin.png"` | con el suyo: "the window needs 266 tiles —26 of its frame and its arrow— and the bank has 256" |
+| `system = "ablskin.png"` | with its own: "the window needs 266 tiles —26 of its frame and its arrow— and the bank has 256" |
 
-`below` pasa de 135 a 156, todos los mapas: el tope de 255 en el directorio de muestras ya no corta (degrada desde `las-muestras-que-sobran`). Los 69 y 84 arman.
+`below` goes from 135 to 156, all the maps: the cap of 255 in the sample directory no longer cuts (it degrades since `las-muestras-que-sobran`). 69 and 84 build.
 
 ### Desert Nightmare
 
-| qué | por qué |
+| what | why |
 |---|---|
-| (ningún mapa) | arma con los 189: lo que cortaba doce el 2026-10-10 ahora degrada con un WARNING —en nueve mapas los eventos que pasan de 120 quedan afuera, y lo que pierden es sólo su dibujo o una pared invisible (el recorte de Carpintero); los panoramas salen `mode1` o aplanados; los NPCs que pasan de 104 no se dibujan, y siguen andando—. No se miró ninguno en un emulador |
-| `system = "ablskin.png"` | con el suyo: "the End Game screen uses 18 pairs of colours and a 4bpp palette has 16" |
+| (no map) | it builds with all 189: what cut twelve on 2026-10-10 now degrades with a WARNING —in nine maps the events past 120 stay out, and what they lose is only their drawing or an invisible wall (Carpintero's trimming); the panoramas come out `mode1` or flattened; the NPCs past 104 are not drawn, and keep moving—. None was looked at in an emulator |
+| `system = "ablskin.png"` | with its own: "the End Game screen uses 18 pairs of colours and a 4bpp palette has 16" |
 
-`decorative_events = true` no es una muleta: es la perilla prendida a propósito (`ddb35a5`), y se queda.
+`decorative_events = true` is not a crutch: it is the knob turned on on purpose (`ddb35a5`), and it stays.
 
 ### Vampires Dawn
 
-No arma, y no se tocó su toml. Con el commiteado (System de ABL, sin exclusiones) corta primero en mapas: el 15, "this map can't carry a message window: it spends 576 background tiles, 436 sprite tiles and 130 upper tiles, and there is no layout that leaves 8 KB of tiles plus 2 KB of tilemap for the window"; sin el 15, el 57, "fits no VRAM layout: 609 background tiles, 768 sprite tiles (its animation box's 64 included) and 130 upper tiles". El barrido se cortó ahí, a propósito: a ~2 min por vuelta y con unos ochenta mapas que el re-barrido vio cortar, no rinde mientras sigan abiertos los muros de toda la partida (los 281 de `Music/`, los miembros de las tropas, el arranque del 3), en los que trabajan Tijereta y Carpintero. Con el System propio también corta primero el 15, así que no se pudo medir si su System hace falta: se deja.
+It does not build, and its toml was not touched. With the committed one (ABL's System, without exclusions) it first cuts on maps: 15, "this map can't carry a message window: it spends 576 background tiles, 436 sprite tiles and 130 upper tiles, and there is no layout that leaves 8 KB of tiles plus 2 KB of tilemap for the window"; without 15, 57, "fits no VRAM layout: 609 background tiles, 768 sprite tiles (its animation box's 64 included) and 130 upper tiles". The sweep was cut there, on purpose: at ~2 min per round and with some eighty maps that the re-sweep saw cut, it does not pay off while the whole-playthrough walls stay open (the 281 of `Music/`, the troop members, the boot of 3), which Tijereta and Carpintero are working on. With its own System it also cuts first on 15, so whether its System is needed could not be measured: it stays.
 
-## Resultado
+## Result
 
-Ports, rama `calandria-exclusiones` (`286201b`); libro, rama `calandria-exclusiones` (`245f1fc`, una sección "What it leaves out" en BoT, Dooms 2, Frozen y Desert). Verificado: `just cartuchos release` con los toml finales arma en BoT, Dooms 2, Frozen, Desert, El Dorado y Sunset (este último sin tocar). No se miró ninguno en un emulador. Nada que instalar al mergear: no se tocaron herramientas.
+Ports, branch `calandria-exclusiones` (`286201b`); book, branch `calandria-exclusiones` (`245f1fc`, a "What it leaves out" section in BoT, Dooms 2, Frozen and Desert). Verified: `just cartuchos release` with the final tomls builds in BoT, Dooms 2, Frozen, Desert, El Dorado and Sunset (the last one untouched). None was looked at in an emulator. Nothing to install at merge time: no tools were touched.
 
-Para las herramientas: "the song uses N sounds and the index is one byte" no dice ni la canción ni el mapa, y "this map can't carry a message window" no dice el mapa en su línea (hay que leer el encabezado anterior del log).
+For the tools: "the song uses N sounds and the index is one byte" says neither the song nor the map, and "this map can't carry a message window" does not say the map on its line (you have to read the previous header of the log).

@@ -1,96 +1,96 @@
 ---
-name: "El audio en dos pasos lossy"
-description: "MIDI y SoundFont reducidos y versionados, para escucharlos en un DAW"
+name: "Audio in two lossy steps"
+description: "Reduced and versioned MIDI and SoundFont, to listen to them in a DAW"
 type: feature
 status: todo
 ---
 
-# Qué
+# What
 
-Partir la conversión de audio en **dos pasos lossy explícitos y versionados**,
-para que el último paso sea mecánico:
+Split the audio conversion into **two explicit, versioned lossy steps**,
+so that the last step is mechanical:
 
-    (todos los MIDIs + SoundFont)  ->  SoundFont reducida     [decisión artística]
-    (MIDI + SoundFont reducida)    ->  MIDI reducido          [decisión artística]
-    (MIDIs reducidos + SoundFont reducida)  ->  streams + muestras BRR
+    (all MIDIs + SoundFont)  ->  reduced SoundFont     [artistic decision]
+    (MIDI + reduced SoundFont)    ->  reduced MIDI          [artistic decision]
+    (reduced MIDIs + reduced SoundFont)  ->  streams + BRR samples
 
-Los dos primeros son artefactos que se miran, se comparan con el original y
-**se pueden editar a mano** cuando una decisión queda mal. El tercero deja de
-decidir nada.
+The first two are artifacts that are looked at, compared with the original and
+**can be edited by hand** when a decision comes out wrong. The third stops
+deciding anything.
 
 # Status
 
-Anotado el 2026-09-21, sin empezar. Es la tercera y cuarta clase de parche de
-`parches-de-decisiones-artisticas.md`, que quedaron afuera porque la clave "el
-tema" no identifica la decisión.
+Noted on 2026-09-21, not started. It is the third and fourth class of patch in
+`parches-de-decisiones-artisticas.md`, which were left out because the key "the
+track" doesn't identify the decision.
 
-# Los cuatro sacrificios de hoy, y de qué paso son
+# Today's four sacrifices, and which step they belong to
 
-1. **La polifonía**: ocho voces, y una nota que arranca sin voz libre se la
-   saca a la que termina antes. **Es del tema y de nadie más** —nunca suenan
-   dos temas a la vez— así que va en el paso del MIDI.
-2. **Qué temas aportan programas al banco**: el recorte cuando no entra todo.
-3. **La resolución de cada muestra**: `ARAM_BUDGET` repartido en partes
-   iguales, con lo que sobra redistribuido.
-4. **La tasa que baja para todos** al sumar temas: mediana de 12,5 a 8,4 kHz
-   con diecinueve en vez de once.
+1. **Polyphony**: eight voices, and a note that starts with no free voice
+   takes it from the one that ends first. **It belongs to the track and nobody else**
+   —two tracks never play at once— so it goes in the MIDI step.
+2. **Which tracks contribute programs to the bank**: the cut when not everything fits.
+3. **The resolution of each sample**: `ARAM_BUDGET` split into equal
+   parts, with what's left over redistributed.
+4. **The rate that drops for everyone** as tracks are added: median from 12.5 to 8.4 kHz
+   with nineteen instead of eleven.
 
-2, 3 y 4 son el mismo paso: son función de **todos los temas del juego** + la
-SoundFont + el presupuesto de ARAM + la prioridad.
+2, 3 and 4 are the same step: they are a function of **all the tracks in the game** + the
+SoundFont + the ARAM budget + the priority.
 
-(El 2026-09-26, con el presupuesto por paquete —el paso 6 de
-`la-calidad-de-la-musica.md`—, el 2 desapareció: aportan todos. El 3 y el 4
-son ahora uno solo: cada muestra con lo que le deja su peor paquete, y la
-función pasa a ser de todos los temas + la SoundFont + **los paquetes de cada
-mapa, con sus efectos y lo que puede venir sonando**. La prioridad se fue.)
+(On 2026-09-26, with the per-package budget —step 6 of
+`la-calidad-de-la-musica.md`—, 2 disappeared: they all contribute. 3 and 4
+are now a single one: each sample with what its worst package leaves it, and the
+function becomes one of all the tracks + the SoundFont + **the packages of each
+map, with its effects and what may come in already playing**. The priority is gone.)
 
-# El acoplamiento que fija el orden
+# The coupling that fixes the order
 
-**Una nota se cae del stream cuando su programa no está en el banco**
-—el `continue` de `build_events`—. O sea que el MIDI reducido no se puede
-decidir sin saber qué quedó en la SoundFont reducida. Primero la SoundFont,
-después el MIDI.
+**A note drops out of the stream when its program isn't in the bank**
+—the `continue` in `build_events`—. That is, the reduced MIDI can't be
+decided without knowing what was left in the reduced SoundFont. First the SoundFont,
+then the MIDI.
 
-# Decisiones a tomar
+# Decisions to make
 
-* **Qué es la "SoundFont reducida"**: un `.sf2` de verdad, que se abre con
-  cualquier editor, o un directorio de muestras ya resampleadas con su
-  metadata. Lo primero es más útil para mirarlo; lo segundo es más fiel a lo
-  que el paso final consume.
-* **Qué lleva cada muestra ya decidido**: tasa, loop, normalización, recorte.
-  Cuanto más lleve, menos decide el paso final.
-* **Cómo se expresa el recorte por programa faltante** en el MIDI reducido:
-  la nota se borra, o queda marcada.
-* **El tope de polifonía**: no es ocho. Hay una voz reservada para los efectos
-  de sonido, y el reparto de voces entre canales también es una decisión que
-  conviene que viva en el mismo artefacto.
-* **De qué conjunto de temas sale la decisión**: los de `abl`, siguiendo la
-  regla de que lo versionado es lo del ROM jugable.
+* **What the "reduced SoundFont" is**: a real `.sf2`, which opens with
+  any editor, or a directory of already resampled samples with their
+  metadata. The first is more useful for looking at it; the second is more faithful to what
+  the final step consumes.
+* **What each sample carries already decided**: rate, loop, normalization, trim.
+  The more it carries, the less the final step decides.
+* **How the cut for a missing program is expressed** in the reduced MIDI:
+  the note is deleted, or it stays marked.
+* **The polyphony limit**: it isn't eight. There is a voice reserved for sound
+  effects, and the split of voices among channels is also a decision that
+  should live in the same artifact.
+* **From which set of tracks the decision comes**: the ones in `abl`, following the
+  rule that what's versioned is what's in the playable ROM.
 
-# Para qué sirve el artefacto: iterar sin armar la ROM
+# What the artifact is for: iterating without building the ROM
 
-El MIDI reducido y la SoundFont reducida **se cargan en un DAW**, y ahí se
-prueban ajustes sin pedir un build. Es el equivalente de los PNG que deja el
-Adeleine en `rom/build/<cartucho>/adeleine/`: se juzga el paso lossy mirando
-—u oyendo— su salida.
+The reduced MIDI and the reduced SoundFont **are loaded into a DAW**, and there
+adjustments are tried without asking for a build. It is the equivalent of the PNGs that
+Adeleine leaves in `rom/build/<cartucho>/adeleine/`: the lossy step is judged by looking at
+—or listening to— its output.
 
-Eso lo hace taro, así que el artefacto tiene que abrirse con herramientas de
-todos los días, y **esa es la razón de que las envolventes salgan del
-SoundFont** —`ataque-y-decaimiento-desde-el-soundfont.md`—: si la ROM usa las
-ocho familias de `sdsp.py` y el DAW usa las del SoundFont, los ataques suenan
-distinto y el artefacto miente donde más se nota.
+taro does that, so the artifact has to open with everyday
+tools, and **that is the reason the envelopes come out of the
+SoundFont** —`ataque-y-decaimiento-desde-el-soundfont.md`—: if the ROM uses the
+eight families in `sdsp.py` and the DAW uses the SoundFont's, the attacks sound
+different and the artifact lies where it shows the most.
 
-**No reemplaza probar la ROM**, y hay dos diferencias que van a quedar siempre,
-porque no son decisiones nuestras: el SPC700 interpola con su filtro gaussiano,
-que redondea los agudos, y el DSP tiene eco por hardware que el driver no usa.
+**It does not replace testing the ROM**, and there are two differences that will always remain,
+because they are not our decisions: the SPC700 interpolates with its Gaussian filter,
+which rounds off the highs, and the DSP has hardware echo that the driver doesn't use.
 
-**La SoundFont reducida no pasa por BRR**, y es una decisión, no un olvido.
-Meter un `encode` + `decode` para que el DAW reproduzca la pérdida de los 4 bits
-dejaría **dos pasadas lossy** —la del artefacto y la del paso final—, que no
-tienen por qué dar lo mismo. Vale más que el artefacto sea exactamente lo que
-el paso final consume.
+**The reduced SoundFont doesn't go through BRR**, and that is a decision, not an oversight.
+Adding an `encode` + `decode` so the DAW reproduces the loss of the 4 bits
+would leave **two lossy passes** —the artifact's and the final step's—, which
+have no reason to give the same result. It is better for the artifact to be exactly what
+the final step consumes.
 
-# Lo que no es una decisión
+# What is not a decision
 
-La codificación a BRR. Pierde señal —16 bits a 4— pero no hay nada que
-elegir: es el formato del hardware, como los tiles de 8x8.
+The encoding to BRR. It loses signal —16 bits to 4— but there is nothing to
+choose: it is the hardware's format, like the 8x8 tiles.

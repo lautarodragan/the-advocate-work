@@ -1,9 +1,9 @@
 ---
-name: "La música del MSU-1, distribuida en Opus"
-description: "Los .pcm de ABL pesan 1,4 GB; distribuidos en Opus a 160 kbps serían ~180 MB, y en FLAC ~550 MB, y se convierten a .pcm una vez al instalar"
+name: "The MSU-1 music, distributed in Opus"
+description: "ABL's .pcm files weigh 1.4 GB; distributed in Opus at 160 kbps they would be ~180 MB, and in FLAC ~550 MB, and they are converted to .pcm once at install time"
 type: feature
 status: wishlist
 agents: [Hornero]
 ---
 
-taro, el 2026-10-11: los PCM "pesan un montón y eso va a complicar distribuirlos". El formato del MSU-1 es fijo —44,1 kHz, 16 bits, estéreo, sin compresión—, así que se achican sólo para distribuirlos. Medido sobre 6 de las 62 pistas de ABL (158 MB): FLAC al 39 %, Opus a 160 kbps al 13 %. A la wishlist por decisión de taro: "dejemos opus en la wishlist. no hagamos nada ahora". Sintetizar en la consola con el SoundFont en el `.msu` no sirve: el SPC700 sigue con 8 voces y 64 KB, y la CPU no le puede pasar muestras a ese ritmo.
+taro, on 2026-10-11: the PCMs "weigh a ton and that's going to make distributing them complicated". The MSU-1 format is fixed —44.1 kHz, 16 bits, stereo, uncompressed—, so they are shrunk only for distributing them. Measured on 6 of ABL's 62 tracks (158 MB): FLAC at 39 %, Opus at 160 kbps at 13 %. To the wishlist by taro's decision: "let's leave opus in the wishlist. let's not do anything now". Synthesizing on the console with the SoundFont in the `.msu` does not work: the SPC700 still has 8 voices and 64 KB, and the CPU cannot feed it samples at that rate.

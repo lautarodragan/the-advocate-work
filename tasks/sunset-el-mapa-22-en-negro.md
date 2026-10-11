@@ -1,116 +1,116 @@
 ---
-name: "Sunset: la escena del mapa 22 en negro"
-description: "En un cartucho chico de Sunset Over Imdahl (mapas 11, 22, 21, 23 y 10) la escena del mapa 22 queda en negro, con o sin la muleta del grupo"
+name: "Sunset: the map 22 scene in black"
+description: "In a small Sunset Over Imdahl cartridge (maps 11, 22, 21, 23 and 10) the map 22 scene stays black, with or without the party crutch"
 type: bug
 status: testing
 assignee: taro
 agents: [Mulita]
 ---
 
-Visto por Mulita el 2026-10-10, al cerrar `el-grupo-vacio-al-empezar.md`: no es del grupo vacío, pasa también con `party = [1]`.
+Seen by Mulita on 2026-10-10, while closing `el-grupo-vacio-al-empezar.md`: it is not about the empty party, it also happens with `party = [1]`.
 
-## La causa: son dos, una detrás de la otra
+## The cause: there are two, one behind the other
 
-El 11 tiñe la pantalla a negro (`TintScreen` 0,0,0 en 25 cuadros) y salta
-al 22 (17, 13). Ahí la escena es el ev1, autorun: `PlayBGM`, lluvia,
-`ShowPicture` de `WinterMist` y su `MovePicture`, el tinte a
-(110, 120, 120, 90) en 70 cuadros, los mensajes, y el salto a la tienda
-(21), con los techos y la luz de la tienda como imágenes.
+Map 11 tints the screen to black (`TintScreen` 0,0,0 over 25 frames) and jumps
+to 22 (17, 13). There the scene is ev1, autorun: `PlayBGM`, rain,
+`ShowPicture` of `WinterMist` and its `MovePicture`, the tint to
+(110, 120, 120, 90) over 70 frames, the messages, and the jump to the shop
+(21), with the shop's roofs and light as pictures.
 
-1. **La página no compilaba.** Pide `ChangeScreenTransitions [1, 19]` —el
-   corte para mostrar—, que el compilador rechazaba ("no ROM map uses
-   them"): `rm2k-snes-events culprits` lo da como el único culpable de una
-   página del cartucho chico. Sin la página, nada saca el negro del tinte
-   del 11. En el conversor se veía como "map 22: 2 automatic event page(s),
+1. **The page did not compile.** It asks for `ChangeScreenTransitions [1, 19]` —the
+   cut for showing—, which the compiler rejected ("no ROM map uses
+   them"): `rm2k-snes-events culprits` gives it as the only culprit of a
+   page in the small cartridge. Without the page, nothing removes the black from the tint
+   of 11. In the converter it showed as "map 22: 2 automatic event page(s),
    1 runnable".
-2. **Con la página corriendo, sigue negro: la niebla tapa el mapa.**
-   `WinterMist` es una niebla de 320x240 que se muestra al 100 % de
-   transparencia y baja al 95 %. La ROM la lleva como imagen grande —BG1 en
-   modo 1, el mapa se va— y la transparencia oscurece hacia negro, así que
-   al 95 % es una pantalla negra. Se ve en el cuadro exacto: con
-   `sondear.py` el negro cae en el tick del `ShowPicture` y no en el del
-   tinte; sacando el tinte del volcado sigue negro, sacando las dos de
-   imágenes la escena corre entera —panorama, tinte, mensajes, y el salto
-   al 21 con la tienda—. No hay otra causa detrás.
+2. **With the page running, it is still black: the mist covers the map.**
+   `WinterMist` is a 320x240 mist that is shown at 100 %
+   transparency and goes down to 95 %. The ROM carries it as a big picture —BG1 in
+   mode 1, the map goes away— and the transparency darkens toward black, so
+   at 95 % it is a black screen. It shows at the exact frame: with
+   `sondear.py` the black lands on the tick of the `ShowPicture` and not on the one of the
+   tint; removing the tint from the dump it is still black, removing both
+   pictures the scene runs whole —panorama, tint, messages, and the jump
+   to 21 with the shop—. There is no other cause behind it.
 
-Lo que hace RM2k (easyrpg-player): `TransitionCutIn` dura un cuadro
-(`Transition::GetDefaultFrames`) y `TransitionNone` cero; las imágenes se
-borran al cambiar de mapa (`flags = 1 | 32 | 64` por omisión en
-`Game_Pictures::ShowParams`), como hace la ROM. El original con Wine
-(RPG_RT de 2015, en `~/scratch/mulita/wine2/`, Xvfb :94) muestra el
-panorama con lluvia y la niebla que entra.
+What RM2k does (easyrpg-player): `TransitionCutIn` lasts one frame
+(`Transition::GetDefaultFrames`) and `TransitionNone` zero; pictures are
+erased on changing map (`flags = 1 | 32 | 64` by default in
+`Game_Pictures::ShowParams`), as the ROM does. The original with Wine
+(RPG_RT of 2015, in `~/scratch/mulita/wine2/`, Xvfb :94) shows the
+panorama with rain and the mist coming in.
 
-## Lo que se arregló: el corte para mostrar
+## What got fixed: the cut for showing
 
-* `rm2k-snes/events/src/compile.rs`: el corte (19) y "ninguna" (20) para
-  mostrar compilan a `TRANSITION_CUTOFF`, igual que para borrar.
-* `runtime/enter_map.s`, `fade_tick`: con `TRANSITION_SHOW` en el corte,
-  el fundido termina en el tick de la carga, con el brillo entero y ese
-  tick todavía congelado. Los comentarios de `teleport_transition.s` y
-  `far_ram.s`, al día.
-* ABL lo pide sólo en el 302, que no entra: `abl.sfc` cambia por el código
-  del runtime y por los dos casos nuevos, no por el juego.
+* `rm2k-snes/events/src/compile.rs`: the cut (19) and "none" (20) for
+  showing compile to `TRANSITION_CUTOFF`, the same as for erasing.
+* `runtime/enter_map.s`, `fade_tick`: with `TRANSITION_SHOW` on the cut,
+  the fade ends on the loading tick, with full brightness and that
+  tick still frozen. The comments in `teleport_transition.s` and
+  `far_ram.s`, up to date.
+* ABL asks for it only in 302, which does not fit: `abl.sfc` changes because of the runtime
+  code and the two new cases, not because of the game.
 
-## Lo que no se arregló: las imágenes sobre el mapa
+## What did not get fixed: the pictures over the map
 
-No es acotado. Sunset dibuja así sus techos, cielorrasos, luces, sombras y
-nieblas en casi todos los mapas: unas 140 imágenes de pantalla entera
-(320x240 a 656x480), la mayoría con el color transparente cubriendo entre
-la mitad y el 99 % de la imagen, o mostradas al 45-95 % de transparencia
-(`~/scratch/mulita/bin/pics.py` las lista con sus parámetros). Todas son
-imágenes grandes para el conversor, que tapan el mapa: **cualquier escena de
-Sunset con una de ésas queda negra o con la imagen sobre negro**. Las de ABL
-son pantallas opacas (índice 0 en 0-13 %), que es para lo que se diseñaron.
+It is not bounded. Sunset draws its roofs, ceilings, lights, shadows and
+mists that way in almost every map: some 140 full-screen pictures
+(320x240 to 656x480), most with the transparent color covering between
+half and 99 % of the picture, or shown at 45-95 % transparency
+(`~/scratch/mulita/bin/pics.py` lists them with their parameters). They are all
+big pictures for the converter, which cover the map: **any Sunset
+scene with one of those stays black or with the picture over black**. ABL's
+are opaque screens (index 0 in 0-13 %), which is what they were designed for.
 
-Dos caminos, sin elegir:
+Two paths, not chosen:
 
-* **Dejarlas afuera** (aceptadas sin hacerse) cuando son "sobre el mapa":
-  el juego se ve sin techos ni nieblas, pero se ve. Pide un criterio —una
-  perilla del proyecto o una regla por el índice 0 y la transparencia— y
-  cuidar las que sí van sobre negro, como `ImdahlTitleImage` del 11.
-* **Hacerlas**: una capa encima del mapa con el color transparente, y
-  matemática de color para la transparencia, en un mapa que ya está en
-  modo 3 con el panorama. Es una feature entera.
+* **Leave them out** (accepted without doing them) when they are "over the map":
+  the game is seen without roofs or mists, but it is seen. It needs a criterion —a
+  project knob or a rule by index 0 and transparency— and
+  care for the ones that do go over black, like `ImdahlTitleImage` in 11.
+* **Do them**: a layer above the map with the transparent color, and
+  color math for the transparency, in a map that is already in
+  mode 3 with the panorama. It is a whole feature.
 
-Ver `sunset-las-imagenes-sobre-el-mapa.md`.
+See `sunset-las-imagenes-sobre-el-mapa.md`.
 
-## Bitácora
+## Log
 
-* Cartucho chico en el toml de Sunset de mi worktree, sin commitear:
-  `[cartridges.arranque]` (empieza en 11) y `arranque22` (empieza en 22),
+* Small cartridge in the Sunset toml of my worktree, uncommitted:
+  `[cartridges.arranque]` (starts at 11) and `arranque22` (starts at 22),
   `flags = ["--no-title"]`, `party = [1]`.
-* `build/` no se entera de un cambio en `data/`: `just cartuchos` dijo "up
-  to date" con el `Map0022.json` tocado, y hubo que borrar el directorio
-  del cartucho. Para medir alcanza; no lo seguí.
-* En la escena sin imágenes la ventana de mensajes sale opaca y naranja:
-  la página pide la ventana transparente y `ChangeSystemGraphics` (en el
-  11). No es de esta tarea.
-* Rojo antes del arreglo: con las herramientas de main (5094ef11) la tanda
-  de ABL ni arma —"transicion-mostrar-corte.json: the test page doesn't
+* `build/` does not notice a change in `data/`: `just cartuchos` said "up
+  to date" with `Map0022.json` touched, and the cartridge directory had to be
+  deleted. For measuring it is enough; I did not follow it up.
+* In the scene without pictures the message window comes out opaque and orange:
+  the page asks for the transparent window and `ChangeSystemGraphics` (in
+  11). It is not this task's.
+* Red before the fix: with main's tools (5094ef11) ABL's suite
+  does not even build —"transicion-mostrar-corte.json: the test page doesn't
   compile"—.
-* Verde: la tanda entera de ABL con `events` y `cartridge` de
-  `mulita-sunset-22` adelante en el PATH, **1176** (las 1174 más las dos
-  nuevas); `abl.sfc` = `f81ae57da625…`, distinto del `5852b723…` de main
-  por el runtime y los casos nuevos. `just crate-test events`, verde.
-* Después mergeé `main` en las dos ramas (Tijereta en
-  `rm2k-snes-audio`, Calandria en los tomls de otros juegos) y **no** volví
-  a correr la tanda sobre el merge.
+* Green: ABL's whole suite with `events` and `cartridge` from
+  `mulita-sunset-22` ahead in the PATH, **1176** (the 1174 plus the two
+  new ones); `abl.sfc` = `f81ae57da625…`, different from main's `5852b723…`
+  because of the runtime and the new cases. `just crate-test events`, green.
+* Afterwards I merged `main` into both branches (Tijereta in
+  `rm2k-snes-audio`, Calandria in the other games' tomls) and did **not** run
+  the suite again on the merge.
 
-## Al mergear
+## When merging
 
-Ramas `mulita-sunset-22` en the-advocate, the-advocate-ports y
-the-advocate-docs. Reinstalar en el global: `events` y `cartridge` (éste
-por el runtime).
+Branches `mulita-sunset-22` in the-advocate, the-advocate-ports and
+the-advocate-docs. Reinstall in the global: `events` and `cartridge` (the latter
+because of the runtime).
 
-## Lo que no cubre la tanda
+## What the suite does not cover
 
-* **Sunset**: no tiene pruebas. Que la página del 22 ahora corre se miró
-  con capturas de snes9x en el cartucho chico, no con una prueba; que sigue
-  negro, también.
-* `test_mostrar_con_el_corte` cubre el corte para mostrar en el salto del
-  2 al 5 de ABL, con el borrar por omisión (el fundido). El corte para
-  borrar y para mostrar juntos —que es lo que Sunset pide para el salto de
-  la tienda en adelante— no lo corre ninguna prueba.
-* No se miró en bsnes ni en el hardware.
+* **Sunset**: it has no tests. That the page of 22 now runs was looked at
+  with snes9x captures in the small cartridge, not with a test; that it is still
+  black, too.
+* `test_mostrar_con_el_corte` covers the cut for showing on the jump from
+  2 to 5 in ABL, with the default erase (the fade). The cut for
+  erasing and for showing together —which is what Sunset asks for on the jump from
+  the shop onward— is not run by any test.
+* It was not looked at in bsnes or on hardware.
 
-Capturas, con el original al lado: `/shared/capturas/2026-10-11-sunset-22/`.
+Captures, with the original alongside: `/shared/capturas/2026-10-11-sunset-22/`.

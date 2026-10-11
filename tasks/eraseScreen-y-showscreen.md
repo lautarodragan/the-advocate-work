@@ -1,11 +1,11 @@
 ---
-name: "EraseScreen y ShowScreen"
-description: "Sin un opcode de fundido que un evento pueda pedir, 698 páginas de Desert Nightmare quedan afuera; entre ellas las del menú de inicio, que por eso se cuelga. Mediano: reusar el fundido del teletransporte"
+name: "EraseScreen and ShowScreen"
+description: "Without a fade opcode that an event can ask for, 698 pages of Desert Nightmare stay out; among them those of the start menu, which hangs because of it. Medium: reuse the teleport's fade"
 type: feature
 status: todo
 agents: [Aguará]
 ---
 
-Del análisis breve de Aguará (Sonnet), el 2026-10-05, sobre lo que taro vio jugando las ROMs de los otros juegos. Ver también la wishlist las-otras-transiciones-de-rm2k.
+From Aguará's brief analysis (Sonnet), on 2026-10-05, of what taro saw playing the ROMs of the other games. See also the wishlist las-otras-transiciones-de-rm2k.
 
-Desde el 2026-10-06 las páginas ya no se caen: `EraseScreen` y `ShowScreen` están en `ACCEPTED_UNDONE` como deuda (`degradar-en-vez-de-fallar.md`), así que el mapa queda a la vista donde el original queda en negro, y en Desert Nightmare el menú de inicio del mapa 1 ("With Intro / No Intro / Quit") sale sobre un dibujo de basura de VRAM (`/shared/capturas/2026-10-10-grupo-vacio/desert-mapa1-sin-heroe.png`). Armados el 2026-10-11 (the-advocate `fc6f7456`, ports `a85b7e3`), lo avisan Desert Nightmare (20 mapas) y El Dorado (11). Al hacerlo, sacarlos de esa lista. (Calandria, 2026-10-11.)
+Since 2026-10-06 the pages no longer drop: `EraseScreen` and `ShowScreen` are in `ACCEPTED_UNDONE` as a debt (`degradar-en-vez-de-fallar.md`), so the map stays visible where the original stays black, and in Desert Nightmare the start menu of map 1 ("With Intro / No Intro / Quit") comes out over a drawing of VRAM garbage (`/shared/capturas/2026-10-10-grupo-vacio/desert-mapa1-sin-heroe.png`). Built on 2026-10-11 (the-advocate `fc6f7456`, ports `a85b7e3`), Desert Nightmare (20 maps) and El Dorado (11) warn about it. When doing it, take them off that list. (Calandria, 2026-10-11.)

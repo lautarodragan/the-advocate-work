@@ -1,29 +1,29 @@
 ---
-name: "Los eventos encima del héroe, sobre los techos pintados"
-description: "En un mapa pintado (modo 1), un evento con prioridad 'encima del héroe' se dibuja por arriba de los techos; en RM2k los techos son imágenes y van arriba de todo"
+name: "Events above the hero, over the painted roofs"
+description: "In a painted map (mode 1), an event with 'above the hero' priority is drawn over the roofs; in RM2k the roofs are pictures and go above everything"
 type: bug
 status: draft
 ---
 
-Visto por Cardón el 2026-10-11 (`los-otros-juegos-arman-y-arrancan.md`),
-herramientas `fc6f7456`, ports `a85b7e3`, en snes9x y bsnes igual.
+Seen by Cardón on 2026-10-11 (`los-otros-juegos-arman-y-arrancan.md`),
+tools `fc6f7456`, ports `a85b7e3`, the same in snes9x and bsnes.
 
-**Qué se ve**: Sunset Over Imdahl, mapa 2 (la plaza), el DummyGuard en
-(13,23): se dibuja sobre el techo que debería taparlo.
+**What is seen**: Sunset Over Imdahl, map 2 (the square), the DummyGuard at
+(13,23): it is drawn over the roof that should cover it.
 
-**Por qué, hasta donde se sabe**: en modo 1 los objetos suben un escalón de
-prioridad (`oam.s`), así que "encima del héroe" queda en prioridad 3, por
-arriba de BG1 alta, que es donde van los techos. En RM2k los techos de
-Sunset son imágenes, y una imagen va arriba de todos los eventos (EasyRPG:
-`Priority_PictureNew` > `Priority_EventsFlying`). No se comparó con el
-original en Wine.
+**Why, as far as is known**: in mode 1 objects go up one priority
+step (`oam.s`), so "above the hero" ends up at priority 3, above
+high BG1, which is where the roofs go. In RM2k Sunset's roofs are
+pictures, and a picture goes above all events (EasyRPG:
+`Priority_PictureNew` > `Priority_EventsFlying`). It was not compared with the
+original in Wine.
 
-**Cómo verlo**: `just arrancan -k sunset` en la raíz de los ports arma el
-release; ir al mapa 2 y mirar el guardia. Las caminatas de las goldens de
-`test_pintados.py` se eligieron para que no lo muestren.
+**How to see it**: `just arrancan -k sunset` at the root of the ports builds the
+release; go to map 2 and look at the guard. The walks of the goldens of
+`test_pintados.py` were chosen so they do not show it.
 
-Cerca, sin comprobar si es lo mismo: un guardia de capa normal en (36,13)
-del mismo mapa tiene las piernas sobre el borde de un techo; puede ser uno
-de los bordes que no entran en los 127 (la deuda de
-`sunset-en-modo-1-con-color-math.md`, ahora
+Nearby, without checking whether it is the same thing: a normal-layer guard at (36,13)
+on the same map has its legs over the edge of a roof; it may be one
+of the edges that do not fit in the 127 (the debt in
+`sunset-en-modo-1-con-color-math.md`, now
 `los-bordes-de-techo-que-no-entran.md`).

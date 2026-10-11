@@ -1,77 +1,77 @@
 ---
-name: "Los colores de la ventana, en el pedido de Wally"
-description: "WINDOW_COLORS es una constante de wally (13 desde la flecha y la barra) y rompió la prueba que compara las capas contra el Python; que venga en el pedido, del System del juego"
+name: "The window's colors, in Wally's request"
+description: "WINDOW_COLORS is a wally constant (13 since the arrow and the bar) and it broke the test that compares the layers against the Python; have it come in the request, from the game's System"
 type: refactor
 status: testing
 agents: [Hornero, Tijereta]
 assignee: taro
 ---
 
-`wally::the_layers_are_the_ones_the_python_made` está en rojo en `main`
-desde el merge de la flecha y la barra (`60b61b9c`, Tijereta): verde en su
-primer padre, rojo en él. La causa es `WINDOW_COLORS` de
-`wally/src/background/layers.rs`, que pasó de 8 a 13 —la ventana reserva
-esos colores de la paleta 0 en cada mapa—. Comprobado el 2026-10-04: con la
-constante en 8, la prueba vuelve a dar exactamente los hashes del Python.
+`wally::the_layers_are_the_ones_the_python_made` is red on `main`
+since the merge of the arrow and the bar (`60b61b9c`, Tijereta): green on its
+first parent, red on it. The cause is `WINDOW_COLORS` in
+`wally/src/background/layers.rs`, which went from 8 to 13 —the window reserves
+those colors of palette 0 in every map—. Checked on 2026-10-04: with the
+constant at 8, the test gives exactly the Python's hashes again.
 
-Lo de fondo: cuántos colores se lleva la ventana depende del System del
-juego, no del motor. Que llegue en el pedido de `wally` (y de `mapdata`, que
-tiene su propio `WINDOW_COLORS`), calculado de una sola fuente; la prueba le
-pide 8 y sigue contra el Python, y una prueba nueva fija los 13 de ABL.
+The underlying issue: how many colors the window takes depends on the game's System,
+not on the engine. Have it arrive in `wally`'s request (and `mapdata`'s, which
+has its own `WINDOW_COLORS`), computed from a single source; the test asks it
+for 8 and stays against the Python, and a new test pins ABL's 13.
 
-## Hecho (Tijereta)
+## Done (Tijereta)
 
-Worktree de las herramientas desde `c8d5064f`; ABL en el clon
-`/extras/scratch/tijereta/abl` desde `c76157d`, rama
+Tools worktree from `c8d5064f`; ABL in the clone
+`/extras/scratch/tijereta/abl` from `c76157d`, branch
 `colores-de-la-ventana`.
 
-### De dónde sale el número
+### Where the number comes from
 
-`rm2k-snes-screens window` lo cuenta del System: los colores de la ventana
-vacía, la flecha, el cursor, el texto y la sombra —`message_window::colors`,
-lo mismo que `convert` ya juntaba para armar la paleta, partido en una
-`draw` que usan los dos—. Contesta `{"colors": n}`. Con ABL da 13.
+`rm2k-snes-screens window` counts it from the System: the colors of the empty
+window, the arrow, the cursor, the text and the shadow —`message_window::colors`,
+the same thing `convert` already gathered to build the palette, split into a
+`draw` that both use—. It answers `{"colors": n}`. With ABL it gives 13.
 
-El conversor lo pregunta **una vez**, antes de los mapas
-(`screens::window_colors`), y lo reparte:
+The converter asks for it **once**, before the maps
+(`screens::window_colors`), and hands it out:
 
-* a cada mapa de `wally`, como `window_colors` en el pedido (`MapRequest`
-  y `LayersRequest`); `wally` ya no tiene `WINDOW_COLORS` ni
-  `CGRAM_RESERVED`, sino `cgram_reserved(window_colors)`;
-* a las pantallas, como `cgram_reserved` = 1 + n, como antes;
-* a la emisión, como `window_colors` en el pedido de `emit`;
-  `rm2k-snes-mapdata` tampoco tiene la constante: `cgram_reserved(n)` en
-  `cgram.rs`. `rm2k-snes-mapdata vram` dejó de publicar `cgram_reserved`
-  —no lo leía nadie: el arnés de ABL sólo lee `slots`—.
+* to each `wally` map, as `window_colors` in the request (`MapRequest`
+  and `LayersRequest`); `wally` no longer has `WINDOW_COLORS` or
+  `CGRAM_RESERVED`, but `cgram_reserved(window_colors)`;
+* to the screens, as `cgram_reserved` = 1 + n, as before;
+* to the emission, as `window_colors` in the `emit` request;
+  `rm2k-snes-mapdata` does not have the constant either: `cgram_reserved(n)` in
+  `cgram.rs`. `rm2k-snes-mapdata vram` stopped publishing `cgram_reserved`
+  —nobody read it: ABL's harness only reads `slots`—.
 
-Las preguntas de `wally` (`bakeable`, `split`) no convierten las capas, así
-que el pedido parcial pone `window_colors: 0` y el arnés de ABL no cambia.
+`wally`'s questions (`bakeable`, `split`) do not convert the layers, so
+the partial request sets `window_colors: 0` and ABL's harness does not change.
 
-### Las pruebas
+### The tests
 
-* `wally::the_layers_are_the_ones_the_python_made` pide 8
-  (`PYTHON_WINDOW_COLORS`) y vuelve a verde **sin tocar sus hashes**; las
-  de bloques y de los dibujos del mismo archivo, también con 8.
-* Las demás de `wally` y las dos de `emit` de `mapdata` llevan 13 en el
-  pedido: sus hashes ya eran con 13 y no se movieron.
-* La nueva, en ABL: `pruebas/herramientas/test_colores_de_la_ventana.py`
-  fija los 13 del System de ABL. Roja con las herramientas globales (no
-  existía `window`), verde con las locales.
-* `cargo test --workspace` entero en verde: era rojo sólo por la de Python.
+* `wally::the_layers_are_the_ones_the_python_made` asks for 8
+  (`PYTHON_WINDOW_COLORS`) and goes back to green **without touching its hashes**; the
+  block and drawing ones in the same file, also with 8.
+* The other `wally` ones and the two `emit` ones in `mapdata` carry 13 in the
+  request: their hashes were already with 13 and did not move.
+* The new one, in ABL: `pruebas/herramientas/test_colores_de_la_ventana.py`
+  pins the 13 of ABL's System. Red with the global tools (`window` did not
+  exist), green with the local ones.
+* The whole `cargo test --workspace` green: it was red only because of the Python one.
 
-### Verificado
+### Verified
 
-* `cargo test --workspace`, entero: verde.
-* La tanda de ABL con las herramientas de esta rama: 1095, las 1094 y la
-  nueva. `abl.sfc` byte por byte igual, `924c33ea3b51c958…`, armado de
-  nuevo con estas herramientas (`release: built` en el log).
+* `cargo test --workspace`, whole: green.
+* ABL's suite with this branch's tools: 1095, the 1094 and the
+  new one. `abl.sfc` byte for byte the same, `924c33ea3b51c958…`, built
+  again with these tools (`release: built` in the log).
 
-No hay nada que jugar: la ROM es la misma.
+There is nothing to play: the ROM is the same.
 
-### Al mergear
+### When merging
 
-Reinstalar en el global `screens`, `mapdata`, `wally` y `convert`, los
-cuatro juntos: el conversor le pregunta `window` a las pantallas y les pasa
-`window_colors` a `wally` y a la emisión, y uno nuevo con otro viejo se
-niega por un campo que falta. Y traer la rama `colores-de-la-ventana` de
-`/extras/scratch/tijereta/abl`, con la prueba nueva.
+Reinstall in the global `screens`, `mapdata`, `wally` and `convert`, the
+four together: the converter asks the screens for `window` and passes
+`window_colors` to `wally` and to the emission, and a new one with an old one
+refuses because of a missing field. And bring in the `colores-de-la-ventana` branch from
+`/extras/scratch/tijereta/abl`, with the new test.

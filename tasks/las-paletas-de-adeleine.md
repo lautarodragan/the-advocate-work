@@ -1,44 +1,44 @@
 ---
-name: "Las paletas de Adeleine"
-description: "Adeleine fusiona colores globalmente, de a uno, hasta que su best-fit acomoda los tiles: en Uruya a 4bpp deja 19 colores donde agrupar tiles y elegir 15 por paleta deja 73. Que elija por paleta"
+name: "Adeleine's palettes"
+description: "Adeleine merges colors globally, one at a time, until its best-fit accommodates the tiles: in Uruya at 4bpp it leaves 19 colors where grouping tiles and choosing 15 per palette leaves 73. Make it choose per palette"
 type: feature
 status: testing
 agents: [Codex, Hornero]
 assignee: taro
 ---
 
-Medido por Calandria el 2026-10-06, en `uruya-en-4bpp.md`: con las
-8 paletas de 15 que decide `adeleine reduce`, Uruya (Vampires Dawn, mapa
-165) queda con 19 colores distintos y el 33,5% de los píxeles cambiados;
-con un agrupamiento de tiles y 15 colores por grupo, 73 colores y 17,7%.
-Su script, `build2.py`, está en `/extras/scratch/calandria/uruya/`.
+Measured by Calandria on 2026-10-06, in `uruya-en-4bpp.md`: with the
+8 palettes of 15 that `adeleine reduce` decides, Uruya (Vampires Dawn, map
+165) ends up with 19 distinct colors and 33.5% of the pixels changed;
+with a grouping of tiles and 15 colors per group, 73 colors and 17.7%.
+Its script, `build2.py`, is in `/extras/scratch/calandria/uruya/`.
 
-Rinde en todo lo que Adeleine reparte en paletas: sprites, las imágenes,
-los mapas en modo 1, los panoramas, la pelea.
+It pays off in everything Adeleine splits into palettes: sprites, the pictures,
+the maps in mode 1, the panoramas, the battle.
 
-taro, el 2026-10-06: "vamos con las paletas de Adeleine", a Codex.
+taro, on 2026-10-06: "let's go with Adeleine's palettes", to Codex.
 
-## En curso, el 2026-10-06 (Codex)
+## In progress, on 2026-10-06 (Codex)
 
-La base de ABL, armada con los binarios locales de `9283f47f`, conserva la
-huella esperada `aaae70c2e48661836186411d77d407c14776ecdafb8234f0ec42a83525531243`.
+ABL's base, built with the local binaries of `9283f47f`, keeps the
+expected fingerprint `aaae70c2e48661836186411d77d407c14776ecdafb8234f0ec42a83525531243`.
 
-La prueba de juguete ya se vio roja antes del cambio: tres tiles de tres
-grises, en dos paletas de dos colores, quedan con dos colores por la fusión
-global aunque una elección por grupo puede conservar cuatro. El contrato cambió:
-`reduce` devuelve, además de las paletas, la paleta y el mapeo de cada tile.
+The toy test was already seen red before the change: three tiles of three
+grays, in two palettes of two colors, end up with two colors due to the global
+merge even though a per-group choice can keep four. The contract changed:
+`reduce` returns, besides the palettes, the palette and the mapping of each tile.
 
-## Hecho, el 2026-10-07
+## Done, on 2026-10-07
 
-A Codex lo cortó dos veces el límite de uso, con el código commiteado
-(27a28646) y la tanda de ABL en verde en su clon; Hornero cerró la tarea.
+Codex was cut off twice by the usage limit, with the code committed
+(27a28646) and ABL's suite green in its clone; Hornero closed the task.
 
-- Uruya a 4bpp: **64 colores** distintos, contra 19 del algoritmo anterior y
-  73 del script de Calandria.
-- ABL: cambian 319 goldens, todas de color en fondos, panoramas e imágenes;
-  lado a lado en `/shared/capturas/2026-10-06-paletas-adeleine/`. Hornero miró
-  las hojas y una muestra al tamaño real: ninguna se ve peor.
-- No se midió el porcentaje de píxeles cambiados en ABL ni el modo 3, que el
-  encargo pedía; la tarea queda sin esa tabla.
+- Uruya at 4bpp: **64 colors** distinct, against 19 of the previous algorithm and
+  73 of Calandria's script.
+- ABL: 319 goldens change, all of color in backgrounds, panoramas and pictures;
+  side by side in `/shared/capturas/2026-10-06-paletas-adeleine/`. Hornero looked at
+  the sheets and a sample at real size: none looks worse.
+- The percentage of changed pixels in ABL was not measured, nor mode 3, which the
+  assignment asked for; the task stays without that table.
 
-Al mergear: reinstalar `adeleine wally images screens battle convert patches`.
+At merge time: reinstall `adeleine wally images screens battle convert patches`.

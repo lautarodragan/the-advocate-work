@@ -1,23 +1,23 @@
 ---
-name: "Más voces para los efectos"
-description: "Con MSU-1 las ocho voces del DSP quedan libres para efectos; sin él, evaluar; y los efectos de cola larga, recortados por parche"
+name: "More voices for the sound effects"
+description: "With MSU-1 the DSP's eight voices are free for effects; without it, evaluate; and the long-tail effects, trimmed by patch"
 type: feature
 status: todo
 ---
 
-Pedido de taro el 2026-09-26, para después de la tanda de hoy (no ahora).
-Hoy los efectos tienen dos voces (la 6 y la 7). Al verificar el mapa 3 se vio
-un momento de la escena de `evilrhys` con tres efectos a la vez: uno no
-suena.
+Request from taro on 2026-09-26, for after today's suite (not now).
+Today the effects have two voices (6 and 7). While verifying map 3 a
+moment in `evilrhys`'s scene was seen with three effects at once: one doesn't
+sound.
 
-1. **Con MSU-1, todas las voces para efectos.** Hecho el 2026-09-26, en
-   `efectos-de-calidad-con-msu-1.md`: mientras el SPC700 no toca música, los
-   efectos tienen también las voces 0 a 5. Lo que queda acá es sin MSU-1.
-2. **Sin MSU-1, evaluarlo**: una tercera voz se le saca a la música, y el
-   reparto de voces (`la-calidad-de-la-musica.md`, paso 5) pierde polifonía.
-   Medir cuántas veces pasa en el juego que suenen tres efectos a la vez y
-   cuánto le cuesta a la música.
-3. **Tres efectos a la vez es raro**: si los casos se deben a un efecto con
-   una cola (fade out) larga, lo más simple es **editar ese efecto** —
-   recortarle la cola— con el sistema de parches que ya existe
-   (`parches/manual/`, ver `parches/README.md`), en vez de agregar voces.
+1. **With MSU-1, all voices for effects.** Done on 2026-09-26, in
+   `efectos-de-calidad-con-msu-1.md`: while the SPC700 doesn't play music, the
+   effects also have voices 0 to 5. What remains here is without MSU-1.
+2. **Without MSU-1, evaluate it**: a third voice is taken from the music, and the
+   voice allocation (`la-calidad-de-la-musica.md`, step 5) loses polyphony.
+   Measure how many times it happens in the game that three effects sound at once and
+   how much it costs the music.
+3. **Three effects at once is rare**: if the cases are due to an effect with
+   a long tail (fade out), the simplest thing is to **edit that effect** —
+   trim its tail— with the patch system that already exists
+   (`parches/manual/`, see `parches/README.md`), instead of adding voices.
