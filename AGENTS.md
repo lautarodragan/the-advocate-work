@@ -22,17 +22,19 @@ acá, y los otros repos están al lado:
                      RM2k, los research y una entrada por port—
 
 **Las rutas de este archivo son de adentro de cada repo**, y cuál es lo dice
-la sección o la ruta misma: `tools/…` es de
-`the-advocate`; `pruebas/…`, `parches/…`, `justfile` y `rm2k-snes.toml` sueltos,
+la sección o la ruta misma: `runtime/…`, `snes/…`, `rm2k/…` y
+`rm2k-snes/…` son de `the-advocate`; `pruebas/…`, `parches/…`, `justfile` y `rm2k-snes.toml` sueltos,
 de `abl/` en `the-advocate-ports`. Adentro de `the-advocate`:
 
-    tools/justfile   qué se puede correr —probar e instalar las
+    justfile         qué se puede correr —probar e instalar las
                      herramientas—; los comentarios explican el porqué. Se
-                     corre con `just -f tools/justfile`, o con `just`
-                     parado en `tools/`
+                     corre con `just`, parado en cualquier lugar del repo
     README.md        qué es el proyecto, cómo se instala, y los porqués de
                      arquitectura que no tienen línea de código donde vivir
-    tools/README.md  qué hace cada carpeta de `tools/`
+    LAYOUT.md        qué hace cada carpeta del repo
+
+Hasta el 2026-10-10 todo eso vivía en una carpeta `tools/` de ese repo, y
+se corría con `just -f tools/justfile`: **una cita `tools/x` es `x`**.
 
 Y adentro de `abl/`, en `the-advocate-ports` —cada juego es un proyecto
 entero en su directorio, y todo se corre parado en él; el README de la
@@ -143,7 +145,7 @@ lugar. Lo que eso pide al trabajar:
   commit, en el libro.
 * **El libro es público**: no nombra el ambiente —ni `~`, ni `/shared`, ni
   el contenedor— ni enlaza a los repos, que son privados: los nombra como
-  texto ("`tools/runtime/hero.s` in the-advocate").
+  texto ("`runtime/hero.s` in the-advocate").
 * **mdBook no avisa de los links rotos.** Antes de pushear al libro se
   revisan los links relativos de lo que se tocó. Cada push a `main` lo
   publica solo, con su workflow.
@@ -159,16 +161,16 @@ Todo va en castellano —comentarios, documentación y mensajes de commit—,
 entero, sus commits incluidos, y los directorios de `the-advocate` que son
 proyectos aparte**, que van en inglés
 de punta a punta: código, comentarios, nombres de pruebas y README. Desde el
-2026-09-19 viven adentro de `tools/` —ver `tools/README.md`—:
+2026-09-19 viven adentro de las herramientas —ver `LAYOUT.md`—:
 
-    tools/snes/        los formatos de la consola, sin saber de RPG Maker
+    snes/        los formatos de la consola, sin saber de RPG Maker
       gunter/          Gunter: códec BRR y lector de SoundFont
       goombario/       Goombario: el linter de 65816, lo que ensambla bien y
                        está mal; lee la ROM, el `.dbg` de `ld65` y el fuente
       adeleine/        Adeleine: qué colores se pierden y cómo se agrupan en paletas
       voodoo/          Voodoo: de una imagen a tiles, paletas y tilemap
       lz2/             el LC_LZ2 de Nintendo, con el que se comprimen los mapas
-    tools/rm2k/        los de RPG Maker 2000, sin saber de la consola
+    rm2k/        los de RPG Maker 2000, sin saber de la consola
       ditto/           lee y escribe sus formatos; como biblioteca, el único
                        lugar en Rust que lee el volcado
       rules/           rm2k-rules: lo que el formato significa —pasabilidad,
@@ -176,7 +178,7 @@ de punta a punta: código, comentarios, nombres de pruebas y README. Desde el
       rm2k-render/     las capas de un mapa, sus CharSets, lo de la pelea y las
                        caras, ventanas y carteles de las pantallas, dibujados
                        como RM2k
-    tools/rm2k-snes/   los que unen las dos cosas
+    rm2k-snes/   los que unen las dos cosas
       project/         la biblioteca: qué juego, sus perillas, los flags de la
                        máquina; y `rm2k-snes-project`, que se lo dice en JSON
                        a las pruebas de un juego
@@ -205,15 +207,15 @@ de punta a punta: código, comentarios, nombres de pruebas y README. Desde el
                        el cartucho necesita, y le da lo que contestaron las otras
 
 Las capas sólo dependen hacia abajo —`rm2k-snes/` de las otras dos, y
-ésas de nada de las demás—, y lo cuida `tools/tests/test_layers.py`. Todos
+ésas de nada de las demás—, y lo cuida `tests/test_layers.py`. Todos
 son un solo workspace de Cargo, con el `Cargo.lock` y el `target/`
-en `tools/`.
+en la raíz de `the-advocate`.
 
 Hasta el 2026-09-16 hubo otro más, `w65/`, el ensamblador de 65816. Lo reemplazaron
 `ca65` y `ld65`, del proyecto cc65: ver "Dónde corre esto".
 
 **Se consumen desde el PATH, no desde `target/release`.** Se instalan con
-`just -f tools/justfile install` —`cargo install --locked --path …`— y a
+`just install` —`cargo install --locked --path …`— y a
 partir de ahí son herramientas del sistema, como `python3` o un core de
 libretro: **ningún script ni prueba de este juego llama a `cargo`**. Es de taro, el 2026-09-15, y lo que
 evita es que cada corrida de la tanda quede atada al toolchain de Rust.
@@ -224,7 +226,7 @@ PATH.
 La regla para saber si algo va adentro de uno de ésos es una sola: **si no
 necesita saber nada de este juego, es un proyecto aparte y va en inglés.**
 Adentro no se nombra a ABL ni al port, y sus flags son ingleses aunque el
-equivalente de `tools/` los tenga en castellano (`--include`, `--symbols`).
+equivalente de las recetas los tenga en castellano (`--include`, `--symbols`).
 Hablar de la consola *como formato* —el SPC700, el 65816— sí está bien: eso es
 el dominio, no el proyecto.
 
@@ -233,7 +235,7 @@ la decisión. **Los mensajes de commit siguen en castellano también para esos
 directorios**: son del repo.
 
 Y **lo que esas herramientas generan va en inglés también**, aunque caiga en
-`tools/` o en `tools/runtime/`: es su salida, no fuente de este árbol, y dice arriba
+el repo de las herramientas o en `runtime/`: es su salida, no fuente de este árbol, y dice arriba
 que es generada y de dónde; y también lo que dejan en el `build/` de un
 port, como los comentarios de los `.inc` del conversor. El 2026-09-14 la regla era la contraria —"el idioma
 del árbol donde cae"— y duró un día: al generalizar el generador para el
@@ -241,21 +243,21 @@ segundo bytecode quedó claro que hacerlo hablar castellano lo ata a este repo.
 
 Las pruebas de esos proyectos no dependen del juego. Ditto recibe el corpus por
 `DITTO_CORPUS`, y sin esa variable las que lo necesitan se saltean con un
-mensaje; `tools/rm2k-snes/rm2k-snes-audio/` recibe el SoundFont por `SOUNDFONT`, igual;
-`tools/snes/goombario/` ensambla programas de juguete y necesita `ca65` y
+mensaje; `rm2k-snes/rm2k-snes-audio/` recibe el SoundFont por `SOUNDFONT`, igual;
+`snes/goombario/` ensambla programas de juguete y necesita `ca65` y
 `ld65` en el PATH, y sin ellos se saltea igual;
-y `tools/snes/gunter/`, `tools/snes/voodoo/`, `tools/snes/lz2/`,
-`tools/snes/adeleine/`, `tools/rm2k/rules/`, `tools/rm2k/rm2k-render/`, `tools/rm2k-snes/battle/`,
-`tools/rm2k-snes/bytecode/`, `tools/rm2k-snes/events/`, `tools/rm2k-snes/patches/`, `tools/rm2k-snes/wally/` y
-los dos de las pantallas, `tools/rm2k-snes/images/`,
-`tools/rm2k-snes/mapdata/` y `tools/rm2k-snes/convert/` no necesitan nada.
+y `snes/gunter/`, `snes/voodoo/`, `snes/lz2/`,
+`snes/adeleine/`, `rm2k/rules/`, `rm2k/rm2k-render/`, `rm2k-snes/battle/`,
+`rm2k-snes/bytecode/`, `rm2k-snes/events/`, `rm2k-snes/patches/`, `rm2k-snes/wally/` y
+los dos de las pantallas, `rm2k-snes/images/`,
+`rm2k-snes/mapdata/` y `rm2k-snes/convert/` no necesitan nada.
 
-### `tools/snes/voodoo/` no decide colores, y eso no se arregla
+### `snes/voodoo/` no decide colores, y eso no se arregla
 
-`tools/snes/voodoo/` convierte una imagen **que ya entra**: recibe PNG indexados cuyos
+`snes/voodoo/` convierte una imagen **que ya entra**: recibe PNG indexados cuyos
 índices son entradas de CGRAM, y si la imagen rompe el formato, dice dónde y no
 la arregla. Qué colores se pierden y cómo se agrupan en paletas lo decide
-Adeleine, `tools/snes/adeleine/` —`wally`, `rm2k-snes-screens`
+Adeleine, `snes/adeleine/` —`wally`, `rm2k-snes-screens`
 y `rm2k-snes-images` lo usan como biblioteca—, que corre
 **antes**; lo que decidió de cada mapa queda como imágenes en
 `build/<cartucho>/adeleine/`, en el proyecto del juego. La prueba para saber de qué lado
@@ -267,7 +269,7 @@ cualquier decisión de ésas deshace el diseño, aunque sea cómodo.
 
 ## El número de un opcode se elige en la declaración
 
-En `tools/rm2k-snes/bytecode/` y en ningún otro lado. Hay dos declaraciones,
+En `rm2k-snes/bytecode/` y en ningún otro lado. Hay dos declaraciones,
 cada una una invocación de la macro `bytecode!`: `src/events.rs`, el bytecode
 que interpreta `run_code`, y `src/music.rs`, el stream que lee `irq_music`. El
 lado de Rust toma las constantes con un `use`, y `rm2k-snes-assemble` escribe
@@ -279,7 +281,7 @@ dos opcodes de bytecodes distintos pueden compartir **número** pero no
 de música—, y eso, como un número repetido o un hueco en el despacho, **no
 compila**: son `const` asserts del crate, con el opcode en el mensaje.
 
-Hasta el 2026-10-02 los declaraban dos TOML de `tools/snes/protocol/`, un
+Hasta el 2026-10-02 los declaraban dos TOML de `snes/protocol/`, un
 generador que escribía los dos lados y los commiteaba, y una prueba que
 cuidaba que no envejecieran.
 
@@ -316,7 +318,7 @@ Y lo que **no** arregla: sólo sirve para `blame`. Para `git log` y `git diff`
 no hay equivalente, así que para rastrear cuándo cambió algo sigue valiendo
 `git log -S '<texto>'`, que busca por contenido y por eso ignora el ruido solo.
 
-**`tools/runtime/` atraviesa el corte de `main.s` sólo con
+**`runtime/` atraviesa el corte de `main.s` sólo con
 `git blame -C --diff-algorithm=histogram <archivo>`.** El 2026-09-25 `main.s`
 se partió en un archivo por subsistema, y el corte **no** está en
 `.git-blame-ignore-revs` porque no sirve: ignorar un commit le pasa la culpa
@@ -330,10 +332,10 @@ en las líneas únicas, **cada línea sale con el mismo commit que daba el
 --follow` no cruza el corte; `git log -S` sí, porque busca en todos los
 archivos.
 
-**La mudanza de `rom/src/` a `tools/runtime/`, el 2026-09-29, no cuesta
+**La mudanza de `rom/src/` a `runtime/`, el 2026-09-29, no cuesta
 nada**: fue un commit de `git mv` solo, sin tocar una línea, y `blame` sigue
 los renombres sin opciones. Con las de arriba, cada línea de
-`tools/runtime/` sale con el mismo commit que daba en `rom/src/` antes de
+`runtime/` sale con el mismo commit que daba en `rom/src/` antes de
 mudarse: medido sobre `main.s`, `hero.s`, `interpreter.s`, `battle.s`,
 `registers.s`, `audio_package.s` y `event_opcodes.inc`, cuatro mil
 líneas. Con `data/`, `parches/` y `pruebas/`, que se mudaron adentro de
@@ -368,9 +370,9 @@ escenario. Se fueron con el juego el 2026-10-02, porque necesitan uno, y
 vuelven a `the-advocate` de a poco
 cuando exista el juego de pruebas —la fase 2 de
 `research/2026-10-02-el-juego-de-pruebas.md` del libro—. Hasta entonces **un
-cambio en `tools/` se verifica corriendo la tanda de ABL con las
-herramientas del cambio**, como dice "Dónde corre esto"; `just -f
-tools/justfile test` y las de cada crate no corren ninguna ROM. Es el riesgo
+cambio en las herramientas se verifica corriendo la tanda de ABL con
+las herramientas del cambio**, como dice "Dónde corre esto"; `just test`
+y las de cada crate no corren ninguna ROM. Es el riesgo
 que el estudio señaló, y es el argumento para no demorar la fase 2. Y una
 golden que se mueve por un cambio de las herramientas se mira y se
 commitea en los ports, en su propio commit.
@@ -437,8 +439,8 @@ es donde van los builds, las capturas y el audio para taro (ver
 "Sub-agentes"). Hasta el 2026-10-03 ABL vivía ahí, en `/shared/abl-snes`, y
 la copia vieja sigue pero **no se usa**.
 
-**Las herramientas se consumen desde el PATH**: las instala `just -f
-tools/justfile install`, desde `~/the-advocate`, en `/usr/local/bin`, y desde
+**Las herramientas se consumen desde el PATH**: las instala `just
+install`, desde `~/the-advocate`, en `/usr/local/bin`, y desde
 ahí son del sistema, como `python3` o un core de libretro. **El runtime lo
 arma `rm2k-snes-cartridges` desde el checkout del que se instaló** —la ruta
 queda compilada en `project`—: reinstalar desde otro checkout cambia qué
@@ -449,9 +451,9 @@ del proyecto —sus rutas, el `rm2k-snes.toml`— el arnés se lo pregunta a
 `rm2k-snes-project` (`pruebas/arnes/proyecto.py`).
 
 **Para correr ABL con las herramientas de un checkout que las cambia** —un
-worktree de `the-advocate` que toca el runtime o el conversor—: `just -f
-tools/justfile install-local tools/.local-tools <proyectos de Rust>` en el
-worktree, y desde `abl/` de los ports `PATH=<worktree>/tools/.local-tools/bin:$PATH
+worktree de `the-advocate` que toca el runtime o el conversor—: `just
+install-local .local-tools <proyectos de Rust>` en el
+worktree, y desde `abl/` de los ports `PATH=<worktree>/.local-tools/bin:$PATH
 just pruebas`. El `justfile` de ABL arma su PATH desde el que recibe,
 y lo que no esté en ese `bin/` sale del global. **Pero arma en el `build/`
 del checkout de los ports donde corre**: el de `~/the-advocate-ports` es el que
@@ -510,8 +512,8 @@ viven adentro de `build/`, y las variables sólo los mueven.
 Las dos pruebas de las herramientas que leen un SoundFont de verdad —las
 de `rm2k-snes-audio`— lo reciben en `SOUNDFONT`, como Ditto su corpus en
 `DITTO_CORPUS`: sin la variable se saltean. Para correrlas acá,
-`SOUNDFONT="$HOME/assets/soundfonts/Microsoft GS Wavetable Synth.sf2" just -f
-tools/justfile crate-test rm2k-snes-audio`.
+`SOUNDFONT="$HOME/assets/soundfonts/Microsoft GS Wavetable Synth.sf2" just
+crate-test rm2k-snes-audio`, parado en `~/the-advocate`.
 
 **`ca65` y `ld65` se compilan acá adentro, y eso fue una decisión.** No están
 empaquetados en Arch, y hasta el 2026-09-15 la regla era no compilar fuentes de
@@ -569,7 +571,7 @@ y se tira.
 
 ## Trampas del entorno
 
-**`tools/runtime/` es un solo ensamblado partido en muchos `.s`.** `main.s` los
+**`runtime/` es un solo ensamblado partido en muchos `.s`.** `main.s` los
 pega con `.include`, y el orden de esa lista es el orden en la ROM: partir es
 gratis, mover no. Lo que eso implica —cada archivo hereda los anchos y el
 segmento del anterior, las anónimas se resuelven sobre el texto pegado— lo
@@ -578,15 +580,15 @@ archivo. Hasta el 2026-09-25 era un solo archivo; se partió byte por byte
 igual, y por eso hay rutinas que quedaron en el archivo del vecino: moverlas
 es un cambio de ROM, y va en su propio commit.
 
-**Un `.inc` generado nunca va en `tools/runtime/`.** `ca65` busca los
+**Un `.inc` generado nunca va en `runtime/`.** `ca65` busca los
 `.include` primero en el directorio del archivo que incluye y recién después en
-los `-I`, así que un `mapdata.inc` en `tools/runtime/` taparía al del cartucho sin
+los `-I`, así que un `mapdata.inc` en `runtime/` taparía al del cartucho sin
 avisar: la ROM saldría con los datos de otro. Hasta el 2026-09-16 la receta
 `convert` escribía justo ahí —en `rom/src/`, donde vivía el runtime hasta el
 2026-09-29; era "estado global", y así se terminó mirando el
 mapa 6 creyendo que era la demo del hito 12—; hoy cada cartucho escribe el suyo
 en su directorio del `build/` del proyecto, y `rm2k-snes-assemble` se niega a armar si
-encuentra uno en `tools/runtime/`. **Las
+encuentra uno en `runtime/`. **Las
 ROMs salen de una receta, no de un `ca65` suelto.**
 
 **Cuánto le sobra al banco 0 depende de qué cartucho se arme.** Las tablas que
@@ -619,7 +621,7 @@ dos ROMs tienen que ser byte por byte iguales. Ver `cache.rs` en
 `rm2k-project`.
 
 **Mientras corren las pruebas no se toca ningún fuente**, tampoco desde el
-otro repo. La huella de `rm2k-snes-cartridges` cubre todo `tools/runtime/`
+otro repo. La huella de `rm2k-snes-cartridges` cubre todo `runtime/`
 del checkout desde el que se instalaron las herramientas y los binarios
 que arman —`ca65`, `ld65`, `rm2k-snes-assemble` y
 los que corre el conversor—: tocar cualquiera de ésos mientras corre la
@@ -693,9 +695,9 @@ Lo que hay que hacer siempre:
   toca lo que taro deja adentro, como la partida de su emulador.
 
   **Al lado va `abl.sfc.dbg`**, con el que Mesen2 muestra nuestros nombres de
-  rutina en el depurador, **y el `tools/runtime/` del commit**, sacado con `git
+  rutina en el depurador, **y el `runtime/` del commit**, sacado con `git
   archive`: Mesen2 busca el fuente subiendo de carpeta desde el `.dbg`, así
-  que con `tools/runtime/` al lado lo muestra también desde `/shared/builds/`. Los
+  que con `runtime/` al lado lo muestra también desde `/shared/builds/`. Los
   `.inc` que genera el conversor no van —pesan ~15 MB— y lo que cae en ellos
   se ve sólo desensamblado. Por eso la receta **se niega con cambios sin
   commitear** en lo que entra en la ROM, de los dos lados —el juego y el
@@ -751,15 +753,15 @@ Lo que hay que hacer siempre:
   nombre obvio: el 2026-09-15 dos escribieron un `comparar.sh` cada uno en el
   mismo lugar. Uno pisa al otro y el pisado no se entera. `<scratchpad>/<lo que
   hace>/…` alcanza.
-* **Que corra `just -f tools/justfile install-local tools/.local-tools`
+* **Que corra `just install-local .local-tools`
   al empezar, si va a modificar las herramientas**, desde la raíz del
-  worktree. El global —`just -f tools/justfile install`— sale de
+  worktree. El global —`just install`— sale de
   `~/the-advocate`, y esto arma un `bin/` en el destino con los
   proyectos de Rust que se le nombren —scripts de Python no queda
-  ninguno, desde el 2026-10-02—; `tools/justfile` lo pone adelante en el
+  ninguno, desde el 2026-10-02—; `justfile` lo pone adelante en el
   PATH de sus recetas, y ABL lo usa si se le pone adelante en el suyo (ver "Dónde corre esto").
   **Un proyecto de Rust se le pasa sólo si el agente lo va a modificar**
-  —`… install-local tools/.local-tools lz2`—: compilar cuesta, y sin
+  —`… install-local .local-tools lz2`—: compilar cuesta, y sin
   nombres no compila nada. Y **todo se corre por `just`**: un comando
   suelto no ve ese `bin/` y usa el global. Es de taro, el 2026-09-29, y
   reemplazó a un re-exec implícito que los scripts hacían solos.
@@ -815,11 +817,11 @@ haya resuelto mal otro.
 
 Así que al mergear una rama de sub-agente:
 
-* **Correr `just -f tools/justfile test` y la tanda de ABL sobre el árbol
+* **Correr `just test` y la tanda de ABL sobre el árbol
   mergeado**, con las herramientas del merge instaladas, no sobre las ramas.
   Que cada una viniera en verde no dice nada del merge.
-* **Reinstalar en el global sólo lo de Rust que la rama tocó**: `just -f
-  tools/justfile install lz2`, desde `~/the-advocate`. Una rama que
+* **Reinstalar en el global sólo lo de Rust que la rama tocó**: `just
+  install lz2`, desde `~/the-advocate`. Una rama que
   toca `rm2k-project` —`project`— cambia todos los binarios que lo
   compilan adentro, y se reinstala todo. Hasta el 2026-10-02 había
   también scripts de Python, instalados como symlinks, y una receta
@@ -886,7 +888,7 @@ que eran:
 * `IsActorInParty` daba que todos los actores están en el grupo.
 
 El arreglo es siempre el mismo: un `cmp #0` explícito entre el `pl*` y el salto.
-Desde el 2026-10-02 lo busca Goombario —`tools/snes/goombario/`— sobre cada
+Desde el 2026-10-02 lo busca Goombario —`snes/goombario/`— sobre cada
 cartucho armado, en `pruebas/herramientas/test_linter.py` de ABL: un salto
 condicional sobre una bandera que dejó un `pl*` es rojo, salvo los que miran
 a propósito lo que se sacó, que están en `excepciones-del-linter.txt` de ABL,

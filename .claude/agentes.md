@@ -39,10 +39,10 @@ antes, empezá desde ahí y no lo vuelvas a medir.
   **No escribas en `~/the-advocate-ports`** ni en los otros checkouts de
   `~/`: el de los ports es el que se juega y el de la tanda principal.
 * **No pushees**: lo pushea Hornero al mergear.
-* Instalá en local **sólo los crates que modifiques**: `just -f
-  tools/justfile install-local tools/.local-tools <crates>` en tu worktree
+* Instalá en local **sólo los crates que modifiques**: `just
+  install-local .local-tools <crates>` en tu worktree
   de `the-advocate`, y corré ABL con `PATH=<ese
-  worktree>/tools/.local-tools/bin:$PATH just …` en `abl/` del de los ports. **Nunca
+  worktree>/.local-tools/bin:$PATH just …` en `abl/` del de los ports. **Nunca
   reinstales en el global.**
 * Los temporales, en `~/scratch/<tu nombre>/`.
 
