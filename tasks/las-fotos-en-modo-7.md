@@ -1,95 +1,95 @@
 ---
-name: "El zoom de las imágenes en modo 7"
-description: "Una imagen grande que se achica o agranda con ShowPicture/MovePicture se hace en modo 7, con la textura de 255 tiles parecidos (vq); quieta sigue en modo 1 a resolución completa"
+name: "Picture zoom in mode 7"
+description: "A large picture that shrinks or grows with ShowPicture/MovePicture is done in mode 7, with the texture of 255 similar tiles (vq); when still it stays in mode 1 at full resolution"
 type: feature
 status: done
 assignee: taro
 ---
 
-De taro, el 2026-10-03, después de ver el piloto en la SNES: "el modo 7 es
-definitivamente la forma de encarar las fotos", y eligió la variante 4, la
-**híbrida vq**: la foto quieta a resolución completa en modo 1, como hoy, y
-al empezar el zoom el modo 7 con una textura de 255 tiles elegidos por
-cuantización vectorial. El piloto, lo medido y el costo de llevarlo al
-juego: `tasks/el-piloto-del-modo-7.md`, en ABL. Es del motor:
-cualquier imagen grande con zoom, de cualquier juego.
+From taro, on 2026-10-03, after seeing the pilot on the SNES: "mode 7 is
+definitely the way to approach the photos", and he chose variant 4, the
+**vq hybrid**: the still photo at full resolution in mode 1, as today, and
+when the zoom starts mode 7 with a texture of 255 tiles chosen by
+vector quantization. The pilot, what was measured and the cost of bringing it to the
+game: `tasks/el-piloto-del-modo-7.md`, in ABL. It belongs to the engine:
+any large picture with zoom, from any game.
 
-Hecha por Chajá, desde `main` en `2c05f8a0`; ABL en un clon, rama
-`fotos-en-modo-7` desde `30d916c`.
+Done by Chajá, from `main` at `2c05f8a0`; ABL in a clone, branch
+`fotos-en-modo-7` from `30d916c`.
 
-## El plan
+## The plan
 
-* **La textura sale de la capa del modo 1, no de la foto**: los mismos
-  índices de CGRAM (las siete paletas de arriba de la ventana), así que el
-  cambio de modo no toca la CGRAM y el tono de la imagen sigue andando en
-  modo 7 con `big_palette_build` tal cual. El piloto usaba 239 colores
-  propios; acá son los ≤105 de la capa.
-* **Quieta, la foto con textura va a `$4000`** (tiles) y su tilemap a
-  `$7C00`, 32x32: el modo 7 es dueño de `$0000`-`$3FFF` y la textura se
-  sube en el vblank mientras está quieta. Eso pisa la ventana y los tiles
-  de BG2: con la foto quieta no puede haber mensaje (en las cuatro escenas
-  no lo hay). En modo 7 la mitad de arriba ya no hace falta, y la ventana
-  se repone ahí durante el zoom.
-* **Al terminar el zoom en 0**, modo 1 con BG1 apagado: los mensajes que
-  siguen (el de la viuda, en el 212) ven la ventana. Si termina en otro
-  tamaño, se queda en modo 7.
-* `irq_music` multiplica con el multiplicador de la PPU, que en modo 7 es
-  la matriz: con el modo 7 en pantalla multiplica a mano.
-* RAM: los bytes de la imagen en `$7F6500`, dentro de `ANIM_DRAWINGS`,
-  que es de la imagen mientras está (como su paleta y sus ondas). Opcode:
+* **The texture comes from the mode 1 layer, not from the photo**: the same
+  CGRAM indices (the seven palettes above the window), so the
+  mode change does not touch CGRAM and the picture's tone keeps working in
+  mode 7 with `big_palette_build` as is. The pilot used 239 colours
+  of its own; here they are the layer's ≤105.
+* **When still, the photo with texture goes to `$4000`** (tiles) and its tilemap to
+  `$7C00`, 32x32: mode 7 owns `$0000`-`$3FFF` and the texture is
+  uploaded in the vblank while it is still. That overwrites the window and the tiles
+  of BG2: with the photo still there can be no message (in the four scenes
+  there is none). In mode 7 the upper half is no longer needed, and the window
+  is restored there during the zoom.
+* **When the zoom ends at 0**, mode 1 with BG1 off: the messages that
+  follow (the widow's, on 212) see the window. If it ends at another
+  size, it stays in mode 7.
+* `irq_music` multiplies with the PPU's multiplier, which in mode 7 is
+  the matrix: with mode 7 on screen it multiplies by hand.
+* RAM: the picture's bytes at `$7F6500`, inside `ANIM_DRAWINGS`,
+  which belongs to the picture while it is there (like its palette and its waves). Opcode:
   `OP_BIG_ZOOM`, `0x43`.
 
-## Lo hecho
+## What was done
 
-* **El conversor** (`c30ea5b0`): la pasada que junta las imágenes anota a
-  qué tamaño lleva cada `MovePicture` a su número; la imagen grande que
-  algún movimiento de su mapa lleva a otro tamaño pide su textura a
-  `rm2k-snes-images` (`mode7.rs`), que la corta de la misma capa del modo
-  1. Va ahí porque comparte la capa y sus entradas de CGRAM, no es un
-  formato aparte. k-means sobre los tiles promediados de a 2x2, sembrado
-  sin azar, y el medoide de cada grupo. Sólo si la capa entra en la mitad
-  de arriba: 960 tiles y 32 filas; si no, se sigue apagando como antes.
-  `OP_BIG_ZOOM` (0x43) reemplaza a `OP_BIG_MOVE` para esas imágenes.
-* **La ROM** (`e14c8912`, `tools/runtime/big_picture_zoom.s`): quieta en
-  $4000/$7C00, la textura subiendo a $0000-$3FFF de a 3 KB por vblank; el
-  zoom en modo 7 sin cuadros en negro; la ventana de vuelta en la mitad de
-  arriba durante el zoom; zoom a cero → modo 1 con la capa apagada y los
-  mensajes visibles. Los sprites están apagados como con cualquier imagen
-  grande. Y `irq_music` multiplica con una tabla de cuadrados mientras hay
-  modo 7, porque el multiplicador de la PPU es la matriz.
-* **ABL**, rama `fotos-en-modo-7` del clon de Chajá: dos casos y una prueba
-  nuevos, y las goldens (una cambia: `imagen-grande-foto-140`).
+* **The converter** (`c30ea5b0`): the pass that gathers the pictures notes
+  to what size each `MovePicture` takes its number; the large picture that
+  some movement on its map takes to another size asks for its texture from
+  `rm2k-snes-images` (`mode7.rs`), which cuts it from the same mode
+  1 layer. It goes there because it shares the layer and its CGRAM entries; it is not a
+  separate format. k-means over the tiles averaged 2x2, seeded
+  without randomness, and the medoid of each group. Only if the layer fits in the upper
+  half: 960 tiles and 32 rows; if not, it keeps being turned off as before.
+  `OP_BIG_ZOOM` (0x43) replaces `OP_BIG_MOVE` for those pictures.
+* **The ROM** (`e14c8912`, `tools/runtime/big_picture_zoom.s`): still at
+  $4000/$7C00, the texture uploading to $0000-$3FFF 3 KB per vblank; the
+  zoom in mode 7 without black frames; the window back in the upper
+  half during the zoom; zoom to zero → mode 1 with the layer off and the
+  messages visible. Sprites are off as with any large
+  picture. And `irq_music` multiplies with a table of squares while there is
+  mode 7, because the PPU's multiplier is the matrix.
+* **ABL**, branch `fotos-en-modo-7` of Chajá's clone: two new cases and one
+  new test, and the goldens (one changes: `imagen-grande-foto-140`).
 
-Las cuatro fotos Diff llevan textura —y con ellas el montaje del 217, que
-usa las mismas capas—: 16 KB de tiles y 3,5 KB de filas cada una, 78 KB.
-Las capas del modo 1: 664 tiles PhoneCallDiff y 897 las otras tres.
+The four Diff photos carry a texture —and with them the montage on 217, which
+uses the same layers—: 16 KB of tiles and 3.5 KB of rows each, 78 KB.
+The mode 1 layers: 664 tiles PhoneCallDiff and 897 the other three.
 
-## Los números
+## The numbers
 
-* `just pruebas` en ABL: **1037** (las 1035 de antes y las dos nuevas).
-* `abl.sfc`: `ef1bf110a5e1bf1b…` (antes `35ce63c5…`).
-* `just -f tools/justfile test`: 27; `cargo test` de los seis proyectos
-  tocados, en verde.
+* `just pruebas` in ABL: **1037** (the 1035 from before and the two new ones).
+* `abl.sfc`: `ef1bf110a5e1bf1b…` (before `35ce63c5…`).
+* `just -f tools/justfile test`: 27; `cargo test` of the six projects
+  touched, green.
 
-## Qué tiene que ver taro en la consola
+## What taro has to see on the console
 
-Capturas, el video y qué mirar: `/shared/capturas/2026-10-03-modo-7/`,
-con su `LEEME.txt`. **La golden `imagen-grande-foto-140` espera su visto
-bueno.** En el juego: las escenas del 212, 213, 214 y 216 —el salto al
-empezar el zoom, la velocidad, el centro, y el mensaje de la viuda en el
-212 después del zoom—.
+Captures, the video and what to look at: `/shared/capturas/2026-10-03-modo-7/`,
+with its `LEEME.txt`. **The golden `imagen-grande-foto-140` awaits his
+approval.** In the game: the scenes on 212, 213, 214 and 216 —the jump when
+the zoom starts, the speed, the centre, and the widow's message on
+212 after the zoom—.
 
-## Al mergear
+## On merging
 
-* Instalar `bytecode cartridge events images mapdata convert`. 0x41 y
-  0x42 van reservados en `events.rs` y en `interpreter.s` para Yaguareté:
-  al mergear su rama, sus opcodes reemplazan a los reservados.
-* Traer primero la rama de ABL, que sin ella la tanda da rojo en la golden
-  del 140.
+* Install `bytecode cartridge events images mapdata convert`. 0x41 and
+  0x42 are reserved in `events.rs` and in `interpreter.s` for Yaguareté:
+  when merging his branch, his opcodes replace the reserved ones.
+* Bring in ABL's branch first, since without it the suite goes red on the golden
+  of 140.
 
-## Lo que no cubre ninguna prueba
+## What no test covers
 
-Un mensaje con la foto quieta (no se vería: la ventana no está), un zoom
-que vuelve a crecer desde cero, uno que termina en otro tamaño y se queda
-en modo 7, y uno que llega antes de que la textura terminó de subir (sube
-el resto con la pantalla apagada).
+A message with the photo still (it would not show: the window is not there), a zoom
+that grows again from zero, one that ends at another size and stays
+in mode 7, and one that arrives before the texture finished uploading (it uploads
+the rest with the screen off).

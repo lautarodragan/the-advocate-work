@@ -1,92 +1,92 @@
 ---
-name: "Talan negro con DummyHero de líder"
-description: "un actor sin gráfico le subía quince colores en cero a la paleta de sprite 0; en el barril del 14 y en la guarida de Wick esa paleta era la de Talan"
+name: "Talan black with DummyHero as leader"
+description: "an actor without a graphic uploaded fifteen zero colours to sprite palette 0; in the barrel on 14 and in Wick's hideout that palette was Talan's"
 type: bug
 status: done
 assignee: taro
 ---
 
-Reportado por taro jugando en la SNES el 2026-09-27. **Pasaba en `release`.**
-Arreglado en el commit que mueve esta tarea a `testing/`.
+Reported by taro playing on the SNES on 2026-09-27. **It happened in `release`.**
+Fixed in the commit that moves this task to `testing/`.
 
-# El reporte
+# The report
 
-> en la casa de Boss Wick, luego de ver los vidcasts, Talan queda
-> completamente negro. Algo similar ya pasaba antes: en el Lazer Teeth HQ,
-> cuando Talan está escondido en el barril [...] aparece Talan sin barril
-> (hasta acá, todo OK), pero Talan queda completamente negro. En ambos casos
-> un cambio de mapa parece restaurarlo a la normalidad.
+> in Boss Wick's house, after watching the vidcasts, Talan turns
+> completely black. Something similar already happened before: in the Lazer Teeth HQ,
+> when Talan is hidden in the barrel [...] Talan appears without the barrel
+> (up to here, all OK), but Talan turns completely black. In both cases
+> a map change seems to restore him to normal.
 
-# Lo que se midió
+# What was measured
 
-**No es el cambio de gráfico.** La sospecha era que un cambio de gráfico en
-el mismo mapa subía los tiles y no la paleta. En las dos escenas Talan **no es
-el héroe**: es un evento con `Future1:0` —el 4 del mapa 14 (NV Get Talan to
-Work, la escena del barril) lo toma con la orden 34 de una ruta; el 8 del
-mapa 40, `TalanProxy`, lo trae en su página— y el héroe es `DummyHero`, el
-actor 10, que el juego pone de líder en esas cinemáticas: la página 2 del
-hotplate saca a Talan antes de ir al 14, y el `Security Footage` (el 45)
-pone al 10 antes de volver al 40.
+**It is not the graphic change.** The suspicion was that a graphic change on
+the same map uploaded the tiles and not the palette. In both scenes Talan **is not
+the hero**: he is an event with `Future1:0` —event 4 of map 14 (NV Get Talan to
+Work, the barrel scene) takes it with order 34 of a route; event 8 of
+map 40, `TalanProxy`, brings it on its page— and the hero is `DummyHero`,
+actor 10, which the game makes leader in those cutscenes: page 2 of the
+hotplate removes Talan before going to 14, and the `Security Footage` (map 45)
+sets 10 before going back to 40.
 
-`DummyHero` no tiene un pixel opaco. El conversor le da en la tabla de
-actores la paleta 0 y quince colores en cero, con el comentario "la ROM no
-los sube" (`5264eada`, 2026-09-07). **La ROM sí los subía**:
-`elegir_grafico_heroe` apuntaba `hero_cgram` a esos colores para cualquier
-actor que encontrara, y `aplicar_tinte` los copiaba a la paleta de sprite 0
-al cargar el mapa. La paleta 0 es la del primer gráfico que reparte el
-conversor, y en los dos mapas es la de `Future1:0`.
+`DummyHero` does not have a single opaque pixel. The converter gives it in the
+actor table palette 0 and fifteen colours at zero, with the comment "the ROM does not
+upload them" (`5264eada`, 2026-09-07). **The ROM did upload them**:
+`elegir_grafico_heroe` pointed `hero_cgram` at those colours for any
+actor it found, and `aplicar_tinte` copied them to sprite palette 0
+when loading the map. Palette 0 is that of the first graphic the
+converter allocates, and on both maps it is that of `Future1:0`.
 
-El volcado de `cgram_sombra` en el momento de cada escena, antes del
-arreglo —la paleta 0 entera en cero, y el sprite de Talan en la OAM con la
-paleta 0—:
+The dump of `cgram_sombra` at the moment of each scene, before the
+fix —palette 0 all at zero, and Talan's sprite in the OAM with
+palette 0—:
 
     mapa 14, Talan sale del barril   grupo=10 hero_pal=0  obj pal 0: 0000 x16
     mapa 40, el favor y el cirujano  grupo=10 hero_pal=0  obj pal 0: 0000 x16
 
-Y "un cambio de mapa lo arregla" es porque en los dos casos el mapa siguiente
-se carga con Talan de líder: el 14 lo pone en el grupo antes de irse al 16 y
-el 41 rearma el grupo.
+And "a map change fixes it" is because in both cases the next map
+loads with Talan as leader: 14 puts him in the party before going to 16 and
+41 rebuilds the party.
 
-**Pasaba en todos los mapas del juego**: con `DummyHero` de líder, los 66
-mapas de `MAPAS_DEL_JUEGO` cargaban la paleta 0 en negro. Lo mide
-`test_lider_sin_grafico.py`: 66 rojos con el código de antes, 0 con el de
-ahora. Qué se veía negro en cada uno depende de quién usa la paleta 0.
+**It happened on every map of the game**: with `DummyHero` as leader, the 66
+maps of `MAPAS_DEL_JUEGO` loaded palette 0 in black. It is measured by
+`test_lider_sin_grafico.py`: 66 reds with the old code, 0 with the
+new. What looked black on each one depends on who uses palette 0.
 
-Dónde llega el juego con `DummyHero` liderando —páginas que ponen al 10, y
-los mapas a los que saltan después—, con un script descartable sobre `data/`:
+Where the game gets with `DummyHero` leading —pages that set 10, and
+the maps they jump to afterwards—, with a throwaway script over `data/`:
 
     ponen al 10     4, 12, 18, 26, 33, 37, 38, 40, 45, 47, 48, 81, 84
     se llega así a  4, 5, 14, 20, 36, 40, 66, 82
 
-# El arreglo
+# The fix
 
-`elegir_grafico_heroe` apaga `hero_cgram` cuando el actor no tiene gráfico,
-reconocido por el mismo centinela que mira `place_hero` (la primera pose en
-`$FFFF`). Es lo que el comentario del conversor y el de `hero_cgram` en
-`pagina_cero.s` ya decían que pasaba.
+`elegir_grafico_heroe` turns off `hero_cgram` when the actor has no graphic,
+recognised by the same sentinel `place_hero` looks at (the first pose at
+`$FFFF`). It is what the converter's comment and that of `hero_cgram` in
+`pagina_cero.s` already said happened.
 
-# Lo que queda, parecido y distinto
+# What is left, similar and different
 
-**Un evento que la orden 34 cambia al gráfico de un líder posible, sin que
-ese gráfico esté en ninguna página del mapa, comparte la ranura del líder**
-—`npcs_dibujables` sólo le da paleta propia a los líderes que están como NPC
-en alguna página—. Se dibuja con los colores de quien lidere. No se pone
-negro (con el arreglo, con `DummyHero` liderando la ranura queda con los
-colores del cartucho, que son los del primer líder), pero con otro líder que
-no sea el del gráfico se vería con colores ajenos. En `release`:
+**An event that order 34 changes to the graphic of a possible leader, without
+that graphic being on any page of the map, shares the leader's slot**
+—`npcs_dibujables` only gives its own palette to the leaders that appear as NPCs
+on some page—. It is drawn with the colours of whoever leads. It does not turn
+black (with the fix, with `DummyHero` leading the slot keeps the
+cartridge's colours, which are those of the first leader), but with another leader who
+is not the graphic's it would look with someone else's colours. In `release`:
 
     14  NV Get Talan to Work   ev4  -> Future1:0 (Talan)    6 paletas de 8
     76  Sorbe Mountain         ev5  -> AG717:4 (AG7-17)     7 paletas de 8
     81  Dr. Vago's House       ev2  -> Future1:0 (Talan)    Talan lidera: bien
     83  Dalia at the Factory   ev13 -> Future1:5 (Kersh)    8 paletas de 8
 
-No se tocó: arreglarlo es darles paleta propia en el conversor, y el 83 ya
-usa las ocho, así que ahí alguien pasaría a dibujarse con una prestada. Si
-taro ve al capitán de la Agencia del 83 o a AG7-17 en el 76 con colores
-raros, es esto.
+It was not touched: fixing it means giving them their own palette in the converter, and 83 already
+uses all eight, so there someone would end up drawn with a borrowed one. If
+taro sees the Agency captain on 83 or AG7-17 on 76 with odd
+colours, this is it.
 
-# Qué tiene que probar taro
+# What taro has to test
 
-1. La escena del barril: Talan sale del barril con sus colores.
-2. La guarida de Wick, después de los vidcasts: Talan (el evento) con sus
-   colores en el cuarto de Wick y en el del cirujano.
+1. The barrel scene: Talan comes out of the barrel with his colours.
+2. Wick's hideout, after the vidcasts: Talan (the event) with his
+   colours in Wick's room and in the surgeon's.

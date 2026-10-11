@@ -1,138 +1,138 @@
 ---
-name: "Rust: el render de mapas"
-description: "tools/render en Rust: rm2k-render dibuja las capas de un mapa desde el volcado y el ChipSet, y el conversor lo llama por el PATH en lugar de importar Renderer, con las ROMs byte por byte iguales"
+name: "Rust: the map render"
+description: "tools/render in Rust: rm2k-render draws a map's layers from the dump and the ChipSet, and the converter calls it through the PATH instead of importing Renderer, with the ROMs byte-for-byte identical"
 type: refactor
 status: done
 assignee: taro
 ---
 
-Segundo paso del camino a Rust de `docs/research/las-herramientas-hoy.md`,
-en paralelo con Carancho (`rust-el-armado-de-cartuchos.md`). Lo decidió
-Hornero: el conversor usa el render para dos cosas, `Renderer` (las capas de
-cada mapa, que se cachean) y `load_image` (cargar una imagen con su color
-clave, desde varios módulos). Pasa a Rust lo primero, como un ejecutable
-que el conversor llama por el PATH; `load_image` se queda en Python mientras
-el conversor lo sea.
+Second step of the road to Rust of `docs/research/las-herramientas-hoy.md`,
+in parallel with Carancho (`rust-el-armado-de-cartuchos.md`). Hornero
+decided it: the converter uses the render for two things, `Renderer` (the layers of
+each map, which are cached) and `load_image` (loading an image with its key
+colour, from several modules). The first goes to Rust, as an executable
+the converter calls through the PATH; `load_image` stays in Python while
+the converter does.
 
-## Lo hecho (Hurón)
+## What was done (Hurón)
 
-**`tools/rm2k-render/`**, biblioteca y ejecutable. El directorio se llama
-como el binario: `render/` sigue siendo el Python que se queda (CharSets,
-`load_image`, la receta de los ChipSets del fork), y con el nombre del
-binario la receta `which` de `tools/justfile` lo encuentra como a los demás.
+**`tools/rm2k-render/`**, library and executable. The directory is named
+like the binary: `render/` is still the Python that stays (CharSets,
+`load_image`, the recipe of the fork's ChipSets), and with the binary's
+name the `which` recipe of `tools/justfile` finds it like the others.
 
     rm2k-render layers --map N [--project DIR] --game-dir G --rtp-dir R --out DIR
     rm2k-render layers --request map.json --chipset-file X.png --out DIR
     rm2k-render atlas (--chipset NOMBRE | --chipset-file X.png) -o atlas.png
 
-Escribe `lower.png`, `upper.png` y, por familia que el mapa usa,
-`water-1.png`, `water-2.png`, `animated-1.png` a `animated-3.png`; borra
-los de una familia que no usa. El README del crate lo dice entero.
+It writes `lower.png`, `upper.png` and, per family the map uses,
+`water-1.png`, `water-2.png`, `animated-1.png` to `animated-3.png`; it deletes
+those of a family it does not use. The crate's README says it all.
 
-### Las decisiones
+### The decisions
 
-* **`png` solo, no `image`.** Los ChipSets son PNG indexados y el índice 0
-  es el color clave diga lo que diga el archivo: hace falta leer los
-  índices crudos, que es lo que `image` esconde. Ninguno del juego ni del
-  RTP es BMP, así que un BMP se rechaza con un mensaje en vez de cargar un
-  decodificador sin nada contra qué verificarlo. Se leen también gris, RGB
-  y RGBA a 8 bits con su tRNS, como Pillow.
-* **Lo que escribe: PNG RGBA**, con compresión rápida. Se pueden abrir para
-  mirar, Pillow los lee sin más, y son sin pérdida. Un volcado crudo se
-  ahorraría la compresión, pero no hizo falta: ver los tiempos abajo.
-* **Cómo le llega el mapa: un `--request`** en JSON con los nombres de campo
-  del volcado de Ditto (`width`, `height`, `lower_layer`, `upper_layer`,
-  `chipset` con `chipset_name` y las dos pasabilidades). No `--map N`
-  porque el mapa que dibuja el conversor no es el del volcado: lleva el fork
-  de `rom/parches/manual/` y los eventos horneados en la capa alta, y la
-  lógica del fork se queda en Python. `--map N` existe igual —lee el volcado
-  tal cual, con `--project`— y la prueba del crate verifica que da lo mismo
-  que el pedido equivalente.
-* **El ChipSet por `--chipset-file`**, resuelto en Python con
-  `find_resource`: es el mismo archivo que `chipset_fingerprint` hashea para
-  la clave del caché, así que no pueden divergir. `--game-dir`/`--rtp-dir`
-  quedan para la búsqueda por nombre, con las mismas reglas (sin distinguir
-  mayúsculas, `.png`/`.bmp`, en orden).
-* **Sin atlas en Python.** Lo que lo usaba sin ser una capa —el alfa de un
-  tile para hornear (`_tile_alphas`) y el CharSet inventado de un evento
-  dibujado con un tile (`Charsets._from_tile`)— mira sólo tiles de la capa
-  alta, que son copias sin combinar del ChipSet: lo hace
-  `render_map.upper_tile`, diez líneas, copiando dos veces por el alfa como
-  llegaba pasando por el atlas.
-* **La mezcla por alfa como la de Pillow**, con su redondeo: con los
-  ChipSets indexados es una copia, pero con medias transparencias no, y la
-  prueba del crate cubre ese caso con un ChipSet RGBA.
-* **La clave del caché de capas** lleva `render_map.version()` —el hash del
-  binario— en lugar de `render/chipset.py`. `render/render_map.py` se queda
-  en la clave, porque es el que arma el pedido; Pillow también, porque
-  sigue leyendo los PNG y es sobre lo que trabaja la conversión.
+* **`png` alone, not `image`.** The ChipSets are indexed PNGs and index 0
+  is the key colour whatever the file says: the raw
+  indices need to be read, which is what `image` hides. None from the game or the
+  RTP is BMP, so a BMP is rejected with a message instead of loading a
+  decoder with nothing to verify it against. Grey, RGB
+  and RGBA at 8 bits with their tRNS are also read, like Pillow.
+* **What it writes: RGBA PNG**, with fast compression. They can be opened to
+  look at, Pillow reads them as is, and they are lossless. A raw dump would
+  save the compression, but it was not needed: see the timings below.
+* **How the map reaches it: a `--request`** in JSON with the field names
+  of Ditto's dump (`width`, `height`, `lower_layer`, `upper_layer`,
+  `chipset` with `chipset_name` and the two passabilities). Not `--map N`
+  because the map the converter draws is not the dump's: it carries the fork
+  of `rom/parches/manual/` and the events baked into the upper layer, and the
+  fork's logic stays in Python. `--map N` exists anyway —it reads the dump
+  as is, with `--project`— and the crate's test verifies that it gives the same
+  as the equivalent request.
+* **The ChipSet through `--chipset-file`**, resolved in Python with
+  `find_resource`: it is the same file `chipset_fingerprint` hashes for
+  the cache key, so they cannot diverge. `--game-dir`/`--rtp-dir`
+  remain for lookup by name, with the same rules (case-insensitive,
+  `.png`/`.bmp`, in order).
+* **No atlas in Python.** What used it without being a layer —a
+  tile's alpha for baking (`_tile_alphas`) and the made-up CharSet of an event
+  drawn with a tile (`Charsets._from_tile`)— looks only at tiles of the upper
+  layer, which are uncombined copies of the ChipSet: it is done by
+  `render_map.upper_tile`, ten lines, copying twice through the alpha as it
+  came through the atlas.
+* **Alpha blending like Pillow's**, with its rounding: with the
+  indexed ChipSets it is a copy, but with partial transparency it is not, and the
+  crate's test covers that case with an RGBA ChipSet.
+* **The layer cache key** carries `render_map.version()` —the hash of the
+  binary— instead of `render/chipset.py`. `render/render_map.py` stays
+  in the key, because it is what builds the request; Pillow too, because
+  it still reads the PNGs and is what the conversion works on.
 
-### La comparación completa
+### The full comparison
 
-Descartable, en el scratchpad (`rust-huron/comparar.py`): el Python de
-`f19b27ec` copiado aparte contra el `Renderer` nuevo, en los 93 mapas de
-`release` y `test-special`, RGBA byte por byte. Cubre:
+Throwaway, in the scratchpad (`rust-huron/comparar.py`): the Python of
+`f19b27ec` copied aside against the new `Renderer`, on the 93 maps of
+`release` and `test-special`, RGBA byte for byte. It covers:
 
-* las capas y los dibujos de la animación de cada mapa, con el fork: 142
-  imágenes;
-* lo mismo con los eventos horneados metidos en la capa alta: los 4 mapas
-  que hornean;
-* los 352 CharSets que dibujan sus eventos, incluidos los translúcidos
-  horneados contra la capa baja y los hechos con un tile del ChipSet;
-* los 144 tiles altos de cada uno de los 24 ChipSets, y el atlas entero de
-  cada uno, que cubre también las combinaciones que ningún mapa usa.
+* the layers and the animation drawings of each map, with the fork: 142
+  images;
+* the same with the baked events put into the upper layer: the 4 maps
+  that bake;
+* the 352 CharSets their events draw, including the translucent ones
+  baked against the lower layer and the ones made with a ChipSet tile;
+* the 144 upper tiles of each of the 24 ChipSets, and the whole atlas of
+  each one, which also covers the combinations no map uses.
 
-**Ninguna distinta.** Dibujar las capas sin hornear de los 93 mapas: 5,3 s
-el Python, 3,7 s `rm2k-render` contando el subproceso, escribir y leer los
-PNG (en serie, fuera del conversor).
+**None different.** Drawing the unbaked layers of the 93 maps: 5.3 s
+the Python, 3.7 s `rm2k-render` counting the subprocess, writing and reading the
+PNGs (serially, outside the converter).
 
-### La prueba del crate
+### The crate's test
 
-`just -f tools/justfile render-test`: `tests/python.rs` guarda los sha256 de
-lo que dibujaba el Python para un ChipSet indexado y uno RGBA con medias
-transparencias, y un mapa de 48x32 que toca todas las aguas, terrenos,
-animados, los ids de combinación 47 a 49, tiles pasados del final de la
-página y tiles de los dos lados del héroe; todo generado adentro de la
-prueba, sin juego ni RTP. `tests/command_line.rs` prueba el ejecutable: las
-dos entradas, los archivos de familias que se borran, y los códigos de
-salida.
+`just -f tools/justfile render-test`: `tests/python.rs` keeps the sha256 of
+what the Python drew for an indexed ChipSet and an RGBA one with partial
+transparency, and a 48x32 map that touches all the waters, terrains,
+animated tiles, combination ids 47 to 49, tiles past the end of the
+page and tiles on both sides of the hero; all generated inside the
+test, without game or RTP. `tests/command_line.rs` tests the executable: the
+two inputs, the family files that get deleted, and the exit
+codes.
 
-### Lo que se borró y lo que quedó
+### What was deleted and what stayed
 
-Se borró `render/chipset.py` entero (el atlas) y, de `render_map.py`,
-`draw_tiles`, `render_layers`, `atlas`/`atlas_by_name` y el dibujo de
-`animated_layers`. Quedan en `render_map.py`: `load_image`,
-`build_passability` (la usan el conversor y las pruebas), `DITHERS`,
-`Charsets`, `upper_tile` y `Renderer` como contexto (base de datos, árbol,
-`load_map`, CharSets, huellas de ChipSet, `layer_inputs`). Queda entero
-`render/chipset_recipe.py`: arma las imágenes de los ChipSets del fork, que
-es del conversor y no del formato.
+`render/chipset.py` was deleted entirely (the atlas) and, from `render_map.py`,
+`draw_tiles`, `render_layers`, `atlas`/`atlas_by_name` and the drawing of
+`animated_layers`. Staying in `render_map.py`: `load_image`,
+`build_passability` (used by the converter and the tests), `DITHERS`,
+`Charsets`, `upper_tile` and `Renderer` as context (database, tree,
+`load_map`, CharSets, ChipSet fingerprints, `layer_inputs`). Staying whole:
+`render/chipset_recipe.py`: it builds the images of the fork's ChipSets, which
+belongs to the converter and not to the format.
 
-### Para el que mergee
+### For whoever merges
 
-* **Desde el checkout principal: `just -f tools/justfile install
-  rm2k-render`.** Sin él en el PATH el conversor se corta con el mensaje.
-  No cambió ningún script, así que `install-scripts` no hace falta.
-* **`rm2k-render` tiene que entrar en la huella de los cartuchos**:
-  `cartridges.fingerprint_files` lista `tiles_bin.binary()` y los otros
-  binarios; falta `render_map.binary()`. Sin eso, recompilarlo no deja
-  viejos los cartuchos. No lo toqué: `tools/assembly/` es de Carancho.
-* `tools/justfile`: `rm2k-render` al final de `rust_projects` y la receta
-  `render-test`, al lado de `lz2-test`.
+* **From the main checkout: `just -f tools/justfile install
+  rm2k-render`.** Without it in the PATH the converter stops with the message.
+  No script changed, so `install-scripts` is not needed.
+* **`rm2k-render` has to go into the cartridges' fingerprint**:
+  `cartridges.fingerprint_files` lists `tiles_bin.binary()` and the other
+  binaries; `render_map.binary()` is missing. Without that, recompiling it does not make
+  the cartridges stale. I did not touch it: `tools/assembly/` is Carancho's.
+* `tools/justfile`: `rm2k-render` at the end of `rust_projects` and the recipe
+  `render-test`, next to `lz2-test`.
 
-### Verificado
+### Verified
 
-* `NO_CACHE=1 just cartuchos` en `f19b27ec`, después del cambio y después
-  del borrado: los 987 archivos de `rom/build` (sin `.o`, `.sym`, `.inc`,
-  `.dbg`) byte por byte iguales las tres veces. `abl.sfc`
+* `NO_CACHE=1 just cartuchos` on `f19b27ec`, after the change and after
+  the deletion: the 987 files of `rom/build` (without `.o`, `.sym`, `.inc`,
+  `.dbg`) byte-for-byte identical all three times. `abl.sfc`
   `7a3c64834f783ae0fad34eb9f814801916be00aa962d0ca78c1a215ce6a66552`,
   `prueba.sfc` (`test-special`)
   `fb6db844580e74097af5d500be85dbab3f88e888e27743b457167a97ad9e0617`.
-* `just pruebas`: 874 pasan. `just -f tools/justfile test`: 132 pasan, 2 se
-  saltean (las del SoundFont). `render-test`: 6 pasan.
-* Lo que **no** se corrió: la tanda de ABL después del último commit, que
-  sólo cambia comentarios; y `cargo test` de los otros proyectos de Rust,
-  que no se tocaron.
+* `just pruebas`: 874 pass. `just -f tools/justfile test`: 132 pass, 2
+  skipped (the SoundFont ones). `render-test`: 6 pass.
+* What was **not** run: ABL's suite after the last commit, which
+  only changes comments; and `cargo test` of the other Rust projects,
+  which were not touched.
 
-Commits: `7b49ad2a` (el crate), `c7d2fe84` (el conversor lo usa),
-`2ffc6152` (el borrado, mecánico), `a0968a38` (las citas en prosa).
+Commits: `7b49ad2a` (the crate), `c7d2fe84` (the converter uses it),
+`2ffc6152` (the deletion, mechanical), `a0968a38` (the citations in prose).

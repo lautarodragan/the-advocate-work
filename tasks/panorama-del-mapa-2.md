@@ -1,36 +1,36 @@
 ---
-name: "El panorama del mapa 2"
-description: "Los puntitos sobre azul que se desplazan en diagonal"
+name: "The panorama of map 2"
+description: "The little dots over blue that scroll diagonally"
 type: feature
 status: done
 ---
 
-# Qué
+# What
 
-El panorama del mapa 2: los puntitos sobre azul que se desplazan en diagonal
-solos, detrás de la pantalla grande.
+The panorama of map 2: the little dots over blue that scroll diagonally
+on their own, behind the big screen.
 
 # Status
 
-Anotado, sin empezar, y **no es prioridad**.
+Noted down, not started, and **not a priority**.
 
-# Por qué
+# Why
 
-Se nota faltando cuando la pantalla grande se enciende. Lo que cuesta es una
-capa: el **modo 3 tiene dos capas de fondo y las dos están tomadas** —el mapa, y
-la capa de encima con la ventana—, así que un panorama pide una tercera o el
-modo 1, que la conversión no usa.
+It is missed when the big screen turns on. What it costs is a
+layer: **mode 3 has two background layers and both are taken** —the map, and
+the layer on top with the window—, so a panorama asks for a third one or
+mode 1, which the conversion does not use.
 
-De ahí sale que **`ChangePBG` se acepte y se tire**: si no hay panorama, no hay
-nada que cambiarle, y se tira al compilar, así que no queda nada a medias.
-Aparece **una sola vez en todo el juego** —siete comandos en la página del viaje
-en el Hover-Tram, donde el paisaje de la tarde corre por detrás y cambia de
-velocidad al arrancar y al frenar— y sin él esa página no compila. O sea que lo
-que esto compra es **el viaje entero**, y lo que cuesta hoy es que las
-ventanillas se vean quietas.
+From that follows that **`ChangePBG` is accepted and dropped**: if there is no panorama, there is
+nothing to change on it, and it is dropped at compile time, so nothing is left half-done.
+It appears **only once in the whole game** —seven commands on the page of the ride
+on the Hover-Tram, where the evening landscape runs behind and changes
+speed when starting and when braking— and without it that page does not compile. So what
+this buys is **the whole ride**, and what it costs today is that the
+windows look still.
 
-# Hecho
+# Done
 
-El 2026-10-05, con todos los panoramas —`los-panoramas.md`—: el 2 va
-aplanado, con la pantalla grande en BG2, y `ChangePBG` compila a
+On 2026-10-05, with all the panoramas —`los-panoramas.md`—: map 2 goes
+flattened, with the big screen on BG2, and `ChangePBG` compiles to
 `OP_PANORAMA`.

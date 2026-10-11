@@ -1,284 +1,284 @@
 ---
-name: "La segunda etapa de partir main.s"
-description: "Mudanzas, interprete.s partido (B) y el despacho por tabla (C): hecha"
+name: "The second stage of splitting main.s"
+description: "Moves, interprete.s split (B) and the table dispatch (C): done"
 type: refactor
 status: done
 ---
 
-El corte del 2026-09-25 (`391930c`, ver `done/partir-main.s.md`) partió
-`rom/src/main.s` en tramos contiguos **sin reordenar**, porque partir no
-cambia la ROM y mover sí. Así que quedaron rutinas en un archivo que no es el
-suyo. Eso ya está hecho (ver "Las mudanzas"). Después vino `interprete.s`:
-taro eligió **B, y C después** entre las particiones de "interprete.s". B está
-hecha (ver "B, hecha"), y C también (ver "C, hecha", al final).
+The cut of 2026-09-25 (`391930c`, see `done/partir-main.s.md`) split
+`rom/src/main.s` into contiguous stretches **without reordering**, because splitting does not
+change the ROM and moving does. So routines were left in a file that is not
+theirs. That is already done (see "The moves"). Then came `interprete.s`:
+taro chose **B, and C afterwards** among the partitions of "interprete.s". B is
+done (see "B, done"), and so is C (see "C, done", at the end).
 
-## Las mudanzas
+## The moves
 
-Hechas el 2026-09-25, sobre `d99694d` y con `main` mergeado en el medio
-(`4147242`). Una por commit y sin tocar el texto movido:
+Done on 2026-09-25, on `d99694d` and with `main` merged in the middle
+(`4147242`). One per commit and without touching the moved text:
 
-| commit | qué | de → a |
+| commit | what | from → to |
 |---|---|---|
-| `d63130b` | `poner_switch` | `ruta_del_heroe.s` → `variables.s`, detrás de `var_escribir` |
-| `14c71e5` | `volver_al_mapa`, `volver_de_batalla` | `items.s` → `cargar_mapa.s`, detrás de `cargar_mapa` |
-| `4811091` | `poses_npc_olvidar` | `items.s` → `npcs.s`, detrás de `subir_pose_npc` |
-| `be42124` | `sonido_de_codigo`, `sonido_tocar` | `quietos_que_animan.s` → `efectos_de_sonido.s`, al final |
-| `14eb259` | `destello_de_codigo` | `quietos_que_animan.s` → **`destello_de_pantalla.s`**, detrás de `destello_tick` |
-| `0164143` | `pan_cuadros` | `destello_de_pantalla.s` → `camara.s`, detrás de `pan_tick` |
-| `6e49fc5` | `exp_sumar`, `aprender_del_nivel` | `batalla_lazo.s` → `nivel.s`, al final |
-| `1874a93` | `menu_hp_escribir` | `equipo_desde_eventos.s` → `nivel.s`, detrás de `texto_maximo` |
-| `c2df013` | `actor_nivel_de` | `banco1.s` → `nivel.s`, delante de `nivel_param` |
-| `70f1716` | `hp_inicial_poner` | `banco1.s` → `nivel.s`, delante de `curar` |
-| `5f395e0` | `ba_mensaje` | `batalla_habilidades.s` → `batalla.s`, debajo de su comentario |
-| `3efad4e` | el comentario de `titulo_subir_menu` | `titulo.s` → `banco1.s`, pegado a la rutina |
+| `d63130b` | `poner_switch` | `ruta_del_heroe.s` → `variables.s`, after `var_escribir` |
+| `14c71e5` | `volver_al_mapa`, `volver_de_batalla` | `items.s` → `cargar_mapa.s`, after `cargar_mapa` |
+| `4811091` | `poses_npc_olvidar` | `items.s` → `npcs.s`, after `subir_pose_npc` |
+| `be42124` | `sonido_de_codigo`, `sonido_tocar` | `quietos_que_animan.s` → `efectos_de_sonido.s`, at the end |
+| `14eb259` | `destello_de_codigo` | `quietos_que_animan.s` → **`destello_de_pantalla.s`**, after `destello_tick` |
+| `0164143` | `pan_cuadros` | `destello_de_pantalla.s` → `camara.s`, after `pan_tick` |
+| `6e49fc5` | `exp_sumar`, `aprender_del_nivel` | `batalla_lazo.s` → `nivel.s`, at the end |
+| `1874a93` | `menu_hp_escribir` | `equipo_desde_eventos.s` → `nivel.s`, after `texto_maximo` |
+| `c2df013` | `actor_nivel_de` | `banco1.s` → `nivel.s`, before `nivel_param` |
+| `70f1716` | `hp_inicial_poner` | `banco1.s` → `nivel.s`, before `curar` |
+| `5f395e0` | `ba_mensaje` | `batalla_habilidades.s` → `batalla.s`, below its comment |
+| `3efad4e` | the comment of `titulo_subir_menu` | `titulo.s` → `banco1.s`, next to the routine |
 
-Lo que cambió respecto de la lista de antes, medida sobre `43bd1aa`:
+What changed from the list before, measured on `43bd1aa`:
 
-* `destello_de_codigo` iba a `destello_de_personaje.s`, pero arma
-  `destello_rgb`/`destello_nivel`/`destello_resta`, que es el destello de
-  **pantalla**.
-* `menu_hp_escribir` sí tenía casa en el banco 1: `nivel.s` es lo que el
-  menú escribe de cada actor y no sale del cartucho.
-* Dos que no estaban en la lista: `pan_cuadros` (GetPanWait, al final del
-  tramo del destello) y `ba_mensaje`, que era la dueña del "comentario huérfano
-  antes de usar un ítem en la pelea": nacieron juntos en `9527063` y `72109da`
-  metió los ítems entre los dos.
+* `destello_de_codigo` was going to `destello_de_personaje.s`, but it sets
+  `destello_rgb`/`destello_nivel`/`destello_resta`, which is the **screen**
+  flash.
+* `menu_hp_escribir` did have a home in bank 1: `nivel.s` is what the
+  menu writes about each actor and does not leave the cartridge.
+* Two that were not on the list: `pan_cuadros` (GetPanWait, at the end of the
+  flash stretch) and `ba_mensaje`, which was the owner of the "orphaned comment
+  before using an item in battle": they were born together in `9527063` and `72109da`
+  put the items between the two.
 
-**Lo que no se mudó, y por qué**: `titulo_subir_menu` (su casa, `titulo.s`, es
-del banco 0: volver a subirla cambia el `jsl` de sus tres llamadores; sólo se
-le juntó su comentario). Por lo mismo `hp_inicial_poner` queda lejos de
-`equipo_inicial_poner` (`variables.s`, banco 0) y `menu_hp_escribir` de
-`menu.s`. Los finales de `ram_baja.s` y `ventana_del_mapa.s` terminan en
-comentario, pero hablan de su propio archivo: no son huérfanos.
+**What was not moved, and why**: `titulo_subir_menu` (its home, `titulo.s`, is
+in bank 0: moving it back up changes the `jsl` of its three callers; only
+its comment was brought next to it). For the same reason `hp_inicial_poner` stays far from
+`equipo_inicial_poner` (`variables.s`, bank 0) and `menu_hp_escribir` from
+`menu.s`. The ends of `ram_baja.s` and `ventana_del_mapa.s` end in a
+comment, but they talk about their own file: they are not orphans.
 
-**Cómo se verificó cada una.** `just cartuchos` y `just pruebas` en verde
-(con `test_cores.py` adentro) después de cada commit, sin ninguna golden
-cambiada ni ninguna prueba tocada. La ROM cambia en cada una (la primera, 2352
-bytes de `abl.sfc`). Que ninguna rutina quedara ensamblada con otro ancho lo
-comprobó un script descartable que arma `ca65 -l` del árbol de antes y del de
-después, contra los mismos generados de los tres cartuchos, y compara rutina
-por rutina los bytes listados —con `rr` donde el linker reubica— y el texto:
-en las once, 0 bloques distintos de 2015/2257/1378. Probado al revés: cambiar
-el `.a8` de `hay_rutas` por `.a16` lo marca. El commit del comentario salió
-con las tres ROMs byte por byte iguales.
+**How each one was verified.** `just cartuchos` and `just pruebas` green
+(with `test_cores.py` inside) after each commit, without any golden
+changed or any test touched. The ROM changes in each one (the first, 2352
+bytes of `abl.sfc`). That no routine ended up assembled with another width was
+checked by a throwaway script that builds `ca65 -l` of the tree before and of the one
+after, against the same generated files of the three cartridges, and compares routine
+by routine the listed bytes —with `rr` where the linker relocates— and the text:
+in all eleven, 0 different blocks out of 2015/2257/1378. Tested the other way round: changing
+the `.a8` of `hay_rutas` to `.a16` flags it. The comment's commit came out
+with the three ROMs byte-for-byte identical.
 
-**`git blame -C --diff-algorithm=histogram`** las sigue: en siete de las once
-da para cada línea movida el mismo commit que daba en el origen. En las otras
-cuatro se equivoca en unas pocas líneas genéricas que el diff aparea con las
-vecinas del destino: 2 de 89 (`volver_*`), 4 de 56 (`pan_cuadros`: `sep`,
-`.a8`, `rts`, `.endproc`), 6 de 187 (el final de `aprender_del_nivel`, igual
-al de `curar_actor`, que era el final de `nivel.s`) y 10 de 28
-(`actor_nivel_de`, los `rep`/`.a16`/`and #$00FF` iguales a los de
+**`git blame -C --diff-algorithm=histogram`** follows them: in seven of the eleven
+it gives for each moved line the same commit it gave at the origin. In the other
+four it gets a few generic lines wrong that the diff pairs with the
+destination's neighbours: 2 of 89 (`volver_*`), 4 of 56 (`pan_cuadros`: `sep`,
+`.a8`, `rts`, `.endproc`), 6 of 187 (the end of `aprender_del_nivel`, identical
+to that of `curar_actor`, which was the end of `nivel.s`) and 10 of 28
+(`actor_nivel_de`, the `rep`/`.a16`/`and #$00FF` identical to those of
 `nivel_param`).
 
 ## interprete.s
 
-Un solo `.proc correr_codigo` con los 46 manejadores adentro —medido el
-2026-09-25, igual que todo lo de abajo—. Esto es lo medido y la propuesta
-de antes de elegir; lo que se hizo está en "B, hecha".
+A single `.proc correr_codigo` with the 46 handlers inside —measured on
+2026-09-25, like everything below—. This is what was measured and the proposal
+from before choosing; what was done is in "B, done".
 
-### Cuánto se toca cada parte
+### How much each part is touched
 
-`git log` sin merges sobre el `main.s` de antes del corte (`391930c^`, desde
-el 2026-09-03, 214 commits) más `interprete.s` después, repartiendo cada línea
-de cada hunk entre los manejadores según la versión de cada lado. Se sacan el
-corte y los cuatro commits de `.git-blame-ignore-revs` (el renombre de
-`ec94369` tocaba 70 manejadores), y los nombres viejos se cuentan con los
-nuevos (`op_si` es `op_if`). Queda: **76 commits tocan `correr_codigo`**.
+`git log` without merges over the `main.s` from before the cut (`391930c^`, since
+2026-09-03, 214 commits) plus `interprete.s` afterwards, distributing each line
+of each hunk among the handlers according to the version on each side. The
+cut and the four commits of `.git-blame-ignore-revs` are taken out (the rename of
+`ec94369` touched 70 handlers), and the old names are counted with the
+new ones (`op_si` is `op_if`). What remains: **76 commits touch `correr_codigo`**.
 
-| familia | manejadores | commits | líneas cambiadas | tamaño hoy |
+| family | handlers | commits | lines changed | size today |
 |---|---|---|---|---|
-| flujo | despacho, if, if_var, if_actor, goto, delay, key | 41 | 935 | 599 líneas, 782 bytes |
-| escenas | shop, battle, save, game_over, access, teleport | 23 | 376 | 238, 274 |
-| pantalla | tint, flash, flash_screen, shake, pan, weather, picture×3, animation, tile_sub, terrain | 16 | 482 | 455, 679 |
+| flow | dispatch, if, if_var, if_actor, goto, delay, key | 41 | 935 | 599 lines, 782 bytes |
+| scenes | shop, battle, save, game_over, access, teleport | 23 | 376 | 238, 274 |
+| screen | tint, flash, flash_screen, shake, pan, weather, picture×3, animation, tile_sub, terrain | 16 | 482 | 455, 679 |
 | audio | bgm, fade_bgm, sound | 14 | 286 | 80, 68 |
-| grupo | gold, item, party, actor_sprite, heal, equipment, skill | 12 | 235 | 203, 265 |
+| party | gold, item, party, actor_sprite, heal, equipment, skill | 12 | 235 | 203, 265 |
 | variables | switch, var, timer | 12 | 340 | 308, 364 |
-| movimiento | route, route_event, place, place_var, swap, wait/stop_routes | 12 | 296 | 261, 342 |
-| mensajes | message, choice | 9 | 91 | 79, 87 |
+| movement | route, route_event, place, place_var, swap, wait/stop_routes | 12 | 296 | 261, 342 |
+| messages | message, choice | 9 | 91 | 79, 87 |
 
-Lo que importa está adentro de "flujo": **el despacho solo —la
-cadena de `cmp`/`bne`/`jmp`— lo tocan 34 de los 76.** Ningún manejador pasa
-de 9 (`op_message`), y casi todos tienen 2 a 4, contando el que los creó.
-Cada opcode nuevo agrega su comparación al despacho y su cuerpo al final del
-`.proc`: ésos son los dos lugares donde dos ramas chocan, y ninguna partición
-por familia los separa. Desde el 2026-09-18 sólo 15 commits tocaron
-`correr_codigo`: el ritmo ya bajó.
+What matters is inside "flow": **the dispatch alone —the
+chain of `cmp`/`bne`/`jmp`— is touched by 34 of the 76.** No handler goes
+beyond 9 (`op_message`), and almost all have 2 to 4, counting the one that created them.
+Each new opcode adds its comparison to the dispatch and its body at the end of the
+`.proc`: those are the two places where two branches collide, and no partition
+by family separates them. Since 2026-09-18 only 15 commits touched
+`correr_codigo`: the pace has already slowed down.
 
-### Lo que se probó (en el scratchpad, sin commitear)
+### What was tried (in the scratchpad, uncommitted)
 
-**Cada manejador puede ser su propio `.proc`, y sale byte por byte igual.**
-Sólo se cierran los scopes: `.endproc` antes del comentario de cada manejador
-y `.proc op_x` en vez de `op_x:`. Las referencias que cruzan de un manejador a
-otro son 42 y nada más: los 40 `jmp otro` de vuelta al lazo (pasan a `jmp
-correr_codigo::otro`, mismo `jmp` absoluto), el `bra lugar_plantar` de
-`op_place_var` a `op_place` (`op_place::lugar_plantar`), y el `bne
-op_route_event` de `op_route`, que ya es global. Armado contra los generados de
-`release`, `tests/main` y `tests/special`: **las tres ROMs iguales**. Y
-también iguales con un `.a8`/`.i16` explícito al principio de cada manejador,
-o sea que ninguno está ensamblado con un ancho heredado del texto de arriba.
-Lo único que cambia es el `.sym`: `correr_codigo::abrir` pasa a
-`op_shop::abrir`; ninguna prueba ni herramienta lee los locales de
-`correr_codigo` (grep de `correr_codigo::` y `op_*::` en `pruebas/` y
+**Each handler can be its own `.proc`, and it comes out byte for byte identical.**
+Only the scopes are closed: `.endproc` before each handler's comment
+and `.proc op_x` instead of `op_x:`. The references that cross from one handler to
+another are 42 and nothing more: the 40 `jmp otro` back to the loop (they become `jmp
+correr_codigo::otro`, the same absolute `jmp`), the `bra lugar_plantar` of
+`op_place_var` to `op_place` (`op_place::lugar_plantar`), and the `bne
+op_route_event` of `op_route`, which is already global. Built against the generated files of
+`release`, `tests/main` and `tests/special`: **the three ROMs identical**. And
+also identical with an explicit `.a8`/`.i16` at the start of each handler,
+that is, none is assembled with a width inherited from the text above.
+The only thing that changes is the `.sym`: `correr_codigo::abrir` becomes
+`op_shop::abrir`; no test or tool reads the locals of
+`correr_codigo` (grep of `correr_codigo::` and `op_*::` in `pruebas/` and
 `tools/`).
 
-### Las particiones posibles
+### The possible partitions
 
-**A. `.include` adentro del `.proc`, por familia** —lo que proponía el plan
-del corte—. Byte por byte igual. Gana: el diff es sólo mover texto. Pierde:
-ocho archivos que empiezan a mitad de un scope, con `jmp otro` a una etiqueta
-de otro archivo y sin un `.proc` que diga dónde se está; `blame` y el
-lector tienen que saber que el archivo no existe solo.
+**A. `.include` inside the `.proc`, by family** —what the cut's plan
+proposed—. Byte for byte identical. It gains: the diff is only moving text. It loses:
+eight files that start in the middle of a scope, with `jmp otro` to a label
+in another file and without a `.proc` that says where you are; `blame` and the
+reader have to know that the file does not exist on its own.
 
-**B. Un `.proc` por manejador, y los archivos por familia**, en el mismo
-orden de hoy. Byte por byte igual (probado arriba). Gana lo de A sin su
-defecto: cada archivo empieza con un `.proc` y sus anchos, y un manejador es
-una unidad que se encuentra con `grep '\.proc op_'`. Cuesta 42 líneas
-mecánicas además del corte. No resuelve el despacho, que sigue en
-`interprete.s` como el punto donde chocan dos opcodes nuevos. Se verifica
-igual que el corte: las tres ROMs iguales y `just pruebas`.
+**B. One `.proc` per handler, and the files by family**, in the same
+order as today. Byte for byte identical (tested above). It gains what A gains without its
+defect: each file starts with a `.proc` and its widths, and a handler is
+a unit that is found with `grep '\.proc op_'`. It costs 42 mechanical
+lines besides the cut. It does not solve the dispatch, which stays in
+`interprete.s` as the point where two new opcodes collide. It is verified
+like the cut: the three ROMs identical and `just pruebas`.
 
-**C. B más un despacho por tabla**: un `cmp` contra el número de opcodes, `bcs` y `jmp (tabla,
-x)` con una `.addr` por opcode en el orden de su número. **Cambia la ROM.** Las
-cuentas, de la tabla de ciclos del 65816 y no medidas: la cadena de hoy cuesta
-`5k + 7` ciclos al opcode en la posición k, o sea de 7 (`OP_MESSAGE`) a 227
-(`OP_GAME_OVER`, el 45º), y la tabla unos 23 para todos; en bytes del banco 0,
-la cadena son 45 × 7 = 315 y la tabla 46 × 2 = 92 más unos 15 de código,
-**unos 200 bytes libres en el banco más apretado**. Y si la tabla la emite
-`tools/protocol/` desde `events.toml` —un nombre de manejador por
-convención—, agregar un opcode deja de tocar el despacho: el número se sigue
-eligiendo en un solo lugar. Pierde: pisa X en el despacho, que hoy no lo toca
-(hay que revisar que ningún manejador lea X antes de escribirlo), obliga a
-que los números sean contiguos o a llenar los huecos, y darle a
-`tools/protocol/` una salida nueva es una decisión de ese proyecto.
+**C. B plus a table dispatch**: a `cmp` against the number of opcodes, `bcs` and `jmp (tabla,
+x)` with one `.addr` per opcode in the order of its number. **It changes the ROM.** The
+numbers, from the 65816's cycle table and not measured: today's chain costs
+`5k + 7` cycles for the opcode at position k, that is from 7 (`OP_MESSAGE`) to 227
+(`OP_GAME_OVER`, the 45th), and the table some 23 for all; in bank 0 bytes,
+the chain is 45 × 7 = 315 and the table 46 × 2 = 92 plus some 15 of code,
+**some 200 bytes free in the tightest bank**. And if the table is emitted by
+`tools/protocol/` from `events.toml` —a handler name by
+convention—, adding an opcode stops touching the dispatch: the number keeps being
+chosen in a single place. It loses: it clobbers X in the dispatch, which today does not touch it
+(it needs checking that no handler reads X before writing it), it forces
+the numbers to be contiguous or the gaps to be filled, and giving
+`tools/protocol/` a new output is a decision of that project.
 
-Partir por **frecuencia de cambio** no tiene con qué: ningún manejador se
-separa del resto, salvo el despacho, que es de lo que se ocupa C.
+Splitting by **frequency of change** has nothing to go on: no handler stands
+apart from the rest, except the dispatch, which is what C deals with.
 
-### La recomendación
+### The recommendation
 
-**B, ya**, como commit mecánico solo y verificado igual que el corte —las tres
-ROMs iguales—, con un archivo por familia de la tabla. **C después y aparte**,
-si taro quiere los doscientos bytes o sacar el despacho del camino: cambia la
-ROM, y es la que de verdad saca el punto donde chocan las ramas.
+**B, now**, as a mechanical commit alone and verified like the cut —the three
+ROMs identical—, with one file per family of the table. **C afterwards and separately**,
+if taro wants the two hundred bytes or to get the dispatch out of the way: it changes the
+ROM, and it is the one that really removes the point where branches collide.
 
-## B, hecha
+## B, done
 
-El 2026-09-25, en cuatro commits: cada manejador a su propio `.proc` en el
-mismo archivo; el corte en archivos (sólo la salida de un script descartable
-modelado sobre `partir_main.py`); el `.segment` y los anchos al principio de
-cada archivo nuevo; y la prosa. Los tres primeros con las tres ROMs byte por
-byte iguales a las de antes y `just pruebas` en verde; ver los mensajes.
+On 2026-09-25, in four commits: each handler to its own `.proc` in the
+same file; the cut into files (only the output of a throwaway script
+modelled on `partir_main.py`); the `.segment` and the widths at the start of
+each new file; and the prose. The first three with the three ROMs byte for
+byte identical to those from before and `just pruebas` green; see the messages.
 
-Dos correcciones a lo medido arriba. Las referencias que cruzan de un
-manejador a otro son **46, no 42**: los 45 `jmp otro` —todos los del
-intérprete— y el `bra lugar_plantar`. El `bne op_route_event` no cruza:
-`op_route_event` es una etiqueta de `op_route`, no un manejador. Y los
-manejadores son 46 porque `op_battle_destination` —al que `op_battle` salta
-con `jmp`— queda en su propio `.proc`, pero el despacho compara **45**
-opcodes: los de `events.toml` menos `OP_DONE`.
+Two corrections to what was measured above. The references that cross from one
+handler to another are **46, not 42**: the 45 `jmp otro` —all of the
+interpreter's— and the `bra lugar_plantar`. The `bne op_route_event` does not cross:
+`op_route_event` is a label of `op_route`, not a handler. And the
+handlers are 46 because `op_battle_destination` —which `op_battle` jumps to
+with `jmp`— stays in its own `.proc`, but the dispatch compares **45**
+opcodes: those of `events.toml` minus `OP_DONE`.
 
-**No quedó un archivo por familia**, porque las familias están intercaladas
-en el orden de la ROM y juntarlas es mover código: las escenas caen en cinco
-tramos y pantalla en cuatro. Quedó un archivo por tramo contiguo con un
-tema, `interprete_*.s`, y cuando un tema sigue en otro archivo el encabezado
-lo dice. La lista es la de `main.s`; el porqué de cada agrupación está en el
-mensaje del commit del corte.
+**One file per family did not happen**, because the families are interleaved
+in the ROM's order and putting them together is moving code: the scenes fall in five
+stretches and screen in four. What remained is one file per contiguous stretch with a
+theme, `interprete_*.s`, and when a theme continues in another file the header
+says so. The list is that of `main.s`; the why of each grouping is in the
+message of the cut's commit.
 
-`blame -C --diff-algorithm=histogram` cruza el corte: sobre las 2399
-líneas, cada una da el mismo commit que en el `interprete.s` de antes salvo
-el blanco final de doce archivos, que culpa al corte de `main.s`. Ninguna
-culpa al corte de `interprete.s`.
+`blame -C --diff-algorithm=histogram` crosses the cut: over the 2399
+lines, each one gives the same commit as in the `interprete.s` from before except
+the final blank line of twelve files, which blames the cut of `main.s`. None
+blames the cut of `interprete.s`.
 
-## C, antes de hacerla
+## C, before doing it
 
-**Un despacho por tabla**: `jmp (tabla, x)` con una `.addr` por opcode, en
-lugar de la cadena de `cmp`/`bne`/`jmp`. Cambia la ROM. Es lo que de verdad
-saca el punto donde chocan dos ramas que agregan un opcode cada una —con B,
-la cadena de `interprete.s` sigue siendo el único lugar que todas tocan—.
+**A table dispatch**: `jmp (tabla, x)` with one `.addr` per opcode, instead
+of the chain of `cmp`/`bne`/`jmp`. It changes the ROM. It is what really
+removes the point where two branches that each add an opcode collide —with B,
+the chain in `interprete.s` is still the only place they all touch—.
 
-Lo que se sabe, de la propuesta de antes (cuentas de la tabla de ciclos del
-65816, no medidas): la cadena cuesta `5k + 7` ciclos al opcode en la
-posición k, de 7 (`OP_MESSAGE`) a 227 (`OP_GAME_OVER`, el 45º), y la tabla
-unos 23 para todos; en bytes del banco 0, la cadena son 45 × 7 = 315 y la
-tabla 46 × 2 = 92 más unos 15 de código, **unos 200 bytes libres en el banco
-más apretado**. Si la tabla la emite `tools/protocol/` desde `events.toml`
-—el manejador de `OP_X` se llama `op_x`, por convención—, agregar un opcode
-deja de tocar el despacho. Darle a `tools/protocol/` esa salida nueva es una
-decisión de ese proyecto (que está en inglés y no sabe de este juego: el
-nombre del manejador tendría que salir de una regla, no de un campo).
+What is known, from the earlier proposal (numbers from the 65816's cycle table,
+not measured): the chain costs `5k + 7` cycles for the opcode at
+position k, from 7 (`OP_MESSAGE`) to 227 (`OP_GAME_OVER`, the 45th), and the table
+some 23 for all; in bank 0 bytes, the chain is 45 × 7 = 315 and the
+table 46 × 2 = 92 plus some 15 of code, **some 200 bytes free in the tightest
+bank**. If the table is emitted by `tools/protocol/` from `events.toml`
+—the handler of `OP_X` is called `op_x`, by convention—, adding an opcode
+stops touching the dispatch. Giving `tools/protocol/` that new output is a
+decision of that project (which is in English and knows nothing about this game: the
+handler's name would have to come from a rule, not from a field).
 
-Lo que se aprendió haciendo B y cambia o afina C:
+What was learned doing B that changes or refines C:
 
-* **Los números ya son contiguos**: `events.toml` va de `0x00` a `0x2D` sin
-  huecos, y los 45 que no son `OP_DONE` tienen su `op_x` con ese nombre
-  exacto. La tabla no tiene que rellenar nada; `OP_DONE` (y cualquier número
-  de más, con un `cmp` contra la cantidad y un `bcs`) va al `stz ev_activo`
-  / `rts` de hoy.
-* **Ningún manejador lee X antes de escribirlo**, en el orden del texto y
-  sin seguir saltos ni `jsr` (un script descartable sobre los 45). El
-  despacho de hoy no toca X, así que pisarlo sería nuevo, pero ninguno lo
-  espera.
-* **`tax` con A de 8 bits e índices de 16 copia los 16 bits de C**, o sea
-  que el byte alto de A tiene que estar en cero antes: con el opcode leído en
-  8 bits, B trae lo que haya quedado del manejador anterior. Hace falta un
-  `rep #$20` / `and #$00FF` / `asl` / `tax` / `sep #$20`, o equivalente.
-* **`jmp (tabla, x)` lee la tabla del banco del programa**, no del de datos,
-  y eso importa acá: el intérprete corre con el banco de datos en el del
-  bytecode (ver el comentario de `op_shop`). Una tabla leída con `lda
-  tabla, x` leería otro banco.
-* **Todos entran con `.a8`/`.i16`** y Y en el primer operando, y ninguno
-  depende del ancho que le deja el anterior en el texto (el prototipo con los
-  anchos explícitos lo mostró): el orden de los manejadores en la ROM no le
-  importa al despacho.
-* `op_battle_destination` no es un opcode: no va en la tabla.
+* **The numbers are already contiguous**: `events.toml` goes from `0x00` to `0x2D` without
+  gaps, and the 45 that are not `OP_DONE` have their `op_x` with that exact
+  name. The table does not have to fill anything; `OP_DONE` (and any extra
+  number, with a `cmp` against the count and a `bcs`) goes to today's `stz ev_activo`
+  / `rts`.
+* **No handler reads X before writing it**, in text order and
+  without following jumps or `jsr` (a throwaway script over the 45). Today's
+  dispatch does not touch X, so clobbering it would be new, but none
+  expects it.
+* **`tax` with 8-bit A and 16-bit indices copies the 16 bits of C**, which means
+  the high byte of A has to be zero beforehand: with the opcode read in
+  8 bits, B carries whatever the previous handler left. A
+  `rep #$20` / `and #$00FF` / `asl` / `tax` / `sep #$20`, or equivalent, is needed.
+* **`jmp (tabla, x)` reads the table from the program bank**, not from the data bank,
+  and that matters here: the interpreter runs with the data bank set to that of the
+  bytecode (see the comment of `op_shop`). A table read with `lda
+  tabla, x` would read another bank.
+* **They all enter with `.a8`/`.i16`** and Y at the first operand, and none
+  depends on the width the previous one leaves in the text (the prototype with
+  explicit widths showed it): the order of the handlers in the ROM does not
+  matter to the dispatch.
+* `op_battle_destination` is not an opcode: it does not go in the table.
 
-## C, hecha
+## C, done
 
-El 2026-09-25, sobre `73fc639`, en cuatro commits más la prosa:
+On 2026-09-25, on `73fc639`, in four commits plus the prose:
 
-| commit | qué |
+| commit | what |
 |---|---|
-| `a0b0358` | `protocol --jump-table`: `EVENT_OPCODE_COUNT` y la macro `EVENT_HANDLERS`, un `.addr op_x` por opcode en el orden del número |
-| `40661ce` | la receta `protocolo` y `test_los_generados_estan_al_dia` lo piden; la ROM no cambia (las tres byte por byte iguales) |
-| `79d765e` | el despacho: `cmp #EVENT_OPCODE_COUNT` / `bcs op_done` / `asl` / `xba` / `lda #0` / `xba` / `tax` / `jmp (manejadores_de_opcode, x)` |
+| `a0b0358` | `protocol --jump-table`: `EVENT_OPCODE_COUNT` and the macro `EVENT_HANDLERS`, one `.addr op_x` per opcode in the order of the number |
+| `40661ce` | the recipe `protocolo` and `test_los_generados_estan_al_dia` ask for it; the ROM does not change (the three byte-for-byte identical) |
+| `79d765e` | the dispatch: `cmp #EVENT_OPCODE_COUNT` / `bcs op_done` / `asl` / `xba` / `lda #0` / `xba` / `tax` / `jmp (manejadores_de_opcode, x)` |
 | `97614f8` | `test_la_entrada_k_de_la_tabla_salta_al_manejador_del_opcode_k` |
 
-Lo que se decidió en el camino:
+What was decided along the way:
 
-* **El nombre sale de una regla**: el manejador de `OP_X` es `op_x`. Por eso
-  `OP_DONE` pasó a tener su `.proc op_done` (el `stz ev_activo` / `rts` del
-  final de la cadena), en vez de ser una excepción.
-* **Es un flag y una macro**, no algo que el generador haga siempre: pide
-  números contiguos, y `music.toml` termina en 0xFF. El `.inc` sigue en
-  `rom/src/` porque es el mismo para todos los cartuchos y no tapa a nadie;
-  la regla de los generados es por los de cartucho.
-* **Un opcode fuera de rango corta la página**, como hacía la cadena. No
-  debería llegar nunca —lo emite el conversor con los mismos números—, pero
-  llega si un manejador cuenta mal sus operandos, y sin tope indexaría
-  fuera de la tabla. Ninguna prueba ejecuta ese camino.
-* **B se limpia con `xba` / `lda #0` / `xba`**, no con `rep` / `and` /
-  `sep`: un ciclo y tres bytes menos.
+* **The name comes from a rule**: the handler of `OP_X` is `op_x`. That is why
+  `OP_DONE` got its own `.proc op_done` (the `stz ev_activo` / `rts` from the
+  end of the chain), instead of being an exception.
+* **It is a flag and a macro**, not something the generator always does: it requires
+  contiguous numbers, and `music.toml` ends at 0xFF. The `.inc` stays in
+  `rom/src/` because it is the same for all the cartridges and shadows nobody;
+  the rule for generated files is about the per-cartridge ones.
+* **An out-of-range opcode cuts the page**, as the chain did. It should
+  never arrive —the converter emits it with the same numbers—, but it
+  arrives if a handler miscounts its operands, and without a cap it would index
+  outside the table. No test executes that path.
+* **B is cleared with `xba` / `lda #0` / `xba`**, not with `rep` / `and` /
+  `sep`: one cycle and three bytes less.
 
-**X, A y las banderas.** Cada manejador entra ahora con X = opcode × 2, A =
-opcode × 2 con B en cero, C=0 y Z=0 (antes: X lo que dejó el anterior, A el
-opcode con B basura, C=1 y Z=1). Cuatro scripts descartables que siguen
-ramas, `jmp`, `jsr` y `jsl` —cortando en la vuelta a `correr_codigo::otro`—
-no encuentran ningún camino que lea X, A, C o Z/N antes de fijarlos, ni
-desde los 45 manejadores ni desde el `jsr correr_codigo` de los tres
-llamadores (y los de ellos) al volver. Lo que cruzan de `phx`/`plx` con X
-sin escribir es guardar-y-restaurar, o el truco de la dirección de vuelta de
-`cerrar` en `ranuras.s`.
+**X, A and the flags.** Each handler now enters with X = opcode × 2, A =
+opcode × 2 with B at zero, C=0 and Z=0 (before: X whatever the previous one left, A the
+opcode with garbage B, C=1 and Z=1). Four throwaway scripts that follow
+branches, `jmp`, `jsr` and `jsl` —stopping at the return to `correr_codigo::otro`—
+find no path that reads X, A, C or Z/N before setting them, neither
+from the 45 handlers nor from the `jsr correr_codigo` of the three
+callers (and theirs) on return. What they cross of `phx`/`plx` with X
+unwritten is save-and-restore, or the return-address trick of
+`cerrar` in `ranuras.s`.
 
-**Medido**: el banco 0 tiene 210 bytes más libres en los tres cartuchos
-(`.res N, $00` en `TABLAS` contra el `.o` de cada uno): release 2139 → 2349,
-tests/main 1769 → 1979, tests/special 2463 → 2673. **Calculado, no medido**:
-22 ciclos de `cmp` a `jmp` para cualquier opcode, contra `5k + 7` de la
-cadena; tres se encarecen (`OP_MESSAGE` 7 → 22, `OP_SWITCH` 12, `OP_ROUTE`
-17). Pesado por cuántas veces aparece cada opcode en las páginas compiladas
-del juego —estático, no por cuántas veces corre—, de 87 a 22 ciclos por
-instrucción.
+**Measured**: bank 0 has 210 more bytes free in the three cartridges
+(`.res N, $00` in `TABLAS` against the `.o` of each): release 2139 → 2349,
+tests/main 1769 → 1979, tests/special 2463 → 2673. **Calculated, not measured**:
+22 cycles from `cmp` to `jmp` for any opcode, against `5k + 7` for the
+chain; three get more expensive (`OP_MESSAGE` 7 → 22, `OP_SWITCH` 12, `OP_ROUTE`
+17). Weighted by how many times each opcode appears in the game's compiled
+pages —static, not by how many times it runs—, from 87 to 22 cycles per
+instruction.
 
-Verificado con `just cartuchos` y `just pruebas` tres veces sobre el
-despacho, en verde, sin ninguna golden cambiada ni ninguna prueba tocada, y
-`test_cores.py` tres veces más aparte.
+Verified with `just cartuchos` and `just pruebas` three times on the
+dispatch, green, without any golden changed or any test touched, and
+`test_cores.py` three more times separately.
