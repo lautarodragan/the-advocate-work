@@ -92,7 +92,10 @@
 <!-- TASKS -->
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+<!-- marked 12.0.2 (MIT, its licence in the file's header), served from here
+     and not from a CDN: when the CDN doesn't load —a blocker, a network that
+     filters it— the page shows every task as raw markdown, and says nothing. -->
+<script src="marked.min.js"></script>
 <script>
   const sections = [...document.querySelectorAll('#tasks section')];
   const tasks = [...document.querySelectorAll('details.task')];

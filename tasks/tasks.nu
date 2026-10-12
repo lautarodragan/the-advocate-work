@@ -130,6 +130,7 @@ def "main html" [
   let page = open --raw ($root | path join site index.html) | str replace '<!-- TASKS -->' $html
   mkdir ($root | path join $out)
   $page | save --force ($root | path join $out index.html)
+  cp ($root | path join site marked.min.js) ($root | path join $out)
 }
 
 # When each task last changed, from git: `{<stem>: <ISO date>}`. The page
