@@ -2,7 +2,9 @@
 name: "More voices for the sound effects"
 description: "With MSU-1 the DSP's eight voices are free for effects; without it, evaluate; and the long-tail effects, trimmed by patch"
 type: feature
-status: todo
+status: doing
+agents: [Mulita]
+assignee: Mulita
 ---
 
 Request from taro on 2026-09-26, for after today's suite (not now).
@@ -21,3 +23,13 @@ sound.
    a long tail (fade out), the simplest thing is to **edit that effect** —
    trim its tail— with the patch system that already exists
    (`parches/manual/`, see `parches/README.md`), instead of adding voices.
+
+## taro, on 2026-10-11
+
+The rain of ABL's opening sounds ugly because of its tail: it seems to be
+retriggered while the previous one is still sounding, and the new one
+cuts the old. In RM2k sounds never cut each other: playing a 3 s sound
+three times, 1 s apart, has three moments of the same sound playing at
+once for about a second. That is the behaviour to reach, as far as the
+voices allow.
+
