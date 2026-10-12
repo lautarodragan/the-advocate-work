@@ -6,7 +6,7 @@ status: done
 assignee: taro
 ---
 
-Step 1 of the plan in `docs/research/el-mapa-de-las-herramientas-de-python.md`
+Step 1 of the plan in [`docs/research/el-mapa-de-las-herramientas-de-python.md`](https://lautarodragan.github.io/the-advocate-docs/research/el-mapa-de-las-herramientas-de-python.html)
 (§4), approved by taro on 2026-09-28. taro authorized Hornero to move ahead
 with the mechanical steps without waiting for his feedback on 2026-09-29.
 

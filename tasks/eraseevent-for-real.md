@@ -7,7 +7,7 @@ agents: [Aguará, Hurón]
 assignee: taro
 ---
 
-From Aguará's study, `docs/research/2026-10-05-los-comandos-que-faltan.md`; `rm2k-snes-events culprits` measured it. taro, on 2026-10-05: leave them all, without launching yet. It is the first thing it recommends: a small one and a medium one.
+From Aguará's study, [`docs/research/2026-10-05-los-comandos-que-faltan.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-05-los-comandos-que-faltan.html); `rm2k-snes-events culprits` measured it. taro, on 2026-10-05: leave them all, without launching yet. It is the first thing it recommends: a small one and a medium one.
 
 2026-10-06, Hornero: in Desert Nightmare `EraseEvent` is what leaves the most
 pages out on its own —127 of the 157 that use it, measured with `culprits

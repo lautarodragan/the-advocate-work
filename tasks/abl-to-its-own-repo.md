@@ -7,7 +7,7 @@ assignee: taro
 ---
 
 From taro, on 2026-10-02, with the plan in
-`docs/research/2026-10-02-el-juego-de-pruebas.md` (Leñatero, phase 1):
+[`docs/research/2026-10-02-el-juego-de-pruebas.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-02-el-juego-de-pruebas.html) (Leñatero, phase 1):
 "I'd start by making sure all of ABL's things exist in a single
 place. In fact, I think I'd take them out of the repo and move them to a repo
 of their own, and `git init` there". Without `git filter-repo`: "we still have the git
@@ -53,10 +53,10 @@ a judgement call that isn't mine to make.
 | `docs/rpgmaker/chipsets.md` | stays | |
 | `docs/rpgmaker/rtp.md` | mixed | what the RTP is and how it's extracted, the tools'; the chipsets and charsets ABL uses, ABL's |
 | `docs/snes/*` | stays | |
-| `docs/research/graficos-de-rm2k-a-snes.md`, `el-mapa-de-las-herramientas-de-python.md`, `las-herramientas-hoy.md`, `2026-10-01-el-sistema-de-imagenes.md`, `2026-10-02-el-juego-de-pruebas.md` | stay | the tools'; the test game one is this repo's plan |
-| `docs/research/inspeccion-integral-del-repo.md` | ABL | according to Hornero's table |
-| `docs/research/2026-10-01-el-juego-entero-sin-msu-1.md` | ABL | how much the whole of ABL weighs and what cuts its cartridge asks for |
-| `docs/research/2026-10-01-los-mapas-por-el-msu-1.md` | ABL | how far ABL's cartridge goes; its test ROM (`experimentos/msu-puerto/`) is already ABL's |
+| [`docs/research/graficos-de-rm2k-a-snes.md`](https://lautarodragan.github.io/the-advocate-docs/research/graficos-de-rm2k-a-snes.html), [`el-mapa-de-las-herramientas-de-python.md`](https://lautarodragan.github.io/the-advocate-docs/research/el-mapa-de-las-herramientas-de-python.html), [`las-herramientas-hoy.md`](https://lautarodragan.github.io/the-advocate-docs/research/las-herramientas-hoy.html), [`2026-10-01-el-sistema-de-imagenes.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-01-el-sistema-de-imagenes.html), [`2026-10-02-el-juego-de-pruebas.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-02-el-juego-de-pruebas.html) | stay | the tools'; the test game one is this repo's plan |
+| [`docs/research/inspeccion-integral-del-repo.md`](https://lautarodragan.github.io/the-advocate-docs/ports/abl/research/inspeccion-integral-del-repo.html) | ABL | according to Hornero's table |
+| [`docs/research/2026-10-01-el-juego-entero-sin-msu-1.md`](https://lautarodragan.github.io/the-advocate-docs/ports/abl/research/2026-10-01-el-juego-entero-sin-msu-1.html) | ABL | how much the whole of ABL weighs and what cuts its cartridge asks for |
+| [`docs/research/2026-10-01-los-mapas-por-el-msu-1.md`](https://lautarodragan.github.io/the-advocate-docs/ports/abl/research/2026-10-01-los-mapas-por-el-msu-1.html) | ABL | how far ABL's cartridge goes; its test ROM (`experimentos/msu-puerto/`) is already ABL's |
 
 ## workflow/decisiones/ and divergencias/
 

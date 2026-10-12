@@ -56,7 +56,7 @@ the `.zip`s; the retouched copies go to `~/scratch/tijereta/`.
 ## What was done (Tijereta, 2026-10-11)
 
 The research is in the book, branch `tijereta-ventanas`:
-`src/research/2026-10-11-las-ventanas.md`, "The windows, made cheaper".
+[`src/research/2026-10-11-las-ventanas.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-11-las-ventanas.html), "The windows, made cheaper".
 No code of the tools or of the ports was touched. The main points:
 
 - **The knob** (`[windows] background`, a color or a list of stops

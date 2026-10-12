@@ -6,9 +6,9 @@ status: done
 assignee: taro
 ---
 
-Phase 1 of the plan of `docs/research/2026-10-01-el-juego-entero-sin-msu-1.md`
+Phase 1 of the plan of [`docs/research/2026-10-01-el-juego-entero-sin-msu-1.md`](https://lautarodragan.github.io/the-advocate-docs/ports/abl/research/2026-10-01-el-juego-entero-sin-msu-1.html)
 (Tucu-tucu), measured by Lechuza in
-`docs/research/2026-10-01-los-mapas-por-el-msu-1.md`, section 5. From taro, on
+[`docs/research/2026-10-01-los-mapas-por-el-msu-1.md`](https://lautarodragan.github.io/the-advocate-docs/ports/abl/research/2026-10-01-los-mapas-por-el-msu-1.html), section 5. From taro, on
 2026-10-01, after moving to 8 MB (`decisiones/el-cartucho-pasa-a-8-mb.md`). The
 poses and the music sequences cannot be: they are read while in use, and why is
 in the study.

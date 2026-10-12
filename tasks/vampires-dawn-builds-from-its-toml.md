@@ -13,7 +13,7 @@ toml has `excluded = []` and `start_map = 3`, and it stops at map 15
 exclusions from Aguará's re-sweep (2026-10-10) starting on 8, without
 committing that configuration.
 
-The table of what blocked it (research `2026-10-10-otros-juegos-de-nuevo.md`
+The table of what blocked it (research [`2026-10-10-otros-juegos-de-nuevo.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-10-otros-juegos-de-nuevo.html)
 in the book, section 2) is old: since then the songs with more than 255
 sounds (28 maps), the NPCs that don't fit in OAM (25) and
 the events that don't fit in RAM (15) were fixed. What remains is measuring it.

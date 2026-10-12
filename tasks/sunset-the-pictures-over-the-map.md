@@ -62,7 +62,7 @@ Base: the-advocate `6f933ff8`, ports `b499ab4`, book `491624d`. Branches
 
 ### The analysis
 
-In the book: `ports/sunset-over-imdahl/research/2026-10-11-las-imagenes.md`.
+In the book: [`ports/sunset-over-imdahl/research/2026-10-11-las-imagenes.md`](https://lautarodragan.github.io/the-advocate-docs/ports/sunset-over-imdahl/research/2026-10-11-las-imagenes.html).
 By group: roofs and ceilings (61 maps, cut-outs of the panorama: they go with
 their cells' priority, free), lights (50) and shadows (22) —flat
 masks at 10-35 %—, fogs (38, screen textures), animated ones (flags,

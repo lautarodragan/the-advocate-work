@@ -6,7 +6,7 @@ status: done
 assignee: taro
 ---
 
-Phase 3 of `docs/research/2026-10-01-el-sistema-de-imagenes.md` (Jilguero),
+Phase 3 of [`docs/research/2026-10-01-el-sistema-de-imagenes.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-01-el-sistema-de-imagenes.html) (Jilguero),
 option E. taro decided it on 2026-10-01:
 `decisiones/las-imagenes-grandes-en-modo-1.md`. The Diff photos (212 to 216),
 which in RM2k shrink with a zoom, are shown with a fade: the SNES does not

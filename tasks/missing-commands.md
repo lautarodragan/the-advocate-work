@@ -13,7 +13,7 @@ report for the whole game.
 
 # What was done (Aguará, 2026-10-05)
 
-The study is in `docs/research/2026-10-05-los-comandos-que-faltan.md`,
+The study is in [`docs/research/2026-10-05-los-comandos-que-faltan.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-05-los-comandos-que-faltan.html),
 with the table of every command in the game, what's missing sorted by pages
 it unblocks, what is accepted without being done, and the recommendation.
 

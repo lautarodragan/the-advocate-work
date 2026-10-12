@@ -16,7 +16,7 @@ originals and updates the references.
 ## What was done (Cardón, 2026-10-10)
 
 Branch `cardon-research` of `snes-rm2k-docs`, on `149452a`, in a separate
-clone: one commit per study, one for `src/research/README.md` and a
+clone: one commit per study, one for [`src/research/README.md`](https://lautarodragan.github.io/the-advocate-docs/research/index.html) and a
 separate one for `SUMMARY.md`. Nothing to install when merging. The nine
 ended up in `src/research/<slug>.md` with the slug in Spanish and the title
 in English; the README explains that a research is a snapshot that isn't touched.

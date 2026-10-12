@@ -26,7 +26,7 @@ them.
 
 ## The study (Jilguero, 2026-10-01)
 
-It is in `docs/research/2026-10-01-el-sistema-de-imagenes.md`, measured on
+It is in [`docs/research/2026-10-01-el-sistema-de-imagenes.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-01-el-sistema-de-imagenes.html), measured on
 `76d98bed`. What taro has to look at to decide:
 
 * **The portable console is not needed to play**: what it writes is read by

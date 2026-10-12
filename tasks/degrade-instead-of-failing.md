@@ -9,7 +9,7 @@ assignee: taro
 
 From taro, on 2026-10-06: cheap shortcuts to unblock the other games, along
 the same line as the surplus samples. From the survey
-(`docs/research/2026-10-05-otros-juegos.md`) and from the brief analysis of the
+([`docs/research/2026-10-05-otros-juegos.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-05-otros-juegos.html)) and from the brief analysis of the
 four games.
 
 ## Done (Carpintero, 2026-10-06)

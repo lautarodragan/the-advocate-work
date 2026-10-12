@@ -16,7 +16,7 @@ completely trivial and we'll have to take it on in parts. This plan will help
 us with that."
 
 It is research and a plan, not code. **The result is
-`docs/research/el-mapa-de-las-herramientas-de-python.md`**: taro has to read
+[`docs/research/el-mapa-de-las-herramientas-de-python.md`](https://lautarodragan.github.io/the-advocate-docs/research/el-mapa-de-las-herramientas-de-python.html)**: taro has to read
 it, and above all answer the questions in its §5, which are the ones that
 decide where to start.
 

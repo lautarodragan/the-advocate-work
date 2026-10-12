@@ -43,7 +43,7 @@ repo; the temporaries in `/extras/scratch/aguara/`.
 ## Result
 
 The study, with the table and the recommendation:
-`docs/research/2026-10-05-otros-juegos.md`. Six of the seven build a
+[`docs/research/2026-10-05-otros-juegos.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-05-otros-juegos.html). Six of the seven build a
 cartridge that starts; Vampires Dawn doesn't (the variables).
 
 **Where each thing is** (on this machine, that's why here and not in the

@@ -63,6 +63,13 @@ citation is found by name:
   `src/ports/abl/research/x.md`;
 * `docs/port/x.md` is `src/internals/x.md`.
 
+**A task cites a page of the book with a link to it on the published
+book**, `https://lautarodragan.github.io/the-advocate-docs/<path>.html`
+—`research/x.md` is `…/research/x.html`—, keeping the citation's text as
+the link's text, so it opens from the tasks page or from GitHub. It is
+taro's, from 2026-10-12, the day the research cited in the tasks were
+turned into links.
+
 ## A task's frontmatter
 
     ---

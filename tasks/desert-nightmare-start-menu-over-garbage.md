@@ -30,7 +30,7 @@ What the converter says about it, in `build/release/conversor.log`:
 
 So it is converted; where it goes wrong —the tiles not uploaded, uploaded
 and overwritten by the pictures, or a tilemap pointing elsewhere— was not
-looked at. The book's own survey (`research/2026-10-10-otros-juegos-de-nuevo.md`)
+looked at. The book's own survey ([`research/2026-10-10-otros-juegos-de-nuevo.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-10-otros-juegos-de-nuevo.html))
 already noted "light-blue garbage" there, attributed to a panoramas bug
 fixed that day; today the pattern is orange, so either that fix did not
 cover this or something else broke it.
