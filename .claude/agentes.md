@@ -55,8 +55,11 @@ same thing before, start from there and do not measure it again.
   commits; the assignment usually says how to split them.
 * **A new test is shown red** before the fix.
 * The numbers that are chosen by taking "the next free one" —opcodes,
-  RAM— are handed out by Hornero in the assignment: use yours and say
-  which ones you used.
+  indices in test tuples— are handed out by Hornero in the assignment: use
+  yours and say which ones you used. **RAM is not chosen**: a new variable
+  goes in its subsystem's file with a `.res` in `ZEROPAGE`, `BSS` or
+  `FARBSS`, and the linker places it —see the top of `runtime/far_ram.s`
+  and of `runtime/low_ram.s`—.
 * There may be other agents running: two suites at once fight over CPU; be
   patient and do not kill anything that is not yours.
 * **The original** runs with Wine: the recipe is in
