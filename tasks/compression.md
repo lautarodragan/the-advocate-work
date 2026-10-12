@@ -2,7 +2,7 @@
 name: "Compression"
 description: "Compress what travels in the ROM: measured, 75% less"
 type: feature
-status: wishlist
+status: done
 ---
 
 What can be expected from compressing, measured: the used part of
@@ -33,3 +33,11 @@ from 2026-09-26. The battle animations are already stored without their empty ti
 the maps' tiles and grids go in LZ2 —the grid is decompressed
 whole to WRAM, so random access stayed the same— and identical poses
 are stored once.
+
+## Closed
+
+Closed by taro on 2026-10-12, as superseded: the compression this asked
+for was measured and done in `compression-of-maps-and-graphics.md` —maps'
+tiles and grids in LZ2, identical poses stored once, battle animations
+without their empty tiles—. What compression is still needed is asked for
+by each game's task, measured.

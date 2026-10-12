@@ -2,7 +2,7 @@
 name: "Inventory: images to tiles in Python"
 description: "Which image-to-tiles conversions are still in Python and which ones Voodoo can do"
 type: refactor
-status: wishlist
+status: done
 ---
 
 **Count which image-to-tiles conversions are still done in Python**, and for
@@ -132,3 +132,10 @@ What was run for each column:
 4. **Sharing tiles between palettes**, for slots and items. It is the one that pays
    off least: the tile count hardly moves and stacking blocks in one
    image is new code on the caller's side.
+
+## Closed
+
+Closed by taro on 2026-10-12, as obsolete: it measures Python that no
+longer exists. Since 2026-10-02 the tools are Rust (see
+`python-of-tools-out-common-to-rust-and-the-harness-to-tests.md`), and
+the probe and prototypes it names were never in a repo.

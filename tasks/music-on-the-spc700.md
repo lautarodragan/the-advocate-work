@@ -22,6 +22,8 @@ audio shows something the emulator doesn't.
 
 # Why
 
-Today the 65816 plays the music from an IRQ —see "La música no espera al lazo"
-in `docs/port/events.md`— and it works, but it costs **up to twenty lines per
-frame** and imposes the interrupt's rules.
+Today the 65816 plays the music from an IRQ —see `internals/events.md` in
+the book— and it works, but it costs **up to twenty lines per frame** and
+imposes the interrupt's rules. With MSU-1 the SPC700 plays no music and
+this matters less; without it, it still does, and the game has to play
+whole without MSU-1. Kept in the wishlist by taro on 2026-10-12.

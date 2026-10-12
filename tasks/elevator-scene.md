@@ -2,7 +2,7 @@
 name: "The elevator scene"
 description: "A case of its own in the suite for the elevator scene on map 2"
 type: test
-status: wishlist
+status: done
 ---
 
 # What
@@ -29,3 +29,10 @@ What remains true of the limit that kept it out: the peaks exist, and the way
 out is not a hand-tuned offset —a number adjusted until it goes green— but
 easing them, or reading `cuadros_perdidos`, which already travels in the output
 of each capture.
+
+## Closed
+
+Closed by taro on 2026-10-12, as already done: the elevator scene on
+map 2 has its own case, `ascensor`, in `abl/pruebas/abl/test_escenas_golden.py`
+of the ports, since 2026-09-16 (f572532d in the-advocate, when the scenes
+moved to pytest).
