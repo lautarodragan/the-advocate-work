@@ -2,7 +2,7 @@
 name: "More voices for the sound effects"
 description: "With MSU-1 the DSP's eight voices are free for effects; without it, evaluate; and the long-tail effects, trimmed by patch"
 type: feature
-status: testing
+status: done
 agents: [Mulita]
 assignee: taro
 ---
@@ -86,11 +86,9 @@ are per package and the allocator does not look at them.
 
 ## What remains
 
-**Point 2, without MSU-1**, as it was: a third voice taken from the music,
-what it costs the music's polyphony, and how often three effects sound at
-once. The rain that cuts itself without MSU-1 is a draft,
-`abl-rain-cuts-itself-without-msu-1.md`, and a line in ABL's "Known issues".
-Point 3 (trimming tails by patch) was not looked at.
+Without MSU-1, in its own task: `abl-rain-cuts-itself-without-msu-1.md`,
+in todo, with the three angles taro proposed on 2026-10-11. taro heard the
+wavs with MSU-1 the same day and declared it fixed: done.
 
 ## On merging
 
