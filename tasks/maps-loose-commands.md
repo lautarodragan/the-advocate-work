@@ -2,8 +2,9 @@
 name: "The maps' loose commands"
 description: "The small cases that leave pages out: ChangeGold by variable, EraseEvent before a jump, the screen position in ControlVars, the cut in ChangeScreenTransitions, and the ControlVars = 999999 of common event 45"
 type: feature
-status: todo
+status: doing
 agents: [Aguará, Chajá]
+assignee: Aguará
 ---
 
 From Aguará's study, `docs/research/2026-10-05-los-comandos-que-faltan.md`; `rm2k-snes-events culprits` measured it. taro, on 2026-10-05: leave them in todo, without launching yet. None is in release; common event 45, since it doesn't compile, makes 47

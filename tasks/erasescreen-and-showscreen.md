@@ -2,8 +2,9 @@
 name: "EraseScreen and ShowScreen"
 description: "Without a fade opcode that an event can ask for, 698 pages of Desert Nightmare stay out; among them those of the start menu, which hangs because of it. Medium: reuse the teleport's fade"
 type: feature
-status: todo
-agents: [Aguará]
+status: doing
+agents: [Aguará, Calandria]
+assignee: Calandria
 ---
 
 From Aguará's brief analysis (Sonnet), on 2026-10-05, of what taro saw playing the ROMs of the other games. See also the wishlist las-otras-transiciones-de-rm2k.
