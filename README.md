@@ -66,7 +66,7 @@ citation is found by name:
     ---
 
 `type` and `status` are always there. `assignee` says who has it: `taro`
-for his own and for those waiting on something from him —playing, looking
+for their own and for those waiting on something from them —playing, looking
 at some goldens—, and the agent's name for those in `doing`. See "Taking a
 task" in `AGENTS.md`. In `todo`, with no `assignee`, whoever comes first
 takes it. Many of those in `done` predate these fields and carry no

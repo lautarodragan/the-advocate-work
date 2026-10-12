@@ -66,6 +66,10 @@ ports when they talk about ABL. And the same day `decisiones/`,
 book, translated and with the same file names: **an old citation is found
 by name**, and this repo's README says where each folder went.
 
+**taro's pronouns are they/them**, and elle/le in Spanish: in replies,
+tasks, commits, comments and the book. Since 2026-10-11; what was written
+before is not edited for it.
+
 **ABL's tests are, until the test game exists, the engine's only ROM
 tests**: see "The rule that holds everything up".
 
@@ -147,7 +151,7 @@ no.
 Since 2026-10-10 **all the documentation lives in the book**,
 `the-advocate-docs`, and it is written **in English**, its commits too. It
 is taro's: "The book is for people and for AIs", and having it in a single
-place is useful to him. What that asks for when working:
+place is useful to them. What that asks for when working:
 
 * **A new decision** goes to `src/decisions/<slug>.md` —or to
   `src/ports/<game>/decisions/` if it is a game's—, with `## What`,
@@ -453,7 +457,7 @@ suite, the message has to say so in so many words.
 ## Where this runs
 
 Inside a podman container that taro brings up with `box`, a nushell
-function of his: Arch —same as the host—. **The four repos are cloned in
+function of theirs: Arch —same as the host—. **The four repos are cloned in
 `~/`, inside the container** —`~/the-advocate-work`, `~/the-advocate`,
 `~/the-advocate-ports`, `~/the-advocate-docs`—, and the CLI runs standing
 in the first one. Since 2026-10-10 nothing of git is shared with the host:
@@ -502,7 +506,7 @@ needs it gets its own worktree (`git -C ~/the-advocate-ports worktree add
 <dir>`).
 
 The rest of the system is disposable, and that is why taro works in auto
-mode and does not approve command by command; what he reviews is the `git
+mode and does not approve command by command; what they review is the `git
 diff`.
 
 What the container changes in practice:
@@ -546,7 +550,7 @@ never edited.
 
 Until 2026-10-10 all that lived in `/extras`, another volume on the same
 disk, with 75 GB of leftovers from other times; it was cleaned up and moved
-here. What taro wants looked at he leaves in `/shared`.
+here. What taro wants looked at they leave in `/shared`.
 
 The tools reach `~` and `/shared` through flags —`--game-dir`,
 `--rtp-dir`, `--soundfont`, `--replacements`, `--shared`—, and know of no
@@ -605,8 +609,8 @@ from nowhere else, because the first version of the doors filter put them
 in from memory and three were wrong. If something is needed that cannot be
 obtained from here, taro is asked to copy it to `~`.
 
-**taro runs nothing on the host**: if he runs something by hand, he does it
-in here, and asks first. It is his, from 2026-10-05. The only things that
+**taro runs nothing on the host**: if they run something by hand, they do it
+in here, and ask first. It is theirs, from 2026-10-05. The only things that
 belong to the host are the `git push`, the EverDrive over USB, and
 **seeing and hearing the ROM for real** — in here it is captured with Xvfb
 and the audio is recorded to a wav instead of playing.
@@ -738,7 +742,7 @@ commit of theirs names them as its co-author. They still start from
 scratch every time: continuity is what they leave written.
 
 **The author of every commit is taro**, the agents' and Hornero's too, so
-they count on his GitHub account; who wrote it goes at the end of the
+they count on their GitHub account; who wrote it goes at the end of the
 message, as a trailer:
 
     Co-authored-by: Aguará <aguara@agents.taro.codes>
@@ -773,7 +777,7 @@ What always has to be done:
   what was being played, and the older ones are rebuilt from their commit.
   It is taro's, from 2026-09-20, after the builds reached 4.3 GB in 51
   directories. The recipe deletes the rest and does not touch what taro
-  leaves inside, like his emulator's save.
+  leaves inside, like their emulator's save.
 
   **Next to it goes `abl.sfc.dbg`**, with which Mesen2 shows our routine
   names in the debugger, **and the commit's `runtime/`**, taken with `git
@@ -1001,7 +1005,7 @@ there, saying what it is that was pulled.
 Commits go straight to `main`, in all four repos, **and are pushed**: since
 2026-10-10 the repos only exist in here and on GitHub, so a commit not
 pushed is a commit taro does not see. What is **never** done without
-asking him is rewriting what is already on GitHub: `push --force`,
+asking them is rewriting what is already on GitHub: `push --force`,
 `rebase` of what was pushed, deleting a branch over there. Until that day
 the push was done by taro, with a key on a YubiKey. Sub-agents do not
 push: their work reaches `main` through the merge of the one who launched
