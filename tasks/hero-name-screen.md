@@ -42,3 +42,11 @@ System's, stretched to the cell, and it blinks.
   gradients: one entry and one channel per window. It only works for a
   vertically stretched background, not for one with texture or tiled.
   It would also work for the other screens, not just this one.
+
+## Where it goes now
+
+Since 2026-10-12 this screen is step 6 of `cheaper-windows.md`: the first
+window drawn by the runtime, on a screen that doesn't exist yet so nothing
+that works is touched. The setting, the gradient and the cursor in sprites
+come before it there.
+
