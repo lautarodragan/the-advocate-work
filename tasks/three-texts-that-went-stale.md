@@ -2,7 +2,9 @@
 name: "Three texts that went stale"
 description: "internals/events.md says the converter is Python, internals/vram.md says 'four' layouts and lists five, and the header of rm2k-rules' tests names a Python and a test that don't exist"
 type: docs
-status: draft
+status: doing
+assignee: Hurón
+agents: [Hurón]
 ---
 
 Two agents saw them and left them noted without touching them, because they

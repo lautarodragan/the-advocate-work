@@ -2,8 +2,22 @@
 name: "What the reference cleanup left behind"
 description: "Four things that the cleanup of the reference's leftovers left out on purpose, because they weren't comments"
 type: refactor
-status: todo
+status: done
 ---
+
+**Done**, 2026-10-12, with nothing to do: the four had stopped applying
+when the tools moved to Rust (checked on the-advocate `25d93f0a`).
+
+1. `KeyInputProc` without waiting is compiled for real —the `KEY_INPUT_PROC`
+   arm of `rm2k-snes/events/src/compile.rs`, "the car's steering wheel"—;
+   neither the `NoSePuede` nor the 55% are left.
+2. A battle animation that doesn't fit is shrunk until it fits
+   (`rm2k-snes/convert/src/animations.rs`), and a map whose animation box
+   doesn't fit goes without it
+   (`have-vampires-dawn-map-1-build-without-its-animation-box.md`).
+3. `titulo.render` and `ventana.pagina` were Python, and no Python is left.
+4. The 999 cap in `runtime/battle.s` (`ba_capped`) cites RM2k's window, not
+   the reference.
 
 The cleanup of 2026-09-26 (`leftovers-of-the-reference.md`)
 removed the comments that relied on the Python reference and left

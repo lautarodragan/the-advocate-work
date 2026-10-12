@@ -2,7 +2,9 @@
 name: "Parallel common events don't run"
 description: "The ROM doesn't run parallel common events, except ABL's equipment ones; five games have some —Vampires Dawn 35, among them the transformations— and it hasn't been looked at what is lost in each one"
 type: feature
-status: draft
+status: doing
+assignee: Aguará
+agents: [Aguará]
 ---
 
 Aguará saw it on 2026-10-06 while building the board against RM2k

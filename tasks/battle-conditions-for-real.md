@@ -2,7 +2,9 @@
 name: "Battle conditions for real"
 description: "A condition system in battle —duration, restrictions, the controlled one's AI, what each changes— so that ChangeMonsterCondition stops being a debt: ABL's Control and BarkWall"
 type: feature
-status: todo
+status: doing
+assignee: Chajá
+agents: [Chajá]
 ---
 
 taro, on 2026-10-12: after `monster-conditions-and-flashscreen-in-battle.md`

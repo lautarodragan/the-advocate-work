@@ -2,9 +2,16 @@
 name: "Draw the faces and really wait on the escapes"
 description: "Today ChangeFaceGraphic is accepted without drawing the face, and the escapes \\. \\! \\| in the middle of a box are discarded without waiting. Do them for real"
 type: feature
-status: todo
+status: done
 agents: [Tijereta]
 ---
+
+**Split**, 2026-10-12, by taro: the three things compete for different
+resources —the waits for none, the colours and the speed for palettes and
+the drawing pace, the faces for VRAM and palettes—, so each is a task of
+its own: `waits-in-the-middle-of-a-box.md` (taken first, the cheapest),
+`message-colours-and-speed.md` and `draw-the-faces.md`. What follows is as
+it was.
 
 Debt left by `faces-and-wait-escapes-in-messages.md`.
 
