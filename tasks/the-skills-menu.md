@@ -26,3 +26,21 @@ skills on the map, and then implement that in a second phase."
    event, teleport and escape.
 
 ## Log
+
+### Mulita, 2026-10-12: phase 1, the research
+
+From the-advocate `28e66b35`, the ports `c97a0dd`, the book `c3e40f4`.
+
+* **Why Tech Skill is grey**: not the game. In the original the option is
+  enabled from the first moment the player walks —the intro rooftop, with
+  Kersh, whose Healing Syringe already heals from the menu—. It is grey in
+  the port because the runtime does not do it: the pause menu greys every
+  command the converter's `MENU_DONE` does not list (`menu_enabled` in
+  `runtime/menu.s`, `menu_done` in `mapdata/src/emit.rs`).
+* **The original under Wine**: a copy of ABL whose map 4 builds a party
+  with Kersh, Talan (given 27 skills, to scroll), Radin without SP and
+  Emily, and takes it to map 7. Captured: the list, the description line,
+  the costs, grey skills (battle-only, not enough SP), the scroll with its
+  arrows, a heal with the target window, a full-HP target that does
+  nothing, Change Tape and Mix Formula —switch skills whose common event
+  runs on the map after the menu closes—, and an actor with no skills.
