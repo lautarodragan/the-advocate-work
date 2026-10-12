@@ -2,7 +2,7 @@
 name: "Translate the tasks repo into English"
 description: "the-advocate-work goes entirely into English, like the book, its commits included: first the README, tasks.nu, AGENTS.md and .claude/; then the tasks that aren't done; then the done ones"
 type: docs
-status: testing
+status: done
 agents: [Hornero, Chajá, Carpintero, Aguará, Cardón, Hurón, Mulita, Calandria, Tijereta]
 assignee: taro
 ---

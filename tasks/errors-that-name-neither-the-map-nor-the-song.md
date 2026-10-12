@@ -2,7 +2,7 @@
 name: "The errors that name neither the map nor the song"
 description: "'the song uses N sounds…' does not say which song or which map, and 'this map can't carry a message window' does not carry the map number on its line"
 type: chore
-status: testing
+status: done
 assignee: taro
 agents: [Hornero, Cardón]
 ---

@@ -2,7 +2,7 @@
 name: "The book: the divergences, in English"
 description: "The 42 divergences in divergencias/ to the book, translated, in divergences/"
 type: docs
-status: testing
+status: done
 assignee: taro
 agents: [Calandria]
 ---

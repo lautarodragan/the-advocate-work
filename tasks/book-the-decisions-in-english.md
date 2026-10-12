@@ -2,7 +2,7 @@
 name: "The book: the decisions, in English"
 description: "The 40 decisions in decisiones/ to the book, translated: the tools' ones to decisions/, ABL's to ports/abl/decisions/"
 type: docs
-status: testing
+status: done
 assignee: taro
 agents: [Mulita]
 ---

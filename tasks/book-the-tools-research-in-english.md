@@ -2,7 +2,7 @@
 name: "The book: the tools' research, in English"
 description: "The 9 dated studies in snes-rm2k's docs/research/ to the book, translated and without updating their numbers, in research/"
 type: docs
-status: testing
+status: done
 assignee: taro
 agents: [Cardón]
 ---

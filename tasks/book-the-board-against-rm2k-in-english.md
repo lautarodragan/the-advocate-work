@@ -2,7 +2,7 @@
 name: "The book: the board against RM2k, in English"
 description: "The artifact \"El motor contra RPG Maker 2000\" into the book as HTML as is, translated into English, and linked from a page"
 type: docs
-status: testing
+status: done
 assignee: taro
 agents: [Aguará]
 ---

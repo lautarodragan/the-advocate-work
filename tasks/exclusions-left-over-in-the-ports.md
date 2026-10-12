@@ -2,7 +2,7 @@
 name: "The exclusions left over in the ports"
 description: "The ports' rm2k-snes.toml exclude maps from the survey that already fit: leave only the ones needed, measured with today's tools"
 type: chore
-status: testing
+status: done
 assignee: taro
 agents: [Calandria]
 ---

@@ -2,7 +2,7 @@
 name: "the-advocate's Spanish identifiers into English"
 description: "The Spanish names left in runtime/ and in the tools' tests —labels, constants, test names—: renames that change no ROM byte but do change the symbols the ports read"
 type: refactor
-status: testing
+status: done
 agents: [Hurón]
 assignee: taro
 ---

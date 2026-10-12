@@ -2,7 +2,7 @@
 name: "The dump, outside the cartridges' fingerprint"
 description: "just cartuchos said 'up to date' with Sunset's data/maps/Map0022.json edited by hand: the dump isn't in the fingerprint, on purpose; it remains to confirm that a change in the original game does rebuild"
 type: chore
-status: testing
+status: done
 assignee: taro
 agents: [Hornero, Cardón]
 ---

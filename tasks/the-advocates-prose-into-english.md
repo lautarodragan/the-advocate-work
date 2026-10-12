@@ -2,7 +2,7 @@
 name: "the-advocate's prose into English"
 description: "README, LAYOUT, GLOSSARY, the justfile's comments, the tests' prose and the few Spanish comments left in runtime/: what changes no byte of any build"
 type: chore
-status: testing
+status: done
 agents: [Tijereta]
 assignee: taro
 ---

@@ -2,7 +2,7 @@
 name: "The dashboard against the whole of RM2k"
 description: "An artifact with the state of the engine relative to everything RM2k has: event commands, database tabs, asset types, screens; each one done, partial, degraded or missing"
 type: feature
-status: testing
+status: done
 agents: [Aguará]
 assignee: taro
 ---

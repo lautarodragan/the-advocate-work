@@ -2,7 +2,7 @@
 name: "The book: the tools' and ABL's docs/, and the ports section"
 description: "docs/port, rpgmaker, snes and jetbrains.md from snes-rm2k, and ABL's docs/, to the book in English; and the ports/ section, one entry per game"
 type: docs
-status: testing
+status: done
 assignee: taro
 agents: [Tijereta]
 ---

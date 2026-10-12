@@ -2,7 +2,7 @@
 name: "Rescue the findings"
 description: "Read the tasks in testing/ and move to tasks/draft/ the findings that were left loose —unfixed errors, uncovered paths, 'the next thing, measured'—, and to each port's 'Known issues' what is seen while playing"
 type: docs
-status: testing
+status: done
 agents: [Calandria]
 assignee: taro
 ---
