@@ -2,9 +2,9 @@
 name: "The maps' loose commands"
 description: "The small cases that leave pages out: ChangeGold by variable, EraseEvent before a jump, the screen position in ControlVars, the cut in ChangeScreenTransitions, and the ControlVars = 999999 of common event 45"
 type: feature
-status: doing
+status: testing
 agents: [Aguará, Chajá]
-assignee: Aguará
+assignee: taro
 ---
 
 From Aguará's study, `docs/research/2026-10-05-los-comandos-que-faltan.md`; `rm2k-snes-events culprits` measured it. taro, on 2026-10-05: leave them in todo, without launching yet. None is in release; common event 45, since it doesn't compile, makes 47
@@ -44,3 +44,26 @@ left: common event 45, `ChangeGold` by variable (map 321 and common events
   `GOLD_BY_VARIABLE`, with the slot in the amount's low byte; a variable
   below zero turns the operation around, as `OperateValue` does. No new
   opcode, no new RAM.
+* **The screen position in `ControlVars`** (class 6, RM2k's 4 and 5):
+  `character_screen`, in the far bank, gives the centre of the cell and the
+  feet on **RM2k's** screen, minus the same RM2k display the pictures that
+  go with the map are placed on (`pic_on_map`). Checked against RM2k's
+  numbers worked out by hand from `GetScreenX`/`GetScreenY` and liblcf's
+  default pan, which showed **`pic_on_map` was eight pixels off**: it
+  centred RM2k's display on the console's camera, and RM2k leaves nine
+  cells left of the hero, not the half. Fixed in its own commit; the two
+  `imagen-mapa` goldens move their REC eight pixels right.
+
+What `culprits --every-map` says now, on ABL: every map page compiles; of
+the common events only 32 is left, which compiles on its map (114); no call
+is skipped. On Desert Nightmare the screen position was most of what was
+left on its maps.
+
+What the suite does not cover: Eisen's simulation itself. Its rooms, maps
+281 to 344, are not in any cartridge, so nobody can play it yet; the tests
+look at common event 45 run from a test page. The jump height is not taken
+off the screen y (RM2k does), and no page asks mid-jump.
+
+When merging: reinstall `events` and `cartridge` (the runtime changed:
+`op_gold`, `op_var`, `picture_far.s`). Branches `aguara-comandos-sueltos`
+in the-advocate, the ports and the book.
