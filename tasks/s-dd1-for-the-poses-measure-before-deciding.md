@@ -59,7 +59,7 @@ any board.
 
 **Recommendation: not now.** ABL doesn't need the space and VD doesn't fit anyway.
 
-All of it, in the book: [`src/research/2026-10-11-el-s-dd1.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-11-el-s-dd1.html), branch
+All of it, in the book: [`src/research/2026-10-11-the-s-dd1.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-11-the-s-dd1.html), branch
 `carpintero-s-dd1` of the-advocate-docs (7aaaa6f).
 
 ## On merging

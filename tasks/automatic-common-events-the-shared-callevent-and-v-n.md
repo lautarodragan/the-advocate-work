@@ -6,7 +6,7 @@ status: done
 assignee: taro
 ---
 
-Phases 4 and 5 of [`docs/research/2026-10-01-el-sistema-de-imagenes.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-01-el-sistema-de-imagenes.html)
+Phases 4 and 5 of [`research/2026-10-01-the-picture-system.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-01-the-picture-system.html)
 (Jilguero), from taro on 2026-10-02. The portable console is not needed to
 play, but its pieces serve the custom systems of many games. What
 is missing: automatic common events (not the parallel ones), a `CallEvent`
@@ -65,7 +65,7 @@ stack full is skipped.
 **A map page calls instead of pasting** when it runs in the foreground and
 the body compiled with its map is byte for byte the one without a map; if not, it pastes
 as always. What is forgiven is the variable refresh, and why is
-in `shares` and in `decisiones/call-event-a-un-cuerpo-compartido.md`. Parallel
+in `shares` and in `decisions/call-event-into-a-shared-body.md`. Parallel
 pages always paste: they share the foreground's globals.
 
 **`CODE_CARRY` with the stack**: a body lives in the cartridge and does not move,

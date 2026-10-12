@@ -45,7 +45,7 @@ picture 544. In 4bpp a tile weighs 32 bytes and the same worst case is
 
 * The converter keeps trying 8bpp first, in mode 3, as today.
 * If it doesn't fit, the same picture in 4bpp, on BG1 in mode 1 —as
-  [Large pictures in mode 1](https://github.com/lautarodragan/the-advocate-docs/blob/main/src/decisions/las-imagenes-grandes-en-modo-1.md)
+  [Large pictures in mode 1](https://github.com/lautarodragan/the-advocate-docs/blob/main/src/decisions/large-pictures-in-mode-1.md)
   already does with the map covered—, with Adeleine choosing the eight
   palettes of sixteen, as it does for the maps.
 * The WARNING that today drops the title goes away; whatever is lost is

@@ -95,8 +95,8 @@ What remained:
   the strip in another mode via HDMA —mode 1 leaves 4bpp BG1 and BG2 and
   BG3—, which is the next step if wanted.
 * What isn't the same as the original is in
-  `workflow/divergencias/lo-que-el-menu-de-la-pelea-no-modela.md`, and Escape
-  in `workflow/divergencias/escape-es-la-quinta-orden.md`.
+  `divergences/what-the-battle-menu-does-not-model.md`, and Escape
+  in `divergences/escape-is-the-fifth-command.md`.
 * The victory splits its term by letters (31) and not by pixels: "The combat
   has resulted in victory!" goes on two rows.
 * With ABL's font and +1, the converter warns that three actor names get cut

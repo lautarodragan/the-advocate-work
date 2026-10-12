@@ -65,7 +65,7 @@ once.
 ## What is not included
 
 - **One counter per arrow**, like RM2k: it is one for all four. See
-  `workflow/divergencias/un-solo-contador-para-las-cuatro-flechas.md`.
+  `divergences/one-counter-for-all-four-arrows.md`.
 - **easyrpg's other press/repeat differences** were not looked at one by one:
   `Window_Selectable` has them but wraps around anyway, and
   `Window_BattleStatus` and the shop repeat without distinguishing. Whether

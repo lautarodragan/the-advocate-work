@@ -6,7 +6,7 @@ status: done
 assignee: taro
 ---
 
-Step 1 of the plan in [`docs/research/el-mapa-de-las-herramientas-de-python.md`](https://lautarodragan.github.io/the-advocate-docs/research/el-mapa-de-las-herramientas-de-python.html)
+Step 1 of the plan in [`research/the-map-of-the-python-tools.md`](https://lautarodragan.github.io/the-advocate-docs/research/the-map-of-the-python-tools.html)
 (§4), approved by taro on 2026-09-28. taro authorized Hornero to move ahead
 with the mechanical steps without waiting for his feedback on 2026-09-29.
 
@@ -15,7 +15,7 @@ In scope: items 1.1, 1.2, 1.3, 1.5 and 1.6 of the research, and 1.7 (splitting
 
 Out of scope: 1.4 (`cartuchos` stops importing `port/` and `audio/`), because
 what to do with `cartuchos.py` is an open question for taro (see
-`workflow/decisiones/las-herramientas-se-separan-de-abl.md`).
+`decisions/the-tools-split-from-abl.md`).
 
 ## What was done (Lapacho)
 

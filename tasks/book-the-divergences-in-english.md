@@ -33,15 +33,15 @@ What was decided while translating:
   in `tasks/` in snes-rm2k-work".
 * Citations between divergences are relative links. The ones to
   `decisiones/` point to `../decisions/<slug>.md` (four:
-  `call-event-a-un-cuerpo-compartido`, `el-cronometro-no-tiene-paleta-propia`,
-  `las-imagenes-grandes-en-modo-1`, `los-translucidos-van-horneados`), the
+  `call-event-into-a-shared-body`, `the-timer-has-no-palette-of-its-own`,
+  `las-imagenes-grandes-en-modo-1`, `translucent-events-are-baked`), the
   intro to `../decisions/README.md`, and the one to `docs/research/` to
-  [`../research/graficos-de-rm2k-a-snes.md`](https://lautarodragan.github.io/the-advocate-docs/research/graficos-de-rm2k-a-snes.html): if Mulita put any in
+  [`../research/graphics-and-sound-from-rm2k-to-the-snes.md`](https://lautarodragan.github.io/the-advocate-docs/research/graphics-and-sound-from-rm2k-to-the-snes.html): if Mulita put any in
   `ports/abl/decisions/`, it has to be corrected when merging.
 * `docs/port/events.md` and `docs/port/vram.md` stayed as text ("in
   snes-rm2k"), without a link: I do not know what name Tijereta leaves them under.
 * The only trace of the environment was the captures folder in `/shared` of
-  `la-ventana-sin-fondo-no-tapa-a-los-personajes`: it became "kept outside the
+  `the-window-without-a-background-does-not-cover-the-characters`: it became "kept outside the
   repositories, for review", and where they are gets lost.
 
 When merging there is nothing to install.

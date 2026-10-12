@@ -7,14 +7,14 @@ assignee: taro
 ---
 
 From taro, on 2026-10-01, after reading
-[`docs/research/2026-10-01-los-mapas-por-el-msu-1.md`](https://lautarodragan.github.io/the-advocate-docs/ports/abl/research/2026-10-01-los-mapas-por-el-msu-1.html). The new decision:
-`decisiones/el-juego-se-juega-sin-msu-1.md`. What he wants to know is whether,
+[`ports/abl/research/2026-10-01-the-maps-through-the-msu-1.md`](https://lautarodragan.github.io/the-advocate-docs/ports/abl/research/2026-10-01-the-maps-through-the-msu-1.html). The new decision:
+`decisions/the-game-is-playable-without-msu-1.md`. What he wants to know is whether,
 moving to 8 MB if needed, compressing what can be compressed and lowering the
 quality of something in the ROM without MSU-1, the whole game fits.
 
 # What came out (Tucu-tucu)
 
-The study is [`docs/research/2026-10-01-el-juego-entero-sin-msu-1.md`](https://lautarodragan.github.io/the-advocate-docs/ports/abl/research/2026-10-01-el-juego-entero-sin-msu-1.html).
+The study is [`ports/abl/research/2026-10-01-the-whole-game-without-msu-1.md`](https://lautarodragan.github.io/the-advocate-docs/ports/abl/research/2026-10-01-the-whole-game-without-msu-1.html).
 The short version:
 
 * **In 4 MB it doesn't fit with any cut**; in **8 MB (ExHiROM) it fits without

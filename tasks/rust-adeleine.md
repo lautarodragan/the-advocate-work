@@ -7,7 +7,7 @@ assignee: taro
 ---
 
 From taro, on 2026-09-29: start with Adeleine to Rust. Already decided
-(`workflow/decisiones/las-herramientas-se-separan-de-abl.md`): Adeleine is
+(`decisions/the-tools-split-from-abl.md`): Adeleine is
 its own crate in `tools/snes/`, next to Voodoo and not inside it, because
 Voodoo does not decide colours (AGENTS.md). It knows nothing about RPG Maker: colours,
 tiles and the limit of 16 per palette. It is the step before `rm2k-render`

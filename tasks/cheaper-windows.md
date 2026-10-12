@@ -6,7 +6,7 @@ status: todo
 ---
 
 taro, on 2026-10-12: the implementation of the research, which had no task
-of its own. The research is [`research/2026-10-11-las-ventanas.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-11-las-ventanas.html) in the
+of its own. The research is [`research/2026-10-11-the-windows-made-cheaper.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-11-the-windows-made-cheaper.html) in the
 book ("The windows, made cheaper", Tijereta, from
 `most-efficient-windows.md`); what each step saves, and for which game,
 is there.

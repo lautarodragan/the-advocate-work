@@ -20,7 +20,7 @@ each frame of the walk lasts.
 
 ## What was decided
 
-Everything is in `workflow/divergencias/la-velocidad-del-heroe-con-l-y-r.md` and
+Everything is in `divergences/the-heros-speed-with-l-and-r.md` and
 commented in `tools/runtime/hero_speed_keys.s`. In short:
 
 * **an addition on top of the game's**, not the game's: L and R move

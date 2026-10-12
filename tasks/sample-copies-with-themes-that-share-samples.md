@@ -50,7 +50,7 @@ proposed going beyond "choosing better what to copy", and what came out of the c
 Why not now: with MSU-1 the music goes through tracks and this is not heard;
 duplicating samples costs ROM, and `release` has few banks left, which the world is going to
 ask for; and quality gets tuned when the whole game is playable
-(`decisiones/primero-el-juego-entero-despues-la-calidad.md`).
+(`decisions/first-the-whole-game-then-the-quality.md`).
 
 **When it is taken**: first an analysis and a plan —measure the graph, the weights
 and how much ROM each option costs—, and from that plan come the tasks.

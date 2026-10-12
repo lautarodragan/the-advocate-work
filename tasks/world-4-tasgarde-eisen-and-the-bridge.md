@@ -127,7 +127,7 @@ would require touching how `copias` chooses, which is its own task.
   (`panorama-of-map-2.md`).
 * **The Fortitude counter isn't visible**: `fortitude-counter-is-not-shown.md`.
 * Erasing with "none" is a black frame and not the fade from the old map to
-  the new one: `divergencias/las-transiciones-del-teletransporte.md`.
+  the new one: `divergences/the-teleport-transitions.md`.
 * A save made at the minigame's save point comes back with the fade instead of
   the cut (the transition doesn't travel in the save): it's only noticeable in
   the jump to the start when fortitude runs out. See `TRANSICION_BORRAR` in

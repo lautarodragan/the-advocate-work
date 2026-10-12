@@ -93,7 +93,7 @@ while the load lasts. It was not tried on the console.
 its entries); bank 0 was left with 1029 free in `release` and 1727 in
 `test-special`. The WRAM: `$7F0000` is the load buffer, `$7F6000` the
 animation's drawings, and the grid at `$7E8000`, which is **the decision with a
-cost**: `workflow/decisiones/la-grilla-vive-en-la-wram.md`.
+cost**: `decisions/the-grid-lives-in-wram.md`.
 
 **The grid and the battle**: the battle scene is the upper half of `$7F`, so
 it overwrites the end of grids larger than 32 KB (today, only map 52's).

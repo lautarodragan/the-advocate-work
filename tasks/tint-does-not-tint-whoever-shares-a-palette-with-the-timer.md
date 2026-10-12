@@ -80,7 +80,7 @@ Without a new palette and without touching the distribution:
   in place, `timer_repintar` asks to re-upload the shadow, because those
   entries change owner.
 
-What remains is in `divergencias/el-cronometro-y-su-vecino-comparten-colores.md`.
+What remains is in `divergences/the-timer-and-its-neighbor-share-colors.md`.
 
 # What to look at while playing
 

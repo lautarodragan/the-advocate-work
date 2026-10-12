@@ -8,7 +8,7 @@ assignee: taro
 
 From taro, on 2026-09-29: "translate the tools into English". It's
 AGENTS.md's rule for the separate projects, which now reaches all of `tools/`
-(see `workflow/decisiones/las-herramientas-se-separan-de-abl.md`).
+(see `decisions/the-tools-split-from-abl.md`).
 
 **Phase 1**, split among four agents by area: comments, docstrings, error
 messages, `help=` and prose. **Code names aren't touched** —modules,

@@ -51,11 +51,11 @@ The task was written on the 24th, and since then:
   `rom/src/efectos_de_sonido.s`).
 * **6 kHz, 0.75 s and the 0.4 s loop: still true** for all but the
   opening's thunder, which goes whole at 22 kHz
-  (`decisiones/el-trueno-va-entero-y-paga-la-lluvia.md`). The thunder **was already on
+  (`ports/abl/decisions/the-thunder-plays-whole-and-pays-for-the-rain.md`). The thunder **was already on
   `main`**, not only in the experiment's branch as that decision said.
 * **The ARAM budget** is no longer "each effect whatever fits": it's per
   package and each package fills ARAM, so there was no spare room to
-  use without looking package by package. See `decisiones/un-solo-banco-de-muestras.md`.
+  use without looking package by package. See `decisions/a-single-sample-bank.md`.
 * **`SE_ARAM` is still dead**: `build_varios` passes `1 << 30` to `build_efectos`.
 
 **The test case —the opening's thunderclaps cut off— was already
@@ -272,7 +272,7 @@ Hz take up 63 bytes more than today, within the margin. Checked with the
 converter: with those two alone, the bank, the copies and the rate and size of
 each sample come out **identical to `main`**. It's taro's, from 2026-09-26: he'd
 already listened to the thunder at lower quality and found it quite acceptable.
-See `decisiones/el-trueno-va-entero-y-paga-la-lluvia.md`.
+See `ports/abl/decisions/the-thunder-plays-whole-and-pays-for-the-rain.md`.
 
 ## Proposals that remain, measured (not implemented)
 

@@ -192,7 +192,7 @@ showing it and fourteen when erasing it, which reloads the map. **Mode 7 owns
 
 **Apart from mode 7**: the flash with `COLDATA` also works for today's mode 1
 photo —the white on 213, 214 and 216 that today gets cut off when the photo
-appears, `divergencias/lo-que-las-imagenes-grandes-no-modelan.md`— and for
+appears, `divergences/what-large-pictures-do-not-model.md`— and for
 217's montage in `diff-photos-cropped-and-217-montage-as-in-rm2k.md`.
 
 ## What's in `/shared/experimentos/2026-10-02-modo-7/`

@@ -56,7 +56,7 @@ the `.zip`s; the retouched copies go to `~/scratch/tijereta/`.
 ## What was done (Tijereta, 2026-10-11)
 
 The research is in the book, branch `tijereta-ventanas`:
-[`src/research/2026-10-11-las-ventanas.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-11-las-ventanas.html), "The windows, made cheaper".
+[`src/research/2026-10-11-the-windows-made-cheaper.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-11-the-windows-made-cheaper.html), "The windows, made cheaper".
 No code of the tools or of the ports was touched. The main points:
 
 - **The knob** (`[windows] background`, a color or a list of stops
@@ -82,7 +82,7 @@ No code of the tools or of the ports was touched. The main points:
 - **Per-game code**: data, not `.ifdef`; the risk is the path that
   no test runs.
 
-Captures in `/shared/capturas/2026-10-11-las-ventanas/`. The
+Captures in `/shared/capturas/2026-10-11-the-windows-made-cheaper/`. The
 measuring scripts stayed in `~/scratch/tijereta/ventanas/py/` and the prototype in
 `~/scratch/tijereta/hdma/`: throwaway.
 

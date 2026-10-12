@@ -1697,7 +1697,7 @@ The table above has each package's upload. Where it falls:
 
 ### Decisions that would have to be taken or rewritten
 
-* **`decisiones/un-solo-banco-de-muestras.md` is not reverted with A: its
+* **`decisions/a-single-sample-bank.md` is not reverted with A: its
   reason is rewritten.** There is still one bank, one sample per program,
   uploaded in packages per map. What goes away is `build_varios`'s rule that
   the **whole** bank has to fit in the ARAM, and with it the trimming of

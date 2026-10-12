@@ -36,7 +36,7 @@ Checked with ROMs: ABL without the knob comes out the same, `abl.sfc`
 `27e94e67039533a2…`, and the suite gives 1136. Frozen World, Book of Three and
 Desert Nightmare, built with the original game and
 `system = "ablskin.png"`, start: captures in
-`/shared/capturas/2026-10-05-otros-juegos/system-elegido*.png`, ROMs in
+`/shared/capturas/2026-10-05-other-games/system-elegido*.png`, ROMs in
 `/shared/builds/otros-juegos/<juego>.sfc`, and the knob committed in
 each repo. Dooms2 doesn't build for another reason: its CharSets are BMP.
 

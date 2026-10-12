@@ -7,7 +7,7 @@ agents: [Tijereta]
 assignee: taro
 ---
 
-From Aguará's survey ([`docs/research/2026-10-05-otros-juegos.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-05-otros-juegos.html)): it
+From Aguará's survey ([`research/2026-10-05-other-games.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-05-other-games.html)): it
 happens to 5 of the 7 games, which today build only with the System reduced by hand
 in a copy of the game. taro, on 2026-10-05, chose this as the first,
 one at a time because of the usage limit: without prior mockups, with before and

@@ -68,7 +68,7 @@ why above; `git blame` showed no other reason.
   `jsl`; on returning, the cursor stays on End Game. Bank 0 spends 15 bytes
   (`just espacio release`: from 205 to 190 free).
 - What is still different is in
-  `workflow/divergencias/lo-que-la-pantalla-de-end-game-no-modela.md`.
+  `divergences/what-the-end-game-screen-does-not-model.md`.
 
 ## Tests
 

@@ -14,7 +14,7 @@ the same in the-advocate `fc6f7456`: the comment of `party_common_events`,
 in `rm2k-snes/events/src/indices.rs`, says "The ROM does not run parallel
 common events", and the only exception are the ones that only look at the equipment,
 which run when closing the menu (the book's divergence
-`los-comunes-del-equipo-corren-al-cerrar-el-menu`).
+`pure-parallel-common-events-run-only-when-what-they-read-changes`).
 
 **Which ones they are**, counted on 2026-10-11 in each port's `data/db/commonevents.json`
 (ports `a85b7e3`; parallel trigger and with commands):

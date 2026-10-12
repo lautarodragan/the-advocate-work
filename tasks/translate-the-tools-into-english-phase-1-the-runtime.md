@@ -8,7 +8,7 @@ assignee: taro
 
 From taro, on 2026-09-29: "translate the tools into English". It's the rule in
 AGENTS.md for the separate projects, which now reaches all of `tools/`
-(see `workflow/decisiones/las-herramientas-se-separan-de-abl.md`).
+(see `decisions/the-tools-split-from-abl.md`).
 
 **Phase 1**, split among four agents by area: comments, docstrings,
 error messages, `help=` and prose. **Code names aren't touched** —
@@ -50,7 +50,7 @@ and on the tree merged with `main` both suites pass.
 * the identifiers, paths and Python names being cited: they're phase 2;
 * section titles of files that aren't the runtime's, cited
   in quotes so they can be searched for: "Cuánto tarda"
-  (`docs/port/msu-datos.md`), "Qué fondos hay" and "El respaldo liviano"
+  (`internals/the-msu-file.md`), "Qué fondos hay" and "El respaldo liviano"
   (`tools/port/escena.py`), "el formato por nota" (`tools/audio/snes_music.py`),
   "lo que depende del actor" (`titulo.py`), and the section title of
   `tasks/music-through-the-spc700.md` that `paquete_de_audio.s` cites. **If the

@@ -68,7 +68,7 @@ The System's cursor over a rectangle, for other screens:
   from another mechanism (`tl_strip` and the per-cursor rows of
   `slots.rs`). Items, equipment, shop and battle already had the bar.
 * **The bar does not alternate the cursor's two drawings**: see
-  `workflow/divergencias/la-barra-de-la-eleccion-no-alterna-sus-dos-dibujos.md`.
+  `divergences/the-choice-bar-does-not-alternate-its-two-drawings.md`.
   In ABL they are identical.
 
 ### What it uses
@@ -76,7 +76,7 @@ The System's cursor over a rectangle, for other screens:
 * **CGRAM: five more colours in the window's palette**, thirteen instead of
   eight, taken from the background of every map. Eleven ABL maps merge
   between one and five colours. It is what most needs looking at:
-  `workflow/divergencias/la-ventana-se-lleva-trece-colores-de-cada-fondo.md`.
+  `divergences/the-window-takes-thirteen-colors-from-every-background.md`.
 * VRAM: four more tiles in the window's bank —with ABL's System that leaves
   exactly 256—. Tilemap, sprites, OAM: nothing.
 * RAM: `MSG_ARROW_T`, `MSG_ARROW_WAY` (two bytes) and `MSG_ARROW_UP`, at

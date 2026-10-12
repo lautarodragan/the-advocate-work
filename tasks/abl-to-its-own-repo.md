@@ -7,7 +7,7 @@ assignee: taro
 ---
 
 From taro, on 2026-10-02, with the plan in
-[`docs/research/2026-10-02-el-juego-de-pruebas.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-02-el-juego-de-pruebas.html) (Leñatero, phase 1):
+[`research/2026-10-02-the-test-game.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-02-the-test-game.html) (Leñatero, phase 1):
 "I'd start by making sure all of ABL's things exist in a single
 place. In fact, I think I'd take them out of the repo and move them to a repo
 of their own, and `git init` there". Without `git filter-repo`: "we still have the git
@@ -34,7 +34,7 @@ a judgement call that isn't mine to make.
 | all of `rom/` | ABL, **to the root** | `rom/` has already been ABL's root since the move of 2026-09-29: in a repo of its own the extra step isn't needed. `rom/X` becomes `X` |
 | the root `justfile` | goes, and doesn't pass to ABL | it only imported `rom/justfile`; in the new repo `rom/justfile` is the root one. Here nothing's left to import: see below |
 | `tools/assembly/entregar.py` | ABL, to `entregar.py` | it's ABL's (`abl-entregar`), as `tools/README.md` says |
-| `DITTO.md` | **stays** | the study took it as ABL's; read, it's why the converter reads the dump and not the binary, and the status of that decision: it belongs to the tools (`tools/justfile` cites it, `decisiones/data-es-la-vista-resuelta.md` is the tools'). ABL's part —what's in its `data/`— is already in `rom/data/README.md` |
+| `DITTO.md` | **stays** | the study took it as ABL's; read, it's why the converter reads the dump and not the binary, and the status of that decision: it belongs to the tools (`tools/justfile` cites it, `decisions/data-is-the-resolved-view.md` is the tools'). ABL's part —what's in its `data/`— is already in `rom/data/README.md` |
 | `README.md` | mixed | each repo its own: ABL's, the original game, `just datos`, how it's built; this one's, the runtime's architecture |
 | `AGENTS.md` | mixed | each repo its own; the environment is described in both, because it's the only file in each one that can name it |
 | `CLAUDE.md` | mixed | the same shape in both |
@@ -53,10 +53,10 @@ a judgement call that isn't mine to make.
 | `docs/rpgmaker/chipsets.md` | stays | |
 | `docs/rpgmaker/rtp.md` | mixed | what the RTP is and how it's extracted, the tools'; the chipsets and charsets ABL uses, ABL's |
 | `docs/snes/*` | stays | |
-| [`docs/research/graficos-de-rm2k-a-snes.md`](https://lautarodragan.github.io/the-advocate-docs/research/graficos-de-rm2k-a-snes.html), [`el-mapa-de-las-herramientas-de-python.md`](https://lautarodragan.github.io/the-advocate-docs/research/el-mapa-de-las-herramientas-de-python.html), [`las-herramientas-hoy.md`](https://lautarodragan.github.io/the-advocate-docs/research/las-herramientas-hoy.html), [`2026-10-01-el-sistema-de-imagenes.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-01-el-sistema-de-imagenes.html), [`2026-10-02-el-juego-de-pruebas.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-02-el-juego-de-pruebas.html) | stay | the tools'; the test game one is this repo's plan |
-| [`docs/research/inspeccion-integral-del-repo.md`](https://lautarodragan.github.io/the-advocate-docs/ports/abl/research/inspeccion-integral-del-repo.html) | ABL | according to Hornero's table |
-| [`docs/research/2026-10-01-el-juego-entero-sin-msu-1.md`](https://lautarodragan.github.io/the-advocate-docs/ports/abl/research/2026-10-01-el-juego-entero-sin-msu-1.html) | ABL | how much the whole of ABL weighs and what cuts its cartridge asks for |
-| [`docs/research/2026-10-01-los-mapas-por-el-msu-1.md`](https://lautarodragan.github.io/the-advocate-docs/ports/abl/research/2026-10-01-los-mapas-por-el-msu-1.html) | ABL | how far ABL's cartridge goes; its test ROM (`experimentos/msu-puerto/`) is already ABL's |
+| [`research/graphics-and-sound-from-rm2k-to-the-snes.md`](https://lautarodragan.github.io/the-advocate-docs/research/graphics-and-sound-from-rm2k-to-the-snes.html), [`el-mapa-de-las-herramientas-de-python.md`](https://lautarodragan.github.io/the-advocate-docs/research/the-map-of-the-python-tools.html), [`the-tools-today.md`](https://lautarodragan.github.io/the-advocate-docs/research/the-tools-today.html), [`2026-10-01-the-picture-system.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-01-the-picture-system.html), [`2026-10-02-the-test-game.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-02-the-test-game.html) | stay | the tools'; the test game one is this repo's plan |
+| [`ports/abl/research/a-full-inspection-of-the-repository.md`](https://lautarodragan.github.io/the-advocate-docs/ports/abl/research/a-full-inspection-of-the-repository.html) | ABL | according to Hornero's table |
+| [`ports/abl/research/2026-10-01-the-whole-game-without-msu-1.md`](https://lautarodragan.github.io/the-advocate-docs/ports/abl/research/2026-10-01-the-whole-game-without-msu-1.html) | ABL | how much the whole of ABL weighs and what cuts its cartridge asks for |
+| [`ports/abl/research/2026-10-01-the-maps-through-the-msu-1.md`](https://lautarodragan.github.io/the-advocate-docs/ports/abl/research/2026-10-01-the-maps-through-the-msu-1.html) | ABL | how far ABL's cartridge goes; its test ROM (`experimentos/msu-puerto/`) is already ABL's |
 
 ## workflow/decisiones/ and divergencias/
 
@@ -66,14 +66,14 @@ it is; what was added or changed afterwards:
 | file | where to | why |
 |---|---|---|
 | `decisiones/README.md` | mixed | each repo its own |
-| `decisiones/la-camara-corrida-de-la-reja-es-del-juego.md` | ABL | according to the table |
-| `decisiones/el-trueno-va-entero-y-paga-la-lluvia.md`, `las-herramientas-se-separan-de-abl.md`, `un-caso-largo-en-cero-no-prueba-nada.md` | mixed, copy | according to the table |
-| `decisiones/el-cartucho-pasa-a-8-mb.md` | mixed, copy | it replaced `el-cartucho-se-queda-en-4-mb.md`, which the table had as mixed: ExHiROM is the runtime's, that ABL needs it is ABL's |
-| `decisiones/el-juego-se-juega-sin-msu-1.md` | mixed, copy | new; the rule is for ABL, and the engine follows it while ABL is the only game |
-| `decisiones/primero-el-juego-entero-despues-la-calidad.md` | mixed, copy | new; the same |
+| `ports/abl/decisions/the-camera-offset-after-the-gate-is-the-games.md` | ABL | according to the table |
+| `ports/abl/decisions/the-thunder-plays-whole-and-pays-for-the-rain.md`, `the-tools-split-from-abl.md`, `a-long-case-at-zero-proves-nothing.md` | mixed, copy | according to the table |
+| `decisions/the-cartridge-goes-to-8-mb.md` | mixed, copy | it replaced `el-cartucho-se-queda-en-4-mb.md`, which the table had as mixed: ExHiROM is the runtime's, that ABL needs it is ABL's |
+| `decisions/the-game-is-playable-without-msu-1.md` | mixed, copy | new; the rule is for ABL, and the engine follows it while ABL is the only game |
+| `decisions/first-the-whole-game-then-the-quality.md` | mixed, copy | new; the same |
 | `decisiones/rm2k-plus.md` | mixed, copy | new; for the tools it's what they are, for ABL it's that what it asks for goes to the engine |
-| `decisiones/call-event-a-un-cuerpo-compartido.md`, `las-imagenes-grandes-en-modo-1.md` | stay | new; the converter's and the runtime's |
-| `divergencias/*` | stay, all of them | according to the table, and the four new ones (`la-entrada-a-la-pelea-en-mosaico`, `la-velocidad-del-heroe-con-l-y-r`, `lo-que-las-imagenes-en-sprites-no-modelan`, `lo-que-las-imagenes-grandes-no-modelan`) are the runtime's. ABL doesn't carry `divergencias/`: its `AGENTS.md` points here |
+| `decisions/call-event-into-a-shared-body.md`, `las-imagenes-grandes-en-modo-1.md` | stay | new; the converter's and the runtime's |
+| `divergencias/*` | stay, all of them | according to the table, and the four new ones (`the-way-into-battle-in-mosaic`, `la-velocidad-del-heroe-con-l-y-r`, `what-pictures-as-sprites-do-not-model`, `what-large-pictures-do-not-model`) are the runtime's. ABL doesn't carry `divergencias/`: its `AGENTS.md` points here |
 
 The copies go untouched: splitting the prose of a mixed decision is
 taro's call.

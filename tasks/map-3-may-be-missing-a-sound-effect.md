@@ -75,7 +75,7 @@ Hardware frames from the arrival at 3:
 to 1044, some 17 seconds— the map asks only for Earth2 and Open1, and both are
 there from the arrival because they are the first on the list. Everything that
 was missing is used only after evilrhys's `PlayBGM`. It is the design of
-`decisiones/el-tema-que-suena-gana-y-los-efectos-esperan.md` working.
+`decisions/the-playing-track-wins-and-the-sound-effects-wait.md` working.
 
 ## With MSU-1
 

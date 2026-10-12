@@ -149,7 +149,7 @@ One NPC for each —Arden (15), Saldra (17), AG7-17 (18)— with the
 game's graphic. Talking to one adds them to the party if they're not in it and removes them if they are
 (`ConditionalBranch` of actor in the party). AG7 also turns 150 on and off:
 turning it on runs common event 37 right after —see
-`divergencias/los-comunes-del-equipo-corren-al-cerrar-el-menu.md`— and he joins
+`divergences/pure-parallel-common-events-run-only-when-what-they-read-changes.md`— and he joins
 knowing the skill of his ArmCannon, which he has equipped from the base. There's no need
 to give him the weapon. Without 150, 36's page and 64's farewell wouldn't
 put him in the party.

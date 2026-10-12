@@ -52,7 +52,7 @@ and that this pass fixes or removes:
   allocation of leftovers, the percussion "with whatever is left" and
   `--banco-entero` are gone, and "Por qué el límite sigue estando" is exactly
   what was changed: now each sample has the budget of its worst package. The
-  why that remains is in `workflow/decisiones/un-solo-banco-de-muestras.md`
+  why that remains is in `decisions/a-single-sample-bank.md`
   and in `Banco` (`tools/audio/snes_music.py`). The link to
   `workflow/presupuesto-de-muestras-por-paquete.md` now points to
   `workflow/tasks/done/`.
@@ -60,7 +60,7 @@ and that this pass fixes or removes:
   uploads the bank through the IPL; it uploads the driver and the directory,
   and the boot map's package through command 3. `BOOT_CUADROS` went down from
   112 to 40 on 2026-09-26 and is no longer sized on the ceiling: see
-  `workflow/decisiones/el-arranque-esta-dimensionado-para-el-paquete-de-arranque.md`.
+  `decisions/boot-is-sized-for-the-boot-package.md`.
 
 ## How it ended up
 
@@ -73,10 +73,10 @@ says in its message where each section it removed went.
 What taro should read, because it's judgement and nothing verifies it:
 
 * the whole README, which is short now;
-* the two new decisions, `decisiones/las-poses-se-suben-en-caliente.md` and
-  `decisiones/el-color-math-no-se-usa.md`;
+* the two new decisions, `decisions/poses-are-uploaded-on-the-fly.md` and
+  `decisions/translucent-events-dont-use-color-math.md`;
 * the divergence that comes back,
-  `divergencias/atravesar-paredes-vale-mientras-dura-la-ruta.md`, which had
+  `divergences/walking-through-walls-lasts-as-long-as-the-route.md`, which had
   been lost in the rewrite of 2026-09-20 and which `celda_bloqueada` was
   still citing.
 
@@ -102,7 +102,7 @@ Where each thing went:
 * the audio, to `docs/port/audio.md`;
 * the hardware traps, to the header of `rom/src/main.s`;
 * the baked translucent ones, to
-  `decisiones/los-translucidos-van-horneados.md`;
+  `decisions/translucent-events-are-baked.md`;
 * the environment rule, to `AGENTS.md`.
 
 What still names the environment, on purpose, because taro left out the

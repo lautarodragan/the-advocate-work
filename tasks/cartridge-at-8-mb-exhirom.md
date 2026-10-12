@@ -6,8 +6,8 @@ status: done
 assignee: taro
 ---
 
-From taro, on 2026-10-01: `decisiones/el-cartucho-pasa-a-8-mb.md`. What
-changes, according to [`docs/research/2026-10-01-el-juego-entero-sin-msu-1.md`](https://lautarodragan.github.io/the-advocate-docs/ports/abl/research/2026-10-01-el-juego-entero-sin-msu-1.html)
+From taro, on 2026-10-01: `decisions/the-cartridge-goes-to-8-mb.md`. What
+changes, according to [`ports/abl/research/2026-10-01-the-whole-game-without-msu-1.md`](https://lautarodragan.github.io/the-advocate-docs/ports/abl/research/2026-10-01-the-whole-game-without-msu-1.html)
 (Tucu-tucu): `memoria.cfg` to 64 KB banks (`banks.rs` is already
 parametrised), the header at `$40FFB0`, bank 0's tables seen as
 32 KB at `$80`, what crosses banks by hand (`.crossbank`, the samples of

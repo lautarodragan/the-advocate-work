@@ -26,12 +26,12 @@ Related: taro wants all the tools to end up in Rust, not for speed; when that
 is tackled, it'll be decided which parts make sense.
 
 The inventory by sections, with line ranges and what is engine and what is
-RM2k tooling, is in [`docs/research/el-mapa-de-las-herramientas-de-python.md`](https://lautarodragan.github.io/the-advocate-docs/research/el-mapa-de-las-herramientas-de-python.html)
+RM2k tooling, is in [`research/the-map-of-the-python-tools.md`](https://lautarodragan.github.io/the-advocate-docs/research/the-map-of-the-python-tools.html)
 (§2), with a snapshot from 2026-09-28.
 
 ## Taken on 2026-09-29
 
-For step 4 of the road to Rust ([`docs/research/las-herramientas-hoy.md`](https://lautarodragan.github.io/the-advocate-docs/research/las-herramientas-hoy.html)): the
+For step 4 of the road to Rust ([`research/the-tools-today.md`](https://lautarodragan.github.io/the-advocate-docs/research/the-tools-today.html)): the
 converter is migrated in parts, and first it has to be split. The time
 optimization that was holding it back has happened. The file is still called
 `tools/port/snes_convert.py`, but it's now in English and uses `rm2k-render`
@@ -122,7 +122,7 @@ script that does it. All in `tools/port/`, in English.
 | `snes_convert.py` | `main()` and the `lcf` hooks | — | — | 1,077 |
 
 **The why of the cut.** It follows the stages that
-[`docs/research/inspeccion-integral-del-repo.md`](https://lautarodragan.github.io/the-advocate-docs/ports/abl/research/inspeccion-integral-del-repo.html) proposed —input and options,
+[`ports/abl/research/a-full-inspection-of-the-repository.md`](https://lautarodragan.github.io/the-advocate-docs/ports/abl/research/a-full-inspection-of-the-repository.html) proposed —input and options,
 planning, emission, diagnostics—, but doesn't group them into four modules: it
 groups them by **console resource**, because that's what a Rust piece can take
 whole. The background's CGRAM and VRAM are `map_layers`; the objects' CGRAM
@@ -215,7 +215,7 @@ says so.
 * **`emit()`, `main()` and `convert_map()` whole**, of 2,234, ~960 and ~540
   lines. Their stretches share locals, and splitting them means deciding what
   passes from one to another. The table of `emit()`'s stretches is in
-  [`docs/research/el-mapa-de-las-herramientas-de-python.md`](https://lautarodragan.github.io/the-advocate-docs/research/el-mapa-de-las-herramientas-de-python.html), §2.
+  [`research/the-map-of-the-python-tools.md`](https://lautarodragan.github.io/the-advocate-docs/research/the-map-of-the-python-tools.html), §2.
 * **The `.inc` texts that name `snes_convert.py`**: the header of
   `mapdata.inc`, the comment of `anim_table` (which also names `rom/src/`) and
   the `.msu`'s (which says `escribir_msu`). Correcting them changes the `.inc`s

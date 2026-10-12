@@ -51,7 +51,7 @@ cartridge (map 255) and `test_gemelos.py` cover the ROM's
 path.
 
 Branches: `carpintero-eventos` in the-advocate, in the ports and in the book
-(`src/divergences/los-eventos-que-no-entran-en-la-ram.md`). At merge time,
+(`src/divergences/events-that-do-not-fit-in-the-ram.md`). At merge time,
 reinstall `convert events wally mapdata`, and not `cartridge` (it did not change:
 the runtime comes from the checkout). `abl.sfc` changes on purpose; the whole
 suite green without moving goldens.

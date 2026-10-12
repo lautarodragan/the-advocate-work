@@ -77,7 +77,7 @@ midway through the scene, at 80. The night forest ones (`nightbg` at 40 and temp
   doesn't change speed without changing pitch. The expensive option, one track
   per tempo, would today be a single one —`Kfmus5` at 110, whose track, 100, weighs
   25.8 MB—: some 23 MB more for a theme that goes 10% faster. 
-  `decisiones/primero-el-juego-entero-despues-la-calidad.md` applies. There's no
+  `decisions/first-the-whole-game-then-the-quality.md` applies. There's no
   balance in the MSU-1 either: it takes the loudest side.
 - **The battle** saves the map's level and restores it on returning; its theme and the
   victory one go as written (the LDB says 100, 100 and 50). And

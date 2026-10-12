@@ -171,7 +171,7 @@ encounters only calls common event 35, which doesn't compile, so the page compil
 to nothing and, with 498 on, ran forever: after the first battle
 the hero couldn't take a step. An autorun that compiles to nothing is now not carried,
 just like an empty one. In its own commit, and in
-`divergencias/llamada-salteada.md` what it costs.
+`divergences/a-skipped-call.md` what it costs.
 
 **The model** (`batalla.PaginaDeTropa`, `Batalla.revisar_paginas`): knows when
 a page's conditions are met and runs from it only what changes who's fighting
@@ -179,7 +179,7 @@ a page's conditions are met and runs from it only what changes who's fighting
 moments as the ROM. With that `test_eventos_de_tropa.py` predicts in which turn
 each rat appears and the exact HP of the four.
 
-What the ROM does differently, in `divergencias/lo-que-las-paginas-de-tropa-no-modelan.md`:
+What the ROM does differently, in `divergences/what-troop-pages-do-not-model.md`:
 the HP of an actor who isn't fighting, the shake of the scene only, and the thunder.
 
 # What was left out
@@ -191,7 +191,7 @@ the HP of an actor who isn't fighting, the shake of the scene only, and the thun
   has taken off in th" and the king's second call loses the "s" of
   "sounds". It's `battle-texts.md`, which already had it with
   Absorb Aura.
-- **Common event 35** doesn't run: see `divergencias/llamada-salteada.md`.
+- **Common event 35** doesn't run: see `divergences/a-skipped-call.md`.
 
 # Numbers used
 

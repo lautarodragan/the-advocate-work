@@ -19,7 +19,7 @@ The `System` of *A Blurred Line* (`rom/data/db/system.json`) says
 **the game doesn't ask for blocks to cover the map: it asks for the zoom**,
 which the console doesn't do and which since 2026-09-26 had been a fade. The
 ROM wasn't disobeying the `System`; what taro asks for is a design change,
-and it went into `workflow/divergencias/la-entrada-a-la-pelea-en-mosaico.md`.
+and it went into `divergences/the-way-into-battle-in-mosaic.md`.
 The `System` isn't read: the mosaic always goes.
 
 The return to the map (`battle_end_fadein = 16`, the zoom) **is still a

@@ -16,7 +16,7 @@ restriction 3, four turns, released by damage— and 23, `BarkWall` —lowers
 attack, defense and agility, two turns—. Battle has no conditions today;
 making them is a system: duration, restrictions, the controlled one's AI,
 what each one changes. EasyRPG: `Game_Battler`'s `AddState`. Measured in
-[`research/2026-10-05-los-comandos-que-faltan.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-05-los-comandos-que-faltan.html),
+[`research/2026-10-05-the-missing-commands.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-05-the-missing-commands.html),
 "The battle ones".
 
 

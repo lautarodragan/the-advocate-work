@@ -78,7 +78,7 @@ manual patches are in `manual/`, where the runtime is— was already in
   the harness stops importing anything from the tools:
   `rm2k-snes-python-path` and `pruebas/arnes/suite.py` go, and ABL goes back to
   knowing only executables in the PATH, which is the rule of
-  `decisiones/las-herramientas-se-separan-de-abl.md`. The other option was
+  `decisions/the-tools-split-from-abl.md`. The other option was
   a tests folder in the root of this repo, where the ROM tests come back
   in phase 2; but until then its only user would be
   ABL, and a mechanism would have to be maintained for another repo to import it

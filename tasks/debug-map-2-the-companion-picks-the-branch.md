@@ -96,7 +96,7 @@ removes them and turns off theirs. The branches are the game's:
 
 Each NPC's sign says which branch the doors take; the doors' signs say "on
 your companion's path". AG7 still runs common 37 when turning on 150 (see
-`divergencias/los-comunes-del-equipo-corren-al-cerrar-el-menu.md`).
+`divergences/pure-parallel-common-events-run-only-when-what-they-read-changes.md`).
 
 Each door reads 54, 56 and 150 and sets what belongs to that branch **at that
 stretch**, turning off the switches of the others. Where each one comes from is

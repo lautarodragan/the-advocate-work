@@ -16,7 +16,7 @@ completely trivial and we'll have to take it on in parts. This plan will help
 us with that."
 
 It is research and a plan, not code. **The result is
-[`docs/research/el-mapa-de-las-herramientas-de-python.md`](https://lautarodragan.github.io/the-advocate-docs/research/el-mapa-de-las-herramientas-de-python.html)**: taro has to read
+[`research/the-map-of-the-python-tools.md`](https://lautarodragan.github.io/the-advocate-docs/research/the-map-of-the-python-tools.html)**: taro has to read
 it, and above all answer the questions in its §5, which are the ones that
 decide where to start.
 
@@ -61,7 +61,7 @@ Related: `responsibilities-of-snes-convert-py.md` and
 ## What taro decided
 
 On 2026-09-28, on the research's summary: see
-`workflow/decisiones/las-herramientas-se-separan-de-abl.md`, which also has
+`decisions/the-tools-split-from-abl.md`, which also has
 the three questions that were left open (how ABL consumes the tools,
 `cartuchos.py`, and which decisions and divergences go to each side). The
 research was not touched: it is a snapshot.
