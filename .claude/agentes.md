@@ -7,14 +7,12 @@ the assignment tells you what to do, and this, how.
 
 ## Who you are, and what you already did
 
-Your name goes in four places, and that is how you find yourself:
+Your name goes in three places, and that is how you find yourself:
 
 * in the task's `assignee` while you have it, and in its `agents` list
   forever —add it yourself when you take it if it is not there; when you
   move it to `testing` the `assignee` becomes taro, and `agents` stays—;
-* in every commit of yours, on a line at the end, next to the ones the
-  assignment gives you: `Agente: <Your name>`;
-* and as the author and committer of every commit of yours: your name,
+* as the author and committer of every commit of yours: your name,
   with its accent, and `<your name>@agents.taro.codes`, in ASCII and
   lowercase —`aguara@`, `chaja@`, `huron@`, `cardon@`—.
 
@@ -31,8 +29,10 @@ says `extensions.worktreeConfig` is off, tell Hornero instead of turning it
 on yourself.
 
 **Before starting, look at what is yours**: `nu tasks/tasks.nu ls -s "*" -a
-<your name>` in your worktree, and `git log --grep 'Agente: <Your name>'`
-in `~/the-advocate` and `~/the-advocate-ports`. If you already touched the
+<your name>` in your worktree, and `git log --author=<your address>` in
+`~/the-advocate` and `~/the-advocate-ports` —and `git log --grep 'Agente:
+<Your name>'` for what you did before 2026-10-11, when your commits
+carried that line instead—. If you already touched the
 same thing before, start from there and do not measure it again.
 
 ## Before touching anything

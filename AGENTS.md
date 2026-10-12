@@ -734,11 +734,7 @@ every assignment—. They are launched by their name, not as
 `general-purpose`, so the same agent comes back and finds itself: each task
 carries in `agents` everyone who worked on it —the `assignee` becomes taro
 in `testing`—, which `nu tasks/tasks.nu ls -a <name>` filters, and each
-commit of theirs ends with `Agente: <name>`, which `git log --grep` finds.
-That line stays `Agente: <name>`, in Spanish, in all four repos —this one
-and the book included, although their messages are in English—, so that
-the same `git log --grep` keeps finding it. taro asked for it, on
-2026-10-04. They still start from scratch every time: continuity is what
+commit of theirs carries their name as its author. They still start from scratch every time: continuity is what
 they leave written.
 
 **Each one also commits under its own name and address**, since
@@ -750,8 +746,15 @@ GitHub and claim the commits. It is set per worktree, with `git config
 --worktree` —how, in `.claude/agentes.md`—, which needs
 `extensions.worktreeConfig` on in the repo; it is on in all four, and a new
 clone or a recreated `~` needs it again. `git log --author=aguara` finds
-them, and the `Agente:` line stays: it was asked for, and it covers the
-history before that day.
+them.
+
+**Until that day they were found by a line**: from 2026-10-04 each commit
+of theirs ended with `Agente: <name>`, in Spanish in all four repos, and
+the author was taro. What came before 2026-10-11 is found with `git log
+--grep 'Agente: <name>'`, and what came after with `--author`: git ANDs the
+two flags, so there is no single query for both. A commit after that date
+that comes out with taro as its author is an agent that did not set its
+address, and it is fixed when merging, before pushing.
 
 What always has to be done:
 
@@ -1007,5 +1010,5 @@ them, who is the one who pushes.
 
 Messages explain the why, not the what —the diff already says the what—.
 They go in Spanish, except in the book and in this repo, which go in
-English (see "The independent projects are in English"); the final
-`Agente: <name>` line is the same in all four.
+English (see "The independent projects are in English"). Who wrote it is
+said by the author, not by the message (see "Sub-agents").
