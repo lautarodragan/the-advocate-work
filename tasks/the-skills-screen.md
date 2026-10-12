@@ -67,7 +67,7 @@ captures, side by side with the original's under Wine, are in
 **Not covered by the suite**: the weapon requirement of skills with
 physical attributes (not modelled; no game was checked for one), teleport
 and escape skills (always grey; no game teaches one), and the screen in
-the six other games beyond `just arrancan` reaching their first map —no
+the other seven games beyond `just arrancan` reaching their first map —no
 test opens their Tech Skill—.
 
 **Found and not fixed**, as drafts:
