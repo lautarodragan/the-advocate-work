@@ -2,8 +2,8 @@
 name: "The skills menu"
 description: "Tech Skill in the pause menu is always greyed out: show the skills, their descriptions and the selector first, and using them on the map in a second phase"
 type: feature
-status: doing
-assignee: Mulita
+status: testing
+assignee: taro
 agents: [Mulita]
 ---
 
@@ -44,3 +44,26 @@ From the-advocate `28e66b35`, the ports `c97a0dd`, the book `c3e40f4`.
   arrows, a heal with the target window, a full-HP target that does
   nothing, Change Tape and Mix Formula —switch skills whose common event
   runs on the map after the menu closes—, and an actor with no skills.
+* **Delivered**: the research,
+  [`research/2026-10-12-the-skills-menu.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-12-the-skills-menu.html)
+  in the book —branch `mulita-skills-menu` of the-advocate-docs—, with the
+  plan for phases 2 and 3 split into steps, the risks and the measured
+  numbers; and a line in "Known issues" of the six ports that teach skills.
+  The captures and their `LEEME.txt` were left in Mulita's scratch, under
+  `capturas/`. No code: no branch in the-advocate or in the ports, nothing
+  to install.
+* **What it found**: the data is already in the cartridge for the battle;
+  the screen needs the custom menus' full VRAM (ABL's widest page asks some
+  336 pairs, the items screen leaves 184); the description needs two lines
+  for 82 of ABL's 231 skills; Vampires Dawn has 170 B left in its data banks
+  and 53 B of far RAM. And that **four of ABL's systems —Radin's Mix
+  Formula and Field/Battery Repair, Sern's Weapon Forging, Emily's Change
+  Tape— are reached only from Tech Skill**: no event turns on their
+  switches.
+* **Drafts**, both read in the code and not run in the ROM:
+  `battle-offers-skills-that-are-only-for-the-map.md` and
+  `skills-that-cost-100-or-more-are-left-out.md`.
+* **Proposed follow-ups**, not created: the list (phase 2), switch skills
+  from the menu (3.1, what ABL needs first), healing skills from the menu
+  (3.2), items that cast a skill outside battle (3.3). See section 9 of the
+  research.
