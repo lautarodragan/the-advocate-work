@@ -2,8 +2,9 @@
 name: "ChangeSystemGraphics"
 description: "Sunset Over Imdahl changes the System in its startup event (map 11), which therefore does not run: white map and the menu with the wrong colors. Medium: the window with the System changed on the fly; cheap: ignore it"
 type: feature
-status: todo
-agents: [Aguará]
+status: doing
+assignee: Cardón
+agents: [Aguará, Cardón]
 ---
 
 From Aguará's brief analysis (Sonnet), on 2026-10-05, of what taro saw playing the ROMs of the other games.
