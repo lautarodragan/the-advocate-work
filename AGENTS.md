@@ -172,21 +172,24 @@ place is useful to them. What that asks for when working:
   publishes it on its own, with its workflow.
 
 The whys that protect a line of code **still go as a comment on that
-line**, in the language of its repo —English in `the-advocate`, Spanish
-in the ports—: the book is for what has no line to live in.
+line**, in English like everything else: the book is for what has no line
+to live in.
 
 ## The independent projects are in English
 
-**Only the ports go in Spanish** —comments, documentation and commit
-messages—. The other three repos go in English entirely, their commits
-included: the book, `the-advocate-docs`, which is for the outside; this
-repo, `the-advocate-work`, since 2026-10-11, taro's decision the same day
-it went public; and **`the-advocate`, since 2026-10-12** (taro): its
-README, `LAYOUT.md`, the `justfile`, the runtime and its tests. Until that
-day only the directories of `the-advocate` that are separate projects
-went in English, and the rest of the repo and its commits in Spanish:
-what was written before is translated as it is touched, and its history
-stays as it was. What follows is about those separate projects, which
+**Everything goes in English, in all four repos** —code, comments,
+documentation, file and directory names, recipe names, the book's URLs and
+commit messages—, since 2026-10-12 (taro: "basically, EVERYTHING in
+English, but without modifying the git history"). Until then the ports went
+in Spanish, and `the-advocate` only since that same morning; the book and
+this repo were already in English. **The history is not rewritten**: old
+commits, and the old names they cite, stay as they were, and each rename
+leaves its table so that an old citation can be found —`RENAMES.md` here
+for the tasks, the redirects in the book's `book.toml` for its pages—.
+Quoting something old verbatim, in Spanish, is fine. Until each rename
+lands, some names below are still the Spanish ones.
+
+What follows is about those separate projects, which
 went in English first and for a reason of their own. Since 2026-09-19
 they live inside the tools —see `LAYOUT.md`—:
 
@@ -1018,6 +1021,6 @@ push: their work reaches `main` through the merge of the one who launched
 them, who is the one who pushes.
 
 Messages explain the why, not the what —the diff already says the what—.
-They go in English, except in the ports, which go in Spanish (see "The
+They go in English, in all four repos (see "The
 independent projects are in English"). Who wrote it is
 said by the `Co-authored-by` trailer (see "Sub-agents").
