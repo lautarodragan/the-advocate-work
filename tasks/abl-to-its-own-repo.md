@@ -53,7 +53,7 @@ a judgement call that isn't mine to make.
 | `docs/rpgmaker/chipsets.md` | stays | |
 | `docs/rpgmaker/rtp.md` | mixed | what the RTP is and how it's extracted, the tools'; the chipsets and charsets ABL uses, ABL's |
 | `docs/snes/*` | stays | |
-| [`research/graphics-and-sound-from-rm2k-to-the-snes.md`](https://lautarodragan.github.io/the-advocate-docs/research/graphics-and-sound-from-rm2k-to-the-snes.html), [`el-mapa-de-las-herramientas-de-python.md`](https://lautarodragan.github.io/the-advocate-docs/research/the-map-of-the-python-tools.html), [`the-tools-today.md`](https://lautarodragan.github.io/the-advocate-docs/research/the-tools-today.html), [`2026-10-01-the-picture-system.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-01-the-picture-system.html), [`2026-10-02-the-test-game.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-02-the-test-game.html) | stay | the tools'; the test game one is this repo's plan |
+| [`research/graphics-and-sound-from-rm2k-to-the-snes.md`](https://lautarodragan.github.io/the-advocate-docs/research/graphics-and-sound-from-rm2k-to-the-snes.html), [`the-map-of-the-python-tools.md`](https://lautarodragan.github.io/the-advocate-docs/research/the-map-of-the-python-tools.html), [`the-tools-today.md`](https://lautarodragan.github.io/the-advocate-docs/research/the-tools-today.html), [`2026-10-01-the-picture-system.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-01-the-picture-system.html), [`2026-10-02-the-test-game.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-02-the-test-game.html) | stay | the tools'; the test game one is this repo's plan |
 | [`ports/abl/research/a-full-inspection-of-the-repository.md`](https://lautarodragan.github.io/the-advocate-docs/ports/abl/research/a-full-inspection-of-the-repository.html) | ABL | according to Hornero's table |
 | [`ports/abl/research/2026-10-01-the-whole-game-without-msu-1.md`](https://lautarodragan.github.io/the-advocate-docs/ports/abl/research/2026-10-01-the-whole-game-without-msu-1.html) | ABL | how much the whole of ABL weighs and what cuts its cartridge asks for |
 | [`ports/abl/research/2026-10-01-the-maps-through-the-msu-1.md`](https://lautarodragan.github.io/the-advocate-docs/ports/abl/research/2026-10-01-the-maps-through-the-msu-1.html) | ABL | how far ABL's cartridge goes; its test ROM (`experimentos/msu-puerto/`) is already ABL's |
@@ -72,8 +72,8 @@ it is; what was added or changed afterwards:
 | `decisions/the-game-is-playable-without-msu-1.md` | mixed, copy | new; the rule is for ABL, and the engine follows it while ABL is the only game |
 | `decisions/first-the-whole-game-then-the-quality.md` | mixed, copy | new; the same |
 | `decisiones/rm2k-plus.md` | mixed, copy | new; for the tools it's what they are, for ABL it's that what it asks for goes to the engine |
-| `decisions/call-event-into-a-shared-body.md`, `las-imagenes-grandes-en-modo-1.md` | stay | new; the converter's and the runtime's |
-| `divergencias/*` | stay, all of them | according to the table, and the four new ones (`the-way-into-battle-in-mosaic`, `la-velocidad-del-heroe-con-l-y-r`, `what-pictures-as-sprites-do-not-model`, `what-large-pictures-do-not-model`) are the runtime's. ABL doesn't carry `divergencias/`: its `AGENTS.md` points here |
+| `decisions/call-event-into-a-shared-body.md`, `large-pictures-in-mode-1.md` | stay | new; the converter's and the runtime's |
+| `divergencias/*` | stay, all of them | according to the table, and the four new ones (`the-way-into-battle-in-mosaic`, `the-heros-speed-with-l-and-r`, `what-pictures-as-sprites-do-not-model`, `what-large-pictures-do-not-model`) are the runtime's. ABL doesn't carry `divergencias/`: its `AGENTS.md` points here |
 
 The copies go untouched: splitting the prose of a mixed decision is
 taro's call.

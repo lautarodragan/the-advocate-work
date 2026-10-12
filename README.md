@@ -53,15 +53,20 @@ were buried with it.
 book, `the-advocate-docs`, in English, since 2026-10-10 —"the book is for
 people and for AIs", taro's words—. Until that day `decisiones/` and
 `divergencias/` were folders in this repo, and the research was in
-`docs/research/` of the tools and of ABL. File names were kept, so an old
-citation is found by name:
+`docs/research/` of the tools and of ABL. Each folder went to one of the
+book:
 
-* `decisiones/x.md` is `src/decisions/x.md` in the book, except two of
-  ABL's, which are in `src/ports/abl/decisions/`;
-* `divergencias/x.md` is `src/divergences/x.md`;
-* `docs/research/x.md` of the tools is `src/research/x.md`, and ABL's,
-  `src/ports/abl/research/x.md`;
-* `docs/port/x.md` is `src/internals/x.md`.
+* `decisiones/x.md` went to `src/decisions/`, except two of ABL's, which
+  are in `src/ports/abl/decisions/`;
+* `divergencias/x.md`, to `src/divergences/`;
+* `docs/research/x.md` of the tools, to `src/research/`, and ABL's, to
+  `src/ports/abl/research/`;
+* `docs/port/x.md`, to `src/internals/`.
+
+The file names kept their Spanish slugs until 2026-10-12, when they got
+English ones made from their titles: the old name of a page, and where it
+is now, are in the `[output.html.redirect]` table of the book's
+`book.toml`, which also keeps the old URLs working.
 
 **A task cites a page of the book with a link to it on the published
 book**, `https://lautarodragan.github.io/the-advocate-docs/<path>.html`

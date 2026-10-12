@@ -63,8 +63,9 @@ folder of `the-advocate` for this repo, **with** their history: **a
 prefix, and the hashes the tasks cite are from `the-advocate`, or from the
 ports when they talk about ABL. And the same day `decisiones/`,
 `divergencias/` and all the `docs/` —of the tools and of ABL— moved to the
-book, translated and with the same file names: **an old citation is found
-by name**, and this repo's README says where each folder went.
+book, translated; on 2026-10-12 their file names were translated too, so
+**an old citation is found in the redirect table of the book's
+`book.toml`**, and this repo's README says where each folder went.
 
 **taro's pronouns are they/them**, and elle/le in Spanish: in replies,
 tasks, commits, comments and the book. Since 2026-10-11; what was written

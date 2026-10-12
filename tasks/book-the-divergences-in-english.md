@@ -34,7 +34,7 @@ What was decided while translating:
 * Citations between divergences are relative links. The ones to
   `decisiones/` point to `../decisions/<slug>.md` (four:
   `call-event-into-a-shared-body`, `the-timer-has-no-palette-of-its-own`,
-  `las-imagenes-grandes-en-modo-1`, `translucent-events-are-baked`), the
+  `large-pictures-in-mode-1`, `translucent-events-are-baked`), the
   intro to `../decisions/README.md`, and the one to `docs/research/` to
   [`../research/graphics-and-sound-from-rm2k-to-the-snes.md`](https://lautarodragan.github.io/the-advocate-docs/research/graphics-and-sound-from-rm2k-to-the-snes.html): if Mulita put any in
   `ports/abl/decisions/`, it has to be corrected when merging.

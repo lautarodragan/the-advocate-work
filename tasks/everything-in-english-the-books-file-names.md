@@ -28,3 +28,50 @@ This task is the book and the citations of it; the ports are
   `.claude/agentes.md` gets an English name.
 
 ## Log
+
+### 2026-10-12, Cardón
+
+Branches `cardon-english` in the-advocate, the-advocate-ports and
+the-advocate-docs; worktrees in `~/scratch/cardon/english/`.
+
+**The table**: 105 pages, every one under `src/` whose file name was
+Spanish, each renamed from its (English) title; directories were already
+English. It lives twice, the same: `[output.html.redirect]` in the book's
+`book.toml` —an old URL lands on the new page; the value is relative to
+the old page, which shares its directory with the new one— and
+`~/scratch/cardon/english/script/table.tsv`, next to the scripts.
+
+**The scripts**, kept in `~/scratch/cardon/english/script/` to rerun on
+branches merged later:
+
+* `fix_citations.py [--dry] [--show] REPO...` — rewrites every old name as
+  a whole token, and the stale directory in front of it (`workflow/…`,
+  `decisiones/`, `divergencias/`, `docs/research/`, `docs/port/`, an ABL
+  decision cited under the engine's) to the page's directory in the book.
+  It leaves alone what follows `tasks/`, `RENAMES.md` and
+  `decisions-and-divergences-by-repo`, and lists for a human the bare
+  names that could be a page or an old task —six old page names were also
+  old task names—.
+* `wrapped.py REPO...` — old names cut across two lines, which the first
+  cannot see (there was one, in `far_ram.s`).
+* `check_book.py BOOK OUT` — every relative link of `src/` resolves and
+  every redirect lands on a built page.
+* `rename_pages.py`, `redirects.py` — the `git mv`s and the toml table.
+
+**What was done by hand** (judgement commits, separate from the mechanical
+ones): the READMEs of the book and of this repo that said the names were
+kept in Spanish so they could be found by name, now point at the redirect
+table, and Contributing explains it; three lines of studies went back to
+the old names because they describe another repo as it was; in
+the-advocate, citations of the book that did not say so, `tools/port/*.py`
+and the rest of the deleted Python pointed at the Rust that replaced them,
+`rom/pruebas/…` at the ports, `encolar_eventos` (gone with 348cf58c; the
+rule is `pick_pages`', and the orphan comment of a routine that no longer
+exists on top of `seek_event_page` went away) and `animacion_de_mapa`
+(`map_shows_animation`); in the ports, "de las herramientas" → "del
+libro".
+
+**Left as is**: the `.inc` text the converter emits still cites
+`tools/port/…` and `rom/src/…`, on purpose according to its comments; the
+ports' citations of old tasks (`workflow/tasks/*/<Spanish>.md`), which are
+the ports task's.
