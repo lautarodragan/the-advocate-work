@@ -172,20 +172,23 @@ place is useful to them. What that asks for when working:
   publishes it on its own, with its workflow.
 
 The whys that protect a line of code **still go as a comment on that
-line**, in Spanish: the book is for what has no line to live in.
+line**, in the language of its repo —English in `the-advocate`, Spanish
+in the ports—: the book is for what has no line to live in.
 
 ## The independent projects are in English
 
-Everything goes in Spanish —comments, documentation and commit messages—,
-**except the book, `the-advocate-docs`, which is for the outside and goes
-in English entirely, its commits included; this repo, `the-advocate-work`,
-which goes in English entirely too —tasks, README, this file and
-`.claude/`, its commits included— since 2026-10-11, taro's decision the
-same day it went public; and the directories of `the-advocate` that are
-separate projects**, which go in English from end to end: code, comments,
-test names and README. The rest of `the-advocate` and the ports stay as
-they were: comments and commits in Spanish, except those projects. Since
-2026-09-19 they live inside the tools —see `LAYOUT.md`—:
+**Only the ports go in Spanish** —comments, documentation and commit
+messages—. The other three repos go in English entirely, their commits
+included: the book, `the-advocate-docs`, which is for the outside; this
+repo, `the-advocate-work`, since 2026-10-11, taro's decision the same day
+it went public; and **`the-advocate`, since 2026-10-12** (taro): its
+README, `LAYOUT.md`, the `justfile`, the runtime and its tests. Until that
+day only the directories of `the-advocate` that are separate projects
+went in English, and the rest of the repo and its commits in Spanish:
+what was written before is translated as it is touched, and its history
+stays as it was. What follows is about those separate projects, which
+went in English first and for a reason of their own. Since 2026-09-19
+they live inside the tools —see `LAYOUT.md`—:
 
     snes/        the console's formats, knowing nothing about RPG Maker
       gunter/          Gunter: BRR codec and SoundFont reader
@@ -264,8 +267,7 @@ format* —the SPC700, the 65816— is fine: that is the domain, not the
 project.
 
 It is not an oversight to correct: if someone "fixes" it into Spanish, they
-undo the decision. **Commit messages stay in Spanish for those directories
-too**: they belong to the repo.
+undo the decision.
 
 And **what those tools generate goes in English too**, even if it lands in
 the tools repo or in `runtime/`: it is their output, not source of this
@@ -1012,6 +1014,6 @@ push: their work reaches `main` through the merge of the one who launched
 them, who is the one who pushes.
 
 Messages explain the why, not the what —the diff already says the what—.
-They go in Spanish, except in the book and in this repo, which go in
-English (see "The independent projects are in English"). Who wrote it is
+They go in English, except in the ports, which go in Spanish (see "The
+independent projects are in English"). Who wrote it is
 said by the `Co-authored-by` trailer (see "Sub-agents").
