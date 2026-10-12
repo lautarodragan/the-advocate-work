@@ -734,27 +734,26 @@ every assignment—. They are launched by their name, not as
 `general-purpose`, so the same agent comes back and finds itself: each task
 carries in `agents` everyone who worked on it —the `assignee` becomes taro
 in `testing`—, which `nu tasks/tasks.nu ls -a <name>` filters, and each
-commit of theirs carries their name as its author. They still start from scratch every time: continuity is what
-they leave written.
+commit of theirs names them as its co-author. They still start from
+scratch every time: continuity is what they leave written.
 
-**Each one also commits under its own name and address**, since
-2026-10-11 (taro): `Aguará <aguara@agents.taro.codes>`, as author and
-committer, and Hornero as `hornero@agents.taro.codes` in the checkouts of
-`~/` —his merges carry his name and keep each agent's commits theirs—. The
-domain has no mailbox on purpose: nobody can verify those addresses on
-GitHub and claim the commits. It is set per worktree, with `git config
---worktree` —how, in `.claude/agentes.md`—, which needs
-`extensions.worktreeConfig` on in the repo; it is on in all four, and a new
-clone or a recreated `~` needs it again. `git log --author=aguara` finds
-them.
+**The author of every commit is taro**, the agents' and Hornero's too, so
+they count on his GitHub account; who wrote it goes at the end of the
+message, as a trailer:
 
-**Until that day they were found by a line**: from 2026-10-04 each commit
-of theirs ended with `Agente: <name>`, in Spanish in all four repos, and
-the author was taro. What came before 2026-10-11 is found with `git log
---grep 'Agente: <name>'`, and what came after with `--author`: git ANDs the
-two flags, so there is no single query for both. A commit after that date
-that comes out with taro as its author is an agent that did not set its
-address, and it is fixed when merging, before pushing.
+    Co-authored-by: Aguará <aguara@agents.taro.codes>
+
+Hornero's own commits and merges carry `Hornero
+<hornero@agents.taro.codes>`. The address is the name in ASCII and
+lowercase —`chaja@`, `huron@`, `cardon@`—, and the domain has no mailbox
+on purpose: nobody can verify those addresses on GitHub and claim the
+commits. **No `Co-Authored-By` line for Claude**, not even the one the
+tool suggests: taro's, from 2026-10-11. `git log --grep 'Co-authored-by:
+Aguará'` finds an agent's commits, and `git shortlog -s
+--group=trailer:co-authored-by` counts them. Before 2026-10-11 the trailer
+was `Agente: <name>`, in Spanish in all four repos, and that is what `git
+log --grep 'Agente: <name>'` finds. A merged commit without the trailer is
+an agent that forgot it, and it is fixed when merging, before pushing.
 
 What always has to be done:
 
@@ -1011,4 +1010,4 @@ them, who is the one who pushes.
 Messages explain the why, not the what —the diff already says the what—.
 They go in Spanish, except in the book and in this repo, which go in
 English (see "The independent projects are in English"). Who wrote it is
-said by the author, not by the message (see "Sub-agents").
+said by the `Co-authored-by` trailer (see "Sub-agents").

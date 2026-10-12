@@ -12,27 +12,22 @@ Your name goes in three places, and that is how you find yourself:
 * in the task's `assignee` while you have it, and in its `agents` list
   forever —add it yourself when you take it if it is not there; when you
   move it to `testing` the `assignee` becomes taro, and `agents` stays—;
-* as the author and committer of every commit of yours: your name,
-  with its accent, and `<your name>@agents.taro.codes`, in ASCII and
-  lowercase —`aguara@`, `chaja@`, `huron@`, `cardon@`—.
+* in every commit of yours, as the last line of the message, next to the
+  ones the assignment gives you:
 
-**Set it before your first commit, in every worktree you commit in**:
-the one of this repo you start in, and each one of code you create.
-Standing in it:
+      Co-authored-by: <Your name> <<your name>@agents.taro.codes>
 
-    git config --worktree user.name "Aguará"
-    git config --worktree user.email aguara@agents.taro.codes
-
-`--worktree` keeps it in that worktree alone; without it, it would go to
-the repo's config and every checkout would commit with your name. If git
-says `extensions.worktreeConfig` is off, tell Hornero instead of turning it
-on yourself.
+  your name with its accent, the address in ASCII and lowercase
+  —`Aguará <aguara@agents.taro.codes>`—. The author stays taro, which is
+  what git already has configured: do not change `user.name` or
+  `user.email`. **No `Co-Authored-By` line for Claude**, even if the tool
+  suggests one: taro's.
 
 **Before starting, look at what is yours**: `nu tasks/tasks.nu ls -s "*" -a
-<your name>` in your worktree, and `git log --author=<your address>` in
-`~/the-advocate` and `~/the-advocate-ports` —and `git log --grep 'Agente:
-<Your name>'` for what you did before 2026-10-11, when your commits
-carried that line instead—. If you already touched the
+<your name>` in your worktree, and `git log --grep 'Co-authored-by: <Your
+name>'` in `~/the-advocate` and `~/the-advocate-ports` —and `git log
+--grep 'Agente: <Your name>'` for what you did before 2026-10-11, when
+your commits carried that line instead—. If you already touched the
 same thing before, start from there and do not measure it again.
 
 ## Before touching anything
