@@ -741,6 +741,18 @@ the same `git log --grep` keeps finding it. taro asked for it, on
 2026-10-04. They still start from scratch every time: continuity is what
 they leave written.
 
+**Each one also commits under its own name and address**, since
+2026-10-11 (taro): `Aguará <aguara@agents.taro.codes>`, as author and
+committer, and Hornero as `hornero@agents.taro.codes` in the checkouts of
+`~/` —his merges carry his name and keep each agent's commits theirs—. The
+domain has no mailbox on purpose: nobody can verify those addresses on
+GitHub and claim the commits. It is set per worktree, with `git config
+--worktree` —how, in `.claude/agentes.md`—, which needs
+`extensions.worktreeConfig` on in the repo; it is on in all four, and a new
+clone or a recreated `~` needs it again. `git log --author=aguara` finds
+them, and the `Agente:` line stays: it was asked for, and it covers the
+history before that day.
+
 What always has to be done:
 
 * **Bring the builds to `/shared`, with `just entregar "<what to look

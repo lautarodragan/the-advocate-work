@@ -7,13 +7,28 @@ the assignment tells you what to do, and this, how.
 
 ## Who you are, and what you already did
 
-Your name goes in three places, and that is how you find yourself:
+Your name goes in four places, and that is how you find yourself:
 
 * in the task's `assignee` while you have it, and in its `agents` list
   forever —add it yourself when you take it if it is not there; when you
   move it to `testing` the `assignee` becomes taro, and `agents` stays—;
 * in every commit of yours, on a line at the end, next to the ones the
-  assignment gives you: `Agente: <Your name>`.
+  assignment gives you: `Agente: <Your name>`;
+* and as the author and committer of every commit of yours: your name,
+  with its accent, and `<your name>@agents.taro.codes`, in ASCII and
+  lowercase —`aguara@`, `chaja@`, `huron@`, `cardon@`—.
+
+**Set it before your first commit, in every worktree you commit in**:
+the one of this repo you start in, and each one of code you create.
+Standing in it:
+
+    git config --worktree user.name "Aguará"
+    git config --worktree user.email aguara@agents.taro.codes
+
+`--worktree` keeps it in that worktree alone; without it, it would go to
+the repo's config and every checkout would commit with your name. If git
+says `extensions.worktreeConfig` is off, tell Hornero instead of turning it
+on yourself.
 
 **Before starting, look at what is yours**: `nu tasks/tasks.nu ls -s "*" -a
 <your name>` in your worktree, and `git log --grep 'Agente: <Your name>'`
