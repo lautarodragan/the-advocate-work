@@ -2,8 +2,8 @@
 name: "Everything in English: the book's file names and URLs"
 description: "The book's pages keep the Spanish file names they had before the translation: give them English names, redirect the old URLs, and fix every citation in the four repos"
 type: chore
-status: doing
-assignee: Cardón
+status: testing
+assignee: taro
 agents: [Cardón]
 ---
 
@@ -75,3 +75,23 @@ libro".
 `tools/port/…` and `rom/src/…`, on purpose according to its comments; the
 ports' citations of old tasks (`workflow/tasks/*/<Spanish>.md`), which are
 the ports task's.
+
+**Merged with main** after Mulita's skills screen, in the four branches,
+and the script rerun on what it brought: nothing to change.
+
+**Verified**: `mdbook build` (v0.5.4) without warnings; `check_book.py`:
+every relative link resolves and the 105 redirects land (an old URL such
+as `/decisions/la-grilla-vive-en-la-wram.html` is a page that sends to
+`the-grid-lives-in-wram.html` in the same directory); in the-advocate,
+`just test` and `just rust-test` green; `abl.sfc` (`just cartuchos release` in
+a ports worktree of this branch) built twice, with this branch's runtime
+and converter (`install-local cartridge convert`) and with the global
+tools of main at 5573c3e5: both
+`417978e33580d3613241143b6b6b1d287ffb771bca96e31dfd4ecdc6bcda3522`, byte for
+byte. The suite was not run: comments only.
+
+**To install when merging**: `just install convert` (an error message
+changed); the rest are comments.
+
+Rerun `fix_citations.py` and `wrapped.py` on any branch merged after this
+one; a page renamed again gets its line in `book.toml` and in `table.tsv`.
