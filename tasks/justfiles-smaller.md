@@ -39,7 +39,7 @@ The scripts that did the counting, in case they need redoing, are in
 | `ditto-test` | Ditto's `cargo test`, with `DITTO_CORPUS` | DITTO.md | 2026-09-29 | **question 1** |
 | `ditto-round-trip` | Ditto in release with `--include-ignored`, and it refuses without `DITTO_CORPUS` | DITTO.md | 2026-09-29 | keep: it is not a bare `cargo test` |
 | `install` | `cargo install` of the named projects, or of all of them, into `CARGO_ROOT` | AGENTS.md, `tools/README.md`, the converter's `stage.rs` error | 2026-10-04 | keep |
-| `install-local` | the same into a `bin/` of a worktree; refuses in the main checkout | AGENTS.md, `.claude/agentes.md`, `tools/README.md` | 2026-10-04 | keep |
+| `install-local` | the same into a `bin/` of a worktree; refuses in the main checkout | AGENTS.md, `.claude/roster.md`, `tools/README.md` | 2026-10-04 | keep |
 | `_not_in_main_checkout`, `_install` | private ones of the two above | `install`, `install-local` | — | keep; the symlink cleanup of `_install`, **question 2** |
 | `which` | which binary this checkout resolves for each tool | one task (`bytecodes-declared-in-rust`) | 2026-10-02 | keep, and **fix**: it was missing `rm2k-snes-mapdata` and `rm2k-snes-audio` |
 

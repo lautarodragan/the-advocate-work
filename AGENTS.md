@@ -739,7 +739,7 @@ in with `git merge` from those worktrees.
 
 **They are a fixed roster, since 2026-10-04**: one file per agent in
 `.claude/agents/`, with a name from Argentine flora or fauna, and what
-applies to all of them in `.claude/agentes.md` —what used to be repeated in
+applies to all of them in `.claude/roster.md` —what used to be repeated in
 every assignment—. They are launched by their name, not as
 `general-purpose`, so the same agent comes back and finds itself: each task
 carries in `agents` everyone who worked on it —the `assignee` becomes taro
