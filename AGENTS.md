@@ -768,7 +768,11 @@ What always has to be done:
   on the host, and `/shared` is: it is where taro finds them. They go to
   `/shared/builds/<date>-<ABL commit>-<tools commit>/`, and the text passed
   to the recipe goes to the `LEEME.txt`: what changed, what to look at and
-  which limitations were hit. Until 2026-09-24 they went to
+  which limitations were hit. **The other games go with `just entregar`
+  from the root of the ports**, all seven at once, to
+  `/shared/builds/otros-juegos/`, which is overwritten: until 2026-10-12
+  they were copied by hand, and taro played two-day-old ones without
+  anyone noticing. Until 2026-09-24 they went to
   `pruebas-manuales/`, inside the repo, and until 2026-09-25 they were
   assembled by hand, which was repeated often and went wrong.
 
