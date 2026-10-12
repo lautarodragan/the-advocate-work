@@ -31,3 +31,23 @@ It waits for Mulita's skills screen and the book's file names to merge, so
 nobody renames under someone's feet.
 
 ## Log
+
+### 2026-10-12, Chajá: step 1, the mechanical renames
+
+Branches `chaja-english` in the-advocate (from `65885882`), the ports
+(`0bf10fd`) and the book (`49c0421`).
+
+Found before starting:
+
+* **`release` carries every case, sorted by name** (`all_cases` in
+  `rm2k-snes/cartridge/src/cartridges.rs`), so renaming the cases reorders
+  `abl.sfc`'s test pages: `abl.sfc` cannot stay byte for byte equal across
+  that one commit. It is verified instead against a reference built from
+  the old tree with only the case files renamed.
+* The tools know Spanish names of the ports beyond `desde_imagen`: the
+  auto patches' keys and folders (`parches/auto/mapas`, `fusiones`,
+  `colores`…, written by `rm2k-snes/patches/src/text.rs`), the volume
+  ceilings (`musica/techos.toml`, `temas`, `huella`…), the manual fork's
+  folders (`mapas/`, `nuevos/`, `chipsets/`), the `@entero` suffix of
+  `[sound_effects.whole]`, and the build's `parches/usos.json` and
+  `parches-manual/`.
