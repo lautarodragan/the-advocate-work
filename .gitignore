@@ -1,3 +1,4 @@
 # What the CLI writes on its own and is not part of the repo.
 .claude/scheduled_tasks.lock
 .claude/worktrees/
+_site/

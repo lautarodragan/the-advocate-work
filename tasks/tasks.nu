@@ -35,6 +35,7 @@ def parse_file [file: string] {
     description: $task_description,
     assignee: $assignee,
     agents: $agents,
+    listed_agents: ($yml | get -o agents | default []),
   }
 }
 
@@ -101,4 +102,56 @@ def "main open" [
   if ($chosen | is-empty) { return }
 
   run-external ($env.EDITOR? | default micro) $chosen.file
+}
+
+# The tasks as a static page: replaces the TASKS marker of
+# `site/index.html` with one section per state and writes it to
+# `<out>/index.html`. It is what `.github/workflows/pages.yml` publishes;
+# locally it is looked at by opening the file.
+def "main html" [
+  --out (-o): string = "_site"
+] {
+  let root = $env.FILE_PWD | path dirname
+  let order = [doing testing todo draft wishlist done]
+
+  let tasks = all_tasks | each { |t| $t | insert body (task_body $t.file) }
+  let states = $tasks | get status | uniq
+    | sort-by { |s| $order | enumerate | where item == $s | get -o 0.index | default 99 }
+
+  let html = $states | each { |s|
+    let items = $tasks | where status == $s | sort-by task_type name | each { task_html } | str join "\n"
+    $"<section data-status=\"($s | escape)\">\n<h2>($s | escape)</h2>\n($items)\n</section>"
+  } | str join "\n"
+
+  let page = open --raw ($root | path join site index.html) | str replace '<!-- TASKS -->' $html
+  mkdir ($root | path join $out)
+  $page | save --force ($root | path join $out index.html)
+}
+
+# What comes after the frontmatter.
+def task_body [file: string] {
+  open --raw $file | str replace --regex '(?s)\A---\n.*?\n---\n' '' | str trim
+}
+
+def escape [] {
+  $in | into string | str replace --all '&' '&amp;' | str replace --all '<' '&lt;'
+    | str replace --all '>' '&gt;' | str replace --all '"' '&quot;'
+}
+
+# One task, closed: its anchor is its file name, which never changes, so
+# `#<name>` links it from outside.
+def task_html [] {
+  let t = $in
+  let id = $t.file | path parse | get stem
+  let agents = if ($t.listed_agents | is-empty) { "" } else { $" · agents: ($t.listed_agents | str join ', ' | escape)" }
+  let assignee = if ($t.assignee | is-empty) { "" } else { $" · assignee: ($t.assignee | escape)" }
+  let source = $"https://github.com/lautarodragan/the-advocate-work/blob/main/tasks/($id).md"
+  [
+    $"<details class=\"task\" id=\"($id | escape)\" data-status=\"($t.status | escape)\">"
+    $"<summary><span class=\"type\">($t.task_type | escape)</span><span class=\"name\">($t.name | escape)</span>"
+    $"<span class=\"desc\">($t.description | escape)</span></summary>"
+    $"<p class=\"meta\"><a href=\"#($id)\">#</a> · <a href=\"($source)\">($id).md</a>($assignee)($agents)</p>"
+    $"<div class=\"body raw\">($t.body | escape)</div>"
+    "</details>"
+  ] | str join ''
 }

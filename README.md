@@ -28,6 +28,14 @@ exception: a citation with an old Spanish name is found in
 way —lowercase, hyphens, no leading article—.
 `nu tasks/tasks.nu ls -s <state>` lists them.
 
+**They are also a web page**, at
+<https://lautarodragan.github.io/the-advocate-work/>: grouped by state,
+with a filter, and each one opens to its body; `#<name>` links a task. It
+is built by `nu tasks/tasks.nu html`, which fills the `<!-- TASKS -->` of
+`site/index.html` —the page's style and script live there— and writes
+`_site/index.html`; `.github/workflows/pages.yml` publishes it on each
+push. It is taro's, from 2026-10-11.
+
 **This repo is public**: nothing written here can be private.
 
 **A draft is not ready to be taken.** It is what an agent finds and does

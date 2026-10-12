@@ -1,0 +1,44 @@
+# The tasks page: `nu tasks/tasks.nu html` builds it from `tasks/` and
+# `site/index.html`, and it is published on GitHub Pages on each push to
+# main that touches either. The repo's Pages source has to be "GitHub
+# Actions" (Settings → Pages) for the deploy to have somewhere to go.
+name: Tasks page
+
+on:
+  push:
+    branches: [main]
+    paths: [tasks/**, site/**, .github/workflows/pages.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # The same version as in the container, where the script is written
+      # and run: nushell still breaks syntax between releases.
+      - uses: hustcer/setup-nu@v3
+        with:
+          version: "0.115.1"
+      - run: nu tasks/tasks.nu html --out _site
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
