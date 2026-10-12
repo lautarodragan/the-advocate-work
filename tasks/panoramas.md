@@ -23,7 +23,7 @@ different speed from the map". The ones he named:
 
 # What was done (Cardón, 2026-10-05)
 
-The study is in `docs/research/2026-10-05-los-panoramas.md`: the 45 maps with
+The study is in [`docs/research/2026-10-05-los-panoramas.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-05-los-panoramas.html): the 45 maps with
 a panorama measured —how much of it shows, how it moves, what they have above
 the hero, what they lose on each path—, the rooftop and the intro, and the
 cost.

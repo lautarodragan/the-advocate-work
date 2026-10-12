@@ -6,7 +6,7 @@ status: done
 assignee: taro
 ---
 
-Phases 4 and 5 of `docs/research/2026-10-01-el-sistema-de-imagenes.md`
+Phases 4 and 5 of [`docs/research/2026-10-01-el-sistema-de-imagenes.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-01-el-sistema-de-imagenes.html)
 (Jilguero), from taro on 2026-10-02. The portable console is not needed to
 play, but its pieces serve the custom systems of many games. What
 is missing: automatic common events (not the parallel ones), a `CallEvent`

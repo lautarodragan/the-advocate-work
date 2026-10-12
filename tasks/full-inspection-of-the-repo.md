@@ -15,7 +15,7 @@ concrete priorities, without fixing status metrics that go stale: each one is
 expressed through the command that reproduces it.
 
 Finished on 2026-09-28. The result is in
-`docs/research/inspeccion-integral-del-repo.md`: the repo has a strong architecture
+[`docs/research/inspeccion-integral-del-repo.md`](https://lautarodragan.github.io/the-advocate-docs/ports/abl/research/inspeccion-integral-del-repo.html): the repo has a strong architecture
 and testing strategy; the priorities are making the environment reproducible,
 reducing the blast radius of the converter and clarifying licence and
 provenance. The ROM suite could not be run: this environment lacked `just`,

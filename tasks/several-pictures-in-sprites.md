@@ -6,7 +6,7 @@ status: done
 assignee: taro
 ---
 
-Phase 2 of `docs/research/2026-10-01-el-sistema-de-imagenes.md` (Jilguero),
+Phase 2 of [`docs/research/2026-10-01-el-sistema-de-imagenes.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-01-el-sistema-de-imagenes.html) (Jilguero),
 from taro on 2026-10-01. The BG1 plane in mode 1 for large pictures
 is phase 3, separately: taro approved mode 1 only while a large picture
 covers the map (`decisiones/las-imagenes-grandes-en-modo-1.md`).

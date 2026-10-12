@@ -7,7 +7,7 @@ assignee: taro
 ---
 
 Steps 3 and 4 of the plan in
-`docs/research/el-mapa-de-las-herramientas-de-python.md` (§4, and §3's table
+[`docs/research/el-mapa-de-las-herramientas-de-python.md`](https://lautarodragan.github.io/the-advocate-docs/research/el-mapa-de-las-herramientas-de-python.html) (§4, and §3's table
 with the hooks). taro authorized Hornero on 2026-09-29 to decide the open
 points without waiting for him. What was decided:
 

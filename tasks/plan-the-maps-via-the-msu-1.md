@@ -18,7 +18,7 @@ decompression chips (S-DD1, SPC7110, SA-1) was added.
 # Done
 
 Lechuza, on 2026-10-01. **The study is
-`docs/research/2026-10-01-los-mapas-por-el-msu-1.md`**; what's below is what
+[`docs/research/2026-10-01-los-mapas-por-el-msu-1.md`](https://lautarodragan.github.io/the-advocate-docs/ports/abl/research/2026-10-01-los-mapas-por-el-msu-1.html)**; what's below is what
 has to be decided and what was left loose.
 
 * **The whole game is 8,514 KB of data**: 266 banks against 124. It doesn't

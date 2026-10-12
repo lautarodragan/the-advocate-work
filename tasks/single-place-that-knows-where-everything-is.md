@@ -6,7 +6,7 @@ status: done
 assignee: taro
 ---
 
-Step 2 of the plan in `docs/research/el-mapa-de-las-herramientas-de-python.md`
+Step 2 of the plan in [`docs/research/el-mapa-de-las-herramientas-de-python.md`](https://lautarodragan.github.io/the-advocate-docs/research/el-mapa-de-las-herramientas-de-python.html)
 (§4). It goes before the move of `data/`, `parches/`, `pruebas/` and the engine
 (see `workflow/decisiones/las-herramientas-se-separan-de-abl.md`): with this
 done, moving a folder is changing one line.

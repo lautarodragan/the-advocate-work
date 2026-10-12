@@ -6,7 +6,7 @@ status: done
 assignee: taro
 ---
 
-Third step of the road to Rust in `docs/research/las-herramientas-hoy.md`,
+Third step of the road to Rust in [`docs/research/las-herramientas-hoy.md`](https://lautarodragan.github.io/the-advocate-docs/research/las-herramientas-hoy.html),
 in parallel with Carancho. Hornero decided it: the audio goes in parts, and
 this is the first, the music compiler —`midi`, `music`, `sdsp`, `spc700`,
 `snes_music`, `snes_samples`, `brr_samples`, `msu_effects`—. `msu.py` and

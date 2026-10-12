@@ -9,4 +9,4 @@ assignee: Cardón
 
 taro, on 2026-10-12: the first two steps of `cheaper-windows.md`, the ones
 worth doing even if nothing else is. What each saves, per game, is in
-`research/2026-10-11-las-ventanas.md` in the book.
+[`research/2026-10-11-las-ventanas.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-11-las-ventanas.html) in the book.

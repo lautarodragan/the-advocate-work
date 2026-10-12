@@ -26,7 +26,7 @@ study pointed out, and the argument for not delaying this.
 
 # The plan
 
-The study is `research/2026-10-02-el-juego-de-pruebas.md` in the book;
+The study is [`research/2026-10-02-el-juego-de-pruebas.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-02-el-juego-de-pruebas.html) in the book;
 phase 1, ABL out, is done. What follows is its phase 2, the minimal game:
 
 * the seven assumptions of its section 3 —each a small change in

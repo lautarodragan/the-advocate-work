@@ -137,9 +137,9 @@ Not counting the README: **31 tools, 0 ABL and 0 mixed.**
 | `docs/rpgmaker/chipsets.md` | tools | The RM2k format. |
 | `docs/rpgmaker/rtp.md` | mixed | What Don Miguel's RTP is, why EasyRPG's is no good and how it is extracted belong to the tools; the 5 ChipSets and 17 CharSets that ABL uses are ABL's. |
 | `docs/snes/` | tools | The console and the emulators. |
-| `docs/research/graficos-de-rm2k-a-snes.md` | tools | A study of how to convert RM2k's graphics, measured on ABL; tools decisions and divergences cite it. |
-| `docs/research/el-mapa-de-las-herramientas-de-python.md` | tools | The map of `tools/` and the plan for the split. |
-| `docs/research/inspeccion-integral-del-repo.md` | abl | A snapshot of the whole repo before the split, and more than half of it is about the ROM tests and their harness, which stay in ABL. It is not split: it is a snapshot. |
+| [`docs/research/graficos-de-rm2k-a-snes.md`](https://lautarodragan.github.io/the-advocate-docs/research/graficos-de-rm2k-a-snes.html) | tools | A study of how to convert RM2k's graphics, measured on ABL; tools decisions and divergences cite it. |
+| [`docs/research/el-mapa-de-las-herramientas-de-python.md`](https://lautarodragan.github.io/the-advocate-docs/research/el-mapa-de-las-herramientas-de-python.html) | tools | The map of `tools/` and the plan for the split. |
+| [`docs/research/inspeccion-integral-del-repo.md`](https://lautarodragan.github.io/the-advocate-docs/ports/abl/research/inspeccion-integral-del-repo.html) | abl | A snapshot of the whole repo before the split, and more than half of it is about the ROM tests and their harness, which stay in ABL. It is not split: it is a snapshot. |
 
 ## The ones that no longer hold, for taro
 

@@ -7,7 +7,7 @@ agents: [Aguará, Chajá]
 assignee: taro
 ---
 
-From Aguará's study, `docs/research/2026-10-05-los-comandos-que-faltan.md`; `rm2k-snes-events culprits` measured it. taro, on 2026-10-05: leave them in todo, without launching yet. None is in release; common event 45, since it doesn't compile, makes 47
+From Aguará's study, [`docs/research/2026-10-05-los-comandos-que-faltan.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-05-los-comandos-que-faltan.html); `rm2k-snes-events culprits` measured it. taro, on 2026-10-05: leave them in todo, without launching yet. None is in release; common event 45, since it doesn't compile, makes 47
 calls from Eisen's rooms get skipped.
 
 ## Already done

@@ -7,6 +7,6 @@ agents: [Chajá]
 assignee: taro
 ---
 
-From the survey of other games (`docs/research/2026-10-05-otros-juegos.md`):
+From the survey of other games ([`docs/research/2026-10-05-otros-juegos.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-05-otros-juegos.html)):
 Dooms 2 has three BMPs (`CharSet/clown.bmp` among them), and it built only with
 a copy converted to PNG. taro, on 2026-10-05: "let's go with bmp".

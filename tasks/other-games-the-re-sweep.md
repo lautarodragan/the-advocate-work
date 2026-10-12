@@ -20,7 +20,7 @@ With the global tools (snes-rm2k 1afe6457), in a worktree of the ports of my own
 
 ## Result
 
-In the book, branch `aguara-rebarrido` of snes-rm2k-docs: `src/research/2026-10-10-otros-juegos-de-nuevo.md` and an "As of 2026-10-10" section in each `src/ports/<juego>/README.md`. The ROMs, as the ports are committed, in `/shared/builds/otros-juegos/` (all except Vampires Dawn, which does not build).
+In the book, branch `aguara-rebarrido` of snes-rm2k-docs: [`src/research/2026-10-10-otros-juegos-de-nuevo.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-10-otros-juegos-de-nuevo.html) and an "As of 2026-10-10" section in each `src/ports/<juego>/README.md`. The ROMs, as the ports are committed, in `/shared/builds/otros-juegos/` (all except Vampires Dawn, which does not build).
 
 What is new behind:
 

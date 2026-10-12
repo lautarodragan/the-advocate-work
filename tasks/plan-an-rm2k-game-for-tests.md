@@ -41,7 +41,7 @@ Leñatero finds it feasible":
 
 ## Result
 
-The study is `docs/research/2026-10-02-el-juego-de-pruebas.md`. The short version:
+The study is [`docs/research/2026-10-02-el-juego-de-pruebas.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-02-el-juego-de-pruebas.html). The short version:
 
 * Of the 999 cases, 605 in 80 files are the engine's and can be written
   against a synthetic game; 208 in 20 run on both games; 186 in 38
