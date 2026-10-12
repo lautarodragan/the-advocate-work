@@ -24,6 +24,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        # The whole history: each task's date is its last commit.
+        with:
+          fetch-depth: 0
       # The same version as in the container, where the script is written
       # and run: nushell still breaks syntax between releases.
       - uses: hustcer/setup-nu@v3

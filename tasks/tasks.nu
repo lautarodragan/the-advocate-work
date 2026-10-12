@@ -114,18 +114,34 @@ def "main html" [
   let root = $env.FILE_PWD | path dirname
   let order = [doing testing todo draft wishlist done]
 
-  let tasks = all_tasks | each { |t| $t | insert body (task_body $t.file) }
+  let changed = last_changes $root
+  let tasks = all_tasks | each { |t|
+    let id = $t.file | path parse | get stem
+    $t | insert body (task_body $t.file) | insert changed ($changed | get -o $id | default "")
+  }
   let states = $tasks | get status | uniq
     | sort-by { |s| $order | enumerate | where item == $s | get -o 0.index | default 99 }
 
   let html = $states | each { |s|
-    let items = $tasks | where status == $s | sort-by task_type name | each { task_html } | str join "\n"
+    let items = $tasks | where status == $s | sort-by name | sort-by --reverse { |t| if ($t.changed | is-empty) { 0 } else { $t.changed | into datetime | into int } } | each { task_html } | str join "\n"
     $"<section data-status=\"($s | escape)\">\n<h2>($s | escape)</h2>\n($items)\n</section>"
   } | str join "\n"
 
   let page = open --raw ($root | path join site index.html) | str replace '<!-- TASKS -->' $html
   mkdir ($root | path join $out)
   $page | save --force ($root | path join $out index.html)
+}
+
+# When each task last changed, from git: `{<stem>: <ISO date>}`. The page
+# puts the most recent first, so that what moved is what one sees. A task
+# not committed yet has no entry, and goes last. It needs the whole history:
+# the workflow checks out with `fetch-depth: 0` for that.
+def last_changes [root: string] {
+  git -C $root log --format=@%cI --name-only -- tasks/*.md
+  | split row "@" | where $it != ""
+  | each { |c| let l = $c | lines | where $it != ""; $l | skip 1 | each { |f| {id: ($f | path parse | get stem), date: $l.0} } }
+  | flatten | uniq-by id
+  | reduce --fold {} { |r, acc| $acc | insert $r.id $r.date }
 }
 
 # What comes after the frontmatter.
@@ -145,12 +161,13 @@ def task_html [] {
   let id = $t.file | path parse | get stem
   let agents = if ($t.listed_agents | is-empty) { "" } else { $" · agents: ($t.listed_agents | str join ', ' | escape)" }
   let assignee = if ($t.assignee | is-empty) { "" } else { $" · assignee: ($t.assignee | escape)" }
+  let changed = if ($t.changed | is-empty) { "" } else { $" · changed <time datetime=\"($t.changed)\">($t.changed | str substring 0..9)</time>" }
   let source = $"https://github.com/lautarodragan/the-advocate-work/blob/main/tasks/($id).md"
   [
     $"<details class=\"task\" id=\"($id | escape)\" data-status=\"($t.status | escape)\">"
     $"<summary><span class=\"type\">($t.task_type | escape)</span><span class=\"name\">($t.name | escape)</span>"
     $"<span class=\"desc\">($t.description | escape)</span></summary>"
-    $"<p class=\"meta\"><a href=\"#($id)\">#</a> · <a href=\"($source)\">($id).md</a>($assignee)($agents)</p>"
+    $"<p class=\"meta\"><a href=\"#($id)\">#</a> · <a href=\"($source)\">($id).md</a>($changed)($assignee)($agents)</p>"
     $"<div class=\"body raw\">($t.body | escape)</div>"
     "</details>"
   ] | str join ''
