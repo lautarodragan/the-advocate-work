@@ -16,7 +16,7 @@ About 140 of Sunset's pictures are like that: roofs and ceilings with the
 transparent colour (index 0 in 50-99 % of the picture), translucent lights and
 shadows, fogs at 45-95 %. Almost every map has one. ABL's large
 pictures are opaque screens over black, and that is what they were
-designed for (`lo-que-las-imagenes-grandes-no-modelan.md` in the book).
+designed for (`what-large-pictures-do-not-model.md` in the book).
 
 The two paths are in the task above: leave them out with a
 criterion, or do them as a layer over the map.
@@ -62,7 +62,7 @@ Base: the-advocate `6f933ff8`, ports `b499ab4`, book `491624d`. Branches
 
 ### The analysis
 
-In the book: [`ports/sunset-over-imdahl/research/2026-10-11-las-imagenes.md`](https://lautarodragan.github.io/the-advocate-docs/ports/sunset-over-imdahl/research/2026-10-11-las-imagenes.html).
+In the book: [`ports/sunset-over-imdahl/research/2026-10-11-the-pictures-over-the-map.md`](https://lautarodragan.github.io/the-advocate-docs/ports/sunset-over-imdahl/research/2026-10-11-the-pictures-over-the-map.html).
 By group: roofs and ceilings (61 maps, cut-outs of the panorama: they go with
 their cells' priority, free), lights (50) and shadows (22) —flat
 masks at 10-35 %—, fogs (38, screen textures), animated ones (flags,
@@ -81,7 +81,7 @@ colour math) is written there, not done: it is taro's decision.
   commands are accepted without being carried out.
 * ports `ce01ff9`: Sunset turns it on. 183 pictures on 64 maps.
 * book `a5554be`: the investigation, the divergence
-  `las-imagenes-dentro-del-mapa.md` and the port's page.
+  `pictures-drawn-into-the-map.md` and the port's page.
 * Seen with captures (snes9x) of 28, 2, 13, 33, 7 and the scene on 22,
   against the original with Wine on the same cell: in
   `/shared/capturas/2026-10-11-sunset-imagenes/`. For the original I built

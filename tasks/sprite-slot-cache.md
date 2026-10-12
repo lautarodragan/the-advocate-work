@@ -225,7 +225,7 @@ Now, without a free place, **the first one whose route finished hands it over to
 asking** (`reclaim_slot` in `event_pages.s`), and the converter warns instead of
 stopping. The event that releases it keeps where it is facing and loses the
 rest the route had changed: see
-`divergencias/las-rutas-terminadas-sueltan-su-lugar.md`. On the farm there are never
+`divergences/finished-routes-give-up-their-slot.md`. On the farm there are never
 more than nine moving at once. It is a departure from the assignment —"if it does not
 fit, stop"—: what did not fit was no longer VRAM but this, and it was small.
 

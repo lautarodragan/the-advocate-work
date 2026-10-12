@@ -11,7 +11,7 @@ From taro, on 2026-10-02, on seeing that a test of the event compiler uses
 places, pictures, the acronym) gives 125 lines in some 50 files of `tools/`.
 
 **The engine comments that name ABL stay**, as
-`decisiones/las-herramientas-se-separan-de-abl.md` says ("for now, out of
+`decisions/the-tools-split-from-abl.md` says ("for now, out of
 care"), and the limits measured against ABL keep their comment. What is
 cleaned up is the rest: test data and fixtures, defaults, literals in the
 code. And it is needed for the test game: this repo must not carry anything of

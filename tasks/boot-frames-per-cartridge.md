@@ -16,7 +16,7 @@ Tijereta's proposal, as is (branch `carpintero-boot-frames` of the-advocate: `3b
 * `runtime/far_ram.s` no longer has `BOOT_FRAMES`: it has `BOOT_FRAMES_FLOOR = 44`, with the why.
 * `rm2k-snes-audio cartridge` reads that floor —as it used to read the constant— and writes into the cartridge's `musicdata.inc` `BOOT_FRAMES = max(floor, ceiling of the estimate)`, next to the header (further down, `rm2k-snes-assemble` splits the file into banks and the comments are lost). It no longer refuses to build; the only ceiling is the `boot_frames` byte: more than 255 doesn't build.
 * The floor stays in the runtime and not as a knob in `rm2k-snes.toml`: what it protects belongs to the runtime, and no game asks for another.
-* The book (branch `carpintero-boot-frames` of the-advocate-docs): the decision `el-arranque-esta-dimensionado-para-el-paquete-de-arranque.md` and `internals/audio.md`.
+* The book (branch `carpintero-boot-frames` of the-advocate-docs): the decision `boot-is-sized-for-the-boot-package.md` and `internals/audio.md`.
 
 No opcode was needed.
 

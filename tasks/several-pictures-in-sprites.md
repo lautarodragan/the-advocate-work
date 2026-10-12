@@ -6,10 +6,10 @@ status: done
 assignee: taro
 ---
 
-Phase 2 of [`docs/research/2026-10-01-el-sistema-de-imagenes.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-01-el-sistema-de-imagenes.html) (Jilguero),
+Phase 2 of [`research/2026-10-01-the-picture-system.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-01-the-picture-system.html) (Jilguero),
 from taro on 2026-10-01. The BG1 plane in mode 1 for large pictures
 is phase 3, separately: taro approved mode 1 only while a large picture
-covers the map (`decisiones/las-imagenes-grandes-en-modo-1.md`).
+covers the map (`decisions/large-pictures-in-mode-1.md`).
 
 Done by Gallareta, from `main` at `71782626`, with `main` merged at
 `7d4c1c7b` (Label and JumpToLabel, by Pitogüé). **It awaits taro's approval
@@ -98,7 +98,7 @@ map in black: it's phase 3's.
     return from battle and menu       yes: the menu covers them, and they come back as
                                       they were
 
-The debts, in `divergencias/lo-que-las-imagenes-en-sprites-no-modelan.md`.
+The debts, in `divergences/what-pictures-as-sprites-do-not-model.md`.
 
 ## The scenes
 

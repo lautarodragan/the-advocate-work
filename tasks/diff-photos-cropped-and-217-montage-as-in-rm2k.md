@@ -21,7 +21,7 @@ From taro, on 2026-10-02, looking at the goldens of
   original's frame is from another moment of the cycle. And neither of the two options that
   Aguilucho left is what RM2k does: the original puts each photo at 50 % over
   black with a white flash on top. Since
-  `decisiones/el-color-math-no-se-usa.md` (2026-10-02) color math is used
+  `decisions/translucent-events-dont-use-color-math.md` (2026-10-02) color math is used
   for pictures: the photo at 50 % over black is the darkened photo, and the
   flash can be done by adding a fixed color (`COLDATA`). Aguilucho's strip
   `tira-destellos.png` is only those flashes, without photo: that is why

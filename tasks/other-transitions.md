@@ -22,7 +22,7 @@ others —the zoom, 16, and the mosaic, 17—: the mosaic is the PPU's, and the 
 as a fade, because zooming in on the map is mode 7. See `rom/src/fundido_de_pelea.s`.
 Since 2026-09-27 `ChangeScreenTransitions` too: the teleport does
 the mosaic, and the zoom and the others the console does not do go as a fade —see
-`divergencias/las-transiciones-del-teletransporte.md`—. But `Transition::Type`
+`divergences/the-teleport-transitions.md`—. But `Transition::Type`
 has **38**, and an event can ask for any of them.
 
 What makes them expensive is not the number: the block, blind and wipe ones

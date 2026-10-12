@@ -117,7 +117,7 @@ are others (see question 6).
    once: merging them would mean changing pixels, which is Adeleine's decision and
    would show.
 5. **MSU-1 as a source.** **Doesn't apply**: what's missing is VRAM, not ROM, and the
-   MSU-1 can only replace something the ROM already carries (`docs/port/msu-datos.md`,
+   MSU-1 can only replace something the ROM already carries (`internals/the-msu-file.md`,
    "without MSU-1 the game works the same"). It helps with cartridge space, not
    with this.
 

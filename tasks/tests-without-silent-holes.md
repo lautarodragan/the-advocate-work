@@ -7,7 +7,7 @@ assignee: taro
 ---
 
 The two improvements from Codex's inspection
-([`docs/research/inspeccion-integral-del-repo.md`](https://lautarodragan.github.io/the-advocate-docs/ports/abl/research/inspeccion-integral-del-repo.html)) that Hornero marked as the
+([`ports/abl/research/a-full-inspection-of-the-repository.md`](https://lautarodragan.github.io/the-advocate-docs/ports/abl/research/a-full-inspection-of-the-repository.html)) that Hornero marked as the
 ones that pay off most for what they cost, and that taro agreed with on
 2026-09-28:
 

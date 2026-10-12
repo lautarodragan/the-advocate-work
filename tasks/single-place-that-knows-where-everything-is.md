@@ -6,9 +6,9 @@ status: done
 assignee: taro
 ---
 
-Step 2 of the plan in [`docs/research/el-mapa-de-las-herramientas-de-python.md`](https://lautarodragan.github.io/the-advocate-docs/research/el-mapa-de-las-herramientas-de-python.html)
+Step 2 of the plan in [`research/the-map-of-the-python-tools.md`](https://lautarodragan.github.io/the-advocate-docs/research/the-map-of-the-python-tools.html)
 (§4). It goes before the move of `data/`, `parches/`, `pruebas/` and the engine
-(see `workflow/decisiones/las-herramientas-se-separan-de-abl.md`): with this
+(see `decisions/the-tools-split-from-abl.md`): with this
 done, moving a folder is changing one line.
 
 Hornero decided it, with taro's authorisation of 2026-09-29 to decide

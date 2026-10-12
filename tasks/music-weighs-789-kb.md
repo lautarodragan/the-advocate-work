@@ -394,7 +394,7 @@ The per-theme tables —instruments and pitches, 3,504 B— are included in the
 **268,794 B, and 79% are sound effects, not music.**
 
 * **Music: 58 samples, 57,285 B.** It's capped by ARAM —the whole bank has to
-  fit in the SPC700's 64 KB, `un-solo-banco-de-muestras.md`—, so it doesn't
+  fit in the SPC700's 64 KB, `a-single-sample-bank.md`—, so it doesn't
   grow with the themes: what grows is the themes that stay out. **Five groups
   are byte for byte identical**, 6,453 B; I didn't look at which programs or
   hits they come from. That costs ARAM as well as cartridge when two land in
@@ -402,7 +402,7 @@ The per-theme tables —instruments and pitches, 3,504 B— are included in the
   given back to another sample.
 * **Sound effects: 92, 211,509 B.** 50 are at the cap, 2,529 B —0.75 s at 6
   kHz, `SE_MAX_SEGUNDOS` and `SE_TASA`—, and the opening's whole thunder is
-  23,760 (`el-trueno-va-entero-y-paga-la-lluvia.md`). They all go into some
+  23,760 (`the-thunder-plays-whole-and-pays-for-the-rain.md`). They all go into some
   map's package, so none is dead. `sound-effects-without-cuts.md` wants to
   lift those caps, and that will make it **grow**.
 * **Nothing obvious to compress**: BRR is already 9 bytes for every 16

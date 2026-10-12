@@ -7,7 +7,7 @@ agents: [Aguará, Hurón]
 assignee: taro
 ---
 
-From Aguará's study, [`docs/research/2026-10-05-los-comandos-que-faltan.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-05-los-comandos-que-faltan.html); `rm2k-snes-events culprits` measured it. taro, on 2026-10-05: leave them all, without launching yet. It is the first thing it recommends: a small one and a medium one.
+From Aguará's study, [`research/2026-10-05-the-missing-commands.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-05-the-missing-commands.html); `rm2k-snes-events culprits` measured it. taro, on 2026-10-05: leave them all, without launching yet. It is the first thing it recommends: a small one and a medium one.
 
 2026-10-06, Hornero: in Desert Nightmare `EraseEvent` is what leaves the most
 pages out on its own —127 of the 157 that use it, measured with `culprits
@@ -36,7 +36,7 @@ looks at. Only `clear_waits`, which runs on every map load, clears it: that is
 why a jump to the same map does not undo it. **A parallel that runs it is
 cut there** —`pair_ev`—, like `CommandEraseEvent` with `main_flag` false;
 a foreground one continues until the end, as over there. What is not modelled, in
-`divergencias/lo-que-borrar-un-evento-no-modela.md`.
+`divergences/what-erasing-an-event-does-not-model.md`.
 
 **Measured** (`culprits --every-map`): Desert Nightmare, `EraseEvent` was the
 first —157 pages, 127 alone— and it is no longer there; El Dorado, three alone, no longer

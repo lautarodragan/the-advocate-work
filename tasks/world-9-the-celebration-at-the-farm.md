@@ -45,7 +45,7 @@ compile, like the world's doors whose destination is not there.
   events walking —Pierson and the four professions of the celebration, the
   six who stroll at the dance, Emily and Radin— and the ROM has twelve
   route places. Now the cap is twelve moving at once: see
-  `divergencias/las-rutas-terminadas-sueltan-su-lugar.md` over there.
+  `divergences/finished-routes-give-up-their-slot.md` over there.
 
 # Tests
 

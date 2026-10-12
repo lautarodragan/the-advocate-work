@@ -35,7 +35,7 @@ maps 1 and 2, VD without the `system` knob). The one-off scripts, in
 * `map-streams-that-dont-fit-in-wram` — from `exclusions-left-over-in-the-ports` (Frozen 2) and `vampires-dawn-builds-from-its-toml` (VD 1).
 * `vampires-dawn-maps-that-dont-fit-in-vram` — from `vampires-dawn-builds-from-its-toml`, `one-quantization-per-character-for-the-poses` and `merge-similar-tiles-when-the-background-doesnt-fit`.
 * `vampires-dawn-now-builds-with-its-own-system` — from `window-in-the-tile-bank`: **it already builds with `VDBlutsys`**, measured today.
-* `invisible-walls-lost-when-trimming-events` — from `los-eventos-que-no-entran-en-la-ram`.
+* `invisible-walls-lost-when-trimming-events` — from `events-that-dont-fit-in-the-map-ram`.
 * `pictures-that-go-over-the-map-outside-sunset` — from `eraseevent-for-real` (Desert's WC).
 * `title-that-doesnt-fit-in-vram` — from `degrade-instead-of-failing` (Desert, Frozen, VD).
 * `variables-past-256` — from `degrade-instead-of-failing` (VD).

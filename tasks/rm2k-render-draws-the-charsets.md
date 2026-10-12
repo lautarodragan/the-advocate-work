@@ -12,7 +12,7 @@ Adeleine in Rust because the CharSets go through Adeleine before reaching
 Voodoo.
 
 The criterion for what goes into `rm2k-render` comes from the decision
-(`workflow/decisiones/las-herramientas-se-separan-de-abl.md`): drawing what
+(`decisions/the-tools-split-from-abl.md`): drawing what
 RPG Maker would draw, without knowing about the SNES. What the port decides
 because of the console —the pattern or the baking of the translucent ones,
 which the SNES does not have, the opaque CharSets— is not `rm2k-render`'s: it

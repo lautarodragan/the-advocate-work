@@ -148,7 +148,7 @@ copies that were made differently. The new themes (`Kfmus5`, `tsmedit`,
   sound effect of its list (Flame3) does not fit alongside and waits for the race's
   `PlayBGM`, which arrives before it is used; Evasion2, which sounds earlier, is there.
   The same on 64 with the race's theme, which turns on its own on
-  frame 5. It is the decision `el-tema-que-suena-gana-y-los-efectos-esperan`; the
+  frame 5. It is the decision `the-playing-track-wins-and-the-sound-effects-wait`; the
   converter warns about it, and it was checked in the ROM going through Arden's ending.
 * **Bank 0** of `release`: from 344 to 280 B free. BSS and ZEROPAGE the same.
 * **Cartridge**: 228 music samples instead of 220, 454 KB instead of 426.

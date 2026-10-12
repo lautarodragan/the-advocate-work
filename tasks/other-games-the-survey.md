@@ -43,7 +43,7 @@ repo; the temporaries in `/extras/scratch/aguara/`.
 ## Result
 
 The study, with the table and the recommendation:
-[`docs/research/2026-10-05-otros-juegos.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-05-otros-juegos.html). Six of the seven build a
+[`research/2026-10-05-other-games.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-05-other-games.html). Six of the seven build a
 cartridge that starts; Vampires Dawn doesn't (the variables).
 
 **Where each thing is** (on this machine, that's why here and not in the
@@ -52,7 +52,7 @@ study):
 * the projects, each its own repo with one commit: `/extras/otros-juegos-snes/<juego>/`;
 * the ROMs: `/shared/builds/otros-juegos/<juego>.sfc`;
 * the sheets, original above and cartridge below:
-  `/shared/capturas/2026-10-05-otros-juegos/<juego>.png`;
+  `/shared/capturas/2026-10-05-other-games/<juego>.png`;
 * the link copies with the reduced System and the BMPs as PNG, which the
   cartridges of Book of Three, Dooms 2, Frozen World and Desert need to
   build: `/extras/scratch/aguara/juegos/<juego>/`, made with the `granja.py`

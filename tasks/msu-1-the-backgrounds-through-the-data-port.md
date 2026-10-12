@@ -14,7 +14,7 @@ MSU-1 the game work the same, because taro plays in Mednafen.
 
 The converter writes into each cartridge's `.msu` the same backgrounds the ROM
 carries, with a signature of the contents in front —format and mechanism in
-`docs/port/msu-datos.md`, reference in `tools/port/msu_datos.py`—. When a
+`internals/the-msu-file.md`, reference in `tools/port/msu_datos.py`—. When a
 battle with a background starts, the ROM checks whether there's MSU-1 and
 whether the `.msu` has its signature; if so, it brings the 32 KB by DMA from
 `$2001` into the two WRAM buffers and the colors into CGRAM, and leaves
@@ -57,7 +57,7 @@ In snes9x, bsnes and mesen-s seeking is instant, and the DMA goes at 8 master
 cycles per byte wherever it comes from. In Mednafen each of the four seeks per
 battle —the signature, the tiles twice (one per buffer) and the colors— costs
 one or two frames: about seven in total, measured. On the FX Pak they aren't
-measured. See "Cuánto tarda" in `docs/port/msu-datos.md`.
+measured. See "Cuánto tarda" in `internals/the-msu-file.md`.
 
 ## How it travels to taro
 

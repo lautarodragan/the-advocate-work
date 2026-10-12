@@ -23,11 +23,11 @@ clone; three commits: the tools' ones, ABL's and the
   and with a grouped index (project, events, routes, graphics and memory,
   audio), which is also the order of `SUMMARY.md`.
 - **`src/ports/abl/decisions/`**: the two that belong to the game and not to
-  the engine —`la-camara-corrida-de-la-reja-es-del-juego` (what the
-  original does on map 8) and `el-trueno-va-entero-y-paga-la-lluvia` (an
+  the engine —`the-camera-offset-after-the-gate-is-the-games` (what the
+  original does on map 8) and `the-thunder-plays-whole-and-pays-for-the-rain` (an
   effect on one of ABL's maps)— and a `README.md` with its index. The mixed
   ones —an engine rule measured on ABL, like `los-lideres-comparten-…`,
-  `la-orden-34-…` or `el-cartucho-pasa-a-8-mb`— stayed in `decisions/`.
+  `la-orden-34-…` or `the-cartridge-goes-to-8-mb`— stayed in `decisions/`.
 - `src/ports/README.md` and `src/ports/abl/README.md` are one-line stubs:
   the real ones are Tijereta's.
 - The format: the title goes in English and "Qué / Por qué / Cómo se aplica"
@@ -37,11 +37,11 @@ clone; three commits: the tools' ones, ABL's and the
 
 - The links to `../research/…` and `../divergences/…` point to slugs by
   Cardón and Calandria. Two of the studies
-  (`2026-10-01-el-juego-entero-sin-msu-1`, `2026-10-01-los-mapas-por-el-msu-1`)
+  (`2026-10-01-the-whole-game-without-msu-1`, `2026-10-01-the-maps-through-the-msu-1`)
   are from `abl/docs/research/` in the ports, not from `snes-rm2k`: if Cardón
   puts them under `ports/abl/`, those two links have to be fixed (in
-  `el-cartucho-pasa-a-8-mb.md` and `el-juego-se-juega-sin-msu-1.md`).
-- `el-color-math-no-se-usa.md` and `decisions/README.md` link
+  `the-cartridge-goes-to-8-mb.md` and `the-game-is-playable-without-msu-1.md`).
+- `translucent-events-dont-use-color-math.md` and `decisions/README.md` link
   `../divergences/README.md`, which has to exist.
 - The citation of `modo3-y-poses-en-caliente` (a memory note, not public)
   was replaced by a link to `cartridge/mode-3.md`.

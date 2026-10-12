@@ -39,7 +39,7 @@ the hero gets to walk one more frame —2 pixels— before it's cut off.
 This other thing, from the `timer-cero` page, may be on the same side: the
 `TintScreen` that comes after a `Wait 2` shows **13** frames after the timer
 appears in the ROM and **12** in RPG_RT. It may be the wait, or it may be
-`divergencias/ticks-de-pantalla-despues-del-interprete.md`, which describes
+`divergences/screen-ticks-run-after-the-interpreter.md`, which describes
 precisely a one-frame lag in what the screen shows; they weren't separated.
 
 ## What isn't known

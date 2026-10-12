@@ -130,7 +130,7 @@ Branch `worktree-agent-a140cce898ba673eb` of the tools repo:
   package of the starting map went from 14,976 to 15,651 B —the sample split is
   done over all the packages— and the `boot_frames` count gave 40 against 40:
   the converter refused to build. It is what the tools'
-  `decisiones/el-arranque-esta-dimensionado-para-el-paquete-de-arranque.md`
+  `decisions/boot-is-sized-for-the-boot-package.md`
   says is done, by hand. It did not move any golden.
 * **An MSU-1 track for the RTP themes the game names** (`rm2k-snes-audio`).
   `Farewell2`, the one of Talan's house the first night, is from the RTP and

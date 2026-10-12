@@ -41,7 +41,7 @@ Droid (10), the Trash Hauler and the Junkbot (30) are ten points or more below
 and weigh zero, in RM2k too. A lone weighted action doesn't roll a die, so as
 not to move the randomness of the battles that were already there. What isn't
 modeled —conditions, the other basic actions, states— in
-`divergencias/lo-que-la-ia-de-los-enemigos-no-modela.md`.
+`divergences/what-the-enemies-ai-does-not-model.md`.
 
 **The five scopes** (`batalla.blancos_de_la_habilidad`, `ba_hab_usar`):
 `enemies` and `party` repeat the effect on each living one of that side, with
@@ -61,7 +61,7 @@ recognizes the parallel common events, with a switch, that have nothing but
 `ChangeSkills` and branches on the equipment. Their body is pasted after the
 `ControlSwitches` that turns on their switch and the ROM runs it on closing
 the menu (`comunes_del_equipo`). Why not the general approach, with the
-numbers: `divergencias/los-comunes-del-equipo-corren-al-cerrar-el-menu.md`.
+numbers: `divergences/pure-parallel-common-events-run-only-when-what-they-read-changes.md`.
 In short:
 
     general   ~0.13 frames of CPU per iteration of the body, on every frame of

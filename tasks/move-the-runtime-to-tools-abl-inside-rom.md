@@ -7,7 +7,7 @@ assignee: taro
 ---
 
 Decided by taro on 2026-09-29 (see
-`workflow/decisiones/las-herramientas-se-separan-de-abl.md`): the generic
+`decisions/the-tools-split-from-abl.md`): the generic
 runtime is distinguished from the A Blurred Line project. The root is left with
 `rom/`, `tools/`, `docs/` and `workflow/` (plus the usual loose files:
 `AGENTS.md`, `CLAUDE.md`, `README.md`, `DITTO.md`, `.gitignore`…).

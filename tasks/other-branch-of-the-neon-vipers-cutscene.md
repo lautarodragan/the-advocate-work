@@ -40,7 +40,7 @@ are precisely the ones left out:
 And what showed up measuring the fence —the camera that stays three cells shifted on
 leaving— **is already answered and is not ours**: it is done by the Bum's `PanScreen`,
 which nobody returns, and the original RPG_RT stays just as shifted. See
-`workflow/decisiones/la-camara-corrida-de-la-reja-es-del-juego.md`.
+`ports/abl/decisions/the-camera-offset-after-the-gate-is-the-games.md`.
 
 ---
 

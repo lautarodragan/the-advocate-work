@@ -7,7 +7,7 @@ assignee: taro
 ---
 
 From taro, on 2026-09-29: the first step before moving `data/`, `parches/`,
-`pruebas/` and the engine (see `workflow/decisiones/las-herramientas-se-separan-de-abl.md`).
+`pruebas/` and the engine (see `decisions/the-tools-split-from-abl.md`).
 A `tools/justfile` with what belongs to the tools, and the root one
 narrowed to ABL. It gets closer to having two repos without moving any path
 yet.

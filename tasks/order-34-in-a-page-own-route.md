@@ -25,4 +25,4 @@ Noted, not started.
 
 Order 34 inside a *forced* route is done —on events and on the hero—: see
 "Cambiar el gráfico a mitad de una ruta (la orden 34)" in
-`docs/port/events.md` and `decisiones/la-orden-34-sobre-el-heroe.md`.
+`docs/port/events.md` and `decisions/move-route-command-34-on-the-hero.md`.

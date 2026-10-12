@@ -63,8 +63,9 @@ folder of `the-advocate` for this repo, **with** their history: **a
 prefix, and the hashes the tasks cite are from `the-advocate`, or from the
 ports when they talk about ABL. And the same day `decisiones/`,
 `divergencias/` and all the `docs/` —of the tools and of ABL— moved to the
-book, translated and with the same file names: **an old citation is found
-by name**, and this repo's README says where each folder went.
+book, translated; on 2026-10-12 their file names were translated too, so
+**an old citation is found in the redirect table of the book's
+`book.toml`**, and this repo's README says where each folder went.
 
 **taro's pronouns are they/them**, and elle/le in Spanish: in replies,
 tasks, commits, comments and the book. Since 2026-10-11; what was written
@@ -414,7 +415,7 @@ of that, and one of them is new.
 `pruebas/rpgmaker/` in the ports is what RM2k does, using ABL as a stage.
 They left with the game on 2026-10-02, because they need one, and they
 come back to `the-advocate` little by little when the test game exists
-—phase 2 of `research/2026-10-02-el-juego-de-pruebas.md` in the book—.
+—phase 2 of `research/2026-10-02-the-test-game.md` in the book—.
 Until then **a change in the tools is verified by running ABL's suite with
 the tools of the change**, as "Where this runs" says; `just test` and each
 crate's tests run no ROM. It is the risk the study pointed out, and it is
@@ -738,7 +739,7 @@ in with `git merge` from those worktrees.
 
 **They are a fixed roster, since 2026-10-04**: one file per agent in
 `.claude/agents/`, with a name from Argentine flora or fauna, and what
-applies to all of them in `.claude/agentes.md` —what used to be repeated in
+applies to all of them in `.claude/roster.md` —what used to be repeated in
 every assignment—. They are launched by their name, not as
 `general-purpose`, so the same agent comes back and finds itself: each task
 carries in `agents` everyone who worked on it —the `assignee` becomes taro
@@ -818,7 +819,7 @@ What always has to be done:
 
   **The `abl.msu` does go in the build, and also to `/shared/msu/`
   always.** Since 2026-09-25 it is not empty: it carries the battle
-  backgrounds that the ROM reads through MSU-1 —see `internals/msu-datos.md`
+  backgrounds that the ROM reads through MSU-1 —see `internals/the-msu-file.md`
   in the book—, so it changes with the converter and belongs to the build,
   not to the tracks; and it weighs 32 KB per background. With another
   build's `abl.sfc` nothing breaks: the ROM does not find its signature in

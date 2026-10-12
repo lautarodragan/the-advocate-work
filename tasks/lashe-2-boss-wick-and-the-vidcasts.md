@@ -112,7 +112,7 @@ like the battle's; `fundido_tick` wasn't touched. It doesn't travel in the save:
 the page that sets it to mosaic and the one that sets it back there's no moment when
 you can save (see the comment in `ram_lejana.s`). The divergence
 —the mosaic darkens, the sprites don't pixelate, the zoom is a fade— is in
-`divergencias/las-transiciones-del-teletransporte.md`.
+`divergences/the-teleport-transitions.md`.
 
 **The cap of chained teleports, from 8 to 32** (`SALTOS_MAX` in
 `rom/src/pagina_cero.s`). From the neighbour's door until returning to 37 there are twelve

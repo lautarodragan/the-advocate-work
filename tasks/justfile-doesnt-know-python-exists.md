@@ -7,8 +7,8 @@ assignee: taro
 ---
 
 From taro, on 2026-09-28, as a first step to separate the tools from ABL (see
-`workflow/decisiones/las-herramientas-se-separan-de-abl.md` and
-[`docs/research/el-mapa-de-las-herramientas-de-python.md`](https://lautarodragan.github.io/the-advocate-docs/research/el-mapa-de-las-herramientas-de-python.html)):
+`decisions/the-tools-split-from-abl.md` and
+[`research/the-map-of-the-python-tools.md`](https://lautarodragan.github.io/the-advocate-docs/research/the-map-of-the-python-tools.html)):
 
 > A first step occurs to me: that the justfile doesn't know Python exists. ABL
 > can't know the tools directory exists — it only knows there's a suite of

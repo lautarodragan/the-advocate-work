@@ -7,7 +7,7 @@ agents: [Aguará, Chajá]
 assignee: taro
 ---
 
-From Aguará's study, [`docs/research/2026-10-05-los-comandos-que-faltan.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-05-los-comandos-que-faltan.html); measured by `rm2k-snes-events culprits`. taro, on 2026-10-05: leave them in todo, without launching yet. taro's decision on conditions is still pending.
+From Aguará's study, [`research/2026-10-05-the-missing-commands.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-05-the-missing-commands.html); measured by `rm2k-snes-events culprits`. taro, on 2026-10-05: leave them in todo, without launching yet. taro's decision on conditions is still pending.
 
 ## taro's decision, 2026-10-12
 

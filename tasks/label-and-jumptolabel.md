@@ -6,7 +6,7 @@ status: done
 assignee: taro
 ---
 
-Phase 1 of [`docs/research/2026-10-01-el-sistema-de-imagenes.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-01-el-sistema-de-imagenes.html) (Jilguero),
+Phase 1 of [`research/2026-10-01-the-picture-system.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-01-the-picture-system.html) (Jilguero),
 from taro on 2026-10-01: "going ahead with Label, JumpToLabel sounds perfect
 to me".
 

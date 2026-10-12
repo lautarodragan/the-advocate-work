@@ -18,7 +18,7 @@ because the cartridge does not carry its five terrains:
 - **With MSU-1, each battle shows its correct background**, even if it is not in the
   ROM.
 
-See `docs/port/msu-datos.md` and `msu-1-the-backgrounds-through-the-data-port.md`
+See `internals/the-msu-file.md` and `msu-1-the-backgrounds-through-the-data-port.md`
 for how they are read today. It needs measuring how much all the game's backgrounds weigh
 in the `.msu` and deciding the order (by background id, so that each one's sector
 does not depend on which maps go in).
@@ -56,7 +56,7 @@ Measured over the game on 2026-09-27 (throwaway script):
 * **The `.msu`, version 2**: the header and the index padded up to `$10000`,
   and from there background k at `$10000 + k × $8200` (tiles; colours `$8000`
   further on; the rest padded up to the 512 sector). The sound effects after the
-  last slot. Documented in `docs/port/msu-datos.md`.
+  last slot. Documented in `internals/the-msu-file.md`.
 * **In the ROM**: `escena_tropa_fondo` and `escena_mapa_fondo` carry the game's
   numbers; `fondo_terreno` (per terrain) and `fondo_respaldo` (per number,
   which of the ROM's is drawn without MSU-1). `esc_terreno` reads the terrain under the

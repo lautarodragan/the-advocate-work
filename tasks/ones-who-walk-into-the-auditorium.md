@@ -25,7 +25,7 @@ of map 18. They're moved by page 1 of event 36, an autorun with switch 77:
 
 Hornero's suspicion, unverified: the page change from the switch, right after
 the `ChangeEventLocation` and before the `MoveEvent`, overwrites the position
-or the route. See `decisiones/la-pagina-activa-se-congela-hasta-el-refresco.md`.
+or the route. See `decisions/the-active-page-is-frozen-until-the-refresh.md`.
 
 # What was seen in the ROM
 

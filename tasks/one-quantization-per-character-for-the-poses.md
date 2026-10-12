@@ -96,7 +96,7 @@ Branches `mulita-poses-por-personaje`:
   `41bbe3a` (its four goldens), merge of origin/main `0982cf0`, and
   `e575020` (VD: the eleven from "the ROM" come back).
 * the-advocate-docs: `ff1e9ad`, the decision
-  `decisions/los-graficos-que-solo-muestra-el-heroe.md`, and a note in the
+  `decisions/the-graphics-only-the-hero-shows.md`, and a note in the
   one about command 34 on the hero. Links checked.
 
 **Verified**, with `just install-local .local-tools events wally mapdata

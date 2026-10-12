@@ -40,7 +40,7 @@ between maps with the same chipset.
 
 On 18 the limit was not theoretical: the map was **stuck at 8 of 8 sprite
 palettes**, which is where
-`workflow/decisiones/un-grafico-que-no-entra-no-se-dibuja.md` starts deciding
+`decisions/a-graphic-that-doesnt-fit-isnt-drawn.md` starts deciding
 for us. And it was deciding: the five `18-*` goldens changed on baking because
 **now people are drawn that the port had been discarding**.
 

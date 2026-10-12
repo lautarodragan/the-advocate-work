@@ -63,7 +63,7 @@ thing that decides about what is seen. A map that fits doesn't go through there.
   Desert Nightmare's 182 come out of `excluded`; both whole releases
   build with the branch.
 * book, branch `cardon-anim-tiles`: `fcd736f`, the divergence
-  `la-animacion-del-chipset-que-no-entra-en-la-wram.md` and a line in the
+  `a-chipset-animation-that-does-not-fit-in-wram.md` and a line in the
   README of each of the three ports.
 
 Measured, each map in a cartridge with its game's start map:

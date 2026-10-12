@@ -7,7 +7,7 @@ assignee: taro
 ---
 
 From taro, on 2026-09-29: take on the new tools in Rust in the order of
-[`docs/research/las-herramientas-hoy.md`](https://lautarodragan.github.io/the-advocate-docs/research/las-herramientas-hoy.html). This is the first one: the common
+[`research/the-tools-today.md`](https://lautarodragan.github.io/the-advocate-docs/research/the-tools-today.html). This is the first one: the common
 library and `rm2k-snes-build` (which Hornero decided to split into the three
 executables that already exist, with the same names, so that nobody who calls
 them has to change).

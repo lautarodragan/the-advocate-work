@@ -28,7 +28,7 @@ because it is design and taro wants to see it. Lagartija did it, from `main` at
 
 ## What was done
 
-* **The study**: [`docs/research/2026-10-04-el-menu-custom.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-04-el-menu-custom.html). The
+* **The study**: [`research/2026-10-04-the-custom-menu.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-04-the-custom-menu.html). The
   inventory page by page, the feature's design, what the whole VRAM
   gives, and what it would cost.
 * **The captures of the original and the mock-ups**, in
@@ -74,7 +74,7 @@ transcription of the thirteen pages and six tables, with their goldens.
 # What taro decided
 
 On 2026-10-04: "the design goes ahead, with portrait, \"Console\", and only with the item".
-That is: the study's design ([`docs/research/2026-10-04-el-menu-custom.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-04-el-menu-custom.html))
+That is: the study's design ([`research/2026-10-04-the-custom-menu.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-04-the-custom-menu.html))
 as is, with the characters' portraits and not their faces, the label
 "Console" in the pause menu, and the option visible only while item 81
 is in the inventory.

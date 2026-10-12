@@ -11,7 +11,7 @@ portable console system" —ABL's own menu, made with common events and
 pictures—, because it is useful for custom systems in many games. He said
 using the MSU-1 is acceptable; with 46 free banks of 64 KB and the game's
 pictures estimated at ~430 KB with LZ2, Hornero thinks they fit in the ROM
-without breaking `decisiones/el-juego-se-juega-sin-msu-1.md`.
+without breaking `decisions/the-game-is-playable-without-msu-1.md`.
 
 taro's idea for drawing them in mode 3, which has two layers: "in practice
 most ShowPictures prevent moving while they are shown. I don't know if they
@@ -26,7 +26,7 @@ them.
 
 ## The study (Jilguero, 2026-10-01)
 
-It is in [`docs/research/2026-10-01-el-sistema-de-imagenes.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-01-el-sistema-de-imagenes.html), measured on
+It is in [`research/2026-10-01-the-picture-system.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-01-the-picture-system.html), measured on
 `76d98bed`. What taro has to look at to decide:
 
 * **The portable console is not needed to play**: what it writes is read by

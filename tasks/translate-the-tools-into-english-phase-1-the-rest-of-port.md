@@ -8,7 +8,7 @@ assignee: taro
 
 From taro, on 2026-09-29: "translate the tools into English". It is the
 AGENTS.md rule for the separate projects, which now reaches all of `tools/`
-(see `workflow/decisiones/las-herramientas-se-separan-de-abl.md`).
+(see `decisions/the-tools-split-from-abl.md`).
 
 **Phase 1**, split among four agents by area: comments, docstrings, error
 messages, `help=` and prose. **Code names are not touched** —modules,
@@ -57,7 +57,7 @@ things:
 
 ## What was left hanging
 
-* `docs/port/msu-datos.md` cites two sections of `escena.py` by their
+* `internals/the-msu-file.md` cites two sections of `escena.py` by their
   Spanish titles ("El respaldo liviano", "Qué fondos hay"); now they are
   called "The light fallback" and "Which backdrops there are, and which ones
   the cartridge carries". `docs/` is not part of this phase.

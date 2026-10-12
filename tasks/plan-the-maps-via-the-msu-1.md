@@ -10,7 +10,7 @@ From taro, on 2026-10-01, when asking about more maps. Already decided: the
 cartridge stays at 4 MB (`decisiones/el-cartucho-se-queda-en-4-mb.md`), and
 taro said on 2026-09-27 that "at this rate, neither 6 MB nor 8 MB will
 let us cover the whole game". The battle backgrounds already go through the `.msu`
-(`docs/port/msu-datos.md`). This is a study with numbers, without
+(`internals/the-msu-file.md`). This is a study with numbers, without
 implementing: it's what defines how far the cartridge goes, and it's worth doing
 before adding more chapters. Later taro's question about
 decompression chips (S-DD1, SPC7110, SA-1) was added.
@@ -18,7 +18,7 @@ decompression chips (S-DD1, SPC7110, SA-1) was added.
 # Done
 
 Lechuza, on 2026-10-01. **The study is
-[`docs/research/2026-10-01-los-mapas-por-el-msu-1.md`](https://lautarodragan.github.io/the-advocate-docs/ports/abl/research/2026-10-01-los-mapas-por-el-msu-1.html)**; what's below is what
+[`ports/abl/research/2026-10-01-the-maps-through-the-msu-1.md`](https://lautarodragan.github.io/the-advocate-docs/ports/abl/research/2026-10-01-the-maps-through-the-msu-1.html)**; what's below is what
 has to be decided and what was left loose.
 
 * **The whole game is 8,514 KB of data**: 266 banks against 124. It doesn't

@@ -11,7 +11,7 @@ It follows from `vampires-dawn-fits-in-the-cartridge-compressed.md`, where Tijer
 
 taro's decision, on 2026-10-11: rather than two cartridges, mandatory MSU-1 **for this game**; ABL and the others stay playable without it ([[sin-msu-jugable]] in the memory). Not a compression chip, as long as MSU-1 remains optional in general.
 
-There is already a path: the battle backgrounds travel in the `.msu` and the ROM reads them if it finds its signature (`internals/msu-datos.md` in the book). What it would take: a project knob that asks for it as mandatory, the split of what goes to the ROM and what to the `.msu` —the poses, which are uploaded on the fly, call for looking at how long the MSU-1 takes to deliver them—, and a screen that says the MSU-1 is missing if it isn't there. Tijereta noted an option without CPU that wasn't tried: the poses without their zero tiles, by direct DMA in vblank (−2.44 MB in VD), which would shrink what has to go to the `.msu`.
+There is already a path: the battle backgrounds travel in the `.msu` and the ROM reads them if it finds its signature (`internals/the-msu-file.md` in the book). What it would take: a project knob that asks for it as mandatory, the split of what goes to the ROM and what to the `.msu` —the poses, which are uploaded on the fly, call for looking at how long the MSU-1 takes to deliver them—, and a screen that says the MSU-1 is missing if it isn't there. Tijereta noted an option without CPU that wasn't tried: the poses without their zero tiles, by direct DMA in vblank (−2.44 MB in VD), which would shrink what has to go to the `.msu`.
 
 ## What taro asked for when confirming it, on 2026-10-11
 
@@ -63,7 +63,7 @@ first way and doesn't change.
 each map 1 to 8 frames more than from the ROM (map 66, with the largest
 background, 94 against 86), because the LZ2 literals go one byte at a time through
 the CPU. **In Mednafen each seek is one or two frames** (measured on
-2026-09-26, see `internals/msu-datos.md`), and a VD map does 0 to 5 for
+2026-09-26, see `internals/the-msu-file.md`), and a VD map does 0 to 5 for
 its streams —most 3 or 4— plus one per panorama and one per each sample
 from the `.msu` its package uploads: I didn't measure that frame by frame.
 

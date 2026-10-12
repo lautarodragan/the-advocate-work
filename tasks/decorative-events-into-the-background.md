@@ -65,7 +65,7 @@ Candidates per game, without looking at the drawing or the upper layer:
 book-of-three 87, desert-nightmare 2887, dooms2 39, el-dorado 26,
 frozen-world 117, sunset-over-imdahl 209, vampires-dawn 5483, ABL 502.
 
-Divergences in `workflow/divergencias/los-eventos-decorativos-horneados.md`
+Divergences in `divergences/baked-decorative-events.md`
 —the animation's pace and phase—. Captures in
 `/shared/capturas/2026-10-06-decorativos/`.
 

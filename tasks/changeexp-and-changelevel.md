@@ -43,7 +43,7 @@ noted lines) and $7E6128 to $7E61FF (`LVL_BOX`, the page). No
 `rm2k-snes-battle experience` answers it for the tests.
 
 **What isn't the same as RM2k** is in
-`workflow/divergencias/lo-que-changeexp-y-changelevel-no-modelan.md`: the
+`divergences/what-changeexp-and-changelevel-do-not-model.md`: the
 order of two skills of the same level, no message in a troop
 page, and the line caps.
 

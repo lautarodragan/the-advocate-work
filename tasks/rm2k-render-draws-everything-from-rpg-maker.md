@@ -7,7 +7,7 @@ assignee: taro
 ---
 
 Decided with taro on 2026-09-29 (see
-`workflow/decisiones/las-herramientas-se-separan-de-abl.md`): `rm2k-render`
+`decisions/the-tools-split-from-abl.md`): `rm2k-render`
 owns drawing RPG Maker graphics, without knowing about the SNES.
 
 Today the converter's Python draws:

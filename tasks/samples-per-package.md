@@ -11,7 +11,7 @@ It is step 6 of `tasks/quality-of-the-music.md`, option A, with what was
 measured and what came out: each sample with the budget of its worst package,
 the sound effects subtracted, and the theme that may come in already playing
 counted only as a theme
-(`decisiones/el-tema-que-suena-gana-y-los-efectos-esperan.md`). The three
+(`decisions/the-playing-track-wins-and-the-sound-effects-wait.md`). The three
 decisions below ended up like this: the unit is still the map; the stall is
 paid in each map's fade and in the battle; and a program's sample is a single
 one for the whole cartridge, at the rate of its worst package. What is below

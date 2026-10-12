@@ -37,7 +37,7 @@ cartridge's sound effects are the usual ones, not lighter.
 
 Also from taro, the same day: **the light sound effects in the ROM and the quality
 ones in the `.msu`**, with the battle backgrounds' mechanism
-(`docs/port/msu-datos.md`: the ROM reads the `.msu` through the data port if there's
+(`internals/the-msu-file.md`: the ROM reads the `.msu` through the data port if there's
 MSU-1 and the signature matches, and otherwise uses its own).
 
 It fits with the above: with MSU-1 the theme's samples don't take up ARAM, so

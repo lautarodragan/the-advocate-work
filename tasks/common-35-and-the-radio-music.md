@@ -19,7 +19,7 @@ From taro, on 2026-09-30, answering about `troop-events.md`
   in the `.msu`; if separating them is harder than lowering the quality of the
   battle theme or others, it is lowered and that's that.
 
-See `decisiones/primero-el-juego-entero-despues-la-calidad.md`.
+See `decisions/first-the-whole-game-then-the-quality.md`.
 
 It starts from `main` at the commit that launches the task. There: `NO_CACHE=1
 just cartuchos` gives `abl.sfc` `e20182d1bd905de7…`; `just pruebas` 893,
@@ -101,7 +101,7 @@ worst:
     TF3_1_awe, escape_newyork hits 14.3 → 10.6 kHz
 
 It gets adjusted when the whole game can be played
-(`decisiones/primero-el-juego-entero-despues-la-calidad.md`). To listen:
+(`decisions/first-the-whole-game-then-the-quality.md`). To listen:
 `/shared/audio/2026-09-30-radio/`, the three themes and the battle one through
 the SPC700.
 

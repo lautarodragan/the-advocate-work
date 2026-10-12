@@ -6,9 +6,9 @@ status: done
 assignee: taro
 ---
 
-Phase 3 of [`docs/research/2026-10-01-el-sistema-de-imagenes.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-01-el-sistema-de-imagenes.html) (Jilguero),
+Phase 3 of [`research/2026-10-01-the-picture-system.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-01-the-picture-system.html) (Jilguero),
 option E. taro decided it on 2026-10-01:
-`decisiones/las-imagenes-grandes-en-modo-1.md`. The Diff photos (212 to 216),
+`decisions/large-pictures-in-mode-1.md`. The Diff photos (212 to 216),
 which in RM2k shrink with a zoom, are shown with a fade: the SNES does not
 scale without mode 7. What happens in those scenes, with captures from the original:
 `/shared/capturas/2026-10-01-escenas-diff/` (Bandurria).
@@ -141,7 +141,7 @@ Bandurria's captures— in `/shared/capturas/2026-10-02-imagenes-grandes/`.
 **The merge awaits taro's approval.**
 
 What looks different from the original, noted in
-`divergencias/lo-que-las-imagenes-grandes-no-modelan.md`: the fade instead
+`divergences/what-large-pictures-do-not-model.md`: the fade instead
 of the zoom, the black frame of the instructions on 285, the mirrored edges
 of `GTest4`'s waves, the 105 colours, and the black frames when
 showing and erasing.

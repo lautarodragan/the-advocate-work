@@ -155,7 +155,7 @@ to `FAR_HP`/`FAR_SP`— and `ba_sync_in` —back, and the party: the one who lef
 leaves their place empty, the one who joined goes to the first empty one,
 from `ba_actor_setup`, what `ba_build` does for one actor—. See
 `battle_troop.s`. What that doesn't do like RM2k is in
-`divergencias/lo-que-las-paginas-de-tropa-no-modelan.md`.
+`divergences/what-troop-pages-do-not-model.md`.
 
 **The commands**, with their test in `rom/pruebas/rpgmaker/test_sistemas_de_tropa.py`:
 
@@ -200,7 +200,7 @@ pages: 1602 of 1671 in 149 distinct body(ies), 9941 B of code and 9515 B in
 and not done, because its theme would go into the battle package and lower
 the battle theme's rate —the same rule that leaves out the pages' effects—
 and none of the three has an MSU-1 track. It's an audio decision for taro;
-it's in `divergencias/lo-que-las-paginas-de-tropa-no-modelan.md`.
+it's in `divergences/what-troop-pages-do-not-model.md`.
 
 **The space afterwards** (`just espacio`, `release`): bank 0 **13 B** (from
 50), bank 1 5,054 B (from 3,126, with the tables out), data banks 116 of 124
@@ -220,7 +220,7 @@ out of bank 0.
 is left with the summon in place of Lerle. In RM2k it's fixed by common event
 35, `ResetAfterBattles`, which runs the `AfterBattleMint` autostart of the
 maps with encounters; here it doesn't compile —see
-`divergencias/llamada-salteada.md`—. Measured with this branch's compiler:
+`divergences/a-skipped-call.md`—. Measured with this branch's compiler:
 **each of its commands compiles** —what was missing was the actor
 `ControlVars`, the `ChangeHP` by variable and `ChangeSP`, which are there
 now—, and the whole common event compiles on its own (1,773 bytes) if the

@@ -15,7 +15,7 @@ pictures' transparency, not the erasing". Captures from that day in
 
 What is known of the cause: it is a large picture, and a large picture
 takes the map off the screen; its transparency darkens towards the black
-behind (`divergences/lo-que-las-imagenes-grandes-no-modelan.md` in the book).
+behind (`divergences/what-large-pictures-do-not-model.md` in the book).
 It is the same thing Sunset had with its roofs and fogs, which since
 2026-10-11 are drawn inside the map with `[graphics] map_pictures`
 (`sunset-the-pictures-over-the-map.md`); that knob is turned

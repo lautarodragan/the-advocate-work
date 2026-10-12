@@ -32,7 +32,7 @@ Tools worktree from `cc502f93`; ABL in the clone
   224— and bottom at 144, as always. The choice and the digits go in the
   same window, so they follow it on their own.
 * **No background**: the text with its shadow over the map. With two limits,
-  written in `workflow/divergencias/la-ventana-sin-fondo-no-tapa-a-los-personajes.md`:
+  written in `divergences/the-window-without-a-background-does-not-cover-the-characters.md`:
   the characters pass over the text, and the map's upper layer isn't
   visible in the band while the message lasts. Both come from the
   window being BG2, the same layer as the upper one, and mode 3 has no other.
