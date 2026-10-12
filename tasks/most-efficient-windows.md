@@ -2,7 +2,7 @@
 name: "The most efficient windows"
 description: "Analyze every window —messages, menus, items, equipment, shop, battle, slots, actor choice, hero name— with a System background configured by knob (gradient or solid color via HDMA/hblank), faces out of BG1 and the cursor in objects; measure and propose"
 type: research
-status: testing
+status: done
 agents: [Tijereta]
 assignee: taro
 ---
