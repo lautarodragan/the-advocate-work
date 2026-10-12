@@ -2,8 +2,8 @@
 name: "The title that doesn't fit in VRAM"
 description: "Desert Nightmare, The Frozen World and Vampires Dawn start without their title screen: the picture goes past the 544 tiles that title.s leaves it"
 type: feature
-status: doing
-assignee: Carpintero
+status: testing
+assignee: taro
 agents: [Carpintero]
 ---
 
@@ -56,3 +56,65 @@ picture 544. In 4bpp a tile weighs 32 bytes and the same worst case is
 Done when Desert Nightmare, The Frozen World and Vampires Dawn start on
 their title screen, with its menu, and the ones that fit today don't move a
 byte.
+
+## Carpintero, 2026-10-12
+
+Starting from the-advocate `a2b58945`, ports `6d7beed`; branches
+`carpintero-titulo-4bpp` in both.
+
+**The VRAM layout doesn't move.** At 4bpp a tile is 16 words, so the
+worst case —every cell distinct plus the blank one, 897 tiles— ends at
+$3810, below the menu's tilemap at $4400; the menu's tiles stay at $5000
+and the picture's tilemap at $7C00. What changes is the mode (1 instead of
+3, set right after `screen_upload` and only in a cartridge whose title is
+4bpp: `.if TITLE_BPP = 4`), the bytes of tiles in the `screens_table` row,
+and the tilemap entries, which carry palette and flips.
+
+**Seven palettes for the picture, not eight**: the menu stays on BG2 with
+palette 0, and in mode 1 BG2 shares the eight palettes with BG1. The
+picture goes through `rm2k-snes-images background` —the same layer a big
+`ShowPicture` gets—, with Adeleine choosing seven palettes from palette 1,
+and its corner at the screen's, where RM2k draws the title.
+
+`--title-4bpp` forces the path in a game whose title fits: it is how ABL's
+suite gets a case for it.
+
+**Measured** (the-advocate `be098254`):
+
+| game | 8bpp tiles | 4bpp tiles | palettes | colours left, of the 15-bit scaled picture's |
+|---|---|---|---|---|
+| Desert Nightmare | 872 | 870 | 7 | 83 of 1065 |
+| The Frozen World | 736 | 731 | 7 | 79 of 512 |
+| Vampires Dawn | 896 | 896 | 7 | 78 of 1073 |
+
+What Adeleine left is in each release's `adeleine/title.png`.
+
+**The others don't move a byte**: ABL, Book of Three, El Dorado, Dooms 2
+and Sunset, built before and after with the same tools but this change,
+give the same sha256. `TITLE_BPP = 8` is an equate the 8bpp path doesn't
+assemble anything with.
+
+**Loading a game in those three**: before, without a title, the save in
+slot 1 loaded by itself at boot. Now it goes through "Load" on the title,
+like ABL: saved from the pause menu (access forced from outside), reset,
+"Load", slot 1, and the three come back to the same map and cell.
+
+**ABL's suite gets a case**: the cartridge `test-title-4bpp` (map 6,
+`--title-4bpp`) and four goldens in `test_titulo_golden.py` —the title,
+the cursor down, back from the slots with B, and map 6 after "Begin the
+Story", which is pixel for pixel the same as on the same cartridge
+without the flag—. Without the line that sets mode 1 the three of the
+title go red.
+
+**What the suite doesn't cover**: none of the three games has a golden
+of its title —`just arrancan` only passes it with A—, so how each one
+looks at 4bpp was looked at by hand (captures, next to the picture), not
+frozen; saving and loading through the title in those three was run by
+hand once, not by a test; and the 4bpp path with a title that isn't
+320x240 was not tried (none of the eight games has one).
+
+**To merge**: the-advocate `carpintero-titulo-4bpp` (reinstall `convert`,
+`mapdata` and `cartridge`), the-advocate-ports `carpintero-titulo-4bpp`
+(four goldens in their own commit, and a fix to
+`test_msu_la_rom_sabe_donde_esta_cada_fondo`, which the new cartridge
+turned red), the-advocate-docs `carpintero-titulo-4bpp`.
