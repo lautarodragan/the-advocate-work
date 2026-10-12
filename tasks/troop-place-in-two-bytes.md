@@ -2,7 +2,7 @@
 name: "The troop's place in two bytes"
 description: "BA_TROOP_K is a byte: a cartridge with more than 255 used troops doesn't build (VD asks for 277); widen it to two bytes, for any game"
 type: feature
-status: testing
+status: done
 agents: [Hurón]
 assignee: taro
 ---

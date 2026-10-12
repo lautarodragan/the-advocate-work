@@ -2,7 +2,7 @@
 name: "The title that doesn't fit in VRAM"
 description: "Desert Nightmare, The Frozen World and Vampires Dawn start without their title screen: the picture goes past the 544 tiles that title.s leaves it"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Carpintero]
 ---

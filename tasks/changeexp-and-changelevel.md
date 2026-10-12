@@ -2,7 +2,7 @@
 name: "ChangeExp and ChangeLevel"
 description: "The compiler has neither ChangeExp nor ChangeLevel, and a page with a command that doesn't compile drops entirely: the debug map's doors can't give experience"
 type: feature
-status: testing
+status: done
 agents: [Hurón, Carpintero]
 assignee: taro
 ---

@@ -2,7 +2,7 @@
 name: "Other games: the re-sweep"
 description: "Measure the seven games again with today's tools —what builds, what cuts, which pages do not compile— and leave it as a new research in the book"
 type: research
-status: testing
+status: done
 assignee: taro
 agents: [Aguará]
 ---

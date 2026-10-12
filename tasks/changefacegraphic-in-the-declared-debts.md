@@ -2,7 +2,7 @@
 name: "ChangeFaceGraphic in the declared debts"
 description: "ChangeFaceGraphic compiles to nothing but is not in ACCEPTED_UNDONE, so page_debts does not warn that the face is lost"
 type: bug
-status: testing
+status: done
 agents: [Codex]
 assignee: taro
 ---

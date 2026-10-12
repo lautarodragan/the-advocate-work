@@ -2,7 +2,7 @@
 name: "The events that don't fit in the map's RAM"
 description: "EV_MAX: a map with more than 120 events cuts the build; make the ones that matter fit, and warn"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Carpintero]
 ---

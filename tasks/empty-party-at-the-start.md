@@ -2,7 +2,7 @@
 name: "The empty party at the start"
 description: "RM2k starts with nobody in the party and no visible hero; the converter asks for a leader to draw, and Sunset and Desert need party = [1]"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Mulita]
 ---

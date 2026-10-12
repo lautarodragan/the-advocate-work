@@ -2,7 +2,7 @@
 name: "Encounters with two-byte indices"
 description: "The encounter tables use one byte per index and Vampires Dawn has 779 troops and 136 zones: make them fit, instead of stopping the build"
 type: feature
-status: testing
+status: done
 agents: [Tijereta]
 assignee: taro
 ---

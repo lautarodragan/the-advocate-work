@@ -2,7 +2,7 @@
 name: "The fingerprint: the game's files, the .zip and --force"
 description: "The game's resources go into the fingerprint by content; the game and the RTP can be a .zip, unpacked into the cache and into the fingerprint by content; the RTP as a directory and the SoundFont, by their path; and a --force"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Cardón]
 ---

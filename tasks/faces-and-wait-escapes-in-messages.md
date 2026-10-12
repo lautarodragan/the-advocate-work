@@ -2,7 +2,7 @@
 name: "Faces and wait escapes in messages"
 description: "ChangeFaceGraphic and the escapes \\. \\! \\| in the middle of a box leave their page out; in Dooms 2 the start scene of map 2 doesn't run and nothing triggers. Cheap: accept the face as debt (without drawing it) and take the escapes as waits"
 type: feature
-status: testing
+status: done
 agents: [Aguará, Tijereta]
 assignee: taro
 ---

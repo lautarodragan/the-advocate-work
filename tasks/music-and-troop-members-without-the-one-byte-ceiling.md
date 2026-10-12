@@ -2,7 +2,7 @@
 name: "Music and troop members, without the one-byte ceiling"
 description: "Vampires Dawn stops at 'Music/ has 281 songs and the track goes in a byte' and behind it at the 470 troop members in a one-byte table: make them fit"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Tijereta]
 ---

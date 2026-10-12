@@ -2,7 +2,7 @@
 name: "Sunset: the map 22 scene in black"
 description: "In a small Sunset Over Imdahl cartridge (maps 11, 22, 21, 23 and 10) the map 22 scene stays black, with or without the party crutch"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Mulita]
 ---

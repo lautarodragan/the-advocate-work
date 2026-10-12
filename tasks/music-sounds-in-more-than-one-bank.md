@@ -2,7 +2,7 @@
 name: "The music's sounds, in more than one bank"
 description: "Vampires Dawn stops at 'rm2k-snes-audio: the music's sounds go over one bank: 41118 B': the sounds table of all the songs can't go past a 32 KB bank"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Tijereta]
 ---

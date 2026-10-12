@@ -2,7 +2,7 @@
 name: "Sunset: the pictures over the map"
 description: "Sunset draws roofs, lights, shadows and fogs as full-screen pictures over the map; the ROM carries them as large pictures, which cover the map, and the scene goes black"
 type: feature
-status: testing
+status: done
 assignee: Mulita
 agents: [Mulita]
 ---

@@ -2,7 +2,7 @@
 name: "A screens test gives a different result with the whole workspace"
 description: "the_boxes_of_the_maps_and_the_common_events gives 4 boxes with cargo test -p rm2k-snes-screens and 5 with cargo test --workspace, since the merge of the faces and the escapes (3f34ca23)"
 type: bug
-status: testing
+status: done
 agents: [Hornero]
 assignee: taro
 ---

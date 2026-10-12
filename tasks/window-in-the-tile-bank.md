@@ -2,10 +2,12 @@
 name: "The window in the tile bank"
 description: "A System with a stretched gradient background asks for one tile per shade: the message window goes over 256 tiles and the actor choice over its VRAM range"
 type: feature
-status: testing
+status: done
 agents: [Tijereta]
 assignee: taro
 ---
+
+**Done**, 2026-10-12. Superseded: it asked taro to judge the fused windows, and the windows' background by System (`windows-background-setting-and-flat-text-area.md`) undid almost all the fusing.
 
 What was left behind `window-with-more-than-15-colors` (Tijereta, 2026-10-05).
 With the original System and the colors already reduced by Adeleine, the message

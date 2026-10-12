@@ -2,7 +2,7 @@
 name: "The window's colors, in Wally's request"
 description: "WINDOW_COLORS is a wally constant (13 since the arrow and the bar) and it broke the test that compares the layers against the Python; have it come in the request, from the game's System"
 type: refactor
-status: testing
+status: done
 agents: [Hornero, Tijereta]
 assignee: taro
 ---

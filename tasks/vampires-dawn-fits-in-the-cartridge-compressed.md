@@ -2,10 +2,12 @@
 name: "Vampires Dawn fits in the cartridge, compressed"
 description: "VD asks for ~11.7 MB of blocks against 7.94 MB in the 127 banks (pose_N 4.27, map_tiles_N 2.21): compress until it fits; if that is not enough, MSU-1 mandatory for VD"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Tijereta]
 ---
+
+**Done**, 2026-10-12. Superseded: it concluded that VD doesn't fit compressed, and `vampires-dawn-with-mandatory-msu-1.md` solved it. Its branches are not merged, on purpose.
 
 Measured by Tijereta on 2026-10-11 (`music-sounds-in-more-than-one-bank.md`), with Aguará's 82 exclusions and starting at 8: `the data does not fit: … the 127 banks the cartridge has for data are taken`.
 

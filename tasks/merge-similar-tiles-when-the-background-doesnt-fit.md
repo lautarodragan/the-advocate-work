@@ -2,7 +2,7 @@
 name: "Merge similar tiles when the background doesn't fit"
 description: "If a map's background has more distinct tiles than fit in VRAM, the most similar ones are merged until it fits, with a warning: an algorithmic playable floor, without intervening by hand"
 type: feature
-status: testing
+status: done
 agents: [Cardón]
 assignee: taro
 ---

@@ -2,7 +2,7 @@
 name: "Vampires Dawn's intro, broken"
 description: "VD's map 3 ('Intro') builds alone, but instead of the panorama with the title it shows still stripes and red blocks; it isn't BOOT_FRAMES"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Hurón]
 ---

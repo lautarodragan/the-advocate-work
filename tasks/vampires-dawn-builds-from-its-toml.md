@@ -2,7 +2,7 @@
 name: "Vampires Dawn builds from its toml"
 description: "Re-sweep VD's maps with today's main —mandatory MSU-1, 255 sounds, NPCs, events in RAM already fixed— and commit its exclusions and its start map, so that it builds from rm2k-snes.toml like the others"
 type: feature
-status: testing
+status: done
 agents: [Aguará]
 assignee: taro
 ---

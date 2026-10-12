@@ -2,7 +2,7 @@
 name: "Vampires Dawn with mandatory MSU-1"
 description: "VD doesn't fit in the 127 banks even with the reasonable stuff compressed (~1 MB short with the poses in LZ2, more without them): let a project ask for mandatory MSU-1 and carry to the .msu what doesn't fit"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Hornero, Tijereta]
 ---

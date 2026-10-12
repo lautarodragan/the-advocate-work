@@ -2,7 +2,7 @@
 name: "\\N[n] in messages"
 description: "A box with \\N[n] (an actor's name) leaves its page out; in The Frozen World that cuts the opening cutscene to black (map 4). Cheap: bake the default name when no ChangeHeroName changes it"
 type: feature
-status: testing
+status: done
 agents: [Aguará, Carpintero]
 assignee: taro
 ---

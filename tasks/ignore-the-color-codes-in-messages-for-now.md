@@ -2,7 +2,7 @@
 name: "Ignore the color codes in messages, for now"
 description: "\\c[n], \\C[n] and \\s[n] in a box leave it out entirely; have them ignored as the waits already are, as debt"
 type: feature
-status: testing
+status: done
 agents: [Tijereta]
 assignee: taro
 ---

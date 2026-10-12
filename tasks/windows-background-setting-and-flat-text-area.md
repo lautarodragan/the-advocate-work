@@ -2,7 +2,7 @@
 name: "The windows' background setting, and the text area from one cell"
 description: "Steps 1 and 2 of cheaper-windows: [windows] background in the project, drawn by the converter over one CGRAM entry, and the message window's text area filled from one cell when the background is flat"
 type: feature
-status: testing
+status: done
 agents: [Cardón]
 assignee: taro
 ---

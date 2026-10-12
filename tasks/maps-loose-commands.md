@@ -2,7 +2,7 @@
 name: "The maps' loose commands"
 description: "The small cases that leave pages out: ChangeGold by variable, EraseEvent before a jump, the screen position in ControlVars, the cut in ChangeScreenTransitions, and the ControlVars = 999999 of common event 45"
 type: feature
-status: testing
+status: done
 agents: [Aguará, Chajá]
 assignee: taro
 ---

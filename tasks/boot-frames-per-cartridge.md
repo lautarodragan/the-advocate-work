@@ -2,7 +2,7 @@
 name: "BOOT_FRAMES per cartridge"
 description: "Vampires Dawn's start map asks for 46 frames of BOOT_FRAMES and the ROM has 44, a constant: have each cartridge carry its own without moving ABL"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Carpintero]
 ---

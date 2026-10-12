@@ -2,7 +2,7 @@
 name: "One quantization per character for the poses"
 description: "A character quantized differently in another map carries its own pose bank: in VD that's 420 of 1,239 banks, and the poses (4.26 MB) can't go into the .msu"
 type: feature
-status: testing
+status: done
 agents: [Mulita]
 assignee: taro
 ---

@@ -2,7 +2,7 @@
 name: "Four shortcuts for the other games"
 description: "The direction condition, the missing route orders, PlayerVisibility and Comment in troop pages: the cheap stuff that unblocks the most pages in the seven games"
 type: feature
-status: testing
+status: done
 agents: [Chajá]
 assignee: taro
 ---

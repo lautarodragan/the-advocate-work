@@ -2,10 +2,12 @@
 name: "The S-DD1 for the poses: measure before deciding"
 description: "Compressing the poses with LZ2 costs ABL frames; the S-DD1 decompresses on the DMA path, with no CPU. Measure how much it yields, whether it coexists with the cartridge's memory map and what the hardware supports, without touching the cartridge"
 type: research
-status: testing
+status: done
 assignee: taro
 agents: [Carpintero]
 ---
+
+**Done**, 2026-10-12. taro, on 2026-10-12: no S-DD1 —the MSU-1 already takes what doesn't fit and the extra complexity isn't worth it, for now—, with the door open. Written as a decision in the book: [No S-DD1, for now](https://lautarodragan.github.io/the-advocate-docs/decisions/no-s-dd1-for-now.html).
 
 taro, on 2026-10-11, after seeing what the poses in LZ2 cost (`vampires-dawn-fits-in-the-cartridge-compressed.md`): "would the S-DD1 let us compress them without introducing lag?". And: "on the fx pak star ocean runs, so it has to support that chip. what I never tried is msu + another chip".
 

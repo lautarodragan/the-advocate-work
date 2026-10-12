@@ -2,7 +2,7 @@
 name: "Choose another System from the project"
 description: "A knob in rm2k-snes.toml that says which System to use instead of the one the database names: one from the game, from the RTP or from the project"
 type: feature
-status: testing
+status: done
 agents: [Calandria]
 assignee: taro
 ---

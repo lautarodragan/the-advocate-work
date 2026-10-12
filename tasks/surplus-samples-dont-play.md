@@ -2,7 +2,7 @@
 name: "The surplus samples don't play"
 description: "When a cartridge asks for more than 255 samples (SRCN is a byte), the surplus ones are left out with a warning, instead of stopping the build"
 type: feature
-status: testing
+status: done
 agents: [Mulita]
 assignee: taro
 ---

@@ -2,7 +2,7 @@
 name: "Adeleine's palettes"
 description: "Adeleine merges colors globally, one at a time, until its best-fit accommodates the tiles: in Uruya at 4bpp it leaves 19 colors where grouping tiles and choosing 15 per palette leaves 73. Make it choose per palette"
 type: feature
-status: testing
+status: done
 agents: [Codex, Hornero]
 assignee: taro
 ---

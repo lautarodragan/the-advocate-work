@@ -2,10 +2,12 @@
 name: "Experiment: Uruya in 4bpp"
 description: "A throwaway ROM that only shows Uruya (Vampires Dawn, map 165) in mode 1, with its two layers at 4bpp, to see how much color is lost in exchange for fitting in VRAM"
 type: research
-status: testing
+status: done
 agents: [Calandria]
 assignee: taro
 ---
+
+**Done**, 2026-10-12. Superseded: the ROM was a throwaway, and what it showed was followed by `adeleine-palettes.md`.
 
 Measured by Hornero on 2026-10-06 with `wally layers`: Uruya is 817 background
 tiles of 8x8 at 8bpp (60x60 cells, 95 in the upper layer), and the largest VRAM

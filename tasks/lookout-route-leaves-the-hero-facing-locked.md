@@ -2,7 +2,7 @@
 name: "The lookout's route leaves the hero's facing locked"
 description: "At speed 3, the dream scene at the lookout (map 109) cuts the hero's route before it unlocks the facing, and Talan is left unable to turn"
 type: bug
-status: testing
+status: done
 agents: [Hurón]
 assignee: taro
 ---

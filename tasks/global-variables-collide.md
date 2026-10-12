@@ -2,7 +2,7 @@
 name: "Global variables collide"
 description: "Two branches that add a variable at the end of pagina_cero.s, ram_baja.s or ram_lejana.s always collide"
 type: refactor
-status: testing
+status: done
 agents: [Carpintero]
 assignee: taro
 ---

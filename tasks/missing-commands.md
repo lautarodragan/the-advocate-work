@@ -2,10 +2,12 @@
 name: "The missing commands"
 description: "Which RM2k event commands the compiler still can't compile, measured over the whole game: how many pages drop because of each one, and what each one costs"
 type: research
-status: testing
+status: done
 agents: [Aguará]
 assignee: taro
 ---
+
+**Done**, 2026-10-12. Superseded: its two pending items were resolved —the quarry, by `eraseevent-for-real.md`, and ChangeMonsterCondition, as a debt, by `monster-conditions-and-flashscreen-in-battle.md`—.
 
 From taro, on 2026-10-05: "which event system commands are we still missing
 implementing?". The compiler knows it page by page, but there is no

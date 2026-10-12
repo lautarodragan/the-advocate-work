@@ -2,7 +2,7 @@
 name: "A song's sounds, more than 255"
 description: "Dooms 2 leaves out maps 10, 14 and 63 because of 'the song uses 291 sounds and the index is one byte' (411 in 14)"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Hornero, Tijereta]
 ---

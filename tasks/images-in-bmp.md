@@ -2,7 +2,7 @@
 name: "Images in BMP"
 description: "RM2k accepts BMP as well as PNG (CharSet, ChipSet, System, Picture…); the tools read only PNG, and Dooms 2 doesn't build because of a CharSet in BMP"
 type: feature
-status: testing
+status: done
 agents: [Chajá]
 assignee: taro
 ---

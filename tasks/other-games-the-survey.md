@@ -2,7 +2,7 @@
 name: "Other games: the survey"
 description: "Seven RM2k games besides ABL —El Dorado, Sunset Over Imdahl, The Book of Three, Dooms 2, The Frozen World, Desert Nightmare, Vampires Dawn—: a project for each one, what compiles, what breaks and a first cartridge without MSU-1, to find what they share before fixing anything"
 type: research
-status: testing
+status: done
 agents: [Aguará]
 assignee: taro
 ---

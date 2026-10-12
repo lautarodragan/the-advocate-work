@@ -2,7 +2,7 @@
 name: "The justfiles, smaller"
 description: "Remove from the two justfiles —the tools' one and ABL's— the recipes that are no longer used, and simplify the ones that were left complicated after the migration to Rust and the split into two repos"
 type: refactor
-status: testing
+status: done
 agents: [Calandria]
 assignee: taro
 ---

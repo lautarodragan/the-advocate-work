@@ -2,10 +2,12 @@
 name: "Ignore ChangeSystemGraphics, for now"
 description: "Keep ChangeSystemGraphics from leaving out the page that uses it: accept it doing nothing, as debt, until it is implemented (changesystemgraphics.md, in todo)"
 type: feature
-status: testing
+status: done
 agents: [Mulita]
 assignee: taro
 ---
+
+**Done**, 2026-10-12. Superseded by `changesystemgraphics.md`, which did it for real.
 
 From taro, on 2026-10-05: "ignore ChangeSystemGraphics. Let's leave a task
 in todo to implement it, and for now let's not allow its lack of

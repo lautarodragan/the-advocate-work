@@ -2,7 +2,7 @@
 name: "Have Vampires Dawn's map 1 build without its animation box"
 description: "If the box for a map's battle animations doesn't fit in the sprite bank, the map is left without them with a warning, instead of aborting the build"
 type: feature
-status: testing
+status: done
 agents: [Carpintero]
 assignee: taro
 ---

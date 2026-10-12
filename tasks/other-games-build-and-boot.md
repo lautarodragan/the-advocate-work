@@ -2,7 +2,7 @@
 name: "The other games build and boot"
 description: "A recipe that builds the seven games from their toml and boots them up to the first map, in snes9x and bsnes; and some goldens of Sunset's painted maps, the only engine path that no test runs"
 type: feature
-status: testing
+status: done
 agents: [Cardón]
 assignee: taro
 ---

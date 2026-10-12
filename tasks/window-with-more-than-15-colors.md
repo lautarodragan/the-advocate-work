@@ -2,7 +2,7 @@
 name: "The window with more than 15 colors"
 description: "A System whose window (background, frame, arrow, cursor, font and shadow) goes over the colors that fit stops the whole game today; have Adeleine reduce it instead of stopping, for any game"
 type: feature
-status: testing
+status: done
 agents: [Tijereta]
 assignee: taro
 ---

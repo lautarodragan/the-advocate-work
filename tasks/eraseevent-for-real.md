@@ -2,7 +2,7 @@
 name: "EraseEvent for real"
 description: "EraseEvent for real in map pages: the event that runs it disappears until the map is reloaded, and a parallel one is cut there; in a common event it does nothing"
 type: feature
-status: testing
+status: done
 agents: [Aguará, Hurón]
 assignee: taro
 ---

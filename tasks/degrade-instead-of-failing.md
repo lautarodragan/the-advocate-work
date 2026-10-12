@@ -2,10 +2,12 @@
 name: "Degrade instead of failing"
 description: "The limits that today stop the whole game or map lose only what doesn't fit, with a warning: EraseScreen/ShowScreen, more than 256 variables, more than 8 route graphics per map, the names that don't fit in the menu, the title that doesn't fit in VRAM"
 type: feature
-status: testing
+status: done
 agents: [Carpintero]
 assignee: taro
 ---
+
+**Done**, 2026-10-12. taro closed it on 2026-10-12. Point 4, the names that don't fit in the menu's bank, is what is left, and it was already a draft: `dooms-2-slots-and-menu-dont-fit-in-their-bank.md`.
 
 From taro, on 2026-10-06: cheap shortcuts to unblock the other games, along
 the same line as the surplus samples. From the survey
