@@ -820,7 +820,11 @@ What always has to be done:
   without git seeing anything. It is cheaper to tell each one which it gets
   when launching it than to discover it when merging: on 2026-09-13 it
   happened with all three things at once, and an opcode collision travelled
-  inside a merge that had already been declared verified.
+  inside a merge that had already been declared verified. **Far RAM is no
+  longer one of them** since 2026-10-11: a new variable goes with a `.res`
+  in the `FARBSS` segment, in its subsystem's file, and the linker places
+  it —see the top of `runtime/far_ram.s`—; an agent that writes a far
+  address by hand gets ABL's `test_reservas_de_la_wram.py` red.
 * **Tell it to namespace its temporary files.** The scratchpad is **shared
   among agents**, and two working in parallel pick the same obvious name:
   on 2026-09-15 two wrote a `comparar.sh` each in the same place. One
@@ -915,7 +919,8 @@ So when merging a sub-agent's branch:
   looking at its copy, so two branches choose the same one and git sees
   nothing. All three things happened the same day. The opcodes are now
   guarded by the declaration, which does not compile with a repeated
-  number; the rest has to be looked at.
+  number, and far RAM by the linker, since it stopped being chosen by hand;
+  the rest has to be looked at.
 
 ### When a sub-agent gets cut off
 
