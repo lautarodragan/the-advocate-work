@@ -2,8 +2,14 @@
 name: "The world and what follows"
 description: "Plan: the world map (66) in release, the Lashe Area chapter up to the tunnel to Paradise, and the space still missing to fit it whole"
 type: feature
-status: todo
+status: done
 ---
+
+**Done**, closed on 2026-10-12: it was the plan, and its six milestones
+were each a task of their own, all done —`world-1-map-66-fits.md` to
+`world-5-tangle-forest.md`, and `world-6-yun-town-and-drust-camp.md` for the
+optional parts—. The plan stayed in `todo` because nobody moved it when the
+last one closed. What follows is as it was written, on 2026-09-27.
 
 # What
 
