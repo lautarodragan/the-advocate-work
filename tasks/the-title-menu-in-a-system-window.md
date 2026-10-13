@@ -2,7 +2,7 @@
 name: "The title menu in a System window"
 description: "The title's Begin the Story / Resume the Story menu is drawn as bare text with a mark over the picture; RPG_RT draws it in a window of the game's System, with its cursor"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Tijereta]
 ---

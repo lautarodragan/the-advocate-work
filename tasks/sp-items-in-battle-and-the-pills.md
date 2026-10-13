@@ -2,7 +2,7 @@
 name: "SP items in battle and the pills"
 description: "In battle the items that recover SP can't be used, and the Agility Pill can't be used anywhere: medicines with SP and type 8 items (the ones that raise attributes)"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Mulita]
 ---
