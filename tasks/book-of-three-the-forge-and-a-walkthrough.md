@@ -2,8 +2,7 @@
 name: "Book of Three: the forge, and a walkthrough test"
 description: "At the forge's house the NPC asks to forge something, but the fire isn't interactive and the house can't be left; and up to there the game is right, so a played walkthrough test with goldens is worth having"
 type: bug
-status: testing
-assignee: taro
+status: done
 agents: [Calandria]
 ---
 
@@ -100,3 +99,7 @@ entregar` of the other games, so taro plays the forge.
 Branches: the-advocate `calandria-forja`, the-advocate-ports
 `calandria-forja` (code, then goldens in their own commit),
 the-advocate-docs `calandria-forja`.
+
+### taro, 2026-10-13
+
+"The forge bug is already fixed": played and confirmed.
