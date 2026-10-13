@@ -52,10 +52,10 @@ passes it the window in the request, `troop_window`, with the width that
 `rm2k-snes-battle layout` answers. The ROM doesn't change. "The Captain has taken off in
 the ship!" comes out in a three-line box with TALAN at the top.
 
-Tests, in ABL: `test_el_despegue_se_lee_entero` reads the screen —not the
+Tests, in ABL: `test_the_liftoff_reads_whole` reads the screen —not the
 cartridge— and requires the whole text from the LDB; red before: "The Captain has
 taken off in th". The ones that compared the block against the LDB
-(`test_eventos_de_tropa.py`, `test_sistemas_de_tropa.py`) now compare
+(`test_troop_events.py`, `test_troop_systems.py`) now compare
 against the redone boxes (`screen_stage.refit`).
 
 **The battle's own messages** (the second commit, in the ROM):
@@ -71,15 +71,15 @@ what RM2k's message window covers. Up to four.
   touch `FAR_PAIR_LIST` (`$7E2400`-`$7E257F`).
 - `ba_number_exact` is gone: only `ba_message` used it.
 
-Tests, in ABL (`test_batalla.py`): `test_el_mensaje_del_elixir_entra_en_la_pantalla`
-and `test_el_mensaje_de_detect_aura_entra_en_la_pantalla` read the screen and
+Tests, in ABL (`test_battle.py`): `test_the_elixir_message_fits_on_screen`
+and `test_the_detect_aura_message_fits_on_screen` read the screen and
 require the lines that `envolver` gives, the rule written in the test.
 Red before: `'#Kersh Pungent Elixir-LIFE  used'` —the `#` is the cell the
 full stop stomped on— and `'####an has perceived the enemy a'`.
 
 **No golden moved**: none shows a message that runs over. The
 captures of the new cases, before and after, in
-`/shared/capturas/2026-10-02-textos-de-la-pelea/`.
+`/shared/captures/2026-10-02-textos-de-la-pelea/`.
 
 **What's left**: `ba_page_message`'s cut remains, for a line that
 `refit` can't split (a word longer than 31). A page with `\V[n]`

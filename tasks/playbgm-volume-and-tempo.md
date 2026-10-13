@@ -88,8 +88,8 @@ midway through the scene, at 80. The night forest ones (`nightbg` at 40 and temp
 Seen red before the fix, with the new bytecode and the `op_bgm` that
 only skipped the four bytes:
 
-- `rpgmaker/test_volumen_y_tempo.py`, with three new cases
-  (`tema-a-volumen-50`, `tema-a-tempo-150`, `tema-que-baja`):
+- `rpgmaker/test_volume_and_tempo.py`, with three new cases
+  (`song-a-volume-50`, `song-a-tempo-150`, `song-that-low`):
   - at volume 50, each `VOL` that reaches `dsp_music` is a quarter of what
     the stream wrote. Red: "el registro $00 quedó en 33 y el stream le
     escribió 33: tenía que quedar en 8";
@@ -98,8 +98,8 @@ only skipped the four bytes:
   - the same theme at 100 and then at 50 doesn't restart and the voices go down without
     waiting for their next note. Red: "el registro $00 quedó en 45 … tenía que
     quedar en 11".
-- `abl/test_msu.py::test_con_msu_el_volumen_de_un_tema_que_sigue_baja_la_pista`:
-  with the tracks, `tema-que-baja` against `tema-pedido-dos-veces`, the same
+- `abl/test_msu.py::test_with_msu_the_volume_of_a_song_that_goes_on_lowers_the_track`:
+  with the tracks, `song-that-low` against `song-requested-two-times`, the same
   audio after the second `PlayBGM`; the amplitude has to end up at a
   quarter. Red: "dejó la pista a 1.00".
 - `cargo test -p rm2k-snes-events`: `a_play_bgms_level_in_the_consoles_units`.
@@ -109,7 +109,7 @@ only skipped the four bytes:
   `OP_BGM` (128, 128, 0, 1: all its `PlayBGM`s go as written) and
   the jump destinations that come after, shifted by 4.
 
-`test_musica_techos.py` passed: with everything at 100 the mix is the same, and a
+`test_music_ceilings.py` passed: with everything at 100 the mix is the same, and a
 `PlayBGM` can only lower it.
 
 ## What's left
@@ -119,7 +119,7 @@ only skipped the four bytes:
   `MML2_MotherZone` at 80, `Turrican_1_-_Loader` at 50…, in 18 maps), and the
   LDB says the title's goes at 90 and **at tempo 130**. Both go through
   `music_start`, which plays them as written. The title's, moreover,
-  is how `test_musica_escrituras.py` and the ceiling measurement play the
+  is how `test_music_writes.py` and the ceiling measurement play the
   themes: applying its level changes those two.
 - A map whose theme is the one already playing doesn't change its level (RM2k does:
   `Game_Map::PlayBgm` goes through `BgmPlay` with the map's volume).
@@ -148,11 +148,11 @@ with MSU-1 `Kfmus5` comes out the same as before, on purpose.
 - `bgm_level.s` is a new file in `tools/runtime/`, included in
   `main.s` after `remembered_place_and_song.s`.
 - Far RAM: $25C6 to $25DF.
-- There are no new or moved goldens, and `test_musica_techos.py` passed.
-- With `main` merged (`4a94948c`): `NO_CACHE=1 just cartuchos` identical byte
-  for byte to the cached one, `just pruebas` 919 green, `just -f
+- There are no new or moved goldens, and `test_music_ceilings.py` passed.
+- With `main` merged (`4a94948c`): `NO_CACHE=1 just cartridges` identical byte
+  for byte to the cached one, `just tests` 919 green, `just -f
   tools/justfile test` 46, `cargo test -p rm2k-snes-events` green.
-  `just espacio` in `release`: bank 0 from 581 to 364 B, bank 1 from 4,544 to
+  `just space` in `release`: bank 0 from 581 to 364 B, bank 1 from 4,544 to
   4,233 B, data banks 120 of 124 as before.
 
 ## What to listen for while playing

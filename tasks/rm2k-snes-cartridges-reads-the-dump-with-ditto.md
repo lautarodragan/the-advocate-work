@@ -20,7 +20,7 @@ fails if a crate that isn't Ditto reads a `.json` of the dump on its own.
 `ditto::dump::Dump`, reads the tree with `dump.tree()` and stores it as the
 `Tree` of `rm2k-rules` —the same one `battle` uses—; "is a map" is
 `TreeMapMapType::Map`. The `arbol` node of the new maps in
-`parches/manual/nuevos/` is still read from the patch's JSON (it's the
+`patches/manual/new/` is still read from the patch's JSON (it's the
 project's, not the dump's), but it's converted with Ditto's type, `MapInfo`,
 and overrides the game's with `Tree::insert`, as before. The
 `cartridge` test had to write a `ditto.json` in its toy dump.
@@ -46,12 +46,12 @@ in `cartridges.rs` and the one in `events`.
 **On merging, install** `cartridge` and `events`:
 `just -f tools/justfile install cartridge events`.
 
-**Verified**, with `NO_CACHE=1 just cartuchos` and the sha256 of the 999
-files in `rom/build/` (without cache, `.o`, `sello.txt`, `conversor.log`, and
+**Verified**, with `NO_CACHE=1 just cartridges` and the sha256 of the 999
+files in `rom/build/` (without cache, `.o`, `stamp.txt`, `converter.log`, and
 the `.dbg` without `mtime`): with this change's binaries, with the starting
 `main`'s compiled the same way (installed in the local `bin/` from `5dc54ff7`)
 and on the merge with `main`, the three runs give **everything identical**. Against
 the run with the global binaries only the two `.dbg` files differ, and
 they differ the same way with the local binaries of `5dc54ff7`: it's global versus
-local, not this change. `just pruebas` and `just -f tools/justfile test`
+local, not this change. `just tests` and `just -f tools/justfile test`
 green on the merge; `cargo test -p` of `cartridge` and `events`, too.

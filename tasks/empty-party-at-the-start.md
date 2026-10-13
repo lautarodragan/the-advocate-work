@@ -45,15 +45,15 @@ Read in `~/ref/easyrpg-player/src`:
   (looked at with snes9x captures, not with a test).
 * ABL: `abl.sfc` comes out identical with only the converter's changes
   (`f135f6af…`). With the menu one it moves, on purpose.
-* `test_grupo_vacio.py`, in `test-special` (so as not to touch `release`):
+* `test_empty_party.py`, in `test-special` (so as not to touch `release`):
   before the menu fix, red were Items and Equipment —A opened the
   list, and Equipment opened the actor choice over zero rows— and the
   menu golden. "isn't drawn", "walks", "joins and is seen" and
   "saves and loads" were already passing: the runtime already knew about `party_n = 0`.
 * The first place chosen for the case, map 1 at (66, 40), is the one from
-  `parado-tapado`: the hero ends up under a pipe and can't be seen. Map 255
+  `standing-covered`: the hero ends up under a pipe and can't be seen. Map 255
   opens a sign, and map 21 adds Talan alone. Map 5 at (39, 34) remained, the one from
-  `pelea-82-grupo-11-12`.
+  `battle-82-party-11-12`.
 
 * Sunset without the crutch: the whole `release` builds (2 h 11 min, with other
   runs going). The title leads to map 21 with the empty party.

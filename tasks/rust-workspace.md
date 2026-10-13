@@ -110,7 +110,7 @@ Commits: the workspace; the move, only `git mv` and paths; the test; the
 - `cargo build --release` and `cargo test` of the workspace: 251 tests, the
   same ones the nine gave separately in `main`, plus the `suite::tools()` one,
   252; 3 ignored in both cases.
-- `NO_CACHE=1 just cartuchos` with the nine installed in the local `bin/`: the
+- `NO_CACHE=1 just cartridges` with the nine installed in the local `bin/`: the
   999 files of `rom/build/` —`.sfc`, `.msu`, `.pcm`, `.inc`, `.sym` and the
   rest— identical to those that come out here with `main`'s binaries. The two
   `.dbg` differ, and only in two measured things: `main`'s binaries were
@@ -136,7 +136,7 @@ without `preserve_order`. Recompiling after touching a crate is what goes down
 the most: the dependencies are already in `tools/target/`.
 
 With that, on the branch before merging `main` (what `main` brought was only
-prose in `workflow/`): `just pruebas`, 874 green.
+prose in `workflow/`): `just tests`, 874 green.
 
 ## When merging, in the main checkout
 

@@ -57,19 +57,19 @@ else —verified against the pilot's saved text—.
 
 The ROM test is a new cartridge, `test-encounter-every-step`: map 21 and the
 encounter party of `test-special`, with `--test-encounters 1`. Its case,
-`encuentro-cada-paso`, is a copy of `grupo-11-12-13` and not the same one: a
+`encounter-every-step`, is a copy of `party-11-12-13` and not the same one: a
 case in two cartridges has to be in the one that carries them all
-(`test_un_caso_que_esta_en_dos_corre_en_el_que_lleva_todos`), and that one is
+(`test_a_case_in_two_runs_in_the_one_with_all`), and that one is
 not in `release`. So it goes in `excluded_cases`. Before the fix it did not
 assemble (`Range error (65536 not in [0..65535])`); after it,
-`test_encuentro_cada_paso.py` walks up and the battle comes on the first step.
+`test_encounter_every_step.py` walks up and the battle comes on the first step.
 With the cartridge changed to `test-special` the same test goes red with
 "8 pasos", which is the control.
 
 ## When merging
 
 Reinstall `battle` and `events` in the global one: `just -f tools/justfile
-install battle events`. The new cartridge is built by `just cartuchos` on its
+install battle events`. The new cartridge is built by `just cartridges` on its
 own. In `abl.sfc` there is nothing to play, because it comes out the same. The
 only thing left for taro, if he wants, is to look at
 `rom/build/tests/encounter-every-step/prueba.sfc`, where every step on map 21

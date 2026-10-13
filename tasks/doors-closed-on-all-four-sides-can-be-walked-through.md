@@ -26,7 +26,7 @@ frames, which added the flag.
 ## Done
 
 Both writes store a one (`7dcdcfce`). The test is ABL's,
-`pruebas/rpgmaker/test_puerta_de_tile.py`: the door closed on load,
+`tests/rpgmaker/test_tile_door.py`: the door closed on load,
 with page 279 —the other path, the refresh— and open with 279
 and 280. The first two went red without the fix, with Talan at
 (19,32). With 280 alone the door stays closed, and it isn't an error: `Door1Top`

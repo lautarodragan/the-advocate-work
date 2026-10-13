@@ -93,9 +93,9 @@ this branch's tools first in the PATH:
 
 * `abl.sfc` goes from `35c76500…` to `0072d314…`, the same with `NO_CACHE=1`
   as with the cache;
-* **37 battler patches** change (`just parches-check` said so, colour by
+* **37 battler patches** change (`just patches-check` said so, colour by
   colour): the battlers are reduced by merging what is least visible, and a
-  different shade changes the merges. Regenerated with `just parches`, in their
+  different shade changes the merges. Regenerated with `just patches`, in their
   own commit. Those of animations and maps do not change;
 * **68 goldens** change, in a goldens-only commit. None shifts or gets cropped
   —a one-pixel shift explains none of them—. Almost all are one or two 5-bit
@@ -107,14 +107,14 @@ this branch's tools first in the PATH:
   the background's green sign became more saturated). Both are the scaling
   amplified by the colour reduction —`keep_most_used` in the photos,
   `merge_least_visible` in the background—, not an error of the scaling, but
-  they show. There is one that improved: `imagen-grande-nave-40` lost the
+  they show. There is one that improved: `big-picture-ship-40` lost the
   loose black pixels that Pillow's LANCZOS left on the hard edges (why, I did
   not measure);
-* `just pruebas`: **993** green with the new goldens, including
-  `test_musica_techos.py`.
+* `just tests`: **993** green with the new goldens, including
+  `test_music_ceilings.py`.
 
 Side by side, with x4 crops and a summary per golden, in
-`/shared/capturas/2026-10-02-sin-resample/`. **The merge waits for taro's
+`/shared/captures/2026-10-02-sin-resample/`. **The merge waits for taro's
 approval**, above all because of the photos and the battle.
 
 Here: `just -f tools/justfile test` 32, `just -f tools/justfile rust-test`

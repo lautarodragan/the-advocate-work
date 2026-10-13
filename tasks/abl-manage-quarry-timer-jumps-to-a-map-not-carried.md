@@ -15,4 +15,4 @@ a map out of the cartridge leaves the page out—. Not looked at in play:
 it is the quarry, further than where `release` reaches today.
 
 **How to see it**: the line "parallel common events" of
-`abl/build/release/conversor.log`.
+`abl/build/release/converter.log`.

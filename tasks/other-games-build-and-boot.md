@@ -15,7 +15,7 @@ but few.
    and nobody finds out until the next survey. Red if it does not build or if
    it does not reach the first map; along the way, the same cartridge in snes9x and bsnes
    (uninitialized memory in code that ABL does not run). It does not go in
-   ABL's `just pruebas` —VD alone takes ~2 min to build—: it is a separate
+   ABL's `just tests` —VD alone takes ~2 min to build—: it is a separate
    recipe, for before delivering or after a big change.
 2. **Goldens of Sunset's painted maps** (`[graphics]
    painted_maps`, `Way::Painted`): the plaza (2) and the bar (28), still and
@@ -35,16 +35,16 @@ scripts in `~/scratch/cardon/explorar/`.
 
 ### Where it lives and how it is run
 
-A new `justfile` at the root of the ports, which imports `maquina.just`, with
-`just arrancan` (whatever is passed goes to pytest: `just arrancan -k sunset`).
-The tests, in `pruebas/` at the root: `juegos.py` (the harness),
-`test_arrancan.py`, `test_pintados.py` and `golden/`. From ABL's harness only
-`emulator/retro.py` is used (via `pythonpath` in `pruebas/pytest.ini`): the
-rest imports `lugares.py`, which pins ABL's project and asks for its
+A new `justfile` at the root of the ports, which imports `machine.just`, with
+`just boot` (whatever is passed goes to pytest: `just boot -k sunset`).
+The tests, in `tests/` at the root: `games.py` (the harness),
+`test_boot.py`, `test_painted.py` and `golden/`. From ABL's harness only
+`emulator/retro.py` is used (via `pythonpath` in `tests/pytest.ini`): the
+rest imports `places.py`, which pins ABL's project and asks for its
 `GAME_DIR`. The cut to 15 bits moved to `retro.fifteen_bits`, and
-`tanda.quince_bits` calls it. Each game is built with its own
-`just cartuchos`, **without the outside `GAME_DIR`** (if it came inherited,
-it would build with another game's resources). It does not go in ABL's `just pruebas`.
+`tanda.fifteen_bits_of` calls it. Each game is built with its own
+`just cartridges`, **without the outside `GAME_DIR`** (if it came inherited,
+it would build with another game's resources). It does not go in ABL's `just tests`.
 
 ### How it decides "it reached the first map" (measured 2026-10-11)
 
@@ -87,12 +87,12 @@ Plaza (2) and bar (28), still on the cells of Mulita's captures
 —(28,10) and (4,11)— and walking three cells to each side with the shot at
 the middle of the third step: plaza from (25,17), with the camera moving in
 all four; bar from (10,9), where the camera has almost nowhere to go.
-It gets there by playing the intro and with the door jump (`ir_al_mapa` like
+It gets there by playing the intro and with the door jump (`go_to_map` like
 ABL's): it is the `release`. It requires `PAINT_ON` = 1, the "painted" record
 in the `.inc`, that the hero walks 48 px to each side and, in the plaza, that
 the camera moves. snes9x and bsnes against the same golden, at 15 bits: they come out
 equal. Side by side in
-`/shared/capturas/2026-10-11-los-otros-juegos-arman-y-arrancan/`.
+`/shared/captures/2026-10-11-los-otros-juegos-arman-y-arrancan/`.
 
 **Findings** (not fixed, they belong to the engine):
 
@@ -134,7 +134,7 @@ Branches: ports `cardon-otros-juegos` (`b94b479` the harness and the recipe,
 a line in `contributing/README.md`). Nothing to install: it does not touch the
 tools.
 
-On the branch, with the global tools (`fc6f7456`): `just arrancan`
+On the branch, with the global tools (`fc6f7456`): `just boot`
 **8 passed**, rc 0, 106 s with the cartridges already built (Dooms 2 was
 rebuilt); from scratch it adds ~270 s of building. ABL's suite **1203
 passed**, rc 0, and `abl.sfc` `27d989db75901791…`, the same as main.

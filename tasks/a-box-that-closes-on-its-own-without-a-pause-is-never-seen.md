@@ -27,5 +27,5 @@ stretch is on screen. The plain ones still do.
 2, Dooms 2 9, Sunset Over Imdahl 13, the other five 0.
 
 **To reproduce**: a test case with a `ShowMessage` ending in `\^` and a
-`TintScreen` after it, like `autocierre-1` without its `\|`, captured
+`TintScreen` after it, like `auto-close-1` without its `\|`, captured
 every frame from the page's start: the window never appears.

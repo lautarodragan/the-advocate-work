@@ -59,7 +59,7 @@ timer conditions). Noted in `world-and-what-follows.md`, milestone 4.
   `mundo-plan`'s `culpables.py` against `release`'s list: 74, 85 to 95, 99 to
   102, 259 and 255. On 66 five don't compile, those of the destinations that
   aren't in: 67, 68, 105 (18, the tunnel) and two to 312.
-* **`test_recorrido_capitulo_golden.py`**, new: from the entrance to Tasgarde
+* **`test_playthrough_chapter_golden.py`**, new: from the entrance to Tasgarde
   to the title. The guard, the lab, Eisen's story, **95's minigame played in
   full** —three levers and the hatch, with jumps (action events that move the
   hero) and stairs (touch ones); the route ends with 4 of 99 fortitude—, the
@@ -69,29 +69,29 @@ timer conditions). Noted in `world-and-what-follows.md`, milestone 4.
   RAM the parties of each stretch and what the transitions leave: the cut on
   arriving at 95, the mosaic on returning to Sorbe and the fade after Vago. Its
   screenshots aren't blessed.
-* **`test_capitulo.py`**, new: goldens of the arrival at 74, 85, 95, 259 and
-  255, with `celdas_mal_dibujadas` at zero.
-* **`test_borrar_con_el_corte`** (cases `transicion-corte` and
-  `transicion-ninguna`): the brightness at zero and the map loaded on the
+* **`test_chapter.py`**, new: goldens of the arrival at 74, 85, 95, 259 and
+  255, with `wrongly_drawn_cells` at zero.
+* **`test_erase_with_the_cut`** (cases `transition-cut` and
+  `transition-none`): the brightness at zero and the map loaded on the
   fade's first tick, against the zoom's whole ramp. **It was seen failing**
   with `fundido_desde` ignoring the cut: it reaches zero on tick 23.
-* **`test_recorrido_sorbe_golden.py`** now ends when Dalia enters Tasgarde,
+* **`test_playthrough_sorbe_golden.py`** now ends when Dalia enters Tasgarde,
   alone, at the end of the car's route.
 * **When merging `main`** (the debug map) `AGREGADOS` clashed: it ended up as
-  `(164, 259, 255)` plus 900 behind the flag. `just techos` again on the
+  `(164, 259, 255)` plus 900 behind the flag. `just ceilings` again on the
   merged tree, because of the chapter's five new themes.
 * **The SPC700 directory fills up** with the chapter's themes: the second
   batch of `snes_music.copias` stops for lack of entries.
   `test_los_efectos_comparten_lugares_y_a_las_copias_les_sobran_entradas`
   asked for that not to happen; now it's
-  `test_los_efectos_comparten_lugares_del_directorio` and asks that the
+  `test_the_effects_share_directory_places` and asks that the
   sound effects take fewer entries than the usual ones. It's a limit on how
   much the music can be improved, and it'll come back with each theme.
-* **`just cartuchos` and `just pruebas` green** on the merged tree.
+* **`just cartridges` and `just tests` green** on the merged tree.
 
 # Space
 
-`just espacio release` on the merged tree (with the debug map): 115 of 124
+`just space release` on the merged tree (with the debug map): 115 of 124
 data banks, 9 free; bank 0 137 B; bank 1 7,722 B; BSS 138 and ZEROPAGE 4;
 texts 142,138 of 262,144 B. Before the merge, without the debug map, it was
 114 banks, which is what milestone 3 measured for this path.
@@ -134,7 +134,7 @@ would require touching how `copias` chooses, which is its own task.
   `rom/src/ram_lejana.s`.
 * The debug map has no door to Tasgarde or to the bridge.
 
-# What `just pruebas` doesn't cover
+# What `just tests` doesn't cover
 
 * Saldra's branch and AG7's on the bridge: Arden's plan is 54's page; with
   Saldra (56) or AG7 (150) those of 13-14 and 15-16 of 259 run, which no test

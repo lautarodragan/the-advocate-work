@@ -170,36 +170,36 @@ the earlier end, and 66 ev18 leads to 105 again.
 Mulita enlarged the test page table while this was running, so
 there's a new case:
 
-* `casos/huir-corta.json` and `rpgmaker/test_batalla.py`,
-  `test_huir_con_escape_mode_1_termina_la_pagina`: fights, flees (with
+* `casos/huir-corta.json` and `rpgmaker/test_battle.py`,
+  `test_escaping_with_escape_mode_1_ends_the_page`: fights, flees (with
   `BA_ESCAPE` at 100) and the `ControlSwitches` afterwards doesn't run. **It was seen
   red**: with the global tools the converter refused to build ("a
   test page's EnemyEncounter does not compile"). The compiler's two
   look at the destinations with and without handlers.
 * `abl/test_paradise.py`: 105, 106 and 107 just arrived at, with
   golden; 106 and 107 with their scene already seen (331 and 332).
-* `abl/test_recorrido_paradise_golden.py`: from 105 to the title, with Talan and
+* `abl/test_playthrough_paradise_golden.py`: from 105 to the title, with Talan and
   Arden at level 20: the vehicles, the guard, the ambush (wins the
   battle with troop 184), Arden staying behind, the amnesty, Isabella and the
   sign. Its photos aren't blessed.
-* `abl/test_recorrido_tangle_golden.py` now ends on reaching 105.
+* `abl/test_playthrough_tangle_golden.py` now ends on reaching 105.
 
-`just pruebas`: all green except `test_musica_techos.py` (see below).
+`just tests`: all green except `test_music_ceilings.py` (see below).
 `just -f tools/justfile test` green. `cargo test -p rm2k-snes-events`
-green. `NO_CACHE=1 just cartuchos` gives the same fingerprints as with cache.
+green. `NO_CACHE=1 just cartridges` gives the same fingerprints as with cache.
 
 ## Goldens
 
-**New**: `paradise-105-llegada`, `paradise-106-llegada` and
-`paradise-107-llegada`, in their commit. **No existing one moved.** The
-three and the walkthrough's photos are in `/shared/capturas/2026-10-01-paradise/`.
+**New**: `paradise-105-arrival`, `paradise-106-arrival` and
+`paradise-107-arrival`, in their commit. **No existing one moved.** The
+three and the walkthrough's photos are in `/shared/captures/2026-10-01-paradise/`.
 **The merge awaits taro.** 105's sky comes out black: its panorama
 (Evening1) isn't drawn, as in every map with a panorama
 (`panorama-of-map-2.md`).
 
 ## Space
 
-`just espacio release`, before (`a0863e9e`) and after:
+`just space release`, before (`a0863e9e`) and after:
 
                    before                after
     banks          58 of 128, 50 free    59 of 128, 49 free
@@ -212,15 +212,15 @@ three and the walkthrough's photos are in `/shared/capturas/2026-10-01-paradise/
 # What isn't done
 
 * **108**, and with it Paradise: they await the decision above.
-* **`test_musica_techos.py` fails**: the new theme is `lf-st5`, 105's
-  chase. `just techos` wasn't run.
+* **`test_music_ceilings.py` fails**: the new theme is `lf-st5`, 105's
+  chase. `just ceilings` wasn't run.
 * The music from 105 to 107 wasn't listened to.
 * Fleeing from the chasing guard ends his page, so he touches the
   hero again right away: that's what RM2k does. The walkthrough test doesn't flee.
 * Saldra's branch (switch 56) of the ambush isn't played by any test:
   it's the same scene with the other companion.
 
-# What `just pruebas` doesn't cover
+# What `just tests` doesn't cover
 
 * Fleeing in a battle with handlers and `escape_mode` 1: the game doesn't use it;
   only the compiler's test covers it.

@@ -71,8 +71,8 @@ the same tree.
   `enc_step_thresholds` and `encounter_zones` **belong to this domain** —the
   encounters— even though they live in `events.py`, and were reimplemented.
   The Python ones **stay**: they're used by the tests' `Encounters` model,
-  `battle_scenes.py` (`encounter_zones`) and `test_encuentros.py` /
-  `test_pasos_de_encuentro.py`, which compare the ROM against them. So a
+  `battle_scenes.py` (`encounter_zones`) and `test_encounters.py` /
+  `test_encounter_steps.py`, which compare the ROM against them. So a
   divergence between the two copies gets caught by the suite.
 - From `experience.py`: `max_level`, `exp_for`, `exp_list`, `next_exp`,
   `initial_level` and `initial_exp`, reimplemented. **Nothing is deleted from
@@ -97,7 +97,7 @@ the same tree.
 
 ## Verification
 
-- `NO_CACHE=1 just cartuchos` before (with `battle_tables.py`) and after (with
+- `NO_CACHE=1 just cartridges` before (with `battle_tables.py`) and after (with
   `rm2k-snes-battle`): the 999 files of `rom/build/` identical —the `.sfc`,
   `.msu`, `.pcm` and `.inc`— except the two `.dbg`. Those differ **only in how
   they write each source's path**, which depends on which
@@ -107,10 +107,10 @@ the same tree.
 - After merging `main` (the rename to Adeleine), again with `NO_CACHE=1 just
   cartuchos` on the merged tree: the `.sfc`, `.msu`, `.pcm` and `.inc`
   identical to those from before starting. The `.toml`s of
-  `parches/auto/battlers/` differ, since they carry `adeleine.` in their
+  `patches/auto/battlers/` differ, since they carry `adeleine.` in their
   comment (that's from `main`), and so does the `.dbg`, in the size of
   `far_ram.s`: the prose commit changed a comment in it.
-- `just pruebas` (874) and `just -f tools/justfile test` (83) green on the
+- `just tests` (874) and `just -f tools/justfile test` (83) green on the
   merged tree; `cargo test -p rm2k-snes-battle -p rm2k-snes-cartridge` green.
 
 ## When merging

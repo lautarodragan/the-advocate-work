@@ -118,26 +118,26 @@ more.
 **ABL cannot pay for it.** With everything else green, the suite ends up with 8
 reds (1169 of 1177), all from CPU time:
 
-* `test_la_carrera_entera`: the lap of 49 spends 1217 hardware frames
+* `test_the_whole_race`: the lap of 49 spends 1217 hardware frames
   in 976 ticks, 241 too many against a cap of 48. Counted per tick —with a
   temporary counter, already removed—: of the frames with 0 poses to
   decompress, 23 of 510 are lost, with 1 pose 38 of 269, with 2 **100 of 117**,
   with 3 or more **all of them** (80). The race loop has ~10-15% of a frame
   free, and each pose costs ~13%. A cap of two poses per frame improves
   nothing (286 too many).
-* the six `test_batalla[batalla-*]`: the capture comes out late —the command
+* the six `test_battle[batalla-*]`: the capture comes out late —the command
   menu where the golden already shows the item one—, from frames lost
   before the battle;
-* `test_la_celebracion_con_la_cache_de_ranuras`: events without a slot at
+* `test_the_celebration_with_the_slot_cache`: events without a slot at
   frame 65, the cache is one frame behind.
 
 `abl.sfc` with that: `d1e666eeefe2…`. What got fixed along the way and holds
 for any attempt that repeats this: the ring index has to be
 masked when reading it (RAM starts with garbage and a pose landed on the
-grid: `test_la_grilla_vuelve_entera_de_una_pelea` caught it); Goombario
+grid: `test_the_grid_comes_back_whole_from_a_battle` caught it); Goombario
 asks for the width of A when calling `ring_place`; and two tests in the ports
-—`cache_de_ranuras.py`, `test_paradise.py`— read the pose from ROM and have
-to decompress it; `test_reservas_de_la_wram.py` has to allow
+—`slot_cache.py`, `test_paradise.py`— read the pose from ROM and have
+to decompress it; `test_wram_reservations.py` has to allow
 `POSE_RING`.
 
 **What does not work or was not tried, and why:**

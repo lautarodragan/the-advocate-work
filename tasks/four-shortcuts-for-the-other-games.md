@@ -93,7 +93,7 @@ more than one command blocking the same page; what it has left in `MoveEvent` is
 the hero's diagonals.
 
 The ROMs of the games that build —The Book of Three, Desert Nightmare, El
-Dorado and Sunset— are in `/shared/builds/otros-juegos/<juego>.sfc`.
+Dorado and Sunset— are in `/shared/builds/other-games/<juego>.sfc`.
 
 ### ABL
 
@@ -107,9 +107,9 @@ in the saved game and `SUB_MAX`; and the seven new test cases, which
 playing wasn't looked at**: they are Eisen's simulation, and no golden sees them change.
 
 Branch `chaja-atajos` of the clone `/extras/scratch/chaja/abl-atajos`: three tests
-(`test_condicional_por_direccion.py`, `test_rutas_que_se_alejan.py`,
-`test_heroe_oculto.py`), their cases, and two fixes the suite asked for by itself:
-the index in the tests' README, and the subtraction in `test_la_musica_viaja_en_la_partida`,
+(`test_conditional_by_direction.py`, `test_routes_moving_away.py`,
+`test_hidden_hero.py`), their cases, and two fixes the suite asked for by itself:
+the index in the tests' README, and the subtraction in `test_the_music_travels_in_the_save`,
 which duplicates `save_table` and warns every time the save grows.
 
 ### What the suite doesn't cover

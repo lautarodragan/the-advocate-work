@@ -13,7 +13,7 @@ and `grep -c '^def '`). taro wants to go over its responsibilities, on
 First an inventory: what parts it has (the conversion of maps, graphics,
 palettes, events, audio, the VRAM layout, writing the `.inc`s, the test cases,
 the command line, …), which already have their module (`eventos.py`,
-`escena.py`, `asignador.py`, `batalla.py`, `tools/audio/`) and what was left
+`escena.py`, `asignador.py`, `battle.py`, `tools/audio/`) and what was left
 in the big file that belongs to something else. Then, a partition proposal
 with the criterion of the `main.s` cut: first the mechanical part (moving
 without changing), verified with the cartridges byte for byte identical, and
@@ -49,7 +49,7 @@ commit.
 | 1-101 | imports and hooks | sets `DECORATE_TRANSLUCENT` and `REFIT_TEXTS` on `lcf` **on import** | — | the whole process, and any test that imports `snes_convert` |
 | 102-386 | the background layers, 1 | the CGRAM split between the 8 bpp background and the 4 bpp overlay layer, the quantization to 15 bits, the overlay layer as an indexed PNG | `allocator`, `tiles_bin` | `_convert_layers`, `convert_window`, `emit` (constants) |
 | 387-723 | the character as a sprite | colors, poses, each CharSet's palette, which poses each graphic shows on the map, the weight for the allocation | `allocator`, `rm2k`, `settings` | `drawable_npcs`, `build_characters`, `convert_map`, `emit` |
-| 724-940 | baked events | which opaque events get painted onto the overlay layer, and only if they don't move the CGRAM | the converted layers, `render_map`, `events` | `convert_map`, `_map_layers`, `test_horneados` |
+| 724-940 | baked events | which opaque events get painted onto the overlay layer, and only if they don't move the CGRAM | the converted layers, `render_map`, `events` | `convert_map`, `_map_layers`, `test_baked` |
 | 941-1338 | drawable NPCs and the sprite bank | which NPCs fit in the eight OBJ palettes and the VRAM pose bank | the character part | `convert_map`, timer and flash tests |
 | 1339-1716 | the sprite bank's extras | timer, rain, the `ShowPicture` image, the battle animation box, and how many palettes are left; `npc_table`, `maps_per_character` and `has_rain` stayed here by proximity | the character part, `picture`, `animation` | `convert_map`, `main` |
 | 1718-2121 | the background layers, 2 | the palette, the conversion of both layers with Voodoo, and the on-disk and parallel cache of the layers | the 102-386 part, `render_map`, `tiles_bin`, `disk_cache` | `convert_map`, `main` (`precompute_layers`) |
@@ -58,11 +58,11 @@ commit.
 | 2814-3088 | the 16x16 blocks | the map as indices into blocks with passability, and `TileSubstitution` translated into blocks | `rm2k`, `events` | `convert_map`, `main`, `test_substitutions` |
 | 3089-3340 | each map's record | the fields of the 128-byte record, their offsets, and the map table | the NPC, event and terrain sizes | `emit`, `main` |
 | 3341-3417 | the ChipSet animations | the runs of water and of the animated families, per map | `FAMILIES` | `convert_map`, `emit` |
-| 3418-3572 | the battle animations | which animations the bytecode asks for, and their frames as the cartridge stores them | `animation`, `events` | `main`, `emit`, `test_animacion_cuadros` |
+| 3418-3572 | the battle animations | which animations the bytecode asks for, and their frames as the cartridge stores them | `animation`, `events` | `main`, `emit`, `test_animation_frames` |
 | 3573-3654 | experience | the experience tables per actor | `experience`, `lcf` | `emit` |
-| 3655-4069 | the backgrounds and the battlers | which ones the cartridge carries, who asks for them, and their emission with the lightweight backgrounds | `scene`, `events` | `main`, `emit`, `test_msu_datos` |
+| 3655-4069 | the backgrounds and the battlers | which ones the cartridge carries, who asks for them, and their emission with the lightweight backgrounds | `scene`, `events` | `main`, `emit`, `test_msu_data` |
 | 4070-4100 | `block` | the emission primitive: a `.byte` block with its `.block` or `.align` | — | almost everything that emits |
-| 4101-4246 | the pages table | a map's event pages, with the pointer to their code | `events` | `map_data`, `test_paginas` |
+| 4101-4246 | the pages table | a map's event pages, with the pointer to their code | `events` | `map_data`, `test_pages` |
 | 4247-4500 | the material and the compression | the blocks with their own identity (`Materials`), what goes compressed, in how many streams, the WRAM caps, and the raw ones | `compress` (the `lz2` from the PATH) | `emit`, `main`, `test_lz2` |
 | 4501-4633 | each map's data, encounters, identity | a map's blocks, the random encounters, the header's title | the NPC and pages parts, `settings` | `emit`, `main` |
 | 4634-6868 | **`emit()`** | the whole `mapdata.inc`, in a 2,234-line function | almost everything above | `main` |
@@ -70,7 +70,7 @@ commit.
 | 7289-7396 | the command line | `flags_parser` | `environment`, `project` | `main` |
 | 7398-8360 | **`main()`** | orchestrates everything | everything | the executable |
 | 8361-8692 | the music | the job for `rm2k-snes-audio`, the separate themes, the boot cap, the data `.msu`, which themes the packages inherit | `msu_data`, `settings`, `project` | `main`, `test_inherited_songs` |
-| 8693-9012 | the analysis of the game | where the hero starts, which actors can lead, which items and members can be there, what each troop drops; with the global `args_game_dir` | `events`, `lcf`, `resources` | `main`, `convert_map`, `test_lideres` and the timer and flash ones |
+| 8693-9012 | the analysis of the game | where the hero starts, which actors can lead, which items and members can be there, what each troop drops; with the global `args_game_dir` | `events`, `lcf`, `resources` | `main`, `convert_map`, `test_leaders` and the timer and flash ones |
 | 9013-9133 | the test cases | splitting the command line into `--case`, each case's page, which map it runs on | `events`, `lcf` | `main`, `convert_map` |
 | 9134-9677 | **`convert_map()`** | a whole map: layers, sprites, blocks, layout | almost everything of the layers, sprites, blocks, VRAM and cases | `main`, `_map_layers` |
 
@@ -171,9 +171,9 @@ The proposal, as is, in one commit per module and in dependency order:
 the diff of those. How many lines each has is told by `wc -l
 tools/port/*.py`; `snes_convert.py` was left with a single function, `main()`.
 
-**How each commit was verified:** `NO_CACHE=1 just cartuchos` with
+**How each commit was verified:** `NO_CACHE=1 just cartridges` with
 `rom/build/release` and `rom/build/tests` deleted, and the sha256 of all of
-`rom/build/` except the cache, the `.o`s, `sello.txt` and `conversor.log`
+`rom/build/` except the cache, the `.o`s, `stamp.txt` and `converter.log`
 —`.sfc`, `.msu`, `.pcm`, `.inc`, `.sym`, `.dbg` without `mtime`, `.json`,
 raw ones—: the 999 files identical to `d4811ece`'s in all twenty. Also `just
 pruebas` and `just -f tools/justfile test`, green on all of them. With the
@@ -195,8 +195,8 @@ says so.
   `REFIT_TEXTS` on `lcf` when imported, so a process that imports only
   `sprites`, `game_scan` or `map_record` reads the maps without them. The six
   tests that imported `snes_convert` and no longer use anything from it
-  —`test_horneados`, `test_paginas`, `test_lideres`, `test_timer_paleta`,
-  `test_destello_paleta` and `test_msu_datos`— keep importing it because of
+  —`test_baked`, `test_pages`, `test_leaders`, `test_timer_palette`,
+  `test_flash_palette` and `test_msu_data`— keep importing it because of
   that, with a comment. The clean thing would be for `lcf` to receive them as a
   parameter or for a port module everyone imports to set them; both change
   when they're set.
@@ -210,7 +210,7 @@ says so.
   `_check_items_border`, `_check_target`, `_check_shop` and `_check_splits` of
   `vram`; `mapdata` uses `message_window`'s `_columns`; `map_convert` uses
   `baking`'s `_bake_unless_cgram_moves` and `map_layers`'s
-  `_layers_in_memory`; `test_horneados` uses `_tile_alphas`. Renaming them is a
+  `_layers_in_memory`; `test_baked` uses `_tile_alphas`. Renaming them is a
   separate mechanical commit.
 * **`emit()`, `main()` and `convert_map()` whole**, of 2,234, ~960 and ~540
   lines. Their stretches share locals, and splitting them means deciding what

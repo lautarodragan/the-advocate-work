@@ -15,7 +15,7 @@ nor Owned Items on the left."
 ## What the original does
 
 The capture with RPG_RT and Wine, at 320x240:
-`/shared/capturas/2026-09-28-items/original-eleccion-de-actor.png`, and
+`/shared/captures/2026-09-28-items/original-eleccion-de-actor.png`, and
 easyrpg's `Scene_ActorTarget`.
 
 - **Three windows**: on the left, 136 wide, the help with the
@@ -95,30 +95,30 @@ have what it needed to write the item's name.
   one medicine has it, the Pocket Shelter (8).
 - **Whom to equip, from the main menu**: in RM2k it is chosen in the menu
   itself, with the orders on the left and the cursor over the party. Here it is
-  this screen, with the left half in black (`equipo-a-quien`), as it already
+  this screen, with the left half in black (`equipment-a-who`), as it already
   was before with the ">". It is left for a separate task.
 
 ## Tests
 
-- New `eleccion-sandwich`: the Cold Sandwich over the second row, Arden
-  at 10 HP, which is taro's case. New `equipo-a-quien`: the selection for
+- New `choice-sandwich`: the Cold Sandwich over the second row, Arden
+  at 10 HP, which is taro's case. New `equipment-a-who`: the selection for
   equipping, without the item windows.
 - `render_objetivo` draws the windows, the bar, the name and the quantity,
-  so `test_menu_curar_dibujo.py` and `test_menu_items_dibujo.py`
+  so `test_menu_heal_drawing.py` and `test_menu_items_drawing.py`
   compare them pixel by pixel, also after using the sandwich (the quantity
   goes down from 2 to 1).
 - No golden of the menu or of the slots changed, with the priority
   bit set across its whole bank.
 - Before, now and the original, side by side, in
-  `/shared/capturas/2026-09-28-eleccion-de-actor/`.
-- Verified with `just cartuchos` and `just pruebas` on this branch with
+  `/shared/captures/2026-09-28-eleccion-de-actor/`.
+- Verified with `just cartridges` and `just tests` on this branch with
   `main` merged (Tala's arrow repeat): all green. The
   selection computes the edges with `pad` against `pad_ant`, so it repeats
   without touching anything. Before the merge `dcbest` clipped in
-  `test_musica_techos.py`; with the merge the ROM moved again and stopped
-  clipping, so `just techos` was not needed and **there is no ceilings commit**,
+  `test_music_ceilings.py`; with the merge the ROM moved again and stopped
+  clipping, so `just ceilings` was not needed and **there is no ceilings commit**,
   even though the message of `714dcef2` announces it.
-- `just espacio`, before (`main` at `1475d9da`) and after this change without
+- `just space`, before (`main` at `1475d9da`) and after this change without
   merging: in `release` bank 0 went from 196 to 254 B free, bank 1 from
   4,380 to 3,841, and the data gaps from 21,584 to 7,456 B (some 14 KB: the
   tiles, the two tilemaps, the bars and the names table); in

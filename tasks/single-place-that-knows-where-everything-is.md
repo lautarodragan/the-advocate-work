@@ -1,13 +1,13 @@
 ---
 name: "A single place that knows where everything is"
-description: "Step 2 of the plan: comun/proyecto.py gathers the eleven root computations and the derived paths, without changing any value"
+description: "Step 2 of the plan: comun/project.py gathers the eleven root computations and the derived paths, without changing any value"
 type: refactor
 status: done
 assignee: taro
 ---
 
 Step 2 of the plan in [`research/the-map-of-the-python-tools.md`](https://lautarodragan.github.io/the-advocate-docs/research/the-map-of-the-python-tools.html)
-(§4). It goes before the move of `data/`, `parches/`, `pruebas/` and the engine
+(§4). It goes before the move of `data/`, `patches/`, `tests/` and the engine
 (see `decisions/the-tools-split-from-abl.md`): with this
 done, moving a folder is changing one line.
 
@@ -25,7 +25,7 @@ move doesn't have to rename calls.
   `snapshots`; and the environment ones: `juego` (`ABL_GAME_DIR`), `rtp`
   (`ABL_RTP_DIR`), `soundfont` (`ABL_SOUNDFONT`), `reemplazos_msu` (no
   variable, overridden by `--reemplazos`), `cache` (`ABL_CACHE`),
-  `cartuchos_de_prueba` (`CARTUCHOS`) and `compartido` (`SHARED`).
+  `cartuchos_de_prueba` (`CARTRIDGES`) and `compartido` (`SHARED`).
 - `herramientas()` comes from `__file__` and `raiz()` is its parent: whichever
   moves is the one that changes a line.
 - The scripts that get executed still go up **two** folders from
@@ -34,11 +34,11 @@ move doesn't have to rename calls.
   doing is going up three.
 - `parches.py` had a single constant for two things: where the
   versioned stuff is in the repo and where each cartridge leaves it in its build. They were
-  equal by chance —the build mimics the shape of `parches/`—. Now
+  equal by chance —the build mimics the shape of `patches/`—. Now
   `Clase` has `directorio` (the repo's, comes from `proyecto`) and `en_build`
-  (the build's shape, which doesn't move with `parches/`).
+  (the build's shape, which doesn't move with `patches/`).
 - The converter's layer key (`_version_capas`) adds
-  `comun/proyecto.py`: the directories where `render_map`
+  `comun/project.py`: the directories where `render_map`
   looks for the ChipSet come from there, just like `recursos.py`.
 - The safety net: `tools/pruebas/test_proyecto.py` fails if a `.py` in `tools/`
   goes up three folders from `__file__`, builds with `os.path.join` a path that
@@ -48,14 +48,14 @@ move doesn't have to rename calls.
 
 ## What was left out, and why
 
-- `pruebas/arnes/video.py`: computes the root to build its `sys.path` before
+- `tests/harness/video.py`: computes the root to build its `sys.path` before
   it can import anything. It's a script, and the bootstrap is that.
-- `pruebas/herramientas/test_lado_de_abl.py`, `test_indice.py` and
-  `pruebas/abl/test_hover_tram.py`: they don't import from the tools and don't
+- `tests/tooling/test_abl_side.py`, `test_index.py` and
+  `tests/abl/test_hover_tram.py`: they don't import from the tools and don't
   start doing so. `test_hover_tram` repeats the default value of
   `ABL_GAME_DIR`, same as the `justfile`.
-- `consola.NUCLEO`: a libretro core, not a project path.
-- `entregar.HUELLA_MSU` comes from `proyecto` and today gives the same text, but
+- `consola.DEFAULT_CORE`: a libretro core, not a project path.
+- `entregar.MSU_FINGERPRINT` comes from `proyecto` and today gives the same text, but
   that text is copied into the `LEEME.txt` of the delivered tracks: when
   `rom/build/` moves, the fingerprint changes and they have to be delivered again.
 - The script in appendix D of the research puts `comun` in the
@@ -63,15 +63,15 @@ move doesn't have to rename calls.
 
 ## Verified
 
-- `SIN_CACHE=1 just cartuchos` before touching anything and after migrating:
-  997 files in `rom/build/` identical (without `.o` or `sello.txt`; the `.dbg` files
+- `SIN_CACHE=1 just cartridges` before touching anything and after migrating:
+  997 files in `rom/build/` identical (without `.o` or `stamp.txt`; the `.dbg` files
   without mtime). After the comment in `registros.s`, the same except for the
   `size` of that file inside the two `.dbg` files.
-- `just pruebas`: 866. `just -f tools/justfile pruebas`: 117 (109 + 8).
+- `just tests`: 866. `just -f tools/justfile pruebas`: 117 (109 + 8).
 - `rm2k-snes-space` and `rm2k-snes-patches --check` by name from `/`,
-  `just -f …/justfile parches-check` from `/tmp`, and `--help` of the other
+  `just -f …/justfile patches-check` from `/tmp`, and `--help` of the other
   six executables.
-- **Not run**: `just entregar` (its values were printed), nor
+- **Not run**: `just deliver` (its values were printed), nor
   `rm2k-snes-msu` nor `rm2k-snes-volume-ceilings` beyond `--help`.
 
 ## What to look at

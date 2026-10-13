@@ -8,7 +8,7 @@ assignee: taro
 
 From taro, on 2026-10-02: keep going with ABL in parallel, "add more maps".
 Today the demo ends at the arrival in Distant Paradise: 108's fork
-(`parches/manual/mapas/Map0108.json`) changes the `Teleport` to the Council
+(`patches/manual/forks/Map0108.json`) changes the `Teleport` to the Council
 (110) for the end sign. This is what comes next: the chapter of Paradise
 inside, measured first —which maps, what each one weighs, what does not fit and
 why— and put in afterwards, up to the next natural cut.
@@ -106,7 +106,7 @@ stops taking turns and it does not convert.
 
 ## Space
 
-`just espacio release`, before (the `release` of `/shared/abl-snes`,
+`just space release`, before (the `release` of `/shared/abl-snes`,
 `a454257`) and after:
 
                    before                after
@@ -135,7 +135,7 @@ Branch `worktree-agent-a140cce898ba673eb` of the tools repo:
 * **An MSU-1 track for the RTP themes the game names** (`rm2k-snes-audio`).
   `Farewell2`, the one of Talan's house the first night, is from the RTP and
   the `System` does not name it: it had no number and played through the
-  SPC700 even if there was MSU-1 (`test_todo_tema_tiene_su_pista`, red without
+  SPC700 even if there was MSU-1 (`test_every_song_has_its_track`, red without
   the change). They go at the end, after the `System` ones, and they are the
   ones **the whole game** names, not the cartridge, so no number from before
   moved. In ABL there is only one: track **235**.
@@ -144,26 +144,26 @@ No new opcode (`0x41`-`0x44` were left unused) and no RAM.
 
 # Tests
 
-* `abl/test_recorrido_paradise_dia_golden.py`: the whole first day, from 108 to
+* `abl/test_playthrough_paradise_day_golden.py`: the whole first day, from 108 to
   the end sign and the title, with twenty-two shots **not blessed** (in
-  `pendientes.txt`). It turns on 357 by hand, so that the memory in the rain is
+  `pending.txt`). It turns on 357 by hand, so that the memory in the rain is
   on the path.
-* `abl/test_recorrido_paradise_golden.py` now ends on arriving at the Council:
+* `abl/test_playthrough_paradise_golden.py` now ends on arriving at the Council:
   its shots of the sign and the title are gone, and the Council one is new and
   pending.
-* `abl/test_paradise_por_dentro.py`: thirteen arrivals with a golden and
-  `celdas_mal_dibujadas` at zero: 109, 110, 112 to 120, 125 and 126. The maps
+* `abl/test_paradise_inside.py`: thirteen arrivals with a golden and
+  `wrongly_drawn_cells` at zero: 109, 110, 112 to 120, 125 and 126. The maps
   that are only a scene (175 to 177, 122 to 124) are played by the
   walkthrough.
-* `parches/auto/mapas/`: nineteen new patches, from `just parches`; the ones
+* `patches/auto/maps/`: nineteen new patches, from `just patches`; the ones
   that existed did not move.
 
-`just pruebas`: **1023 of 1026**. The three red ones are from
-`test_musica_techos.py` —`T_VGFighterMAX_Masako` and `rshinld` clip, and the
-table is not this mix's—: the new themes moved the split. **`just techos` was
+`just tests`: **1023 of 1026**. The three red ones are from
+`test_music_ceilings.py` —`T_VGFighterMAX_Masako` and `rshinld` clip, and the
+table is not this mix's—: the new themes moved the split. **`just ceilings` was
 not run.** `just -f tools/justfile test` 52 green; `cargo test -p
 rm2k-snes-audio -p rm2k-snes-cartridge -p rm2k-snes-bytecode` green.
-`NO_CACHE=1 just cartuchos` gives the same fingerprints as with cache:
+`NO_CACHE=1 just cartridges` gives the same fingerprints as with cache:
 `abl.sfc` `6041a546…`, `abl.msu` `a654f637…`.
 
 The arrivals and the walkthrough are new: they catch regressions from here on,
@@ -174,7 +174,7 @@ not birth errors. That is said by taro looking.
 **New**: the thirteen `paradise-1NN-llegada`, in their commit. **No existing
 one moved**: not even those of 108's turns, although other slots take turns
 now. The thirteen and the shots of the two walkthroughs are in
-`/shared/capturas/2026-10-02-paradise/`, with a `LEEME.txt`. **The merge waits
+`/shared/captures/2026-10-02-paradise/`, with a `LEEME.txt`. **The merge waits
 for taro's approval.**
 
 # What is not done, and what looks different
@@ -189,11 +189,11 @@ for taro's approval.**
   in the sprite palettes (the converter says so). `Rain1` plays; on 125 it does
   rain.
 * **The music** of the new maps was not listened to, and
-  `test_musica_techos.py` is red (above).
+  `test_music_ceilings.py` is red (above).
 * The memory in the rain (125) depends on 357, which the tunnel turns on if AG7
   came: the branch without him is played by no test.
 
-# What `just pruebas` does not cover
+# What `just tests` does not cover
 
 * The town's houses beyond the arrival: nobody talks to the neighbours.
 * The armoury (119) as a shop.
@@ -203,10 +203,10 @@ for taro's approval.**
 * Tools: install `cartridge` (the runtime changed: `BOOT_FRAMES`) and
   `rm2k-snes-audio` (`just -f tools/justfile install cartridge
   rm2k-snes-audio`). There is no new or renamed Python in `tools/`.
-* ABL: track **235** (`Farewell2`) is new: `just entregar` is going to warn
+* ABL: track **235** (`Farewell2`) is new: `just deliver` is going to warn
   that the ones in `/shared/msu/` do not match; it goes with
-  `--actualizar-msu`.
-* `just techos`, once, on the merged tree.
+  `--update-msu`.
+* `just ceilings`, once, on the merged tree.
 
 # What taro has to test
 

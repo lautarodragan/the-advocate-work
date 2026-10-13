@@ -171,10 +171,10 @@ them with the code alongside can decide:
 
 - `cargo test -p rm2k-snes-events`, `cargo fmt --check` and `cargo doc`
   without warnings.
-- `NO_CACHE=1 just cartuchos`: the 999 files of `rom/build/` —without the
-  cache, the `.o` files, `sello.txt` or `conversor.log`, and the `.dbg`
+- `NO_CACHE=1 just cartridges`: the 999 files of `rom/build/` —without the
+  cache, the `.o` files, `stamp.txt` or `converter.log`, and the `.dbg`
   without `mtime`— identical to the ones before starting.
-- `just pruebas`: 872 green; `just -f tools/justfile test`: 88
+- `just tests`: 872 green; `just -f tools/justfile test`: 88
   green. Both on the final tree, with `events` reinstalled.
 
 What taro has to look at is not playing: it is reading the diff of the

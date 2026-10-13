@@ -93,11 +93,11 @@ why the test requires having looked at at least one instruction of each class
 
 ## The numbers
 
-On today's `main` it gives **zero** in the three cartridges. `just pruebas`: 1005
+On today's `main` it gives **zero** in the three cartridges. `just tests`: 1005
 (1001 + the four new ones: three cartridges and the `BANCO_DE_DATOS` one). `just -f
 tools/justfile test`: 39. `abl.sfc` of
 `release`: `35c76500…`, the same as Pepitero's. The comment in `main.s` doesn't
-move the ROM: `NO_CACHE=1 just cartuchos` before and after, the three `.sfc` and
+move the ROM: `NO_CACHE=1 just cartridges` before and after, the three `.sfc` and
 the three `.msu` identical byte for byte.
 
 ## On merging

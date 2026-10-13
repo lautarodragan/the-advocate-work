@@ -38,6 +38,6 @@ more pages compile and more events fit (Aguará).
 that leads to them loses the whole page (a `Teleport` to a map that isn't
 there doesn't compile). How far it can be played without them wasn't looked at.
 
-**How to see it**: remove the map from `excluded` and `just cartuchos release` in
+**How to see it**: remove the map from `excluded` and `just cartridges release` in
 `vampires-dawn/` of the ports (about two minutes; with the MSU-1, which the
 project asks for as mandatory).

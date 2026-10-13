@@ -7,7 +7,7 @@ assignee: taro
 ---
 
 It showed up while reading the gate of map 12 —event 1 at (1,47)— for
-`pruebas/abl/test_recorrido_vipers_otras_ramas_golden.py`, and **it isn't
+`tests/abl/test_playthrough_vipers_other_branches_golden.py`, and **it isn't
 visible in any covered case**: there the hero is already facing down when
 the jump fails.
 
@@ -54,16 +54,16 @@ passed. The first three, red before the fix.
 
 **The goldens**: the droid of map 2 (EV0040) has a fixed direction facing up
 and jumps downwards; the ROM left it facing down after each jump and now it
-keeps facing up. Twelve frames of `bloqueo`, `droide` and `droide-tapado`
+keeps facing up. Twelve frames of `block`, `droid` and `droid-covered`
 change, only in the droid: three in `915a4801` (Guanaco) and nine in
 `255c7252` (Hornero, looked at one by one). The before and after are in
-`/shared/capturas/2026-09-30-salto-que-falla/`. **The merge awaits taro's
+`/shared/captures/2026-09-30-salto-que-falla/`. **The merge awaits taro's
 approval.** (The message of `915a4801` says those three are all that
 changes, and the one of `7fd79fa6` names only three frames: both fell
 short.)
 
 **When merging**: no Rust to install. The ROM moves, so the music ceilings
-may need measuring again; `test_musica_techos.py` passed on the branch.
+may need measuring again; `test_music_ceilings.py` passed on the branch.
 
 **What's left**: the divergence of skippable routes, where RM2k restores the
 `facing` and the ROM doesn't; and the same with an event's blocked

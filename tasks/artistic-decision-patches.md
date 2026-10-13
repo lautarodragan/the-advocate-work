@@ -22,10 +22,10 @@ possibility.
 **Phase 1 is done for three classes**: the colors that get merged in the two
 layers of a map, the size each battle animation is drawn at, and
 —since 2026-09-21, with the battle scene composed on the console— the
-fifteen colors of each battler. They go out to `parches/mapas/<id>.toml`,
-`parches/animaciones/<n>.toml` and `parches/battlers/<nombre>.toml`; the converter writes them next to each ROM
-it builds, `just parches` copies the playable ROM's ones into git, and
-`just parches-check` —and `test_parches.py`, inside the suite— fail saying
+fifteen colors of each battler. They go out to `patches/mapas/<id>.toml`,
+`patches/animaciones/<n>.toml` and `patches/battlers/<nombre>.toml`; the converter writes them next to each ROM
+it builds, `just patches` copies the playable ROM's ones into git, and
+`just patches-check` —and `test_patches.py`, inside the suite— fail saying
 **which decision changed**. The other two still leave no trace; at the end is
 what each one costs.
 

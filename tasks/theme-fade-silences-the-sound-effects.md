@@ -27,7 +27,7 @@ the volume that changed from the previous one. The arithmetic is done by the
 PPU's multiplier (the mode 7 one), which now belongs to `irq_musica`: the
 CPU's cannot be used in the interrupt. Voices with a sound effect are not
 touched: the value goes to their shadow through `dsp_musica`. The master volume stays fixed
-at the startup one, so the per-theme ceiling (`techos.toml`) and the sound effects'
+at the startup one, so the per-theme ceiling (`ceilings.toml`) and the sound effects'
 ceiling keep measuring the same thing.
 
 Two more things from the same bug:
@@ -42,16 +42,16 @@ Two more things from the same bug:
 With MSU-1 the fade was right, and it stays the same: it lowers `MSU_VOLUMEN` and on
 reaching zero stops the track.
 
-It is enforced by `pruebas/rpgmaker/test_fundido_del_tema.py`, with the new case
-`efecto-tras-el-fundido`: `Switch1` before the first theme, during the fade
+It is enforced by `tests/rpgmaker/test_song_fade.py`, with the new case
+`effect-after-fade`: `Switch1` before the first theme, during the fade
 of `evilrhys` and after. Peaks measured with snes9x:
 
     before the theme   0  →  9267
     during (15%)    1782  →  9470
     after              0  →  9267
 
-And `test_con_msu_el_fundido_para_la_pista_y_los_efectos_siguen`
-(`pruebas/abl/test_msu.py`) looks at the same thing with MSU-1; that one also passed
+And `test_with_msu_the_fade_stops_the_track_and_the_effects_go_on`
+(`tests/abl/test_msu.py`) looks at the same thing with MSU-1; that one also passed
 before. The divergence `divergencias/el-fundido-del-tema-calla-los-efectos.md`
 was deleted: it stopped being one.
 

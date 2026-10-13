@@ -166,7 +166,7 @@ Done on 2026-09-25, in `1d8a2ba`. It is not the prototype's: the shadow's index
 is built with X in eight bits (`sep #$10` / `tax` / `rep #$10`) and A is not
 widened, so B is not touched; it comes out three bytes shorter per voice and
 overwrites the high part of Y, which `music_frame` does not use.
-`pruebas/rpgmaker/test_bateria_suena.py` enforces it: it plays the title's
+`tests/rpgmaker/test_drum_kit_sounds.py` enforces it: it plays the title's
 theme and requires the shadow of voices 6 and 7 to have what the stream writes
 to them, with volume and pitch other than zero. Without the fix it goes red.
 
@@ -227,7 +227,7 @@ the ones that were released are counted), 168 of `cd4`, 31 of
 and `hzbreach`—, and **11,024 notes without a sample** took a voice in the nine
 themes that do not contribute to the bank. **The stream of the 22 went down
 from 626,319 to 555,247 B (−11.3%)**, same as in the prototype. The saturation
-barely changed. `pruebas/herramientas/test_musica_stream.py` enforces it.
+barely changed. `tests/tooling/test_musica_stream.py` enforces it.
 
 ## 2. Envelopes from the SoundFont, with air: done, with more air than planned
 
@@ -435,7 +435,7 @@ peak (dBFS) and integrated LUFS:
 * **The fade at the end of `escape_newyork` exists**: it goes down some 25 dB
   in the last 12 s, where before it stayed at the same level until the cut.
 
-**It is enforced by** `pruebas/herramientas/test_musica_stream.py`: the curve,
+**It is enforced by** `tests/tooling/test_musica_stream.py`: the curve,
 CC7 in the middle of a note, CC7 times CC11, the panning, the bend before and
 during, that a controller does not touch another channel nor the drums' pitch,
 and in the reader RPN 0 and the pedal. The eight go red with the `tools/` of
@@ -542,7 +542,7 @@ the sounds table 4.5%, volume and pitch changes to a voice that is playing 4%.
 
 ### Bytes
 
-From each cartridge's `conversor.log`, which prints them per theme. Before: the
+From each cartridge's `converter.log`, which prints them per theme. Before: the
 `release` of `fb12bbb`.
 
 | Theme | Before | Stream | Sounds | After | % |
@@ -627,7 +627,7 @@ voices already had a note and GAIN—, and the test's log, 4 B and a 512 ring.
   `test-special`. Before changing the format, `escrituras` was compared against
   the old streams of both cartridges: the same writes on the same frames.
 * **In the ROM**: `dsp_musica` notes what it receives in `MUS_BITACORA` if the
-  test turns it on, and `test_musica_escrituras.py` plays whole themes and
+  test turns it on, and `test_music_writes.py` plays whole themes and
   compares it frame by frame against the model running on the cartridge's
   bytes: the title's, started by the main code on power-up; `escape_newyork`,
   the battle one, 3D-Galax and TF3_1_awe, started by the IRQ on returning to
@@ -639,7 +639,7 @@ voices already had a note and GAIN—, and the test's log, 4 B and a 512 ring.
   loaded with a dirty B, the title red on frame 0.
 * **That last one was the only real error**: `music_start_ya` set the wait to
   zero with an eight-bit `lda #0` and a sixteen-bit `sta`.
-  `test_bateria_suena` found it, because the title's drums did not arrive: the
+  `test_drum_kit_sounds` found it, because the title's drums did not arrive: the
   theme waited thousands of frames. The IRQ path does not see it —B arrives at
   zero—, and that is why the test starts the title through the other one.
 
@@ -726,11 +726,11 @@ softest).
 **The format did not change** nor the driver: each event already said its
 voice. The converter prints per theme how much note-time is lost against the
 eight-voice floor (`tiempo_perdido`), which replaces `coverage`;
-`share_voices` and `coverage` are gone from `musica.py`.
+`share_voices` and `coverage` are gone from `music.py`.
 
 **They are enforced** by three new tests in `test_musica_stream.py` —the chord
 with more channels than voices, that no note goes without a voice while there
-is a free one, whom it steals from— and `pruebas/rpgmaker/test_musica_reparto.py`,
+is a free one, whom it steals from— and `tests/rpgmaker/test_music_allocation.py`,
 on the real `escape_newyork`: the strings' first chord fires three voices, and
 the clavinet and the square wave are in the bank and play. The five go red with
 the allocation from before, reproduced in the script.
@@ -755,7 +755,7 @@ ramp: the title 116 → 8, the battle 642 → 424, `escape_newyork` 3,497 → 3,
 
 ### Bytes, loss and cycles
 
-Bytes: stream plus sounds, from `conversor.log`. Loss: `tiempo_perdido`, and
+Bytes: stream plus sounds, from `converter.log`. Loss: `tiempo_perdido`, and
 the one from before with the old allocation reproduced in the script. Cycles:
 the probe of step 4 —the scanline on entering and leaving `music_tick`—, each
 whole theme from its return to the start, in snes9x; the IRQ falls on line
@@ -936,30 +936,30 @@ in the commit "Música: un techo de volumen por tema, medido". The reason lives
 in `leer_techos` (tools/audio/snes_music.py) and how it is measured in
 tools/audio/techos.py.
 
-* **The table**: `parches/auto/musica/techos.toml`, versioned like the
-  decisions in `parches/auto/`: each theme's air —the 32, the ones that do not
+* **The table**: `patches/auto/music/ceilings.toml`, versioned like the
+  decisions in `patches/auto/`: each theme's air —the 32, the ones that do not
   clip with 0.5—, the peak and the LUFS with it, up to which frame it has to be
   played to go through its peak and the fingerprint of its mix.
   `build_varios` reads it and `build_events` multiplies each voice's ceiling by
   air/0.5.
-* **It is not written by hand: `just techos`**, some four minutes. It builds a
+* **It is not written by hand: `just ceilings`**, some four minutes. It builds a
   copy of `release` in `rom/build/techos/` with all the themes at 0.25 (the
   converter's `--aire-de-medida`), plays each one whole in snes9x without MSU-1
   —the title screen patched to the theme, like the scripts of the previous
   steps, eight at a time—, gives it the highest air that leaves its peak 0.5 dB
   below the ceiling (capped at 0.5), writes the table, rebuilds `release` and
   measures it again; if any still clipped, it lowers it and repeats. The first
-  time all of them fit in one pass. `just techos --medir` only measures the
+  time all of them fit in one pass. `just ceilings --medir` only measures the
   built `release`.
 * **The cartridges' stamp looks at the table's airs**
   (`cartuchos.huella`): changing one rebuilds, and rewriting the peaks or the
   fingerprints does not.
-* **The test**, `pruebas/rpgmaker/test_musica_techos.py`:
-  `test_la_tabla_de_techos_es_la_de_esta_mezcla` builds the 32 themes in
+* **The test**, `tests/rpgmaker/test_music_ceilings.py`:
+  `test_the_ceilings_table_is_this_mixs` builds the 32 themes in
   memory (3 s) and compares each one's fingerprint —what it writes to the DSP
   and the samples it plays— with the table's: any change of the mix (step 6)
-  turns it red saying which theme and that `just techos` has to be run. And
-  `test_el_tema_no_recorta_en_su_pico`, one per theme among those left at less
+  turns it red saying which theme and that `just ceilings` has to be run. And
+  `test_the_song_does_not_clip_at_its_peak`, one per theme among those left at less
   than 1.5 dB from the ceiling —12—, plays the theme in the ROM up to its
   `hasta` and asks for zero samples at the ceiling: 42,555 frames in total,
   **some 21 s of CPU, 5 s with the eight processes**; the longest, 3D-Galax,
@@ -975,7 +975,7 @@ tools/audio/techos.py.
   ceiling in its first 8,700 frames.
 
 Before: the `release` with 5b and the air at 0.5 for everyone, measured with
-`just techos --medir`. After: the table. "dB" is how much each theme goes down.
+`just ceilings --medir`. After: the table. "dB" is how much each theme goes down.
 
 | Theme | Air | dB | Clips before → after | Peak before → after (dB) | LUFS before → after |
 |---|---:|---:|---:|---:|---:|
@@ -1143,12 +1143,12 @@ in parentheses in the phrase.
   31 frames) goes down from 91 to 90, and the music takes 1.2% fewer lines in
   total. What goes up the most is `cd2` (61 → 68) and `3D-Galax` (38 → 44),
   which lose nothing but allocate the voices in another order.
-* **The test**: `test_la_melodia_de_la_batalla_no_pierde_notas`
-  (`pruebas/rpgmaker/test_musica_reparto.py`) builds the theme and asks that
+* **The test**: `test_the_battle_melody_loses_no_notes`
+  (`tests/rpgmaker/test_music_allocation.py`) builds the theme and asks that
   each note of channel 0's top voice play whole, throughout the theme; with
   step 5's rule it goes red with 214 + 32. And
   `test_la_voz_de_arriba_del_acorde_no_llega_ultima_a_su_cuadro`
-  (`pruebas/herramientas/test_musica_stream.py`), the case built by hand:
+  (`tests/tooling/test_musica_stream.py`), the case built by hand:
   eleven notes on a frame, five hits from three families, and left out are the
   second kick, the second snare and the chord's bottom note; with step 5's rule
   the one left out is the whole chord.
@@ -1179,7 +1179,7 @@ commits plus the prose one, on `d5caa40`:
    `paquete_cargar_ya` now decides first where each one goes, without
    uploading, and if something does not fit it arranges everything from zero
    (except the theme that is playing) before uploading.
-   `test_cada_paquete_entra_entero_aunque_la_aram_quede_partida` enforces it.
+   `test_each_package_fits_whole_even_with_aram_fragmented` enforces it.
 2. **The most used zone**: `zonas_mas_usadas`, one per program.
 3. **The low-pass** before lowering the rate (`resample` in
    `tools/audio/snes_samples.py`): a sinc with a Blackman window, circular in
@@ -1223,7 +1223,7 @@ commits plus the prose one, on `d5caa40`:
   The work of `release`'s startup ends on frame 30 (before 20): with
   `BOOT_CUADROS` at 40, **the game starts 72 frames earlier, 1.2 s**.
 * **Clips**: zero, with the ceilings measured again on each commit that
-  changed the mix (`just techos`; `test_musica_techos.py` enforces it).
+  changed the mix (`just ceilings`; `test_music_ceilings.py` enforces it).
 * **Cartridge** (sum of `ld65`'s segments): from 3,238,073 to 3,510,754 B.
   **Bank 0** in `release`: from 1,144 to 1,015 B free (the rearranging of
   `paquete_cargar_ya`); in `test-special`, 1,713.
@@ -1243,7 +1243,7 @@ the four themes from before and `Gaden` —one of the 19 that did not
 contribute: two channels out of seven played—, from the final ROM without
 MSU-1, at the same loudness.
 
-**What `just pruebas` does not cover**: that with the inherited theme playing
+**What `just tests` does not cover**: that with the inherited theme playing
 the package's themes fit with the ARAM fragmented in the game's jumps. A
 separate script looked at it with fourteen jumps of the inheritance (no theme
 was missing anything; six were missing sound effects, which the `PlayBGM`
@@ -1324,9 +1324,9 @@ map 18 with `hzstream` playing limits.
   their exit theme is uploaded on entering, as before. Map 3's load is the same
   (the package is still full).
 
-**What `just pruebas` does not cover**: the game's jumps with the exit theme
+**What `just tests` does not cover**: the game's jumps with the exit theme
 playing on the destination map; what is covered is the ROM's path on map 3
-(`test_el_tema_de_salida_sube_solo`, case `tema-de-salida`).
+(`test_the_exit_song_uploads_alone`, case `song-of-exit`).
 
 **To listen**: `/shared/audio/2026-09-26-sin-el-techo-del-mapa-3/`, with its
 `LEEME.txt`: `lufsorr`, the battle, `escape_newyork`, `Astpgmarch` and
@@ -1693,7 +1693,7 @@ The table above has each package's upload. Where it falls:
   `test_un_tema_pierde_sus_muestras_pero_nunca_su_numero` and
   `test_un_tema_que_no_aporta_pierde_notas_y_la_ROM_lo_dice` test the trimming
   of contributors, which goes away; the fingerprint of the 32 themes in
-  `techos.toml`, which has to be measured again with `just techos`.
+  `ceilings.toml`, which has to be measured again with `just ceilings`.
 
 ### Decisions that would have to be taken or rewritten
 
@@ -1727,8 +1727,8 @@ The table above has each package's upload. Where it falls:
    (commit "Audio: el paquete que no entró con otro tema sonando se completa en
    el próximo PlayBGM"). `PAQ_INCOMPLETO` and the rebuild in `tema_asegurar`.
    It already fixes the transition from 2 to 3. It is enforced by
-   `test_el_paquete_que_no_entro_con_otro_tema_sonando_se_completa` with the
-   case `paquete-incompleto`, which requires the package to have been left
+   `test_the_package_that_did_not_fit_with_another_song_playing_completes` with the
+   case `package-incomplete`, which requires the package to have been left
    incomplete on arrival —otherwise it tests nothing— and goes red without the
    fix.
 2. **The budget per package (A), in the converter.** The packages' lists are
@@ -1741,17 +1741,17 @@ The table above has each package's upload. Where it falls:
    **stops** if a package does not fit on its own, or if with an inherited theme
    the themes do not fit. It prints each sample's rate and which package
    limited it. Verification: the whole ROM with `SIN_CACHE=1` identical to the
-   one with cache, `just techos`, `just pruebas` with the two trimming tests
+   one with cache, `just ceilings`, `just tests` with the two trimming tests
    replaced by one that asks that each package fit and that all the themes have
    all their samples, and `test_cores.py` twice. To listen: variant 2.
 3. **The most used zone** (variant 3), if taro prefers it by listening: the key
    with which each program's sample is requested goes from 60 to the root of
    its most used zone, and each note's pitch comes from that root. It does not
-   change the ARAM. `just techos`.
+   change the ARAM. `just ceilings`.
 4. **The resampling with a filter**, separately: `snes_samples.resample`
    interpolates linearly without filtering, and at 10 kHz from 22 that aliases.
    It only changes sample bytes; it is measured with the spectrum count and
-   listened to. `just techos`.
+   listened to. `just ceilings`.
 5. **If more is needed**, in this order: lowering `BOOT_CUADROS` (decision
    above); giving the sound effects their own place in the directory —some
    twenty per package instead of the cartridge's 92— so that **B** fits for the

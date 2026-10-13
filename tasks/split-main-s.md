@@ -28,7 +28,7 @@ numbers aren't copied here because they move: they are printed by
 * **Splitting doesn't change a byte.** With `tools/ensamblado/partir_main.py` (it is on
   this branch), the three ROMs —`release`, `test-main` and `test-special`— and their
   three `.sym` come out byte-for-byte identical. They were built with `ensamblar.py` against
-  the same `mapdata.inc`/`musicdata.inc`/`memoria.cfg` of each cartridge, so
+  the same `mapdata.inc`/`musicdata.inc`/`memory.cfg` of each cartridge, so
   the converter is left out of the comparison on purpose: it doesn't read `main.s`.
 * **The `.dbg` changes and it doesn't matter.** Its `file` rows (one per file)
   and `line` rows change; the `sym` rows, without their references to lines, are identical. It is
@@ -63,7 +63,7 @@ numbers aren't copied here because they move: they are printed by
   `test_ningun_opcode_de_la_rom_quedo_sin_declarar`. With the tooling change
   below, the fourteen in those three files
   (`test_sustituciones`, `test_protocolo`, `test_ensamblar`) pass on the
-  split tree. The whole `just pruebas` was **not** run: there were two other
+  split tree. The whole `just tests` was **not** run: there were two other
   agents using the CPU.
 * **`git blame`**, measured in a clone with the cut committed, comparing
   line by line the blame of each new file against that of the `main.s` from
@@ -229,7 +229,7 @@ in `main.s` says so in the prose commit.
 
   and `texto_de_la_fuente(principal)`, which glues them together. In `huella()`:
 
-      partes = (sorted(r for r in glob.glob(os.path.join(RAIZ, "rom", "src", "**"),
+      partes = (sorted(r for r in glob.glob(os.path.join(ROOT, "rom", "src", "**"),
                                             recursive=True) if os.path.isfile(r))
                 + ensamblar.binarios() + …)
 
@@ -273,7 +273,7 @@ in `main.s` says so in the prose commit.
 2. **Tooling**: `fuentes()`/`texto_de_la_fuente()`, `huella()` over
    `rom/src/`, the two tests and the new fingerprint test. On the
    whole `main.s`, `fuentes()` returns `[main.s]`, so this commit is
-   verified on its own: `just pruebas` green. It changes the fingerprint, so all
+   verified on its own: `just tests` green. It changes the fingerprint, so all
    the cartridges get rebuilt; the ROMs have to come out identical because no
    source was touched.
 3. **The cut**: `python3 tools/ensamblado/partir_main.py`, `git add -A
@@ -304,16 +304,16 @@ For commit 3, the three things, and the message says which ones were run:
    shows nothing. (Without the `git add`, `git diff` doesn't see the new untracked
    files and gives a false red: the critic's correction A.) It is the verification that the commit is the script's output
    and nothing else, and the one anyone can do without reading the diff.
-2. **Byte for byte**: before the cut, `just cartuchos` and copy
+2. **Byte for byte**: before the cut, `just cartridges` and copy
    `rom/build/release/abl.sfc`, `rom/build/tests/{main,special}/prueba.sfc` and
-   their `.sym` to a scratchpad directory; after, `just cartuchos` again
+   their `.sym` to a scratchpad directory; after, `just cartridges` again
    and `cmp` of the six. **Check that they really were rebuilt** —that
    `cartuchos` prints the three `ensamblar` lines or that the
-   `sello.txt` files change—: if they aren't rebuilt, the old ones are compared with themselves and it's always
+   `stamp.txt` files change—: if they aren't rebuilt, the old ones are compared with themselves and it's always
    identical. Without the converter, faster and just as conclusive: build
    with `ensamblar.py` the before and after trees against the same
    generated files of `rom/build/*/`, which is what was done for this plan.
-3. **`just pruebas`** green, and the suite: with the identical ROM no
+3. **`just tests`** green, and the suite: with the identical ROM no
    golden can change, so any red is from tooling or
    inherited.
 
@@ -386,7 +386,7 @@ commit 2 also touches near `huella()`.
 
 ### Second stage, separately
 
-Moving changes the ROM: each move is verified with `just pruebas` and the
+Moving changes the ROM: each move is verified with `just tests` and the
 suite **with no golden changed** —the behaviour doesn't change, only the
 addresses—, and the `.sym` changes in the shifted symbols. Things can only be
 moved **within the same segment**: moving something from bank 0 to 1 changes how
@@ -444,7 +444,7 @@ labels from another file. It is a separate readability decision.
 ### What the critic settled
 
 Critiqued on 2026-09-25 on top of `c71666e`, which measured the above again
-(ROMs and `.sym` identical through `ensamblar.py` and through `just cartuchos`; `just
+(ROMs and `.sym` identical through `ensamblar.py` and through `just cartridges`; `just
 pruebas` green on the split tree with the tooling change, and
 exactly 3 reds without it; without the `huella()` change, editing `tienda.s` doesn't
 change the fingerprint; `blame -C --diff-algorithm=histogram` gives 0 different lines).
@@ -471,7 +471,7 @@ Its changes, which are mandatory:
    corrections A, B and D. `partir_main.py --ver` finds all the anchors.
 2. Tooling: the plan's patch, and the list of files of `huella()`
    moved out to `cartuchos.archivos_de_la_huella(fuente)` so it can be tested.
-   C's test, `test_todo_lo_que_arma_la_rom_esta_en_la_huella`, looks at the
+   C's test, `test_everything_that_builds_the_rom_is_in_the_fingerprint`, looks at the
    real tree and at one built by hand with a `main.s` that includes a
    `tienda.s`; the second is the one that catches it today, when `main.s` still doesn't
    include any `.s`. With the `huella()` from before —only `main.s`— in a
@@ -479,9 +479,9 @@ Its changes, which are mandatory:
 3. The cut is **`391930c`**, and it is the script's output alone: from its
    parent, script + `git add -A rom/src` + `git diff --cached --stat
    391930c` gives empty; `git diff --quiet 391930c^ 391930c -- . ':!rom/src'`
-   too. `just cartuchos` rebuilt the three cartridges (the seal changed) and
+   too. `just cartridges` rebuilt the three cartridges (the seal changed) and
    `abl.sfc`, the two `prueba.sfc` and their three `.sym` came out identical to
-   commit 2's. `just pruebas`: 611 passed, same as in 2.
+   commit 2's. `just tests`: 611 passed, same as in 2.
 4. Explicit `.segment` in the 55 that didn't have it. Left without it are
    `registros.s` and `ram_lejana.s`, which emit nothing (constants and
    `.assert`). Same verifications, same results.

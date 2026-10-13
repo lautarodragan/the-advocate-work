@@ -53,9 +53,9 @@ row takes that bank and that palette and uploads the page's pose
 
 Compared with the original under Wine (a copy that starts in 40 with
 160's page with no condition): Wick in cell 18, turning; the ROM now
-the same. Captures in `/shared/capturas/2026-10-05-compuertas-y-wick/`.
+the same. Captures in `/shared/captures/2026-10-05-compuertas-y-wick/`.
 
-The test is `rpgmaker/test_grafico_de_pagina.py`: the silhouette of event 3
+The test is `rpgmaker/test_page_graphic.py`: the silhouette of event 3
 in VRAM against `People7` 2. Red with main's tools, green with
 the branch's.
 

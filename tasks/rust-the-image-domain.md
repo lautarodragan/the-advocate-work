@@ -16,7 +16,7 @@ backgrounds that go through MSU-1 (`msu_data.py`), the battle scenes
 
 It starts from `main` at the commit that launches the task. There: `NO_CACHE=1 just
 cartuchos` gives `abl.sfc` `241dc9ad2bf8b43c…`, `special` `63779e111ee18923…`,
-`encounter-every-step` `200a0b7355289700…`; `just pruebas` 882,
+`encounter-every-step` `200a0b7355289700…`; `just tests` 882,
 `just -f tools/justfile test` 49.
 
 ## The pilot: Pillow's LANCZOS in Rust
@@ -32,7 +32,7 @@ taller than wide goes in two calls.
 
 Measured on 2026-09-30 against **everything the converter scales**: a
 `sitecustomize` wrapping `Image.resize` captured every LANCZOS call of
-`NO_CACHE=1 just cartuchos` —Pillow's input, size and output—. That's
+`NO_CACHE=1 just cartridges` —Pillow's input, size and output—. That's
 **377 distinct scalings** (64 RGB: the title, the Game Over, the
 `ShowPicture` image and the battle backgrounds, full and lightweight; 313
 RGBA: the battlers and the animation frames), **2,826,049 pixels**, and **not
@@ -103,9 +103,9 @@ written only once.
 ## Log
 
 * **The stage, whole at once.** The five pieces came out identical on the
-  first run: `NO_CACHE=1 just cartuchos`, 1032 files of `rom/build/`
+  first run: `NO_CACHE=1 just cartridges`, 1032 files of `rom/build/`
   identical to the base —with `cartridge` in the local `bin/` for the base
-  too, because of the `.dbg` trap Mara noted—; `just pruebas` 882, `just -f
+  too, because of the `.dbg` trap Mara noted—; `just tests` 882, `just -f
   tools/justfile test` 49. The crate's tests compare against the sha256s of
   the old Python (`<scratchpad>/lapacho/ referencia.py`, which runs the
   `tools/` of `1a827260` taken out with `git archive`) over a small game
@@ -116,7 +116,7 @@ written only once.
   of a stage. It came out identical, so the dump and what
   `events.ANIMATIONS` built say the same thing.
 * **What the converter prints** wasn't compared against the base: the base
-  ran before the `conversor.log` files were saved. The stage's are in
+  ran before the `converter.log` files were saved. The stage's are in
   `<scratchpad>/lapacho/logs-etapa/`.
 
 ## Done
@@ -145,9 +145,9 @@ path.
 ## How it was verified
 
 * **The pilot** —above—: 377 scalings, not one pixel different.
-* **The cartridges**: `NO_CACHE=1 just cartuchos` and the sha256 of 1032
-  files of `rom/build/` —without cache, `.o`, `sello.txt` or
-  `conversor.log`; the `.dbg` without `mtime`; the PNGs decoded—, identical
+* **The cartridges**: `NO_CACHE=1 just cartridges` and the sha256 of 1032
+  files of `rom/build/` —without cache, `.o`, `stamp.txt` or
+  `converter.log`; the `.dbg` without `mtime`; the PNGs decoded—, identical
   to the base after each commit up to the `adeleine.py` one. After the
   prose, identical except the three `.dbg` files, which name the size of
   `registers.s`: with the previous size they give the same sha256.
@@ -155,7 +155,7 @@ path.
   * `release/abl.sfc` `241dc9ad2bf8b43c205a6abef97fbe84ba25f3986626d5f0d058e27c742b123e`
   * `tests/special/prueba.sfc` `63779e111ee18923fc3335b725c92c55a0587f9ecd6e7a1908ae1a852e5e3710`
   * `tests/encounter-every-step/prueba.sfc` `200a0b73552897001dcc22509e356c421cd88cf771dd894e0f13e3e19e4fb89c`
-* **The suites**, after each commit with code: `just pruebas` 882,
+* **The suites**, after each commit with code: `just tests` 882,
   `just -f tools/justfile test` 49; `cargo test -p` of `resample`,
   `adeleine`, `rm2k-snes-images` and `rm2k-snes-cartridge`, green.
 * **The crates' tests don't depend on ABL**: `resample` against Pillow over

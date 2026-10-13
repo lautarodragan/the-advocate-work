@@ -56,7 +56,7 @@ directly and **do** turn even when locked. `Jump` only turns if it isn't
 locked. It wasn't confirmed with RPG_RT under Wine.
 
 **The tests** (`rom/pruebas/rpgmaker/test_direccion_trabada.py`, cases
-`traba-heroe`, `traba-heroe-ruta` and `tram-fijo`): the pad doesn't turn the locked
+`lock-hero`, `lock-hero-route` and `tram-fixed`): the pad doesn't turn the locked
 hero, the locked hero still walks, the route doesn't turn him until the 27, and the
 tram with a fixed graphic doesn't turn with the forced route. Red before the
 fix: the pad one (the down arrow left him facing down), the route one
@@ -88,18 +88,18 @@ faces and not towards the last arrow, which is what RM2k's `GetDirection`
 would do: there's a single variable for both things, and no case in the game
 presses action while locked.
 
-**The goldens**: two change, `tram-320` (`test_escena[tram]`) and `tram-620`
-(`test_hablar[tram]`), in `bccba0fb`, only goldens. The tram goes down with its
+**The goldens**: two change, `tram-320` (`test_scene[tram]`) and `tram-620`
+(`test_talk[tram]`), in `bccba0fb`, only goldens. The tram goes down with its
 page's grey ship instead of the blue car. Before and after, and the captures of
 the race and of the agency ships before and after, in
-`/shared/capturas/2026-09-30-vehiculos/` (with a `LEEME.txt`). **The
+`/shared/captures/2026-09-30-vehiculos/` (with a `LEEME.txt`). **The
 original wasn't captured under Wine.** **The merge awaits taro's approval.**
 
 **Commits**: `e90d1d5c` (the fix and the tests), `bccba0fb` (the
 goldens), `c1c9305f` (main merged).
 
 **On merging**: reinstall `events` (`just -f tools/justfile install
-events`); `cartridge` didn't change. The ROM moves: `test_musica_techos.py`
+events`); `cartridge` didn't change. The ROM moves: `test_music_ceilings.py`
 passed in the branch. No far RAM or new opcodes were used; BSS gains two bytes
 (`hero_lock`, `found_flags`).
 
@@ -107,6 +107,6 @@ passed in the branch. No far RAM or new opcodes were used; BSS gains two bytes
 both branches changed the same two hashes; the merged tree's were kept,
 measured (see the merge message). Nothing was taken from the allotted far RAM
 range —neither `$25C6`–`$25DF` nor from `$25C5` down—. On the
-merged tree: 923 in `just pruebas`, 46 in the tools, bank 0 of
+merged tree: 923 in `just tests`, 46 in the tools, bank 0 of
 `release` at 320 B. On merging, reinstall `events`, which now carries both
 things.

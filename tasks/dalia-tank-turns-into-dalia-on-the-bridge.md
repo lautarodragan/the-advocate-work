@@ -74,9 +74,9 @@ an `OP_DELAY` of tenths × 6 after the `OP_TINT`, as
 `FlashSprite` already did. No new opcode nor new RAM. The gradient is still not
 done: the tint arrives at once and the page waits as long as it would have lasted.
 
-**Test**: `pruebas/rpgmaker/test_tinte_espera.py`, cases `tinte-espera`
+**Test**: `tests/rpgmaker/test_tint_wait.py`, cases `tint-wait`
 (the route after a one-second tint arrives at 60 frames) and
-`tinte-espera-vago` (Vago's part as is: the hero comes out at 4). Both
+`tint-wait-vago` (Vago's part as is: the hero comes out at 4). Both
 red with the tools of `main` —the route arrives on frame 1, the
 hero stays at 3— and green with the fix.
 
@@ -87,7 +87,7 @@ hero stays at 3— and green with the fix.
   fixed-tick goldens moved with their tick; the ones that come out identical
   were renamed, and the opening ones with rain are new (only
   the drops change). The A presses of the opening, +120. Side by side in
-  `/shared/capturas/2026-10-05-tanque-de-dalia/`.
+  `/shared/captures/2026-10-05-tanque-de-dalia/`.
 * **The debug map**: doors 7 and 8 were dumped from the ROM with the
   bug and left the speed at 3. Now 4.
 * **The lookout on 109 no longer leaves Talan stuck**: at 4 his route finishes,

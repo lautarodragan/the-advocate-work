@@ -20,7 +20,7 @@ the original they do: **faithful to the original**.
 # Status
 
 2026-09-27, in `testing/`: done on the agent's branch, on `main` at a3140f1
-and with `main` merged on top of milestone 5 (6c4949d); `just cartuchos` and
+and with `main` merged on top of milestone 5 (6c4949d); `just cartridges` and
 the whole suite green on the merged tree. What's left is taro's: play it (see
 below). The goldens didn't change.
 
@@ -100,8 +100,8 @@ someone builds one.
 
 # Tests
 
-`pruebas/rpgmaker/test_ag7_y_la_planta.py`, with two new pages,
-`ag7-componentes` and `pelea-113` (Talan and AG7 on floor 1):
+`tests/rpgmaker/test_ag7_and_the_plant.py`, with two new pages,
+`ag7-components` and `battle-113` (Talan and AG7 on floor 1):
 
 * when 150 turns on AG7 knows ConcentratedSpray and nothing else;
 * changing the weapon changes nothing with the menu open, and on closing it
@@ -114,7 +114,7 @@ someone builds one.
 * the "Components" list in battle;
 * BombsAway, with the GrenadeLauncher: no target, at both enemies.
 
-`test_cores.py` adds `test_la_pelea_de_la_planta`: two turns of 113 in snes9x
+`test_cores.py` adds `test_the_plant_battle`: two turns of 113 in snes9x
 and bsnes.
 
 # What taro has to look at while playing

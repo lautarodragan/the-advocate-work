@@ -17,7 +17,7 @@ Each event is a row of `ev_pos_buf` (4 bytes), `ev_flags` (1) and
 raising the cap is no way out.
 
 What the leftover ones are, per map (script in
-`~/scratch/carpintero/eventos/medir.py`): in Vampires Dawn, 24 of the 38
+`~/scratch/carpintero/eventos/measure.py`): in Vampires Dawn, 24 of the 38
 have more than 120 events **with commands**; almost all are strips of
 invisible events, below the hero, on touch, with `ControlSwitches` +
 `Teleport` to the same destination —the map's edge, 70 cells that lead to the
@@ -47,7 +47,7 @@ lose decoration. Desert: 2 of 11 fit, 9 lose decoration and 8 of
 those invisible walls. `~/scratch/carpintero/eventos/recorte-*.txt`.
 
 `--test-events-max` lowers the cap for the tests: ABL's `test-twins`
-cartridge (map 255) and `test_gemelos.py` cover the ROM's
+cartridge (map 255) and `test_twins.py` cover the ROM's
 path.
 
 Branches: `carpintero-eventos` in the-advocate, in the ports and in the book

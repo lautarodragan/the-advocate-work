@@ -23,7 +23,7 @@ parallel modifying the tools often. What was agreed:
 
 ## What was done (Espinillo)
 
-* `just herramientas-locales [proyectos…]` builds `.herramientas-locales/bin/`
+* `just herramientas-locales [proyectos…]` builds `.local-tools/bin/`
   in the worktree: the eight scripts always, and `cargo install --root` only of
   the named projects. Without names it compiles nothing; a name that isn't a
   project stops before compiling. It refuses in the main checkout
@@ -33,7 +33,7 @@ parallel modifying the tools often. What was agreed:
 * `just herramientas [proyectos…]`: with names, only those in Rust plus the
   Python symlinks; without names, everything, as before.
 * Both use `_instalar`, which joined the list of tool
-  recipes in `test_lado_de_abl.py` with what used to be inside
+  recipes in `test_abl_side.py` with what used to be inside
   `herramientas`.
 * `just cuales` prints which executable the checkout resolves for each one.
 * `tools/comun/ejecutable.py` went away with its calls; `comun/` went back to its
@@ -41,36 +41,36 @@ parallel modifying the tools often. What was agreed:
 * AGENTS.md, "Sub-agentes": what the agent does on starting and what the
   merger reinstalls.
 
-**The name, `.herramientas-locales/`**: at the root and not in `tools/`, so
+**The name, `.local-tools/`**: at the root and not in `tools/`, so
 the fingerprint —which looks at `tools/*/*.py`, `rom/src/` and the binaries the
-PATH resolves— doesn't walk it, and neither does the grep test —it looks at `parches/`, `data/` and
-`pruebas/`—. Hidden, because it isn't part of the tree. Inside is what
+PATH resolves— doesn't walk it, and neither does the grep test —it looks at `patches/`, `data/` and
+`tests/`—. Hidden, because it isn't part of the tree. Inside is what
 `cargo install --root` leaves: `bin/`, `.crates.toml` and `.crates2.json`.
 
 **Without the `bin/`, a worktree refuses.** It would run `main`'s scripts,
 which build in `main`'s `rom/build/`: it would stomp on its cartridges without noticing.
 The coordinator flagged it before merging, and it was solved with
 `_herramientas_del_checkout`, which `cartuchos`, `build`,
-`pruebas*`, `espacio`, `parches`, `parches-check`, `techos`, `entregar` and
+`pruebas*`, `espacio`, `parches`, `patches-check`, `techos`, `entregar` and
 `video` depend on. It passes in the main checkout (`git-dir` equal to the common one) and in a
-worktree with `.herramientas-locales/bin/`. `herramientas-locales` and `cuales`
-don't depend on it. Measured: without the `bin/`, `just cartuchos`, `just pruebas`,
-`just espacio release` and `just video` exit 1 with the message, and `just
+worktree with `.local-tools/bin/`. `herramientas-locales` and `cuales`
+don't depend on it. Measured: without the `bin/`, `just cartridges`, `just tests`,
+`just space release` and `just video` exit 1 with the message, and `just
 cuales` works; in the main checkout the recipe exits 0; after `just
-herramientas-locales` —without Rust— `just cartuchos` builds and `just pruebas` gives
+herramientas-locales` —without Rust— `just cartridges` builds and `just tests` gives
 973 green, with `abl.sfc` and `prueba.sfc` the same as before.
 
 **`cargo` outside installing**: it's only called by `herramientas`, `_instalar` and
 the Rust `*-pruebas`, which are its tests. No `.py` in `tools/` or in
-`pruebas/` calls it (grep).
+`tests/` calls it (grep).
 
 ### Verified
 
-* **ROMs**: `SIN_CACHE=1 just cartuchos` in this worktree, with its `bin/`
+* **ROMs**: `SIN_CACHE=1 just cartridges` in this worktree, with its `bin/`
   —the eight scripts and `lz2` local—: the 47 files in `release/` and
   `tests/special/` with the same sha256 as before step 1 (`abl.sfc`
   `7a3c6483…6a66552`).
-* **`just pruebas`**: 973 pass.
+* **`just tests`**: 973 pass.
 * **Resolution**, with `just cuales`:
   * this worktree without `bin/`: everything in `/usr/local/bin`, no error;
   * after `just herramientas-locales`: the eight local, Rust global;

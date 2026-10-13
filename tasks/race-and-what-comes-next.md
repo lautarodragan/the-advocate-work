@@ -13,19 +13,19 @@ then, if there's still room, **83 and 84**, so that the rule for which maps
 `release` carries stops being the `MAPAS_DEL_JUEGO` list in
 `tools/ensamblado/cartuchos.py` and becomes "the maps with an id below X" plus
 a short `--exclude-maps`. The end of the demo, which today is in the fork of
-36 (`parches/manual/mapas/Map0036.json`), moves to after the race.
+36 (`patches/manual/forks/Map0036.json`), moves to after the race.
 
 This is the plan; the milestones below become tasks of their own when
 launched.
 
 Everything measured here is from 2026-09-27 on `91a84c4` (the merge of Lashe
 City's milestone 4), with variants of `release` built separately —neither
-`release` nor `cartuchos.py` were touched—. The scripts were left in
-`/extras/scratch/carrera-plan/`: `armar.py` builds a variant (`release` with
-extra or fewer maps), `medir.py` gets the space with `AGENTS.md`'s method (a
+`release` nor `cartridges.py` were touched—. The scripts were left in
+`/extras/scratch/carrera-plan/`: `build.py` builds a variant (`release` with
+extra or fewer maps), `measure.py` gets the space with `AGENTS.md`'s method (a
 `.res N, $00` in the segment and `ld65`'s message; bank 1, up to the last
 non-zero byte), `far.py` measures bank 1 even when it no longer fits,
-`culpables.py` is the previous plan's `medir.py` (which command stops each
+`culpables.py` is the previous plan's `measure.py` (which command stops each
 page), `perdidos.py`/`seguir.py`/`foto.py`/`intro.py`/`volante.py` run the race
 in the emulator, and `arreglos-temporales.diff` is the two converter fixes
 that were needed to build the X = 85 variant (see milestone 4).
@@ -66,7 +66,7 @@ the rule.
 
 # Space
 
-Measured with `medir.py`. "Bank 0" is what's left in `TABLAS`+`CODE`; `BSS`
+Measured with `measure.py`. "Bank 0" is what's left in `TABLAS`+`CODE`; `BSS`
 and `ZEROPAGE` don't move in any variant (109 and 4 bytes) and are omitted.
 
     variant                                 cartridge bank 0  bank 1
@@ -184,7 +184,7 @@ it unblocks:
 1. **A `Teleport` from a parallel page isn't handled if no foreground page is
    running.** `op_teleport` sets `salto_hay`, and `eventos_tick` only looks at
    it after running a foreground page: with the foreground idle it exits
-   through `nada`. On 49 the crash turns on 172 and the car stays at (104, 26)
+   through `nothing`. On 49 the crash turns on 172 and the car stays at (104, 26)
    forever —400 ticks looked at—, without jumping to 50. **They're 126 pages,
    all the race's exits** —40 per lap plus 6 on the bridge— and no `release`
    map has one today: it's a path nothing runs. General (it's what RM2k does
@@ -200,7 +200,7 @@ it unblocks:
    frame (the order between the hero's route and the parallels).
 3. **The race runs at half speed.** With the 40 car pages, **each tick costs
    two frames**: 2.07 frames per tick on 49 and 2.02 on 52, measured with
-   `cuadros_perdidos` over 300 ticks. 51, with 13 pages of the same shape,
+   `lost_frames` over 300 ticks. 51, with 13 pages of the same shape,
    doesn't drop any, and neither does `release` on 52 (with the car pages not
    compiled). It matches what `expansion-chips-sa-1-and-s-dd1.md` estimated (~9 lines per
    page, ~370 lines). It's playable, but at 30 frames. The general thing is
@@ -228,8 +228,8 @@ cars that move on their own and the crash (the graphic that changes and the
 animation). 50, 52 through its entrance, 51 through its entrance, 53 and 64
 weren't reached: without point 1 you don't get out of 49.
 
-**52's tests.** 52 is a test map (`test_caminar_golden.py`, `en-52`,
-`grupo-11-en-52`, `pelea-en-52`, `ev41`). With 50 and 54 in the cartridge its
+**52's tests.** 52 is a test map (`test_walk_golden.py`, `in-52`,
+`grupo-11-en-52`, `battle-in-52`, `ev41`). With 50 and 54 in the cartridge its
 40 car pages compile, and with the steering wheel accepted the hero there gets
 pushed to the right every frame: `KEY_INPUT_PROC`'s comment already warns that
 `heroe 52` stops ending. Another big map has to be picked for `heroe`, and 52's
@@ -252,7 +252,7 @@ fixes, on the order of twenty.
 
 **2. The race at 60 frames.** The fused opcode (3), or whatever the
 measurement in `optimise-parallel-events-when-compiling.md` says. It's
-considered done with `cuadros_perdidos` at zero —or almost— on 49, 52 and 54
+considered done with `lost_frames` at zero —or almost— on 49, 52 and 54
 while driving. Independent of 3 and 4.
 
    **Done on 2026-09-27**, with the fused opcode and what the measurement said:
@@ -275,13 +275,13 @@ compared. It can go before, in parallel with or after 2.
 
    **Done on 2026-09-27**: the bugs in `9d6c0d3`, the rule in
    `map-by-id-rule.md`. The exclusion isn't a converter flag but a
-   value in `cartuchos.py`; the why is there.
+   value in `cartridges.py`; the why is there.
 
 **5. (Conditional) X = 85.** Only if taro wants it before the world goes in:
 the 18 unreachable maps, with 66, 67 and 69 in the exclusion.
 
 What has to be split if 1 and 2 go in parallel: 2's opcode, in
-`tools/protocol/events.toml`; and `cartuchos.py`, which 1 and 4 touch.
+`tools/protocol/events.toml`; and `cartridges.py`, which 1 and 4 touch.
 
 # Questions for taro
 

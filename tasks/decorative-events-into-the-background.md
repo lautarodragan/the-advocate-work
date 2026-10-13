@@ -67,7 +67,7 @@ frozen-world 117, sunset-over-imdahl 209, vampires-dawn 5483, ABL 502.
 
 Divergences in `divergences/baked-decorative-events.md`
 —the animation's pace and phase—. Captures in
-`/shared/capturas/2026-10-06-decorativos/`.
+`/shared/captures/2026-10-06-decorativos/`.
 
 **What wasn't tested:** any ROM with the knob set —A Blurred Line's suite
 doesn't turn it on—; that in the ROM the animated water in the background moves and that the

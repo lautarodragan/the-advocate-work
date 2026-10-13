@@ -22,7 +22,7 @@ the `.msu`").
 Measured on `release` at `b521ffb` and again after merging `d44b906` —the
 other agent's full effects—. The numbers below are from that moment: **each
 package's rates are printed by the converter** ("efectos de calidad del
-paquete N" in `conversor.log`), and they change with each package's themes
+paquete N" in `converter.log`), and they change with each package's themes
 and effects.
 
 ## What ARAM there is: maximum quality doesn't fit in the big packages
@@ -181,16 +181,16 @@ byte-for-byte equal.
 
 # How it's tested
 
-`pruebas/abl/test_msu_efectos.py`, with MSU-1 and all the tracks on a copy
+`tests/abl/test_msu_effects.py`, with MSU-1 and all the tracks on a copy
 of `release`, and two new cases:
 
-* `efecto-de-calidad`: `Success2` on map 10. With the cartridge's `.msu` it
+* `effect-of-quality`: `Success2` on map 10. With the cartridge's `.msu` it
   starts with the 22,050 Hz pitch, its envelope follows the WAV's and it ends
   silent —the trimmed one repeats its last stretch until the end—, and with
   the `.msu`'s samples changed and the signature intact it sounds different.
 * the same case with a `.msu` from another build (signature recomputed)
   sounds the same as with an empty one, with the `sonido_tabla` row.
-* `tres-efectos`: `Glass`, `Flash3` and `Earth4` in the same frame, on 3 with
+* `three-effects`: `Glass`, `Flash3` and `Earth4` in the same frame, on 3 with
   `evilrhys` on the track: 7, 6 and one of 0 to 5, three different samples,
   and the same run with 0 to 5 switched off just before sounds different.
 
@@ -206,10 +206,10 @@ time:
 * uploading from the ROM with the `.msu`'s pitch: the quality one fails (the
   envelope correlates 0.23 with the WAV's).
 
-`test_msu_datos.py` now counts the background entries with `MSU_FONDOS_N`:
+`test_msu_data.py` now counts the background entries with `MSU_FONDOS_N`:
 the `.msu` carries the effects after them.
 
-Run on the branch with `d44b906` merged: `just cartuchos`, `just pruebas`
+Run on the branch with `d44b906` merged: `just cartridges`, `just tests`
 green and `test_cores.py` twice; and `release` built with `SIN_CACHE=1`
 comes out with the `.sfc` and the `.msu` byte-for-byte identical, because the
 quality versions go through the BRR cache.

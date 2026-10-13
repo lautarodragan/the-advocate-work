@@ -15,7 +15,7 @@ and the background with the battlers came later (see below).
 What is RM2k's are the words —all from the LDB— and **all the arithmetic**,
 which comes from easyrpg-player and is written twice: in `main.s` and in
 `tools/port/batalla.py`. That the two give the same is what lets
-`pruebas/rpgmaker/test_batalla.py` predict **the exact number** each HP is going to have
+`tests/rpgmaker/test_battle.py` predict **the exact number** each HP is going to have
 after each turn, instead of settling for "it went down".
 
     damage          max(0, atk / 2 - def / 4), times 3 if critical, variance
@@ -69,7 +69,7 @@ theme; both are declared in `assets/LIMITACIONES.md`.
 
 That path **the pixel suite cannot see**: a defeat resets the
 console, so there is no frame to compare against a golden.
-It is enforced by `pruebas/rpgmaker/test_game_over.py`, which puts the whole party at zero HP —with
+It is enforced by `tests/rpgmaker/test_game_over.py`, which puts the whole party at zero HP —with
 nobody standing `batalla_correr` answers defeat without opening the screen— and requires
 the ROM to reset, with control of the same battle pointing to the page.
 
@@ -126,7 +126,7 @@ lands and one that misses look the same.
 droid's on map 2.** The Lazer Teeth one on map 9 —troop 86, four
 enemies— does not compile, and not because of the battle: it is cut by a `MoveEvent` with
 route order 9, "towards the hero", which the ROM does not walk. That is why the troop of
-four is exercised by `test_batalla` with the test page, which is the same
+four is exercised by `test_battle` with the test page, which is the same
 resource the slots screen cases use.
 
 #### The menu: ABL's five orders
@@ -154,7 +154,7 @@ goes one cell before the text.
 names a row of the block shared by the items, equipment,
 shop and battle screens, and that block grows with the cartridge: with the 57 items of
 `abl` the battle's texts start at 273, which does not fit in one
-byte. The case that guards it is `batalla-textos-lejos`, and `ca65` **rejects** a
+byte. The case that guards it is `battle-texts-far`, and `ca65` **rejects** a
 `.byte` that does not fit in a byte instead of truncating it.
 
 `Use Item` works. It opens the list of what can be used **where the enemies'
@@ -177,7 +177,7 @@ What goes into the list and how much it heals comes from easyrpg-player:
   `recover_hp_rate * GetMaxHp() / 100 + recover_hp`, capped against what the
   target is missing, which is the `ChangeHp`. The arithmetic is written twice
   —`main.s` and `batalla.curacion`— like everything else in the battle, and that is why
-  `test_batalla.py` can require the exact number. The product fits in a
+  `test_battle.py` can require the exact number. The product fits in a
   word: the converter stops if any actor goes over 655 HP.
 
 Two things that are RM2k's and are better not "fixed": **the item is spent when
@@ -186,7 +186,7 @@ two actors on the same turn— and **a dead target is not re-targeted**, which i
 opposite of what an attack does: the item is spent anyway.
 
 Five cases enforce it. Two from the suite —the item list and the choice of
-target, pixel by pixel against `pantallas.py`— and three of state: that the list
+target, pixel by pixel against `screens.py`— and three of state: that the list
 is the right one (with an unusable item in the inventory, or it would measure
 nothing), that the potion leaves the exact HP the model says capping against the
 maximum, and that the menu goes through the five orders in the original's order.
@@ -239,7 +239,7 @@ the modifier alone: `CanChangeAtkModifier` caps the drop at half of the
 the SP; the effective value the arithmetic reads is `clamp(base + mod, 1, 999)`, which is
 `AdjustParam` of game_battler.cpp.
 
-**The order in which it consumes randomness is the contract with `batalla.py`**, and it comes from
+**The order in which it consumes randomness is the contract with `battle.py`**, and it comes from
 reading `vExecute` top to bottom: the switch returns before any roll; the
 critical is **always** rolled, even if the chance is zero —and for an LDB skill
 it always is, because `CalcCriticalHitChance` receives
@@ -263,7 +263,7 @@ SP is that the skill turns grey.
 
 Ten cases enforce it. Three from the suite —the list, the list with the cursor on
 another skill and the list in grey while choosing whom to heal, pixel by
-pixel against `pantallas.py`— and seven of state, which compare against
+pixel against `screens.py`— and seven of state, which compare against
 `batalla.Batalla.usar_habilidad` requiring the exact number: HP and SP
 turn by turn with Fury Punch, the switch MindShield turns on —and that the randomness
 did **not** move—, Healing Syringe's healing on a hurt ally,
@@ -306,7 +306,7 @@ are in `tools/port/escena.py`; the headline:
   the message window's tiles ($6800) and the sprite bank. Returning from
   a battle is `volver_de_batalla`, which restores that with `load_sprite`,
   `load_ventana` and `fill_window` before calling the other. It is enforced by
-  `vuelta-ventana`; without the fix, 77% of the pixels.
+  `return-window`; without the fix, 77% of the pixels.
 
 Two non-obvious things about the PPU —the text's priority bit and tile
 512 with which what is left below is covered— are noted above `escena_subir`
@@ -319,7 +319,7 @@ HP at zero—, which is the same reason why this screen shows the
 enemies' HP and RM2k does not. And a scene is **per troop** and not per background: two
 troops with the same background carry both scenes, at 32 KB each.
 
-It is enforced by the suite, with the game's two backgrounds: `batalla` with troop
+It is enforced by the suite, with the game's two backgrounds: `battle` with troop
 86 —four identical battlers, one of them capped against the edge— and with 82
 —a single one—, both at zero. Verified that it goes red by shifting the ROM's
 `BG1VOFS` by one scanline.
@@ -367,7 +367,7 @@ map's troops plus those of each area that covers the cell and chooses one at ran
 none covers it —the hero is outside the rectangle— nothing happens.
 
 **Two simplifications, both measured and both enforced by
-`pruebas/herramientas/test_encuentros.py`:**
+`tests/tooling/test_encounters.py`:**
 
 * **the terrain changes nothing.** The eleven tags stepped on in the 53 maps with
   encounters have `encounter_rate` 100, so the accumulator goes up by 100 and
@@ -385,7 +385,7 @@ converter precomputes two things per map: `1 / encounter_steps` in 1/65536
 —`enc_base`— and at which step each row is crossed —`enc_umbral_n`—, which comes from
 rewriting `acumulado / pasos >= fila` as `n >= ceil(fila * pasos / 100)`.
 With that the console never divides: the chance is a word shift
-and the comparison is against an xorshift. `test_encuentros.py` checks both
+and the comparison is against an xorshift. `test_encounters.py` checks both
 rewrites against the arithmetic over there, for all of the game's `encounter_steps`.
 
 **The randomness is the usual one but with its own seed** —`ENC_SEMILLA`—, like the
@@ -424,11 +424,11 @@ it has no cursor to save nor handlers to jump to.
   went on 2026-09-17; see the comment of `ChangeEncounterSteps`, above
   `ACEPTADOS_SIN_HACER` in eventos.py.
 
-**It is enforced by `encuentro`**, the suite's case: map 21 —Rat Tracks B1—
+**It is enforced by `encounter`**, the suite's case: map 21 —Rat Tracks B1—
 walking upwards, with
 `--encuentros-de-prueba 8` so the encounter comes out on step 8 and not on
 130. It compares two frames: the map one step before, and the battle screen
-against `pantallas.py --batalla`, with the troop the reference says. Both
+against `screens.py --batalla`, with the troop the reference says. Both
 at zero. Verified red in three ways: with the encounters turned off only
 on the ROM's side it is 100% of the pixels; against another troop of the same
 area, 338; and the frame before is the one that does not let it come out too early.
@@ -471,9 +471,9 @@ Three non-obvious things:
   and as many on entering; it is the same price every map change pays, with
   the difference that there a fade hides it.
 
-What enforces it is `pruebas/rpgmaker/test_batalla.py`, and **not the pixel suite**: the
+What enforces it is `tests/rpgmaker/test_battle.py`, and **not the pixel suite**: the
 silence does not change a pixel, which is the same argument as
-`test_musica_paquete.py`. It is four cases —the theme on entering with its samples
+`test_music_package.py`. It is four cases —the theme on entering with its samples
 in ARAM, the victory one, the map's on returning, and which of the five sound effects
 comes out on each hit— and all four are verified red with their defect
 in place.

@@ -23,10 +23,10 @@ The agent's proposals, not implemented, without lowering the quality of anything
    61,668 of 63,419 B): it would still be frozen but without the silence. It touches
    `tema_asegurar`.
 
-Incidentally: the docstring of `test_el_paquete_que_no_entro_con_otro_tema_sonando_se_completa`
+Incidentally: the docstring of `test_the_package_that_did_not_fit_with_another_song_playing_completes`
 and the comment of `tema_asegurar` say that the real transition from 2 to 3 happens
 "with 2's theme playing"; that is not so (on 2 escape_newyork plays, which
-comes from 1). The case `paquete-incompleto` turns on TF3 by hand and exercises the
+comes from 1). The case `package-incomplete` turns on TF3 by hand and exercises the
 same mechanism: fix the prose.
 
 ## Taken on 2026-09-30
@@ -45,7 +45,7 @@ sound effects; not the exit ones, which have no reason to fit— with
 and does not rebuild. Unless what was left out is a theme: there rebuilding does
 help, because it puts themes first, and it rebuilds as before.
 
-Measured with the new case `paso-al-3` —escape_newyork on 2, `Teleport`
+Measured with the new case `step-to-3` —escape_newyork on 2, `Teleport`
 to 3 and `PlayBGM` of TF3_1_awe, like the lift page—, in
 hardware frames with the music silent and the picture still:
 
@@ -67,15 +67,15 @@ load and a second freeze, with the picture still for longer in
 total, in exchange for there being no silence. With 38 frames the numbers do not add up;
 if taro hears that the gap is bothersome, that is the way.
 
-**The test:** `test_el_paso_del_2_al_3_no_vuelve_a_subir_lo_que_estaba`,
+**The test:** `test_going_from_2_to_3_does_not_upload_what_was_there_again`,
 in `rom/pruebas/rpgmaker/test_musica_paquete.py`. It requires that what was in
 ARAM before the `PlayBGM` does not move and that the silence does not exceed
 `TOPE_DEL_PASO_AL_3`, one second. With the old runtime it goes red: 26 samples
-move. To see where each one is, `lugares_en_la_aram`
+move. To see where each one is, `places_in_aram`
 in the harness.
 
 **The prose**, in its own commit: the docstring of
-`test_el_paquete_que_no_entro_con_otro_tema_sonando_se_completa` and the
+`test_the_package_that_did_not_fit_with_another_song_playing_completes` and the
 comment of `song_ensure`.
 
 **The audio**, to listen to: `/shared/audio/2026-09-30-mapa-3/`, the transition
@@ -85,7 +85,7 @@ before and after, with the SPC700 alone.
 fit in the gaps is decided by the order they were left in, not that of the
 list. On 3 more fit than before; in another transition with a package that does not
 fit, one from the front of the list that used to fit could be left out,
-until the next `PlayBGM`. `just pruebas` does not look at that outside 3.
+until the next `PlayBGM`. `just tests` does not look at that outside 3.
 
 **On merging:** nothing needs to be installed. `tools/runtime/` changed, which the
 global one builds from the main checkout, and no Rust project.

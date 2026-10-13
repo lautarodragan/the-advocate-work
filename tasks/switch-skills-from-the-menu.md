@@ -33,10 +33,10 @@ graphic and a shared body has no map graphics table. Adding their maps,
 298 and 321, to `release` was tried and does not help; it was undone.
 Draft: [`radin-s-and-sern-s-menus-do-not-compile`](radin-s-and-sern-s-menus-do-not-compile.md).
 
-**Verified**: ABL's suite, 1283 passed, with `test_habilidades_de_switch.py`
+**Verified**: ABL's suite, 1283 passed, with `test_switch_skills.py`
 —Change Tape's question, Dig Ingredients spending its 4 SP and turning 811
 on, a grey one and a heal doing nothing—, whose first two were shown red
-against the phase 2 runtime; `just arrancan`, 9 passed.
+against the phase 2 runtime; `just boot`, 9 passed.
 
 **Not covered**: the skill's sound effect is not played (draft
 [`switch-skills-from-the-menu-play-no-sound`](switch-skills-from-the-menu-play-no-sound.md));

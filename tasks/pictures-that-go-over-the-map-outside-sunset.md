@@ -11,7 +11,7 @@ that shows `Lichteffekt_Tankstelle_WC` and erases itself. In RM2k it is a
 dark 35% mask over the room; in the ROM "it comes out opaque and covers the
 room for ~480 frames: it looks like it hangs, but it continues. It is the
 pictures' transparency, not the erasing". Captures from that day in
-`/shared/capturas/2026-10-06-eraseevent/`.
+`/shared/captures/2026-10-06-eraseevent/`.
 
 What is known of the cause: it is a large picture, and a large picture
 takes the map off the screen; its transparency darkens towards the black
@@ -27,5 +27,5 @@ name this one among those it doesn't draw, so the expected thing is that it
 stays the same. How many other pictures in the other games go over the map
 wasn't counted.
 
-**How to see it**: `just cartuchos release` in `desert-nightmare/`, play
+**How to see it**: `just cartridges release` in `desert-nightmare/`, play
 up to the station bathroom (map 7) and compare with the original in Wine.

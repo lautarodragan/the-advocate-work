@@ -12,9 +12,9 @@ a domain crate in `tools/rm2k-snes/`, shaped like
 `tools/rm2k-snes/battle/README.md` ("One stage of a converter"), which the
 Python orchestrator (`snes_convert.py`) calls through the PATH.
 
-It branches off `main` at `3d83de68`. Baseline measured there: `NO_CACHE=1 just cartuchos`,
-1032 files in `rom/build/` (without the cache, the `.o`s, `sello.txt` or
-`conversor.log`), their sha256 in `<scratchpad>/mara/sha-base.txt`.
+It branches off `main` at `3d83de68`. Baseline measured there: `NO_CACHE=1 just cartridges`,
+1032 files in `rom/build/` (without the cache, the `.o`s, `stamp.txt` or
+`converter.log`), their sha256 in `<scratchpad>/mara/sha-base.txt`.
 
 ## Inventory: what the Python does today
 
@@ -234,8 +234,8 @@ With throwaway scripts in `<scratchpad>/mara/`:
     and what it prints: identical the 93 of `release`, the 7 of `test-special`
     and the 2 of `test-encounter-every-step`, and the output identical line by
     line.
-* **The cartridges**: `NO_CACHE=1 just cartuchos` and the sha256 of all of
-  `rom/build/` —minus the cache, the `.o`s, `sello.txt` and `conversor.log`;
+* **The cartridges**: `NO_CACHE=1 just cartridges` and the sha256 of all of
+  `rom/build/` —minus the cache, the `.o`s, `stamp.txt` and `converter.log`;
   the `.dbg` without `mtime`—: 766 files, plus the 266 PNGs of `adeleine/`
   decoded. After each step, identical to the previous one; and at the end,
   **the whole tree against `main`'s Python (`591855c0`)** —the `.py` files of
@@ -246,8 +246,8 @@ With throwaway scripts in `<scratchpad>/mara/`:
   * `release/abl.sfc` `e97a574b5a2c8205f4a527f747499f0f122cabaacc94c36ace119ed3db2080a0`
   * `tests/special/prueba.sfc` `08862e741912ace6f6f5614c5520240b81d4973ab27c7ddb194cfe266c9162b5`
   * `tests/encounter-every-step/prueba.sfc` `ad16736073318221ae418dc7b103e18edc7a2b98d9bbd856e7d1549e27f73a30`
-* **The suites**: `just pruebas`, 879 —they were 883: the four of
-  `test_timer_paleta` that tested the mechanism with made-up palettes
+* **The suites**: `just tests`, 879 —they were 883: the four of
+  `test_timer_palette` that tested the mechanism with made-up palettes
   moved to `extras.rs`, because they don't need the game—;
   `just -f tools/justfile test`, 90; `cargo test` of the three crates and of
   `cartridge`, green.

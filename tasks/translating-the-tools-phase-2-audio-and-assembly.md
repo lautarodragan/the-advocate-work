@@ -9,9 +9,9 @@ assignee: taro
 Phase 2 of the translation of `tools/` into English, second area: `tools/audio/`,
 `tools/ensamblado/` (which gets renamed `tools/build/` or similar) and the
 recipes of `tools/justfile`, with all their uses. They go together because
-`cartuchos.py` imports from the audio.
+`cartridges.py` imports from the audio.
 
-`ensamblado/entregar.py` (`abl-entregar`) belongs to ABL and stays in Spanish.
+`ensamblado/deliver.py` (`abl-entregar`) belongs to ABL and stays in Spanish.
 
 A way to install only the Python scripts into the
 PATH is also needed, without compiling or reinstalling Rust: today `herramientas` without arguments
@@ -21,15 +21,15 @@ reinstalls the five projects, and each rename of a script requires re-linking.
 
 One module per commit, with Mburucuyá's token-rename scripts
 adapted —now they also look at `docs/` except `docs/research/`,
-which are dated studies, and they do not touch `musica.json`, `techos.toml` and
+which are dated studies, and they do not touch `music.json`, `ceilings.toml` and
 other file names that look like `módulo.atributo`—. Between commit and
-commit: `SIN_CACHE=1 just cartuchos` with the fingerprints of `rom/build/`
+commit: `SIN_CACHE=1 just cartridges` with the fingerprints of `rom/build/`
 against those of 2bd3cf64 (995 files), the two suites, pyflakes and each
 executable run by its name from /tmp with `--project`.
 
 ## Where it stands
 
-- `audio/musica.py` → `audio/music.py`.
+- `audio/music.py` → `audio/music.py`.
 - `techos.py` did not read `--project` before importing, and outside the game
   `rm2k-snes-volume-ceilings --project rom --help` broke: fixed in
   its own commit.
@@ -41,7 +41,7 @@ executable run by its name from /tmp with `--project`.
   `SoundEffect`, `Constraint`, `Group`, `NoteSetup` and `_Voice`. Left in
   Spanish, on purpose, are the keys of the dicts it builds —`leido["voces"]`,
   `tema["sonidos"]`…—, which the converter and the tests read and end up in
-  `musica.json`; the labels of the SPC700 driver; and what goes inside
+  `music.json`; the labels of the SPC700 driver; and what goes inside
   the text of `musicdata.inc`, which has to come out the same: it still names
   `lugares_de_efectos` and `build_efectos`.
 - `audio/efectos_msu.py` → `audio/msu_effects.py`, with its names. The
@@ -59,8 +59,8 @@ executable run by its name from /tmp with `--project`.
 - `assembly/ensamblar.py` → `assembly/assemble.py`, with its names, and
   `--simbolos` becomes `--symbols`.
 - `assembly/espacio.py` → `assembly/space.py`, with its names and the
-  keys of `measure`, which `test_espacio.py` reads.
-- `assembly/cartuchos.py` → `assembly/cartridges.py`, with its names, and
+  keys of `measure`, which `test_space.py` reads.
+- `assembly/cartridges.py` → `assembly/cartridges.py`, with its names, and
   `--lista` becomes `--list`.
 - The recipes of `tools/justfile`, into English: `herramientas` → `install`,
   `herramientas-locales` → `install-local`, `protocolo` → `protocol`,
@@ -87,7 +87,7 @@ executable run by its name from /tmp with `--project`.
 - A worktree that already had its `bin/` rebuilds it with `just -f tools/justfile
   install-local rom/.herramientas-locales`: the recipe's old name no longer
   exists.
-- The two `memoria.cfg` in `rom/build/` change their first line —the path of
+- The two `memory.cfg` in `rom/build/` change their first line —the path of
   `banks.py`—; the rest comes out byte-for-byte identical to 2bd3cf64.
 
 ## New terms for the glossary

@@ -138,8 +138,8 @@ than what goes into `release` and `test-special`. **None differs**:
   `Image.open(...).convert("RGB")` —all opaque—, with the key colour against
   `load_image`, and 111 through `Pictures._read`.
 
-And the ROMs: `NO_CACHE=1 just cartuchos` before and after, with the sha256
-of the 1032 files in `rom/build/` (minus the cache, `.o`, `sello.txt` and
+And the ROMs: `NO_CACHE=1 just cartridges` before and after, with the sha256
+of the 1032 files in `rom/build/` (minus the cache, `.o`, `stamp.txt` and
 the log; the `.dbg` without mtime): **all identical**.
 
     d098a86fbd7fb9bd41b6ccbea3dba3d0ee2b214e1d7e75a911577b95f6b3be10  release/abl.sfc
@@ -147,7 +147,7 @@ the log; the `.dbg` without mtime): **all identical**.
     8e85c21b4de4bda9aea90e7061386e7b56a731b245ab039a975eed021f32df6c  tests/encounter-every-step/prueba.sfc
 
 **What it costs**: measured with a wrapper that logged each call, a
-`NO_CACHE=1 just cartuchos` makes 19 calls to `face`, 57 to `system` and 1 to
+`NO_CACHE=1 just cartridges` makes 19 calls to `face`, 57 to `system` and 1 to
 `picture` (and the earlier 185 to `charset` and 104 to `layers`). At about
 4 ms each, less than half a second in a build of 46 to 52 s, which is what
 varies from one run to another.
@@ -181,7 +181,7 @@ them to `rm2k-render`, it can be deleted.
 **Dead and not mine**: `picture.render` and `picture.report` are called by
 nobody. I didn't touch them.
 
-**The suites:** `just pruebas` 882 and `just -f tools/justfile test` 90, green;
+**The suites:** `just tests` 882 and `just -f tools/justfile test` 90, green;
 `cargo test` of `rm2k-render` and
 `rm2k-rules`, green and with no clippy warnings in the new code.
 

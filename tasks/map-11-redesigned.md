@@ -36,7 +36,7 @@ Dropped frames walking 1200 frames, measured with
 dropped frames out of 1200**, below the ceiling the diagnosis had measured
 —23—. The map's drawn events go from 69 to 17.
 
-And it plays: `pruebas/abl/test_luces.py` measures that standing on a lit tile
+And it plays: `tests/abl/test_lights.py` measures that standing on a lit tile
 opens the "they caught me" message, and that the stone on `Light5` turns off
 its cone and leaves the broken lamp's switch set.
 
@@ -46,12 +46,12 @@ and 4, which were engine optimizations. See "Why it isn't optimized" below.
 # What was measured
 
 Dropped frames walking 1200 frames, with the counter read and reset to zero
-every 50 because **`cuadros_perdidos` saturates at 255**. It's the same method
+every 50 because **`lost_frames` saturates at 255**. It's the same method
 that gave the 450 and the 228 in `opaque-events-into-the-map.md`, and that 228 was
 reproduced exactly.
 
 **The cell it's measured from changes the answer by a factor of five**, and
-that's the first thing to know: the `en-11` case leaves the hero at (50,50),
+that's the first thing to know: the `in-11` case leaves the hero at (50,50),
 which is an **empty area**, and there **no** light tile falls on screen. What
 had been measured was the cost of rows that are never drawn.
 
@@ -155,7 +155,7 @@ What was expected was **26 → 31** with map 2 joining in. What came out is
 golden** and that forced a sixth condition: **baking can't open the cell**.
 
 Map 2's `MovinDoor` is in a corner, outside any camera, and baking it moved
-`puerta-izq-950` by 113 pixels —a door sixty cells away, with the same
+`door-left-950` by 113 pixels —a door sixty cells away, with the same
 switches set—. What was measured before deciding: the map's CGRAM comes out
 identical, the background draws the same except for the baked cell, the NPC
 table changes **a single byte** —that row's "is visible"— and the compiled
@@ -359,7 +359,7 @@ The redesigned map 11 is a **whole replacement of the file**, not a
 description of changes, and the pipeline ignores the original if it exists.
 Three things support it:
 
-* **It doesn't go in `parches/`**, which today is **generated output** —the
+* **It doesn't go in `patches/`**, which today is **generated output** —the
   color merges the allocator decided—. This is hand-written input that
   overrides everything else: two opposite directions in one directory is what
   someone regenerates without looking.
@@ -392,7 +392,7 @@ document didn't foresee —the why of each one, in `juego/README.md`—:
   its **id**, and without that field there's no "id inside" to compare;
 * **the new ChipSet doesn't replace the database's section: it's added**, in a
   file of its own. A fork that overwrote `db/chipsets.json` would go stale
-  without warning the day `just datos` changes it;
+  without warning the day `just dump` changes it;
 * **its image isn't versioned: it's built.** The game's art isn't ours to
   redistribute —it lives in `/extras`—, so what's committed is the recipe
   —which block and which tile get copied where— and the PNG goes to

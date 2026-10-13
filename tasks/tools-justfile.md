@@ -6,8 +6,8 @@ status: done
 assignee: taro
 ---
 
-From taro, on 2026-09-29: the first step before moving `data/`, `parches/`,
-`pruebas/` and the engine (see `decisions/the-tools-split-from-abl.md`).
+From taro, on 2026-09-29: the first step before moving `data/`, `patches/`,
+`tests/` and the engine (see `decisions/the-tools-split-from-abl.md`).
 A `tools/justfile` with what belongs to the tools, and the root one
 narrowed to ABL. It gets closer to having two repos without moving any path
 yet.
@@ -19,7 +19,7 @@ What goes to `tools/justfile`, as discussed: `protocolo`,
 `bin/` at the front of the `PATH` and the guard stay in the root one. `datos`
 and `ditto-volcado`, which dump this game, also stay.
 
-From `pruebas/herramientas/`, only those that need neither the game nor a
+From `tests/tooling/`, only those that need neither the game nor a
 ROM move to `tools/`, confirmed test by test.
 
 ## What was done (Espinillo)
@@ -58,7 +58,7 @@ ROM move to `tools/`, confirmed test by test.
 * **`tools/justfile` is in Spanish**, like the Python of `tools/`: it gets
   translated with it.
 
-### `pruebas/herramientas/`: none was moved
+### `tests/tooling/`: none was moved
 
 * `test_lz2.py` needs the built cartridges (`tanda.cartucho`): it stays.
 * `test_protocolo.py` mixes: some run `protocol --check` and compare
@@ -68,7 +68,7 @@ ROM move to `tools/`, confirmed test by test.
   neither the game nor a ROM.
 * Without looking at them in depth, `test_temas_heredados.py`,
   `test_sustituciones.py` and `test_musica_stream.py` do not import the
-  suite or the game either; `test_lideres.py` uses `datos.DEMO`, from the
+  suite or the game either; `test_leaders.py` uses `datos.DEMO`, from the
   harness.
 
 I did not move them because it is not obvious where to: `tools/` has no
@@ -84,11 +84,11 @@ in English?).
 * `just lz2-pruebas`, standing in `tools/`: 19 pass. It was the only Rust
   compilation. The other `*-pruebas`, `ditto-vuelta-entera` and
   `herramientas` only with `--dry-run`.
-* Without the `bin/`, `just cartuchos` refuses with the new command; that
+* Without the `bin/`, `just cartridges` refuses with the new command; that
   command builds it without compiling Rust, with the symlinks to the
-  worktree's `tools/`, and `just cartuchos` works afterwards.
+  worktree's `tools/`, and `just cartridges` works afterwards.
   `_no_en_el_principal` exits 1 in the main checkout.
-* `just pruebas` from the root: 973 pass. `abl.sfc` and `prueba.sfc`
+* `just tests` from the root: 973 pass. `abl.sfc` and `prueba.sfc`
   rebuilt, with the same sha256 as before.
 
 **What not**: `herramientas` for real against the global one, the

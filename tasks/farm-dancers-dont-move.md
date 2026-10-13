@@ -69,10 +69,10 @@ In the dance two more start walking: 8 route slots out of 12, which the
 celebration already released. With the cache, they ask for their own slot
 (128 + event) instead of sharing a pose: the converter counts 17 still poses on
 127 instead of 18, and the static peak stays at 33 against 30 slots (the same
-warning as before; the celebration asks for 26). `test_granja.py`, which looks
+warning as before; the celebration asks for 26). `test_farm.py`, which looks
 at each event's VRAM frame by frame, stays green.
 
-`just espacio release`, with main's tools and with these:
+`just space release`, with main's tools and with these:
 
                  before     after
     banks        78 of 127  78 of 127
@@ -82,20 +82,20 @@ at each event's VRAM frame by frame, stays green.
 
 # Tests (in ABL, branch `bailarines`)
 
-* `rpgmaker/test_girar.py`, new: the two that dance spin clockwise every 12
+* `rpgmaker/test_turn.py`, new: the two that dance spin clockwise every 12
   frames, without changing column, and they move; the robot on 64 (switches
   150 and 207) spins every 24 and does not move.
-* `abl/test_recorrido_granja_golden.py`: in the dance, 37 and 38 have to move
+* `abl/test_playthrough_farm_golden.py`: in the dance, 37 and 38 have to move
   and show all four sides.
 * **The red**, with main's tools: the walkthrough fails with "en el baile no
-  se movieron [36, 37]", and `test_girar.py` with "dio 0 cuartos de vuelta" in
+  se movieron [36, 37]", and `test_turn.py` with "dio 0 cuartos de vuelta" in
   both.
 
 ABL's suite with these tools: all green, with the two new ones. **No golden
 moved**: the suite's pass exactly, and the farm walkthrough's eleven come out
 byte for byte identical to main's —in their shots the dancers are not on
 screen, or the shot is taken before their first spin—. Captures of the dance
-spinning in `/shared/capturas/2026-10-04-bailarines/`.
+spinning in `/shared/captures/2026-10-04-bailarines/`.
 
 **The suite does not cover**: a `face_*` or a jump on one that spins, a forced
 route on it, and a page that spins with a column other than the middle one

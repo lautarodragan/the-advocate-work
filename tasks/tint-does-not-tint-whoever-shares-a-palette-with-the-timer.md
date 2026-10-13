@@ -20,8 +20,8 @@ timer running: the upload checked whether the map **carried** the glyphs,
 not whether they were visible, and `release` carries them on all its maps.
 
 The five goldens of map 7's door that the measurement uncovered
-—`sacudir-60`, `cerrar-400`, `cerrar-right-400`, `autocierre-63` and
-`autocierre-3-185`— show it if `test-main` is built without `--sin-timer`:
+—`shake-60`, `close-400`, `close-right-400`, `auto-close-63` and
+`auto-close-3-185`— show it if `test-main` is built without `--sin-timer`:
 **the door of Talan's house** (an event drawn with tiles 111 and 117 of
 `BLchp1`) stays grey on the screen tinted blue. 512 pixels in each one with
 the code from before, 0 with the current one. **There are no goldens to

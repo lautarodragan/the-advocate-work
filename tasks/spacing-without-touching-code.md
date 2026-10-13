@@ -49,7 +49,7 @@ it doesn't fit even after reordering, refuses, saying what each screen asks for.
 
 ### What gets cut
 
-The converter warns —a WARNING in `conversor.log`, one line per place, with
+The converter warns —a WARNING in `converter.log`, one line per place, with
 each name, its pixels and what is shown— and doesn't refuse: the console cuts and
 carries on, as with the other things the cartridge carries less of. It checks:
 
@@ -99,7 +99,7 @@ it's a bound, not what happens.
     +1          168      325                  228
     +2          191      350                  255
 
-And measured in the ROM: the `batalla` battle with Talan (actor 14, who can
+And measured in the ROM: the `battle` battle with Talan (actor 14, who can
 come to know 54 skills) knowing all of them, with the list open.
 **Already with 0 the pool runs out**: the seventh row of skills comes out half drawn
 and the first line of the commands doesn't come out. With 1 it runs out at the sixth.
@@ -124,7 +124,7 @@ rebuilt messages; the tests were touched, not the ROM:
 
 * the farm celebration looked at the slots in a frame with the
   screen turned off by hand after the jump —the same happens with 0, one frame
-  earlier, which `CADA` didn't look at—: `sin_errores` no longer counts what isn't shown;
+  earlier, which `CADA` didn't look at—: `without_errors` no longer counts what isn't shown;
 * `items-2` captured in the frame where the description arrived, which with
   1 goes on two lines and arrives one later: now it looks at 78. The debt
   of text that arrives after the cursor grows by one frame there (six to seven).
@@ -148,7 +148,7 @@ Play the +1: the messages, the menu with the whole party, a medicine from
 the menu (the menu's names now go on top of the slots' text),
 saving to a slot, a shop and a battle with skills. The goldens
 side by side and the captures of the pool, in
-`/shared/capturas/2026-10-03-espaciado-1/`, with its LEEME.
+`/shared/captures/2026-10-03-espaciado-1/`, with its LEEME.
 
 Branches: tools, `worktree-agent-a06268194b190fc7f`; ABL,
 `espaciado-1` of the clone `/extras/scratch/benteveo/abl`.

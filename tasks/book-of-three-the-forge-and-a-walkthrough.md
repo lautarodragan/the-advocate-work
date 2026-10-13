@@ -7,7 +7,7 @@ assignee: taro
 agents: [Calandria]
 ---
 
-taro, on 2026-10-12, playing `/shared/builds/otros-juegos/` (ports
+taro, on 2026-10-12, playing `/shared/builds/other-games/` (ports
 `a8ee168`, the-advocate `25d93f0a`):
 
 * **The forge**: "I get to the forge's house and the NPC wants me to forge
@@ -18,7 +18,7 @@ taro, on 2026-10-12, playing `/shared/builds/otros-juegos/` (ports
   break without anyone noticing.
 
 The plan: a walkthrough played from the start up to the forge, with goldens
-at its milestones (as ABL's `test_recorrido_golden.py`), which goes red at
+at its milestones (as ABL's `test_playthrough_golden.py`), which goes red at
 the forge today and green with the fix; and the cause of the fire found and
 fixed.
 
@@ -64,12 +64,12 @@ plays.
 
 ## The walkthrough
 
-`pruebas/test_book_of_three.py` at the root of the ports, with
-`pruebas/jugada.py` —ABL's `recorrido.py` cut down: BFS over the tiles'
+`tests/test_book_of_three.py` at the root of the ports, with
+`tests/play_script.py` —ABL's `playthrough.py` cut down: BFS over the tiles'
 collision from the game's `data/`, with ABL's pure `rm2k.py`; waits by
 RAM with a cap; A to every page; frame taps in battle—. It runs with `just
 arrancan` (`-k book` alone): same harness, same cartridge and same
-question as `test_arrancan.py`. Eight goldens, snes9x and bsnes against
+question as `test_boot.py`. Eight goldens, snes9x and bsnes against
 the same one at 15 bits: Caer Dallben, Caer Dallben East, the forge, the
 practice battle waiting for the first order, after the fire (and Taran's
 weapon slot holding 83), out of the forge, Dallben's cottage, and back
@@ -90,8 +90,8 @@ fire, green with the branch's.
 
 On the branches, with the-advocate `calandria-forja` installed locally
 (`events` only): `just test` 27 passed; `just crate-test events`; ABL's
-`just pruebas` 1265 passed, and `abl.sfc` byte for byte the same as
-main's; `just arrancan` 9 passed, the walkthrough included. Red with
+`just tests` 1265 passed, and `abl.sfc` byte for byte the same as
+main's; `just boot` 9 passed, the walkthrough included. Red with
 main's tools at the fire.
 
 When merging: `just install events`, from `~/the-advocate`. Then a `just

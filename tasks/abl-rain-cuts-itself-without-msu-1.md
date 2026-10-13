@@ -24,7 +24,7 @@ quiet beginning: in the core's audio, without MSU-1, the mix drops from
 and giving the rain a second one would take it from the thunder; a third
 voice is point 2 of the task.
 
-**How to see it**: case `relampago` of ABL's suite on `release`, without the
+**How to see it**: case `lightning` of ABL's suite on `release`, without the
 `.msu`, and listen from the second rain on —or the wavs in the task—.
 
 ## What to try

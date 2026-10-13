@@ -51,7 +51,7 @@ its comment was brought next to it). For the same reason `hp_inicial_poner` stay
 `menu.s`. The ends of `ram_baja.s` and `ventana_del_mapa.s` end in a
 comment, but they talk about their own file: they are not orphans.
 
-**How each one was verified.** `just cartuchos` and `just pruebas` green
+**How each one was verified.** `just cartridges` and `just tests` green
 (with `test_cores.py` inside) after each commit, without any golden
 changed or any test touched. The ROM changes in each one (the first, 2352
 bytes of `abl.sfc`). That no routine ended up assembled with another width was
@@ -119,7 +119,7 @@ also identical with an explicit `.a8`/`.i16` at the start of each handler,
 that is, none is assembled with a width inherited from the text above.
 The only thing that changes is the `.sym`: `correr_codigo::abrir` becomes
 `op_shop::abrir`; no test or tool reads the locals of
-`correr_codigo` (grep of `correr_codigo::` and `op_*::` in `pruebas/` and
+`correr_codigo` (grep of `correr_codigo::` and `op_*::` in `tests/` and
 `tools/`).
 
 ### The possible partitions
@@ -136,7 +136,7 @@ defect: each file starts with a `.proc` and its widths, and a handler is
 a unit that is found with `grep '\.proc op_'`. It costs 42 mechanical
 lines besides the cut. It does not solve the dispatch, which stays in
 `interprete.s` as the point where two new opcodes collide. It is verified
-like the cut: the three ROMs identical and `just pruebas`.
+like the cut: the three ROMs identical and `just tests`.
 
 **C. B plus a table dispatch**: a `cmp` against the number of opcodes, `bcs` and `jmp (tabla,
 x)` with one `.addr` per opcode in the order of its number. **It changes the ROM.** The
@@ -168,7 +168,7 @@ On 2026-09-25, in four commits: each handler to its own `.proc` in the
 same file; the cut into files (only the output of a throwaway script
 modelled on `partir_main.py`); the `.segment` and the widths at the start of
 each new file; and the prose. The first three with the three ROMs byte for
-byte identical to those from before and `just pruebas` green; see the messages.
+byte identical to those from before and `just tests` green; see the messages.
 
 Two corrections to what was measured above. The references that cross from one
 handler to another are **46, not 42**: the 45 `jmp otro` —all of the
@@ -242,7 +242,7 @@ On 2026-09-25, on `73fc639`, in four commits plus the prose:
 | `a0b0358` | `protocol --jump-table`: `EVENT_OPCODE_COUNT` and the macro `EVENT_HANDLERS`, one `.addr op_x` per opcode in the order of the number |
 | `40661ce` | the recipe `protocolo` and `test_los_generados_estan_al_dia` ask for it; the ROM does not change (the three byte-for-byte identical) |
 | `79d765e` | the dispatch: `cmp #EVENT_OPCODE_COUNT` / `bcs op_done` / `asl` / `xba` / `lda #0` / `xba` / `tax` / `jmp (manejadores_de_opcode, x)` |
-| `97614f8` | `test_la_entrada_k_de_la_tabla_salta_al_manejador_del_opcode_k` |
+| `97614f8` | `test_table_entry_k_jumps_to_the_handler_of_opcode_k` |
 
 What was decided along the way:
 
@@ -268,7 +268,7 @@ find no path that reads X, A, C or Z/N before setting them, neither
 from the 45 handlers nor from the `jsr correr_codigo` of the three
 callers (and theirs) on return. What they cross of `phx`/`plx` with X
 unwritten is save-and-restore, or the return-address trick of
-`cerrar` in `ranuras.s`.
+`close` in `ranuras.s`.
 
 **Measured**: bank 0 has 210 more bytes free in the three cartridges
 (`.res N, $00` in `TABLAS` against the `.o` of each): release 2139 → 2349,
@@ -279,6 +279,6 @@ chain; three get more expensive (`OP_MESSAGE` 7 → 22, `OP_SWITCH` 12, `OP_ROUT
 pages —static, not by how many times it runs—, from 87 to 22 cycles per
 instruction.
 
-Verified with `just cartuchos` and `just pruebas` three times on the
+Verified with `just cartridges` and `just tests` three times on the
 dispatch, green, without any golden changed or any test touched, and
 `test_cores.py` three more times separately.

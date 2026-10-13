@@ -14,7 +14,7 @@ of advances, the layout by pixels and the screens in composed text are
 reused by both.
 
 The study, the sheet and what it would cost: `tasks/font-for-high-resolution-or-a-narrower-one.md`,
-in ABL, and `experimentos/fuentes/` there.
+in ABL, and `experiments/fonts/` there.
 
 ## Done (Calandria)
 
@@ -49,7 +49,7 @@ Accumulated x in `msg_x`, eight phases, and the pixel limit with `font_reach`.
 
 **Precomposed, with the number.** Both were written and they draw identically pixel
 by pixel. On map 6 with the camera moving, counting hardware frames
-against ticks while composing (the case `anclada` and one with four full
+against ticks while composing (the case `anchored` and one with four full
 rows):
 
     letters per loop    precomposed (8 phases)   one-bit
@@ -104,7 +104,7 @@ the precomposed tables per phase (in high resolution they would be different one
 
 Play: the messages, the menu and its screens, a shop and a battle. Look at
 the delay of the text in items/equipment/shop and whether it bothers. The goldens are
-side by side in `/shared/capturas/2026-10-03-ancho-variable/` (with LEEME):
+side by side in `/shared/captures/2026-10-03-ancho-variable/` (with LEEME):
 only letters change, and they are not blessed.
 
 Branches: tools, Calandria's; ABL, `ancho-variable` of her clone.

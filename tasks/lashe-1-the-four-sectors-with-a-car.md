@@ -20,7 +20,7 @@ Put into `_DE_RELEASE` the four sectors with a car —**37, 38, 47 and 48**—, 
 
 2026-09-27, in `testing/`: done on `93af39f`, on the agent's branch. What
 is left is taro's: playing it (below, "What taro has to look at while playing") and looking at
-the photos without a golden in `pruebas/snapshots/playthrough/lashe-*/`.
+the photos without a golden in `tests/snapshots/playthrough/lashe-*/`.
 
 # What was done
 
@@ -36,12 +36,12 @@ remaining baked ones (`_hornear_si_no_mueve_la_cgram`, in
 `tools/port/snes_convert.py`). It is what the comment there asked for —"take it out
 of the rule"—; it is asked afterwards and not inside `eventos_horneables` because
 the borrowed ones come from the allocation, which runs after drawing the layers. No
-other map baked a borrowed one: the `parches/auto/mapas/` of the ones already there
+other map baked a borrowed one: the `patches/auto/maps/` of the ones already there
 come out identical, and the suite moved no golden. It is enforced by
-`test_la_puerta_de_la_casa_de_empeno_no_se_hornea`.
+`test_the_pawn_shop_door_is_not_baked`.
 
 **The end of the demo** (taro's decision of 2026-09-26): 36 is
-forked in `parches/manual/mapas/Map0036.json`, with the original's layers, and
+forked in `patches/manual/forks/Map0036.json`, with the original's layers, and
 its four `Teleport [49, 1, 26]` are now a message —"END OF THE DEMO / The
 escape from Lashe City is not in / the cartridge yet. Thanks for playing!", in
 English like the rest of the game— and a `ReturntoTitleScreen`. The converter
@@ -50,22 +50,22 @@ here the Game Over no longer draws its image, so both are the same, and the
 startup of `release` is the title screen. **No new opcode.** 182
 ("they leave") is still turned on before the card, as in the original; `reset`
 clears it on returning to the title. The why of the fork is in
-`parches/manual/README.md`.
+`patches/manual/README.md`.
 
-`test_fork_los_teleports_que_entran_siguen_cayendo_en_celdas_pisables` required
+`test_fork_incoming_teleports_still_land_on_walkable_cells` required
 that every cell a `Teleport` arrives at be walkable, and 36 receives
 `DummyHero` on cells that were not walkable already in the original (it is a black
 screen). Now it requires what it protects: that the fork does not close a cell the
 original let you walk on.
 
-`test_puerta_del_10.py` enforced that the door on 10 with switch 231 did **not**
+`test_door_of_10.py` enforced that the door on 10 with switch 231 did **not**
 lead to 8 because 38 was not there; now it enforces that it leads to 38, at (48,54).
 
 # What was measured
 
 All on `release`, `93af39f` against this branch:
 
-**The pages**: with the plan's script (`medir.py`), 183 of 186 triggerable
+**The pages**: with the plan's script (`measure.py`), 183 of 186 triggerable
 pages of 36, 37, 38, 39, 47, 48 and 56 compile. The three that do not are the
 expected ones, doors to maps of other milestones:
 
@@ -112,32 +112,32 @@ Half of it belongs to the package itself —`38+cd4` has to fit `vswar`,
 they are copies that the second batch of `snes_music.copias` stopped making (the bank
 goes from 221 to 212 samples), because now there is none that does not lower someone.
 **It is reported and not touched**: it is the domain of the audio agents, and it
-shows in the `vswar` theme without MSU-1. `just techos` redone with the new
+shows in the `vswar` theme without MSU-1. `just ceilings` redone with the new
 mix: no theme clips.
 
 # Tests
 
-`pruebas/abl/test_recorrido_lashe_golden.py`, on `release`, starting from
+`tests/abl/test_playthrough_lashe_golden.py`, on `release`, starting from
 where the game starts —the car talk on map 4 with 132, the cutscene
 on 34— except the HQ and the guards, which jump to their sector:
 
-* `test_la_eleccion_del_36_lleva_a_los_cuatro_sectores`: with Arden, the four
+* `test_the_choice_of_36_leads_to_the_four_sectors`: with Arden, the four
   one after the other —35, 34, 33, 32—, the first through page 1 of 36 and the
   others through page 2. In each one: the map, the `Teleport`'s cell, the party
   (Talan and Arden) and getting into the car (148 off, 149 on, `DummyHero` alone).
-* `test_el_pad_de_talan_con_auto`: 37 -> 39, the computer turns on 151 and
+* `test_talans_pad_with_car`: 37 -> 39, the computer turns on 151 and
   only then does the door open, 39 -> 37 (10,31).
-* `test_el_hq_de_los_vipers_por_el_cano_con_arden`: the pipe (167, Arden goes
+* `test_the_vipers_hq_through_the_pipe_with_arden`: the pipe (167, Arden goes
   ahead), the empty HQ (168), talking to Arden (back in the party), the whisper
   (169) and the exit to the street.
-* `test_los_guardias_del_sector_33_con_saldra`: the shop on 56 and back, and
+* `test_the_sector_33_guards_with_saldra`: the shop on 56 and back, and
   the guards scene with Saldra (181, the escape to (5,36)).
 * `test_irse_de_la_ciudad_termina_la_demo`: with 161 and 169, "Stay" (and
   238 on), another round, "We've got to get out of here", the card and the
   return to the title.
-* `test_la_puerta_de_la_casa_de_empeno_no_se_hornea`.
+* `test_the_pawn_shop_door_is_not_baked`.
 
-The photos are in `pruebas/snapshots/playthrough/lashe-*/` **without a golden**:
+The photos are in `tests/snapshots/playthrough/lashe-*/` **without a golden**:
 
     lashe-sectores  36 the first time, and each sector on arrival
     lashe-pad       Talan's pad

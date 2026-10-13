@@ -8,7 +8,7 @@ assignee: taro
 
 From taro, on 2026-09-30, in the converter's migration to Rust. `patches.py`
 is already an executable of its own (`rm2k-snes-patches`, called by `just
-parches` and `just parches-check`) with clear input and output.
+parches` and `just patches-check`) with clear input and output.
 
 ## Where it ended up and why (Yacutoro, 2026-09-30)
 
@@ -27,17 +27,17 @@ Python did.
 
 The converter imported `patches.py` in the same process: `write_maps`,
 `write_animations` and `write_battlers` built the TOML text from what the
-converter decided, and `write_uses` wrote `parches/usos.json`.
+converter decided, and `write_uses` wrote `patches/uses.json`.
 
 * **What travels is the decision**, in a JSON request: the converter runs
   `rm2k-snes-patches --request <pedido> <build>` —`stage.hand_over`, new,
   next to `stage.run`—, and the executable empties and writes
-  `<build>/parches/auto/{mapas,animaciones,battlers}/` and prints the same
+  `<build>/patches/auto/{mapas,animaciones,battlers}/` and prints the same
   three lines the converter used to print. The request is built by
   `patch_of_map`, `patch_of_animation` and `patch_of_battler` in
   `snes_convert.py`. Of a battler, **how many** merges travels, which is the
   only thing that gets written, and not the list.
-* **`usos.json` is still written by the converter**, which is the one that
+* **`uses.json` is still written by the converter**, which is the one that
   knows who asked for each thing: `write_patch_uses` moved to
   `battle_scenes.py`, next to `patch_uses`, and the executable only reads it.
   That way the file also comes out byte for byte identical without
@@ -45,7 +45,7 @@ converter decided, and `write_uses` wrote `parches/usos.json`.
   pairs.
 * `--request` is a new flag; the earlier ones —`--project`,
   `--test-cartridges`, the directories and `--check`— stay the same, so `just
-  parches` and `just parches-check` don't change. `--request` doesn't look
+  parches` and `just patches-check` don't change. `--request` doesn't look
   for the project: it only writes into the build what it's given.
 * `rm2k-snes-patches` goes into the cartridges' fingerprint
   (`CONVERTER_TOOLS` of `cartridge`): what it writes goes next to the ROM and
@@ -54,12 +54,12 @@ converter decided, and `write_uses` wrote `parches/usos.json`.
 ## The comparison
 
 Throwaway scripts in the scratchpad (`yacutoro/`): `base.sh` builds with
-`NO_CACHE=1 just cartuchos` and takes the sha256 of all of `rom/build/`
-(except the cache, `.o`, `sello.txt` and `conversor.log`; the `.dbg` without
-`mtime`); `salidas.sh` runs `just parches-check` clean, `just parches-check`
+`NO_CACHE=1 just cartridges` and takes the sha256 of all of `rom/build/`
+(except the cache, `.o`, `stamp.txt` and `converter.log`; the `.dbg` without
+`mtime`); `salidas.sh` runs `just patches-check` clean, `just patches-check`
 with five TOML edited by hand —a map's `colores`, an animation's size and
 sheet, a battler's color, hue and merges, a versioned map deleted and an
-extra one— and `just parches` on an edited battler and an extra map, and
+extra one— and `just patches` on an edited battler and an extra map, and
 saves output, error, exit code and the sha256 of the 137 TOML.
 
 * Python against the Rust executable on the same builds: all identical,
@@ -80,12 +80,12 @@ saves output, error, exit code and the sha256 of the 137 TOML.
   the global symlink from `rm2k-snes-patches` to `port/patches.py`, which is
   left dangling, gets replaced by the binary. No separate `install-scripts`
   needed.
-* All cartridges become stale (the fingerprint changed): `just cartuchos`.
+* All cartridges become stale (the fingerprint changed): `just cartridges`.
 
 ## The suites
 
-On the tree with `main` merged (`550ccfeb`): `just cartuchos`, `just
-parches-check` green, `just pruebas` **878** —it was 880: the two that didn't
+On the tree with `main` merged (`550ccfeb`): `just cartridges`, `just
+patches-check` green, `just tests` **878** —it was 880: the two that didn't
 depend on the game, that building again doesn't leave stale patches and what
 is "suite-only", moved to the crate—, `just -f tools/justfile test` **85**
 (`main` removed five), and `cargo test` of `patches` and of `cartridge`. The

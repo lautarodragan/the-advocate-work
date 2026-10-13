@@ -7,14 +7,14 @@ assignee: taro
 ---
 
 From taro, on 2026-10-02: "the refactor to free up those banks". Bank 1
-of `release` was left with 131 B free (`just espacio`), between the autorun
+of `release` was left with 131 B free (`just space`), between the autorun
 common events and the shared `CallEvent` (Picaflor) and the large pictures
 (Aguilucho). It's like what Pirincho did with bank 0's tables
 (`item-and-theme-tables-out-of-bank-0.md`), but with code.
 
 ## What was measured before (2026-10-02, Pepitero, on `cb333da4`)
 
-`just espacio`, bank 0 / bank 1:
+`just space`, bank 0 / bank 1:
 
     release                    1,063 B / 131 B
     test-special               1,081 B / 131 B
@@ -41,7 +41,7 @@ It was the last data space in the fast 4 MB, and no cartridge used it
 (`release` leaves the lower halves of `$C0` and `$C1` free). Being an
 ExHiROM half it's always fast, with no mirror: what lives there is entered with `jsl` at
 its address, and it doesn't need the copy in the second 4 MB that
-banks 0 and 1 have. `banks::FAR2` in `rm2k-snes-cartridge`, and `just espacio`
+banks 0 and 1 have. `banks::FAR2` in `rm2k-snes-cartridge`, and `just space`
 shows it as "bank $C0".
 
 The commit that opens it doesn't move the ROM: the three cartridges come out byte for byte
@@ -118,7 +118,7 @@ the operand from the source with a regular expression, so it's heuristic.
 
 ## The numbers
 
-`just espacio`, before and after:
+`just space`, before and after:
 
     bank 0    release 1,063 -> 2,868 B; test-special 1,081 -> 2,886;
               test-encounter-every-step 1,077 -> 2,882
@@ -132,13 +132,13 @@ The commits:
     222007f6  the battle to FAR2
     d09c4232  the audio package to FAR2
     598376c9  the rule in main.s and the old prose: only comments, same ROM
-    d5013576  `bank_far2` in rm2k-snes-space's JSON and in test_espacio.py
+    d5013576  `bank_far2` in rm2k-snes-space's JSON and in test_space.py
 
-Each commit that moves the ROM, with `just pruebas` green —1000, and 1001 with
+Each commit that moves the ROM, with `just tests` green —1000, and 1001 with
 the new space test— and the goldens identical. Final `abl.sfc`:
-`35c76500…`. `NO_CACHE=1 just cartuchos` gives the same. `just -f tools/justfile
+`35c76500…`. `NO_CACHE=1 just cartridges` gives the same. `just -f tools/justfile
 test`: 39. `cargo test -p rm2k-snes-cartridge`: green.
-`test_musica_techos.py` and `test_cores.py` pass inside `just pruebas`.
+`test_music_ceilings.py` and `test_cores.py` pass inside `just tests`.
 
 **On merging**: `just -f tools/justfile install cartridge` —
 `banks.rs` (the `.cfg`) and `rm2k-snes-space` changed—. Without that, the global assembler

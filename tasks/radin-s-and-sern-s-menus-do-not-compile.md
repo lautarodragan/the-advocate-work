@@ -30,5 +30,5 @@ What was measured:
   to `extra2(1)`, which `compile_route` refuses without a map's graphics
   table (`let Some(graphics) = ctx.graphics… else { return cannot() }`).
 
-To reproduce: build `release`, read `conversor.log`; or play: Radin in the
+To reproduce: build `release`, read `converter.log`; or play: Radin in the
 party, Tech Skill, Radin, Mix Formula.

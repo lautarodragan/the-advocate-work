@@ -108,8 +108,8 @@ Throwaway, in the scratchpad (`coati/comparar.py`): `animation.py` and
 
 Everything that goes into `release` and `test-special` is inside.
 
-And the ROMs: `NO_CACHE=1 just cartuchos` before and after, with the sha256 of
-the 1032 files in `rom/build/` (minus cache, `.o`, `sello.txt` and the log;
+And the ROMs: `NO_CACHE=1 just cartridges` before and after, with the sha256 of
+the 1032 files in `rom/build/` (minus cache, `.o`, `stamp.txt` and the log;
 the `.dbg` without mtime): **everything identical**.
 
     905decd20b48411fb509d60ca7a61b3ddbfe1fd5fcf618519972ddba86b83cee  release/abl.msu
@@ -146,7 +146,7 @@ and the prose (`a13b4b6a`): the crate's README, AGENTS.md,
 description in `Cargo.toml`, which belong to both sides: the
 `MISSING` message in `render_map.py` still says "las capas y los CharSets".
 
-**The suites:** `just pruebas` 882 and `just -f tools/justfile test` 90,
+**The suites:** `just tests` 882 and `just -f tools/justfile test` 90,
 green; `cargo test` of `rm2k-render` and `rm2k-rules`, green, and
 `rm2k-render` with no clippy warnings (the one in `rules/src/tree.rs` was already there).
 
@@ -159,6 +159,6 @@ clash): `battle` and `battle-animation` read the request with its `request.rs`,
 `scene._open` calls `render_map.draw`, and **`load_image` was deleted**, because
 nobody uses it anymore (`c523d9ff`). On the merged tree, again: the
 comparison with no differences, the 1032 sha256 identical to those from before
-everything, `just pruebas` 882 and `just -f tools/justfile test` 90 green.
+everything, `just tests` 882 and `just -f tools/justfile test` 90 green.
 
 **For taro:** there's nothing to play, because not a pixel changes.

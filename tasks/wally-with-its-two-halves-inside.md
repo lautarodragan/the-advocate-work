@@ -61,10 +61,10 @@ both go back to their commit.
 In an ABL clone outside `/shared`, with `wally`, `rm2k-snes-mapdata` and
 `rm2k-snes-convert` from this worktree at the front of the PATH:
 
-* `NO_CACHE=1 just cartuchos`: the 1424 files of `build/` (without cache,
+* `NO_CACHE=1 just cartridges`: the 1424 files of `build/` (without cache,
   `.o`, stamps or log; the `.dbg` without mtime) equal to those of the base,
   built beforehand with the global tools. `abl.sfc` at `35c76500`.
-* `just pruebas`: 993, like the base.
+* `just tests`: 993, like the base.
 * `just -f tools/justfile test`: 32, like the base.
 * `cargo test -p wally -p rm2k-snes-mapdata`: 93, green, without touching a
   hash (it includes the two of `halves.rs`).

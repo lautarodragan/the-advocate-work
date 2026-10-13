@@ -67,7 +67,7 @@ at least `$5000`. So `$4000..$4C00` is always inside. For the shop:
 Captured on 2026-09-28 with the 2015 RPG_RT and Wine, at 320x240, on a copy
 of the game whose map 4 starts with Kersh and Core, items, a thousand gold
 and a type-0 `OpenShop` with weapons, armour, a helmet, medicines and a
-material. The captures are in `/shared/capturas/2026-09-28-tienda/original-*.png`,
+material. The captures are in `/shared/captures/2026-09-28-tienda/original-*.png`,
 and were checked against easyrpg's `Scene_Shop` and `Window_Shop*`.
 
 - **The main one**: the help at the top (32 high) empty, the middle (128) an
@@ -128,7 +128,7 @@ single column, and the terms in white.
   `$3800`, where the items and equipment one is. That's **39 tiles** at 8bpp
   of the 96 that fit, and **4 colours**, in CGRAM 64..67 —where the items
   ones are—. `_controlar_tienda` checks against the allocations that they
-  fall in what `load_map` restores; `tienda-120` and `tienda-200`, which look
+  fall in what `load_map` restores; `shop-120` and `shop-200`, which look
   at the map after closing the shop, didn't change.
 - **What's stored is little** (`pantallas.tienda_compacta`): the three layers
   as runs of rows, without repeating a run that's already stored —16 tilemap
@@ -174,7 +174,7 @@ single column, and the terms in white.
 
 ## Tests
 
-- `test_tienda_dibujo.py` compares each mode against `pantalla_tienda`, which
+- `test_shop_drawing.py` compares each mode against `pantalla_tienda`, which
   now draws the windows and the bar (`Texto.ventanas`). With two new tests,
   among the three the bar passes through every place with a different patch
   —the last row of each list and the last command, which cross the
@@ -186,24 +186,24 @@ single column, and the terms in white.
   - new, the spare parts one (EV0025 with switch 150): eleven items, the bar
     on the fifth row and the list scrolled.
 - **New goldens**, ten, from the ROM in those same states:
-  `tienda-principal`, `tienda-comprar-2`, `tienda-cuantos-2`,
-  `tienda-comprado`, `tienda-vender`, `tienda-armaduras-resaludo-salir`,
-  `tienda-armaduras-vender-corrida`, `tienda-armaduras-cuantos-venta`,
-  `tienda-armaduras-vendido` and `tienda-repuestos-corrida`. Until now the
+  `shop-main`, `shop-buy-2`, `shop-how-many-2`,
+  `shop-bought`, `shop-sell`, `shop-armors-regreeting-leave`,
+  `shop-armors-sell-run`, `shop-armors-how-many-sale`,
+  `shop-armors-sold` and `shop-spare-parts-run`. Until now the
   shop had no golden of its screen, only of the map around it, and those
   didn't change.
 - Before, now and the original, side by side, in
-  `/shared/capturas/2026-09-28-tienda/`, with the goldens from the last commit.
-- Verified with `just cartuchos` and `just pruebas` on this branch, with
+  `/shared/captures/2026-09-28-tienda/`, with the goldens from the last commit.
+- Verified with `just cartridges` and `just tests` on this branch, with
   `main` merged —it hadn't moved—: all green. No music theme started
   clipping, so there's no ceilings commit.
-- **What `just pruebas` doesn't run**: the shop in bsnes. It was run by hand,
+- **What `just tests` doesn't run**: the shop in bsnes. It was run by hand,
   with the three shop tests pointed at bsnes, and the twenty-two screens came
   out identical to the reference; that's what says each frame's DMA fits in
   vblank. Nor does it run a buy-only or sell-only shop (`OpenShop` type 1 or
   2), which goes straight into the list: its path didn't change, but the
   layer comes out of the same table.
-- `just espacio`, before (`main` at `24dc8b6e`) and after: in `release` the
+- `just space`, before (`main` at `24dc8b6e`) and after: in `release` the
   data gaps went from 13,910 to 9,432 B, bank 1 from 3,739 to 3,333 and bank
   0 stayed at 224; in `test-special`, from 23,213 to 18,735, from 6,243 to
   5,837 and 1,117. No cartridge uses one more data bank.

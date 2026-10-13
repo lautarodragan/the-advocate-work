@@ -83,7 +83,7 @@ entregar` no longer carries the opcodes in the `tools/runtime/` it copies: Mesen
 sees them like the other generated `.inc` files.
 
 **An ABL test depended on the `.inc` being in the runtime**:
-`test_saltos_entre_bancos.py` knew that the line of `interpreter.s` that
+`test_jumps_between_banks.py` knew that the line of `interpreter.s` that
 expands `EVENT_HANDLERS` is data because it gathered the expansion's `.addr`s
 only from `tools/runtime/`. It went red in the three cartridges; now it
 gathers the data from any file, in its own commit.
@@ -97,11 +97,11 @@ gathers the data from any file, in its own commit.
    `conftest.py` —its only fixture was used by that test—, the recipes, the
    workspace member and profile;
 3. `f6a9b6cc` the prose, guided by the diff of 2;
-4. `e81834de` the fix to `test_saltos_entre_bancos.py`.
+4. `e81834de` the fix to `test_jumps_between_banks.py`.
 
 ## Verification
 
-* `NO_CACHE=1 just cartuchos` after each of the first three:
+* `NO_CACHE=1 just cartridges` after each of the first three:
   the three ROMs identical to the baseline (`abl.sfc` `35c765009320d436…`). Against
   the baseline, `rom/build/` has the same files plus the six new `.inc`
   files, identical to the ones that were committed except lines 3 to 5; the
@@ -110,7 +110,7 @@ gathers the data from any file, in its own commit.
   ROM, they're the only ones). 2 leaves everything identical to 1; 3 changes the
   `.dbg` files again, because the comments in `main.s` and `interpreter.s` shift
   line numbers.
-* `just pruebas`: **993**, same as before, with the fix of 4.
+* `just tests`: **993**, same as before, with the fix of 4.
 * `just -f tools/justfile test`: **32** (it was 36: the four from
   `test_protocol.py` went away).
 * `cargo test -p` of `rm2k-snes-bytecode` (19 and the runtime one),

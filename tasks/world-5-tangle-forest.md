@@ -14,7 +14,7 @@ Paradise is on the other side of the forest, and it's crossed through 310, 311,
 
 # It fits
 
-Measured with `just espacio release`, as `AGENTS.md` says. "Banks" are the
+Measured with `just space release`, as `AGENTS.md` says. "Banks" are the
 data ones, from `$02` to `$7D`.
 
     release                         banks      free    gap       bank 0   texts
@@ -90,22 +90,22 @@ byte (the record's `+2`, which the ROM doesn't read) and there are 256; one more
 case breaks the assembly (`Range error (256 not in [0..255])`). So the tests use
 the game's pages, which is what matters to compile:
 
-* `rpgmaker/test_borrar_evento.py`: 311's whole autorun, from 840 to the timer
+* `rpgmaker/test_erase_event.py`: 311's whole autorun, from 840 to the timer
   on 312.
-* `rpgmaker/test_cronometro_condiciones.py`: 312's exit (the branch) and the
+* `rpgmaker/test_timer_conditions.py`: 312's exit (the branch) and the
   fire's page, which doesn't run with 2 seconds and does with 1.
-* `rpgmaker/test_elegir.py`,
-  `test_cancelar_a_una_opcion_que_no_esta_no_corre_ninguna`: the shop owner,
+* `rpgmaker/test_choose.py`,
+  `test_cancel_to_a_missing_option_runs_none`: the shop owner,
   B, and the page ends without opening anything.
-* `rpgmaker/test_cores.py`, `test_el_fuego_del_cronometro`: the fire's page in
+* `rpgmaker/test_cores.py`, `test_the_timer_fire`: the fire's page in
   snes9x and in bsnes.
 * `abl/test_tangle.py`: 310 and 311 just arrived, with a golden.
-* `abl/test_recorrido_tangle_golden.py`: from 310 to the title, through the
+* `abl/test_playthrough_tangle_golden.py`: from 310 to the title, through the
   tram, the cans, the burning forest against the timer, the ship and the
   tunnel. With the party at level 20: at the starting level the hits do
   nothing to the Para Guards and the battle doesn't end. Its screenshots
   aren't blessed.
-* `abl/test_recorrido_capitulo_golden.py` now ends on arriving at 310.
+* `abl/test_playthrough_chapter_golden.py` now ends on arriving at 310.
 * The compiler's three in `compile.rs`, and `maps`'s one.
 
 **The four ROM ones were seen red** with the global tools and Tangle in
@@ -120,27 +120,27 @@ The two of `python.rs` (events and maps) used the timer as "the condition the
 ROM doesn't evaluate": now that page asks for timer **and** variable, which
 still isn't evaluated, and the Python hashes weren't touched.
 
-`just pruebas`: all green except `test_musica_techos.py` (both cases, see
+`just tests`: all green except `test_music_ceilings.py` (both cases, see
 below), also on the tree with `main` merged (`aef95674`, Lechuza's study,
 which doesn't touch the ROM). `just -f tools/justfile test` green. `NO_CACHE=1
-just cartuchos` gives the same fingerprints as with the cache.
+just cartridges` gives the same fingerprints as with the cache.
 
 # Goldens
 
-* **New**: `tangle-310-llegada` and `tangle-311-llegada`, in their commit.
-* **Moved**: the five of `test_heroe` on 348 and `ventana-348`, 16 pixels of
+* **New**: `tangle-310-arrival` and `tangle-311-arrival`, in their commit.
+* **Moved**: the five of `test_hero` on 348 and `window-348`, 16 pixels of
   the hero —three tones: the skin, the hair and the clothes—. It's the shop:
   its page 2 now compiles, the owner turns towards the hero, asks for his
   twelve poses and one more slot (`9 with their twelve poses` against 8), and
   the palette the hero shares loses those three colors. Before and after in
-  `/shared/capturas/2026-10-01-tangle/`. **The merge waits for taro.**
+  `/shared/captures/2026-10-01-tangle/`. **The merge waits for taro.**
 
 # What isn't done
 
-* **`test_musica_techos.py` fails**: the new theme is
+* **`test_music_ceilings.py` fails**: the new theme is
   `T_AVGFighter_KyaraSelect` (the clearing and the tram), and
-  `golden_axe-turtlevillage2` clips. `just techos` wasn't run.
-* **The earlier music goes down**: comparing the rates in `conversor.log`
+  `golden_axe-turtlevillage2` clips. `just ceilings` wasn't run.
+* **The earlier music goes down**: comparing the rates in `converter.log`
   against the baseline's, 48 (theme, sample) pairs go down and 21 go up.
   Almost all are the copies of drum hits —KICK264, SOLKK60A, FATSD60A,
   CHH__60A, OHH__60B, SYBS133, SAW0_60…— which drop from ~22 to ~10.6 kHz in
@@ -159,14 +159,14 @@ just cartuchos` gives the same fingerprints as with the cache.
 * 348 is still in `[maps] test`, even though the world now leads to a shop
   that works.
 
-# What `just pruebas` doesn't cover
+# What `just tests` doesn't cover
 
 * The fire's Game Over on reaching zero (the test checks that the page runs,
   not the Game Over).
 * The cans' other branch: with Saldra (56) or AG7 (150) in the party, the
   messages are different.
 * The false branch and the timer's `<=` in `OP_IF`: the game doesn't use
-  them; the comparison is the gold one, which `test_oro.py` checks both ways.
+  them; the comparison is the gold one, which `test_gold.py` checks both ways.
 * 310's chests and the save point.
 
 # When merging

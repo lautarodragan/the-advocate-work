@@ -34,11 +34,11 @@ The short version:
 For taro:
 
 * The captures of the backgrounds are in
-  `/shared/capturas/2026-10-01-fondos-por-chipset/`: today's on the left,
+  `/shared/captures/2026-10-01-fondos-por-chipset/`: today's on the left,
   per ChipSet on the right, the ten maps that lose the most colours.
 * Decide whether to move to 8 MB, and whether the battle without MSU-1 carries the sounds of
   its animations (92 KB).
 
-It doesn't touch the game: `just pruebas`, 923 green. **On merging there's nothing
+It doesn't touch the game: `just tests`, 923 green. **On merging there's nothing
 to install.** The throwaway scripts were left in the scratchpad, in
 `tucu-tucu/`, and reuse the runs from `lechuza/`.

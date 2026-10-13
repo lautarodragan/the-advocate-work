@@ -94,8 +94,8 @@ can they**: the photos are retouched —smoothed and with grain, 212 in sepia—
 and are another moment of the scene, which is the point of the effect; and the
 ROM reduces the colours. What matches is the background, without shifting.
 
-The new golden of `imagen-grande-foto-5` is, pixel by pixel, the ROM's screen
-on the real 212 with the photo on top; that of `imagen-grande-fotos-5`, the one
+The new golden of `big-picture-photo-5` is, pixel by pixel, the ROM's screen
+on the real 212 with the photo on top; that of `big-picture-photos-5`, the one
 of 213.
 
 ## In ABL
@@ -105,28 +105,28 @@ In `/extras/scratch/golondrina/abl`, branch `fotos-recortadas`, on top of
 
 * `26fc753` asks for the crop in `rm2k-snes.toml`, with the four;
 * `a942b02` the goldens, only goldens: **seven**, the ones that show the photos
-  —`imagen-grande-foto-5` and `-140`, `imagen-grande-fotos-5`, `-65` and
-  `-125`, `imagen-grande-montaje-fotos-3` and `-9`—. No other moves, not even
+  —`big-picture-photo-5` and `-140`, `big-picture-photos-5`, `-65` and
+  `-125`, `big-picture-montage-photos-3` and `-9`—. No other moves, not even
   Corbatita's 68.
 
 `abl.sfc` goes from `0072d314…` to `8c9e670f…`; the two test cartridges stay
-the same (they do not carry the photos). `just espacio` on `release`: 43 free
+the same (they do not carry the photos). `just space` on `release`: 43 free
 banks, same as before; the gaps of the used banks go down from 62,373 B to
 59,217 B: the cropped photos ask for some 3 KB more than the scaled ones (why,
 I did not measure).
 
 Side by side —before `without-resample-scaling-with-a-rust-library`, with `without-resample-scaling-with-a-rust-library` and cropped, and the
 map right before each photo against the photo— in
-`/shared/capturas/2026-10-02-fotos-recortadas/`, with its `LEEME.txt`. **The
+`/shared/captures/2026-10-02-fotos-recortadas/`, with its `LEEME.txt`. **The
 merge waits for taro's approval of the seven goldens.**
 
 ## The numbers
 
-* `just pruebas` in the ABL clone, with this branch's tools first in the PATH
+* `just tests` in the ABL clone, with this branch's tools first in the PATH
   —and `main` merged, which changed nothing in the tree—: **993** green with
-  the new goldens, including `test_musica_techos.py`. Without them, the three
+  the new goldens, including `test_music_ceilings.py`. Without them, the three
   tests of the photos red and nothing else.
-* `NO_CACHE=1 just cartuchos` and the build with cache give the same
+* `NO_CACHE=1 just cartridges` and the build with cache give the same
   `abl.sfc`, `8c9e670f…`.
 * `just -f tools/justfile test`: 32.
 * `cargo test -p rm2k-snes-images -p rm2k-snes-convert`: green, with four new

@@ -79,7 +79,7 @@ See `sunset-the-pictures-over-the-map.md`.
 * Small cartridge in the Sunset toml of my worktree, uncommitted:
   `[cartridges.arranque]` (starts at 11) and `arranque22` (starts at 22),
   `flags = ["--no-title"]`, `party = [1]`.
-* `build/` does not notice a change in `data/`: `just cartuchos` said "up
+* `build/` does not notice a change in `data/`: `just cartridges` said "up
   to date" with `Map0022.json` touched, and the cartridge directory had to be
   deleted. For measuring it is enough; I did not follow it up.
 * In the scene without pictures the message window comes out opaque and orange:
@@ -107,10 +107,10 @@ because of the runtime).
 * **Sunset**: it has no tests. That the page of 22 now runs was looked at
   with snes9x captures in the small cartridge, not with a test; that it is still
   black, too.
-* `test_mostrar_con_el_corte` covers the cut for showing on the jump from
+* `test_show_with_the_cut` covers the cut for showing on the jump from
   2 to 5 in ABL, with the default erase (the fade). The cut for
   erasing and for showing together —which is what Sunset asks for on the jump from
   the shop onward— is not run by any test.
 * It was not looked at in bsnes or on hardware.
 
-Captures, with the original alongside: `/shared/capturas/2026-10-11-sunset-22/`.
+Captures, with the original alongside: `/shared/captures/2026-10-11-sunset-22/`.

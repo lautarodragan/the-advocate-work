@@ -12,7 +12,7 @@ street. taro asked for it on 2026-09-22.
 
 The point isn't coverage in the abstract: **that's where this week's two bugs
 showed up** —the jump that got stuck and the map that got shifted— and no
-test ran them. Of map 11 the suite only has `en-11`, which enters and nothing
+test ran them. Of map 11 the suite only has `in-11`, which enters and nothing
 more; of 12 and 14, nothing. Along the way it exercises two teleports and several kinds
 of event: touch, autorun, parallel and the jump.
 
@@ -21,7 +21,7 @@ The maps: the street is **8** (`Lashe City - 34,35`) and the HQ is **12**
 `NV Lookout` and `NV hotplate` are. 12 also has two 5-cell jumps, which are
 among the fastest in the game: 7.3 px per frame.
 
-The model is `pruebas/abl/test_recorrido.py`, which already plays from the title to
+The model is `tests/abl/test_recorrido.py`, which already plays from the title to
 the auditorium with `Mundo`/`Recorrido` —the graph of islands and the plan by doors—,
 and saves one capture per milestone.
 
@@ -33,7 +33,7 @@ found while playing.
 
 ## As of 2026-09-23: the test is there, and it covers one of the two
 
-`pruebas/abl/test_recorrido_vipers.py`. Path, all by state and with a cap:
+`tests/abl/test_recorrido_vipers.py`. Path, all by state and with a cap:
 it starts at (73,32) of map 8 —the cell the map itself teleports to
 from (0,56)— with switch 24; the pipe is event 41 at (52,23), which leaves the
 hero at (55,18); the rooftop crossing is 45 at (58,17), which leaves him at
@@ -54,7 +54,7 @@ gives it away is `ruta_salto`.
 
 **The shifted map: this stretch can't reproduce it, and that's measured.** Building the
 ROM that has the jump fixed and `stream_map` not —reverting `9997bf2` on
-HEAD— this test **passes**, and the two in `test_camara.py` fail. The reason,
+HEAD— this test **passes**, and the two in `test_camera.py` fail. The reason,
 measured loop by loop on that ROM and outside the fades: in the whole stretch
 the camera doesn't move more than **5 px** per loop —the peak is the pipe's
 jumps— and skipping a row takes more than 8. The two things that add up to 16
@@ -66,8 +66,8 @@ two milestones where it can, and the docstring says that today it can't go red.
 turning. It turned with a one-tick tap and a tick can be lost entirely, because the
 ROM reads the pad once per loop and a loop can last several hardware
 frames. Measured just after arriving at the cell: it doesn't turn with one or two ticks
-held, and it does with four. It was hidden by the fact that `caminar_a` leaves the hero facing
-his last step; the HQ door is one where it doesn't. Today `Recorrido.mirar_a` turns,
+held, and it does with four. It was hidden by the fact that `walk_to` leaves the hero facing
+his last step; the HQ door is one where it doesn't. Today `Recorrido.look_at` turns,
 and checks it in RAM.
 
 **What's left uncovered** —this test does none of the three—: the

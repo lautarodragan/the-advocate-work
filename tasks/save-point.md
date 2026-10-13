@@ -98,22 +98,22 @@ red square. An actor without a face —DummyHero— draws nothing, like `DrawFac
 with an empty name.
 
 The full variant can't be seen by the suite —the emulator's SRAM starts
-blank— and it's covered by `test_la_pantalla_de_ranuras_muestra_el_grupo_guardado`,
+blank— and it's covered by `test_the_slot_screen_shows_the_saved_party`,
 which saves with Talan and DummyHero in the party, resets, goes in through "Resume the
 Story" and compares the screen **pixel by pixel** against `titulo.render_ranuras`
 with that party, with the cursor on the first row and then on Talan's,
 which is what repaints it in the vblank. Against a reference with no party or with
 Kersh it's some 400 pixels, so the zero isn't empty.
 
-It's covered by `test_guardar_pantalla` and `test_guardar_vuelve`, from
-`pruebas/rpgmaker/test_tanda_pantallas.py`, in six frames and all at zero: the screen
+It's covered by `test_save_screen` and `test_save_returns`, from
+`tests/rpgmaker/test_tanda_pantallas.py`, in six frames and all at zero: the screen
 on opening and with the cursor two slots down, and the map back after
 cancelling and after choosing, in two ticks. The presses inside the
 screen go with `toques_hardware`,
 which counts hardware frames from boot: one press per tick can't
 land where there are no ticks. And what's left in SRAM is looked at by
-`pruebas/rpgmaker/test_guardar.py`, which now **goes through the screen** —moves the cursor down
-and presses A— instead of writing `ranura` by hand; `menu_abierto` is the byte
+`tests/rpgmaker/test_save.py`, which now **goes through the screen** —moves the cursor down
+and presses A— instead of writing `ranura` by hand; `menu_open` is the byte
 the ROM leaves it to know when, because waiting by ticks there would hang.
 
 What gets saved is said by **one table and nothing else**, `partida_tabla` in `main.s`:
@@ -136,7 +136,7 @@ things are needed: unwritten SRAM brings garbage —snes9x fills it with $60— 
 a test ROM that took it as good would load an invented save.
 
 **What gets written can't be covered by the pixel suite**, because saving
-doesn't change a pixel. It's covered by `pruebas/rpgmaker/test_guardar.py`, which does the only thing that
+doesn't change a pixel. It's covered by `tests/rpgmaker/test_save.py`, which does the only thing that
 proves something: it goes to another map, turns on a switch, saves, **resets the console for
 real** and looks at where it starts. SRAM survives the reset and WRAM doesn't, so
 if the save comes back it's because it came out of the cartridge. With `guardar_partida`

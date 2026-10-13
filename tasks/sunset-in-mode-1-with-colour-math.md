@@ -111,7 +111,7 @@ tiles. Written in the book: [`ports/sunset-over-imdahl/research/2026-10-11-mode-
 
 ### Captures
 
-`/shared/capturas/2026-10-11-sunset-modo-1/`: original / main / mode 1 on
+`/shared/captures/2026-10-11-sunset-modo-1/`: original / main / mode 1 on
 2, 13, 28, 33, 7 and the scene on 22, with its `LEEME.txt`.
 
 ### To merge

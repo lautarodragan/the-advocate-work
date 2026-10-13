@@ -14,9 +14,9 @@ hands out what they answer— and some leftovers, and `tools/rpgmaker/lcf.py`,
 of `tools/port/`, 2 of `tools/render/`, one of `tools/tests/` and 15 ABL
 tests.
 
-It comes from `main` at `8db96253`. There, `NO_CACHE=1 just cartuchos` gives 1418
-files in `rom/build/` —without the cache, the `.o` files, `sello.txt` or
-`conversor.log`; the `.dbg` without `mtime`—, identical to those of the brief's
+It comes from `main` at `8db96253`. There, `NO_CACHE=1 just cartridges` gives 1418
+files in `rom/build/` —without the cache, the `.o` files, `stamp.txt` or
+`converter.log`; the `.dbg` without `mtime`—, identical to those of the brief's
 baseline: `abl.sfc` `35c765009320d436…`. The sha256 and the three
 `mapdata.inc`, in `<scratchpad>/chuna/`.
 
@@ -32,14 +32,14 @@ Measured on 2026-10-02 with a grep of the `import`s in `tools/` and
 | `snes_convert.py` | `main`: the order, the checks on the compiled pages, the second round (each map's code, `draws`), the requests to patches and audio, Adeleine's images | the script; 8 tests import it only for the `lcf` hooks it installs, one for `SUB_MAX` | orchestration |
 | `options.py`, `cases.py`, `stage.py` | the flags, `--case`, running a stage | the converter; `stage.run` the harness too | orchestration; `stage.run` is used by the harness |
 | `map_convert.py`, `map_layers.py`, `sprites.py`, `obj_extras.py`, `window.py`, `vram.py` | `wally map`'s request and the `map_info` from its answer; `separate_from_hero`, `maps_per_character`; the timer's System; the layouts reader | only the converter | orchestration |
-| `game_scan.py` | possible leaders, items, members, rain, the timer's reach | the converter; `test_lideres`, `test_timer_paleta`, `test_destello_paleta` | orchestration: what the converter deduces to build the requests |
-| `compiler.py` | `rm2k-snes-events`' two requests and its answer; `loose_page`, `slots`, `troop_triggers` for the tests | converter; harness (`datos`, `etapa_mapas`) and 3 tests | orchestration, plus a client of the stage for the tests |
-| `screen_stage.py` | `rm2k-snes-screens convert`'s request and its answer; `layout`, `render`, `equip`, `refit` for the tests | converter; harness (`pantallas`, `modelo`, `batalla`) and `test_textos_del_juego` | orchestration, plus a client for the tests |
+| `game_scan.py` | possible leaders, items, members, rain, the timer's reach | the converter; `test_leaders`, `test_timer_palette`, `test_flash_palette` | orchestration: what the converter deduces to build the requests |
+| `compiler.py` | `rm2k-snes-events`' two requests and its answer; `loose_page`, `slots`, `troop_triggers` for the tests | converter; harness (`datos`, `map_stage`) and 3 tests | orchestration, plus a client of the stage for the tests |
+| `screen_stage.py` | `rm2k-snes-screens convert`'s request and its answer; `layout`, `render`, `equip`, `refit` for the tests | converter; harness (`pantallas`, `modelo`, `battle`) and `test_game_texts` | orchestration, plus a client for the tests |
 | `image_stage.py`, `battle_stage.py`, `mapdata.py` | the requests of `rm2k-snes-images`, `rm2k-snes-battle model` and `rm2k-snes-mapdata emit` | only the converter | orchestration |
 | `picture.py` | which `ShowPicture` images each map carries, cut into objects; the large ones, numbered | only the converter | the images domain, on the request side |
-| `animation.py`, `battle_animations.py` | which animations the cartridge carries (the bytecode is walked), the anchor, the frames in tiles | converter; `test_parches` (`fit_size`, `BOX`), `test_animacion_cuadros` | the images and emission domains |
-| `scene.py`, `battle_scenes.py` | which backgrounds and battlers the cartridge carries, their bytes, where each one stands; `compose` | converter; `test_batalla_escena_dibujo`, `test_msu_datos` | the scene domain |
-| `fullscreen.py`, `palette.py`, `compress.py`, `snes_format.py` | title and Game Over: the stage's image, in tiles, compressed with `lz2` | converter; `pack_tile` in `test_msu_datos` | the images and emission domains |
+| `animation.py`, `battle_animations.py` | which animations the cartridge carries (the bytecode is walked), the anchor, the frames in tiles | converter; `test_patches` (`fit_size`, `BOX`), `test_animation_frames` | the images and emission domains |
+| `scene.py`, `battle_scenes.py` | which backgrounds and battlers the cartridge carries, their bytes, where each one stands; `compose` | converter; `test_battle_scene_drawing`, `test_msu_data` | the scene domain |
+| `fullscreen.py`, `palette.py`, `compress.py`, `snes_format.py` | title and Game Over: the stage's image, in tiles, compressed with `lz2` | converter; `pack_tile` in `test_msu_data` | the images and emission domains |
 | `constants.py`, `engine.py`, `event_opcodes.py` | engine numbers and opcodes | converter and many tests | constants |
 | `events.py` | command constants, records, `MapEvents`, `walk_code`, `PartyState`, `Encounters`, `key_value`, `named_backdrops`, `index_animations` | converter and 25 tests and harness modules | mix: the converter's part is orchestration; the rest are the tests' models |
 | `experience.py` | RM2k's curve | `lcf.py` (no), 4 tests, `test_rm2k_rules` | the tests' model |
@@ -50,7 +50,7 @@ Measured on 2026-10-02 with a grep of the `import`s in `tools/` and
 |---|---|---|
 | `lcf.py` | reads the dump in Python: `Map`, `Database`, `TreeMap`; the hooks `REFIT_TEXTS` and `DECORATE_TRANSLUCENT` | 10 modules of `port/`, 2 of `render/`, `test_rm2k_rules` and 15 of ABL's tests |
 | `rm2k.py` | the rules in Python: passability, `page_graphic`, `collect_npcs`, the decorated names (`~horneado`, `~aparte`, `@tile:`) | converter, `render/`, `test_rm2k_rules`, 6 of ABL's |
-| `fork.py` | `rom/parches/manual/`: validates the forks and the new maps | `lcf`, `compiler`, `chipset_recipe`, `test_fork_mapas` |
+| `fork.py` | `rom/parches/manual/`: validates the forks and the new maps | `lcf`, `compiler`, `chipset_recipe`, `test_fork_maps` |
 | `resources.py`, `event_codes.py` | where the game is; the codes' names | converter and tests |
 
 `test_dump_readers.py` only looks at the Rust: that no `src/` outside Ditto
@@ -96,7 +96,7 @@ itself. So:
    read —`events.py`'s constants, `Encounters`, `key_value`,
    `experience.py`, `scene.compose`, the stages' clients— moves to
    `rom/pruebas/arnes/`, reading the dump in JSON (which is ABL's) or
-   asking the binaries, as `modelo.py` and `musica.py` already do.
+   asking the binaries, as `model.py` and `music.py` already do.
 3. **The deletion**, in its own commit, and the prose in another.
 
 Each step, with all of `rom/build/` identical with `NO_CACHE=1` and both suites
@@ -114,8 +114,8 @@ Two safety nets, in `<scratchpad>/chuna/`:
   —as JSON, with the key order— and everything each one wrote
   next to the output. The call lines (`argv-*.txt`) were taken
   from `rm2k-snes-cartridges` with a wrapper that logged them.
-* **All of `rom/build/`**: `base.sh`, with `NO_CACHE=1 just cartuchos`, the
-  sha256 of everything except the cache, the `.o` files, `sello.txt` and `conversor.log`
+* **All of `rom/build/`**: `base.sh`, with `NO_CACHE=1 just cartridges`, the
+  sha256 of everything except the cache, the `.o` files, `stamp.txt` and `converter.log`
   —the `.dbg` without `mtime`—, and the three `mapdata.inc` separately.
 
 **The baseline was taken twice**, because of Mara's trap: with the global
@@ -144,19 +144,19 @@ anchor), `scene.rs` (which backgrounds and battlers, their bytes, where each one
 stands, who asks for each thing), `fullscreen.rs` (the title's and
 Game Over's stream), `chipsets.rs` (the recipe of the fork's ChipSets, which was
 `render/chipset_recipe.py`) and `fork.rs` (the validation of
-`parches/manual/`). Moving them to their stages changes requests and the hashes of
+`patches/manual/`). Moving them to their stages changes requests and the hashes of
 those crates' tests: it's noted below.
 
 Measured on the branch, with `convert` and `cartridge` in the local `bin/`:
 
 * **All of `rom/build/` identical** to `sha-base2.txt` —1418 files— **except
-  the three PNGs in `parches-manual/ChipSet/`**, which the Rust writes with
+  the three PNGs in `patches-manual/ChipSet/`**, which the Rust writes with
   a different compressor from Pillow's: decoded they're identical —mode, size,
   palette, indices and info, `pngcmp.py`—, and `wally`, which reads them, answers
   the same. The three `mapdata.inc`, identical line by line: 336442,
   63556 and 27325 lines. The ROMs, the baseline's.
-* `release`'s `conversor.log`, identical line by line to the Python's.
-* `just pruebas`, 1008; `just -f tools/justfile test`, 39;
+* `release`'s `converter.log`, identical line by line to the Python's.
+* `just tests`, 1008; `just -f tools/justfile test`, 39;
   `cargo test` of `rm2k-snes-convert` (25), `rm2k-snes-cartridge` and
   `ditto`.
 
@@ -177,7 +177,7 @@ Things that changed along the way:
 **The converter's queries.** ABL's tests asked the
 compiler and `game_scan` through the Python converter's modules
 —`compiler.scan`, `loose_page`, `slots`, `troop_triggers`,
-`possible_leaders`, and how `etapa_mapas` builds `wally`'s request—. Now
+`possible_leaders`, and how `map_stage` builds `wally`'s request—. Now
 they ask the binary, which is the one that decides how it asks:
 `rm2k-snes-convert scan | compile | leaders | map-context | boxes`
 (`src/queries.rs`), each with its answer in JSON. Compared against the
@@ -202,19 +202,19 @@ is theirs, without translating it —it's in English and stays in English—:
   `image_stage.py`, `scene.py`, `animation.py`, `snes_format.py`,
   `resources.py`, `parallel.py`).
 
-What they asked the compiler and `game_scan` moved to `arnes/conversor.py`,
+What they asked the compiler and `game_scan` moved to `harness/converter.py`,
 which asks the binary. The tests that imported `port.snes_convert`
 only for its hooks stopped doing so; the one that checked that the reflow
 hook was in place now checks that the converter gives the compiler
-map 2's long boxes rebuilt (`test_textos_del_juego.py`).
+map 2's long boxes rebuilt (`test_game_texts.py`).
 
 Tests that moved to Rust, because they look at what the converter does with
 any project and not at the game:
 
-* from `test_fork_mapas.py`, the seven about the half-done fork, the changed id, the
+* from `test_fork_maps.py`, the seven about the half-done fork, the changed id, the
   map that doesn't exist and the new maps → `fork.rs`; the three about the
   ChipSet recipe —pruning respects what only an event names, it's planted with
-  `TileSubstitution`, `desde_imagen` at fifteen bits and composed— →
+  `TileSubstitution`, `from_image` at fifteen bits and composed— →
   `chipsets.rs`;
 * `tools/tests/test_substitutions.py` → `convert.rs` (`SUB_MAX` against
   `low_ram.s`).
@@ -225,8 +225,8 @@ rules are the Rust ones, and what's left in Python is the tests' oracle,
 which is compared against the ROM. `rm2k-rules` still holds its
 answers with `tests/python.json`.
 
-Measured after stage 2: `rom/build/` as in 1; `just pruebas`,
-999 —the ten from `test_fork_mapas.py` went to Rust and the opcodes one
+Measured after stage 2: `rom/build/` as in 1; `just tests`,
+999 —the ten from `test_fork_maps.py` went to Rust and the opcodes one
 came in—; `just -f tools/justfile test`, 36 —
 `test_rm2k_rules.py` and `test_substitutions.py` went away, and one that looked at the
 protocol's `snes_convert.py`—; `cargo test -p rm2k-snes-convert`, 28.
@@ -238,11 +238,11 @@ protocol's `snes_convert.py`—; `cargo test -p rm2k-snes-convert`, 28.
 only the converter used. `ae217a97` fixes the prose that named them:
 AGENTS.md, README.md, DITTO.md, `tools/README.md` —the section on the
 Python layers becomes "The Python that is left"—, `docs/port/` and the
-harness's docstrings. `test_lado_de_abl.py` loses five exceptions.
+harness's docstrings. `test_abl_side.py` loses five exceptions.
 
 Measured on `ae217a97`, with `convert` and `cartridge` in the local `bin/`:
 `rom/build/` identical to `sha-base2.txt` except the usual three PNGs;
-`abl.sfc` `35c765009320d436…`; `just pruebas`, 999;
+`abl.sfc` `35c765009320d436…`; `just tests`, 999;
 `just -f tools/justfile test`, 36. `main` hasn't moved since `8db96253`:
 there was nothing to merge.
 
@@ -282,4 +282,4 @@ there was nothing to merge.
   `rm2k-snes-convert` symlink points to `port/snes_convert.py`, which no longer exists, and
   `install` deletes the suite's symlinks before installing, so
   `cargo install` writes the binary in its place.
-* With that, `NO_CACHE=1 just cartuchos` and `just pruebas` on `main`.
+* With that, `NO_CACHE=1 just cartridges` and `just tests` on `main`.

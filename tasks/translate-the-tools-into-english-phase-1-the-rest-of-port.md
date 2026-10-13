@@ -26,18 +26,18 @@ things:
 * each file's AST against `66152183`, without docstrings: only strings may
   change, and every string that changed is looked at by hand —message or
   data—;
-* `SIN_CACHE=1 just cartuchos` and the sha256 of all the `.sfc`, `.msu` and
+* `SIN_CACHE=1 just cartridges` and the sha256 of all the `.sfc`, `.msu` and
   `.pcm` in `rom/build/` against those from before starting;
 * the generated `.inc` files, with a diff that can only show comments.
 
 ## Done
 
-* The small modules: `animacion`, `asignador`, `color`, `comprimir`,
+* The small modules: `animation`, `asignador`, `color`, `comprimir`,
   `constantes`, `experiencia`, `fin_del_juego`, `formato_snes`, `fuente`,
   `imagen`, `msu_datos`, `paleta`, `pantalla_completa`, `reglas`, `textos`,
-  `tiles_bin`, `titulo`, `ventana`. `event_opcodes.py` is generated and was
+  `tiles_bin`, `title`, `window`. `event_opcodes.py` is generated and was
   already in English.
-* The battle, the menus and the screens: `batalla`, `escena`, `menus`,
+* The battle, the menus and the screens: `battle`, `escena`, `menus`,
   `pantallas`, `parches`.
 * `eventos`, which is almost half of the scope.
 
@@ -49,7 +49,7 @@ things:
   parches`, which would rewrite those of `rom/` —out of scope—. `--check`
   compares what is parsed, so it does not fail because of that. It is a
   decision for taro: if they go in English, it means changing those lines
-  and running `just parches`, in a commit of its own.
+  and running `just patches`, in a commit of its own.
 * Everything that is data: the LDB's terms, "- Empty -", ">", the fallback
   "Yes" and "No" of End Game, the keys of the dictionaries and of the
   `.toml` files, RM2k's "(OFF)", the sentinel `FONDO_DEL_LUGAR`, the class
@@ -73,12 +73,12 @@ things:
 On the tree with `main` merged (`106da9f8`, with Aromo's, Coronillo's and
 Palmar's work inside):
 
-* `SIN_CACHE=1 just cartuchos`: the `.sfc`, `.msu`, `.pcm` and `.sym` of
+* `SIN_CACHE=1 just cartridges`: the `.sfc`, `.msu`, `.pcm` and `.sym` of
   `rom/build/` with the same sha256 as before starting. The only thing
-  different is `memoria.cfg`, whose header Coronillo translated. No module
+  different is `memory.cfg`, whose header Coronillo translated. No module
   of this part writes into the `.inc` files: before merging they came out
   identical, and what changes in them afterwards is `snes_convert.py`'s.
-* `just pruebas`: 874 pass.
+* `just tests`: 874 pass.
 * `just -f tools/justfile pruebas`: 132 pass and 2 are skipped.
 
 ## What to look at

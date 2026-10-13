@@ -23,7 +23,7 @@ What has to be taken care of: a theme **without** a track that plays in the same
 (it still needs its samples), the switch from MSU-1 to SPC700 if a track is missing
 from the card (the MSU-1 says so with its error bit: does the ROM fall back to the SPC700?,
 then the samples have to be there), and that without MSU-1 nothing changes (the
-goldens run without MSU-1). The test with `msu=True` in `pruebas/abl/test_msu.py`
+goldens run without MSU-1). The test with `msu=True` in `tests/abl/test_msu.py`
 is the place to cover it.
 
 taro's idea, on 2026-09-26: in the worst case, with MSU-1 the music goes through the
@@ -95,7 +95,7 @@ the package is the usual one.
 Without MSU-1, all four the same before and after (84, 82, 82, 82). What's left
 with MSU-1 is the sound effects: map 3 carries 20 and map 2, 18.
 
-**Covered by** three new tests in `pruebas/abl/test_msu.py`, with the
+**Covered by** three new tests in `tests/abl/test_msu.py`, with the
 MSU-1 on over a copy of `release`: the first two fail without the
 change, and the missing-track one fails if the extra is also skipped and the
 missing track isn't recorded.

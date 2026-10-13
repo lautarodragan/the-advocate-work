@@ -102,18 +102,18 @@ from later batches (switches 350, 376, 396, 427…).
 
 In `rom/pruebas/abl/test_paradise.py`:
 
-* `test_recien_llegado[paradise-108-llegada]`: the arrival at (19,19) with the
+* `test_just_arrived[paradise-108-llegada]`: the arrival at (19,19) with the
   scene seen (333), golden and cells against `fill_window`, like the others.
-* `test_los_quietos_del_108_se_turnan`: the full town (333, 396, 386, 388),
+* `test_the_still_ones_of_108_take_turns`: the full town (333, 396, 386, 388),
   walking along the plaza's path down and back, with a golden at each stop. At
   each one, each still one that takes turns and is on screen has to have in
   VRAM the bytes of its pose in the cartridge, read from the tables as
   `share_want` reads them; and some slot has to have shown two poses along the
   way (6: 79 and 75).
-* `test_el_108_se_turna_al_saltar_dentro_del_mapa_y_al_cargar`: a `FADE_SAME`
+* `test_108_takes_turns_when_jumping_inside_the_map_and_when_loading`: a `FADE_SAME`
   jump from (20,19) to (20,45), and saving through the menu and loading there.
 
-And `rpgmaker/test_cores.py::test_los_quietos_que_se_turnan_una_ranura`: the
+And `rpgmaker/test_cores.py::test_the_still_ones_that_share_a_slot`: the
 walk in snes9x and in bsnes.
 
 **The red**: without the fix, 108 does not convert (with the global tools:
@@ -124,7 +124,7 @@ freezing the goldens I compared the silhouette of each still one that takes
 turns and is whole on screen against its frame of the original CharSet: they
 all match.
 
-`test_recorrido_paradise_golden.py` now continues from the tunnel to 108: it
+`test_playthrough_paradise_golden.py` now continues from the tunnel to 108: it
 answers no to the save question and the sign comes out on 108. Its shots are
 still not blessed.
 
@@ -134,7 +134,7 @@ reach and the colouring) and `rm2k-snes-mapdata` (`share_table`). The hashes of
 `mapdata/tests/python.rs` were regenerated on purpose, on the tree merged with
 Pirincho.
 
-# What `just pruebas` does not cover
+# What `just tests` does not cover
 
 * **Coming back from a battle on 108**: `back_from_battle` uploads the bank
   (`share_load`) and `battle_fade_to_map` goes through `build_oam_settled`, but
@@ -143,7 +143,7 @@ Pirincho.
 
 # Space
 
-`just espacio release`, on the tree merged with Pirincho:
+`just space release`, on the tree merged with Pirincho:
 
                    main (Pirincho)       with 108
     banks          —                     64 of 128, 44 free
@@ -157,20 +157,20 @@ The turns code in bank 0 is some 55 B (the `place_npc` hook,
 
 # Verification
 
-On the merged tree (`abl.sfc` `e1e0d591…`): `NO_CACHE=1 just cartuchos` and
-`just cartuchos` with cache give the same fingerprints; `just pruebas` 966
-green (961 + the five new ones), with `test_musica_techos.py` included; `just
+On the merged tree (`abl.sfc` `e1e0d591…`): `NO_CACHE=1 just cartridges` and
+`just cartridges` with cache give the same fingerprints; `just tests` 966
+green (961 + the five new ones), with `test_music_ceilings.py` included; `just
 -f tools/justfile test` 39; `cargo test` of `wally`, `rm2k-snes-map-sprites`
 and `rm2k-snes-mapdata`. Before adding 108 —with the turns already in the ROM
-and 108 outside— `NO_CACHE=1 just cartuchos` changed only the ROMs and
-`mapdata.inc`, and `just pruebas` gave 961 without moving any golden.
+and 108 outside— `NO_CACHE=1 just cartridges` changed only the ROMs and
+`mapdata.inc`, and `just tests` gave 961 without moving any golden.
 
 # Goldens
 
 Five new ones, in their commit, without touching any existing one:
-`paradise-108-llegada` and
+`paradise-108-arrival` and
 `paradise-108-turnos-{arriba,al-medio,abajo,de-vuelta}`. Side by side in
-`/shared/capturas/2026-10-01-el-108/`, with a `LEEME.txt`. **The merge waits
+`/shared/captures/2026-10-01-el-108/`, with a `LEEME.txt`. **The merge waits
 for taro's approval.**
 
 # When merging

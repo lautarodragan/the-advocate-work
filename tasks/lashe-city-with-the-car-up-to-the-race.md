@@ -26,7 +26,7 @@ This is the plan; what gets executed are each milestone's tasks:
 
 Everything measured here is from 2026-09-25 on `d118bc8`, with cartridges built
 separately in the scratchpad —`release` wasn't touched—. The scripts that measured it
-were left in `/extras/scratch/lashe-plan/`: `medir.py` is the count of which
+were left in `/extras/scratch/lashe-plan/`: `measure.py` is the count of which
 command blocks each page (it compiles with the same scaffolding as the converter's
 `main()`, and replaces the culprit with an ignorable command until it has gathered
 them all), `conv.py` is the converter with an in-memory patch to keep going
@@ -306,7 +306,7 @@ three of the people who appear with 161— and 38, 3. It's the same as already h
 `decisiones/el-cartucho-se-queda-en-4-mb.md` says "se revisa al llegar al 85-90%
 del cartucho": with the 18 (without 38) `release` is around 86% counting what's used,
 and the race comes after. And **`test-main` doesn't fit**, which clashes with the rule
-in `cartuchos.py` that "cada mapa que se suma al proyecto se suma a todos los
+in `cartridges.py` that "cada mapa que se suma al proyecto se suma a todos los
 cartuchos". See the questions.
 
 What the copies could make cheaper: the allocator doesn't share data between maps
@@ -405,7 +405,7 @@ enemies fight only with the attack.
 one (transition), 3 between one and four (remembered place, remembered theme)—;
 the far RAM addresses —the remembered theme (3),
 the chosen transition (2), the common events interpreter (4)—; and the
-`_DE_RELEASE` list in `cartuchos.py`, which all of them touch and is best merged while looking.
+`_DE_RELEASE` list in `cartridges.py`, which all of them touch and is best merged while looking.
 
 The concrete numbers aren't written here: they're chosen when launching, looking at
 the declaration at that moment.

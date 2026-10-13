@@ -17,7 +17,7 @@ a fade, and it waits for a key before going back to the title.
 The game brings its image in `GameOver/` (see `ABL_GAME_DIR`).
 
 2026-09-28, in `testing/`: done by Carpincho on its branch, on top of `main` at
-17685f7d; `just cartuchos` and `just pruebas` on the branch. What remains is
+17685f7d; `just cartridges` and `just tests` on the branch. What remains is
 taro's: see "What taro has to test", below.
 
 # What taro has to test
@@ -27,7 +27,7 @@ taro's: see "What taro has to test", below.
   bass drum of seven, and one instrument of bubstix, bmlv2-sbl and
   golden_axe—. If it isn't accepted, room has to be found in the directory
   for the two programs of `GameOver3`; it isn't solved.
-* **Look at** `/shared/capturas/2026-09-28-game-over/`: the new golden next
+* **Look at** `/shared/captures/2026-09-28-game-over/`: the new golden next
   to the original.
 * **Play** without MSU-1 and with MSU-1 (track 231 is new: it has to be
   copied to the card): lose a battle without a handler —the trap chest of
@@ -92,7 +92,7 @@ on 2026-09-28, with a copy of the game whose boot map calls `GameOver`
 
 # Space
 
-`just espacio release`, before (17685f7d) and after:
+`just space release`, before (17685f7d) and after:
 
     bancos de datos  115 de 124, 9 libres        115 de 124, 9 libres
     huecos           28.874 B                    15.367 B
@@ -153,7 +153,7 @@ With MSU-1 nothing changes. The before and after wavs of the nine themes,
 and `GameOver3` through the SPC700 and through its track, in
 `/shared/audio/2026-09-28-game-over/` (with its `LEEME.txt`).
 
-**The ceilings table was run again** (`just techos`): the fingerprint of all
+**The ceilings table was run again** (`just ceilings`): the fingerprint of all
 the themes changed, because the sample numbers shift with the two new ones.
 The headroom of eight themes changes, almost all by less than 0.1 dB; the
 ones that change most: dcbest 0.325 -> 0.354 (+0.7 dB),
@@ -163,14 +163,14 @@ peak sits at -1.4 dB (`techos.py --medir`), and the target is -0.5.
 
 # Tests
 
-* `pruebas/rpgmaker/test_game_over.py`: the battle without a handler, the
+* `tests/rpgmaker/test_game_over.py`: the battle without a handler, the
   random encounter and the command reach the screen —the `game-over` golden,
   the same for all three—; it doesn't go away by itself; A closes it and on
-  the other side is the title (the usual `titulo` golden) and the game runs
+  the other side is the title (the usual `title` golden) and the game runs
   again. The control: the battle with a handler and a page without the
   command don't reach it. And `ReturntoTitleScreen` (new case
-  `volver-al-titulo`) goes to the title without going through the screen.
+  `return-to-title`) goes to the title without going through the screen.
 * `test_cores.py::test_game_over`: the screen on snes9x and on bsnes.
-* `test_curar.py`: the `FullHeal` control checked that the encounter didn't
+* `test_heal.py`: the `FullHeal` control checked that the encounter didn't
   reset; now the Game Over doesn't reset until the key, so it checks the
   screen.

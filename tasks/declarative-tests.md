@@ -52,7 +52,7 @@ The important nuance: about 30 of those 95 could be frozen as "at tick N this ho
 
 The small additions that make up the 34:
 1. Read RM2k data by number: switch N, item N, the current map, variable N. The variable is the hard one, because its slot is computed by the converter from the LDB, and without it 10 tests drop. It could be solved without the runner knowing the LDB if the converter emits the symbols (VAR_17 = slot), as it already does with CASO_RANURA.
-2. A richer initial state: switches, party, ir_al_mapa, and bytes whose value is that of another symbol.
+2. A richer initial state: switches, party, go_to_map, and bytes whose value is that of another symbol.
 3. Simple operators, like "nonzero" or a bitmask. Almost all can be replaced by freezing the exact value.
 4. Compare against an engine constant, for example ORO_MAX == 999999.
 5. Run on another core and compare against the golden at 15 bits, for 4 of the 5 in test_cores.

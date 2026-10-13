@@ -269,13 +269,13 @@ On its branch `cache-de-ranuras` (see its `tasks/world-9-the-celebration-at-the-
   coming back from the grove— to Talan's house for the end card: that is where
   the next day starts, each profession's work. Nothing else is
   reachable before that cut.
-* **Tests**: `abl/test_granja.py`, the celebration frame by frame with the
-  VRAM of each one against its pose (`arnes/cache_de_ranuras.py`), with three
-  goldens; `abl/test_recorrido_granja_golden.py`, from the town to the card, with
+* **Tests**: `abl/test_farm.py`, the celebration frame by frame with the
+  VRAM of each one against its pose (`harness/slot_cache.py`), with three
+  goldens; `abl/test_playthrough_farm_golden.py`, from the town to the card, with
   eleven photos with goldens and checking that the ones strolling in the dance move;
-  `rpgmaker/test_cores.py::test_la_cache_de_ranuras`. The walkthrough of the
+  `rpgmaker/test_cores.py::test_the_slot_cache`. The walkthrough of the
   first day now ends on reaching the farm.
-* `parches/auto/` of 127 and 128, and `techos.toml` redone: the
+* `patches/auto/` of 127 and 128, and `ceilings.toml` redone: the
   new themes moved the allocation of the samples.
 
 285 (Tasgarde Mainframe) would also fit with the cache —without its pictures,
@@ -286,19 +286,19 @@ which are removed before trying the turns—, but it is not part of this stretch
 On the trees merged with `main` of both repos (they only brought
 tasks):
 
-* ABL, `just pruebas`: **1043** green. `abl.sfc` `dbd0c55b6f5b…`,
+* ABL, `just tests`: **1043** green. `abl.sfc` `dbd0c55b6f5b…`,
   `abl.msu` `5902e0bbabb6…`.
 * Before adding 127, with the cache already in the ROM and no map that
   uses it: **1035** green, without moving any golden; the `mapdata.inc` of
   `release` changed only because of the new, empty table.
-* **The red**: without uploading the pose when taking a slot, `test_granja.py` and the
+* **The red**: without uploading the pose when taking a slot, `test_farm.py` and the
   farm walkthrough fail on the first frame looked at; without
   `reclaim_slot`, the walkthrough fails because 41 and 42 do not move.
 * `just -f tools/justfile test`: 27. `cargo test` of `wally`,
   `rm2k-snes-mapdata`, `rm2k-snes-convert` and `rm2k-snes-cartridge`
   green. The hashes of `mapdata/tests/python.rs` moved on purpose:
   removing the new table they give the old ones again.
-* `just espacio release`, before (`main`, without 127) and after:
+* `just space release`, before (`main`, without 127) and after:
 
                       before       after
       banks           71 of 127    72 of 127
@@ -306,7 +306,7 @@ tasks):
       bank 1          14.204 B     13.587 B
       BSS, ZEROPAGE   128 B, 4 B   128 B, 4 B
 
-**`just pruebas` does not cover**: coming back from a battle on a map with a cache (127
+**`just tests` does not cover**: coming back from a battle on a map with a cache (127
 has no battles) and loading a saved game on it —both go through
 `cache_load` and `build_oam_settled`, like the jump within the map, which is
 played—; the full cache, which no map in the game reaches; and the defender and
@@ -325,5 +325,5 @@ with the runtime. There is no new Python in `tools/`.
   end card.
 * That nobody appears late or with someone else's pose, above all in the jump
   to the dance.
-* The goldens, in `/shared/capturas/2026-10-03-cache-de-ranuras/`, before the
+* The goldens, in `/shared/captures/2026-10-03-cache-de-ranuras/`, before the
   merge.

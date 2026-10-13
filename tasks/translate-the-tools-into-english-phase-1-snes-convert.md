@@ -23,7 +23,7 @@ Scope of this part: tools/port/snes_convert.py, whole.
 By stretches of the file, each in its own commit. For each stretch the AST of
 the old file is compared against the new one, with docstrings and strings
 removed: it has to come out equal, and the strings that change are listed and
-looked at by hand one by one. Then `SIN_CACHE=1 just cartuchos` and the
+looked at by hand one by one. Then `SIN_CACHE=1 just cartridges` and the
 sha256 of all of `rom/build/` except the cache, the `.o`s and the stamp,
 against the baseline taken before touching anything.
 
@@ -36,7 +36,7 @@ against the baseline taken before touching anything.
   and `.pcm` identical; both `mapdata.inc` change —only in comments— and the
   `.dbg`s —only in line numbers and sizes—.
 - **A comment in the `.inc` stays in Spanish because it's data**: the
-  `; --- N: mapa M 'nombre' ---` of `mapa_tabla`, which `mapas_de` in
+  `; --- N: mapa M 'nombre' ---` of `mapa_tabla`, which `maps_in_inc` in
   `rom/pruebas/arnes/consola.py` reads with a regex that expects "mapa". A
   comment next to it says so.
 - Lines 4043–5419 (from `tabla_de_paginas` to the middle of `emit`, with the
@@ -65,8 +65,8 @@ against the baseline taken before touching anything.
 ## Wrap-up
 
 Merged `main` (`5e652dc2`, with Coronillo and Palmar) and verified on the
-merged tree: `SIN_CACHE=1 just cartuchos` gives the 47 `.sfc`, `.msu` and
-`.pcm` identical to the baseline; `just pruebas` 874 green and
+merged tree: `SIN_CACHE=1 just cartridges` gives the 47 `.sfc`, `.msu` and
+`.pcm` identical to the baseline; `just tests` 874 green and
 `just -f tools/justfile pruebas` 132 and 2 skipped.
 
 What to look at: nothing plays differently —the ROM is the same byte for

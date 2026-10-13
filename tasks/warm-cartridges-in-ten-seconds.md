@@ -1,18 +1,18 @@
 ---
 name: "Warm cartridges in ten seconds"
-description: "Second round of optimising `just cartuchos`: taro's goal was under 10 s warm, with no refactors and all of rom/build identical byte for byte"
+description: "Second round of optimising `just cartridges`: taro's goal was under 10 s warm, with no refactors and all of rom/build identical byte for byte"
 type: refactor
 status: done
 ---
 
 Request from taro, on 2026-09-26, after `make-building-the-cartridges-take-less-time.md`:
-`just cartuchos` warm under 10 s, and also bring down the cold
+`just cartridges` warm under 10 s, and also bring down the cold
 path. Same rules as the previous round: no unnecessary refactors,
 without changing what the converter produces, and all of `rom/build/release` and
 `rom/build/tests` identical byte for byte and deterministic.
 
 **10 s wasn't reached.** The numbers for each step, before and after, are in
-each commit's message, which is where they don't go stale; `just cartuchos`
+each commit's message, which is where they don't go stale; `just cartridges`
 prints them.
 
 ## Where the time went, after the previous round
@@ -47,25 +47,25 @@ other.
 13. `en_paralelo` runs serially if the process already has threads: in a pytest
     worker with a loaded core, forking can hang the child.
 
-Each one verified the same way: `cartuchos.py` cold (`SIN_CACHE=1`), with the
+Each one verified the same way: `cartridges.py` cold (`SIN_CACHE=1`), with the
 cache deleted —the run that fills it— and warm, comparing the sha256
 of all of `rom/build/release` and `rom/build/tests`, except the `.o` and the
 `.dbg`'s `mtime`s, against what the starting `main` built; and the same
-after merging `main`, against what that `main` builds. `just pruebas`
+after merging `main`, against what that `main` builds. `just tests`
 green at the end.
 
 ## What's left
 
 * **A stamp split in two: the converter's and the assembly's.** It's what
   would take the most common case, which is touching `rom/src/`, under 10 s.
-  Today `cartuchos.py`'s fingerprint puts all of `rom/src/` in the same stamp as
+  Today `cartridges.py`'s fingerprint puts all of `rom/src/` in the same stamp as
   the `.py` files of `tools/`, so touching one line of assembler converts
   everything again. The converter reads a single file from `rom/src/`,
   `ram_lejana.s` —I checked it with an audit hook over `release`'s
   conversion—, so with one stamp for the converter (flags, cases, `tools/`,
-  converter binaries, `parches/manual/`, ceilings and `ram_lejana.s`) and another
+  converter binaries, `patches/manual/`, ceilings and `ram_lejana.s`) and another
   for the assembly (`rom/src/`, `ca65`, `ld65`), touching assembler would be
-  just `ca65` and `ld65`. It's a structural change in `cartuchos.py` and wasn't
+  just `ca65` and `ld65`. It's a structural change in `cartridges.py` and wasn't
   done.
 * **The warm converter is still a trickle**: `convertir` (the
   ChipSet atlases to decide what gets baked, `build_blocks`, the

@@ -78,7 +78,7 @@ rows, so below goes the same plane without the frame and the scroll chooses.
   tree: green, with the new test and 22 goldens moved. It was repeated until
   no new red appeared: five rounds.
 * The red from before: the new test with the global tools gives 9 out of
-  10 red —`ventana-abajo` passes, which is the usual behaviour—.
+  10 red —`window-down` passes, which is the usual behaviour—.
 * `cargo test` of `events` and `mapdata`, and `just -f tools/justfile test`.
 * Against the original under Wine: the same page from the cases placed in a
   copy of the game. The positions and the no-background text land the same.
@@ -87,7 +87,7 @@ rows, so below goes the same plane without the frame and the scroll chooses.
 
 Play a cutscene with no-background text and one with the window at the top —the
 run to work, with the timer—. The goldens side by side, the
-original next to them and a LEEME, in `/shared/capturas/2026-10-04-ventana-de-mensajes/`.
+original next to them and a LEEME, in `/shared/captures/2026-10-04-ventana-de-mensajes/`.
 
 On merging, reinstall `cartridge` —it brings the runtime—, `events`, `mapdata` and
 `convert`. `bytecode` changed but it's a library, inside those.

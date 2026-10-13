@@ -8,7 +8,7 @@ assignee: taro
 
 From taro, on 2026-10-01: `decisions/the-cartridge-goes-to-8-mb.md`. What
 changes, according to [`ports/abl/research/2026-10-01-the-whole-game-without-msu-1.md`](https://lautarodragan.github.io/the-advocate-docs/ports/abl/research/2026-10-01-the-whole-game-without-msu-1.html)
-(Tucu-tucu): `memoria.cfg` to 64 KB banks (`banks.rs` is already
+(Tucu-tucu): `memory.cfg` to 64 KB banks (`banks.rs` is already
 parametrised), the header at `$40FFB0`, bank 0's tables seen as
 32 KB at `$80`, what crosses banks by hand (`.crossbank`, the samples of
 `emit.rs`) because the bank starts at `$0000`, and the SRAM to `$20-$3F:6000`.
@@ -21,7 +21,7 @@ maps ExHiROM.
 pseudorandom bytes with the code twice, which sums stretches across the whole map and
 paints nine stripes; the SRAM is written through `$20:6000`, read through
 `$A0:6000` and leaves a mark for the next boot. Delivered in
-`/shared/experimentos/2026-10-01-exhirom/`, with the `LEEME.txt` of what
+`/shared/experiments/2026-10-01-exhirom/`, with the `LEEME.txt` of what
 to look at; **taro still has to test it on the FX Pak**.
 
 What the emulators gave, two boots each:
@@ -61,15 +61,15 @@ new section of the README, "El cartucho es ExHiROM, de 8 MB". In short:
 - SRAM at `$20:6000`, 8 KB; header `$35`, `$0D`, `$03`. LoROM saves
   do not load.
 - **The goldens did not move**: the suite passes against the ones from before.
-- `test_musica_techos.py[dcbest]` clips **one** sample: I did not run
-  `just techos`, it is left to be measured when merging.
+- `test_music_ceilings.py[dcbest]` clips **one** sample: I did not run
+  `just ceilings`, it is left to be measured when merging.
 - `release` fits in the fast banks and leaves free the 46 slow banks
-  of 64 KB and 20 halves: `just espacio`, measured on this commit. No
+  of 64 KB and 20 halves: `just space`, measured on this commit. No
   data goes to the slow ones yet; when it does, what the CPU reads byte by byte
   —the music stream, the samples, the bytecode— is better kept in
   the fast ones, and the allocation today does not distinguish what each piece is.
-- The case `empujon` grew 32 KB: with 64 KB banks, the text block
-  of `test-special` had to go past a bank so that `test_texto`
+- The case `push` grew 32 KB: with 64 KB banks, the text block
+  of `test-special` had to go past a bank so that `test_text`
   kept crossing the border.
 
 **For Timbó** (he had already finished, so nothing needed passing on): the emission
@@ -85,7 +85,7 @@ LoROM and says so.
   not needed.
 - Measure the ceilings (`dcbest`).
 - What is left, and is not part of this task: taro testing on the FX Pak the test
-  ROM (`/shared/experimentos/2026-10-01-exhirom/`) and then the game;
+  ROM (`/shared/experiments/2026-10-01-exhirom/`) and then the game;
   and in Mesen2, that the routine names show with the new `.dbg` —the
   code is at `$008000` of the file, which Mesen2 shows at `$80:8000`—.
 - Old saves do not load: you have to start over.

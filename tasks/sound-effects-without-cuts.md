@@ -146,7 +146,7 @@ the total): before, between −22 and −55 dB, 20 to 40 dB below the WAV; the
 −26 against −8). Those still at 6 kHz sound as they were, but whole and
 without the repeated plateau.
 
-**What `just pruebas` doesn't cover**: none of this sounds in the suite. A
+**What `just tests` doesn't cover**: none of this sounds in the suite. A
 separate script looked at it, jumping to the map, silencing the music and recording each effect coming out
 of the ROM, before and after.
 
@@ -293,7 +293,7 @@ music loses. Measured jumping from the title in the order 1, 2, 3, 8, 11, 19, 20
 of the fade), against `main`: 20 +13, 32 +10, 19 +9, 11 +5; 1
 −10 and 2 −11 (the thunder at 8.8 kHz weighs 14 KB less, and 2's music
 went down); the rest the same or one less. Loading a save in map 1 fits within the
-cap of `test_entrar_al_juego_devuelve_las_muestras_del_tema_del_mapa`, which
+cap of `test_entering_the_game_brings_back_the_map_songs_samples`, which
 went back to how it was.
 
 **Extra waits for the `PlayBGM`**: 11's sound effects with `hzstream` or
@@ -301,7 +301,7 @@ went back to how it was.
 KB short; whole it can't weigh less), and 20's with `3D-Galax` and 32's
 with `Lunar_Pyramid`, more than before. 28 with `wb3shop` improves.
 
-**What `just pruebas` doesn't cover**: that the sound effects play whole; a
+**What `just tests` doesn't cover**: that the sound effects play whole; a
 separate script recorded it, effect by effect, coming out of the ROM, in
 `/shared/audio/2026-09-26-efectos-enteros/`.
 

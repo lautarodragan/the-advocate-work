@@ -48,6 +48,6 @@ It is in [`research/2026-10-01-the-picture-system.md`](https://lautarodragan.git
 The tasks that come out of it are in section 5 of the study, with their order;
 they were not opened in `todo/` so that taro picks the plane first.
 
-No code changed: there is nothing to install when merging. `just pruebas` was
+No code changed: there is nothing to install when merging. `just tests` was
 not run —only a `.md` in `docs/research/` and this task change—. No captures
 were taken with RPG_RT under Wine: the game's pictures were enough to measure.

@@ -38,7 +38,7 @@ Of the test maps `release` also carries, three more: `underbridgeback`
 (255, which is on the main path), `Castle` (133) and `SurlBattleBack` (269).
 
 No `EnemyEncounter` in a game map asks for "the place's"; only the
-cases `pelea-113`, `pelea-222` and `tropa-talan-aura`. With that, in all the
+cases `battle-113`, `battle-222` and `troop-talan-aura`. With that, in all the
 maps without encounters the background comes from the terrain under the hero, and there
 `LasheBat`, `Forest1`, `Sea`, `SeaBeach` and `Galaxy` show up: they're only asked for by a
 test page that fights in those maps, and when converting it's not known which one.
@@ -111,7 +111,7 @@ LZ2 ones aren't measured: they come from `LZ2_CICLOS_POR_COMANDO` and
 buffer plus the copy of the second. The raw 2bpp ones would use the same
 DMA path as before, without CPU.
 
-**How each one looks**: `/shared/capturas/2026-09-27-fondos-en-la-rom/variantes/`,
+**How each one looks**: `/shared/captures/2026-09-27-fondos-en-la-rom/variantes/`,
 one PNG per background with the `.msu` one as reference and each variant next to it,
 with its weight. At 128x64 with 16 colours it looks pixelated but with all the
 tones; with four colours the sky, the droid's monitor and the
@@ -139,26 +139,26 @@ for one more frame and one more path; it isn't needed today, and it's noted.
 
 # Tests
 
-* `test_msu_cada_camino_dibuja_su_fondo` and
-  `test_msu_una_pelea_del_mundo_lee_su_terreno` (formerly `…_o_el_reemplazo`):
+* `test_msu_each_path_draws_its_backdrop` and
+  `test_msu_a_world_battle_reads_its_terrain` (formerly `…_o_el_reemplazo`):
   the clean background in WRAM against the light one **built from its doubled
   indices**, without going through `respaldo_bytes`: it compares what the ROM does
   against the image, not against the same byte order. The world one is now
   plains6, not the replacement.
-* `test_escena_una_pelea_del_lugar_usa_el_fondo_del_mapa`: 60 now has its
+* `test_scene_a_place_battle_uses_the_maps_backdrop`: 60 now has its
   background in the ROM.
-* `test_escena_una_pelea_cuyo_fondo_no_esta_usa_el_reemplazo` (new, with the
-  new case `pelea-113-en-7`): place troop 113 in 7, without
+* `test_scene_a_battle_whose_backdrop_is_missing_uses_the_fallback` (new, with the
+  new case `battle-113-in-7`): place troop 113 in 7, without
   encounters and with a single terrain (`LasheBat`, which the ROM doesn't carry): the
   replacement, and along the way the `M_TERRENO_PLANO` branch of `esc_terreno`, which
   until today no test ran.
 * **Goldens that changed, on purpose** (the background without MSU-1 becomes 128x64;
-  in `msu-mundo-rom`, also, from the replacement cave to the prairie):
-  `batalla`, `batalla-blanco`, `batalla-droide`, `batalla-hab`,
-  `batalla-hab-blanco`, `batalla-hab-dos`, `batalla-item`,
-  `batalla-item-blanco`, `batalla-textos-lejos`, `encuentro`,
-  `msu-datos-rom`, `msu-mundo-rom`. Before and after in
-  `/shared/capturas/2026-09-27-fondos-en-la-rom/goldens/`.
+  in `msu-world-rom`, also, from the replacement cave to the prairie):
+  `battle`, `battle-white`, `battle-droid`, `battle-skill`,
+  `battle-skill-white`, `battle-skill-two`, `battle-item`,
+  `battle-item-white`, `battle-texts-far`, `encounter`,
+  `msu-data-rom`, `msu-world-rom`. Before and after in
+  `/shared/captures/2026-09-27-fondos-en-la-rom/goldens/`.
 
 # What taro has to look at
 

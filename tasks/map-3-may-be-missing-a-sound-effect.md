@@ -33,7 +33,7 @@ throwaway script that notes every frame which samples of map 3's package are in
 start on the two voices (`SE_CUADROS` going back up) and the frames in which
 `vueltas` does not advance.
 
-**The path**: the opening played, `viajar(2)`, an `ir_al_mapa` next to the
+**The path**: the opening played, `viajar(2)`, an `go_to_map` next to the
 elevator within the same map 2 —the walkthrough does not know how to play the
 rest of the map—, switch 11 and the touch with event 30, which is what the game
 does. On 3, walking to the tremor at (47,69), the door at (38,68) and the whole
@@ -42,7 +42,7 @@ scene up to the jump to map 4.
 **A correction to the premise: 3 is not loaded with `TF3_1_awe` playing.** What
 plays throughout map 2 is `escape_newyork`, the theme of the opening on 1: the
 game's only `PlayBGM` of `TF3_1_awe` is the one the elevator page does **after**
-the `Teleport` to 3. The case `paquete-incompleto` starts `TF3_1_awe` on 2 by
+the `Teleport` to 3. The case `package-incomplete` starts `TF3_1_awe` on 2 by
 hand, so it exercises the same mechanism with another theme; its test's
 docstring and the comment on `tema_asegurar` say that the game's transition
 happens "with map 2's theme playing", and it is not so.

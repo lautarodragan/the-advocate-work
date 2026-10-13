@@ -23,7 +23,7 @@ brought to `8308033b` with the world's milestone 4):
 >   member. And [...] that it doesn't let you add more than one party member:
 >   if you have Arden and add Saldra, Arden leaves.
 
-The whole fix is in `parches/manual/nuevos/Map0900.json`: **the ROM was not
+The whole fix is in `patches/manual/new/Map0900.json`: **the ROM was not
 touched.**
 
 # The Back Alleys: the cell at (93,0) is not walkable
@@ -165,7 +165,7 @@ three times. It is turned on and off in the same page.
 
 # Tests
 
-`pruebas/abl/test_mapa_de_debug.py`, on `release`:
+`tests/abl/test_debug_map.py`, on `release`:
 
 * the Back Alleys with each companion and without: the cell (90,17), Talan
   alone and visible, the branch's switches and none of the others', the gold,
@@ -188,10 +188,10 @@ in the actor table, `elegir_grafico_heroe` leaves it at zero.
 party and he never arrives, the Back Alleys stay at (93,0), the car with Saldra
 does not have her branch, the NPCs do not remove the other—.
 
-The golden `mapa-de-debug-llegada` did not change: the signs and the NPCs are
+The golden `debug-map-arrival` did not change: the signs and the NPCs are
 text.
 
-With `main` merged at `43dc5303`: `just cartuchos` and `just pruebas`, all
+With `main` merged at `43dc5303`: `just cartridges` and `just tests`, all
 green.
 
 # What taro has to test

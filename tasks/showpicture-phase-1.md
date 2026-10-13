@@ -24,7 +24,7 @@ What to keep at hand when touching it:
 * **The fade is a tone fade, not a transparency one.** The two `MovePicture` leave
   `top_trans` at zero and move (r, g, b). And **the duration comes in tenths**:
   the 35 of the first one are 210 frames. That raised the "1 year earlier" page
-  from 105 tenths to 160, and that is why `test_un_ano_antes.py` went from 900 frames to
+  from 105 tenths to 160, and that is why `test_a_year_before.py` went from 900 frames to
   1200.
 * **Fifteen colours out of the PNG's 226**, and the glow's gradient
   bands. It is the declared cosmetic of this round; taro still has to

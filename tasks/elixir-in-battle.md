@@ -17,7 +17,7 @@ What it asks for, as was measured when fixing the menu:
 - that an item's target cursor can stop on a fallen ally;
 - that the revived ally asks for orders again on the next turn and earns the
   experience on winning;
-- change `batalla.py` the same way, because `test_batalla.py` predicts the HP against it.
+- change `battle.py` the same way, because `test_battle.py` predicts the HP against it.
 
 Reviving is the same as in the menu: 1 HP and then the item's percentage
 (`medicina_usar`). Reference: EasyRPG's `Scene_Battle` and `Game_Battler::UseItem`.

@@ -103,8 +103,8 @@ output of the first ones decides what goes into the cartridge:
 5. the troop pages, **after** the battle, with the same `Songs`.
 
 And the ROM tests compile loose pages with Python:
-`arnes/datos.py`, `test_paginas.py`, `test_posada.py`,
-`test_protocolo_contra_el_juego.py`, `test_musica_paquete.py`.
+`harness/data.py`, `test_pages.py`, `test_inn.py`,
+`test_protocol_against_the_game.py`, `test_music_package.py`.
 
 ## The boundary
 
@@ -136,7 +136,7 @@ decides the bytecode.
 - the encounters' troops, from `rm2k-snes-battle`, which therefore now
   runs earlier.
 
-**Stays in Python**: what each page draws (`grafico`, `tile_pass`,
+**Stays in Python**: what each page draws (`graphic`, `tile_pass`,
 the `@tile:` and baking belong to the port and to `rm2k-rules`), which the Python
 adds to each record the crate returns; `texts.py`; `ANIMATIONS`,
 which belongs to `animation.py`; and the constants that emit tables of
@@ -167,7 +167,7 @@ compiling with Python:
 
 - `scan` also returns **the code** of each page compiled alone,
   not just whether it compiles: it is what a test asks about a page of the
-  game (`datos.pagina_de`);
+  game (`datos.page_of`);
 - the test page arrives **with** the `ControlSwitches` that turns it off, which
   the converter adds: it is a convention of the harness and not of the compiler; and one that
   does not compile returns `null` and the converter says which;
@@ -219,7 +219,7 @@ common events, and the two `scan` passes. And in addition the `scan` over
 On `b0001b6b`, with `events` and `cartridge` installed in the local
 `bin/`:
 
-- `NO_CACHE=1 just cartuchos`: of the 999 files of `rom/build/`, the
+- `NO_CACHE=1 just cartridges`: of the 999 files of `rom/build/`, the
   997 that are not `.dbg` byte-for-byte identical to those of the baseline, built
   before touching anything; the two `.dbg`, identical to the baseline's after
   undoing two things that are not the compiler's: that the local
@@ -228,7 +228,7 @@ On `b0001b6b`, with `events` and `cartridge` installed in the local
   whose comments the last commit changed. Before that commit,
   with the global `cartridge`, the 999 came out identical at every step.
   `abl.sfc` 7a3c6483…, `abl.msu` 905decd2…, `prueba.sfc` fb6db844…;
-- `just pruebas`: 872 (it was 874: two moved to the crate, the exit theme
+- `just tests`: 872 (it was 874: two moved to the crate, the exit theme
   and the free inn);
 - `just -f tools/justfile test`: 88 (84, minus two that moved to the crate and
   the eight of the boxes with a tail, which are now fourteen cases

@@ -52,8 +52,8 @@ Empty and not "corrupted": EasyRPG puts "Savegame corrupted" in
 an LDB term, and the ROM takes everything it says from the LDB. And it's what
 the ROM already did with a checksum that doesn't add up.
 
-The test: `test_una_partida_de_otro_build_se_ve_vacia_y_no_carga`, in
-`pruebas/rpgmaker/test_titulo_dibujo.py`, with three variants: the save of a
+The test: `test_a_save_from_another_build_looks_empty_and_does_not_load`, in
+`tests/rpgmaker/test_title_drawing.py`, with three variants: the save of a
 build from before this change (`sin-cabecera`), another length and another
 signature. It saves for real through the menu, rebuilds the slot shifted two
 bytes with zeros behind it —the case that used to load corrupted— and writes

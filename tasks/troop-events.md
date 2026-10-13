@@ -75,7 +75,7 @@ the two Rust projects that changed. The runtime and the Python don't need
 anything —no `.py` was renamed or added—. `tools/snes/protocol/events.toml`
 adds two opcodes and the generated files are already in the commits.
 
-**No golden moved**, and `test_musica_techos.py` passed.
+**No golden moved**, and `test_music_ceilings.py` passed.
 
 # What was measured at the start (2026-09-30, on 1a82726)
 
@@ -84,7 +84,7 @@ With a throwaway script over `rom/data/db/troops.json` and the list of
 branches count like the map ones). It counts pages with some trigger.
 
 **The whole game**: 4451 pages, 1355 fit by their commands. **The 69 troops
-of `release`**: 1671 pages, 532 fit —the same as `conversor.log` says:
+of `release`**: 1671 pages, 532 fit —the same as `converter.log` says:
 "troop pages: 532 of 1671 in 124 distinct body(ies), 8863 B of code and 9121
 B in 162 message(s)"—.
 
@@ -125,7 +125,7 @@ battle doesn't have; `ChangeCondition` always "remove state 1 from the
 party", which is reviving; `ChangeHP` adding to the party or to Emily, or
 subtracting 999 from Talan, lethal.
 
-**The space**, `just espacio` over the base's cartridges:
+**The space**, `just space` over the base's cartridges:
 
     release        data banks 115 of 124, 9 free; gaps 8,799 B;
                    bank 0 50 B; bank 1 3,126 B
@@ -175,7 +175,7 @@ from `ba_actor_setup`, what `ba_build` does for one actor—. See
     PlayBGM                accepted and not done (see below)
 
 OP_ACTOR, `ChangeSP` and the `ChangeHP` by variable are also tested on the
-map: `rom/pruebas/rpgmaker/test_curar.py`, with the `curar-restar` case.
+map: `rom/pruebas/rpgmaker/test_curar.py`, with the `heal-subtract` case.
 
 `ChangeMonsterMP` compiles and the ROM does it, but **no test runs it**: only
 799 uses it, which is still blocked by `ChangeMonsterCondition`.
@@ -202,7 +202,7 @@ the battle theme's rate —the same rule that leaves out the pages' effects—
 and none of the three has an MSU-1 track. It's an audio decision for taro;
 it's in `divergences/what-troop-pages-do-not-model.md`.
 
-**The space afterwards** (`just espacio`, `release`): bank 0 **13 B** (from
+**The space afterwards** (`just space`, `release`): bank 0 **13 B** (from
 50), bank 1 5,054 B (from 3,126, with the tables out), data banks 116 of 124
 and 8 free. Bank 0 is eaten by the two opcode entries (9 B each), the actor
 `ControlVars` one (10 B) and the new cases. **It's the next limit**: the
@@ -255,15 +255,15 @@ skills (it wasn't measured at what point in the game they arrive):
 - Far RAM: `$7E7A2A`, `BA_SYNC_I`, inside what already belonged to the troop
   pages ($7A10-$7A3F).
 - Tuples in `test_*_golden.py`: none.
-- New cases: `pelea-invocacion`, `pelea-vida-por-fuerza`,
-  `pelea-vida-por-fuerza-sin-hp`, `pelea-sacrificio`, `pelea-radio` and
-  `curar-restar`.
+- New cases: `battle-summon`, `battle-life-by-strength`,
+  `battle-life-by-strength-without-hp`, `battle-sacrifice`, `battle-radio` and
+  `heal-subtract`.
 
 # The suites
 
-`just pruebas`: 893 green (882 at the start). `just -f tools/justfile test`:
+`just tests`: 893 green (882 at the start). `just -f tools/justfile test`:
 49. `cargo test -p rm2k-snes-events -p rm2k-snes-battle` green. With
-`NO_CACHE=1 just cartuchos` the three ROMs come out identical to with the
+`NO_CACHE=1 just cartridges` the three ROMs come out identical to with the
 cache: `abl.sfc` `e20182d1bd905de7…`, `special` `6784ab8fc7161ab7…`,
 `encounter-every-step` `5dc9114cd97ff691…` (before merging 3afc819, which
 only moved tasks).

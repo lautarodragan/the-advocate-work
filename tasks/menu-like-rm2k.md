@@ -24,7 +24,7 @@ The three were looked at in easyrpg-player and in the original running under Win
 (the 2015 RPG_RT), with a copy of the game whose map 4 starts with Kersh and
 Core in the party and the tests' items in the inventory: that way you reach the
 menu without playing the intro. The captures are in
-`/shared/capturas/2026-09-28-el-menu/`.
+`/shared/captures/2026-09-28-el-menu/`.
 
 ## 1. The experience in the menu — done
 
@@ -68,7 +68,7 @@ HP of an enemy.
 **Where the ROM draws it**: in `ba_renglon` (`rom/src/batalla.s`), which writes
 each combatant's line: the name, "HP" and the number, and the bar with the
 maximum only if it's the party's —bit 0 of `BA_CONMAX`—. The geometry is
-`BA_HP_COL`/`BA_HP_NUM` in `pantallas.py`, and the decision to show it is
+`BA_HP_COL`/`BA_HP_NUM` in `screens.py`, and the decision to show it is
 written right there, above `BA_ENEMIGO_FILA0`: *"se ven los HP de los
 enemigos. RM2k no los muestra. Acá sí, porque lo que esta vuelta tiene que
 dejar ver es justamente la mecánica"*.
@@ -83,14 +83,14 @@ for debugging, just like `CON_MAPA_DE_DEBUG`:
   BA_CONMAX` / `and #$01` / `bne` to the "HP" / `rts` / `.endif`. It's seven bytes
   in the battle bank with the flag off and zero with it on; bank 0 isn't
   touched;
-- `pantallas.py` the same in the battle screen's reference, with the
+- `screens.py` the same in the battle screen's reference, with the
   same flag;
 - it moves all the goldens where the enemy list is visible —the `batalla*` ones
   for sure; the rest the suite will say—, so it goes in a commit with its
   why.
 
 It's cheap, but **I didn't implement it**: there's another agent in the battle
-(`batalla*.s`, `batalla.py`, `eventos.py`) and we'd clash precisely in those
+(`batalla*.s`, `battle.py`, `eventos.py`) and we'd clash precisely in those
 goldens. It's left for after that gets merged.
 
 ## 3. Equipping: the value that changes, in colour — done
@@ -112,17 +112,17 @@ while choosing the slot, without the new value.
 
 ## Tests
 
-- `menu`, `menu-2` change —the experience line—; new `menu-grupo`
-  (case `menu-grupo`: Kersh, Core and Talan).
-- `equipo-lista` changes —the Bow's 95, which goes down, in grey—; new
-  `equipo-sube-baja` and `equipo-sube` (case `equipo-colores`).
-- `test_el_menu_muestra_guiones_en_el_nivel_tope`, the cap path.
+- `menu`, `menu-2` change —the experience line—; new `menu-party`
+  (case `menu-party`: Kersh, Core and Talan).
+- `equipment-list` changes —the Bow's 95, which goes down, in grey—; new
+  `equipment-rises-low` and `equipment-rises` (case `equipment-colors`).
+- `test_the_menu_shows_dashes_at_the_top_level`, the cap path.
 - `render_menu` draws the experience, and the tests that compare the menu
   after levelling up or fighting pass it the game's.
-- The music ceilings were re-measured (`just techos`): the ROM
+- The music ceilings were re-measured (`just ceilings`): the ROM
   change shifted `dcbest`'s peak until it clipped, as the test warns
   can happen with any change.
-- Verified with `just cartuchos` and `just pruebas` on merged `main`: all
+- Verified with `just cartridges` and `just tests` on merged `main`: all
   green.
 
 ## What taro has to look at

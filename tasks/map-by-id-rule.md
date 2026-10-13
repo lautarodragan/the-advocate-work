@@ -34,17 +34,17 @@ map".
 ## Where each thing lives
 
 The three values —`MENOR_A`, `EXCLUIDOS` and `AGREGADOS`— live in
-`cartuchos.py`, and the rule is expanded **there**, with the tree from the dump in
+`cartridges.py`, and the rule is expanded **there**, with the tree from the dump in
 `data/`. The converter still receives the explicit list in `--mapas`,
 as until now. There is no `--exclude-maps` flag, and that is on purpose:
 
-* **Nobody else calls the converter**: the only one that invokes it is `cartuchos.py`
-  (grep for `snes_convert` in `justfile`, `tools/` and `pruebas/`). A flag would
+* **Nobody else calls the converter**: the only one that invokes it is `cartridges.py`
+  (grep for `snes_convert` in `justfile`, `tools/` and `tests/`). A flag would
   give a second way of receiving the maps to a program that already has
   one, for a single caller.
 * **Those that read the list in Python need it without running the converter**:
-  `test_horneados.py` (`cartuchos.MAPAS`), `test_parches.py`
-  (`MAPAS_DEL_JUEGO`) and `parches.mapas_de_prueba`. With the rule in the
+  `test_baked.py` (`cartuchos.MAPS`), `test_patches.py`
+  (`MAPAS_DEL_JUEGO`) and `parches.test_maps`. With the rule in the
   converter it would have to be expanded in two places.
 * **The seal**: the cartridge's seal carries its flags, and `data/` does not go into
   the fingerprint. With the list expanded in the flags, a change in the tree that
@@ -65,11 +65,11 @@ decorative number in either list says nothing and goes stale.
 
 * The list the rule gives is the same tuple, in the same order, as the
   hand-written one (compared in Python against the old one).
-* **The ROMs, byte for byte**: `just cartuchos` on `69e66ed` and on the
-  change —both cartridges were rebuilt, because `cartuchos.py` goes into the
+* **The ROMs, byte for byte**: `just cartridges` on `69e66ed` and on the
+  change —both cartridges were rebuilt, because `cartridges.py` goes into the
   fingerprint— and `cmp` of `rom/build/release/abl.sfc`, `abl.msu`,
   `rom/build/tests/special/prueba.sfc` and `prueba.msu` against the copies from
   before: all four identical.
-* `just pruebas` on the result: all green.
+* `just tests` on the result: all green.
 
 There is nothing taro has to play: the ROM is the same.

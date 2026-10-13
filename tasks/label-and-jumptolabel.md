@@ -74,10 +74,10 @@ and 39) have the blockers that Jilguero's study lists.
   first one with the number wins, one that is not there does nothing, inside
   the last body (`else`, branch without `else`, last option) compiles, inside
   one that is not the last does not, and within the same body.
-- `rom/pruebas/casos/etiquetas.json` and `rpgmaker/test_etiquetas.py`: a
+- `rom/pruebas/casos/etiquetas.json` and `rpgmaker/test_labels.py`: a
   backwards loop of three passes, a forward jump over a switch, one to a label
   that is not there, and one into an `else`. **The red**: with the base's
-  compiler, `just cartuchos` refuses —"the test page doesn't compile"—.
+  compiler, `just cartridges` refuses —"the test page doesn't compile"—.
 - The small game of the Python tests (`tests/game/`) used a loose `Label` as
   "a command that does not compile", in common 3 and in page 2 of event 9: now
   it compiles and it changed the scan's hash. It was replaced with a `Loop`,
@@ -91,5 +91,5 @@ and 39) have the blockers that Jilguero's study lists.
 
 - Install `events` in the global one: `just -f tools/justfile install events`.
 - No golden changes, and there is nothing to play yet: no page of the game
-  compiles because of this alone. What can be looked at is the `etiquetas`
+  compiles because of this alone. What can be looked at is the `labels`
   case, which runs in the suite.
