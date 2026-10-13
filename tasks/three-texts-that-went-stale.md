@@ -2,7 +2,7 @@
 name: "Three texts that went stale"
 description: "internals/events.md says the converter is Python, internals/vram.md says 'four' layouts and lists five, and the header of rm2k-rules' tests names a Python and a test that don't exist"
 type: docs
-status: testing
+status: done
 assignee: taro
 agents: [Hurón]
 ---

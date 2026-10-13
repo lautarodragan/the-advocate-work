@@ -2,7 +2,7 @@
 name: "Everything in English: the book's file names and URLs"
 description: "The book's pages keep the Spanish file names they had before the translation: give them English names, redirect the old URLs, and fix every citation in the four repos"
 type: chore
-status: testing
+status: done
 assignee: taro
 agents: [Cardón]
 ---
