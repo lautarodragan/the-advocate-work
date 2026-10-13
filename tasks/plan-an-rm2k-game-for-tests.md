@@ -29,7 +29,7 @@ Leñatero finds it feasible":
 
 ## While working (Leñatero, 2026-10-02)
 
-* The base suite: `just pruebas --junitxml=…` gives 999 in 86.5 s, 643
+* The base suite: `just tests --junitxml=…` gives 999 in 86.5 s, 643
   CPU-s. Without the engine's ones (`--ignore` of each M1 and M2 file), 394 in
   73 s and 351 CPU-s.
 * The synthetic game was written as an exact Ditto dump (~8 KB of
@@ -56,7 +56,7 @@ The study is [`research/2026-10-02-the-test-game.md`](https://lautarodragan.gith
 * ABL goes down from 643 to 351 CPU-s, but from 86.5 to 73 s of wall clock.
 
 **When merging there's nothing to install**: it's a document and this task.
-`just pruebas` gave 999 green on this tree, and `just -f tools/justfile
+`just tests` gave 999 green on this tree, and `just -f tools/justfile
 test` 36.
 
 # ABL's history: without filter-repo (taro, 2026-10-02)

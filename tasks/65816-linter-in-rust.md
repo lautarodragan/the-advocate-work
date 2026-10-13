@@ -118,10 +118,10 @@ it goes as a check and not as a study.
 
 ## The numbers
 
-`just pruebas`: 1008 (1005 + the three cartridges of `test_linter.py`).
+`just tests`: 1008 (1005 + the three cartridges of `test_linter.py`).
 `just -f tools/justfile test`: 39. `cargo test -p goombario`: 5 + 8.
 `abl.sfc` of `release`: `35c76500…`, the base's: `NO_CACHE=1 just
-cartuchos` before and after the declarations, and `just cartuchos` at the end,
+cartuchos` before and after the declarations, and `just cartridges` at the end,
 with the three `.sfc` and the three `.msu` byte for byte the same. No golden
 moved. `main` didn't move in the meantime (`a6ba9693`): there was nothing to
 merge.

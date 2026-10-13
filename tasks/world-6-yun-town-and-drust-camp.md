@@ -62,7 +62,7 @@ Lashe; the burning forest one stops at 312's exit). With that:
   311 and 313, and the other test maps don't carry them.
 
 **Fortitude's counter in 95 uses the same digits** (`OP_COUNTER`), and
-the first version left it without them: `test_contador` caught it. The maps
+the first version left it without them: `test_counter` caught it. The maps
 that call a common event from `[events] counters` always carry them; they're found by
 the call and not by the bytecode because the `scan` doesn't know about the counters and
 compiles it in place there.
@@ -124,29 +124,29 @@ Confirmed against easyrpg's source (it isn't compiled here):
 Mulita's work went in shortly after starting, so there are possible new cases;
 none was needed: the tests use the game's pages.
 
-* `rpgmaker/test_numero.py`: 68's door. The digits start at zero
+* `rpgmaker/test_number.py`: 68's door. The digits start at zero
   with the cursor on the last, and the keys wrap around; 35421 opens and leads
   to 201; 100957 stays at 65535 and doesn't open. **All three red** with the
   global compiler (the page doesn't compile: the digits don't open), and
   green with this branch's.
-* `abl/test_yun_y_drust.py`: 67, 68 and the mines (103) just arrived at,
-  with golden and `celdas_mal_dibujadas` at zero; and the world's two entrances
+* `abl/test_yun_and_drust.py`: 67, 68 and the mines (103) just arrived at,
+  with golden and `wrongly_drawn_cells` at zero; and the world's two entrances
   (66 ev9 and ev11), walking, which lead to the town.
 * The compiler's three in `compile.rs`: the number in the message
   window, the ones that don't compile, and the comparison as sixteen bits.
 
-`just pruebas`: 952 green, and **`test_musica_techos.py` red**, which is
+`just tests`: 952 green, and **`test_music_ceilings.py` red**, which is
 expected: the new themes, `arc1_v2` and `piperdun`, are missing. `just
 techos` wasn't run. `just -f tools/justfile test`: 39 green. `cargo test -p
-rm2k-snes-events` green. `NO_CACHE=1 just cartuchos` gives the three ROMs
+rm2k-snes-events` green. `NO_CACHE=1 just cartridges` gives the three ROMs
 identical to the cached ones (the `.o` and `.dbg` differ, which carry the date of the
 generated `.inc` files).
 
 # Goldens
 
-* **New**: `yun-67-llegada`, `drust-68-llegada` and `drust-103-llegada`.
+* **New**: `yun-67-arrival`, `drust-68-arrival` and `drust-103-arrival`.
 * **Moved**: the five of the Hover-Tram (map 13: `tram-900`, `tram-1200`,
-  `tram-viaje-10`, `-30` and `-60`), 183 pixels —61 in the 1200 one— of the
+  `tram-trip-10`, `-30` and `-60`), 183 pixels —61 in the 1200 one— of the
   bottom row of passengers. It isn't the timer: 13 still carries it, and to
   make room for it a character goes down to thirteen colours. It was Future3:5, 53% of
   its pixels; since it's also in Yun's inn (72), the converter
@@ -154,12 +154,12 @@ generated `.inc` files).
   bank.
 
 In their commit, goldens only; the before and after in
-`/shared/capturas/2026-10-01-yun-y-drust/`, with the password window.
+`/shared/captures/2026-10-01-yun-y-drust/`, with the password window.
 **The merge awaits taro.**
 
 # Space
 
-With `just espacio`. The baseline is `a0863e9e` (`main`'s ROM, `6809f47d…`).
+With `just space`. The baseline is `a0863e9e` (`main`'s ROM, `6809f47d…`).
 
     release        banks    bank 0    bank 1     texts
     the baseline   58/128   245 B     3,828 B     94,417 B
@@ -175,9 +175,9 @@ on top, it's worth measuring on merging.
 
 # What isn't done
 
-* **`test_musica_techos.py` fails** (see above).
+* **`test_music_ceilings.py` fails** (see above).
 * **The earlier music drops a bit**: comparing the rates in
-  `conversor.log` against the baseline's, four of the baseline's samples
+  `converter.log` against the baseline's, four of the baseline's samples
   "limited by 311" go down from ~19 to 17.6 kHz (COWBL66, METRO60, SBRS160A,
   SYBS233), a copy of CRASH60B at 22 kHz goes away, and two go up (SIDE_60,
   ATMOS60A). It's 311's package again, now with the new samples
@@ -187,7 +187,7 @@ on top, it's worth measuring on merging.
 * **A lone `InputNumber`** or one after a four-line message doesn't
   compile: the game has none.
 
-# What `just pruebas` doesn't cover
+# What `just tests` doesn't cover
 
 * The battles in the mines (103) and the ring (199): the encounters, their
   backgrounds and the new battlers (Slime2, bat, krawlie, spider, anima).

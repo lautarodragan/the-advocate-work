@@ -10,7 +10,7 @@ dependencies (see the project memory). **Low priority**, 2026-09-26: if what
 we use of fluidsynth is very little, evaluate it; it would make no sense to
 end up porting fluidsynth.
 
-What they are used for today (`git grep -n 'fluidsynth\|ffmpeg' tools/ pruebas/`):
+What they are used for today (`git grep -n 'fluidsynth\|ffmpeg' tools/ tests/`):
 **fluidsynth** renders each MIDI with the SoundFont to WAV, for the MSU-1
 tracks (`tools/audio/msu.py`) and as a reference in the quality measurements;
 **ffmpeg** decodes the audio replacements (`.mp3`, `.ogg`, `.flac`) of the

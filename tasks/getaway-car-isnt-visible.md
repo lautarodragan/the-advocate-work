@@ -19,7 +19,7 @@ asks for 132.
 
 # The cause, measured
 
-Starting the test cartridge on map 4 with 130 and 132 on —`en-4`—, both cars
+Starting the test cartridge on map 4 with 130 and 132 on —`in-4`—, both cars
 end up with `npc_buf + 14` at zero and `eleg_por_ev` at `$FFFF` for events
 1 and 2: **no refresh pass looked at their pages**, neither the one from
 loading the map nor a forced one afterwards.
@@ -40,22 +40,22 @@ running, which in a cutscene is the norm.
 # The fix
 
 `solo_auto` is read with `lda`, before the page. With that, in the same
-`en-4` start with 130 and 132, event 1 picks its page (`$A0`) and event 2
+`in-4` start with 130 and 132, event 1 picks its page (`$A0`) and event 2
 stays hidden (`$FFFD`): **the red car appears, and animates** —it changes
 pose every ten frames—. The blue one doesn't, which is as it should be.
 
 And since every case of the suite's test page **is an autorun**, every
 refresh in the suite ran with the bug in place: the fix may move goldens
 that have nothing to do with cars. The first one that showed up is
-`destello-compartido-2`: the hero no longer flashes together with event 4.
+`flash-shared-2`: the hero no longer flashes together with event 4.
 
-**It moved no golden**: `just pruebas` green with the fix. The
-`destello-compartido-2` thing mentioned above wasn't this but the case of the
+**It moved no golden**: `just tests` green with the fix. The
+`flash-shared-2` thing mentioned above wasn't this but the case of the
 other task, which flashed the hero and changed the converter's palette
 allocation for map 6: see `two-flashes-at-once`.
 
-It is guarded by `pruebas/rpgmaker/test_refresco_con_automatica.py`, which
-starts in `en-4` with 130 and 132 and checks that the red one is drawn and
+It is guarded by `tests/rpgmaker/test_refresh_with_autostart.py`, which
+starts in `in-4` with 130 and 132 and checks that the red one is drawn and
 the blue one isn't. It was seen red against the `main.s` from before the
 fix: both rows at zero.
 

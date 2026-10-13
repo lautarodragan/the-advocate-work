@@ -7,7 +7,7 @@ assignee: taro
 ---
 
 From taro, on 2026-10-02, after seeing Bandurria's video
-(`/shared/capturas/2026-10-01-escenas-diff/`): "I'd like to explore using mode
+(`/shared/captures/2026-10-01-escenas-diff/`): "I'd like to explore using mode
 7. We ruled it out because its use is very brief, but now that I've seen the
 video, I realize it's emotionally striking, and the zoom helps convey the
 emotion much more". Jilguero's study had ruled it out (option F): mode 7's map
@@ -35,7 +35,7 @@ frame, on 212 and 213, with the width of what isn't black:
   camera is at (0, 0) and the ROM's (`follow_camera`) wherever the hero leaves
   it, who enters through a `Teleport` and doesn't move: PhoneCallDiff and
   SurlGravesDiff are cropped from (8, 16) and SurlBroDiff and ThreeRubbleDiff
-  from (0, 16), at 256x224. `recorte()` in `armar.py` computes it; the
+  from (0, 16), at 256x224. `recorte()` in `build.py` computes it; the
   comparison with screenshots that `diff-photos-cropped-and-217-montage-as-in-rm2k.md`
   asks for wasn't done.
 
@@ -195,7 +195,7 @@ photo —the white on 213, 214 and 216 that today gets cut off when the photo
 appears, `divergences/what-large-pictures-do-not-model.md`— and for
 217's montage in `diff-photos-cropped-and-217-montage-as-in-rm2k.md`.
 
-## What's in `/shared/experimentos/2026-10-02-modo-7/`
+## What's in `/shared/experiments/2026-10-02-modo-7/`
 
 The ROM, a `LEEME.txt` with the photos, the variants, the buttons and what to
 look at on the TV, and `videos/`: sixteen, one per photo and variant, with the

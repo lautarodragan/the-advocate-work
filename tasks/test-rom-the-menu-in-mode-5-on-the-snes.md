@@ -25,7 +25,7 @@ The ROM is in `rom/experimentos/menu-modo-5/` and is built with `just
 menu-modo-5`, which then runs it in snes9x, bsnes and mesen-s and compares
 each screen with its mockup at 15 bits. It goes in `rom/justfile` and not in
 the `tools/` one because what it shows is ABL's menu. The delivery, with a
-`LEEME.txt` of what to look at, is in `/shared/experimentos/2026-09-30-menu-modo-5/`.
+`LEEME.txt` of what to look at, is in `/shared/experiments/2026-09-30-menu-modo-5/`.
 
 Three screens: 1 the ×1.5 (mode 5), 2 the ×1.6 by position (mode 5), 3
 today's menu (mode 3). Right or A goes to the next one, left to the previous

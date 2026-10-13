@@ -34,9 +34,9 @@ frame, like `Game_Character::Update`, which calls `GetMoveSpeed()` each time.
 `SALTO_VELOCIDAD` disappeared from the `.inc` and from `eventos.py`; in its
 place `eventos.SALTO_POR_VELOCIDAD` is the RM2k table the tests look at.
 
-**The test** is `pruebas/rpgmaker/test_salto_velocidad.py`, with the cases
-`salto-heroe-lento` (speed 1) and `salto-heroe-veloz` (speed 6) plus the
-usual `salto` (4): it counts the ticks with `ruta_salto` other than zero
+**The test** is `tests/rpgmaker/test_jump_speed.py`, with the cases
+`jump-hero-slow` (speed 1) and `jump-hero-fast` (speed 6) plus the
+usual `jump` (4): it counts the ticks with `ruta_salto` other than zero
 against `ceil(256 / s) - 1`. Without the fix it gives red at both new speeds
 —"a velocidad 6 … en RM2k está 3 ticks en el aire; acá estuvo 10"— and the
 4 one passes, which is what says the count measures the same as RM2k.

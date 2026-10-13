@@ -9,34 +9,34 @@ status: done
 
 That `release` and `test-main` be a single cartridge: the one that gets
 delivered, with title and timer, which also carries all the maps and the cases
-of `pruebas/casos/`, turned off in the real save. `test-special` stays as it
+of `tests/cases/`, turned off in the real save. `test-special` stays as it
 is.
 
 What follows was measured on 2026-09-25 on `d118bc8`, building in a worktree a
-`release` with `--grupo 10`, `--map-id 4` and `cartuchos.py`'s `MAPAS`, with
+`release` with `--grupo 10`, `--map-id 4` and `cartridges.py`'s `MAPS`, with
 the `--grafico-de-prueba` and with all the cases, and running the whole suite
-with `PRUEBAS = RELEASE`. The numbers are from that day: whoever picks this up
+with `TESTS = RELEASE`. The numbers are from that day: whoever picks this up
 measures them again, doesn't copy them (the method is at the end).
 
 # Which difference is fundamental and which is configuration
 
 | Difference | What it is | What was measured |
 |---|---|---|
-| `--grupo 10` | nothing | It's the default party (`system.json`: `party: [10]`): both cartridges start with 10, and 11 is set by the `grupo-11` case. |
-| Title | harness configuration | With the title passed through "Begin the Story" before choosing the case, **zero goldens move**. What it requires is that `tanda.partida` pass `titulo=EMPEZAR` on the cartridge with a title, and that `reiniciar()` come back through "Resume the Story" (without that 13 "viaja en la partida" tests fail, which choose "Begin" on reset and start from scratch). And the two of `test_game_over.py` that expect the start after the GameOver: with a title the ROM goes back **to the title**, which is what RM2k does, so the test has to get past it. |
-| Timer | configuration, plus **a real bug** | 14 goldens move with the timer on every map (the comment in `snes_convert.py` said fifteen, in 9f). 9 are small requantizations —from 2 to 166 pixels: `gemelo-20`, `gemelo-ruta-20`, `gemelo-fija-20`, `tram-200`, `tram-viaje-10`, `autos9-2`, `npc-diagonal-10`, `tram-26`, `puerta-8-9-120`—, because the digits' colors go into the palette allocation. The other **5 are a bug**: `sacudir-60`, `cerrar-400`, `cerrar-right-400`, `autocierre-63` and `autocierre-3-185`, map 7's door untinted on a tinted screen. See below. |
-| Start map (6 against 4) | fundamental, but cheap | The cases live in event 0 of the start map. The 24 of `test-main` that don't start with a `Teleport` ran on 6, and in the merged one they run on 4: 27 goldens move, from 15 to 89%. **With a `Teleport` to 6, (50,50) —the cell where the hero landed—, in front of each one, all 27 go back to zero**: the harness already counts from the arrival. They are `anclada`, `animacion`, `animacion-dibujo`, `atravesar-sin-paso`, `grupo-11`, `pan*`, `rama-grupo*`, `ruta*`, `sacudir-fuerte`, `sacudir-lluvia`, `salto`, `switch-171`, `tropa-talan-aura`, `ventana-6`, `vuelta-ventana`. Map 4's cutscene doesn't interfere: none of the ~150 cases with a `Teleport` moved. |
+| `--grupo 10` | nothing | It's the default party (`system.json`: `party: [10]`): both cartridges start with 10, and 11 is set by the `party-11` case. |
+| Title | harness configuration | With the title passed through "Begin the Story" before choosing the case, **zero goldens move**. What it requires is that `tanda.partida` pass `titulo=START` on the cartridge with a title, and that `reiniciar()` come back through "Resume the Story" (without that 13 "viaja en la partida" tests fail, which choose "Begin" on reset and start from scratch). And the two of `test_game_over.py` that expect the start after the GameOver: with a title the ROM goes back **to the title**, which is what RM2k does, so the test has to get past it. |
+| Timer | configuration, plus **a real bug** | 14 goldens move with the timer on every map (the comment in `snes_convert.py` said fifteen, in 9f). 9 are small requantizations —from 2 to 166 pixels: `twin-20`, `twin-route-20`, `twin-fixed-20`, `tram-200`, `tram-trip-10`, `cars9-2`, `npc-diagonal-10`, `tram-26`, `door-8-9-120`—, because the digits' colors go into the palette allocation. The other **5 are a bug**: `shake-60`, `close-400`, `close-right-400`, `auto-close-63` and `auto-close-3-185`, map 7's door untinted on a tinted screen. See below. |
+| Start map (6 against 4) | fundamental, but cheap | The cases live in event 0 of the start map. The 24 of `test-main` that don't start with a `Teleport` ran on 6, and in the merged one they run on 4: 27 goldens move, from 15 to 89%. **With a `Teleport` to 6, (50,50) —the cell where the hero landed—, in front of each one, all 27 go back to zero**: the harness already counts from the arrival. They are `anchored`, `animation`, `animation-drawing`, `through-without-step`, `party-11`, `pan*`, `rama-grupo*`, `ruta*`, `shake-strong`, `shake-rain`, `jump`, `switch-171`, `troop-talan-aura`, `window-6`, `return-window`. Map 4's cutscene doesn't interfere: none of the ~150 cases with a `Teleport` moved. |
 | Test graphics | configuration | They go on the maps where a case runs, and that includes maps the walkthrough walks: even so **no golden of `release` moved** —walkthrough, title, scenes, stack, MSU-1, cores—. |
 | Cases in the ROM that gets played | fundamental, small | See the next section. |
-| Extra maps (52, 70, 73, 74, 119, 121, 133, 255, 261, 269, 348) | fundamental: space and patches | 282 KB in the cartridge, and `test_parches` requires everything that goes into the playable one to be versioned. |
+| Extra maps (52, 70, 73, 74, 119, 121, 133, 255, 261, 269, 348) | fundamental: space and patches | 282 KB in the cartridge, and `test_patches` requires everything that goes into the playable one to be versioned. |
 
 ## The cases in the ROM that gets played
 
 Page 0 **asks for nothing** and always runs, on the start map, at the start;
 page k asks for `VARIABLE_DE_CASO >= k`, and the game doesn't touch 1000. So
 case 0 doesn't guarantee they don't run: **it's the one that runs**. Today it's
-`grupo-11`, which puts Kersh in and breaks the opening. To turn them off it's
-enough for `PRIMERO` to be `nada`, which already exists: the save then runs a
+`party-11`, which puts Kersh in and breaks the opening. To turn them off it's
+enough for `PRIMERO` to be `nothing`, which already exists: the save then runs a
 page that only turns on switch 1023 and turns itself off, and the others never
 run. Measured: with `PRIMERO = "nada"` the tests that play all pass on the
 merged one.
@@ -45,7 +45,7 @@ What's left, and isn't free:
 
 * **The ROM taro plays carries the test pages and the test maps**, unreachable
   but inside: 3.75 MB against 3.01 MB of `release` today.
-* **The cases' variables go into the index** —`datos.ranuras_de_variable`
+* **The cases' variables go into the index** —`datos.variable_slots`
   explains it—, so the layout of the game's saved data depends on which cases
   there are. A new case that names a new variable shifts the slots of the ones
   that come after it.
@@ -64,24 +64,24 @@ regenerating the remaining 9 goldens.
 
 # Outside the suite
 
-* `just entregar` and `just video` read `rom/build/release/` and don't break:
+* `just deliver` and `just video` read `rom/build/release/` and don't break:
   the merged one comes out in the same place and with the same name.
   `test_msu` passes.
-* `test_parches` fails: the eleven test maps go into the playable one without
-  a versioned patch. Either they get versioned —`just parches` would copy them
-  to `parches/`—, or `parches.revisar` learns which maps are test ones. It's a
+* `test_patches` fails: the eleven test maps go into the playable one without
+  a versioned patch. Either they get versioned —`just patches` would copy them
+  to `patches/`—, or `parches.revisar` learns which maps are test ones. It's a
   decision.
 * **The build directory's patches aren't cleaned**: when building `release`
   again without the test maps, `rom/build/release/parches/auto/mapas/` still
-  had `0052.toml` and the others, and `test_parches` failed because of that.
+  had `0052.toml` and the others, and `test_patches` failed because of that.
   Any cartridge that loses a map will have it; best to fix it along with this.
 * `test_protocolo` and `test_ensamblar` are parametrized by cartridge: two
   cases fewer.
-* Things that name `test-main`: `cartuchos.py` (5), `pruebas/README.md` (3),
-  `justfile` (2), `test_guardar_save_point.py` (1, with `en="test-main"`),
+* Things that name `test-main`: `cartridges.py` (5), `tests/README.md` (3),
+  `justfile` (2), `test_save_at_save_point.py` (1, with `en="test-main"`),
   `race-in-release.md` (2). `conftest.py` asserts that `release` carries
-  no cases. And `donde_esta` depends on the dictionary's order: with
-  `test-special` first, `parado-tapado` —which is in both— ran on the small
+  no cases. And `where_is` depends on the dictionary's order: with
+  `test-special` first, `standing-covered` —which is in both— ran on the small
   one and moved its golden.
 
 # Space
@@ -149,7 +149,7 @@ lever.
 |---|---|---|
 | `cartuchos`, cold cache | 177 s (137.7 + 12.7 + 27.0) | 149 s (136.8 + 12.4) |
 | `cartuchos`, warm cache, everything rebuilt | 114 s (76.4 + 12.4 + 24.9) | 97 s (83.9 + 12.9) |
-| pytest of `just pruebas` | 61 s, 623 cases | 57 s, 621 |
+| pytest of `just tests` | 61 s, 623 cases | 57 s, 621 |
 
 The MSU-1 tracks add 71 s cold to either. Touching `rom/src/` rebuilds all of
 them, so the typical round saves about 17 s.
@@ -167,7 +167,7 @@ costs, measured:
 3. in the harness, the automatic title and the reset through "Resume" —about
    ten lines—, and the two GameOver tests getting past the title;
 4. regenerating on purpose the 9 goldens the timer requantizes;
-5. deciding what `test_parches` does with the test maps, and cleaning the
+5. deciding what `test_patches` does with the test maps, and cleaning the
    build's stale patches;
 6. renaming what says `test-main`.
 
@@ -203,24 +203,24 @@ taro decided to merge in the recommended form: `release` becomes the merged
 one and `test-main` ceases to exist. `test-special` stays.
 
 Before starting, on `cfb100e` (with the tint already fixed and the lightweight
-fallback in): `just cartuchos` cold 266 s —`test-main` 154, `test-special` 13,
-`release` 28 and the MSU-1 tracks 71—, and `just pruebas` 632 cases green.
+fallback in): `just cartridges` cold 266 s —`test-main` 154, `test-special` 13,
+`release` 28 and the MSU-1 tracks 71—, and `just tests` 632 cases green.
 
 1. The `Teleport` to 6 in front of the 24 cases that ran on the start map:
    separate commit, 632 green, no golden moved.
-2. The converter empties `rom/build/<cartucho>/parches/` before writing (closes
+2. The converter empties `rom/build/<cartucho>/patches/` before writing (closes
    `converter-does-not-clean-up-old-patches.md`).
-3. `donde_esta` no longer depends on `CARTUCHOS`'s order.
+3. `where_is` no longer depends on `CARTRIDGES`'s order.
 4. `parches.revisar` knows what's a test thing: the maps come from
    `cartuchos.MAPAS_DE_PRUEBA`, and for the animations and the battlers —91
    and twelve battlers exist only because of the test maps or a case, which
    the measurement hadn't seen— the converter leaves an unversioned
-   `usos.json` with who asks for each one.
+   `uses.json` with who asks for each one.
 5. The merge: `release` carries all the maps and all the cases, with
    `PRIMERO = "nada"`; `test-main` no longer exists. The harness gets past the
    title on its own (`Cartucho.titulo`), `reiniciar()` comes back through
    "Resume" and the two GameOver tests get past the title. The "no title"
-   control of `test_guardar_save_point` was lost: there's no ROM without a
+   control of `test_save_at_save_point` was lost: there's no ROM without a
    title left that reaches 8.
 
 Measured at the merge:
@@ -242,11 +242,11 @@ Measured at the merge:
 
 Then, on the branch with `main` merged (`4d33549`):
 
-* `just pruebas`: 640 green. Without `main` it was 633: the 632 from before,
-  plus three new tests (stale patches, `donde_esta`, `de_prueba`) and minus the
+* `just tests`: 640 green. Without `main` it was 633: the 632 from before,
+  plus three new tests (stale patches, `where_is`, `de_prueba`) and minus the
   two cases of `test_protocolo` and `test_ensamblar` that were parametrized by
   `test-main`. `test_cores.py` green three times.
-* `just cartuchos` cold: 235 s —`release` 150, the tracks and `test-special`
+* `just cartridges` cold: 235 s —`release` 150, the tracks and `test-special`
   85—, against 266 before. The `gunter` on the PATH changed in the middle of
   `test-special`, so that stretch isn't clean.
 * Space, adding up the `.dbg`'s segments: `release` goes from 70.9% to 86.5%

@@ -9,7 +9,7 @@ status: done
 ends**: the hero stays floating halfway through the arc. taro saw it on map 11,
 when Talan jumps in fright and stays halfway while talking.
 
-Measured on 2026-09-22, with the case `camara-salto-colgado` which was left in the repo
+Measured on 2026-09-22, with the case `camera-jump-stuck` which was left in the repo
 without a test: `ruta_salto` stays at 232 and `hero_y` at 323, with the
 destination cell at `tile_y = 22`, indefinitely.
 
@@ -47,8 +47,8 @@ once per frame for every occupied slot, without looking at the order counter, an
 shows if someone gives them the guard `move_hero` had.
 
 **No golden moved, and that does not mean the fix does not show**: the only case
-in the suite that steps on map 11 is `en-11`, which goes in and nothing more —it is used by
-`test_paralelos`, without a golden—. The moment taro sees is not executed by any
+in the suite that steps on map 11 is `in-11`, which goes in and nothing more —it is used by
+`test_parallels`, without a golden—. The moment taro sees is not executed by any
 test, which is the usual failure mode.
 
 ## The camera jerk, checked
@@ -57,12 +57,12 @@ With the fix **there is no case left that slides the camera more than one row pe
 loop other than the hero at speed 6 plus a pan**. Measured over the cases
 of the test cartridge, 240 loops each, counting only the loops without
 a map change or a cell jump: the only ones over 8 px are
-`camara-veloz` and `camara-veloz-x`, with exactly 16 px, which is the worst case that was already
+`camera-fast` and `camera-fast-x`, with exactly 16 px, which is the worst case that was already
 measured.
 
 What showed up while measuring: **no case in the cartridge reproduces the jerk of the sudden landing**,
 neither before nor after the fix. The big jerks
-of `en-4` and `talan` —256 and 192 px— are teleports to the same map, which
+of `in-4` and `talan` —256 and 192 px— are teleports to the same map, which
 write `hero_y` and call `fill_window`, so they never owed a row to
 `stream_map`.
 
@@ -71,7 +71,7 @@ touch `ruta_salto`, so with an arc pending the hero would move up to 29 px
 from where the teleport put him, with the window just filled. **It does not happen, because of
 timing**: the `Teleport` costs the fade —some ninety ticks until the new
 cell appears— and a jump lasts eleven. The case
-`salto-teleport-en-el-aire` was left with its test, so that it is known if that order stops
+`jump-teleport-in-air` was left with its test, so that it is known if that order stops
 holding.
 
 ## What was not done
@@ -80,7 +80,7 @@ holding.
   of speed 4, while the events take it from `salto_por_vel` like
   RM2k's `jump_speed[move_speed - 1]`. An `increase_movement_speed` on the
   hero changes its step and not its jump. It was already like that, and this fix does not touch it.
-* **taro has not played it yet.** What was run is `just pruebas`.
+* **taro has not played it yet.** What was run is `just tests`.
 
 # Played
 

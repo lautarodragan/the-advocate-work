@@ -16,7 +16,7 @@ all their uses in `tools/` and in `rom/pruebas/`. The folder names too:
 
 One module per commit, and each one verified on its own: `SIN_CACHE=1 just
 cartuchos` with the `.sfc`, `.msu`, `.pcm`, `.inc` and `.dbg` (without the
-date) identical to those of `c60949e0`, `just pruebas`, `just -f tools/justfile
+date) identical to those of `c60949e0`, `just tests`, `just -f tools/justfile
 pruebas`, pyflakes without new warnings, and a check that each
 `modulo.nombre` of these packages exists. The renames are done by a script by
 tokens —not by text—, so it does not go into the strings: what is data is not
@@ -26,7 +26,7 @@ searched for separately with grep.
 ## Done
 
 1. `comun/` → `common/`, the folder alone.
-2. `proyecto.py` → `project.py`, with `--proyecto` → `--project`.
+2. `project.py` → `project.py`, with `--proyecto` → `--project`.
 3. `perillas.py` → `settings.py`.
 4. `ambiente.py` → `environment.py`, with `--reemplazos` → `--replacements` and `--compartido` → `--shared`.
 5. `cache_disco.py` → `disk_cache.py`.
@@ -53,13 +53,13 @@ It is all data or belongs to another area:
 
 * **The keys and values that are in the game's files or that something else
   reads**: those of `rom/data/`, those of the fork's ChipSet recipe (`podar`,
-  `desde_imagen`, `cabeza`…), the `arbol` of a new map, the cache categories
+  `from_image`, `cabeza`…), the `arbol` of a new map, the cache categories
   (`capas`, `brr`, `muestras`, `msu`), the CharSet suffixes (`~trama`,
   `~horneado`, `~aparte`), the names of the patterns (`damero`,
   `cinco_de_ocho`…), the families `agua` and `animado`, the output folder
-  `parches-manual/`.
+  `patches-manual/`.
 * **The keys of each NPC's dictionary** that `rm2k.collect_npcs` builds
-  (`evento`, `cambia`, `graficos`, `tile_pasa`, `velocidad`…): they are the
+  (`event`, `cambia`, `graficos`, `tile_pasa`, `velocidad`…): they are the
   interface with the converter, which reads them in `port/`. They change with
   that area.
 * **The environment variables** `SIN_CACHE`, `TRAMA_PATRON` and
@@ -69,7 +69,7 @@ It is all data or belongs to another area:
   `snes_music.Banco`, which belongs to `audio/`.
 * **The variables and constants inside the tests of `tools/pruebas/`**: the
   request asked for the files and the functions.
-* **The homonyms from other areas**: `batalla.py` has its `self.activos`,
+* **The homonyms from other areas**: `battle.py` has its `self.activos`,
   `eventos.py` its `estado.lider()` and its `self.donde`, `Partida` its
   `correr` and `imagen`, and the runtime its routines `cargar_mapa` and
   `grafico_de_pagina`.

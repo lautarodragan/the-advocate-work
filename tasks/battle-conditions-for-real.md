@@ -69,9 +69,9 @@ actors have none. That is the scope; what stays out goes to a divergence.
   in `ba_enemy_actions`, `ba_execute`, `ba_attack`, `ba_skill_hp`,
   `ba_skill_one` and `ba_message`. The converter emits `state_*`, one row
   per LDB condition, and their two messages as texts.
-* The test: `pruebas/rpgmaker/test_condiciones_de_pelea_golden.py` in the
-  ports, with the new case `pelea-controlar` (troop 111, the droid and the
-  rat, 803 on) and `pelea-inscribir`.
+* The test: `tests/rpgmaker/test_battle_conditions_golden.py` in the
+  ports, with the new case `battle-control` (troop 111, the droid and the
+  rat, 803 on) and `battle-inscribe`.
 * The book: the divergence `what-battle-conditions-do-not-model`, and the
   three that said the battle had none.
 
@@ -116,9 +116,9 @@ the only new refusal —taking the dead condition away— no game asks for.
 `rm2k-snes-events culprits` was not run.
 
 **Verified**: ABL's suite whole with these tools, green after merging main (1261 cases), the fingerprint of `abl.sfc` `ebfaf414…`, with the new
-`test_condiciones_de_pelea_golden.py` red with main's tools; `just test`,
+`test_battle_conditions_golden.py` red with main's tools; `just test`,
 and `cargo test` of battle, events, mapdata, cartridge and bytecode;
-`just arrancan` of the ports, the eight, green. Compared with the original
+`just boot` of the ports, the eight, green. Compared with the original
 under Wine (troop 111 with ControlMachines on turn 0): the droid is freed
 by a hit and says so, under the damage.
 

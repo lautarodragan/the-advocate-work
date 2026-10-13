@@ -68,7 +68,7 @@ How, in short:
   rows), and a switched-to System is reduced to fit it: otherwise the maps
   lose colours to a second System. First tried with the max over Systems:
   A Blurred Line's map 7 patches moved for the test cartridge
-  (`test_parches` red), and Sunset's painted maps stopped the build.
+  (`test_patches` red), and Sunset's painted maps stopped the build.
 * Runtime: `window_system.s`, `WINDOW_NOW` (24 bytes of FARBSS) copied
   from `window_systems` at each map load and by the opcode; every reader of
   the window goes through `win_*` macros, which with one System assemble
@@ -88,10 +88,10 @@ column, a clean vertical gradient), `Stone = "#787068"` (the colour of most
 of its square; the joints are lost), `Wood = "#6a4c29"` (the mean of its
 89-colour grain). Measured with PIL over each System's 32x32 square.
 
-ABL: cartridge `test-change-system` (map 7, cases `system-cambia`,
-`system-guardar`, `system-barra`, `system-barra-sin-fondo`,
-`system-flecha-sin-fondo`), test `test_cambiar_system_golden.py`: the
-first window is `flecha-abajo`'s golden pixel for pixel; then Royal (RTP)
+ABL: cartridge `test-change-system` (map 7, cases `system-changes`,
+`system-save`, `system-bar`, `system-bar-no-background`,
+`system-arrow-no-background`), test `test_change_system_golden.py`: the
+first window is `arrow-down`'s golden pixel for pixel; then Royal (RTP)
 over `#1c2c5c`; bars and bare arrow; snes9x vs bsnes; the System through
 save + reset. Red against main's tools. Royal was chosen over BLSys
 because its one-colour text adds no entry to ablskin.
@@ -104,7 +104,7 @@ because its one-colour text adds no entry to ablskin.
   VRAM: the window's tiles padded to the largest frame (Desert Nightmare 9
   -> 13 tiles, 128 B).
 * Bank 0: -8 B for every cartridge (the opcode's handler and dispatch
-  entry); -81 B more for one that switches. `just espacio`-style
+  entry); -81 B more for one that switches. `just space`-style
   (`rm2k-snes-space` on each release ROM), main -> branch: ABL 1,555 ->
   1,547; Desert Nightmare 1,701 -> 1,620; Sunset 1,633 -> 1,552; VD
   1,670 -> 1,589. Free data banks: ABL 23 -> 23, DN 13 -> 12, Sunset 21 ->
@@ -123,11 +123,11 @@ because its one-colour text adds no entry to ablskin.
 ### Verified
 
 A Blurred Line's suite green on the merged tree (1,250 tests); `just test`
-and `just rust-test` green; `just arrancan` green for the seven ports and
+and `just rust-test` green; `just boot` green for the seven ports and
 Sunset's painted goldens, on the merged tree. Captures in
 `~/scratch/cardon/capturas/2026-10-12-change-system/` with LEEME.txt.
 
-Not covered by any test, also in ABL's `pruebas/UNTESTED.md`: the swap
+Not covered by any test, also in ABL's `tests/UNTESTED.md`: the swap
 with a big picture up or a window open; the framed window at the top or
 middle with another System; the four-line backdrop with several Systems;
 a troop page switching; Game Over / End Game after a switch.

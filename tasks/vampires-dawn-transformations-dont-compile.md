@@ -21,5 +21,5 @@ the event compiler), and that table holds eight (`ROUTE_GFX_MAX`): the
 game's map pages already name eleven pairs, and `rs3monst` 3 is not among
 them. The `Loop`s these bodies have compile since `f0fd7e18`.
 
-**How to see it**: `just cartuchos release` in `vampires-dawn/`, and the
-line "parallel common events" of `build/release/conversor.log`.
+**How to see it**: `just cartridges release` in `vampires-dawn/`, and the
+line "parallel common events" of `build/release/converter.log`.

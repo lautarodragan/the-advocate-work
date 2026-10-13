@@ -101,19 +101,19 @@ Measured over the game on 2026-09-27 (throwaway script):
   snes9x and bsnes): a battle at the arrival on 66. Without `.msu`, `ESC_FONDO` is the
   number of plains6 computed from the game (tile → ChipSet terrain → terrain
   background) and the clean background in WRAM is the light replacement, not
-  zeros: golden `msu-mundo-rom`. With `.msu`, `ESC_MSU` at 1 and the clean one is
-  quality plains6: golden `msu-mundo-msu`.
-* `test_msu_la_rom_sabe_donde_esta_cada_fondo`: in addition, each background in its
+  zeros: golden `msu-world-rom`. With `.msu`, `ESC_MSU` at 1 and the clean one is
+  quality plains6: golden `msu-world-msu`.
+* `test_msu_the_rom_knows_where_each_backdrop_is`: in addition, each background in its
   fixed place, `MSU_FONDOS_N == FONDOS_JUEGO == 45`, and the backgrounds region
   byte-for-byte identical in the `.msu` of both cartridges.
-* `test_batalla_escena_dibujo`: the fallback's colours are read with
+* `test_battle_scene_drawing`: the fallback's colours are read with
   `ESC_RESPALDO`.
-* `test_escena_una_pelea_del_lugar_usa_el_fondo_del_mapa` (new): the case
-  `pelea-113` fights with "the place's" background on 60, which names
+* `test_scene_a_place_battle_uses_the_maps_backdrop` (new): the case
+  `battle-113` fights with "the place's" background on 60, which names
   `SJBackdropABL01`; `ESC_FONDO` is that one and the clean one is the replacement.
-* **Verified** with `just cartuchos` and `just pruebas` on this branch before
+* **Verified** with `just cartridges` and `just tests` on this branch before
   the merge: all green, and **no old golden changed**. The only
-  new ones are `msu-mundo-rom` and `msu-mundo-msu`.
+  new ones are `msu-world-rom` and `msu-world-msu`.
 * What **no test runs**: the terrain under the hero with a
   `TileSubstitution` set (the lookup of `esc_terreno` is copied from
   `celda_sustituida`, which the suite does exercise through `op_terrain`), and a map
@@ -126,7 +126,7 @@ the ROM now come out on the replacement: the world, 158 and 210 (terrain), and
 in `release` also those of the maps that name a background the ROM does not
 carry, like Sector 27's Warehouse (`SJBackdropABL01`). And two things the
 port did differently from RM2k and now does not: an `EnemyEncounter` with "the
-place's" background (105 and 141 in the game, and the case `pelea-113`) came out without a background, and a
+place's" background (105 and 141 in the game, and the case `battle-113`) came out without a background, and a
 map that goes up to the root without naming a background was treated as without one; both
 are "the terrain's" in easyrpg. No golden of the suite looks at those
 battles.

@@ -26,7 +26,7 @@ a voice is chosen. Across the 22 themes of `release` there were 564 notes releas
 early and 11,024 notes without a sample taking up a voice; the stream shrank 11.3%. The
 numbers theme by theme and how they were measured, in point 1 of
 `quality-of-the-music.md`; it is enforced by
-`pruebas/herramientas/test_musica_stream.py`.
+`tests/tooling/test_musica_stream.py`.
 
 **For taro**: it is in `testing/` because it can be heard —a little: mostly the bass of
 `escape_newyork` and that of `cd4`, which are no longer cut off early—. The recordings,

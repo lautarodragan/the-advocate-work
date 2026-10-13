@@ -14,7 +14,7 @@ for the menu— and, if it doesn't fit, the game starts without a title, with
 a WARNING. No task follows it.
 
 **Checked today** (the-advocate `fc6f7456`, ports `a85b7e3`, built in a
-worktree of their own), from each release's `conversor.log`:
+worktree of their own), from each release's `converter.log`:
 
 | game | picture | picture tiles |
 |---|---|---|
@@ -29,8 +29,8 @@ built today.
 without the title screen or its New Game / Continue / Quit menu. How a saved
 game is loaded in those cartridges wasn't looked at.
 
-**How to see it**: `just cartuchos release` in the game's directory and
-`grep "title screen" build/release/conversor.log`.
+**How to see it**: `just cartridges release` in the game's directory and
+`grep "title screen" build/release/converter.log`.
 
 ## The plan
 
@@ -100,14 +100,14 @@ like ABL: saved from the pause menu (access forced from outside), reset,
 "Load", slot 1, and the three come back to the same map and cell.
 
 **ABL's suite gets a case**: the cartridge `test-title-4bpp` (map 6,
-`--title-4bpp`) and four goldens in `test_titulo_golden.py` —the title,
+`--title-4bpp`) and four goldens in `test_title_golden.py` —the title,
 the cursor down, back from the slots with B, and map 6 after "Begin the
 Story", which is pixel for pixel the same as on the same cartridge
 without the flag—. Without the line that sets mode 1 the three of the
 title go red.
 
 **What the suite doesn't cover**: none of the three games has a golden
-of its title —`just arrancan` only passes it with A—, so how each one
+of its title —`just boot` only passes it with A—, so how each one
 looks at 4bpp was looked at by hand (captures, next to the picture), not
 frozen; saving and loading through the title in those three was run by
 hand once, not by a test; and the 4bpp path with a title that isn't
@@ -116,5 +116,5 @@ hand once, not by a test; and the 4bpp path with a title that isn't
 **To merge**: the-advocate `carpintero-titulo-4bpp` (reinstall `convert`,
 `mapdata` and `cartridge`), the-advocate-ports `carpintero-titulo-4bpp`
 (four goldens in their own commit, and a fix to
-`test_msu_la_rom_sabe_donde_esta_cada_fondo`, which the new cartridge
+`test_msu_the_rom_knows_where_each_backdrop_is`, which the new cartridge
 turned red), the-advocate-docs `carpintero-titulo-4bpp`.

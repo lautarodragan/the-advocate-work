@@ -22,7 +22,7 @@ sound.
 3. **Three effects at once is rare**: if the cases are due to an effect with
    a long tail (fade out), the simplest thing is to **edit that effect** —
    trim its tail— with the patch system that already exists
-   (`parches/manual/`, see `parches/README.md`), instead of adding voices.
+   (`patches/manual/`, see `patches/README.md`), instead of adding voices.
 
 ## taro, on 2026-10-11
 
@@ -73,11 +73,11 @@ are per package and the allocator does not look at them.
 
 **How it was checked**:
 
-* new test in ABL, `test_con_msu_la_lluvia_que_vuelve_no_corta_la_anterior`
-  in `pruebas/abl/test_msu_efectos.py`: red before ("in tick 551 the rain
+* new test in ABL, `test_with_msu_the_returning_rain_does_not_cut_the_previous_one`
+  in `tests/abl/test_msu_effects.py`: red before ("in tick 551 the rain
   started again on voice 7, which still had 61 frames of the previous
   one"), green after (the new one on voice 6, both sounding).
-* **without MSU-1, unchanged**: 25 s of map 1 (case `relampago`) recorded
+* **without MSU-1, unchanged**: 25 s of map 1 (case `lightning`) recorded
   from the core with the ROM before and after: the audio is byte for byte
   equal. And the whole suite, which runs without MSU-1.
 
@@ -94,6 +94,6 @@ wavs with MSU-1 the same day and declared it fixed: done.
 
 * the-advocate `mulita-voces`: the runtime only, no Rust. **Nothing to
   reinstall**: the global tools assemble the runtime of `~/the-advocate`,
-  so the merge there is enough for the next `just cartuchos`.
+  so the merge there is enough for the next `just cartridges`.
 * the-advocate-ports `mulita-voces`: the test and the suite's README.
 * the-advocate-docs `mulita-voces`: internals/audio.md and the known issue.

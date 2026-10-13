@@ -13,7 +13,7 @@ authorisation of 2026-09-29 to decide without waiting for him:
 - **The tools find the project the way cargo finds its own**:
   they look for `rm2k-snes.toml` upwards from the current directory, or
   receive it through `--proyecto <dir>`. `proyecto.abl()` disappears.
-- **The project's paths** (`data/`, `parches/`, `build/`, whatever is
+- **The project's paths** (`data/`, `patches/`, `build/`, whatever is
   needed) **are declared by the file**, relative to it. The runtime isn't: it belongs to
   the tools.
 - **The environment arrives through flags** (`--game-dir`, `--rtp-dir`,
@@ -23,9 +23,9 @@ authorisation of 2026-09-29 to decide without waiting for him:
 
 ## How it's going (Timbó, 2026-09-29)
 
-Each commit's safety net: `SIN_CACHE=1 just cartuchos` before touching anything and
+Each commit's safety net: `SIN_CACHE=1 just cartridges` before touching anything and
 after each one, with the sha256 of all of `rom/build/` —Molle's script,
-with the same criterion: without `cache/`, `.o`, `sello.txt` or `conversor.log`, and
+with the same criterion: without `cache/`, `.o`, `stamp.txt` or `converter.log`, and
 the `.dbg` files without `mtime`—.
 
 1. **Finding the project.** `proyecto.directorio()` looks for `rm2k-snes.toml`
@@ -37,7 +37,7 @@ the `.dbg` files without `mtime`—.
    find it, `NoHayProyecto` —a `SystemExit`, so the executable stops with
    the message and no traceback— says where it searched from.
    - **Nothing is computed on import.** The constants that came from the project
-     —`lcf.DATOS`, `fork.MAPAS`/`NUEVOS`/`CHIPSETS`/`DEL_JUEGO`,
+     —`lcf.DATOS`, `fork.MAPS`/`NUEVOS`/`CHIPSETS`/`DEL_JUEGO`,
      `chipset_del_fork.GENERADO`, `snes_music.TECHOS`, `cache_disco.DONDE`,
      `techos.MEDIDA`— became functions or are computed inside the one
      that uses them. Otherwise, importing the converter from `tools/` —which the
@@ -52,8 +52,8 @@ the `.dbg` files without `mtime`—.
      paths that end up in the `.dbg` are—, so `cartuchos` passes it
      `--proyecto`.
    - **ABL's tests set the project by their location**:
-     `pruebas/arnes/lugares.py`, which `conftest.py`,
-     `consola.py` and `video.py` import first.
+     `tests/harness/places.py`, which `conftest.py`,
+     `console.py` and `video.py` import first.
    - `render_map` still also looks for resources in `proyecto.raiz()`: it's
      from 2026-08-31 (`00d96428`, when the RTP could live in the repo) and today
      it finds nothing there, because the root has no RM2k folders. It isn't
@@ -64,20 +64,20 @@ the `.dbg` files without `mtime`—.
        data = "data"
        patches = "parches"
        build = "build"
-       cases = "pruebas/casos"
+       cases = "tests/cases"
 
    `proyecto.build()`, `data()`, `parches()` and `casos()` read them from there.
-   What's inside `parches/` (`manual/`, `auto/`) and `build/`
+   What's inside `patches/` (`manual/`, `auto/`) and `build/`
    (`release/`, `tests/`, `cache/`, `techos/`) still belongs to the
    tools: it's the shape they give it, not a decision of the game.
    - **What goes in and what doesn't, with the brief's criterion: it belongs in the file if
-     a tool reads it.** `cases` goes in even though it lives in `pruebas/`, because
+     a tool reads it.** `cases` goes in even though it lives in `tests/`, because
      `rm2k-snes-cartridges` reads it. The goldens and snapshots don't: only
      ABL's tests read them, which know them by their own location, in
-     `pruebas/arnes/lugares.py` (`GOLDENS`, `SNAPSHOTS`).
+     `tests/harness/places.py` (`GOLDENS`, `SNAPSHOTS`).
      `proyecto.pruebas()`, `goldens()` and `snapshots()` disappear.
    - `test_perillas_repetidas.py` doesn't look at `[paths]`: its values are folder
-     names, and the tools use `parches/auto/` as the shape of each
+     names, and the tools use `patches/auto/` as the shape of each
      cartridge's directory. Building a game path by hand with those
      words is caught by `test_proyecto.py`, which looks at paths.
 3. **The environment through flags**, with Molle's plan: `comun/ambiente.py` is
@@ -105,13 +105,13 @@ the `.dbg` files without `mtime`—.
      takes those same ones.
    - **`rom/justfile` translates.** It exports `ABL_GAME_DIR`, `ABL_RTP_DIR`,
      `ABL_SOUNDFONT` and `SHARED` with the same default values as
-     before, and `ABL_CACHE` and `CARTUCHOS` empty if they're not set; it builds
+     before, and `ABL_CACHE` and `CARTRIDGES` empty if they're not set; it builds
      `al_conversor` and `al_armar` and passes them to each recipe that runs a
      tool. The replacements, which had no variable, are left as the
      `justfile`'s `reemplazos_msu`. `datos` and `datos-vuelta` use the
      exported one instead of repeating the value.
    - **ABL's tests read the variables themselves**, in
-     `pruebas/arnes/lugares.py`, and set `ambiente` with that: they're the ones the
+     `tests/harness/places.py`, and set `ambiente` with that: they're the ones the
      `justfile` exports. Without them —a standalone `pytest` without the
      variables— they stop saying which is missing, instead of having a second
      copy of the machine's values. `test_hover_tram.py` stopped
@@ -132,7 +132,7 @@ the `.dbg` files without `mtime`—.
    string without blanks that starts with `rom/` or has `/rom/`. It doesn't look at the
    prose —docstrings, `help=`, the messages, which carry blanks— nor the
    `[rom]` section of the project file, which is a key name. And
-   `proyecto.py` stops being the exception in Tipa's: it no longer has the
+   `project.py` stops being the exception in Tipa's: it no longer has the
    machine's values.
    - Shown to fail: with `os.environ.get("ABL_GAME_DIR")` added to
      `comun/ambiente.py` and `"rom/data/maps"` to `rpgmaker/fork.py`, both
@@ -144,10 +144,10 @@ the `.dbg` files without `mtime`—.
 
 ## What changes for taro on the host
 
-**Nothing in the recipes or in the variables**: `just cartuchos`, `just build
-release`, `just pruebas`, `just espacio`, `just parches`, `just techos`,
-`just entregar` and `just video` are called the same way, and `ABL_GAME_DIR`,
-`ABL_RTP_DIR`, `ABL_SOUNDFONT`, `ABL_CACHE`, `CARTUCHOS` and `SHARED` point
+**Nothing in the recipes or in the variables**: `just cartridges`, `just build
+release`, `just tests`, `just space`, `just patches`, `just ceilings`,
+`just deliver` and `just video` are called the same way, and `ABL_GAME_DIR`,
+`ABL_RTP_DIR`, `ABL_SOUNDFONT`, `ABL_CACHE`, `CARTRIDGES` and `SHARED` point
 to the same things, with the same default values —now in `rom/justfile`—.
 What changes:
 
@@ -162,7 +162,7 @@ What changes:
 
 ## Verified
 
-* `SIN_CACHE=1 just cartuchos` and the sha256 of `rom/build/` before touching
+* `SIN_CACHE=1 just cartridges` and the sha256 of `rom/build/` before touching
   anything and after each commit that touches what it builds (1, 2 and 3) and at the end:
   **995 files identical**, with the `.sfc`, `.msu`, `.pcm`, `.sym` and the
   `.inc` files inside. The two tracks that come from a replacement came from it
@@ -173,7 +173,7 @@ What changes:
       fb6db844…0617   build/tests/special/prueba.sfc
       d9e96eab…1578   build/tests/special/prueba.msu
 
-* `just pruebas`: 867, at each commit and at the end.
+* `just tests`: 867, at each commit and at the end.
   `just -f tools/justfile pruebas`: 132 and 2 skipped, and 134 with
   `SOUNDFONT`. It was 122: the ten new ones are the step 4 safety net's.
 * Without ABL: `rm2k-snes-cartridges --lista` from `/tmp` stops with "no
@@ -182,16 +182,16 @@ What changes:
   from `/tmp`, `rm2k-snes-cartridges --lista`, `rm2k-snes-patches
   --check` and `rm2k-snes-space release` work. The converter without `--game-dir` stops
   with "falta --game-dir…".
-* By hand: `just espacio release`, `just parches-check`, `just techos
+* By hand: `just space release`, `just patches-check`, `just ceilings
   --medir`, `rm2k-snes-msu` on `release`, and `video.py --help` with and without
   the variables.
-* `test_lado_de_abl.py` wasn't touched.
+* `test_abl_side.py` wasn't touched.
 * `main` hasn't moved since `9e276429`: there was nothing to merge.
 
 ## What wasn't done
 
-* **`just entregar` wasn't run**: its line was looked at with `--dry-run`.
-  Nor the whole of `just techos` —it writes the table—, only `--medir`.
+* **`just deliver` wasn't run**: its line was looked at with `--dry-run`.
+  Nor the whole of `just ceilings` —it writes the table—, only `--medir`.
 * **`raiz()` remains in two places that aren't for reaching ABL**: the
   directory where the converter and `ca65` run —the relative paths of the
   `.dbg` and of the `.inc` files come from there, and changing it changes the `.dbg`—, and
@@ -200,6 +200,6 @@ What changes:
 * **The pre-parsing of `--proyecto`** exists because `cartuchos` and `entregar`
   read the file on import. If they stop doing that, each `main`'s
   `parse_args` is enough.
-* **The internal shape of `build/` and `parches/`** —`release/`,
+* **The internal shape of `build/` and `patches/`** —`release/`,
   `tests/`, `manual/`, `auto/`— still belongs to the tools. If another
   game wanted a different one, it would mean more `[paths]` keys.

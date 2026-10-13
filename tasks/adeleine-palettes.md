@@ -36,7 +36,7 @@ Codex was cut off twice by the usage limit, with the code committed
 - Uruya at 4bpp: **64 colors** distinct, against 19 of the previous algorithm and
   73 of Calandria's script.
 - ABL: 319 goldens change, all of color in backgrounds, panoramas and pictures;
-  side by side in `/shared/capturas/2026-10-06-paletas-adeleine/`. Hornero looked at
+  side by side in `/shared/captures/2026-10-06-paletas-adeleine/`. Hornero looked at
   the sheets and a sample at real size: none looks worse.
 - The percentage of changed pixels in ABL was not measured, nor mode 3, which the
   assignment asked for; the task stays without that table.

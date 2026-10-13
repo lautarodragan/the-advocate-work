@@ -21,7 +21,7 @@ This is only the mock-up: images to look at, without changing the ROM.
 
 ## What was built (Ñacurutú, 2026-09-30)
 
-The images are in `/shared/capturas/2026-09-30-menu-alta-resolucion/`,
+The images are in `/shared/captures/2026-09-30-menu-alta-resolucion/`,
 with a `LEEME.txt` that says what each one is: the original, today's menu,
 mode 5 with three scaling criteria, the two alternatives at 256, each one
 as an emulator shows it (512x448), a sheet with all of them at the same physical

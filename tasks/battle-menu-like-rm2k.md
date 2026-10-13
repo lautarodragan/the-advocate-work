@@ -48,7 +48,7 @@ nothing on top. What's seen, from left to right:
   the **victory** go in a full-width window, from top to bottom, and nothing
   else is visible.
 
-The screenshots, in `/shared/capturas/2026-10-04-menu-de-la-pelea/original/`.
+The screenshots, in `/shared/captures/2026-10-04-menu-de-la-pelea/original/`.
 
 ### The plan
 
@@ -116,7 +116,7 @@ tile—. Opcodes: none.
   side by side; repeated until no new red appeared (the two `msu-*-msu`
   appeared in the second round, because their test stopped at the first
   golden): **1072 green**.
-* Two new tests: `test_huir_es_del_grupo` and `test_sin_huida_no_hay_escape`.
+* Two new tests: `test_escape_is_the_partys` and `test_without_escape_there_is_no_escape`.
 * `cargo test` of `rm2k-snes-battle`, `-events`, `-mapdata` and `-convert`;
   `just -f tools/justfile test`: 27.
 * What the suite doesn't cover: the scrolling of the enemy list —no test troop
@@ -128,7 +128,7 @@ tile—. Opcodes: none.
 A battle that can be fled and one that can't; the item and skill lists with
 the cursor going through them; Attack with several enemies; Escape, and that
 if it fails only the enemies act. The screenshots, with the original under
-Wine alongside, in `/shared/capturas/2026-10-04-menu-de-la-pelea/`.
+Wine alongside, in `/shared/captures/2026-10-04-menu-de-la-pelea/`.
 
 The second round, below, replaces what needs reinstalling.
 
@@ -173,7 +173,7 @@ of the touched crates and `just -f tools/justfile test`: 27. Not covered: the
 shaking with the windows (looked at by hand), a battle without a scene and the
 scrolling of the enemy list.
 
-Screenshots: `/shared/capturas/2026-10-04-menu-de-la-pelea-2/`.
+Screenshots: `/shared/captures/2026-10-04-menu-de-la-pelea-2/`.
 
 When merging, reinstall `battle`, `events`, `screens`, `mapdata` and
 `convert`.

@@ -16,7 +16,7 @@ that the title could use them, and measured:
     light in the ROM + quality in .msu   2,483 B   (saves 29 KB)
 
 taro chose the second: only compress. The title screen has to come out the
-same pixel for pixel: the `titulo` golden does not change.
+same pixel for pixel: the `title` golden does not change.
 
 2026-09-28, in `testing/`: done by Chajá on his branch, over `main` at
 2df404b7. What is left is taro's: see "What taro has to test".
@@ -53,12 +53,12 @@ same pixel for pixel: the `titulo` golden does not change.
   set TMW and CGWSEL to zero, which the Game Over does not care about
   because the reset follows it; the map follows the title, and with TMW at
   zero the message window stopped covering the objects: nine goldens red
-  (`ventana`, `hablar-60`, `apertura-830`…), green again with TMW at $10 and
+  (`window`, `talk-60`, `apertura-830`…), green again with TMW at $10 and
   CGWSEL at $30, the values of `ppu_altos`.
 
 # The frames
 
-Measured with snes9x, frame by frame from reset, against the `titulo`
+Measured with snes9x, frame by frame from reset, against the `title`
 golden (throwaway scripts):
 
                                          before  decompressing     at
@@ -79,7 +79,7 @@ it looks after ROMs without a title.
 
 # Space
 
-`just espacio release`, before (2df404b7) and after:
+`just space release`, before (2df404b7) and after:
 
     data banks       115 of 124, 9 free          115 of 124, 9 free
     gaps             15,250 B                    32,139 B
@@ -93,14 +93,14 @@ bank. Bank 0 gains 125 B: three `titulo_subir` DMAs that went away.
 
 # Tests
 
-No new ones and no golden changed. `titulo`, `titulo-2`,
-`titulo-ranuras`, `titulo-ranuras2`, `game-over` and the `CINEMATICAS` come
+No new ones and no golden changed. `title`, `title-2`,
+`title-slots`, `title-slots2`, `game-over` and the `CINEMATICAS` come
 out the same.
 
-**A path that `just pruebas` does not execute**: cancelling the slots
+**A path that `just tests` does not execute**: cancelling the slots
 screen with B and returning to the title, which now uploads the image
 **without** decompressing it again. No test returns to the title that way.
 I ran it by hand with a throwaway script —the capture comes out equal to the
-`titulo` golden, two frames after the B, as before— but with empty SRAM:
+`title` golden, two frames after the B, as before— but with empty SRAM:
 with filled slots the screen draws more things, and none of them writes
 bank $7F according to the code, not according to a test.

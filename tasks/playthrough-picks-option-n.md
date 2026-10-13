@@ -7,7 +7,7 @@ status: done
 
 # What
 
-`Recorrido` —`pruebas/arnes/recorrido.py`— only confirms a `ShowChoice`
+`Recorrido` —`tests/harness/playthrough.py`— only confirms a `ShowChoice`
 with the top option: it presses A without moving the cursor. We need to
 **pick option N**: move the cursor down N times, check in RAM that it ended
 up where requested, and only then confirm.
@@ -29,7 +29,7 @@ precisely because of this.
 # What is already known
 
 - **A press can get lost**: the ROM reads the pad once per loop and a loop
-  can last several frames. `Recorrido.mirar_a` already solved the same thing
+  can last several frames. `Recorrido.look_at` already solved the same thing
   for turning while checking RAM; the same method is advisable (see
   `neon-vipers-walkthrough.md`, "Un agujero del arnés").
 - **The window ignores the button while composing**: no presses in the
@@ -57,7 +57,7 @@ with the cursor in place.
 Everything through RAM and no frames counted:
 
 - **open** is `eleg_activo` and `msg_abierto` together, like `abierta` in
-  `test_elegir.py`: `op_choice` turns on the first before the window
+  `test_choose.py`: `op_choice` turns on the first before the window
   finishes composing, and `eleccion_tick` does not look at the pad until the
   second;
 - **the A that closes the messages** is pressed only with a message open and
@@ -71,10 +71,10 @@ Everything through RAM and no frames counted:
   passing.
 
 `activar` still presses A blindly after the first press, so before an
-`elegir` it has to be cut as soon as the page starts:
-`activar(celda, lambda p: p.corriendo_una_pagina())`.
+`choose` it has to be cut as soon as the page starts:
+`activar(celda, lambda p: p.running_a_page())`.
 
-**The test**: `pruebas/abl/test_recorrido_vipers_otras_ramas_golden.py`,
+**The test**: `tests/abl/test_playthrough_vipers_other_branches_golden.py`,
 which plays the "No" branch of the hotplate cinematic, the two options of
 the fence and map 14 —see `other-branch-of-the-neon-vipers-cutscene.md`—. **Seen
 red** with the top option instead of the second: the "No" one ends at

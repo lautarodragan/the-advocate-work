@@ -50,7 +50,7 @@ load: some seven tenths of a second more of black.
 How it is verified, because the suite does not measure audio: the ARAM is read
 from the core's saved state —`retro_serialize`, locating the driver— and each
 sample the ROM says it has is compared with the cartridge's byte by byte, with
-its directory entry. And `pruebas/rpgmaker/test_musica_paquete.py` enforces it
+its directory entry. And `tests/rpgmaker/test_music_package.py` enforces it
 on its own: for the theme the ROM says it is playing, that each sample in its
 `tema_muestras` has an entry in `FAR_ARAM_DE`. A state test is needed because
 **silence does not change a pixel**, and the title screen's theme is the most

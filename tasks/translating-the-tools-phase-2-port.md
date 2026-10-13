@@ -7,8 +7,8 @@ assignee: taro
 ---
 
 Phase 2 of translating `tools/` into English, third area: `tools/port/`,
-the converter in Python —`snes_convert.py`, `eventos.py`, `batalla.py`,
-`menus.py`, `pantallas.py`, `parches.py` and the rest—, with all their uses in
+the converter in Python —`snes_convert.py`, `eventos.py`, `battle.py`,
+`menus.py`, `screens.py`, `parches.py` and the rest—, with all their uses in
 `tools/` and `rom/pruebas/`. The constants and symbols that the converter
 emits to the assembler (what it writes into the `.inc`s) do **not** go in: they belong to the
 last area, together with the runtime.
@@ -16,9 +16,9 @@ last area, together with the runtime.
 ## How it goes
 
 One module or a small group per commit, from the leaves towards
-`snes_convert.py`. Each commit: `SIN_CACHE=1 just cartuchos` with all of
-`rom/build/` (except `cache/`, `.o`, `sello.txt` and the mtime of the `.dbg`s)
-byte for byte the same as at `a6fd0d19`, `just pruebas` and
+`snes_convert.py`. Each commit: `SIN_CACHE=1 just cartridges` with all of
+`rom/build/` (except `cache/`, `.o`, `stamp.txt` and the mtime of the `.dbg`s)
+byte for byte the same as at `a6fd0d19`, `just tests` and
 `just -f tools/justfile test` green, pyflakes with no new warnings and the
 `rm2k-snes-*` executables working from `/tmp`.
 
@@ -27,8 +27,8 @@ byte for byte the same as at `a6fd0d19`, `just pruebas` and
    `color`.
 2. `asignador` → `allocator`, `msu_datos` → `msu_data`, `paleta` →
    `palette`, `experiencia` → `experience`, and the names in `tiles_bin`.
-3. `ventana` → `window`, `imagen` → `picture` (the `ShowPicture` sign),
-   `pantalla_completa` → `fullscreen`, `titulo` → `title`, `fin_del_juego` →
+3. `window` → `window`, `imagen` → `picture` (the `ShowPicture` sign),
+   `pantalla_completa` → `fullscreen`, `title` → `title`, `fin_del_juego` →
    `end_game`.
 4. `escena` → `scene`. `snes_convert` also uses it through a local alias
    (`E = escena_mod`), which no rename by import sees: only the
@@ -51,8 +51,8 @@ byte for byte the same as at `a6fd0d19`, `just pruebas` and
    translated: the `.inc` writes them with a string, which doesn't change. The
    runtime keeps calling them in Spanish until the last area, which can
    use the Python names as a guide.
-7. `animacion` → `animation` and `textos` → `texts`.
-8. `batalla` → `battle`, the battle model the tests compare
+7. `animation` → `animation` and `textos` → `texts`.
+8. `battle` → `battle`, the battle model the tests compare
    against: `Batalla` → `Battle`, `Combatiente` → `Combatant`, `Azar` →
    `Rng`, with their attributes and methods also on the side of ABL's
    tests (`esperado.jugar_turno` → `esperado.play_turn`). Three things that
@@ -76,7 +76,7 @@ byte for byte the same as at `a6fd0d19`, `just pruebas` and
     `--test-commands`, `--mapas` → `--maps`, `--inicial` → `--start-index`
     and the separator `--caso` → `--case`, with whoever passes them: `cartridges.py`,
     `ceilings.py` and the `flags` of `rom/rm2k-snes.toml`. The key
-    `aire_de_medida` of `techos.toml` belongs to the TOML and stays.
+    `aire_de_medida` of `ceilings.toml` belongs to the TOML and stays.
 12. `snes_convert`: its ~750 names, the classes `Sustituciones` →
     `Substitutions` and `Materiales` → `Materials`, the attributes it
     hangs on `args` (`imagenes` → `pictures`, `casos` → `cases`…) and the
@@ -101,12 +101,12 @@ byte for byte the same as at `a6fd0d19`, `just pruebas` and
   the same**: `events.GOLD_MAX` is written as `ORO_MAX`, `KEY_DECISION` as
   `TECLA_DECISION`. The last area can take the Python ones as a guide.
 - **The keys of the dictionaries** that travel between modules or to disk —those
-  of `collect_npcs` (`evento`, `cambia`, `graficos`, `tile_pasa`…), those of
+  of `collect_npcs` (`event`, `cambia`, `graficos`, `tile_pasa`…), those of
   `scene` (`clave`, `chico`, `alto_rm`), those of each converted map—, the
   TOMLs of `rom/parches/auto/` with their comments (the battlers'
   `asignador.merge_least_visible` is written by `patches.py`) and
   the file and directory names the tools produce
-  (`rom/build/<cartucho>/asignador/`, `parches/auto/mapas/`).
+  (`rom/build/<cartucho>/asignador/`, `patches/auto/maps/`).
 - **The proper names of ABL's tests**: `rom/pruebas/` stays in
   Spanish, including its aliases of the `tools/` modules
   (`from port import battle as modelo`).

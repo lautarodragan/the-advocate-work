@@ -5,7 +5,7 @@ type: test
 status: done
 ---
 
-`pruebas/abl/test_recorrido_vipers_golden.py` plays the whole stretch through the
+`tests/abl/test_playthrough_vipers_golden.py` plays the whole stretch through the
 **"Yes, I'll do it!"** branch, which is the one that comes out of pressing A without moving the cursor of the
 `ShowChoice`. Three things were left unexecuted, and all three are on the same side:
 
@@ -17,7 +17,7 @@ status: done
 * **map 14**, which with these switches neither branch enters.
 
 To take it the `ShowChoice` cursor has to be moved, which the harness does not do today;
-see `Recorrido.activar` and `mirar_a`. The rest is already there: the path up to the
+see `Recorrido.activar` and `look_at`. The rest is already there: the path up to the
 cutscene is the same, and the detail of each event is written in
 `tasks/neon-vipers-walkthrough.md`.
 
@@ -33,7 +33,7 @@ are precisely the ones left out:
 
 * the `PanScreen` of the scene with the kids and the shop owner —events 51 and
   53 of map 8, at (59,23) and (59,24), which ask for switch 33— **added to the hero
-  walking**, which is the recipe that `pruebas/rpgmaker/test_camara.py` puts together by
+  walking**, which is the recipe that `tests/rpgmaker/test_camera.py` puts together by
   hand;
 * the fence's five-cell jump, which is 7.3 px per frame.
 
@@ -46,9 +46,9 @@ which nobody returns, and the original RPG_RT stays just as shifted. See
 
 ## As of 2026-09-26: covered
 
-`pruebas/abl/test_recorrido_vipers_otras_ramas_golden.py`, with
+`tests/abl/test_playthrough_vipers_other_branches_golden.py`, with
 `Recorrido.elegir` —see `playthrough-picks-option-n.md`—. Three
-cases, which start with `ir_al_mapa` on the HQ's roof and go in through the door:
+cases, which start with `go_to_map` on the HQ's roof and go in through the door:
 the pipe path is already played by the "Yes" stretch.
 
 What was learned reading the events, which the description above had wrong:
@@ -76,5 +76,5 @@ of the kids on map 8.
 
 **A warning for the photos of the "Yes" stretch**: the save that starts through
 "Begin the Story" has DummyHero as leader, actor 10, which has no graphic.
-In `test_recorrido_vipers_golden.py` the photos of 8 and 12 come out **without
+In `test_playthrough_vipers_golden.py` the photos of 8 and 12 come out **without
 Talan**. This one sets the party —Talan is 14— before going in.

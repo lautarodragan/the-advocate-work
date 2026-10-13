@@ -47,7 +47,7 @@ What is left for the merge, Hornero's:
   changes;
 * the paths `snes-rm2k: docs/research/…` and `docs/port/…` stay as
   text of the snapshot, even though those files move to the book;
-* `snes-rm2k-ports: menus/consola.toml` is the path of 2026-10-06; today
+* `snes-rm2k-ports: menus/console.toml` is the path of 2026-10-06; today
   ABL is in `abl/`.
 
 ## How it was verified

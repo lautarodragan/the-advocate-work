@@ -58,7 +58,7 @@ Done by Chajá, from `main` at `2c05f8a0`; ABL in a clone, branch
   picture. And `irq_music` multiplies with a table of squares while there is
   mode 7, because the PPU's multiplier is the matrix.
 * **ABL**, branch `fotos-en-modo-7` of Chajá's clone: two new cases and one
-  new test, and the goldens (one changes: `imagen-grande-foto-140`).
+  new test, and the goldens (one changes: `big-picture-photo-140`).
 
 The four Diff photos carry a texture —and with them the montage on 217, which
 uses the same layers—: 16 KB of tiles and 3.5 KB of rows each, 78 KB.
@@ -66,15 +66,15 @@ The mode 1 layers: 664 tiles PhoneCallDiff and 897 the other three.
 
 ## The numbers
 
-* `just pruebas` in ABL: **1037** (the 1035 from before and the two new ones).
+* `just tests` in ABL: **1037** (the 1035 from before and the two new ones).
 * `abl.sfc`: `ef1bf110a5e1bf1b…` (before `35ce63c5…`).
 * `just -f tools/justfile test`: 27; `cargo test` of the six projects
   touched, green.
 
 ## What taro has to see on the console
 
-Captures, the video and what to look at: `/shared/capturas/2026-10-03-modo-7/`,
-with its `LEEME.txt`. **The golden `imagen-grande-foto-140` awaits his
+Captures, the video and what to look at: `/shared/captures/2026-10-03-modo-7/`,
+with its `LEEME.txt`. **The golden `big-picture-photo-140` awaits his
 approval.** In the game: the scenes on 212, 213, 214 and 216 —the jump when
 the zoom starts, the speed, the centre, and the widow's message on
 212 after the zoom—.

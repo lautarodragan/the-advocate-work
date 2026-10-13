@@ -78,8 +78,8 @@ same thing before, start from there and do not measure it again.
 ## The goldens
 
 * The ones that change and the new ones go side by side —before, after and
-  difference— to `/shared/capturas/<date>-<topic>/`, with a contact sheet
-  and a `LEEME.txt`; with the original alongside when comparing against
+  difference— to `/shared/captures/<date>-<topic>/`, with a contact sheet
+  and a `README.txt`; with the original alongside when comparing against
   RM2k.
 * **Repeat the suite until no new red golden shows up**: a test with
   several goldens stops at the first red one, and the ones behind it only

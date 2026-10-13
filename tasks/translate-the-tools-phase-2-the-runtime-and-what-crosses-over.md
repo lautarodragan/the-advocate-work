@@ -14,8 +14,8 @@ Hornero decided (with taro's authorisation to decide without waiting for him)
 that the data that had stayed in Spanish because it was the
 interface between two programs also goes here: the `; Temas:` line of `musicdata.inc` and whoever
 reads it, the keys of `rm2k.collect_npcs`, the `aire_de_medida` key of
-`techos.toml` (by hand, without re-measuring), the comments that
-`patches.py` writes into `rom/parches/auto/` (with `just parches`), and the
+`ceilings.toml` (by hand, without re-measuring), the comments that
+`patches.py` writes into `rom/parches/auto/` (with `just patches`), and the
 variables `SIN_CACHE`, `TRAMA_PATRON` and `MODO_TRANSLUCIDO`. What goes into the
 ROM and what belongs to the game isn't touched: the `.sfc` comes out the same.
 
@@ -34,10 +34,10 @@ else.
 
 Each commit was verified the same way:
 
-* `SIN_CACHE=1 just cartuchos` with `rom/build/release` and `rom/build/tests`
+* `SIN_CACHE=1 just cartridges` with `rom/build/release` and `rom/build/tests`
   deleted beforehand: `.sfc`, `.msu`, `.pcm` and everything else in `rom/build/`
   identical byte for byte to `319a322a`'s, except `.inc`, `.sym`, `.dbg`,
-  `memoria.cfg` (the name of a segment) and the dumps
+  `memory.cfg` (the name of a segment) and the dumps
   `crudos/N.map_celdas.bin`, which were renamed `N.map_cells.bin` with
   the same content;
 * the `.dbg` of the two cartridges: the same symbols, with the same scope,
@@ -74,14 +74,14 @@ Each commit was verified the same way:
 
 9. The data that was interface: the `; Temas:` line of musicdata.inc
    (`; Songs:`, with `no music` and `none`) and whoever reads it; the `; --- N:
-   mapa M` line of mapdata.inc (`map`) and the regex of `consola.mapas_de`; the
+   mapa M` line of mapdata.inc (`map`) and the regex of `consola.maps_in_inc`; the
    NPC keys of `rm2k.collect_npcs` (`event`, `speed`, `animates`,
    `changes`, `graphics`, `layers`, `tile_pass`), which events.py's pages
    share in three of them.
 10. The comments `patches.py` writes into `rom/parches/auto/`,
-    regenerated with `just parches`: the 137 TOML files read with `tomllib` give the
-    same before and after, and `just parches-check` passes. `aire_de_medida` →
-    `measuring_headroom` by hand in `techos.toml`.
+    regenerated with `just patches`: the 137 TOML files read with `tomllib` give the
+    same before and after, and `just patches-check` passes. `aire_de_medida` →
+    `measuring_headroom` by hand in `ceilings.toml`.
 11. `SIN_CACHE`, `TRAMA_PATRON`, `MODO_TRANSLUCIDO` → `NO_CACHE`,
     `DITHER_PATTERN`, `TRANSLUCENT_MODE`, with their values (`baked`/`dither`;
     `checkerboard`, `columns`, `rows`, `five_of_eight`, `three_of_four`).
@@ -96,13 +96,13 @@ needed.
 ## What stays in Spanish, on purpose or for later
 
 * The other keys of events.py's pages and of `map_info` in the
-  converter (`pagina`, `codigo`, `ruta_propia`, `grafico`, `gira`,
+  converter (`pagina`, `codigo`, `ruta_propia`, `graphic`, `gira`,
   `frecuencia`, `ordenes`, `cambian`, `aparecen`, `afuera`, `celdas`…),
   and those of the music dictionaries (`nombre`, `temas`, `escrituras`,
   `largo`): they're internal to the Python, from the previous areas.
-* The keys of the TOML files in `rom/parches/auto/` and of `techos.toml` (except
-  `measuring_headroom`), and the Spanish header of `techos.toml`, which
-  comes out in English the next time `just techos` runs.
+* The keys of the TOML files in `rom/parches/auto/` and of `ceilings.toml` (except
+  `measuring_headroom`), and the Spanish header of `ceilings.toml`, which
+  comes out in English the next time `just ceilings` runs.
 * The CharSet suffixes (`~trama`, `~horneado`, `~aparte`) and the name
   `capas` of the on-disk cache.
 * The tasks that say `SIN_CACHE=1` or name old routines: they tell what

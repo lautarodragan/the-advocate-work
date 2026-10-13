@@ -20,7 +20,7 @@ information.
 jump and each ladder on 95 subtracts 5 from variable 48, which starts at 99,
 and with the variable at zero parallel 56 says "So... tired... can't go
 on...", sends Eisen back to the entrance, turns off the three levers and resets
-it to 99. The route of `test_recorrido_capitulo_golden.py`, which goes straight
+it to 99. The route of `test_playthrough_chapter_golden.py`, which goes straight
 to the three levers and the hatch, ends with 4: without seeing the counter, any
 detour forces starting over without the player seeing it coming. So the counter
 is not only information.
@@ -38,7 +38,7 @@ that move wait for taro's approval.
 
 Measured with the 2015 RPG_RT on Wine, on a copy of the game whose EV0001 on
 map 4 takes Eisen to 95. The captures, in
-`/shared/capturas/2026-09-30-fortitude/original-*.png`.
+`/shared/captures/2026-09-30-fortitude/original-*.png`.
 
 * **They are three pictures**, fixed to the screen —they do not move with the
   camera—: 1 is the `Fortitude` label (110x25, blue italics) centred at
@@ -134,13 +134,13 @@ Why this way and not the other ways:
 **Both live in bank 1** (`tools/runtime/counter.s`): after merging Cachirla's
 `wanted_fits` bank 0 went over by 32 bytes. Left in bank 0 are the dispatch of
 `op_counter`, the `glyph_oam_far` bridge and the three lines of the erasing,
-the palette and the startup. `just espacio`: 55 bytes free in `release`'s bank
+the palette and the startup. `just space`: 55 bytes free in `release`'s bank
 0.
 
 ## The test
 
-`test_contador` (`rom/pruebas/rpgmaker/test_comandos_golden.py`), with the case
-`contador`: on 95, 48 at 99 and pictures 2 and 3 with "9" like the entrance
+`test_counter` (`rom/pruebas/rpgmaker/test_comandos_golden.py`), with the case
+`counter`: on 95, 48 at 99 and pictures 2 and 3 with "9" like the entrance
 scene; then the real jumps —the pages of events 15 and 16, called with
 `CallEvent`, which subtract 5 and call common 9—, the second from 12; a black
 tint and a `Teleport` to 6. Five new goldens: 99, 94, 7 without tens, 7
@@ -153,13 +153,13 @@ the declaration, against the base answer, **only 33 pages of map 95** change
 ## For taro
 
 * **The new goldens wait for your approval.** Side by side with the original,
-  in `/shared/capturas/2026-09-30-fortitude/`: `original-*` (Wine),
+  in `/shared/captures/2026-09-30-fortitude/`: `original-*` (Wine),
   `ahora-contador-*` (the ROM) and `lado-a-lado-99.png` /
   `lado-a-lado-94.png`. The "before" is that there was nothing:
   `antes-capitulo-95-llegada-sin-contador.png`. No existing golden moved.
 * **When merging, install** `events` and `cartridge`: `just -f tools/justfile
   install events cartridge` (the runtime changes, and the compiler reads
   `[events] counters`).
-* What `just pruebas` does not cover: the real entrance scene (EV0001) and
+* What `just tests` does not cover: the real entrance scene (EV0001) and
   parallel 56's "So... tired". Both compile to `OP_COUNTER` —it is in the
   bytecode diff— but no test plays them; playing them is what is missing.

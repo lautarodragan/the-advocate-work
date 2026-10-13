@@ -16,10 +16,10 @@ in the study.
 ## How it is going (Quirquincho, 2026-10-01)
 
 Base: `cd3dce0d`, `abl.sfc` at `ccdf1191…`. Each step, with `NO_CACHE=1 just
-cartuchos`, `just pruebas` and `just -f tools/justfile test`; the load time
-with the method of `_cargar` in `test_carga_descomprimida.py` —the hardware
+cartuchos`, `just tests` and `just -f tools/justfile test`; the load time
+with the method of `_cargar` in `test_decompressed_load.py` —the hardware
 frames of the loop iteration that loaded— over the 97 maps of `release`, and
-the battle with `SCN_FRAMES` in the case `pelea-en-52`.
+the battle with `SCN_FRAMES` in the case `battle-in-52`.
 
 ### 1. The block table and its passability: done
 
@@ -29,7 +29,7 @@ live in WRAM **behind the grid**, in a third LZ2 stream stuck to the grid's two
 (`map_ram` in `materials.rs`): `lz2_grid` decompresses it where the second one
 ended, and that is why they come back on their own with `back_from_battle`. The
 record brings the WRAM addresses, which the converter computes; the ROM does
-not compute them, and `test_carga_descomprimida.py` checks that they match and
+not compute them, and `test_decompressed_load.py` checks that they match and
 that the content is that of `crudos/N.map_ram.bin`, on loading each map and on
 returning from the battle on 52.
 
@@ -54,11 +54,11 @@ each one landed per palette slot (`SCN_BAT_PTR`, `$7E6650`); the converter
 stops if a troop's go over 32 KB (in `release`, the heaviest is 15 KB).
 `scn_terrain`, which reads the grid, runs before.
 
-* In `release`: the gaps of `just espacio` go from 0 to 62,525 B (147 KB of raw
+* In `release`: the gaps of `just space` go from 0 to 62,525 B (147 KB of raw
   battlers).
 * The droid battle on 52 composes in 11 frames instead of 10; the maps do not
   change. The entry to the battle is to black, so it is not seen.
-* `test_reservas_de_la_wram.py` lets `SCN_BATTLERS` through, and the grid's
+* `test_wram_reservations.py` lets `SCN_BATTLERS` through, and the grid's
   decision says so.
 
 ### 3. The battle animations (the cutscenes' ones): done, frame by frame
@@ -76,11 +76,11 @@ its first frame: it saved more —67,696 B to 28,171, against 37,354 frame by
 frame—, but the animation's first tick took up to 4 hardware frames (148, of
 13.7 KB) and 2 for most: the map stalled at the start of each animation. Frame
 by frame, measured over the 21 animations of `release` on map 6 with the
-method of `test_animacion_cuadros.py`, no tick goes over one frame.
+method of `test_animation_frames.py`, no tick goes over one frame.
 
-* In `release`: 67,696 B raw, 37,354 in LZ2. `just espacio`: from 61 data banks
+* In `release`: 67,696 B raw, 37,354 in LZ2. `just space`: from 61 data banks
   to 60.
-* `test_animacion_cuadros.py` builds each frame of each animation through the
+* `test_animation_frames.py` builds each frame of each animation through the
   game's path and compares it with the uncompressed count.
 * **A path slipped past me**, and I fixed it in a separate commit: coming back
   from the menu, the shop, the slots or a battle goes through `back_to_map`,
@@ -88,7 +88,7 @@ method of `test_animacion_cuadros.py`, no tick goes over one frame.
   previous frame; erasing it read background tiles as box numbers, left old
   tiles and wrote beyond `ANIMB_BUF`. `back_to_map` now calls
   `anim_buf_clear` (instead of `scene_upload`), and
-  `test_la_caja_vuelve_entera_del_menu` enforces it: red without the fix
+  `test_the_box_comes_back_whole_from_the_menu` enforces it: red without the fix
   (frames 4 and 5 of 148), green with it.
 
 ### 4. The light battle backgrounds: done
@@ -98,11 +98,11 @@ enlarges it into the scene's two buffers at the start of the battle. Now it is
 decompressed beforehand into the half of the grid in `$7E` (`SCN_BATTLERS`),
 and the battlers are decompressed afterwards, on top: `scn_battlers_load`
 moved from before `scn_backdrop` to after. The suite runs without MSU-1, so
-the fallback's path is the one the goldens and `test_batalla_escena_dibujo.py`
+the fallback's path is the one the goldens and `test_battle_scene_drawing.py`
 look at.
 
 * In `release`: 73,728 B raw (18 backgrounds of 4 KB), 55,331 in LZ2. The gaps
-  of `just espacio` go from 27,331 B to 45,728.
+  of `just space` go from 27,331 B to 45,728.
 * The droid battle composes in 12 frames instead of 11 (10 at the base), to
   black.
 
@@ -136,11 +136,11 @@ not cut it). What is done:
 
 The first version forgot `back_to_map`: with the menu, the slots or a battle in
 the middle of a carried page, the page read background tiles. Seven tests of
-the suite caught it —`test_guardar_golden.py`, `test_curar.py`,
-`test_experiencia_dibujo.py`—, and it uncovered the same error in the battle
+the suite caught it —`test_save_golden.py`, `test_heal.py`,
+`test_experience_drawing.py`—, and it uncovered the same error in the battle
 animation (the separate commit above).
 
-* In `release`: 124.7 KB of bytecode, 80.2 in LZ2. `just espacio`: from 60 data
+* In `release`: 124.7 KB of bytecode, 80.2 in LZ2. `just space`: from 60 data
   banks to 59, and the gaps from 45,728 B to 25,045 —44,853 B less—.
 * Load: +0.4 frames on average over the 97 maps, +6 on 4 (which in `release`
   carries the 262 cases). Carrying costs another decompression inside the
@@ -148,9 +148,9 @@ animation (the separate commit above).
 * The race, which is the tightest on CPU, does not lose frames from reading the
   bytecode from WRAM (8 cycles per byte against 6): driving, 49 loses 35 frames
   in 976 ticks before and after, 52 5 and 4, 54 0 and 1.
-* `test_carga_descomprimida.py` checks the bytecode in WRAM against
+* `test_decompressed_load.py` checks the bytecode in WRAM against
   `crudos/N.map_code.bin` and `map_code` against where it ended up;
-  `test_la_ruta_del_heroe_sigue_entera_en_el_mapa_nuevo` checks the route's
+  `test_the_heros_route_goes_on_whole_in_the_new_map` checks the route's
   copy, which no case runs.
 
 ### 6. The font: it cannot be
@@ -174,7 +174,7 @@ The commits, on `cd3dce0d`:
     14139ad9  the events' bytecode, behind the grid, and carried
 
 What was saved in `release`, in ROM bytes used (banks × 64 KB minus the gaps of
-`just espacio`):
+`just space`):
 
     block table + passability        58,130
     battlers                         62,525
@@ -183,7 +183,7 @@ What was saved in `release`, in ROM bytes used (banks × 64 KB minus the gaps of
     bytecode                         44,853
     total                           214,247   (209 KB)
 
-`just espacio`, before and after:
+`just space`, before and after:
 
     release                62 banks, gaps 7,406 B      ->  59, gaps 25,045 B
                            bank 0 269 B, bank 1 4,241 B -> 247 B and 3,890 B
@@ -198,9 +198,9 @@ Game Over) do not change: they touch none of this. Coming back from the menu,
 the shop or the slots with a carried page costs one more decompression of the
 bytecode.
 
-No golden moved. `just pruebas`: 936 (934 + the two new ones); `just -f
+No golden moved. `just tests`: 936 (934 + the two new ones); `just -f
 tools/justfile test`: 39; `cargo test` of `rm2k-snes-mapdata`.
-`test_musica_techos.py` passes.
+`test_music_ceilings.py` passes.
 
 **When merging**:
 

@@ -17,7 +17,7 @@ title track kept playing, which wasn't the right one either.
 It is the same question that `mapa_tema_callar` and `op_battle` already
 answer —"is it playing?" is `MSU_SUENA` or `music_apagada` at zero—, and it
 can be answered on saving or on loading. Catch it with a test with
-`msu=True` (`pruebas/abl/test_msu.py`), saving on a map with a track theme.
+`msu=True` (`tests/abl/test_msu.py`), saving on a map with a track theme.
 
 ## Done, on 2026-09-27
 
@@ -49,8 +49,8 @@ loading there is no way to tell it apart from a real silence.
 * without MSU-1 to with MSU-1: the track. It already worked —a 0 was
   saved—; now it is covered.
 
-**The test**: `test_la_partida_guardada_vuelve_con_su_tema`, in
-`pruebas/abl/test_msu.py`, with the three variants. It reaches map 26 —it
+**The test**: `test_the_saved_game_comes_back_with_its_song`, in
+`tests/abl/test_msu.py`, with the three variants. It reaches map 26 —it
 turns on `KSSMKEND`, which has a track—, saves through the menu, moves the
 SRAM to another console if the combination asks for it, and loads with
 "Resume the Story". Against the ROM without the fix, `msu-a-msu` and

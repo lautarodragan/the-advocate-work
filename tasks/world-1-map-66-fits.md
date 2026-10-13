@@ -20,7 +20,7 @@ beforehand. It starts from `2be61a9`.
   (`controlar_flujos`), and so is how many streams the ROM reads: with a
   three-stream background, or a stream that overflows its place, the
   converter doesn't build.
-* **Map 66 in `release`**, through `cartuchos.py`'s `AGREGADOS`: raising
+* **Map 66 in `release`**, through `cartridges.py`'s `AGREGADOS`: raising
   `MENOR_A` to 67 would bring in map 65, which is a folder.
 * **The end of the demo** moves from the fork of map 64 (deleted) to a fork of
   map 66: event 10, the entrance to Sorbe Village, shows "END OF THE DEMO" and
@@ -38,27 +38,27 @@ beforehand. It starts from `2be61a9`.
   `snes_convert.py` on a copy of `2be61a9`, `release` and `test-special` come
   out byte for byte identical (`cmp` of `abl.sfc`, `prueba.sfc` and
   `abl.msu`). No map changes layout or streams.
-* **`test_carga_descomprimida.py`** already walks all the maps of `release`,
+* **`test_decompressed_load.py`** already walks all the maps of `release`,
   so it looks at map 66's two-stream background in snes9x and in bsnes. And a
-  new test, `test_un_fondo_de_dos_flujos_no_se_sale_del_buffer`, writes a
+  new test, `test_a_two_stream_backdrop_does_not_overrun_the_buffer`, writes a
   witness into `GRILLA_ALTA`, loads map 66 and checks that it's still there.
   **It was seen failing with the bug in place**: on the same copy of
   `2be61a9` with map 66 shoved in by brute force (the fifth layout and
   without the background cap, like the plan's `m0p2` variant), the witness
   comes out overwritten.
-* **`test_mundo.py`**, new: map 66 just arrived (golden `mundo-66-llegada`,
-  `celdas_mal_dibujadas` at zero) and a battle requested with `ENC_PIDE` that
-  Kersh wins and returns to the map (golden `mundo-66-despues-de-pelear`,
+* **`test_world.py`**, new: map 66 just arrived (golden `world-66-arrival`,
+  `wrongly_drawn_cells` at zero) and a battle requested with `ENC_PIDE` that
+  Kersh wins and returns to the map (golden `world-66-after-of-fight`,
   cells at zero). Talan alone, with what he has at the start of the game,
   loses against the wolf.
 * **The race walkthrough** continues from the farewell to the world, walks
   from (71, 29) to Sorbe (75, 10) with encounters off and ends at the new
-  sign. Its screenshots in `pruebas/snapshots/playthrough/carrera-*/` aren't
+  sign. Its screenshots in `tests/snapshots/playthrough/carrera-*/` aren't
   blessed, as before.
 
 # Space
 
-Measured with `AGENTS.md`'s method on what `just cartuchos` left:
+Measured with `AGENTS.md`'s method on what `just cartridges` left:
 
     release        75.6 %   bank 0 261 B   bank 1 8,185 B   BSS 138   ZEROPAGE 4
     test-special   19.2 %   bank 0 1,073 B bank 1 9,977 B   BSS 138   ZEROPAGE 4

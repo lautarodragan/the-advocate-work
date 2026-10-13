@@ -14,7 +14,7 @@ at `49f0e2f`.
 
 * 49 to 54 and 64 in `release`; 52 stops being a test map.
 * The end of the demo moves to the end of the scene on 64 (fork in
-  `parches/manual/mapas/Map0064.json`), and 36's fork is deleted.
+  `patches/manual/forks/Map0064.json`), and 36's fork is deleted.
 * Gap 1: the `Teleport` from a parallel page with the foreground still.
 * Gap 2: the `KeyInputProc` without wait reads what is pressed (`IsPressed`), and
   `eventos.py` accepts it without the measuring switch.
@@ -111,32 +111,32 @@ bank 0.
 
 # Tests
 
-`just pruebas` green on the merge with `main`: what it prints is the
+`just tests` green on the merge with `main`: what it prints is the
 number.
 
-* **New: `pruebas/abl/test_recorrido_carrera_golden.py`**, with two:
-  * `test_la_carrera_entera`: with Arden, 49's intro, the three laps
+* **New: `tests/abl/test_playthrough_race_golden.py`**, with two:
+  * `test_the_whole_race`: with Arden, 49's intro, the three laps
     driving with a pilot that looks in RAM at each car's cell and
     holds up or down to dodge, the bridge, the prize (the gold, and
     variable 38 equal to the crashes it counted), the farewell on 64, the end-of-demo
     card and the title.
-  * `test_cinco_choques_y_maneja_saldra`: without touching the steering wheel the car always crashes
+  * `test_five_crashes_and_saldra_drives`: without touching the steering wheel the car always crashes
     into the one at (101, 26); each crash goes through 50 and starts again
     on 49, and on the fifth Saldra offers to drive: "Yes" leads to the bridge with
     173, and from there to 64 and the title.
-  The captures go to `pruebas/snapshots/playthrough/carrera-*/` and are not
+  The captures go to `tests/snapshots/playthrough/carrera-*/` and are not
   blessed.
 * **The Lashe walkthroughs**: "leaving ends the demo" became "leaving takes you to
-  the race" (`irse_lleva_a_la_carrera`): 182, map 49 and cell
+  the race" (`leaving_leads_to_the_race`): 182, map 49 and cell
   (1, 26). The end-of-demo photo of `lashe-fin` became that of the
   start.
 * **`heroe` without 52**: its five goldens and its plan were deleted, and the case
-  `grupo-11-en-52`, which only it used. The other 52 ones —`pelea-en-52`, which is
+  `grupo-11-en-52`, which only it used. The other 52 ones —`battle-in-52`, which is
   state— pass without touching anything; `ev41` is from map 8.
 * **No golden of the suite changed.**
 * `Recorrido.foto` accepts an `imagen` taken before: the end card is
   recognised only when the next press goes back to the title.
-* `just techos`: the mix changed with the two new themes
+* `just ceilings`: the mix changed with the two new themes
   (`Fire_Mustang_…` and `prepara`), and the table was measured again.
 
 # What taro has to test by playing

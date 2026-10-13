@@ -60,7 +60,7 @@ port"). Each line names its draft or its task in `todo/`.
 * Sunset black at 30 s (`ignore-changesystemgraphics-for-now`) and the opaque
   orange window (`sunset-the-map-22-scene-in-black`): they were fixed by the
   pictures inside the map and mode 1; the capture `modo1-22-01600` in
-  `/shared/capturas/2026-10-11-sunset-modo-1/` shows the scene with the
+  `/shared/captures/2026-10-11-sunset-modo-1/` shows the scene with the
   window without background.
 * Desert's intro that ended in black because of the excluded map 2
   (`eraseevent-for-real`): Desert no longer excludes anything.

@@ -18,7 +18,7 @@ No other of the eight games says it. It wasn't checked what the ROM does
 with an inventory that reaches that list —whether the text is cut, or which
 names are lost— nor with which inventory it's reached.
 
-**How to see it**: `just cartuchos release` in `abl/` of the ports; the warning
+**How to see it**: `just cartridges release` in `abl/` of the ports; the warning
 is in what `screens` answers (the `says` of its `screens.json`).
 
 A fact measured in passing: with the windows' background in a single color (the

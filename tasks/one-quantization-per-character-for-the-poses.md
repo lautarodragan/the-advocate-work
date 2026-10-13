@@ -91,7 +91,7 @@ Branches `mulita-poses-por-personaje`:
 
 * the-advocate: `d3f1c486` (events, convert, wally, mapdata and runtime) and
   the merge of origin/main (`5d7d5601`, Hurón's thing) in `335194a8`.
-* ports: `ce6e7a7` (the `grafico-heroe-propio` case: command 34 on the
+* ports: `ce6e7a7` (the `graphic-hero-own` case: command 34 on the
   hero to `Crown7:3`, and `Crown7:3` in `release`'s `test_graphics`),
   `41bbe3a` (its four goldens), merge of origin/main `0982cf0`, and
   `e575020` (VD: the eleven from "the ROM" come back).
@@ -111,14 +111,14 @@ convert cartridge`:
   `27d989db75901791…`. The new case, seen red without the `apply_tint`
   of `graphic_hero`: 212 pixels in frame 20.
 * VD with the eleven brought back (**10 left out**, of 21: 1, 15, 57,
-  99, 150, 165, 225, 399, 402, 403): `just cartuchos` rc 0, 138 s; 12,362
+  99, 150, 165, 225, 399, 402, 403): `just cartridges` rc 0, 138 s; 12,362
   pieces in 127 banks and 1,281 in the `.msu` (6,092,634 B). Poses: 6,744
   distinct, 3.45 MB. Whole free banks: 0 (the allocation fills the ROM
   with what could go into the `.msu`); what's left of margin are the
   LZ2 streams that are still in the ROM and can leave: ~0.64 MB.
   In snes9x with the `.msu`: it starts in 3 and with A goes to the house.
 
-Captures in `/shared/capturas/2026-10-11-una-cuantizacion-por-personaje/`.
+Captures in `/shared/captures/2026-10-11-una-cuantizacion-por-personaje/`.
 
 **What nothing covers**: a `ChangeSpriteAssociation` to a graphic that
 isn't a leader's (the suite's one, `sprite-actor`, is `Future1`; it goes through

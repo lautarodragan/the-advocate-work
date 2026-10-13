@@ -26,15 +26,15 @@ of the goldens** —two goldens-only commits— and for him to play it.
   experimento de la translucidez…`, with its goldens in the one that follows:
   to remove it both are reverted, and the divergence's text goes back on its own
   to the opaque version.
-* Today's numbers, on the merged tree: `just pruebas` gives **981** (969
+* Today's numbers, on the merged tree: `just tests` gives **981** (969
   from `main` plus 12 new), `just -f tools/justfile test` **39**, `cargo
   test` of events, images, wally, map-sprites and mapdata green.
-  `NO_CACHE=1 just cartuchos` and the cached build give the same `abl.sfc`,
-  `57ce2e2a…`. `test_musica_techos.py` stayed green.
+  `NO_CACHE=1 just cartridges` and the cached build give the same `abl.sfc`,
+  `57ce2e2a…`. `test_music_ceilings.py` stayed green.
 * Far RAM: `$30EC` to `$30FA` —the previous picture's— and `$2580` to
   `$258F`, the one allotted to me. No new opcode: `OP_PICTURE`,
   `OP_PICTURE_MOVE` and `OP_PICTURE_ERASE` changed operands.
-* Space, `just espacio` on `release`: bank 0 from 1,053 to 1,340 B
+* Space, `just space` on `release`: bank 0 from 1,053 to 1,340 B
   free (the code moved out to bank 1), bank 1 from 3,204 to 2,000 B.
 
 ## The design
@@ -137,7 +137,7 @@ restores the high palettes from `cgram_shadow`, where `pic_palette` leaves them,
 and the menu doesn't touch them.
 
 The scenes are called with `CallEvent` on the map's page
-(`escena-81`, `-95`, `-311`). Compared against the 2015 RPG_RT under Wine,
+(`scene-81`, `-95`, `-311`). Compared against the 2015 RPG_RT under Wine,
 with a copy of the game that starts in the map with the autorun page and
 no conditions —built with `ditto`, see Gallareta's scratchpad—: the
 shadow falls in the same place on the map, (39,59)-(140,179) there and
@@ -146,13 +146,13 @@ shadow falls in the same place on the map, (39,59)-(140,179) there and
 `test_cores.py` adds three: two slots, the ramp and the map one with the
 camera shifted, in snes9x and bsnes.
 
-And `test_recorrido_sorbe_golden.py` takes the photo of the sign when it's
+And `test_playthrough_sorbe_golden.py` takes the photo of the sign when it's
 up and still, instead of when the fork's message is composed.
 
 ## The goldens
 
 Two goldens-only commits. Side by side —before, after and RPG_RT— in
-`/shared/capturas/2026-10-01-imagenes-en-sprites/`, and the two for
+`/shared/captures/2026-10-01-imagenes-en-sprites/`, and the two for
 translucency —opaque, blended, original— in `…/translucidez/`. No
 existing golden moved.
 

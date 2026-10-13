@@ -50,7 +50,7 @@ where the next one goes.
   reservation; `battle_scene.s` asserts its state ends before it. Far RAM
   is otherwise packed: $7E2000–$7E7FFF is a hand-written map with only
   small gaps, the upper half of `$7E` is the grid and `$7F` is time-shared
-  by the battle and the loads. `just espacio` prints what the area has left
+  by the battle and the loads. `just space` prints what the area has left
   ("far RAM"). It grows by taking over another stretch of the hand-written
   map and moving whatever lived there into `FARBSS`.
 * **The hand-written map stays where it is**, to not move the ROM: the
@@ -59,9 +59,9 @@ where the next one goes.
   new path (16 bytes change per ROM, no golden moves, the save is
   untouched).
 * **The far-RAM trap is closed by a test**: ABL's
-  `test_reservas_de_la_wram.py` fails if any symbol that is not a
+  `test_wram_reservations.py` fails if any symbol that is not a
   `FARBSS` label lands in the area, as a long or a 16-bit value. Shown red
-  with a `HAND_PICKED = $7E66C0`. `test_espacio.py` checks the new "far"
+  with a `HAND_PICKED = $7E66C0`. `test_space.py` checks the new "far"
   measure against a linked `.res`.
 * **BSS and ZEROPAGE** were already linker-placed: the rule is only that a
   new one goes in its subsystem's file with `.pushseg`/`.segment "BSS"`,

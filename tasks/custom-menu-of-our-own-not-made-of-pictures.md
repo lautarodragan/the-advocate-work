@@ -28,6 +28,6 @@ The picture system as RM2k uses it comes first
 
 Closed by taro on 2026-10-12, as superseded: `console-custom-menu.md`
 replaced ABL's portable console with a menu described as data
-(`abl/menus/consola.toml` in the ports) instead of pictures. Mode 5 and a
+(`abl/menus/console.toml` in the ports) instead of pictures. Mode 5 and a
 font of its own were not part of it; if they come back, they are a task of
 their own.

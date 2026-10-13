@@ -38,7 +38,7 @@ the maps that need it, and it isn't of the same kind.
 
 * The background is no longer what blocks any of the 18 large maps: with the
   ceiling of 544 each one goes down to 544 (53 fewer on map 1, 273 on Uruya, 260 on
-  338; 249 only 9). Captures in `/shared/capturas/2026-10-06-fusionar-tiles/`.
+  338; 249 only 9). Captures in `/shared/captures/2026-10-06-fusionar-tiles/`.
   In the whole conversion only map 1 (68 tiles, to the ceiling of the
   layout its sprites leave) and 118 (134, to 480) were merged.
 * What stops it is **the sprite bank and the upper layer**: map 15

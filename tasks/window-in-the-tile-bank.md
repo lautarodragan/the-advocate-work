@@ -27,7 +27,7 @@ it holds back four —Book of Three (267 of 256), Frozen World (266), Vampires
 Dawn (262, map 15: "this map can't carry a message window") and Dooms 2
 (the actor choice goes over `$4800`; with map 1, the slots and the
 menu add up to 482–524 tiles of 448)—. The judgment calls are decided by whoever
-does it, with before and after captures in `/shared/capturas/` for taro
+does it, with before and after captures in `/shared/captures/` for taro
 to look at; if it looks fine, it is fine. It must be generic: nothing per game, and
 ABL —which already fits— doesn't move (`abl.sfc` byte for byte the same, if
 possible; if not, goldens shown).
@@ -81,4 +81,4 @@ window: it's the map that doesn't leave room for the window's fixed 8 KB.
 
 Reinstall `adeleine`, `rm2k-render` and `screens` (lib in the first two:
 `screens` is the binary that changes). Captures in
-`/shared/capturas/2026-10-11-la-ventana-en-el-banco-de-tiles/`.
+`/shared/captures/2026-10-11-la-ventana-en-el-banco-de-tiles/`.

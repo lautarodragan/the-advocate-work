@@ -29,10 +29,10 @@ its own with no tracks, unless it is asked for MSU-1.
   and 32040 without it. `video.py` asks for it instead of the constant it had.
 - `video.py` records with MSU-1 by default —it is for hearing the ROM as it is
   played— and `--sin-msu` for the SPC700 alone. `Partida(msu=...)` passes it on.
-- `cartuchos.py release` always runs `msu.armar`, even if the ROM is up to date.
+- `cartridges.py release` always runs `msu.armar`, even if the ROM is up to date.
   The `msu` recipe is gone: a single way of having the ROM with tracks.
 - `msu.py` writes each `.pcm` alongside and replaces it, instead of truncating it.
-- `pruebas/abl/test_msu.py`: with the tracks alongside, `tanda.encender` gives
+- `tests/abl/test_msu.py`: with the tracks alongside, `tanda.encender` gives
   the same audio as a copy without tracks, and with `msu=True` it gives another.
 
 # Measured

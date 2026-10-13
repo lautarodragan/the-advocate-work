@@ -23,9 +23,9 @@ Repeats needed nothing: the page is reader state, like its cache, and an `OP_REP
 
 **ABL**: `musicdata.inc` byte for byte identical to `main`'s; `abl.sfc` goes from `f81ae57da625…` to `ea49ff07fd9d…`, only because of the new runtime code. Suite with my tools: **1176 green**. `just test` and the crates bytecode, cartridge, mapdata, events, convert and rm2k-snes-audio, green. No hash in `mapdata/tests/python.rs` nor in the fingerprint tests changed.
 
-**Dooms 2**: without 10, 14 and 63 in `excluded`, `just cartuchos release` builds. It excludes only 1 (character select, the slots screen and the menu), and still uses ABL's System. With ABL's harness pointed at `dooms2.sfc` (`~/scratch/tijereta/sonidos/dooms2_musica.py`, disposable), the ROM writes to the DSP exactly what the Graig and Demons streams say, whole and the start of the second loop; with `sound_page` mutilated (it reads the page and doesn't move the base) it differs at frame 8138 of Graig, the first one in page 1.
+**Dooms 2**: without 10, 14 and 63 in `excluded`, `just cartridges release` builds. It excludes only 1 (character select, the slots screen and the menu), and still uses ABL's System. With ABL's harness pointed at `dooms2.sfc` (`~/scratch/tijereta/sonidos/dooms2_musica.py`, disposable), the ROM writes to the DSP exactly what the Graig and Demons streams say, whole and the start of the second loop; with `sound_page` mutilated (it reads the page and doesn't move the base) it differs at frame 8138 of Graig, the first one in page 1.
 
-**ABL's harness** (`consola.py`, `stream_del_tema`) passed 256 sounds to the decoder; now, up to the end of the bank. Nothing changes in ABL (`test_musica_escrituras.py` and `test_bateria_suena.py` green).
+**ABL's harness** (`console.py`, `song_stream`) passed 256 sounds to the decoder; now, up to the end of the bank. Nothing changes in ABL (`test_music_writes.py` and `test_drum_kit_sounds.py` green).
 
 **Book**: `internals/audio.md` (how a note names its sound) and `ports/dooms2/README.md` (what it leaves out).
 

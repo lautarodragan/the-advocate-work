@@ -11,7 +11,7 @@ option E. taro decided it on 2026-10-01:
 `decisions/large-pictures-in-mode-1.md`. The Diff photos (212 to 216),
 which in RM2k shrink with a zoom, are shown with a fade: the SNES does not
 scale without mode 7. What happens in those scenes, with captures from the original:
-`/shared/capturas/2026-10-01-escenas-diff/` (Bandurria).
+`/shared/captures/2026-10-01-escenas-diff/` (Bandurria).
 
 Done by Aguilucho, from `main` at `83c7e3ee`, with `main` merged at
 `635c3704` (the automatic common events and the shared `CallEvent`, by
@@ -96,7 +96,7 @@ of twice, and its pending photos were renumbered.
 
 Four photos at 50 % every six frames, with a white flash. The two
 options, captured frame by frame in
-`/shared/capturas/2026-10-02-imagenes-grandes/montaje-217/`:
+`/shared/captures/2026-10-02-imagenes-grandes/montaje-217/`:
 
 * **The photos**, which is what the converter does today: each one is loaded with
   the screen off, so it is **five frames of photo and three of
@@ -137,7 +137,7 @@ even when there are none.
 
 In their own commit, only goldens: twenty-three new ones, none moved. Side
 by side with the original RPG_RT under Wine —and for the photos, with
-Bandurria's captures— in `/shared/capturas/2026-10-02-imagenes-grandes/`.
+Bandurria's captures— in `/shared/captures/2026-10-02-imagenes-grandes/`.
 **The merge awaits taro's approval.**
 
 What looks different from the original, noted in
@@ -153,12 +153,12 @@ showing and erasing.
 * **The opcodes**: `OP_BIG_SHOW` (`0x3D`) and `OP_BIG_MOVE` (`0x3E`), which
   replaced Picaflor's `OP_RESERVED_3D` and `_3E` when merging `main`;
   `0x39` to `0x3C` are still reserved.
-* **Today's numbers**, on the merged tree: `just pruebas` gives **1000**
+* **Today's numbers**, on the merged tree: `just tests` gives **1000**
   (988 from `main` plus 12 new), `just -f tools/justfile test` **39**,
   `cargo test` of events, images and mapdata green. `NO_CACHE=1 just
   cartuchos` and the cached build give the same three cartridges; `abl.sfc`
-  is `6643d2c1…`. `test_musica_techos.py` stayed green.
-* **Space**, `just espacio` on `release`: bank 0 with 1,063 B free,
+  is `6643d2c1…`. `test_music_ceilings.py` stayed green.
+* **Space**, `just space` on `release`: bank 0 with 1,063 B free,
   **bank 1 with 131 B** —the large pictures' code is there, and
   Picaflor's common events too—, 43 free data banks.
 * **Far RAM**: the one assigned to me, `$2570`-`$257F`, is the end of
@@ -166,5 +166,5 @@ showing and erasing.
   `FAR_SPEED_BONUS`. And in bank `$7F`, while there is a large picture,
   `BIG_PAL` and the two wave tables at `$7F6000`-`$7F64FF`, over the
   ChipSet animation's drawings, which the map load restores:
-  `test_reservas_de_la_wram.py` names them.
+  `test_wram_reservations.py` names them.
 * **HDMA channel 4** belongs to the waves: no other code used it.

@@ -29,7 +29,7 @@ the emission's, and Cardón, who is moving the battle to Rust, may need them—.
 
 Base: `968af650`. Each point in its commit; the ROM and all of `rom/build/`
 —1032 files, with Mara's fingerprint script— identical after each one, with
-`NO_CACHE=1 just cartuchos`.
+`NO_CACHE=1 just cartridges`.
 
 ### 1. Who walks leaves Python
 
@@ -77,7 +77,7 @@ nobody runs `voodoo` any more —the maps and the screens use it as a library,
 and it enters the fingerprint through their binaries—. How it was verified that
 no path runs it: by reading, all the `shutil.which` and `stage.run` of `tools/`
 and every `process::Command` of the crates (none names `voodoo`); and by
-running, `NO_CACHE=1 just cartuchos` with a fake `voodoo` first in the PATH
+running, `NO_CACHE=1 just cartridges` with a fake `voodoo` first in the PATH
 that logs and exits with an error: it was never called, and `rom/build/` came
 out identical.
 
@@ -118,13 +118,13 @@ that draws a `~trama` over a made-up CharSet and looks at which pixels were
 left; it costs little and covers everything that belongs to the path. **A
 cartridge is not worth it**: the mode exists to compare the two outputs in the
 same tree, `release` does not use it, and one more cartridge is time in every
-`just cartuchos` for a path that is not played. I did not add it because the
+`just cartridges` for a path that is not played. I did not add it because the
 request asked to note it; if taro says yes, it is a test in `rm2k-snes-maps`.
 
 **A trap I found in passing**: neither `TRANSLUCENT_MODE` nor `DITHER_PATTERN`
 enter the cartridges' fingerprint. Building with one of those and then without
 it leaves the dithered ROM taken as good until something else changes: to go
-back one has to delete the `sello.txt` files (or build with `NO_CACHE=1` and
+back one has to delete the `stamp.txt` files (or build with `NO_CACHE=1` and
 the stamps deleted, which is what I did). I did not fix it: it belongs to
 `cartridge` and the project, and it is better to decide first whether the mode
 stays.
@@ -132,8 +132,8 @@ stays.
 ## How it was verified
 
 With Mara's fingerprint scripts, copied to `<scratchpad>/ceibo/`: `NO_CACHE=1
-just cartuchos` with the stamps deleted, and the sha256 of all of `rom/build/`
-—1032 files, minus the cache, the `.o`, `sello.txt` and `conversor.log`; the
+just cartridges` with the stamps deleted, and the sha256 of all of `rom/build/`
+—1032 files, minus the cache, the `.o`, `stamp.txt` and `converter.log`; the
 `.dbg` without `mtime`— against the base at `968af650`, built with this
 worktree's local binaries. Identical after each of the five commits. The ROMs:
 
@@ -145,7 +145,7 @@ After merging `main` (`be94c1d8`, Cardón's battle) the three ROMs stay
 identical; only the three `.dbg` change, because of the runtime comments that
 merge brought.
 
-The suites on the merged tree: `just pruebas`, 878 pass; `just -f
+The suites on the merged tree: `just tests`, 878 pass; `just -f
 tools/justfile test`, 49. `cargo test -p` of `events`, `map-background`,
 `map-sprites`, `maps` and `cartridge`, green.
 

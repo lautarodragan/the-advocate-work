@@ -44,7 +44,7 @@ animation comes from a counter that does not advance during transitions
 
 ## What it gave
 
-**The timer — deleted.** With the `timer-cero` page, measured from the
+**The timer — deleted.** With the `timer-zero` page, measured from the
 frame in which the timer appears, in both: the colon goes off at +30, the
 digits are visible until +59 and at +60 the timer is gone. **It never shows
 00:00, in neither one.** The 252 pixels of frame 60 were the reference being
@@ -61,7 +61,7 @@ the ROM and 158 in the original. It is a new task:
 `teleport-takes-three-frames-too-many.md`.
 
 **The phase of the animated tiles — deleted.** The ten pixels are the water
-of map 6's ChipSet, visible after the `grafico-heroe` route lowers the
+of map 6's ChipSet, visible after the `graphic-hero` route lowers the
 camera: today it changes step at tick 47 of that case, same as on
 2026-09-12. Against the original, the rule was measured, not the absolute
 phase —that depends on everything played since "Begin the Story", and the
@@ -82,7 +82,7 @@ animation like easyrpg.
 
 Two things seen in passing, which do not change the above:
 
-* `Partida.ir_al_mapa` freezes **one tick more** than the visible fade (70
+* `Partida.go_to_map` freezes **one tick more** than the visible fade (70
   against 69): the animation comes out of it one frame late. It is the
   harness's, which asks for the fade from outside; with a page's
   `Teleport` it does not happen.
@@ -93,7 +93,7 @@ Two things seen in passing, which do not change the above:
 
 ## Where the captures ended up
 
-`/shared/capturas/2026-09-29-divergencias/`, the original and the ROM with
+`/shared/captures/2026-09-29-divergencias/`, the original and the ROM with
 the same name and the number relative to the mark used:
 
 * `cronometro-{rpgrt,rom}-*`: before, on appearing, the tint, the colon, the
@@ -103,13 +103,13 @@ the same name and the number relative to the mark used:
   and the fourth from start to finish.
 * `agua-{rpgrt,rom}-*`: the last water step before the fade, the first and
   the last frame of the fade, and the step after. The ROM ones come from
-  `ir_al_mapa`, so they carry the harness's extra tick.
+  `go_to_map`, so they carry the harness's extra tick.
 
 In the ROM captures of map 16 the hero is not visible: the save starts from
-`en-5` and reaches 16 through `ir_al_mapa`, without the party the game
+`in-5` and reaches 16 through `go_to_map`, without the party the game
 enters there with. The camera follows him anyway, which is what was
 measured.
 
-What `just pruebas` does not cover: none of this. These are measurements
+What `just tests` does not cover: none of this. These are measurements
 with throwaway scripts; no code or goldens were touched, only two test
 comments that cited the deleted files.

@@ -18,9 +18,9 @@ pictures, and a picture goes above all events (EasyRPG:
 `Priority_PictureNew` > `Priority_EventsFlying`). It was not compared with the
 original in Wine.
 
-**How to see it**: `just arrancan -k sunset` at the root of the ports builds the
+**How to see it**: `just boot -k sunset` at the root of the ports builds the
 release; go to map 2 and look at the guard. The walks of the goldens of
-`test_pintados.py` were chosen so they do not show it.
+`test_painted.py` were chosen so they do not show it.
 
 Nearby, without checking whether it is the same thing: a normal-layer guard at (36,13)
 on the same map has its legs over the edge of a roof; it may be one

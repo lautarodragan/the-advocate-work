@@ -32,7 +32,7 @@ because it is design and taro wants to see it. Lagartija did it, from `main` at
   inventory page by page, the feature's design, what the whole VRAM
   gives, and what it would cost.
 * **The captures of the original and the mock-ups**, in
-  `/shared/capturas/2026-10-04-menu-custom/`, with their `LEEME.txt`: fourteen
+  `/shared/captures/2026-10-04-menu-custom/`, with their `LEEME.txt`: fourteen
   captures of the original under Wine —the window of Talan, Arden, Sern and
   Emily, Talan's guide, his skills, four aura tables, Sern's
   souls and the pause menu— and five mock-ups, each side by side
@@ -140,7 +140,7 @@ yellow 4, black as grey 3, white 0).
   1.8 KB, 45 tiles of 8bpp—. Code, in `FAR2` ($C0): from 15,458 to 11,805
   bytes free before the merge with Cardón, some 3.6 KB; bank 0, some 110
   bytes (the rows table and the pause menu's dispatch). Measured with
-  `just espacio release` in ABL; today it gives bank 0 2,522, $C0 10,415.
+  `just space release` in ABL; today it gives bank 0 2,522, $C0 10,415.
 * **RAM**: `$7E3640`-`$7E367F`, between the message arrow and `FAR_HP`.
 * **VRAM**: all of it while it is open. The text from 0 to `SCENE_MAP`
   (447 pairs, its own: the battle went down to 255), BG1 its tilemap at
@@ -162,11 +162,11 @@ without the item, opening from the menu and from the item and going back to the 
 map, navigation around and through tabs, the blue, red and
 white auras with the counters set by hand (99 as "Learned"), Talan's
 guide, Emily scrolled, Sern's souls, Saldra and Lerle with what
-their common events count, and going back to the same character—. `test_consola_portatil.py`
+their common events count, and going back to the same character—. `test_portable_console.py`
 now looks at the automatic common event that opens the menu; the case
 `consola-portatil-escrita` went with the test of Sern's message.
-No existing golden changed. `empujon` lost its last box (the
-text block shifted) and `test_items_vuelve` closes the console, which is
+No existing golden changed. `push` lost its last box (the
+text block shifted) and `test_items_returns` closes the console, which is
 the item it uses.
 
 In the tools: tests of `rm2k-snes-events` for the replaced common event and
@@ -184,12 +184,12 @@ defects. The pause menu with "Console" does not have a `render` either.
   merged and this worktree's tools (`cartridge`, `events`,
   `screens`, `mapdata`, `convert` locally): **1078 green**, twice
   in a row. A third round, in between, gave five reds of
-  "el Teleport no terminó de fundir": it was a `just espacio` of mine that rebuilt
+  "el Teleport no terminó de fundir": it was a `just space` of mine that rebuilt
   the cartridges while it was running; repeated without touching anything, green.
 * `abl.sfc`: `4e809540424fa129…`.
 * **The red**: the new tests with the global tools, without the
   change: the 8 of `test_menu_custom_golden.py` and
-  `test_el_item_81_abre_el_menu_por_su_comun`.
+  `test_item_81_opens_the_menu_through_its_common_event`.
 * `just -f tools/justfile test`: 27. `cargo test` of `screens`, `events`,
   `mapdata`, `convert`, `cartridge` and `bytecode`.
 * What the suite does **not** cover: a menu without portraits or without `replaces_common`
@@ -199,7 +199,7 @@ defects. The pause menu with "Console" does not have a `render` either.
 ### What needs looking at
 
 Side by side with the original and the contact sheet in
-`/shared/capturas/2026-10-04-consola/`. The captures of the original are
+`/shared/captures/2026-10-04-consola/`. The captures of the original are
 Lagartija's, from the same day and the same Wine.
 
 ## For taro

@@ -97,7 +97,7 @@ Dawn's 52 was one.
   not. None of the transformations or summons could be reached.
 
 The other four games build and reach their first map in snes9x and bsnes
-(`just arrancan`, ports root).
+(`just boot`, ports root).
 
 ### Cost
 
@@ -108,24 +108,24 @@ The other four games build and reach their first map in snes9x and bsnes
   race; the rest 0 or 1. Counted with a throwaway pytest plugin that reads
   `lost_frames` after each frame and puts it back to zero.
 * **ROM**: bank 0 gains four `jsl`s (map_events, set_switch, op_access,
-  boot) and loses nothing; the rest is bank 1. `just espacio` for what is
+  boot) and loses nothing; the rest is bank 1. `just space` for what is
   left.
 * **RAM**: six bytes per entry and sixteen more, in `FARBSS`. Vampires
   Dawn has 53 bytes of `FARBSS` left with Chajá's conditions in.
 
 ### Tests
 
-* `pruebas/rpgmaker/test_comunes_paralelos.py` (four), with ABL's own:
+* `tests/rpgmaker/test_parallel_commons.py` (four), with ABL's own:
   2 without a switch prohibits saving; 8 enables it even after a page's
   `ChangeSaveAccess`; turning 236 off prohibits it on the next frame; 1
   opens its message as its owner, turns its switch off, stays frozen, and
   turning it on again goes on from there. Red with main's tools.
 * The compiler's: three on loops, one on switches past the bitmap (red
   without the filter), one on `parallel_commons`' answer.
-* `test_ag7_y_la_planta.py` waits a few frames after the menu, and
-  `pelea-113` a `Wait` between the switch and the battle: in RM2k the
+* `test_ag7_and_the_plant.py` waits a few frames after the menu, and
+  `battle-113` a `Wait` between the switch and the battle: in RM2k the
   battle would not see the common event either.
-* Menu tests turn 236 on (`SWITCH_GUARDAR`); eleven menu goldens moved,
+* Menu tests turn 236 on (`SAVE_SWITCH`); eleven menu goldens moved,
   Save grey, 56 pixels each, looked at one by one.
 * The battle flash test counts levels and not frames: see the draft
   `battle-flash-test-depends-on-the-cycles-before-the-battle`.

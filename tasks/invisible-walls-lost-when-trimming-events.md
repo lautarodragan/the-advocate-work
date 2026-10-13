@@ -15,7 +15,7 @@ be baked (`decorative_events`) instead of lost: the trim runs before
 Wally, so today what goes away isn't baked".
 
 **Checked today** (the-advocate `fc6f7456`, ports `a85b7e3`): the
-`conversor.log` of Desert Nightmare's release gives the same lists as on
+`converter.log` of Desert Nightmare's release gives the same lists as on
 2026-10-10. These lose invisible walls (wall only, or drawing and wall):
 
 | map | events with a wall that go away |
@@ -37,6 +37,6 @@ own System: the trim doesn't depend on that).
 are blocked in the original. Which ones they are, and whether they let you reach
 somewhere you shouldn't, wasn't looked at in an emulator.
 
-**How to see it**: `just cartuchos release` in `desert-nightmare/` and
-`grep "lose an invisible wall\|looks and a wall" build/release/conversor.log`;
+**How to see it**: `just cartridges release` in `desert-nightmare/` and
+`grep "lose an invisible wall\|looks and a wall" build/release/converter.log`;
 the event numbers are on each line.

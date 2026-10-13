@@ -41,18 +41,18 @@ beforehand. It starts from `3aac634`, with milestone 1 (`world-1-map-66-fits.md`
   (diff of the two `.inc`s, which carry each map's record: layout,
   `BG12NBA`, the window's addresses).
 * **69 goes into the new layout** and the window comes out right: golden
-  `sorbe-69-mensaje` (`test_sorbe.py`). **It was seen failing with the bug in place**:
+  `sorbe-69-message` (`test_sorbe.py`). **It was seen failing with the bug in place**:
   forcing `estampar_ventana` to always use the 128 map, that golden
   differs in 26 % of the pixels.
 * **All triggerable pages of the new maps compile** (with
   `culpables.py` from `mundo-plan`): 69, 76 to 84. On 66 seven don't compile,
   those whose destinations aren't in (67, 68, 105, 259, 310, 312).
-* **`test_pasos_de_encuentro.py`**, new: 10 steps on 66 (chance and
+* **`test_encounter_steps.py`**, new: 10 steps on 66 (chance and
   thresholds), zero on 66, 10 on 5 (without encounters: it writes nothing), and
-  the return to 66's 65 on reloading it. `test_batalla_golden.py::
-  test_encuentro` covers that the step on which `test-special`'s encounter
+  the return to 66's 65 on reloading it. `test_battle_golden.py::
+  test_encounter` covers that the step on which `test-special`'s encounter
   comes up didn't move when reading the thresholds from RAM.
-* **`test_recorrido_sorbe_golden.py`**, new: from the world (the "no" branch to
+* **`test_playthrough_sorbe_golden.py`**, new: from the world (the "no" branch to
   Wick, 162, which is the ankle one) to Sorbe, the old woman and the guard, the
   mountain and the fight with Vago, the healing, the story and the sign, the
   office, the factory, outside, the transport, and Dalia's trip up to the
@@ -60,7 +60,7 @@ beforehand. It starts from `3aac634`, with milestone 1 (`world-1-map-66-fits.md`
   set to 999** from the harness: Talan at level 1 and Arden at 3, which
   is what a new game gives, lose. Its captures aren't blessed.
 * **`test_sorbe.py`**, new: goldens of the arrival at 69, 76 and 81, with
-  `celdas_mal_dibujadas` at zero, and the one of the message on 69.
+  `wrongly_drawn_cells` at zero, and the one of the message on 69.
 * **Dalia's trip ends by itself at the end of the demo**, without walking: the
   car's route ends right on Tasgarde's entrance, and RPG_RT, on taking
   the last step of a route, cancels it and looks at the event under the hero
@@ -71,12 +71,12 @@ beforehand. It starts from `3aac634`, with milestone 1 (`world-1-map-66-fits.md`
 * **On merging `main`** (the backgrounds in the MSU-1)
   `test_msu_una_pelea_del_mundo_lee_su_terreno_o_el_reemplazo` went red: it reaches 66
   with `DummyHero` and that now starts Dalia's trip. It turns on 278 and passes
-  with its goldens intact. And `just techos` for the two new themes.
-* **`just cartuchos` and `just pruebas` green** on the merged tree.
+  with its goldens intact. And `just ceilings` for the two new themes.
+* **`just cartridges` and `just tests` green** on the merged tree.
 
 # Space
 
-Measured with the method in `AGENTS.md` on what `just cartuchos` left, on the
+Measured with the method in `AGENTS.md` on what `just cartridges` left, on the
 merged tree with the backgrounds in the MSU-1:
 
     release        81,8 %   bank 0 189 B    bank 1 ~7,9 KB    BSS 138   ZEROPAGE 4

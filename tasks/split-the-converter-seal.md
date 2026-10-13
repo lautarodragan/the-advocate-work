@@ -5,11 +5,11 @@ type: refactor
 status: wishlist
 ---
 
-Proposed on 2026-09-26 by the `just cartuchos` optimisation (see
+Proposed on 2026-09-26 by the `just cartridges` optimisation (see
 `warm-cartridges-in-ten-seconds.md`): today touching any file in
 `rom/src/` reconverts everything, but the converter reads a single file from
 `rom/src/`, `ram_lejana.s` (measured with an audit hook). With one seal for
-the converter (flags, cases, `tools/`, binaries, `parches/manual`, ceilings and
+the converter (flags, cases, `tools/`, binaries, `patches/manual`, ceilings and
 `ram_lejana.s`) and another for `rom/src/`, `ca65` and `ld65`, editing assembly
 would cost about 4 s instead of ~15. It is a structural change in
 `tools/ensamblado/cartuchos.py`.

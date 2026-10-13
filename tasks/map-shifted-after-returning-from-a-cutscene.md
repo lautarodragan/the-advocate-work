@@ -63,19 +63,19 @@ iteration, and it's **two rows**: 8 px of the hero at speed 6
 reach it: the longest in the game is five cells in eleven frames, 7.3 px per
 frame, measured over the 410 jumps in `data/maps/`.
 
-Reproduced with two cases, `camara-veloz` and `camara-veloz-x`, and checked
+Reproduced with two cases, `camera-fast` and `camera-fast-x`, and checked
 against VRAM and not against the screen: it can't be got from a PNG, because
 the window is a torus and a skipped row looks like a plausible map shifted
 one cell. `Partida.ventana` asks which cell each slot holds and compares it
 against the same thing arriving by a teleport. See
-`pruebas/rpgmaker/test_camara.py`.
+`tests/rpgmaker/test_camera.py`.
 
 `stream_map` now does up to two rows and two columns per iteration, advancing
 the edge **one at a time**: if some day the camera jumped further, `win_row`
 falls behind instead of lying and what's missing gets drawn in the following
 iterations.
 
-What it costs, measured with `cuadros_perdidos` and map 11, which is the one
+What it costs, measured with `lost_frames` and map 11, which is the one
 with the least margin: **zero** in the case that exercises the fix —two rows
 per iteration for 120 frames, +44 dropped frames before and after— and up to
 +2 out of 120 in normal walking.
@@ -87,7 +87,7 @@ with the hero floating mid-arc. `move_hero` only calls `paso_de_ruta` while
 `ruta_i < ruta_n`, and `paso_de_ruta` is the only one that lowers
 `ruta_salto`; when the jump is the last order, the route is already consumed
 on the next frame and nobody advances it any more. Measured with the case
-`camara-salto-colgado`: `ruta_salto` stays at 232 and `hero_y` at 323 with
+`camera-jump-stuck`: `ruta_salto` stays at 232 and `hero_y` at 323 with
 the destination cell at `tile_y = 22`, forever.
 
 It's what taro describes on map 11 —Talan floating while the text is

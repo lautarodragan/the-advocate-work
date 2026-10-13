@@ -22,7 +22,7 @@ repo; the temporaries in `/extras/scratch/aguara/`.
   `RPG_RT.LDB` case-insensitively (Sunset). Its own commit.
 * **Setting up a project**: the first time, against "missing key", sixteen
   sections of ABL's `rm2k-snes.toml` had to be filled with neutral
-  values, a `nada.json` case and a `[cases] debug_map_entry` that doesn't
+  values, a `nothing.json` case and a `[cases] debug_map_entry` that doesn't
   exist. The other six came from a throwaway script that copies El Dorado's
   (`nuevo.py`): it is what a `rm2k-snes-project new` would do.
 * **ABL assumptions fixed in the branch**: the mandatory debug map
@@ -50,13 +50,13 @@ cartridge that starts; Vampires Dawn doesn't (the variables).
 study):
 
 * the projects, each its own repo with one commit: `/extras/otros-juegos-snes/<juego>/`;
-* the ROMs: `/shared/builds/otros-juegos/<juego>.sfc`;
+* the ROMs: `/shared/builds/other-games/<juego>.sfc`;
 * the sheets, original above and cartridge below:
-  `/shared/capturas/2026-10-05-other-games/<juego>.png`;
+  `/shared/captures/2026-10-05-other-games/<juego>.png`;
 * the link copies with the reduced System and the BMPs as PNG, which the
   cartridges of Book of Three, Dooms 2, Frozen World and Desert need to
   build: `/extras/scratch/aguara/juegos/<juego>/`, made with the `granja.py`
-  next to them. They are built with `GAME_DIR=<copia> just cartuchos`.
+  next to them. They are built with `GAME_DIR=<copia> just cartridges`.
 
 **What to look at**: that the beginning of Book of Three, Frozen World and Dooms 2
 resembles the original, and **Desert Nightmare's background**, a mode 3

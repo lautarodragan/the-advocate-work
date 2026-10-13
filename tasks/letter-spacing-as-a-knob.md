@@ -103,7 +103,7 @@ Measured with `rm2k-snes-screens boxes` over the boxes of the maps (240 px,
 
 The three ROMs in `/shared/builds/espaciado/` (`abl-espaciado-0.sfc`, `-1`,
 `-2`) with their `LEEME.txt`, and the side-by-side captures in
-`/shared/capturas/2026-10-03-espaciado/`. **+1 and +2 were built with the
+`/shared/captures/2026-10-03-espaciado/`. **+1 and +2 were built with the
 menu bank check turned off** —a local `screens`, uncommitted—: with the
 usual party nothing should happen, but if the menu shows garbage, that's
 why.

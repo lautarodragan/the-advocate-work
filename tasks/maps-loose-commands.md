@@ -52,7 +52,7 @@ left: common event 45, `ChangeGold` by variable (map 321 and common events
   default pan, which showed **`pic_on_map` was eight pixels off**: it
   centred RM2k's display on the console's camera, and RM2k leaves nine
   cells left of the hero, not the half. Fixed in its own commit; the two
-  `imagen-mapa` goldens move their REC eight pixels right.
+  `picture-map` goldens move their REC eight pixels right.
 
 What `culprits --every-map` says now, on ABL: every map page compiles; of
 the common events only 32 is left, which compiles on its map (114); no call

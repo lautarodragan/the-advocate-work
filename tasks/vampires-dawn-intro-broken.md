@@ -22,11 +22,11 @@ Against RM2k (the original with Wine, `RPG_RT_2015.exe`): the whole panorama and
 
 ## The fix
 
-A `beq` after each `sep #$20` that follows the length calculation (Z is from the `asl`): branch `huron-vd-intro` of the-advocate, `6f933ff8`. New test in ABL, `pruebas/rpgmaker/test_dma_de_cero.py`: a copy of `release` with map 94's sprites at zero in the record; VRAM from `M_VRAM_MAP` on has to stay the same as untouched. **Red before the fix**, with the global tools: "sin sprites, 19050 palabras de la VRAM desde $1800 quedaron distintas".
+A `beq` after each `sep #$20` that follows the length calculation (Z is from the `asl`): branch `huron-vd-intro` of the-advocate, `6f933ff8`. New test in ABL, `tests/rpgmaker/test_dma_from_zero.py`: a copy of `release` with map 94's sprites at zero in the record; VRAM from `M_VRAM_MAP` on has to stay the same as untouched. **Red before the fix**, with the global tools: "sin sprites, 19050 palabras de la VRAM desde $1800 quedaron distintas".
 
 ## Verified
 
-* VD's map 3 built alone with the fix: the panorama, still, like the original. With 4 and 27 in the cartridge, the "Skip Intro ?" window is no longer white. The captures, with the original alongside: `/shared/capturas/2026-10-11-vd-intro/`.
+* VD's map 3 built alone with the fix: the panorama, still, like the original. With 4 and 27 in the cartridge, the "Skip Intro ?" window is no longer white. The captures, with the original alongside: `/shared/captures/2026-10-11-vd-intro/`.
 * ABL, with the-advocate `6f933ff8` (`cartridge` and `project` installed locally) and the ports at `b499ab4`: the suite, 1177 green (1176 + the new one), no golden moved. `abl.sfc` `24dd24adb52f…` (before `ea49ff07fd9d…`).
 
 ## What the suite doesn't cover

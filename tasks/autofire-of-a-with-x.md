@@ -45,17 +45,17 @@ bytes** of `TABLAS`/`CODE` in the three cartridges (`release`, `tests/main`,
 `tests/special`), one of BSS, nothing of zero page. The new case adds nothing
 to bank 0.
 
-Tests: `pruebas/rpgmaker/test_autofire.py` and `test_cores.py::test_autofire`,
+Tests: `tests/rpgmaker/test_autofire.py` and `test_cores.py::test_autofire`,
 with the case `autofire` —five messages in a row, and variable 17 counts the
 closed ones—. Seen red by breaking the feature four times:
 
 * `bit #PAD_X` changed to `bit #0` (no autofire): four red —the
   messages, the rhythm, releasing X and releasing X halfway—.
 * `sta pad_a` of the path without X changed to `tsb pad_a` (releasing X leaves A
-  stuck): red `test_soltar_x_no_deja_a_trabado_ni_toca_de_mas`, phase 1.
+  stuck): red `test_releasing_x_neither_leaves_a_stuck_nor_presses_extra`, phase 1.
 * `and #PAD_A` + `sta pad_a` of the path with X changed to `stz pad_a` (the real
-  A does not win): red `test_la_a_de_verdad_gana` and
-  `test_soltar_x_con_a_apretado_no_suelta_a`.
+  A does not win): red `test_the_real_a_wins` and
+  `test_releasing_x_with_a_pressed_does_not_release_a`.
 * without the `stz autofire` of the path without X: red the part of "the next X presses
   right away", phase 4.
 

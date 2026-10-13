@@ -26,4 +26,4 @@ not compile, nor do 30 (`Lebensstatus`), 48 (`Geschick`) and 49
   holds: no page can turn it on, so it is left out whole.
 
 **How to see it**: the line "parallel common events" of
-`vampires-dawn/build/release/conversor.log`, and `just culpables`.
+`vampires-dawn/build/release/converter.log`, and `just culprits`.

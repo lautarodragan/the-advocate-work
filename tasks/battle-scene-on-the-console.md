@@ -18,7 +18,7 @@ once**, and compose when the battle starts.
   bit plane —8bpp is planar—, and the scene goes up to VRAM as today.
 - Each battler has **15 colours plus transparent**: its low 4 bits come
   from its drawing and the high 4 are the palette it gets in this battle. It's an
-  artistic decision —colours are lost compared with today— and it goes to `parches/`.
+  artistic decision —colours are lost compared with today— and it goes to `patches/`.
 - When an enemy dies, its cells are recomposed from the clean background and
   uploaded by DMA. No precomputed versions.
 - With no background —or without MSU-1, later on— it's the same code over a flat background.
@@ -36,7 +36,7 @@ It works in `abl`: the droid battle over `SJBackdropABL04` and the random
 encounters in Sector 30 and Sector 27 over `ABLBackdropSJ03`, inherited from the map as
 `Game_Map::SetupBattle` does. A dead enemy disappears. The how is in
 `tools/port/escena.py` and above `escena_subir` in `main.s`; the fifteen
-colours of each battler, in `parches/battlers/`.
+colours of each battler, in `patches/battlers/`.
 
 The captures to look at are in `/extras/capturas/escena-runtime/`
 —before and after, and an erase frame by frame—, and those of the eleven goldens
@@ -47,7 +47,7 @@ replacing it.
 
 * how many frames composing takes: `ESC_CUADROS`, in RAM, as soon as the
   battle opens. The busiest in the PoC is troop 100 —the encounter in
-  `test_escena.py`—.
+  `test_scene.py`—.
 * how much it takes up: the sum of the ROM segments in the `.dbg` of the
   `abl` build, against the previous one.
 * bank 0: the method in `AGENTS.md`, in the four cartridges.

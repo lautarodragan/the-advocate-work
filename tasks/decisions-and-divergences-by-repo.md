@@ -179,7 +179,7 @@ They were not touched: taro is the one who decides.
 
 * **The paths from the move.** Several cite `rom/src/`, which since the
   move is `tools/runtime/` —which ones: `grep -l 'rom/src/'
-  workflow/decisiones/*.md workflow/divergencias/*.md`—, and the `pruebas/…` inside them are now
+  workflow/decisiones/*.md workflow/divergencias/*.md`—, and the `tests/…` inside them are now
   `rom/pruebas/…`. It is a mechanical replacement that is worth doing before
   the split, in its own commit.
 * **Names that moved to the project file**: `SIN_TRAMA`

@@ -12,7 +12,7 @@ after the world one. taro decided it on 2026-09-27.
 # What was measured
 
 With a throwaway script over the `mensajes` block of `release` at
-3c16a178 (how it is today is printed by `just espacio`):
+3c16a178 (how it is today is printed by `just space`):
 
     as today, one byte per letter    119,082 B
     LZ2, in two streams of < 64 KB   63,405 B   (47 % less)
@@ -40,7 +40,7 @@ phrase: time or RAM, and the smaller the blocks, the less it compresses.
    table and a few instructions in the routine that draws the text. The
    typical figure is 30–40 %; **it isn't measured**.
 
-Measure each step before implementing, and have `just espacio` show the
+Measure each step before implementing, and have `just space` show the
 result.
 
 # What was done (Guayacán, 2026-10-01)
@@ -76,13 +76,13 @@ Searched with a `grep` of `messages`, `msg_ptr`, `msg_start` and
   `slot_text_write`, `level.s`) use `msg_ptr` as a pointer but read
   **other strings**, not `messages`: they weren't touched. `InputNumber` doesn't read
   text from the block.
-* In the tests: `cuadro_de_texto` (`tanda.py`) walks the block and now
+* In the tests: `text_box` (`suite.py`) walks the block and now
   decodes the pairs; `test_compositor.py` counts the bytes as letters;
-  `mensaje_en_pantalla` (`batalla.py`) reads `messages_troop`, without pairs.
+  `message_on_screen` (`battle.py`) reads `messages_troop`, without pairs.
 
 ## What was measured
 
-`just espacio`, before (`cd3dce0d`) and after:
+`just space`, before (`cd3dce0d`) and after:
 
     cartridge                     texts before   texts after
     release                       145,792 B      94,417 B   (-35 %)
@@ -95,8 +95,8 @@ Searched with a `grep` of `messages`, `msg_ptr`, `msg_start` and
 
 Without the push re-measured, `test-special` went down to 36,583 B (-45 %).
 
-(*) `test-special` carries the `empujon` case, which exists to push map 255's
-box over the bank edge —`test_texto`—: with DTE it ended up
+(*) `test-special` carries the `push` case, which exists to push map 255's
+box over the bank edge —`test_text`—: with DTE it ended up
 at +36,188 and didn't cross, so it was re-measured (684 boxes, a tail and
 two of two letters) until it fell again at +$FFFC, as before.
 
@@ -106,7 +106,7 @@ the 51 KB free up is half a bank of the 64 KB ones, and today 46 are spare.
 **The text's pace didn't change**, measured with a throwaway script that
 saves per tick `msg_state`, `msg_line`, `msg_col`, the lost frames and
 the emulator's frames, against the base ROM: identical traces in
-`grupo-11-en-255` (two boxes of four lines), `autofire`, `ventana`
+`party-11-in-255` (two boxes of four lines), `autofire`, `window`
 and 2400 ticks of the game from the title. That is, the same `MSG_CHARS` = 5
 letters per loop, and not one extra lost frame: `message_tick` runs in
 the main loop, not in the vblank, and the `jsl` per letter doesn't show next
@@ -133,7 +133,7 @@ step of 2 is enough for 128 KB, which today is plenty.
   `message_pairs` lines go right after `MESSAGES_CAP`; `request.rs`: the
   `message_pairs` field) and in `main.s`'s list (`message_letter.s`
   before `header.s`). If their branch moves where `messages` starts in
-  `test-special`, `test_texto[texto-cruza]` and `[texto-lejos]` will require
+  `test-special`, `test_text[texto-cruza]` and `[texto-lejos]` will require
   re-measuring the push: the offset is measured from the
   start of the block, which today falls at the start of a bank.
 * None of this touches goldens.

@@ -28,19 +28,19 @@ Related: `responsibilities-of-snes-convert-py.md` and
 * 2026-09-28, Quebracho. `main` merged into the worktree (`e314ff7b`). The
   graph comes from a throwaway AST script (in the scratchpad): `import` edges
   (at module level), `lazy` (inside a function or the `if __name__`) and
-  `ruta` (a literal that *is* the path of another `.py`). The first version
-  counted as `ruta` any text that named a `.py` —docstrings, `help=`— and gave
+  `route` (a literal that *is* the path of another `.py`). The first version
+  counted as `route` any text that named a `.py` —docstrings, `help=`— and gave
   a single cycle of thirty modules: noise. With the whole literal as the path
   two real edges remain: `cartuchos` runs `snes_convert.py` as a subprocess,
   and `snes_convert` puts the hash of `rm2k`, `render_map`, `chipset` and
   `asignador` into the cache key.
 * First finding against `tools/README.md`: the cycles are not the three it
   says. There is a single strong component in `port/` of six modules
-  (`eventos`, `batalla`, `pantallas`, `imagen`, `titulo`, `experiencia`),
+  (`eventos`, `battle`, `pantallas`, `imagen`, `title`, `experiencia`),
   plus `snes_convert`↔`pantalla_completa` and, at the very bottom,
-  `lcf`↔`fork`. `batalla`↔`pantallas` is not direct: it goes through
+  `lcf`↔`fork`. `battle`↔`pantallas` is not direct: it goes through
   `eventos`. And the imports that violate the layers come from just two
-  files: `ensamblado/cartuchos.py` (imports from `port/`, `audio/` and
+  files: `ensamblado/cartridges.py` (imports from `port/`, `audio/` and
   `rpgmaker/`) and `rpgmaker/fork.py` (imports from `render/`, inside
   functions).
 * I split the reading for the agnostic/ABL classification into five parallel
@@ -48,7 +48,7 @@ Related: `responsibilities-of-snes-convert-py.md` and
   and what is not Python.
 * The five readings agreed on the broad strokes: **no section of
   `snes_convert` nor of `eventos` is ABL's**. What of ABL is written in the
-  code is the content of `cartuchos.py`, the audio tables of `snes_music.py`
+  code is the content of `cartridges.py`, the audio tables of `snes_music.py`
   (269-417) and some twenty knobs. I checked against the code each hook the
   research cites by line (a grep of each constant). What ties the repo to ABL
   is the shape of the tree: eleven modules compute the root from `__file__`.
@@ -63,5 +63,5 @@ Related: `responsibilities-of-snes-convert-py.md` and
 On 2026-09-28, on the research's summary: see
 `decisions/the-tools-split-from-abl.md`, which also has
 the three questions that were left open (how ABL consumes the tools,
-`cartuchos.py`, and which decisions and divergences go to each side). The
+`cartridges.py`, and which decisions and divergences go to each side). The
 research was not touched: it is a snapshot.

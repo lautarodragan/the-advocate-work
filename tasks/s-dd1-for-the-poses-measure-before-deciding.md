@@ -21,7 +21,7 @@ exact inverse of Andreas Naive's decompressor. Each compressed block is
 decompressed with **bsnes's decompressor untouched**, included from
 `~/ref/bsnes-libretro` (`src/ref.cpp`), with garbage after the block, and it
 comes back byte for byte identical: 0 differences in the ~60,000 pieces of ABL and VD.
-`medir.py` builds the table; `carga.py`, what the background costs at load time.
+`measure.py` builds the table; `carga.py`, what the background costs at load time.
 
 ABL's data comes from `build/release` in the ports (b499ab4, tools
 6f933ff8, `abl.sfc` 24dd24adb52f3187); VD's, from Tijereta's `vd-bloques/`

@@ -22,7 +22,7 @@ From taro, on 2026-09-30, answering about `troop-events.md`
 See `decisions/first-the-whole-game-then-the-quality.md`.
 
 It starts from `main` at the commit that launches the task. There: `NO_CACHE=1
-just cartuchos` gives `abl.sfc` `e20182d1bd905de7…`; `just pruebas` 893,
+just cartridges` gives `abl.sfc` `e20182d1bd905de7…`; `just tests` 893,
 `just -f tools/justfile test` 46.
 
 # Common 35 (Aguará, 2026-09-30)
@@ -34,7 +34,7 @@ it runs before the first orders). And 74 maps —82 pages— bring the autostart
 `AfterBattleMint`, with 498 as its condition, which only does `CallEvent` to
 common 35; on returning to the map, the autostart runs and the common turns off
 498 at the end. In `release` 16 of those maps are there, among them 60 of the
-case `pelea-invocacion`.
+case `battle-summon`.
 
 **What it does**, besides giving Lerle back: it heals the 18 summons (36 to
 53), removes whichever is in and adds Lerle (26); it turns off Talan's switches
@@ -48,14 +48,14 @@ and the highest, from 201 to 204. It shifts the slots: the saves of the
 cartridges from before do not load correctly in this one, and that is
 approved.
 
-**The test**: `test_despues_de_la_pelea_lerle_vuelve_al_grupo`, in
-`test_sistemas_de_tropa.py`. **Red before the fix**, measured: 498 stayed on
+**The test**: `test_after_the_battle_lerle_rejoins_the_party`, in
+`test_troop_systems.py`. **Red before the fix**, measured: 498 stayed on
 after the battle. `test_la_invocacion_cambia_...`, which looked at the party
 right after the battle closed, now turns 498 off before closing, because
 otherwise the common has already run when it looks.
 
 **The cost**: the common compiles in place of each `CallEvent`, so it goes
-copied into each map with encounters. `just espacio` in `release`: data banks
+copied into each map with encounters. `just space` in `release`: data banks
 from 116 to 117 used (7 free), gaps from 8,799 to 7,678 B. Bank 0 and bank 1
 did not move (13 B and 5,054 B). It is a debt: a shared body would pay it only
 once.
@@ -83,7 +83,7 @@ of the `.msu` cost nothing: **with the MSU-1 the three have their track** (38,
 142 and 161), because the numbering comes from `Music/` and the converter
 rendered them on its own.
 
-**The quality debt**, measured by comparing `release`'s `conversor.log` before
+**The quality debt**, measured by comparing `release`'s `converter.log` before
 and after (throwaway script, per sample and per theme): three more themes
 leave fewer entries of the sample directory for copies, and samples that other
 themes had in their own copy move to the worst package's. The battle theme: its
@@ -105,10 +105,10 @@ It gets adjusted when the whole game can be played
 `/shared/audio/2026-09-30-radio/`, the three themes and the battle one through
 the SPC700.
 
-**The test**: `test_la_radio_pone_el_tema_de_la_cinta`, in
-`test_sistemas_de_tropa.py`, one per tape: `song_current` is the theme, the
+**The test**: `test_the_radio_plays_the_tapes_song`, in
+`test_troop_systems.py`, one per tape: `song_current` is the theme, the
 music is not silenced and its samples are in the ARAM, like
-`test_tema_del_mapa.py`. **Red without the fix**, measured with `main`'s
+`test_map_song.py`. **Red without the fix**, measured with `main`'s
 compiler: the cartridge did not carry the themes.
 
 **Bank 0**: the three themes cost it 4 B each —`song_lo`, `song_hi`,
@@ -120,17 +120,17 @@ tables moved to RODATA and are read with `f:` (separate commit).
 Commits: e0100423 (common 35), d6f3342d (the theme tables out of bank 0),
 92c3f95f (the radio) and the merge of `main`.
 
-`NO_CACHE=1 just cartuchos` and `just cartuchos` with cache give the 1035 files
+`NO_CACHE=1 just cartridges` and `just cartridges` with cache give the 1035 files
 of `rom/build/` identical. `abl.sfc` `30ae28d9cff39cd3…`.
 
-`just espacio`, `release`: data banks **120 of 124, 4 free** (116 before the
+`just space`, `release`: data banks **120 of 124, 4 free** (116 before the
 common and the radio: one is the common copied into each map with encounters,
 almost three are the streams of the three themes); gaps 21,391 B; **bank 0
 182 B** (14 in `main`); bank 1 4,697 B.
 
-**The suites**: `just pruebas` gives **897 green and 1 red**,
-`test_musica_techos.py`: the three radio themes are missing from its table.
-**`just techos` was not run.** `just -f tools/justfile test`: 46.
+**The suites**: `just tests` gives **897 green and 1 red**,
+`test_music_ceilings.py`: the three radio themes are missing from its table.
+**`just ceilings` was not run.** `just -f tools/justfile test`: 46.
 `cargo test -p rm2k-snes-events -p rm2k-snes-audio` green. `test_cores.py`
 green. **No golden moved.**
 

@@ -74,31 +74,31 @@ once.
 
 ## Tests
 
-- `pruebas/rpgmaker/test_repeticion.py`, hardware frame by frame:
+- `tests/rpgmaker/test_repeat.py`, hardware frame by frame:
   - in the pause menu, down and up held move on the frame of the edge, at 23
     and every 4;
   - releasing stops it, and pressing again waits the full 23;
   - B held does not repeat (the menu does not open again);
   - in the slots, down held reaches the fourth and stays; a press wraps
     around.
-- `test_tecla.py::test_sostener_una_direccion_no_contesta` already covered the
+- `test_key.py::test_holding_a_direction_does_not_answer` already covered the
   key input: it goes **red** without the `tecla_valor` guard (the variable
-  stays at 2). The menu ones in `test_repeticion.py` go red without the `jsl`,
+  stays at 2). The menu ones in `test_repeat.py` go red without the `jsl`,
   and the slots one without its guard: the three things verified by removing
   them.
 - **What no test executes**: the repeat in the title, in a message's choices,
   in items, equipment, shop, battle and End Game. It is the same mechanism and
   no screen changed, but there is no case that holds an arrow there.
-- No golden changed, and `test_musica_techos.py` stays green: `just techos` was
+- No golden changed, and `test_music_ceilings.py` stays green: `just ceilings` was
   not needed.
-- `just cartuchos` and `just pruebas` on the branch, with `main` merged in
-  (`535b19fd`, without new commits): all green except `test_indice.py`, which
-  asked for the new test in `pruebas/README.md`; it was added and that one
+- `just cartridges` and `just tests` on the branch, with `main` merged in
+  (`535b19fd`, without new commits): all green except `test_index.py`, which
+  asked for the new test in `tests/README.md`; it was added and that one
   alone was run, green.
 
 ## Space
 
-`just espacio`, before and after, in `release` and `test-special`: bank 0
+`just space`, before and after, in `release` and `test-special`: bank 0
 costs 30 bytes (the `jsl`, the `tecla_valor` guard, the two of the slots and
 the two `stz` of the startup); the rest, 48 bytes, goes in bank 1; and 2 of
 BSS.

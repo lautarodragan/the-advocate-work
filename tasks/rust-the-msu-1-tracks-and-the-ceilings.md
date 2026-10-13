@@ -52,19 +52,19 @@ What's different about it: **a core is one console per process** —its state
 is the library's globals—, so the themes are played in parallel in separate
 processes, as Python's `Pool` did: the same binary with `--play ROM --song N
 --frames F`, which prints in JSON the clips, the peak and the frame (and the
-LUFS with `--lufs`). `PROCESOS` still says how many.
+LUFS with `--lufs`). `PROCESSES` still says how many.
 
-**`test_musica_techos.py` no longer imports `audio.ceilings`**: it plays each
+**`test_music_ceilings.py` no longer imports `audio.ceilings`**: it plays each
 theme near the cap with `rm2k-snes-volume-ceilings --play`, which is the same
 console and the same computations the table was measured with. The rest it
-took from the module —where the table is, `musica.json`, the `; Songs:`
+took from the module —where the table is, `music.json`, the `; Songs:`
 line— the test reads on its own: three lines each.
 
 `emulator/retro.py` isn't touched: it's the whole suite's harness.
 
 ## The comparison
 
-* **The tracks**: `NO_CACHE=1 just cartuchos` with the Rust binaries against
+* **The tracks**: `NO_CACHE=1 just cartridges` with the Rust binaries against
   the same command with the Python ones, in this worktree: the `.pcm`s, the
   `.msu` and the `.sfc`s of `rom/build/` come out byte for byte identical,
   and so do the lines each track prints. That includes the two that come from
@@ -76,7 +76,7 @@ line— the test reads on its own: three lines each.
   rebuilding, measuring again—, run in Python and in Rust on **a copy of the
   project**, so as not to touch the repo's table: both tables come out byte
   for byte identical, and the reports too.
-* `just pruebas` and `just -f tools/justfile test` green, before and after
+* `just tests` and `just -f tools/justfile test` green, before and after
   deleting the `.py`s; the crate's `cargo test` green.
 
 What was seen along the way and not touched: the versioned table is no longer
@@ -84,9 +84,9 @@ the one measuring today would give. Python and Rust agree that eight themes
 moved between 0.1 and 0.4 dB from the written peak —`MML2_MotherZone`, from
 -1.0 to -0.6—, and the whole path changes the headroom of seven and the
 fingerprint of six. None clips, and the fingerprint test passes because it
-looks at `musica.json`, not at a new run, so it's the drift the test already
+looks at `music.json`, not at a new run, so it's the drift the test already
 expects. And the header of the repo's table is still in Spanish, because it
-predates the translation: the next `just techos` writes it in English, and it
+predates the translation: the next `just ceilings` writes it in English, and it
 cites `build_all` and `sdsp.HEADROOM`, which were Python names —they were left
 as they were, so the tables would come out identical—.
 
@@ -99,7 +99,7 @@ as they were, so the tables would come out identical—.
   `.py`s, aren't left dangling. Without reinstalling, the global is left with
   symlinks to files that no longer exist.
 * **`tools/port/snes_convert.py` cites `tools/audio/` twice** —the help of
-  `--measure-headroom` and a comment about `musica.json`—: it wasn't touched
+  `--measure-headroom` and a comment about `music.json`—: it wasn't touched
   because Ñacurutú is splitting it.
 * The first run with the new binary redoes the 43 tracks —the key changed—: a
   minute and a half, once.

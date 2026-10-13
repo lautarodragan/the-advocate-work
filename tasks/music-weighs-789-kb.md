@@ -19,7 +19,7 @@ rm2k-snes-audio`). `protocol` didn't change —`music.toml` changed, and the
 generated output is committed—, and neither did `cartridge`: it reads the
 runtime from the checkout.
 
-`test_musica_techos.py` passes without re-measuring: the mix is the same. No
+`test_music_ceilings.py` passes without re-measuring: the mix is the same. No
 goldens move.
 
 ## What ended up (idea 2)
@@ -71,22 +71,22 @@ gives −23.0%, and `fold` gets −23.5%.
 * **On every build**, the compiler decodes each theme flat and with jumps, and
   both have to give `writes`'s writes; and `fold` refuses if unfolding what it
   returns doesn't give the stream it received.
-* **In the ROM**, `test_musica_escrituras.py`:
-  * `test_la_rom_vuelve_de_cada_repeticion` plays `wb3shop` (169 jumps) and
+* **In the ROM**, `test_music_writes.py`:
+  * `test_the_rom_comes_back_from_each_repeat` plays `wb3shop` (169 jumps) and
     compares what the ROM asks of the DSP against the **unfolded** stream,
     without going through the jump's model. **Seen failing** by breaking the
     ROM twice: going back one byte too many, the music goes silent (the test
     puts it as "`music_frame` no corre en cada cuadro"); reading one event too
     few, it differs on frame 144. The other five in the file also failed both
     times: their themes carry jumps.
-  * `test_la_rom_vuelve_atras_por_encima_de_un_banco` searches the cartridge
+  * `test_the_rom_goes_back_across_a_bank` searches the cartridge
     for the shortest theme with a jump that crosses the start of a bank and
     compares it the same way. **Seen failing** with `ev_repeat` without the
     borrow to the bank: this one and the `3D-Galax` one fail.
 * **Three tests changed how they measure, not what they expect**:
-  `test_tema_que_ya_suena`, `test_lugar_recordado` and `test_volumen_y_tempo`
+  `test_song_already_playing`, `test_remembered_place` and `test_volume_and_tempo`
   said "it didn't restart" because the stream pointer didn't go down, and a
-  jump takes it down. They now look at `avance_del_stream` (`consola.py`),
+  jump takes it down. They now look at `stream_advance` (`console.py`),
   which inside a jump is where it'll go back to. They still see a restart: it
   goes to the start.
 * `tests/python.rs`'s fixture changed hash: outside the streams,
@@ -112,7 +112,7 @@ What raises it is the loop back to the start, not the jumps.
 
 ### The space
 
-`just espacio`, before and after:
+`just space`, before and after:
 
 | | `release` | `test-special` | `test-encounter-every-step` |
 |---|---|---|---|
@@ -315,9 +315,9 @@ frame closes 14.4%, releases 14.1%, instrument 8%, volume 5%.
 
 **What would catch it if it goes wrong**: almost nothing in the suite, and
 that's the first thing to solve. There are no audio goldens.
-`test_musica_paquete.py` uses `muestras_del_stream`, which would have to be
+`test_music_package.py` uses `muestras_del_stream`, which would have to be
 rewritten for the new format —it would break loudly, which is good—;
-`test_tema_del_mapa.py` checks that the pointer advances, and still holds.
+`test_map_song.py` checks that the pointer advances, and still holds.
 `test_msu.py` compares the same ROM with and without a track, so it doesn't
 see the format. Two safety nets are needed:
 

@@ -25,7 +25,7 @@ droid's tutorial, outside Lashe City's subtree).
 
 2026-09-27, in `testing/`: done on the agent's branch, with `main` merged
 on top of milestone 2. What's left is taro's: playing it and looking at the photos without a
-golden in `pruebas/snapshots/playthrough/lashe-planta*/`.
+golden in `tests/snapshots/playthrough/lashe-planta*/`.
 
 # What was done
 
@@ -75,7 +75,7 @@ $01:F874 (~1.9 KB free) to $01:FEA4 (**~350 B free**, with both milestones); mos
 of it is the troop pages and the plant's encounter tables, not the code. **Cartridge**: 2,964,854 B used, 70.7% of 4 MB (last
 bank $61). BSS and ZEROPAGE unchanged.
 
-**Pages**: with the plan's `medir.py`, 176 of 176 triggerable ones of 48, 57, 59-63 and
+**Pages**: with the plan's `measure.py`, 176 of 176 triggerable ones of 48, 57, 59-63 and
 164 compile (120 before).
 
 **Dropped frames**, walking 1200 frames 50 at a time back and forth (the method of
@@ -86,25 +86,25 @@ of 62 and falling to 60: a teleport.
 **Audio.** `fm2bar_gs` (Stash) goes in with all its notes and its MSU-1 track
 came out by itself. Against `main` with milestone 2, pair by pair (program, theme) of the
 shared bank: two go down, 0.1 kHz (SPACE79 in `TF3_1_awe` and
-`T_ProjectJustice_DiscLoad`). `just techos` redone: no theme clips.
+`T_ProjectJustice_DiscLoad`). `just ceilings` redone: no theme clips.
 
 # Tests
 
-`pruebas/rpgmaker/test_lugar_recordado.py`, with five new cases:
-`lugar-caer` (the whole floor of 60: it falls to 61 at the variables' cell and
-the page carries on there), `lugar-ida-y-vuelta`, `lugar-ausente` (map 999: it doesn't
-jump), `tema-recordado` and `tema-recordado-el-mismo` (doesn't restart).
-`test_cores.py` adds `lugar-ida-y-vuelta`.
+`tests/rpgmaker/test_remembered_place.py`, with five new cases:
+`place-fall` (the whole floor of 60: it falls to 61 at the variables' cell and
+the page carries on there), `place-there-and-return`, `place-absent` (map 999: it doesn't
+jump), `song-remembered` and `song-remembered-same` (doesn't restart).
+`test_cores.py` adds `place-there-and-return`.
 
-`pruebas/abl/test_recorrido_lashe_planta_golden.py`, on `release`:
+`tests/abl/test_playthrough_lashe_plant_golden.py`, on `release`:
 
-* `test_stash_la_planta_y_ag7_en_el_grupo`: no companion and with the idol
+* `test_stash_the_plant_and_ag7_in_the_party`: no companion and with the idol
   stolen (71). From 48 to Stash's, the scene, the plant, **four falls**
   —from the entrance of 60 you can't go up without falling—, the chip, the tunnel, page 5
   of Stash, what was memorized (48, 3, 39), the tutorial and the return: party
   [Talan, AG7], 150, without the chip, the previous theme playing.
-* `test_la_escena_de_stash_con_el_soborno`: page 4 (29), up to the plant.
-* `test_con_arden_la_puerta_de_stash_esta_cerrada`.
+* `test_stashs_scene_with_the_bribe`: page 4 (29), up to the plant.
+* `test_with_arden_stashs_door_is_closed`.
 
 The plant's random encounters **are turned off** in the test (`ENC_BASE` at
 zero on reaching each map): no walkthrough test walks through an area

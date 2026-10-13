@@ -122,13 +122,13 @@ belongs to the converter and not to the format.
 
 ### Verified
 
-* `NO_CACHE=1 just cartuchos` on `f19b27ec`, after the change and after
+* `NO_CACHE=1 just cartridges` on `f19b27ec`, after the change and after
   the deletion: the 987 files of `rom/build` (without `.o`, `.sym`, `.inc`,
   `.dbg`) byte-for-byte identical all three times. `abl.sfc`
   `7a3c64834f783ae0fad34eb9f814801916be00aa962d0ca78c1a215ce6a66552`,
   `prueba.sfc` (`test-special`)
   `fb6db844580e74097af5d500be85dbab3f88e888e27743b457167a97ad9e0617`.
-* `just pruebas`: 874 pass. `just -f tools/justfile test`: 132 pass, 2
+* `just tests`: 874 pass. `just -f tools/justfile test`: 132 pass, 2
   skipped (the SoundFont ones). `render-test`: 6 pass.
 * What was **not** run: ABL's suite after the last commit, which
   only changes comments; and `cargo test` of the other Rust projects,

@@ -19,7 +19,7 @@ composes the whole text in `texto_buf` every frame.
 ## What the original does
 
 The captures with RPG_RT and Wine, at 320x240, in
-`/shared/capturas/2026-09-28-el-menu/original-equipo*.png`.
+`/shared/captures/2026-09-28-el-menu/original-equipo*.png`.
 
 - **Four windows**: help at the top across the full width (32 high); on the
   left the actor —the name and below it the four parameters in one
@@ -102,25 +102,25 @@ there (Tero, `menu-like-rm2k.md`).
 
 ## Tests
 
-- `equipo`, `equipo-lista`, `equipo-sube-baja` and `equipo-sube` change: the
+- `equipment`, `equipment-list`, `equipment-rises-low` and `equipment-rises` change: the
   windows, the bar, the terms and the arrow in red, and the new
-  layout. New `equipo-ranura`: the bar on the head, which is a
-  slot that isn't the first and is empty. `equipo-lista` already covered the bar
+  layout. New `equipment-slot`: the bar on the head, which is a
+  slot that isn't the first and is empty. `equipment-list` already covered the bar
   on the list, in its second row.
 - `pantallas.pantalla_equipo` draws the windows and the bar (`Texto.ventanas`),
-  so `test_menu_equipo_dibujo.py` also compares that pixel by pixel.
+  so `test_menu_equipment_drawing.py` also compares that pixel by pixel.
 - **What no test runs**: the bar with the list scrolled —more than
   five candidates—. The calculation is the same as for the text (the cursor minus
   the first visible one), but no case has that many.
 - `rama-equipo*` don't change: they're map captures.
 - Before, now and the original, side by side, in
-  `/shared/capturas/2026-09-28-equipo/`.
+  `/shared/captures/2026-09-28-equipo/`.
 - Aligning the columns moved the ROM, and with it when each write
   to the DSP lands within the frame: `dcbest`, which was close to the cap, started
-  clipping two samples (`test_musica_techos.py`). `just techos` was run,
+  clipping two samples (`test_music_ceilings.py`). `just ceilings` was run,
   which is what the test asks for, and the table goes in its own commit.
-- Verified with `just cartuchos` and `just pruebas` on this branch: all
-  green. `just espacio`: in `release` bank 0 went from 190 to 196 B free
+- Verified with `just cartridges` and `just tests` on this branch: all
+  green. `just space`: in `release` bank 0 went from 190 to 196 B free
   and bank 1 from 4,499 to 4,380; in `test-special`, from 1,083 to 1,089 and from
   7,003 to 6,884. The new data —the equipment tilemap, its bars and the
   red font— are about 4 KB in the data banks.

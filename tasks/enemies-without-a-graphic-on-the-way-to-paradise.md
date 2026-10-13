@@ -25,7 +25,7 @@ from Python (`_file` in `tools/port/scene.py`, 9cae36fc) with the why "so as
 not to change which ones get in without looking at it". Backgrounds did look
 for it since 2026-09-27. Without a file, the enemy was left with battler
 `$FF` in `member_battler` and the ROM drew nothing, without a line in
-`conversor.log`.
+`converter.log`.
 
 It isn't the `.msu`'s: it happens the same with MSU-1 and without it. Nor any of the other causes
 the brief listed —the limit of seven battlers per troop, the palettes, the
@@ -67,16 +67,16 @@ troop in the game goes past three distinct battlers or four members.
 
 * `rm2k-snes-convert`: `find_file` looks in the game and then in the RTP,
   for backgrounds and battlers —the parameter is gone—; and if a battler isn't in
-  either of the two, `conversor.log` says so.
-* `pruebas/arnes/scene.py`: the same in `_file`, which is the tests' expected
+  either of the two, `converter.log` says so.
+* `tests/harness/scene.py`: the same in `_file`, which is the tests' expected
   composition.
-* `parches/auto/battlers/`: the five new ones (`Troll`, `Troll-20`, `Hog-20`,
-  `Hog-340`, `Man5-320`), from `just parches`.
+* `patches/auto/battlers/`: the five new ones (`Troll`, `Troll-20`, `Hog-20`,
+  `Hog-340`, `Man5-320`), from `just patches`.
 
 ## The test
 
-`test_escena_cada_tropa_del_cartucho_dibuja_a_todos`, in
-`pruebas/rpgmaker/test_batalla_escena_dibujo.py`: each `release` troop
+`test_scene_each_troop_of_the_cartridge_draws_everyone`, in
+`tests/rpgmaker/test_battle_scene_drawing.py`: each `release` troop
 against the game's composition, in WRAM and on screen. About 25
 seconds. Without the fix, red with the seven:
 
@@ -97,7 +97,7 @@ taro: "Dr Vago doesn't show up in his battle either". It is the same cause: troo
 178, the only one with him, fights on 76 with the RTP's `Man5`. Sorbe's
 walkthrough plays that battle and takes a picture of it,
 `sorbe-y-la-curacion/05-la-pelea-con-vago`, but it was in
-`pendientes.txt`, without a golden: nobody was checking whether Vago was there. With the fix
+`pending.txt`, without a golden: nobody was checking whether Vago was there. With the fix
 he is, and the picture becomes a golden (separate commit).
 
 ## To compare with the original

@@ -23,7 +23,7 @@ and no other read of `[page_ptr], y` lands on `+2` —searched across all of
   `+26`, signed: up to 32767;
 * `M_PAGE_COUNT` is a 16-bit scalar of the map record, and `pages_left` is
   2 bytes;
-* the harness writes the case variable in two bytes (`_elegir_el_caso`);
+* the harness writes the case variable in two bytes (`_choose_the_case`);
 * the walk uses a 16-bit `page_ofs`, and `pick_by_ev` stores that offset per
   event, with `$FFFD`–`$FFFF` as sentinels.
 
@@ -44,11 +44,11 @@ instead of letting the offset wrap around silently. The comment on
 
 ## What was measured
 
-* **The red, end to end**: with two extra cases in `pruebas/casos/` (copies of
-  `contador`), `just build release` with the old `mapdata` gives
+* **The red, end to end**: with two extra cases in `tests/cases/` (copies of
+  `counter`), `just build release` with the old `mapdata` gives
   `Range error (256 not in [0..255])` and `(257 …)` in `mapdata.inc`. With the
   new one it builds, and a throwaway test ran the two cases —pages 255 and
-  256— against the goldens `contador-110` and `contador-190`: identical. The
+  256— against the goldens `counter-110` and `counter-190`: identical. The
   cases and the test were deleted afterwards.
 * **The test that stays**: `more_than_256_test_pages_fit_in_the_page_table`,
   in `record.rs`: it builds the table of a test event with 300 pages and
@@ -57,9 +57,9 @@ instead of letting the offset wrap around silently. The comment on
   fit in: .byte 256  ; +2  its page number`. And
   `a_map_with_more_pages_than_the_console_walks_is_refused`, that 2048 fit and
   2049 do not. They run with `cargo test -p rm2k-snes-mapdata`, **not with
-  `just pruebas`**; end to end it will be covered by `release` as soon as it
+  `just tests`**; end to end it will be covered by `release` as soon as it
   goes past 256 cases, which is the next thing Zorro or Puma adds.
-* `NO_CACHE=1 just cartuchos` before and after: the 1287 files of `rom/build/`
+* `NO_CACHE=1 just cartridges` before and after: the 1287 files of `rom/build/`
   identical, `abl.sfc` at `6809f47d59671284…`. The goldens did not move, and
   neither did the space.
 

@@ -41,7 +41,7 @@ The text, read from the game's image:
 
 It does not fit in a window of 39 columns by four rows, so it is two
 boxes: the title and the controls; the crashes and "Press any key to begin."
-Fork in `parches/manual/mapas/Map0049.json`, layers from the original.
+Fork in `patches/manual/forks/Map0049.json`, layers from the original.
 
 **The `KeyInputProc` that waited for the key was removed**, and the `ErasePicture` of
 the image that is no longer there. The message is closed with A and the `KeyInputProc`
@@ -117,25 +117,25 @@ is a decision about the allocation, not about this task.
 
 ## Heard
 
-In the whole race (`test_la_carrera_entera`), on the bridge six
+In the whole race (`test_the_whole_race`), on the bridge six
 14-frame Wind7 and one 87-frame Annihilation2 start, and the hit starts 101 ticks
 before the `Teleport` to 53: it sounds whole. The bridge's audio is in
-`pruebas/snapshots/playthrough/carrera-entera/el-puente.wav`.
+`tests/snapshots/playthrough/carrera-entera/el-puente.wav`.
 
 # Tests
 
-`just cartuchos` and `just pruebas` green on each commit and on the
+`just cartridges` and `just tests` green on each commit and on the
 merge with `main`.
 
-* **New: `pruebas/rpgmaker/test_sonido_en_ruta.py`**, with the cases
-  `sonido-en-ruta`, `sonido-en-ruta-evento` and `sonido-en-ruta-salto` (map
+* **New: `tests/rpgmaker/test_sound_in_route.py`**, with the cases
+  `sound-in-route`, `sound-in-route-event` and `sound-in-route-jump` (map
   10, `Close1`, which was already in its package): on the hero it sounds with the
   third step starting, on an event it sounds, and inside a jump it does not
   sound and the route continues. With the converter dropping the order, the first two
   go red.
-* `pruebas/abl/test_msu_efectos.py`: with the `.msu`, the route's one sounds at 22
+* `tests/abl/test_msu_effects.py`: with the `.msu`, the route's one sounds at 22
   kHz with the WAV's envelope.
-* `pruebas/abl/test_recorrido_carrera_golden.py`: photographs the card's two boxes
+* `tests/abl/test_playthrough_race_golden.py`: photographs the card's two boxes
   (`el-cartel-1`, `el-cartel-2`) and counts the bridge's sound effects.
   Its photos are still unblessed.
 * No golden of the suite changed.

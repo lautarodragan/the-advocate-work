@@ -38,7 +38,7 @@ battle none of that runs, and what it would take, looked at on 2026-09-27:
   would have to fit inside it or stretch it.
 * **The cartridge**: an animation is tens of KB (number 77, 40 KB), and the
   cartridge carries only those some map's `ShowBattleAnimation` asks for.
-  Number 62 is already there (`parches/auto/animaciones/0062.toml`); of those
+  Number 62 is already there (`patches/auto/animations/0062.toml`); of those
   from AG7's skills —1, 118, 145, 78, 8, 95, 119, 30, 93, 60, 38, 115, 151—
   only 1 and 78.
 

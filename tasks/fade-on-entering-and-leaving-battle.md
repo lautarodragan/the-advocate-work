@@ -42,12 +42,12 @@ no tick.
   side goes dark, loads, and the other lights up.
 
 The battle goldens did not move: no capture falls inside the transition.
-What shifted were the numbers of `test_batalla_golden.py` —68 frames, what
+What shifted were the numbers of `test_battle_golden.py` —68 frames, what
 the transition adds before the battle takes control—, the one of
 `test_cores.py`, and `Pelea.cerrar`, which now waits for the map to run
 again.
 
-`test_fundido_de_pelea.py` enforces that every frame in which the package
+`test_battle_fade.py` enforces that every frame in which the package
 advances is black, on entering and on leaving. Without the change it gives
 83 of 83 frames visible on both sides (map 2's droid, `release`).
 

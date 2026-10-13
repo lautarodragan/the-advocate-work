@@ -73,7 +73,7 @@ plain CharSet.
 
 `Charsets.draw(nombres)` asks for a list in a single call; `get` of a name
 nobody asked for costs a call of its own. Measured with a wrapper that noted
-each call, in `NO_CACHE=1 just cartuchos`: **186 calls to `charset`** (and
+each call, in `NO_CACHE=1 just cartridges`: **186 calls to `charset`** (and
 106 to `layers`), one per CharSet asked for on its own. A call for one CharSet
 costs 3.7 ms, against 2.1 ms per CharSet in a batch and 0.3 ms to read it with
 Pillow: in total, less than a second in a 46 s build, which took the same
@@ -105,8 +105,8 @@ included). **None different**:
   (5184);
 * the CharSets of the 17 actors.
 
-And the ROMs: `NO_CACHE=1 just cartuchos` before and after, with the sha256 of
-the 1032 files of `rom/build/` (minus cache, `.o`, `sello.txt` and the log;
+And the ROMs: `NO_CACHE=1 just cartridges` before and after, with the sha256 of
+the 1032 files of `rom/build/` (minus cache, `.o`, `stamp.txt` and the log;
 the `.dbg` without mtime): **all identical**.
 
     d098a86fbd7fb9bd41b6ccbea3dba3d0ee2b214e1d7e75a911577b95f6b3be10  release/abl.sfc
@@ -133,7 +133,7 @@ pictures—, which only `_from_tile` and `baking` used. Its place is taken by
 `scene.py`, `window.py`, `menus.py`, `animation.py` and `snes_convert.py` use
 it.
 
-**The suites:** `just pruebas` 882 and `just -f tools/justfile test` 90,
+**The suites:** `just tests` 882 and `just -f tools/justfile test` 90,
 green; `cargo test` of `rm2k-render`, green and without clippy warnings.
 
 **When merging:** `just -f tools/justfile install rm2k-render`. No Python was

@@ -12,13 +12,13 @@ not fixed. With MSU-1, the title track
 call `msu_parar`. The track goes on until the first `PlayBGM`, and the battle
 records it as the theme to restore on leaving. The fix seems to be calling
 `msu_parar` on that path. Cover it with a test with `msu=True`
-(`pruebas/abl/test_msu.py`).
+(`tests/abl/test_msu.py`).
 
 ## Done, on 2026-09-26
 
 `music_boot_ya` calls `msu_parar` on its silent path. It's covered by
-`test_con_msu_la_pista_del_titulo_no_sigue_en_la_partida`
-(`pruebas/abl/test_msu.py`): with MSU-1, it checks that the title plays its track, picks
+`test_with_msu_the_title_track_does_not_go_on_into_the_game`
+(`tests/abl/test_msu.py`): with MSU-1, it checks that the title plays its track, picks
 "Begin the Story" and asks that 120 frames later the title track is no longer
 playing. Without the fix it's red: `MSU_SUENA` stays at 1 with `tema_actual` on
 the title's.

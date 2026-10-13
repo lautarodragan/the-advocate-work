@@ -148,7 +148,7 @@ except four:
 a thunder, the rain and the thunder of the same storm (I did not verify it in
 the pages). In
 3 the only moment measured with three at once —`Glass`, `Flash3` and `Earth4`
-in the `evilrhys` scene, `test_msu_efectos.py`— weighs 77 KB at 22050 Hz:
+in the `evilrhys` scene, `test_msu_effects.py`— weighs 77 KB at 22050 Hz:
 that group alone no longer fits. Idea 2 would really help on maps 2 and 3
 and on no other, and it would cost: a page analysis that says which
 `PlaySound` coexist, a table of groups in the ROM, a load of ~100
@@ -190,15 +190,15 @@ It does not move goldens: the suite runs without MSU-1.
 
 # How it was verified
 
-* `NO_CACHE=1 just cartuchos` on the baseline: the assignment's sha256
+* `NO_CACHE=1 just cartridges` on the baseline: the assignment's sha256
   (`abl.sfc` `e20182d1…`, `abl.msu` `905decd2…`, `special` `6784ab8f…`,
   `encounter-every-step` `5dc9114c…`).
 * After, twice the same: `abl.sfc` `0d43de3c…`, `abl.msu` `e53bc400…`,
   `special` `ea444940…`, `encounter-every-step` `54ef5505…`. The
-  `conversor.log` changes only in the lines of the rates and in the size and
+  `converter.log` changes only in the lines of the rates and in the size and
   signature of the `.msu`.
-* `just pruebas` 893, `just -f tools/justfile test` 46, `cargo test -p
-  rm2k-snes-audio` with `SOUNDFONT` green. `test_musica_techos.py` passes.
+* `just tests` 893, `just -f tools/justfile test` 46, `cargo test -p
+  rm2k-snes-audio` with `SOUNDFONT` green. `test_music_ceilings.py` passes.
 * **What no test looks at**: that it sounds better. For that, what is below.
 
 # To listen to

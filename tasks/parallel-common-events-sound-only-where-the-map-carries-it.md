@@ -21,5 +21,5 @@ the map's package already carries its sample, and map 20's does not carry
 `Rain1`.
 
 **How to see it**: `partida(caso="grupo-11-en-20", switch=[94])` and the
-`arranques` of `pruebas/rpgmaker/test_sonido_en_ruta.py` over 600 ticks:
+`arranques` of `tests/rpgmaker/test_sound_in_route.py` over 600 ticks:
 empty. In the original the rain sound repeats every three seconds.

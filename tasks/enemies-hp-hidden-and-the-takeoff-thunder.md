@@ -10,9 +10,9 @@ Two small battle things, from 2026-09-28.
 
 **The enemies' HP.** RM2k never shows it and ABL has no way to see it (Tero
 measured it: `menu-like-rm2k.md`). taro accepted the proposal: hide it by
-default with a build flag, `CON_HP_DE_ENEMIGOS = False` in `cartuchos.py`,
+default with a build flag, `CON_HP_DE_ENEMIGOS = False` in `cartridges.py`,
 like `CON_MAPA_DE_DEBUG`. Today `ba_renglon` in `rom/src/batalla.s` draws it;
-in `pantallas.py` it's noted as our own decision.
+in `screens.py` it's noted as our own decision.
 
 **The takeoff's thunder.** The turn-1 page of troops 102 and 104 asks for
 Thunder9, and it doesn't play because putting it in the battle package lowers
@@ -21,7 +21,7 @@ six instruments of the battle theme from ~14 to ~11.5 kHz and BRASS64 from
 decided by listening.
 
 2026-09-28, in `testing/`: done by Ombú on his branch, on `main` at 8da66c4,
-in e15fd72; `just cartuchos` and `just pruebas` green. What's left is
+in e15fd72; `just cartridges` and `just tests` green. What's left is
 taro's: look at the goldens and listen to the thunder (see below).
 
 # The enemies' HP — done
@@ -31,7 +31,7 @@ As Tero proposed: `CON_HP_DE_ENEMIGOS = False` in
 `--hp-de-enemigos` to the converter **in both cartridges**; the converter
 emits `BA_HP_ENEMIGOS` next to `BA_HP_NUM_DX`, and `ba_renglon`
 (`rom/src/batalla.s`) cuts after the name if the row isn't the party's. In
-`pantallas.py` there's no reference that draws the battle, only the geometry
+`screens.py` there's no reference that draws the battle, only the geometry
 and the decision written above `BA_ENEMIGO_FILA0`: it was rewritten.
 
 A `ca65` trap that cost a build: inside a `.proc`, `.if BA_HP_ENEMIGOS = 0`
@@ -41,19 +41,19 @@ earlier; with `::BA_HP_ENEMIGOS` it works. It's commented there.
 **With the flag on the ROM is the one from before, byte for byte**: building
 a separate `release` with `--hp-de-enemigos` and assembling 8da66c4's
 `rom/src/` against its same `mapdata.inc`, both `.sfc` come out identical
-(`cmp`). `just pruebas` doesn't run that path: the suite runs with the flag
+(`cmp`). `just tests` doesn't run that path: the suite runs with the flag
 off.
 
 **Nine goldens change**, and in all of them the only difference is the
-rectangle x 145-191 of the enemy rows: `batalla`, `batalla-blanco`,
-`batalla-droide`, `batalla-textos-lejos`, `encuentro`, `msu-datos-rom`,
-`msu-datos-msu`, `msu-mundo-rom` and `msu-mundo-msu`. Before and after, side
-by side, in `/shared/capturas/2026-09-28-hp-de-enemigos/`.
+rectangle x 145-191 of the enemy rows: `battle`, `battle-white`,
+`battle-droid`, `battle-texts-far`, `encounter`, `msu-data-rom`,
+`msu-data-msu`, `msu-world-rom` and `msu-world-msu`. Before and after, side
+by side, in `/shared/captures/2026-09-28-hp-de-enemigos/`.
 
 **No test read an enemy's HP on the screen** except those goldens, and none of
 them shows a hit: all are the battle just opened or picking a target, with
 the HP full. The ones that look at how much an enemy has left already read it
-from RAM (`Pelea.hp_del_combatiente`), so there was nothing to move from the
+from RAM (`Pelea.combatant_hp`), so there was nothing to move from the
 screen to RAM.
 
 # The thunder — recorded, so taro can decide
@@ -64,7 +64,7 @@ control (the same wrapper without adding it) comes out byte for byte
 identical to `release`. The wavs and what to listen for in each one, in
 `/shared/audio/2026-09-28-trueno/` (`LEEME.txt`).
 
-What was measured, comparing the allocation lines of `conversor.log`:
+What was measured, comparing the allocation lines of `converter.log`:
 
 - **at 6000 Hz**, the rate Thunder9 already has in maps 3, 20 and 32:
   BRASS64 from 16.3 to 10.8 kHz —only the battle theme uses it— and thirteen
@@ -87,7 +87,7 @@ What was measured, comparing the allocation lines of `conversor.log`:
 What's left is taro's: listen and say whether it goes in, and at what rate.
 If it does, it's adding `"Thunder9"` to `SE_DE_TROPA_AL_PAQUETE` (and, for a
 different rate only in the battle, an alias like `Thunder9@entero`), redoing
-`just techos`, and `test_el_despegue_pide_su_efecto` stops saying "no
+`just ceilings`, and `test_el_despegue_pide_su_efecto` stops saying "no
 suena".
 
 # Numbers used

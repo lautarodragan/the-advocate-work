@@ -13,7 +13,7 @@ The battle's text layer has 191 tile pairs (`TL_POOL_WHOLE`, from
 `SLOT_VRAM` to `ITEM_BORDER_MAP`). The skill list with fourteen
 names, the description, the party's four rows and the commands' two
 asks for more than that. Measured in the ROM, in the battle of the case
-`batalla` with Talan —actor 14, who can get to know 54— in front and
+`battle` with Talan —actor 14, who can get to know 54— in front and
 knowing them all, with the list open:
 
 * with 0, the seventh row comes out halfway ("Candl…") and the first row of
@@ -21,7 +21,7 @@ knowing them all, with the list open:
 * with 1, it cuts off at the sixth.
 
 The captures, `pozo-0-14.png`, `pozo-1-14.png` and `pozo-2-14.png`, in
-`/shared/capturas/2026-10-03-espaciado-1/`. The converter warns about it as a
+`/shared/captures/2026-10-03-espaciado-1/`. The converter warns about it as a
 WARNING ("battle text: the skill list asks for…"), with a bound that exceeds
 the pool in all three spacings.
 
@@ -90,7 +90,7 @@ whole. The converter warns against 447 and not against the shop's 191.
 
 ### Measured
 
-In the ROM, with the case `batalla` and Talan knowing his 54 (and separately his 16
+In the ROM, with the case `battle` and Talan knowing his 54 (and separately his 16
 with the longest names), the list open and the cursor going through it. Free at
 the worst moment, out of 447:
 
@@ -120,7 +120,7 @@ A battle with skills, with the list open and moving the cursor, and
 going back to the map: that the characters and the background are fine (the battle now also
 overwrites the map's sprites and whatever allocation it has below
 `$3800`; `back_from_battle` already restored them). The captures, in
-`/shared/capturas/2026-10-04-texto-de-la-pelea/`, with their LEEME.
+`/shared/captures/2026-10-04-texto-de-la-pelea/`, with their LEEME.
 
 Branches: tools, `worktree-agent-af8dc9ad89d8d7220`; ABL,
 `texto-de-la-pelea` of the clone `/extras/scratch/carpintero/abl`.

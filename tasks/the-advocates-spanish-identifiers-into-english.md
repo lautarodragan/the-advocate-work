@@ -73,11 +73,11 @@ Left, on purpose:
   `look_var`, `pass_look`, `the_chosen`, `the_set`, `to_one`,
   `from_four`, `if_gold_picks`…
 * The citations of the ports' Spanish names in runtime comments
-  (`Partida.ir_al_mapa`, `Partida.cuadros_perdidos`): they name the
+  (`Partida.go_to_map`, `Partida.lost_frames`): they name the
   harness, which stays in Spanish.
-* The file names the tools write into a port's `build/` —`memoria.cfg`,
-  `musica.json`, `efectos.json`, `crudos/`, `parches/usos.json`,
-  `sello.txt`— and `lda tabla, x` in the comment `rm2k-snes-audio` emits:
+* The file names the tools write into a port's `build/` —`memory.cfg`,
+  `music.json`, `effects.json`, `crudos/`, `patches/uses.json`,
+  `stamp.txt`— and `lda tabla, x` in the comment `rm2k-snes-audio` emits:
   they belong to the already-English projects, are not symbols, and the
   ports' harness opens several of them by name. A draft of their own:
   [the-tools-write-spanish-file-names-into-build.md](the-tools-write-spanish-file-names-into-build.md).
@@ -90,7 +90,7 @@ Branches `huron-identificadores` in the-advocate and in the ports, with
 the-advocate:
 
 1. `81df01f4` the 38 local labels; `29567e78` `MUS_LOG_YES` →
-   `MUS_LOG_ON`. Each verified on its own: `just cartuchos` in ABL with
+   `MUS_LOG_ON`. Each verified on its own: `just cartridges` in ABL with
    `cartridge` installed from the branch gives the 74 `.sfc`, `.msu` and
    `.pcm` of release and the five test cartridges byte for byte equal to
    57abdca3's, and the six `.dbg` keep every symbol with the same id,

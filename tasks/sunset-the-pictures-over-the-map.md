@@ -84,7 +84,7 @@ colour math) is written there, not done: it is taro's decision.
   `pictures-drawn-into-the-map.md` and the port's page.
 * Seen with captures (snes9x) of 28, 2, 13, 33, 7 and the scene on 22,
   against the original with Wine on the same cell: in
-  `/shared/capturas/2026-10-11-sunset-imagenes/`. For the original I built
+  `/shared/captures/2026-10-11-sunset-imagenes/`. For the original I built
   variants of the game that start on the map with the door's
   pictures (`~/scratch/mulita/wine3/variante.py`).
 * Red before: the scene on 22 black (task `sunset-the-map-22-scene-in-black.md`),

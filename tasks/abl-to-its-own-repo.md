@@ -33,9 +33,9 @@ a judgement call that isn't mine to make.
 |---|---|---|
 | all of `rom/` | ABL, **to the root** | `rom/` has already been ABL's root since the move of 2026-09-29: in a repo of its own the extra step isn't needed. `rom/X` becomes `X` |
 | the root `justfile` | goes, and doesn't pass to ABL | it only imported `rom/justfile`; in the new repo `rom/justfile` is the root one. Here nothing's left to import: see below |
-| `tools/assembly/entregar.py` | ABL, to `entregar.py` | it's ABL's (`abl-entregar`), as `tools/README.md` says |
+| `tools/assembly/entregar.py` | ABL, to `deliver.py` | it's ABL's (`abl-entregar`), as `tools/README.md` says |
 | `DITTO.md` | **stays** | the study took it as ABL's; read, it's why the converter reads the dump and not the binary, and the status of that decision: it belongs to the tools (`tools/justfile` cites it, `decisions/data-is-the-resolved-view.md` is the tools'). ABL's part —what's in its `data/`— is already in `rom/data/README.md` |
-| `README.md` | mixed | each repo its own: ABL's, the original game, `just datos`, how it's built; this one's, the runtime's architecture |
+| `README.md` | mixed | each repo its own: ABL's, the original game, `just dump`, how it's built; this one's, the runtime's architecture |
 | `AGENTS.md` | mixed | each repo its own; the environment is described in both, because it's the only file in each one that can name it |
 | `CLAUDE.md` | mixed | the same shape in both |
 | `.gitignore` | mixed | each with its own |
@@ -56,7 +56,7 @@ a judgement call that isn't mine to make.
 | [`research/graphics-and-sound-from-rm2k-to-the-snes.md`](https://lautarodragan.github.io/the-advocate-docs/research/graphics-and-sound-from-rm2k-to-the-snes.html), [`the-map-of-the-python-tools.md`](https://lautarodragan.github.io/the-advocate-docs/research/the-map-of-the-python-tools.html), [`the-tools-today.md`](https://lautarodragan.github.io/the-advocate-docs/research/the-tools-today.html), [`2026-10-01-the-picture-system.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-01-the-picture-system.html), [`2026-10-02-the-test-game.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-02-the-test-game.html) | stay | the tools'; the test game one is this repo's plan |
 | [`ports/abl/research/a-full-inspection-of-the-repository.md`](https://lautarodragan.github.io/the-advocate-docs/ports/abl/research/a-full-inspection-of-the-repository.html) | ABL | according to Hornero's table |
 | [`ports/abl/research/2026-10-01-the-whole-game-without-msu-1.md`](https://lautarodragan.github.io/the-advocate-docs/ports/abl/research/2026-10-01-the-whole-game-without-msu-1.html) | ABL | how much the whole of ABL weighs and what cuts its cartridge asks for |
-| [`ports/abl/research/2026-10-01-the-maps-through-the-msu-1.md`](https://lautarodragan.github.io/the-advocate-docs/ports/abl/research/2026-10-01-the-maps-through-the-msu-1.html) | ABL | how far ABL's cartridge goes; its test ROM (`experimentos/msu-puerto/`) is already ABL's |
+| [`ports/abl/research/2026-10-01-the-maps-through-the-msu-1.md`](https://lautarodragan.github.io/the-advocate-docs/ports/abl/research/2026-10-01-the-maps-through-the-msu-1.html) | ABL | how far ABL's cartridge goes; its test ROM (`experiments/msu-port/`) is already ABL's |
 
 ## workflow/decisiones/ and divergencias/
 
@@ -97,7 +97,7 @@ in the runtime or the converter.
   `world-and-what-follows`, `diff-photos-cropped-and-217-montage-as-in-rm2k`,
   `goldens-of-the-neon-vipers-playthrough`, `playthrough-pending-goldens`.
 * `testing/`: `cartridge-at-8-mb-exhirom` (the test ROM belongs to
-  `experimentos/`), `common-35-and-the-radio-music`,
+  `experiments/`), `common-35-and-the-radio-music`,
   `fortitude-counter-is-not-shown`, `enemies-hp-hidden-and-the-takeoff-thunder`,
   `plan-the-whole-game-without-msu-1-the-count`, `mode-7-pilot-for-the-zoom-of-the-diff-photos`,
   `troop-events` (the battle systems of ABL's
@@ -122,22 +122,22 @@ here, with the Rust half, and so do `plan-an-rm2k-game-for-tests.md` and
 
 1. `bdd0d83` **A Blurred Line, from abl-snes at 817037ee**: the 2075
    files of the classification, without touching a byte, with `rom/X → X` and
-   `tools/assembly/entregar.py → entregar.py`. Checked blob by blob and
+   `tools/assembly/entregar.py → deliver.py`. Checked blob by blob and
    with their mode against `git ls-tree -r 817037ee`: none different.
 2. `6f79c2b` the `.gitignore` with the paths over there.
 3. `574427f` **the Python packages, asked of the suite**:
-   `pruebas/arnes/suite.py` runs `rm2k-snes-python-path` and puts what it
+   `tests/harness/suite.py` runs `rm2k-snes-python-path` and puts what it
    answers into `sys.path`; it's imported by `lugares` and the scripts that don't go
    through it. `pytest.ini` and `video.py` stop naming `tools/`.
 4. `63c57f7` without the `_herramientas_del_checkout` guard, and `entregar`
-   calls `./entregar.py`.
-5. `e2aef83` `consola.RAIZ` is the game's root and not the
+   calls `./deliver.py`.
+5. `e2aef83` `consola.ROOT` is the game's root and not the
    tools'.
 6. `c32b9ba` a comment of mine that named Python: caught by
-   `test_el_justfile_no_nombra_python`.
-7. `bc55f57` `test_el_dbg_nombra_los_fuentes_relativos_a_la_raiz` accepts the
+   `test_the_justfile_does_not_name_python`.
+7. `bc55f57` `test_the_dbg_names_the_sources_relative_to_the_root` accepts the
    cartridge's `.inc` files with an absolute path: see "What was left".
-8. `6d2d783` **`entregar.py` with two repos**: the build is called
+8. `6d2d783` **`deliver.py` with two repos**: the build is called
    `<fecha>-<commit de ABL>-<commit de las herramientas>`, checks for uncommitted
    changes in both, takes `tools/runtime/` from the tools'
    checkout and the LEEME says both commits.
@@ -157,13 +157,13 @@ here, with the Rust half, and so do `plan-an-rm2k-game-for-tests.md` and
 ## The decisions I made
 
 * **ABL finds `common` and `emulator` by asking an executable**,
-  `rm2k-snes-python-path`, from Python (`arnes/suite.py`). The study's other
+  `rm2k-snes-python-path`, from Python (`harness/suite.py`). The study's other
   two, discarded:
   * a `PYTHONPATH` exported by ABL's `justfile`: a `just` backtick
     **doesn't see the `PATH` that the same `justfile` exports** —tested with
     just 1.58—, so it would take the global one even with a local `bin/`
     in front; it would be evaluated in every recipe; and ABL's `justfile` doesn't name
-    Python, which `test_lado_de_abl.py` guards;
+    Python, which `test_abl_side.py` guards;
   * packages installed with pip or a `.pth`: global state that a worktree
     can't cover with its own, and one more installation step.
   The executable is a symlink to the checkout it was installed from, the same one
@@ -182,17 +182,17 @@ here, with the Rust half, and so do `plan-an-rm2k-game-for-tests.md` and
 
 ## The verification
 
-* **The ROM, from `/shared/abl-snes`**: `NO_CACHE=1 just cartuchos` on
+* **The ROM, from `/shared/abl-snes`**: `NO_CACHE=1 just cartridges` on
   a `build/` that didn't exist —62 s— gives `abl.sfc` =
   `35c765009320d43664d4604bc6b456db7f0b4332638dc52d761a573c5ffd7349`, the
   baseline's. **The 1424 files in `build/`** —the three cartridges, the 51
-  MSU-1 tracks, `parches-manual/`— come out identical to those in the main
+  MSU-1 tracks, `patches-manual/`— come out identical to those in the main
   checkout's `rom/build/`, except the three `.dbg` files, which name the generated
   `.inc` files with an absolute path (below).
-* **`just pruebas` over there: 993 green**, 95 s, on the last commit.
+* **`just tests` over there: 993 green**, 95 s, on the last commit.
 * **`just -f tools/justfile test` here: 32 green**, after the
   deletions and after the prose.
-* **`just entregar` over there**, with `SHARED=<un directorio del scratchpad>`
+* **`just deliver` over there**, with `SHARED=<un directorio del scratchpad>`
   so as not to touch `/shared/builds`: it left
   `builds/2026-10-02-bc55f57-d356bfb7/` with the usual `abl.sfc`, its
   `.dbg`, the `abl.msu`, `tools/runtime/` and the LEEME with both commits.
@@ -211,7 +211,7 @@ here, with the Rust half, and so do `plan-an-rm2k-game-for-tests.md` and
   GB), `rom/pruebas/snapshots/` and whatever is untracked. With the
   new `.gitignore`, `git status` will show it. I didn't delete it —it's the
   environment—: it gets deleted when ABL is built from `/shared/abl-snes`.
-* With that, `just pruebas` in `/shared/abl-snes` with the global ones is what
+* With that, `just tests` in `/shared/abl-snes` with the global ones is what
   verifies a change in `tools/`.
 
 ## What was left, for phase 2
@@ -219,7 +219,7 @@ here, with the Rust half, and so do `plan-an-rm2k-game-for-tests.md` and
 * **The engine without ROM tests**, as Leñatero said: it's written in
   so many words in the README and in `AGENTS.md`.
 * **`/shared` is a CIFS**: without symlinks, so the tools'
-  `install-local` can't leave its `bin/` in ABL's `.herramientas-locales/`.
+  `install-local` can't leave its `bin/` in ABL's `.local-tools/`.
   To run ABL with the tools of a worktree from here, its
   `tools/.local-tools/bin` goes in front in the PATH (it's in both
   `AGENTS.md` files). No execute bits of its own: a new script is marked
@@ -244,6 +244,6 @@ here, with the Rust half, and so do `plan-an-rm2k-game-for-tests.md` and
   tools' decision.
 * **The suite version the game declares**, which the decision asks for: with
   two repos it's what ties ABL's goldens to an engine, and today it doesn't exist.
-* **`test_lado_de_abl.py`** remains whole: in the new repo naming `tools/`
+* **`test_abl_side.py`** remains whole: in the new repo naming `tools/`
   is naming another repo, and it has three files in its list that name it
   in the prose.

@@ -17,4 +17,4 @@ and `LegendariesActivated` (22) run; `Reraise KO'd chars` (18) and
 from the number of an item held (operand 4).
 
 **How to see it**: the line "parallel common events" of
-`book-of-three/build/release/conversor.log`.
+`book-of-three/build/release/converter.log`.

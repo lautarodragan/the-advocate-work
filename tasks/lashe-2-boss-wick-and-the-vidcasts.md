@@ -33,7 +33,7 @@ end in 41 and from there go to 37, where the companion comments (event 17, switc
 
 2026-09-27, in `testing/`: done on `bd5b6a6`, in the agent's branch. What's
 left is taro's: play it (below, "What taro has to look at while playing") and
-look at the photos without golden in `pruebas/snapshots/playthrough/lashe-wick-*/`.
+look at the photos without golden in `tests/snapshots/playthrough/lashe-wick-*/`.
 What follows from here down to "What was done" is the plan as it was.
 
 # What was missing
@@ -145,26 +145,26 @@ accept branch (the player never walks through these maps): 40, 34 in 3390 ticks
 41 is always inside a fade.
 
 **Audio.** `Kfmus5` and `tsmedit` go in with their samples and with an MSU-1 track
-(100 and 204). Comparing the rates in `conversor.log` against `main`,
+(100 and 204). Comparing the rates in `converter.log` against `main`,
 almost nothing changes: `PCKBS50A` in `TF3_1_awe` loses its copy (15.2 -> 14.0 kHz),
 `EORG268` in `Deflector1` gains one (16.4 -> 22.9), and the rest moves one or two
 tenths —`evilrhys`'s cymbals from 4.6 to 4.5—. The converter doesn't know that
 `Kfmus5` keeps playing from 41 to 45 —it comes from 37's page and the rule in
 `temas_heredados` cuts at 41, which has its own `PlayBGM`s— so those
 packages don't reserve room for it. Nobody listened to it without MSU-1: it goes with the
-audio pass (`audio-after-lashe-city.md`). `just techos` redone: no
+audio pass (`audio-after-lashe-city.md`). `just ceilings` redone: no
 theme clips.
 
 # Tests
 
-* `pruebas/abl/test_recorrido_lashe_wick_golden.py`: from 37 with 151,
+* `tests/abl/test_playthrough_lashe_wick_golden.py`: from 37 with 151,
   the door, scene 1, the vidcasts, the video, and the favour through both
   branches: **accept** with Saldra (164, the surgeon, 267, and 41 doesn't make him
   limp) and **refuse** with Arden (162, without 164 or 267, and one point less of
   speed). It checks through RAM the transition each page leaves, the party on
   returning and the companion's comment, which turns off 163.
-* `test_transicion` in `pruebas/rpgmaker/test_comandos_golden.py`: the cases
-  `transicion-mosaico` and `transicion-zoom`, with new goldens midway through each
+* `test_transition` in `tests/rpgmaker/test_commands_golden.py`: the cases
+  `transition-mosaic` and `transition-zoom`, with new goldens midway through each
   ramp, and the same ones in `test_cores.py`.
 
 The photos, without golden:
