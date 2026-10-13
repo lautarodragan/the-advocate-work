@@ -2,7 +2,7 @@
 name: "Everything in English: the ports' prose"
 description: "Step 2 of the ports into English: comments, docstrings, READMEs, messages, and the names local to a file, by directory among five agents"
 type: chore
-status: testing
+status: done
 assignee: taro
 agents: [Aguará, Tijereta, Calandria, Mulita, Cardón]
 ---

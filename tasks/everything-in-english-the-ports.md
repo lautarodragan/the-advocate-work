@@ -2,7 +2,7 @@
 name: "Everything in English: the ports"
 description: "The ports repo goes in English like the other three: directories, files, recipes, identifiers, comments, docs and commits; the history stays"
 type: chore
-status: testing
+status: done
 assignee: taro
 agents: [Chajá]
 ---
