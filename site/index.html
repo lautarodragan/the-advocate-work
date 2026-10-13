@@ -85,7 +85,8 @@
     <a href="https://github.com/lautarodragan/the-advocate-work/tree/main/tasks"><code>tasks/</code></a>.</p>
 </header>
 
-<nav class="filters" id="filters"></nav>
+<nav class="filters" id="filters" aria-label="Filter by status"></nav>
+<nav class="filters" id="types" aria-label="Filter by type"></nav>
 <input id="search" type="search" placeholder="Filter by text…" aria-label="Filter by text">
 
 <main id="tasks">
@@ -100,8 +101,11 @@
   const sections = [...document.querySelectorAll('#tasks section')];
   const tasks = [...document.querySelectorAll('details.task')];
   const filters = document.getElementById('filters');
+  const types = document.getElementById('types');
   const search = document.getElementById('search');
-  let status = new URLSearchParams(location.search).get('status') || 'all';
+  const params = new URLSearchParams(location.search);
+  let status = params.get('status') || 'all';
+  let type = params.get('type') || 'all';
 
   // The counts are counted here, from what the build put in the page.
   const states = [['all', tasks.length], ...sections.map(s => [s.dataset.status, s.querySelectorAll('details.task').length])];
@@ -113,17 +117,32 @@
     filters.append(b);
   }
 
+  // The types, most used first, counted over every task like the states.
+  const byType = {};
+  for (const t of tasks) byType[t.dataset.type] = (byType[t.dataset.type] || 0) + 1;
+  const typeList = [['all', tasks.length], ...Object.entries(byType).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))];
+  for (const [name, count] of typeList) {
+    const b = document.createElement('button');
+    b.dataset.type = name;
+    b.innerHTML = `${name}<span class="count">${count}</span>`;
+    b.onclick = () => { type = name; apply(); };
+    types.append(b);
+  }
+
   function apply() {
     const q = search.value.trim().toLowerCase();
     for (const b of filters.children) b.setAttribute('aria-pressed', b.dataset.status === status);
+    for (const b of types.children) b.setAttribute('aria-pressed', b.dataset.type === type);
     for (const t of tasks) {
       const okStatus = status === 'all' || t.dataset.status === status;
+      const okType = type === 'all' || t.dataset.type === type;
       const okText = !q || t.textContent.toLowerCase().includes(q);
-      t.hidden = !(okStatus && okText);
+      t.hidden = !(okStatus && okType && okText);
     }
     for (const s of sections) s.hidden = !s.querySelector('details.task:not([hidden])');
     const url = new URL(location);
     status === 'all' ? url.searchParams.delete('status') : url.searchParams.set('status', status);
+    type === 'all' ? url.searchParams.delete('type') : url.searchParams.set('type', type);
     history.replaceState(null, '', url);
   }
   search.oninput = apply;
@@ -146,7 +165,7 @@
   function openHash() {
     const t = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
     if (!t) return;
-    status = 'all'; search.value = ''; apply();
+    status = 'all'; type = 'all'; search.value = ''; apply();
     t.open = true; t.scrollIntoView();
   }
   window.addEventListener('hashchange', openHash);

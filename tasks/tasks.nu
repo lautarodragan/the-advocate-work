@@ -165,7 +165,7 @@ def task_html [] {
   let changed = if ($t.changed | is-empty) { "" } else { $" · changed <time datetime=\"($t.changed)\">($t.changed | str substring 0..9)</time>" }
   let source = $"https://github.com/lautarodragan/the-advocate-work/blob/main/tasks/($id).md"
   [
-    $"<details class=\"task\" id=\"($id | escape)\" data-status=\"($t.status | escape)\">"
+    $"<details class=\"task\" id=\"($id | escape)\" data-status=\"($t.status | escape)\" data-type=\"($t.task_type | escape)\">"
     $"<summary><span class=\"type\">($t.task_type | escape)</span><span class=\"name\">($t.name | escape)</span>"
     $"<span class=\"desc\">($t.description | escape)</span></summary>"
     $"<p class=\"meta\"><a href=\"#($id)\">#</a> · <a href=\"($source)\">($id).md</a>($changed)($assignee)($agents)</p>"
