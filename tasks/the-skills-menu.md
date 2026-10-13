@@ -2,8 +2,7 @@
 name: "The skills menu"
 description: "Tech Skill in the pause menu is always greyed out: show the skills, their descriptions and the selector first, and using them on the map in a second phase"
 type: feature
-status: testing
-assignee: taro
+status: done
 agents: [Mulita]
 ---
 
@@ -67,3 +66,12 @@ From the-advocate `28e66b35`, the ports `c97a0dd`, the book `c3e40f4`.
   from the menu (3.1, what ABL needs first), healing skills from the menu
   (3.2), items that cast a skill outside battle (3.3). See section 9 of the
   research.
+
+### Hornero, 2026-10-13: the phases have their own tasks
+
+Phase 1, the research, is this task's, and is done. The rest went to tasks
+of their own: phase 2, [`the-skills-screen`](the-skills-screen.md); 3.1,
+[`switch-skills-from-the-menu`](switch-skills-from-the-menu.md); 3.2,
+[`healing-skills-from-the-menu`](healing-skills-from-the-menu.md); 3.3,
+[`items-that-cast-a-skill-outside-battle`](items-that-cast-a-skill-outside-battle.md).
+Teleport and escape skills (3.4) have none: no game teaches one.
