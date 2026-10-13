@@ -30,17 +30,24 @@ Everything else compiles to the fade.
 
 # Who asks for the rest
 
-Counted on 2026-10-12 over each game's `data/`: every `ChangeScreenTransitions`,
-`EraseScreen` and `ShowScreen`. The two numbers are erase/show and the
-index in RM2k's list.
+Counted on 2026-10-12 over each game's `data/`: the database's defaults
+(`system.json`) and every `ChangeScreenTransitions`, `EraseScreen` and
+`ShowScreen`. The numbers are RM2k's indices.
 
-* **Dooms 2** is the one that needs it: erase 7, border to center, 21
-  times; show 8, center to border, 20 times; erase 9, scroll up, once; show
-  13, vertical combine, once.
-* **A Blurred Line**: erase 7, border to center, twice, on maps that are
-  not carried yet.
-* **Vampires Dawn**: the mosaic, already done. The others use the fade, the
-  cut and none. Book of Three asks for nothing.
+* **The database is what weighs.** Book of Three, The Frozen World, El
+  Dorado and Dooms 2 have border to center (7) to erase and center to
+  border (8) to show for **every teleport**. Today all four go as the fade.
+* **All eight games** start each battle with the zoom (16), and come back
+  to the map with the zoom (16). Sunset, Dooms 2, Desert Nightmare and El
+  Dorado show the battle with horizontal division (14); the rest with the
+  mosaic. The zoom is
+  [`the-zoom-baked-at-run-time`](the-zoom-baked-at-run-time.md).
+* **Commands**:
+  * Dooms 2 asks for 7 to erase 21 times and 8 to show 20 times (the same
+    as its default, after changing it); scroll up (9) once; vertical
+    combine (13) once.
+  * A Blurred Line asks for 7 twice, on maps that are not carried yet.
+  * Vampires Dawn asks for the mosaic, already done.
 
 # What each would take on the console
 
@@ -89,7 +96,8 @@ the message window and the windows' background already use.
 
 # Order, if it is done
 
-1. Border to center and center to border: covers 41 of Dooms 2's 43
-   commands and ABL's two.
-2. Blinds and the two strip ones, which are the same HDMA.
-3. The rest when a game asks for it.
+1. Border to center and center to border: every teleport of four games,
+   and 41 of Dooms 2's 43 commands.
+2. Horizontal division, which four games show every battle with.
+3. Blinds and the two strip ones, which are the same HDMA.
+4. The rest when a game asks for it.
