@@ -2,8 +2,8 @@
 name: "Everything in English: the ports' prose"
 description: "Step 2 of the ports into English: comments, docstrings, READMEs, messages, and the names local to a file, by directory among five agents"
 type: chore
-status: doing
-assignee: Aguará
+status: testing
+assignee: taro
 agents: [Aguará, Tijereta, Calandria, Mulita, Cardón]
 ---
 
@@ -191,3 +191,56 @@ compare at the end.
   equal to the ones built before touching anything; no golden touched.
   `deliver.py` and the root `deliver` are not run by any test (see
   above), nor are the experiments. Nothing to install.
+
+### Calandria: the names that cross files, last
+
+After the five merges, on ports `c59fc10` and the-advocate `9f95b248`:
+branch `calandria-cross-file` in both. Every rename has its line in the
+ports' `RENAMES.md`, section "Step 2, the names that cross files".
+
+* The harness's keyword parameters, with every caller (`b291efb`), by a
+  script that renames at the definition and at each call resolved to a
+  harness function by name; root `tests/` (`ScriptedPlay`) untouched, and
+  the conftest's `session` fixture moves with `suite.session`. Calls that
+  forward `**how` (`test_cores.py`'s `two_cores`) by hand.
+* The values and keys other files read (`a01cbee`): `give_command`'s
+  commands, `events.ANIMATIONS`'s and `scene.battler`'s keys,
+  `places.flags("game")`, `.expected.png`, `still:N` with
+  `abl/justfile`'s example.
+* The photo `lashe-plant-arden/01-cerrado.png`, only in `pending.txt`
+  (`b88fc13`).
+* The keys `rm2k-snes-audio` writes —`music.json`, `effects.json`, the
+  `--play` row— in the-advocate (`2393f0bc`), and their readers in ABL's
+  tests (`734165d`). `tests/python.rs`'s hash of `music.json` moves: with
+  the keys turned back the text gives the Python's hash, which its comment
+  keeps.
+* `abl/experiments/` (`b9ba6cc`): what each build writes and its assembly
+  reads, the labels left, and the ROM titles. exhirom, menu-mode-5 and
+  msu-port built before and after: only title and checksum differ; their
+  emulator checks green. zoom-mode-7 does not build, before or after:
+  draft [`zoom-mode-7-experiment-does-not-build`](zoom-mode-7-experiment-does-not-build.md).
+* The sweep (every name token of the ports' Python against a list of
+  Spanish words; justfiles; TOML keys) found one more, `test_cinematic`'s
+  `en` (`b75902d`). Left on purpose: `videos.py`'s `escena*.mp4`, capture
+  files already on disk, and the runner's `--toques` flags `suite.py`
+  cites as history.
+* taro's two extra items: the debug map's `Comment` commands in English
+  (`Map0900.json`, same line count per block; what the player reads was
+  already English), and two dead citations (`patches/manual/README.md`'s
+  pruning test, now `pruning_keeps_the_slots_only_an_event_names` in
+  `convert/src/chipsets.rs`; `test_auditorium_routes.py`'s removed
+  divergence). A scan for backticked test names and old doc paths that
+  exist nowhere found no other.
+
+Verified with the-advocate's branch `rm2k-snes-audio` in the PATH
+(`install-local`): `just tests` in `abl/`, 1285 passed, before and after
+the debug map; `NO_CACHE=1 just cartridges --force`, every `.sfc` and
+`.msu` of `build/` equal to the cached build; `just boot`, 9 passed; the
+seven games' and ABL's `release` `.sfc` and `.msu` equal to the hashes
+measured before step 2; `abl.sfc` `395367f6…860238`; `just test` in
+the-advocate, 27 passed, and `just crate-test rm2k-snes-audio`, with and
+without `SOUNDFONT`, green. No golden touched.
+
+**To install when merging**: `just install rm2k-snes-audio` from
+the-advocate, **before** running ABL's suite: the ports' tests read the
+new keys.
