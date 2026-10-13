@@ -35,6 +35,33 @@ for byte equal, goldens untouched.
 
 ## Log
 
+### Tijereta: `abl/tests/rpgmaker`, n–z
+
+"n–z" is read on the name after `test_`, since every file there starts
+with it: 48 files, from `test_number.py` to `test_walk_golden.py`, about
+6,600 lines. Branch `tijereta-english-prose` in the ports, from `4b15e20`.
+Four commits, one per stretch of the alphabet (`94b257c`, `009374d`,
+`8713d58`, `c7744ce`). Only names local to each file were renamed; no
+file of the part is imported from elsewhere. Docstring tables that listed
+the old Spanish case ids now list today's; two parametrize changes move
+node ids only (`test_stack`: `parallels`, `slots`; `test_title_golden`:
+`held`, `taps`).
+
+Missed by step 1, and **not** renamed here, because they are defined in
+the harness (Calandria's part) and called from every part, so renaming
+them in one branch would conflict with all five: `Session.run`'s
+`cuadros`, `apretar_a`, `sosteniendo`, `toques`, `tocar`;
+`run_hardware`'s `cuantos`, `toques_hardware`; `save_in`'s `cancelar`,
+`espera`; `go_to_map`'s `cuadros`; `session`'s `en`; and
+`Fight.give_command`'s keys `"atacar"`, `"defender"`, `"habilidad"`. The
+`"sonidos"` key of `effects.json` is written by the converter in
+the-advocate. Best done once, after the five merges, with its lines in
+`RENAMES.md`.
+
+Verified on the branch merged with `main` (`4b15e20`, unmoved), global
+tools: `just cartridges` and `just tests`, 1285 passed; `abl.sfc`
+sha256 `395367f6…860238`, as before; no golden touched.
+
 ### Aguará: `abl/tests/rpgmaker`, a–m
 
 "a–m" read as the name after `test_`: 66 files, 12,689 lines, from
