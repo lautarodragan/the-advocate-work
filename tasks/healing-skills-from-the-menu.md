@@ -2,7 +2,9 @@
 name: "Healing skills from the menu"
 description: "Tech Skill on the map uses a healing skill: on one ally, on oneself or on the whole party, with RM2k's effect and the SP spent only if it was of use"
 type: feature
-status: todo
+status: doing
+assignee: Mulita
+agents: [Mulita]
 ---
 
 Phase 3.2 of [`the-skills-menu`](the-skills-menu.md), after the list
