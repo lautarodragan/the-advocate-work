@@ -42,6 +42,7 @@
     background: var(--accent); border-color: var(--accent); color: var(--bg);
   }
   .filters .count { opacity: .7; margin-left: .3rem; }
+  .filters button.empty { opacity: .45; }
   #search {
     width: 100%; font: inherit; padding: .5rem .75rem; margin-bottom: 1.5rem;
     border: 1px solid var(--line); border-radius: .5rem;
@@ -112,7 +113,9 @@
     filters.append(b);
   }
 
-  // The types, most used first, counted over every task like the states.
+  // The types, most used first over every task —an order that does not
+  // jump around when the status changes—; their counts are of the chosen
+  // status, and apply() writes them. The states' counts stay the totals.
   const byType = {};
   for (const t of tasks) byType[t.dataset.type] = (byType[t.dataset.type] || 0) + 1;
   const typeList = [['all', tasks.length], ...Object.entries(byType).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))];
@@ -128,6 +131,12 @@
     const q = search.value.trim().toLowerCase();
     for (const b of filters.children) b.setAttribute('aria-pressed', b.dataset.status === status);
     for (const b of types.children) b.setAttribute('aria-pressed', b.dataset.type === type);
+    const inStatus = tasks.filter(t => status === 'all' || t.dataset.status === status);
+    for (const b of types.children) {
+      const n = b.dataset.type === 'all' ? inStatus.length : inStatus.filter(t => t.dataset.type === b.dataset.type).length;
+      b.querySelector('.count').textContent = n;
+      b.classList.toggle('empty', n === 0);
+    }
     for (const t of tasks) {
       const okStatus = status === 'all' || t.dataset.status === status;
       const okType = type === 'all' || t.dataset.type === type;
