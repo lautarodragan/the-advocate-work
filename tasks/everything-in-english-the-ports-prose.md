@@ -61,6 +61,15 @@ callers and its own parameter move together.
 
 One finding, not fixed: [`video-read-slowly-breaks-wait-for-control`](video-read-slowly-breaks-wait-for-control.md).
 
+The first run gave 1284: one of the six groups had renamed
+`stretch_sorbe.play_case`'s `tope`, which `test_playthrough_chapter_golden.py`
+passes by name; it went back, in its own commit, and a script that diffs
+every harness signature against `4b15e20` and looks for keyword calls to
+the names that left found no other. Verified on the branch merged with
+`main` (`d922a44`), global tools: `just tests` in `abl/`, 1285 passed;
+`just boot` at the root, 9 passed; `abl.sfc` sha256 `395367f6…860238`, as
+before; no golden touched.
+
 ### Tijereta: `abl/tests/rpgmaker`, n–z
 
 "n–z" is read on the name after `test_`, since every file there starts
