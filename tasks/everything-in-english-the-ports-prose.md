@@ -140,3 +140,19 @@ compare at the end.
   then `tests/tooling/`. The TOMLs' data was checked to parse the same
   with tomllib. The debug map's `Comment` commands
   (`patches/manual/new/Map0900.json`) are event data and stay in Spanish.
+* Then `experiments/`, with a fork of mine. Step 1 had left three
+  experiments broken —`fonts/mockups.py`, `menu-mode-5/build.py`, and a
+  docstring of `zoom-mode-7/videos.py`— and they were fixed; none was run.
+  `msu-port/port.s`'s labels went into English, checked byte for byte;
+  what the assembly or another file reads keeps its Spanish name.
+* For others at merge: `just video`'s examples keep `quieto:N`, which is
+  what `tests/harness/video.py` parses today; if Calandria renames it,
+  the justfile's comment follows. test_index.py quotes Mulita's "Which
+  test covers what".
+* Verified with ports `main` (`cdb3228`) merged in, global tools: `just
+  tests` in `abl/`, **1285 passed**; `just boot` at the root, **9
+  passed**; `abl.sfc` sha256 `395367f6…860238`, the same; the seven
+  games' `release` `.sfc` and `.msu`, and ABL's `.msu`, byte for byte
+  equal to the ones built before touching anything; no golden touched.
+  `deliver.py` and the root `deliver` are not run by any test (see
+  above), nor are the experiments. Nothing to install.
