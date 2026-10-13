@@ -2,7 +2,7 @@
 name: "Book of Three: the hero freezes in Caer Dallben East"
 description: "On map 4 the hero walks with no walking animation and always facing the way it came in; it is right on map 3, inside the houses, and again after leaving map 4"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Calandria]
 ---
