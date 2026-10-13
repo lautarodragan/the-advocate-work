@@ -23,7 +23,7 @@ standing here, and the other repos are next to it:
 
 **The paths in this file are from inside each repo**, and which one is
 said by the section or by the path itself: `runtime/…`, `snes/…`, `rm2k/…`
-and `rm2k-snes/…` are from `the-advocate`; `pruebas/…`, `parches/…`, and a
+and `rm2k-snes/…` are from `the-advocate`; `tests/…`, `patches/…`, and a
 bare `justfile` and `rm2k-snes.toml`, from `abl/` in `the-advocate-ports`.
 Inside `the-advocate`:
 
@@ -45,7 +45,7 @@ root says which ones there are—:
     README.md        what the game is, how it is built and how it finds the
                      tools
     data/            the dump to JSON; its README sees it from inside
-    pruebas/         the suite: its README says which ROM there is and
+    tests/           the suite: its README says which ROM there is and
                      which test covers what
 
     git log          in all four: the messages are long on purpose, they
@@ -128,7 +128,7 @@ nowhere: the `git log` already has it.
 not the container, not `box`, not the folders in `~` that are not repos,
 not `/shared`, not paths of this machine. It says which variable or which
 flag points to it —`GAME_DIR`, `RTP_DIR`—, and the environment stays in
-this file and in `maquina.just` of the ports, which are the only ones that
+this file and in `machine.just` of the ports, which are the only ones that
 describe it. It is taro's, from 2026-09-26; tasks and code defaults do not
 count.
 
@@ -186,7 +186,9 @@ in Spanish, and `the-advocate` only since that same morning; the book and
 this repo were already in English. **The history is not rewritten**: old
 commits, and the old names they cite, stay as they were, and each rename
 leaves its table so that an old citation can be found —`RENAMES.md` here
-for the tasks, the redirects in the book's `book.toml` for its pages—.
+for the tasks, the redirects in the book's `book.toml` for its pages,
+`RENAMES.md` at the root of the ports for their directories, files,
+recipes, Python names, cases and goldens—.
 Quoting something old verbatim, in Spanish, is fine. Until each rename
 lands, some names below are still the Spanish ones.
 
@@ -407,12 +409,12 @@ pixel, at 15 bits**, which is the console's real depth. What changed on
 
 Until that day it was compared against a **Python reference** that did the
 same as the ROM. Today it is compared against **frozen captures** —the
-goldens of ABL's suite, in `pruebas/golden/tanda/` of its repo, which are
+goldens of ABL's suite, in `tests/golden/suite/` of its repo, which are
 what the ROM drew the day the suite was green—. Three obligations come out
 of that, and one of them is new.
 
 **The engine's ROM tests live in ABL, for now**: almost all of
-`pruebas/rpgmaker/` in the ports is what RM2k does, using ABL as a stage.
+`tests/rpgmaker/` in the ports is what RM2k does, using ABL as a stage.
 They left with the game on 2026-10-02, because they need one, and they
 come back to `the-advocate` little by little when the test game exists
 —phase 2 of `research/2026-10-02-the-test-game.md` in the book—.
@@ -437,7 +439,7 @@ that taro plays.
 
 **And there is a class of bug that no golden can see, because the emulator
 that took it does not see it either.** That is what
-`pruebas/rpgmaker/test_cores.py`, in the ports, is for: it runs the same
+`tests/rpgmaker/test_cores.py`, in the ports, is for: it runs the same
 cartridge in **snes9x and in bsnes** and compares the two captures with
 each other. bsnes starts WRAM with garbage and snes9x with zeros, so a
 difference means the ROM depends on uninitialised memory. It goes red
@@ -496,14 +498,14 @@ by `rm2k-snes-cartridges` from the checkout it was installed from** —the
 path is compiled into `project`—: reinstalling from another checkout
 changes which runtime goes into the ROM. No script or test of the ports
 calls `cargo` or names the path of `the-advocate`, and
-`pruebas/herramientas/test_lado_de_abl.py` guards it: what the tools know
+`tests/tooling/test_abl_side.py` guards it: what the tools know
 about the project —its paths, the `rm2k-snes.toml`— the harness asks
-`rm2k-snes-project` (`pruebas/arnes/proyecto.py`).
+`rm2k-snes-project` (`tests/harness/project.py`).
 
 **To run ABL with the tools of a checkout that changes them** —a worktree
 of `the-advocate` that touches the runtime or the converter—: `just
 install-local .local-tools <Rust projects>` in the worktree, and from
-`abl/` in the ports `PATH=<worktree>/.local-tools/bin:$PATH just pruebas`.
+`abl/` in the ports `PATH=<worktree>/.local-tools/bin:$PATH just tests`.
 ABL's `justfile` builds its PATH from the one it receives, and what is not
 in that `bin/` comes from the global one. **But it builds in the `build/`
 of the ports checkout where it runs**: the one in `~/the-advocate-ports` is
@@ -560,15 +562,15 @@ here. What taro wants looked at they leave in `/shared`.
 
 The tools reach `~` and `/shared` through flags —`--game-dir`,
 `--rtp-dir`, `--soundfont`, `--replacements`, `--shared`—, and know of no
-value of this machine. They are set by `maquina.just`, at the root of the
+value of this machine. They are set by `machine.just`, at the root of the
 ports, which each game's `justfile` imports: it translates `RTP_DIR`,
-`SOUNDFONT`, `SHARED` and `JUEGOS` with the values from here by default,
+`SOUNDFONT`, `SHARED` and `GAMES` with the values from here by default,
 and each game adds its `GAME_DIR`; they are exported, because ABL's tests
 read them too. The MSU-1 replacements, which have no variable, are its
 `reemplazos_msu`. If the environment changes, it is changed there. Until
 2026-10-10 ABL called them `ABL_GAME_DIR`, `ABL_RTP_DIR` and
 `ABL_SOUNDFONT`, and each game repeated its own. `ABL_CACHE` and
-`CARTUCHOS` are translated too, in ABL's, but with no machine value: the
+`CARTRIDGES` are translated too, in ABL's, but with no machine value: the
 cache and the test cartridges live inside `build/`, and the variables only
 move them.
 
@@ -673,9 +675,9 @@ there was not. Since `abl` is also the suite's cartridge it carries all of
 them, but `test-special` has its own flags. Which one is the tightest
 changes, and twice it was written here and went stale: **it is not
 written, it is measured**, and all of them have to be measured: `abl` and
-the ones `cartuchos` builds.
+the ones `cartridges` builds.
 
-**It is measured with `just espacio`, in `abl/` of the ports**, which runs
+**It is measured with `just space`, in `abl/` of the ports**, which runs
 `rm2k-snes-space` and prints for each cartridge the free data banks and
 the gaps, bank 0, bank 1, `BSS`, `ZEROPAGE` and the text block; with the
 path of a ROM built separately, it measures that one. What counts is **how
@@ -704,10 +706,10 @@ Until 2026-09-16 there was `just hitos-foto`, which took a snapshot of the
 tree with `git stash create` because the suite ran recipes that overwrote
 `rom/src/mapdata.inc` —the runtime lived there—, which was then global
 state. Since 9f the tests build nothing: they run against the cartridges
-that `just cartuchos` builds beforehand —`release` and those in
+that `just cartridges` builds beforehand —`release` and those in
 `build/tests/`—, and the harness refuses to run against a stale one. Two
 runs at once only step on each other if both find a stale cartridge and
-rebuild it together: with `just cartuchos` run once before, the only thing
+rebuild it together: with `just cartridges` run once before, the only thing
 they fight over is the CPU.
 
 **The background tasks we launch, we can kill.**
@@ -767,14 +769,14 @@ an agent that forgot it, and it is fixed when merging, before pushing.
 
 What always has to be done:
 
-* **Bring the builds to `/shared`, with `just entregar "<what to look
+* **Bring the builds to `/shared`, with `just deliver "<what to look
   at>"`, from the ports.** The worktrees live in `~`, which is not mounted
   on the host, and `/shared` is: it is where taro finds them. They go to
   `/shared/builds/<date>-<ABL commit>-<tools commit>/`, and the text passed
-  to the recipe goes to the `LEEME.txt`: what changed, what to look at and
-  which limitations were hit. **The other games go with `just entregar`
+  to the recipe goes to the `README.txt`: what changed, what to look at and
+  which limitations were hit. **The other games go with `just deliver`
   from the root of the ports**, all seven at once, to
-  `/shared/builds/otros-juegos/`, which is overwritten: until 2026-10-12
+  `/shared/builds/other-games/`, which is overwritten: until 2026-10-12
   they were copied by hand, and taro played two-day-old ones without
   anyone noticing. Until 2026-09-24 they went to
   `pruebas-manuales/`, inside the repo, and until 2026-09-25 they were
@@ -803,19 +805,22 @@ What always has to be done:
 
   **The rest of what taro has to look at or listen to goes to two folders
   and not to the root of `/shared`**: captures and goldens to
-  `/shared/capturas/<date>-<topic>/`, audio to
-  `/shared/audio/<date>-<topic>/`. It is taro's, from 2026-09-27, after
+  `/shared/captures/<date>-<topic>/`, audio to
+  `/shared/audio/<date>-<topic>/` (until 2026-10-12 captures went to
+  `/shared/capturas/`, which stays as it was). It is taro's, from 2026-09-27, after
   cleaning up a dozen loose folders (`capturas-lashe-3`,
   `goldens-textos`…) and 2 GB of old audio. What is already in git or is
   rebuilt from a commit can be deleted once taro has declared it looked at.
 
   **The MSU-1 tracks do not go in the build: they go to `/shared/msu/`**, a
-  single directory that is updated only when they change —its `LEEME.txt`
-  says which fingerprint they are compared with—. They weigh half a gig,
+  single directory that is updated only when they change —its `README.txt`
+  says which fingerprint they are compared with; it was `LEEME.txt` until
+  2026-10-12, so the first `just deliver` after that asks for
+  `--update-msu`, which writes the new one—. They weigh half a gig,
   and copying them in every build would duplicate them for nothing. taro
   copies the `abl.sfc` next to them. It is taro's, from 2026-09-25, when
-  `release` started carrying them always. `just entregar` warns if they do
-  not match the build's, and copies them only with `--actualizar-msu`.
+  `release` started carrying them always. `just deliver` warns if they do
+  not match the build's, and copies them only with `--update-msu`.
 
   **The `abl.msu` does go in the build, and also to `/shared/msu/`
   always.** Since 2026-09-25 it is not empty: it carries the battle
@@ -843,7 +848,7 @@ What always has to be done:
   and take longer, and killing them out of impatience ruins the run.
 * **Hand out the numbers to them in advance.** Everything that is chosen
   by taking "the next free one" —an opcode, an index in a tuple of ABL's
-  `pruebas/*/test_*_golden.py`, a far RAM address— each agent is going to
+  `tests/*/test_*_golden.py`, a far RAM address— each agent is going to
   choose looking at its copy, and two are going to choose the same one
   without git seeing anything. It is cheaper to tell each one which it gets
   when launching it than to discover it when merging: on 2026-09-13 it
@@ -852,7 +857,7 @@ What always has to be done:
   longer one of them** since 2026-10-11: a new variable goes with a `.res`
   in the `FARBSS` segment, in its subsystem's file, and the linker places
   it —see the top of `runtime/far_ram.s`—; an agent that writes a far
-  address by hand gets ABL's `test_reservas_de_la_wram.py` red.
+  address by hand gets ABL's `test_wram_reservations.py` red.
 * **Tell it to namespace its temporary files.** The scratchpad is **shared
   among agents**, and two working in parallel pick the same obvious name:
   on 2026-09-15 two wrote a `comparar.sh` each in the same place. One
@@ -977,7 +982,7 @@ And in any case, when resuming it is worth looking, in this order, at:
    `~/.claude/projects/<project>/<session>/subagents/agent-<id>.jsonl`.
    They are megabytes: it is read **from the end backwards, one entry at a
    time**, looking at which tool it used last. Never whole.
-4. **What it left running**: `pgrep -af "pytest|cartuchos"`, and `git
+4. **What it left running**: `pgrep -af "pytest|cartridges"`, and `git
    worktree list` in each repo.
 
 And for the new agent that replaces it: pass it what the previous one left
@@ -1004,10 +1009,10 @@ they were:
 
 The fix is always the same: an explicit `cmp #0` between the `pl*` and the
 branch. Since 2026-10-02 Goombario —`snes/goombario/`— looks for it on
-every built cartridge, in ABL's `pruebas/herramientas/test_linter.py`: a
+every built cartridge, in ABL's `tests/tooling/test_linter.py`: a
 conditional branch on a flag left by a `pl*` is red, except those that
 look on purpose at what was pulled, which are in ABL's
-`excepciones-del-linter.txt`, with their why. A new one of those goes
+`linter-exceptions.txt`, with their why. A new one of those goes
 there, saying what it is that was pulled.
 
 ## Git

@@ -19,8 +19,8 @@ a ROM that only has that map, in 4bpp mode".
 
 ## Done, on 2026-10-06 (Calandria)
 
-Two ROMs in `/shared/builds/otros-juegos/`, to look at in an emulator, and
-side-by-side captures in `/shared/capturas/2026-10-06-uruya-4bpp/`: each sheet
+Two ROMs in `/shared/builds/other-games/`, to look at in an emulator, and
+side-by-side captures in `/shared/captures/2026-10-06-uruya-4bpp/`: each sheet
 has RM2k's original, wally's 8bpp, and the two ROMs. The experiment's
 code (conversion, `uruya.s`, the `ld65` cfg, the captures) stayed in
 the scratch, outside the repo, on purpose.

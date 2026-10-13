@@ -81,7 +81,7 @@ already belonged to the item message (`$7E7850`-`$7E785F`). Opcodes: none.
 * A Blurred Line's whole suite, with the tools from this branch (`battle`,
   `screens`, `mapdata`, `convert`, `cartridge`) and the clone's `mulita-items`
   branch, both with `main` merged: **1094 green**. Ten new
-  tests (four in `test_batalla.py`, six in `test_materiales.py`), all
+  tests (four in `test_battle.py`, six in `test_materials.py`), all
   red with the tools from `main`. **No golden changed**.
 * `cargo test` of `rm2k-snes-battle`, `-screens`, `-mapdata`, `-convert` and
   `-cartridge`; `just -f tools/justfile test`: 27. In the same run

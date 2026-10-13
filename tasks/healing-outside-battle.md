@@ -23,7 +23,7 @@ selection is drawn correctly on coming back, and there are tests that check it.
 ## Where it stood, 2026-09-21
 
 The "done is" part is there, with cases that run the ROM in
-`pruebas/rpgmaker/test_curar_menu.py`. The causes:
+`tests/rpgmaker/test_curar_menu.py`. The causes:
 
 - **The sandwich**: the actor choice did nothing with A on a medicine, on
   purpose, since before HP were state. Now it's `medicina_usar`, which is
@@ -41,8 +41,8 @@ What was left out:
   (`batalla.item_usable_en_batalla`), so there taro still can't use it. Doing
   it needs the item's target cursor to be able to stop on a knocked-out ally,
   the revived one to ask for orders again the next turn and collect the
-  experience on winning, and moving `batalla.py` the same way, which is what
-  `test_batalla.py` predicts HP against. It's battle's, not the menu's.
+  experience on winning, and moving `battle.py` the same way, which is what
+  `test_battle.py` predicts HP against. It's battle's, not the menu's.
 - **The left column of the choice**, which in RM2k shows the item and how
   many are left: it's still empty, as declared in `titulo.py`.
 - **Uses of a multi-use item**: one is spent per use, as with the switch ones.

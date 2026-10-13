@@ -20,9 +20,9 @@ frames. Measure in bsnes first.
 # Status
 
 2026-09-26, in `testing/`: both computations redone without changing a single
-value. `just pruebas` green and no golden moved; `test_cores.py` green twice.
+value. `just tests` green and no golden moved; `test_cores.py` green twice.
 What's left is for taro to play the terrace —slot 2 of the `.srm`s in
-`/shared/experimentos/2026-09-26-paralelos-cada-n/`— and say whether the lag
+`/shared/experiments/2026-09-26-paralelos-cada-n/`— and say whether the lag
 is gone, also in Kersh's blue flash.
 
 Besides the goldens, the terrace scene was run with the ROM from before and
@@ -34,7 +34,7 @@ one per iteration, came out identical in snes9x and in bsnes.
 
 Measured with the chips research's line probes
 (`/extras/scratch/chips/instrumentar.py`, adapted), in the usual scene:
-`ir_al_mapa(32, 41, 8)`, up, and A every 20 frames until the battle. snes9x
+`go_to_map(32, 41, 8)`, up, and A every 20 frames until the battle. snes9x
 and bsnes agreed to within one line.
 
 * **`flashes_tick`, ~94 lines per character flash.** Almost all of it was

@@ -14,10 +14,10 @@ something on screen —`Inscribe`'s wall of bark, a message and then a
 frame, and the flash shows on the next one; but the message's text is
 still in the window for two frames, under the flash. In the original under
 Wine the window is already empty on the first frame of the flash. The
-golden `pelea-inscribir-destello-1` of
-`pruebas/rpgmaker/test_destello_de_pelea_golden.py` holds it that way.
+golden `battle-inscribe-flash-1` of
+`tests/rpgmaker/test_battle_flash_golden.py` holds it that way.
 
-**How to see it**: the `pelea-inscribir` case, frame by frame from the A
+**How to see it**: the `battle-inscribe` case, frame by frame from the A
 that closes "TALAN inscribes a glyph of power": the lower band of the
 screen still has the text on the first two frames after the A —the flash
 already shows on the second— and is empty from the third. It

@@ -26,7 +26,7 @@ packing and the four-byte texts).
 
 # How a map the game doesn't have is born
 
-`parches/manual/nuevos/Map0900.{json,tiles}`, and not `mapas/`: a fork
+`patches/manual/new/Map0900.{json,tiles}`, and not `mapas/`: a fork
 replaces a map that exists and a new map **can't** override one that
 exists, so they're the same rule turned around and each one needs its own safety net.
 `fork.nuevos()` validates: the two pieces, the id in the name equal to the one inside,
@@ -48,13 +48,13 @@ A throwaway script built it; from then on the JSON is edited by hand.
 # How "Begin the Story" starts there
 
 Page 0 of `release` —the one that runs on starting, in map 4, before
-its router— is a case, `PRIMERO` in `cartuchos.py`. Until today it was `nada`. With
-`CON_MAPA_DE_DEBUG = True` it's `mapa-de-debug`: a `Teleport` to 900 and Talan
+its router— is a case, `PRIMERO` in `cartridges.py`. Until today it was `nothing`. With
+`CON_MAPA_DE_DEBUG = True` it's `debug-map`: a `Teleport` to 900 and Talan
 in the party, because DummyHero is an empty sprite and the hero wouldn't be visible.
-`nada` becomes just another page.
+`nothing` becomes just another page.
 
 **For a clean delivery, `CON_MAPA_DE_DEBUG = False`**: the map leaves the
-cartridge and page 0 goes back to being `nada`. Measured: that ROM comes out **byte for
+cartridge and page 0 goes back to being `nothing`. Measured: that ROM comes out **byte for
 byte identical** to `main`'s at `2ca861a5` (`.sfc` and `.msu`), both built
 with `cartuchos.convertir` in separate directories.
 
@@ -67,11 +67,11 @@ Two paths, and it ended up a mix:
 
 * **The ones that play from the title** —`tanda.partida(None)`, the
   cutscenes, the music, Talan's walkthrough— choose the page of
-  `LA_PARTIDA_DE_VERDAD` (`nada`) by its number, like any case: it's
+  `LA_PARTIDA_DE_VERDAD` (`nothing`) by its number, like any case: it's
   page 0 of the clean delivery, in the same ROM. Going through the door didn't give
   the same: the `cinematica` goldens count ticks from the title and two
   fall on the ramp of the first fade, and reaching 4 with a `Teleport` shifts
-  the ramp and the tint (`CINEMATICAS` in `test_escenas_golden.py` says so).
+  the ramp and the tint (`CINEMATICAS` in `test_scenes_golden.py` says so).
   Goldens that today test exactly the start delivered without the map would
   have to be redone.
 * **The opening walkthrough** does what taro suggested: it enters through "Begin
@@ -89,7 +89,7 @@ still holds for that branch.*
 
 Branch chosen for everything that branches: **Arden's** (Neon Vipers),
 arriving at work on time, **refusing Wick** —the same one
-`test_recorrido_sorbe_golden.py` uses—. The player is tidy: opens the chests along the
+`test_playthrough_sorbe_golden.py` uses—. The player is tidy: opens the chests along the
 way and talks to the people who leave a switch someone looks at later. He doesn't
 take the detours that change branches: not the Hover-Tram (71/72/186), nor the
 bribe (29), nor shaving (25).
@@ -172,31 +172,31 @@ companions who joined, except the normal start one.
 
 # Tests
 
-`pruebas/abl/test_mapa_de_debug.py`, on `release`:
+`tests/abl/test_debug_map.py`, on `release`:
 
-* the arrival through "Begin the Story", with golden (`mapa-de-debug-llegada`) and
-  `celdas_mal_dibujadas` at zero;
+* the arrival through "Begin the Story", with golden (`debug-map-arrival`) and
+  `wrongly_drawn_cells` at zero;
 * each door crossed walking, with the map, the cell, the switches, the
   party, the gold, items and the speed on arrival;
 * each NPC adds and removes their companion (AG7, with 150 and his skill);
 * the clean delivery, without building it: `release`'s cases with the flag off.
 
-And `test_recorrido_golden.py`, the opening, enters through door 1.
+And `test_playthrough_golden.py`, the opening, enters through door 1.
 
 # Space
 
-`just espacio`, against the clean delivery built separately (= `main` at
+`just space`, against the clean delivery built separately (= `main` at
 `3c16a178`, byte for byte): bank 0, bank 1, `BSS` and `ZEROPAGE` don't
 move; the map adds **one data bank** (some 8 KB, but it crosses the edge and
 leaves a big gap in the last one) and 592 B of texts, the signs.
 
 # `dcbest`'s ceiling
 
-With the map, `test_el_tema_no_recorta_en_su_pico[dcbest]` clipped 2
+With the map, `test_the_song_does_not_clip_at_its_peak[dcbest]` clipped 2
 samples: its streams and samples are the same (the `musicdata.inc` comes out
 the same except `PAQUETES_N`), but the peak moves with when each
 write lands in the frame, which changes with any ROM change —the
-test says so—. On `main` it passes. `just techos` was run, and the table goes in its
+test says so—. On `main` it passes. `just ceilings` was run, and the table goes in its
 own commit.
 
 # What taro has to test

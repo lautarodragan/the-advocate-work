@@ -11,7 +11,7 @@ assignee: taro
 Milestone 2 of `race-and-what-comes-next.md`. It starts from `main` at
 `69e66ed`. It's considered done with dropped frames at zero or nearly so on
 49, 52 and 54 while driving, and a test has to enforce it: the walkthrough
-`pruebas/abl/test_recorrido_carrera_golden.py` already drives with a pilot.
+`tests/abl/test_playthrough_race_golden.py` already drives with a pilot.
 
 What was measured before starting (milestone 1), driving and only on ticks
 with switch 170, with no message or fade:
@@ -173,7 +173,7 @@ which exceed 262 lines by 1 to 35.
 
 ## The test
 
-`test_la_carrera_entera` counts the hardware frames of the driving ticks of
+`test_the_whole_race` counts the hardware frames of the driving ticks of
 each lap, with the same criterion, and fails with more than `CUADROS_DE_MAS`
 (5) extra per hundred. Against `69e66ed` it fails: "la vuelta del mapa 49
 gastó 2017 cuadros de hardware en 977 ticks: 1040 de más".
@@ -192,17 +192,17 @@ a buffer.) Bank 0 gained: `clear_oam`, `npc_swap`, `npc_va_antes` and
 
 ## The ceilings
 
-On the merge, `test_el_tema_no_recorta_en_su_pico[dcbest]` went red (two
+On the merge, `test_the_song_does_not_clip_at_its_peak[dcbest]` went red (two
 samples at the cap); separately both branches passed. It's what that test
 warns about: the peak moves with when each DSP write lands within the frame,
 and the milestone changed the duration of almost every frame with moving
-NPCs. `just techos` re-measured it (`33e78c4`).
+NPCs. `just ceilings` re-measured it (`33e78c4`).
 
 # Tests
 
-`just pruebas` green on `da466bb`, and on the merge with `main` with the
+`just tests` green on `da466bb`, and on the merge with `main` with the
 ceilings table re-measured. No golden changed. New cases in
-`pruebas/herramientas/test_paginas.py`: the shape of `OP_CELL_TEST`, the
+`tests/tooling/test_pages.py`: the shape of `OP_CELL_TEST`, the
 destination of the inner branch's `else`, and that without the exact shape it
 doesn't get fused.
 

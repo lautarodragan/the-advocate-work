@@ -34,4 +34,4 @@ there doesn't compile). In Vampires Dawn it's the world: it wasn't looked at how
 it can be played without it.
 
 **How to see it**: remove the map from `excluded` in the game's `rm2k-snes.toml`
-and `just cartuchos release` in its directory.
+and `just cartridges release` in its directory.

@@ -47,24 +47,24 @@ The scripts that did the counting, in case they need redoing, are in
 
 | recipe | what it does | users | last | proposal |
 |---|---|---|---|---|
-| `datos` | `ditto unpack` of the game to `data/` and `build/ditto-exacto/` | `rm2k-snes.toml`, `docs/port/pipeline.md`, `parches/manual/README.md`, the harness, DITTO.md | 2026-10-02 (3 in `done/`) | keep |
-| `ditto-volcado` | `just datos` to `/extras/volcado-ditto` | **none**: not docs, not tests, not a task, in neither of the two repos | never | **delete**: it is `just datos <dir> <dir>-exacto` |
+| `datos` | `ditto unpack` of the game to `data/` and `build/ditto-exacto/` | `rm2k-snes.toml`, `docs/port/pipeline.md`, `patches/manual/README.md`, the harness, DITTO.md | 2026-10-02 (3 in `done/`) | keep |
+| `ditto-volcado` | `just dump` to `/extras/volcado-ditto` | **none**: not docs, not tests, not a task, in neither of the two repos | never | **delete**: it is `just dump <dir> <dir>-exacto` |
 | `datos-vuelta` | `unpack` + `pack` of the game, byte for byte against the original | DITTO.md | 2026-09-29 (2 in `done/`) | keep |
 | `pruebas` | the suite, in parallel, after `cartuchos` | everything | 2026-10-03 | keep |
-| `pruebas-rpgmaker`, `pruebas-abl`, `pruebas-herramientas` | the suite of one folder | `pruebas/README.md` | 2026-10-02 (none in `done/`) | **question 3** |
+| `pruebas-rpgmaker`, `pruebas-abl`, `pruebas-herramientas` | the suite of one folder | `tests/README.md` | 2026-10-02 (none in `done/`) | **question 3** |
 | `_xdist` | refuses if pytest-xdist is missing | the four above | — | keep |
 | `cartuchos` | `rm2k-snes-cartridges` with the machine's flags | `pruebas`, AGENTS.md, studies | 2026-10-02 | keep |
 | `espacio` | `rm2k-snes-space`, building what is stale first | AGENTS.md, `main.s`, `emit.rs`, studies | 2026-10-04 | keep |
-| `parches` | copies the decisions of `release` to `parches/` | `rm2k-snes-patches` (its messages), `parches/README.md` | 2026-10-03 | keep |
-| `parches-check` | `rm2k-snes-patches --check` | `test_parches.py`, `parches/README.md` | 2026-10-02 (7 in `done/`) | keep; see **question 5** |
-| `techos` | `rm2k-snes-volume-ceilings` | `test_musica_techos.py`, `techos.toml`, `ceilings.rs` | 2026-10-03 | keep |
+| `parches` | copies the decisions of `release` to `patches/` | `rm2k-snes-patches` (its messages), `patches/README.md` | 2026-10-03 | keep |
+| `patches-check` | `rm2k-snes-patches --check` | `test_patches.py`, `patches/README.md` | 2026-10-02 (7 in `done/`) | keep; see **question 5** |
+| `techos` | `rm2k-snes-volume-ceilings` | `test_music_ceilings.py`, `ceilings.toml`, `ceilings.rs` | 2026-10-03 | keep |
 | `build` | `rm2k-snes-cartridges` with a name: **the same as `cartuchos <name>`** | `parches`, `entregar`, `video`; `test_msu.py`, `docs/port/pipeline.md`, a wishlist task | 2026-10-02 | **question 4** |
-| `entregar` | `entregar.py` after building `release` | AGENTS.md of both repos, `docs/snes/emulators.md` | 2026-10-02 | keep |
-| `video` | `pruebas/arnes/video.py` | `test_video.py`, `pruebas/README.md` | 2026-10-02 (6 in `done/`) | keep |
-| `menu-modo-5`, `fuentes` | test ROM of the menu in mode 5 and of the fonts, and their verification | `experimentos/` | 2026-10-02 (`font-for-high-resolution-or-a-narrower-one`) | **question 6** |
+| `entregar` | `deliver.py` after building `release` | AGENTS.md of both repos, `docs/snes/emulators.md` | 2026-10-02 | keep |
+| `video` | `tests/harness/video.py` | `test_video.py`, `tests/README.md` | 2026-10-02 (6 in `done/`) | keep |
+| `menu-modo-5`, `fuentes` | test ROM of the menu in mode 5 and of the fonts, and their verification | `experiments/` | 2026-10-02 (`font-for-high-resolution-or-a-narrower-one`) | **question 6** |
 | `msu-puerto` | test ROM of the MSU-1 data port | the study of maps over the MSU-1 (its phase 0 is measuring the FX Pak) | 2026-10-02 | **question 6** |
-| `exhirom` | ExHiROM test ROM | `docs/snes/emulators.md`, `experimentos/` | 2026-10-02 | **question 6** |
-| `zoom-modo-7`, `zoom-modo-7-videos` | test ROM of the mode 7 zoom, and its videos next to the original | `experimentos/` | 2026-10-02 (`mode-7-pilot-for-the-zoom-of-the-diff-photos`) | **question 6** |
+| `exhirom` | ExHiROM test ROM | `docs/snes/emulators.md`, `experiments/` | 2026-10-02 | **question 6** |
+| `zoom-modo-7`, `zoom-modo-7-videos` | test ROM of the mode 7 zoom, and its videos next to the original | `experiments/` | 2026-10-02 (`mode-7-pilot-for-the-zoom-of-the-diff-photos`) | **question 6** |
 
 What I did **not** find: any Python recipe wrapping a script
 that no longer exists, any from `rom/`, and any `just X` invocation in the
@@ -108,31 +108,31 @@ bulk.
 3. **`pruebas-rpgmaker`, `-abl` and `-herramientas`**: three recipes for one
    folder each, that nobody ran in any finished task. `just
    pruebas` does not work for that because it always passes `pruebas` to pytest;
-   if instead it received the folder —`just pruebas pruebas/abl`, and with nothing,
+   if instead it received the folder —`just tests tests/abl`, and with nothing,
    `pruebas`—, the three would go. My proposal: do it.
 4. **`build` is `cartuchos` with an argument**: `just build release` and
-   `just cartuchos release` run the same thing. It could go, with `parches`,
+   `just cartridges release` run the same thing. It could go, with `parches`,
    `entregar` and `video` depending on `(cartuchos "release")`, and the
    long comment about the MSU-1 tracks moving to `cartuchos`. It changes
    a name that `test_msu.py` and `docs/port/pipeline.md` name. My
    proposal: do it.
 5. **The tools name ABL recipes**: `rm2k-snes-patches` says
-   "run `just parches`" and writes in the header of each `parches/auto/`
-   "`just parches --check`" —which besides does not exist: it is `just
-   parches-check`—, and `rm2k-snes-volume-ceilings` says "`just techos`".
+   "run `just patches`" and writes in the header of each `patches/auto/`
+   "`just patches --check`" —which besides does not exist: it is `just
+   patches-check`—, and `rm2k-snes-volume-ceilings` says "`just ceilings`".
    AGENTS.md says that inside those projects the game is not named.
    Fixing it changes the tool's output and the versioned files
-   of ABL's `parches/`, so it is not for this task: does it go in
+   of ABL's `patches/`, so it is not for this task: does it go in
    a separate one?
 6. **The six experiment recipes** (`menu-modo-5`, `fuentes`,
    `msu-puerto`, `exhirom`, `zoom-modo-7`, `zoom-modo-7-videos`): they are
    test ROMs of decisions already taken —mode 5 and the fonts, the
    8 MB, the mode 7 pilot—, except `msu-puerto`, whose phase 0 (measuring the
-   FX Pak) is still open. Each script in `experimentos/` already says in its
+   FX Pak) is still open. Each script in `experiments/` already says in its
    header how it is run. They could leave the `justfile` and be run
-   directly (`experimentos/exhirom/armar.py build/exhirom/exhirom.sfc && …`),
+   directly (`experiments/exhirom/build.py build/exhirom/exhirom.sfc && …`),
    which is what the recipes do. They are half a screen of `just --list`.
-   My proposal: remove them, leaving in each `experimentos/<x>/` the two
+   My proposal: remove them, leaving in each `experiments/<x>/` the two
    lines the recipe ran.
 
 Outside the `justfile`, seen in passing: the header of
@@ -150,9 +150,9 @@ at merge time there is nothing to install.
   pass. `abl.sfc` is `924c33ea3b51c958…`, the one from before.
 * `just --list` on both sides: twenty-six recipes in the tools and
   twenty in ABL, each one with its summary.
-* `just entregar` with `SHARED=/extras/scratch/calandria/shared`: leaves the
+* `just deliver` with `SHARED=/extras/scratch/calandria/shared`: leaves the
   build with `abl.sfc`, `.dbg`, `abl.msu`, `tools/` and `LEEME.txt`. The
-  folder has to exist: `entregar.py` refuses otherwise, on purpose.
+  folder has to exist: `deliver.py` refuses otherwise, on purpose.
 * `cargo test --workspace --no-fail-fast`: **one red, which is not from this
   branch**: `the_layers_are_the_ones_the_python_made`, in
   `wally/tests/background_python.rs` ("plain: the tiles"). It was born in
@@ -189,9 +189,9 @@ In the tools:
   `tools/README.md` and `tools/tests/README.md` name `crate-test`.
 * `_install` without the symlink cleanup.
 * `rm2k-snes-patches` and `rm2k-snes-volume-ceilings` name the binary and
-  its flag instead of `just parches`, `just parches --check` and `just
-  techos`; the header of `techos.toml` no longer names
-  `test_musica_techos.py` nor the Python functions that do not exist either. The
+  its flag instead of `just patches`, `just patches --check` and `just
+  techos`; the header of `ceilings.toml` no longer names
+  `test_music_ceilings.py` nor the Python functions that do not exist either. The
   patches tests change hashes and sizes: each new patch, with the
   old header put back, gives the Python's hash (all ten).
 * `docs/snes/emulators.md` and a wishlist task, which named
@@ -206,9 +206,9 @@ In ABL (branch `calandria-justfile` of `/extras/scratch/calandria/abl`):
 * Without `build`: `parches`, `entregar` and `video` depend on `cartuchos`, which
   kept its comment.
 * Without `menu-modo-5`, `fuentes`, `exhirom`, `zoom-modo-7` or
-  `zoom-modo-7-videos`; each `experimentos/<x>/` states its lines.
-* The 181 patches of `parches/auto/` with the new header, from `just
-  parches`, and the one of `techos.toml` by hand, equal to what the
+  `zoom-modo-7-videos`; each `experiments/<x>/` states its lines.
+* The 181 patches of `patches/auto/` with the new header, from `just
+  parches`, and the one of `ceilings.toml` by hand, equal to what the
   tool writes.
 * The same host prose in its `AGENTS.md`.
 
@@ -225,11 +225,11 @@ rest from the global:
   is no longer in `main`).
 * `just crate-test lz2` and `crate-test ditto` run; `crate-test nope`
   refuses with the list.
-* ABL's suite, `just pruebas` in my clone: **1101 pass**. `just
-  pruebas pruebas/herramientas`: 81. `abl.sfc` is `5c50524fea3111ba…`,
+* ABL's suite, `just tests` in my clone: **1101 pass**. `just
+  pruebas tests/tooling`: 81. `abl.sfc` is `5c50524fea3111ba…`,
   the same as before.
 * `just --list`: seven recipes in the tools and eleven in ABL.
-* `just entregar` with `SHARED` in a folder of mine: leaves `abl.sfc`,
+* `just deliver` with `SHARED` in a folder of mine: leaves `abl.sfc`,
   `.dbg`, `abl.msu`, `tools/` and `LEEME.txt`.
 
 What I did not run: the experiments whose recipes went away (only

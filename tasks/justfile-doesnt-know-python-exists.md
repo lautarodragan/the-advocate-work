@@ -19,9 +19,9 @@ From taro, on 2026-09-28, as a first step to separate the tools from ABL (see
 > the tools path, the pipeline fails.
 
 Measured before starting: the `justfile` has 50 lines that name `python3` or
-`tools/` (`grep -c "python3\|tools/" justfile`), and 63 files of `pruebas/`
+`tools/` (`grep -c "python3\|tools/" justfile`), and 63 files of `tests/`
 import modules from `tools/` directly. That's why the grep test starts with an
-exceptions list for `pruebas/` that can only shrink.
+exceptions list for `tests/` that can only shrink.
 
 ## What was done (Espinillo)
 
@@ -66,7 +66,7 @@ copy.
 ### The deviation: a symlink points at a single checkout
 
 With just `realpath`, a script run from the PATH uses the symlink's checkout.
-In a sub-agent's worktree, `just cartuchos` would then build **the ROMs of
+In a sub-agent's worktree, `just cartridges` would then build **the ROMs of
 another tree, with another tree's converter and in that one's `rom/build/`**,
 and the worktree's suite refused to run against its own, stale ones. It broke
 every sub-agent from the first `just herramientas` run from `main` onwards.
@@ -90,7 +90,7 @@ until `just herramientas` is run again from another one. Hence:
 
 ### `video.py` and pytest
 
-`video.py` belongs to `pruebas/`, so it isn't installed: the `justfile` calls
+`video.py` belongs to `tests/`, so it isn't installed: the `justfile` calls
 it by its path, and the `-O` goes in the hashbang (`#!/usr/bin/env -S python3
 -O`). It didn't need to go in any exceptions list. `env -S` is from coreutils
 8.30 onwards.
@@ -103,19 +103,19 @@ exits 0 anyway, which is why it doesn't work).
 
 ### The test
 
-`pruebas/herramientas/test_lado_de_abl.py`. What ABL's side is, is written
+`tests/tooling/test_abl_side.py`. What ABL's side is, is written
 above the test: the `justfile` except the eight recipes of the tools
 (`protocolo`, `*-pruebas`, `ditto-vuelta-entera`, `herramientas`),
-`parches/`, `data/`, and `pruebas/` + `pytest.ini` with 28 exceptions. Both
+`patches/`, `data/`, and `tests/` + `pytest.ini` with 28 exceptions. Both
 lists can only shrink: it fails if a new one appears and if one on the list no
 longer names `tools/`.
 
 For it to go green the header the converter writes in each versioned patch
-had to change —136 files of `parches/auto/`, one line each— as well as
-`techos.toml`'s, plus the READMEs of `parches/` and `data/` and the prose of
+had to change —136 files of `patches/auto/`, one line each— as well as
+`ceilings.toml`'s, plus the READMEs of `patches/` and `data/` and the prose of
 ABL's recipes.
 
-The exceptions of `pruebas/` are of two kinds. The ones that build the import
+The exceptions of `tests/` are of two kinds. The ones that build the import
 path or read files from `tools/` (`pytest.ini`, `video.py`,
 `test_repartos.py`, `test_musica_stream.py`, `test_protocolo.py`) go away when
 the tests get separated from the tools. The rest name it in the prose —"ver
@@ -128,20 +128,20 @@ rpgmaker import lcf`), which don't say where anything is.
 
 See each commit's message. At the end, on the tree merged with `main`:
 
-* **ROMs byte for byte**: `just cartuchos` on `2bf9ff2c`, before touching
-  anything, and `SIN_CACHE=1 just cartuchos` on the final tree: the 47 files of
+* **ROMs byte for byte**: `just cartridges` on `2bf9ff2c`, before touching
+  anything, and `SIN_CACHE=1 just cartridges` on the final tree: the 47 files of
   `rom/build/release/` and `rom/build/tests/special/` —two `.sfc`, two `.msu`
   and 43 `.pcm`— with the same sha256. `abl.sfc` `7a3c6483…6a66552`,
   `prueba.sfc` `fb6db844…66a0617`.
-* **`just pruebas`**, run from the scratchpad with `--justfile`: 973 pass,
+* **`just tests`**, run from the scratchpad with `--justfile`: 973 pass,
   none fails.
 * `just herramientas` installs the eight; all eight answer `--help` by their
   name from outside the repo.
-* From outside the repo too: `just espacio release`, `just espacio <ruta a
-  abl.sfc>`, `just parches-check`, `just build release`, `just video release …
+* From outside the repo too: `just space release`, `just space <ruta a
+  abl.sfc>`, `just patches-check`, `just build release`, `just video release …
   quieto:120` (the hashbang's `-O` works: without it, `video.py` refuses) and
-  `just techos --medir`.
-* The re-exec, with a fake checkout in the scratchpad whose `cartuchos.py`
+  `just ceilings --medir`.
+* The re-exec, with a fake checkout in the scratchpad whose `cartridges.py`
   only prints: `rm2k-snes-cartridges` run inside it runs that one.
 * The grep test, with a line violating each rule put in by hand and removed
   afterwards: see the message of `2aa151be`.
@@ -154,4 +154,4 @@ entregar` wasn't run either, as instructed: only `abl-entregar --help`. And the
 <inexistente> --help` exits 1 was measured.
 
 **For taro**: after merging, `just herramientas` once, on the host side too.
-Without that, `just cartuchos` says `rm2k-snes-cartridges: command not found`.
+Without that, `just cartridges` says `rm2k-snes-cartridges: command not found`.

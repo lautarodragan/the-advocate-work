@@ -141,7 +141,7 @@ copies that were made differently. The new themes (`Kfmus5`, `tsmedit`,
 # What it costs
 
 * **Loading `vswar` when turning it on**: 71 frames frozen on 38 when the
-  empty HQ scene starts (measured with the case `tema-aparte`), and the same on
+  empty HQ scene starts (measured with the case `song-separate`), and the same on
   47. In main those samples were uploaded on entering the map, with the package.
 * **21 loads Earth4 whole**: some 30 KB more on entering.
 * **49 with `golden_axe` playing** —you get there like that from 36—: the last
@@ -155,20 +155,20 @@ copies that were made differently. The new themes (`Kfmus5`, `tsmedit`,
 
 # Tests
 
-`just techos` redone (the mix changed: no theme clips), `just
-cartuchos` and `just pruebas` green, and `release` with `SIN_CACHE=1` comes out
+`just ceilings` redone (the mix changed: no theme clips), `just
+cartuchos` and `just tests` green, and `release` with `SIN_CACHE=1` comes out
 byte-for-byte identical. New:
 
-* `test_el_tema_aparte_sube_con_los_efectos_del_paquete`
-  (`pruebas/rpgmaker/test_musica_paquete.py`), with the case `tema-aparte`: on
+* `test_the_separate_song_uploads_with_the_packages_effects`
+  (`tests/rpgmaker/test_music_package.py`), with the case `song-separate`: on
   38, `golden_axe` and then `vswar`, which has to end up whole with
   Bow2 alongside, without `golden_axe` and with the package incomplete. With
   `extra_aparte` always answering no, it fails because of Bow2.
-* `pruebas/herramientas/test_temas_heredados.py`: `Kfmus5` from 41 to 40 and to
+* `tests/tooling/test_temas_heredados.py`: `Kfmus5` from 41 to 40 and to
   the vidcasts with the shape of those maps, the startup one with the usual
   rule, an apart theme that does not leave the map, and what `Temas.salto` notes.
 
-**What `just pruebas` does not cover**: the pair-by-pair rates were measured by a separate
+**What `just tests` does not cover**: the pair-by-pair rates were measured by a separate
 script against 93af39f; that 49's sound effects are there on arriving with
 `golden_axe` and that in the HQ scene `vswar` sounds whole with Bow2, by a
 throwaway probe over the walkthrough of Arden's ending; the 71 frames,

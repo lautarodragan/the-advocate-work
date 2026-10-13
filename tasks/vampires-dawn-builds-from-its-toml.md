@@ -123,7 +123,7 @@ each one with its why on the line:
 | the troops in a byte (277 of 255) | 98, 182, 327, 339 |
 | the ROM: what doesn't go to the `.msu`, mostly poses | 95, 164, 170, 219, 221, 222, 239, 338, 429 |
 
-**Verified**: `just cartuchos` in the worktree's `vampires-dawn/`, from
+**Verified**: `just cartridges` in the worktree's `vampires-dawn/`, from
 scratch (`build/release` deleted) and with the committed toml: rc 0, 137 s
 (130 s the first time, with Tijereta running alongside). `vampires-dawn.sfc`
 8,388,608 B (sha256 `52d80b8d7c367533…`), `vampires-dawn.msu`
@@ -131,7 +131,7 @@ scratch (`build/release` deleted) and with the committed toml: rc 0, 137 s
 slow, and 2,227 in the `.msu` (6,473,120 B). Poses: 8,320 distinct of
 14,868. In snes9x (libretro, with the `.msu`): it starts on 3 with "Skip
 Intro ?", and with "Yes" moves on to the house. Captures in
-`/shared/capturas/2026-10-11-vampires-dawn-desde-su-toml/`. ABL wasn't
+`/shared/captures/2026-10-11-vampires-dawn-desde-su-toml/`. ABL wasn't
 touched: the commit changes only `vampires-dawn/rm2k-snes.toml`, so
 its suite wasn't run. **It wasn't played**: not a step beyond the
 house, nor Mednafen, nor without `.msu`.

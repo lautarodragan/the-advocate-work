@@ -18,6 +18,6 @@ measured again—, with the same output byte for byte: that image, from
 4 min 5 s to 1.2 s.
 
 Measured on 2026-10-11 (Hornero), the-advocate 01388b04 and the ports at
-main, in a fresh worktree with an empty `build/`: `just cartuchos release`
+main, in a fresh worktree with an empty `build/`: `just cartridges release`
 in `sunset-over-imdahl/` takes 31 s of real time, 2 min 2 s of user.
 

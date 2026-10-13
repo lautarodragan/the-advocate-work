@@ -23,7 +23,7 @@ Three commits:
    `reduce_colors` that set is rebuilt on every merge, so in Rust it could only
    be reproduced by emulating CPython's hash tables. Now the tie is
    broken by the colours. Measured by logging every call of a
-   `NO_CACHE=1 just cartuchos`: 6 of 62 `try_pack` and 5 of 11
+   `NO_CACHE=1 just cartridges`: 6 of 62 `try_pack` and 5 of 11
    `reduce_colors` change. All of them are a different allocation of colours among the palettes of
    the upper layer, with not a single pixel different, except map 3: before it
    merged 2 colours (6 pixels out of 3684) and now it fits without merging.
@@ -46,20 +46,20 @@ distinct. Each subprocess costs between 2 and 5 ms, and the Python took about
 **On merging:** `just -f tools/justfile install adeleine cartridge`.
 
 **The suites.** `just -f tools/justfile test` passes entirely, and so do
-`cargo test -p adeleine` and `-p rm2k-snes-cartridge`. `just pruebas` gives
+`cargo test -p adeleine` and `-p rm2k-snes-cartridge`. `just tests` gives
 **4 reds, and all 4 come from commit 1**: with the Python of `5dc54ff7` and
 the same binaries, `dcbest` passes.
 
-* `test_caminando[3-down-avances3]` and `test_escena[talan]`: 4 pixels
+* `test_walking[3-down-avances3]` and `test_scene[talan]`: 4 pixels
   each, on map 3. They go from (16, 56, 65) to (24, 64, 82): they are the
   pixels that are no longer merged.
 * `test_los_parches_versionados_…`: `0003.toml` no longer lists the two
   merges.
-* `test_el_tema_no_recorta_en_su_pico[dcbest]` clips 2 samples. Running
-  `just techos` rewrites half the table: headroom, mix fingerprints of six
+* `test_the_song_does_not_clip_at_its_peak[dcbest]` clips 2 samples. Running
+  `just ceilings` rewrites half the table: headroom, mix fingerprints of six
   themes and the header, which now comes out in English. I did not commit it: it is bigger
   than this change.
 
-If the new order is accepted, `just parches` and
-`just techos` have to be run, and the two goldens replaced. If it is not accepted, the port to
+If the new order is accepted, `just patches` and
+`just ceilings` have to be run, and the two goldens replaced. If it is not accepted, the port to
 Rust cannot be byte-for-byte identical in `reduce`.

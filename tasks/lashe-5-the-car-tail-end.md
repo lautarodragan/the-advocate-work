@@ -48,14 +48,14 @@ taro's: play it and look at the photos without golden.
 
 # What was done
 
-`pruebas/abl/test_recorrido_lashe_cierre_golden.py`, on `release`, one
+`tests/abl/test_playthrough_lashe_closing_golden.py`, on `release`, one
 walkthrough per branch. Each one starts at the car talk in map 4 (132),
 goes through the cutscene in 34, and reaches 36 with Wick's stretch done (
-161 turned on by hand: `test_recorrido_lashe_wick_golden.py` plays it). Then:
+161 turned on by hand: `test_playthrough_lashe_wick_golden.py` plays it). Then:
 
 1. its sector and back to the car **without doing its own thing**: 36 doesn't turn on 238
    and the first choice it opens is the sectors one (four options, not two);
-2. its own thing, played from 36 and not with `ir_al_mapa`, and walking back to the
+2. its own thing, played from 36 and not with `go_to_map`, and walking back to the
    car;
 3. "Stay": 238 on, 182 not; another trip to a sector and to the car;
 4. "We've got to get out of here": 182, the end sign and the title.
@@ -73,8 +73,8 @@ switch of **another** branch that you can have without it being your own:
             original
 
 The stretches milestones 1 and 3 already played are reused: in a separate commit, the
-body of their tests became functions (`el_hq_por_el_cano`,
-`la_tienda_y_los_guardias`, `irse_termina_la_demo`, `de_stash_a_ag7`), without
+body of their tests became functions (`the_hq_through_the_pipe`,
+`the_shop_and_the_guards`, `irse_termina_la_demo`, `from_stash_to_ag7`), without
 changing what they play.
 
 That step 1 catches what it says was checked by hand once: with 169 on
@@ -85,7 +85,7 @@ is the plant (59 to 62), and there Talan goes alone —AG7 joins later—; the w
 turns them off, like milestone 3's. So the droid branch doesn't depend on
 milestone 4.
 
-The photos are left in `pruebas/snapshots/playthrough/lashe-cierre-*/` **without
+The photos are left in `tests/snapshots/playthrough/lashe-cierre-*/` **without
 golden** (`arden`, `saldra`, `solo`). What they **don't** cover: the blue car (130
 off), Wick's stretch played in the same run, and the plant's
 battles.

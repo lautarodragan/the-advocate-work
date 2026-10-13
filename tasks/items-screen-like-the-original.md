@@ -21,7 +21,7 @@ whose map 4 starts with Kersh and Core in the party and nine items in the
 inventory —usable, equipment and switch ones—, and in easyrpg-player
 (`Scene_Item`, `Window_Item`, `Window_Help`, `Window::RefreshFrame`,
 `RefreshBackground` and `RefreshCursor`). The screenshots, at 320x240, are in
-`/shared/capturas/2026-09-28-items/original-*.png`.
+`/shared/captures/2026-09-28-items/original-*.png`.
 
 - **Two adjoining windows**: the help one on top, 32 tall, and the list one
   below. Each is a `Window` with the game's System (`ablskin`): the
@@ -95,15 +95,15 @@ The shop, which uses the same font, same as equip.
 ## Tests
 
 - `items` and `items-2` change: the windows, the bar instead of the ">", and
-  the list one cell lower. New `items-gris`: the cursor on the Club, in gray,
+  the list one cell lower. New `items-grey`: the cursor on the Club, in gray,
   with its description. The actor choice doesn't change: it's the menu's
   screen.
 - `render_items` draws the windows and the bar, and
-  `test_la_lista_se_corre_cuando_el_cursor_se_sale` counts with `ITEM_FILAS`.
+  `test_the_list_scrolls_when_the_cursor_leaves` counts with `ITEM_FILAS`.
 - Before, now and the original, side by side, in
-  `/shared/capturas/2026-09-28-items/`.
-- Verified with `just cartuchos` and `just pruebas` on this branch: all green.
-  `just espacio release`: bank 0 went from 175 to 205 B free.
+  `/shared/captures/2026-09-28-items/`.
+- Verified with `just cartridges` and `just tests` on this branch: all green.
+  `just space release`: bank 0 went from 175 to 205 B free.
 
 ## What taro has to look at
 

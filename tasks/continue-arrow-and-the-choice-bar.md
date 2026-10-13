@@ -9,7 +9,7 @@ assignee: taro
 From taro, on 2026-10-04: "Go ahead", to carry on with the two differences
 Quirquincho found comparing against the original under Wine
 (`tasks/message-window-at-the-top-in-the-middle-and-without-background.md`; the captures in
-`/shared/capturas/2026-10-04-ventana-de-mensajes/original/`).
+`/shared/captures/2026-10-04-ventana-de-mensajes/original/`).
 
 ## Done (Tijereta)
 
@@ -105,7 +105,7 @@ Play a choice —Talan's Insta-Shave, or the one about staying in Lashe— and
 look at a message waiting for the key. Look above all at the eleven maps
 that lose colours (Lashe Area and the Paradise interiors): if it shows, the
 alternative is the divergence's. Side by side, with the original and a
-LEEME, in `/shared/capturas/2026-10-04-flecha-y-barra/`.
+LEEME, in `/shared/captures/2026-10-04-flecha-y-barra/`.
 
 When merging, reinstall `cartridge` —it brings the runtime—, `screens`,
 `wally`, `mapdata`, `events` and `convert`. `rules` and `rm2k-render`

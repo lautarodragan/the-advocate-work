@@ -9,7 +9,7 @@ assignee: taro
 
 From Aguará's brief analysis (Sonnet), on 2026-10-05, of what taro saw playing the ROMs of the other games. See also the wishlist las-otras-transiciones-de-rm2k.
 
-Since 2026-10-06 the pages no longer drop: `EraseScreen` and `ShowScreen` are in `ACCEPTED_UNDONE` as a debt (`degrade-instead-of-failing.md`), so the map stays visible where the original stays black, and in Desert Nightmare the start menu of map 1 ("With Intro / No Intro / Quit") comes out over a drawing of VRAM garbage (`/shared/capturas/2026-10-10-grupo-vacio/desert-mapa1-sin-heroe.png`). Built on 2026-10-11 (the-advocate `fc6f7456`, ports `a85b7e3`), Desert Nightmare (20 maps) and El Dorado (11) warn about it. When doing it, take them off that list. (Calandria, 2026-10-11.)
+Since 2026-10-06 the pages no longer drop: `EraseScreen` and `ShowScreen` are in `ACCEPTED_UNDONE` as a debt (`degrade-instead-of-failing.md`), so the map stays visible where the original stays black, and in Desert Nightmare the start menu of map 1 ("With Intro / No Intro / Quit") comes out over a drawing of VRAM garbage (`/shared/captures/2026-10-10-grupo-vacio/desert-mapa1-sin-heroe.png`). Built on 2026-10-11 (the-advocate `fc6f7456`, ports `a85b7e3`), Desert Nightmare (20 maps) and El Dorado (11) warn about it. When doing it, take them off that list. (Calandria, 2026-10-11.)
 
 ## Done (Calandria, 2026-10-11)
 
@@ -49,9 +49,9 @@ Nightmare: after "With Intro" the screen fades to black and the intro's
 first map stays black until its `ShowScreen`, where before the map was in
 sight for a second and a half.
 
-**Covered**: `pruebas/rpgmaker/test_borrar_pantalla.py` in ABL, with three
-cases (`pantalla-borrar-y-mostrar`, `pantalla-borrada-y-salto`,
-`pantalla-mosaico`) and three goldens; red with main's tools. And
+**Covered**: `tests/rpgmaker/test_erase_screen.py` in ABL, with three
+cases (`screen-erase-and-show`, `screen-erased-and-jump`,
+`screen-mosaic`) and three goldens; red with main's tools. And
 `erasing_and_showing_the_screen_carry_what_the_rom_does` in the events
 crate. **Not covered**: the menus, shop, save screen and battle over an
 erased screen (in ABL's `UNTESTED.md`).
@@ -66,7 +66,7 @@ fade.
 
 **Measured on the merged tree** (the-advocate `703f2eaf` over main
 `b6ac8227`, ports `b9ca083` over `3fd03de`): ABL's suite 1216 passed;
-`just arrancan` of the ports 8 passed before the merge, and Desert
+`just boot` of the ports 8 passed before the merge, and Desert
 Nightmare, El Dorado and Vampires Dawn again after it; `just test` 27;
 the events crate 89. The two far RAM bytes went to `FARBSS` with the
 merge: `SCREEN_ERASED` and `SCREEN_FADE`, declared in

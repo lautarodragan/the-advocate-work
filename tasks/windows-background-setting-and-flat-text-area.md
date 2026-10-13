@@ -63,7 +63,7 @@ and the pages that change.
 Verified: without the setting the eight games, and A Blurred Line's six
 cartridges, byte for byte the same; with it the four already flat ones
 too, before step 2. A Blurred Line's suite green with the goldens of step
-1 and none moved by step 2; `just arrancan` green for the seven; `just
+1 and none moved by step 2; `just boot` green for the seven; `just
 test` green. Not covered by any cartridge: the four-line path of
 `prime_line`, now that every game has the setting.
 

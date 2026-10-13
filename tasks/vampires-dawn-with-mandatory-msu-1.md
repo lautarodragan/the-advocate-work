@@ -76,13 +76,13 @@ without the zero tiles, by direct DMA.
 **The tests.** ABL fits, so the path is run by two new cartridges
 of its suite: `test-msu`, with `--msu-everything` —everything that can go, to the
 `.msu`, even if it fits— and `test-msu-rom`, its twin with everything in the ROM. What
-is loaded with each map, against the converter (`test_carga_descomprimida.py`);
+is loaded with each map, against the converter (`test_decompressed_load.py`);
 the boot frame by frame with map 6's panorama, a battle with its
 battlers and the envelope of map 66's music, against the twin
-(`test_msu_gemelos.py`); and the screen, without `.msu` and with another
-build's region (`test_msu_obligatorio.py`, new golden `msu-falta`). The suite: **1202
+(`test_msu_twins.py`); and the screen, without `.msu` and with another
+build's region (`test_msu_required.py`, new golden `msu-missing`). The suite: **1202
 green**, with `abl.sfc` = `24dd24adb52f…`. Captures in
-`/shared/capturas/2026-10-11-msu-obligatorio/`.
+`/shared/captures/2026-10-11-msu-obligatorio/`.
 
 **What the suite doesn't run**: a large picture read from the `.msu` —no map
 of `test-msu` shows one—, a battle background's light fallback read from

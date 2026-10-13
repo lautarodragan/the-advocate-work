@@ -42,8 +42,8 @@ and that this pass fixes or removes:
 * "Lo que sí queda de ellas son los números de `sdsp.py`" (~lines 962-966):
   the per-voice ceiling is no longer a single one since 2026-09-26.
   `sdsp.AIRE` is the maximum, and the theme that would clip with it goes with
-  its own, measured by `just techos` and versioned in
-  `parches/auto/musica/techos.toml` (see `leer_techos` in
+  its own, measured by `just ceilings` and versioned in
+  `patches/auto/music/ceilings.toml` (see `leer_techos` in
   `tools/audio/snes_music.py`).
 * "Varios temas en el cartucho" (~lines 130-200) went entirely stale on
   2026-09-26, with the per-package budget (step 6 of
@@ -108,7 +108,7 @@ Where each thing went:
 What still names the environment, on purpose, because taro left out the
 tasks and the code: the tasks in `tasks/` and `ESTADO.md`, and comments and
 defaults of `justfile`, `tools/` (`render_map.py`, `msu.py`,
-`snes_samples.py`, `entregar.py`, `ensamblar.py`, `retro.py`, `batalla.py`,
+`snes_samples.py`, `deliver.py`, `ensamblar.py`, `retro.py`, `battle.py`,
 `experiencia.py`, `fuente.py`, `fork.py`, `cache_disco.py`),
 `rom/src/msu1.s` and four tests.
 

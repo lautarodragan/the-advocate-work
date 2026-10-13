@@ -25,7 +25,7 @@ doesn't go through there.
 
 What's lost travels in `window`'s answer (`brought`, `merges`, `system`)
 and the converter writes it in the patches as a new type,
-`parches/auto/ventanas/<System>.toml`, only if there were merges.
+`patches/auto/ventanas/<System>.toml`, only if there were merges.
 
 With the original System, `rm2k-snes-screens window` answers:
 
@@ -52,7 +52,7 @@ destroys the window. It's not the tool; it goes separately (wishlist
 `window-in-the-tile-bank`). Desert stops at End Game and Dooms 2
 also at its BMPs.
 
-Captures: `/shared/capturas/2026-10-05-ventana-con-mas-colores/`, Dooms 2's
+Captures: `/shared/captures/2026-10-05-ventana-con-mas-colores/`, Dooms 2's
 window decoded from what the cartridge builds, before (System reduced by
 hand) and after (Adeleine): the font keeps the gradient.
 

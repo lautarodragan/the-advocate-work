@@ -11,7 +11,7 @@ From the re-sweep of 2026-10-10 (`other-games-the-re-sweep.md`): the committed e
 
 ## How it is measured (Calandria, 2026-10-11)
 
-Global tools of the-advocate `5094ef11`; ports at `038ea64`, own worktree (branch `calandria-exclusiones`). For each game, the toml without crutches —`excluded = []`, without `system`, Dooms 2 with `start_map = 1`, Frozen with `below = 156`— and `just cartuchos release`; if the error names a map, it is excluded and built again. If what cuts it is its own System (it names no map), `system` is put back and it is repeated.
+Global tools of the-advocate `5094ef11`; ports at `038ea64`, own worktree (branch `calandria-exclusiones`). For each game, the toml without crutches —`excluded = []`, without `system`, Dooms 2 with `start_map = 1`, Frozen with `below = 156`— and `just cartridges release`; if the error names a map, it is excluded and built again. If what cuts it is its own System (it names no map), `system` is put back and it is repeated.
 
 ## Per game
 
@@ -70,6 +70,6 @@ It does not build, and its toml was not touched. With the committed one (ABL's S
 
 ## Result
 
-Ports, branch `calandria-exclusiones` (`286201b`); book, branch `calandria-exclusiones` (`245f1fc`, a "What it leaves out" section in BoT, Dooms 2, Frozen and Desert). Verified: `just cartuchos release` with the final tomls builds in BoT, Dooms 2, Frozen, Desert, El Dorado and Sunset (the last one untouched). None was looked at in an emulator. Nothing to install at merge time: no tools were touched.
+Ports, branch `calandria-exclusiones` (`286201b`); book, branch `calandria-exclusiones` (`245f1fc`, a "What it leaves out" section in BoT, Dooms 2, Frozen and Desert). Verified: `just cartridges release` with the final tomls builds in BoT, Dooms 2, Frozen, Desert, El Dorado and Sunset (the last one untouched). None was looked at in an emulator. Nothing to install at merge time: no tools were touched.
 
 For the tools: "the song uses N sounds and the index is one byte" says neither the song nor the map, and "this map can't carry a message window" does not say the map on its line (you have to read the previous header of the log).

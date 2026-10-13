@@ -24,7 +24,7 @@ the Director and the texts are fine: "we don't need to do anything more
 complex". How it ended up:
 
 * **The refit is a step of the pipeline, separate from the patches.** taro
-  asked that it not compete with `parches/` nor with the forks of `juego/`:
+  asked that it not compete with `patches/` nor with the forks of `juego/`:
   they are two different processes. The reader has a hook,
   `lcf.REAJUSTAR_TEXTOS`, which the converter sets —like
   `DECORAR_TRANSLUCIDO`—, and it runs after the forks on whatever is left. A
@@ -83,7 +83,7 @@ to be able to say both things.
 
 # Where the patch lives
 
-**The JSON files in `data/` are not edited.** They are derived: `just datos`
+**The JSON files in `data/` are not edited.** They are derived: `just dump`
 empties them and writes them again from the `.lmu`, so an edit there is lost on
 the next regeneration, and besides the `git diff` of `data/` would stop saying
 "the game did not change".
@@ -91,9 +91,9 @@ the next regeneration, and besides the `git diff` of `data/` would stop saying
 What I propose is a **texts file that the converter applies in memory**, after
 reading `data/` and before compiling:
 
-    parches/textos/<mapa>.toml     one per map, like parches/mapas/
-    parches/textos/comunes.toml    the common events
-    parches/textos/tropas.toml     the battle pages: another width
+    patches/textos/<mapa>.toml     one per map, like patches/mapas/
+    patches/textos/comunes.toml    the common events
+    patches/textos/tropas.toml     the battle pages: another width
 
 Each entry is a box: **the original text as the key** and the one that replaces
 it —one or more boxes—. That the key is the content and not a position (map,
@@ -103,7 +103,7 @@ event, page, command index) is what avoids copying the events:
 * it survives the order of the events or of the commands changing;
 * a box the game repeats in several places is fixed once;
 * an entry whose original no longer appears in the game is a stale patch, and
-  the check fails saying so, like `just parches-check`.
+  the check fails saying so, like `just patches-check`.
 
 An entry could look like this:
 
@@ -171,7 +171,7 @@ converter decides on its own in each build.
 # Plan
 
 1. **The format and the application**, without refitting anything: the
-   converter reads `parches/textos/`, replaces the boxes and the check detects
+   converter reads `patches/textos/`, replaces the boxes and the check detects
    stale patches. With the directory empty the ROM has to come out byte for
    byte identical.
 2. **The recipe that proposes**, run over maps 1 to 16. taro reads the diff,

@@ -32,7 +32,7 @@ Another table with the same ceiling didn't turn up: `BA_TROOP` and `enc_troop` w
 words. **A hidden consumer did turn up**: the converter's `scene.rs`
 read the JSON's `per_map` and compared with `0xFF`; with `$FFFF` every
 map seemed to have encounters and the cartridge loaded extra backgrounds
-(`test_escena_una_pelea_cuyo_fondo_no_esta_usa_el_reemplazo` showed it
+(`test_scene_a_battle_whose_backdrop_is_missing_uses_the_fallback` showed it
 red). Now it compares with `NO_RECORD`, written twice because `convert`
 doesn't link `battle`.
 

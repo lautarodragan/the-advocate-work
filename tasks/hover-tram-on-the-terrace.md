@@ -130,7 +130,7 @@ Done and verified:
 
 * the **fork of map 32 with ChipSet 55**, pruned to what the map draws.
   It comes out byte for byte identical to without the fork;
-* **`desde_imagen`**, the operation that brings in a PNG that is neither ChipSet nor
+* **`from_image`**, the operation that brings in a PNG that is neither ChipSet nor
   CharSet, with its test. It is in the tree but **no recipe uses it
   yet**;
 * the **rounding to 15 bits**, which is what makes the colours fit.
@@ -213,7 +213,7 @@ so not a single one is saved.
 # What does not fit in today's form
 
 The ChipSet recipe **cannot bring this picture in**, and not because of the missing
-operation —`desde_imagen` would be the same as `desde_charset`— but because of the **vehicle**:
+operation —`from_image` would be the same as `from_charset`— but because of the **vehicle**:
 the ChipSet's PNG is indexed and has 256 entries.
 
     ChipSet1, the base of 11                       uses 134 indices

@@ -63,7 +63,7 @@ Played, not invented, same as last time: a throwaway test
 went into the room, added each companion, crossed the world door (door 6) and
 played with the harness the path of the walkthroughs —Sorbe, the chapter, the
 bridge (from below with Arden and Saldra, paying with AG7-17), Tangle, the
-tram and the ship—, without the walkthroughs' `ir_al_mapa` or `poner_exp`.
+tram and the ship—, without the walkthroughs' `go_to_map` or `set_exp`.
 No stretch broke. At each point it dumped what
 `save_table` keeps, and the pages come from the difference against the room, per
 branch, with last time's generator.
@@ -95,29 +95,29 @@ skills, equipment, speed, permissions, tint and theme, identical. Door
 
 ## The tests
 
-In `pruebas/abl/test_mapa_de_debug.py`, per companion, red before the
+In `tests/abl/test_debug_map.py`, per companion, red before the
 new map (there is no path to (28,14) or to (31,14), and the one at (25,14) led
 to Paradise):
 
-* `test_la_puerta_despues_del_puente_sigue_al_bosque`: map, cell,
+* `test_the_door_after_the_bridge_continues_to_the_forest`: map, cell,
   direction, party, switches, branch, gold, speed, escape, levels; the
   arrival golden; and from there walking to Tangle.
-* `test_la_puerta_despues_del_tram_sigue_a_mountain_path`: the same, and from
+* `test_the_door_after_the_tram_continues_to_mountain_path`: the same, and from
   there the tunnel up to Mountain Path.
 
 The six new goldens are `mapa-de-debug-puente-*` and
-`mapa-de-debug-tram-*`. **The room's, `mapa-de-debug-llegada`, did not
+`mapa-de-debug-tram-*`. **The room's, `debug-map-arrival`, did not
 change**: from the arrival you cannot see beyond door 7's terminal, and what
 was added is to the right of that. The photos of what follows (the
-forest and Mountain Path) stay in `pendientes.txt`, like those of the other
+forest and Mountain Path) stay in `pending.txt`, like those of the other
 doors.
 
 ## For merging
 
 Only ABL: no tools were touched, there is nothing to install. Verified
-with the whole suite on the branch (`just pruebas`, with the global
+with the whole suite on the branch (`just tests`, with the global
 tools): all green. Side by side in
-`/shared/capturas/2026-10-10-puertas-de-debug-mundo/`.
+`/shared/captures/2026-10-10-puertas-de-debug-mundo/`.
 
 What the suite does not cover: experience above the exact amount for the
 level, the HP and SP played, and taro playing from both doors beyond

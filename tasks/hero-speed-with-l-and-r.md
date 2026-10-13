@@ -63,9 +63,9 @@ startup and the loop, and a `jsr` that became `jsl`); bank 1, from 4,679 B to
 
 ## Verification
 
-`just pruebas`: 908 green (900 from the baseline, 1 from the entrance mosaic and
+`just tests`: 908 green (900 from the baseline, 1 from the entrance mosaic and
 the 7 of this one); `just -f tools/justfile test`: 46. No golden moved.
-`NO_CACHE=1 just cartuchos` comes out byte-for-byte identical to the cached one (the only thing
+`NO_CACHE=1 just cartridges` comes out byte-for-byte identical to the cached one (the only thing
 in the converter that changed is one more constant in `mapdata.inc`).
 
 ## For taro

@@ -14,7 +14,7 @@ A small test that looks for repo paths between backticks —in the
 
 On 2026-09-24, after moving and renaming several things, references were left
 to paths that were no longer there: `juego/`, `pruebas-manuales/capturas-batalla/`, an
-explanation of `cartuchos.py` that had been deleted. taro found them by reading,
+explanation of `cartridges.py` that had been deleted. taro found them by reading,
 and they confused him. Nothing caught them.
 
 The alternative of a markdown linter was looked at —markdownlint, mdformat,

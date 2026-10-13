@@ -1,6 +1,6 @@
 ---
 name: "Make building the cartridges take less time"
-description: "Optimize the time of `just cartuchos` without refactors: memoizing, parallelizing and numpy, with the ROMs byte for byte identical"
+description: "Optimize the time of `just cartridges` without refactors: memoizing, parallelizing and numpy, with the ROMs byte for byte identical"
 type: refactor
 status: done
 ---
@@ -16,7 +16,7 @@ message, which is where they don't go stale. What can't be deduced from them:
 ## Where the time went
 
 Measured with `cProfile` on the `release` conversion and timing each
-subprocess of `cartuchos.py`:
+subprocess of `cartridges.py`:
 
 * `lideres_posibles` ran once per test case that touches the party and each
   time loaded and compiled all the maps: half of the converter, warm.
@@ -34,16 +34,16 @@ subprocess of `cartuchos.py`:
 2. The CharSets' pixels through `load()`.
 3. The layers of all the maps in parallel (`precalcular_capas`), with forked
    processes that return what they computed with the cache key.
-4. `cartuchos.py` builds the cartridges and the tracks at the same time, in
+4. `cartridges.py` builds the cartridges and the tracks at the same time, in
    threads.
 5. `msu.pista` with numpy.
 6. `textos.reajustar` and `asignador.merge_least_visible` memoized.
 
-Each one verified the same way: `cartuchos.py` cold (`SIN_CACHE=1`), with the
+Each one verified the same way: `cartridges.py` cold (`SIN_CACHE=1`), with the
 cache deleted, in the run that fills it and warm, and all of
 `rom/build/release` and `rom/build/tests` compared by sha256 against what
 8ffc2ce built, except the `.o` and the `.dbg`'s `mtime`s, which change with
-each checkout. `just pruebas` green at the end.
+each checkout. `just tests` green at the end.
 
 ## What's left, and why it wasn't done
 

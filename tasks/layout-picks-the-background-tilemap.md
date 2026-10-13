@@ -71,7 +71,7 @@ Everything in `rom/src/`, plus the harness:
 | `ventana_del_mapa.s`, `limpiar_tilemaps` | `ldx #VRAM_MAP` | reads it from `FAR_VRAM_MAPA` |
 | `vblank.s`, `push_una_columna` | `adc #(VRAM_ABOVE_MAP - VRAM_MAP)` | `and #$07FF` / `ora #VRAM_ABOVE_MAP` |
 | `vblank.s`, `push_una_fila` | `lda #(VRAM_ABOVE_MAP - VRAM_MAP - 1024)` | `and #$03FF` / `ora #VRAM_ABOVE_MAP`, and enters through `fila_en_a` |
-| `pruebas/arnes/consola.py`, `ventana` | read the `VRAM_MAP` symbol | reads `FAR_VRAM_MAPA` from WRAM |
+| `tests/harness/console.py`, `window` | read the `VRAM_MAP` symbol | reads `FAR_VRAM_MAPA` from WRAM |
 
 No precomputed table nor hidden arithmetic: they were seven uses of the
 constant in the ROM, two of them as the distance between the two tilemaps.
@@ -123,12 +123,12 @@ and four in vblank**.
 * **The ROMs don't come out byte for byte identical, and can't**: code that
   reads a variable instead of a constant is different code, and it shifts
   everything that comes after it. What enforces it is the suite: `just
-  cartuchos` + `just pruebas` green, without touching any golden.
+  cartuchos` + `just tests` green, without touching any golden.
 * **Map 38 in a test cartridge in the scratchpad** (`--map-id 38
   --sin-titulo`): it converts, takes `LAYOUT_VENTANA_AMBOS` and the ROM leaves
   `FAR_VRAM_MAPA` at $1800. Running in snes9x: the screenshot looks right,
   without shifted tiles; walking, the camera moved 112 px in x and 32 in y,
-  and `Partida.celdas_mal_dibujadas` gave 0 of 957; after opening the menu and
+  and `Partida.wrongly_drawn_cells` gave 0 of 957; after opening the menu and
   saving through the slots —`volver_al_mapa`—, 0 differing pixels and 0
   wrongly drawn cells. With a test `ShowMessage` the window is drawn right.
 * Map 38 doesn't have a baked-events problem like `PawnDoorTop`'s on 37: it
@@ -136,7 +136,7 @@ and four in vblank**.
 
 ## What wasn't verified
 
-* **No case of `just pruebas` runs the new layout**: map 38 isn't in any
+* **No case of `just tests` runs the new layout**: map 38 isn't in any
   cartridge. The above is by hand, in snes9x, and nothing will run it again
   until 38 goes in (the Lashe City stage).
 * **A battle on 38**: `volver_de_batalla` restores `BG1SC` through

@@ -29,7 +29,7 @@ or the route. See `decisions/the-active-page-is-frozen-until-the-refresh.md`.
 
 # What was seen in the ROM
 
-With `grupo-11-en-18` and switch 77 turned on from outside, frame by frame
+With `party-11-in-18` and switch 77 turned on from outside, frame by frame
 (RAM: `ev_pos_buf`, `npc_buf`, `route_ev` and the OAM):
 
 * **the position and the route are fine**: 16 appears at (10,14), goes up to
@@ -85,7 +85,7 @@ have the same pattern —page 1 with `BLPeople` index 3, empty; page 2 with
 `Chara2`/`Chara3`—. I didn't look at 44 on screen.
 
 No golden moved. Screenshots, before, after and the RPG_RT side by side, in
-`/shared/capturas/2026-09-30-auditorio/`.
+`/shared/captures/2026-09-30-auditorio/`.
 
 # The same pattern on other maps
 

@@ -19,5 +19,5 @@ optional: the story does not wait for it.
 
 **How to see it**: `rm2k-snes-events culprits` with the compile request of
 the `release` (map 4, event 4, page 2 in `culprits.json`). The project's
-`just culpables` does not get there: see
+`just culprits` does not get there: see
 `ports-culpables-recipe-is-missing-its-arguments`.

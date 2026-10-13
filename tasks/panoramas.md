@@ -63,11 +63,11 @@ saving and loading, no.
 
 ## The goldens and the patches
 
-Five goldens change, all from these two maps —`capitulo-259-llegada`,
-`capitulo-255-llegada` and the three of `texto`—, and each one's versioned
-patch (`parches/auto/mapas/0255.toml` and `0259.toml`: the grate at 4 bits
+Five goldens change, all from these two maps —`chapter-259-arrival`,
+`chapter-255-arrival` and the three of `texto`—, and each one's versioned
+patch (`patches/auto/maps/0255.toml` and `0259.toml`: the grate at 4 bits
 merges 17 colors). **The goldens aren't blessed**: they go side by side with
-the original in `/shared/capturas/2026-10-05-panoramas/`. The patches are
+the original in `/shared/captures/2026-10-05-panoramas/`. The patches are
 regenerated, in their commit on ABL's branch.
 
 ## When merging
@@ -95,8 +95,8 @@ nothing above the hero; **flattened** if it draws little —what's above goes to
 the background, and the 8x8 cells it covers more than half of go to BG1's
 priority 1, in front of the hero—; mode 1 if it draws more; black if nothing
 fits. "Little" is `ABOVE_LOST_MAX`: at most four RM2k cells' worth of pixels on
-the wrong side of the hero. `conversor.log` says each map's path and why not
-the previous ones; `parches/auto/mapas/` writes it in `[panorama]`.
+the wrong side of the hero. `converter.log` says each map's path and why not
+the previous ones; `patches/auto/maps/` writes it in `[panorama]`.
 
 **`[maps] panoramas` is gone.** What remains is `[maps] panorama_ways`,
 optional, which forces a map's path by its name: it was useful for measuring
@@ -104,7 +104,7 @@ optional, which forces a map's path by its name: it was useful for measuring
 taro asked for the choice to be the converter's, and a list of maps is exactly
 what doesn't generalize to another game.
 
-What it picked for the `release` ones —see `conversor.log`—: hidden 8 and 76;
+What it picked for the `release` ones —see `converter.log`—: hidden 8 and 76;
 baked the director's office and its own (19, 34, 43, 45, 82) and those of
 Pierson's memory (175, 176); mode 3 for 13, 16, 51, 64, 94, 99, 259 and 313;
 flattened the intro (1), 2, **the rooftop (33)**, 95, 109 and 126; mode 1 for
@@ -127,7 +127,7 @@ What the study left pending:
 * **`adeleine::try_pack`**: in its own commit, separately. Measured over the
   328 maps of the dump, a cell with more colors than a palette appears only in
   the overlay layer of 159, which isn't in any cartridge.
-* **`parches/`**: the path, the tiles left over from the distinct ones, the
+* **`patches/`**: the path, the tiles left over from the distinct ones, the
   colors and the merges of each panorama.
 
 What had to be added along the way: three VRAM layouts for mode 3 with more
@@ -136,7 +136,7 @@ BG1 under the window on a flattened map, the `TileSubstitution` rows drawn
 under a flattened map (the intro has one in the overlay layer), and
 `load_above` not uploading anything to BG2's base with the panorama in mode 3.
 
-**The space**, with `just espacio` in ABL: `release` goes from 29 free banks
+**The space**, with `just space` in ABL: `release` goes from 29 free banks
 to 23. It fits entirely in the ROM; the `.msu` wasn't needed.
 
 **RAM**: `$7E7EE0` to `$7E7EE6` of the far one, besides the prototype's.
@@ -144,7 +144,7 @@ to 23. It fits entirely in the ROM; the `.msu` wasn't needed.
 
 ## The tests
 
-In ABL, `pruebas/rpgmaker/test_panorama_golden.py`: the arrival on each map
+In ABL, `tests/rpgmaker/test_panorama_golden.py`: the arrival on each map
 that shows its panorama (24 goldens), two snapshots at different times on 94
 (mode 3) and 255 (mode 1) with `PANO_AX` advancing, the four `ChangePBG`s of
 the Hover-Tram in order, and saving and loading on 255 —red without
@@ -157,7 +157,7 @@ tests depended on the exact frame and were fixed in ABL: the battle's long
 list —it wrote the party before the case built it— and the decompressed load,
 which didn't know about the slots cache nor the panorama on BG2. Everything
 side by side, with the original, in
-`/shared/capturas/2026-10-05-panoramas-todos/`.
+`/shared/captures/2026-10-05-panoramas-todos/`.
 
 ## To play
 

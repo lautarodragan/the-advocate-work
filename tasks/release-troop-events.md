@@ -26,7 +26,7 @@ The 32 character systems remain in the big one.
 
 2026-09-28, in `testing/`: done by Ceibo in his branch, on `main` at
 40f4011, in two commits —d2d820a (the autorun that compiles to nothing) and
-208c828 (the rest)—; `just cartuchos` and `just pruebas` green. What's left
+208c828 (the rest)—; `just cartridges` and `just tests` green. What's left
 is taro's: play it (see below) and decide on the thunder.
 
 # The inventory
@@ -176,7 +176,7 @@ just like an empty one. In its own commit, and in
 **The model** (`batalla.PaginaDeTropa`, `Batalla.revisar_paginas`): knows when
 a page's conditions are met and runs from it only what changes who's fighting
 —`ShowHiddenMonster`, the switches and the branches by switch—, at the same
-moments as the ROM. With that `test_eventos_de_tropa.py` predicts in which turn
+moments as the ROM. With that `test_troop_events.py` predicts in which turn
 each rat appears and the exact HP of the four.
 
 What the ROM does differently, in `divergences/what-troop-pages-do-not-model.md`:
@@ -202,9 +202,9 @@ the HP of an actor who isn't fighting, the shake of the scene only, and the thun
 
 # Tests
 
-`pruebas/rpgmaker/test_eventos_de_tropa.py`, with four new cases:
-`pelea-97` (AG7 against the Rat King), `pelea-97-sin-ratas` (with 1005 and
-1006 already on), `pelea-102` (Kersh against the agents) and `pelea-86` (Kersh
+`tests/rpgmaker/test_troop_events.py`, with four new cases:
+`battle-97` (AG7 against the Rat King), `battle-97-without-rats` (with 1005 and
+1006 already on), `battle-102` (Kersh against the agents) and `battle-86` (Kersh
 and Talan against the Lazer Teeth).
 
 * the Rat King turn by turn against the model: HP of the four, who stays

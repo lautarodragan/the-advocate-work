@@ -26,10 +26,10 @@ are redone with the probe and the two prototypes, which stayed in
     sonda.py                wraps each conversion, lets it do its thing, and
                             passes its same cells through `voodoo` to compare
                             tiles and tilemap. It runs with the arguments of
-                            `just cartuchos release` and writes nothing in the tree.
+                            `just cartridges release` and writes nothing in the tree.
     prototipo-menu.diff     the title menu through Voodoo
     prototipo-titulo.diff   the title picture through Voodoo
-    comparar.sh             `just cartuchos release` + `just cartuchos` and `md5sum -c`
+    comparar.sh             `just cartridges release` + `just cartridges` and `md5sum -c`
                             against the four ROMs of `deaf3be`
 
 The maps' two layers —the lower one with its animations, the upper one— already
@@ -101,13 +101,13 @@ with the non-deduplicating mode and rows 4 and 7 to 11 in.
 
 What was run for each column:
 
-* **Rows 1 and 2**: the prototype applied in the tree, `just cartuchos release` and `just
+* **Rows 1 and 2**: the prototype applied in the tree, `just cartridges release` and `just
   cartuchos` —the four rebuilt, `armado` in the three test ones—, and
   `md5sum` against the four ROMs of `deaf3be`: `abl`, `pruebas`, `chico` and
   `juego`. Of those, the ones with a title are `abl` and `juego`. For 2,
-  also, `pytest pruebas/rpgmaker/test_tanda_pantallas.py -k titulo`: 4
+  also, `pytest tests/rpgmaker/test_tanda_pantallas.py -k titulo`: 4
   green against the goldens, which are compared exactly.
-* **The rest**: only the probe, on the arguments of `just cartuchos release`. Where the
+* **The rest**: only the probe, on the arguments of `just cartridges release`. Where the
   probe already gives different tiles or tilemap, the ROM comes out different without building it;
   where a mode is missing, there is nothing to build.
 
@@ -117,7 +117,7 @@ What was run for each column:
   no cell of the menu is a mirror of an earlier one; if a new text had
   one, Voodoo would flip it and the ROM would change, with the same pixels.
 * **`titulo.render` and `titulo.informe` have no callers**: `grep` in
-  `tools/` and `pruebas/` finds none. They are from the reference's era;
+  `tools/` and `tests/` finds none. They are from the reference's era;
   that's why the row 2 prototype didn't have to teach flips to `render`.
 
 ### Where to start

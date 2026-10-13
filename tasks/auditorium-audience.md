@@ -95,7 +95,7 @@ ChipSet 25, which 54 comes from, has **art in 143 of its 144 upper slots**, so
 there is no empty one: what makes overwriting eight free is that **54 is
 private to map 18**, and 18 draws ten —0 and 105 to 119—. The other 134 are
 free to use, and
-`test_fork_no_pisa_una_ranura_que_su_mapa_dibuja_con_el_arte_de_antes` guards
+`test_fork_does_not_overwrite_a_slot_its_map_draws_with_the_old_art` guards
 it.
 
 **The passability is written by the ChipSet, and it is what holds up the
@@ -108,7 +108,7 @@ open cells go from 197 to 166: the 31, no more.
 
 The map fork already existed —map 11 debuted it, see
 `map-11-redesigned.md`— and was not touched. The only thing added to it is
-a third operation in the ChipSet picture's recipe, `desde_charset`, which is
+a third operation in the ChipSet picture's recipe, `from_charset`, which is
 the first that **brings pixels from outside the ChipSet**.
 
 Its trap, which one does not see coming: **both PNGs are indexed and their

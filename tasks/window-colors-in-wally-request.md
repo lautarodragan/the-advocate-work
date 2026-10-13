@@ -54,7 +54,7 @@ the partial request sets `window_colors: 0` and ABL's harness does not change.
   block and drawing ones in the same file, also with 8.
 * The other `wally` ones and the two `emit` ones in `mapdata` carry 13 in the
   request: their hashes were already with 13 and did not move.
-* The new one, in ABL: `pruebas/herramientas/test_colores_de_la_ventana.py`
+* The new one, in ABL: `tests/tooling/test_window_colors.py`
   pins the 13 of ABL's System. Red with the global tools (`window` did not
   exist), green with the local ones.
 * The whole `cargo test --workspace` green: it was red only because of the Python one.

@@ -110,11 +110,11 @@ does not look at the permission, like `OpenSaveMenu`.
 
 While the menu is shown **the game clock does not run**, same as with the
 slots screen, so the menu costs no tick and the map continues from the frame it
-was on. It is enforced by `test_menu` and `test_menu_vuelve` of
-`pruebas/rpgmaker/test_tanda_pantallas.py`: the menu as it opens, with the
+was on. It is enforced by `test_menu` and `test_menu_returns` of
+`tests/rpgmaker/test_tanda_pantallas.py`: the menu as it opens, with the
 cursor moved, and the map after closing. What compares it against a Python
 reference —`titulo.render_menu`, which is still alive— is
-`pruebas/rpgmaker/test_menu.py`, and it is also what looks at what the suite
+`tests/rpgmaker/test_menu.py`, and it is also what looks at what the suite
 does not reach: the menu with a party and gold set, saving from the menu, both
 permissions set by the bytecode, B in the middle of a step, and the permissions
 coming back from SRAM.
@@ -161,10 +161,10 @@ vblank and the second line came out cut. When the cursor goes out of the
 eleven rows, the list is repainted whole with the screen off, which is one
 frame of black.
 
-It is enforced by `test_items` and `test_items_vuelve` of
-`pruebas/rpgmaker/test_tanda_pantallas.py` —the screen as it is entered, with
+It is enforced by `test_items` and `test_items_returns` of
+`tests/rpgmaker/test_tanda_pantallas.py` —the screen as it is entered, with
 the cursor on the console, and the map after using it— and
-`pruebas/rpgmaker/test_items_pantalla.py`, which compares it against
+`tests/rpgmaker/test_items_pantalla.py`, which compares it against
 `titulo.render_items`: the console turns on 710 and is not spent, an item in
 grey does nothing, fourteen items in eleven rows scroll and come back, and the
 empty list.
@@ -192,15 +192,15 @@ demo today—: **since 2026-09-21 it compiles** the form that removes a slot, se
 The equipment screen —and the shop, which follows— are **text screens**: they
 carry no drawn blocks but the items screen's font, and they are composed whole
 in `texto_buf` —the tilemap of 32 by 28 cells, 1792 bytes— which is uploaded
-with one DMA per frame. Composing is in no hurry, and `pantallas.py` is the
+with one DMA per frame. Composing is in no hurry, and `screens.py` is the
 reference with the same cell composer. The DMA goes **after** reading the
 controller: the other way round, its ten lines made `read_pad` arrive with the
 automatic read finished, each iteration lasted two frames and half the presses
-were lost. `equipo` caught it.
+were lost. `equipment` caught it.
 
-It is enforced by `test_equipo` and `test_equipo_vuelve` of
-`pruebas/rpgmaker/test_tanda_pantallas.py` —Kersh's slots with his initial
+It is enforced by `test_equipment` and `test_equipment_returns` of
+`tests/rpgmaker/test_tanda_pantallas.py` —Kersh's slots with his initial
 equipment, the weapon list with the parameters that would result, and the map
-after returning— and `pruebas/rpgmaker/test_equipo.py`: the initial equipment
+after returning— and `tests/rpgmaker/test_equipment.py`: the initial equipment
 in RAM, equipping from the menu, the two-handed spear that takes off the
 shield, the empty line, and the equipment in the save.

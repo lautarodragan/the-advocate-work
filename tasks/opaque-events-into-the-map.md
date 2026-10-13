@@ -21,7 +21,7 @@ bakes is told by the converter in its report.
 
 It comes from **the Lazer Teeth HQ, map 11**, which is the most loaded map of
 the game —68 drawn events, 62 of them with a tile— and the one that
-`pruebas/rpgmaker/test_paralelos.py` uses to measure whether the frame fits.
+`tests/rpgmaker/test_parallels.py` uses to measure whether the frame fits.
 
 **What was measured, walking 1200 frames on map 11** (frames lost, with the
 counter read and reset to zero every 50 frames: it saturates at 255, and a

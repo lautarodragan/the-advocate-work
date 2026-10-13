@@ -27,7 +27,7 @@ The test `change_face_graphic_is_reported_as_debt` gave red before the fix:
 Done: `CHANGE_FACE_GRAPHIC` goes into `ACCEPTED_UNDONE`, and the comment of its
 branch follows the task without depending on the folder it is in. Verified with
 `just -f tools/justfile crate-test events` and, in a clone of ABL using the
-local install of `events`, with `just cartuchos` and `just pruebas`.
+local install of `events`, with `just cartridges` and `just tests`.
 
 The suite does not run the new warning: ABL does not have command 10130 in its JSON.
 It does verify that the cartridge and the rest of the suite do not change; the warning is

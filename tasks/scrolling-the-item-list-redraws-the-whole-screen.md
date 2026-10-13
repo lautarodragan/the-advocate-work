@@ -42,8 +42,8 @@ the cursor's two bars on 243, and the vblank lasts until 261.
 Recomposing the screen ends around line 145–170 of the next frame:
 it fits in one frame, so nothing needed splitting in two.
 
-**The test**: `test_correr_la_lista_cambia_solo_el_texto` in
-`test_menu_items_dibujo.py` looks frame by frame at a scroll down and one
+**The test**: `test_scrolling_the_list_changes_only_the_text` in
+`test_menu_items_drawing.py` looks frame by frame at a scroll down and one
 up, and requires each frame to be wholly the screen from before or the one from
 after. Against the old ROM it's red: the first frame after pressing
 differs in 7,479 pixels —black except for the last row—, in snes9x and in bsnes.
@@ -53,11 +53,11 @@ entering (the shop also when switching from one mode to another, which is changi
 screen and not scrolling a list).
 
 **Goldens**: none changed. The strip of frames, before and after, is in
-`/shared/capturas/2026-09-30-scroll-de-items/`.
+`/shared/captures/2026-09-30-scroll-de-items/`.
 
 **Space**: bank 0 of `release` gained 422 B (from 182 to 604 free on the
-baseline `69164d82`, with `just espacio`; after merging `d94ec1b8`, from 159 to
-581). `NO_CACHE=1 just cartuchos` and the cached build give the same ROMs.
+baseline `69164d82`, with `just space`; after merging `d94ec1b8`, from 159 to
+581). `NO_CACHE=1 just cartridges` and the cached build give the same ROMs.
 
 **On merging**: nothing in Rust to install for this branch;
 `tools/port/mapdata.py` changed in content, with no renames.

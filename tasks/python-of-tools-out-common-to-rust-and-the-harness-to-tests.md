@@ -36,15 +36,15 @@ Measured with grep over ABL at `a942b02`, the 24 files:
 - **`project`**: the game's paths —`data()` fourteen times, `build()`,
   `patches()`, `manual_patches()`, `auto_patches()`, `project_file()`,
   `directory()`—, the suite's paths —`root()`, `tools()`, `runtime()`, in
-  `entregar.py`, `render_map.py` and `test_perillas_repetidas.py`— and
+  `deliver.py`, `render_map.py` and `test_perillas_repetidas.py`— and
   `use`/`from_command_line`/`add_argument` to choose the project.
 - **`settings`**: three knobs —`[rom] name`, `[rom] sram_signature`,
   `[battle] fallback_backdrop`— and the whole file, in
   `test_perillas_repetidas.py`.
 - **`environment`**: nothing that comes from the file. The harness used it as a
-  box of machine values: `lugares.py` filled it with `ABL_GAME_DIR`
-  and the others, and `conversor.py` and `musica.py` asked it for the flags to
-  pass to a tool; `entregar.py`, its `--shared`.
+  box of machine values: `places.py` filled it with `ABL_GAME_DIR`
+  and the others, and `converter.py` and `music.py` asked it for the flags to
+  pass to a tool; `deliver.py`, its `--shared`.
 
 Everything that is a rule —that `[paths]` is relative to the file, that the
 manual patches are in `manual/`, where the runtime is— was already in
@@ -60,23 +60,23 @@ manual patches are in `manual/`, where the runtime is— was already in
   file, in order—. It checks what the library checks for any
   tool and nothing more: that `sram_signature` is four ASCII letters is
   required by the converter when building, not by this one.
-- In ABL, **`pruebas/arnes/proyecto.py`** calls it once per process
-  (with `lru_cache`) and gives `ruta(...)`, `de_la_suite(...)`, `ajuste(...)` and
-  `ajustes()`. `lugares.py` tells it which the project is, as before to
+- In ABL, **`tests/harness/project.py`** calls it once per process
+  (with `lru_cache`) and gives `ruta(...)`, `of_the_suite(...)`, `ajuste(...)` and
+  `ajustes()`. `places.py` tells it which the project is, as before to
   `common.project.use`.
 - The machine part **did not move to Rust**: it is not a rule of the format but of
   which flag each tool receives, which the harness already knows for all the
-  others (`--project`, `--maps`…). `lugares.py` keeps the values —`JUEGO`,
+  others (`--project`, `--maps`…). `places.py` keeps the values —`GAME`,
   `RTP`, `SOUNDFONT`, `CACHE`— and `lugares.banderas(...)` gives them as flags.
-  `entregar.py` has its `--shared` in its own `argparse`, and stopped
+  `deliver.py` has its `--shared` in its own `argparse`, and stopped
   accepting `--project`: it belongs to ABL and the project is ABL.
 
 ## Where each thing went, and why
 
 - **`tools/emulator/` —`retro.py` and `bsnes-wram.patch`— to ABL, to
-  `pruebas/arnes/emulator/`.** Only ABL's harness imports it, and with that
+  `tests/harness/emulator/`.** Only ABL's harness imports it, and with that
   the harness stops importing anything from the tools:
-  `rm2k-snes-python-path` and `pruebas/arnes/suite.py` go, and ABL goes back to
+  `rm2k-snes-python-path` and `tests/harness/suite.py` go, and ABL goes back to
   knowing only executables in the PATH, which is the rule of
   `decisions/the-tools-split-from-abl.md`. The other option was
   a tests folder in the root of this repo, where the ROM tests come back
@@ -89,7 +89,7 @@ manual patches are in `manual/`, where the runtime is— was already in
   `from emulator import retro` stays the same in the nine that import it. The
   copy is byte for byte that of `3bddfeb8`, in its own commit; the two
   comments that named `tools/runtime/` were touched in the next one,
-  because `test_lado_de_abl.py` does not let a test name `tools/`.
+  because `test_abl_side.py` does not let a test name `tools/`.
 - **`tools/tests/` stays.** They look at the tree of `tools/` —the layers, who
   reads the dump, that nothing names ABL, the index— and need nothing
   from outside: they belong to the suite as a crate's tests belong to the
@@ -108,7 +108,7 @@ manual patches are in `manual/`, where the runtime is— was already in
 - **Incidentally, the fingerprint of `rm2k-snes-cartridges`** stopped reading the `.py`
   of `tools/`: it dated from when the converter was Python, and with `common/` and
   `emulator/` out there were none left. The fingerprint changes, so the
-  first `just cartuchos` after installing it rebuilds everything, identical byte
+  first `just cartridges` after installing it rebuilds everything, identical byte
   for byte.
 
 ## What is left loose
@@ -119,7 +119,7 @@ manual patches are in `manual/`, where the runtime is— was already in
   of the game written in a tool— would today live in Rust. It is left
   running; extending it to the `.rs` or deleting it is taro's call.
 - The suite's key in the JSON is called `directory` and not `tools`:
-  `test_lado_de_abl.py` does not let an ABL test write `"tools"`.
+  `test_abl_side.py` does not let an ABL test write `"tools"`.
 
 ## Done
 

@@ -185,9 +185,9 @@ separate them lowers some other theme a bit: the rule rejects it.
 
 # Tests
 
-`just techos` (the mix changed), `just cartuchos` and `just pruebas` green,
-`test_cores.py` twice and `test_musica_escrituras.py`. New, both in
-`pruebas/rpgmaker/test_musica_paquete.py`:
+`just ceilings` (the mix changed), `just cartridges` and `just tests` green,
+`test_cores.py` twice and `test_music_writes.py`. New, both in
+`tests/rpgmaker/test_music_package.py`:
 
 * `test_los_efectos_comparten_lugares_y_a_las_copias_les_sobran_entradas`:
   from the cartridge, that the directory isn't full —the copies stopped
@@ -195,17 +195,17 @@ separate them lowers some other theme a bit: the rule rejects it.
   and that the slots are those of the most loaded package. With main it
   fails: 255 entries. Since milestone 4 of the world
   (`world-4-tasgarde-eisen-and-the-bridge.md`) it's called
-  `test_los_efectos_comparten_lugares_del_directorio` and no longer asks for
+  `test_the_effects_share_directory_places` and no longer asks for
   the directory not to be full: with the chapter's themes it fills up.
-* `test_un_efecto_no_suena_con_la_muestra_de_otro`: `Success2` on map 10
+* `test_an_effect_does_not_sound_with_anothers_sample`: `Success2` on map 10
   with another effect noted in its slot doesn't sound, and without touching
   anything it does. With `sonido_tocar`'s question removed, it fails.
 
-`test_la_partida_cargada_arranca_con_su_musica` looked at `music_apagada`
+`test_the_loaded_game_starts_with_its_music` looked at `music_apagada`
 three frames after choosing, in the middle of loading the map; now it waits a
 tick, because during loading the title is silent on purpose.
 
-**What `just pruebas` doesn't cover**: that the second batch of copies
+**What `just tests` doesn't cover**: that the second batch of copies
 doesn't lower anyone is ensured by `copias` when choosing them, over the
 allocation, and it was measured with the real allocation (`Banco`, with the
 rounding to blocks) comparing each pair against 868259d: none drops. The

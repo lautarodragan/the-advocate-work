@@ -25,7 +25,7 @@ text screen, and each mode is RM2k's:
 With a single order —only buy or only sell— there is no main. The
 messages come from the LDB's three term sets, split over two
 lines; the "bought" and "didn't buy" branches don't compile, and no shop
-in the game uses them. The suite's `tienda` case enters and leaves the one on map
-10, and `pruebas/rpgmaker/test_tienda.py` walks through it entirely pixel by pixel against
+in the game uses them. The suite's `shop` case enters and leaves the one on map
+10, and `tests/rpgmaker/test_tienda.py` walks through it entirely pixel by pixel against
 `pantallas.pantalla_tienda`: buying, the gold cap, selling, the gold and the
 inventory that remain.

@@ -29,7 +29,7 @@ Why this way and not two bytes:
 - Why plan B and not the rule: ABL brings 230 songs and names about a hundred; numbering
   only the named ones in ABL too renumbers its tracks (half a gig to
   copy to the card again) and moves `abl.sfc`. With plan B, ABL
-  stays the same: `musica.json`, `audio.json` and `musicdata.inc` of `release`
+  stays the same: `music.json`, `audio.json` and `musicdata.inc` of `release`
   come out identical to main's.
 - `ChangeSystemBGM` is accepted without being done, but its songs are counted from
   now on: that way doing it doesn't renumber VD. In ABL it adds nothing (its eleven were already
@@ -62,7 +62,7 @@ index. No new RAM. `enemy_acc_n` stays a byte (bounded by
   `.word`, nothing more.
 - A Blurred Line's suite with my tools: 1159 green. `abl.sfc` goes from
   `f135f6af…` to `b0c61b1f…`, on purpose (the two tables and the runtime that
-  reads them). ABL's music, the same: `musica.json`, `audio.json` and
+  reads them). ABL's music, the same: `music.json`, `audio.json` and
   `musicdata.inc` identical to main's.
 - Vampires Dawn with the real game (the whole `Music/`, 281), starting
   on 8 and without the 82 maps Aguará excluded: the music, the troops and the

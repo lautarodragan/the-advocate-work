@@ -23,7 +23,7 @@ seen is the panorama alone).
 and 3) do, and with `erasescreen-and-showscreen` they now fade to black,
 but the menu itself is unchanged.
 
-What the converter says about it, in `build/release/conversor.log`:
+What the converter says about it, in `build/release/converter.log`:
 
     map 1: its panorama goes mode3
     panorama Introauswahl: mode 3 in VENTANA_PANORAMA, a stretch of 320x240, 576 tiles of 1146 distinct, 76 colors of 256, 973 merged
@@ -35,7 +35,7 @@ already noted "light-blue garbage" there, attributed to a panoramas bug
 fixed that day; today the pattern is orange, so either that fix did not
 cover this or something else broke it.
 
-**To reproduce**: `just cartuchos` in `desert-nightmare/` of the ports, and
+**To reproduce**: `just cartridges` in `desert-nightmare/` of the ports, and
 run `build/release/desert-nightmare.sfc`: the title does not fit, so the
 menu is the first thing on screen. Captures (before and after the
 EraseScreen branch, identical on this screen) in

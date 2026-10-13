@@ -14,7 +14,7 @@ runtime.
 
 ## What was measured before (2026-10-01, Pirincho, on `387b1e49`)
 
-`just espacio`: bank 0 of `release` **95 B**, of `test-special` 1,003 B, of
+`just space`: bank 0 of `release` **95 B**, of `test-special` 1,003 B, of
 `test-encounter-every-step` 1,047 B. `TABLES` in `release` is 1,441 B, and in
 `test-special` 551 B. The difference, label by label (with the `.dbg`:
 each label of the segment up to the next one):
@@ -53,11 +53,11 @@ each read becomes `f:`:
 
 In the shop, `ti_item`, `ti_can`, the listing one and `ti_price` return X = k
 as before; they no longer leave 2k in Y, and no caller read it (the procs that
-call them end in a `jmp` to the loop). Each commit with `just pruebas` at 961 and
+call them end in a `jmp` to the loop). Each commit with `just tests` at 961 and
 the goldens unmoved, and with the hashes in `tests/python.rs` of
 `rm2k-snes-mapdata` regenerated, because the `.inc` changes on purpose.
 
-`just espacio`, before and after:
+`just space`, before and after:
 
     bank 0    release 95 B -> 1,220 B; test-special 1,003 -> 1,238;
               test-encounter-every-step 1,047 -> 1,234
@@ -70,10 +70,10 @@ only new runtime code costs it. What still differs between
 cartridges in bank 0 is 18 B of `CODE`, because of `test-special`'s flags,
 not the content.
 
-`NO_CACHE=1 just cartuchos` comes out with the same `abl.sfc` as the cached
+`NO_CACHE=1 just cartridges` comes out with the same `abl.sfc` as the cached
 build (`1b606408…`); only `.o` and `.dbg` change, because of the mtimes.
 `just -f tools/justfile test`: 39. `cargo test -p rm2k-snes-mapdata`: green.
-`test_musica_techos.py` and `test_cores.py` pass inside `just pruebas`.
+`test_music_ceilings.py` and `test_cores.py` pass inside `just tests`.
 
 **On merging**: `just -f tools/justfile install mapdata`. The runtime changed
 (`tools/runtime/`), but the global assembler builds with the main checkout's,

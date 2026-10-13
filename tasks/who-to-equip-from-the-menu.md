@@ -6,7 +6,7 @@ status: done
 assignee: taro
 ---
 
-It came up on 2026-09-28, looking at the actor choice's `equipo-a-quien`
+It came up on 2026-09-28, looking at the actor choice's `equipment-a-who`
 golden (`actor-selection-like-the-original.md`, Ñandú): choosing
 who to equip uses the actor choice screen without the item's
 windows, and the left half is left black. Before that change it was already like that,
@@ -24,7 +24,7 @@ taro hasn't asked for it yet: Hornero noted it when proposing it.
 **The 2015 RPG_RT under Wine**, from a new game —after the intro
 the party is Kersh, Core and Manta—. The captures, at 640x480, in
 `/extras/capturas/2026-09-30-a-quien-equipar-wine/` and copied to
-`/shared/capturas/2026-09-30-a-quien-equipar/original/`:
+`/shared/captures/2026-09-30-a-quien-equipar/original/`:
 
 - `05-equipo-elegir`: A on Equipment leaves **the same menu**, with the red bar
   still on "Equipment" and another on **the first actor's text** —the
@@ -83,7 +83,7 @@ the screen gets done, the choice is the same as this one.
   shadow fell on black. Measured in the capture, the red ended at
   y = 52 and the text at 56; now it goes five pixels lower and no pixel of
   text or shadow of the row is left outside. The ×4 crop, before and
-  after, is in `/shared/capturas/2026-09-30-a-quien-equipar/`.
+  after, is in `/shared/captures/2026-09-30-a-quien-equipar/`.
 - **BG1 on in the menu**, empty, with the choice's base
   (`TARGET_VRAM`): `menu_bar_upload` uploads the tiles, the colours and a
   zeroed tilemap when building the menu, with the screen off.
@@ -110,8 +110,8 @@ the screen gets done, the choice is the same as this one.
 
 ## Tests
 
-- New `test_a_quien_equipar_se_elige_en_el_menu`
-  (`test_menu_equipo_dibujo.py`): the menu with the bar on the first, on the
+- New `test_who_to_equip_is_chosen_in_the_menu`
+  (`test_menu_equipment_drawing.py`): the menu with the bar on the first, on the
   second, wrapping around from the first, after B and again on the
   first, against `render::menu`; that A opens the second's equipment
   (`comp_char`) and looks like `pantallas.equipo`; and that the equipment returns to the
@@ -120,21 +120,21 @@ the screen gets done, the choice is the same as this one.
 - `rm2k-snes-screens`: a new menu case with the bar, and the hash of the
   conversion of its test game changes: the menu bar adds tiles to it
   and the no-item layer is gone.
-- **Only one golden changes, `equipo-a-quien`**, in its own commit. The before, the
+- **Only one golden changes, `equipment-a-who`**, in its own commit. The before, the
   after and the original side by side, and the RPG_RT captures, in
-  `/shared/capturas/2026-09-30-a-quien-equipar/`. **The merge awaits
+  `/shared/captures/2026-09-30-a-quien-equipar/`. **The merge awaits
   taro's approval.** The scenes in `test_menu_golden.py` are one
   capture per case, so there are no more frames that change: the whole suite
   ran and that was the only red one.
-- `just pruebas`, `just -f tools/justfile test` and `cargo test -p
+- `just tests`, `just -f tools/justfile test` and `cargo test -p
   rm2k-snes-screens`, green on the branch with `main` merged
   (`d5680b99`) and the taller bar: **894** and **46**.
-  `test_musica_techos.py` and `test_cores.py` passed. `abl.sfc` comes out
+  `test_music_ceilings.py` and `test_cores.py` passed. `abl.sfc` comes out
   `3423c711…`, the same with `NO_CACHE=1`.
 
 ## Space
 
-`just espacio`, `release`: against `main` at `3afc8199`, bank 0 went from
+`just space`, `release`: against `main` at `3afc8199`, bank 0 went from
 50 to 51 bytes free, bank 1 from 3,126 to 2,769, and the data gaps from
 8,799 to 8,603 (the 196 of `menu_bar_cells`, from the first bar). With
 `main` at `d5680b99` merged and the taller bar, bank 0 is at

@@ -54,8 +54,8 @@ Adding the gold with a cap moved out of the shop's sale into a routine,
 Far RAM: `$7E79E0-$7E79E8` (`BA_BOTIN*` in `ram_lejana.s`), from the range
 handed out. No opcode.
 
-It is covered by `pruebas/rpgmaker/test_victoria.py` with the new case
-`pelea-222`, three Crazed Marauders: the model picks the seed —the first one
+It is covered by `tests/rpgmaker/test_victory.py` with the new case
+`battle-222`, three Crazed Marauders: the model picks the seed —the first one
 with which it wins without casualties and the three rolls do not come out the
 same— and it is written into `BA_SEM` when the battle opens, with 1 HP for
 each enemy. The test compares the gold, the inventory and the first two pages
@@ -70,7 +70,7 @@ seen is **the gold**: after any battle with enemies that give gold, the first
 page says " You found NCr credits!" and the menu's gold goes up by that. The
 droid on map 2 gives zero and does not say it, which is RM2k's behaviour
 (`if (money > 0)`). The items on the page are only seen with the case
-`pelea-222`.
+`battle-222`.
 
 * That the gold page reads well and that A moves past it as before.
 * That the menu's gold after fighting is the previous one plus what the page

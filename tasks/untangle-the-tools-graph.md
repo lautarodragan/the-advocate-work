@@ -14,7 +14,7 @@ In scope: items 1.1, 1.2, 1.3, 1.5 and 1.6 of the research, and 1.7 (splitting
 `titulo.py`) if everything before it ended up merged and green.
 
 Out of scope: 1.4 (`cartuchos` stops importing `port/` and `audio/`), because
-what to do with `cartuchos.py` is an open question for taro (see
+what to do with `cartridges.py` is an open question for taro (see
 `decisions/the-tools-split-from-abl.md`).
 
 ## What was done (Lapacho)
@@ -40,13 +40,13 @@ One commit per item, each one a move with no new logic:
   anything from the other, measured in the AST.
 - Prose: `tools/README.md`, the layers and the cycles.
 
-Verified on each item: `SIN_CACHE=1 just cartuchos` gives identical the files
+Verified on each item: `SIN_CACHE=1 just cartridges` gives identical the files
 of `rom/build/release/` and `rom/build/tests/special/` that are compared —the
 `.sfc`, the `.msu`, the tracks, the `.inc`s, the `.sym`, the
-`conversor.log`, and the `.dbg`s without the sources' `mtime`s—. Not compared:
+`converter.log`, and the `.dbg`s without the sources' `mtime`s—. Not compared:
 the `.o`s, which carry inside them the `mtime`s of the regenerated `.inc`s,
-nor `sello.txt`, which carries the fingerprint of the `.py`s and changes on
-purpose. `just pruebas` and `just -f tools/justfile pruebas` green on every
+nor `stamp.txt`, which carries the fingerprint of the `.py`s and changes on
+purpose. `just tests` and `just -f tools/justfile pruebas` green on every
 commit from 1.3 on; on 1.2, only the ROM.
 
 Appendix D's script, on the final tree:
@@ -63,7 +63,7 @@ Appendix D's script, on the final tree:
     ## CICLOS
     import + lazy + ruta SCC: ensamblado.cartuchos, port.parches, port.snes_convert
 
-Without the `ruta` class no cycle remains, and all the violations are
+Without the `route` class no cycle remains, and all the violations are
 `cartuchos`'s, which is 1.4.
 
 ### The cache key
@@ -72,7 +72,7 @@ Without the `ruta` class no cycle remains, and all the violations are
 because `render_map` finds the ChipSet with `find_resource`, and that code
 was part of the key by living in `render_map.py`. The other new modules
 don't go in: either they come from files that weren't in the list (`fork`,
-`eventos`, `titulo`, `pantallas`, `batalla`), or what's cached doesn't use
+`eventos`, `title`, `pantallas`, `battle`), or what's cached doesn't use
 them (`formato_snes`: measured by walking `capas_convertidas`'s calls in the
 AST). `cartuchos`'s fingerprint covers them on its own, with its glob of
 `tools/*/*.py`.

@@ -20,15 +20,15 @@ itself. Noted by:
   in the test harness; the escapes tail in the event compiler and in
   `rm2k-snes-text`.
 
-It starts from `main` at `5a93a5ca`. There: `NO_CACHE=1 just cartuchos`
+It starts from `main` at `5a93a5ca`. There: `NO_CACHE=1 just cartridges`
 gives `abl.sfc` `35c765009320d436…`, 1418 files in `rom/build/`; `just
 pruebas` 1001, `just -f tools/justfile test` 39.
 
 ## How each step is verified
 
-`NO_CACHE=1 just cartuchos` with the crates being touched in the local
+`NO_CACHE=1 just cartridges` with the crates being touched in the local
 `bin/`, and the sha256 of all of `rom/build/` —except the cache, the `.o`s,
-`sello.txt` and `conversor.log`; the `.dbg` without `mtime`— against the
+`stamp.txt` and `converter.log`; the `.dbg` without `mtime`— against the
 baseline.
 
 A trap that showed up halfway: **the global assembler builds with the main
@@ -149,9 +149,9 @@ Noted and untouched:
 
 ## The numbers at the end
 
-On the last merge of `main` (`4248d4f4`): `NO_CACHE=1 just cartuchos`, the
+On the last merge of `main` (`4248d4f4`): `NO_CACHE=1 just cartridges`, the
 1418 files of `rom/build/` identical to the baseline taken on that merge;
-`just pruebas` 1005 —the four extra are Ratona's—; `just -f tools/justfile
+`just tests` 1005 —the four extra are Ratona's—; `just -f tools/justfile
 test` 39; `cargo test` of `rm2k-rules`, `rm2k-snes-battle`,
 `rm2k-snes-screens`, `rm2k-snes-events`, `rm2k-snes-text` and
 `rm2k-snes-mapdata` green. Three test hashes changed, those of

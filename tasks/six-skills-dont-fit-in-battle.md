@@ -14,7 +14,7 @@ should warn about it.
 ## What Benteveo found, on 2026-10-03
 
 Since `spacing-without-touching-code` the converter names them: a WARNING
-in `conversor.log`, "skill names in the battle don't fit in 11 cells", with
+in `converter.log`, "skill names in the battle don't fit in 11 cells", with
 each name, its pixels and what's shown.
 
 What cut the most wasn't the pixels but the letters: the cartridge stored
@@ -64,8 +64,8 @@ screen; it wasn't done.
 ### Verified
 
 * ABL's suite with +1: **five goldens change, only extra letters**
-  —"Healing Syringe" whole in `batalla-hab`, `-dos` and `-blanco`, and
-  "DecayingShambler" in `msu-datos-rom` and `-msu`—, looked at side by side. It
+  —"Healing Syringe" whole in `battle-skill`, `-dos` and `-blanco`, and
+  "DecayingShambler" in `msu-data-rom` and `-msu`—, looked at side by side. It
   was repeated until no new red appeared (two rounds): **1045
   green**. `abl.sfc` with +1: `17c71a14…`.
 * `cargo test -p rm2k-snes-battle` (the test against the Python model
@@ -76,6 +76,6 @@ screen; it wasn't done.
 
 A battle with long-named skills and against an enemy with a long
 name. The goldens side by side in
-`/shared/capturas/2026-10-04-texto-de-la-pelea/goldens/`.
+`/shared/captures/2026-10-04-texto-de-la-pelea/goldens/`.
 
 On merging, reinstall `battle` and `convert`.

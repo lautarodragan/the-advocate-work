@@ -14,4 +14,4 @@ Today none of them compiles, so the whole page that uses them doesn't run:
   events 23 and 25): `ChangeSkills [1, 14, 0, 0, 133]`, `ChangeEquipment [1, 25, 1, 4, 0]`
   and `GameOver`.
 
-Done means: those pages compile and run, with cases in `pruebas/casos/`.
+Done means: those pages compile and run, with cases in `tests/cases/`.

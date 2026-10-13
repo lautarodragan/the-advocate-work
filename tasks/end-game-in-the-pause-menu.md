@@ -66,22 +66,22 @@ why above; `git blame` showed no other reason.
   whole boot: music, palettes and RAM as on power-up.
 - In the menu, `MENU_FIN` enters `MENU_HECHAS` and `menu_pantalla` does the
   `jsl`; on returning, the cursor stays on End Game. Bank 0 spends 15 bytes
-  (`just espacio release`: from 205 to 190 free).
+  (`just space release`: from 205 to 190 free).
 - What is still different is in
   `divergences/what-the-end-game-screen-does-not-model.md`.
 
 ## Tests
 
-- `pruebas/rpgmaker/test_fin_del_juego.py`: the screen against
+- `tests/rpgmaker/test_end_game.py`: the screen against
   `fin_del_juego.render` on both commands and wrapping around; "No" and B
   return to the menu —against `render_menu` with the cursor on End Game—
   without the clock running; "Yes", on map 21 with its theme playing, starts
-  the theme fade, resets, reaches the `titulo` golden, and "Begin the Story"
+  the theme fade, resets, reaches the `title` golden, and "Begin the Story"
   starts the game again.
-- New goldens `fin` and `fin-no` (`test_menu_golden.py`). `menu`, `menu-2`
-  and `menu-grupo` change: End Game is no longer greyed out. Side by side
-  with the original in `/shared/capturas/2026-09-28-end-game/`.
-- The music ceilings were measured again (`just techos`): the ROM change
+- New goldens `end` and `end-no` (`test_menu_golden.py`). `menu`, `menu-2`
+  and `menu-party` change: End Game is no longer greyed out. Side by side
+  with the original in `/shared/captures/2026-09-28-end-game/`.
+- The music ceilings were measured again (`just ceilings`): the ROM change
   made `dcbest` clip, as the test warns may happen.
 - What no test looks at: that the theme fade **can be heard**, and the
   MSU-1 track going silent. The test checks that the fade starts.

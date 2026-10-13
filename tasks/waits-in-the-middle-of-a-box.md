@@ -90,9 +90,9 @@ second variant of the composer that the suite covers in one of the two.
 **Verified**: `cargo test` of rm2k-snes-text, -events, -screens, -convert,
 -battle and -mapdata (the escape cases red before); `just test`; ABL's
 whole suite with these tools, green, including the new
-`test_comandos_golden.py::test_esperas` —five of its six cases red with
-main's tools— and `test_cores.py::test_esperas`. Captures and contact
-sheet in `/shared/capturas/2026-10-12-esperas/`.
+`test_commands_golden.py::test_waits` —five of its six cases red with
+main's tools— and `test_cores.py::test_waits`. Captures and contact
+sheet in `/shared/captures/2026-10-12-esperas/`.
 
 **Not covered by the suite**: any game's own boxes with waits —only the
 invented case runs—; a wait inside a box with `\V[n]` (the cut line is

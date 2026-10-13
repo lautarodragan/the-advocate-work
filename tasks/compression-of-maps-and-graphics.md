@@ -101,10 +101,10 @@ it overwrites the end of grids larger than 32 KB (today, only map 52's).
 
 **How it was verified**: `test_lz2.py` does the round trip of each block of
 each cartridge through the compressor and through a separately written reference;
-`test_carga_descomprimida.py` compares, on the forty maps, the freshly
+`test_decompressed_load.py` compares, on the forty maps, the freshly
 loaded VRAM, the grid and the animation's drawings in WRAM against what the
 converter leaves uncompressed in `crudos/`, in snes9x and in bsnes, and the grid
-after fighting on map 52 (case `pelea-en-52`). It was seen failing
+after fighting on map 52 (case `battle-in-52`). It was seen failing
 by breaking the fill and removing the second grid decompression; the
 poses, by pointing each one at its neighbour (46 cases of the suite red).
 
@@ -333,8 +333,8 @@ cartridge from 3162 to 2650 KB used, and the last bank from `$6B` to `$5B`.
 * **Load frames**: `anim_buf_limpiar` erases the 2 KB when loading each map,
   with the screen off: some 10,000 CPU cycles, less than one frame.
 
-**How it was verified**: `just pruebas` green without touching any golden, and the
-new test `pruebas/rpgmaker/test_animacion_cuadros.py`, which makes the ROM
+**How it was verified**: `just tests` green without touching any golden, and the
+new test `tests/rpgmaker/test_animation_frames.py`, which makes the ROM
 draw each animation of the cartridge —changing the row of the animation it
 is drawing— and compares the VRAM box, frame by frame, all 274,
 against `cuadro_de_animacion`, the uncompressed computation. It also runs in
@@ -367,9 +367,9 @@ by decompressing it. The scripts were throwaway and are not in the repo; what
 has to be redone is: a block reader, greedy LZ2 with lazy, and the cycle
 model above.
 
-Lost frames are counted with the harness's `cuadros_perdidos` around
+Lost frames are counted with the harness's `lost_frames` around
 each animation, set to draw by writing `ANIMB_FILA`, `ANIMB_N`,
 `ANIMB_T`, `ANIMB_CUADRO` and `ANIMB_ACTIVA` —the same as the test does—,
-after `ir_al_mapa`. The scanlines, with a copy of the ROM that reads
+after `go_to_map`. The scanlines, with a copy of the ROM that reads
 `$213F`, `$2137` and `$213D` twice before and after the `jsl`, and notes the
 four bytes at `$7E7F00`.

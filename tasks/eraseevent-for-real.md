@@ -51,10 +51,10 @@ that shows the picture `Lichteffekt_Tankstelle_WC` and erases itself, and before
 compile. Now the picture —a dark mask at 35% in RM2k— comes out opaque and
 covers the room for ~480 frames: it looks like it hangs, but it continues. It is
 the pictures' transparency, not the erasing; it is in
-`/shared/capturas/2026-10-06-eraseevent/`.
+`/shared/captures/2026-10-06-eraseevent/`.
 
 **Tests**: three in the crate (`erasing_the_event_*`, one shown in red
-before the fix) and `pruebas/rpgmaker/test_borrar_evento_de_verdad.py` in
+before the fix) and `tests/rpgmaker/test_erase_event_for_real.py` in
 ABL, with two new cases that go in `test-special` —in `release` the starting
 map is the opening and does not let the page run—. **It does not cover** that the
 event stops being drawn, that it stops blocking or that the parallel is cut:

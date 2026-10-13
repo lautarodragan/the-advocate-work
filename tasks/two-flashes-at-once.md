@@ -39,7 +39,7 @@ which was free: the CGRAM entry of its palette, which is never zero because
 the sprite ones start at 128. The vblank uploads all the pending ones. `flash_buf`,
 `flash_pend` and `flash_pend_cgadd` leave the BSS: 34 bytes.
 
-It is guarded by `test_destellos_encimados`, with the case `destellos-encimados`: event
+It is guarded by `test_overlapping_flashes`, with the case `flashes-overlapping`: event
 1 flashes for ten tenths, and two tenths later event 4 flashes for thirty. At
 tick 90, event 1 has to look as it did at the arrival tick. It was seen red
 against the `main.s` from before.
@@ -52,9 +52,9 @@ Two things that were hard and are worth knowing:
   the ROM broken.
 * **Flashing the hero on map 6 changes the palette allocation of the whole
   map**: the first version of the case did that, and the goldens of
-  `grafico`, `grafico-heroe`, `sprite-actor` and `destello-compartido` moved —with
+  `graphic`, `graphic-hero`, `sprite-actor` and `flash-shared` moved —with
   either of the two `main.s`—. That is why the second target is event 4.
 
-With all that, `just pruebas` green and no golden moved.
+With all that, `just tests` green and no golden moved.
 
 **taro, on 2026-09-26: it improved, but it is not perfect; he suspects what is left is lag and not a bug.** The chips investigation measured that on the terrace, in the heavy loops, almost 200 of the 262 lines go to recomputing palettes (`destello_tick` + `flashes_tick`): it continues in `terrace-drops-frames-during-the-flashes.md`.

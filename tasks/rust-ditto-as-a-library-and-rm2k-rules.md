@@ -119,15 +119,15 @@ Run on 2026-09-29, on `d1f579a8`+prose, with the branch's `ditto`,
 `rm2k-render` and `rm2k-snes-battle` installed in the local
 `bin/`:
 
-- `NO_CACHE=1 just cartuchos`: the 999 files of `rom/build/` —`.sfc`,
+- `NO_CACHE=1 just cartridges`: the 999 files of `rom/build/` —`.sfc`,
   `.msu`, `.pcm`, `.inc`, the `.dbg` without mtime— byte-for-byte identical to
   those of the baseline, built before touching anything;
 - `rm2k-render --map` over the 328 maps of `rom/data/`: the 827 PNGs
   identical to those of the binary from before (the converter uses `--request`, which
   the above covers);
-- `just datos-vuelta`: 330 identical, and the resolved view it writes is
+- `just dump-round-trip`: 330 identical, and the resolved view it writes is
   `rom/data/` without a single difference;
-- `just pruebas`: 874; `just -f tools/justfile test`: 84 —the 83 and
+- `just tests`: 874; `just -f tools/justfile test`: 84 —the 83 and
   `test_rm2k_rules.py`—;
 - `cargo test` of rm2k-rules, rm2k-render and rm2k-snes-battle; Ditto with
   `DITTO_CORPUS` and the long batch: 330 of 330 per file and per tree, and

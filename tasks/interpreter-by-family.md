@@ -7,7 +7,7 @@ status: done
 
 Dispatch has been by table since 2026-09-25 (part C of
 `second-stage-of-splitting-main-s.md`), so it can be done now. Watch out: the test
-`test_la_entrada_k_de_la_tabla_salta_al_manejador_del_opcode_k` requires each
+`test_table_entry_k_jumps_to_the_handler_of_opcode_k` requires each
 handler to stay in `correr_codigo`'s bank.
 
 Since part B each opcode handler is its own `.proc`, spread across
@@ -18,7 +18,7 @@ each handler lives stops mattering, so grouping each family into its file is
 moving whole `.proc`s **within the same segment**, same as the eleven moves
 of the second stage.
 
-It's verified the same way as those: `just pruebas` without any golden
+It's verified the same way as those: `just tests` without any golden
 changed, and the `ca65` listing compared routine by routine so that no
 handler ends up with a different width (the script for that comparison was in
 the second stage's scratchpad: redo it if it got lost). One family per
@@ -99,7 +99,7 @@ What was decided along the way:
   either, because without them it was left alone between the return from the
   battle and the fade.
 
-**How it was verified.** Each commit with `just cartuchos` and `just pruebas`
+**How it was verified.** Each commit with `just cartridges` and `just tests`
 green (707 until the first merge of `main`, 719 after), with no golden changed
 and no test touched. That no handler ended up assembled with a different
 width, with the second stage's script —`ca65 -l` of the tree from before and

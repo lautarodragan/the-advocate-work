@@ -79,7 +79,7 @@ question: now they ask the same one.
 
 **With MSU-1** it holds the same: `song_playing` looks at `MSU_PLAYING` before
 `music_off`, and the track does not restart (enforced by
-`test_con_msu_el_tema_pedido_dos_veces_no_reinicia_la_pista`, listening).
+`test_with_msu_the_song_asked_twice_does_not_restart_the_track`, listening).
 
 **Without MSU-1, the battle changes the audio package on entering**, and for
 that it silences what is playing: if the map were playing the battle theme, it
@@ -90,14 +90,14 @@ enough not to silence it when it is the same one.
 
 ## The tests
 
-- `rpgmaker/test_tema_que_ya_suena.py`, with the case `tema-pedido-dos-veces`:
+- `rpgmaker/test_song_already_playing.py`, with the case `song-requested-two-times`:
   two `PlayBGM evilrhys` in one page. Red before the fix: the stream went back
   from `$65C296` to `$65C1A6`.
-- `test_batalla.py::test_ganar_deja_seguir_el_tema_de_la_victoria`: **it used
+- `test_battle.py::test_winning_lets_the_victory_song_go_on`: **it used
   to ask for the opposite**, that the victory start it from zero (`546fb17d`,
   2026-09-12). Red before the fix with the condition flipped: the cursor went
   back from `$6781CB` to `$67808D`.
-- `abl/test_msu.py::test_con_msu_el_tema_pedido_dos_veces_no_reinicia_la_pista`:
+- `abl/test_msu.py::test_with_msu_the_song_asked_twice_does_not_restart_the_track`:
   compares what plays after each `PlayBGM`. Correlation 1.00 before the fix and
   0.12 after.
 
@@ -118,9 +118,9 @@ recording.
 - Installing `cartridge` in the global one is not needed: no Rust was touched.
   Only `tools/runtime/` changed, which the global one already reads from the
   main checkout.
-- There are no new or moved goldens, and `test_musica_techos.py` passed.
+- There are no new or moved goldens, and `test_music_ceilings.py` passed.
 - With `main` merged (`bfbabec5`) the suite gave 904 green and 2 red, both
-  from `test_rutas_auditorio.py`, Pecarí's: they ask for what changed in
+  from `test_auditorium_routes.py`, Pecarí's: they ask for what changed in
   `map-sprites` and `maps`, and the global `rm2k-snes-maps` predates their
   merge. I did not compile them here —they are not mine—; with that
   reinstalled they should pass.

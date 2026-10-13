@@ -14,7 +14,7 @@ and the sound effects. The music itself already belongs to `rm2k-snes-audio`.
 
 It branches from `main` at the commit that launches the task. There: `NO_CACHE=1 just
 cartuchos` gives `abl.sfc` `241dc9ad2bf8b43c…`, `special` `63779e111ee18923…`,
-`encounter-every-step` `200a0b7355289700…`; `just pruebas` 882,
+`encounter-every-step` `200a0b7355289700…`; `just tests` 882,
 `just -f tools/justfile test` 49.
 
 ## Inventory: what the Python does today
@@ -29,7 +29,7 @@ Read on 2026-09-30:
 | `music.inherited_songs` | which theme may be playing when each package loads, following the jumps without looking at conditions, minus `[music] jumps_that_never_happen` |
 | `music.compile_music` | the job, to `audio-job.json`, and `rm2k-snes-audio compile` |
 | `music.boot_frames` and 1010-1024 | that the startup fits in `BOOT_FRAMES`, which it reads from `far_ram.s` |
-| `music.write_msu` | the `.msu`: the quality backgrounds and the quality sound effects; what the `.inc` needs to read it, at the end of `musicdata.inc`; and `efectos.json` |
+| `music.write_msu` | the `.msu`: the quality backgrounds and the quality sound effects; what the `.inc` needs to read it, at the end of `musicdata.inc`; and `effects.json` |
 | `msu_data` | the `.msu` format: `build`, the signature, and `index`/`read`, which four ABL tests use |
 | `tools/tests/test_inherited_songs.py` | the inheritance test, on a hand-made game |
 
@@ -40,7 +40,7 @@ Read on 2026-09-30:
 crate because what it decides is exactly what `compile` receives: the
 job stops travelling through Python and is built inside, and the stage calls
 `compile` in the same process. `compile` stays as it is, because it is used by
-the harness (`musica.py`) and the crate's tests.
+the harness (`music.py`) and the crate's tests.
 
 **The `.msu` goes with the music.** It carries two things —the quality backgrounds and the
 quality sound effects—, and of the two the only thing that has to be decided is the
@@ -75,8 +75,8 @@ SoundFont, what `compile` already read; and `BOOT_FRAMES` from `far_ram.s`, from
 suite's runtime.
 
 **What it returns**, in `--out`: `musicdata.inc` (with the `.msu`'s
-tables at the end, as today), `musica.json`, `audio.json`, `audio-job.json`,
-`efectos.json` and the `.msu`; Python puts them where they go —the `.msu` in
+tables at the end, as today), `music.json`, `audio.json`, `audio-job.json`,
+`effects.json` and the `.msu`; Python puts them where they go —the `.msu` in
 `--msu`—. What it prints comes out with what the converter prints.
 
 **What stays in Python**: building the request, the backgrounds' bytes, the
@@ -87,20 +87,20 @@ decompression frames and putting the files in their place. `events.Songs` and
 binary adds `msu-index` —the entries of a `.msu`, or that it is not a
 valid one— and `msu-sign` —the signature again, to build "the `.msu` of another
 build"—, and `constants` adds those of the format. That way the format lives in a single
-place; the harness calls them from `musica.py`, as it already does with `constants`.
+place; the harness calls them from `music.py`, as it already does with `constants`.
 `test_inherited_songs.py` moves to the crate's tests, so
 `just -f tools/justfile test` gives three fewer, its three cases.
 
 ## Log
 
 * **The baseline**, at `3afc8199` with `rm2k-snes-audio` and `cartridge` in the
-  local `bin/`: `NO_CACHE=1 just cartuchos`, 1032 files of `rom/build/`
-  (without cache, `.o`, `sello.txt` or `conversor.log`; the `.dbg` without `mtime`;
-  the PNGs decoded), their sha256 and the three `conversor.log` in
+  local `bin/`: `NO_CACHE=1 just cartridges`, 1032 files of `rom/build/`
+  (without cache, `.o`, `stamp.txt` or `converter.log`; the `.dbg` without `mtime`;
+  the PNGs decoded), their sha256 and the three `converter.log` in
   `<scratchpad>/calandria/musica/`. The ROMs give the task's sha256; the
   `.msu` of `release` gives `905decd20b48411f…`.
 * **The stage, whole in one go**, and it came out identical on the first run: the
-  1032 files identical, **and the three `conversor.log` too**, line by
+  1032 files identical, **and the three `converter.log` too**, line by
   line. What the stage prints is what the Python printed, in the same
   order.
 * **`audio-job.json` still comes out**, now from Rust, with the format of
@@ -132,7 +132,7 @@ of `3afc8199` up to the deletion; after the prose only the
 | commit | what |
 |---|---|
 | `e75b3b2c` | the stage: `cartridge.rs`, `msu_data.rs`, `pyjson` with floats; the converter calls it through `stage.hand_over` |
-| `5fc096d7` | ABL's tests read and sign the `.msu` through `msu-index` and `msu-sign`, from `musica.py` |
+| `5fc096d7` | ABL's tests read and sign the `.msu` through `msu-index` and `msu-sign`, from `music.py` |
 | `cab90f2b` | the deletion, only deletion: `music.py`, `msu_data.py`, `events.Songs`, `compiler.songs`, `test_inherited_songs.py` |
 | `eb58cd9a` | the prose that named what was deleted, and the crate's README |
 | `20eef3e1` | the battle's log counts the sound effects of its package |
@@ -146,9 +146,9 @@ subcommand.
 
 ## How it was verified
 
-* **The cartridges**: `NO_CACHE=1 just cartuchos` and the sha256 of the 1032
+* **The cartridges**: `NO_CACHE=1 just cartridges` and the sha256 of the 1032
   files of `rom/build/`, identical to the baseline after the stage, the
-  tests and the deletion, **and the `conversor.log` identical line by line**.
+  tests and the deletion, **and the `converter.log` identical line by line**.
   After the prose, identical except the three `mapdata.inc` and the three
   `.dbg`: the `.inc` carried above the `.msu`'s tables "see
   `escribir_msu` in tools/port/snes_convert.py", stale since before, and now
@@ -164,7 +164,7 @@ subcommand.
   local `bin/`—: `abl.sfc` `e20182d1bd905de7…`, that of `main`; the three
   `.msu`, the same as above; `special` `6784ab8fc7161ab7…`,
   `encounter-every-step` `5dc9114cd97ff691…`.
-* **The suites**: `just pruebas` 882 on each commit with code, 893 after
+* **The suites**: `just tests` 882 on each commit with code, 893 after
   the merge; `just -f tools/justfile test` 49 at the stage, 46 since the
   deletion. `cargo test -p rm2k-snes-audio` with `SOUNDFONT`, green.
 

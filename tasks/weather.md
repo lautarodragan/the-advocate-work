@@ -53,9 +53,9 @@ between 224 and 247 —from 248 onwards the PPU draws it peeking in from the top
 With that and long addressing instead of the WMADD window, heavy
 rain went down from 58 to 24 lines in `lluvia_tick` and `build_oam` from 130 to 84.
 
-It is enforced by `pan-lluvia` and `sacudir-lluvia` in the suite, which move the camera with
+It is enforced by `pan-rain` and `shake-rain` in the suite, which move the camera with
 heavy rain through the test page —a `WeatherEffects` in its file in
-`pruebas/casos/`—: in the opening the camera does not move, so on its own it does not
+`tests/cases/`—: in the opening the camera does not move, so on its own it does not
 look at the drops' scroll. And
 `apertura` compares with rain, which is what requires the case to count the ticks
 to the end: the rain never settles, so cutting when the scene

@@ -83,7 +83,7 @@ and the script rerun on what it brought: nothing to change.
 every relative link resolves and the 105 redirects land (an old URL such
 as `/decisions/la-grilla-vive-en-la-wram.html` is a page that sends to
 `the-grid-lives-in-wram.html` in the same directory); in the-advocate,
-`just test` and `just rust-test` green; `abl.sfc` (`just cartuchos release` in
+`just test` and `just rust-test` green; `abl.sfc` (`just cartridges release` in
 a ports worktree of this branch) built twice, with this branch's runtime
 and converter (`install-local cartridge convert`) and with the global
 tools of main at 5573c3e5: both

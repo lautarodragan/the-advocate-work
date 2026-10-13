@@ -7,7 +7,7 @@ status: draft
 
 Measured by Calandria on 2026-10-11 (`exclusions-left-over-in-the-ports.md`)
 and **checked today** (the-advocate `fc6f7456`, ports `a85b7e3`): with map 1
-returned to The Frozen World (and map 2 still out), `just cartuchos
+returned to The Frozen World (and map 2 still out), `just cartridges
 release` stops at "map 1: a page makes the hero flash, and actor 11 is
 drawn with rangedmelee[0], which an NPC of the map also uses. On the
 console they share a palette and both would flash".
@@ -28,4 +28,4 @@ And it isn't the only thing about map 1: according to Frozen's page in the book,
 behind this one may be the one from `map-streams-that-dont-fit-in-wram`.
 
 **How to see it**: remove 1 from `excluded` in `frozen-world/rm2k-snes.toml` and
-`just cartuchos release` in `frozen-world/`.
+`just cartridges release` in `frozen-world/`.

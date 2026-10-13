@@ -13,13 +13,13 @@ in `tools/port/` is almost all emission and glue. It was the last thing in the p
 together with the orchestrator (`snes_convert.py`), which comes after.
 
 Baseline: `main` at the commit that launches the task, `abl.sfc` `8f8bf5b3c5facf51…`,
-`just pruebas` 923, `just -f tools/justfile test` 46.
+`just tests` 923, `just -f tools/justfile test` 46.
 
 Measured on the baseline, with `cartridge` installed in the local `bin/` —the
 cartridges' fingerprint will name the new binary, and the `.dbg` changes depending on
-which assembler builds (Mara's trap)—: `NO_CACHE=1 just cartuchos`,
-1035 files in `rom/build/` without the cache, the `.o` files, `sello.txt` or
-`conversor.log`; their sha256 and the three `mapdata.inc` in
+which assembler builds (Mara's trap)—: `NO_CACHE=1 just cartridges`,
+1035 files in `rom/build/` without the cache, the `.o` files, `stamp.txt` or
+`converter.log`; their sha256 and the three `mapdata.inc` in
 `<scratchpad>/timbo-emision/`.
 
 * `release/abl.sfc` `8f8bf5b3c5facf517fdf3a758326d2fddafcfe9f16ab88fb3bf5c139c1b29c87`
@@ -200,8 +200,8 @@ How it turned out, inside:
 ## How it was verified
 
 With the scripts in `<scratchpad>/timbo-emision/` (`base.sh`, `huellas.py`):
-`NO_CACHE=1 just cartuchos` with the stamps deleted, and the sha256 of all of
-`rom/build/` —minus the cache, the `.o` files, `sello.txt` and `conversor.log`; the
+`NO_CACHE=1 just cartridges` with the stamps deleted, and the sha256 of all of
+`rom/build/` —minus the cache, the `.o` files, `stamp.txt` and `converter.log`; the
 `.dbg` without `mtime`—, with the three `mapdata.inc` separately.
 
 * **Before the merge**, after each commit of stages 1 to 3: the 1035
@@ -223,7 +223,7 @@ With the scripts in `<scratchpad>/timbo-emision/` (`base.sh`, `huellas.py`):
   audio, no troop pages—. A throwaway script took them
   (`gen_record.py`, `gen_emit.py`), running the Python over the same thing; the
   outputs were identical line by line before noting the hashes.
-* The suites, on the final tree: `just pruebas`, 934 —it was 936 on `main`;
+* The suites, on the final tree: `just tests`, 934 —it was 936 on `main`;
   two from `test_lz2.py` moved to the crate—; `just -f tools/justfile test`,
   39 —it was 46; the seven from `test_vram_layouts.py` moved to the crate—;
   `cargo test -p` of `rm2k-snes-mapdata` (38), `rm2k-snes-maps`,
@@ -232,7 +232,7 @@ With the scripts in `<scratchpad>/timbo-emision/` (`base.sh`, `huellas.py`):
 What the converter's log changes, and isn't in the fingerprint: the line "the
 map fits in N 16x16 blocks" now counts the blocks the
 substitutions built, because the stage builds them before answering. And `NO_CACHE=1
-just cartuchos` takes the same as before, some 45 s.
+just cartridges` takes the same as before, some 45 s.
 
 ## On merging
 

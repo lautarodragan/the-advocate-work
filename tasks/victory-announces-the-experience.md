@@ -46,7 +46,7 @@ What stays out, on purpose:
   new ones. They differ only if a `ChangeSkills` first teaches one that a level
   later teaches, and in ABL none does (checked in `data/`).
 
-It is covered by `pruebas/rpgmaker/test_victoria.py`, which reads the text from the tilemap.
+It is covered by `tests/rpgmaker/test_victory.py`, which reads the text from the tilemap.
 It uses far RAM `$7E7810-$7E781F` (`BA_VIC*` in `ram_lejana.s`); no
 new opcode.
 

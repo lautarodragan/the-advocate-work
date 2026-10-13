@@ -27,7 +27,7 @@ has to be decided and what was left loose.
   3.0 MB** and fits with 0.9 MB free. The music alone is 3.4 MB, and what a
   map uploads on entering, 1.9.
 * **Reading a map from the `.msu` is faster than decompressing it**: the port gives
-  42 KB per frame on the harness's three cores (`just msu-puerto`), and the
+  42 KB per frame on the harness's three cores (`just msu-port`), and the
   typical map's load goes from ~5 frames to ~0.4; 66's, from 22 to 1.5.
 * **Without MSU-1 a third of the game can be reached**, roughly what there is today.
 * **The S-DD1 ties with LZ2 on the tiles** (57 against 58 %); what it gives is

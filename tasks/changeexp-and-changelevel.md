@@ -52,14 +52,14 @@ page, and the line caps.
 Branch `carpintero-changeexp` of Carpintero's clone
 (`/extras/scratch/Carpintero/abl`):
 
-* `pruebas/rpgmaker/test_experiencia_de_eventos.py` and four cases: level,
+* `tests/rpgmaker/test_event_experience.py` and four cases: level,
   experience, skills and HP against the model, each page of the message
   read from `LVL_BOX`, and a page against the same text in a
   `ShowMessage`. With `main`'s tools, the cases don't compile.
-* Doors 7 and 8 of `parches/manual/nuevos/Map0900.json`: Talan and the
+* Doors 7 and 8 of `patches/manual/new/Map0900.json`: Talan and the
   branch's companion at the levels Hurón measured, with a `ChangeLevel`
   of -49 and another that raises; Arden's `ChangeSkills` that stood in for leveling
-  up are gone. `test_mapa_de_debug.py` checks it on both doors, per branch.
+  up are gone. `test_debug_map.py` checks it on both doors, per branch.
 
 **A trap that showed up**: a case with `ChangePartyMembers` changes for the
 converter who can lead in all maps (`page_party` in

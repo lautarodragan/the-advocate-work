@@ -50,7 +50,7 @@ of 255, 611 members").
 
 * `just crate-test mapdata` and `just test` (27) green.
 * ABL, in `abl/` of my ports with `PATH=<worktree>/.local-tools/bin`
-  (project, mapdata, convert, cartridge): `just cartuchos` and `just
+  (project, mapdata, convert, cartridge): `just cartridges` and `just
   pruebas`, **1202 passed**, no golden moved. `abl.sfc` goes from
   `24dd24ad…` to `4bb9b84e…`: `mapdata.inc` comes out identical to main's
   (`df57da5a…` both), so what changes is only the runtime's code
@@ -67,7 +67,7 @@ of 255, 611 members").
   bsnes: `BA_TROOP_K` = 260, one enemy, 400 HP (the Fireworm), its
   battler and its background; and winning it (HP and attack tweaked by hand), "590
   Experience Points gained", which comes from `troop_exp` at place 260.
-  Captures in `/shared/capturas/2026-10-11-tropas-dos-bytes/`.
+  Captures in `/shared/captures/2026-10-11-tropas-dos-bytes/`.
 
 **What wasn't covered**: the victory gold with a high place (the
 Fireworm gives 0), `troop_hidden` with a hidden member above 255, and the

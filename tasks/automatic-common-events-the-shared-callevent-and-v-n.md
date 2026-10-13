@@ -99,7 +99,7 @@ upper or lower case; the nested one still does not compile.
   tests enforced it —common event 35 after the battle left 498 on and
   the hero stuck—; now `start_waiting` and `common_start` set it to zero.
 - **The sign of `\V`**: an `ldx` between the read and the `bpl` clobbered N,
-  and -1234 came out as 64302. `test_variable_en_texto.py` enforced it.
+  and -1234 came out as 64302. `test_variable_in_text.py` enforced it.
 - **The sound effect with another sample on a map**: `shares` compiled the body
   "without a map" with the map's package set, and a sound effect that on that map
   sounds with another sample came out the same in both. The test in
@@ -139,15 +139,15 @@ package already carries them: a body without a map notes nothing in any.
 
 ## Tests, and their red
 
-- `rpgmaker/test_consola_portatil.py` (four): item 81 runs the common event,
+- `rpgmaker/test_portable_console.py` (four): item 81 runs the common event,
   the arrows, the hero still and Sern's message against the same one written
   with 42. **Red**: with `common_start` returning zero, all four.
-- `rpgmaker/test_variable_en_texto.py`: three `\V` —negative, zero, two in one
+- `rpgmaker/test_variable_in_text.py`: three `\V` —negative, zero, two in one
   row, with leading zeros and in lower case— against the same message written
-  by hand. **Red**: with the baseline compiler, `just cartuchos` refuses
+  by hand. **Red**: with the baseline compiler, `just cartridges` refuses
   ("a test page's text box does not compile"); and with the wrong sign, 776
   pixels.
-- `rpgmaker/test_llamada_compartida.py` (two): a page calls common event
+- `rpgmaker/test_shared_call.py` (two): a page calls common event
   43, a jump is requested with the choice open, and the page continues afterwards.
   The two variants: the page on its map and already carried. **Red**: without looking at
   the stack's frames in `code_carry_before`, both. No common event shared today
@@ -158,13 +158,13 @@ package already carries them: a body without a map notes nothing in any.
   as a slot and what does not compile, and that a pair does not skip a variable.
 - `test_compositor.py` also sets to zero the pending digits, which is the
   other thing the start of a row leaves set.
-- `empujon.json`: the text block moved —one pair fewer and the texts of
+- `push.json`: the text block moved —one pair fewer and the texts of
   the common events—, and the box of `texto-cruza` ended up on the other side of the border.
   I removed the two padding boxes at the end, `Z1` and `Z2`.
 - `rm2k-snes-mapdata/tests/python.rs`: the common events' tables are removed
   before the hash, like the pairs one; the hashes did not change.
 
-Both suites green: `just pruebas` gives 988 (981 + 7) and `just -f
+Both suites green: `just tests` gives 988 (981 + 7) and `just -f
 tools/justfile test` 39. `cargo test -p rm2k-snes-events -p
 rm2k-snes-mapdata` green.
 
@@ -175,7 +175,7 @@ the common events—, but no golden.
 
 ## Space, in `release`
 
-Against the baseline (`57ce2e2a…`), with `just espacio`: from 62 data banks to
+Against the baseline (`57ce2e2a…`), with `just space`: from 62 data banks to
 61; bank 0 from 1,340 to 1,275 bytes free; bank 1 from 2,000 to 1,498;
 the text block from 112,697 to 116,014 bytes. `NO_CACHE=1 just
 cartuchos` gives the same three ROMs as with the cache.
@@ -206,7 +206,7 @@ cartuchos` gives the same three ROMs as with the cache.
   `OP_RESERVED_3D` and `_3E`, and `op_reserved_3d`/`_3e` of `interpreter.s` go
   with them.
 - The RAM: `$6110` to `$6127` is mine, not `$2560`.
-- `test_musica_techos.py` passed; I did not run `just techos`.
+- `test_music_ceilings.py` passed; I did not run `just ceilings`.
 - To play: automatic common events 7, 43 and 50 now run in the game
   —Talan's auras, Emily's tape and what Radin repairs—, and the
   console opens with item 81.

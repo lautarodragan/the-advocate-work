@@ -1,6 +1,6 @@
 ---
 name: "World 3: the space"
-description: "Milestone 3 of el-mundo-y-lo-que-sigue: bank packing with first-fit decreasing, the .msu's height table per package, the text block in four-byte steps and `just espacio`"
+description: "Milestone 3 of el-mundo-y-lo-que-sigue: bank packing with first-fit decreasing, the .msu's height table per package, the text block in four-byte steps and `just space`"
 type: refactor
 status: done
 assignee: taro
@@ -13,12 +13,12 @@ before (section "Espacio"). It starts from `2ca861a`, with milestones 1 and 2
 already in `release`. One commit per thing, each one with its before and after
 in the message:
 
-1. **`just espacio`** (`tools/ensamblado/espacio.py`): it prints, for each
+1. **`just space`** (`tools/ensamblado/espacio.py`): it prints, for each
    cartridge or for the path of a ROM built separately, the data banks used
    and free, the gaps, bank 0, bank 1, BSS, ZEROPAGE and the text block. It
-   reads the `.dbg` and `memoria.cfg`; it does not relink. The texts come from
+   reads the `.dbg` and `memory.cfg`; it does not relink. The texts come from
    two constants the converter emits next to `mensajes` (`MENSAJES_BYTES`,
-   `MENSAJES_TOPE`). `test_espacio.py` compares it with the `.res` linked by
+   `MENSAJES_TOPE`). `test_space.py` compares it with the `.res` linked by
    hand, and AGENTS.md points to the recipe.
 2. **Bank packing with first-fit decreasing** (`bancos.resolver`). The
    constraints are the ones the converter already declared: a `.bloque` of up
@@ -34,12 +34,12 @@ in the message:
 4. **The texts in four-byte steps**: `MENSAJES_PASO = 4`, and `msg_empezar`
    takes out the top two bits with `rol` so that the one beyond 128 KB runs
    the same code as the one beyond 64 KB. Step 3, a 24-bit operand and a
-   second block with another opcode were measured (see the commit). `empujon`
+   second block with another opcode were measured (see the commit). `push`
    was measured again.
 
 # What was measured
 
-With `just espacio`, in data banks used (124 fit, from $02 to $7D). "Path" is
+With `just space`, in data banks used (124 fit, from $02 to $7D). "Path" is
 `release` plus the world's main path —85 to 95, 99 to 102 and 259; 74 and 255
 were already there—, built separately and uncommitted. Before point 4 the path
 does not convert because of the texts, so its first two rows were built with
@@ -79,9 +79,9 @@ The ROM moved almost all its data and the text block is read in another way,
 so what is worth playing is what no golden covers entirely: **long texts from
 the end of Lashe City and from Sorbe** (the ones that fall past the block's
 64 KB) and **sound effects with MSU-1**, which now look up their height in a
-list. The goldens and the suite pass (`just pruebas`, 878).
+list. The goldens and the suite pass (`just tests`, 878).
 
-# What `just pruebas` does not cover
+# What `just tests` does not cover
 
 * The beyond-128 KB bit of `msg_empezar`: no cartridge of the suite reaches
   that offset. It runs the same instructions as the 64 KB one, which does get

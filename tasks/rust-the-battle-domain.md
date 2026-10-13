@@ -14,7 +14,7 @@ experience and the encounters; what remains in Python is
 text screen that the screens left out—.
 
 It starts from `main` at the commit that launches the task. There:
-`NO_CACHE=1 just cartuchos` gives `abl.sfc` `cdcc323197ee6c66…`, `special`
+`NO_CACHE=1 just cartridges` gives `abl.sfc` `cdcc323197ee6c66…`, `special`
 `15e4f331fe8ff812…`, `encounter-every-step` `dc83ed698b348032…`; `just
 pruebas` 878, `just -f tools/justfile test` 49.
 
@@ -25,9 +25,9 @@ Read on 2026-09-30:
 | module | what it does | who uses it |
 |---|---|---|
 | `battle.py` | **the rules** the emission writes —which skills the battle can offer (`skill_usable`, `skills_of`, `level_learned`, `skill_command_name`), which actions each enemy has (`actions_of_enemy`), which items are offered (`item_usable_in_battle`), the weapon's SP, a troop's gold— and **the simulator**: `Rng`, `Combatant`, `Battle` and `TroopPage`, which play the battle with the same randomness as the ROM | `mapdata` (the rules), and ABL's tests (the simulator, turn by turn against the console) |
-| `battle_screen.py` | the battle's text screen: the geometry (`BA_*`, the five orders), the victory rows and their check that they fit, the cropped orders, the revived text, and `item_text` —the screens' rule for writing with their font— | `mapdata`, and the tests (`arnes/batalla.py`, `test_victoria.py`) |
+| `battle_screen.py` | the battle's text screen: the geometry (`BA_*`, the five orders), the victory rows and their check that they fit, the cropped orders, the revived text, and `item_text` —the screens' rule for writing with their font— | `mapdata`, and the tests (`harness/battle.py`, `test_victory.py`) |
 | `scene.py`, `battle_scenes.py` | the backgrounds and the battlers: which ones the cartridge carries, their pixels —scaled with Pillow's `LANCZOS`, reduced with `palette.reduce` or `adeleine`— and their bytes for the `.inc` and the `.msu` | `snes_convert`, `mapdata`, `msu_data`, the scene's tests |
-| `animation.py`, `battle_animations.py` | the battle animations: their cells via `rm2k-render`, the console's tint (`color.apply_tint`), the shrinking with `LANCZOS`, `palette.reduce`, and the frames for the `.inc` | `snes_convert`, `map_convert`, `obj_extras`, `mapdata`, `test_parches`, `test_animacion_cuadros` |
+| `animation.py`, `battle_animations.py` | the battle animations: their cells via `rm2k-render`, the console's tint (`color.apply_tint`), the shrinking with `LANCZOS`, `palette.reduce`, and the frames for the `.inc` | `snes_convert`, `map_convert`, `obj_extras`, `mapdata`, `test_patches`, `test_animation_frames` |
 
 ## The boundary
 
@@ -131,7 +131,7 @@ out".
 
 On the Python side, `port/battle_stage.py` remains —`model`'s request—,
 `item_text` moved to `port/screen_stage.py`, and the tests have
-`arnes/modelo.py`, with the same names as the earlier model (`Battle`,
+`harness/model.py`, with the same names as the earlier model (`Battle`,
 `play_turn`, `actor_of`), which keeps the steps and replays the whole battle
 every time it needs to be looked at.
 
@@ -161,9 +161,9 @@ With throwaway scripts in `<scratchpad>/cardon/`:
 * **`referencia.py`**: the crate tests' small game and the Python's hashes
   —400 battles, 1808 turns, 30 that refuse; 26 models; the victory rows—,
   which are now `cargo test -p rm2k-snes-battle`.
-* **The cartridges**: `NO_CACHE=1 just cartuchos` and the sha256 of all of
-  `rom/build/` —1032 files, without the cache, the `.o`s, `sello.txt` or
-  `conversor.log`; the `.dbg` without `mtime`; the PNGs decoded—, identical to
+* **The cartridges**: `NO_CACHE=1 just cartridges` and the sha256 of all of
+  `rom/build/` —1032 files, without the cache, the `.o`s, `stamp.txt` or
+  `converter.log`; the `.dbg` without `mtime`; the PNGs decoded—, identical to
   the baseline after each commit up to the deletion. After the prose,
   identical except the three `.dbg`s, which name the size of the runtime's
   sources: with the earlier sizes they give the same sha256
@@ -173,7 +173,7 @@ With throwaway scripts in `<scratchpad>/cardon/`:
   * `release/abl.sfc` `cdcc323197ee6c66d82b1304ce20c3c37f4124d13a6867e851fd13226046b7df`
   * `tests/special/prueba.sfc` `15e4f331fe8ff8123803ae3819a2212a5b84d71cd0a053b7261a9188bbab84b9`
   * `tests/encounter-every-step/prueba.sfc` `dc83ed698b348032514dbb76eaf5f535b6296944075fcba786087533ed5b8a4b`
-* **The suites**, after each commit and on the merge: `just pruebas` 878,
+* **The suites**, after each commit and on the merge: `just tests` 878,
   `just -f tools/justfile test` 49, `cargo test -p rm2k-snes-battle` green.
 
 ## When merging

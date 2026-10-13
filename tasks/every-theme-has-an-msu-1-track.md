@@ -23,7 +23,7 @@ What it implies:
   (`done/` or `with-msu-1-the-theme-samples-arent-uploaded.md`), so the whole
   ARAM is left for the sound effects; it is better done **after** the task of
   the sound effects with MSU-1, or coordinated with it.
-* The tracks go to `/shared/msu/` with `just entregar --actualizar-msu` (the
+* The tracks go to `/shared/msu/` with `just deliver --update-msu` (the
   fingerprint changes).
 * Touching `msu.py` redoes all the tracks: it is done once.
 
@@ -44,26 +44,26 @@ a new theme is a new file, and the others stay where they were. The numbers
 come out with gaps (2, 4, 15 … 224), and the MSU-1 does not care.
 
 What it cost: **renumbering the 22 from before once**. The tracks in
-`/shared/msu/` have to be replaced entirely with `just entregar
---actualizar-msu` —the fingerprint changes—: with this ROM, the `abl-1` to
+`/shared/msu/` have to be replaced entirely with `just deliver
+--update-msu` —the fingerprint changes—: with this ROM, the `abl-1` to
 `abl-22` from before play the wrong themes.
 
 How it is built now:
 
 * The converter gives each theme its `pista` (`build_varios`), writes it into
-  the ROM's `tema_msu` and into the `musica.json` next to it.
-* `msu.py` builds **those in `musica.json`** and deletes the `<rom>-N.pcm`
-  that no longer belong to any theme, because `just entregar` copies every
+  the ROM's `tema_msu` and into the `music.json` next to it.
+* `msu.py` builds **those in `music.json`** and deletes the `<rom>-N.pcm`
+  that no longer belong to any theme, because `just deliver` copies every
   one it finds. A theme that is a WAV in the game has a track too, via ffmpeg
   (today there is none in the cartridge).
-* `cartuchos.py` builds the tracks **after** the `release` conversion, and
-  not alongside it: it needs them from `musica.json`.
+* `cartridges.py` builds the tracks **after** the `release` conversion, and
+  not alongside it: it needs them from `music.json`.
 
-**The test** is `test_todo_tema_tiene_su_pista` (`pruebas/abl/test_msu.py`):
-every theme with music in `Music/` has a number in `musica.json`, the same one
+**The test** is `test_every_song_has_its_track` (`tests/abl/test_msu.py`):
+every theme with music in `Music/` has a number in `music.json`, the same one
 in the ROM's `tema_msu`, and its `.pcm` next to it; and no `.pcm` is left
 over. It was seen failing by removing `abl-148.pcm` by hand, adding an extra
-`abl-5.pcm` and setting `prepara`'s track to `null` in `musica.json`.
+`abl-5.pcm` and setting `prepara`'s track to `null` in `music.json`.
 
 **The new ones** —`11h035`, `bubstix`, `Deflector1`, `Fire_Mustang…`,
 `MML2_MotherZone`, `pn28year`, `prepara`, `T_ProjectJustice_DiscLoad`,

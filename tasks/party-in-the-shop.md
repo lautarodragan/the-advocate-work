@@ -17,7 +17,7 @@ window at the top right with the party:
   the `CmpEquip` calculation.
 
 The captures of the original are in
-`/shared/capturas/2026-09-28-tienda/original-comprar-arco.png` and
+`/shared/captures/2026-09-28-tienda/original-comprar-arco.png` and
 `original-comprar-chaqueta.png`.
 
 The ROM's shop (`shop-like-the-original.md`, Aguaribay) doesn't

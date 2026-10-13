@@ -84,8 +84,8 @@ move in any.
 
 **Verified**: `just test` and `just rust-test`; ABL's suite whole with
 these tools, green; the new
-`pruebas/rpgmaker/test_destello_de_pelea_golden.py` red with main's tools
-(five of six) and green with these; `just arrancan` of the ports, green
+`tests/rpgmaker/test_battle_flash_golden.py` red with main's tools
+(five of six) and green with these; `just boot` of the ports, green
 for the other seven, in snes9x and bsnes. Run by hand and not in the suite: the flash over a background
 from the `.msu` (MSU-1 on, same case: one step per frame, none lost).
 Compared with the original under Wine, with a copy of the LDB where

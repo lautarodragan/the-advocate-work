@@ -14,21 +14,21 @@ last one closed. What follows is as it was written, on 2026-09-27.
 # What
 
 What follows `race-and-what-comes-next.md`. Today the demo ends at the end
-of the scene in 64, with a fork (`parches/manual/mapas/Map0064.json`) that
+of the scene in 64, with a fork (`patches/manual/forks/Map0064.json`) that
 replaces the `Teleport [66, 71, 29]` with the end card. This is **what is
 needed for the world map, 66, to fit, along with what can be reached from it**
 up to the next natural cut, measured and not implemented. The milestones below
 become tasks of their own when they are launched.
 
 Everything measured here is from 2026-09-27 on `c84ed2b`, with variants of
-`release` built separately: neither `release` nor `cartuchos.py` nor the
-converter in `main` were touched. **None of this is covered by `just pruebas`**:
+`release` built separately: neither `release` nor `cartridges.py` nor the
+converter in `main` were touched. **None of this is covered by `just tests`**:
 they are variants that no recipe builds, and what was run in the emulator is
 spelled out in each place.
 
 The scripts were left in `/extras/scratch/mundo-plan/`, which survives the
-session (the built variants don't: they are heavy). `armar.py` builds a variant,
-`medir.py` gets the space with the method in `AGENTS.md`, `far.py` bank 1,
+session (the built variants don't: they are heavy). `build.py` builds a variant,
+`measure.py` gets the space with the method in `AGENTS.md`, `far.py` bank 1,
 `grande.py` relinks a variant that doesn't fit in 4 MB with fake banks and
 says how many it asks for, `ffd.py` estimates the bank packing with first-fit
 decreasing, `categorias.py` and `tablas.py` say what grew, `culpables.py`
@@ -86,10 +86,10 @@ with the grid. It is code in `descomprimir.s`, which lives in `FAR`.
 
 **Seen in the emulator** (variant `m0p2`: `release` plus 66, with the
 text block in steps of 2 bytes, the harness's default core): 66 loads,
-`celdas_mal_dibujadas` gives zero, the window shows the text of event 2
+`wrongly_drawn_cells` gives zero, the window shows the text of event 2
 ("I can't just walk back into Lashe City!") correctly, a forced battle with
 `ENC_PIDE` (Snarling Wolf) is won and returns to the correctly drawn map, and
-walking 17 cells up and 4 down `cuadros_perdidos` stays at
+walking 17 cells up and 4 down `lost_frames` stays at
 zero. The battle comes out **without a background**: the cartridge carries three, and the world's
 are others (see question 6).
 
@@ -262,7 +262,7 @@ layer above remains).
 
 ## Space
 
-With `medir.py`, `far.py` and `grande.py`. All with the fifth layout and the
+With `measure.py`, `far.py` and `grande.py`. All with the fifth layout and the
 text block in steps of 4 bytes (except `release`). BSS and ZEROPAGE don't move in
 any of them: 138 and 4 bytes free. "Banks" are the data ones, from `$02` to `$7D`:
 **124 fit**. "FFD" is what packing with first-fit decreasing would ask for
@@ -348,9 +348,9 @@ the end of the demo moves to a fork of 66 that cuts when stepping on Sorbe (ev10
 the world can be walked and fought in. The other entrances of 66 do nothing
 —their pages don't compile because the destination isn't there—, as happened with 64
 before. Cartridge 75.6%, bank 0 unchanged. It is tested with: a golden of 66
-just arrived, `celdas_mal_dibujadas` at zero, a battle in 66 that returns
+just arrived, `wrongly_drawn_cells` at zero, a battle in 66 that returns
 to the map (it is the one that would overwrite the upper half of the grid if LZ2 isn't split),
-and `test_carga_descomprimida` with a two-stream background.
+and `test_decompressed_load` with a two-stream background.
 
 **2. Sorbe and the healing.** (Done: `world-2-sorbe-and-the-healing.md`.) The layout with the layer above at 256 (69), the
 `Comment` skipped, and `ChangeEncounterSteps` done. 69 and 76 to 84 in
@@ -360,7 +360,7 @@ where Dalia's trip leads. 81.4%, bank 0 192 minus what
 
 **3. Space.** (Done: `world-3-the-space.md`; the main path has ten banks left, and it fits along with one or two of the optional zones, not all three.) Packing with first-fit decreasing in `bancos.py`, with the
 ROM building the same and the goldens not moving; the `.msu` height table per
-package; the text block in steps of 4 bytes; and `medir.py` —or whatever
+package; the text block in steps of 4 bytes; and `measure.py` —or whatever
 replaces it— reporting free banks and not a percentage. It can go in parallel with
 1 and 2; **it has to be before 4**, which leaves three banks.
 

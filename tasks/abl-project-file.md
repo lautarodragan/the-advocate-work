@@ -1,6 +1,6 @@
 ---
 name: "ABL's project file"
-description: "Steps 3 and 4 of the plan: ABL's knobs move out of the code into rom/rm2k-snes.toml, and cartuchos.py stays as the mechanism that reads it"
+description: "Steps 3 and 4 of the plan: ABL's knobs move out of the code into rom/rm2k-snes.toml, and cartridges.py stays as the mechanism that reads it"
 type: refactor
 status: done
 assignee: taro
@@ -18,7 +18,7 @@ points without waiting for him. What was decided:
   comments are in Spanish**, because the file is ABL's.
 - **One knob per commit, with the same value**, and the ROM byte for byte
   identical on each one.
-- **`cartuchos.py` stays as the mechanism** that reads the file and builds
+- **`cartridges.py` stays as the mechanism** that reads the file and builds
   (`rm2k-snes-cartridges`); ABL's stuff —which maps, which cartridges, which
   cases— moves to the file. The cache key is still the hash of the binaries
   until there are real versions.
@@ -28,9 +28,9 @@ points without waiting for him. What was decided:
 
 ## What was done
 
-Each knob's safety net: `SIN_CACHE=1 just cartuchos` before touching anything
+Each knob's safety net: `SIN_CACHE=1 just cartridges` before touching anything
 and after each one, with the sha256 of all of `rom/build/` except `cache/`,
-the `.o`s, `sello.txt` and `conversor.log`, and the `.dbg`s without `mtime`.
+the `.o`s, `stamp.txt` and `converter.log`, and the `.dbg`s without `mtime`.
 **The `.sfc`, `.sym`, `.msu`, `.pcm` and `musicdata.inc` never changed.** The
 only thing that moved: the two `mapdata.inc`, because of the identity block
 (six lines, two `.define`s), and hence the `.dbg`s, in line numbers and file
@@ -43,7 +43,7 @@ sizes; the symbols, with their values, are the same.
    goes into the cartridges' fingerprint and into what `entregar` requires to
    be committed.
 2. **The cartridges.** `[maps]`, `[debug]`, `[cases]` and `[cartridges.*]`.
-   cartuchos.py reads the file and builds the flags in the usual order, so the
+   cartridges.py reads the file and builds the flags in the usual order, so the
    stamp comes out the same. Map 900 comes from `fork.nuevos()`: the debug one
    is the only new map, and if there were another it refuses. A new cartridge
    is one more table.
@@ -52,30 +52,30 @@ sizes; the symbols, with their values, are the same.
    `SRAM_MAGIA_TEXTO` as `.define`s at the start of `mapdata.inc` —outside
    `RODATA`, which the bank layout moves—, and `cabecera.s` and `partida.s`
    use them with `.byte` and `.strat`. The signature is still `ABLS`.
-   `entregar.HUELLA_MSU` comes out the same, letter by letter.
+   `entregar.MSU_FINGERPRINT` comes out the same, letter by letter.
 4. **Graphics, battle, jumps and `--map-id`.** `[graphics]`, `[battle]` and
    `[music] jumps_that_never_happen`. `--map-id` no longer has a default:
    `main` enforces it and not `required`, because the parser is reused for
    each `--caso`.
 5. **The audio tables.** `[sound_effects]` and `[music]`. snes_music exposes
-   them as functions —`se_enteros()`, `temas_aparte()`…— and eventos.py and
+   them as functions —`se_enteros()`, `separate_songs()`…— and eventos.py and
    snes_convert.py read them too.
 6. **The engine limits** (class c): a comment saying they were measured
    against A Blurred Line on each Python constant. The three in the runtime
    already said so and weren't touched, so as not to move the `.dbg`.
 
-**It's read on use, not on import**, except in cartuchos.py, which is the
+**It's read on use, not on import**, except in cartridges.py, which is the
 game's orchestrator: `test_las_herramientas_se_importan_sin_un_juego` imports
 the converter with the file pointing at one that doesn't exist. And
 `rom/pruebas/herramientas/test_perillas_repetidas.py` fails if a tools `.py`
 writes a text from the file again: on the tree from before this, it found the
 sound effect tables, `vswar`, `ABLBackdropSJ08`, `savept`, `Future1`,
-`nobodyhere`, `test-special` and `mapa-de-debug`.
+`nobodyhere`, `test-special` and `debug-map`.
 
 ## What wasn't done: the environment (step 7 of the assignment)
 
 The tools still read `ABL_GAME_DIR`, `ABL_RTP_DIR` and `ABL_SOUNDFONT` through
-`comun/proyecto.py`. How I'd do it:
+`comun/project.py`. How I'd do it:
 
 * `recursos.GAME_DIR`, `recursos.RTP_DIR` and `snes_samples.SOUNDFONT` are
   module globals used **inside** functions, not only as defaults: `escena.py`
@@ -99,7 +99,7 @@ The tools still read `ABL_GAME_DIR`, `ABL_RTP_DIR` and `ABL_SOUNDFONT` through
   either—, so changing `--game-dir` doesn't make a cartridge stale: same as
   now.
 * `test_proyecto.py` goes on to forbid `os.environ` of those three in all of
-  `tools/`, `proyecto.py` included.
+  `tools/`, `project.py` included.
 
 ## What remains open
 
@@ -110,6 +110,6 @@ The tools still read `ABL_GAME_DIR`, `ABL_RTP_DIR` and `ABL_SOUNDFONT` through
   the ROM's name, the MSU-1 tracks and all the cases. It could be a key
   (`[rom] played_cartridge`), but today `entregar`, `parches` and the suite
   name it too.
-* **cartuchos.py's module names** —`MENOR_A`, `CARTUCHOS`, `FUERA`— stayed
+* **cartridges.py's module names** —`MENOR_A`, `CARTRIDGES`, `FUERA`— stayed
   because of the suite, which reads them. Renaming them or having the suite
   read the file is another change.

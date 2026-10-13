@@ -68,7 +68,7 @@ thirty candidate pages on maps 8, 9, 95, 261, 278, 279, 343 and 344. It is
 approximate —the starting cell of the events in the hero's layer is guessed—
 and it does not need refining: the fix is general and covers them all.
 
-**The test**: `pruebas/rpgmaker/test_accion_con_ruta.py`, A every one, two and
+**The test**: `tests/rpgmaker/test_action_with_route.py`, A every one, two and
 four frames from `EV0043`: the second thing that starts has to be `EV0042` and
 at (51,22). Without the fix it goes red in all three —"disparó el evento de
 índice 51 con el héroe en (52, 20)"—; with it, green. The same assertion

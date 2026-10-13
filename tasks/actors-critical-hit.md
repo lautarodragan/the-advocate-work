@@ -69,18 +69,18 @@ that have one.
   —which never read it— remain the correct answer. See the header
   of `tests/model.rs`.
 
-**Tests** (in ABL, `pruebas/rpgmaker/test_batalla.py`):
+**Tests** (in ABL, `tests/rpgmaker/test_battle.py`):
 
-- `test_cada_actor_entra_a_la_pelea_con_su_critico`: `BA_CRIT` of Kersh,
+- `test_each_actor_enters_the_battle_with_its_critical`: `BA_CRIT` of Kersh,
   Core and Manta against an easyrpg computation done in the test —from the dump,
   in float— and against the model. Red before: "el actor 11 entró con un
   crítico de 0 y easyrpg le da 3".
-- `test_un_critico_del_grupo_da_el_mismo_hp_que_el_modelo`: the first
+- `test_a_party_critical_gives_the_same_hp_as_the_model`: the first
   seed with which someone in the party lands a critical against the
   droid, written into `BA_SEED`, turn by turn against the model. Red
   before: with the old model, "con ninguna de 200 semillas le sale un
   crítico a nadie del grupo".
-- `test_la_cuenta_del_critico_es_la_de_easyrpg`: the test's computation with
+- `test_the_critical_formula_is_easyrpgs`: the test's computation with
   1/25, and that the party has a critical.
 - In Rust: `the_critical_hit_adds_in_floating_point`.
 

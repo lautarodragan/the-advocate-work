@@ -7,7 +7,7 @@ status: draft
 
 Hurón left it on 2026-10-06 in `eraseevent-for-real.md`: the
 `EraseEvent` tests (three from the events crate and
-ABL's `pruebas/rpgmaker/test_borrar_evento_de_verdad.py`, in
+ABL's `tests/rpgmaker/test_erase_event_for_real.py`, in
 `test-special`) "do not cover that the event stops being drawn, that it stops
 blocking or that the parallel is cut: the test event has no graphic
 and is not parallel. That was looked at playing Desert Nightmare, no
@@ -20,7 +20,7 @@ runs it (`op_erase_event`, `runtime/interpreter_movement.s`). ABL uses
 `EraseEvent` in the quarry (map 150 and common event 36), and Desert Nightmare in
 157 parallel pages without a graphic.
 
-**How to see it**: in the cases of `test_borrar_evento_de_verdad.py`, an
+**How to see it**: in the cases of `test_erase_event_for_real.py`, an
 event with a graphic and on the hero's layer that erases itself (that it is not drawn and
 that its cell can be walked through), and a parallel that erases itself in the middle of
 its page (that what comes after does not run).

@@ -224,7 +224,7 @@ puts after each `jsr` of the main loop a `jsl` to a probe that reads the
 vertical counter's line (`$2137`/`$213D`) and accumulates at `$7F:F000` how many
 lines passed since the previous probe, and does the same around
 `music_tick` in `irq_musica`. It builds against the `.inc` files in `rom/build/release`, without
-touching the tree. `medir.py` runs scenes and, on each pass of the loop, splits its
+touching the tree. `measure.py` runs scenes and, on each pass of the loop, splits its
 lines by routine.
 
 **Each probe costs one line** —measured: two probes in a row give 1.0 between
@@ -390,12 +390,12 @@ What it touches:
 * **The SRAM**: with S-DD1 it stays at `$70`. With SA-1 it moves to `$40` and writing
   has to be enabled for the main CPU (`$2226`), which starts protected.
   `SRAM_BANCO` is in `partida.s`, `ranuras.s` and `nivel.s`.
-* **The harness**: `en_la_rom` in `pruebas/arnes/consola.py` is the LoROM formula and
+* **The harness**: `in_the_rom` in `tests/harness/console.py` is the LoROM formula and
   it is used by the tests that read tables from the ROM. And the converter has two
   written LoROM assumptions (`snes_convert.py:2977` and `:3634`) and a grid
   pointer that crosses banks by adding one: a block can't straddle
   the 2 MB.
-* **`just entregar`** and the `.sym` don't change: they are built by the same `ld65`.
+* **`just deliver`** and the `.sym` don't change: they are built by the same `ld65`.
 * **The MSU-1** doesn't either: `$2000-$2007` doesn't clash with either of the two
   (the SA-1's `$2200-$23FF`, the S-DD1's `$4800-$4807`).
 
@@ -415,9 +415,9 @@ On the order of **100 to 200 lines**, almost all in Python.
 
 **They catch**: any data misread by the new mapping —the goldens, in
 pixels—; uninitialised memory —`test_cores.py`, which with SA-1 would also
-have to look at the BW-RAM—; the saved game —`test_guardar.py` and the slot ones,
-through the SRAM that snes9x exposes—; an extra frame —`cuadros_perdidos` and
-`test_el_hq_de_los_lazer_teeth_entra_en_el_cuadro`—.
+have to look at the BW-RAM—; the saved game —`test_save.py` and the slot ones,
+through the SRAM that snes9x exposes—; an extra frame —`lost_frames` and
+`test_the_lazer_teeth_hq_fits_in_the_frame`—.
 
 **Nothing catches**, and it has to be taken to the FX Pak:
 
@@ -484,7 +484,7 @@ worktree's root written inside (`WT`): it has to be changed before running them,
 `release` has to be built first.
 
 * `instrumentar.py` builds the probed ROM in its own directory;
-* `medir.py <escena>` runs `mapa11_caminar`, `mapa11_piedras`, `terraza` or
+* `measure.py <escena>` runs `mapa11_caminar`, `mapa11_piedras`, `terraza` or
   `terraza_real`, probed or with `REAL=1` on the real ROM;
 * `sdd1.py` is the compressor and decompressor, with its round-trip test;
   `armar_s9x.py` sets up snes9x's decoder to compile it with

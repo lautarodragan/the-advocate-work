@@ -35,7 +35,7 @@ Two safety nets per group:
 
 * a comparer that strips comments and `.assert` messages —respecting
   `"…"` and `'x'`— and requires the rest to be line by line what's in `HEAD`;
-* `SIN_CACHE=1 just cartuchos` and the sha256 of the `.sfc`, `.msu` and `.pcm` in
+* `SIN_CACHE=1 just cartridges` and the sha256 of the `.sfc`, `.msu` and `.pcm` in
   `rom/build/`, which have to come out the same as before starting.
 
 ## What was left

@@ -18,7 +18,7 @@ Map 16's scene —the run to work— is four rounds of the hero's `MoveEvent`,
 `Wait 15` and a `Teleport` to the same map. In the 2015 RPG_RT under Wine, on
 a copy of the game whose map 4 EV0001 starts with `Teleport 16 (53,7)`,
 recording Wine's desktop at 60 frames per second; in the ROM (`release`),
-with `ir_al_mapa(16, 53, 7)` and one screenshot per tick. In both, the camera
+with `go_to_map(16, 53, 7)` and one screenshot per tick. In both, the camera
 shift frame by frame and the mean brightness are measured, and from that come
 four marks per round: **S**, the hero's first step; **F**, the first darker
 frame of the fade that erases; **J**, the last one that brightens on showing.
@@ -36,7 +36,7 @@ more frames to go from the wait to the teleport and one more in the fade**. A
 visible effect: in the third round the route lasts longer than the wait, and
 the hero gets to walk one more frame —2 pixels— before it's cut off.
 
-This other thing, from the `timer-cero` page, may be on the same side: the
+This other thing, from the `timer-zero` page, may be on the same side: the
 `TintScreen` that comes after a `Wait 2` shows **13** frames after the timer
 appears in the ROM and **12** in RPG_RT. It may be the wait, or it may be
 `divergences/screen-ticks-run-after-the-interpreter.md`, which describes
@@ -50,7 +50,7 @@ a map where it's visible. And the RPG_RT measured is the 2015 one, not the
 2000 one the author used (see what the Wine recipe says about that).
 
 The screenshots, with the relative frame number in the name, are in
-`/shared/capturas/2026-09-29-divergencias/mapa16-*` and `cronometro-*`.
+`/shared/captures/2026-09-29-divergencias/mapa16-*` and `cronometro-*`.
 
 ## Taken on 2026-09-29
 
@@ -60,8 +60,8 @@ taro accepted that the ROM change to match RM2k. If the fix moves goldens,
 ## Where the three came from (Benteveo, 2026-09-29)
 
 Measured in the ROM tick by tick —the hero's position, `ev_waiting`, `fade`
-and `brightness` through RAM— with the same save as Caranday (`en-5`,
-`ir_al_mapa(16, 53, 7)`). In the round of the numbers above, the page runs the
+and `brightness` through RAM— with the same save as Caranday (`in-5`,
+`go_to_map(16, 53, 7)`). In the round of the numbers above, the page runs the
 `MoveEvent` and the `Wait` on tick 71, the hero takes the first step on 72,
 the `Teleport` runs on **162**, the first darker tick is 163 and the
 brightness comes back fully on 231; the page continues on 232.
@@ -71,7 +71,7 @@ brightness comes back fully on 231; the page continues on 232.
   `SetupWait` leaves `wait_time` and the interpreter loop goes back to the top
   **in the same frame**, where `wait_time--; break;` already spends one
   (`game_interpreter.cpp:447`): the next one runs 90 later. It's also the tint
-  of `timer-cero`: with the wait one tick shorter, it comes out one tick
+  of `timer-zero`: with the wait one tick shorter, it comes out one tick
   earlier, which is RPG_RT's +12 and not the ROM's +13.
 * **The other two are the fade**, and they aren't the wait: with the wait
   already fixed, 90 remain from the step to the fade and 68 of fade, against 89
@@ -107,7 +107,7 @@ rules is the measurement.
 
 ## The numbers
 
-With the new test, `rpgmaker/test_teletransporte_contra_rm2k.py`, which
+With the new test, `rpgmaker/test_teleport_against_rm2k.py`, which
 measures the same through RAM:
 
 |                         | RPG_RT | ROM before | ROM now |
@@ -123,26 +123,26 @@ water: `frozen_ticks` goes up during the 68 ticks from F to J, included.
 
 ## What moved as a side effect
 
-* **`Recorrido.esperar_el_control` no longer presses A with control
+* **`Recorrido.wait_for_control` no longer presses A with control
   returned.** With the fade two ticks shorter, on arriving at Sector 35 the page
   finished before the A of the eight-tick window, and the A talked to the car,
   which is in front: back to 36 with the choice open, and ten tests stuck
   there. The A of that wait is for the messages; now it asks whether there's a
   page running right before pressing. With that no golden of the playthroughs
   changed.
-* `test_borrar_con_el_corte` now asks for black on the jump's tick (0) and the
+* `test_erase_with_the_cut` now asks for black on the jump's tick (0) and the
   load on the next (1).
 * **44 goldens of the suite**, in a separate commit with only goldens. All of
   them are shifts in time: the wait one tick shorter, or everything that
   happens after a teleport two ticks earlier (and the ChipSet animation two
-  steps less frozen, in those that arrive through `ir_al_mapa`). Separated by
-  building with the wait alone: the wait alone already moves `lugar`,
-  `parar-rutas`, `savepoint-guarda`, `tram`, `autos9`, `core-puerta`,
-  `sacudir`, `sacudir-borde`, `cinematica`, `apertura`, `8-left`, `manta` and
-  `cartel`; only the fade, `3-down-56`, `8-right`, `fuego-20`, `talan`,
-  `puerta-8-9-120` and the four of `transicion-*`, which are the ramp itself
+  steps less frozen, in those that arrive through `go_to_map`). Separated by
+  building with the wait alone: the wait alone already moves `place`,
+  `stop-routes`, `savepoint-saves`, `tram`, `autos9`, `core-door`,
+  `shake`, `shake-edge`, `cinematica`, `apertura`, `8-left`, `manta` and
+  `cartel`; only the fade, `3-down-56`, `8-right`, `fire-20`, `talan`,
+  `door-8-9-120` and the four of `transicion-*`, which are the ramp itself
   halfway through. Side by side, with the difference in red, in
-  `/shared/capturas/2026-09-29-teletransporte/`.
+  `/shared/captures/2026-09-29-teletransporte/`.
 
 **The merge awaits taro's approval of those goldens.**
 
@@ -151,17 +151,17 @@ water: `frozen_ticks` goes up during the 68 ticks from F to J, included.
 * `PanScreen` with a wait has the same extra tick —`op_pan` stores the whole
   `GetPanWait()` and cuts the tick— and wasn't touched: there's no RPG_RT
   measurement asking for it, and it moves other goldens. Zero was already fine.
-* The tests' save that arrives through `ir_al_mapa` still freezes one tick
+* The tests' save that arrives through `go_to_map` still freezes one tick
   more than a real `Teleport` (68 against 67 plus the jump's), as before: it's
   the harness, which requests the fade from outside.
-* What `just pruebas` doesn't cover: the cut measured against RPG_RT. It was
+* What `just tests` doesn't cover: the cut measured against RPG_RT. It was
   moved by analogy with the fade, not recorded.
 
 ## When merging
 
 Nothing to install: no Rust project changes and no script gets renamed, and
 the runtime is read by the global `rm2k-snes-cartridges` from the main
-checkout. With `main` merged (`2be90714`), `just pruebas` and `just -f
+checkout. With `main` merged (`2be90714`), `just tests` and `just -f
 tools/justfile test` green.
 
 What to look at while playing: any door or `Teleport` —the fade starts on the

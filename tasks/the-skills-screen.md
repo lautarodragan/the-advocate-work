@@ -56,9 +56,9 @@ four bytes fewer, far RAM 5 B (Vampires Dawn is left with 48). With phase
 3.1 on top, `$C0` some 150 B more.
 
 **Verified**: ABL's suite with the branch's tools, 1279 passed with the
-new `test_menu_habilidades_dibujo.py` (six cases, pixel for pixel against
-`rm2k-snes-screens render`) and `test_menu_habilidades_golden.py` (eight
-new goldens); `just arrancan`, 9 passed; `just test`, 27; `just
+new `test_menu_skills_drawing.py` (six cases, pixel for pixel against
+`rm2k-snes-screens render`) and `test_menu_skills_golden.py` (eight
+new goldens); `just boot`, 9 passed; `just test`, 27; `just
 rust-test`. Ten goldens moved, each by 111 pixels on the second command's
 two cell rows, "Tech Skill" from grey to white: their own commit. The
 captures, side by side with the original's under Wine, are in
@@ -67,7 +67,7 @@ captures, side by side with the original's under Wine, are in
 **Not covered by the suite**: the weapon requirement of skills with
 physical attributes (not modelled; no game was checked for one), teleport
 and escape skills (always grey; no game teaches one), and the screen in
-the other seven games beyond `just arrancan` reaching their first map —no
+the other seven games beyond `just boot` reaching their first map —no
 test opens their Tech Skill—.
 
 **Found and not fixed**, as drafts:

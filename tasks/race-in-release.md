@@ -51,7 +51,7 @@ which is where the game enters, so reaching the map normally lands there
 without doing anything.
 
 **Switch 171 is what makes it start** —the test page
-`pruebas/casos/switch-171.json` turns it on—, and one has to know why. Event 1
+`tests/cases/switch-171.json` turns it on—, and one has to know why. Event 1
 on map 49 has two autostart pages, one per switch, and the one that sets up the
 car asks for 171. With both off **neither is the active one** and the event
 does nothing, so the hero stays as `DummyHero`, whose sprite is an empty cell

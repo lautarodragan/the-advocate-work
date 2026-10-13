@@ -49,7 +49,7 @@ loads with Talan as leader: 14 puts him in the party before going to 16 and
 
 **It happened on every map of the game**: with `DummyHero` as leader, the 66
 maps of `MAPAS_DEL_JUEGO` loaded palette 0 in black. It is measured by
-`test_lider_sin_grafico.py`: 66 reds with the old code, 0 with the
+`test_leader_without_graphic.py`: 66 reds with the old code, 0 with the
 new. What looked black on each one depends on who uses palette 0.
 
 Where the game gets with `DummyHero` leading —pages that set 10, and

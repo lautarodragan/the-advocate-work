@@ -38,7 +38,7 @@ move: 182 B free in `release` before and after.
 
 ## The test
 
-`test_la_entrada_tapa_el_mapa_con_el_mosaico_de_la_salida`, in
+`test_the_entrance_covers_the_map_with_the_exits_mosaic`, in
 `rom/pruebas/rpgmaker/test_fundido_de_pelea.py`: it measures the side of the
 blocks of each frame **by looking at the screen** —on each line, at which
 columns the color changes; with blocks of side n they can only be multiples
@@ -51,11 +51,11 @@ Red without the fix: `al entrar [], al salir [2, 2, 3, 4, 4, 5, 6, 6, 7, 8,
 A first version that counted per pixel and not per line lost the mosaic from
 9 onwards near black, with the hero dominating the changes.
 
-`just pruebas`: 901, green (900 + this one). No golden moved: none falls
+`just tests`: 901, green (900 + this one). No golden moved: none falls
 inside the transition, which spends no ticks.
 
 The strips, from the `linkage` case talking to the droid —the 26 frames
-before black—: `/shared/capturas/2026-09-30-entrada-a-la-pelea/antes.png` and
+before black—: `/shared/captures/2026-09-30-entrada-a-la-pelea/antes.png` and
 `despues.png`.
 
 ## For taro

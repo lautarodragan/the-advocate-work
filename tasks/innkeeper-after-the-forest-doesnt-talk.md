@@ -22,7 +22,7 @@ the owner standing at the door, event 1 at (9,8).
   layer**. It's the "I'm just closing up shop" talk, which turns on switch
   975.
 * **Page 2**, with 975: action button, the choice of shop and inn. That one
-  already worked (`test_elegir.py` covers it with 975 on).
+  already worked (`test_choose.py` covers it with 975 on).
 
 So what didn't work was page 1, and without it 975 never turns on and page 2
 never activates. It wasn't Hurón's locked direction: the hero arrives
@@ -72,21 +72,21 @@ bumped into.
 
 # The test
 
-`pruebas/rpgmaker/test_tocar_de_frente.py`: with A from (9,9), the talk, 975
+`tests/rpgmaker/test_touch_head_on.py`: with A from (9,9), the talk, 975
 and the shop open; bumping into him from (9,10), the talk and the inn, which
 charges the 100. Both red with the global tools (neither opens the talk),
 green with these.
 
 No door was added on the debug map: building the "just out of the forest"
 state by hand is more risk than what it saves, and the test gets there with
-`ir_al_mapa`.
+`go_to_map`.
 
 # When merging
 
 The tools are branch `worktree-agent-abd20fdcf9df6b578`, commit `a4fd1514`:
 reinstall `events` and `cartridge` in the global (the runtime changed). ABL's
 whole suite with them: green, no goldens moved. Screenshots of the original
-and of the ROM in `/shared/capturas/2026-10-05-posadero/`.
+and of the ROM in `/shared/captures/2026-10-05-posadero/`.
 
 What taro has to play: leave the forest, enter 348 and talk to the owner with
 A and by bumping into him; then, the shop and the inn. And along the way the

@@ -16,7 +16,7 @@ From taro, on 2026-10-02, looking at the goldens of
   look for the difference to be the same in the ROM—. The ROM does not scale the
   map: the crop is the camera's offset (RM2k centers on 320x240,
   the ROM on 256x224) and the map's edge.
-- **217's montage**: the two goldens `imagen-grande-montaje-fotos-3` and
+- **217's montage**: the two goldens `big-picture-montage-photos-3` and
   `-9` show different scenes on one side and the other, because the
   original's frame is from another moment of the cycle. And neither of the two options that
   Aguilucho left is what RM2k does: the original puts each photo at 50 % over

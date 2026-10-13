@@ -82,7 +82,7 @@ No code of the tools or of the ports was touched. The main points:
 - **Per-game code**: data, not `.ifdef`; the risk is the path that
   no test runs.
 
-Captures in `/shared/capturas/2026-10-11-the-windows-made-cheaper/`. The
+Captures in `/shared/captures/2026-10-11-the-windows-made-cheaper/`. The
 measuring scripts stayed in `~/scratch/tijereta/ventanas/py/` and the prototype in
 `~/scratch/tijereta/hdma/`: throwaway.
 

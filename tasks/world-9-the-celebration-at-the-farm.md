@@ -49,24 +49,24 @@ compile, like the world's doors whose destination is not there.
 
 # Tests
 
-* `abl/test_granja.py`: the celebration frame by frame, choosing farmer
+* `abl/test_farm.py`: the celebration frame by frame, choosing farmer
   —seven jump—, and every five frames that each event on screen has in
   VRAM, in its cache slot, the bytes of its pose in the cartridge
-  (`arnes/cache_de_ranuras.py`). With a golden at the start, with the
+  (`harness/slot_cache.py`). With a golden at the start, with the
   farmers in the air and at the dance.
-* `abl/test_recorrido_granja_golden.py`: from 108 to the end sign and the
+* `abl/test_playthrough_farm_golden.py`: from 108 to the end sign and the
   title, with eleven snapshots with golden. At the dance it also checks
   that the six who stroll move: they use the route places the celebration
   left.
-* `abl/test_recorrido_paradise_dia_golden.py` now ends on reaching the
+* `abl/test_playthrough_paradise_day_golden.py` now ends on reaching the
   farm: its two snapshots of the sign and the title went away, and the farm
   one is new.
-* `rpgmaker/test_cores.py::test_la_cache_de_ranuras`: the celebration in
+* `rpgmaker/test_cores.py::test_the_slot_cache`: the celebration in
   snes9x and in bsnes.
-* `parches/auto/mapas/`: two new patches, 127 and 128.
-* `parches/auto/musica/techos.toml`: redone with `just techos`, because the
+* `patches/auto/maps/`: two new patches, 127 and 128.
+* `patches/auto/music/ceilings.toml`: redone with `just ceilings`, because the
   new themes moved the distribution of the samples and
-  `test_musica_techos.py` went red.
+  `test_music_ceilings.py` went red.
 
 **The red**: without uploading the pose when taking a slot, the two farm
 tests fail on the first frame looked at; without finished routes releasing

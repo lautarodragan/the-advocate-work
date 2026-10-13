@@ -25,7 +25,7 @@ if MSU-1 doesn't finish seeking—, everything comes from the ROM as before.
 
 * **Without MSU-1**: the whole suite. In the pilot, with no golden changed;
   with the lightweight fallback, with the ten battle ones changed.
-* **With MSU-1, in snes9x and in bsnes**: `pruebas/abl/test_msu_datos.py`. The
+* **With MSU-1, in snes9x and in bsnes**: `tests/abl/test_msu_data.py`. The
   Sector 27 battle, each path against its golden and the clean WRAM
   background against the converter's bytes; a control with the `.msu`'s tiles
   changed looks different —which is what proves the image came from the
@@ -61,7 +61,7 @@ measured. See "Cuánto tarda" in `internals/the-msu-file.md`.
 
 ## How it travels to taro
 
-`just entregar` copies the `abl.msu` into the build, next to the `abl.sfc`,
+`just deliver` copies the `abl.msu` into the build, next to the `abl.sfc`,
 and **always** to `/shared/msu/`, because it belongs to the build and not to
 the tracks. With another build's `abl.sfc` nothing breaks: the ROM doesn't
 find its signature and reads the backgrounds from itself.
@@ -78,7 +78,7 @@ background in Mednafen"*. With both backgrounds the same there was no way.
   fallback when copying it to WRAM, two DMAs per tile (the tile through
   channel 0, the fixed planes 4 to 7 through channel 7). The why of this shape
   and not another, in "El respaldo liviano" of `tools/port/escena.py`.
-* **How much it saves**: the converter prints it in `conversor.log` ("fondo de
+* **How much it saves**: the converter prints it in `converter.log` ("fondo de
   batalla …: en la ROM … B, en el .msu … B"). It's a property of the format:
   16,384 B of tiles and 160 of colors per background, minus 32 B of pattern
   for all of them.
@@ -139,7 +139,7 @@ The most likely thing is that **the difference doesn't show at game size**: on
 the violet wall, the quality one is a gradient with the face and the
 lightweight one the same face posterized into two or three violets. Side by
 side and enlarged it shows; while playing, not so much. The screenshots, in
-`/shared/capturas/2026-09-26-msu-mednafen/`.
+`/shared/captures/2026-09-26-msu-mednafen/`.
 
 **What taro has to look at**, if he wants to confirm it without looking at the
 background: in Mednafen, Alt+D opens the debugger and Alt+3 its memory editor;

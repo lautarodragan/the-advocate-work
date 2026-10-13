@@ -37,8 +37,8 @@ lasts. Three things are ours:
 * **The drawing is not there.** They are 96x96 cells with zoom of up to double
   and their own palette; it is the system next door, and it is below.
 
-It is enforced by `animacion` in the suite —82 on the hero, which flashes the
-screen—, through the test page in `pruebas/casos/animacion.json`: the Emitter
+It is enforced by `animation` in the suite —82 on the hero, which flashes the
+screen—, through the test page in `tests/cases/animation.json`: the Emitter
 Room scene cannot be triggered from a test. The sound effects are enforced by
 each map's audio package, which counts them as one more.
 
@@ -95,8 +95,8 @@ and the animation is not drawn.
 What is lost is in `assets/LIMITACIONES.md`: a cell's transparency, the flash
 on the animation and the `global` ones.
 
-In the suite it is enforced by `animacion-dibujo` —78 on the hero, with one of
-its empty frames and the three most loaded ones— and `animacion-evento` —the
+In the suite it is enforced by `animation-drawing` —78 on the hero, with one of
+its empty frames and the three most loaded ones— and `animation-event` —the
 same one on Manta, stuck to the left edge, where `emit_object` clips the box—.
 They are two cases and not one because in the ROM they are two paths: the hero
 comes from `hero_x` and an event from its row, through `npc_de_evento`.

@@ -57,9 +57,9 @@ presses it.
 Fixed with `hero_heading` (BSS, in `low_ram.s` next to
 `hero_lock`): RM2k's `direction`, which is read only when locked. It is written by
 `try_toward`, the `face_*` and the jump, and the 26 starts it from
-`hero_dir`. Test: `test_el_heroe_trabado_habla_hacia_donde_intento_ir`
-in ABL's `pruebas/rpgmaker/test_direccion_trabada.py`, case
-`traba-heroe-habla` (the gang member on map 9): red with `main`, green with
+`hero_dir`. Test: `test_the_locked_hero_talks_where_it_tried_to_go`
+in ABL's `tests/rpgmaker/test_locked_direction.py`, case
+`lock-hero-talks` (the gang member on map 9): red with `main`, green with
 the fix.
 
 **And the save did not keep the lock**: loading unlocked, on the reckoning
@@ -67,13 +67,13 @@ that the only lock that outlived its route was the car's in the race, and
 between 49 and 64 there is no save point. The lookout's lasts all of Distant
 Paradise, which does have one. Now `hero_lock` and `hero_heading` go in
 `save_table` —`SAVE_BYTES` grows by two and old saves stop
-loading—. Test: `test_la_direccion_trabada_vuelve` in `test_guardar.py`,
-red with the first commit and green with the second. `test_titulo_dibujo.py`
+loading—. Test: `test_the_locked_direction_comes_back` in `test_save.py`,
+red with the first commit and green with the second. `test_title_drawing.py`
 subtracts from the end of the save to find the music, and learned
 the two bytes.
 
 The Paradise door test no longer unlocks by hand: it requires the lock
-and walks locked to the farm. The harness (`recorrido.mirar_a`) turns
+and walks locked to the farm. The harness (`recorrido.look_at`) turns
 toward an event by looking at what A looks at.
 
 ## Other routes that get cut the same way
@@ -134,7 +134,7 @@ then on Talan reaches Paradise at 4, the lookout finishes its route and comes ou
 unlocked, as the "4" row of the table above measures. What this task is about
 —talking while locked and saving the lock— is still RM2k's and still stands,
 but the game no longer exercises it at the lookout: the cases in
-`test_direccion_trabada.py` and `test_guardar.py` cover it. Door 8 of the
+`test_locked_direction.py` and `test_save.py` cover it. Door 8 of the
 debug map now leaves him at 4, and its test requires the hero unlocked.
 
 And about "Other routes that get cut the same way": the model counted without the

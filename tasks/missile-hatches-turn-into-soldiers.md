@@ -45,12 +45,12 @@ RM2k. New RAM: `FOUND_SPEED`, $7E30CB. No opcode.
 Compared with the original under Wine (a copy that starts in 92): the
 hatches open —closed, ajar, red lights— without any soldier, and the ROM
 now the same. Screenshots in
-`/shared/capturas/2026-10-05-compuertas-y-wick/`.
+`/shared/captures/2026-10-05-compuertas-y-wick/`.
 
 It moved two goldens, on purpose: `tram-320` and `tram-620`, the Hover-Tram
 of 9, also a fixed graphic in column 0, which loses the flame underneath.
 
-The test is `rpgmaker/test_grafico_de_pagina.py`: the silhouette of each
+The test is `rpgmaker/test_page_graphic.py`: the silhouette of each
 hatch in VRAM against the sheet's cell. Red with main's tools, green with
 the branch's.
 

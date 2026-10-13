@@ -53,16 +53,16 @@ the map wouldn't have seen it—.
 ## What taking `video.py` out of the tests would look like
 
 What remains ugly is that a harness script imports a `test_*` and depends on a
-reimplemented pytest fixture. The alternative: a `pruebas/arnes/` module of
+reimplemented pytest fixture. The alternative: a `tests/harness/` module of
 scenarios —`escenarios.apertura(r)`, `escenarios.talan(r)`— that receive an
 already built `Recorrido`, with the snapshots and the `assert`s as hooks that
 the test passes and the video doesn't; the test would be "build the walkthrough
 with the fixture and call the scenario", and the video "build it with
 `fabrica` and call the same one". With that `-O` is no longer needed —the
 video wouldn't have the speed `assert`s—, `IMPORTAN_PRUEBAS` in
-`test_indice.py` becomes empty, and `just video` could also play the stretches
+`test_index.py` becomes empty, and `just video` could also play the stretches
 of `tramo_*.py` and the other `test_recorrido_*`, which it can't reach today
-because it only looks in `test_recorrido_golden.py`.
+because it only looks in `test_playthrough_golden.py`.
 
 And in passing, which isn't part of this task: a `video.py` that gets cut off
 leaves its raw `video.mkv` in the temp directory —about 200 MB per minute—,

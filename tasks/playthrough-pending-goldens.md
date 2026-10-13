@@ -18,10 +18,10 @@ act"). What has to be done:
 - show them to taro side by side with the original when there is a capture of the
   original, or alone; a new golden bakes in whatever bug it has, so they are
   looked at before approving them;
-- the ones he approves leave `pendientes.txt` and go into git; the ones he doesn't
+- the ones he approves leave `pending.txt` and go into git; the ones he doesn't
   are a task each.
 
 A decision for taro before starting: the 14 `debug-*` of
-`test_mapa_de_debug.py` go without a golden **on purpose** according to their docstring.
+`test_debug_map.py` go without a golden **on purpose** according to their docstring.
 Are they pending or permanent? If they are permanent, the list should
 tell them apart, so they don't remain as debt.

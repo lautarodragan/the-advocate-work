@@ -26,8 +26,8 @@ mesen-s, screen by screen against its mockup. How a sheet is edited, in
 `rom/experimentos/fuentes/LEEME.md`; after editing it, running the recipe
 again is enough.
 
-The ROM is the sibling of `menu-modo-5`, with the same code: `armar.py` and
-`verificar.py` from there learned to receive other screens —the mode comes
+The ROM is the sibling of `menu-modo-5`, with the same code: `build.py` and
+`verify.py` from there learned to receive other screens —the mode comes
 from the width, the faces from a `.json` alongside— and to set up as many
 banks as needed. `just menu-modo-5` still comes out byte for byte identical
 (sha256 before and after: `1b85307e…`).
@@ -59,7 +59,7 @@ titles, techniques, items, states and enemies, in low-res pixels: today's
 `alta-ancho-variable` 3.64 (61%).
 
 But what matters is whether RM2k's **layout** fits, and that is measured by
-`maquetas.py` packing it: each block of text starts where the previous one
+`mockups.py` packing it: each block of text starts where the previous one
 ends plus a fixed gap. With today's font the packed menu measures exactly
 320, so the gaps are RM2k's. `just fuentes` prints it
 (`build/fuentes/maquetas/medidas.txt`); on 2026-09-30, with the sheets as
@@ -94,11 +94,11 @@ than the variable one.
 
 ### What there is to look at
 
-* `/shared/capturas/2026-09-30-fuentes/`: the side-by-side comparisons
+* `/shared/captures/2026-09-30-fuentes/`: the side-by-side comparisons
   (RM2k, today's ROM and the three, at the same physical size), the ×4 crops
   of Kersh's row, the sheets with the letter on top, the sheets to edit,
   the loose mockups and `medidas.txt`. With a `LEEME.txt`.
-* `/shared/experimentos/2026-09-30-fuentes/`: the ROM, `fuentes.sfc`, with a
+* `/shared/experiments/2026-09-30-fuentes/`: the ROM, `fuentes.sfc`, with a
   `LEEME.txt` of what to look at on the TV.
 
 ### What it would cost in the ROM (estimated, not implemented)

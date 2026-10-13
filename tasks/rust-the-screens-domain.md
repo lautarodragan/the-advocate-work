@@ -16,7 +16,7 @@ It branches off `main` at `52156e5b`. Baseline measured there, with `cartridge` 
 the local `bin/` —the fingerprint is going to need it, and the `.dbg` changes depending on which
 assembler builds; see the trap Mara noted—: `NO_CACHE=1 just
 cartuchos`, 1032 files in `rom/build/` (without the cache, the `.o`s,
-`sello.txt` or `conversor.log`; the PNGs decoded), their sha256 in
+`stamp.txt` or `converter.log`; the PNGs decoded), their sha256 in
 `<scratchpad>/tataupa/sha-base.txt`.
 
 ## Inventory: what the Python does today
@@ -51,7 +51,7 @@ slots and the menu, the four frames, End Game, the title menu—,
 screens fall—, `compiler.py` —`texts.refit`—, and the ABL tests that draw
 with the Python model: `render_menu`, `render_items`, `render_target`,
 `render_slots`, `equipment_screen`, `shop_screen`, `end_game.render`, and the
-text ones (`test_textos_del_juego`, `tools/tests/test_texts.py`).
+text ones (`test_game_texts`, `tools/tests/test_texts.py`).
 
 ## The boundary
 
@@ -166,7 +166,7 @@ below.
 | `1083d4c7` | merge of `main` (`248c0134`, Yacutoro's patches) |
 | `2b017b2e` | `rm2k-snes-text` and the `rm2k-snes-screens` stage; `snes_convert` calls it once, and `compiler.boxes` and `lcf.REFIT_TEXTS` ask it for the boxes |
 | `7ef985d1` | the emission reads the geometry and the texts from the stage; the battle's text screen, to `battle_screen.py` |
-| `ea8eb3c3` | the ABL tests ask the stage for the drawings (`pruebas/arnes/pantallas.py`) |
+| `ea8eb3c3` | the ABL tests ask the stage for the drawings (`tests/harness/screens.py`) |
 | `44cae8e1` | the tests of the two crates against the Python's hashes, with their small game |
 | `04e31c5e` | the deletion, deletion only |
 | `d431b9e3` | `luma_distance` from adeleine.py, which was left unused |
@@ -198,7 +198,7 @@ splitting it left intermediate commits with both halves at once.
 Subcommands: `convert` —the converter's, one per cartridge—, `boxes` —the
 box table, for `compiler.boxes` and `lcf.REFIT_TEXTS`—, `render` —the
 screens for the ABL tests—, `refit` —refitting loose boxes, for
-`test_textos_del_juego`— and `layout`.
+`test_game_texts`— and `layout`.
 
 On the Python side remain `port/screen_stage.py` (the request and the shape of
 the answer `mapdata` emits), `port/battle_screen.py` (the battle's text
@@ -222,7 +222,7 @@ System and the timer, which belong to the maps.
   `rm2k-snes-text`, with the same cases (`escapes.json`); the Python one
   went with `texts.py`.
 * **`equip`** —`Game_Actor::ChangeEquipment`— ended up in two places: in
-  `render.rs`, to draw the list, and in `pruebas/arnes/pantallas.py`,
+  `render.rs`, to draw the list, and in `tests/harness/screens.py`,
   so that the test knows what to expect from the RAM.
 * **The title image** stayed in Python (`palette.convert` and
   `fullscreen`), as planned; the menu on top belongs to the stage.
@@ -248,8 +248,8 @@ With throwaway scripts in `<scratchpad>/tataupa/`:
   two modes with saves; the equipment in each slot and row; the shop in
   its seven modes, three types and three message sets, with the errors
   in the same cases; End Game—: all identical.
-* **The cartridges**: `NO_CACHE=1 just cartuchos` and the sha256 of all of
-  `rom/build/` —minus the cache, the `.o`s, `sello.txt` and `conversor.log`;
+* **The cartridges**: `NO_CACHE=1 just cartridges` and the sha256 of all of
+  `rom/build/` —minus the cache, the `.o`s, `stamp.txt` and `converter.log`;
   the `.dbg` without `mtime`; the PNGs decoded—: 1032 files, identical to
   `main`'s (`248c0134`, with the Python) after each commit up to
   the deletion; what the converter prints, identical line by line. After
@@ -260,7 +260,7 @@ With throwaway scripts in `<scratchpad>/tataupa/`:
   * `release/abl.sfc` `cdcc323197ee6c66d82b1304ce20c3c37f4124d13a6867e851fd13226046b7df`
   * `tests/special/prueba.sfc` `15e4f331fe8ff8123803ae3819a2212a5b84d71cd0a053b7261a9188bbab84b9`
   * `tests/encounter-every-step/prueba.sfc` `dc83ed698b348032514dbb76eaf5f535b6296944075fcba786087533ed5b8a4b`
-* **The suites**: `just pruebas`, 878 —the same as `main`—;
+* **The suites**: `just tests`, 878 —the same as `main`—;
   `just -f tools/justfile test`, 49 —they were 85: the 36 of `test_texts.py` and
   `test_escapes.py` moved to `rm2k-snes-text`—; `cargo test` of `text`,
   `screens`, `events` and `cartridge`, green.
