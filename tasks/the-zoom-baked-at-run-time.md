@@ -2,8 +2,8 @@
 name: "The zoom, baked at run time"
 description: "Compose the mode 3 screen —both layers and the sprites— into mode 7's single layer at run time, so the zoom transition can be done: every battle of every game starts and ends with it"
 type: research
-status: doing
-assignee: Carpintero
+status: testing
+assignee: taro
 agents: [Carpintero]
 ---
 
@@ -66,3 +66,69 @@ cells pixel by pixel at 15 bits):
 * A recommendation with a measured limit, and phases.
 
 ## Log
+
+### 2026-10-12, Carpintero
+
+From the-advocate `65885882`, the ports `0bf10fd`, the book `49c0421`.
+The answer is the research page
+[`research/2026-10-12-the-zoom-baked-at-run-time.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-12-the-zoom-baked-at-run-time.html)
+in the book, branch `carpintero-zoom-research`. Nothing changed in the
+runtime, the converter or the ports.
+
+**Verdict: doable on the plain CPU; the SA-1 is not worth it for this.**
+
+* **The pieces, timed** with the H/V counters in a throwaway cartridge,
+  snes9x and bsnes equal to the cycle, output checked against a model of
+  the planar formats: an 8bpp planar tile into chunky **31,245 master
+  cycles (23 lines)**; a 4bpp overlay 20,319; at half resolution 12,527
+  and 8,330; a chunky flip 5,913; hash and compare 4,687; a cell's key in
+  a hash table 478; MVN of 64 bytes 3,142; DMA ROM to WRAM 977.
+* **126 map screens** of ABL's `release` (teleported to each map, captured
+  with each layer alone): distinct tiles at full res median 140, p90 259,
+  max 627, **113 of 126 fit in 256**; at half res max 203, **all fit**.
+  What goes over is a message with text, then panoramas.
+* **Time per screen**, adding the pieces: full res median 15.9 frames, p90
+  31, max 88.6; half res 10.5 / 14.9 / 37.3; full if it fits, half if not,
+  14.8 / 25 / 37.3.
+* **Into battle** RM2k spends 20 frames of flashes before the zoom, with
+  the main loop frozen: composing there, 98 of 126 screens add nothing,
+  the worst adds 17 frames. **Out of battle** it is black time: 15 frames
+  median, 37 worst.
+* **Sources: VRAM, read back by DMA in vblank** (the map tiles are LZ2 in
+  ROM, the poses are uploaded on the fly): two or three vblanks, eight on
+  the worst screen. A chunky copy of the map tiles in ROM would halve the
+  cost but is 1.25 MB of the ~2 MB free.
+* **VRAM swap**: 17.3 KB at full res, 14.6 at half — three vblanks, but
+  into the half the mode 3 screen is using. In one go it is 64 lines of
+  black in one frame (48 at half). Without black it needs free 128-byte
+  windows in that half: likely at half res, **not measured**.
+* **The composed pixel is already a CGRAM index**: no remap. What does not
+  carry over is colour math: pictures at half transparency.
+* **More than 256**: merging by nearest tile changes 7-18% of the pixels on
+  the dense screens but is unaffordable on the 65816; nearest mean colour
+  ~9 frames, a bit worse; keep the tiles nearest the zoom's centre or the
+  hero is the first to go. Half resolution changes 21-53% (it loses detail
+  everywhere, nothing in particular). Recommended fallback: half res.
+* **SA-1**: ~3.3x faster composing (5 frames median), but it hides behind
+  the flashes anyway, it cannot read VRAM, its BW-RAM is the save (an SD
+  write per battle on the FX Pak), and the ExHiROM 8 MB map does not exist
+  on its board.
+* **RM2k's zoom**: 41 frames, no fade, magnification `40 / (40 − f)`,
+  centre the hero clamped to the middle half, nearest neighbour.
+
+**Phases** proposed: 1, the way back from battle (black at the start, so
+the upload is free); 2, the way into battle, which replaces taro's mosaic
+—theirs to decide—; 3, `ChangeScreenTransitions`/`EraseScreen`/`ShowScreen`;
+4, merging instead of half res if half res is not good enough.
+
+**Not measured**: the compositor with the message window's HDMA lines and
+the sprites' priorities; the free VRAM windows on real screens; the black
+band on the console; the 1,500 cycles per half-res tile assembled from
+quarters (estimated).
+
+Mock-ups and numbers for taro: `~/scratch/carpintero/captures/2026-10-12-zoom/`
+—`README.txt` says what each panel is; the scripts and the prototype
+cartridge's source are there too—.
+
+Nothing to install when merging: only the book and this task change.
+
