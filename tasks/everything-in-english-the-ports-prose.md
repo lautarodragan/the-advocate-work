@@ -86,3 +86,37 @@ renamed, these calls follow at merge. And the keys of the `music.json`
 the tools write (`temas`, `nombre`, `largo`, `huella`, `recortes`), which
 are the-advocate's output. Renamed here and cited in the harness's
 comments: `Grabador` (`Recorder`) and `sonido_muestra` (`sample_sound`).
+
+### Mulita: `abl/tests/abl`, `abl/tests/golden`, the root of `abl/tests`
+
+Branch `mulita-english-prose` in the ports, from `4b15e20`.
+
+* **A missed step-1 rename that had switched a check off**:
+  `conftest._complete_stretches` looked the module up as
+  `sys.modules.get("recorrido")`, a string no rename sees, so since step 1
+  the check that every golden and pending line of a stretch was a photo
+  never ran. Fixed alone, in its own commit; no `RENAMES.md` line, since
+  the module's rename is already there.
+* `README.md`: translated whole; the index names the same 172 paths.
+  Its heading is now "Which test covers what", which
+  `tooling/test_index.py`'s message and the abl `justfile` still cite in
+  Spanish (Cardón's part).
+* `golden/playthrough/pending.txt`: only its `#` lines.
+* The harness keywords the tests pass (`tope=`, `a_cada=`, `mirando=`,
+  `hasta=`, `cuadros=`, `apretar_a=`, `salta=`, `momentos=`…) stay: they
+  belong to the harness (Calandria's part) and cross files. If the harness
+  renames them, every caller in `tests/abl` breaks, and only running those
+  tests shows it.
+* Also left: the `music.json`/`effects.json` keys (`temas`, `nombre`,
+  `pista`, `sonidos`), which are `rm2k-snes-audio`'s output; golden and
+  photo names (one still Spanish: `lashe-plant-arden/01-cerrado.png`).
+* Test ids changed in `test_msu.py` (`msu-a-msu` → `msu-to-msu`, …);
+  no golden depends on them.
+* For others at merge: `rpgmaker/test_cores.py:387` (Aguará) cites
+  `EL_PUEBLO_LLENO` of `test_paradise.py`, now `THE_FULL_VILLAGE`; the
+  docstring of `test_save_at_save_point.py` quotes the console's "the ROM
+  did not reach tick N" in English, to follow Calandria's wording.
+* Verified on the branch with ports `main` (`c5564d0`, Tijereta's part)
+  merged in, global tools: `just tests` in `abl/`, **1285 passed** —with
+  the stretch check back on—; `abl.sfc` sha256 `395367f6…860238`, the
+  same; no golden touched. Nothing to install.
