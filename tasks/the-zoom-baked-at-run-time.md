@@ -132,3 +132,27 @@ cartridge's source are there too—.
 
 Nothing to install when merging: only the book and this task change.
 
+
+### 2026-10-13, Carpintero: an outside design, compared
+
+taro left a design written by another assistant without access to the
+source (SA-1 worker, persistent tile cache, hashing, fallbacks) and asked
+what could be rescued. Answered in a dated section at the end of the
+research page, book branch `carpintero-zoom-review`; the measured part is
+untouched. **The recommendation does not change.**
+
+* **Already had**: rebuild from renderer state, 256 tiles counted on the
+  composed image, hash plus compare, no flips in mode 7, compose on the
+  map's grid, recompose sprite cells with priorities, half res as the
+  fallback, the VRAM collision and the restore, offline validation first.
+* **Does not hold here**: the warm persistent cache (random trigger,
+  screen changing every frame, ChipSet animations rewriting tiles; no idle
+  main CPU; filling it at load is 33-47 frames per map), the SA-1 as its
+  home (BW-RAM is the save), and "initialise the whole 16 KB tilemap":
+  measured, RM2k's zoom rectangle never leaves the screen for any centre
+  and frame (0 of 19,762 cases). Rotation: no RM2k transition rotates.
+* **Worth keeping for phase 1**: blank the revealed area only if a
+  transition ever goes past the screen (snapshot at the plane's corner);
+  count by key on the ROM, not only by captured pixels; measure a few
+  misaligned-camera screens; report latency and visible black separately;
+  keep mosaic/fade as the per-screen fallback.
