@@ -130,7 +130,6 @@ def "main html" [
   let page = open --raw ($root | path join site index.html) | str replace '<!-- TASKS -->' $html
   mkdir ($root | path join $out)
   $page | save --force ($root | path join $out index.html)
-  cp ($root | path join site marked.min.js) ($root | path join $out)
 }
 
 # When each task last changed, from git: `{<stem>: <ISO date>}`. The page
@@ -143,6 +142,16 @@ def last_changes [root: string] {
   | each { |c| let l = $c | lines | where $it != ""; $l | skip 1 | each { |f| {id: ($f | path parse | get stem), date: $l.0} } }
   | flatten | uniq-by id
   | reduce --fold {} { |r, acc| $acc | insert $r.id $r.date }
+}
+
+# A task's body as HTML, with cmark-gfm —GitHub's own Markdown, so the page
+# reads like the file on GitHub—: built here and not in the browser, so the
+# page needs no script to be read. Raw HTML in a task comes out escaped,
+# cmark-gfm's default. A link to another task —`other.md`, as they are
+# written in the repo— goes to its anchor in the page.
+def render_body [] {
+  $in | ^cmark-gfm --extension table --extension autolink --extension strikethrough
+    | str replace --all --regex 'href="(?:\./)?([\w-]+)\.md(?:#[^"]*)?"' 'href="#$1"'
 }
 
 # What comes after the frontmatter.
@@ -169,7 +178,7 @@ def task_html [] {
     $"<summary><span class=\"type\">($t.task_type | escape)</span><span class=\"name\">($t.name | escape)</span>"
     $"<span class=\"desc\">($t.description | escape)</span></summary>"
     $"<p class=\"meta\"><a href=\"#($id)\">#</a> · <a href=\"($source)\">($id).md</a>($changed)($assignee)($agents)</p>"
-    $"<div class=\"body raw\">($t.body | escape)</div>"
+    $"<div class=\"body\">($t.body | render_body)</div>"
     "</details>"
   ] | str join ''
 }

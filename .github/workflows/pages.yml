@@ -32,6 +32,8 @@ jobs:
       - uses: hustcer/setup-nu@v3
         with:
           version: "0.115.1"
+      # The tasks' bodies are rendered with it, GitHub's own Markdown.
+      - run: sudo apt-get install -y --no-install-recommends cmark-gfm
       - run: nu tasks/tasks.nu html --out _site
       - uses: actions/upload-pages-artifact@v3
         with:
