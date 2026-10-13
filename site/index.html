@@ -100,11 +100,17 @@
   const types = document.getElementById('types');
   const search = document.getElementById('search');
   const params = new URLSearchParams(location.search);
-  let status = params.get('status') || 'all';
+  let status = params.get('status');
   let type = params.get('type') || 'all';
 
   // The counts are counted here, from what the build put in the page.
-  const states = [['all', tasks.length], ...sections.map(s => [s.dataset.status, s.querySelectorAll('details.task').length])];
+  // The states in the build's order —doing, testing, todo…—, and `all` last:
+  // with every task shown the page lags, so it is not the default. The
+  // default is the first state with any task, and it is the one the URL
+  // leaves out.
+  const states = [...sections.map(s => [s.dataset.status, s.querySelectorAll('details.task').length]), ['all', tasks.length]];
+  const defaultStatus = (states.find(([, n]) => n > 0) || ['all'])[0];
+  if (!status) status = defaultStatus;
   for (const [name, count] of states) {
     const b = document.createElement('button');
     b.dataset.status = name;
@@ -145,7 +151,7 @@
     }
     for (const s of sections) s.hidden = !s.querySelector('details.task:not([hidden])');
     const url = new URL(location);
-    status === 'all' ? url.searchParams.delete('status') : url.searchParams.set('status', status);
+    status === defaultStatus ? url.searchParams.delete('status') : url.searchParams.set('status', status);
     type === 'all' ? url.searchParams.delete('type') : url.searchParams.set('type', type);
     history.replaceState(null, '', url);
   }
@@ -154,7 +160,7 @@
   function openHash() {
     const t = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
     if (!t) return;
-    status = 'all'; type = 'all'; search.value = ''; apply();
+    status = t.dataset.status; type = 'all'; search.value = ''; apply();
     t.open = true; t.scrollIntoView();
   }
   window.addEventListener('hashchange', openHash);
