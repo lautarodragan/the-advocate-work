@@ -2,7 +2,7 @@
 name: "The skills screen"
 description: "Tech Skill in the pause menu opens the list: who, their skills, the description, the selector and the SP cost; nothing is used yet"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Mulita]
 ---

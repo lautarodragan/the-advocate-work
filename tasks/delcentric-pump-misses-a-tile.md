@@ -2,7 +2,7 @@
 name: "Delcentric Factory: the right pump misses a tile"
 description: "Of the two decorative pumps on the left of map 17, the right one misses a tile in one of its two frames; the left one is right"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Hurón]
 ---
