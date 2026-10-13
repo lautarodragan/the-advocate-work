@@ -2,7 +2,7 @@
 name: "The 2000 RPG_RT runs under Wine"
 description: "The book's End Game divergence says the 2000 RPG_RT crashes under Wine; on 2026-10-13 it ran ABL's title fine, so what was measured only with the 2015 one can be measured with the one the author used"
 type: research
-status: draft
+status: done
 ---
 
 Seen by Tijereta on 2026-10-13, with the-advocate `28ba001f` and the docs
@@ -22,3 +22,9 @@ and so can anything else that today is decided with the 2015 one.
 
 **How to see it**: copy ABL's Wine directory and prefix, and run
 `RPG_RT.exe` instead of `RPG_RT_2015.exe` with the same environment.
+
+## Done
+
+taro, on 2026-10-13: the RPG_RT runs under Wine, and so does RPG Maker,
+and both have been used here for a while; the sentence was stale, wrong
+and confusing. Removed from the End Game divergence in the book.
