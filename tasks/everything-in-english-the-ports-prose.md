@@ -34,3 +34,21 @@ Verification for each part: the suite with the same count, every ROM byte
 for byte equal, goldens untouched.
 
 ## Log
+
+### Mulita: `abl/tests/abl`, `abl/tests/golden`, the root of `abl/tests`
+
+Branch `mulita-english-prose` in the ports, from `4b15e20`.
+
+* **A missed step-1 rename that had switched a check off**:
+  `conftest._complete_stretches` looked the module up as
+  `sys.modules.get("recorrido")`, a string no rename sees, so since step 1
+  the check that every golden and pending line of a stretch was a photo
+  never ran. Fixed alone, in its own commit; no `RENAMES.md` line, since
+  the module's rename is already there.
+* `README.md`: translated whole; the index names the same 172 paths.
+  Its heading is now "Which test covers what", which
+  `tooling/test_index.py`'s message and the abl `justfile` still cite in
+  Spanish (Cardón's part).
+* `golden/playthrough/pending.txt`: only its `#` lines.
+* The harness keywords the tests pass (`tope=`, `a_cada=`, `mirando=`…)
+  stay: they belong to the harness (Calandria's part) and cross files.
