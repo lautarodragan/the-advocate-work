@@ -50,5 +50,21 @@ Branch `mulita-english-prose` in the ports, from `4b15e20`.
   `tooling/test_index.py`'s message and the abl `justfile` still cite in
   Spanish (Cardón's part).
 * `golden/playthrough/pending.txt`: only its `#` lines.
-* The harness keywords the tests pass (`tope=`, `a_cada=`, `mirando=`…)
-  stay: they belong to the harness (Calandria's part) and cross files.
+* The harness keywords the tests pass (`tope=`, `a_cada=`, `mirando=`,
+  `hasta=`, `cuadros=`, `apretar_a=`, `salta=`, `momentos=`…) stay: they
+  belong to the harness (Calandria's part) and cross files. If the harness
+  renames them, every caller in `tests/abl` breaks, and only running those
+  tests shows it.
+* Also left: the `music.json`/`effects.json` keys (`temas`, `nombre`,
+  `pista`, `sonidos`), which are `rm2k-snes-audio`'s output; golden and
+  photo names (one still Spanish: `lashe-plant-arden/01-cerrado.png`).
+* Test ids changed in `test_msu.py` (`msu-a-msu` → `msu-to-msu`, …);
+  no golden depends on them.
+* For others at merge: `rpgmaker/test_cores.py:387` (Aguará) cites
+  `EL_PUEBLO_LLENO` of `test_paradise.py`, now `THE_FULL_VILLAGE`; the
+  docstring of `test_save_at_save_point.py` quotes the console's "the ROM
+  did not reach tick N" in English, to follow Calandria's wording.
+* Verified on the branch with ports `main` (`c5564d0`, Tijereta's part)
+  merged in, global tools: `just tests` in `abl/`, **1285 passed** —with
+  the stretch check back on—; `abl.sfc` sha256 `395367f6…860238`, the
+  same; no golden touched. Nothing to install.
