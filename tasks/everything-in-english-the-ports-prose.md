@@ -34,3 +34,10 @@ Verification for each part: the suite with the same count, every ROM byte
 for byte equal, goldens untouched.
 
 ## Log
+
+### Aguará: `abl/tests/rpgmaker`, a–m
+
+"a–m" read as the name after `test_`: 66 files, 12,689 lines, from
+`test_action_with_route.py` to `test_music_writes.py`. Branch
+`aguara-english-prose` in the ports, from `4b15e20`. Split in five groups
+by size, each translated in parallel and committed on its own.
