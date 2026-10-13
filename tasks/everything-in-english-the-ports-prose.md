@@ -34,3 +34,10 @@ Verification for each part: the suite with the same count, every ROM byte
 for byte equal, goldens untouched.
 
 ## Log
+
+### Calandria: `abl/tests/harness/`
+
+Branch `calandria-harness-english` in the ports, from `4b15e20`. 9,700
+lines in 42 files plus `emulator/`; translated in six groups of files in
+parallel, committed by group, and the keyword parameters that tests pass
+by name renamed last, in a commit of their own with `RENAMES.md`.
