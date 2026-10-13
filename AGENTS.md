@@ -30,8 +30,8 @@ Inside `the-advocate`:
     justfile         what can be run —testing and installing the
                      tools—; the comments explain the why. It is run with
                      `just`, standing anywhere in the repo
-    README.md        what the project is, how it is installed, and the
-                     architectural whys that have no line of code to live in
+    README.md        one line of what the project is, the link to the
+                     book, and how it is installed
     LAYOUT.md        what each folder of the repo does
 
 Until 2026-10-10 all of that lived in a `tools/` folder of that repo, and
@@ -115,11 +115,14 @@ On 2026-09-15 there were **three different numbers for the same question**
 —281, 314 and 332 of 489— in two files, all three stale, and the real one
 was 350. One of those I had written myself an hour earlier.
 
-**A why stays in the README only if it is an architectural decision that
-has no line of code to live in**: why fixed mode 3, why LoROM. **A why that
-protects a concrete line goes as a comment on that line.** The reasoning is
-taro's and is hard to argue with: nobody editing a routine is going to look
-for the reason in a five-thousand-line README, so there it protects no one.
+**A why goes to the book only if it is an architectural decision that has
+no line of code to live in**: why mode 3 by default, why ExHiROM —the
+book's "The cartridge"—. **A why that protects a concrete line goes as a
+comment on that line.** The reasoning is taro's and is hard to argue with:
+nobody editing a routine is going to look for the reason in a
+five-thousand-line README, so there it protects no one. Until 2026-10-13
+those architectural whys lived in the-advocate's README; taro cut it down
+to a line and the link to the book.
 
 And if the mistake is not one of those that get made again, it goes
 nowhere: the `git log` already has it.
