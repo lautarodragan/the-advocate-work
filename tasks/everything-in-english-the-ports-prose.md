@@ -35,6 +35,41 @@ for byte equal, goldens untouched.
 
 ## Log
 
+### Calandria: `abl/tests/harness/`
+
+Branch `calandria-harness-english` in the ports, from `4b15e20`, with
+main merged (Aguará's and Tijereta's parts). 30 of the 42 files had
+Spanish; `emulator/`, `lcf.py`, `rm2k.py`, `engine.py`, `resources.py`,
+`snes_format.py`, `stage.py`, `screen_stage.py`, `fork.py`,
+`image_stage.py` and `render_map.py` were already English. Translated in
+six groups, one commit each: prose, messages, private dict keys
+(`scene.py`, `animation.py`'s cache, `events.py`'s timings) and the names
+local to each file, including parameters of public functions that no
+caller passes by name (grepped across the ports before each one).
+
+**Left in Spanish, on Hornero's word, because other files use them**: the
+keyword parameters tests pass by name and the keys a test reads. The
+whole list, with the English picked, is in Calandria's report; a script
+that renames each keyword at its definition and at every call site,
+resolving the callee by name and skipping files that define a function
+of the same name, did it once and was reverted before committing. Its
+traps, for whoever does that commit: `tests/test_book_of_three.py` calls
+`walk_to(hasta=)` and `wait(tope=)` on `tests/play_script.py`'s
+`ScriptedPlay`, not on the harness; and the `session` fixture of
+`abl/tests/conftest.py` takes `en=` itself and forwards it, so its
+callers and its own parameter move together.
+
+One finding, not fixed: [`video-read-slowly-breaks-wait-for-control`](video-read-slowly-breaks-wait-for-control.md).
+
+The first run gave 1284: one of the six groups had renamed
+`stretch_sorbe.play_case`'s `tope`, which `test_playthrough_chapter_golden.py`
+passes by name; it went back, in its own commit, and a script that diffs
+every harness signature against `4b15e20` and looks for keyword calls to
+the names that left found no other. Verified on the branch merged with
+`main` (`d922a44`), global tools: `just tests` in `abl/`, 1285 passed;
+`just boot` at the root, 9 passed; `abl.sfc` sha256 `395367f6…860238`, as
+before; no golden touched.
+
 ### Tijereta: `abl/tests/rpgmaker`, n–z
 
 "n–z" is read on the name after `test_`, since every file there starts
