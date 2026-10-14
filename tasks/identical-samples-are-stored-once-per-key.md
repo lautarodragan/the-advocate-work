@@ -2,7 +2,9 @@
 name: "Identical samples are stored once per key"
 description: "The sample bank carries the same BRR —same rate, same loop— several times, once per key that uses it: 205 KB of the whole ABL"
 type: bug
-status: draft
+status: testing
+assignee: taro
+agents: [Carpintero]
 ---
 
 Seen by Carpintero on 2026-10-14, with the-advocate `51b4b1b2` and the
@@ -23,3 +25,8 @@ and take room the music's rates need, was not looked at.
 `sample_N` labels in its `musicdata.inc`, or the entries of
 `bank.voices` in its `audio.json`; `release` should show it too, at a
 smaller scale.
+
+**Fixed** in
+[`the-emitter-stores-identical-data-once`](the-emitter-stores-identical-data-once.md),
+on 2026-10-14: the repeats were in `release` too —23 groups, 201,465 B— and
+they did take ARAM twice, in 27 of its 131 packages.
