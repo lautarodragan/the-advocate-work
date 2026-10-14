@@ -16,3 +16,6 @@ it is the quarry, further than where `release` reaches today.
 
 **How to see it**: the line "parallel common events" of
 `abl/build/release/converter.log`.
+
+2026-10-14, Cardón: it compiles as soon as 150 goes in; what carrying 150 runs into is
+[`abl-the-quarry-timer-does-not-fit-on-108`](abl-the-quarry-timer-does-not-fit-on-108.md).
