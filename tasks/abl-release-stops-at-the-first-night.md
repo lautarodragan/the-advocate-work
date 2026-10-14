@@ -38,3 +38,27 @@ plays—, is section 3 of the research.
 
 **How to see it**: a cartridge in `rm2k-snes.toml` with every map
 reachable from 4 and the fork of 108 set aside; the research says how.
+
+### Hornero, 2026-10-14: release with every map, the next stop
+
+With the four small stops and the space fixed (Tijereta, Chajá,
+Carpintero, Calandria), taro asked to carry the whole game in `release`.
+Tried on the-advocate `0a7ee197`, ports `c35afbd`: `[maps] below = 352`,
+`excluded` with the folders and backups plus the maps Cardón's walk does
+not reach (161, 198, 202, 211, 274, 275, 280, 297, 320, 322, 341),
+`added` empty, and the fork of 108 removed. The diff is kept in Hornero's
+scratch, `whole-release.diff`; nothing was committed.
+
+The converter stops before packing: **"264 items don't fit in one-byte
+tables"** (`items_and_battle` in `rm2k-snes/mapdata/src/emit.rs`). The
+database has 450; Cardón's whole cartridge passed this check, so what
+pushes `release` past 255 is most likely what only `release` carries
+—the suite's cases and test maps—, not the debug map (without it, still
+264). Not measured further.
+
+The way on: either the item index goes to 16 bits in the tables and the
+runtime (the right fix: the game itself may need more than 255 one day),
+or `release` counts only the items its pages, shops, troops and cases
+really name, if that is below 255 —to measure first—. After that, the
+space has to be measured on the real `release`, which carries the cases
+too.
