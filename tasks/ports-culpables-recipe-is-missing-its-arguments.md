@@ -2,7 +2,9 @@
 name: "The ports' `just culprits` does not run"
 description: "The recipe of the seven games calls `rm2k-snes-events culprits` without --data, --request and --out, and the request is not left anywhere"
 type: bug
-status: draft
+status: doing
+assignee: Tijereta
+agents: [Tijereta]
 ---
 
 Seen by Calandria on 2026-10-12, with the-advocate `28e66b35` and the ports
@@ -23,3 +25,9 @@ file to pass it.
 (`book-of-three-the-forge-and-a-walkthrough`): a `rm2k-snes-events` first
 in the PATH that copies its `--request` aside and execs the real one, a
 `just cartridges release`, and `culprits` by hand on the copy.
+
+### Hornero, 2026-10-14
+
+taro asked which pages of ABL's whole game are left out and why, now that
+`release` carries every map (with the items past 255 cut). Tijereta fixes
+the recipe and runs it.
