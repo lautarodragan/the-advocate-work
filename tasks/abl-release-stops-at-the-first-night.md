@@ -2,7 +2,8 @@
 name: "ABL: release stops at the first night in Paradise"
 description: "About 180 maps of the story, from the next day in Paradise to the teaser that closes the game, are not in release; carrying them stops at five limits of the build"
 type: feature
-status: draft
+status: testing
+assignee: taro
 ---
 
 Seen by Cardón on 2026-10-14, with the-advocate `a7f278e6` and the ports
@@ -79,3 +80,29 @@ Delivered to taro as `2026-10-14-74eb754-9c9b0f66`. ABL's suite: 11 red of
 1492, not looked at —the two of 108's fork, the farm (two), the mechanic
 and tram talks, the tram scene, three of the music ceilings, and the
 versioned patches—.
+
+### Hornero, 2026-10-14: in main
+
+The `whole-game` branches merged into main (the-advocate `0255f8f7`, ports
+`a6823c8`): `release` is the whole game. ABL's suite 1514 green and 2
+skipped, `just boot` 12, `just test` 27, `rust-test` green.
+
+**ABL's pending list**, what was accepted to get here (taro: "degrading
+where needed"; what is cheap was fixed, the rest is listed):
+
+* **Items past 255 left out** (411, 413–416, 418–421; a drop of one
+  drops nothing): TEMPORARY in `convert.rs` and `emit.rs`. The real fix is
+  the item index in 16 bits. Dropping RM2k's 16 default items does not
+  help: the cartridge already carries only the referenced ones (see
+  [`unused-items-at-the-start-of-each-database`](unused-items-at-the-start-of-each-database.md)).
+* **An MSU-1 effect with no rate of its own in a package takes any
+  version of the effect**: TEMPORARY in `rm2k-snes-audio/src/msu.rs`, which
+  panicked. Not looked at why the rate is missing.
+* **Sprites drawn with another's palette** in the tram, the mechanic and,
+  visibly, the farm's celebration (villagers with another hair colour),
+  now that `release` carries every map: about twenty goldens approved.
+* **108's still ones no longer take turns**, so the two tests of taking
+  turns on 108 are skipped (`_NO_TURNS_ON_108` in `test_paradise.py`):
+  to be pointed at a map that still does, or removed.
+* The farm's playthrough ends the next morning (114) instead of the end
+  sign, which is gone with the fork of 108.
