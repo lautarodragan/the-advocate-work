@@ -117,7 +117,7 @@ was 350. One of those I had written myself an hour earlier.
 
 **A why goes to the book only if it is an architectural decision that has
 no line of code to live in**: why mode 3 by default, why ExHiROM —the
-book's "The cartridge"—. **A why that protects a concrete line goes as a
+book's "Internals": "Mode 3 by default" and "ExHiROM, 8 MB"—. **A why that protects a concrete line goes as a
 comment on that line.** The reasoning is taro's and is hard to argue with:
 nobody editing a routine is going to look for the reason in a
 five-thousand-line README, so there it protects no one. Until 2026-10-13
