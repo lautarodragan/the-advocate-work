@@ -2,7 +2,8 @@
 name: "Radin's and Sern's menus do not compile"
 description: "ABL's common events 42 and 44, which Mix Formula and Weapon Forging open, are left out by the converter: their MoveEvent changes the hero's graphic, which a shared body cannot"
 type: bug
-status: draft
+status: testing
+assignee: taro
 agents: [Mulita]
 ---
 
@@ -32,3 +33,13 @@ What was measured:
 
 To reproduce: build `release`, read `converter.log`; or play: Radin in the
 party, Tech Skill, Radin, Mix Formula.
+
+### Hornero, 2026-10-14: the graphic change is dropped, the menus compile
+
+taro: "can we drop the graphic change command instead of the whole
+page?" `compile_route` now skips a route's graphic change when there is no
+map's table to resolve it in (a shared body), and the rest compiles:
+common events 42 and 44 run (the converter's log: "left out, not
+compiling: none"). What is lost: the hero keeps its graphic where the
+original changed it. Not played: choose Mix Formula and Weapon Forging
+from Tech Skill and see that the party goes to Radin's and Sern's maps.
