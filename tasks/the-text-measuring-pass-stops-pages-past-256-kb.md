@@ -2,8 +2,8 @@
 name: "The text's measuring pass stops pages past 256 KB"
 description: "compile's first pass gathers the boxes without letter pairs and without a cap, but the compiler still writes each offset in 16 bits: past 256 KB of unpaired text a page stops, and a common event stops the cartridge"
 type: bug
-status: doing
-assignee: Tijereta
+status: testing
+assignee: taro
 agents: [Tijereta]
 ---
 
@@ -29,3 +29,34 @@ the cap: 218,410 bytes counting by eight (`MESSAGES_STEP`), against the
 
 **How to see it**: the request the converter sends to `compile` for a
 cartridge with every map of ABL, and `rm2k-snes-events compile` on it.
+
+## Log
+
+**2026-10-14, Tijereta.** Fixed in `rm2k-snes/events`, the-advocate,
+branch `tijereta-blockers` (from `51b4b1b2`), commit `44177d88`.
+
+The blame of `Messages::measuring`: it was made uncapped on purpose, so
+that the unpaired block can pass 256 KB; what was left out is that every
+caller still writes the returned offset with `usize_word`. The measuring
+pass's bytecode is thrown away —`compile` keeps only `gathered`, and
+`commons.rs`'s plan and the scan's pictures only whether the page
+compiles—, so `Messages::store` now hands out the offset wrapped to 16
+bits when it is not capped (`operand`, with the why). The capped one —the
+second pass and every other— still stops past the operand. One place for
+every box: `ShowMessage`, choices, inns, numbers and troops all go through
+`store`.
+
+* **The test**: `a_box_past_the_operand_still_compiles_while_measuring`,
+  in `compile.rs`: a measuring block filled past 64 KB counting by one, and
+  a `ShowMessage` page after it compiles. Red before the fix
+  (`code.is_some()`), green after; `just crate-test events` all green.
+* **The whole game**: with Cardón's experiment —108's fork out,
+  `timer_never_runs_in = [66, 108]`, the slot screen's names let through,
+  `--msu-everything`, the 307 maps— but **without** his `MESSAGES_STEP = 8`
+  nor his far RAM asserts commented out, the `whole` cartridge builds:
+  `just space` says the texts are 208,574 B of 262,144 counting by four.
+  The experiment is not committed; it lived in two throwaway worktrees.
+* ABL's suite with these tools: 1304 passed (1303 + the materials' new
+  test); `just boot` 9; the-advocate `just test` 27.
+
+To install when merging: `events`.
