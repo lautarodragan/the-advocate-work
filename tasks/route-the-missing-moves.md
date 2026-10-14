@@ -2,7 +2,9 @@
 name: "Route: the missing moves"
 description: "The move commands the ROM doesn't do yet: move forward, the relative turns, and the hero's diagonals and turns"
 type: feature
-status: wishlist
+status: doing
+assignee: Hurón
+agents: [Hurón]
 ---
 
 # What
