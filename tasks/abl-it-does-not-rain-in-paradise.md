@@ -1,0 +1,23 @@
+---
+name: "ABL: it does not rain in Paradise"
+description: "Map 108 sets rain for the crying girl's scene, and the converter leaves its drops out: its sprite palettes have no room for the three greys"
+type: bug
+status: draft
+---
+
+Seen by Chajá on 2026-10-14, with the-advocate `51b4b1b2` and the ports
+`d91049e`, in ABL's `release`, while measuring the quarry's timer on the
+same map
+([`abl-the-quarry-timer-does-not-fit-on-108`](abl-the-quarry-timer-does-not-fit-on-108.md)).
+
+**What is seen**: event 34 of Paradise (108), the autostart that follows
+the crying girl (switch 362), starts with `WeatherEffects` rain. In the
+port it does not rain there: `converter.log` of `release` says "map 108:
+WARNING, the raindrops don't fit in the sprite palettes and it doesn't
+rain here". The drops need room for their three greys in a palette that
+is neither a leader's nor the timer's, and 108's eight are full.
+
+The same with every map of the game, with or without the timer on 108.
+
+**How to see it**: `just cartridges release` in `abl/` and the line in
+`build/release/converter.log`; in the game, 108 with switch 362 on.
