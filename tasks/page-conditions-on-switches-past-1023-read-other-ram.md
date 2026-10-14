@@ -29,3 +29,8 @@ it is 1; `pick_by_ev` picks offset `$40`, page 3, for events 0 to 7.
 
 Two ways out: widen the bitmap where the game needs it, or have the
 converter refuse —or treat as off— a condition past what the ROM holds.
+
+**Correction** (Calandria, 2026-10-14): the compiler refuses a *branch* on a
+switch past 1,023, not every "command that touches" one. `ControlSwitches` is
+not checked and compiles with the number as is, writing past the table: see
+[`branches-and-switch-commands-past-switch-1023`](branches-and-switch-commands-past-switch-1023.md).
