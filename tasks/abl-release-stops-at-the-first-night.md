@@ -62,3 +62,20 @@ or `release` counts only the items its pages, shops, troops and cases
 really name, if that is below 255 —to measure first—. After that, the
 space has to be measured on the real `release`, which carries the cases
 too.
+
+### Hornero, 2026-10-14: the whole game builds, on a branch
+
+taro: go on without investing in the stops, with a temporary hard-code.
+On the `whole-game` branch of the-advocate (`9c9b0f66`) and of the ports
+(`74eb754`), not main: the items past 255 are left out (411, 413–416,
+418–421) and an enemy dropping one drops nothing; and an MSU-1 effect
+with no rate of its own in a package takes any version of the effect
+(`rm2k-snes-audio/src/msu.rs`, which panicked "no entry found for key").
+Both marked TEMPORARY in the code.
+
+With that, `release` with the whole game **fits in 8 MB**: 121 of 127
+banks, 6 halves of 32 KB free; far RAM 13 B, BSS 20 B, texts 51 KB left.
+Delivered to taro as `2026-10-14-74eb754-9c9b0f66`. ABL's suite: 11 red of
+1492, not looked at —the two of 108's fork, the farm (two), the mechanic
+and tram talks, the tram scene, three of the music ceilings, and the
+versioned patches—.
