@@ -2,7 +2,9 @@
 name: "ABL: the whole game does not fit in 8 MB"
 description: "With every map, ABL asks for 8.42 MB of data and the 127 data banks hold 7.70 MB: about 700 KB over, without MSU-1"
 type: bug
-status: draft
+status: doing
+assignee: Carpintero
+agents: [Carpintero]
 ---
 
 Seen by Cardón on 2026-10-14, with the-advocate `a7f278e6` and the ports

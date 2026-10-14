@@ -2,7 +2,9 @@
 name: "The text's measuring pass stops pages past 256 KB"
 description: "compile's first pass gathers the boxes without letter pairs and without a cap, but the compiler still writes each offset in 16 bits: past 256 KB of unpaired text a page stops, and a common event stops the cartridge"
 type: bug
-status: draft
+status: doing
+assignee: Tijereta
+agents: [Tijereta]
 ---
 
 Seen by Cardón on 2026-10-14, with the-advocate `a7f278e6` and the ports

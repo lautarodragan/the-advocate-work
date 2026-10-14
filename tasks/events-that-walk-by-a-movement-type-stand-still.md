@@ -2,7 +2,9 @@
 name: "Events that walk by a movement type stand still"
 description: "A page whose movement type is random, vertical, horizontal, toward the hero or away from him (1 to 5) gets no route, so the event stands at its cell: NPCs that pace in Sector 34 and Yun Town, ABL's chasing skeletons and monsters, most of Vampires Dawn's walkers"
 type: bug
-status: draft
+status: doing
+assignee: Hurón
+agents: [Hurón]
 ---
 
 Seen by Aguará on 2026-10-14, with the-advocate `a7f278e6` and the ports

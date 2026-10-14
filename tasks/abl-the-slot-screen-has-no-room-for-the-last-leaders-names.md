@@ -2,7 +2,9 @@
 name: "ABL: the slot screen has no room for the last leaders' names"
 description: "With every map of ABL, the leaders' names the slot screen composes ask for 48 tiles and the menu's bank leaves 44: rm2k-snes-screens stops the cartridge"
 type: bug
-status: draft
+status: doing
+assignee: Chajá
+agents: [Chajá]
 ---
 
 Seen by Cardón on 2026-10-14, with the-advocate `a7f278e6` and the ports

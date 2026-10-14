@@ -2,7 +2,9 @@
 name: "The materials' table has room for 21 actors"
 description: "FAR_GROWTH is placed by hand in far RAM with room for 21 experience slots; with every map of ABL 23 actors can join, and the assembler stops"
 type: bug
-status: draft
+status: doing
+assignee: Tijereta
+agents: [Tijereta]
 ---
 
 Seen by Cardón on 2026-10-14, with the-advocate `a7f278e6` and the ports

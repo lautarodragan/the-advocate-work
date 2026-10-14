@@ -2,7 +2,9 @@
 name: "ABL: the quarry's timer does not fit on 108"
 description: "With the quarry (150) in the cartridge, the converter gives the timer digits to 108 by walking reach and stops there: its eight sprite palettes are full"
 type: bug
-status: draft
+status: doing
+assignee: Chajá
+agents: [Chajá]
 ---
 
 Seen by Cardón on 2026-10-14, with the-advocate `a7f278e6` and the ports
