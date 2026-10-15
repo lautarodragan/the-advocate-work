@@ -2,7 +2,9 @@
 name: "The Book of Three's Reraise doesn't compile"
 description: "One of its four parallel common events stops at an actor's HP branch; Eilonwy's Upgrades, the other, compiles since 2026-10-14"
 type: bug
-status: draft
+status: doing
+assignee: Calandria
+agents: [Calandria]
 ---
 
 Seen by Aguará on 2026-10-12, with the-advocate `6ed7c4a0` and the ports
@@ -30,3 +32,9 @@ battle, which does not compile either
 **Eilonwy's Upgrades compiles** since 2026-10-14 (Tijereta,
 [`controlvars-from-an-item-count`](controlvars-from-an-item-count.md)): what
 is left is `Reraise KO'd chars`, at the actor's HP branch.
+
+### taro, 2026-10-15
+
+"We can guess by the name… surely it does what it says. So it must be
+important —auto-reviving fallen characters after winning battles—. It's
+not the end of the world, but it's worth having it working."
