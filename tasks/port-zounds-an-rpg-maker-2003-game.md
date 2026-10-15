@@ -117,3 +117,17 @@ What was found so far, in the order it came up:
   merging. The game is in `~/juegos/zounds` (not a `.zip`: it is a git
   clone, never edited); the retouched copy and the scripts stay in
   `~/scratch/aguara/zounds/`.
+
+## taro, on 2026-10-15, after the study
+
+* The 55 assets that are nowhere may be lost for good: taro never noticed
+  they were not committed. The songs were taken from other RM games, many
+  renamed. By name (Hornero, over every `.zip` in the games folder and both
+  RM2k RTPs), six of the missing songs are ABL's, with the same name:
+  `3D-Galax`, `KSSMKEND`, `Lunar_Pyramid`, `SF2010`, `ValiusBatt`,
+  `wb3shop`. Matching the renamed ones by size is not possible: the bytes
+  were never in the repo, only the names the events ask for.
+* `\c[n]` can be ignored for now: the text in its colour-less form.
+* "It's my game, we can change it however we want": creative solutions
+  —changing the game's data, art or music— have more room here than in any
+  other port.
