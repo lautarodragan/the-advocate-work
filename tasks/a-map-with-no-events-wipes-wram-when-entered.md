@@ -2,7 +2,9 @@
 name: "A map with no events wipes WRAM when entered"
 description: "Teleporting into a map that has no events at all leaves the whole WRAM at $FF some fifteen frames after map_current changes, on snes9x and on bsnes; with one still event on the map it loads fine"
 type: bug
-status: draft
+status: doing
+assignee: Calandria
+agents: [Cardón, Calandria]
 ---
 
 Seen by Cardón on 2026-10-15, in
