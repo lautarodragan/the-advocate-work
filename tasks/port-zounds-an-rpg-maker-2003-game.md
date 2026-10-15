@@ -2,7 +2,8 @@
 name: "Port Zounds, an RPG Maker 2003 game"
 description: "A study of how much of Zounds —taro's game, made in RPG Maker 2003— works today with the tools: the project, Ditto with the 2003 fields, what compiles, which commands are missing, and what 2003 battles and .wav music would need"
 type: research
-status: wishlist
+status: doing
+assignee: Aguará
 agents: [Aguará]
 ---
 
@@ -19,3 +20,9 @@ commands, classes, battler animations— falls into `unknown`.
 taro, on 2026-10-05, on seeing it is 2003: "better to try another game
 first, then … an rpg maker 2000 one". It stays for after porting
 a second RM2k game.
+
+taro, on 2026-10-15: time for the study. "An option I find perfectly
+acceptable, as a middle ground or as final, is that the battles be 2000's
+and not 2003's, but how easy it is to degrade them has to be measured.
+Maybe there are non-obvious impacts." `/extras` is gone: the game is
+cloned again from GitHub. Launched on Fable.
