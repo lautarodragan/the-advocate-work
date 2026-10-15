@@ -38,3 +38,28 @@ whatever width each command computes in. What would fix it without
 widening every variable: the compiler gives 4 bytes only to the variables
 that are multiplied and then divided (or set to constants past the word),
 and the runtime keeps those in 32 bits. Not a priority (taro).
+
+### taro, 2026-10-14: how to approach it, in order
+
+taro prefers **the hidden high half**: "a kind of carry register for RPG
+Maker's variables". Even with parallel events, execution at run time is
+sequential, so a single register can carry what overflowed the last
+result into the next operation on that variable.
+
+Better still: **detect the patterns at build time** and replace the
+original commands with synthetic commands of The Advocate's own, designed
+to do the arithmetic in 32 bits without more RAM —e.g. `var = HP; var *=
+100; var /= max` compiled as one multiply-then-divide with a 32-bit
+intermediate—.
+
+And if something really needs to **store** a value that does not fit in 16
+bits, 32-bit variables are unavoidable; then choosing each variable's
+width at build time makes sense, but by the numbers it has to hold, not by
+which operations touch it.
+
+Priorities (taro):
+
+1. A solution whose RAM is **constant**, independent of which operations
+   exist at run time (the carry register).
+2. Second, optimise at build time as much as possible (the synthetic
+   commands; the width by the values a variable must hold).
