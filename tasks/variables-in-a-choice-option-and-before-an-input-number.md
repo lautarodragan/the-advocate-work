@@ -2,8 +2,8 @@
 name: "\\V[n] in a choice option and before an InputNumber"
 description: "Only a plain ShowMessage turns \\V[n] into the variable's digits; a choice's options and the box in front of an InputNumber keep the escape and the page is refused. Frozen World: 3 merchants (6 pages) and the use-item menu (5 pages)"
 type: feature
-status: doing
-assignee: Mulita
+status: testing
+assignee: taro
 agents: [Mulita]
 ---
 
@@ -29,3 +29,5 @@ mark) is applied in the `SHOW_MESSAGE` arm only. `choice_boxes` and
 finds the backslash and refuses it.
 
 No other game has a `\V` in an option: 6 in the eight dumps, all here.
+
+**Done** by Mulita on 2026-10-14 (the-advocate `84cc60e5`, same commit as [`a-literal-backslash-in-messages`](a-literal-backslash-in-messages.md)). `choice_boxes` and `compile_number` now run `with_names` and `with_variables` like the `ShowMessage` arm. In Frozen World `just culprits`, `ShowChoice` and `InputNumber` are no longer among the culprits: the three merchants and the use-item menu's boxes compile (the `InputNumber` pages did not need another fix; the item-count `ControlVars` was already done). Tests: compiler unit test (red before) and ABL `test_escapes_in_text.py` (option with `\V` against the same option with the number written). The merchants' Known issue is removed from the book.
