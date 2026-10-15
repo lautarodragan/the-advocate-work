@@ -74,8 +74,8 @@ original could not be heard —no audio under Xvfb—, only read.
 
 **Done, and its limits** (2026-10-15):
 
-* **Played to the end in both.** The original under Wine from 21 starting
-  points (the intro, the walkthrough's stretch and the 20 milestone
+* **Played to the end in both.** The original under Wine from 27 starting
+  points (the title, six cases along the walkthrough's stretch and the 20 milestone
   cases), every scene played through with Return; the port the same,
   from the same cases. The last milestone goes from the race to Caer
   Dathyl to the title screen in both.
