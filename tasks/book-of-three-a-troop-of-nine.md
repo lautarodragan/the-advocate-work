@@ -2,7 +2,9 @@
 name: "The Book of Three: the horsemen's battle never ends"
 description: "Troop 83 has nine members and the cartridge carries eight; its first page leaves only the ninth standing, so the port's battle has no enemy and the story stops in Yern's woods"
 type: bug
-status: draft
+status: doing
+assignee: Tijereta
+agents: [Mulita, Tijereta]
 ---
 
 Seen by Mulita on 2026-10-15, comparing the port with the original under
