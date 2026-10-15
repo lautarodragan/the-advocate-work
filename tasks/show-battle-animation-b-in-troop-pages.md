@@ -2,8 +2,8 @@
 name: "ShowBattleAnimationB in troop pages"
 description: "The battle animation on a monster is not in the troop pages' command list: it keeps out Taran's Last Stand in 52 troops and the two scripted endings of The Book of Three (the Cauldron-Born at map 26, the Horned King with Dyrnwyn at map 78), which may leave those fights without an end"
 type: feature
-status: doing
-assignee: Tijereta
+status: testing
+assignee: taro
 agents: [Tijereta]
 ---
 
@@ -34,3 +34,32 @@ debt (no animation, a wait) lets the two ending pages in and ends both fights
 at the cost of the animation; drawing one needs the battle scene to play an
 animation on a monster, which it does not do for anything today (see
 [`animations-in-battle`](animations-in-battle.md), for the skills').
+
+## Done (Tijereta, 2026-10-14): accepted as a debt
+
+From the-advocate `14e200fc` and the ports `f775b66`, branch
+`tijereta-bot-fixes` in both. taro: "we can ignore it for now so the page
+doesn't fall; not having this command shouldn't stop anyone from playing".
+
+* `SHOW_BATTLE_ANIMATION_B` (13260) in `codes.rs`, checked against liblcf's
+  name like the others.
+* `TROOP_ACCEPTED_UNDONE` in `troops.rs`: the troops' own list of what is
+  accepted without being done, next to `TROOP_COMMANDS`; `runs_in_battle`
+  lets it in and the page's debts list it, so the converter warns.
+* Its arm in `compile_command`: an `OP_DELAY` of the animation's length
+  (two ticks per frame, as the map's animation) when the page waits for it,
+  nothing otherwise. No new opcode.
+* Test `an_animation_on_the_monsters_is_a_wait_and_a_debt` (troops.rs), red
+  without the change.
+* The divergence: a paragraph in the book's
+  `divergences/what-troop-pages-do-not-model.md`.
+
+The other commands of troop 96's page 11 and troop 136's page 1 all
+compile (`just culprits` after: troops 497 to 499 compiling, 13260 gone
+from the list). The Last Stand pages (52) are still out, now only by
+`ChangeMonsterHP` with the damage in a variable —the culprits report gives
+it 52 pages "alone"—: the animation no longer counts among their culprits.
+
+**In the ROM**: `tests/test_book_of_three_endings.py` in the ports (in `just boot`), with two test pages of the game, `book-of-three/cases/battle-96.json` and `battle-136.json`: Taran alone, his HP filled every frame (and the Horned King put at a third), A tapped; each battle ends with neither the victory nor the defeat handler, RM2k's Abort. Red with the old tools: troop 96 never ends, 136 is won. Measured with a probe: troop 96 reaches turn 6 and the battle goes to `BA_M_ABORT`; troop 136 does at turn 1. **Not played by hand**, and the real fights on maps 26 and 78 were not reached by playing: what the test covers is the troop, not the map event that starts it. Fleeing was not looked at.
+
+**When merging**: reinstall `events`, `convert` and `cartridge` (the runtime changed with the other task, `controlvars-random-ranges-wider-than-255`, same branches). The animation is still not drawn: that is [`animations-in-battle`](animations-in-battle.md) territory, and a line in Book of Three's Known issues says so.
