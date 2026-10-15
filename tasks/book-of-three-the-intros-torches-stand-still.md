@@ -2,7 +2,9 @@
 name: "The Book of Three: the intro's torches stand still"
 description: "Map 3, the opening's hall, has six still events that animate in RM2k; the console animates four at most, and here none"
 type: bug
-status: draft
+status: doing
+assignee: Calandria
+agents: [Mulita, Calandria]
 ---
 
 Seen by Mulita on 2026-10-15 in the port's opening, next to the
@@ -20,3 +22,5 @@ animate in RM2k and the console animates 4 at most: none does" —see
 in the book—.
 
 **How to see it**: boot the release and watch the opening.
+
+taro, on 2026-10-15: they saw them still every time they played and could not tell whether it was on purpose. Take it on.
