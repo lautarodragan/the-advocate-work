@@ -2,7 +2,8 @@
 name: "The Book of Three: talking to Hen Wen a second time does nothing"
 description: "Map 4's Hen Wen page that turns the hero away stops at a MoveEvent with route command 22, so the whole page is left out"
 type: bug
-status: draft
+status: done
+agents: [Hurón]
 ---
 
 Seen by Calandria on 2026-10-12, measuring with the culprits report —not
@@ -21,3 +22,9 @@ optional: the story does not wait for it.
 the `release` (map 4, event 4, page 2 in `culprits.json`). The project's
 `just culprits` does not get there: see
 `ports-culpables-recipe-is-missing-its-arguments`.
+
+**Fixed on 2026-10-14**, with
+[`route-the-missing-moves`](route-the-missing-moves.md): on the hero, 22
+looks at himself and is a face up. The ports' `tests/test_route_moves.py`
+plays the second talk. Kept as `done` and not deleted: the book's research
+of 2026-10-14 links here.
