@@ -2,7 +2,9 @@
 name: "The flashing hero shares a palette with an NPC"
 description: "If a page makes the hero flash and its graphic is also used by an NPC on the map, the converter stops: on the console they would share a palette and both would flash. It leaves out map 1 of The Frozen World"
 type: bug
-status: draft
+status: doing
+assignee: Hurón
+agents: [Hurón]
 ---
 
 Measured by Calandria on 2026-10-11 (`exclusions-left-over-in-the-ports.md`)
@@ -37,6 +39,26 @@ fights run on this map ("Battle Screen": 48 events, 28,989 commands, one of
 them a page of 1,801), and 324 pages on 72 maps that teleport to it are left
 out. The stop was run again today with only map 1 brought back, and it is the
 same message; what comes after it is not known.
+
+### Carpintero, 2026-10-15: on map 1 the refusal is a false positive
+
+Read with the-advocate `497be031` and the ports `0ddf815`
+([research](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-15-frozen-worlds-battle-system.html)).
+No page of map 1 flashes the hero (no `FlashSprite` on 10001 in its data).
+The flash comes from common events 3, 4 and 8 (`Hero1ChoosesAnAction`,
+`Hero2ChoosesAnAction`, `RecalcDone!`), which the `CommandDataHero` pages
+call and the compiler pastes into map 1's bytecode; in common 3 the
+`FlashSprite 10001` comes **after `Teleport 3,7,6`**, so in RM2k it runs on
+map 3, where the hero has just been given `rangedmelee` 7 by a route, not
+index 0. The check in `rm2k-snes/convert/src/convert.rs` walks the page's
+bytecode as if all of it ran on the map that owns the page. Besides, on
+map 1 the setup's first route gives the hero the CharSet `nobodyhere`.
+
+**How to see it**: `python` over `data/db/commonevents.json` in
+`frozen-world/`, common 3, commands 8 to 12 (`Teleport`, the route, the
+flash). What would fix it: the check stops at a `Teleport` to another map
+(the rest is that map's), or the call is not pasted (see the research,
+"A call is a call").
 
 **Hurón, 2026-10-15** (the-advocate `8d6bc064`, branch `huron-tp`): it is not
 only map 1. Once a `Teleport` to a map not carried stops dropping its page
