@@ -2,7 +2,9 @@
 name: "The tools do not read XYZ images"
 description: "RPG Maker 2003 saves images as .xyz (a zlib stream of a 256-colour palette and indices); the finders accept the extension but nothing decodes it, so a 2003 game's build stops at its System. Zounds has 186 of them"
 type: feature
-status: draft
+status: doing
+assignee: Aguará
+agents: [Aguará]
 ---
 
 Seen by Aguará on 2026-10-15, in the study
@@ -27,3 +29,7 @@ backdrops, a faceset, 3 battle animations—; the 2003 RTP ships as PNG.
 wherever else an image is opened by extension), indexed like a PNG with a
 palette. The study measured with a copy of the game converted to PNG
 (`~/scratch/aguara/zounds/xyz2png.py`).
+
+taro, on 2026-10-15: not worth supporting XYZ in the tools —"I have no
+good reason to use XYZ"—. If some common software converts XYZ to PNG or
+BMP, use it once on Zounds and be done.

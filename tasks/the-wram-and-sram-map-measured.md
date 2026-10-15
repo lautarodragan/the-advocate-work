@@ -2,7 +2,9 @@
 name: "The WRAM and SRAM map, measured"
 description: "How much of the 128 KB of WRAM and the 8 KB of SRAM is really used, by what, in release and in the whole game; and what it costs that the linker places everything instead of the hand-made map of bank $7E"
 type: research
-status: todo
+status: doing
+assignee: Hurón
+agents: [Hurón]
 ---
 
 taro, on 2026-10-14, worried by the far RAM pool being nearly full (79 B
@@ -22,3 +24,8 @@ To measure, without touching code: the real map of the 128 KB by owner in
 release and in the whole game, what is free, a whole-game save's size
 against the SRAM, and the cost of a plan where the linker places
 everything, so `just space` says what is left in total.
+
+taro, on 2026-10-15: launched, with suggestions for improvements on top
+of the measurement. It came up asking whether map-only switches could
+save RAM: they cannot matter —one bit per switch, 256 B at most—, so the
+question is what does weigh.

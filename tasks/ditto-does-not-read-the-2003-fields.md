@@ -2,7 +2,9 @@
 name: "Ditto does not read the 2003 fields"
 description: "118 of liblcf's 1,043 field rows are RM2k3-only and Ditto's generator skips them: classes, battle commands, battler animations, System2, the 2003 terms and terrains land in `unknown` as raw bytes; reading them is the generator's flag plus the flag-width question"
 type: feature
-status: draft
+status: doing
+assignee: Aguará
+agents: [Aguará]
 ---
 
 Seen by Aguará on 2026-10-15, in the study

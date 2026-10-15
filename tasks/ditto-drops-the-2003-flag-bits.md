@@ -2,7 +2,9 @@
 name: "Ditto drops the 2003 flag bits, and misreads a 2003 game's conditions"
 description: "On an RPG Maker 2003 game the round trip is not byte for byte: a troop page condition has 10 flags in 2 bytes and Ditto writes the 7 it knows in 1, so the resolved view says no page is conditioned on a battle command where 36 are"
 type: bug
-status: draft
+status: doing
+assignee: Aguará
+agents: [Aguará]
 ---
 
 Seen by Aguará on 2026-10-15, in the study
