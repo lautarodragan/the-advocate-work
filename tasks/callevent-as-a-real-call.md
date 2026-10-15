@@ -2,8 +2,8 @@
 name: "CallEvent as a real call"
 description: "A CallEvent to a common event or another event's page compiles to a call into one shared body with a return, instead of pasting the body at every caller; the call stack as deep as RM2k's"
 type: feature
-status: doing
-assignee: Carpintero
+status: testing
+assignee: taro
 agents: [Carpintero]
 ---
 
@@ -159,3 +159,49 @@ anywhere in the eight games, as the depths measured said.
   bank 1 1,455 B (1,559), BSS 105 B (146: the stack's 41), far RAM 12 B
   (13: `compar_context`'s one more byte), ROM gaps 11,985 B (11,495: the
   map 11 calls save about 490 B of LZ2).
+* `just boot` at the root of the ports, with the merged tools: 43 passed,
+  13:34 (the seven games build and boot; Book of Three's milestones, the
+  code-in-ROM pages of Frozen World's maps 2 and 3 among them).
+
+## What the suites do not cover
+
+* A **page called from a page of a map whose code is in the cartridge**
+  (Frozen World's map 1): the call is the same opcode and the same table
+  read as in the test game, whose code is in WRAM, but no test runs a
+  fight on map 1; the first fight played is what tells. Nor a called page
+  that **teleports and goes on** after the caller is carried to
+  `CODE_CARRY`: `code_carry_before` moves every frame of the stack, as
+  ABL's `test_shared_call.py` checks for a common body, and a map page's
+  frame is the same five bytes, but no case builds that chain.
+* A chain **deeper than the stack** at run time: the runtime skips the
+  call (`call_push`'s carry), and the compiler's `call-stack-exceeded` is
+  unit-tested, but no ROM test pushes nine frames —no game needs more than
+  six—.
+* The **custom menu's `before`** body saving and restoring the longer
+  stack (`CM_CALLS`, 41 bytes): the menu tests run, but none opens the
+  menu from inside a call.
+* `OP_CALL_PAGE` from a **troop page** cannot happen (no map), and from a
+  parallel page it is pasted, which `a_call_to_a_map_event_s_page_is_a_call_by_its_index_in_the_table` checks.
+
+## Not done, and what is left
+
+* A common event's body that **changes with the map** (`shares` says no)
+  is still pasted at every call —Frozen World's map 1: about 8.5 KB of
+  the 57 KB, per the research—. A map-local copy of the body stored once
+  as an extra entry of the map's page table, called with `OP_CALL_PAGE`,
+  would make every common call a call; left for when it is measured to
+  matter.
+* Parallel pages paste what they call, by design (one stack).
+* A page called **after a jump to another map** is pasted and resolves
+  "this event" and the callee against the map it was compiled on, as
+  before (`MapEvents::after_jump`).
+
+## To install when merging
+
+`just install bytecode cartridge events convert` from `~/the-advocate`
+—`cartridge` because the runtime changed and `rm2k-snes-cartridges`
+assembles it from the checkout it was installed from—, and ABL's
+`release` rebuilt: its ROM changes (`abl.sfc` `b5367669…` with the
+merged tools). Branches `carpintero-calls` in the-advocate, the ports
+(one commit, the shared-call test's labels) and the book; all three
+merged with their `main` of 2026-10-15 evening.
