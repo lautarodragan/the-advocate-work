@@ -2,7 +2,9 @@
 name: "Stale comments on the VRAM layouts"
 description: "big_picture.s and vram.rs say things about the layouts that stopped being true when the panorama and painted ones came"
 type: docs
-status: draft
+status: testing
+assignee: taro
+agents: [Cardón]
 ---
 
 Seen by Hurón on 2026-10-12 while bringing the book's `internals/vram.md`
@@ -23,3 +25,16 @@ pages and one test header.
   `LAYOUT_WINDOW_ABOVE`, the panorama ones and the painted one move it
   too; `Layout::pieces` says "by the names the converter's Python knew
   them by", a Python that left on 2026-10-02.
+
+## Done (Cardón, 2026-10-15)
+
+Fixed in the-advocate `acf3153c` (comments only), on branch
+`cardon-vram-comments`: the header of `runtime/big_picture.s` (four
+layouts, the BG2 base of "panorama", the `BIG_PALETTES` pointer),
+`LAYOUT_WINDOW_BOTH` and `Layout::pieces`. Verified by ABL's release
+`abl.sfc` coming out byte for byte the same with the global tools and
+with this checkout's `cartridge`: sha256 `b5367669…`.
+
+Left alone: `rm2k-snes/mapdata/src/emit.rs` (~line 1048) still says
+`BIG_PALETTES` "in picture.py"; it lives in
+`rm2k-snes/convert/src/pictures.rs` now.
