@@ -12,7 +12,8 @@ Seen by Chajá on 2026-10-15, at the-advocate's branch `chaja-attributes`
 
 **What is seen**: not played. In RM2k a skill with `affect_attr_defence`
 rolls, per attribute it carries, a shift of its target's rank by one step
-—down if it damages, up if it heals— that lasts the battle
+—weaker on one it targets as an enemy, more resistant on an ally— that
+lasts the battle, at most one step either way
 (`Game_BattleAlgorithm::Skill::vExecute`, `Game_Battler::ShiftAttributeRate`
 in easyrpg-player). Neither the model (`rm2k-snes/battle/src/attributes.rs`)
 nor the console reads the flag: the ranks are the database's all battle
