@@ -2,8 +2,8 @@
 name: "A map's save and escape flags are never read"
 description: "The tree's per-map can-save, can-escape and can-teleport tri-states are not read by anything: ABL forbids saving on 75 of its 308 maps"
 type: bug
-status: doing
-assignee: Mulita
+status: testing
+assignee: taro
 agents: [Mulita]
 ---
 
@@ -92,3 +92,32 @@ mapdata's `each_map_carries_what_it_forbids_in_its_order`, and the two
 
 Divergence: `divergences/what-a-maps-permissions-do-not-model.md` in the
 book.
+
+**One test that moved**: `tests/abl/test_debug_map.py`'s bridge test
+asserted that escaping stayed forbidden in 66 after crossing under the
+bridge (255's autostart forbids it). 66 allows escaping explicitly, so RM2k
+gives it back on entering; the assertion was what the ROM did while nothing
+read the tree. Changed in its own commit. No golden moved.
+
+### Mulita, 2026-10-15: done, to testing
+
+**Branches** `mulita-map-flags` in the-advocate, the ports and the book,
+each with main merged (the-advocate `d5648f1e`, ports `2d6aacc`, book
+`25e7f95`). **To install when merging**: `mapdata` and `convert` (convert
+compiles `rules`, which gained `Tree::access`; `battle` and `rm2k-render`
+compile it too but use nothing new). The runtime changes; `cartridge` needs
+no reinstall.
+
+**Verified**, on the merged tree with the branch's tools: ABL's suite,
+1540 passed, 2 skipped; `just rust-test` and `just test` green. With
+main's tools, three of the six new tests red (see above).
+
+**What it costs**, `just space` on the merged `release`: bank 0 has 972 B
+left (three call sites of 7 B each; the table is in RODATA), far RAM
+unchanged.
+
+**What the suite does not cover**: the map's save shown in the pause menu
+—on ABL it cannot be seen, common events 2 and 8 overwrite it—; it would
+show on Dooms 2 and Vampires Dawn, which were not built nor played. The
+new-game path in `title.s` (`leave`) runs in every session that goes
+through the title, but no test looks at the permissions right after it.
