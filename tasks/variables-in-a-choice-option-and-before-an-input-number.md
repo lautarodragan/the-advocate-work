@@ -2,7 +2,9 @@
 name: "\\V[n] in a choice option and before an InputNumber"
 description: "Only a plain ShowMessage turns \\V[n] into the variable's digits; a choice's options and the box in front of an InputNumber keep the escape and the page is refused. Frozen World: 3 merchants (6 pages) and the use-item menu (5 pages)"
 type: feature
-status: draft
+status: doing
+assignee: Mulita
+agents: [Mulita]
 ---
 
 Seen by Calandria on 2026-10-14, with the-advocate `14e200fc` and the ports

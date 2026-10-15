@@ -2,7 +2,9 @@
 name: "A literal backslash in messages"
 description: "RM2k's \\\\ (a backslash on screen) is refused by escape_tail: The Frozen World uses it as the separator of its stat readouts, 320 lines on 38 map pages and 7 common events"
 type: feature
-status: draft
+status: doing
+assignee: Mulita
+agents: [Mulita]
 ---
 
 Seen by Calandria on 2026-10-14, with the-advocate `14e200fc` and the ports
