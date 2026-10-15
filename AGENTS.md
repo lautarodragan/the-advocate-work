@@ -213,6 +213,8 @@ they live inside the tools —see `LAYOUT.md`—:
                        place in Rust that reads the dump
       rules/           rm2k-rules: what the format means —passability,
                        pages, experience—
+      sketch/          rm2k-sketch: a map's tile layers drawn as text,
+                       made into a dump's `.tiles`; the test game's maps
       rm2k-render/     a map's layers, its CharSets, the battle stuff and
                        the faces, windows and signs of the screens, drawn
                        like RM2k
@@ -293,7 +295,7 @@ it are skipped with a message; `rm2k-snes/rm2k-snes-audio/` receives the
 SoundFont through `SOUNDFONT`, the same; `snes/goombario/` assembles toy
 programs and needs `ca65` and `ld65` in the PATH, and without them it is
 skipped the same way; and `snes/gunter/`, `snes/voodoo/`, `snes/lz2/`,
-`snes/adeleine/`, `rm2k/rules/`, `rm2k/rm2k-render/`, `rm2k-snes/battle/`,
+`snes/adeleine/`, `rm2k/rules/`, `rm2k/sketch/`, `rm2k/rm2k-render/`, `rm2k-snes/battle/`,
 `rm2k-snes/bytecode/`, `rm2k-snes/events/`, `rm2k-snes/patches/`,
 `rm2k-snes/wally/` and the two of the screens, `rm2k-snes/images/`,
 `rm2k-snes/mapdata/` and `rm2k-snes/convert/` need nothing.
