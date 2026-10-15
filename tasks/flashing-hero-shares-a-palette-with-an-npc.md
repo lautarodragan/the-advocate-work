@@ -2,8 +2,8 @@
 name: "The flashing hero shares a palette with an NPC"
 description: "If a page makes the hero flash and its graphic is also used by an NPC on the map, the converter stops: on the console they would share a palette and both would flash. It leaves out map 1 of The Frozen World"
 type: bug
-status: doing
-assignee: Hurón
+status: testing
+assignee: taro
 agents: [Hurón]
 ---
 
@@ -68,3 +68,25 @@ there makes the hero flash while actor 11 shares `rangedmelee[0]` with an
 NPC, and the page used to be left out together with its teleport to map 1 or
 2. The Frozen World does not build with that change until this is fixed (or
 the stop made not to apply to pages that now only show the box).
+
+### Hurón, 2026-10-15: the check follows the page (the-advocate `ca228059`, branch `huron-tp`)
+
+* The check now walks each page's bytecode tracking where the hero is: a
+  `Teleport` moves it to the destination, and a route on the hero with
+  command 34 gives it that graphic (the actor's own is only the default).
+  A flash is checked against the NPCs of the map it lands on.
+* **Only a flash before any teleport stops the build** (as always). One after
+  a teleport is a WARNING per map: checking it as a stop broke ABL (map 32's
+  pages flash the hero on 33 with actors 15, 17 and 19) and left Frozen
+  World's map 3 refused. Calling that a stop again is a one-word change if
+  taro wants it.
+* **Map 1 gets past this check**: with 1 brought back (throwaway), no hit is
+  on map 1. All the hits are on map 3, after the teleport: the hero as
+  `EEEEVIL[5]`, `rangedmelee[0]` and `rangedmelee[7]` against NPCs of map 3.
+* **Frozen World still does not build**, for another reason this exposed: map
+  3 now carries its 198 pages that were dropped, and its `map_code` stream is
+  29,912 bytes against the 19,968 that fit in WRAM
+  (`map-streams-that-dont-fit-in-wram`, which was map 2's). `just boot`
+  fails only on frozen-world because of it (20 of 21 pass).
+* Pages that compile in the converter (sum of "runnable"): 2962 before, 3286
+  of 3303 now, +324 = the 324 pages on 72 maps.
