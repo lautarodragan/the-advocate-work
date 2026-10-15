@@ -2,7 +2,9 @@
 name: "ControlVars: from an item count"
 description: "A variable set from the number of an item held (operand kind 4) does not compile: Book of Three 5, Frozen World 13 (the use-item menu), Vampires Dawn 47"
 type: feature
-status: draft
+status: doing
+assignee: Tijereta
+agents: [Tijereta]
 ---
 
 Seen by Calandria on 2026-10-14, with the-advocate `14e200fc` and the ports
