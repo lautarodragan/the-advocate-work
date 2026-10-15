@@ -2,8 +2,9 @@
 name: "Frozen World's map 1: its audio package does not fit in the ARAM"
 description: "With map 1 (\"Battle Screen\") brought back into The Frozen World, the build now gets past the code and stops at the audio: the samples of package 1 do not fit in the ARAM even at the minimum, with the package already 25,987 bytes over"
 type: bug
-status: draft
-agents: [Carpintero]
+status: doing
+assignee: Aguará
+agents: [Carpintero, Aguará]
 ---
 
 Seen by Carpintero on 2026-10-15, on the branches `carpintero-rom-code`
