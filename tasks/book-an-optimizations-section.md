@@ -25,3 +25,14 @@ sub-pages, **Lossy** and **Lossless**.
    section, "Tried and left out" or similar.
 
 ## Log
+
+- 2026-10-15, Cardón: stage 1 on branch `cardon-optimizations` of
+  the-advocate-docs (from `33e9cfe`): `src/optimizations/` with README,
+  `lossless.md`, `lossy.md` and `tried-and-left-out.md`, built only from
+  what the book documents, paths checked against the-advocate at
+  `99140946`. Found for stage 2: `internals/cgram.md` names
+  `convert_layers()`, which no longer exists (it is `convert_with` in
+  Wally's `background/layers.rs`); several pages still cite old Python
+  paths (`tools/port/…`, `docs/port/…`). `fitting.md` overlaps Lossy and
+  should move under `optimizations/` in stage 3. w65 and Voodoo's
+  `--merge` are not in the book, so they are not in "Tried and left out".
