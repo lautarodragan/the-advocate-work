@@ -2,7 +2,9 @@
 name: "Elemental attributes are not applied in battle"
 description: "An enemy's weakness or resistance to an attribute never changes the damage: 74 of the 100 enemies ABL can fight have one the party carries"
 type: bug
-status: draft
+status: doing
+assignee: Chajá
+agents: [Chajá]
 ---
 
 Seen by Cardón on 2026-10-14 (`what-the-compiler-ignores-silently.md`),
