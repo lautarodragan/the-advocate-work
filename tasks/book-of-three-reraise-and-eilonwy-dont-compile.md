@@ -1,6 +1,6 @@
 ---
-name: "The Book of Three's Reraise and Eilonwy's upgrades don't compile"
-description: "Two of its four parallel common events stop at an actor's HP branch and at ControlVars from an item count"
+name: "The Book of Three's Reraise doesn't compile"
+description: "One of its four parallel common events stops at an actor's HP branch; Eilonwy's Upgrades, the other, compiles since 2026-10-14"
 type: bug
 status: draft
 ---
@@ -26,3 +26,7 @@ the branch is on an actor's HP (6 uses, only in this game); the item count is
 essences common event 21 counts are the ones Eilonwy's Absorb Essence adds in
 battle, which does not compile either
 ([`changeitems-and-changemonsterhp-by-a-variable`](changeitems-and-changemonsterhp-by-a-variable.md)).
+
+**Eilonwy's Upgrades compiles** since 2026-10-14 (Tijereta,
+[`controlvars-from-an-item-count`](controlvars-from-an-item-count.md)): what
+is left is `Reraise KO'd chars`, at the actor's HP branch.
