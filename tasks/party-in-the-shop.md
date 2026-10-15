@@ -172,3 +172,18 @@ merging, reinstall `screens` and `convert` (which carries `mapdata`); the
 runtime is read from the checkout, and no other crate changed.
 
 Draft: `the-shops-party-ignores-changespriteassociation`.
+
+### FAR3, after merging with Mulita's renames (2026-10-15)
+
+Merged with `cb7a7772` (`actor_names.s` in bank 1), ABL's test-msu
+overflowed bank 1. Instead of shaving bytes, the cartridge got a fourth
+code bank, `FAR3`, the low half of `$C1` (the last fast data half), and
+`shop_party.s` and `actor_names.s` moved there whole: both are entered with
+`jsl`/`jml` and call nothing near —the party reaches `ti_item` and
+`eq_read` through two `_far` doors—. Free after, bank 1 / FAR2 / FAR3:
+ABL release 1,390 / 2,580 / 31,437; test-msu 807 / 2,546 / 31,437; Sunset
+1,396 / 340 / 31,296. ABL release has 4 free halves of data instead of 5.
+Verified: `just test` 29, `just rust-test` 909, `just test-game` 11 + 1
+skipped, ABL `just tests` 1554 + 2 skipped, `just boot` 43. Tools
+`eac98c5f`, ports `b197b88`, docs `c477c9d`. When merging, reinstall
+`cartridge` (`rm2k-snes-space` and the memory map).
