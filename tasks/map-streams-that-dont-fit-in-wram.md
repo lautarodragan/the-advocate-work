@@ -2,7 +2,9 @@
 name: "A map's streams that don't fit in WRAM"
 description: "A map's code (map_code) or its grid (map_cells) going over their LZ2 reserve in WRAM stops the build: it leaves out map 2 of The Frozen World and map 1 of Vampires Dawn, the world map"
 type: feature
-status: draft
+status: doing
+assignee: Carpintero
+agents: [Carpintero]
 ---
 
 Two maps, the same limit: the LZ2 reserve of `runtime/far_ram.s`, which
