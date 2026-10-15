@@ -55,3 +55,23 @@ a shortcut that runs those pages without the interpreter when they don't get pas
 condition. See `race-2-at-60-frames.md`, which also has measured
 the limit of number 2 for the race: zero on the heaviest tick,
 because the hero changes cell every two ticks.
+
+### Another example: Book of Three's `Reraise KO'd chars` (taro, 2026-10-15)
+
+Book of Three's common event 18 is parallel, has no switch and runs **every
+frame on every map** (never in battle): a `ChangeCondition` takes death off
+the whole party, and then, for each actor from 10 to 15, a
+`ConditionalBranch` "has at least 1 HP?" with a `ChangeHP` +1 in its else.
+In practice it only matters right after a battle won: whoever ended it
+fallen leaves with 1 HP. taro: "it's crazy to run this on every frame of
+the game". Since 2026-10-15 it compiles (Calandria, task
+[`book-of-three-reraise-and-eilonwy-dont-compile`](book-of-three-reraise-and-eilonwy-dont-compile.md)),
+so it does run every frame.
+
+What a compiler could see: nothing in it reads anything that changes on
+the map —HP and conditions only change in battle, by items, by events or
+by the menu—, so it could run only after each of those (the end of a
+battle, closing the menu, a page that touches HP or conditions), the way
+the "pure" common events already run only when what they read changes
+(Aguará's `commons::pure`, 2026-10-12). It is the same idea extended to
+reads of HP and conditions.
