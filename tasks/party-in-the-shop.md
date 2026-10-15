@@ -168,7 +168,7 @@ ROM on an arrow at the clamps (the four tests use the case's actors).
 Branches: the-advocate `chaja-shop-party`, the-advocate-ports
 `chaja-shop-party` (the goldens in their own commit), the-advocate-docs
 `chaja-shop-party` (`divergences/the-shops-party-window.md`). When
-merging, reinstall `screens`, `mapdata` (into `convert`), `convert` and
-`cartridge` —the runtime changes; `project` did not change—.
+merging, reinstall `screens` and `convert` (which carries `mapdata`); the
+runtime is read from the checkout, and no other crate changed.
 
 Draft: `the-shops-party-ignores-changespriteassociation`.
