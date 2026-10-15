@@ -1,6 +1,6 @@
 ---
 name: "Zounds: the picture-made screens keep more than two pictures at once"
-description: "Zounds builds its menu (map 136), its skill screen (map 190), a race's score board (map 75) and its intro (map 106 'Imágenes') out of ShowPicture; the console keeps two, the ROM does not run the picture pages, and the boot stalls on the intro with the hero hidden"
+description: "Zounds builds its menu (map 136), its skill screen (map 190), a race's score board (map 75) and its intro (map 106 'Imágenes') out of ShowPicture; the console keeps two, the ROM does not run the picture pages, and the boot stalls on the intro with the hero stuck"
 type: bug
 status: draft
 ---
