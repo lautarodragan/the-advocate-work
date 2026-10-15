@@ -2,8 +2,8 @@
 name: "The party in the shop"
 description: "The party's sprites and the 'can equip it' arrows in the shop, like Window_ShopParty"
 type: feature
-status: doing
-assignee: Chajá
+status: testing
+assignee: taro
 agents: [Chajá]
 ---
 
@@ -109,3 +109,66 @@ checks both, and says it as a degradation.
   leaves no room and the shop has no party (`shop-party-no-room`, with
   `TI_PARTY_ON` 0); a buy message that runs into the gold, or a count's term
   wider than its window, is `shop-crowded`. ABL has none of the three.
+
+### What it costs, measured
+
+`just space` in `abl/` and in Sunset over Imdahl, before (main) and after:
+
+* bank 0, BSS, far RAM: unchanged (the state borrows the battle's, after
+  the shop's list; the scratch is `temp`).
+* bank 1: release 1,455 -> 720 B; test-msu, the tightest, 872 -> 137 B.
+* bank $C0 (`FAR2`): release 2,795 -> 2,373 B; Sunset over Imdahl 555 ->
+  133 B. The first version took some thousand bytes of `FAR2` and Sunset
+  did not link (`just boot` caught it); the code shrank from 1,456 to 1,157
+  bytes and is split so both fit. **Those two are the limits now**: the
+  next one to add code to bank 1 or `FAR2` meets them.
+* ABL's data: 19 graphics for 33 possible members, some 23.7 KB; release
+  went from 6 free halves of 32 KB to 5.
+
+### Tests
+
+* `test_shop_drawing.py`: every shop check passes the party and what the
+  cartridge has up of it (`screens.shop_party_shown`), and the stage gets
+  the RTP, where Future1 (Kersh, Talan...) is. New,
+  `test_the_party_window_greys_out_and_points_its_arrows`: four members at
+  the armours shop, each item against the stage, the jacket's and the
+  boots' grey and arrows against what the original showed, and the walk
+  over a cycle. Red against main's tools (no `TI_P_UP` in the ROM).
+* Goldens: six of the buy layer moved (status band and message line,
+  every pixel below y 145) and `shop-party-111` is new; side by side in
+  `/shared/captures/2026-10-15-party-in-the-shop/`, with the original's
+  captures and the three mockups.
+* The stage's `python.rs` hashes: the five buy-layer screens and the whole
+  answer moved; without `shop_border` the answer is the old one, and the
+  screens differ only below y 152. The mapdata tests inject a `shop_party`
+  and cut its section, like the skills screen's.
+
+### Verified
+
+On the branches with `main` merged (tools `dc83b16c`, ports `2572f36`),
+tools from `install-local .local-tools cartridge project screens mapdata
+convert events battle`:
+
+* the-advocate `just test` 29 passed, `just rust-test` 907 passed;
+* ABL `just tests` 1554 passed, 2 skipped;
+* the five shop tests pointed at bsnes by hand (`DEFAULT_CORE`, goldens
+  skipped: they are snes9x captures): every comparison against the stage
+  passes, which is what says the uploads stay inside the vblank;
+* `just boot` at the ports' root: 43 passed. The first run, before the
+  shrink, had Sunset over Imdahl not linking (`FAR2` 454 bytes over). No
+  game of the eight has a `shop-*` degradation.
+
+What the suite does not cover: a cartridge with no room for the party
+(`TI_PARTY_ON` 0) —only the stage's gradient-System test reaches that
+path, and no ROM runs it—; a member whose CharSet is missing; a party of
+more than four; and the shop's reference is drawn with each actor's
+starting level, so a test whose party levelled up could disagree with the
+ROM on an arrow at the clamps (the four tests use the case's actors).
+
+Branches: the-advocate `chaja-shop-party`, the-advocate-ports
+`chaja-shop-party` (the goldens in their own commit), the-advocate-docs
+`chaja-shop-party` (`divergences/the-shops-party-window.md`). When
+merging, reinstall `screens`, `mapdata` (into `convert`), `convert` and
+`cartridge` —the runtime changes; `project` did not change—.
+
+Draft: `the-shops-party-ignores-changespriteassociation`.
