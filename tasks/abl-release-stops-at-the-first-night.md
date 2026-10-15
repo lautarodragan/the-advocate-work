@@ -90,11 +90,11 @@ skipped, `just boot` 12, `just test` 27, `rust-test` green.
 **ABL's pending list**, what was accepted to get here (taro: "degrading
 where needed"; what is cheap was fixed, the rest is listed):
 
-* **Items past 255 left out** (411, 413–416, 418–421; a drop of one
-  drops nothing): TEMPORARY in `convert.rs` and `emit.rs`. The real fix is
-  the item index in 16 bits. Dropping RM2k's 16 default items does not
-  help: the cartridge already carries only the referenced ones (see
-  [`unused-items-at-the-start-of-each-database`](unused-items-at-the-start-of-each-database.md)).
+* ~~**Items past 255 left out** (411, 413–416, 418–421; a drop of one
+  drops nothing): TEMPORARY in `convert.rs` and `emit.rs`.~~ Fixed by
+  Chajá on 2026-10-15, the item index in 16 bits:
+  [`the-item-index-in-16-bits`](the-item-index-in-16-bits.md). `release`
+  carries its 264 items, and Emily's and Sern's shops on map 321 sell.
 * **An MSU-1 effect with no rate of its own in a package takes any
   version of the effect**: TEMPORARY in `rm2k-snes-audio/src/msu.rs`, which
   panicked. Not looked at why the rate is missing.
