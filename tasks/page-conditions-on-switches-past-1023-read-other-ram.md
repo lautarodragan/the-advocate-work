@@ -2,7 +2,9 @@
 name: "Page conditions on switches past 1023 read other RAM"
 description: "A page that asks for a switch past the ROM's 1024 is emitted with that number as is, and the console tests a bit beyond the switch bitmap: Vampires Dawn has 735 such pages on 253 maps, Frozen World 45 on 27"
 type: bug
-status: draft
+status: doing
+assignee: Tijereta
+agents: [Tijereta]
 ---
 
 Seen by Hurón on 2026-10-14, with the-advocate `51b4b1b2` and the ports

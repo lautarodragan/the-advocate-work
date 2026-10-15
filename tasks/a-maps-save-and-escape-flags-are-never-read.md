@@ -2,7 +2,9 @@
 name: "A map's save and escape flags are never read"
 description: "The tree's per-map can-save, can-escape and can-teleport tri-states are not read by anything: ABL forbids saving on 75 of its 308 maps"
 type: bug
-status: draft
+status: doing
+assignee: Mulita
+agents: [Mulita]
 ---
 
 Seen by Cardón on 2026-10-14 (`what-the-compiler-ignores-silently.md`),

@@ -2,7 +2,9 @@
 name: "Branches and switch commands past switch 1023"
 description: "ControlSwitches on a switch past the ROM's 1024 compiles and writes outside the switch table (Frozen World 78 commands, Vampires Dawn 1,014); the branch on one is refused and leaves pages out (63 and 39)"
 type: bug
-status: draft
+status: doing
+assignee: Tijereta
+agents: [Tijereta]
 ---
 
 Seen by Calandria on 2026-10-14, with the-advocate `14e200fc` and the ports
