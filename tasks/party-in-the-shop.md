@@ -2,7 +2,9 @@
 name: "The party in the shop"
 description: "The party's sprites and the 'can equip it' arrows in the shop, like Window_ShopParty"
 type: feature
-status: wishlist
+status: doing
+assignee: Chajá
+agents: [Chajá]
 ---
 
 From taro, on 2026-09-28, when approving the shop with windows: leave it in the
@@ -25,3 +27,8 @@ have it: at 256 wide the list runs across and "Owned Items" with the gold
 below, so that window has nowhere to go without taking rows away from the
 buy list, which already has five. Before implementing it, it has to be
 decided where that space comes from.
+
+taro, on 2026-10-15: "maybe we could try to implement it? It would be nice
+for ABL too." Where the space comes from is decided by the agent with a
+first version, measured against the original's captures; taro adjusts by
+playing.

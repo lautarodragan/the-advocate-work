@@ -2,7 +2,9 @@
 name: "\\N[0] and renamed actors in messages"
 description: "A box with \\N[0] (the leader) or with the \\N[n] of an actor that some ChangeHeroName renames leaves out its whole page"
 type: feature
-status: draft
+status: doing
+assignee: Mulita
+agents: [Carpintero, Mulita]
 ---
 
 Debt that Carpintero declared on 2026-10-05 when baking the names
@@ -24,3 +26,6 @@ page that renames is already out on its own (the
 its opening cutscene in map 4— and the baking unblocked that; what
 remains is `\N[0]` and the renamed ones. `rm2k-snes-events culprits
 --every-map`, on each game's `compile` request, says it.
+
+taro, on 2026-10-15: do it even without `EnterHeroName`; `\N[0]` can be
+tested by reordering the party.
