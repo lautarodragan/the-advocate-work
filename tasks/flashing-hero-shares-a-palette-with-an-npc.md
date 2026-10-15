@@ -37,3 +37,12 @@ fights run on this map ("Battle Screen": 48 events, 28,989 commands, one of
 them a page of 1,801), and 324 pages on 72 maps that teleport to it are left
 out. The stop was run again today with only map 1 brought back, and it is the
 same message; what comes after it is not known.
+
+**Hurón, 2026-10-15** (the-advocate `8d6bc064`, branch `huron-tp`): it is not
+only map 1. Once a `Teleport` to a map not carried stops dropping its page
+(see `a-teleport-to-a-map-not-carried-is-dropped`), The Frozen World's
+`just cartridges release` stops at **map 3** with the same message: a page
+there makes the hero flash while actor 11 shares `rangedmelee[0]` with an
+NPC, and the page used to be left out together with its teleport to map 1 or
+2. The Frozen World does not build with that change until this is fixed (or
+the stop made not to apply to pages that now only show the box).
