@@ -72,3 +72,38 @@ the message. Doom's Day 2's `\N[8]` are baked, since `EnterHeroName` is not
   one routine.
 * The line keeps its width as RM2k does: no rewrap, the composer cuts at
   the window's edge.
+
+## Done (Mulita, 2026-10-15)
+
+the-advocate, branch `mulita-leader-name`:
+
+* `551703da`: the `NAME` mark ($FD, one pair fewer: 157) and the actor, 0
+  the leader; `msg_name_mark` in the new `runtime/actor_names.s` points
+  `msg_ptr` at the name's text and hands its letters out like a variable's
+  digits. `OP_CHANGE_NAME` (0x54; 0x55 not used): the actor's place among
+  the renamed (`name_actor`) and which rename (`name_txt`, from one).
+  `ACTOR_NAME`, `NAME_SLOTS` bytes of FARBSS —none in a game that renames
+  no one—, in the save right before the experience. The battle, the
+  equipment, skills and level-up screens ask `actor_name_txt`; the menu
+  `actor_name_row_now`; the slot screen `actor_name_row_saved`, from the
+  SRAM. Test pages' `ChangeHeroName`s count as the game's.
+* `b6444bb9`: a troop page's box writes `\V[n]` and names too
+  (`ba_page_message`). Before, it drew the mark and the slot as two letters:
+  The Book of Three's "TARAN was able to steal \V[0008] silver".
+* `cd180a9b`: the test game's `test_leader_name.py`, three cases and seven
+  goldens: the leader before and after reordering, a rename and the menu,
+  an empty party, and the rename through save, reset and load —the slot
+  screen shows the saved name—. Seen red with the tools before: the
+  cartridge did not build. The save test runs on snes9x only (bsnes keeps
+  the SRAM between consoles and does not expose it).
+
+Pages left out, `culprits --every-map`, before and after: the same in all
+eight games (138, 95, 117, 85, 89, 96, 29, 1614): no game has a page
+waiting only on this. Sunset's `ChangeHeroName` is no longer a culprit;
+its page is still out for its `ControlVars` and `ControlSwitches` on ranges.
+
+Space (ABL, `just space`): bank 0 −23 B, bank 1 −15 B, bank $C0 −213 B
+(plus what the battle's box took), far RAM unchanged (ABL renames no one).
+
+Book, branch `mulita-leader-name`: divergence "What names in messages do
+not model" and its row in internals/events.md.
