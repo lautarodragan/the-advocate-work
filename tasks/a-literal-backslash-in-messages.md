@@ -2,8 +2,8 @@
 name: "A literal backslash in messages"
 description: "RM2k's \\\\ (a backslash on screen) is refused by escape_tail: The Frozen World uses it as the separator of its stat readouts, 320 lines on 38 map pages and 7 common events"
 type: feature
-status: doing
-assignee: Mulita
+status: testing
+assignee: taro
 agents: [Mulita]
 ---
 
@@ -27,3 +27,5 @@ backslash left in a line. Nothing turns `\\` into one `\`. Whether the
 console font has the glyph was not looked at.
 
 No other game uses it: 320 lines in the eight dumps, all here.
+
+**Done** by Mulita on 2026-10-14 (the-advocate `84cc60e5`, branch `mulita-escapes`; ports branch `mulita-escapes`). The console font already has the backslash glyph (it is one of the 95 ASCII cells), so nothing was added: `with_wait_marks` turns `\\` into a mark (`backslash_mark`), the reflow measures it as the font's `\` and writes it back as `\\`, and `units` draws it. `with_names` and `with_variables` skip a `\\` pair, so `\\V[1]` is a backslash and the letters. Tests: compiler unit tests and `escapes.json` cases (the compiler ones red before), ABL `test_escapes_in_text.py` with the golden `backslash-in-text`. `just culprits` in frozen-world: commons that compile 90 to 94, maps 3,823 to 3,871 (together with the other task). Install on merge: `just install text events convert` plus whatever links them.
