@@ -2,8 +2,8 @@
 name: "The test game: its skeleton"
 description: "A game of our own, made from scratch with free assets, where the engine's ROM tests can live instead of in A Blurred Line: first a map, the hero and an NPC, built from text and booting"
 type: feature
-status: doing
-assignee: Calandria
+status: testing
+assignee: taro
 agents: [Calandria]
 ---
 
@@ -117,3 +117,20 @@ at the two captures in `test-game/tests/snapshots/golden/`, copy them to
 `tests/golden/` in their own commit, run again for green in snes9x and
 bsnes. Then this goes to `testing`. To install when merging: `ditto` and
 `sketch` (new).
+
+**Finished, the same day.** Hornero reinstalled the globals; to be safe I
+built with this branch's tools (`install-local` of what the build uses)
+over main `f6e17ccc` (merged, `cf8b9d5d`). The first run showed a harness
+bug: it waited for `msg_state` 2, which `vblank.s` clears as soon as the
+window shows, so it timed out with the message whole on screen; it now
+waits for `msg_open` with `msg_state` at 0 (`42b9783d`). The two goldens,
+looked at, in their own commit (`dc5a26af`); `just test-game` green twice
+in snes9x and bsnes, `just test` 29. Run with
+`SOUNDFONT=.../Microsoft GS Wavetable Synth.sf2` as Hornero asked: the game
+has no music, so no sample goes in; with music, a free one is needed.
+`AUTHORS.md` names the font (`6c345345`). Captures in
+`~/scratch/calandria/captures/2026-10-15-test-game/`.
+
+**When merging**: install `ditto` and `sketch` (new). The goldens depend on
+the runtime, so a runtime change can move them: `just test-game` is now
+the second ROM check after ABL's suite.
