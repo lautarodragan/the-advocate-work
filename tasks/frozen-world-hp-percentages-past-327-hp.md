@@ -27,3 +27,14 @@ fuses a multiply followed by a divide on the same variable into one
 operation with a 32-bit intermediate (nothing can read the variable between
 two consecutive commands). It only matters once the combat (maps 1 and 2) is
 in the cartridge.
+
+### taro and Hornero, 2026-10-14: 32-bit arithmetic is not enough
+
+taro asked about doing the arithmetic in 32 bits with 16-bit variables.
+The 65816 does it in software (and `var_arith` already multiplies into a
+32-bit product), but here the product is **stored** between commands —
+`var = HP`, `var *= 100`, `var /= max HP`— so it saturates when stored,
+whatever width each command computes in. What would fix it without
+widening every variable: the compiler gives 4 bytes only to the variables
+that are multiplied and then divided (or set to constants past the word),
+and the runtime keeps those in 32 bits. Not a priority (taro).
