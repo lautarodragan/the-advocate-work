@@ -2,8 +2,8 @@
 name: "A map with no events wipes WRAM when entered"
 description: "Teleporting into a map that has no events at all leaves the whole WRAM at $FF some fifteen frames after map_current changes, on snes9x and on bsnes; with one still event on the map it loads fine"
 type: bug
-status: doing
-assignee: Calandria
+status: testing
+assignee: taro
 agents: [Cardón, Calandria]
 ---
 
@@ -88,5 +88,21 @@ cartridge carries by `[maps]`:
 * Frozen World: 1 (148), carried, no `Teleport` to it;
 * Vampires Dawn: 7 (34, 64–68, 71), carried, **and reached**: 34, the
   castle's picture, by seventeen `Teleport`s, 64–68 from 63 and 71 from
-  69. On those the port wiped WRAM; with the fix they load. Not played.
+  69. Measured with the ports harness's `go_to_map` to each of the seven,
+  on snes9x and bsnes: with the global tools of the-advocate `6a9ef4b9`
+  all fourteen jumps end with `map_current` at `$FFFF`; with the fix all
+  fourteen arrive. The port was never played into them, so its book page
+  had no line about it; no ports test covers them —the test game's does
+  the path—.
 * Dooms2, El Dorado, Sunset over Imdahl: none.
+
+**Verified** on `calandria-empty-map` (the-advocate) with
+`just install-local .local-tools cartridge`: `just test`, 29 passed; the
+test game, 17 passed and 1 skipped —bsnes's SRAM, as before—; ABL's
+`just tests` with those tools, 1555 passed and 2 skipped, no golden moved;
+`just boot` at the ports' root, 44 passed. `just rust-test` was not run:
+no Rust changed.
+
+**When merging**: nothing to install. Only `runtime/` and the test game
+changed, and `rm2k-snes-cartridges` assembles the runtime of the checkout
+it was installed from, `~/the-advocate`.
