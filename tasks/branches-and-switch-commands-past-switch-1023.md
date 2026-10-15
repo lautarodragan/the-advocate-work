@@ -2,8 +2,8 @@
 name: "Branches and switch commands past switch 1023"
 description: "ControlSwitches on a switch past the ROM's 1024 compiles and writes outside the switch table (Frozen World 78 commands, Vampires Dawn 1,014); the branch on one is refused and leaves pages out (63 and 39)"
 type: bug
-status: doing
-assignee: Tijereta
+status: testing
+assignee: taro
 agents: [Tijereta]
 ---
 
@@ -44,32 +44,67 @@ it refuses the branch only.
 **How to see it**: `rm2k-snes-events compile` with `frozen-world/build/release/events-request.json`
 and the game's `data/`; map 19's page code starts `011b0401`.
 
+
 ## The fix (Tijereta, 2026-10-15)
 
 Taken together with
 [`page-conditions-on-switches-past-1023-read-other-ram`](page-conditions-on-switches-past-1023-read-other-ram.md):
-one table, one size, every reader.
+one table, one size, every reader. Branches `tijereta-switches` in
+the-advocate, the ports and the book.
 
 * **The table is the game's.** The event compiler's indices carry
   `switch_top`, the highest switch the game names anywhere —every page of
   every map, troop and common event, compiled or not: conditions, triggers,
   `ControlSwitches` single and range, branches; the database's switch items
   and skills; the test pages, the harness's `TEST_SWITCH` and the custom
-  menus' conditions—. The scan answers it, the converter passes it to
-  `rm2k-snes-mapdata`, and `SWITCH_BYTES` is `switch_top / 8 + 1`.
-* **Every command, branch, toggle, condition and trigger is checked against
-  it** (`Indices::holds_switch`): `ControlSwitches` was not checked at all.
-  Since the table holds every switch named, the checks guard a mistake, not
-  a game; a game that names 2048 or more is refused.
-* **The table moved to far RAM**: neither the bank 0 BSS nor `FARBSS` had
-  room for 206 bytes. It has its own area, `SWITCHRAM`, at `$7E7D00`, 256
-  bytes, which the materials' table left free on 2026-10-14: segment
-  `SWITCHES`, declared in `runtime/switches.s`. Readers and writers take it
-  with a long index: `set_switch`, `switch_on`, the common events'
-  `switch_of` and `compar_one`, the battle's `ba_page_switch` and switch
-  skills, the custom menus, boot's clear and the save (`.loword`).
-  `just space` prints what the table leaves.
+  menus' conditions, which the converter sends as `extra_switches`—. The
+  scan answers it, the converter passes it to `rm2k-snes-mapdata`, and
+  `SWITCH_BYTES` is `switch_top / 8 + 1`. Measured: Vampires Dawn 206
+  bytes (1643), The Frozen World 135 (1077), ABL 138 (1103: map 348's fork
+  and the new case; without them 1023, the harness's, and 1008 the game's).
+* **Every command, toggle, branch, troop trigger, common trigger and page
+  condition is checked against it** (`Indices::holds_switch`):
+  `ControlSwitches` was not checked at all. Since the table holds every
+  switch named, the checks guard a mistake, not a game; a game that names
+  2048 or more is refused by the converter.
+* **The table moved to far RAM**: the bank 0 BSS had 20 bytes and `FARBSS`
+  13, in ABL. It has its own area, `SWITCHRAM`, 256 bytes at `$7E7D00`,
+  which the materials' table left free on 2026-10-14: segment `SWITCHES`,
+  declared in `runtime/switches.s`, after `mapdata.inc`. Readers and
+  writers take it with a long index —`set_switch`, `switch_on`, the common
+  events' `switch_of` and `compar_one`, the battle's `ba_page_switch` and
+  switch skills, the custom menus, boot's clear— and the save with
+  `.loword`. ABL's bank 0 pays 9 bytes; its BSS gets 128 back. `just
+  space` prints what the table leaves: VD 50, FW 121, ABL 118.
 * **The save format changes** with the size: `SAVE_BYTES` and
-  `GAME_SIGNATURE` see it. ABL's table goes from 128 to 127 bytes —its
-  highest is 1008— plus whatever its test pages name, so ABL saves from
-  before do not load.
+  `GAME_SIGNATURE` see it. Saves from before do not load, in any game.
+
+**Tests**: compiler tests in `compile.rs` (a switch past 1023 set, a range
+and a toggle, the branch, and refused past the table), `indices.rs` (each
+place that names a switch raises the table; past 2047 refused), mapdata's
+`switch_bytes`, and `the_scan_says_the_highest_switch`. In ABL,
+`tests/rpgmaker/test_switches_past_1023.py`, with the case
+`switches-past-1023` and a fork of map 348 (a test map) that adds an
+invisible event whose only page, parallel, asks for 1100 and turns on 1101:
+the case waits, checks 1101 is off, turns on 1100 and branches on it. Red
+with the global tools: the case's page does not compile, `release` does not
+build. Green with these, and the whole suite green, no golden moved; `just
+boot` green.
+
+**`just culprits`**, global tools against these on the same request (before merging main):
+Frozen World commons 94 → 99 compile, maps 3871 → 3876 (the branch as the
+only culprit, 5 → 0); Vampires Dawn commons 26 → 29, maps 17611 → 17613.
+
+VD's map 433, seen in the ROM and not played: switch 1521 reads off on
+entering, and the table is 206 bytes at `$7E7D00`. Which page the figures
+take was not looked at.
+
+**What the suite does not cover**: the switch skill and the switch item
+past 1023 (VD has one of each), the custom menus' switch conditions past
+1023 (no game has one), the troop pages' switch triggers past 1023 (none
+compile in VD or FW yet), and the save carrying a table bigger than 128
+(the suite's save tests run with ABL's 138, which is bigger, so that one
+is covered).
+
+**To install when merging**: `events`, `mapdata`, `convert` and `cartridge`
+—`cartridge` because the runtime's memory map gets the `SWITCHRAM` area—.
