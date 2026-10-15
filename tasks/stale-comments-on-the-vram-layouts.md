@@ -2,7 +2,9 @@
 name: "Stale comments on the VRAM layouts"
 description: "big_picture.s and vram.rs say things about the layouts that stopped being true when the panorama and painted ones came"
 type: docs
-status: draft
+status: doing
+assignee: Cardón
+agents: [Hurón, Cardón]
 ---
 
 Seen by Hurón on 2026-10-12 while bringing the book's `internals/vram.md`
