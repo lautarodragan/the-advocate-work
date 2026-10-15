@@ -2,8 +2,8 @@
 name: "Elemental attributes are not applied in battle"
 description: "An enemy's weakness or resistance to an attribute never changes the damage: 74 of the 100 enemies ABL can fight have one the party carries"
 type: bug
-status: doing
-assignee: Chajá
+status: testing
+assignee: taro
 agents: [Chajá]
 ---
 
@@ -58,3 +58,29 @@ there as well.
   `battle-114-attributes` (Kersh, Talan, Manta against a Junkbot: Ray B,
   Cut D, Flame D). Red with main's tools (Manta's hit 81 where the
   attribute leaves 44; MinorFire 34 where it leaves 15), green with these.
+
+## Verified, and what to install
+
+With the tools of `chaja-attributes` (`cartridge battle mapdata convert`
+installed locally): `just test`, `just rust-test`, ABL's `just tests` and
+`just boot`, all green; **no golden moved**, since no battle a golden case
+fights has a non-neutral rank in what hits it. `just space`: bank 0 and
+far RAM in `release` as before —the tables are in RODATA and the scratch
+is the zero page's—.
+
+What the suite does **not** cover, in so many words: the actor's rank
+going one step up with armor, an enemy skill with an attribute on an
+actor, and the physical-and-magical product run only in the model's tests
+(`tests/attributes.rs`), not on the console; a healing skill from the menu
+with an attribute (no healing skill of ABL carries one); a troop page's
+`ChangeEquipment` changing ranks mid-battle.
+
+Left as drafts:
+[skills-that-shift-an-attribute-rank-do-not-shift-it](skills-that-shift-an-attribute-rank-do-not-shift-it.md)
+and
+[a-skill-with-a-physical-attribute-does-not-ask-for-the-weapon](a-skill-with-a-physical-attribute-does-not-ask-for-the-weapon.md);
+both are in the book's divergence `what-attributes-do-not-model`.
+
+**On merging, install** `cartridge battle mapdata convert`. Branches
+`chaja-attributes` in the-advocate, the-advocate-ports and
+the-advocate-docs.
