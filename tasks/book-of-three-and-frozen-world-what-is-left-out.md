@@ -35,7 +35,7 @@ research `research/2026-10-14-what-the-compiler-ignores-silently.md`.
 ### Calandria, 2026-10-14
 
 Research: [The Book of Three and The Frozen World: what is left
-out](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-14-book-of-three-and-frozen-world-left-out.html)
+out](https://lautarodragan.github.io/the-advocate-docs/progress/book-of-three-and-frozen-world.html)
 (the-advocate `14e200fc`, ports `f775b66`). Measurement only: nothing in the
 tools or the games was changed; the only builds run were two throwaway ones
 with map 1 and map 2 of Frozen World brought back, in a worktree of the ports.

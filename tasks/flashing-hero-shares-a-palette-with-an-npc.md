@@ -31,7 +31,7 @@ behind this one may be the one from `map-streams-that-dont-fit-in-wram`.
 `just cartridges release` in `frozen-world/`.
 
 **What map 1 is** (Calandria, 2026-10-14, the-advocate `14e200fc`, ports
-`f775b66`; [research](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-14-book-of-three-and-frozen-world-left-out.html)):
+`f775b66`; [research](https://lautarodragan.github.io/the-advocate-docs/progress/book-of-three-and-frozen-world.html)):
 it is the game's combat. Frozen World has no `EnemyEncounter` at all; its
 fights run on this map ("Battle Screen": 48 events, 28,989 commands, one of
 them a page of 1,801), and 324 pages on 72 maps that teleport to it are left

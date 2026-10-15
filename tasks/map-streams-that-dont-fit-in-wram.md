@@ -37,7 +37,7 @@ it can be played without it.
 and `just cartridges release` in its directory.
 
 **What map 2 is** (Calandria, 2026-10-14, the-advocate `14e200fc`, ports
-`f775b66`; [research](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-14-book-of-three-and-frozen-world-left-out.html)):
+`f775b66`; [research](https://lautarodragan.github.io/the-advocate-docs/progress/book-of-three-and-frozen-world.html)):
 Frozen World's "Plate Placement" is part of the game's combat (51 events,
 12,225 commands; no `EnemyEncounter` in the game). The stop was run again
 today with only map 2 brought back: the same message, 38179 bytes against

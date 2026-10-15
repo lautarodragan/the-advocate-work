@@ -21,7 +21,7 @@ from the number of an item held (operand 4).
 **How to see it**: the line "parallel common events" of
 `book-of-three/build/release/converter.log`.
 
-**Measured again** (Calandria, 2026-10-14; [research](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-14-book-of-three-and-frozen-world-left-out.html)):
+**Measured again** (Calandria, 2026-10-14; [research](https://lautarodragan.github.io/the-advocate-docs/progress/book-of-three-and-frozen-world.html)):
 the branch is on an actor's HP (6 uses, only in this game); the item count is
 `ControlVars` operand kind 4
 ([`controlvars-from-an-item-count`](controlvars-from-an-item-count.md)). The

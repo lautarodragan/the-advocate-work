@@ -7,7 +7,7 @@ status: draft
 
 Seen by Calandria on 2026-10-14, with the-advocate `14e200fc` and the ports
 `f775b66`
-([research](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-14-book-of-three-and-frozen-world-left-out.html)).
+([research](https://lautarodragan.github.io/the-advocate-docs/progress/book-of-three-and-frozen-world.html)).
 
 **What is seen**: `just culprits` prints, for The Frozen World, "troops: 80
 pages, 0 compile, 80 with a trigger the ROM cannot look at", and for The Book

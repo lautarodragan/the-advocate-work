@@ -9,7 +9,7 @@ agents: [Tijereta]
 
 Seen by Calandria on 2026-10-14, with the-advocate `14e200fc` and the ports
 `f775b66`, measuring what The Book of Three leaves out
-([research](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-14-book-of-three-and-frozen-world-left-out.html)).
+([research](https://lautarodragan.github.io/the-advocate-docs/progress/book-of-three-and-frozen-world.html)).
 
 **What is seen**: common event 19, `Random Chest List`, does not compile, and
 the 82 `CallEvent`s to it, on 16 maps (20, 21, 26, 27, 28, 41, 44, 47 to 50,

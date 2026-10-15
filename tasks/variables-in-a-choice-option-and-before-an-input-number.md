@@ -9,7 +9,7 @@ agents: [Mulita]
 
 Seen by Calandria on 2026-10-14, with the-advocate `14e200fc` and the ports
 `f775b66`, measuring what The Frozen World leaves out
-([research](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-14-book-of-three-and-frozen-world-left-out.html)).
+([research](https://lautarodragan.github.io/the-advocate-docs/progress/book-of-three-and-frozen-world.html)).
 **Read in the data and the compiler, not played.**
 
 **What is seen**:
