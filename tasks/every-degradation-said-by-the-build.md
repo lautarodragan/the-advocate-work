@@ -3,7 +3,7 @@ name: "Every degradation, said by the build"
 description: "The converter writes, per cartridge, every place where it compiles a command undone or loses part of it —map, event, page, command, what is lost—, machine-readable, for any game"
 type: feature
 status: doing
-assignee: Huron
+assignee: Hurón
 agents: [Hurón]
 ---
 
