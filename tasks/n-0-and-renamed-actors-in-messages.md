@@ -2,8 +2,8 @@
 name: "\\N[0] and renamed actors in messages"
 description: "A box with \\N[0] (the leader) or with the \\N[n] of an actor that some ChangeHeroName renames leaves out its whole page"
 type: feature
-status: doing
-assignee: Mulita
+status: testing
+assignee: taro
 agents: [Carpintero, Mulita]
 ---
 
@@ -102,8 +102,26 @@ eight games (138, 95, 117, 85, 89, 96, 29, 1614): no game has a page
 waiting only on this. Sunset's `ChangeHeroName` is no longer a culprit;
 its page is still out for its `ControlVars` and `ControlSwitches` on ranges.
 
-Space (ABL, `just space`): bank 0 −23 B, bank 1 −15 B, bank $C0 −213 B
-(plus what the battle's box took), far RAM unchanged (ABL renames no one).
+* `b7bd02b4`, `08042d07`: the pull the battle's digits branch on, said;
+  and `actor_names.s` moved to bank 1, since Sunset —which renames its
+  hero, so it carries that code— overflowed `FAR2` by 14 bytes.
+* Ports, `mulita-leader-name`: ABL's `linter-exceptions.txt` takes
+  `ba_page_message bpl put_digits`, the same as `msg_letter`'s.
+
+Space, `just space` in ABL, before → after: release bank 0 944 → 921 B,
+bank 1 1455 → 1227 B, $C0 2795 → 2580 B, far RAM 12 → 12 B (ABL renames
+no one); the tightest bank 1 is test-msu's, 872 → 644 B. Sunset over
+Imdahl's release after: $C0 340 B, bank 1 1092 B.
+
+Verified: `just test` (29), `just rust-test`, `just test-game` (11 passed,
+the save test skipped on bsnes), ABL `just tests` with the branch's tools
+(1553 passed, 2 skipped; no golden moved), `just boot` at the ports' root
+(43 passed). Not covered by any test: a troop page's box with `\V[n]` or a
+name —The Book of Three's are not on its walkthrough—; and `EnterHeroName`,
+still out (`hero-name-screen.md`).
+
+To install when merging: `events`, `mapdata`, `screens`, `convert` and
+`cartridge` (the runtime changed).
 
 Book, branch `mulita-leader-name`: divergence "What names in messages do
 not model" and its row in internals/events.md.
