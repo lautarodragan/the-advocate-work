@@ -2,8 +2,8 @@
 name: "ChangeActorFace is not compiled"
 description: "ChangeActorFace (the actor's database face) has no arm and leaves out its whole page, while ChangeFaceGraphic is accepted as nothing because faces are not drawn: Frozen World 13 uses on 7 pages, Vampires Dawn 5, Dooms 2 1"
 type: feature
-status: doing
-assignee: Tijereta
+status: testing
+assignee: taro
 agents: [Tijereta]
 ---
 

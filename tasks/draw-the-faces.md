@@ -2,8 +2,8 @@
 name: "Draw the faces"
 description: "ChangeFaceGraphic is accepted without drawing the face: the message box comes out without it"
 type: feature
-status: doing
-assignee: Tijereta
+status: testing
+assignee: taro
 agents: [Tijereta]
 ---
 
@@ -98,6 +98,23 @@ in every layout, which is why no per-layout number is written here.
   new side's, the HDMA table— in one vblank next to the line's 1920-byte
   DMA ran past its end on the meadow, and from the second box on the
   face came out in the text's colours. One per line's vblank now.
+* **What bit, second**: with everything in far RAM, A Blurred Line's
+  release cartridge did not link —`FARBSS` 171 bytes past its area; it
+  had 12 free, the face asked for 183—. Two things: the HDMA table went to
+  ROM, in indirect mode, so the RAM is the 120 bytes of colours it points
+  at, and the box's small state to bank 0's `BSS`; and the pool grew by
+  the strips' and the VRAM map's stretch, `$7E6A00` to `$7E6BFF`, which
+  went into the segment as `.res`, 126 bytes to the pool. **The measured
+  limit**: the pool was full before the face; the next thing that needs
+  far RAM takes over the next stretch —`$7E6C00`, the music decoder's—
+  the same way, with `just space` saying what is left.
 * To install when merging: `cartridge events screens mapdata convert`
   —`just install cartridge events screens mapdata convert`—, and
   rm2k-render changed as a library (`Picture::mirrored`).
+* **Run, on the merged tree** (the-advocate `ec71cf6d` merged in):
+  `just rust-test`, `just test` (29), `just test-game` (22 passed, 1
+  skipped; the five new goldens identical in bsnes), ABL's `just tests`
+  with these tools (1555 passed, 2 skipped; no golden moved: A Blurred
+  Line shows no face), `just space` (release: bank 0 739 B, far RAM 15 B,
+  BSS 83 B; test-msu: bank 1 801 B, far RAM 207 B), and the ports' `just
+  boot` (44 passed, before Zounds came in; Zounds alone after).
