@@ -776,29 +776,29 @@ What always has to be done:
 
 * **Bring the builds to `/shared`, with `just deliver "<what to look
   at>"`, from the ports.** The worktrees live in `~`, which is not mounted
-  on the host, and `/shared` is: it is where taro finds them. They go to
-  `/shared/builds/abl/<date>-<ABL commit>-<tools commit>/`, and the text
-  passed to the recipe goes to the `README.txt`: what changed, what to look
-  at and which limitations were hit. **The other games go with `just
-  deliver` from the root of the ports**, all seven at once, each to
-  `/shared/builds/<game>/<date>-<ports commit>-<tools commit>/`: until
-  2026-10-12 they were copied by hand, and taro played two-day-old ones
-  without anyone noticing. **One folder per game, and the builds inside**
-  is taro's, from 2026-10-15; until that day ABL's builds were straight in
-  `/shared/builds/` and the others in a single `other-games/` that was
-  overwritten. Until 2026-09-24 they went to
+  on the host, and `/shared` is: it is where taro finds them. ABL's goes
+  to `/shared/builds/abl/`, and the text passed to the recipe goes to the
+  `README.txt`, with the two commits: what changed, what to look at and
+  which limitations were hit. **The other games go with `just deliver`
+  from the root of the ports**, all at once, each to
+  `/shared/builds/<game>/`: until 2026-10-12 they were copied by hand, and
+  taro played two-day-old ones without anyone noticing. **One folder per
+  game** is taro's, from 2026-10-15; until that day ABL's builds were
+  straight in `/shared/builds/` and the others in a single `other-games/`
+  that was overwritten. Until 2026-09-24 they went to
   `pruebas-manuales/`, inside the repo, and until 2026-09-25 they were
   assembled by hand, which was repeated often and went wrong.
 
   **A single `.sfc` per build, and it is called `abl.sfc`**: the cartridge
   with a title screen, which is the one taro plays. The other demos are not
-  copied; whoever wants them builds them. And **the last two directories
-  are kept and nothing more**, per game: the previous one is useful to
-  compare with what was being played, and the older ones are rebuilt from
-  their commit.
-  It is taro's, from 2026-09-20, after the builds reached 4.3 GB in 51
-  directories. The recipe deletes the rest and does not touch what taro
-  leaves inside, like their emulator's save.
+  copied; whoever wants them builds them. And **one build per game, straight
+  in its folder**: a delivery overwrites the previous one's files, and an
+  older build is rebuilt from its commit. It is taro's, from 2026-10-16:
+  until that day each build had its `<date>-<commit>-<commit>/` folder and
+  the last two were kept —taro's, from 2026-09-20, after the builds reached
+  4.3 GB in 51 directories—, and the previous one was used once or twice.
+  The recipe does not touch what taro leaves inside, like their emulator's
+  save.
 
   **Next to it goes `abl.sfc.dbg`**, with which Mesen2 shows our routine
   names in the debugger, **and the commit's `runtime/`**, taken with `git
