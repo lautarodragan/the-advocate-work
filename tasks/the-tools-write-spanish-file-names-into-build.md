@@ -33,8 +33,8 @@ binaries that write MSU-1 data changes the cache key.
 **Done the same day, by another task**: the-advocate `5d78ada7`
 (2026-10-12), "Tools: the Spanish names they read from a game, and write
 into its build, in English", renamed all of them while the ports went into
-English, and this draft was not closed then. Checked on 2026-10-16 at the
--advocate `759aa0ba`: no source of the tools or of the ports names
+English, and this draft was not closed then. Checked on 2026-10-16 at
+the-advocate `759aa0ba`: no source of the tools or of the ports names
 `memoria.cfg`, `musica.json`, `efectos.json`, `crudos/`, `parches/usos.json`
 or `sello.txt`, and `musicdata.inc` no longer says `tabla`. The Spanish
 files still seen in an old `build/` —`memoria.cfg` next to `memory.cfg`—
