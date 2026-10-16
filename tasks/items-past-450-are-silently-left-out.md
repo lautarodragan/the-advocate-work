@@ -25,3 +25,15 @@ below 250, ABL at 450.
 The runtime places `FAR_ITEM_LIST` right after the inventory, at $2A00,
 and asserts that the inventory does not reach it: `ITEMS_N` up to 512
 fits as it is; more needs the inventory moved.
+
+## Checked on 2026-10-16 (Carpintero)
+
+Still open: `ITEMS_N` is 451 in `rm2k-snes/events/src/compile.rs` and
+`rm2k-snes/mapdata/src/engine.rs` at the-advocate `759aa0ba`, and the scan
+still filters past it in silence. The last paragraph is out of date: since
+the linker places all of far RAM (`fb156a3e`, `d121156e`, 2026-10-16;
+[`let-the-linker-place-the-far-ram-map`](let-the-linker-place-the-far-ram-map.md)),
+the inventory is `far_items: .res ITEMS_N` in `runtime/far_ram_game.s` and
+`FAR_ITEM_LIST` a `.res` of its own in `runtime/items.s`, so raising
+`ITEMS_N` —or sizing it by the game— moves nothing by hand: what limits it
+is the `FARBSS` pool, and `just space` says how much is left.

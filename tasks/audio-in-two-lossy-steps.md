@@ -94,3 +94,12 @@ the final step consumes.
 
 The encoding to BRR. It loses signal —16 bits to 4— but there is nothing to
 choose: it is the hardware's format, like the 8x8 tiles.
+
+## Checked on 2026-10-16 (Carpintero)
+
+Still open: nothing in the-advocate `759aa0ba` writes a reduced SoundFont or
+MIDI. Two names above moved: the envelopes' families are in `sdsp.rs` of
+`rm2k-snes/rm2k-snes-audio/` (the Python left on 2026-10-02), and Adeleine's
+images are in `build/<cartridge>/adeleine/` of each game's project in
+the-advocate-ports. And "the ones in `abl`" is now one set per game: the
+same tools build nine.

@@ -496,3 +496,17 @@ The clones: `/extras/ref/sd2snes` (the FX Pak's firmware), `/extras/ref/ares`,
 `/extras/ref/mednafen-src` (the 1.32.1 tarball) and `/extras/ref/fullsnes`.
 bsnes, snes9x, mesen-s and Mesen2 were already there; the snes9x in `/extras/ref` is the
 same commit as the installed core.
+
+## Checked on 2026-10-16 (Carpintero)
+
+The premise of "More than 4 MB" and of the S-DD1 "for space" moved: **the
+cartridge is ExHiROM, 8 MB, since 2026-10-01** (the book's
+`decisions/the-cartridge-goes-to-8-mb.md` and `internals/exhirom.md`), which
+replaced the 4 MB decision this cites —its "revisit at 85-90 %" was reached
+and answered without a chip—. A chip would now mean leaving ExHiROM for the
+chip's own mapper. The rest —the SA-1 for the race, the measurements of the
+frame— is as it was. Other things that moved: `ram_lejana.s` is
+`runtime/far_ram.s` of the-advocate; the "is this character on the cell"
+pattern is compiled to `OP_CELL_TEST` (2026-09-27); and `/extras` is gone
+—the scripts are in `~/scratch/chips/` (with their Spanish names,
+`medir.py` for `measure.py`), and the clones in `~/ref/`—.

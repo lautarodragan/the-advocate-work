@@ -31,3 +31,13 @@ is a DMA whose `A1B` stays at zero: the screen shows it at once, and
 `FARBSS`, which needs the far RAM map placed by the linker first (its
 own draft), or into a stretch of the hand-written map—, and whether
 `text_buf`'s compositor, which writes it per letter row, pays the cycle.
+
+## Checked on 2026-10-16 (Carpintero)
+
+Still open: `oam`, `oam_high`, `cgram_shadow` and `text_buf` are still in
+`runtime/low_ram.s` at the-advocate `759aa0ba`. What moved is the choice of
+where they would go: since `fb156a3e` (2026-10-16) the linker places all of
+`$7E2000-$7E7FFF` as `FARBSS`
+([`let-the-linker-place-the-far-ram-map`](let-the-linker-place-the-far-ram-map.md),
+in testing), so there is no hand-written map left: they would be a `.res`
+in `FARBSS`, and the "its own draft" above is that task.

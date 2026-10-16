@@ -1,6 +1,6 @@
 ---
 name: "The Diff photos cropped, and 217's montage as in RM2k"
-description: "The Diff photos are captures of the map at 320x240: crop them to the ROM's window instead of scaling them, so that the switch from live to photo matches; and 217's montage with the photo at 50 % and the white flash, which is now possible with color math"
+description: "217's montage as in RM2k: each Diff photo at 50 % over black with a white flash on top; the crop of the photos, the other half of this task, is done"
 type: feature
 status: todo
 ---
@@ -30,3 +30,13 @@ From taro, on 2026-10-02, looking at the goldens of
 
 If the mode 7 pilot (`mode-7-pilot-for-the-zoom-of-the-diff-photos.md`) turns out well, the zoom
 of the photos comes back, and this goes together with it.
+
+## Checked on 2026-10-16 (Carpintero)
+
+**The crop is done**: [`cropping-a-picture-instead-of-scaling-it`](cropping-a-picture-instead-of-scaling-it.md)
+(`[graphics] cropped_pictures`, the four Diff photos and the montage's,
+verified against the ROM's camera). The mode 7 pilot is done too, and the
+zoom with it ([`picture-zoom-in-mode-7`](picture-zoom-in-mode-7.md)). What
+is left of this task is **217's montage**: on the-advocate `759aa0ba` it is
+still five frames of photo and three of black, without the white, as the
+book's `divergences/what-large-pictures-do-not-model.md` says.
