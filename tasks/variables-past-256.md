@@ -1,6 +1,6 @@
 ---
 name: "The variables past 256"
-description: "Vampires Dawn names 600 variables and far RAM has room for 256: the pages that use one of the other 344 are left out"
+description: "Vampires Dawn names 600 variables and the cartridge holds 256 (duplicate of variables-are-capped-at-256-slots): the pages that use one of the other 344 are left out"
 type: feature
 status: draft
 ---
@@ -21,3 +21,12 @@ culprits --every-map`, on the build's `compile` request, says so.
 
 **How to see it**: `just cartridges release` in `vampires-dawn/` and
 `grep "variables and" build/release/converter.log`.
+
+**Duplicate, noted on 2026-10-16 (Mulita)**: the same cap is followed in
+[`variables-are-capped-at-256-slots`](variables-are-capped-at-256-slots.md)
+(Hurón, 2026-10-15), which says where it lives —a byte slot in the
+bytecode and the converter's check— and counts what Vampires Dawn loses
+(224 events for 145 variables). The 256 is no longer far RAM's: since
+the-advocate `d121156e` the variables' region is sized by the game and
+placed by the linker. This one stays because the book's Vampires Dawn
+page links it.
