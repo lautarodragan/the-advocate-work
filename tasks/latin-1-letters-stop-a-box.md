@@ -2,7 +2,9 @@
 name: "Latin-1 letters stop a box"
 description: "A text box with a letter outside printable ASCII —é, ñ, ¿, ü, ß, …— leaves its whole page out: it is most of what Zounds and Vampires Dawn lose of their messages"
 type: feature
-status: draft
+status: doing
+assignee: Aguará
+agents: [Mulita, Aguará]
 ---
 
 Seen by Mulita on 2026-10-15, measuring
@@ -38,3 +40,8 @@ directory; the culprit `ShowMessage`s are the ones with those letters.
 its autostart —event 3, Uname's talk with the two guards, which teleports
 to map 9— is left out whole by its message boxes alone (`é ¿ ¡ ë`), so the
 player walks on map 8 and the story does not go on.
+
+**Taken by Aguará on 2026-10-16** (Hornero), as the next thing that blocks
+Zounds: first the box shown with each such letter as its plain ASCII
+neighbour and a warning, so the pages run; then the letters drawn for
+real, if the font has room.
