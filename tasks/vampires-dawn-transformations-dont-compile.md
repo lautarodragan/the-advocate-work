@@ -23,3 +23,8 @@ them. The `Loop`s these bodies have compile since `f0fd7e18`.
 
 **How to see it**: `just cartridges release` in `vampires-dawn/`, and the
 line "parallel common events" of `build/release/converter.log`.
+
+**Mulita, 2026-10-16**: once the bat compiles, it will still walk with the
+ground's passability: the maps' parallel pages that open every cell for it
+swap the ChipSet with `ChangeMapTileset`, which is dropped since that day.
+See `changemaptileset-is-not-done.md`.
