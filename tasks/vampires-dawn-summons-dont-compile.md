@@ -27,3 +27,13 @@ not compile, nor do 30 (`Lebensstatus`), 48 (`Geschick`) and 49
 
 **How to see it**: the line "parallel common events" of
 `vampires-dawn/build/release/converter.log`, and `just culprits`.
+
+**Checked on 2026-10-16 (Mulita)**, at the-advocate 759aa0ba, **reading the compiler, not with `culprits`**: several of the
+culprits above compile now —`ControlVars` from an item count
+(`557b3ea2`), a random operand in any range (`6d3b12b7`), from any of an
+actor's stats (`06710c31`), and switches past 1023, since the switch
+table is the game's (`782e1931`)—. Still refused: `ControlVars` from
+"other" but gold and the timer (the party size), `ChangeCondition` that
+sets a state, and `ChangeParameters`, which the compiler does not know.
+So the summons and 30, 48 and 49 most likely still stop, and 52 should
+not; a `just culprits` in `vampires-dawn/` says which.

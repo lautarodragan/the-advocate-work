@@ -34,3 +34,8 @@ that versions them will miss it.
 
 **How to see it**: `just cartridges release` in `book-of-three/` of the ports and
 `grep WARNING build/release/converter.log`.
+
+**Checked on 2026-10-16 (Mulita)**, at the-advocate 759aa0ba: still so —`WindowDecision` in `rm2k-snes/patches/src/lib.rs` holds
+only the message window's merges—. The folder is
+`build/release/patches/auto/windows/` since `5d78ada7`, which put the
+names the tools write into a build in English.
