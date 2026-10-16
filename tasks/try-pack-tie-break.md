@@ -2,7 +2,7 @@
 name: "try_pack's tie-break"
 description: "That the color distribution not depend on CPython's hash order"
 type: bug
-status: wishlist
+status: done
 ---
 
 # What
@@ -39,3 +39,10 @@ worse**. That code is in the history of `tools/snes/voodoo/`, before `4953089`.
 What it costs to do: either of the two paths **moves the tilemap of
 some maps**, so there are goldens that are going to move and taro has to
 re-bless them.
+
+Done by the-advocate `3a8e381f` (2026-09-29, "las teselas del mismo tamaño
+se reparten en el orden de sus colores"), still in Python, and kept when
+Adeleine moved to Rust in `c5e22f0b`: `try_pack` in
+`snes/adeleine/src/pack.rs` sorts tiles by size and then by their colours,
+so the answer depends on the input only. Checked on 2026-10-16 at the-advocate
+759aa0ba (Mulita).
