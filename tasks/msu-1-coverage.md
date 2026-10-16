@@ -21,3 +21,10 @@ in snes9x**. What was measured by hand and has no test:
   drifted from the video. A small test that builds a few frames with and
   without `--sin-msu` and compares the length of the audio with that of the
   picture is enough.
+
+## Checked on 2026-10-16 (Carpintero)
+
+Still open, with two facts that moved: `abl/tests/abl/test_video.py`
+(2026-09-29) now runs `video.py`'s factories against the conftest's —that
+the runs start where the suite starts them— but still not the audio's
+length against the picture's; and the flag is `--no-msu`, not `--sin-msu`.

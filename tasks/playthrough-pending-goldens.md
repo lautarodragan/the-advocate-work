@@ -25,3 +25,13 @@ A decision for taro before starting: the 14 `debug-*` of
 `test_debug_map.py` go without a golden **on purpose** according to their docstring.
 Are they pending or permanent? If they are permanent, the list should
 tell them apart, so they don't remain as debt.
+
+## Checked on 2026-10-16 (Carpintero)
+
+Still open. The list is `abl/tests/golden/playthrough/pending.txt` in
+the-advocate-ports (it was `rom/pruebas/golden/playthrough/pendientes.txt`),
+and its count is no longer the one above: some stretches got goldens and
+new shots were added. How many are left is said by the file. It includes
+the vipers' shots, which
+[`goldens-of-the-neon-vipers-playthrough`](goldens-of-the-neon-vipers-playthrough.md)
+also asked for.

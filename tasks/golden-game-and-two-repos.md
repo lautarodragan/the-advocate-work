@@ -39,3 +39,15 @@ phase 1, ABL out, is done. What follows is its phase 2, the minimal game:
 
 Phases 3 to 5 —the rest of M1, M2 with its assets, M3 on both— each become
 a task when the previous one is done.
+
+## Checked on 2026-10-16 (Carpintero)
+
+Phase 2 started: the game lives in `test-game/` of the-advocate since
+[`the-test-game-its-skeleton`](the-test-game-its-skeleton.md) (Calandria,
+2026-10-15, in testing), built from text with `rm2k-sketch` and Ditto, and
+cases have been added to it since —switches past 1023 brought from A
+Blurred Line ([`switches-past-1023-tested-in-the-test-game`](switches-past-1023-tested-in-the-test-game.md)),
+nested calls, the faces, the escapes, the map pictures, the System's
+cursor—, run by `just test-game`. What this task still holds is the rest of
+the plan: the harness split and ABL's M1 tests moved over, and phases 3
+to 5.
