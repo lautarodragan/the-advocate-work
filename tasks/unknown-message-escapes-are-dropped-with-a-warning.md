@@ -2,8 +2,8 @@
 name: "Unknown message escapes are dropped, with a warning"
 description: "A box with an escape the console cannot show leaves its whole page out today; it should drop the escape, compile the box, and say so in degradations.json, so the game can be played without solving each escape first"
 type: feature
-status: doing
-assignee: Mulita
+status: testing
+assignee: taro
 agents: [Mulita]
 ---
 
@@ -129,3 +129,20 @@ Nightmare 4,326 (`\c` 4,293, `\s` 30, `\h` 2); Dooms2 4 (`\S`); Frozen World
 already dropped silently.
 
 ABL compiles no box differently: no loss of the kind, the same culprits.
+
+## Verified
+
+With the branch's `text events screens convert` in `.local-tools`:
+`just rust-test` 914 passed; `just test` 29 passed; the test game, 20
+passed and 1 skipped (the save test on bsnes); ABL's `just tests` 1,555
+passed and 2 skipped, no golden moved; `just boot` at the ports root, 44
+passed. Captures and the tables in `/shared/captures/2026-10-15-message-escapes/`.
+
+What the suites do not cover: no ABL box carries an escape the console
+drops, so ABL's suite only says nothing else moved; the reflow that moves
+dropped escapes to the first box is covered by the text crate's unit test,
+not by a ROM. The `\^` in the middle of a box is covered only by
+`escapes.json`.
+
+**To install when merging**: `just install text events screens convert`
+(the text crate goes into the other three).
