@@ -2,7 +2,9 @@
 name: "Dooms 2's slots and menu don't fit in their bank"
 description: "With Dooms 2's map 1 (choose a character) in the cartridge, the slot screen and the menu gather more tiles than the 448 of their bank; the map is left out and the game starts on map 2"
 type: bug
-status: draft
+status: doing
+assignee: Calandria
+agents: [Calandria]
 ---
 
 Measured by Calandria on 2026-10-11 (`exclusions-left-over-in-the-ports.md`):
@@ -33,3 +35,14 @@ with their face— is the obvious suspicion, not checked.
 
 **How to see it**: remove 1 from `excluded` in `dooms2/rm2k-snes.toml` and
 `just cartridges release` in `dooms2/`.
+
+taro, on 2026-10-16, playing Dooms 2: Will is always in the party from the
+start, so the hero on the map is Will; in the original the first map is
+where the character is chosen. taro's idea, from memory: the map is a black
+background with more NPCs than VRAM holds, NPCs that only move when talked
+to. "The cheapest test first": a patch of the map that leaves the NPCs one
+pose, no code changes; then the same graphic for several, or a synthetic
+ChipSet from the CharSet; later, a general optimization (events that do not
+fit as BG while keeping them interactive, or poses loaded when needed).
+What 2026-10-11 measured was the slot screen and the menu's tile bank, not
+the NPCs: to be measured again with today's tools.

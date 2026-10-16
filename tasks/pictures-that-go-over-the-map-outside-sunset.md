@@ -2,7 +2,9 @@
 name: "Pictures that go over the map, outside Sunset"
 description: "In the station bathroom of Desert Nightmare (map 7) a 35% light mask comes out as a large picture and covers the room for about 8 seconds; the map_pictures knob that solves it in Sunset isn't turned on in other games"
 type: bug
-status: draft
+status: doing
+assignee: Tijereta
+agents: [Tijereta]
 ---
 
 Seen by Hurón on 2026-10-06 (`eraseevent-for-real.md`): in the
@@ -29,3 +31,7 @@ wasn't counted.
 
 **How to see it**: `just cartridges release` in `desert-nightmare/`, play
 up to the station bathroom (map 7) and compare with the original in Wine.
+
+taro, on 2026-10-16: Desert Nightmare's toilet (map 7) is practically
+invisible under the darkness the original lays at 35 %; "I'd try rendering
+it at 50 %, if possible".
