@@ -46,3 +46,15 @@ battle none of that runs, and what it would take, looked at on 2026-09-27:
 
 It shows. taro confirms it by playing: today a skill is a message and a number
 going down.
+
+## Checked on 2026-10-16
+
+At the-advocate `759aa0ba`, by Cardón: still not started —no battle code
+reads a skill's or weapon's `animation_id`—. Names above that moved with
+the translation and the moves since: `rom/src/animacion_de_batalla.s` is
+`runtime/battle_animation.s` (and `battle_animation_frames.s`),
+`batalla_escena.s` is `runtime/battle_scene.s`, `ESC_PAL_N` is
+`SCN_PAL_N` and `BA_MSG_CUADROS` is `BA_MSG_FRAMES`
+(`runtime/battle_loop.s`); the patch is `abl/patches/auto/animations/0062.toml`
+in the ports. Related since 2026-10-14 (`e36ff5d8`): a troop page's
+`ShowBattleAnimationB` compiles as a wait, a declared debt, not drawn.

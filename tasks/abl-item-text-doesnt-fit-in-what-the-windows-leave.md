@@ -1,6 +1,6 @@
 ---
 name: "ABL's item text doesn't fit in what the windows leave"
-description: "ABL's build warns that the most loaded item list asks for 200 tile pairs and the item and equipment windows leave 167"
+description: "ABL's build warns that the most loaded item list asks for more tile pairs than the item and equipment windows leave"
 type: bug
 status: draft
 ---
@@ -23,3 +23,12 @@ is in what `screens` answers (the `says` of its `screens.json`).
 
 A fact measured in passing: with the windows' background in a single color (the
 book's research "The windows, made cheaper"), the windows leave 184.
+
+**Checked on 2026-10-16** at the-advocate `759aa0ba`, by Cardón: the
+warning stands, with other numbers —the release build's `converter.log`
+in the ports checkout (2026-10-16) says 202 pairs of the 184 the windows
+leave—: `release` carries the whole game since the ports' `74eb754`, and
+the windows' background went flat with
+[`windows-background-setting-and-flat-text-area`](windows-background-setting-and-flat-text-area.md).
+The numbers are the build's to say; the description no longer carries
+them. What the ROM does with such an inventory is still not looked at.

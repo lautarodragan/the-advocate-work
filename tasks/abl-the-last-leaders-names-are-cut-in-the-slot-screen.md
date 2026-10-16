@@ -27,3 +27,11 @@ start.
 `~/scratch/chaja/captures/2026-10-14-end-blockers/` (`slots-original.png`,
 `slots-port-whole.png`), and the WARNING in the converter's log of a
 cartridge with every map.
+
+**Checked on 2026-10-16** at the-advocate `759aa0ba`, by Cardón: since
+the ports' `74eb754` (2026-10-14, after this draft) `release` carries the
+whole game, so this is no longer an experiment's: the release build's
+`converter.log` in the ports checkout (2026-10-16) has the same WARNING,
+six names cut —"DummyHero", "Gang Member", "MobilizedCar", "Royal Dalia",
+"Advocate" and "ABL 2.0 Save"—, and the leaders that cut are reachable in
+the cartridge taro plays.

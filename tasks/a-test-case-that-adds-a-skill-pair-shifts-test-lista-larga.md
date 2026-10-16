@@ -27,3 +27,8 @@ in another order —which would be the ROM's, and a game could hit it—.
 
 To reproduce: add that command to `tests/cases/skills.json`, `just
 cartuchos`, and `just tests tests/rpgmaker/test_long_list.py`.
+
+**Checked on 2026-10-16** at the ports `4b2d41e`, by Cardón: not looked
+at since. Names that moved with the ports' translation on 2026-10-12: the
+harness module is `data` —`data.skill_slots()`, in
+`tests/harness/data.py`— and the recipe is `just cartridges`.
