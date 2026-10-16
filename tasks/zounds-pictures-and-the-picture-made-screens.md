@@ -28,3 +28,9 @@ Captures of both cores in `/shared/captures/2026-10-15-zounds/`.
 custom menu was (the book's "The custom menu"), or the picture system
 grows past two —the book's "The picture system and the portable
 console"—; and how the intro gets past without them.
+
+**Noted on 2026-10-16 (Hurón)**: the boot stalling on map 106 had another
+cause too, followed in
+[`zounds-the-intro-on-map-106-waits-for-a-key-nobody-reads`](zounds-the-intro-on-map-106-waits-for-a-key-nobody-reads.md)
+(in testing). What stays a draft here is the choice above for the
+picture-made screens.

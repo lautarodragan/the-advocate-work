@@ -2,7 +2,7 @@
 name: "Vehicles: EnterExitVehicle and the boat"
 description: "Zounds starts its boat on map 187 'Fishing Game' and boards it with EnterExitVehicle on two pages, plus a TeleportTargets; the compiler has no vehicles, and the System's boat/ship/airship music slots point at RTP songs the repo lacks"
 type: feature
-status: draft
+status: wishlist
 ---
 
 Seen by Aguará on 2026-10-15, in the study
@@ -22,3 +22,13 @@ passability rule (water), its music— that the hero boards and leaves;
 none of the eight ports has needed it until now, so it is engine work
 with Zounds as the first user. The fishing mini-game on map 187 is what
 depends on it.
+
+## Defined
+
+**2026-10-16, Hurón**, checked against the-advocate `f4709d0b` and the ports `66ed09c`.
+Only Zounds' fishing mini-game needs it. **Done** is `EnterExitVehicle`
+boarding and leaving the boat —its sprite, water as its passability, its
+music—, `TeleportTargets` compiled, and a test game page that boards the
+boat and crosses water; the other vehicles' commands are left for when a
+game needs them. First step: easyrpg's `Game_Vehicle` and what of the
+hero's movement it changes.

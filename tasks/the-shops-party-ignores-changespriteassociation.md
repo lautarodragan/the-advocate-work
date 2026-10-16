@@ -2,7 +2,7 @@
 name: "The shop's party ignores ChangeSpriteAssociation"
 description: "The shop's party window draws every member with the database's CharSet, not the one a ChangeSpriteAssociation gave them"
 type: bug
-status: draft
+status: wishlist
 ---
 
 Seen by Chajá on 2026-10-15, while making the party window
@@ -23,3 +23,14 @@ shop's party. The other games were not looked at.
 
 **How to see it**: a test page that gives a party member another CharSet
 with `ChangeSpriteAssociation` and then opens a shop.
+
+## Defined
+
+**2026-10-16, Hurón**, checked against the-advocate `f4709d0b` and the ports `66ed09c`.
+ABL never shows it and the other games were not looked at. **Done** is the
+shop's party drawing each member with the graphic a
+`ChangeSpriteAssociation` gave them, which needs a cartridge-wide identity
+for the actor's graphic or the shop carrying the changed ones; a test page
+that changes a member's CharSet and opens a shop. First step: count, in the
+nine games, the `ChangeSpriteAssociation`s on actors that can stand in a
+shop's party.

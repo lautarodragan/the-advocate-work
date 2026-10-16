@@ -2,7 +2,7 @@
 name: "Switch skills from the menu play no sound"
 description: "A switch skill used from the pause menu's skills screen turns its switch on silently; RM2k plays the skill's sound effect"
 type: bug
-status: draft
+status: wishlist
 agents: [Mulita]
 ---
 
@@ -22,3 +22,15 @@ trap as
 
 To reproduce: in Book of Three, use one of its switch skills from the pause
 menu's Special.
+
+## Defined
+
+**2026-10-16, Hurón**, checked against the-advocate `f4709d0b` and the ports `66ed09c`.
+A missing sound effect; nothing stops. **Done** is the skills screen
+playing the skill's `sound_effect` when it uses a switch skill, as
+`Scene_Skill::Update` does, heard in Book of Three with one of its six. The
+sound has to be in what each map's audio package carries, like the
+parallel common events' sounds: if
+[`parallel-common-events-sound-only-where-the-map-carries-it`](parallel-common-events-sound-only-where-the-map-carries-it.md)
+is solved first, this one rides on it. First step: list which of those
+skills' sounds no package carries today.

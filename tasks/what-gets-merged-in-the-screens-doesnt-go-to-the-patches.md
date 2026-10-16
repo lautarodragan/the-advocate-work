@@ -2,7 +2,7 @@
 name: "What gets merged in the screens doesn't go to the patches"
 description: "Of what the converter loses in the windows, only the message window's colours reach patches/auto/; the colours of the 8bpp screens, the merged cells and End Game's stay in a WARNING in the log"
 type: chore
-status: draft
+status: wishlist
 ---
 
 Tijereta said it on 2026-10-05 in
@@ -39,3 +39,13 @@ that versions them will miss it.
 only the message window's merges—. The folder is
 `build/release/patches/auto/windows/` since `5d78ada7`, which put the
 names the tools write into a build in English.
+
+## Defined
+
+**2026-10-16, Hurón**, checked against the-advocate `f4709d0b` and the ports `66ed09c`.
+Only ABL versions its patches, and it merges nothing in those screens, so
+nobody misses it yet. **Done** is `WindowDecision` holding the 8bpp
+screens' colour merges, the merged cells and End Game's colours, and the
+converter writing them into `patches/auto/windows/` as it does the message
+window's, with a `rm2k-snes-patches` test per kind. First step: the shape
+of each kind in `borders.rs`, `fit.rs` and `merge_until`.
