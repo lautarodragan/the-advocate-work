@@ -2,8 +2,8 @@
 name: "Zounds: the intro on map 106 waits for a key nobody reads"
 description: "Map 106's autostart waits for variable 4 to be 5 or 6 (the action or cancel key); only common event 3 writes it, with KeyInputProc in its long form, and that event is left out by the long KeyInputProc and by ControlVars from an actor's stats"
 type: bug
-status: doing
-assignee: Aguará
+status: testing
+assignee: taro
 agents: [Aguará]
 ---
 
@@ -89,3 +89,12 @@ maximums (2–5) in ABL, Book of Three, Vampires Dawn and Zounds, spirit
 * The book: Zounds' Known issues, two rows in `internals/events.md`, a
   bullet in the saturation divergence.
 * Draft [`a-parameter-with-a-zero-curve-clamps-before-the-equipment`](a-parameter-with-a-zero-curve-clamps-before-the-equipment.md).
+
+### What to install when merging
+
+`just install events mapdata convert`, from `~/the-advocate`: the compiler
+and its binary, the emission (`actor_level`) and the converter, which
+links the compiler. The runtime —`actor_stats.s`, `level.s`, `main.s`— is
+read by `rm2k-snes-cartridges` from the checkout, so it needs no reinstall.
+The ports' harness change (`tests/games.py`, `has_control` with `auto_n`)
+and `test_boot.py` come with the ports' branch; the book's, with the docs'.
