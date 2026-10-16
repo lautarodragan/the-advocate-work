@@ -27,3 +27,5 @@ composer in `runtime/` would have to honour per glyph with the font's
 inks (the screens already draw text in several inks). `\n[k]` is the
 actor's name, `\v[k]` a variable's value: both are things the ROM knows at
 run time. Other games were not counted here.
+
+**Absorbed** by [`unknown-message-escapes-are-dropped-with-a-warning`](unknown-message-escapes-are-dropped-with-a-warning.md) (Mulita, 2026-10-15): the 678 pages are not out by `\c[n]`, which was already dropped, but by letters the console's font does not have —Zounds is in Spanish, and its hero is `Unamë`—; see [`latin-1-letters-stop-a-box`](latin-1-letters-stop-a-box.md). The colour itself is still lost: [`message-colours-and-speed`](message-colours-and-speed.md).
