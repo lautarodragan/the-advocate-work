@@ -2,7 +2,7 @@
 name: "TintScreen snaps instead of fading"
 description: "A TintScreen with a duration changes the screen at once and waits the time out; scenes that fade to night, to black or back to day jump instead"
 type: bug
-status: draft
+status: todo
 ---
 
 Seen by Mulita on 2026-10-15, comparing The Book of Three with the original
@@ -25,3 +25,18 @@ because the compared screen is always the settled one.
 
 **How to see it**: any scene of the ports' `milestone-*` cases, for
 example `milestone-cauldron`, against the original.
+
+## Defined
+
+**2026-10-16, Hurón**, checked against the-advocate `f4709d0b` and the ports `66ed09c`.
+Seen in every scene of The Book of Three (128 tints) and in the other
+ports, so todo even though nothing stops. **Done** is `OP_TINT` carrying
+the duration and the runtime moving the tint towards the target each frame
+over it, as easyrpg's `Screen` does, with the wait still an `OP_DELAY`;
+`tint-gradient-dropped` gone from `degradations.json`; and a test that
+captures a frame halfway through a fade and sees an intermediate tint. The
+goldens that settle should not move; any that does is looked at. First
+step: measure what recomputing the tinted palettes costs per frame, in
+vblank, with the timer's and the pictures' palettes in;
+[`tint-does-not-tint-whoever-shares-a-palette-with-the-timer`](tint-does-not-tint-whoever-shares-a-palette-with-the-timer.md)
+touches the same code.

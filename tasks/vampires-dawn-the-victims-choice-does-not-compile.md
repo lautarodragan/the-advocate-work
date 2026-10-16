@@ -2,7 +2,7 @@
 name: "Vampires Dawn: the victims' choice does not compile"
 description: "The choice 'Talk / Suck Blood / Convert / Leave', whose options carry leading spaces and a \\_, refuses 210 pages on 48 maps, with no other culprit in them"
 type: bug
-status: draft
+status: todo
 ---
 
 Seen by Chajá on 2026-10-14, with the-advocate `3438a90c` (branch
@@ -35,3 +35,13 @@ in `build/release/culprits.json` the pages whose culprits are only codes
 among them— is dropped and noted instead of refusing the box. If the `\_`
 was the culprit the 210 pages compile now; whether the padded lines fit
 was never measured. A `just culprits` in `vampires-dawn/` says which.
+
+## Defined
+
+**2026-10-16, Hurón**, checked against the-advocate `f4709d0b` and the ports `66ed09c`.
+210 pages on 48 maps are the game's main interaction, so todo. **Done** is
+`just culprits` in `vampires-dawn/` naming none of those pages for
+`ShowChoice`, and the choice shown in the ROM with its options readable, in
+a test that opens event 46 of map 6. First step: that `culprits` run; if
+the `\_` was the culprit it is not since `2a142635`, and what remains is the
+padded width, measured against the choice window.

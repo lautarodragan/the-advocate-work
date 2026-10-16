@@ -2,7 +2,7 @@
 name: "Variables are capped at 256 slots, and Vampires Dawn names 401"
 description: "The RM2k variable's slot is one byte in the bytecode and the converter stops at 256, so a game with more than 256 variables loses every event that names the rest: Vampires Dawn leaves 224 events out for 145 variables without a slot"
 type: feature
-status: draft
+status: todo
 ---
 
 Seen by Hurón on 2026-10-15, in the study
@@ -41,3 +41,19 @@ message still gives the old reason: see
 The same loss was noted earlier, from the converter's log, in
 [`variables-past-256`](variables-past-256.md) (2026-10-06); this one is
 kept as the one to follow, since it says where the cap is.
+
+## Defined
+
+**2026-10-16, Hurón**, checked against the-advocate `f4709d0b` and the ports `66ed09c`.
+224 of Vampires Dawn's events are left out by it, and it is no longer RAM,
+only the byte slot, so todo. **Done** is a game's variables having a slot
+up to its own `VARIABLES_N`, Vampires Dawn's `degradations.json` without
+any "has no slot in far RAM", the check in `emit.rs` capping at what the
+new operand holds with its real reason, and the save carrying them. Two
+ways are open and the agent picks and measures, in bytecode and in cycles:
+the operand becomes a word in every opcode that carries a variable, or a
+slot past 255 goes through a wider form only where it appears, so ABL's
+bytecode stays as it is. First step: list every opcode with a variable
+operand, from `variable_slot`'s callers in `rm2k-snes-events`. It closes
+the second point of
+[`the-converter-caps-what-far-ram-no-longer-limits`](the-converter-caps-what-far-ram-no-longer-limits.md).

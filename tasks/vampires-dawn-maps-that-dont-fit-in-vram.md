@@ -2,7 +2,7 @@
 name: "The Vampires Dawn maps that don't fit in VRAM"
 description: "Nine Vampires Dawn maps —Shannar, Uruya, Melsan, Asran among them— are left out because of VRAM: five with no layout that holds background, sprites and upper layer, two with no room for the message window and two because of their panorama in mode 1"
 type: feature
-status: draft
+status: todo
 ---
 
 What is left out of Vampires Dawn because of VRAM, measured by Aguará on
@@ -41,3 +41,19 @@ there doesn't compile). How far it can be played without them wasn't looked at.
 **How to see it**: remove the map from `excluded` and `just cartridges release` in
 `vampires-dawn/` of the ports (about two minutes; with the MSU-1, which the
 project asks for as mandatory).
+
+## Defined
+
+**2026-10-16, Hurón**, checked against the-advocate `f4709d0b` and the ports `66ed09c`.
+Shannar, Uruya, Melsan and Asran are towns of the story, and a `Teleport`
+to a map that is not there leaves its page out, so todo. **Done** is the
+nine maps out of `excluded` in `vampires-dawn/rm2k-snes.toml` and in the
+whole `release`, or each that stays with its measured limit in that
+comment. Two ways are open and the agent picks and measures: fewer sprite
+tiles per map —only the poses an event can show,
+[`poses-only-when-an-event-can-show-them`](poses-only-when-an-event-can-show-them.md),
+on top of [`poses-without-their-empty-tiles`](poses-without-their-empty-tiles.md)—,
+or a degradation of the sprites as the background has one, which Cardón
+left as the next step. First step: take each map out of `excluded` with
+today's tools and write down what each says now; the numbers above are of
+2026-10-11.

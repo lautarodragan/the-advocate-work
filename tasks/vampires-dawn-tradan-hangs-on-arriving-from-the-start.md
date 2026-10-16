@@ -2,7 +2,7 @@
 name: "Vampires Dawn: Tradan hangs on arriving from the start"
 description: "Jumping to Tradan (170) right after the opening leaves a page active and the main loop without ticks, with main's tools too; maybe a page that waits for state the jump does not give, maybe a hang"
 type: bug
-status: draft
+status: todo
 ---
 
 Seen by Hurón on 2026-10-14, with the-advocate `51b4b1b2` and the ports
@@ -26,3 +26,13 @@ FADE_DOOR`, `fade = 1`) to 170; run 900 frames reading `ticks`.
 To look at first: which page is active then, and whether the ROM is in a
 loop of the interpreter or waiting on something —a page that only runs
 when the story got there from map 1 should still let the loop tick—.
+
+## Defined
+
+**2026-10-16, Hurón**, checked against the-advocate `f4709d0b` and the ports `66ed09c`.
+Whatever page is waiting, the main loop should keep ticking: `ticks`
+stopping for good is a hang of the ROM, not of the story, so this is a bug
+with a repro whether or not the game itself makes that jump. **Done** is
+the cause found and fixed, and a test in the ports that makes the draft's
+jump and sees `ticks` go on for 900 frames. First step: the draft's own
+—which page is active and where the CPU loops when `ticks` stops—.

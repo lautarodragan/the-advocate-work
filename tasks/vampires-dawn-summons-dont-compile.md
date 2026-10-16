@@ -2,7 +2,7 @@
 name: "Vampires Dawn's summons don't compile"
 description: "Parallel common events 1, 2, 5, 6, 8 and 9 (the summons), 30, 48 and 49 stop at ControlVars and branches the compiler leaves out, and 52 is on a switch past 1023"
 type: bug
-status: draft
+status: todo
 ---
 
 Seen by Aguará on 2026-10-12, with the-advocate `6ed7c4a0` and the ports
@@ -37,3 +37,15 @@ table is the game's (`782e1931`)—. Still refused: `ControlVars` from
 sets a state, and `ChangeParameters`, which the compiler does not know.
 So the summons and 30, 48 and 49 most likely still stop, and 52 should
 not; a `just culprits` in `vampires-dawn/` says which.
+
+## Defined
+
+**2026-10-16, Hurón**, checked against the-advocate `f4709d0b` and the ports `66ed09c`.
+Summoning is one of Vampires Dawn's mechanics and does nothing, so todo.
+**Done** is the parallel common events 1, 2, 5, 6, 8, 9, 30, 48, 49 and 52
+out of the "do not compile" line of `converter.log`, or each that stays
+with its measured culprit written here. First step: `just culprits` in
+`vampires-dawn/` with today's tools, since Mulita read that several
+culprits compile now; what is left by her reading is `ControlVars` from
+"other: party size", `ChangeCondition` that sets a state, and
+`ChangeParameters`, each a small piece of the compiler and the runtime.
