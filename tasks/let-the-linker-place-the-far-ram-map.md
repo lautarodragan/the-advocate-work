@@ -2,7 +2,9 @@
 name: "Let the linker place the far RAM map"
 description: "Move the 24 KB of $7E2000-$7E7FFF written by hand into segments the linker places, sized by the game: 3.5 KB (ABL) to 5.6 KB (Sunset) of slack and holes become one pool, and just space says what is left in total"
 type: feature
-status: draft
+status: doing
+assignee: Hurón
+agents: [Hurón]
 ---
 
 Suggested by Hurón on 2026-10-15, in the study

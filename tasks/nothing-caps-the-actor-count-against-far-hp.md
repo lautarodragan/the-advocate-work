@@ -2,7 +2,9 @@
 name: "Nothing caps the actor count against FAR_HP and FAR_SP"
 description: "FAR_HP and FAR_SP are 128 B apart and FAR_EQUIPMENT has 752 B, so a game with more than 64 LDB actors has its HP table run into its SP table with no assert on either side; ABL has 61"
 type: bug
-status: draft
+status: doing
+assignee: Hurón
+agents: [Hurón]
 ---
 
 Seen by Hurón on 2026-10-15, in the study
