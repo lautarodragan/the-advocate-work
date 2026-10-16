@@ -2,7 +2,7 @@
 name: "The Book of Three: a night's rest in a scene has no fade or music"
 description: "The game uses ShowInn as the night passing in several scenes; the port heals on the spot, without the inn's fade to black and its jingle"
 type: bug
-status: draft
+status: wishlist
 ---
 
 Seen by Mulita on 2026-10-15, comparing the port with the original under
@@ -23,3 +23,16 @@ its music".
 
 **How to see it**: the ports' case `milestone-campfire` —its scene ends
 with one—, or `milestone-guard`.
+
+## Defined
+
+Wishlist, on 2026-10-16, by Cardón: at the-advocate `f4709d0b` `compile_inn` heals on the
+spot for every inn, of every game, and says so as `inn-not-staged`; the
+scenes go on, only without their fade.
+
+**Done** means `ShowInn` fades to black with the System's inn music and
+comes back, at price 0 too, as RM2k's `Scene_Map::CallInn`, and the loss
+goes for both prices or only the free one; a golden of
+`milestone-campfire`'s end. **First step**: how the runtime does a fade
+and a song from a page today (`TintScreen`, `PlayBGM`), to stage it with
+them.

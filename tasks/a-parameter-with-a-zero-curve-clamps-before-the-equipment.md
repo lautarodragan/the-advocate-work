@@ -2,7 +2,7 @@
 name: "A parameter with a zero curve is clamped before the equipment is added"
 description: "The ROM clamps an actor's attack, defense, spirit and agility to 1 at the level's value and then adds the equipment; RM2k adds first and clamps after. It only shows with a curve of zeros, which no game of the nine has"
 type: bug
-status: draft
+status: wishlist
 ---
 
 Seen by Aguará on 2026-10-16 in the test game, with the-advocate
@@ -24,3 +24,13 @@ says so.
 
 How to see it: give an actor a curve of zeros and a weapon, and read its
 attack with `ControlVars` or on the equipment screen.
+
+## Defined
+
+Wishlist, on 2026-10-16, by Cardón: no game of the nine has a curve with a 0.
+
+**Done** means `level_param` in `runtime/level.s` leaves the curve's value
+unclamped and `eq_parameter` and `actor_stat_other` clamp once after the
+equipment, as `Game_Actor::GetBaseAtk`, with the test game's
+`actor-stats` expecting RM2k's 5. **First step**: who else reads
+`level_param` and relies on its clamp.

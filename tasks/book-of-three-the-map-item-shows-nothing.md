@@ -2,7 +2,7 @@
 name: "The Book of Three: looking at the map shows nothing"
 description: "Common event 23 shows a full-screen picture of the land and waits for a key; the port does not show the picture, so the player gets a blank wait"
 type: bug
-status: draft
+status: todo
 ---
 
 Seen by Mulita on 2026-10-15 in the build's `degradations.json`
@@ -19,3 +19,15 @@ and waits for a key over the map as it was.
 
 **How to see it**: turn on switch 38 from a case on any map, or use the map
 item from the pause menu once the party has it.
+
+## Defined
+
+Todo, on 2026-10-16, by Cardón: an item of the game that, when used, waits for a key over
+nothing.
+
+**Done** means switch 38 on shows `bo3map` full screen until a key, on the
+maps where the item can be used, with a case and its golden, and the
+`picture-not-shown` loss for common event 23 gone. **First step**: why
+the converter leaves it out —a common event's picture has no map of its
+own, so it needs a layout on every map where switch 38 can come on—, which
+`degradations.json` and `map_pictures.rs` should say.

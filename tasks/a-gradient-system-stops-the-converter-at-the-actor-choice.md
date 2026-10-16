@@ -2,7 +2,7 @@
 name: "A System with a gradient under its frame stops the converter at the actor choice"
 description: "Zounds' System has 215 colours under its window frame and no `[windows.background]` entry: the actor choice's windows come out as 65 tiles in a 64-tile bank and rm2k-snes-screens stops, instead of fusing or saying which knob"
 type: bug
-status: draft
+status: todo
 ---
 
 Seen by Aguará on 2026-10-15, in the study
@@ -28,3 +28,16 @@ told "give Zounds_System a `[windows.background]`".
 
 **To reproduce**: build Zounds' measuring project without the entry
 (`~/scratch/aguara/zounds/project/rm2k-snes.toml`, last lines).
+
+## Defined
+
+Todo, on 2026-10-16, by Cardón: Zounds goes on since its `rm2k-snes.toml` carries the
+`[windows.background]` entry, but a new game with a gradient System stops
+with a message that names the symptom.
+
+**Done** means a System with no entry whose windows do not fit their bank
+either gets the average fill on its own, noted as a WARNING, or stops
+naming the knob —"give <System> a `[windows.background]`"—; the agent picks,
+with a test in rm2k-snes-screens over a gradient skin. **First step**: the
+check in `checks.rs` and `fit::skin_for`, to see whether the background
+can join the frame's path.

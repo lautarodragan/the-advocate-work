@@ -2,7 +2,7 @@
 name: "ChangeMapTileset is not done"
 description: "The command is dropped since 2026-10-16: the map keeps its ChipSet. Frozen World's frozen bazaar and temple don't show, and Vampires Dawn's bat would keep the ground's passability"
 type: feature
-status: draft
+status: wishlist
 ---
 
 Seen by Mulita on 2026-10-16, with the-advocate `759aa0ba` plus branch
@@ -31,3 +31,16 @@ the drawing.
 `vampires-dawn/`, and the `tileset-not-changed` losses of
 `build/release/degradations.json`; Frozen World's intro on map 9, after
 the flash, with the water still in the original.
+
+## Defined
+
+Wishlist, on 2026-10-16, by Cardón: since `d9577293` the command is dropped and its pages
+run, so nothing stops. The Frozen World shows moving water where the
+original shows it still; Vampires Dawn's bat waits for
+`vampires-dawn-transformations-dont-compile.md`, and when that is done
+this one becomes needed for its passability.
+
+**Done** means, per Phase 2 of `changemaptileset-is-not-compiled.md`, a
+map's variants converted over its grid and swapped at run time with an
+opcode, and the `tileset-not-changed` losses gone. Vampires Dawn's case
+alone —every cell open, no drawing— is a smaller first piece.
