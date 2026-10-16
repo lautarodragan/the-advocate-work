@@ -2,7 +2,7 @@
 name: "Characters a route gives a graphic to are not drawn"
 description: "An event whose pages all lack a graphic and that a forced route gives one (move command 34) never appears: scenes lose characters that walk in, talk and leave"
 type: bug
-status: draft
+status: todo
 ---
 
 Seen by Mulita on 2026-10-15, comparing The Book of Three with the original
@@ -32,3 +32,15 @@ Frozen World 78, Desert Nightmare 63, Sunset Over Imdahl 23, Vampires Dawn
 **How to see it**: the ports' `tests/test_book_of_three_milestones.py`, case
 `milestone-gurgi`: the scene after the step up has two characters next to
 the hero in the original and none in the port.
+
+## Defined (2026-10-16, Carpintero)
+
+Scenes lose their characters in five games, ABL among them. **Done**: an
+event whose pages carry no graphic but that a forced route (command 34)
+dresses gets an NPC row and a slot for that graphic, and appears;
+`milestone-gurgi` sees the two characters next to the hero. **First
+step**: in Wally's `collect_npcs`, collect the graphics routes give to
+such events (the converter already knows them, `route_graphics`), and
+what that costs in rows on the busiest maps. The command-34 graphics go
+through the same per-map table as
+[`frozen-world-map-2-route-graphic-changes-past-the-table`](frozen-world-map-2-route-graphic-changes-past-the-table.md).

@@ -2,7 +2,7 @@
 name: "ExFont glyphs in messages"
 description: "RM2k draws `$` plus a letter as an icon from the System's ExFont; the converter prints it as text. Seen in Vampires Dawn: a sign reads \"$s Graveyard\""
 type: bug
-status: draft
+status: wishlist
 ---
 
 Seen by Cardón on 2026-10-12, in the captures of
@@ -21,3 +21,11 @@ Not measured: how many messages use it, in which games, and which glyphs.
 `grep` over each game's `data/` is the first step. What doing it asks for
 is a glyph per icon used in the font —`rm2k-snes/text/`— and the
 converter recognising the escape; if few are used, only those.
+
+## Defined (2026-10-16, Carpintero)
+
+Cosmetic: two characters in a message; nothing stops. **Done**: `$` plus
+a letter in a message is drawn as its ExFont icon, for the icons the
+games use, with a golden of a message that carries one. **First step**:
+the grep over each game's `data/` for `$[A-Za-z]` in messages, which says
+how many icons the font needs; if it is many, it becomes `todo`.

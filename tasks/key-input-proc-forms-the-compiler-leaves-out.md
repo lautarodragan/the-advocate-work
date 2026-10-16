@@ -2,7 +2,7 @@
 name: "KeyInputProc: the forms the compiler leaves out"
 description: "Some directions and not others, the timed form of RPG Maker 2003 and the keys the pad does not have: no game of the nine asks for the first two, and the third is noted as a degradation"
 type: feature
-status: draft
+status: wishlist
 ---
 
 Seen by Aguará on 2026-10-16, with the-advocate `af7c399d` and the ports
@@ -37,3 +37,11 @@ How to see it: `just culprits` in a game whose pages carry one of the two
 forms; the compiler's unit test
 `key_input_proc_long_forms_that_are_the_short_form_compile_as_it` has one
 of each.
+
+## Defined (2026-10-16, Carpintero)
+
+No game of the nine asks for the two forms that do not compile. **Done**:
+a page with some directions and not others, and one with 2003's timed
+form, compile and behave like easyrpg's, each with a unit test in the
+events crate. Becomes `todo` when a game asks for either; `just
+culprits` says so.

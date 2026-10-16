@@ -2,7 +2,7 @@
 name: "The event's touch from another layer does not fire"
 description: "A trigger-2 page on a layer other than the hero's fires when the hero steps onto it, but not when the event steps onto the hero, nor while the hero stands on it: RM2k's CheckEventCollision and the player's per-frame check"
 type: bug
-status: draft
+status: wishlist
 ---
 
 Seen by Aguará on 2026-10-14, reading the code while fixing
@@ -32,3 +32,11 @@ counted over each port's `data/` (the page's `layer`, 1 is the hero's):
 none in ABL (64 pages, all on the hero's layer) nor in Frozen World
 (92); 1 of 40 in Desert Nightmare; 44 of 152 in Vampires Dawn, 39 of
 them below the hero.
+
+## Defined (2026-10-16, Carpintero)
+
+No case seen in a game; the pages are in Vampires Dawn (44) and Desert
+Nightmare (1). **Done**: RM2k's two behaviours —`CheckEventCollision`
+and the per-frame check while the hero stands on one—, each with a test
+page in the test game, red before. Becomes `todo` when a Vampires Dawn or
+Desert Nightmare scene is seen stuck on one.

@@ -2,7 +2,7 @@
 name: "The roof edges that don't fit in the 127"
 description: "On painted maps, the exact roof edges go in BG2 and 127 fit; in Sunset's plazas and streets there are more, and the rest go by whole cell: the roof covers too much or too little"
 type: bug
-status: draft
+status: wishlist
 ---
 
 Measured by Mulita on 2026-10-11 (`sunset-in-mode-1-with-colour-math.md`):
@@ -27,3 +27,11 @@ where the original covers them.
 
 **How to see it**: `just boot -k sunset` at the root of the ports builds the
 release; go to map 2 and look at the guard at (36,13).
+
+## Defined (2026-10-16, Carpintero)
+
+Cosmetic and measured (2.2% of the roof pixels): nothing stops. **Done**:
+Sunset's painted maps carry every roof edge exactly, with the goldens of
+`test_painted.py` moved on purpose to show the guard at (36,13) on map
+2. **First step**: Mulita's suggestion —BG2's base and the window at
+index 256, for 256 edges— and how many edges each painted map needs.

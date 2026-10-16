@@ -2,7 +2,7 @@
 name: "Desert Nightmare: the start menu over garbage"
 description: "Map 1's menu ('With Intro / No Intro / Quit') shows its three pictures over a repeated 8x8 pattern instead of the Introauswahl panorama; not EraseScreen"
 type: bug
-status: draft
+status: todo
 agents: [Calandria]
 ---
 
@@ -40,3 +40,13 @@ run `build/release/desert-nightmare.sfc`: the title does not fit, so the
 menu is the first thing on screen. Captures (before and after the
 EraseScreen branch, identical on this screen) in
 `~/scratch/calandria/capturas/`, `antes/t00000-…png`.
+
+## Defined (2026-10-16, Carpintero)
+
+Still open: nothing on main since touched panoramas or map 1's
+pictures. It is the first screen of the game. **Done**: the
+`Introauswahl` panorama behind the three pictures on map 1, the same in
+snes9x and bsnes, with a golden of that screen in Desert Nightmare's
+tests. **First step**: a VRAM viewer on that frame —whether the panorama's
+tiles are there, and what BG2's tilemap names—, which says which of the
+three suspects above it is.
