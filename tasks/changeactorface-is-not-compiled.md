@@ -24,3 +24,14 @@ declared debt in the same way is the question; it would let in five pages on
 its own (the other two have other causes).
 
 **Uses in the eight dumps**: Frozen World 13, Vampires Dawn 5, Dooms 2 1.
+
+## Done (Tijereta, 2026-10-15)
+
+Accepted as a debt, with `ChangeFaceGraphic` done for real in
+`draw-the-faces.md`: `ChangeActorFace` is in the event compiler's
+`ACCEPTED_UNDONE` and compiles to nothing, with an `actor-face-not-changed`
+loss in `degradations.json` that says which actor keeps the database's
+face. The seven pages of Frozen World get in. Changing the face the slot
+screen and the menu show is out of scope: they bake each actor's face into
+their 448-tile bank, so a changed face would have to be in it too; the
+book's "What faces do not model" says so.
