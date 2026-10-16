@@ -31,3 +31,10 @@ script):
 
 **To reproduce**: build a game's `release` and run `just culprits` in its
 directory; the culprit `ShowMessage`s are the ones with those letters.
+
+**It is where Zounds' intro stops** (Aguará, 2026-10-16, the-advocate
+`1a97c8ca`): once map 8 "To King's Room" stopped going black
+([`zounds-the-screen-goes-black-up-the-stairs-after-the-guard`](zounds-the-screen-goes-black-up-the-stairs-after-the-guard.md)),
+its autostart —event 3, Uname's talk with the two guards, which teleports
+to map 9— is left out whole by its message boxes alone (`é ¿ ¡ ë`), so the
+player walks on map 8 and the story does not go on.
