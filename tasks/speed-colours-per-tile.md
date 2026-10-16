@@ -2,7 +2,7 @@
 name: "Speed: colours per tile"
 description: "Keep each tile's colours instead of recomputing them"
 type: refactor
-status: wishlist
+status: done
 ---
 
 # What
@@ -26,3 +26,12 @@ kept from the first.
 It is a free improvement: it doesn't change any colour decision, so the ROM has
 to come out byte for byte the same. That is the acceptance criterion, and with
 `SIN_CACHE=1`, which is where it is measured.
+
+## Dropped on 2026-10-16 (Carpintero), at the-advocate 759aa0ba
+
+The code this would change is gone: `tile_colors` and the second pass that
+recomputed it were in the Python of the map layers, deleted on 2026-09-30
+(`dde35b1a`, "Se va el Python de los mapas que ya no usa nadie") when Wally
+and Adeleine in Rust took the conversion over; no function of that name is
+left, and `SIN_CACHE` is `NO_CACHE`. If the Rust conversion turns out slow,
+it is measured anew and is another task.
