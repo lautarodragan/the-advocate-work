@@ -25,3 +25,10 @@ converter would have to take a `.wav` as a song (upsampled to 44.1 kHz,
 it emits the MIDI's. Without MSU-1 the three slots fall silent, or get a
 MIDI chosen for them as a knob. The title and the battle theme are the
 first and most heard music of the game.
+
+**Corrected on 2026-10-16 (Hornero)**: five `.wav` are played, not three.
+The map tree sets its own music (`music_type` 2) on map 33, Mountains,
+`18 - Desert flower`, and on maps 89, 91, 92 and 177, the small caves,
+`04 - Cavern`; the study read the tree as setting none. The fourteen
+nothing plays were removed from taro's repository that day (taro's call),
+so `Music/` holds only these five `.wav`.
