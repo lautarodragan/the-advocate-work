@@ -821,23 +821,23 @@ What always has to be done:
   `goldens-textos`…) and 2 GB of old audio. What is already in git or is
   rebuilt from a commit can be deleted once taro has declared it looked at.
 
-  **The MSU-1 tracks do not go in the build: they go to `/shared/msu/`**, a
-  single directory that is updated only when they change —its `README.txt`
-  says which fingerprint they are compared with; it was `LEEME.txt` until
-  2026-10-12, so the first `just deliver` after that asks for
-  `--update-msu`, which writes the new one—. They weigh half a gig,
-  and copying them in every build would duplicate them for nothing. taro
-  copies the `abl.sfc` next to them. It is taro's, from 2026-09-25, when
-  `release` started carrying them always. `just deliver` warns if they do
-  not match the build's, and copies them only with `--update-msu`.
+  **The MSU-1 tracks go in every build, of every game**, next to the
+  `.sfc` with its `.msu`: the folder is whole, and a card plays it with
+  MSU-1 as it is copied. It is taro's, from 2026-10-16, knowing that it
+  repeats gigabytes —ABL's tracks are 2.5 GB— because the NAS has room and
+  builds are not made every twenty minutes. The other games' `cartridges`
+  build without tracks unless `TRACKS=1`, which the root's `deliver` asks
+  for: the tests do not need them. From 2026-09-25 until that day ABL's
+  tracks went to a single `/shared/msu/`, copied only with `--update-msu`
+  when their fingerprint changed, and taro carried the `abl.sfc` there; the
+  other games went without tracks. `/shared/msu/` is no longer written.
 
-  **The `abl.msu` does go in the build, and also to `/shared/msu/`
-  always.** Since 2026-09-25 it is not empty: it carries the battle
-  backgrounds that the ROM reads through MSU-1 —see `internals/the-msu-file.md`
-  in the book—, so it changes with the converter and belongs to the build,
-  not to the tracks; and it weighs 32 KB per background. With another
-  build's `abl.sfc` nothing breaks: the ROM does not find its signature in
-  the `.msu` and uses the backgrounds it carries.
+  **The `.msu` is not the tracks.** Since 2026-09-25 it carries the battle
+  backgrounds that the ROM reads through MSU-1 —see
+  `internals/the-msu-file.md` in the book—, so it changes with the
+  converter; it weighs 32 KB per background. With another build's `.sfc`
+  nothing breaks: the ROM does not find its signature and uses the
+  backgrounds it carries.
 * **And the ROM given to test comes from merged `main`, not from the
   agent's branch.** The agent's has its fix and **none of the others'**.
   The agent's is useful to isolate **its** change; the one that gets
