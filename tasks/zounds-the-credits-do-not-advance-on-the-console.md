@@ -2,7 +2,7 @@
 name: "Zounds: the credits do not advance on the console"
 description: "On a real SNES, Zounds' build with MSU-1 boots and stays on the first screen, the credits with music on map 106; the boot test, without tracks and in emulators, gets past it to map 7"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Aguará]
 ---
@@ -116,3 +116,11 @@ What each answer would mean: no white flash, the CPU is stopped on 106
 —the SPC700 echo waits are the first suspect—; white but no shake, the
 pad is not reaching the ROM; shake but no green on a press after 5 s, the
 edge logic of `op_key`; green and no fade, page 1 or the teleport.
+
+**taro, 2026-10-16, on the console**: the delivery of that evening (the
+ports `4b2d41e`, the-advocate `759aa0ba`) gets past the credits to the
+intro's maps. The build that stayed on the credits is gone, and taro is
+fairly sure they had pressed every button, many times, after waiting much
+longer than five seconds; so what fixed it is not known —between the two
+builds are the System's cursor, the far RAM placed by the linker and the
+merges of that day—, and it is closed as seen working, not as explained.
