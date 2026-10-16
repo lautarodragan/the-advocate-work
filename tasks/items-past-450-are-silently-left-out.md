@@ -2,7 +2,7 @@
 name: "Items past 450 are silently left out"
 description: "ITEMS_N is ABL's database size, fixed in the tools: a game with more items loses the ones past 450 without a warning, and Frozen World has 500"
 type: bug
-status: draft
+status: todo
 agents: [Chajá]
 ---
 
@@ -37,3 +37,13 @@ the inventory is `far_items: .res ITEMS_N` in `runtime/far_ram_game.s` and
 `FAR_ITEM_LIST` a `.res` of its own in `runtime/items.s`, so raising
 `ITEMS_N` —or sizing it by the game— moves nothing by hand: what limits it
 is the `FARBSS` pool, and `just space` says how much is left.
+
+## Defined (2026-10-16, Carpintero)
+
+Still open (see the check above). **Done**: `ITEMS_N` sized by the game's
+database —the inventory a `.res` of that size in `FARBSS`— in both
+crates from one place, or, if it does not fit, the items left out named
+in `degradations.json`; Frozen World's 451–500 in its cartridge, and a
+test that holds the size. **First step**: whether Frozen World's
+pages, shops or drops name any item past 450, and how much `FARBSS` room
+`just space` gives.

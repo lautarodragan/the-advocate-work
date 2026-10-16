@@ -2,7 +2,7 @@
 name: "The Frozen World's HP percentages come out low past 327 HP"
 description: "CalculateHPPercents multiplies the HP by 100 and then divides by the maximum; the product passes the sixteen-bit variable and clamps at 32767"
 type: bug
-status: draft
+status: wishlist
 ---
 
 Seen by Tijereta on 2026-10-14, with the-advocate `51f05d7c` plus the branch
@@ -63,3 +63,12 @@ Priorities (taro):
    exist at run time (the carry register).
 2. Second, optimise at build time as much as possible (the synthetic
    commands; the width by the values a variable must hold).
+
+## Defined (2026-10-16, Carpintero)
+
+taro already said how (the carry register first, build-time synthetic
+commands second) and that it is not a priority. **Done**: The Frozen
+World's common event 38 gives 100 for 944 HP of 944, with a test of a
+multiply-then-divide past 32767. Becomes `todo` when the combat on maps
+1 and 2 is played. **First step**: the carry register's semantics —which
+operations set it and which read it— against EasyRPG's 32-bit variables.

@@ -2,7 +2,7 @@
 name: "Events above the hero, over the painted roofs"
 description: "In a painted map (mode 1), an event with 'above the hero' priority is drawn over the roofs; in RM2k the roofs are pictures and go above everything"
 type: bug
-status: draft
+status: wishlist
 ---
 
 Seen by Cardón on 2026-10-11 (`other-games-build-and-boot.md`),
@@ -27,3 +27,13 @@ on the same map has its legs over the edge of a roof; it may be one
 of the edges that do not fit in the 127 (the debt in
 `sunset-in-mode-1-with-colour-math.md`, now
 `roof-edges-that-dont-fit-in-the-127.md`).
+
+## Defined (2026-10-16, Carpintero)
+
+Still open: nothing on main touched `oam.s`'s mode-1 priorities
+(`bbbd2692` traded BG1 and BG2 only under a message window). Cosmetic: one
+guard in Sunset's square; nothing stops. **Done**: on a painted map an
+"above the hero" event is drawn under the roofs drawn from pictures, as
+the original does, with a golden of map 2's guard at (13,23).
+**First step**: the original under Wine on that spot, to confirm what
+RM2k draws, then which priority an "above" object gets on a painted map.

@@ -2,7 +2,7 @@
 name: "Culprits counts empty troop pages as a bad trigger"
 description: "A troop page with no condition and no command is counted under 'a trigger the ROM cannot look at', which says The Frozen World compiles 0 of 80 troop pages and The Book of Three leaves out 95 for a trigger; nothing is lost, an RM2k page without a condition never runs"
 type: bug
-status: draft
+status: todo
 ---
 
 Seen by Calandria on 2026-10-14, with the-advocate `14e200fc` and the ports
@@ -30,3 +30,15 @@ a code other than 0.
 
 **Elsewhere**: El Dorado is reported with the same "0 of 80" and may be the
 same; not checked.
+
+## Defined (2026-10-16, Carpintero)
+
+Still open at the-advocate `f4709d0b` (`culprits.rs` counts every `None`
+of `trigger()` under one name). The report is what the survey and the
+book read to decide what to port next, so a wrong count misleads. **Done**:
+`just culprits` counts the pages that look at nothing apart —or leaves
+them out—, The Frozen World and The Book of Three stop reporting them as
+refusals, the book's sentence about Frozen World's troops is fixed, and a
+unit test in `culprits.rs` holds it. **First step**: tell `trigger()`'s
+"looks at nothing" from its refusals —another variant or a flag— and
+check El Dorado.
