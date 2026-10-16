@@ -2,7 +2,7 @@
 name: "A forced route on a still event that animates reads its flags as speed"
 description: "The runtime takes a forced route's speed from +13 of the event's row, which on a still event that animates also carries bit 7 —and bit 6 since 2026-10-15—"
 type: bug
-status: draft
+status: wishlist
 ---
 
 Seen by Calandria on 2026-10-15, reading the runtime for
@@ -22,3 +22,15 @@ event, or a test page's `also_walk`, could.
 
 **How to see it**: a map with a still event with continuous animation that
 only a common event moves.
+
+## Defined
+
+Wishlist, on 2026-10-16, by Cardón, checked at the-advocate `f4709d0b`: still `lda npc_buf
++ 13, y` as is in `runtime/event_routes.s`. No route of the eight ports
+reaches such a row, so nothing is seen today.
+
+**Done** means a forced route on a still event that animates goes at the
+page's speed, without bits 6 and 7, with a test-game case —a still event
+with continuous animation moved only by a common event— red before the
+fix. **First step**: the case, and `git blame` of the flag bits of +13 to
+see which other readers of +13 mask them.

@@ -2,7 +2,7 @@
 name: "The battle offers skills that are only for the map"
 description: "A switch skill with occasion_battle off —Emily's Change Tape, Radin's Mix Formula— comes out white and usable in battle; RM2k greys it there"
 type: bug
-status: draft
+status: todo
 ---
 
 Seen by Mulita on 2026-10-12, **reading the code**, with the-advocate
@@ -31,3 +31,16 @@ switch skills too.
 
 **How to see it**: a battle with Emily (actor 25, who knows Change Tape
 from level 1) in the party, the skill list open.
+
+## Defined
+
+Todo, on 2026-10-16, by Cardón: in ABL a battle offers Emily's Change Tape and four more,
+and choosing one turns on a switch whose autostart runs after the battle.
+At the-advocate `f4709d0b` nothing reads a skill's `occasion_battle`.
+
+**Done** means a switch skill with `occasion_battle` off is grey in the
+battle's list and buzzes, as RM2k's `Window_Skill::CheckEnable`, in the
+model and the console, with a golden of the list with Emily in the party
+red before. **First step**: `skill_usable` in rm2k-snes-battle's
+`rules.rs`, and whether the stage can still carry the skill and only mark
+it grey.

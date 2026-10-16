@@ -26,3 +26,10 @@ them too, and that is worth saying there.
 
 **How to reproduce it**: not reproduced. Running `just boot` while
 touching a `.rs` of the tools' checkout would say whether that is it.
+
+**Checked on 2026-10-16** by Cardón, at the-advocate `f4709d0b`: the
+fingerprint of `rm2k-snes-cartridges` (`fingerprint_files` in
+`rm2k-snes/cartridge/src/cartridges.rs`) reads all of `runtime/`, the
+binaries it runs, the game and the patches, and no Rust source; so an edit
+to `emit.rs` alone does not explain it, unless a binary was reinstalled or
+`runtime/` touched during the run. Still not reproduced.

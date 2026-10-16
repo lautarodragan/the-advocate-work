@@ -2,7 +2,7 @@
 name: "The camera turning back over a half-uploaded row loses a frame"
 description: "On a painted map, if the camera turns around while a row of the painting is being uploaded ahead, it uploads it whole in that tick and a frame is lost"
 type: bug
-status: draft
+status: wishlist
 ---
 
 Measured by Mulita on 2026-10-11 (`sunset-in-mode-1-with-colour-math.md`),
@@ -20,3 +20,12 @@ walking in a plaza in Sunset. Nobody has said they noticed it.
 **How to see it**: Mulita's script, `~/scratch/mulita/modo1/chequear.py`,
 on Sunset's release, walking in the plaza (map 2) and going back over
 one's steps.
+
+## Defined
+
+Wishlist, on 2026-10-16, by Cardón: a one-frame hitch nobody reported.
+
+**Done** means turning back over a half-uploaded row on a painted map
+does not lose the frame, measured with Mulita's script on Sunset's map 2.
+**First step**: check it is still so —painted maps changed since
+2026-10-11—.

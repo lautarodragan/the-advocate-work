@@ -2,7 +2,7 @@
 name: "ABL: the last leaders' names are cut in the slot screen"
 description: "With every map, the slot screen shows \"Advocat\", \"Royal D\" and \"ABL 2.0\" where the original shows the whole name: the name field is seven cells"
 type: bug
-status: draft
+status: todo
 ---
 
 Seen by Chajá on 2026-10-14, with the-advocate `ac9897cc` (branch
@@ -35,3 +35,17 @@ whole game, so this is no longer an experiment's: the release build's
 six names cut —"DummyHero", "Gang Member", "MobilizedCar", "Royal Dalia",
 "Advocate" and "ABL 2.0 Save"—, and the leaders that cut are reachable in
 the cartridge taro plays.
+
+## Defined
+
+Todo, on 2026-10-16, by Cardón: in the `release` taro plays, six reachable leaders' names
+are cut on the save screen.
+
+**Done** means the slot screen writes those names whole, as the original
+under Wine, and the WARNING is gone from `release`'s `converter.log`, with
+a golden of a slot with "ABL 2.0 Save" or "MobilizedCar". Ways, the agent
+picks and measures, minding the slot bank's tiles: a field wider than seven
+cells (moving the faces, as the original lays them out), or the names
+without `letter_spacing`. **First step**: the original's slot layout in
+`~/scratch/chaja/captures/2026-10-14-end-blockers/slots-original.png`
+against the port's, measured in pixels.

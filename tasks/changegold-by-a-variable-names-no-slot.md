@@ -2,7 +2,7 @@
 name: "ChangeGold by a variable does not give its variable a slot"
 description: "The variable sweep of the event compiler does not name ChangeGold's variable, so a page whose variable only ChangeGold names is left out"
 type: bug
-status: draft
+status: todo
 ---
 
 Seen by Chajá on 2026-10-14, reading the code while doing
@@ -28,3 +28,13 @@ culprit.
 **The fix** is one arm in `command_variables`, like the ones `ChangeItems`
 and `ChangeMonsterHP` got on 2026-10-14. It can shift slots in a game
 that had such a variable, which only breaks saves.
+
+## Defined
+
+Todo, on 2026-10-16, by Cardón: still missing at the-advocate `f4709d0b`, and the fix is
+one arm.
+
+**Done** means `command_variables` in `rm2k-snes/events/src/indices.rs`
+names `ChangeGold`'s variable when `[1]` is 1, as `ChangeItems` does, with
+a unit test red before; and `just culprits` run over the eight ports, to
+say whether any page comes back. **First step**: the arm and its test.
