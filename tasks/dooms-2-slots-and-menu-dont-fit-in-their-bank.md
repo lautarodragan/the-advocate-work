@@ -2,8 +2,8 @@
 name: "Dooms 2's slots and menu don't fit in their bank"
 description: "With Dooms 2's map 1 (choose a character) in the cartridge, the slot screen and the menu gather more tiles than the 448 of their bank; the map is left out and the game starts on map 2"
 type: bug
-status: doing
-assignee: Calandria
+status: testing
+assignee: taro
 agents: [Calandria]
 ---
 
@@ -108,4 +108,20 @@ Branches `calandria-dooms2-start` in the three repos, from the-advocate
 **To install when merging**: `just install screens` —the only crate
 touched—.
 
-**What was run**: see the end of this file.
+**What was run**, with the local `rm2k-snes-screens` first on the PATH
+and the rest of the tools the global ones (the-advocate `30ab0ca6`):
+
+* in the-advocate: `just test` (29 passed), `just rust-test` (green with
+  the Microsoft GS SoundFont in `SOUNDFONT`; with FluidR3 exported the
+  audio crate's `the_synth_bass_releases_as_the_soundfont_says` is red,
+  which is the SoundFont and not the change), `SOUNDFONT=FluidR3_GM.sf2
+  just test-game` (26 passed, 1 skipped), `just crate-test screens`;
+* in the ports: ABL's `just cartridges` and `just tests` (1555 passed, 2
+  skipped; `abl.sfc` `92bacc160263d34b`, byte for byte the main
+  checkout's: ABL's faces fit, so nothing changes there), and `just boot`
+  at the root (46 passed, `test_dooms2.py` among them).
+
+**What the suite does not cover**: the slot screen itself with a faceless
+actor —the captures show the pause menu—, and a bank that fits only with
+the slot screen's text last *and* faces left out, which no game asks for
+today.
