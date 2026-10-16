@@ -2,7 +2,7 @@
 name: "The tools write Spanish file names into a port's build/"
 description: "memory.cfg, music.json, effects.json, crudos/, patches/uses.json and stamp.txt come out of the already-English projects with Spanish names, and the ports' harness opens them by name"
 type: refactor
-status: draft
+status: done
 ---
 
 Seen by Hurón on 2026-10-12, at the-advocate 57abdca3, while listing the
@@ -29,3 +29,14 @@ task. ABL's harness and tests open several of them by name —`grep -rln
 'music.json\|effects.json\|memory.cfg\|crudos\|uses.json\|stamp.txt'
 pruebas justfile` in `abl/` gives about a dozen files—, and changing the
 binaries that write MSU-1 data changes the cache key.
+
+**Done the same day, by another task**: the-advocate `5d78ada7`
+(2026-10-12), "Tools: the Spanish names they read from a game, and write
+into its build, in English", renamed all of them while the ports went into
+English, and this draft was not closed then. Checked on 2026-10-16 at the
+-advocate `759aa0ba`: no source of the tools or of the ports names
+`memoria.cfg`, `musica.json`, `efectos.json`, `crudos/`, `parches/usos.json`
+or `sello.txt`, and `musicdata.inc` no longer says `tabla`. The Spanish
+files still seen in an old `build/` —`memoria.cfg` next to `memory.cfg`—
+are leftovers of builds before that commit: nothing writes or reads them,
+and deleting `build/` removes them.
