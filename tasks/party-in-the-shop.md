@@ -2,7 +2,7 @@
 name: "The party in the shop"
 description: "The party's sprites and the 'can equip it' arrows in the shop, like Window_ShopParty"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Chajá]
 ---
