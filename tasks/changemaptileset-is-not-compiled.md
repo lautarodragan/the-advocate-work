@@ -202,7 +202,11 @@ global checkout (the-advocate `ba8fd164`, Aguará's teleport change
 included): `just rust-test` 928 passed, 3 ignored; `just test` 29 passed;
 `just test-game` 31 passed, 1 skipped; ABL's `just tests` 1563 passed, 2
 skipped, no golden moved; `just boot` at the ports' root 47 passed. After
-merging `main`, again: see the report.
+merging `main` (the-advocate `ba8fd164`, the ports `18c8c87`), with
+`events` and `convert` reinstalled from the merge: `just crate-test
+events` 140 passed, `just test-game` 33 passed and 1 skipped, `just boot
+-k "frozen or zounds"` 4 passed, ABL's `just tests` 1563 passed and 2
+skipped; `abl.sfc` `7a3aaa76b6eedfc8` (sha256, first 16).
 
 **What the suite does not cover**: maps 47, 99, 129 and 149's scenes
 (played once by hand, above, not in a test), and Vampires Dawn's five
