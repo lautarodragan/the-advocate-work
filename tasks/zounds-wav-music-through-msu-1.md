@@ -1,6 +1,6 @@
 ---
 name: "Zounds: the .wav music through the MSU-1"
-description: "Zounds plays three .wav songs —the title, the battle and the victory themes, 242 s— and the converter only knows MIDI; as MSU-1 PCM at 44.1 kHz they weigh 42.8 MB, like ABL's replacement tracks"
+description: "Zounds plays five .wav songs —the title, battle and victory themes and two the map tree sets—; their MSU-1 tracks are built, and without MSU-1 they are silent"
 type: feature
 status: draft
 ---
@@ -32,3 +32,12 @@ The map tree sets its own music (`music_type` 2) on map 33, Mountains,
 `04 - Cavern`; the study read the tree as setting none. The fourteen
 nothing plays were removed from taro's repository that day (taro's call),
 so `Music/` holds only these five `.wav`.
+
+**Checked on 2026-10-16 (Mulita)**, at the-advocate 759aa0ba: the tracks are already built. `rm2k-snes-audio` takes a song that is
+a `.wav` in the game as an MSU-1 track, decoded with ffmpeg
+(`TRACK_EXTENSIONS` in `src/game.rs`, since 2026-09-29), and Zounds'
+`release` delivered that day carries the five: its `music.json` gives
+them tracks 1 to 5, and `zounds-5.pcm`, the title theme, is 27.0 MB,
+153 s at 176,400 B/s. Whether the ROM plays them through the MSU-1 was
+not heard. What stands is the other half: without MSU-1 those slots are
+silent.

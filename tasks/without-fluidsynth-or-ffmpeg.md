@@ -21,3 +21,9 @@ without dependencies) gives a render similar enough to fluidsynth's for the
 MSU-1 tracks —the tracks would change bytes: it is decided by listening—, and
 whether `symphonia` (decoders in Rust) is enough for the replacements. And
 where it would live: probably in `gunter`, which already reads the SoundFont.
+
+**Checked on 2026-10-16 (Mulita)**, at the-advocate 759aa0ba: both are still used, now from Rust: fluidsynth in `rm2k-snes-audio`
+(`tracks.rs`, `ceilings.rs`, `bin/msu.rs`), and ffmpeg for the
+replacements, a game's own `.wav` songs and, since `30ab0ca6`, the MP3 a
+`.link.wav` names. `tools/audio/msu.py` is `rm2k-snes-audio`'s `msu`
+binary.

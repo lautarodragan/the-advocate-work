@@ -15,3 +15,10 @@ would cost about 4 s instead of ~15. It is a structural change in
 `tools/ensamblado/cartuchos.py`.
 
 taro left it in wishlist: the gain is not much.
+
+**Checked on 2026-10-16 (Mulita)**, at the-advocate 759aa0ba: still one fingerprint for everything —`fingerprint_files` in
+`rm2k-snes/cartridge/src/cartridges.rs`, which replaced
+`tools/ensamblado/cartuchos.py`—. `rom/src/` is `runtime/` since
+2026-09-29 and `ram_lejana.s` is `far_ram.s`; what the converter still
+reads from it is `BOOT_FRAMES_FLOOR`, in `rm2k-snes-audio`. The timings
+above were measured with the Python and were not measured again.

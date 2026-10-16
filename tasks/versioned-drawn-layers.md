@@ -86,3 +86,11 @@ So "the build doesn't need the game" is a goal of several steps, not of
 one, and the order that comes out of what was measured is: layers (1.6 MB), characters, and then
 the rest. The font is already inside the repo —`tools/port/fuente.py` is
 generated from easyrpg-player— and doesn't count.
+
+**Checked on 2026-10-16 (Mulita)**, at the-advocate 759aa0ba: still not started. The names above are of the Python, which is gone:
+the layers are drawn by `rm2k-render` and `wally`, the characters by
+`wally`, the windows and title by `rm2k-snes-screens`, the battle by
+`rm2k-snes-images`, and the font is `rm2k-snes-text`'s. `/extras` is gone
+too: the game and the RTP are read from their zip, through `GAME_DIR` and
+`RTP_DIR`. The sizes were measured on ABL alone and were not measured
+again.

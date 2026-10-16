@@ -54,3 +54,10 @@ ask for; and quality gets tuned when the whole game is playable
 
 **When it is taken**: first an analysis and a plan —measure the graph, the weights
 and how much ROM each option costs—, and from that plan come the tasks.
+
+**Checked on 2026-10-16 (Mulita)**, at the-advocate 759aa0ba: still open. Two things changed around it. The cartridge went to
+ExHiROM at 8 MB on 2026-10-01, so "`release` has few banks left" no
+longer holds as an argument against duplicating samples. And since
+`f0b15d74` a package that does not fit in the ARAM is relieved instead of
+stopping the build, and since `7abfdcbb` identical samples are one
+directory entry. `copies` is in `rm2k-snes/rm2k-snes-audio/src/bank.rs`.

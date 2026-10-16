@@ -31,3 +31,10 @@ this gives the rain back to none of them; the converter says so when building
 It is work for the ROM, not the converter: reserve and free when starting and
 stopping the timer, with what that implies for what is already drawn with that
 palette.
+
+**Checked on 2026-10-16 (Mulita)**, at the-advocate 759aa0ba: the converter no longer gives the digits to every map. A walk hands
+them to the maps the timer can reach by teleports from where it starts
+(`[graphics] timer_never_runs_in` and, since `16c9abfd`, `timer_stays_in`
+cut it), and since `7b6bc482` a map with no free sprite palette lends the
+timer the nearest one instead of stopping. Reserving and freeing at run
+time is still not done; what it would give back today was not measured.

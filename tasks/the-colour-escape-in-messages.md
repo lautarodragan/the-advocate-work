@@ -2,7 +2,7 @@
 name: "The colour escape \\c[n] in messages"
 description: "Any escape but a tail of \\| and \\^ refuses the box, on purpose; Zounds colours speaker names with \\c[n] in 2,604 of its 7,102 message lines, and that alone keeps 678 map pages out of 981"
 type: feature
-status: draft
+status: done
 ---
 
 Seen by Aguará on 2026-10-15, in the study
@@ -29,3 +29,11 @@ actor's name, `\v[k]` a variable's value: both are things the ROM knows at
 run time. Other games were not counted here.
 
 **Absorbed** by [`unknown-message-escapes-are-dropped-with-a-warning`](unknown-message-escapes-are-dropped-with-a-warning.md) (Mulita, 2026-10-15): the 678 pages are not out by `\c[n]`, which was already dropped, but by letters the console's font does not have —Zounds is in Spanish, and its hero is `Unamë`—; see [`latin-1-letters-stop-a-box`](latin-1-letters-stop-a-box.md). The colour itself is still lost: [`message-colours-and-speed`](message-colours-and-speed.md).
+
+Done by [`unknown-message-escapes-are-dropped-with-a-warning`](unknown-message-escapes-are-dropped-with-a-warning.md)
+(the-advocate `2a142635`, merged in `a9b3e144`): `\c[n]` and every escape
+the console cannot show is dropped and noted in `degradations.json`
+instead of refusing the box. What is still lost, the colour itself, is
+[`message-colours-and-speed`](message-colours-and-speed.md); the letters,
+[`latin-1-letters-stop-a-box`](latin-1-letters-stop-a-box.md). Checked on
+2026-10-16 at the-advocate 759aa0ba (Mulita).

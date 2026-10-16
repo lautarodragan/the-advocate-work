@@ -28,3 +28,10 @@ the same: it is not the cancel branch's.
 To reproduce: `just cartridges` and `just culprits` in `vampires-dawn/`, and
 in `build/release/culprits.json` the pages whose culprits are only codes
 10140, 20140 and 20141.
+
+**Checked on 2026-10-16 (Mulita)**, at the-advocate 759aa0ba, **reading the compiler, not with `culprits`**: since `2a142635`
+(merged in `a9b3e144`) a choice's options go through the same
+`escape_tail` as a box, and an escape the console cannot show —`\_`
+among them— is dropped and noted instead of refusing the box. If the `\_`
+was the culprit the 210 pages compile now; whether the padded lines fit
+was never measured. A `just culprits` in `vampires-dawn/` says which.

@@ -1,6 +1,6 @@
 ---
 name: "Variables are capped at 256 slots, and Vampires Dawn names 401"
-description: "The RM2k variable's slot is one byte in the bytecode and FAR_VARIABLES is 512 B, so a game with more than 256 variables loses every event that names the rest: Vampires Dawn leaves 224 events out for 145 variables without a slot"
+description: "The RM2k variable's slot is one byte in the bytecode and the converter stops at 256, so a game with more than 256 variables loses every event that names the rest: Vampires Dawn leaves 224 events out for 145 variables without a slot"
 type: feature
 status: draft
 ---
@@ -29,3 +29,15 @@ that carries a variable —`ControlVars`, the conditions, `InputNumber`,
 `VARIABLES_N` with no cap below RM2k's 5,000; the book's research page
 ranks it second and estimates the RAM at 802 B for Vampires Dawn, which
 fits once the far RAM map is placed by the linker.
+
+**Checked on 2026-10-16 (Mulita)**, at the-advocate 759aa0ba: far RAM is
+no longer a hand-written map. Since `d121156e` `far_variables` is a
+`.res VARIABLES_N * 2` in `runtime/far_ram_game.s`, placed by the linker,
+so the 512-byte region at `$7E2600` with `FAR_ITEMS` behind it is gone and
+RAM is not what caps it. What still does is the byte slot in the bytecode
+and the converter's check in `rm2k-snes/mapdata/src/emit.rs`, whose
+message still gives the old reason: see
+[`the-converter-caps-what-far-ram-no-longer-limits`](the-converter-caps-what-far-ram-no-longer-limits.md).
+The same loss was noted earlier, from the converter's log, in
+[`variables-past-256`](variables-past-256.md) (2026-10-06); this one is
+kept as the one to follow, since it says where the cap is.
