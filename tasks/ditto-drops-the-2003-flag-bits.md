@@ -2,8 +2,8 @@
 name: "Ditto drops the 2003 flag bits, and misreads a 2003 game's conditions"
 description: "On an RPG Maker 2003 game the round trip is not byte for byte: a troop page condition has 10 flags in 2 bytes and Ditto writes the 7 it knows in 1, so the resolved view says no page is conditioned on a battle command where 36 are"
 type: bug
-status: doing
-assignee: Aguará
+status: testing
+assignee: taro
 agents: [Aguará]
 ---
 
@@ -34,3 +34,15 @@ trigger the ROM cannot look at.
 **To reproduce**: `~/scratch/aguara/zounds/lcf_flags.py <game dir>` walks
 the `.ldb` and the `.lmu` and prints the flag bits; compare with
 `data/db/troops.json`'s `condition.flags`.
+
+## Aguará, on 2026-10-15: fixed
+
+the-advocate `f818d7e9`, on the branch `aguara-zounds-2003`. The generator
+keeps the 2003 bits with their order, `pack_bits` writes as many bytes as
+the version has bits, and the version is `System.ldb_id == 2003`, found
+before the actors are decoded. Measured: Zounds 190 of 190 files byte for
+byte (`just dump-round-trip` and Ditto's own corpus tests over it); the
+RM2k corpus 330 of 330 and its exact dump identical to the byte; the
+resolved view shows the 36 pages conditioned on a battle command and the
+18 on a turn. The same commit fixes
+[`ditto-does-not-read-the-2003-fields`](ditto-does-not-read-the-2003-fields.md).
