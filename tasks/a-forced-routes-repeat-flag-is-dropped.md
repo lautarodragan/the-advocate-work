@@ -21,3 +21,9 @@ looked at.
 
 **How to see it**: changing the parameter (index 2 of code 11330) in those
 commands leaves `events.json` unchanged.
+
+**Checked on 2026-10-16** at the-advocate `759aa0ba`, by Cardón: still
+runs once —`OP_ROUTE` has no repeat bit—, but it is no longer silent:
+since `3a954b30` (2026-10-15) `compile_route` notes it as the loss
+`route-repeat-dropped`, which the converter writes to `degradations.json`
+next to the ROM. That is now the way to see it, instead of `events.json`.

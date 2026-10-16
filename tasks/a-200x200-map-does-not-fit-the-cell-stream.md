@@ -21,3 +21,13 @@ warning —as events over 120 or pictures over two are— instead of stopping
 the build, and whether the reservation can grow or the stream be split
 for a map that size (the console's own limit is the 64 KB of a bank for
 the decompressed layers, not WRAM's 32 KB half).
+
+**Checked on 2026-10-16** at the-advocate `759aa0ba`, by Cardón: still
+so —`check_streams` in `rm2k-snes/mapdata/src/materials.rs` stops the
+build, and Zounds' `rm2k-snes.toml` still excludes map 30—. A correction
+to the arithmetic above: `map_cells` is not compressed at ~1.18 bytes per
+cell; it is the grid, two bytes per cell, cut in two streams of up to
+`HALF_GRID` (32 KB) each —`compressed_parts`—, one per half of bank
+`$7F`. 40,000 cells are 80,000 bytes: the first half takes 32,768 and the
+second is the 47,232 of the message. The limit is then the 64 KB bank,
+32,768 cells (a 181x181 map), not about 27,700.

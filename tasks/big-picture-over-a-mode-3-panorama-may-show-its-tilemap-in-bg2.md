@@ -33,3 +33,8 @@ converts with the "panorama" layout (mode 3, background in 256 tiles).
 The header of `big_picture.s` also says BG2's tiles are above `$5000` in
 every layout, which this layout contradicts: see
 [`stale-comments-on-the-vram-layouts`](stale-comments-on-the-vram-layouts.md).
+
+**Checked on 2026-10-16** at the-advocate `759aa0ba`, by Cardón: the code
+is as described and nothing has reproduced it. The last paragraph is
+stale: `acf3153c` (2026-10-15) fixed the header of `big_picture.s`, which
+now says BG2's base is at `$4000` in "panorama" and links this draft.

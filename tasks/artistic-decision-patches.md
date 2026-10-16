@@ -187,3 +187,26 @@ tells apart two battlers with the same drawing.
   and the other thing it does —baking the graphic against its cell's background— is of the
   non-lossy kind. What would be missing to emit is which graphic was treated that way in each
   map, which is little more than repeating the list.
+
+# Checked on 2026-10-16
+
+At the-advocate `759aa0ba` and the ports `4b2d41e`, by Cardón. Phase 1
+stands as described and phase 2 has not started: the converter still
+decides again on every build. What moved, so the text above can be
+followed:
+
+* **Where things are**: the Python modules are Rust crates —Adeleine is
+  `snes/adeleine/`; the patches themselves, `rm2k-snes/patches/`
+  (`rm2k-snes-patches`, with `--check`)—, and the versioned files are in
+  `abl/patches/auto/maps/`, `animations/` and `battlers/` of the ports.
+  `just patches` and `just patches-check` are still ABL's recipes.
+* **`DECORAR_TRANSLUCIDO` and `SIN_TRAMA`** are now `[graphics] opaque`
+  in each game's `rm2k-snes.toml`: still edited by hand, still versioned.
+* **"The 29 maps of `abl`"**: `release` carries the whole game since the
+  ports' `74eb754` (2026-10-14).
+* **The classes that left no trace now leave one, as a report**: since
+  `5d5df69d` (2026-10-15) the converter writes `degradations.json` next to
+  the ROM, every loss of the event compiler and of its stages —still
+  animations given up, rain and pictures not drawn, the ChipSet animation
+  cut, events left out—. It is not versioned and it is not the desired
+  state phase 2 asks for, but it is the list of what is lost, by place.

@@ -51,3 +51,25 @@ Real hardware (CGRAM writes in the hblank are where emulators are least
 trusted), how long `irq_music` takes, the battle windows' gradient groups,
 and what a smooth gradient looks like next to RM2k's bands: see the
 research's "What was not measured".
+
+## Checked on 2026-10-16
+
+At the-advocate `759aa0ba`, by Cardón. What is done of the steps, each
+by its own task:
+
+* **Steps 1 and 2**: done by
+  [`windows-background-setting-and-flat-text-area`](windows-background-setting-and-flat-text-area.md)
+  —`[windows.background]`, a colour or a gradient drawn as its average
+  until step 3 (`a7de613c`)—.
+* **Step 7, the message window's half**: done by
+  [`draw-the-faces`](draw-the-faces.md) (in testing; merged in
+  `af7c399d`): the face in the text area's cells, its palette by HDMA
+  channel 5. The menu's half is not.
+* **Step 5 is not**: the System's cursor on the pause menu and the save
+  slots ([`the-system-cursor-in-the-main-menu-and-the-slots`](the-system-cursor-in-the-main-menu-and-the-slots.md),
+  `193fd075`) is drawn on BG1, like the other screens', not in sprites.
+* Steps 3, 4 and 6 (the gradient through HDMA, on the message window and
+  the screens; the windows drawn by the runtime) have no commit.
+
+`just arrancan`, in the steps above, is `just boot` since the ports'
+translation.
