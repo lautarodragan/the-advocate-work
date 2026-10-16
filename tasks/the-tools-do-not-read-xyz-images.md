@@ -2,8 +2,8 @@
 name: "The tools do not read XYZ images"
 description: "RPG Maker 2003 saves images as .xyz (a zlib stream of a 256-colour palette and indices); the finders accept the extension but nothing decodes it, so a 2003 game's build stops at its System. Zounds has 186 of them"
 type: feature
-status: doing
-assignee: Aguará
+status: testing
+assignee: taro
 agents: [Aguará]
 ---
 
@@ -33,3 +33,14 @@ palette. The study measured with a copy of the game converted to PNG
 taro, on 2026-10-15: not worth supporting XYZ in the tools —"I have no
 good reason to use XYZ"—. If some common software converts XYZ to PNG or
 BMP, use it once on Zounds and be done.
+
+## Aguará, on 2026-10-15: done without touching the tools
+
+As taro decided: the 186 XYZ files of Zounds converted once with EasyRPG's
+`xyz2png` —cloned and built in `~/ref/easyrpg-tools`; it writes
+`<name>.png` in the current directory, so it ran standing in each folder—
+on a `png-images` branch of taro's clone, commit `593f6ba`, author taro
+with Aguará's trailer, **not pushed**. One file kept its PNG instead of its
+XYZ twin: `ChipSet/Zounds_MenuChip` had both, they differ in a corner, and
+RPG_RT reads the PNG first (EasyRPG's `IMG_TYPES`: bmp, png, xyz). The
+tools keep reading `.png` and `.bmp` only; nothing changed in them.
