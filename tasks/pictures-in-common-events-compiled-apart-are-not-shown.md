@@ -29,3 +29,16 @@ How to see it: build Zounds' `release` and look at
 `build/release/degradations.json`: the `picture-not-shown` losses under
 `"common"`. The book's research "More pictures at once" weighs what it
 would cost.
+
+## 2026-10-17, Mulita: the automatic ones, copied into the maps
+
+Since the-advocate `939a8bd7` (branch `mulita-fw-b-menu`, for
+[`frozen-world-the-b-menu-on-the-map-is-not-drawn`](frozen-world-the-b-menu-on-the-map-is-not-drawn.md))
+an **automatic** common event with a `ShowPicture` of its own is copied
+into each map with room for one more event, as an automatic page of an
+added event 0, and its pictures are the map's when they fit beside the
+map's own: see `common_pages.rs` in rm2k-snes-convert. What is still as
+this draft says: the **parallel** common events, the bodies an automatic
+or a page **calls** (an `OP_CALL` to a body without pictures), and the
+maps where the copy's pictures do not fit. Zounds' `PickAxe` (21),
+Vampires Dawn's and Sunset's menus were not looked at with the change.
