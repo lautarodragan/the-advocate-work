@@ -2,8 +2,8 @@
 name: "A Blurred Line: the chests change colour from map to map"
 description: "The chests' palette changes between maps: open ones look flatter than closed ones, and in the Neon Vipers' base, with Arden, they look golden. Is there a distribution of the same number of colours that keeps them consistent without degrading anything else?"
 type: research
-status: doing
-assignee: Carpintero
+status: testing
+assignee: taro
 agents: [Carpintero]
 ---
 
@@ -108,3 +108,72 @@ own, measured over the 31 maps that borrow and every game; then the cost
 of step 3 (group and quantise together instead of borrowing) measured,
 not implemented.
 
+
+## Phase 2 (Carpintero, 2026-10-17)
+
+Started from the-advocate `48362b6b` and the ports `9ce88ef`; main moved
+during it (Calandria's still pages, `b15c9408` / `bd92975`), was merged,
+and everything below was measured again on it. Branches
+`carpintero-lending` in the-advocate, the ports and the book. Two commits
+in wally, one per step:
+
+* **Step 2** (`bf056f24`): `fits` only marks a character lent; `lend`,
+  once every palette is whole, gives it the palette with the least *pixels
+  × distance* over the poses the map shows (each colour as the bank draws
+  it). The distance, not its square: the square was measured and lost.
+* **Step 1** (`18b67bc6`): `nearest` is the nearest in CIE Lab (Adeleine's
+  new `lab_distance`, CIE76 in integer tenths), not by luma; the lending
+  cost and the timer's use it too. Oklab was measured as well and lost.
+
+How: every game's `cartridges` built once through a shim that keeps
+wally's requests; each variant of wally replayed over them with a
+throwaway report: per character drawn with a palette of the map's, the
+mean colour difference per pixel against the sheet at 15 bits over the
+poses the map shows, in CIE76 and CIEDE2000 (CIEDE2000 is the judge: Lab
+would judge itself). Per map the worst character and the sum.
+
+**197 instances of 196 maps lend** (ABL 30, BoT 3, Desert Nightmare 42,
+Dooms 2 3, El Dorado 10, Frozen World 14, Sunset 11, Vampires Dawn 70,
+Zounds 13). No map that does not lend moves, in any variant.
+
+| CIEDE2000 | better / worse / same | sum of totals | sum of worst | chars worse > 1 |
+|---|---|---|---|---|
+| step 2 | 135 / 22 / 40 | −18% | −23% | 56 on 38 maps |
+| step 1 | 149 / 35 / 13 | −4% | −3% | 74 on 36 maps |
+| both | 176 / 15 / 6 | −23% | −30% | 35 on 22 maps |
+
+In CIE76: step 2 143/14/40 (−21%, −24%), step 1 187/1/9 (−11%, −13%), both
+190/1/6 (−31%, −38%), nobody worse by more than 2.3. No map's CIEDE2000 sum
+gets worse by more than 1.7 with both; the worst character, +3.3, is
+Vampires Dawn's 221 `sozai00:1`, which on screen gets its blue dress and
+blond hair back. Map 38: chest 25.9 → 9.1 (M had 1.4), People4:0 17.1 →
+14.6, Chara2:2 19.0 → 13.7, nobody else moves.
+
+Lost variants (on the earlier main, CIEDE2000, with step 2): squared cost
+with Oklab 143/50/12 and 134 chars worse; linear with Oklab 157/33/15 and
+88; linear with Lab, the chosen one, 182/17/6 and 41.
+
+**Step 3, cost only** (model: each palette hosting a guest re-quantised
+with all its characters; a member whose colours move gets its own pose
+bank; ROM counted per pose, since the cartridge stores each once): 448–522
+more pose banks over all games, 1–3 per lending map on average (max 31,
+Vampires Dawn's 95), 1.4–1.6 MB. ABL 31–37 banks, 156–174 KB, and ABL's
+`release` has about 229 KB free with steps 1 and 2: it fits, 55–70 KB
+left. Vampires Dawn (508–598 KB) has no free bank: it would go to the
+`.msu`. The rest have two dozen banks free or more. A real grouping would
+move more characters than the model, so it costs more.
+
+Verified: `just rust-test`, `just test`, `just test-game` on the merged
+tree; ABL's `just tests` green after five rounds, 35 goldens moved, looked
+at, committed in the ports (`01d3217`); `just boot`: Sunset's four square
+goldens moved (`80f0aba`), the rest green; once Zounds' cores arrived 16
+ticks apart under load and passed right after (draft
+`zounds-the-two-cores-once-arrived-sixteen-ticks-apart`). Captures and
+side by sides: `/shared/captures/2026-10-17-palette-lending/`. Book:
+`research/2026-10-17-the-palette-a-character-is-lent.md`, and the colours
+page, "Every event is drawn" and Adeleine's entry updated.
+
+**When merging**: `just install wally adeleine` (events came from main).
+`rm2k-snes/wally/src/sprites/extras.rs` is touched (one line: the timer's
+lending cost uses `lab_distance`), and Calandria works there: look at that
+merge by hand.
