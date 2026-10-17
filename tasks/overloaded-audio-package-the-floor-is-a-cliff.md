@@ -2,8 +2,8 @@
 name: "An overloaded audio package gets its music at 6 kHz; one that barely fits gets it at the minimum"
 description: "The relief of a package that does not fit in the ARAM leaves its music at the sound effects' rate and drops effects; a package that fits by a few bytes is not relieved and its music is squeezed to the minimum instead. Where the trigger goes is taro's to decide by ear"
 type: bug
-status: doing
-assignee: Cardón
+status: testing
+assignee: taro
 agents: [Aguará, Cardón]
 ---
 
@@ -56,8 +56,9 @@ Map 3's last effect, Fog2, plays only at the end of Core's farewell (event
 42, after maps 4, 5 and 6), which is recorded apart.
 
 The renders are in `/shared/audio/2026-10-16-map-3-relief/`, with their
-README: tools at main `40117ca0`, the variant `db9f8d40` on the experiment
-branch (later replaced by the real commit, below); the ports at `ad003b1`.
+README: tools at main `40117ca0`, the variant an experiment commit
+(`db9f8d40`, no longer on any branch: the real commit, below, replaced it
+with the same trigger); the ports at `ad003b1`.
 
 **ABL's map 3** (converter.log, samples limited by package 3):
 
@@ -119,3 +120,28 @@ sentido, y 4k es demasiado poco"*. The experiment became the real change:
 `relief.rs` triggers at the floor, ABL's `paid_by_music` comment says the
 music pays only down to 6 kHz, and the book's internals and lossy pages
 say what triggers the relief now.
+
+Branches, all named `cardon-relief-6khz`, with main merged (the-advocate
+`63b46ae9`, the ports `059ddcd`):
+
+* **the-advocate**: `12ca6c69`, the trigger, with the test that pinned the
+  old one rewritten and a new one for a package that fits only below the
+  floor (red with the old trigger).
+* **the-advocate-ports**: `ddec8b8`, ABL's `paid_by_music` comment;
+  `0462e4d`, ABL's volume ceilings measured again —`test_music_ceilings`
+  went red: `evilrhys` goes from headroom 0.299 to 0.354, the rest move by
+  0.01 at most—. No golden moved.
+* **the-advocate-docs**: `331e0d2`, `internals/audio.md` and the lossy
+  entry, renamed, with its link in `lossy.md`.
+
+**Verified** on the merged tree, with the tools installed locally from it:
+`just rust-test`, `just test`, `just test-game` (with FluidR3_GM), ABL's
+`just tests` and the ports' `just boot`, all green. What the suite does not
+cover: that Fog2 is silent at Core's farewell, and that `evilrhys` starts
+on its `PlayBGM` —both heard only in the renders, which were made with the
+experiment's identical trigger—; and El Dorado's and Vampires Dawn's
+changed packages, which no test plays.
+
+**To install when merging**: `just install rm2k-snes-audio`. Then `just
+deliver` of ABL and of the other games, for the packages above to reach
+the builds.
