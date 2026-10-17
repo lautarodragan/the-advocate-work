@@ -2,7 +2,7 @@
 name: "Sunset over Imdahl: GateStreet's messages come out without their letters"
 description: "On GateStreet (map 10) the scene ran but its transparent messages were hidden behind the painted map's cells in front of the hero; then the man (PanScreen lock), the statue (a six-second flash) and the statue in spring (a big picture over the map) stopped the story"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Tijereta]
 ---
