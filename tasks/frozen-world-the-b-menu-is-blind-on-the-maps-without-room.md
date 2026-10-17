@@ -20,6 +20,6 @@ fit them everywhere is uploading a picture's tiles when it is shown,
 with room reserved for the biggest of its number: option 5 of the book's
 research "More pictures at once".
 
-The maps the copy does not reach at all —the one the test pages boot in,
-and any with no room left for one more event— run the shared body,
-blind, as before; Frozen World's B event is on none of them today.
+The maps the copy does not reach at all —any with no room left for one
+more event— run the shared body, blind, as before; Frozen World's B
+event is on none of them today.

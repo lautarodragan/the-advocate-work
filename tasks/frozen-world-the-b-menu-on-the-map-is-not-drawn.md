@@ -80,3 +80,23 @@ Stats" it calls common event 31, the message.
   and the draft this one hung from,
   [`pictures-in-common-events-compiled-apart-are-not-shown`](pictures-in-common-events-compiled-apart-are-not-shown.md),
   says what of it is still open.
+
+### 2026-10-17, Mulita: three corrections after the suites
+
+* **Only where the switch can be turned on**: copied into every map, A
+  Blurred Line's two automatic common events with pictures (11 and 16,
+  menus nothing starts) did not fit its release cartridge. Now a common
+  event is copied only if something can turn its switch on, and only into
+  the maps that can: their pages and what they call, or every map when a
+  parallel or automatic common event can. A Blurred Line gets no copies.
+* **Last, not event 0**: at index 0 the copies' event moved every event
+  of the map one place, and the ports' test of Desert Nightmare's shop
+  owner, which numbers events from the data, found no route slot. The
+  copies go in a last event, with the id after the highest, and the map
+  the test pages boot in carries it too.
+* **The copies' pictures cost nothing else**: Wally compares the map's
+  losses with them and with its own pictures only —the rain, a battle
+  animation's box, a lent palette—, not just whether it fits.
+
+Desert Nightmare (common events 12 and 14) and Sunset Over Imdahl (5)
+get copies too; neither was played with them.
