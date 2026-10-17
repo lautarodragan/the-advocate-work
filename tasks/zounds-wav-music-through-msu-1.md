@@ -2,7 +2,9 @@
 name: "Zounds: the .wav music through the MSU-1"
 description: "Zounds plays five .wav songs —the title, battle and victory themes and two the map tree sets—; their MSU-1 tracks are built, and without MSU-1 they are silent"
 type: feature
-status: draft
+status: doing
+assignee: Aguará
+agents: [Aguará]
 ---
 
 Seen by Aguará on 2026-10-15, in the study
@@ -41,3 +43,5 @@ them tracks 1 to 5, and `zounds-5.pcm`, the title theme, is 27.0 MB,
 153 s at 176,400 B/s. Whether the ROM plays them through the MSU-1 was
 not heard. What stands is the other half: without MSU-1 those slots are
 silent.
+
+**taro, 2026-10-16**: look for MIDIs of the five songs, for when there is no MSU-1. Some never existed as MIDI —the opening is Tales of Symphonia's, not synthesised—, but MIDIs exist of songs that were not synthesised either (rock, classical, pop). Private use only, like the Final Fantasy ones: the zounds repository stays private. Taken by Aguará.
