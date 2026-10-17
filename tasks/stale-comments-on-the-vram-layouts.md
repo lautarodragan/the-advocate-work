@@ -2,7 +2,7 @@
 name: "Stale comments on the VRAM layouts"
 description: "big_picture.s and vram.rs say things about the layouts that stopped being true when the panorama and painted ones came"
 type: docs
-status: testing
+status: done
 assignee: taro
 agents: [Hurón, Cardón]
 ---

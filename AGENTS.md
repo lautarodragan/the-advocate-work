@@ -545,8 +545,11 @@ has:
     ~/assets/      `rtp.zip`, Don Miguel's RTP, without which 22 assets
                    are missing —`rtp/` next to it is the same,
                    unzipped—; `rtpe/`, the extended RTP; `soundfonts/`,
-                   where the samples come from; and `msu/`, the
-                   replacements for the MSU-1 tracks
+                   where the samples come from; `msu/`, the
+                   replacements for the MSU-1 tracks; and
+                   `easyrpg-rtp.zip`, EasyRPG's free RTP (CC BY 4.0, from
+                   GitHub, no releases), with `easyrpg-rtp/` its
+                   unzipped copy —its names are RM2k's English RTP's—
     ~/ref/         what was cloned to read: liblcf, easyrpg-player, the
                    emulators, Game-Decompilations; and `cc65/`, compiled
                    here, where `ca65` and `ld65` come from

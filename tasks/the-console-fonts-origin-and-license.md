@@ -2,7 +2,7 @@
 name: "The console font's origin and license"
 description: "low-variable.png was derived from 'easyrpg's Mincho'; which of EasyRPG's bitmap fonts that is decides its license, and the test game is public"
 type: research
-status: testing
+status: done
 assignee: taro
 agents: [Mulita]
 ---

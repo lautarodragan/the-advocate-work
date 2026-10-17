@@ -2,7 +2,7 @@
 name: "Book: an Optimizations section"
 description: "A section of the book for the port's optimizations, Lossy and Lossless, plus what was tried and left out; checked against the code, and the decisions that are really optimizations moved there"
 type: docs
-status: testing
+status: done
 assignee: taro
 agents: [Cardón]
 ---

@@ -2,7 +2,7 @@
 name: "What the compiler ignores silently"
 description: "Every page field and command parameter ABL uses with a non-default value that the converter never reads: the features that compile but are not there, like trigger 2 and the movement types were"
 type: research
-status: testing
+status: done
 assignee: taro
 agents: [Cardón]
 ---
