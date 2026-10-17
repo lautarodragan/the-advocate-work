@@ -2,7 +2,7 @@
 name: "A battle with the party empty"
 description: "RM2k immediately loses a battle with nobody in the party; what the ROM does wasn't looked at, and the eight ports start with the database's party, which in several of them is nobody"
 type: test
-status: draft
+status: todo
 ---
 
 Mulita left it on 2026-10-10 in "Lo que no cubre" of
@@ -22,3 +22,14 @@ runtime path (the walks over `party_n` in `battle.s` and
 **How to see it**: ABL's empty party case (map 5, at (39,34), the one from
 `battle-82-party-11-12`) with an `EnterBattle` or an encounter before anyone
 joins, compared with what the original does in Wine.
+
+## Defined
+
+Todo, on 2026-10-16, by Cardón: a runtime path no test executes, which the eight ports can
+reach since they all start with `party = []`.
+
+**Done** means a case in ABL's `test-special` —the empty-party one, map 5,
+with an `EnterBattle` before anyone joins— that ends the way the original
+does under Wine (lost at once, Game Over or the page's defeat branch),
+with its golden, and the runtime fixed if it does not. **First step**: the
+original under Wine with that case, to know what to expect.

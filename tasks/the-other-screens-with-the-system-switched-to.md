@@ -2,7 +2,7 @@
 name: "The other screens with the System a game switches to"
 description: "ChangeSystemGraphics changes only the message window: the menu, the slot screen, the item, equipment and shop screens, End Game, the battle's windows and the title keep the starting System"
 type: feature
-status: draft
+status: wishlist
 ---
 
 Found by Cardón on 2026-10-12, doing
@@ -23,3 +23,14 @@ What the converter knows about it: every screen but the message window is
 drawn once by `rm2k-snes-screens convert` into its bank, with the starting
 System; the divergence is
 [What `ChangeSystemGraphics` does not model](https://lautarodragan.github.io/the-advocate-docs/divergences/what-changesystemgraphics-does-not-model.html).
+
+## Defined
+
+**2026-10-16, Hurón**, checked against the-advocate `f4709d0b` and the ports `66ed09c`.
+Seen all through Sunset (its menu in `System`, its messages in
+`SaveMeny`), but nothing stops. **Done** is the screens drawn once per
+System a game's `ChangeSystemGraphics` names, and the command switching
+which one the menu, the slots, the item, equipment and shop screens, End
+Game and the battle's windows draw, with the ROM it costs per game
+measured, and the divergence page updated. First step: per game, how many
+Systems the command names and what one more set of screens weighs.

@@ -2,7 +2,7 @@
 name: "A Blurred Line: the sixty-one torches of map 148 stand still"
 description: "Map 148's Crown7 flames animate in RM2k and stand still in the port: with its ground already fused to fit, the converter gives up their two slots before fusing more"
 type: bug
-status: draft
+status: wishlist
 ---
 
 Seen by Calandria on 2026-10-15, measuring
@@ -28,3 +28,15 @@ looks).
 
 **How to see it**: build `release` and look for `still-animation-dropped`
 in `abl/build/release/degradations.json`; in the game, map 148.
+
+## Defined (2026-10-16, Carpintero)
+
+Still open at the-advocate `f4709d0b`. A fidelity detail: nothing stops
+and the map plays. **Done** is map 148's flames animating in `release`
+—no `still-animation-dropped` for it in `degradations.json`—, with the
+map's background fused as much as that takes and the fusion's loss looked
+at side by side. Two ways, the agent picks and measures: fuse the ground
+further to free the two slots, or let the animation take its slots before
+the fusion is decided. **First step**: how many more tiles the fusion has
+to merge for the two slots, on 148 and on the Sunset and Vampires Dawn
+maps listed above.

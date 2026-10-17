@@ -2,7 +2,7 @@
 name: "The battle flash test depends on the cycles before the battle"
 description: "test_the_flash_lasts_what_the_page_says saw the flash's first level twice when the map's frames before the battle cost a few more scan lines"
 type: bug
-status: draft
+status: wishlist
 ---
 
 Seen by Aguará on 2026-10-12, with the-advocate `25d93f0a` plus a first
@@ -26,3 +26,13 @@ that test red.
 
 **How to see it**: add a few hundred cycles to `compar_tick` —reading the
 line counter twice, `SLHV`/`OPVCT`, is what did it— and run that test.
+
+## Defined
+
+Wishlist, on 2026-10-16, by Cardón: a fragile test, not a bug seen; green today.
+
+**Done** means `test_the_flash_lasts_what_the_page_says` counts the flash
+from its first lit frame and does not depend on where the map's frames
+leave the battle's loop, and the draft's question answered: whether the
+battle loses a frame at the flash's start. **First step**: the draft's
+repro, the extra `SLHV`/`OPVCT` read in `compar_tick`.

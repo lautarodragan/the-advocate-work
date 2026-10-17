@@ -2,7 +2,9 @@
 name: "Zounds: the picture-made screens keep more than two pictures at once"
 description: "Zounds builds its menu (map 136), its skill screen (map 190), a race's score board (map 75) and its intro (map 106 'Imágenes') out of ShowPicture; the console keeps two, the ROM does not run the picture pages, and the boot stalls on the intro with the hero stuck"
 type: bug
-status: draft
+status: doing
+assignee: Tijereta
+agents: [Aguará, Tijereta]
 ---
 
 Seen by Aguará on 2026-10-15, in the study
@@ -28,3 +30,11 @@ Captures of both cores in `/shared/captures/2026-10-15-zounds/`.
 custom menu was (the book's "The custom menu"), or the picture system
 grows past two —the book's "The picture system and the portable
 console"—; and how the intro gets past without them.
+
+**Noted on 2026-10-16 (Hurón)**: the boot stalling on map 106 had another
+cause too, followed in
+[`zounds-the-intro-on-map-106-waits-for-a-key-nobody-reads`](zounds-the-intro-on-map-106-waits-for-a-key-nobody-reads.md)
+(in testing). What stays a draft here is the choice above for the
+picture-made screens.
+
+**taro, 2026-10-16**: "Si sale relativamente barato implementar el resto del sistema de imágenes, intentémoslo. Si es algo que, de una u otra, nos acerca a la compatibilidad con RM, me parece bien." So the picture system grows toward RM2k's (more pictures at once), rather than remaking Zounds' screens as the engine's menu; first measured, implemented if the cost is reasonable. Taken by Tijereta.

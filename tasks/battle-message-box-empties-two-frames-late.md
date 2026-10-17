@@ -2,7 +2,7 @@
 name: "A battle message box empties two frames late"
 description: "When A closes a troop page's message, the battle's message window still shows its text for two frames; RM2k empties it at once. Seen next to a FlashScreen, which starts on the first of those frames"
 type: bug
-status: draft
+status: wishlist
 ---
 
 Seen by Chajá on 2026-10-12, with the-advocate `5238c200` and the ports
@@ -23,3 +23,12 @@ screen still has the text on the first two frames after the A —the flash
 already shows on the second— and is empty from the third. It
 looked like the text layer's own pace —it clears a row per budget—, not
 measured.
+
+## Defined
+
+Wishlist, on 2026-10-16, by Cardón: two frames of text under a flash, in battle.
+
+**Done** means the battle's message window is empty on the first frame
+after the A that closes it, as under Wine, with
+`battle-inscribe-flash-1` reblessed and looked at. **First step**: measure
+whether it is the text layer clearing a row per budget, as suspected.

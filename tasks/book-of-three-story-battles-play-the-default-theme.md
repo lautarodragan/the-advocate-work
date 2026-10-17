@@ -2,7 +2,7 @@
 name: "The Book of Three: the story's battles play the default battle theme"
 description: "Each scripted fight sets its own battle and victory music with ChangeSystemBGM, which the port does not do: they all play the database's battle theme"
 type: bug
-status: draft
+status: todo
 ---
 
 Seen by Mulita on 2026-10-15, comparing the port with the original's event
@@ -23,3 +23,16 @@ every story fight relies on it.
 
 **How to see it**: the ports' case `milestone-cauldron` and the song in
 RAM (`games.Session.song`) during the first battle.
+
+## Defined (2026-10-16, Carpintero)
+
+Still open: `compile.rs` drops `ChangeSystemBGM` with
+`system-bgm-not-changed` at the-advocate `f4709d0b`. It is a missing
+command, heard in every story fight. **Done**: `ChangeSystemBGM` for the
+battle and the victory slots at least —a slot the battle reads instead of
+the database's theme, kept in the save—, the songs it names carried by
+the audio packages, the degradation gone for those slots, and the
+ports' `milestone-cauldron` asserting "talisn" in the first battle.
+**First step**: count, over the nine dumps, which slots the command
+changes (battle, victory, inn, vehicles, game over), to decide which go in
+the first version.

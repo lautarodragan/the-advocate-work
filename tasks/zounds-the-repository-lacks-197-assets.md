@@ -2,7 +2,9 @@
 name: "Zounds: the repository lacks 197 assets the data references"
 description: "22 chipsets, 15 charsets, 17 songs, 131 sounds, 6 backdrops, 2 facesets, a monster, a panorama, a picture and the System2 are referenced and not in the repo: 108 are the RM2k3 RTP (not in ~/assets), 43 the RM2k RTP under other names, 55 are nowhere"
 type: chore
-status: draft
+status: doing
+assignee: Aguará
+agents: [Aguará]
 ---
 
 Seen by Aguará on 2026-10-15, in the study
@@ -27,3 +29,5 @@ right.
 taro may still have them. The study built with placeholders
 (`~/scratch/aguara/zounds/placeholders.py`); the full lists are in
 `~/scratch/aguara/zounds/missing.json`.
+
+**taro, 2026-10-16**: the 55 that are nowhere are probably lost (said on 2026-10-15); the free RTP of EasyRPG for RM2k3 goes to `~/assets` to cover the 108 of the RM2k3 RTP ("Dale"). Taken by Aguará.

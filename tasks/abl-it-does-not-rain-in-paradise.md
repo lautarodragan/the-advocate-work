@@ -2,7 +2,7 @@
 name: "ABL: it does not rain in Paradise"
 description: "Map 108 sets rain for the crying girl's scene, and the converter leaves its drops out: its sprite palettes have no room for the three greys"
 type: bug
-status: draft
+status: todo
 ---
 
 Seen by Chajá on 2026-10-14, with the-advocate `51b4b1b2` and the ports
@@ -21,3 +21,17 @@ The same with every map of the game, with or without the timer on 108.
 
 **How to see it**: `just cartridges release` in `abl/` and the line in
 `build/release/converter.log`; in the game, 108 with switch 362 on.
+
+## Defined
+
+Todo, on 2026-10-16, by Cardón: a story scene of ABL's `release` without its rain, and the
+WARNING is still in `rm2k-snes/wally/src/map.rs` at the-advocate
+`f4709d0b`.
+
+**Done** means it rains on 108 with switch 362 on, and the WARNING is gone
+from `release`'s `converter.log`, with a golden of the scene. Two ways, the
+agent picks and measures: make room for the three greys on 108 (fusing the
+map's sprite palettes, as the ground already is), or draw the drops with
+greys a palette already has (the nearest three of a leader's or the
+timer's). **First step**: what the eight palettes of 108 hold, and how far
+each of their greys is from the drops'.

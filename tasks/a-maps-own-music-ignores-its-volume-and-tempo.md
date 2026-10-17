@@ -2,7 +2,7 @@
 name: "A map's own music ignores its volume and tempo"
 description: "The song a map plays on its own, by its properties, is played as written: a map that asks for it at 50% or 70% plays it at full volume"
 type: bug
-status: draft
+status: todo
 ---
 
 Seen by Mulita on 2026-10-15, comparing The Book of Three with the
@@ -26,3 +26,15 @@ Over Imdahl 6, The Frozen World 3, Dooms 2 2, Desert Nightmare 0.
 
 **How to see it**: the ports' case `milestone-south-mountains` and
 `Session.song_level()` on map 25.
+
+## Defined
+
+Todo, on 2026-10-16, by Cardón: heard in play, in every port —ABL 18 maps, Vampires Dawn
+125—. At the-advocate `f4709d0b` `runtime/bgm_level.s` and `music.s` still
+play a map's own song as written.
+
+**Done** means a map's own song plays at its volume and tempo, as a
+`PlayBGM` with them already does, with `Session.song_level()` on map 25 of
+`milestone-south-mountains` reading the 70% —red before—. **First step**:
+`git blame` the "as written" comments of `bgm_level.s`, to see whether it
+was a decision or only what was there; if it was a decision, ask before.

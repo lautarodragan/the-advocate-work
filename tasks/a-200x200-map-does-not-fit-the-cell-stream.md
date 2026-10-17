@@ -2,7 +2,7 @@
 name: "A 200x200 map does not fit the WRAM cell stream"
 description: "rm2k-snes-mapdata stops the whole build at Zounds' map 30 (200x200): its map_cells stream is 47,232 bytes and 32,768 fit in WRAM; no other map of the eight ports gets near"
 type: bug
-status: draft
+status: todo
 ---
 
 Seen by Aguará on 2026-10-15, in the study
@@ -31,3 +31,17 @@ cell; it is the grid, two bytes per cell, cut in two streams of up to
 `$7F`. 40,000 cells are 80,000 bytes: the first half takes 32,768 and the
 second is the 47,232 of the message. The limit is then the 64 KB bank,
 32,768 cells (a 181x181 map), not about 27,700.
+
+## Defined
+
+Todo, on 2026-10-16, by Cardón, at the-advocate `f4709d0b`: Zounds still excludes map 30
+by hand. Two things, the first is the task and the second is measured:
+
+**Done** means a map over the grid's room does not stop the build: it is
+left out with a WARNING and a loss in `degradations.json`, as events over
+120 are, and Zounds' `excluded = [30]` goes. Whether map 30 can be held at
+all —the grid is 64 KB of bank `$7F` at two bytes a cell, so 32,768 cells;
+a byte per cell, or a grid read from ROM, would be the ways— the agent
+measures and writes down, without building it unless it is cheap.
+**First step**: `check_streams` in `rm2k-snes/mapdata/src/materials.rs`,
+and how the converter already leaves out a map it cannot hold.

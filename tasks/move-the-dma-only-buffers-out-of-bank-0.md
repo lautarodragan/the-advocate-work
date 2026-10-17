@@ -2,7 +2,7 @@
 name: "Move the DMA-only buffers out of bank 0's BSS"
 description: "oam, oam_high, cgram_shadow and text_buf —3,024 B— are built in bank 0 and leave it by DMA, which reads any bank; the BSS has 97 B left in every game, and EV_MAX cannot grow by more than 13 events"
 type: feature
-status: draft
+status: wishlist
 ---
 
 Suggested by Hurón on 2026-10-15, in the study
@@ -41,3 +41,14 @@ where they would go: since `fb156a3e` (2026-10-16) the linker places all of
 ([`let-the-linker-place-the-far-ram-map`](let-the-linker-place-the-far-ram-map.md),
 in testing), so there is no hand-written map left: they would be a `.res`
 in `FARBSS`, and the "its own draft" above is that task.
+
+## Defined (2026-10-16, Carpintero)
+
+An optimisation: it buys `BSS` room, which nothing asks for today. It
+becomes `todo` the day `EV_MAX` has to grow, or a new low-RAM buffer
+does not fit. **Done**: the chosen buffers are `.res` in `FARBSS`, their
+writers use long addressing and their DMAs carry the bank; `just space`
+shows the `BSS` room gained in every cartridge; suite and `test_cores.py`
+green. **First step**: start with `cgram_shadow` and `oam`, the cheapest
+(4 and 12 writers), and measure `text_buf`'s compositor's cost before
+moving it.

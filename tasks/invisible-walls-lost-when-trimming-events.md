@@ -2,7 +2,7 @@
 name: "The invisible walls lost when trimming events"
 description: "When a map goes past 120 events, the trim also leaves out invisible walls: on eight maps of Desert Nightmare the hero can pass where the original stops them"
 type: bug
-status: draft
+status: todo
 ---
 
 Measured by Carpintero on 2026-10-10 (`events-that-dont-fit-in-the-map-ram.md`):
@@ -40,3 +40,14 @@ somewhere you shouldn't, wasn't looked at in an emulator.
 **How to see it**: `just cartridges release` in `desert-nightmare/` and
 `grep "lose an invisible wall\|looks and a wall" build/release/converter.log`;
 the event numbers are on each line.
+
+## Defined (2026-10-16, Carpintero)
+
+A wall that goes away can open a way the original closes, which can
+break a game. **Done**: an invisible wall the trim leaves out becomes
+blocked passability of its cell when the event is still and its pages
+never change that —else it stays a candidate to keep—; Desert
+Nightmare's eight maps and Vampires Dawn's 164 no longer list walls lost
+in `converter.log`, and a converter test holds it. **First step**: for
+each wall listed, whether any page of it moves, erases itself or changes
+its layer.

@@ -2,7 +2,7 @@
 name: "The variables past 256"
 description: "Vampires Dawn names 600 variables and the cartridge holds 256 (duplicate of variables-are-capped-at-256-slots): the pages that use one of the other 344 are left out"
 type: feature
-status: draft
+status: done
 ---
 
 Carpintero declared it on 2026-10-06 as a degradation
@@ -30,3 +30,8 @@ bytecode and the converter's check— and counts what Vampires Dawn loses
 the-advocate `d121156e` the variables' region is sized by the game and
 placed by the linker. This one stays because the book's Vampires Dawn
 page links it.
+
+**Closed on 2026-10-16 (Hurón)** as a duplicate: it is followed in
+[`variables-are-capped-at-256-slots`](variables-are-capped-at-256-slots.md),
+now todo, which the book's Vampires Dawn page links instead of this one.
+It is kept, not deleted, because other tasks and `RENAMES.md` name it.
