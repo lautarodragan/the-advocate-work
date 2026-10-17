@@ -100,3 +100,14 @@ merged at the end.
 maps by playing —only Bob on map 3 is in a test; the rest is the throwaway
 measurement—, and the look an actor's `ChangeSpriteAssociation` gives it,
 which goes through the map's graphics table and not the actor table.
+
+**What was run**, on the branches merged with main (the-advocate
+`ee64bfca`, over `9407d385`; the ports `d6c824d`, over `6d5c491`), with
+the local tools first on the PATH —wally and convert, and the crates main
+changed that were not yet reinstalled globally: cartridge, events, screens,
+battle, mapdata, project, text—: `just rust-test`, `just test` (29
+passed), `SOUNDFONT=FluidR3_GM.sf2 just test-game` (36 passed, 1 skipped)
+in the-advocate; ABL's `just cartridges` and `just tests` (1563 passed, 2
+skipped, no golden moved; `abl.sfc` `a3e45c59db07bb6f`), and `just boot`
+at the ports' root (50 passed). Before merging main the second time, ABL's
+`abl.sfc` was byte for byte the one the global tools built at `759aa0ba`.
