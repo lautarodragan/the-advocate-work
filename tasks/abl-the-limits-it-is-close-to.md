@@ -2,7 +2,7 @@
 name: "ABL: the limits it is close to"
 description: "With the whole game in release, which hard limits of the tools and the runtime —one-byte indices, tables with a cap, segments and banks— ABL is at or close to, measured"
 type: research
-status: testing
+status: done
 assignee: taro
 agents: [Cardón]
 ---

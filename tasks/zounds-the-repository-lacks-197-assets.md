@@ -2,7 +2,7 @@
 name: "Zounds: the repository lacks 197 assets the data references"
 description: "22 chipsets, 15 charsets, 17 songs, 131 sounds, 6 backdrops, 2 facesets, a monster, a panorama, a picture and the System2 are referenced and not in the repo: 108 are the RM2k3 RTP (not in ~/assets), 43 the RM2k RTP under other names, 55 are nowhere"
 type: chore
-status: testing
+status: done
 assignee: taro
 agents: [Aguará]
 ---

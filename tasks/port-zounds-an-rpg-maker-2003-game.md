@@ -2,7 +2,7 @@
 name: "Port Zounds, an RPG Maker 2003 game"
 description: "A study of how much of Zounds —taro's game, made in RPG Maker 2003— works today with the tools: the project, Ditto with the 2003 fields, what compiles, which commands are missing, and what 2003 battles and .wav music would need"
 type: research
-status: testing
+status: done
 assignee: taro
 agents: [Aguará]
 ---

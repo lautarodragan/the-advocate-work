@@ -2,7 +2,7 @@
 name: "Unused items at the start of each game's database"
 description: "Do the eight games leave RM2k's default items unused at the start of the item table? A measurement, for a quick fix to the 255-item limit"
 type: research
-status: testing
+status: done
 assignee: taro
 agents: [Mulita]
 ---

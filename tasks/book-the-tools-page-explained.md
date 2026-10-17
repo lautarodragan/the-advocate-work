@@ -2,7 +2,7 @@
 name: "The tools page, explained"
 description: "The book's tools.html says little: what each tool does, in which order they run, and examples of input and output —an RTP image through Adeleine, test-game cases that show the lossy optimizations from nothing lost to too much merged—, in phases"
 type: docs
-status: testing
+status: done
 assignee: taro
 agents: [Cardón]
 ---

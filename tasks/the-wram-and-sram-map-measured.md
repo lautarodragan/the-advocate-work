@@ -2,7 +2,7 @@
 name: "The WRAM and SRAM map, measured"
 description: "How much of the 128 KB of WRAM and the 8 KB of SRAM is really used, by what, in release and in the whole game; and what it costs that the linker places everything instead of the hand-made map of bank $7E"
 type: research
-status: testing
+status: done
 assignee: taro
 agents: [Hurón]
 ---

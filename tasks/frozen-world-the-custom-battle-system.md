@@ -2,7 +2,7 @@
 name: "Frozen World: the custom battle system"
 description: "Frozen World's combat is made of events on maps 1 and 2, excluded today: which limits of the runtime, the tools and the console it hits, and which creative ways out the events' patterns allow"
 type: research
-status: testing
+status: done
 assignee: taro
 agents: [Carpintero]
 ---
