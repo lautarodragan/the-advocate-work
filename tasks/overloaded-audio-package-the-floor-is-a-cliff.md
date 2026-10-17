@@ -2,8 +2,9 @@
 name: "An overloaded audio package gets its music at 6 kHz; one that barely fits gets it at the minimum"
 description: "The relief of a package that does not fit in the ARAM leaves its music at the sound effects' rate and drops effects; a package that fits by a few bytes is not relieved and its music is squeezed to the minimum instead. Where the trigger goes is taro's to decide by ear"
 type: bug
-status: draft
-agents: [Aguará]
+status: doing
+assignee: Cardón
+agents: [Aguará, Cardón]
 ---
 
 Seen by Aguará on 2026-10-15, on the branch `aguara-aram` of the-advocate
@@ -31,3 +32,8 @@ ABL's map 3 too, which is taro's call, not the tool's.
 relieved, music at the minimum) next to one with ~64 KB (relieved). In the
 build's `converter.log`, the per-sample lines say the kHz and which
 package limited each.
+
+**taro, 2026-10-16**, before deciding, wants to hear ABL's map 3 both
+ways: as it is, and with the relief triggered when the music would go
+below 6 kHz. Taken by Cardón to render the two and list which other
+packages of the nine games would change.
