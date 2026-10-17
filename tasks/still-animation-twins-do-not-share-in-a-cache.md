@@ -2,7 +2,9 @@
 name: "Still events that animate don't share their twins' slot in a cache"
 description: "In a map with a cache of slots each still event that animates wants a slot of its own while in view, so Sunset's and Vampires Dawn's crowded maps give up their animations or make events wait"
 type: bug
-status: draft
+status: testing
+assignee: taro
+agents: [Calandria]
 ---
 
 Seen by Calandria on 2026-10-16, with the-advocate `8c6a345b` (main
@@ -44,3 +46,15 @@ Sunset's 46 is something else: see
 **How to see it**: `still-animation-dropped` and `events-wait-for-a-slot`
 in `build/release/degradations.json` of `sunset-over-imdahl/` and
 `vampires-dawn/`.
+
+## Log
+
+**2026-10-17, Calandria**: done in
+[`rain-drops-cost-a-cache-its-slots`](rain-drops-cost-a-cache-its-slots.md),
+the-advocate's `calandria-rain-and-slots` (`ceb31253`): a twin's row
+carries its leader's key and the cache hands both the same slot; in a
+cache a twin that only appears with its page shares too. Of this table,
+Vampires Dawn's 201, 222, 236 and 240 and Sunset's 2, 13 and 15 animate
+everything; Sunset's 1, 3, 12 and 14 still give up some looks, where
+animating them would make events wait. The ROM test is the ports'
+`tests/test_cache_twins.py`.

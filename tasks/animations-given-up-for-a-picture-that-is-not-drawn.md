@@ -20,3 +20,9 @@ lost and the picture too, where losing only the picture was possible.
 **How to see it**: in `sunset-over-imdahl/build/release/degradations.json`,
 map 46 has both `still-animation-dropped` (2 events, 0 of 1 looks) and
 `pictures-not-drawn`.
+
+**2026-10-17, Calandria**: 46 no longer shows it since the raindrops go
+into the free columns of the last row of blocks
+([`rain-drops-cost-a-cache-its-slots`](rain-drops-cost-a-cache-its-slots.md)):
+its two still events animate, and only the picture is left out. The order
+in `convert` that caused it is the same, so another map can still meet it.
