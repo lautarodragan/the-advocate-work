@@ -15,3 +15,37 @@ too. The Book of Three probably the same, but nothing is seen —its first
 map starts in black— and its first map's music is heard for about a
 second before the title. taro has not seen it in ABL, and wonders whether
 it is for the same reason.
+
+## Chajá, 2026-10-16
+
+**Reproduced** in snes9x, frame by frame from the reset, on the-advocate
+`f4709d0b` and the ports `66ed09c`: Dooms 2 shows its first map from frame
+12 to 101 and Desert Nightmare from 11 to 45; El Dorado and Sunset a few
+frames too. The Book of Three's first map is black, and its song (38)
+starts on frame 31, before the title on 46. ABL does exactly the same,
+unseen and unheard: its first map is black and `SONG_BOOT` is $FF.
+
+**Cause**: `runtime/boot.s` always enters the first map, runs
+`flush_video` —which ends writing `brightness` to INIDISP, turning the
+screen on—, turns the screen on, uploads the driver and runs `music_boot`,
+which starts `SONG_BOOT`; only after BOOT_FRAMES does it go to
+`title_screen`. That order comes from `c5f5b4e0` (2026-09-10), which put
+the title after the boot so that a ROM without one reaches the loop on the
+usual frame; keeping the map hidden was never done. It is a birth defect,
+not a regression. The title, on leaving, already does `enter_map`,
+`flush_video` and `music_boot` itself.
+
+**Fix** (the-advocate, `chaja-title-first`): with a title, the boot skips
+`flush_video` and the screen-on —forced blank until `title_upload`— and
+leaves `music_off` at 1 instead of `music_boot`. Without a title, the same
+path as before.
+
+**Test** (ports, `chaja-title-first`): `tests/test_title_first.py`, in
+`just boot`: from the reset until BOOT_FRAMES plus a second, each lit pixel
+has to be the settled title's, and nothing sounds and `music_off` is set,
+unless the title's own song is the one on. Red on five games at the base
+(Book of Three, Desert Nightmare and Dooms 2 by the music; El Dorado and
+Sunset by a map frame), green on the eight with the fix.
+
+Seen on the way and not a bug of this: Desert Nightmare's title song
+(`music13`) has only an MSU-1 track, so without MSU-1 the title is silent.
