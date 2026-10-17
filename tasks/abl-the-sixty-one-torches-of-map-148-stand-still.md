@@ -2,8 +2,8 @@
 name: "A Blurred Line: the sixty-one torches of map 148 stand still"
 description: "Map 148's Crown7 flames animate in RM2k and stand still in the port: with its ground already fused to fit, the converter gives up their two slots before fusing more"
 type: bug
-status: doing
-assignee: Calandria
+status: testing
+assignee: taro
 agents: [Calandria]
 ---
 
@@ -91,3 +91,35 @@ drawn anyway: [`animations-given-up-for-a-picture-that-is-not-drawn`](animations
 The test: `tests/rpgmaker/test_still_animation_twins.py` in ABL, red with
 main's tools, green with the fix: the slot of torch 3 and of its twin 4
 show the same pose, and more than one in 120 frames.
+
+## Done (2026-10-17, Calandria): to testing
+
+Branches, all `calandria-torches-148`, with main merged:
+
+* the-advocate: `8c6a345b` the fix (with its test, red first), `b6b9df10`
+  the test game's garden and showcase goldens (People1 5 on an empty page
+  no longer turns: a step of colour on one character), `477ef9c2` merge.
+* the ports: `021f64c` the ROM test (red with main's tools, green with
+  the fix), `33c6338` its line in the index, `b887d75`, `d42436c`,
+  `520ec0c`, `e408570` the goldens that moved, by rounds (24 captures,
+  still characters merged differently; the tram's passengers go from a
+  lent grey to their own blue). All looked at side by side in
+  `/shared/captures/2026-10-16-torches-148/`.
+* the book: `43dca56` the Known issues line goes, and the divergence on
+  still animations stops listing 148.
+* Not to merge without taro: the-advocate `calandria-rain-before-slots`
+  (`836861f0`), the rain proposal of the draft
+  [`rain-drops-cost-a-cache-its-slots`](rain-drops-cost-a-cache-its-slots.md).
+
+**To install when merging**: `just install events`. Wally is not touched.
+
+Run, with the branch's tools: `just rust-test` (953 passed), `just test`
+(29), `just test-game` with FluidR3 (38 passed, 1 skipped, after the two
+goldens; on a clean main it was green with the old ones), ABL's `just
+tests` until no new golden showed up (1565 passed, 2 skipped), and the
+ports' `just boot` full (59 passed). `release`'s `abl.sfc` sha256 starts
+`0bf476a4c25e4c9d`; `degradations.json` has no `still-animation-dropped`
+for 148, and its fusion is the same 74 tiles to 543.
+
+**To play**: map 148, Paradise Burning: the fires flicker. Pressing the
+action key on a torch no longer turns it, as in RM2k.
