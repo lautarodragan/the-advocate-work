@@ -2,7 +2,7 @@
 name: "Zounds: the intro on map 106 waits for a key nobody reads"
 description: "Map 106's autostart waits for variable 4 to be 5 or 6 (the action or cancel key); only common event 3 writes it, with KeyInputProc in its long form, and that event is left out by the long KeyInputProc and by ControlVars from an actor's stats"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Aguará]
 ---

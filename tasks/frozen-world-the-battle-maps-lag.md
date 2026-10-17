@@ -2,7 +2,7 @@
 name: "Frozen World: the battle maps, the battles and the Use Menu lag"
 description: "The custom systems run far below 60 frames: Command Grid, Plate Placement, the fights and the Use Menu, with no parallel event or heavy graphics to explain it"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Aguará]
 ---

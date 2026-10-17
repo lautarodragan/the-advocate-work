@@ -2,7 +2,7 @@
 name: "Frozen World: the menu B opens on the map is not drawn"
 description: "Pressing B on the map opens something with three options that works blind —equipment, items, a stats message— but nothing is drawn"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Mulita]
 ---
