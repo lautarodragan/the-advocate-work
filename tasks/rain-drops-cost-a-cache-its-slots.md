@@ -2,7 +2,9 @@
 name: "The raindrops cost a cache its slots"
 description: "Rain is drawn whenever its greys fit a palette, before the cache counts its slots: Vampires Dawn's 51 gives up 21 animations for it and its 163 has events waiting"
 type: bug
-status: draft
+status: doing
+assignee: Calandria
+agents: [Calandria]
 ---
 
 Seen by Calandria on 2026-10-16, with the-advocate `8c6a345b` and the
@@ -35,3 +37,11 @@ Sunset loses the rain on twelve more maps. Which loss is worse is taro's.
 
 **How to see it**: `just cartridges` in `vampires-dawn/` with the fix, and
 maps 51 and 163 in `build/release/degradations.json`.
+
+## taro's decision
+
+taro, on 2026-10-17: the rain is not given up. If both do not fit, the
+animations go —so `calandria-rain-before-slots` is not merged—, but first
+look for ways to keep both, also when it rains.
+
+## Log
