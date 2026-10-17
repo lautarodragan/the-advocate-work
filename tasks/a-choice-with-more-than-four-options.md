@@ -2,7 +2,7 @@
 name: "A choice with more than four options"
 description: "The fifth option of a choice does not compile (CHOICE_MAX is 4): The Book of Three's 'All Five Dreams' common event (6 calls skipped), 21 in Sunset and 21 in Vampires Dawn"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Chajá]
 ---

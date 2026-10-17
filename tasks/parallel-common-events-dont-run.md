@@ -2,7 +2,7 @@
 name: "Parallel common events don't run"
 description: "Parallel common events run in the ROM, each with its own interpreter, the pure ones only when what they read changes, and Loop compiles; what still does not run in each game is in drafts"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Aguará]
 ---

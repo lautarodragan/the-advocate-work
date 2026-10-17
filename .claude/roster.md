@@ -103,6 +103,15 @@ same thing before, start from there and do not measure it again.
 * **If you fixed something that was in a port's "Known issues"**, remove
   its line in the same change, and the draft, if there was one.
 * **Leave nothing running**: suites, waits, Wine, Xvfb.
+* **Do not poll for what you launched**: a suite or anything long goes
+  with the Bash tool's `run_in_background`, which wakes you up when it
+  exits. A process you did not launch is waited for by its PID and with a
+  limit, `timeout 2h tail --pid=<pid> -f /dev/null`. A wait loop with no
+  `timeout` is refused by `.claude/hooks/bounded-waits.py`.
+* **A suite's output goes to a log, not to your context**: `just tests >
+  ~/scratch/<name>/<topic>/tests.log 2>&1`, and from it you read the
+  summary with `tail` and the reds with `grep`. A whole suite is thousands
+  of lines; `cat` on it costs as much as running it in the foreground.
 * Hand back a report **that is short and in Spanish**: what you did, what
   you did not, the branches of each repo, the suite and the fingerprint of
   `abl.sfc`, where the captures are, and what the suite does not cover,

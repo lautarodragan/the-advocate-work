@@ -2,7 +2,7 @@
 name: "The tools do not read XYZ images"
 description: "RPG Maker 2003 saves images as .xyz (a zlib stream of a 256-colour palette and indices); the finders accept the extension but nothing decodes it, so a 2003 game's build stops at its System. Zounds has 186 of them"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Aguará]
 ---
