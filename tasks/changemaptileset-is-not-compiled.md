@@ -2,7 +2,7 @@
 name: "ChangeMapTileset is not compiled"
 description: "A page that changes the map's tileset at run time is left out whole: Frozen World 10 uses on 8 pages (maps 9, 47, 99, 129, 149), Vampires Dawn 10"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Calandria, Mulita]
 ---
