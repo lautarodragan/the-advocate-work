@@ -2,8 +2,8 @@
 name: "The first map shows for a few frames before the title"
 description: "Booting Dooms 2 and Desert Nightmare, the start map is drawn for a few frames before the title screen; The Book of Three plays its first map's music for about a second; the original does not, and ABL seems not to"
 type: bug
-status: doing
-assignee: Chajá
+status: testing
+assignee: taro
 agents: [Chajá]
 ---
 
@@ -49,3 +49,15 @@ Sunset by a map frame), green on the eight with the fix.
 
 Seen on the way and not a bug of this: Desert Nightmare's title song
 (`music13`) has only an MSU-1 track, so without MSU-1 the title is silent.
+
+**Verified** on the merged tree (the-advocate `9d9325e9`, the ports
+`f1b2f72`), with the branch's tools: `just rust-test`, `just test`, `just
+test-game` (FluidR3), ABL's `just tests` —green, no golden moved: ABL's
+boot was already black and silent— and `just boot`, whole, with the new
+test green on the eight games. Leaving the title by "New Game" is what
+`test_boot.py` and ABL's title cases already play. Not looked at on
+hardware: taro sees it on the next delivery. Captures in
+`/shared/captures/2026-10-16-title-first/`.
+
+**When merging**: the runtime only (`runtime/boot.s`); no crate changed,
+nothing to reinstall for this.
