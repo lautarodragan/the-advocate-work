@@ -2,8 +2,8 @@
 name: "Frozen World: the menu B opens on the map is not drawn"
 description: "Pressing B on the map opens something with three options that works blind —equipment, items, a stats message— but nothing is drawn"
 type: bug
-status: doing
-assignee: Mulita
+status: testing
+assignee: taro
 agents: [Mulita]
 ---
 
@@ -100,3 +100,16 @@ Stats" it calls common event 31, the message.
 
 Desert Nightmare (common events 12 and 14) and Sunset Over Imdahl (5)
 get copies too; neither was played with them.
+
+### 2026-10-17, Mulita: to testing
+
+Branches `mulita-fw-b-menu` in the-advocate, the ports and the book, with
+main merged (the-advocate `eb8fff44`, Aguará's lag fix, included).
+Verified on the merged tree with the branch's tools: ABL's suite green,
+and the ports' `just boot` green, `test_b_draws_the_menu` and Desert
+Nightmare's shop owner included. Sunset Over Imdahl (common 5) and Desert
+Nightmare (12, 14) get copies too, and nobody played them.
+
+**To install when merging**: `cartridge events mapdata convert wally`
+(the runtime changed: `switch_of` in `common_events.s`, with the tables
+mapdata writes).
