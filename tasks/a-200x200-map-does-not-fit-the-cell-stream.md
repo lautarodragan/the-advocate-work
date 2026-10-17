@@ -45,3 +45,12 @@ a byte per cell, or a grid read from ROM, would be the ways— the agent
 measures and writes down, without building it unless it is cheap.
 **First step**: `check_streams` in `rm2k-snes/mapdata/src/materials.rs`,
 and how the converter already leaves out a map it cannot hold.
+
+**Why it matters now** (Aguará, 2026-10-17): map 30 is Zounds' dream
+after sleeping in Uname's bed, and only it turns on switch 47, which the
+next scene waits for: without it the story stops on map 17 —see
+[`zounds-sleeping-in-unames-bed-leaves-the-screen-black`](zounds-sleeping-in-unames-bed-leaves-the-screen-black.md)—.
+What it is made of, read from its `.tiles`: 15 distinct (lower, upper)
+tile pairs, the upper layer all 10000, and 3,776 of its 40,000 cells not
+the background tile 5143 —rails across the whole map, edge to edge, so
+no crop holds it—. A byte per cell would be 40,000 bytes.
