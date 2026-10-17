@@ -2,7 +2,9 @@
 name: "A Blurred Line: the sixty-one torches of map 148 stand still"
 description: "Map 148's Crown7 flames animate in RM2k and stand still in the port: with its ground already fused to fit, the converter gives up their two slots before fusing more"
 type: bug
-status: wishlist
+status: doing
+assignee: Calandria
+agents: [Calandria]
 ---
 
 Seen by Calandria on 2026-10-15, measuring
@@ -40,3 +42,5 @@ further to free the two slots, or let the animation take its slots before
 the fusion is decided. **First step**: how many more tiles the fusion has
 to merge for the two slots, on 148 and on the Sunset and Vampires Dawn
 maps listed above.
+
+**Taken on 2026-10-16** at taro's request, by Calandria.
