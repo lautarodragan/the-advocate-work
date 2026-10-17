@@ -33,3 +33,9 @@ fingerprint of `rm2k-snes-cartridges` (`fingerprint_files` in
 binaries it runs, the game and the patches, and no Rust source; so an edit
 to `emit.rs` alone does not explain it, unless a binary was reinstalled or
 `runtime/` touched during the run. Still not reproduced.
+
+**Seen again by Aguará on 2026-10-16**, with the-advocate `a02041ef`
+(branch `aguara-zounds-assets`, main merged) and the ports `3524727`: the
+full `just boot` failed the same way on sunset-over-imdahl, and `just boot
+-k sunset` right after passed (2 passed). Other agents were running their
+suites at the same time.
