@@ -2,7 +2,7 @@
 name: "Frozen World does not open under Wine"
 description: "With ABL's RPG_RT copied in, as Dooms 2 needed, the window opens and closes; Wine logs an exception outside the stack limits"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Chajá]
 ---
@@ -77,3 +77,7 @@ If it still closes, `WINEDEBUG=+seh,+loaddll wine RPG_RT.exe 2>&1 | tail
 
 Captures —title, first map, the intro, and each failure's dialog— with a
 README, in `/shared/captures/2026-10-17-frozen-world-wine/`.
+
+## Done
+
+taro, on 2026-10-17: with Don Miguel's RTP behind the key, Frozen World opens under Wine on their machine.
