@@ -2,7 +2,7 @@
 name: "Latin-1 letters stop a box"
 description: "A text box with a letter outside printable ASCII —é, ñ, ¿, ü, ß, …— leaves its whole page out: it is most of what Zounds and Vampires Dawn lose of their messages"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Mulita, Aguará]
 ---

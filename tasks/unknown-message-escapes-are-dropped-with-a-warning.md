@@ -2,7 +2,7 @@
 name: "Unknown message escapes are dropped, with a warning"
 description: "A box with an escape the console cannot show leaves its whole page out today; it should drop the escape, compile the box, and say so in degradations.json, so the game can be played without solving each escape first"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Mulita]
 ---

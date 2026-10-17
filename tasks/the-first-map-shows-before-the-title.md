@@ -2,7 +2,7 @@
 name: "The first map shows for a few frames before the title"
 description: "Booting Dooms 2 and Desert Nightmare, the start map is drawn for a few frames before the title screen; The Book of Three plays its first map's music for about a second; the original does not, and ABL seems not to"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Chajá]
 ---

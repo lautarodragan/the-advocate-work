@@ -2,7 +2,7 @@
 name: "The Book of Three: the intro's torches stand still"
 description: "Map 3, the opening's hall, has six still events that animate in RM2k; the console animates four at most, and here none"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Mulita, Calandria]
 ---

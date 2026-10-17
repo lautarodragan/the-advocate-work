@@ -2,7 +2,7 @@
 name: "A Blurred Line: the sixty-one torches of map 148 stand still"
 description: "Map 148's Crown7 flames animate in RM2k and stand still in the port: with its ground already fused to fit, the converter gives up their two slots before fusing more"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Calandria]
 ---

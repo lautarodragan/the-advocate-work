@@ -2,7 +2,7 @@
 name: "The System's cursor in the main menu and the save slots"
 description: "The main menu's command list and the Save/Load screen mark the selection with a two-cell mark of their own instead of the System's cursor, the rectangle the items, equipment, shop, targets and choices already use"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Chajá]
 ---

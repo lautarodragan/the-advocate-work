@@ -2,7 +2,7 @@
 name: "A Blurred Line: the chests change colour from map to map"
 description: "The chests' palette changes between maps: open ones look flatter than closed ones, and in the Neon Vipers' base, with Arden, they look golden. Is there a distribution of the same number of colours that keeps them consistent without degrading anything else?"
 type: research
-status: testing
+status: done
 assignee: taro
 agents: [Carpintero]
 ---
