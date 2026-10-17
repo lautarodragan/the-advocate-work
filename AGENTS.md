@@ -731,6 +731,21 @@ pgrep -f "pytest"; do sleep 30; done`— and they have two vices:
   hours earlier, and that has already sent us to look at old numbers more
   than once.
 
+And a third, which is not about `pgrep`: **a condition written wrong** —a
+line the log never prints, a suite that died before printing it— waits
+forever just the same. On 2026-10-17 two were found alive, of two hours
+and of six and a half, and they kept two finished agents running.
+
+So since that day **nothing waits by polling a condition** (taro's): what
+one launches goes with the Bash tool's `run_in_background`, which wakes the
+one who launched it when the process exits —it always exits, even dying—;
+what someone else launched is waited for by its PID and with a limit,
+`timeout 2h tail --pid=<pid> -f /dev/null`. A loop with `sleep` and no
+`timeout` is refused by `.claude/hooks/bounded-waits.py`, a hook of this
+repo's `.claude/settings.json`, which applies to every agent: the rule was
+already here and was broken all the time. And Hornero, when an agent
+hands back, checks that nothing of it is left alive.
+
 When killing them, careful with `pkill`: if the pattern appears in its own
 command line, it kills itself —code 144— and leaves half the job done.
 Splitting the pattern is enough: `pgrep -f 'un[t]il ! pgrep'`, and then
