@@ -2,8 +2,8 @@
 name: "Zounds: the picture-made screens keep more than two pictures at once"
 description: "Zounds builds its menu (map 136), its skill screen (map 190), a race's score board (map 75) and its intro (map 106 'Imágenes') out of ShowPicture; the console keeps two, the ROM does not run the picture pages, and the boot stalls on the intro with the hero stuck"
 type: bug
-status: doing
-assignee: Tijereta
+status: testing
+assignee: taro
 agents: [Aguará, Tijereta]
 ---
 
@@ -151,3 +151,57 @@ plane of objects: 256x128 or less on the console's screen.
 **Decided: 1, 2 and 3**, which are cheap and general and are RM2k's
 behaviour, not Zounds': phase 2 below. 4 and 5 stay as drafts with these
 numbers.
+
+## Phase 2: more pictures at once (Tijereta, 2026-10-16)
+
+Branches `tijereta-more-pictures` in the-advocate, the ports and the book.
+
+* **Sixteen slots**, one per number of the map, **the highest number in
+  slot 0** —OAM draws the lowest index in front, RM2k the highest number—.
+* **Palettes shared**: the converter puts a picture in the first palette
+  that takes its colours —exact, in the room left, or within two steps of
+  31 for the least used—; a number the map tones (the scan writes down
+  `tinted`) shares only with itself. Each entry of `picture_data` says its
+  palette; the colours go once per palette.
+* **Fewer tiles**: the same pixels once —blocks and cells deduplicated over
+  the map—, and a 32x32 block with four cells drawn or fewer as 8x8
+  objects. Each object says its tile and size (bit 15).
+* **A ramp per slot, and moves that move**: `OP_PICTURE_MOVE` carries a mode
+  and x, y like `OP_PICTURE`'s; the corner walks by Bresenham's steps, the
+  tone and transparency as before. A picture with the map does not move
+  (RM2k 2000). The big picture keeps its own ramp.
+
+Zounds, measured on its `release`: **map 75's score board** went from two
+numbers in 320 tiles to all five, 40 objects in 12 tiles and one palette;
+**map 190** carries its four small pictures —the box and the list are big,
+and hide them: draft
+[`small-pictures-under-a-big-one-are-hidden`](small-pictures-under-a-big-one-are-hidden.md)—;
+**map 136** carries four numbers and the bar's slide, but its pictures need
+512 tiles and fit no layout: draft
+[`zounds-menu-pictures-on-map-136-need-512-tiles`](zounds-menu-pictures-on-map-136-need-512-tiles.md).
+The common events' pictures —pick-axe, notebook— are not shown at all:
+draft [`pictures-in-common-events-compiled-apart-are-not-shown`](pictures-in-common-events-compiled-apart-are-not-shown.md).
+
+Tests: the test game's `test_pictures.py` (case `pictures`: six at once,
+two slides at once, one toned without toning its neighbours; three
+goldens), the ports' `test_zounds.py::test_the_race_score_board_carries_every_number`
+(read from the build), the converter's, mapdata's and the event
+compiler's unit tests. Red before: with the tools of `main` the converter
+said of the case "the picture 'Digit3' (number 3) doesn't go in: the
+console keeps 2 at a time", and four of the six were left out; Zounds' map
+75 had 21 such lines.
+
+Verified on the branches merged with `main` (the-advocate `8014fd06`, the
+ports `fd7da90`): `just rust-test`, `just test`, `just test-game` (38
+passed, 1 skipped), A Blurred Line's `just tests` (1563 passed, 2 skipped,
+no golden moved) and the ports' `just boot` (59 passed), all with the
+branch's tools. On the way, A Blurred Line's race went past the lag its
+test allows (59 frames in 976 ticks against 58) while the frame's loops
+walked all sixteen slots; they walk up to the highest slot shown now.
+What the suite does not cover: map 136's slide is compiled but its
+pictures do not fit, so no screen of Zounds plays a slide; the race's
+board is read from the build, not played.
+
+To install when merging: `events`, `convert`, `mapdata`, `wally` and
+`cartridge` (the bytecode's `OP_PICTURE_MOVE` grew, and `cartridge` writes
+`event_opcodes.inc`).
