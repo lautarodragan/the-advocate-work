@@ -2,7 +2,7 @@
 name: "Book of Three and Frozen World: what is left out, and why"
 description: "Both already carry every map; their culprits report still leaves pages and common events out. Which, by which variant of each command, and what fixing each would take"
 type: research
-status: testing
+status: done
 assignee: taro
 agents: [Calandria]
 ---

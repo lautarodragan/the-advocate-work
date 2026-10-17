@@ -2,7 +2,7 @@
 name: "ABL: what still blocks playing it to the end"
 description: "A fresh count of what stops A Blurred Line from being played from the start to the ending today: pages left out on the story's path, maps not carried, commands not done, and anything else"
 type: research
-status: testing
+status: done
 assignee: taro
 agents: [Cardón]
 ---

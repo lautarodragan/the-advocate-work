@@ -2,7 +2,7 @@
 name: "Switches past 1023, tested in the test game"
 description: "The switches-past-1023 ROM test leaves ABL —its fork of map 348 goes— for a map of the test game"
 type: chore
-status: testing
+status: done
 assignee: taro
 agents: [Calandria]
 ---
