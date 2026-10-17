@@ -2,7 +2,7 @@
 name: "A teleport to a map not carried is dropped, not the page"
 description: "A Teleport to a map the cartridge does not carry leaves the whole page out today; drop the command with a warning instead, so the rest of the page runs"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Hurón]
 ---

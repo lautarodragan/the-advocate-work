@@ -2,7 +2,7 @@
 name: "ABL: the agents on the road to Paradise do not come"
 description: "On the map with the panorama where an agent knocks Arden down, the original spawns agents that run at Talan every so often and start a battle when they touch him; in the port nothing appears"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Aguará]
 ---

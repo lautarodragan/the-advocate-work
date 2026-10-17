@@ -2,7 +2,7 @@
 name: "Zounds: the screen goes black up the stairs after the guard"
 description: "In the intro, after Uname knocks out a guard, takes his uniform and hides the body, going north up the stairs to the next map leaves the screen black; the music goes on and the menu opens"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Aguará]
 ---

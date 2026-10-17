@@ -2,7 +2,7 @@
 name: "Enemies without a graphic on the way to Paradise"
 description: "On the newest maps, on the way to Paradise, some battle enemies aren't drawn (or don't exist), playing with MSU-1"
 type: bug
-status: testing
+status: done
 agents: [Chajá]
 assignee: taro
 ---

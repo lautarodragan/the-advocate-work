@@ -2,7 +2,7 @@
 name: "Route: the missing moves"
 description: "The move commands the ROM didn't do: move forward, the relative turns, and the hero's diagonals and turns"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Hurón]
 ---

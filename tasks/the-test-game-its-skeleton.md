@@ -2,7 +2,7 @@
 name: "The test game: its skeleton"
 description: "A game of our own, made from scratch with free assets, where the engine's ROM tests can live instead of in A Blurred Line: first a map, the hero and an NPC, built from text and booting"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Calandria]
 ---

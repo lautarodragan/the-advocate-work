@@ -2,7 +2,7 @@
 name: "Draw the faces"
 description: "ChangeFaceGraphic is accepted without drawing the face: the message box comes out without it"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Tijereta]
 ---
