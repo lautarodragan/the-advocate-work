@@ -33,3 +33,68 @@ script—. If one is found that improves that map, then look at what the
 algorithm would need to approach it without worsening the other existing
 distributions. If none is found, the algorithm is probably not worth
 touching.
+
+## Phase 1, by hand (Carpintero, 2026-10-16)
+
+Measured on the-advocate `63b46ae9` and the ports `059ddcd`, global tools
+from main.
+
+**The map** is 38, `Sector 34 With Car`: the Vipers' HQ is its north-west
+corner, reached through the pipe (events 20 and 21, only with Arden); the
+scene of event 25 turns on 168 ("The Agency has been here"). Its three
+chests are events 45–47, `BLObjs` character 2, closed pose 9 and open
+pose 10 (page 2, switches 544–546).
+
+**Why they look golden there and nowhere else**: map 38 has 22 characters
+for 8 object palettes, and the split (`drawable_npcs`, wally) puts each
+character in the first palette whose colours it fits **exactly**; when none
+is left, the character is **lent** the palette it misses the fewest pixels
+from, each missing colour going to its nearest by luma. The converter says
+so: "map 38: 3 graphic(s) without a palette of their own, drawn with
+someone else's: BLObjs:2, Chara2:2, People4:0". The chest is 13 greys
+(and two orange pixels of the lock), and in luma —0.30/0.59/0.11— a
+yellow-brown is near a grey, so the greys land on browns. Of ABL's maps,
+38 is the only one where the chest is lent (31 maps lend something).
+
+Two things make that choice worse than it has to be: the lending cost
+counts the twelve poses of `BLObjs:2` (47 colours, other objects of the
+sheet) when the map shows two, and it counts *how many* pixels miss, not
+*how far* they go. And the chest is not the only victim: People4:0 (brown
+hair instead of olive) and Chara2:2 (three black-haired kids drawn with
+brown hair) are lent too, and show more.
+
+**Open chests**: in the other fourteen maps with chests both poses are
+**exact**; the open one is flatter in the drawing itself (eleven colours,
+77 px of near-black interior, the light greys at 4 px each). On map 38 it
+does lose a grey (16 and 19 both to `(18,18,1)`). Map 316 moves the
+chest's greys too, but shows another object of that character (pose 7, a
+turning event, so its colours are chosen over the twelve poses).
+
+**By hand**: the leaders' four palettes fixed; the other seven characters
+split into the four free palettes in all 350 ways, each group's palette
+the union of its colours merged least visibly down to 15 (the timer's
+colour kept). Error: mean CIE76 dE per pixel, against the sheet at 15 bits
+(the background of 38 has no merged colour). Best candidate **M** (Chara4:1
+alone; Chara2:4+People1:0+timer; Crown3:1+People4:0; Chara2:2+chest): chest
+25.9 -> 1.4, Chara2:2 19.4 -> 3.8, People4:0 17.1 -> 5.8; worse: Crown3:1
+3.6 -> 6.3, Chara2:4 4.0 -> 5.9, People1:0 2.6 -> 4.1. Worst character
+25.9 -> 6.9 (a fixed one); sum 195 -> 70. **No split leaves everyone as
+they are** (the least worsening is +1.8). Only switching the nearest to a
+hue-aware distance, same split, gives 195 -> 152. Table, method and
+hypothesis: `src/ports/abl/research/2026-10-16-the-chests-colours.md` in
+the book (branch `carpintero-chests`). Captures and side by sides
+(original | today | M | N): `/shared/captures/2026-10-16-chests/`.
+
+**Answer**: yes, there is a better distribution of the same colours on
+map 38, but it is a trade: three characters stop being drawn in the wrong
+colours and three lose a shade. Hypothesis for the algorithm (not tried):
+no character drawn with a palette not made with its colours in it —when
+the events do not fit exactly, group similar characters and quantize each
+group together instead of lending—; smaller steps first: lending cost over
+the shown poses and by distance, nearest by a hue-aware distance. Cost to
+measure: more characters with a per-map pose bank in the cartridge.
+
+Not done: a capture of the original under Wine at that spot (getting the
+original there means playing to it or editing a copy's start; the sheet at
+15 bits over the exact background stands in), the other 30 maps that lend,
+and the rain that does not fit on 38.
