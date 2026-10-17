@@ -15,6 +15,15 @@ the editor.
 
 ## Log
 
+### 2026-10-17, taro's confirmation
+
+Relayed by Hornero the same day: under Wine, with the original runtime,
+pressing B on the map shows a custom menu, probably built with
+`ShowPicture`, and the SNES ROM shows nothing there. It is what the data
+says below: three pictures of common event 15. No capture of the original
+was taken for this task: the game's own three pictures are next to the
+console's in the captures' contact sheet.
+
 ### 2026-10-17, Mulita: what reacts to B
 
 Starting from the-advocate `b15c9408`, the ports `bd92975`, the book
