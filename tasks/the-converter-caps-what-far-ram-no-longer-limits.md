@@ -2,7 +2,7 @@
 name: "The converter still caps experience slots and variables by the hand-written far RAM map"
 description: "rm2k-snes-battle refuses more than 126 experience slots because FAR_EXP had 504 B, and rm2k-snes-mapdata explains its 256-variable cap with 'FAR_ITEMS is 512 bytes from FAR_VARIABLES'; since far RAM is placed by the linker neither is the reason"
 type: bug
-status: draft
+status: wishlist
 ---
 
 Seen by Hurón on 2026-10-16, while letting the linker place the far RAM map
@@ -30,3 +30,16 @@ and still stand:
 
 **How to reproduce**: read the three messages; none of the nine games hits
 them today.
+
+## Defined
+
+**2026-10-16, Hurón**, checked against the-advocate `f4709d0b` and the ports `66ed09c`.
+Still so, and none of the nine games hits any of the three. **Done** is
+each check giving its real reason or going: the experience slots and the
+skill pairs measured against what else holds them (a byte index, the
+pool) and capped there with that message, or not capped; the variables'
+message in `emit.rs` naming the byte slot in the bytecode. That last one is
+touched anyway by
+[`variables-are-capped-at-256-slots`](variables-are-capped-at-256-slots.md),
+so whoever takes that one closes it. First step: for each of the three,
+`git blame` and what the runtime does with the index.

@@ -2,7 +2,7 @@
 name: "Interactive still events drawn as background"
 description: "A map with more still NPCs than the sprite VRAM holds could draw the ones that do not fit as background tiles and keep their action page: today only events with no commands go to the background"
 type: feature
-status: draft
+status: wishlist
 ---
 
 Left by Calandria on 2026-10-16, from taro's plan for Dooms 2's map 1
@@ -42,3 +42,12 @@ that did not fit are `vampires-dawn-maps-that-dont-fit-in-vram.md`.
 **How to see it**: there is no map that needs it today; measuring it
 would be taking a map past the sprite limit on purpose, like
 `vampires-dawn-maps-that-dont-fit-in-vram.md` lists.
+
+## Defined (2026-10-16, Carpintero)
+
+No map of the eight ports needs it today. **Done**: a still NPC with an
+action page that does not fit in the sprite VRAM is baked into the
+background, still talks, and goes back to a sprite when a page change
+needs it —or the converter refuses that case and keeps it a sprite—,
+shown on a map taken past the limit on purpose. Becomes `todo` when a map
+stops at the sprites' VRAM.

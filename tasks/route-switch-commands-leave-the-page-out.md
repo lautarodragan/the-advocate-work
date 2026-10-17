@@ -2,7 +2,7 @@
 name: "A forced route that turns a switch on or off leaves its page out"
 description: "Move commands 32 and 33 in a MoveEvent are refused, and the whole page with them: about 55 pages of Vampires Dawn and one of Sunset over Imdahl"
 type: bug
-status: draft
+status: todo
 ---
 
 Seen by Hurón on 2026-10-14, measuring with `just culprits` after
@@ -22,3 +22,14 @@ of the `MoveEvent` culprits of both games, compile since that task.
 `sunset-over-imdahl/` of the ports, and the pages of `culprits.json` whose
 culprit is code 11330 with a 32 or 33 among the decoded commands (the
 route's integers are RM2k's seven-bit format: see `route::decode`).
+
+## Defined (2026-10-16, Carpintero)
+
+Still open: `route::known` refuses 32 and 33 at the-advocate `f4709d0b`.
+Whole pages go, one of them in Sunset, which is being played. **Done**: a
+forced route turns a switch on and off when it reaches the command, and
+refreshes the pages like `ControlSwitches`; the pages compile, `just
+culprits` drops them in Vampires Dawn and Sunset, and a ROM test sees the
+switch change at its step. **First step**: the route's opcode for it, with
+the switch number past 1023 in mind
+([`branches-and-switch-commands-past-switch-1023`](branches-and-switch-commands-past-switch-1023.md)).

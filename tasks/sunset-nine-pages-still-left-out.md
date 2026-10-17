@@ -2,7 +2,7 @@
 name: "Sunset over Imdahl: nine pages still left out"
 description: "After GateStreet's fixes, `just culprits` still leaves out nine map pages of Sunset; at least two are autostarts of story maps, which would stop the game the way GateStreet's man and the statue did"
 type: bug
-status: draft
+status: todo
 ---
 
 Seen by Tijereta on 2026-10-16, with the tools of the branch
@@ -30,3 +30,16 @@ does not happen and nothing else moves the story—.
 How to see it: build the release with the branch's tools, `just
 cartridges` and `just culprits` in `sunset-over-imdahl/`, and read
 `build/release/culprits.json`.
+
+## Defined
+
+**2026-10-16, Hurón**, checked against the-advocate `f4709d0b` and the ports `66ed09c`.
+Two of the nine are autostarts on the story's way (map 14, the statue in
+summer, and map 35, the ruined plains), which is what stopped Sunset at
+GateStreet, so todo. **Done** is `just culprits release` in
+`sunset-over-imdahl/` leaving out none of the pages on maps 14, 29, 35, 56
+and 60, or each that stays with its measured reason written here; map 39 is
+the author's test map and can stay out. First step: for each culprit, the
+exact form the compiler refuses —which operand of `ControlSwitches` and
+`ControlVars`, why the boxes of 29 and 39, which target of the `MoveEvent`,
+which `TileSubstitution`—, starting with the two autostarts.

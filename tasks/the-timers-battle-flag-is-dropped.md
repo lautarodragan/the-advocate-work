@@ -2,7 +2,7 @@
 name: "The timer's battle flag is dropped"
 description: "TimerOperation's 'also in battle' flag is compiled and ignored, on the comment that there are no battles; there are"
 type: bug
-status: draft
+status: wishlist
 ---
 
 Seen by Cardón on 2026-10-14 (`what-the-compiler-ignores-silently.md`),
@@ -20,3 +20,11 @@ sets it.
 
 **How to see it**: parameter 4 of code 10230 in that command; changing it
 leaves `events.json` unchanged.
+
+## Defined (2026-10-16, Carpintero)
+
+Still dropped at the-advocate `f4709d0b` (`compile.rs`, "no battles").
+One command in ABL, the quarry's timer. **Done**: a timer without the
+flag pauses during a battle and one with it keeps counting, with a ROM
+test of each. **First step**: what the ROM's timer does in a battle
+today.

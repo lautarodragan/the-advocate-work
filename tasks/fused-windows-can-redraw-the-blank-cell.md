@@ -2,7 +2,7 @@
 name: "Fused windows can redraw the blank cell"
 description: "When a System's windows do not fit their 8bpp bank, fit merges the cells that show the least, and the blank one can be among them: the screens over nothing —the menu's bar and cursors, the slot cursor— then draw every empty cell"
 type: bug
-status: draft
+status: wishlist
 ---
 
 Seen by Chajá on 2026-10-16, while doing
@@ -35,3 +35,12 @@ still fuses enough that the blank cell is merged —today Book of Three,
 Dooms 2 and Zounds fuse the actor choice's windows (82, 85 and 81 tiles of
 64 since the cursors) and none merges it—. Then the converter stops on
 that game.
+
+## Defined (2026-10-16, Carpintero)
+
+Latent: with each game's `[windows.background]` no cartridge merges the
+blank cell today, and if one did the converter would stop rather than
+draw stripes. **Done**: `fit` never merges the blank cell (tile 0) into
+another, with a unit test in the screens crate red before the fix; the
+request above, rendered without `--window-background`, draws the menu's
+background black. Becomes `todo` the day a game stops on it.

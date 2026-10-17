@@ -2,7 +2,7 @@
 name: "A 2003 actor is capped at level 50"
 description: "RPG Maker 2003's actors go to level 99 by default and the rules clamp max_level to RM2k's 50; Zounds' actors read 99 since Ditto reads 2003, and their curves have 50 entries, so nothing shows there yet"
 type: feature
-status: draft
+status: wishlist
 ---
 
 Seen by Aguará on 2026-10-15, while making Ditto read RPG Maker 2003
@@ -24,3 +24,16 @@ not be read.
 **To reproduce**: `just dump` in `zounds/` and read `final_level` in
 `data/db/actors.json`; then `max_level` over one of them, and the length of
 `parameters.maxhp`.
+
+## Defined
+
+Wishlist, on 2026-10-16, by Cardón, checked at the-advocate `f4709d0b`: still
+`LEVEL_MAX` = 50 in `rm2k/rules/src/actor.rs`. Nothing shows in the nine
+games —Zounds' curves stop at 50— so it waits for a 2003 game that levels
+past it.
+
+**Done** means a 2003 database's actors level to their `final_level` up to
+99: `max_level` clamps by the version Ditto reads, and the experience table
+and the parameter curves the cartridge carries reach that level, with the
+runtime's own cap (`runtime/level.s`) following it. **First step**: list
+every table and runtime check sized by `LEVEL_MAX` or by fifty levels.

@@ -2,7 +2,7 @@
 name: "The converter's per-map page line says \"automatic\" and counts every page"
 description: "\"map 4: 337 automatic event page(s), 336 runnable\" counts all the triggerable pages plus the suite's test pages, and the one without code is the test switch's own"
 type: bug
-status: draft
+status: wishlist
 ---
 
 Seen by Tijereta on 2026-10-14, with the-advocate `0255f8f7` and the ports
@@ -22,3 +22,10 @@ maps' pages without code are pages whose commands compile to nothing
 **What it should say**: how many pages carry code out of how many, without
 "automatic", and apart from the test pages. Reproduce: `just cartridges
 release` in `abl/`, `grep 'automatic event page' build/release/converter.log`.
+
+## Defined (2026-10-16, Carpintero)
+
+Still the same line at the-advocate `f4709d0b` (`convert.rs`). Only a log
+wording; nothing is lost. **Done**: the line says how many pages carry
+code of how many triggerable pages, without "automatic" and with the
+test pages apart.

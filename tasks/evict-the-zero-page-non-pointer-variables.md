@@ -2,7 +2,7 @@
 name: "Evict the zero page's non-pointer variables"
 description: "Of the zero page's 253 used bytes only 55 are [dp],y pointers; the other 198 are there for one byte and one cycle per access, and 3 B are left: move the cold ones to the BSS so a new pointer can exist"
 type: feature
-status: draft
+status: wishlist
 ---
 
 Suggested by Hurón on 2026-10-15, in the study
@@ -32,3 +32,13 @@ moves with it.
 
 **What to decide**: which ones go, by how often each is read; the saving
 is the sum of what is moved, 60–100 B by inspection.
+
+## Defined (2026-10-16, Carpintero)
+
+An optimisation: nothing is blocked until a new pointer is needed. Then
+it becomes `todo`. **Done**: `just space` shows the zero page with room
+for at least one new three-byte pointer in every cartridge, the moved
+variables are the cold ones (read once a frame or less), and the suite
+and `test_cores.py` are green. **First step**: the per-label count of
+accesses, weighted by how often each routine runs; needs the `BSS` room
+of [`move-the-dma-only-buffers-out-of-bank-0`](move-the-dma-only-buffers-out-of-bank-0.md) first.

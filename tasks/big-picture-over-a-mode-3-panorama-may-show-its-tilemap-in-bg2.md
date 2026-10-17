@@ -2,7 +2,7 @@
 name: "A big picture over a mode-3 panorama may show its own tilemap in BG2"
 description: "In the 'panorama' VRAM layout BG2's base is $4000, where a big picture puts its tilemap; the emptied layer above points at BG2's tile 0, which would be that tilemap. Suspected by reading, not reproduced"
 type: bug
-status: draft
+status: wishlist
 ---
 
 Seen by Hurón on 2026-10-12 reading the code while bringing the book's
@@ -38,3 +38,11 @@ every layout, which this layout contradicts: see
 is as described and nothing has reproduced it. The last paragraph is
 stale: `acf3153c` (2026-10-15) fixed the header of `big_picture.s`, which
 now says BG2's base is at `$4000` in "panorama" and links this draft.
+
+## Defined (2026-10-16, Carpintero)
+
+Suspected by reading; no game is known to hit it. **Done**: a test page
+—in the test game, which can make the map it needs— that shows a big
+picture over a map converted with the "panorama" layout; if it shows
+the pattern, the fix (a blank BG2 tile for that layout) with the test red
+before. Becomes `todo` if a game shows it.

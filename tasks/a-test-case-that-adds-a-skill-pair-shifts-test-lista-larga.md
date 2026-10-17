@@ -2,7 +2,7 @@
 name: "A test case that adds a skill pair shifts test_long_list"
 description: "With a test page that teaches Kersh a skill the game never teaches him, ABL's test_long_list.py stops seeing the first skill of Talan's battle list"
 type: bug
-status: draft
+status: todo
 agents: [Mulita]
 ---
 
@@ -32,3 +32,16 @@ cartuchos`, and `just tests tests/rpgmaker/test_long_list.py`.
 at since. Names that moved with the ports' translation on 2026-10-12: the
 harness module is `data` —`data.skill_slots()`, in
 `tests/harness/data.py`— and the recipe is `just cartridges`.
+
+## Defined
+
+Todo, on 2026-10-16, by Cardón. It has a repro, and one of its two explanations is the
+ROM's, which a game could hit.
+
+**Done** means that command in `tests/cases/skills.json` leaves
+`test_long_list.py` green, fixed on the side that is wrong: the harness's
+`data.skill_slots()` against what the cartridge was compiled with, or the
+cartridge's numbering of a case's `ChangeSkills` pairs. **First step**:
+with the command added, print the slot the harness gives Talan's pairs and
+the one the converter emitted for the same cartridge; if they agree, the
+ROM is the one to look at.

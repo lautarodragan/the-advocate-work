@@ -2,7 +2,7 @@
 name: "A box that closes on its own without a pause is never seen"
 description: "A ShowMessage whose tail is \\^ without any \\| closes before the composer finishes it, so the window never shows; RM2k types it out and then closes it"
 type: bug
-status: draft
+status: todo
 ---
 
 Seen by Tijereta on 2026-10-12, reading the code while doing
@@ -29,3 +29,15 @@ stretch is on screen. The plain ones still do.
 **To reproduce**: a test case with a `ShowMessage` ending in `\^` and a
 `TintScreen` after it, like `auto-close-1` without its `\|`, captured
 every frame from the page's start: the window never appears.
+
+## Defined
+
+Todo, on 2026-10-16, by Cardón, checked at the-advocate `f4709d0b`: `events_tick` in
+`runtime/event_pages.s` still closes it "before it finishes composing".
+Text that is never on screen, in ABL (2), Dooms 2 (9) and Sunset (13).
+
+**Done** means a box whose tail is `\^` without `\|` is typed out whole and
+then closes, as RM2k's `kill_page`, with the test case the draft describes
+(`auto-close-1` without its `\|`, every frame) red before the fix.
+**First step**: `git blame` that comment to see why it closes early, and
+reuse what `waits-in-the-middle-of-a-box.md` did for the last stretch.

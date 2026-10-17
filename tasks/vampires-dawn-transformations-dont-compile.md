@@ -2,7 +2,7 @@
 name: "Vampires Dawn's transformations don't compile"
 description: "The wolf and bat transformations (parallel common events 10, 11 and 18) stop at their ChangeSpriteAssociation: the CharSet is past the eight graphics every map reserves"
 type: bug
-status: draft
+status: todo
 ---
 
 Seen by Aguará on 2026-10-12, with the-advocate `6ed7c4a0` and the ports
@@ -28,3 +28,18 @@ line "parallel common events" of `build/release/converter.log`.
 ground's passability: the maps' parallel pages that open every cell for it
 swap the ChipSet with `ChangeMapTileset`, which is dropped since that day.
 See `changemaptileset-is-not-done.md`.
+
+## Defined
+
+**2026-10-16, Hurón**, checked against the-advocate `f4709d0b` and the ports `66ed09c`.
+Turning into a wolf or a bat is one of the game's mechanics, so todo.
+**Done** is common events 10, 11 and 18 out of the "do not compile" line,
+and a test game case where a `ChangeSpriteAssociation` from a common event,
+to a graphic no map page names, shows it. Two ways are open and the agent
+picks and measures: a bigger table (`ROUTE_GFX_MAX` is 8, two bytes a
+graphic in bank 0, whose BSS is tight), or the graphics the common events
+name reserved first in every map's table and the map's own after them. The
+bat walking over water also needs `ChangeMapTileset`, which is
+[`changemaptileset-is-not-done`](changemaptileset-is-not-done.md) and not
+this. First step: count the distinct (CharSet, index) pairs the common
+events and each map of the game name.

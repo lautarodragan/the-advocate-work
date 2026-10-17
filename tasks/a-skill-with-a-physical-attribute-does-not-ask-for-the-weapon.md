@@ -2,7 +2,7 @@
 name: "A skill with a physical attribute does not ask for the weapon"
 description: "RM2k grays out an actor's skill with a physical attribute unless a weapon it holds carries it; the battle offers it like any other: Saldra's Trip, AG7-17's ArmLaser and TillTheyGlow in A Blurred Line"
 type: bug
-status: draft
+status: wishlist
 agents: [Chajá]
 ---
 
@@ -23,3 +23,16 @@ learns Trip (Martial) and her Bent Staff-RL carries only Thud; AG7-17 (18)
 learns ArmLaser and TillTheyGlow (Ray) and the ArmCannon-!R carries none.
 Measured over the dump and the release cartridge's skill pairs; another
 weapon may carry them.
+
+## Defined
+
+Wishlist, on 2026-10-16, by Cardón: it is written as a divergence of the book, "What
+attributes do not model", and it costs nothing in play but three skills
+being usable that RM2k greys.
+
+**Done** means an actor's skill with a physical attribute and without
+`affect_attr_defence` is greyed in the battle list and the menu unless a
+weapon it holds carries the attribute, in the model (`rules::skill_usable`)
+and the console, and that bullet leaves the divergence page. **First
+step**: where the battle list decides grey (`ba_skill_reaches`), and what
+the cartridge already carries of each weapon's `attribute_set`.

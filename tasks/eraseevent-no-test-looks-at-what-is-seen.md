@@ -2,7 +2,7 @@
 name: "EraseEvent: no test looks at what is seen"
 description: "That an erased event stops being drawn, stops blocking, and that a parallel one that erases itself is cut, is enforced by no test: it was looked at playing Desert Nightmare"
 type: test
-status: draft
+status: todo
 ---
 
 Hurón left it on 2026-10-06 in `eraseevent-for-real.md`: the
@@ -24,3 +24,13 @@ runs it (`op_erase_event`, `runtime/interpreter_movement.s`). ABL uses
 event with a graphic and on the hero's layer that erases itself (that it is not drawn and
 that its cell can be walked through), and a parallel that erases itself in the middle of
 its page (that what comes after does not run).
+
+## Defined (2026-10-16, Carpintero)
+
+A path no test executes is what bit most often (AGENTS.md). **Done**: the
+cases of `test_erase_event_for_real.py` cover an event with a graphic on
+the hero's layer that erases itself —not drawn, its cell walkable— and a
+parallel that erases itself mid-page —what follows does not run—; each
+new test shown red first by breaking its runtime path (`apply_pages`,
+`conditions_ok`, `pair_ev`). **First step**: the two test pages, and
+whether `test-special` has room for them or they belong in the test game.

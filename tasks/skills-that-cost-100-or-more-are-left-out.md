@@ -2,7 +2,7 @@
 name: "Skills that cost 100 SP or more are left out"
 description: "Vampires Dawn's Apocalypse (100) and Vampire Healing (120) are not in the cartridge: the battle's list writes two digits, so the stage leaves out any skill over 99"
 type: bug
-status: draft
+status: todo
 ---
 
 Seen by Mulita on 2026-10-12, **reading the data and the code**, with the-advocate
@@ -23,3 +23,14 @@ reads the same tables.
 
 **How to see it**: in Vampires Dawn, an actor that has learned either, in
 battle, with the skill list open.
+
+## Defined
+
+**2026-10-16, Hurón**, checked against the-advocate `f4709d0b` and the ports `66ed09c`.
+Still so (`skill_usable` in `rules.rs`, `sp_cost <= 99`). It leaves two of
+Vampires Dawn's skills out of the game, so todo. **Done** is a skill up to
+999 SP in the battle's list and in the skills screen, its cost written in
+three digits, and a test game case with a skill of 100 SP or more that the
+battle offers and charges. First step: measure whether the two lists have
+room for a third digit in their cost column or the name has to give it, and
+whether anything in the runtime holds the cost in a byte.

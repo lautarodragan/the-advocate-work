@@ -2,7 +2,7 @@
 name: "Poses only when an event can show them"
 description: "Every character on a map carries its twelve poses in the cartridge and gets a VRAM slot sized for them, also the NPCs that never move: Dooms 2's map 1 has 16 still NPCs facing down and '31 with their twelve poses'"
 type: feature
-status: draft
+status: wishlist
 ---
 
 Left by Calandria on 2026-10-16, from taro's plan for Dooms 2's map 1
@@ -37,3 +37,17 @@ the pose is missing when it walks.
 
 **How to see it**: `just cartridges release` in `dooms2/` and the
 `sprites:` line of map 1 in `build/release/converter.log`.
+
+## Defined
+
+**2026-10-16, Hurón**, checked against the-advocate `f4709d0b` and the ports `66ed09c`.
+An optimisation of the cartridge and of VRAM; nothing stops on its own,
+but it is one of the two ways open for
+[`vampires-dawn-maps-that-dont-fit-in-vram`](vampires-dawn-maps-that-dont-fit-in-vram.md),
+which takes it if it measures it as the one that fits them. **Done** is
+the converter deciding, from each map's pages and routes, which of the
+twelve poses each character can show —one, four or twelve, a page change
+that gives a route counted— and carrying and slotting only those; the
+`sprites:` line saying how many of each, and the bytes saved per game
+measured. First step: count, over the nine games, how many characters
+fall in each of the three classes.
