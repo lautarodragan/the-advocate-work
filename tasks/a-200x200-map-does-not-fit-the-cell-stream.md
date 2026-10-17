@@ -2,7 +2,9 @@
 name: "A 200x200 map does not fit the WRAM cell stream"
 description: "rm2k-snes-mapdata stops the whole build at Zounds' map 30 (200x200): its map_cells stream is 47,232 bytes and 32,768 fit in WRAM; no other map of the eight ports gets near"
 type: bug
-status: todo
+status: doing
+assignee: Aguará
+agents: [Aguará]
 ---
 
 Seen by Aguará on 2026-10-15, in the study
