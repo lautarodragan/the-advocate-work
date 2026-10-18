@@ -2,8 +2,8 @@
 name: "Runtime optimizations, read whole: events, text and screens"
 description: "Read the events, the text and the screens of runtime/ file by file for optimizations the book's Optimizations section does not tell"
 type: docs
-status: doing
-assignee: Tijereta
+status: testing
+assignee: taro
 agents: [Tijereta]
 ---
 
@@ -60,3 +60,58 @@ Second batch, book's `12c7bf8`:
   `equipment_screen.s`, `equipment_from_events.s`, `skills_screen.s`,
   `shop.s`, `save_game.s`, `title.s`, `game_over.s`: nothing new.
 * `custom_menu.s`: nothing to write; a question for taro (below).
+
+Third batch, book's `1963d78`:
+
+* `picture.s`, `picture_far.s`: the per-frame loops stop at the highest
+  slot in use → CPU time.
+* `big_picture_zoom.s`: the mode 7 texture goes up a piece per vblank
+  while the picture is still (told only in `internals/vram.md`) → CPU
+  time.
+* `level.s`: experience only for the actors who can fight, each curve
+  once → battle (the routine is mine, the page Mulita's: no overlap with
+  hers).
+* `party.s`, `medicine.s`, `remembered_place_and_song.s`,
+  `big_picture.s`: nothing new.
+
+The book's main merged in (`46fb20e`): Cardón's and Mulita's entries
+conflicted only as neighbours, both kept. Cardón's "far RAM tables as big
+as the game asks" overlaps the slot sentence of my variables entry, which
+now links it. `mdbook build` and a check of every relative link and anchor
+on the pages touched: none broken.
+
+### What went into the book, by page
+
+* Events: every jump lands where the compiler said; a command that waits
+  goes back to itself; the parallel common events save the foreground
+  only when one runs; only the variables the game names get a slot; a
+  skill learned is one bit.
+* Text and windows: the glyphs carry palette entries, one set per System
+  and per ink; a message a few letters a frame, a line a vblank; a wait
+  redraws its line; the party panel is one block; a renamed actor's name
+  is one byte, the others baked; End Game's cursor is a palette; the
+  shop's party waits for room in the vblank.
+* The map: a cell's terrain is its block's, a flat map's one byte.
+* The cartridge: only the items the game can give are carried.
+* Battle: experience only for the actors who can fight, each curve once.
+* CPU time: the pictures' loops walk only the slots in use; a zoom's
+  texture goes up while the picture stands still.
+
+### Left out, as questions for taro
+
+* **The custom menus** (`OP_MENU_OPEN`, `runtime/custom_menu.s`): a
+  common event of pictures the project declares a menu becomes an engine
+  screen. Is it `OP_COUNTER`'s kind, for `lossy/events.md`, or an RM2k
+  PLUS feature that is not an optimization?
+* **A waiting page is one bit per event, not a queue** (`mark_waiting`):
+  told only in `internals/events.md`, but `event_pages.s` is in none of
+  the three lists.
+* The small ones, left out by taro's rule unless wanted: `op_done`
+  checks the call depth inline, not with a `jsl` (the race lost fifty
+  frames in a thousand); the random draw uses the hardware divider below
+  256; the title is decompressed while boot waits out `BOOT_FRAMES`;
+  saving and loading are one DMA through `WMDATA`; the slot screen does
+  not check the checksum to paint the list.
+
+No drafts: nothing dead or broken found. Nothing to install: only the
+book changed.
