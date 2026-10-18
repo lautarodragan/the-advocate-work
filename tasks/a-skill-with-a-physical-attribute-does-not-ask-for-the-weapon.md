@@ -37,3 +37,36 @@ weapon it holds carries the attribute, in the model (`rules::skill_usable`)
 and the console, and that bullet leaves the divergence page. **First
 step**: where the battle list decides grey (`ba_skill_reaches`), and what
 the cartridge already carries of each weapon's `attribute_set`.
+
+## Tijereta, 2026-10-18
+
+Worktrees `tijereta-attr-weapon` in the three code repos, from the-advocate
+`b066b885`, ports `74068b8`, docs `239069e`.
+
+**easyrpg, read**: `Game_Actor::IsSkillUsable` has no 2000/2003 branch.
+Unless the skill has `affect_attr_defence`, **each** of its attributes that
+is physical has to be on `GetWeapon()` or on `Get2ndWeapon()` —not
+necessarily the same one—; `Get2ndWeapon` is whatever weapon is in the
+shield's slot, so a two-weapon actor's second weapon counts and a shield
+never does. `Window_Skill::CheckEnable` asks the same, so the menu greys by
+it too.
+
+**What the cartridge already carried**: `skill_attr` and `item_attr`,
+rows of `attr_sets` per skill and item, and `attr_magic`; not
+`affect_attr_defence`. Rather than teach the console that flag and the
+kinds, the converter emits `skill_weapon`: per skill, the row of the
+attributes it asks a weapon for (row 0, the empty set, for almost all).
+
+**In ABL**: Trip (141, Martial), TillTheyGlow (236) and ArmLaser (243), Ray.
+Saldra (17) starts with weapon 267 and can equip no Martial weapon; AG7-17
+(18) starts with 269 and can equip 275, ArmMountedLaser-!R, which carries
+Ray. (Attribute types in ABL: Ray, Thud, Martial, Cut, Bullets are
+physical; Sword, oddly, is magical.)
+
+Plan: the rule in `rm2k-rules` (`skill::weapons_allow`,
+`weapon_attributes_asked`), used by `rm2k-snes-battle` (rules, the played
+battle refuses an order for a grey one, the field skill does nothing), by
+`rm2k-snes-screens` (the skills screen's grey, a new `held` in the
+request) and by the converter (`skill_weapon`); on the console,
+`ba_weapons_allow` in `battle_skills.s`, called by `ba_skill_reaches`
+(battle list: grey and A) and `sk_usable` (menu).
