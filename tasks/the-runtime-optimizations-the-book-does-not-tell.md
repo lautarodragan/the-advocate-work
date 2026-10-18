@@ -87,3 +87,19 @@ the effects in the `.msu`).
   draft, [`routes-moved-is-written-and-never-read`](routes-moved-is-written-and-never-read.md).
 
 Nothing to install: only the book changed.
+
+### taro's answers, written in
+
+Same day, the book's `d16012a` on `huron-optimizations-2`, from its main
+`041f3e9`: four more entries.
+
+* Pictures drawn into the map: an optimization, in `lossless/the-map.md`,
+  with a line on when it stops being lossless.
+* A dead enemy redraws only its cells: in `lossless/battle.md`. The
+  missing fade is a divergence the book does not tell, not an
+  optimization, and no reason of cost is written for it: a draft,
+  [`a-dead-enemy-does-not-fade-out`](a-dead-enemy-does-not-fade-out.md).
+* `OP_COUNTER`: in `lossy/events.md`.
+* A save slot per SRAM bank: in `lossless/the-cartridge.md`. Left out, as
+  taro said, the obvious small ones; and `attr_sets`, whose shared rows
+  save a few bytes of ROM per repeated set and nothing measured.
