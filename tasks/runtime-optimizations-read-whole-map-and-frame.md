@@ -41,7 +41,7 @@ had that the section does not tell, or "nothing".
   loop. Fixed in the entry; `npc_buf`'s comment in `low_ram.s` says the
   same and is stale.
 
-Book `74e4252`: nine entries, and that fix.
+Book `74e4252`: eight entries, and that fix.
 
 The rest, same day:
 
@@ -53,10 +53,9 @@ The rest, same day:
 * walk_by_type: walkers past the route slots stand still (lossy, told
   only in its divergence).
 
-Book `553ee4c`, on `cardon-optimizations`: twelve entries in all, each
-with its line in `lossless.md` or `lossy.md` —the map four plus the ring
-and the narrow grid, events one, CPU time three, the cartridge one, the
-tables of a fixed size one— and the fix to the NPC table's "one DMA".
+Book `553ee4c`, on `cardon-optimizations`: eleven entries in all, each
+with its line in `lossless.md` or `lossy.md` —the map five, events one,
+CPU time three, the cartridge one, the tables of a fixed size one— and the fix to the NPC table's "one DMA".
 Relative links and anchors checked against `mdbook build`.
 
 ### Left out, as questions for taro
