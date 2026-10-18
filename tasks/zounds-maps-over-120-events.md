@@ -2,7 +2,9 @@
 name: "Zounds: four maps have more events than the console's 120"
 description: "Maps 47 (284 events), 51 (214), 57 (131) and 178 (327) lose 155, 88, 8 and 206 pages that run; they are grids of identical info/coin/rock events the twin folding does not catch because each carries its own commands"
 type: bug
-status: wishlist
+status: doing
+assignee: Carpintero
+agents: [Carpintero]
 ---
 
 Seen by Aguará on 2026-10-15, in the study
@@ -36,3 +38,11 @@ the switch or variable they set or in their sprite, folded with a
 per-instance operand; or more events per map, which the runtime's byte
 index (`action_key.s`: "EV_MAX is 128") and every table sized by `EV_MAX`
 make the more expensive one.
+
+**Out of the wishlist, 2026-10-17** (Hornero): taro, playing the delivery
+of that day (the-advocate `30786e0b`, the ports `1d93da4`), got to map 47
+and events 198–203 —teleports to map 51 "Entrada de la Cueva"— and 204
+do nothing, with no box saying why: they are among the events left out.
+The story goes through there, so this is now on the way and not side
+content. Besides the four maps keeping every page that runs, an event
+left out that carries a `Teleport` must not be silent.
