@@ -2,8 +2,8 @@
 name: "Zounds: four maps have more events than the console's 120"
 description: "Maps 47 (284 events), 51 (214), 57 (131) and 178 (327) lose 155, 88, 8 and 206 pages that run; they are grids of identical info/coin/rock events the twin folding does not catch because each carries its own commands"
 type: bug
-status: doing
-assignee: Carpintero
+status: testing
+assignee: taro
 agents: [Carpintero]
 ---
 
@@ -114,3 +114,17 @@ taro's save from before map 47 does not load on this branch's ROM: the
 save's format changed (172 variables to 173, a new `GAME_SIGNATURE`),
 because the signs now kept use one more variable. As designed: a save of
 another format is "no saved game".
+
+Verified on the merged tree (the-advocate `8d525d94`, ports `dea6602`, with
+this branch's `convert`, `events` and `cartridge`): ABL's suite, 1565
+passed, no golden moved, and the race at 57 extra frames as on `main`;
+`just boot` in the ports, 67 passed; `just test`, 29 passed; `just
+test-game`, 44 passed. In one earlier full run ABL's
+`test_cores.py::test_event` went red once (bsnes drew an empty box); alone
+it passed eight times out of eight on the branch and three on `main`, and
+the merged run was green. Not covered: an event walking into a twin's cell,
+which is not stopped. Captures: `/shared/captures/2026-10-17-zounds-events/`.
+
+Branches `carpintero-zounds-events` in the-advocate, the ports and the
+book. When merging, reinstall `convert` and `events`; `cartridge` did not
+change (the runtime comes from the checkout).
