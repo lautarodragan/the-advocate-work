@@ -91,3 +91,50 @@ The fade around it is 68 ticks: 23 going dark, the load, 19 of black and
 24 coming up, all frozen. A frozen tick does nothing but write the
 brightness: **43 idle frames after every load**, where nothing can sound
 and nothing moves.
+
+### 2026-10-18, Cardón: what was done —the load leaves for the fade what nobody needs yet—
+
+Two cuts, both in the-advocate's `runtime/`, both only inside a
+teleport's fade (`LOAD_DEFER`, set by `map_access_enter` from `fade`; a
+load at boot, a new game or a save from the title does everything at once,
+as before):
+
+1. **The package's uploads go in the fade's frozen ticks** (`upload_placed`,
+   `package_pump`, `pump`, `package_settle`, `song_now` in
+   `audio_package.s`). The package is placed in the load as always; only
+   the song the map turns on goes up there —`music_start` asks
+   `song_ensure`, which now uploads that song's waiting samples first—.
+   The rest goes up block by block in each frozen tick after the load,
+   stopping at line 180 so the tick still ends before the vblank (85
+   triplets take some 88 lines in snes9x). On the last black tick (43),
+   whatever 24 ticks of ramp at 512 bytes each could not take goes up at
+   once —black, as the whole load used to be—, so the ramp keeps its pace;
+   and the fade does not end until the package is complete
+   (`package_finish` from `finish` and `cut_in`). A `PlayBGM` and every
+   new package finish what is waiting first. Nothing can sound in between:
+   the world is frozen and the left map's effects were silenced by
+   `se_mute`. Same ARAM, same directory.
+2. **The window and the tint go in the black ticks** (`tail_pump` in
+   `enter_map.s`): clearing the tilemaps, the 64 columns, the panorama's
+   ring and the painted slots, and `apply_tint`, with the screen in forced
+   blanking —it is black already— and the tint to CGRAM in the next vblank
+   through `tint_ready`. What is left on tick 43 is done there, so the ramp
+   shows the whole map. `fill_window` split into `window_start` —which the
+   hero's pointer needs in the load— and `fill_columns`.
+
+Measured on ABL's 200 door pairs, frames the jump adds to the fade's 68
+(the after columns count hardware frames from the request to the end of the
+fade, so they include any settle):
+
+| | mean | slowest |
+|---|---|---|
+| before: the load tick | 30.3 | 95.2 (11>9) |
+| 1 alone | 20.0 | 79 (69>66) |
+| 1 + 2 | 15.9 | 74 (69>66) |
+
+The slowest ones are a big map whose own song goes up in the load (66:
+grid 7, background 11 and the song most of the rest).
+
+A test moved: `tests/abl/test_leader_without_graphic.py` read the sprite
+shadow the moment the load ended, and the tint now fills it on a black tick
+after; it waits for `LOAD_TAIL` to finish, still inside the fade.
