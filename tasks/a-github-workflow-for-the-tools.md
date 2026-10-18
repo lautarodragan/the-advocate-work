@@ -2,8 +2,8 @@
 name: "A GitHub workflow for the tools"
 description: "the-advocate checked on every push to main by GitHub Actions: the Rust workspace and its tests, the Python tests, and then the test game's cartridge, its ROM tests and Goombario over it"
 type: tooling
-status: doing
-assignee: Mulita
+status: testing
+assignee: taro
 agents: [Mulita]
 ---
 
@@ -90,3 +90,7 @@ Second run on `ci`, with cc65 and the cores from the cache: green, 9.5
 minutes. `20ddb95`: the trigger goes to `main`, pushed to `ci` too —it
 no longer runs there—. Left in `doing` until Hornero confirms the run on
 `main`.
+
+2026-10-18, Hornero: squashed to the-advocate's main as `e7794b18`; its
+first run on main, 39173117318, green —the Rust job in 3 minutes, the test
+game's in 12—. The `ci` branch was deleted from GitHub, as taro said.
