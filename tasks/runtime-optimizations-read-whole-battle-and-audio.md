@@ -2,8 +2,8 @@
 name: "Runtime optimizations, read whole: battle and audio"
 description: "Read the battle and the audio of runtime/ file by file for optimizations the book's Optimizations section does not tell"
 type: docs
-status: doing
-assignee: Mulita
+status: testing
+assignee: taro
 agents: [Mulita]
 ---
 
@@ -66,3 +66,28 @@ section read first, as Hurón left it, and `internals/audio.md` and
   code and the driver cap them at 85.
 * `music_start` (`music.s`) says the sample bank "is uploaded only once at
   boot"; since the per-map packages it is not.
+
+### What went into the book
+
+On `mulita-optimizations`, from the book's `a083b3e`: `a2f6d49` (battle)
+and `a51d95b` (audio), fourteen entries, each with its line in
+`lossless.md` or `lossy.md`; no new page, so nothing in `SUMMARY.md`.
+Links and anchors of the touched pages checked against `mdbook build`.
+
+* `lossless/battle.md`: the scene composed on the console from each
+  backdrop and battler once; a battler is its mask and four planes; one
+  placing loop per shift; the light backdrop doubled through a table; the
+  windows as a band per layout and each bar only where it changes; the
+  critical hit looked up; the battle's tint and flash composed once per
+  change.
+* `lossless/audio.md`: a package uploads only what the ARAM lacks; samples
+  go up three bytes per handshake; a note goes to the voice its channel
+  last held.
+* `lossless/cpu-time-in-the-frame.md`: a fade rewrites only the volumes
+  that changed; in mode 7 the music multiplies by a table of squares.
+* `lossy/audio.md`: the sound effects borrow two of the music's voices;
+  a song played only to leave, or apart, goes up alone.
+
+No questions for taro: what was left out was small, and it is listed
+above. No drafts: no dead code or bug found, only the two stale comments.
+Nothing to install: only the book changed.
