@@ -2,8 +2,9 @@
 name: "Skills that shift an attribute rank do not shift it"
 description: "A skill with affect_attr_defence —Heat Barrier, Cold Barrier— should move its target's rank in its attributes for the rest of the battle; the battle does its damage or healing and the ranks stay"
 type: bug
-status: wishlist
-agents: [Chajá]
+status: doing
+assignee: Aguará
+agents: [Chajá, Aguará]
 ---
 
 Seen by Chajá on 2026-10-15, at the-advocate's branch `chaja-attributes`
