@@ -70,3 +70,24 @@ battle refuses an order for a grey one, the field skill does nothing), by
 request) and by the converter (`skill_weapon`); on the console,
 `ba_weapons_allow` in `battle_skills.s`, called by `ba_skill_reaches`
 (battle list: grey and A) and `sk_usable` (menu).
+
+**Done, in the-advocate `tijereta-attr-weapon`**: the rule in `rm2k-rules`,
+the model and the screens stage, the converter's `skill_weapon`, and the
+console's `ba_weapons_allow` in a new `runtime/battle_weapons.s` —after
+`battle_attributes.s`, whose `weapon_row` it calls: ca65 cannot reach a
+proc's labels before the proc—. ABL's `test_skills_weapons_drawing.py`,
+four new cases (`skills-weapons`, `-laser`, `battle-114-skills-weapons`,
+`-laser`): red with main's tools (TillTheyGlow and Trip white), green with
+these.
+
+The first whole suite caught one of mine: `ba_skill_reaches` kept the skill
+in `BA_T1`, which the list's row holds across the call (where its line
+starts), and every name after the first went to the wrong place —six
+goldens of `test_battle_golden` and `test_long_list`—. Now on the stack.
+
+**The menu cannot show it with ABL**: Trip, TillTheyGlow and ArmLaser target
+enemies, so the map greys them anyway, and no skill of ABL the map can use
+carries a physical attribute (the eight that carry one: 141, 142, 145, 236,
+243, 299, 347, 379; 145 is a battle-only switch skill). The menu's lists are
+compared against `screens.skills`, which greys by the same rule, but the
+console only reaches the weapon walk after `skill_on_map` says yes.
