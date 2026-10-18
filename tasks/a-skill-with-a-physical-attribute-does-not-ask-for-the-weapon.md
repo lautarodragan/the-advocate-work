@@ -2,8 +2,8 @@
 name: "A skill with a physical attribute does not ask for the weapon"
 description: "RM2k grays out an actor's skill with a physical attribute unless a weapon it holds carries it; the battle offers it like any other: Saldra's Trip, AG7-17's ArmLaser and TillTheyGlow in A Blurred Line"
 type: bug
-status: doing
-assignee: Tijereta
+status: testing
+assignee: taro
 agents: [Chajá, Tijereta]
 ---
 
@@ -91,3 +91,30 @@ carries a physical attribute (the eight that carry one: 141, 142, 145, 236,
 243, 299, 347, 379; 145 is a battle-only switch skill). The menu's lists are
 compared against `screens.skills`, which greys by the same rule, but the
 console only reaches the weapon walk after `skill_on_map` says yes.
+
+## Verified, and what to install
+
+With main merged (the-advocate `846ecc5b`, ports `0da079e`) and the tools of
+`tijereta-attr-weapon` installed locally (`cartridge battle mapdata convert
+screens`): `just test` 29 passed; `just crate-test` of battle, rules,
+mapdata and screens, green; ABL's `just tests` 1575 passed, 2 skipped;
+the other games' `just boot` 67 passed (run before the merge, which only
+brought comments to the runtime and Goombario). **No golden moved.**
+`abl.sfc` sha256 `75bf33fe…5fddcf`.
+
+`just space`, `release`: bank $C0 2,766 → 2,623 B free (the routine), the
+gaps 30,404 → 29,930 B (`skill_weapon` and the four cases); bank 0 194,
+bank 1 676, BSS 57, far RAM 2,670, unchanged. `test-special`, the same
+143 B of $C0.
+
+What the suite does **not** cover, in so many words: the menu's weapon walk
+(no skill of ABL the map can use carries a physical attribute); a
+two-weapon actor's second weapon, a skill with two physical attributes
+split between the weapons, and `affect_attr_defence`, only in the
+`rm2k-rules` and battle-crate tests; a troop page's `ChangeEquipment`
+greying or whitening a skill mid-battle.
+
+**On merging, install** `battle mapdata convert screens` (`rules` changed,
+but only those use what it added; the runtime comes from the checkout).
+Branches `tijereta-attr-weapon` in the-advocate, the-advocate-ports and
+the-advocate-docs.
