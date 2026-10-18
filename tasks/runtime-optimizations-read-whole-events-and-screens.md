@@ -46,3 +46,17 @@ Files read, and what came out (book's `13c3cb2` for the first batch):
   palette entry, one set per System and per ink; the composer's pace; a
   wait redraws its line → text and windows.
 * `menu.s`: the party panel's one block → text and windows.
+
+Second batch, book's `12c7bf8`:
+
+* `actor_names.s`: a rename is one byte, unrenamed names baked (told only
+  in a divergence) → text and windows.
+* `end_game.s`: the cursor is a palette swap → text and windows.
+* `shop_party.s`: frames when the vblank has room, grey by palette →
+  text and windows.
+* `slots.s`: the leader's name composed, not baked per actor → added to
+  the party panel's entry.
+* `menu_experience.s`, `actor_stats.s`, `actor_choice.s`,
+  `equipment_screen.s`, `equipment_from_events.s`, `skills_screen.s`,
+  `shop.s`, `save_game.s`, `title.s`, `game_over.s`: nothing new.
+* `custom_menu.s`: nothing to write; a question for taro (below).
