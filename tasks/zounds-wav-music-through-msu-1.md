@@ -2,7 +2,7 @@
 name: "Zounds: the .wav music through the MSU-1"
 description: "Zounds plays five .wav songs —the title, battle and victory themes and two the map tree sets—; their MSU-1 tracks are built, and without MSU-1 they are silent"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Aguará]
 ---
@@ -91,3 +91,5 @@ draft `arrancan-sunset-stale-right-after-built`: `just boot -k sunset`
 right after, 2 passed. No suite plays a song that is both a `.wav` and a
 `.mid`: the new path is covered only by the crate's unit test and by the
 Zounds build measured above.
+
+**2026-10-19, taro**: declared done.

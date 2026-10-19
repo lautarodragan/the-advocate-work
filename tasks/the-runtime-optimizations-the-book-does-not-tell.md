@@ -2,7 +2,7 @@
 name: "The runtime's optimizations the book does not tell"
 description: "Audit runtime/ for optimizations missing from the book's Optimizations section, and write them in"
 type: docs
-status: testing
+status: done
 assignee: taro
 agents: [Hurón]
 ---
@@ -103,3 +103,5 @@ Same day, the book's `d16012a` on `huron-optimizations-2`, from its main
 * A save slot per SRAM bank: in `lossless/the-cartridge.md`. Left out, as
   taro said, the obvious small ones; and `attr_sets`, whose shared rows
   save a few bytes of ROM per repeated set and nothing measured.
+
+**2026-10-19, taro**: declared done.
