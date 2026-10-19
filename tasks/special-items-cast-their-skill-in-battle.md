@@ -85,6 +85,15 @@ Not done (drafts): conditions from skills, the result line of any skill,
 several uses. Equipment with `use_skill` is not offered either (in the
 divergence); none of the four games has any.
 
+**FAR2 ran out in Sunset.** `just boot` on the merged tree: Sunset over
+Imdahl did not link —`FAR2` overflowed bank $C0 by 232 bytes—, because its
+painted maps carry more code there (`paint_table`); A Blurred Line has
+2 KB left in it. `message_waits.s` and `items_by_variable.s` moved to
+`FAR3` (bank $C1, 28 KB free), whole procs entered by `jsl`/`jml` that read
+everything with `f:`; what is left in Sunset's `FAR2` is what `just space`
+prints for bank $C0 there. It is Sunset's tightest bank: whoever grows the
+battle or the panoramas next will hit it.
+
 **Branches**: `tijereta-special-items` in the-advocate (model, converter,
 runtime), the ports (ABL's `test_battle_special_items.py` and its case
 `battle-114-special-items`, Zounds' `test_zounds_special_items.py` and its
@@ -100,3 +109,14 @@ a battle: Piedra, Shuriken and Bomba Chica are there, ask for an enemy,
 hurt it and spend no SP; the message is the item's line —Kazar, the item and
 the game's `use_item` term— and nothing more (draft `a-skill-in-battle-writes-no-result-line`). In A Blurred Line
 the bombs, batteries, potions and fields of the late game.
+
+**Verified on the merged tree** (the-advocate `40e95885`, with Mulita's
+format, Calandria's events and Chajá's vblank; the ports `16c73cb`), with
+the branch's tools plus main's `events` installed locally: `just test`,
+`just rust-test`, `just lint` clean, ABL's whole suite green, and `just
+boot` from the ports' root green, Zounds' and Sunset's tests included. The
+new tests were red with main's tools first. Not covered by any test: the
+failed escape giving a special item back, an item with `uses` 0 in battle,
+a switch skill cast by an item, and Kazar's list leaving out what his
+`actor_set` does not allow on the console (ABL's AG7-17 case covers the
+routine). No golden moved.
