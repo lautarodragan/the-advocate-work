@@ -68,3 +68,24 @@ Found on the way: `song_ensure`, the upload of a song that is not in ARAM,
 always rebuilt `map_current`'s package, also in a battle. A troop page's
 `PlayBGM` —ABL's radio— left the battle without its sound effects. It now
 rebuilds the package loaded last (`PKG_LOADED`), the battle's in a battle.
+
+### For whoever starts a song from the runtime (Tijereta's inn jingle)
+
+The interface, written at the top of `runtime/bgm_level.s` too:
+
+1. The level in `BGM_ASK` (4 bytes: left gain, right gain in 128ths, the
+   tempo's step in 256ths, little endian) and the fade-in's step in
+   `BGM_ASK_FADE` (word, 65536ths per frame; zero none). The tools write
+   all six bytes with `Level::bytes()` (rm2k-snes-bytecode's `level.rs`);
+   `bgm_level_whole` fills them with the song as written.
+2. The song in A, `jsr music_play` (bank 0): a song that already plays only
+   changes level, otherwise it starts at that level, fading in if asked.
+   `music_start_asked` restarts it even if it plays. From another bank,
+   `ba_t_bgm`/`battle_bgm` do the same with the data bank at 0.
+3. What plays, to put it back afterwards: `song_current` (or nothing, if
+   `music_off` is set and `MSU_PLAYING` is not), and its level `BGM_NOW`
+   —4 bytes, copy them to `BGM_ASK` to restart it at that level, as
+   `bgm_level_battle_in`/`_out` do with `BGM_BEFORE_BATTLE`—.
+
+`ChangeSystemBGM` does not change the inn's song in any of the nine games,
+so the inn's is the database's `inn_music`; its level is not emitted yet.
