@@ -73,14 +73,18 @@ nothing lost.
 
 ### Verified, and what to install
 
-On the branches, with `cartridge convert project` installed locally (the
-runtime goes in with `cartridge`; nothing in Rust changed): `just test` in
-the-advocate, 29 passed; ABL's whole suite, 1577 passed and 2 skipped;
-`just boot` from the ports' root, 68 passed, Zounds' whole file included;
-the test game, 45 passed and 1 skipped. Main had not moved from `54ec3daf`
-and `c2912ad` when this was written. The change is runtime only, so
-merging it needs no reinstall: the installed tools assemble the runtime of
-the checkout they were installed from, `~/the-advocate`, as it is on disk.
+On the branches merged with `main` (the-advocate `29ec7e91`, the ports
+`c516302`), with `cartridge convert project events` installed locally from
+the merged tree: `just test` in the-advocate, 29 passed; ABL's whole suite,
+1577 passed and 2 skipped (`abl.sfc` sha256 `70fc7d26…2d67`); `just boot`
+from the ports' root, 70 passed, Zounds' whole file included. Before the
+last merge, the test game too: 45 passed and 1 skipped. One full ABL run
+on an earlier merge had `test_cores.py::test_event` red, the known flake of
+the draft `abl-test-cores-event-red-once-in-a-full-run`; alone it passed
+twenty times out of twenty, and the runs after were green. The change is
+runtime only, so merging it needs no reinstall: the installed tools
+assemble the runtime of the checkout they were installed from,
+`~/the-advocate`, as it is on disk.
 
 What the suite does not cover: the clear when a battle starts, and the
 one at the start of a foreground page when the face was set by a parallel
