@@ -93,3 +93,17 @@ taken.
 
 What it costs in bank 0 and in the runtime's banks, and how a window's
 line is lit —a row's background redrawn, or a cursor as the choice's—.
+
+## A strict requirement (taro, 2026-10-19)
+
+The message window's HDMA takes BG2 —the map's layer above— for the
+**whole width** of the lines it covers. A message is the whole width
+anyway; a narrow window like Frozen World's menu (88 px) would make the
+roofs and treetops beside it vanish while it is up, which the pictures it
+replaces —objects over the layers— did not do. taro noticed the
+difference playing the picture menu, and made it a strict requirement:
+roofs cut off while a window is up would be too disruptive. **A
+ShowWindow narrower than the screen keeps the layer above beside it**,
+however it is done: e.g. its tiles laid into
+BG2's own tilemap instead of swapping the line's, or the console's
+windows limiting the swap to its columns.
