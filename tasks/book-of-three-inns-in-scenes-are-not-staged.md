@@ -2,7 +2,9 @@
 name: "The Book of Three: a night's rest in a scene has no fade or music"
 description: "The game uses ShowInn as the night passing in several scenes; the port heals on the spot, without the inn's fade to black and its jingle"
 type: bug
-status: wishlist
+status: doing
+assignee: Tijereta
+agents: [Tijereta]
 ---
 
 Seen by Mulita on 2026-10-15, comparing the port with the original under

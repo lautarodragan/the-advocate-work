@@ -2,7 +2,9 @@
 name: "The Book of Three: the story's battles play the default battle theme"
 description: "Each scripted fight sets its own battle and victory music with ChangeSystemBGM, which the port does not do: they all play the database's battle theme"
 type: bug
-status: todo
+status: doing
+assignee: Carpintero
+agents: [Carpintero]
 ---
 
 Seen by Mulita on 2026-10-15, comparing the port with the original's event

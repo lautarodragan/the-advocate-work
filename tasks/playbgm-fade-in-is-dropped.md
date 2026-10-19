@@ -2,7 +2,9 @@
 name: "PlayBGM's fade-in is dropped"
 description: "The compiler reads a PlayBGM's volume, tempo and balance and emits it without the fade-in, so the theme starts at once"
 type: bug
-status: wishlist
+status: doing
+assignee: Carpintero
+agents: [Carpintero]
 ---
 
 Seen by Cardón on 2026-10-14 (`what-the-compiler-ignores-silently.md`),

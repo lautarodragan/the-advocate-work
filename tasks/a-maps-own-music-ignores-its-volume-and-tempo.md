@@ -2,7 +2,9 @@
 name: "A map's own music ignores its volume and tempo"
 description: "The song a map plays on its own, by its properties, is played as written: a map that asks for it at 50% or 70% plays it at full volume"
 type: bug
-status: todo
+status: doing
+assignee: Carpintero
+agents: [Carpintero]
 ---
 
 Seen by Mulita on 2026-10-15, comparing The Book of Three with the

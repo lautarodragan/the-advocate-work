@@ -2,7 +2,9 @@
 name: "Characters a route gives a graphic to are not drawn"
 description: "An event whose pages all lack a graphic and that a forced route gives one (move command 34) never appears: scenes lose characters that walk in, talk and leave"
 type: bug
-status: todo
+status: doing
+assignee: Calandria
+agents: [Calandria]
 ---
 
 Seen by Mulita on 2026-10-15, comparing The Book of Three with the original

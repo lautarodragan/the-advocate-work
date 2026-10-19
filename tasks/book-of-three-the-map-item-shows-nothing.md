@@ -2,7 +2,9 @@
 name: "The Book of Three: looking at the map shows nothing"
 description: "Common event 23 shows a full-screen picture of the land and waits for a key; the port does not show the picture, so the player gets a blank wait"
 type: bug
-status: todo
+status: doing
+assignee: Chajá
+agents: [Chajá]
 ---
 
 Seen by Mulita on 2026-10-15 in the build's `degradations.json`
