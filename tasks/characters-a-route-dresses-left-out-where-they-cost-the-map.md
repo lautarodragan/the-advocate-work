@@ -7,7 +7,7 @@ agents: [Calandria]
 ---
 
 Seen by Calandria on 2026-10-19, measured with the converter of the-advocate
-`a2168be6` (branch `calandria-route-graphics`) and the ports `16257e1`,
+`a2168be6` (branch `calandria-route-graphics`) and the ports `bbfa831`,
 when fixing
 [`characters-a-route-gives-a-graphic-are-not-drawn`](characters-a-route-gives-a-graphic-are-not-drawn.md).
 
