@@ -2,7 +2,8 @@
 name: "Frozen World's map 2: route graphic changes past the ROM's table of 8"
 description: "Map 2 (\"Plate Placement\") builds since its code stays in the cartridge, with 20 warnings: a route changes an event's graphic to one the ROM's table of 8 has no room for, and the change is ignored"
 type: bug
-status: todo
+status: doing
+assignee: Carpintero
 agents: [Carpintero]
 ---
 
