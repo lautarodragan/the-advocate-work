@@ -2,7 +2,7 @@
 name: "The console menu opened from the items screen is drawn wrong"
 description: "ABL's Portable Console, opened by using the console from the items screen, sometimes shows window-frame pieces tiled over its background; opened from the main menu's entry it looks right"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Carpintero]
 ---
@@ -62,3 +62,5 @@ merging: the runtime is read from the-advocate's main checkout. Branches
 `carpintero-console-from-items` in the-advocate (`d4ffe731`) and in the
 ports (`9b52975`), both on today's `main`. For taro: use the console from
 the items screen on map 32 (or 3, 6, 105, 255) and close it.
+
+**2026-10-19, taro**: played in ABL, opening the Portable Console from the items screen; it looks fixed. Done.
