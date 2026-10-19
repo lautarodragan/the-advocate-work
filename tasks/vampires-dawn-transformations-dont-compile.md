@@ -43,3 +43,15 @@ bat walking over water also needs `ChangeMapTileset`, which is
 [`changemaptileset-is-not-done`](changemaptileset-is-not-done.md) and not
 this. First step: count the distinct (CharSet, index) pairs the common
 events and each map of the game name.
+
+**Carpintero, 2026-10-19**: the table is no longer eight. Since
+`carpintero-cursor-graphic` (the-advocate) `ROUTE_GFX_MAX` is the
+compiler's cap, 255, and the console's table is sized by the cartridge's
+map that asks for most, in far RAM; and a common event's body can number a
+route's graphic (command 34) at the same index in every map that may run
+it (`landings.rs`). Common events 10, 11 and 18 still do not compile:
+their `ChangeSpriteAssociation`s name graphics `indices::associations`
+does not gather —it walks the maps' pages, not the common events—, and a
+parallel common event gets no landings. Measured on Vampires Dawn's
+release with that branch: "parallel common events: 23 run, 12 do not
+compile [1, 2, 5, 6, 8, 9, 10, 11, 18, 30, 48, 49]", the same as main.
