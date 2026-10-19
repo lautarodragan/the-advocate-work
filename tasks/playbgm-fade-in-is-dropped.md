@@ -2,8 +2,8 @@
 name: "PlayBGM's fade-in is dropped"
 description: "The compiler reads a PlayBGM's volume, tempo and balance and emits it without the fade-in, so the theme starts at once"
 type: bug
-status: doing
-assignee: Carpintero
+status: testing
+assignee: taro
 agents: [Carpintero]
 ---
 
@@ -42,3 +42,31 @@ track's— by a factor from 0 to 256. The fade-in is the same ramp going up:
 the same number `OP_FADE_BGM` carries. `OP_BGM` carries it as a word after
 the step, and the map table and `OP_SYSTEM_BGM` carry it too, so a map's
 own song and a battle's fade in if their RM2k music asks.
+
+## Done (2026-10-19, Carpintero)
+
+`OP_BGM` carries the fade-in as a word after the step —the same
+`ceil(65536 / frames)` `OP_FADE_BGM` carries, clamped to easyrpg's ten
+seconds— and the ROM ramps the level up from zero over it, with the
+fade-out's ramp going up: `bgm_fade` at 2, `bgm_fade_rise` and, with
+MSU-1, `bgm_fade_track`, both in FAR3. A song fading in that gets a
+`PlayBGM` of itself goes on fading; a `FadeOutBGM` in the middle drops from
+where it got to. `bgm-fade-in-dropped` is gone from the degradations.
+
+**Tests**: the compiler's `a_play_bgms_fade_in_is_carried`; ABL's
+`test_volume_and_tempo.py` —two seconds of fade-in: `bgm_fade` at 2 when
+the song starts, each voice the stream's times `FADE_N` a second in, the
+stream's once it ends— and the ports' `test_book_of_three_music.py` —map
+21's `roved` starts with `bgm_fade` at 2, and it is over a second later—;
+red with main's tools.
+
+**Heard**: map 21's fade-in runs but cannot be heard, in RM2k either:
+`roved` starts with about a second and a half under the ambient sound, so
+its notes come after the fade. The recordings, before and after, are in
+`/shared/audio/2026-10-19-book-of-three-music/`.
+
+**Not covered by any test**: the fade-in over an MSU-1 track
+(`bgm_fade_track`, which the MSU-1 fade-out test does exercise going
+down), and a `FadeOutBGM` in the middle of a fade-in.
+
+**When merging**: see the battle task; this is the same branch.

@@ -2,8 +2,8 @@
 name: "The Book of Three: the story's battles play the default battle theme"
 description: "Each scripted fight sets its own battle and victory music with ChangeSystemBGM, which the port does not do: they all play the database's battle theme"
 type: bug
-status: doing
-assignee: Carpintero
+status: testing
+assignee: taro
 agents: [Carpintero]
 ---
 
@@ -80,7 +80,7 @@ The interface, written at the top of `runtime/bgm_level.s` too:
    `bgm_level_whole` fills them with the song as written.
 2. The song in A, `jsr music_play` (bank 0): a song that already plays only
    changes level, otherwise it starts at that level, fading in if asked.
-   `music_start_asked` restarts it even if it plays. From another bank,
+   `music_start` restarts it even if it plays. From another bank,
    `ba_t_bgm`/`battle_bgm` do the same with the data bank at 0.
 3. What plays, to put it back afterwards: `song_current` (or nothing, if
    `music_off` is set and `MSU_PLAYING` is not), and its level `BGM_NOW`
@@ -89,3 +89,60 @@ The interface, written at the top of `runtime/bgm_level.s` too:
 
 `ChangeSystemBGM` does not change the inn's song in any of the nine games,
 so the inn's is the database's `inn_music`; its level is not emitted yet.
+
+## Done (2026-10-19, Carpintero)
+
+`ChangeSystemBGM` of the battle and the victory is `OP_SYSTEM_BGM` (0x39,
+the number handed out; 0x3A stays reserved). A new game starts with the
+database's two songs at the database's level, and they travel in the save:
+**`SAVE_BYTES` grows by 18** —two system songs of seven bytes and the
+four of `BGM_NOW`, see the map task—, before `music_off`; saves from
+before do not load. The battle plays them on entering and on winning,
+and each song a `ChangeSystemBGM` names goes up first in the battle's
+package as a separate song, with the battle's sound effects.
+
+**The test, not `talisn`**: the cauldron milestone's first battle is on
+map 26, whose `ChangeSystemBGM`s right before it give both slots `dowds`
+at 80; `talisn` is map 16's. The ports' `test_book_of_three_music.py`
+asserts `dowds` at 82/128 there; ABL's `test_battle.py` gives the droid's
+battle `KW-robot` at 80 and asserts the song, its level, its samples and
+the battle's sound effects in the ARAM, and the victory keeping it.
+
+**What it cost**, measured in the sample bank (`audio.json`,
+`bank.voices[].rate` per key, against main's): The Book of Three, nothing.
+**ABL, thirteen of its 236 sample keys go down to ~9.5 kHz** (from 12–22),
+limited by `pelea>T_AVGFighter_KyaraSelect`: the battle's package leaves
+32,432 B for music, and that song's 28 samples take 31,428. Without MSU-1
+only. Draft: `a-battle-song-with-many-instruments-squeezes-shared-samples`,
+with its line in ABL's Known issues. ABL's ceilings table was measured
+again (`just ceilings`), since `KW-robot` is a song of `release` now.
+
+**Not covered by any test**: a victory song other than the battle's after
+a `ChangeSystemBGM` —it is uploaded when the battle is won, with the
+picture still; draft
+`a-victory-song-other-than-a-changed-battle-songs-uploads-at-victory`—;
+`ChangeSystemBGM` to "(OFF)", which leaves the battle silent; the system
+songs' path with MSU-1, where a song with a track uploads nothing
+(`battle_extra_l` asks `song_per_msu`); and a save made after a
+`ChangeSystemBGM`, loaded —the bytes are in `save_table`, which
+`test_save.py` walks, but no test changes the song before saving—.
+Dooms 2's Game Over slot is still a loss: draft
+`change-system-bgm-of-the-game-over-is-ignored`.
+
+**When merging**: reinstall `cartridge`, `rm2k-snes-audio`, `events`,
+`mapdata` and `convert` —the bytecode's `OP_BGM` grows two bytes and
+`OP_SYSTEM_BGM` is new, so every binary that walks or writes pages—.
+Tijereta's inn emits `OP_BGM` (`tijereta-inns`): it has to write the two
+bytes of fade-in, at zero —`Level::bytes()` does it—; if not, the
+conversion stops, since pages are walked by the declared sizes.
+
+**Verified**, with the branch's tools (`.local-tools` with `cartridge`,
+`rm2k-snes-audio`, `events`, `mapdata` and `convert`): `just test` (29),
+`just lint`, the crate tests of bytecode, events, mapdata, convert,
+cartridge and rm2k-snes-audio; ABL's `just cartridges` and `just tests`,
+1569 passed and 2 skipped, **no golden moved**, `abl.sfc`
+`c79657f4c1504a7f`; `just boot` from the ports root, 76 passed, no golden
+moved. Bank 0 (`just space` in ABL): `release` 146 B left,
+`test-change-system` 91 B, the tightest; main had 98 and 52, since
+`op_bgm`'s and `op_fade_bgm`'s bodies and the MSU-1 fade's multiply went
+to FAR3.
