@@ -23,3 +23,9 @@ research "More pictures at once".
 The maps the copy does not reach at all —any with no room left for one
 more event— run the shared body, blind, as before; Frozen World's B
 event is on none of them today.
+
+Measured again by Aguará on 2026-10-19 with the menu's own flat pictures
+(the-advocate `f19217a2`, ports `3bded23`, branches `aguara-fw-menu`): the
+same 22 maps are blind, and each map still takes the three pictures in 18
+objects and 320 tiles, as the converter's log says: drawing them flat and
+smaller (88x56 against 88x59 scaled) does not move the count.
