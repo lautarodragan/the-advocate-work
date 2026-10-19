@@ -1036,11 +1036,13 @@ they were:
 
 The fix is always the same: an explicit `cmp #0` between the `pl*` and the
 branch. Since 2026-10-02 Goombario —`snes/goombario/`— looks for it on
-every built cartridge, in ABL's `tests/tooling/test_linter.py`: a
-conditional branch on a flag left by a `pl*` is red, except those that
-look on purpose at what was pulled, which are in ABL's
-`linter-exceptions.txt`, with their why. A new one of those goes
-there, saying what it is that was pulled.
+every built cartridge, in ABL's `tests/tooling/test_linter.py` and the
+test game's: a conditional branch on a flag left by a `pl*` is red, except
+those that look on purpose at what was pulled, which say so on their own
+line with a `; goombario: pull-branch: <why>` comment —what it is that was
+pulled—. A new one of those carries its own; one that no longer allows
+anything is red too. Until 2026-10-18 they were a list in ABL,
+`linter-exceptions.txt`.
 
 ## Git
 
