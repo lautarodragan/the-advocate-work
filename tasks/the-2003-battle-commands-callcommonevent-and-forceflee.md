@@ -2,7 +2,7 @@
 name: "The 2003 battle commands: CallCommonEvent and ForceFlee"
 description: "The only RM2k3-only commands Zounds uses, both in troop pages: CallCommonEvent (19, the steal mechanic) is a call to a common body, which the compiler already does on maps; ForceFlee (36, the custom Escape command) ends the battle as an escape that cannot fail"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Aguará]
 ---
@@ -65,3 +65,5 @@ calls common event 65—; the 18 steal pages are kept out by the callee's
 boxes, whose `¡`, `á` and `ë` the font lacks (Mulita's draft
 `latin-1-letters-stop-a-box`), and not by the call: `culprits` names the
 pasted command now.
+
+**2026-10-19, taro**: declared done.

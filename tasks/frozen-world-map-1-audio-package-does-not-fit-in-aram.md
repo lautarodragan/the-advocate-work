@@ -2,7 +2,7 @@
 name: "Frozen World's map 1: its audio package does not fit in the ARAM"
 description: "With map 1 (\"Battle Screen\") brought back into The Frozen World, the build stopped at the audio: its 41 sound effects alone are ~89 KB against ~63 KB of ARAM. The audio stage now relieves a package that does not fit even at the minimum instead of stopping, records what it loses in degradations.json, and map 1 is in"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Carpintero, Aguará]
 ---
@@ -114,3 +114,5 @@ issues".
 **To install when merging**: `just install rm2k-snes-audio convert`.
 
 **Left as a draft**: `overloaded-audio-package-the-floor-is-a-cliff`.
+
+**2026-10-19, taro**: declared done.

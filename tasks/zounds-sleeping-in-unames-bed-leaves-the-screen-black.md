@@ -2,7 +2,7 @@
 name: "Zounds: sleeping in Uname's bed leaves the screen black"
 description: "Sleeping in the bed of Uname's room fades the screen out and it never fades back in; the next map's music plays"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Aguará]
 ---
@@ -95,3 +95,5 @@ where I left what map 30 is made of.
 
 Not covered: a `RecallToLocation` whose map is not carried, not looked
 at; and the rest of the game past the bed, which needs map 30.
+
+**2026-10-19, taro**: fixed, playing Zounds; they went on to the rest of the rift and north of the desert. Done.
