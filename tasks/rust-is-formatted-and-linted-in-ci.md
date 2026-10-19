@@ -24,3 +24,10 @@ Measured by Hornero on `54ec3daf`, rustfmt 1.9.0 and clippy 0.1.96:
 * `cargo build` / `cargo test --no-run`: no warnings since `54ec3daf`.
 
 ## Log
+
+2026-10-19, Mulita. Branch `mulita-rust-lint` in the-advocate, from
+`54ec3daf`. The proof that the formatting changes nothing: two sets of
+every tool, both installed from the same worktree —before and after
+`cargo fmt`—, so the runtime and everything else is the same; every
+game's cartridges built with each, `NO_CACHE=1`, from an empty `build/`,
+and the `.sfc`, `.msu`, `.inc`, `.dbg` and `.pcm` compared by hash.
