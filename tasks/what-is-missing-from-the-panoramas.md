@@ -2,7 +2,9 @@
 name: "What is missing from the panoramas"
 description: "What each panorama's path does not cover: ChangePBG to another image, those of a common event, the sky in mode 1 and the grain of the flattening"
 type: feature
-status: wishlist
+status: doing
+assignee: Aguará
+agents: [Aguará]
 ---
 
 # What
@@ -29,3 +31,19 @@ What was left out of `panoramas.md`, for any game:
 
 None of them holds back A Blurred Line today: they are the edges of the rule, and what
 another game is going to ask for.
+
+# Log
+
+**2026-10-19, taro**, playing Zounds: "a nice to have: showing the panorama
+in this map. Is it feasible?" —`DownLoad Room` (map 32), in `Sala de
+Máquinas` of the Hover Tram—. The map has no panorama of its own; its
+parallel event 2, `SetBackGround`, sets `Zounds_DesertPan` (a BMP) with
+ChangePBG at several scroll speeds, and at the end `Zounds_ScreenShot_01`
+(a 320x240 PNG). Asked whether to take it out of the wishlist, measuring
+the cost first: "Dale!".
+
+Scope for now: the first two bullets —a ChangePBG naming another image, and
+one in a map without a panorama—. `panorama-not-changed` in each game's
+`build/release/degradations.json`, on 2026-10-19: Zounds 19 commands in 4
+maps (20, 21, 31, 32), Frozen World 240 in 72 (113 in map 1), Sunset 8 in 3,
+Desert Nightmare 3 in 2.
