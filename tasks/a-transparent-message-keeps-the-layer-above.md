@@ -38,3 +38,21 @@ instead of from transparent. What it costs:
 
 **First step**: how many transparent messages the ports show over tiles
 of the layer above, and on which maps, before choosing.
+
+## The palettes: the text's colours win (taro, 2026-10-19)
+
+The text keeps its exact colours, and the background gives way: in each
+palette of the layer above that a baked cell uses, the entry closest to
+each of the text's colours —and its shadow's— becomes that colour. The
+layer above changes colour slightly, maybe differently from tile to tile,
+and that is less disruptive than text whose colour changes between cells,
+however imperceptibly. taro's words: consistency in the text matters more
+than in the background.
+
+What that leaves to measure (Hornero): the change is to the palette, so
+it is seen on every tile of the map that uses that entry, not only under
+the text —done at build time it is permanent on that map; done in CGRAM
+while the message is up, the rest of the layer would flicker—. And it
+costs one entry per colour the text can take there: the colour codes
+(`\c[n]`) a message uses are known when it is compiled, so the build can
+say, per map, how many entries each palette gives up.
