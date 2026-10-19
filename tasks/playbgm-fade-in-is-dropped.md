@@ -32,3 +32,13 @@ nothing stops. **Done**: `OP_BGM` carries the fade-in and the driver
 ramps the volume in over it, with a compiler unit test and a ROM test that
 hears the first frames quieter. **First step**: whether the music driver
 already has a volume ramp to reuse.
+
+## Doing (2026-10-19, Carpintero)
+
+The driver already had the ramp: `FadeOutBGM`'s, `bgm_fade_tick`, a
+sixteen-bit level that scales each music voice's volume —or the MSU-1
+track's— by a factor from 0 to 256. The fade-in is the same ramp going up:
+`bgm_fade` at 2, from zero by the step `ceil(65536 / frames)` each frame,
+the same number `OP_FADE_BGM` carries. `OP_BGM` carries it as a word after
+the step, and the map table and `OP_SYSTEM_BGM` carry it too, so a map's
+own song and a battle's fade in if their RM2k music asks.

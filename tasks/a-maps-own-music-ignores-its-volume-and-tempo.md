@@ -40,3 +40,18 @@ play a map's own song as written.
 `milestone-south-mountains` reading the 70% —red before—. **First step**:
 `git blame` the "as written" comments of `bgm_level.s`, to see whether it
 was a decision or only what was there; if it was a decision, ask before.
+
+## Doing (2026-10-19, Carpintero)
+
+`git blame` of the "as written" comments: `d23d2628` (2026-10-01), whose
+message says the title's and the maps' songs have a level of their own
+"that is not used, noted in the task" —a debt, not a decision—.
+
+**How**: the level a map plays its song at goes with it in a
+`map_song_level` table, six bytes per map —gains, step and fade-in, the
+units of `OP_BGM`—, which the music's stage writes from the map tree's
+node (`Level`, now in rm2k-snes-bytecode's `level.rs`, shared by the event
+compiler and the music). Entering a map starts its song at that level; a
+map whose song is already playing only changes the level, as easyrpg's
+`BgmPlay` does with the same name. And `BGM_NOW` travels in the save, so a
+loaded game plays at the level it was saved at instead of as written.
