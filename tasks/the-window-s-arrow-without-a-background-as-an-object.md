@@ -2,7 +2,7 @@
 name: "The backgroundless window's arrow as an object"
 description: "A window without a background still takes the map's upper layer on its bottom frame row, eight lines across the screen, only to draw the arrow of a message waiting for a key; drawn as an object, that row could be given back too"
 type: optimization
-status: testing
+status: done
 assignee: taro
 agents: [Chajá]
 ---
@@ -134,3 +134,5 @@ frames; merges), the ports (the test and the case), the book (the
 divergence, vram.md, cgram.md). **To install when merging: `mapdata` and
 `convert`** (`convert` compiles mapdata in); the runtime goes from
 `~/the-advocate`.
+
+**2026-10-19, taro**: played in ABL, Core and Manta's memory, on the island; "perfect". Done.

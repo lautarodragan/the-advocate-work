@@ -2,7 +2,7 @@
 name: "A window without a background hides the upper layer only on its text lines"
 description: "The backgroundless message window takes BG2 on all 80 of its lines; give the map's upper layer back on the lines with no text"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Chajá]
 ---
@@ -107,3 +107,5 @@ bands, and their move to FAR3), the ports (the case and the test), the
 book (the divergence, vram.md, the optimizations entry). **To install
 when merging: nothing** —only `runtime/` changed, which the global tools
 read from `~/the-advocate`—.
+
+**2026-10-19, taro**: played in ABL, Core and Manta's memory, on the island; "perfect". Done.

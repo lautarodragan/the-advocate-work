@@ -2,7 +2,7 @@
 name: "Scrolling a list shows the last row repeated for a moment"
 description: "On the screens that list items, the rows that come in while scrolling repeat the last row that was on screen for one or two seconds before showing their item"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Hurón]
 ---
@@ -123,3 +123,5 @@ golden moved; the other games'
 **On merging**: the runtime only; nothing in Rust changed. Reinstall
 `cartridge` only if the global tools are installed from another checkout
 than the one this lands in (the runtime's path is compiled in).
+
+**2026-10-19, taro**: played in ABL, scrolling the item lists; "perfect". Done.
