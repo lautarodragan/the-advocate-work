@@ -2,8 +2,8 @@
 name: "Frozen World: a legible menu, from pictures of our own"
 description: "The custom menu is three pictures (one per highlighted row) whose gradient does not survive the console; redraw them flat in three colours, and let a port's patches carry files that replace the game's by name"
 type: feature
-status: doing
-assignee: Aguará
+status: testing
+assignee: taro
 agents: [Aguará]
 ---
 
@@ -123,3 +123,18 @@ the game lacks) and the case-insensitive replacement are covered by the
 crate's tests on invented trees, not by a game; the big-picture layer with
 `console_pictures` has a unit test but no game shows such a picture there; the 22 maps where the
 menu is still blind are a draft of their own.
+
+**When merging**: the branch touches `rm2k-project`, so every binary that
+compiles it in is reinstalled —`just install`, all of it—; besides,
+`convert`, `cartridge` and `images` changed on their own. What taro looks
+at: the B menu on the beach (map 11) with each row lit, and which highlight
+to keep —the captures in `/shared/captures/2026-10-19-frozen-world-menu/`—.
+
+**For `manual-patches-one-folder-per-kind-of-asset`**, decided while this
+ran: `files/` moves to `manual/<RM2k folder>/` then. The merge here is not in
+`search_dirs` but in `Environment::unpack`, so every stage —and Ditto, and
+a game's tests through `rm2k-snes-project --unpacked`— sees the port's
+files without taking them from a list; what that task says about a stage
+that reads `GAME_DIR` on its own skipping the patches does not happen with
+it. The collision check between an added ChipSet's recipe and a file lying
+there by hand is already in `chipsets.rs`.
