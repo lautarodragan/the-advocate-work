@@ -2,7 +2,9 @@
 name: "Zounds: a debug map"
 description: "A map of our own with doors to the ship after the intro, the desert on first arrival with Kazar, and the desert with the pickaxe; and someone to level Kazar and Uname up"
 type: tooling
-status: todo
+status: doing
+assignee: Carpintero
+agents: [Carpintero]
 ---
 
 Asked by taro on 2026-10-19, to play the parts of Zounds they are testing
