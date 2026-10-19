@@ -2,8 +2,8 @@
 name: "A paid inn shows no gold window, and \"Yes\" can be picked without the gold"
 description: "ShowInn with a price: the greeting comes without the gold window, and Yes is not greyed out when the party cannot pay"
 type: bug
-status: doing
-assignee: Hurón
+status: testing
+assignee: taro
 agents: [Tijereta, Hurón]
 ---
 
@@ -67,3 +67,30 @@ The plan:
   The converter draws the empty window with the term; the console composes
   the number into a copy of its middle two rows when the box opens and
   uploads one row of tiles per line the composer uploads.
+
+## Hurón, 2026-10-19: done, to testing
+
+Done as planned, in the-advocate `huron-inn-gold` (`d76bb565`, the window
+selection fix `3a3d2883`), the ports `huron-inn-gold` (tests `539adb2`,
+goldens `fd4788e`) and the book `huron-inn-gold` (`e327f4d`), each merged
+with `tijereta-inns` after Tijereta brought `hornero-integ` into it.
+
+* No new opcode: `OP_INN` 3 and 4 (`INN_GOLD_WINDOW`, `INN_AFFORDED` in
+  rm2k-snes-bytecode). `SAVE_BYTES` does not change: the state is far RAM
+  that lives from `OP_INN 3` to the choice's pick.
+* Bank 0 gets bytes back: the choice's pick moved to FAR3. Measured with
+  `just space` after the merge: `release` 124 B, the tightest,
+  `test-change-system`, 69.
+* `window_systems` has a tenth piece per System, `window_gold`;
+  `window_select` multiplied by 27 by hand and now by 30, with an assert.
+  The change-system goldens caught it.
+* Map 200 has no room for the window (its eight sprite palettes are
+  taken): `inn-no-gold-window` per map in `degradations.json`, a known
+  issue on ABL's page and the draft
+  [`map-200-has-no-room-for-the-gold-window`](map-200-has-no-room-for-the-gold-window.md).
+* Compared with the 2015 RPG_RT under Wine, starting a copy of ABL at map
+  20: `/shared/captures/2026-10-19-inn-gold-window/`. What differs is in
+  the book, `divergences/what-the-inn-s-gold-window-does-not-model.md`.
+
+**To install when merging**: `cartridge events screens mapdata convert`
+—plus whatever `tijereta-inns` asks for—.
