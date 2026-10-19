@@ -74,7 +74,9 @@ Stats" it calls common event 31, the message.
   `/shared/captures/2026-10-17-frozen-world-b-menu/`. The menu fits most of
   the game's maps; the converter's log names the rest.
 * **What remains**, as drafts:
-  [`frozen-world-the-menu-s-lit-option-loses-its-text`](frozen-world-the-menu-s-lit-option-loses-its-text.md)
+  `frozen-world-the-menu-s-lit-option-loses-its-text` —deleted on
+  2026-10-19, fixed by
+  [`frozen-world-a-legible-menu-from-our-own-pictures`](frozen-world-a-legible-menu-from-our-own-pictures.md)—
   and
   [`frozen-world-the-b-menu-is-blind-on-the-maps-without-room`](frozen-world-the-b-menu-is-blind-on-the-maps-without-room.md);
   and the draft this one hung from,
