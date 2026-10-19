@@ -23,3 +23,12 @@ twin" anyway; it was not proven to be unrelated.
 
 **How to reproduce it**: `just tests` in `abl/` of the ports, several times;
 the captures stay in `tests/snapshots/cores/`.
+
+**Seen again** by Carpintero on 2026-10-19, the same way —bsnes drew an
+empty box over a black screen, snes9x the tinted map, 89% of the pixels—,
+in a full run on the branch `carpintero-faces` merged with `main`
+(the-advocate `148d2fe2` plus `b168c362`, ports `bfebe37`), with that
+branch's tools and `events` installed from it. Alone, `test_event` passed
+twenty times out of twenty on the same tree, and two full runs before the
+merge were green. That branch's change only writes the message face, never
+reads uninitialised memory: it was not proven to be unrelated either.
