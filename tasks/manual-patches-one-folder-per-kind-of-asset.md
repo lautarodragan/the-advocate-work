@@ -2,7 +2,9 @@
 name: "Manual patches: one folder per kind of asset"
 description: "patches/manual/ as RM2k's own folders —ChipSet/, Picture/…, plus maps/—, the extension telling an image to replace from a database record; new maps by id 1000 and up, instead of forks/ and new/"
 type: tooling
-status: todo
+status: doing
+assignee: Aguará
+agents: [Aguará]
 ---
 
 Decided with taro on 2026-10-19, to do once
@@ -37,3 +39,13 @@ records are merged into the dump, as `chipsets/` is today.
 ports' `RENAMES.md`, ABL's ROM byte for byte equal—; the debug map's new id, which
 changes the ROM, apart; then the rules and
 the docs, in their own commit.
+
+**What landed since it was written** (Hornero, 2026-10-19): Aguará's
+`frozen-world/patches/manual/files/` —a port's file replaces the game's of
+the same name— merges them in `Environment::unpack` (`own_files.rs` in
+`rm2k-project`), into `build/cache/own-files/`, not through `search_dirs`;
+and Mulita's `frozen-world/patches/manual/commonevents/NNNN.json` replaces
+common events, through `Dump::with_section` (Ditto) and
+`fork::with_common_events` (convert). Both fold into this layout: `files/`
+into each RM2k folder, and the common events with the other database
+records.
