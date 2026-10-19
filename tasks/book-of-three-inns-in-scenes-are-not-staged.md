@@ -127,3 +127,30 @@ the inn travels in the save. Carpintero's `PlayBGM` work had not landed in
 above. Captures in `/shared/captures/2026-10-19-inns/`, the camp's night
 heard in `/shared/audio/2026-10-19-inns/`. Branches `tijereta-inns` in the
 three repos; draft: `an-inn-has-no-gold-window`.
+
+## On Carpintero's music (2026-10-19, after the hand-back)
+
+Hornero merged `hornero-integ` (`main` plus Carpintero's, Calandria's
+and Chajá's branches) into `tijereta-inns` in the three repos. `op_bgm` is
+still the one `OP_BGM` writer, now from `Level`: `PlayBGM` passes
+`music_level`, the inn its System entry's level **with its own fade-in**,
+which `Game_System::BgmPlay` honours (0 in every game today). With
+`bgm_fade` at 2 meaning a fade-in, the inn's wait reads only 1 as "the song
+before is fading out". The runtime's convention did not change for the
+inn: it notes `song_current` and `BGM_NOW` and puts them back through
+`BGM_ASK` and `music_play`; `BGM_ASK_FADE` is not written, so no fade-in.
+The camp's test now checks the level too: `TLITCA` at `80800001` before
+and after, in both cores.
+
+A golden photo moved in time, not in pixels: the guard milestone's
+`-scene` photo is taken by ticks, and the cell's night adds 409; at 1619
+it is the same frame. The parity hash moved for both changes; with
+`inn_staging` answering the heal alone it is Carpintero's.
+
+Verified on the merged tree with `.local-tools` of `events`, `convert`,
+`cartridge`, `mapdata`, `rm2k-snes-audio` and `wally`: `just crate-test
+events` (159 + 5 + 8), `just test` (29), `just lint`; ABL 1570 passed, 2
+skipped, `abl.sfc` `0a3cce588992ccea`; `just boot` 77 passed and the
+guard red until the photo moved, then the guard and the inn's test again,
+green. `just space`: `test-change-system` 49 B of bank 0, `release` 104.
+**When merging**: reinstall `events`, `convert`, `cartridge`.
