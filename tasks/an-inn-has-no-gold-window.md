@@ -2,7 +2,9 @@
 name: "A paid inn shows no gold window, and \"Yes\" can be picked without the gold"
 description: "ShowInn with a price: the greeting comes without the gold window, and Yes is not greyed out when the party cannot pay"
 type: bug
-status: draft
+status: doing
+assignee: Hurón
+agents: [Tijereta, Hurón]
 ---
 
 Seen by Tijereta on 2026-10-19, at the-advocate `35dcc348` and the ports
