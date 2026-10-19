@@ -67,3 +67,40 @@ the noted song back from the top. The page emits:
 with the bracket left out when the inn music is `(OFF)` —ABL's, Desert
 Nightmare's and Sunset's—, which is `StartInn` going straight to
 `FinishInn`.
+
+**Done as planned**, with three things learned on the way:
+
+* the wait hangs off `fade_tick`: with no fade of its own it asks
+  `inn_tick`, so the frozen frames are a fade's —the world stops, the
+  ticks and the music go on—. Bank 0 pays the opcode's entry (14 bytes) and
+  two in `fade_tick`; the rest is in `FAR3`, `inn.s`;
+* "played once" is a count, `SONG_LAPS`, that `music_frame` adds one to
+  each time a song starts over. The nine bytes did not fit where the restart
+  was —two branches of the opcode chain went out of range— and the restart
+  moved out of the way, next to `boot`, reached with a `jmp`;
+* an MSU-1 track repeats from its loop point and never ends, so `OP_INN 1`
+  writes `$2007` without the repeat bit and the wait looks at the playing
+  bit. **No test runs that path**: the suite plays no inn music through the
+  MSU-1.
+
+"Playing" before the inn is what the battle asks —a song cut by a fade,
+or a map with none, leaves silence after the night—, not `MemorizeBGM`'s
+last song.
+
+**Measured** on The Book of Three's camp, snes9x and bsnes alike: 25 ticks
+down, 361 ticks of `Inn1` in the black —it ends on the lap, not on the ten
+seconds—, 23 ticks up.
+
+**Coordination with Carpintero** (`playbgm-fade-in-is-dropped`): the inn's
+music goes through `op_bgm`, the same writer as `PlayBGM`'s, so if
+`OP_BGM` gains the fade-in operand the inn gets it there; the inn wants it
+at 0. And if a page's bytes do not walk by the declared sizes the
+conversion stops, so a mismatch cannot pass quietly.
+
+**Verified**, with the tools of the branch (`.local-tools` with `events`,
+`convert` and `cartridge`): `just crate-test events` (155 + 5 + 8 green;
+the Python parity hash of the compilation's `maps` moved on purpose, see
+`python.rs`), `just test`, `just lint`; ABL's `just cartridges` and
+`just tests`, with no golden moved; and `just boot` from the ports root.
+The two new ROM tests were red with the global tools: the bum healed at
+full brightness.
