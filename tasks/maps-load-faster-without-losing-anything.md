@@ -2,8 +2,8 @@
 name: "Maps load faster without losing anything"
 description: "Measure where a map load spends its frames, phase by phase and map by map, in every game, and cut what can be cut without losing quality or features"
 type: optimization
-status: doing
-assignee: Cardón
+status: testing
+assignee: taro
 agents: [Cardón]
 ---
 
@@ -138,3 +138,92 @@ grid 7, background 11 and the song most of the rest).
 A test moved: `tests/abl/test_leader_without_graphic.py` read the sprite
 shadow the moment the load ended, and the tint now fills it on a black tick
 after; it waits for `LOAD_TAIL` to finish, still inside the fade.
+
+### 2026-10-18, Cardón: the ramp keeps its pace, and before and after in every game
+
+Checking every jump of the nine ports frame by frame (a scratch script that
+watches `ticks`), two cases held a tick of the ramp for two frames: a block
+that straddled the music's IRQ line pushed the IRQ's frame past line 225
+(ABL's maps 3 and 9), and an effect from the `.msu` —which goes up whole—
+landing in a ramp tick. Blocks now stop at `IRQ_LINE` when they start
+before it, and the whole-only samples all go up on the last black tick
+(`whole_ones`). After that, no tick from the ramp to the fade's end lasts
+more than one frame on any map of any port. Commit `7ca45aa6`.
+
+Frames a jump adds to the fade's 68, counted in hardware frames from the
+request to the end of the fade, both sides with the same probe and the same
+jumps (ABL: the same 200 door pairs; the rest: every map from the one
+before). "after: load tick" is what is left inside the load's tick;
+the difference to "after: mean" is the settle on tick 43.
+
+| game | loads | before: mean | before: slowest | after: mean | after: slowest | after: load tick |
+|---|---|---|---|---|---|---|
+| abl-pairs | 200 | 30.7 | 96 (11>9) | 15.8 | 73 (69>66) | 11.0 |
+| el-dorado | 13 | 36.1 | 61 (2) | 17.2 | 39 (13) | 14.7 |
+| sunset-over-imdahl | 65 | 26.6 | 58 (12) | 13.5 | 43 (54) | 11.6 |
+| book-of-three | 89 | 26.6 | 78 (22) | 13.0 | 49 (22) | 9.7 |
+| dooms2 | 93 | 35.2 | 95 (42) | 21.1 | 66 (42) | 15.6 |
+| frozen-world | 155 | 27.8 | 79 (135) | 18.5 | 60 (135) | 17.0 |
+| desert-nightmare | 189 | 29.1 | 78 (48) | 20.3 | 49 (48) | 18.9 |
+| zounds | 188 | 23.6 | 85 (34) | 11.8 | 70 (183) | 8.7 |
+| vampires-dawn | 409 | 83.8 | 221 (195) | 78.5 | 216 (195) | 35.8 |
+
+Vampires Dawn barely moves: its effects come from the `.msu` and go up
+whole, so most of them end up on the settle tick. A draft says it.
+
+### What was left, with its cost
+
+* **The decompression is still in the load's tick**: grid, background,
+  animation, upper layer and sprites, four to nine frames a load. Each
+  stream is one `lz2_decompress`, one to eight frames, which does not fit
+  in a frozen tick. Moving them needs a decompressor that can stop and go
+  on next tick —a second copy of the body per bank that looks at the line
+  between commands, some 400 bytes in a far bank, and the decompressor's
+  state in far RAM— and the load buffer's users in a fixed order across
+  ticks. Gain: up to those frames on loads whose package leaves the black
+  ticks free, which is the common door between neighbours. Draft
+  [`a-map-load-still-decompresses-inside-its-tick`](a-map-load-still-decompresses-inside-its-tick.md).
+* **A door decompresses the whole bytecode of the map it leaves**
+  (`code_carry_after`): Desert Nightmare's are ~14 KB each, some 2 to 5
+  frames a door. Draft
+  [`a-door-decompresses-the-whole-bytecode-of-the-map-it-leaves`](a-door-decompresses-the-whole-bytecode-of-the-map-it-leaves.md).
+* **The song the map turns on still goes up in the load**, because it
+  starts there, as in RM2k; it is what is left of the slowest loads (ABL's
+  map 66: 63 to 73 frames). Starting it later, or uploading it while the
+  old map fades out, changes when it is heard or risks the effect of the
+  door that is still sounding: not lossless. Draft
+  [`the-song-a-map-turns-on-goes-up-inside-the-load`](the-song-a-map-turns-on-goes-up-inside-the-load.md).
+* **Vampires Dawn's effects from the `.msu`**: draft
+  [`vampires-dawn-loads-spend-seconds-on-effects-from-the-msu`](vampires-dawn-loads-spend-seconds-on-effects-from-the-msu.md).
+* `PUMP_LINE` (180) and `PUMP_TICK_BYTES` (512) are on the safe side of
+  what snes9x measured (blocks ending at ~184, ~600 bytes a tick); raising
+  them gains a few percent of the package and was not tried on hardware.
+* The upload's timing reads the V counter, which needs `WRIO` bit 7 set
+  (the power-on value; nothing writes it). The text layer already counts
+  on it the same way.
+
+### What was run
+
+On the tree merged with main (the-advocate `f68f0b70`, ports `6b27921`),
+with the branch's tools:
+
+* `just test` in the-advocate: 29 passed.
+* ABL's whole suite: 1577 passed, 2 skipped; no golden moved.
+  `test_cores.py` five more times: 24 passed each.
+* The other games' tests, `just boot` from the ports' root: 67 passed.
+* The ramp check over every map of the nine ports: no tick from the ramp
+  to the fade's end lasts more than one frame.
+* `just space` in `abl/`: bank 0, `release` 130 B and the tightest 79 B
+  (a test cartridge); bank $C0 2.0 KB at least; the fade-tick code is in
+  $C1 (28 KB left). Sunset Over Imdahl's $C0 was what pushed the code
+  there (`95783f1a`).
+* `abl.sfc` of `release`: sha256 `11375e00…79b5f6`.
+* Rust: none touched. Nothing to reinstall when merging; the runtime goes
+  with the-advocate's checkout. The global tools must be at least main's
+  `f68f0b70`: with an older runtime and the newer `rm2k-snes-screens` the
+  window systems' goldens go red, which is how that merge was found to be
+  needed.
+
+Commits: the-advocate `c7360e6e`, `7ca45aa6`, `95783f1a` on
+`cardon-map-load`; the ports `89da040` (the leader test); the book
+`2c18fc3`, `248c117`.
