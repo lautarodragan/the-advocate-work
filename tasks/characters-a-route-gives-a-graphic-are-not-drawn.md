@@ -2,8 +2,8 @@
 name: "Characters a route gives a graphic to are not drawn"
 description: "An event whose pages all lack a graphic and that a forced route gives one (move command 34) never appears: scenes lose characters that walk in, talk and leave"
 type: bug
-status: doing
-assignee: Calandria
+status: testing
+assignee: taro
 agents: [Calandria]
 ---
 
@@ -47,19 +47,73 @@ what that costs in rows on the busiest maps. The command-34 graphics go
 through the same per-map table as
 [`frozen-world-map-2-route-graphic-changes-past-the-table`](frozen-world-map-2-route-graphic-changes-past-the-table.md).
 
-## Work (2026-10-19, Calandria)
+## Done (2026-10-19, Calandria)
 
 Branches `calandria-route-graphics` in the-advocate (from `9592b88b`), the
-ports (from `c420032`) and the book.
+ports (from `c420032`) and the book. **To install when merging**: `events`,
+`wally` and `convert`, and the runtime changed (`runtime/event_pages.s`,
+`runtime/npcs.s`), so every cartridge is rebuilt. No opcode taken (0x52 is
+still free); `SAVE_BYTES` does not change.
 
-* The events compiler's scan says, for each page, which graphics its
-  compiled routes give which events: `route_graphics`, `[event index,
-  graphic index]`, walked from the bytecode like `route_targets`.
-* Wally gives an event whose pages all draw nothing and that some route
-  dresses with a graphic that has pixels a hidden row of its own
-  (`dressed_by_routes`), whose graphic follows its pages: a page that
-  becomes active hides it again, as `SetupFromPage` does. The runtime
-  needed nothing: `change_graphic` already dresses a row.
-* The Book of Three: 37 events on the 14 maps get a row, and the converter
-  says which (`a route dresses them: a hidden row each`). Captures of the
-  scenes before and after: the characters show.
+* **The scan says who a route dresses.** The events compiler's page records
+  carry `route_graphics`, `[event index, graphic index]`, walked from the
+  compiled `OP_ROUTE`s like `route_targets` (`pages.rs`, with its test).
+* **Wally gives them a row** (`dressed_by_routes` in `events.rs`): an event
+  whose pages all draw nothing and that some compiled route dresses with a
+  graphic that has pixels gets a hidden row with the first such graphic,
+  whose graphic follows its pages —a new page draws nothing and hides it
+  again, as `SetupFromPage` does—. A route that only dresses an event with
+  a blank slot is hiding it, and gets no row. The converter says which
+  ("a route dresses them: a hidden row each").
+* **Their palettes go after the map's own.** A row only a route dresses
+  (`Npc::dressed`) is left out of the pages' pass of the palette split, and
+  a leader candidate that only such a row shows is split like the leaders
+  that get no palette of their own: both go with the routes' graphics.
+  Without this, the party walking in Book of Three's race (map 64) took the
+  yellow soldiers' palette, and the race milestone's golden went red.
+* **And they are left out where they cost the map.** `convert` converts a
+  map with dressed rows twice, and keeps them unless that loses the map
+  something it did not lose without them (`loses_more`): another kind of
+  loss, another event, or a graphic of its own lent a palette. What the
+  dressed characters pay themselves —their graphic lent, a wait for a slot
+  of the cache— stays. Three maps leave theirs out, and say so ("aren't
+  drawn: with them the map loses"): Book of Three's 46, Frozen World's 88
+  (its menu pictures) and ABL's 83 (a tile's palette). Draft:
+  [`characters-a-route-dresses-left-out-where-they-cost-the-map`](characters-a-route-dresses-left-out-where-they-cost-the-map.md),
+  with a Known issues line in each game's page.
+* **The runtime: coming back from a battle no longer undresses them.**
+  `npc_poses_forget` made the next refresh set every row up from its page,
+  and a page that draws nothing hid the row: Gwydion and Gurgi vanished
+  after Gurgi's fight. Now it asks for every page again with
+  `applied_again` set, and `page_graphic` leaves a row whose page draws
+  nothing alone then. The same for a row its page draws, whose route
+  graphic is still undone: draft
+  [`a-route-graphic-on-a-paged-row-is-undone-after-a-battle`](a-route-graphic-on-a-paged-row-is-undone-after-a-battle.md).
+
+**Measured**, with today's dumps: The Book of Three, 29 events on 13 maps
+get a row (map 46 leaves its 2 out); ABL 33 on 18 (map 83 leaves 1 out);
+Frozen World 39 on 23 (map 88 leaves 2 out); Sunset over Imdahl 7 on 7;
+Desert Nightmare 2 on 2; Zounds 1; Vampires Dawn, Dooms 2 and El Dorado
+none. The counts in the description above were routes, an upper bound.
+
+**Tested**: `test_book_of_three_milestones.py` photographs four scenes in
+the middle (`SCENE_PHOTOS`): Gwydion and Gurgi beside Taran after the
+fight (21), Gwydion at the river (22), Eilonwy in the cell (32) and the
+party before Eiddileg (83). Red with the tools of `9592b88b` (in snes9x,
+where the test stops), green with the branch's in snes9x and bsnes. No existing golden moved. Ran, with the
+branch's tools: `just test` and `just lint` in the-advocate; ABL's `just
+cartridges` and `just tests` (1580 passed; the only red, map 83's pump,
+went when map 83 left Forem out); `just boot` in the ports (73 passed).
+Captures before and after, in
+`/shared/captures/2026-10-19-book-of-three-route-graphics/`.
+
+**Not covered by any test**: that a dressed row hides again when its
+event's page changes; that the fallback keeps Frozen World's 88 menu
+pictures (it is the converter's log that says so, no test opens the menu
+there); the other games' scenes, which only build. The four scene
+goldens were looked at against the scenes' lines, not compared with the
+original under Wine.
+
+[`order-34-in-a-page-own-route`](order-34-in-a-page-own-route.md) does not
+fall out of this: an own route has no room for the graphic's operand. Said
+there.

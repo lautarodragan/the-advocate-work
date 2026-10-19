@@ -32,3 +32,13 @@ is left out whole. It is no longer only ABL's question: counted over the
 ports' data, own routes with a 34 are **11 pages in Sunset Over Imdahl and
 1 in Vampires Dawn**; none in ABL, The Book of Three or the other four.
 So it moves from the wishlist to `todo`.
+
+**Not taken with the forced routes' fix** (Calandria, 2026-10-19): the
+fix of
+[`characters-a-route-gives-a-graphic-are-not-drawn`](characters-a-route-gives-a-graphic-are-not-drawn.md)
+gives a row to an event a *forced* route dresses, and reads which graphic
+from the compiled `OP_ROUTE`s. An own route still has nowhere to carry the
+graphic's operand —`route::own` returns `None` on a 34, and the page record
+holds bare codes—, so it does not fall out of that change: it needs the
+own route's format to carry the operand and the runtime's own-route walker
+to skip it, which that task did not touch.
