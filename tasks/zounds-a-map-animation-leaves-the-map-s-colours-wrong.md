@@ -2,8 +2,8 @@
 name: "Zounds: a map animation leaves the map's colours wrong"
 description: "In MiniCave (map 89), Tower (Ele)'s second page plays battle animation 89 three times, and after the second or third the map's background is left in wrong colours —yellow and magenta— that stay"
 type: bug
-status: doing
-assignee: Chajá
+status: testing
+assignee: taro
 agents: [Chajá]
 ---
 
@@ -78,3 +78,20 @@ screen differs), green after (1%, the characters that moved).
 
 What the probes also showed and is not fixed here: a draft,
 [a face's cells step runs past the vblank](a-face-s-cells-step-runs-past-the-vblank.md).
+
+**Verified**, on the branches merged with main (the-advocate `434dee1a`,
+the ports `0f15bfe`), with `cartridge` installed locally from the merged
+tree and everything else from the global tools: `just test` green; ABL's
+`just tests`, 1577 passed and 2 skipped, no golden moved, `abl.sfc`
+`d9efcd22`; `just boot` from the ports' root, 68 passed and one red,
+Calandria's `test_into_the_desert_west_of_map_87`, because the global
+`rm2k-snes-convert` predates her converter fix (`b168c362`): it is not this
+change, which is runtime only. `just space`: the tightest bank 0 is
+`test-change-system`'s, 60 bytes left. What the suite does **not** cover: no
+test runs the HVBJOY guards' other branch —a box appearing or `HDMAEN`
+written with the vblank already over—; with the animation's frame waiting,
+the tower no longer gets there, and nothing else measured did.
+
+When merging: nothing to install for this change —the runtime is the
+checkout's—; the test runs in bsnes. Captures, before and after, in
+`/shared/captures/2026-10-19-zounds-animation-colours-fix/`.
