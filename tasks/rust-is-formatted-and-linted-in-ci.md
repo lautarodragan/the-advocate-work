@@ -31,3 +31,16 @@ every tool, both installed from the same worktree —before and after
 `cargo fmt`—, so the runtime and everything else is the same; every
 game's cartridges built with each, `NO_CACHE=1`, from an empty `build/`,
 and the `.sfc`, `.msu`, `.inc`, `.dbg` and `.pcm` compared by hash.
+
+Default rustfmt config, no `rustfmt.toml`. Of what it would rewrite, only
+one thing was a loss: the two glyph tables of `rm2k-snes/text`, one glyph
+per line with its character beside it, broken into three lines each. That
+file and Ditto's schema are generated and committed as their generators
+emit them, so `#[rustfmt::skip]` on their `mod` (`a6a91a24`) leaves both
+out; formatting Ditto's would make every `cargo xtask generate` a diff of
+layout. The rest of `cargo fmt` alone, `da6a4a40`: 258 files.
+
+Base tools (`54ec3daf`) against fmt tools (`da6a4a40`), every game of the
+ports, `NO_CACHE=1`: ABL's 159 files (.sfc, .msu, .inc, .pcm, its test
+cartridges), 6 of each of the seven survey games and 12 of Zounds, byte for
+byte equal. The `.dbg` differ: ld65 writes each source's mtime in it.
