@@ -2,7 +2,9 @@
 name: "The Book of Three: the closing pictures are not drawn"
 description: "The pictures the game shows over its last two maps (69 and 72) do not fit any VRAM layout and are left out: those moments of the ending are a plain or black screen"
 type: bug
-status: todo
+status: testing
+assignee: taro
+agents: [Chajá]
 ---
 
 Seen by Mulita on 2026-10-15, comparing the port with the original under
@@ -35,3 +37,47 @@ plain or black map gives the picture all of BG1), or loading the pictures
 one at a time as each is shown. **First step**: what else those two maps
 draw, and how many tiles each picture takes alone. Related:
 [`book-of-three-the-map-item-shows-nothing`](book-of-three-the-map-item-shows-nothing.md).
+
+## Chajá, 2026-10-19
+
+Taken together with
+[`book-of-three-the-map-item-shows-nothing`](book-of-three-the-map-item-shows-nothing.md):
+**not the same limit**, but the same way out. The map item's picture was
+left out because a common event had no pictures at all; these are left
+out by the VRAM layouts, as the converter said.
+
+**What those two maps draw, and what each picture takes alone** (the
+converter's log, at the-advocate `9592b88b`):
+
+* map 69: its background alone overflows every layout —544 distinct
+  tiles, 210 fused into others to fit the 543 the layouts leave—, so its
+  sprite bank has no room even for `credits3` alone, 320 tiles. Seven
+  characters, 56 sprite tiles.
+* map 72: 259 background tiles, 116 sprite tiles; the five pictures,
+  `quote1` to `quote4` and `theend`, 924 tiles together.
+
+Neither of the task's two ways was needed. **Both scenes tint the screen
+black first** —map 69's command 44, map 72's 29, `TintScreen` to 0, 0, 0—
+and then show each picture centred, fading it in and out with
+`MovePicture`s of its transparency. Over black, the big pictures' layer
+—BG1 in mode 1, the same in every VRAM layout, with the map hidden— is
+exact: the map and its characters are not seen anyway, and the layer's
+transparency darkens, which over black is what RM2k shows. So the
+converter now carries as big pictures **the small ones a map shows over a
+black screen, when the map has no room for its pictures in the sprites**
+(`over_black` in `pictures.rs` of rm2k-snes-convert): a `ShowPicture`
+after a `TintScreen` to black in its own page, with no other tint between,
+placed by a constant and with the screen. A map whose pictures fit keeps
+them in the sprites, as before. The rule does not see a tint from another
+page or from before the map: it only takes what it can be sure of.
+
+On the build: the log says "the pictures … are shown in the background
+layer instead" for maps 69 and 72, the cartridge carries 8 big pictures,
+and `degradations.json` has no picture loss left. `test_the_end`, in the
+ports, photographs each of the six once it has faded in, in snes9x and
+bsnes; compared with the original under Wine —a case over map 1 that tints
+black and shows each, Mulita's recipe— they are the same pictures in the
+same places.
+
+**To install when merging**: `events` and `convert` (rm2k-snes-events and
+rm2k-snes-convert); the runtime is not touched. SAVE_BYTES does not change.

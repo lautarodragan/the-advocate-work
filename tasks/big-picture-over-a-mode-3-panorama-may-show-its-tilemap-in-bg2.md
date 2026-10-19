@@ -46,3 +46,16 @@ Suspected by reading; no game is known to hit it. **Done**: a test page
 picture over a map converted with the "panorama" layout; if it shows
 the pattern, the fix (a blank BG2 tile for that layout) with the test red
 before. Becomes `todo` if a game shows it.
+
+## 2026-10-19, Chajá: shown once, not seen
+
+The Book of Three's map item —common event 23, which shows the big
+`bo3map` on any map since the-advocate's branch `chaja-map-item`— was
+shown with a throwaway case on its map 43, whose panorama goes in mode 3
+in `VENTANA_PANORAMA` (the converter's log says so). The picture came out
+whole, with no repeated tile over it; it differs from the same picture on
+the world map (70) only in 75 pixels of its place names, which are the
+picture's transparent colour and show the backdrop. So the pattern this
+draft fears does not show there; why —what BG2's tile 0 holds then— was
+not looked at. The capture, in
+`/shared/captures/2026-10-19-book-of-three-map-item/map-item-on-map-43.png`.

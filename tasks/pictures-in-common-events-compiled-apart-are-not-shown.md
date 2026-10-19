@@ -42,3 +42,37 @@ this draft says: the **parallel** common events, the bodies an automatic
 or a page **calls** (an `OP_CALL` to a body without pictures), and the
 maps where the copy's pictures do not fit. Zounds' `PickAxe` (21),
 Vampires Dawn's and Sunset's menus were not looked at with the change.
+
+## 2026-10-19, Chajá: the big ones are shown
+
+Since the-advocate's branch `chaja-map-item` (for
+[`book-of-three-the-map-item-shows-nothing`](book-of-three-the-map-item-shows-nothing.md))
+the automatic and parallel common events —and what they call, pasted— are
+compiled with **the big pictures** they show: those are the cartridge's,
+in a layer that is the same on every map, so a body without a map can show
+them. Only when they are all under one number, since the layer holds one
+and each it shows takes the screen off; a body that stacks several keeps
+them out, and the converter's log says so per common event. Measured on
+the ports' games at that branch:
+
+* The Book of Three: common 23's `bo3map`, the map item. Shown.
+* Zounds: common 29's `Zounds_Notas_Fondo`, the notebook's background.
+  Shown, **alone**: the bar and the "you have notes" text over it are small
+  pictures and still not shown, and the map is hidden while it is up.
+* Sunset Over Imdahl: commons 4 and 5, big pictures under two numbers. Not
+  shown, as before.
+* Desert Nightmare: commons 6, 8, 10 and 12, its picture menus, hundreds of
+  320x240 pictures under nine or ten numbers. Not shown, as before.
+* Vampires Dawn: the body that shows `VDWelt` does not compile, so nothing.
+* A Blurred Line: common 16 (`DisplayNameMenu`, automatic on switch 340)
+  reaches common 21's six `Aura…Menu`, all under number 1: the cartridge
+  carries them, six big pictures more (15 where it carried 9), but in the
+  port nothing turns 340 on —only commons 12 and 14 do, which only the
+  handheld console reaches, and a custom menu replaces it—, so they are
+  never shown: cartridge spent for nothing. A rule that left out the
+  automatic common events whose switch nothing starts —what
+  `common_pages.rs` already asks for its copies, plus the switch items,
+  which it does not count— would save them.
+
+What is still as this draft says: **the small pictures** of every such
+body, which need a map's sprite bank, and the big ones a body stacks.
