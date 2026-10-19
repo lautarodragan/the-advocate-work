@@ -34,5 +34,6 @@ that reads `GAME_DIR` on its own would skip the patches. The `.json`
 records are merged into the dump, as `chipsets/` is today.
 
 **How**: first the mechanical move —`git mv`, with each old name in the
-ports' `RENAMES.md`, ABL's ROM byte for byte equal—, then the rules and
+ports' `RENAMES.md`, ABL's ROM byte for byte equal—; the debug map's new id, which
+changes the ROM, apart; then the rules and
 the docs, in their own commit.
