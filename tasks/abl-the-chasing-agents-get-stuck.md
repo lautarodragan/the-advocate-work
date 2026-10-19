@@ -2,7 +2,7 @@
 name: "ABL: the chasing agents get stuck"
 description: "In the scene where the agents chase the hero down the wooden scaffolding, they get stuck easily, and on the upper stretch they seem unable to reach the hero; to compare with the original"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Calandria]
 ---
@@ -77,3 +77,5 @@ does too was not checked, and playing normally the game never puts him
 there.
 
 **Nothing to install when merging.**
+
+**2026-10-19, taro**: declared done.

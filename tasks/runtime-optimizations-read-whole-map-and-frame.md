@@ -2,7 +2,7 @@
 name: "Runtime optimizations, read whole: the map and the frame"
 description: "Read the map, the characters and the frame of runtime/ file by file for optimizations the book's Optimizations section does not tell"
 type: docs
-status: testing
+status: done
 assignee: taro
 agents: [Cardón]
 ---
@@ -79,3 +79,5 @@ comment in `low_ram.s` says the table is copied "by one DMA"; it is a
 loop —a stale comment, not a bug—.
 
 Nothing to install: only the book changed.
+
+**2026-10-19, taro**: declared done.

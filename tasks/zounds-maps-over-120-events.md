@@ -2,7 +2,7 @@
 name: "Zounds: four maps have more events than the console's 120"
 description: "Maps 47 (284 events), 51 (214), 57 (131) and 178 (327) lose 155, 88, 8 and 206 pages that run; they are grids of identical info/coin/rock events the twin folding does not catch because each carries its own commands"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Carpintero]
 ---
@@ -128,3 +128,5 @@ which is not stopped. Captures: `/shared/captures/2026-10-17-zounds-events/`.
 Branches `carpintero-zounds-events` in the-advocate, the ports and the
 book. When merging, reinstall `convert` and `events`; `cartridge` did not
 change (the runtime comes from the checkout).
+
+**2026-10-19, taro**: declared done.

@@ -2,7 +2,7 @@
 name: "CallEvent as a real call"
 description: "A CallEvent to a common event or another event's page compiles to a call into one shared body with a return, instead of pasting the body at every caller; the call stack as deep as RM2k's"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Carpintero]
 ---
@@ -205,3 +205,5 @@ assembles it from the checkout it was installed from—, and ABL's
 merged tools). Branches `carpintero-calls` in the-advocate, the ports
 (one commit, the shared-call test's labels) and the book; all three
 merged with their `main` of 2026-10-15 evening.
+
+**2026-10-19, taro**: declared done.

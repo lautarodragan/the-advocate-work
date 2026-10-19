@@ -2,7 +2,7 @@
 name: "Runtime optimizations, read whole: battle and audio"
 description: "Read the battle and the audio of runtime/ file by file for optimizations the book's Optimizations section does not tell"
 type: docs
-status: testing
+status: done
 assignee: taro
 agents: [Mulita]
 ---
@@ -91,3 +91,5 @@ Links and anchors of the touched pages checked against `mdbook build`.
 No questions for taro: what was left out was small, and it is listed
 above. No drafts: no dead code or bug found, only the two stale comments.
 Nothing to install: only the book changed.
+
+**2026-10-19, taro**: declared done.

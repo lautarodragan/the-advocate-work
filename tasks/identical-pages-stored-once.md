@@ -2,7 +2,7 @@
 name: "Identical pages stored once"
 description: "Pages whose compiled bytecode is identical are stored once per map and shared through the page table, which already points with 24 bits: Frozen World's map 1 drops from 90 KB to 69 KB, measured"
 type: refactor
-status: testing
+status: done
 assignee: taro
 agents: [Carpintero]
 ---
@@ -88,3 +88,5 @@ on purpose. Frozen World's shared pages run in no test: it has no suite.
 Branches `carpintero-shared-pages` in the-advocate and the book (the
 ports' has no commit). **When merging, install `convert`**: `just install
 convert`.
+
+**2026-10-19, taro**: declared done.
