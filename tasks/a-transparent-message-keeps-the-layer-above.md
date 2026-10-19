@@ -34,7 +34,12 @@ instead of from transparent. What it costs:
 * **Where the layer's tiles are read from**: VRAM can only be read in
   vblank; the map's decompressed tiles in WRAM or ROM are cheaper.
 * **The map moving while the text is up** (a parallel event, a pan):
-  the baked cells would have to be baked again.
+  the baked cells would have to be baked again. **Out of the first phase**
+  (taro, 2026-10-19): looked into within this task, and implemented with
+  the base case only if it turns out free; otherwise it goes to the
+  wishlist as its own task, and the build warns in its log on every map
+  where the camera can move while a transparent message is up. taro
+  remembers no such case in ABL, and it would hurt reading anyway.
 
 **First step**: how many transparent messages the ports show over tiles
 of the layer above, and on which maps, before choosing.
