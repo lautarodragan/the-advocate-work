@@ -2,8 +2,8 @@
 name: "A paid inn shows no gold window, and \"Yes\" can be picked without the gold"
 description: "ShowInn with a price: the greeting comes without the gold window, and Yes is not greyed out when the party cannot pay"
 type: bug
-status: doing
-assignee: Hurón
+status: testing
+assignee: taro
 agents: [Tijereta, Hurón]
 ---
 
@@ -26,3 +26,71 @@ easyrpg: `SetShowGoldWindow(true)`, `PushChoice(accept, can_afford)`).
 **How to see it**: talk to the bum below him at (91, 28) on map 20 with
 fewer than 5 credits; `rpgmaker/test_inn.py`'s
 `test_without_gold_it_neither_charges_nor_heals` is that case.
+
+## Hurón, 2026-10-19: the plan
+
+From Tijereta's branches (the-advocate `35dcc348`, the ports `71e7528`, the
+book `7a83e9f`), in `huron-inn-gold` of each.
+
+What RM2k does, from easyrpg's `CommandShowInn` and `Window_Message`: the
+gold window is `Window_Gold`, 88x32 at the right edge, at the top of the
+screen unless the message is at the top, then at the bottom; the number
+right-aligned in colour 0 and the gold term after it in colour 1. "Yes" is
+pushed with `can_afford`, which the window draws in `Font::ColorDisabled`
+—System colour 3— and which A refuses with the buzzer, the choice staying
+open. Cancel is never refused.
+
+What there is to reuse, measured:
+
+* The shop's gold is a text screen's, not the map's: nothing to take.
+* The greys —skills, items, the title's "Load"— are all text screens or
+  baked menus. The message window composes its letters from tables with
+  the colour baked in —`font_pre*`, 117 KB—, so a second colour there is
+  new work. RM2k's ShowChoice cannot grey an option, only the inn does.
+* The message arrow is already drawn as objects in a window without a
+  background, where the map has room past its sprite bank and a free
+  sprite palette (`arrow_objs`): the gold window goes the same way, in the
+  same palette, after the arrow's two tiles.
+
+The plan:
+
+* **Greyed option**: no new opcode. The inn compiles to `OP_INN 3` —"the
+  next choice is the inn's: its gold window, and Yes greyed"— and a gold
+  branch that, with the price paid for, goes through `OP_INN 4` —"Yes not
+  greyed"—. The choice's pick moves out of bank 0 into FAR3, where it
+  refuses A on a greyed option. The grey is a recolour of each letter just
+  composed on a greyed line, glyph pixels only, to the window palette's
+  nearest entries to System colour 3: the palette has no room for a grey
+  of its own (the backgrounds start right after it).
+* **Gold window**: 44 8x8 objects, in the arrow's sprite palette, with the
+  window's colours plus the free entries of that palette for the term's.
+  The converter draws the empty window with the term; the console composes
+  the number into a copy of its middle two rows when the box opens and
+  uploads one row of tiles per line the composer uploads.
+
+## Hurón, 2026-10-19: done, to testing
+
+Done as planned, in the-advocate `huron-inn-gold` (`d76bb565`, the window
+selection fix `3a3d2883`), the ports `huron-inn-gold` (tests `539adb2`,
+goldens `fd4788e`) and the book `huron-inn-gold` (`e327f4d`), each merged
+with `tijereta-inns` after Tijereta brought `hornero-integ` into it.
+
+* No new opcode: `OP_INN` 3 and 4 (`INN_GOLD_WINDOW`, `INN_AFFORDED` in
+  rm2k-snes-bytecode). `SAVE_BYTES` does not change: the state is far RAM
+  that lives from `OP_INN 3` to the choice's pick.
+* Bank 0 gets bytes back: the choice's pick moved to FAR3. Measured with
+  `just space` after the merge: `release` 124 B, the tightest,
+  `test-change-system`, 69.
+* `window_systems` has a tenth piece per System, `window_gold`;
+  `window_select` multiplied by 27 by hand and now by 30, with an assert.
+  The change-system goldens caught it.
+* Map 200 has no room for the window (its eight sprite palettes are
+  taken): `inn-no-gold-window` per map in `degradations.json`, a known
+  issue on ABL's page and the draft
+  [`map-200-has-no-room-for-the-gold-window`](map-200-has-no-room-for-the-gold-window.md).
+* Compared with the 2015 RPG_RT under Wine, starting a copy of ABL at map
+  20: `/shared/captures/2026-10-19-inn-gold-window/`. What differs is in
+  the book, `divergences/what-the-inn-s-gold-window-does-not-model.md`.
+
+**To install when merging**: `cartridge events screens mapdata convert`
+—plus whatever `tijereta-inns` asks for—.
