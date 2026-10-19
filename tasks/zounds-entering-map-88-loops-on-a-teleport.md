@@ -2,8 +2,8 @@
 name: "Zounds: entering map 88 loops on a teleport"
 description: "Entering 'Desierto de Urbaddun / Mountains / Oeste de la Grieta / Secreton / 4 - Desert' (map 88) leaves the hero unable to move or leave: Get Outta Map's autostart pages, conditioned on variables 7 and 8, seem to fire with both still at 0 and teleport in a loop"
 type: bug
-status: doing
-assignee: Calandria
+status: testing
+assignee: taro
 agents: [Calandria]
 ---
 
@@ -76,3 +76,21 @@ test in `game.rs`. Only `rm2k-snes-events` changes; ABL is a 2000 game.
 On the way, a divergence that was not the cause: what a parallel common
 event writes is refreshed a frame late —draft
 [`a-parallel-common-events-write-refreshes-pages-a-frame-late`](a-parallel-common-events-write-refreshes-pages-a-frame-late.md)—.
+
+Verified on the branches, with `rm2k-snes-events` installed locally
+(`just install-local .local-tools events`): `just test` in the-advocate
+green; the ports' `just boot`, 68 passed, Zounds' tests among them, the
+new one too; ABL's `just tests`, 1577 passed and 2 skipped, and its
+`abl.sfc` byte for byte the one main's tools build
+(`11375e00…`) —ABL is a 2000 game, so nothing of it changes—. What the
+suite does not cover: the other 13 Zounds maps whose pages compare with
+`==`, `>`, `!=` or `<`, which now behave differently and nobody has played
+through; it is taro's to see playing.
+
+**To install when merging**: `just install events`, from
+`~/the-advocate`. Only that crate changed.
+
+To test: walk into the desert west of map 87 —the way north to the pyro
+sword— and across it; at its west, north and south edges the hero is sent
+back to the middle, and a key press gives control back.
+
