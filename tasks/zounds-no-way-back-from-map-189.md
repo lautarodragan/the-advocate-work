@@ -2,7 +2,7 @@
 name: "Zounds: no way back from map 189"
 description: "Map 44's event 7 teleports to map 189 (5 > Arriba), whose exits back to 44 do not work on the console; EasyRPG crashes on that map"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Calandria]
 ---
@@ -71,3 +71,5 @@ which no test plays.
 
 **To install when merging**: `just install cartridge` (only the runtime
 changed; the path of `runtime/` goes into the cartridge binaries).
+
+**2026-10-19, taro**: fixed, playing Zounds; they went on to the rest of the rift and north of the desert. Done.
