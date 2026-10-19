@@ -2,8 +2,8 @@
 name: "The Book of Three: a night's rest in a scene has no fade or music"
 description: "The game uses ShowInn as the night passing in several scenes; the port heals on the spot, without the inn's fade to black and its jingle"
 type: bug
-status: doing
-assignee: Tijereta
+status: testing
+assignee: taro
 agents: [Tijereta]
 ---
 
@@ -104,3 +104,26 @@ the Python parity hash of the compilation's `maps` moved on purpose, see
 `just tests`, with no golden moved; and `just boot` from the ports root.
 The two new ROM tests were red with the global tools: the bum healed at
 full brightness.
+
+Measured with the branch's tools: `just crate-test events` (155 + 5 + 8),
+`just test` (29), `just lint`; ABL's suite 1582 passed, 2 skipped, no
+golden moved, `abl.sfc` `84bfa9a11fe05e21`; `just boot` 74 passed, with
+one new golden, `book-of-three-m-campfire-night` —the scene going on after
+the night: the camp is tinted black before it, so the night is black over
+black and is heard, not seen—. `milestone-campfire`'s end golden did not
+move. **Bank 0**, `just space` in ABL: `test-change-system` is the
+tightest, at 14 bytes left; `release` 69.
+
+**What no test covers**: the MSU-1 path of the wait —the track told to
+stop repeating, and its playing bit—; an inn whose music the cartridge
+does not carry, or the same song as the map's; a night started over a
+screen an event already erased; and the paid inn with an inn music,
+which no game has (ABL's paid inns play `(OFF)`).
+
+**When merging**: reinstall `events`, `convert` and `cartridge` —the
+opcode and the runtime change—. `SAVE_BYTES` does not change: nothing of
+the inn travels in the save. Carpintero's `PlayBGM` work had not landed in
+`main` when this was handed back; the inn goes through `op_bgm`, see
+above. Captures in `/shared/captures/2026-10-19-inns/`, the camp's night
+heard in `/shared/audio/2026-10-19-inns/`. Branches `tijereta-inns` in the
+three repos; draft: `an-inn-has-no-gold-window`.
