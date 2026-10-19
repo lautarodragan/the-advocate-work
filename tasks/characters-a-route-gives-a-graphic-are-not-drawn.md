@@ -46,3 +46,20 @@ such events (the converter already knows them, `route_graphics`), and
 what that costs in rows on the busiest maps. The command-34 graphics go
 through the same per-map table as
 [`frozen-world-map-2-route-graphic-changes-past-the-table`](frozen-world-map-2-route-graphic-changes-past-the-table.md).
+
+## Work (2026-10-19, Calandria)
+
+Branches `calandria-route-graphics` in the-advocate (from `9592b88b`), the
+ports (from `c420032`) and the book.
+
+* The events compiler's scan says, for each page, which graphics its
+  compiled routes give which events: `route_graphics`, `[event index,
+  graphic index]`, walked from the bytecode like `route_targets`.
+* Wally gives an event whose pages all draw nothing and that some route
+  dresses with a graphic that has pixels a hidden row of its own
+  (`dressed_by_routes`), whose graphic follows its pages: a page that
+  becomes active hides it again, as `SetupFromPage` does. The runtime
+  needed nothing: `change_graphic` already dresses a row.
+* The Book of Three: 37 events on the 14 maps get a row, and the converter
+  says which (`a route dresses them: a hidden row each`). Captures of the
+  scenes before and after: the characters show.
