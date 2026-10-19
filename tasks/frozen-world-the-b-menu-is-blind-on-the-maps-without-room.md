@@ -2,7 +2,9 @@
 name: "Frozen World: the B menu is still blind on the maps without room for it"
 description: "On the maps whose sprites have no room for the menu's three pictures besides their own, B opens the menu and nothing is drawn, as before"
 type: bug
-status: draft
+status: doing
+assignee: Mulita
+agents: [Mulita, Aguará]
 ---
 
 Seen by Mulita on 2026-10-17, with the-advocate `939a8bd7` (branch
@@ -29,3 +31,21 @@ Measured again by Aguará on 2026-10-19 with the menu's own flat pictures
 same 22 maps are blind, and each map still takes the three pictures in 18
 objects and 320 tiles, as the converter's log says: drawing them flat and
 smaller (88x56 against 88x59 scaled) does not move the count.
+
+## Taken (2026-10-19)
+
+taro: "this menu is not optional — the game is not playable without it".
+Mulita takes it, to measure the ways out and implement the cheapest that
+always draws it. taro's options, from the one they find most acceptable:
+
+1. reserving it VRAM —and a palette, or sharing one of the map's whose
+   colours are close enough, as the timer's red digits do in ABL; that
+   second part only if it is needed, later—, and something else degrades;
+2. the whole width, with tiles loaded in HBLANK;
+3. the whole width and at the bottom edge: HBLANK to load, VBLANK for the
+   way out, and a mode change if wanted;
+4. a full-screen screen of its own, which owns VRAM like RM2k's menus.
+
+Plus the draft's own: uploading the shown picture's tiles when it is
+shown, with room for the biggest of the three, since only one is up at a
+time (option 5 of the research "More pictures at once").
