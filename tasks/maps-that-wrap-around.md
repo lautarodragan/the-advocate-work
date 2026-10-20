@@ -2,7 +2,8 @@
 name: "Maps that wrap around"
 description: "A map with Wrap (scroll_type) is a torus in RM2k —hero, events, camera—; the console stops everything at its edges. Twelve maps of Zounds, Vampires Dawn and Sunset use it; on Zounds 70 it hides a room"
 type: feature
-status: todo
+status: doing
+assignee: Hurón
 ---
 
 Opened by Hurón on 2026-10-19, from the research
