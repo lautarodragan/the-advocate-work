@@ -74,10 +74,17 @@ Since 2026-10-15 it compiles (Calandria, task
 [`book-of-three-reraise-and-eilonwy-dont-compile`](book-of-three-reraise-and-eilonwy-dont-compile.md)),
 so it does run every frame.
 
-What a compiler could see: nothing in it reads anything that changes on
-the map —HP and conditions only change in battle, by items, by events or
-by the menu—, so it could run only after each of those (the end of a
-battle, closing the menu, a page that touches HP or conditions), the way
-the "pure" common events already run only when what they read changes
-(Aguará's `commons::pure`, 2026-10-12). It is the same idea extended to
-reads of HP and conditions.
+What a compiler could see: what it reads, HP and conditions, changes
+only at known moments —in battle, by items, by events, by the menu, and
+on the map by a condition that hurts while walking (poison) or by a
+terrain that damages—, so it could run only after each of those (the end
+of a battle, closing the menu, a page that touches HP or conditions, a
+step that hurts), the way the "pure" common events already run only when
+what they read changes (Aguará's `commons::pure`, 2026-10-12). It is the
+same idea extended to reads of HP and conditions.
+
+*Corrected on 2026-10-20 (taro)*: this paragraph said HP and conditions
+do not change on the map. They do in RM2k —a condition like poison, a
+terrain that damages—; the console does not do either yet, but will
+soon, and the optimisation has to count them as one more moment to run
+after.
