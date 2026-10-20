@@ -7,10 +7,12 @@ assignee: taro
 agents: [Calandria]
 ---
 
-taro, on 2026-10-20: "podrías arreglar los infinitos errores de
-ortografía del Zounds? Tiene cosas básicas como 'save' en vez de 'sabe',
-creo que falta alguna que otra 'h', expresiones como 'uy' o 'ay' mal
-escritas, y seguramente otros horrores que en este momento olvido".
+taro, on 2026-10-20:
+
+> podrías arreglar los infinitos errores de ortografía del Zounds? Tiene
+> cosas básicas como "save" en vez de "sabe", creo que falta alguna que
+> otra "h", expresiones como "uy" o "ay" mal escritas, y seguramente
+> otros horrores que en este momento olvido
 
 **Where**: in the game's own data, in `~/juegos/zounds` —taro's repo,
 retouched with their approval like the cave's doorways and its song—,
