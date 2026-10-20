@@ -6,10 +6,11 @@ status: done
 assignee: taro
 ---
 
-From taro, on 2026-09-28: "when holding down a directional arrow inside the
-menu, after ~1s, it should start moving the selection continuously in that
-direction, at a rate of ~10 items per second (check easy rpg's code to
-confirm)".
+From taro, on 2026-09-28, in their words, translated:
+
+> when holding down a directional arrow inside the menu, after ~1s, it
+> should start moving the selection continuously in that direction, at a
+> rate of ~10 items per second (check easy rpg's code to confirm)
 
 ## What the original does
 

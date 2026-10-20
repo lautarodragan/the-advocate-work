@@ -13,12 +13,15 @@ using the MSU-1 is acceptable; with 46 free banks of 64 KB and the game's
 pictures estimated at ~430 KB with LZ2, Hornero thinks they fit in the ROM
 without breaking `decisions/the-game-is-playable-without-msu-1.md`.
 
-taro's idea for drawing them in mode 3, which has two layers: "in practice
-most ShowPictures prevent moving while they are shown. I don't know if they
-freeze other things, like event movements or animated tiles, but I wouldn't
-rule out the possibility of baking the picture or map layers at runtime, or
-not showing events while a picture is shown. It isn't something that always
-works, but I think in many cases it does".
+taro's idea for drawing them in mode 3, which has two layers, in their
+words, translated:
+
+> in practice most ShowPictures prevent moving while they are shown. I
+> don't know if they freeze other things, like event movements or
+> animated tiles, but I wouldn't rule out the possibility of baking the
+> picture or map layers at runtime, or not showing events while a
+> picture is shown. It isn't something that always works, but I think in
+> many cases it does
 
 Our own custom menu, with mode 5 and a font, went to the wishlist:
 `custom-menu-of-our-own-not-made-of-pictures.md`. This comes before: the pictures as RM2k uses

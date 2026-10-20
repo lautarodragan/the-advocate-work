@@ -34,7 +34,10 @@ smaller (88x56 against 88x59 scaled) does not move the count.
 
 ## Taken (2026-10-19)
 
-taro: "this menu is not optional — the game is not playable without it".
+taro:
+
+> this menu is not optional — the game is not playable without it
+
 Mulita takes it, to measure the ways out and implement the cheapest that
 always draws it. taro's options, from the one they find most acceptable:
 

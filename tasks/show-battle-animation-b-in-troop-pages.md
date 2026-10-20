@@ -38,8 +38,10 @@ animation on a monster, which it does not do for anything today (see
 ## Done (Tijereta, 2026-10-14): accepted as a debt
 
 From the-advocate `14e200fc` and the ports `f775b66`, branch
-`tijereta-bot-fixes` in both. taro: "we can ignore it for now so the page
-doesn't fall; not having this command shouldn't stop anyone from playing".
+`tijereta-bot-fixes` in both. taro:
+
+> we can ignore it for now so the page doesn't fall; not having this
+> command shouldn't stop anyone from playing
 
 * `SHOW_BATTLE_ANIMATION_B` (13260) in `codes.rs`, checked against liblcf's
   name like the others.

@@ -15,8 +15,11 @@ parallel modifying the tools often. What was agreed:
 - Python is linked whole (the eight executables), because it costs nothing and
   each script resolves its modules from its real checkout;
 - Rust is installed there **only for the project the agent modifies**. From
-  taro: "it's important that no subagent runs an unnecessary Rust
-  compilation. They're costly";
+  taro, in their words, translated:
+
+  > it's important that no subagent runs an unnecessary Rust compilation.
+  > They're costly
+
 - `tools/comun/ejecutable.py` goes: it resolved the same thing implicitly;
 - on merging, whoever merges reinstalls in the global only the Rust
   the branch touched.

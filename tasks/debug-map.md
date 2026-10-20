@@ -8,6 +8,8 @@ assignee: taro
 
 # What taro asked for
 
+In their words, translated:
+
 > could you create a new map, for debug, that has doors leading to
 > different key maps, each with a sign saying its destination? the idea
 > would be for begin game to start there. one door would take you to the

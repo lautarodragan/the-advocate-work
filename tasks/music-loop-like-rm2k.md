@@ -6,7 +6,12 @@ status: todo
 agents: [Hornero]
 ---
 
-Measured on 2026-10-11 by Hornero, at taro's request ("we still have the music loop issue on the msu pending, and I don't know whether we already do it right without msu or not"), with `abl.sfc` `24dd24ad…` and the tools at `6f933ff8`.
+Measured on 2026-10-11 by Hornero, at taro's request, in their words, translated:
+
+> we still have the music loop issue on the msu pending, and I don't
+> know whether we already do it right without msu or not
+
+With `abl.sfc` `24dd24ad…` and the tools at `6f933ff8`.
 
 **What RPG_RT does**, according to easyrpg-player (`src/midisequencer.cpp`, `audio_decoder_midi.cpp`): on finishing —the MIDI's last event, not the last note— it goes back to the loop mark, a Control Change 111 on any channel, or to the start if there is none. The first time it skips the silence at the start and begins at the first note, unless there is a SysEx before it; on looping back, it doesn't.
 
@@ -30,4 +35,9 @@ What it would take: the length up to the end of the track, not the last note; CC
 
 ## How the tail goes in the `.pcm`, with taro
 
-taro, on 2026-10-11: cutting the tail abruptly would sound ugly; "we'd have to have a version of the start of the song that has the tail of the end and loop from 0 + len(tail)". That's how it is done: render the pass and, without resetting the synthesiser, the beginning of the next one —fluidsynth with the MIDI twice and `player.reset-synth=0`—, end the track at E + D and put the loop point at L + D, with E the end of the first pass, L the loop point (CC111, or 0) and D how long the tail lasts, with margin. After D seconds the previous tail has already died out, so E + D and L + D sound the same and the jump isn't heard; the tail of the first pass sounds whole, stuck onto the beginning of the second. With the initial silence skipped (length S), the loop point is `max(L + D, S)` counted from S. Without MSU-1 nothing is needed: the stream is made of notes, and the DSP's reverb carries on through the loop.
+taro, on 2026-10-11: cutting the tail abruptly would sound ugly. In their words, translated:
+
+> we'd have to have a version of the start of the song that has the tail
+> of the end and loop from 0 + len(tail)
+
+That's how it is done: render the pass and, without resetting the synthesiser, the beginning of the next one —fluidsynth with the MIDI twice and `player.reset-synth=0`—, end the track at E + D and put the loop point at L + D, with E the end of the first pass, L the loop point (CC111, or 0) and D how long the tail lasts, with margin. After D seconds the previous tail has already died out, so E + D and L + D sound the same and the jump isn't heard; the tail of the first pass sounds whole, stuck onto the beginning of the second. With the initial silence skipped (length S), the loop point is `max(L + D, S)` counted from S. Without MSU-1 nothing is needed: the stream is made of notes, and the DSP's reverb carries on through the loop.

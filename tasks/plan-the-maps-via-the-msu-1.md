@@ -8,8 +8,11 @@ assignee: taro
 
 From taro, on 2026-10-01, when asking about more maps. Already decided: the
 cartridge stays at 4 MB (`decisiones/el-cartucho-se-queda-en-4-mb.md`), and
-taro said on 2026-09-27 that "at this rate, neither 6 MB nor 8 MB will
-let us cover the whole game". The battle backgrounds already go through the `.msu`
+taro said on 2026-09-27, in their words, translated:
+
+> at this rate, neither 6 MB nor 8 MB will let us cover the whole game
+
+The battle backgrounds already go through the `.msu`
 (`internals/the-msu-file.md`). This is a study with numbers, without
 implementing: it's what defines how far the cartridge goes, and it's worth doing
 before adding more chapters. Later taro's question about

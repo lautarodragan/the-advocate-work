@@ -7,12 +7,19 @@ assignee: taro
 ---
 
 From taro, on 2026-10-02, with the plan in
-[`research/2026-10-02-the-test-game.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-02-the-test-game.html) (Leñatero, phase 1):
-"I'd start by making sure all of ABL's things exist in a single
-place. In fact, I think I'd take them out of the repo and move them to a repo
-of their own, and `git init` there". Without `git filter-repo`: "we still have the git
-log here, and what's going to stay on ABL's side should be very little". The new
-repo is born from scratch with today's files.
+[`research/2026-10-02-the-test-game.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-02-the-test-game.html) (Leñatero, phase 1),
+in their words, translated:
+
+> I'd start by making sure all of ABL's things exist in a single place. In
+> fact, I think I'd take them out of the repo and move them to a repo of
+> their own, and `git init` there
+
+Without `git filter-repo`, in their words, translated:
+
+> we still have the git log here, and what's going to stay on ABL's side
+> should be very little
+
+The new repo is born from scratch with today's files.
 
 The risk Leñatero pointed out: between this phase and phase 2 the engine is left without
 ROM tests of its own. That's why phase 2 comes right after.

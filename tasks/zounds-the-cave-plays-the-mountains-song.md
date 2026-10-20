@@ -48,7 +48,9 @@ What to do, if anything, is taro's: the data is their game's.
 
 ## taro's decision (2026-10-20)
 
-> Dale, usemos la canción del calabozo en los mapas del calabozo en
+In their words, translated:
+
+> Go ahead, let's use the dungeon's song in the dungeon's maps in
 > Zounds.
 
 The dungeon's maps play `Zounds_Dungeon_01`, changed in the

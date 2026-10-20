@@ -8,7 +8,10 @@ agents: [Mulita]
 ---
 
 From taro, on 2026-10-10: all the documentation in one place, the book
-(`snes-rm2k-docs`), in English: "The book is for people and for AIs".
+(`snes-rm2k-docs`), in English; in their words, translated:
+
+> The book is for people and for AIs
+
 This task is one of four in parallel; the common conventions are in
 Hornero's brief, and Hornero builds the final `SUMMARY.md`, deletes the
 originals and updates the references.

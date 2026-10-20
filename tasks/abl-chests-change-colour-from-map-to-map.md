@@ -99,9 +99,13 @@ original there means playing to it or editing a copy's start; the sheet at
 15 bits over the exact background stands in), the other 30 maps that lend,
 and the rain that does not fit on 38.
 
-**taro, 2026-10-17**, on phase 1: "Excelente experimento y análisis!! Creo
-que los puntos 1 y 2 deberían ser una mejora en general (sobre todo el 2).
-Y coincido con que M se ve claramente mejor." Phase 2, Carpintero: steps 1
+**taro, 2026-10-17**, on phase 1, in their words, translated:
+
+> Excellent experiment and analysis!! I think points 1 and 2 should be an
+> improvement in general (especially 2). And I agree that M looks clearly
+> better.
+
+Phase 2, Carpintero: steps 1
 (the nearest colour by a distance that sees hue) and 2 (the borrowed
 palette chosen over the poses the map shows, by distance), each on its
 own, measured over the 31 maps that borrow and every game; then the cost

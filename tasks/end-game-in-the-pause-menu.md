@@ -6,7 +6,9 @@ status: done
 assignee: Yaguareté
 ---
 
-From taro, on 2026-09-28: "make End Game work properly".
+From taro, on 2026-09-28, in their words, translated:
+
+> make End Game work properly
 
 In RM2k, End Game opens `Scene_End`: a window that asks whether to return
 to the title, with "Yes"/"No" (the LDB's terms), and "Yes" fades the screen

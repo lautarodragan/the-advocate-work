@@ -18,8 +18,12 @@ map. The research on the windows
 section 4) measured a face's palette written by HDMA on the window's lines.
 When doing it, remove it from that list.
 
-taro, on 2026-10-15: "I'm assuming it will be too complicated, but that is
-assuming without evidence". Launched on Fable: measure first, then build
+taro, on 2026-10-15:
+
+> I'm assuming it will be too complicated, but that is assuming without
+> evidence
+
+Launched on Fable: measure first, then build
 the first version that fits.
 
 ## Measured (Tijereta, 2026-10-15, ports `f015801`)

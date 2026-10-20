@@ -7,15 +7,20 @@ agents: [Carpintero]
 ---
 
 taro, on 2026-10-12: the Diff photos already zoom in mode 7, from
-screenshots baked by the game's author. "Could we 'bake' the screen we are
-showing in mode 3 into mode 7? I think there is nothing like a frame
-buffer, so we would have to compose everything with tiles in mode 7's only
-BG layer, merging all the layers at run time (objects included?)… without
-going over VRAM or tiles… and without the process taking more than .5 s so
-that it is not too disruptive… I don't see it very feasible, but not
-impossible either. Maybe it's worth exploring?" And: "could the SA-1 do it
-in its own RAM without interrupting the main CPU, and then upload it to
-VRAM?"
+screenshots baked by the game's author:
+
+> Could we 'bake' the screen we are showing in mode 3 into mode 7? I
+> think there is nothing like a frame buffer, so we would have to compose
+> everything with tiles in mode 7's only BG layer, merging all the layers
+> at run time (objects included?)… without going over VRAM or tiles… and
+> without the process taking more than .5 s so that it is not too
+> disruptive… I don't see it very feasible, but not impossible either.
+> Maybe it's worth exploring?
+
+And:
+
+> could the SA-1 do it in its own RAM without interrupting the main CPU,
+> and then upload it to VRAM?
 
 ## Why it is worth it
 
@@ -158,10 +163,12 @@ untouched. **The recommendation does not change.**
 
 ### taro, 2026-10-13: the research stays, the zoom waits
 
-"Let's not change anything yet. If we decide to implement the zoom and we
-see it working, then we'll decide whether to change ABL. For now, let's
-leave the research in the book and that's it. Having other transitions has
-less priority than bug fixing and implementing RPG Maker features or
-commands we don't have yet. It can stay in the wishlist for now. As long as
-it doesn't block anything, we're fine." So: wishlist, with the research
+> Let's not change anything yet. If we decide to implement the zoom and
+> we see it working, then we'll decide whether to change ABL. For now,
+> let's leave the research in the book and that's it. Having other
+> transitions has less priority than bug fixing and implementing RPG
+> Maker features or commands we don't have yet. It can stay in the
+> wishlist for now. As long as it doesn't block anything, we're fine.
+
+So: wishlist, with the research
 done; ABL keeps the mosaic to start a battle.
