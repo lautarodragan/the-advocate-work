@@ -84,3 +84,25 @@ composer —where Tijereta works on `\c` and `\s`— is not touched.
 case: four boxes, each must have a face and no bare bit, and two goldens,
 Unamë's (face left) and Kazar's (face right). Red before the fix ("box 0
 has a face and no background"), green after.
+
+## Where it is (Chajá, 2026-10-20)
+
+Committed: the-advocate `chaja-ship-messages` cd47a250 (the fix), the
+ports' `chaja-ship-messages` 5e68a29 (case and test) and 49a1c91
+(goldens), the book's `chaja-ship-messages` 6a820e2 (the divergence and
+the CGRAM page). Captures before, after and difference, with a contact
+sheet and a README, in `/shared/captures/2026-10-20-zounds-ship-messages/`.
+
+Measured, with `project cartridge convert mapdata` installed locally from
+hornero-integrate: A Blurred Line's `abl.sfc` is byte for byte the same
+with and without the fix (it has no faces); `just space`: Zounds' bank
+$C1 10 bytes less, ABL's unchanged. ABL's suite: 13 red (save and title
+slots, the menu after the slots, the pump of map 83, battle skill
+results, the rain's sound), which the fix cannot touch since the ROM is
+the same. `just boot`: 3 red, Zounds' record player's bar and the two of
+the skill screen, red too with the fix taken out. Likely cause of both:
+the other binaries —battle, events, images, screens, wally— are the
+global install's, older than hornero-integrate; not followed.
+
+Left: merging `origin/main` of the-advocate and `main` of the others into
+the branches, and the task to `testing`.
