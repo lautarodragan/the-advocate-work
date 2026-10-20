@@ -73,3 +73,19 @@ not in the game) and no skill belongs to a subskill set (none has a
 shows.
 
 Zounds is the only 2003 game among the ports.
+
+## Where it is (Cardón, 2026-10-20)
+
+Branches `cardon-2003-commands` in the-advocate (`44f5c211`, origin/main
+merged), the ports (`a3f94da`, main merged) and the docs (`babb2b9`, main
+merged). Done and committed: `command_names` in the battle's rules,
+`texts.commands` in the model, `actor_command_txt` in the converter and
+the runtime, the test and goldens `zounds-battle-commands-uname`/`-kazar`
+(red with 5971f850: 785 pixels), the divergence "A 2003 game's battle
+commands", Zounds' page and the draft
+[`a-2003-actor-s-command-window-is-the-2000-one`](a-2003-actor-s-command-window-is-the-2000-one.md).
+Measured: `just test`, `rust-test`, `lint` green; ABL's suite 9 red, 8 of
+them red with the base tools too (slots/save/title goldens, delcentric
+pump 83, rain), the ninth (`test_menu_custom_ways_in[1-bsnes]`) green on a
+rerun. Left: `just boot` was running; then the final notes here and
+`testing`.
