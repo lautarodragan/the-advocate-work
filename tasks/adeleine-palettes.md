@@ -16,7 +16,9 @@ Its script, `build2.py`, is in `/extras/scratch/calandria/uruya/`.
 It pays off in everything Adeleine splits into palettes: sprites, the pictures,
 the maps in mode 1, the panoramas, the battle.
 
-taro, on 2026-10-06: "let's go with Adeleine's palettes", to Codex.
+taro, on 2026-10-06, to Codex, in their words, translated:
+
+> let's go with Adeleine's palettes
 
 ## In progress, on 2026-10-06 (Codex)
 

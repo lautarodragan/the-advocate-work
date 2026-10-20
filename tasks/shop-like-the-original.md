@@ -8,7 +8,11 @@ assignee: taro
 
 It was born on 2026-09-28, when taro approved the equipment screen, to write
 down the VRAM matter below. It's what comes after items and equipment. taro
-asked for it on 2026-09-28: "let's go with the shop". Today the shop is still
+asked for it on 2026-09-28, in their words, translated:
+
+> let's go with the shop
+
+Today the shop is still
 on black and with the ">" (`EQ_CURSOR` still exists because of it). The
 screen is `rom/src/tienda.s`, and the reference is
 `pantallas.pantalla_tienda`.

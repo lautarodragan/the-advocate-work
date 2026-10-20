@@ -11,7 +11,9 @@ taro, on 2026-10-18, looking at the captures of
 `a-window-without-background-hides-the-upper-layer-only-on-its-text-lines`
 (`/shared/captures/2026-10-18-window-upper-layer/`): an improvement, but
 the trees under the window, in Core and Manta's memory, still miss a row of
-tiles. "Can't we get that one back too?"
+tiles:
+
+> Can't we get that one back too?
 
 What that row is: the window's bottom frame row, eight lines, which the
 window keeps in BG2 when the page can show the arrow of a message waiting

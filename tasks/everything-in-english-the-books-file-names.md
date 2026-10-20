@@ -7,10 +7,14 @@ assignee: taro
 agents: [Cardón]
 ---
 
-taro, on 2026-10-12: "I want the URLs and file names in English too. Let's
-find and fix all the references. Let's not modify the git history. I also
-want the ports repo in English. Basically, EVERYTHING in English, but
-without modifying the git history." The rule is in AGENTS.md, "The
+taro, on 2026-10-12:
+
+> I want the URLs and file names in English too. Let's find and fix all
+> the references. Let's not modify the git history. I also want the ports
+> repo in English. Basically, EVERYTHING in English, but without
+> modifying the git history.
+
+The rule is in AGENTS.md, "The
 independent projects are in English".
 
 This task is the book and the citations of it; the ports are

@@ -2,7 +2,9 @@
 name: "A forced route that turns a switch on or off leaves its page out"
 description: "Move commands 32 and 33 in a MoveEvent are refused, and the whole page with them: 33 pages of Vampires Dawn and one of Sunset over Imdahl on 2026-10-20"
 type: bug
-status: todo
+status: doing
+assignee: Mulita
+agents: [Mulita]
 ---
 
 Seen by Hurón on 2026-10-14, measuring with `just culprits` after
@@ -45,3 +47,22 @@ above —those may have been commands, several to a page; why it went down
 was not traced—, and Sunset's one, map 56, event 5, page 2,
 which is now one of the last four pages Sunset leaves out
 ([`sunset-nine-pages-still-left-out`](sunset-nine-pages-still-left-out.md)).
+
+## It blocks Zounds' first dungeon (2026-10-20, Hornero)
+
+taro, on 2026-10-20, in their words, translated, stuck in the dungeon
+under the crack:
+
+> Maybe what I was missing is the Silver Key, to open CENTRO (START)'s
+> door?
+
+It is. The Llave de Plata is only in map 103's (Cuarto 2) chest, event
+10, whose page with the key needs switch 171 (D1-Cofre Aparecio). The
+only thing in the whole game that turns 171 on is the route of the
+autostart EV0015 there —after the six monsters, it drops the chest
+(event 11, "Cofre Ke cae") with a route that changes its graphic, plays
+two sounds and ends with **move command 32, switch 171 on**—. The
+compiler refuses that route, so the page is left out (`culprits` on
+Zounds' release: map 103, event 15, page 1, the `MoveEvent`), the chest
+never appears and the door of map 59 can't be opened. Zounds joins
+Vampires Dawn and Sunset in this task, and it goes first.

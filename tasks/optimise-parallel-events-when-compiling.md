@@ -8,8 +8,11 @@ status: wishlist
 taro's idea, on 2026-09-26, from what the chips investigation measured
 (`expansion-chips-sa-1-and-s-dd1.md`): on map 11 the 13 parallel pages
 without a wait eat ~123 of the frame's 262 lines, and almost all of them
-compare coordinates. *"It is completely normal for compilers to
-optimise code"*: the converter already is a compiler from RM2k to bytecode.
+compare coordinates. In their words, translated:
+
+> It is completely normal for compilers to optimise code
+
+The converter already is a compiler from RM2k to bytecode.
 
 Ideas, from the cheapest to the most ambitious:
 
@@ -63,15 +66,25 @@ frame on every map** (never in battle): a `ChangeCondition` takes death off
 the whole party, and then, for each actor from 10 to 15, a
 `ConditionalBranch` "has at least 1 HP?" with a `ChangeHP` +1 in its else.
 In practice it only matters right after a battle won: whoever ended it
-fallen leaves with 1 HP. taro: "it's crazy to run this on every frame of
-the game". Since 2026-10-15 it compiles (Calandria, task
+fallen leaves with 1 HP. taro:
+
+> it's crazy to run this on every frame of the game
+
+Since 2026-10-15 it compiles (Calandria, task
 [`book-of-three-reraise-and-eilonwy-dont-compile`](book-of-three-reraise-and-eilonwy-dont-compile.md)),
 so it does run every frame.
 
-What a compiler could see: nothing in it reads anything that changes on
-the map —HP and conditions only change in battle, by items, by events or
-by the menu—, so it could run only after each of those (the end of a
-battle, closing the menu, a page that touches HP or conditions), the way
-the "pure" common events already run only when what they read changes
-(Aguará's `commons::pure`, 2026-10-12). It is the same idea extended to
-reads of HP and conditions.
+What a compiler could see: what it reads, HP and conditions, changes
+only at known moments —in battle, by items, by events, by the menu, and
+on the map by a condition that hurts while walking (poison) or by a
+terrain that damages—, so it could run only after each of those (the end
+of a battle, closing the menu, a page that touches HP or conditions, a
+step that hurts), the way the "pure" common events already run only when
+what they read changes (Aguará's `commons::pure`, 2026-10-12). It is the
+same idea extended to reads of HP and conditions.
+
+*Corrected on 2026-10-20 (taro)*: this paragraph said HP and conditions
+do not change on the map. They do in RM2k —a condition like poison, a
+terrain that damages—; the console does not do either yet, but will
+soon, and the optimisation has to count them as one more moment to run
+after.

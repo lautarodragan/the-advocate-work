@@ -30,8 +30,11 @@ wherever else an image is opened by extension), indexed like a PNG with a
 palette. The study measured with a copy of the game converted to PNG
 (`~/scratch/aguara/zounds/xyz2png.py`).
 
-taro, on 2026-10-15: not worth supporting XYZ in the tools —"I have no
-good reason to use XYZ"—. If some common software converts XYZ to PNG or
+taro, on 2026-10-15: not worth supporting XYZ in the tools:
+
+> I have no good reason to use XYZ
+
+If some common software converts XYZ to PNG or
 BMP, use it once on Zounds and be done.
 
 ## Aguará, on 2026-10-15: done without touching the tools

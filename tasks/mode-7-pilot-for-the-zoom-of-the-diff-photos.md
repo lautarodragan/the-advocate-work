@@ -7,10 +7,13 @@ assignee: taro
 ---
 
 From taro, on 2026-10-02, after seeing Bandurria's video
-(`/shared/captures/2026-10-01-escenas-diff/`): "I'd like to explore using mode
-7. We ruled it out because its use is very brief, but now that I've seen the
-video, I realize it's emotionally striking, and the zoom helps convey the
-emotion much more". Jilguero's study had ruled it out (option F): mode 7's map
+(`/shared/captures/2026-10-01-escenas-diff/`), in their words, translated:
+
+> I'd like to explore using mode 7. We ruled it out because its use is
+> very brief, but now that I've seen the video, I realize it's
+> emotionally striking, and the zoom helps convey the emotion much more
+
+Jilguero's study had ruled it out (option F): mode 7's map
 allows 256 8-bit tiles and a whole photo needs 896.
 
 Done by Chimango, from `main` at `cb333da4`.

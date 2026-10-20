@@ -29,13 +29,16 @@ another game is going to ask for.
 
 # Log
 
-**2026-10-19, taro**, playing Zounds: "a nice to have: showing the panorama
-in this map. Is it feasible?" —`DownLoad Room` (map 32), in `Sala de
-Máquinas` of the Hover Tram—. The map has no panorama of its own; its
+**2026-10-19, taro**, playing Zounds —`DownLoad Room` (map 32), in `Sala
+de Máquinas` of the Hover Tram—:
+
+> a nice to have: showing the panorama in this map. Is it feasible?
+
+The map has no panorama of its own; its
 parallel event 2, `SetBackGround`, sets `Zounds_DesertPan` (a BMP) with
 ChangePBG at several scroll speeds, and at the end `Zounds_ScreenShot_01`
 (a 320x240 PNG). Asked whether to take it out of the wishlist, measuring
-the cost first: "Dale!".
+the cost first: "Go for it!" (translated).
 
 Scope for now: the first two bullets —a ChangePBG naming another image, and
 one in a map without a panorama—. `panorama-not-changed` in each game's

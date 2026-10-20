@@ -37,8 +37,12 @@ way "The setting for each game" in the research measured the others.
 
 ## Worklog (Cardón, 2026-10-12)
 
-taro, through Hornero: "podríamos implementar ChangeSystemGraphics y verlo
-andar (con distintos colores planos)?". Branches `cardon-change-system` in
+taro, through Hornero, in their words, translated:
+
+> could we implement ChangeSystemGraphics and see it work (with different
+> flat colours)?
+
+Branches `cardon-change-system` in
 the-advocate (from `a2b58945`), the-advocate-ports (from `6d7beed`) and
 the-advocate-docs (from `e69efed`), each with main merged at the end.
 

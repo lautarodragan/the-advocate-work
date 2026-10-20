@@ -2,8 +2,8 @@
 name: "ABL's opening rain cuts itself without MSU-1"
 description: "Without MSU-1, each new Rain1 on map 1 restarts the voice of the one still playing, and the rain dips almost to silence every four seconds"
 type: bug
-status: doing
-assignee: Mulita
+status: testing
+assignee: taro
 agents: [Mulita]
 ---
 
@@ -58,3 +58,71 @@ needs no extra voice at all.
 Compare them by ear —wavs, as in the MSU-1 fix— and by what each costs,
 and say which one, or which combination.
 
+
+## Done (Mulita, 2026-10-20)
+
+Hornero's assignment: the rain on map 1 does not dip without MSU-1, with a
+test red before —the voices, and the level of the core's audio if the
+harness can measure it—, and before/after audio in
+`/shared/audio/2026-10-20-abl-rain/`.
+
+## What RM2k does (Mulita, 2026-10-20)
+
+easyrpg's `GenericAudio::SE_Play` (`audio_generic.cpp`) gives every
+`PlaySound` the first free channel of its own, and never looks at what the
+others play: two copies of the same sound add up. The same as what taro
+described on 2026-10-11. The original under Wine was not recorded.
+
+## Which of the three angles (Mulita, 2026-10-20)
+
+The second, alone: the timeline of map 1's parallel page (EV0013) leaves
+no moment where it is not enough. The page is a loop of `Rain1`, wait 4.0
+s, `Thunder9` with a 1.2 s tint that waits, then four times `Rain1` and wait
+4.0 s; `Rain1` lasts 5.0 s. So, per turn of ~17 s:
+
+    0.0  rain A           voice 7   (until 5.0)
+    4.0  thunder          voice 6   (free)
+    5.2  rain B           voice 7   (A ended at 5.0: free)
+    9.2  rain C           voice 6   (the thunder ended long before)
+    13.2 rain D           voice 7   (B ended at 10.2)
+    17.2 rain E           voice 6   (C ended at 14.2)
+    ...
+
+With a free voice first, two rains overlap for their second as in RM2k, and
+the thunder never lands on two rains at once. The order is now: a free
+voice, then the one already playing the same sample —so that when both are
+busy a sound still cuts its own copy and not a different one, which was
+the reason for the old order—, then the one that ends sooner. The gap
+between 5.0 and 5.2 is the original's too: the page waits the tint there.
+
+The first angle —a third voice taken from the music— and the third —a loop
+with the crossfade baked in— are not needed for this: a third voice costs
+the music's polyphony all the time to cover a case that does not happen
+here, and the loop ties the sample to the page's period, which is the
+page's and not the sound's. What the second one costs: voice 6 is busy one
+second in four more than before on map 1, and the music's voice there is
+its first percussion one (`EFFECT_VOICES`).
+
+## How it was checked (Mulita, 2026-10-20)
+
+`test_the_returning_rain_does_not_cut_the_previous_one`, in ABL's
+`tests/abl/test_rain.py`, case `lightning` without MSU-1 over 1,400 ticks:
+it looks at both effect voices and at the core's audio in tenths of a
+second. Red before: "on tick 551 the rain started again on voice 7, which
+still had 61 frames of the previous one", and the mix fell to 109 RMS at
+17.2 s against a median of 1,454. Green after: the rains alternate on 7
+and 6, the thunder (ticks 239 and 1,272) always finds a free voice, and the
+lowest tenth is ~970 RMS.
+
+The recordings, before and after, in `/shared/audio/2026-10-20-abl-rain/`
+with a `README.txt`. The original under Wine was not recorded.
+
+## On merging
+
+The runtime, in the-advocate `mulita-abl-rain` (`sound_play`): it reaches
+the ROMs through `cartridge`, which assembles the runtime of the checkout
+it was installed from, so with the global tools from `~/the-advocate` the
+merge there is enough. Bank 0 is 10 B larger in every cartridge (Sunset 25
+→ 35, Vampires Dawn 45 → 55, ABL's `test-change-system` 53 → 63, the
+tightest); no other line of `just space` moves but the gaps and far RAM of
+the games whose packages changed (see the other task).

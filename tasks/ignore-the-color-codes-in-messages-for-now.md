@@ -9,7 +9,9 @@ assignee: taro
 
 From Aguará's analysis of 2026-10-06: Desert Nightmare (`\c[1]Sandra: \c[0]`
 in almost every message, 1345 pages out), Sunset Over Imdahl (about 870)
-and Dooms 2 (`\S[n]`). taro, on 2026-10-06: "Let's go with 1 on sonnet".
+and Dooms 2 (`\S[n]`). taro, on 2026-10-06, in their words, translated:
+
+> Let's go with 1 on sonnet
 
 ## Done (Tijereta, 2026-10-06)
 

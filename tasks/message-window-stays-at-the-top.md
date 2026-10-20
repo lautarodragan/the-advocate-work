@@ -6,9 +6,14 @@ status: done
 assignee: Calancate
 ---
 
-From taro, on 2026-10-04, with the build `2026-10-04-5b29ba9-f6a44973`: "at
-some point it started staying permanently at the top, and the timer, at the
-bottom. I think it should have gone back to the bottom at some point". The Bum
+From taro, on 2026-10-04, with the build `2026-10-04-5b29ba9-f6a44973`, in
+their words, translated:
+
+> at some point it started staying permanently at the top, and the timer,
+> at the bottom. I think it should have gone back to the bottom at some
+> point
+
+The Bum
 next to Talan's house, the worried worker, the hover tram officer, several
 NPCs on the left side of Lashe City, the Neon Vipers: all at the top.
 
@@ -19,8 +24,11 @@ candidate, unconfirmed: common 15, `CustomMenuSideQuests`, ends with
 
 ## It is not a bug: the original does the same (Calancate)
 
-taro confirmed it playing the original: "I'm testing the original and it
-seems it really is like that". What leaves it at the top, read in ABL's dump
+taro confirmed it playing the original, in their words, translated:
+
+> I'm testing the original and it seems it really is like that
+
+What leaves it at the top, read in ABL's dump
 at `5b29ba9` and in easyrpg-player:
 
 * **The Neon Vipers scene is the first to put it at the top**: map 14

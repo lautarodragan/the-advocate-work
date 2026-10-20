@@ -13,7 +13,13 @@ taro's decision, on 2026-10-11: don't hash the RTP or the SoundFont; at most inv
 
 ## Change of brief, on 2026-10-11
 
-taro, a while later: "If the zip thing wouldn't be very complicated, maybe I'd think about using .zip for the games too. That forces us a bit not to modify them, but always to use the patch system." So: first measure whether asset reading —game, then RTP— goes or can go through a single place; if so, `GAME_DIR` and `RTP_DIR` as `.zip`, with the fingerprint by the `.zip`'s content —or path, size and date, if hashing it is heavy—, the SoundFont by its path and `--force`; if not, the plan above and the measurement for taro to decide.
+taro, a while later, in their words, translated:
+
+> If the zip thing wouldn't be very complicated, maybe I'd think about
+> using .zip for the games too. That forces us a bit not to modify them,
+> but always to use the patch system.
+
+So: first measure whether asset reading —game, then RTP— goes or can go through a single place; if so, `GAME_DIR` and `RTP_DIR` as `.zip`, with the fingerprint by the `.zip`'s content —or path, size and date, if hashing it is heavy—, the SoundFont by its path and `--force`; if not, the plan above and the measurement for taro to decide.
 
 ## The plan (Cardón, 2026-10-11)
 
@@ -35,7 +41,12 @@ The cost, `--list --json` three times warm, before → after: ABL 79 → 90 ms (
 
 ## The `.zip` (Hornero, at taro's request, 2026-10-11)
 
-taro: "maybe I'd think about using .zip for the games too. That forces us a bit not to modify them, but always to use the patch system". Step 1: is there a single place that resolves an asset?
+taro, in their words, translated:
+
+> maybe I'd think about using .zip for the games too. That forces us a
+> bit not to modify them, but always to use the patch system
+
+Step 1: is there a single place that resolves an asset?
 
 **Today there isn't one: there are three resolvers and several loose readers**, in different processes:
 

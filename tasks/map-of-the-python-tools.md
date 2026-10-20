@@ -6,14 +6,16 @@ status: done
 assignee: taro
 ---
 
-From taro, on 2026-09-28: "I'd like to pick up the refactor of the tools made
-in python again. [...] I'd like to understand the dependency graph between the
-different python files, what responsibility each thing has, and what is
-agnostic to ABL and what isn't. One of the next steps I want to take on is
-splitting the repo in two: the tools on one side, all agnostic to any game,
-and a repo dedicated to A Blurred Line. That project isn't going to be
-completely trivial and we'll have to take it on in parts. This plan will help
-us with that."
+From taro, on 2026-09-28, in their words, translated:
+
+> I'd like to pick up the refactor of the tools made in python again.
+> [...] I'd like to understand the dependency graph between the different
+> python files, what responsibility each thing has, and what is agnostic
+> to ABL and what isn't. One of the next steps I want to take on is
+> splitting the repo in two: the tools on one side, all agnostic to any
+> game, and a repo dedicated to A Blurred Line. That project isn't going
+> to be completely trivial and we'll have to take it on in parts. This
+> plan will help us with that.
 
 It is research and a plan, not code. **The result is
 [`research/the-map-of-the-python-tools.md`](https://lautarodragan.github.io/the-advocate-docs/research/the-map-of-the-python-tools.html)**: taro has to read

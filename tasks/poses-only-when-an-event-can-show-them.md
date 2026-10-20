@@ -7,7 +7,9 @@ status: wishlist
 
 Left by Calandria on 2026-10-16, from taro's plan for Dooms 2's map 1
 (`dooms-2-slots-and-menu-dont-fit-in-their-bank.md`), tools `30ab0ca6`,
-ports `f8aca68`: "a general optimization: poses loaded only when needed".
+ports `f8aca68`:
+
+> a general optimization: poses loaded only when needed
 
 **What is seen**: in the converter's log of Dooms 2's release, map 1 says
 "sprites: 31 characters, 29 slots, 500 tiles in VRAM, 8 palettes; 31 with

@@ -6,7 +6,11 @@ status: done
 assignee: taro
 ---
 
-From taro, on 2026-10-01: "can we add more maps?". The plan is
+From taro, on 2026-10-01, in their words, translated:
+
+> can we add more maps?
+
+The plan is
 `world-and-what-follows.md`, milestones 1 to 4 done. The demo ended on
 entering Tangle Forest (66 ev19), and Tangle **isn't optional**: the tunnel to
 Paradise is on the other side of the forest, and it's crossed through 310, 311,
