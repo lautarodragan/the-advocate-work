@@ -27,3 +27,12 @@ script that did it compared `bank.keys` against `bank.voices[].rate`.
 
 With MSU-1 —how ABL is played— none of it is heard: the songs with a track
 do not upload samples.
+
+## Checked (2026-10-20, Tijereta)
+
+Still so in A Blurred Line's release build of the ports `68bf55b`
+(the-advocate `8f290c39`): `bank.limited_by` in its `audio.json` still
+names `T_AVGFighter_KyaraSelect` for drums and melodic keys, now also some
+keys of map 311 alone. Only heard without MSU-1, which is not how ABL is
+played; what to do —let a battle's separate song lose rate alone, or
+accept it— is a call about sound, and stays open.

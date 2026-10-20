@@ -23,3 +23,12 @@ tick, where an overrun does not show (`whole_ones`). The slowest maps: 195 (215 
 **To reproduce**: `just cartridges` in `vampires-dawn/`, and the measuring
 script described in that task's log, or any door between two maps of the
 list above, counting hardware frames until `fade` goes back to zero.
+
+## Checked (2026-10-20, Tijereta)
+
+Still so at the-advocate `8f290c39`: `whole_ones`
+(`runtime/audio_package.s`) still puts the effects that go up whole on
+the fade's last black tick, and `se_msu_upload` reads each one in one go.
+What to do is open: uploading them from the `.msu` in blocks, as the
+ROM's go, spreads them over the black ticks but does not make them
+fewer bytes, and the fade has a fixed number of black ticks.
