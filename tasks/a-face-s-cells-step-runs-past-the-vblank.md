@@ -29,3 +29,10 @@ these steps.
 What was **not** seen: any damage. The box's face, in the bsnes capture of
 that frame and the ones after, looks right. Not measured either: which part
 of the step takes the twenty-two lines, or whether snes9x takes as long.
+
+## Checked (2026-10-20, Tijereta)
+
+Not measured again. Since the draft, `msg_face_vblank` was touched once,
+by the-advocate `d76bb565` (the inn's gold window), which does not shorten
+its steps; so the measure of 2026-10-19 likely holds, and should be
+repeated on today's `main` before anything is decided.

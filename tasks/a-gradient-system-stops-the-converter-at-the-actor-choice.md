@@ -41,3 +41,11 @@ naming the knob —"give <System> a `[windows.background]`"—; the agent picks,
 with a test in rm2k-snes-screens over a gradient skin. **First step**: the
 check in `checks.rs` and `fit::skin_for`, to see whether the background
 can join the frame's path.
+
+## Checked (2026-10-20, Chajá)
+
+Still so at the-advocate `8f290c39`: the message in `checks.rs` names the
+tiles and the addresses, not the knob, and `TARGET_TILES_MAX` lives in
+`fit.rs` next to `skin_for`. The project file is `advocate.toml` since
+2026-10-20 (the ports' `71c4143`): Zounds' entry is in
+`zounds/advocate.toml`, and the knob is still `[windows.background]`.

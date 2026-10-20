@@ -23,3 +23,11 @@ where songs with a track upload nothing).
 **How to see it**: a Dooms 2 battle after a `ChangeSystemBGM` of slot 0
 alone, without MSU-1: the frames between the last hit and the victory
 message.
+
+## Checked (2026-10-20, Tijereta)
+
+Still so at the-advocate `8f290c39` by reading: `battle_extra_l`
+(`runtime/audio_package.s`) puts one extra song in the battle's package,
+the battle's, and nothing puts the victory's next to it. Still not
+measured on a ROM, so whether the still picture is long enough to see is
+not known; that is the first thing before deciding anything.

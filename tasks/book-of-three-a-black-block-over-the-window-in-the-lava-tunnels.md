@@ -23,3 +23,13 @@ have it.
 milestone (or of `lava`), with
 `/shared/captures/2026-10-19-book-of-three-route-graphics/map46-window-block.png`
 as the capture.
+
+## Checked (2026-10-20, Tijereta)
+
+Not looked at on screen. A lead, not checked: in The Book of Three's
+release build of the ports `68bf55b`, map 46 is one of the maps whose
+message arrow "stays in the window's cells" because its eight sprite
+palettes are taken —see
+[`the-bare-window-s-arrow-keeps-its-band-on-maps-with-eight-sprite-palettes`](the-bare-window-s-arrow-keeps-its-band-on-maps-with-eight-sprite-palettes.md)—,
+and it is the map whose route-dressed characters are left out for its
+palettes. Maps 21 and 32, without the block, could be compared on that.

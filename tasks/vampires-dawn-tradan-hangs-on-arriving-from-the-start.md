@@ -2,7 +2,9 @@
 name: "Vampires Dawn: Tradan hangs on arriving from the start"
 description: "Jumping to Tradan (170) right after the opening leaves a page active and the main loop without ticks, with main's tools too; maybe a page that waits for state the jump does not give, maybe a hang"
 type: bug
-status: todo
+status: doing
+assignee: Mulita
+agents: [Mulita]
 ---
 
 Seen by Hurón on 2026-10-14, with the-advocate `51b4b1b2` and the ports
