@@ -2,8 +2,8 @@
 name: "The invisible walls lost when trimming events"
 description: "When a map goes past 120 events, the trim also leaves out invisible walls: on eight maps of Desert Nightmare the hero can pass where the original stops them"
 type: bug
-status: doing
-assignee: Aguará
+status: testing
+assignee: taro
 agents: [Aguará]
 ---
 
@@ -104,3 +104,44 @@ cartridge with one —ABL's too— for maps that fit, and moves the divergence
 (an event on another layer that walks into it is stopped; in RM2k it is
 not) to maps that have no reason to pay it. Recommended only if some map
 needs the rows.
+
+## Result (2026-10-20, Aguará)
+
+Branches `aguara-invisible-walls` in the-advocate (fix `57082d0a`), the
+ports (test `492f21b`) and the book (`86e3692`), each with main merged.
+
+* `converter.log`: no map of Desert Nightmare nor of Vampires Dawn lists a
+  wall lost. DN's 4, 14, 61 and 66 list theirs as "lose nothing: a still
+  wall" or "only their looks: their wall stays"; map 14's four
+  conditional walls (155 157 166 178) are kept, and four drawn still walls
+  (118..121) go in their place. Maps 2, 59, 62 and 172 now leave still
+  walls out before drawings, so they keep more drawings —62 drops a
+  still-wall family of 28 instead of one drawing—. VD's 164 bakes 253
+  and 254.
+* Tests: `trim.rs` (three new cases), `wally/tests/decorative.rs`
+  (`a_wall_the_caller_left_out_closes_its_cell`, red without the
+  `layers.rs` change), and the ports' `tests/test_invisible_walls.py`
+  —the log of both games, and walking into map 4's wall at (16, 17) in
+  snes9x—: red on main, green with the branch. The ports' `just boot`:
+  99 passed. `just test`: 29 passed; `crate-test convert` and `wally`
+  green.
+* ROMs, against main's tools: byte for byte equal in ABL (its nine
+  cartridges), The Book of Three, Dooms 2, El Dorado, The Frozen World and
+  Sunset over Imdahl. They change in Desert Nightmare and Vampires Dawn
+  (release) and in Zounds' `test-exits` (a cartridge with a 12-event RAM,
+  which now bakes a still wall and four drawn ones). ABL's suite was not
+  run: its ROMs are the same bytes.
+* `just space`: DN's gaps 14.187 → 13.363 B (more blocks for the closed
+  cells); VD unchanged; Zounds' `test-exits` 61.352 → 61.341 B; the rest
+  as they were.
+* Captures: `/shared/captures/2026-10-20-invisible-walls/`, map 4 before
+  and after.
+
+Not covered: a still wall left out is closed for everybody; an event on
+another layer walking into it is stopped, which RM2k does not do (the
+divergence says so). Nothing checks that no `Teleport` lands the hero on
+a closed cell, where he could not step out —as with a baked decoration—.
+The roofs of map 4 that show white are a draft:
+`desert-nightmare-roofs-left-out-show-white`.
+
+**At merge**: install `wally` and `convert` (`just install wally convert`).
