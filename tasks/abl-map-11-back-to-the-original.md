@@ -2,8 +2,8 @@
 name: "ABL: map 11 back to the original"
 description: "The stones and lights minigame plays well with the game's own map 11 now: drop the redesign's fork, its ChipSet if nobody else uses it, and what tests and docs say about it"
 type: tooling
-status: doing
-assignee: Mulita
+status: testing
+assignee: taro
 agents: [Mulita]
 ---
 
@@ -125,3 +125,27 @@ without noticing.
   snapshots, and `TileSubstitution` and `StoreTerrainID` in general
   terms. ABL no longer uses either command anywhere; the test cases
   `tile-sub*` and `terrain` still cover them.
+
+## Verified, and what to install
+
+On the ports branch `mulita-map-11-original` (`f3f686b`), with the global
+tools (the-advocate `8715b90e`):
+
+* ABL's whole suite, `just tests` —which builds every cartridge first—:
+  1574 passed, 2 skipped (the two of `test_paradise.py` that say 108 no
+  longer takes turns in release). Twice, the second with `-rs`. **No
+  golden moved**: map 11's goldens are the empty area at (50,50), and the
+  shots taken at six cells of the minigame came out pixel for pixel equal
+  with and without the fork —the redesign was made to look the same, and
+  22 of the original's light events are baked into the map anyway—.
+* `just space`: bank 0 as before, `test-change-system` the tightest at
+  56 B; `release` 111 B.
+* `just boot`, from the ports' root: 96 passed.
+* `abl.sfc` of `release`: sha256 `5b8aa3ad39ed…`.
+
+**Nothing to install**: no Rust or runtime changed. The book has no
+change either, and there is no branch of it.
+
+What the suite does not cover: stepping into cone A after it is turned
+off —see above—, `ResetPuzzle` bringing the cones back, and winning the
+minigame to the end. Neither did the redesign's tests.
