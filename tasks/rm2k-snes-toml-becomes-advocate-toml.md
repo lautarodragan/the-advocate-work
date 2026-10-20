@@ -2,8 +2,8 @@
 name: "rm2k-snes.toml becomes advocate.toml"
 description: "Each game's project file is renamed advocate.toml; the tools keep their names"
 type: tooling
-status: doing
-assignee: Carpintero
+status: testing
+assignee: taro
 agents: [Carpintero]
 ---
 
@@ -63,3 +63,13 @@ renamed tools on the renamed ports: the 34 `.sfc` and `.msu` —ABL's
 `7ec61010ab940141c9925aa74ce53d52d17c0d39dfed7e5ea05627a5175c252e`.
 `just test`, `just rust-test`, `just lint` and `just test-game` green in
 the-advocate.
+
+**Suites, on the final branches** (the-advocate 8f290c39, the ports with
+the prose commit), with the local tools: ABL's `just tests`, 1576 passed
+and 2 skipped; `just boot` from the ports root, 96 passed. To testing.
+
+**When merging**: the three branches go together —tools that look for
+`advocate.toml` cannot build a ports tree that still has `rm2k-snes.toml`,
+and the other way round—, and `project` is compiled into every binary that
+reads the project: `just install project cartridge convert patches
+rm2k-snes-audio`, or everything. Nothing in this change moves a ROM byte.
