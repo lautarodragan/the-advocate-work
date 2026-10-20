@@ -146,3 +146,13 @@ variable's value at its widest, right-aligned in the wide mode; and no
 test runs the text layer's wide mode with the pool exhausted and nothing
 waiting —the case where a column stays blank—, which a page of whole
 names does not reach.
+
+**Verification on the merged tree** (tools installed from the merge:
+project cartridge convert mapdata screens battle events images): ABL's
+suite 1589 passed, red only the delcentric pump golden of map 83, also
+red at 090b0037 with the same PATH (and `test_jumps_between_banks`, fixed
+in d3a1680); `just test`, `just lint`, `just rust-test` green. `just boot`
+from the ports' root was green on the pre-merge tree; on the merged one it
+was still running when this was written —if cut, the next step is
+re-running it (`PATH=<the-advocate worktree>/.local-tools/bin:$PATH just
+boot`, about 45 minutes)—.
