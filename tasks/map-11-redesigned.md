@@ -1,6 +1,6 @@
 ---
 name: "Map 11 redesigned"
-description: "The 52 light tiles become tiles: from 30 fps to smooth"
+description: "The 52 light tiles become tiles: from 30 fps to smooth. Undone on 2026-10-20, when the original fit in the frame"
 type: bug
 status: done
 ---
@@ -16,6 +16,12 @@ the light tiles stopped being events. The decision, and the two optimization
 paths that were discarded on the way to it, are below.
 
 # Status
+
+**Undone on 2026-10-20**: taro played the game's own map 11 without the
+fork and the minigame runs perfectly, so the fork and its ChipSet were
+deleted. What it costs today, measured, and what moved with it, in
+[`abl-map-11-back-to-the-original`](abl-map-11-back-to-the-original.md).
+What follows is the record of what the redesign was.
 
 **Done on 2026-09-21.** The 52 light tiles stopped being events: the pool is a
 map tile, turning off a cone is a `TileSubstitution` and catching the hero is
