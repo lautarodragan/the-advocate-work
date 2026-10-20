@@ -35,3 +35,12 @@ easyrpg's `Game_Player`/`Game_Character`/`Game_Map`):
 each with what the nine games use. **First step**: which terrains of the
 nine games have damage, a rate other than 100, a bush depth or vehicle
 flags, and on which maps they are walked on.
+
+**Where to start** —taro, on 2026-10-20, in their words, translated—:
+
+> The simplest case is Zounds': the first desert has tiles that cause
+> damage when you walk over them. And there are also monsters there that
+> poison.
+
+So Zounds' first desert is this task's first case, and the same desert
+is the first of [`the-partys-conditions`](the-partys-conditions.md).

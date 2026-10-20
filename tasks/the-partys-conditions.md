@@ -44,3 +44,13 @@ where it matters):
 map half and the battle half. **First step**: an inventory of how the
 nine games use conditions on the party —which commands, items, skills
 and states— to order the work by what is seen most.
+
+**Where to start** —taro, on 2026-10-20, in their words, translated—:
+
+> The simplest case is Zounds': the first desert has tiles that cause
+> damage when you walk over them. And there are also monsters there that
+> poison.
+
+So the first case is Zounds' first desert: its monsters that poison the
+party, and the poison hurting while walking, next to the damaging
+terrain of [`terrains-do-what-rm2k-does`](terrains-do-what-rm2k-does.md).
