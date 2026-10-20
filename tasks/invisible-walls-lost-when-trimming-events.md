@@ -70,3 +70,37 @@ layer can share a row—) saved four of Desert Nightmare's eight maps: 2,
 | VD 164 Thessa | 0 | 2 (253 254) |
 
 So the fix is still needed.
+
+## First step: what each lost wall is (2026-10-20, Aguará)
+
+Read from the dump: of DN map 4's 50 and map 14's 46, and VD 164's two,
+every one has no commands, nobody names it, no move type and no route.
+All are one page on the hero's layer without conditions, except four of
+map 14 that have two pages: one below the hero and one on his layer,
+one of them under a switch —a wall that comes and goes—. Those four are
+not still; the other 94 (and the night maps' copies) are.
+
+## What was done
+
+`trim::still_wall` (the-advocate, `rm2k-snes/convert/src/trim.rs`): an
+event that runs nothing and nobody names, with every page on the hero's
+layer, none that walks or has a route, and one page without conditions
+—so a page is always active; conditions are not read, any page may be
+the active one—. Such a wall is `Loss::StillWall` (or
+`LooksAndStillWall` if drawn), ranked right after the ones that do
+nothing (resp. right after the drawings): it loses nothing (resp. only its
+looks). Its cell goes in the Wally request's new `walls`, and Wally
+closes it in the passability (`rm2k-snes/wally/src/layers.rs`), as it
+already did for a decorative event on that layer. A wall that can stop
+being one keeps its old classes, after the drawings.
+
+Touch triggers: a wall with a page that runs is not a wall but `Pages`,
+never baked. The doors filter is not involved: the codes are the
+schema's fields, nothing is written by eye.
+
+Broader option, not done: bake every still wall before the trim, in every
+map. It frees rows and costs nothing at run time, but changes every
+cartridge with one —ABL's too— for maps that fit, and moves the divergence
+(an event on another layer that walks into it is stopped; in RM2k it is
+not) to maps that have no reason to pay it. Recommended only if some map
+needs the rows.
