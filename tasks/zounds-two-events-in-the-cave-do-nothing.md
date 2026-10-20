@@ -89,3 +89,55 @@ over `master` `3330c15`), which is what fixes RPG Maker 2003 and has to be
 merged and pushed there so the next `just dump` does not undo the ports'
 `data/`; the ports' (`33263fb`); and the book's, a section on Zounds'
 page, "What the game's branch fixes in the game".
+
+**2026-10-20, Calandria — a second look, before touching the game.**
+taro did not believe a slip that simple, nor ~100 of them in Vampires
+Dawn; EasyRPG does not prove anything, and moving the tree's start skips
+whatever the way there sets. So, looking for another explanation:
+
+1. **Nothing on the way changes that cell.** The game has no
+   `ChangeMapTileset` (11710) anywhere; its only `TileSubstitution` (11750)
+   are on maps 17 and 59, on the lower layer and for that map. Maps 79 and
+   80 have no page with a condition, no autostart and no parallel; map 78's
+   conditioned pages are tiles on its own cells. No common event or troop
+   touches them. The one state that would open the cell is the hero
+   walking through walls: a hero route's 36 sets `move_route_through`,
+   which is saved and only a 37 clears. Decoding every hero `SetMoveRoute`
+   in the game, four pages end with it on (map 4 ev 2, 6 ev 3, 7 ev 2 and
+   **58 ev 1, the fall into the lower cave**); but map 59's autostart, where
+   the fall lands, turns it off (`[28, 2, 2, 2, 2, 37, 39, 29]`), and every
+   hero route between 59 and 79 turns it on and off again.
+2. **The ChipSet, from the game's own `.ldb`** (ditto read of
+   `RPG_RT.ldb`): ChipSet 46, "Dungeon 3", upper tiles 53 and 59 have
+   passability 0 —no direction, no star, no square—. At (7,3) of map 79
+   and (14,31) of map 80 the lower tile is 4000 and the upper 59; the cells
+   left and right are walls (lower 4428), so below is the only side. The
+   chipset image's upper tiles 53 and 59 are that green-framed doorway.
+   With no star the upper tile closes the cell whatever the lower.
+3. **A real path in RPG_RT.** taro's own 2017 `Save03.lsd` is on map 177,
+   in the mountains; from there, through the real doors —177, 94, 55, 54,
+   47, 51, 58 (the fall), 59 (its scene), 60, 78 and 79, and on to 80— with
+   an EasyRPG input replay holding Ctrl (test play: through walls, no
+   encounters, which RPG_RT's test play does too) and stepping round every
+   touch event but each hop's exit, saved below each doorway: the saves say
+   map 79 (7,4) and map 80 (14,32), `move_route_through` 0. Loaded in
+   RPG_RT 1.0.8.0 in normal play, holding Up, then Enter, Space and Z
+   facing the door, then down and up again: the hero turns and stays, on
+   both maps; he walks fine elsewhere. Left and right are walls.
+4. **Vampires Dawn**, its own `RPG_RT.exe` (RPG Maker 2000): the strict
+   pattern —a touch `Teleport` below the hero, no graphic, on a cell whose
+   upper tile has passability 0 and no star— is 84 events there, almost all
+   on a map's edge row, each in a run of exit cells side by side, standing
+   on a tree, a bush or a rock drawn on the upper layer. Tried four, a new
+   game one cell inside: map 161 (0,12), 390 (9,29), 353 (35,39) and 346
+   (19,29). All four do not move —no step, no encounter—, and in all four
+   the neighbour exit, from the same distance, teleports (or steps and
+   rolls an encounter). So in Vampires Dawn the pattern is as blocked as
+   in Zounds; nobody notices because the cell next door does the job. The
+   difference with Zounds' doorways is only that these have no neighbour.
+
+Captures, with a README: `/shared/captures/2026-10-19-zounds-cave-doorways/`.
+
+**Conclusion**: the original cannot go through either, from a real path,
+in RPG Maker 2003's own runtime. Whether to fix it in the game is taro's
+call; the test and the game branch stay as they are until then.
