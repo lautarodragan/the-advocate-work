@@ -33,3 +33,13 @@ with an `EnterBattle` before anyone joins— that ends the way the original
 does under Wine (lost at once, Game Over or the page's defeat branch),
 with its golden, and the runtime fixed if it does not. **First step**: the
 original under Wine with that case, to know what to expect.
+
+## Checked (2026-10-20, Chajá)
+
+Still open: no test of ABL's or of the test game's enters a battle with
+nobody in the party (`test_empty_party.py` covers the hero, the menu,
+items, equipment and saving). The ports are nine since Zounds, and each
+one's project file is `advocate.toml` since 2026-10-20 (the ports'
+`71c4143`): eight `release`s say `party = []`, and ABL's says `[10]`,
+DummyHero, so that map 1's opening runs —see its comment—. ABL's
+`test-special` and several of its test cartridges still start empty.

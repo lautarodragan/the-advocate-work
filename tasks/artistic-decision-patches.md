@@ -210,3 +210,20 @@ followed:
   animations given up, rain and pictures not drawn, the ChipSet animation
   cut, events left out—. It is not versioned and it is not the desired
   state phase 2 asks for, but it is the list of what is lost, by place.
+
+## Checked (2026-10-20, Chajá)
+
+Phase 2 has still not started for what the converter decides. What moved
+since the check above:
+
+* each game's project file is `advocate.toml` since 2026-10-20 (the
+  ports' `71c4143`): `[graphics] opaque` lives there now;
+* `abl/patches/` is two folders by who writes them, as its README says:
+  `auto/` —the converter's maps, animations and battlers, plus
+  `music/ceilings.toml`, each theme's volume ceiling, measured over the ROM
+  by `just ceilings` and charged for by `test_music_ceilings.py`— and
+  `manual/`, what a person decided, one folder per kind of asset in RM2k's
+  own names (`ChipSet/`, `maps/`; the ports' `f85a6ed` and the-advocate's
+  `92e18a22`, 2026-10-19). What is in `manual/` rules and no tool writes
+  there: it is the "edited by hand" half of phase 2, but for whole files,
+  not for the converter's decisions this task is about.
