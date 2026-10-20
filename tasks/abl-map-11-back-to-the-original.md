@@ -97,3 +97,31 @@ frames after each, frame by frame:
 here and there and not a drop to 30 fps. It is the price of the
 original's 84 events against the redesign's 34, and taro played it
 without noticing.
+
+## What changed in the ports
+
+* The fork and ChipSet 53, deleted, alone in their commit.
+* `test_lights.py`, rewritten: it was red on the original —it looked for
+  cone B's upper tile and for `sub_n`—. Now a step onto a lit cell of
+  cone B, and onto `A1`, runs its touch page and opens "they caught me"
+  (82 ticks after the step, the guard walks first); and the stone on
+  `Light5` breaks the lamp —switch 44— and sends cone A's ten events to
+  (54,82) and the stone to (98,98). **It does not step into the cone after
+  it is off**: the hero is boxed in on the lamp's cell, and `go_to_map`
+  reloads the map, which brings the cone back, as a `Teleport` to the
+  same map does in RM2k. The new version was not shown red: the old one
+  was, on the original, and the new one cannot run on the redesign, whose
+  map has no `A1`.
+* `test_parallels.py`'s frame test walked nowhere: it stood at (50,50),
+  where `in-11` leaves the hero and no light is on screen. It now walks
+  row 48 from x 8 to 16, cones B, C and D on screen: 180 laps out of 180.
+* `test_pages.py`: the four slots above 204 were the redesign's parallel;
+  now it checks there are none.
+* `UNTESTED.md` and `patches/manual/README.md`: map 11's fork, in the
+  past.
+* `patches-check` against `release`: map 11's automatic patch did not
+  move.
+* The book: nothing to change. It names map 11 only in research
+  snapshots, and `TileSubstitution` and `StoreTerrainID` in general
+  terms. ABL no longer uses either command anywhere; the test cases
+  `tile-sub*` and `terrain` still cover them.
