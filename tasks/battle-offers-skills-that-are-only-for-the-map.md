@@ -2,7 +2,9 @@
 name: "The battle offers skills that are only for the map"
 description: "A switch skill with occasion_battle off —Emily's Change Tape, Radin's Mix Formula— comes out white and usable in battle; RM2k greys it there"
 type: bug
-status: todo
+status: doing
+assignee: Cardón
+agents: [Cardón]
 ---
 
 Seen by Mulita on 2026-10-12, **reading the code**, with the-advocate
