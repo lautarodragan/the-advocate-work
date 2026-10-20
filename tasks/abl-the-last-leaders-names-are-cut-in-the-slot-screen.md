@@ -2,7 +2,9 @@
 name: "ABL: the last leaders' names are cut in the slot screen"
 description: "With every map, the slot screen shows \"Advocat\", \"Royal D\" and \"ABL 2.0\" where the original shows the whole name: the name field is seven cells"
 type: bug
-status: todo
+status: doing
+assignee: Hurón
+agents: [Hurón]
 ---
 
 Seen by Chajá on 2026-10-14, with the-advocate `ac9897cc` (branch

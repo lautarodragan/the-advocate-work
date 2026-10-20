@@ -2,7 +2,9 @@
 name: "Message colours and speed"
 description: "\\c[n] and \\s[n] in a message box are discarded today: coloured words come out in the plain colour and the text goes at one speed"
 type: feature
-status: todo
+status: doing
+assignee: Tijereta
+agents: [Tijereta]
 ---
 
 Split from `draw-the-faces-and-really-wait-on-the-escapes.md` on

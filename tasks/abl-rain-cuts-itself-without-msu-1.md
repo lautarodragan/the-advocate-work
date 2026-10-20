@@ -2,7 +2,9 @@
 name: "ABL's opening rain cuts itself without MSU-1"
 description: "Without MSU-1, each new Rain1 on map 1 restarts the voice of the one still playing, and the rain dips almost to silence every four seconds"
 type: bug
-status: todo
+status: doing
+assignee: Mulita
+agents: [Mulita]
 ---
 
 Seen by Mulita on 2026-10-11 (`more-voices-for-the-sound-effects.md`),

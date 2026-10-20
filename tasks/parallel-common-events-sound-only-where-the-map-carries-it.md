@@ -2,7 +2,9 @@
 name: "A parallel common event's sound effect plays only where the map carries it"
 description: "ABL's Raining runs on map 20 with switch 94 on, but its Rain1 every three seconds is silent: a common event's effects are noted in no map's audio package"
 type: bug
-status: todo
+status: doing
+assignee: Mulita
+agents: [Mulita]
 ---
 
 Seen by Aguará on 2026-10-12, with the-advocate `6ed7c4a0` and the ports

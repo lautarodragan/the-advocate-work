@@ -2,8 +2,9 @@
 name: "A skill in battle writes no result line"
 description: "A skill —or a special item that casts one— shows only its using message: RM2k's next lines, the damage or the heal on each target, are not written"
 type: bug
-status: todo
-agents: [Tijereta]
+status: doing
+assignee: Cardón
+agents: [Tijereta, Cardón]
 ---
 
 Seen by Tijereta on 2026-10-19, on the-advocate `54ec3daf`, while making
