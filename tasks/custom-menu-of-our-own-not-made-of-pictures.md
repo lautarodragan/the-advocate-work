@@ -6,12 +6,17 @@ status: done
 ---
 
 From taro, on 2026-10-01, talking about ABL's portable console
-(`NewMenuActivated`, `ManageAuraMenu`, `CustomMenu*`, `DisplayNameMenu`):
-"many of these pictures are text on a white background, and, at most, a
-picture of a character. We could reduce it immensely in size and at the same
-time improve it in UX and aesthetics —ABL's custom menu with pictures isn't
-well aligned and is aesthetically pretty ugly—". And "there I would use mode 5
-and build a typeface specifically for that".
+(`NewMenuActivated`, `ManageAuraMenu`, `CustomMenu*`, `DisplayNameMenu`),
+in their words, translated:
+
+> many of these pictures are text on a white background, and, at most, a
+> picture of a character. We could reduce it immensely in size and at the
+> same time improve it in UX and aesthetics —ABL's custom menu with
+> pictures isn't well aligned and is aesthetically pretty ugly—
+
+And:
+
+> there I would use mode 5 and build a typeface specifically for that
 
 It is an addition of the port, not something from RM2k: the game describes its
 menu with pictures and event logic, and this would replace it with a

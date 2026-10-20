@@ -7,8 +7,11 @@ assignee: taro
 agents: [Aguará]
 ---
 
-Asked by taro on 2026-10-19: Frozen World's menu "always has to be seen,
-and always has to be seen *well*". The cheapest step first, before the
+Asked by taro on 2026-10-19, about Frozen World's menu:
+
+> always has to be seen, and always has to be seen *well*
+
+The cheapest step first, before the
 custom windows: no runtime change.
 
 **What there is**: the menu is three pictures, `Picture/MenuEquipPlates.png`,

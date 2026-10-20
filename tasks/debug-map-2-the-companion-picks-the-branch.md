@@ -9,7 +9,8 @@ assignee: taro
 # What taro reported
 
 Playing `tasks/debug-map.md` (it starts from `main` at `455f9fc1`,
-brought to `8308033b` with the world's milestone 4):
+brought to `8308033b` with the world's milestone 4), in their words,
+translated:
 
 > - Choosing the Back Alleys (AFTER THE DIRECTOR IS SHOT) leaves you where the
 >   director's cutscene would leave you, but there is no cutscene triggered, so
