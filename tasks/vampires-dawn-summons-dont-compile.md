@@ -49,3 +49,33 @@ with its measured culprit written here. First step: `just culprits` in
 culprits compile now; what is left by her reading is `ControlVars` from
 "other: party size", `ChangeCondition` that sets a state, and
 `ChangeParameters`, each a small piece of the compiler and the runtime.
+
+## Checked (2026-10-20, Chajá)
+
+The first step, done: `rm2k-snes-events culprits --every-map` with the
+global tools (installed from the-advocate `8f290c39`) over the
+`events-request.json` of Vampires Dawn's `release` built that morning
+(ports `68bf55b`), and that build's `converter.log`: "parallel common
+events: 23 run, 12 do not compile [1, 2, 5, 6, 8, 9, 10, 11, 18, 30, 48,
+49]". **52 runs** —switches past 1023 since `782e1931`—; 10, 11 and 18 are
+[`vampires-dawn-transformations-dont-compile`](vampires-dawn-transformations-dont-compile.md).
+What each of the others stops at today:
+
+* **1, 2, 5, 6** (the summons): `ControlVars [0, 461, 461, 0, 7, 2]`
+  —from "other: party size", which `compile.rs` still refuses: only gold
+  and the timer compile— and the branch `[1, 461, 0, 4, 4, 1]` on that
+  variable;
+* **8, 9**: the same two, and `ControlVars` from an actor's stat
+  (`[0, 402|463, …, 5, 11]`) with `ChangeLevel` by those variables;
+* **30**: only `ChangeCondition` that sets state 5 on actors 11, 2 and 13
+  —setting a state still does not compile—;
+* **48, 49**: `ControlVars` random 30–60 into variable 417, and
+  `ChangeParameters` by it.
+
+The `ControlVars` from an actor's stat and the random one compile by
+themselves since `06710c31` and `6d3b12b7`, so when they are still named
+the likely reason is that their variable —402, 417, 461, 463, all past the
+256th— has no slot:
+[`variables-are-capped-at-256-slots`](variables-are-capped-at-256-slots.md).
+Not confirmed one by one. So what is left is that cap, "other: party size",
+`ChangeCondition` that sets a state, and `ChangeParameters`.

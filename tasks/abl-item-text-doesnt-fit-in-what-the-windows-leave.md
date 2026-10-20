@@ -32,3 +32,12 @@ the windows' background went flat with
 [`windows-background-setting-and-flat-text-area`](windows-background-setting-and-flat-text-area.md).
 The numbers are the build's to say; the description no longer carries
 them. What the ROM does with such an inventory is still not looked at.
+
+## Checked (2026-10-20, Tijereta)
+
+Still so in A Blurred Line's release build of the ports `68bf55b`
+(the-advocate `8f290c39`): its `converter.log` still has the "WARNING,
+item text" line, and it is still the only one of the nine games with the
+WARNING (Zounds' list takes all the pairs its windows leave, without
+going past). What the ROM does with such an inventory is still not
+looked at, and that is what would define it.

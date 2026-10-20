@@ -2,8 +2,8 @@
 name: "A test case that adds a skill pair shifts test_long_list"
 description: "With a test page that teaches Kersh a skill the game never teaches him, ABL's test_long_list.py stops seeing the first skill of Talan's battle list"
 type: bug
-status: todo
-agents: [Mulita]
+status: done
+agents: [Mulita, Chajá]
 ---
 
 Seen by Mulita on 2026-10-12, at the-advocate `3086271b` and the ports'
@@ -45,3 +45,17 @@ cartridge's numbering of a case's `ChangeSkills` pairs. **First step**:
 with the command added, print the slot the harness gives Talan's pairs and
 the one the converter emitted for the same cartridge; if they agree, the
 ROM is the one to look at.
+
+## Done (2026-10-20, Chajá): it was the harness's
+
+Fixed by Aguará in the ports' `c376a7d` (2026-10-18), with its goldens in
+`2ac7175`, while doing the attribute shift: the case that taught Kersh a
+skill, `battle-69-attribute-shift`, is this repro. The test wrote Talan's
+bits with `release`'s pair indices, but its case, `battle`, runs on
+`test-special`, whose pairs differ —they were already one off before, so
+the goldens had been defending a list without Detect Aura—. Now
+`test_long_list.py` asks `data.skill_slots()` for the pairs of the
+cartridge that carries `battle` (`cartridges.where_is`), and the goldens
+show the whole list, Detect Aura first. The cartridge's own numbering was
+not the culprit. Checked by reading both commits at the ports `68bf55b`;
+not run.

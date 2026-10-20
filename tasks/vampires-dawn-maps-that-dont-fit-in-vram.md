@@ -57,3 +57,18 @@ or a degradation of the sprites as the background has one, which Cardón
 left as the next step. First step: take each map out of `excluded` with
 today's tools and write down what each says now; the numbers above are of
 2026-10-11.
+
+## Checked (2026-10-20, Chajá)
+
+Still out: the nine are in `excluded` with the same comments, and the
+`release` built that morning (ports `68bf55b`) passes `--maps` without
+them. Two things above moved:
+
+* the project file is `vampires-dawn/advocate.toml` since 2026-10-20 (the
+  ports' `71c4143`), not `rm2k-snes.toml`;
+* a `Teleport` to a map that is not carried no longer leaves its page out:
+  since `8d6bc064` (2026-10-15) it compiles to a "Teleport to missing map
+  N" box and the page goes on —noted as `teleport-to-missing-map` in
+  `degradations.json`; since `a6a0f639` the box shows over a screen the
+  teleport erased—. So these maps cost their own scenes, not the pages
+  that lead to them.

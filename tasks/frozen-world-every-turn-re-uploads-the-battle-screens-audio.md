@@ -27,3 +27,12 @@ anticipated the round trips without measuring them.
 (11, 33)—, with switch 6 on so the first slot has a plate, A on it from the
 grid and A on Monster A; count the hardware frames of the ticks that load
 maps 1 and 3.
+
+## Checked (2026-10-20, Tijereta)
+
+Not measured again. Two things moved since: `maps-load-faster-without-losing-anything`
+(`testing`) uploads a teleport's package in the fade's frozen ticks, and
+`frozen-world-map-1-audio-package-does-not-fit-in-aram` is `done`. Whether
+a turn's two teleports gain from the first depends on whether they fade;
+the turn's frames have to be counted again on today's `main` before this
+is defined, with the same steps as above.
