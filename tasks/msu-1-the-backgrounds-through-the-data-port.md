@@ -68,9 +68,12 @@ find its signature and reads the backgrounds from itself.
 
 ## The lightweight fallback (on its branch, not merged)
 
-taro's request the same day: *"I want to be able to confirm it's actually
-loading via MSU, by being able to compare and see it loads a different
-background in Mednafen"*. With both backgrounds the same there was no way.
+taro's request the same day, in their words, translated:
+
+> I want to be able to confirm it's actually loading via MSU, by being
+> able to compare and see it loads a different background in Mednafen
+
+With both backgrounds the same there was no way.
 
 * **What it is**: the ROM carries each background in **4bpp and 16 colors**;
   the `.msu` keeps the 8bpp, 96-color one, byte for byte the earlier one —the
@@ -113,9 +116,13 @@ background in Mednafen"*. With both backgrounds the same there was no way.
   whole file: any change in any entry invalidates the whole `.msu`, which is
   the simple and correct thing while the `.msu` travels with the build.
 
-**What taro said looking at the goldens side by side, on 2026-09-25**: "on the
-phone it shows, but it isn't that bad. I suspect on the CRT it'll barely be
-noticeable." It remains for him to see it on the console.
+**What taro said looking at the goldens side by side, on 2026-09-25**, in
+their words, translated:
+
+> on the phone it shows, but it isn't that bad. I suspect on the CRT
+> it'll barely be noticeable.
+
+It remains for him to see it on the console.
 
 ## "In Mednafen and in ares I don't see any difference" (2026-09-26)
 

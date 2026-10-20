@@ -6,10 +6,13 @@ status: done
 assignee: taro
 ---
 
-From taro, on 2026-10-04: "Go ahead", to carry on with the two differences
+From taro, on 2026-10-04, to carry on with the two differences
 Quirquincho found comparing against the original under Wine
 (`tasks/message-window-at-the-top-in-the-middle-and-without-background.md`; the captures in
-`/shared/captures/2026-10-04-ventana-de-mensajes/original/`).
+`/shared/captures/2026-10-04-ventana-de-mensajes/original/`), in their
+words, translated:
+
+> Go ahead
 
 ## Done (Tijereta)
 

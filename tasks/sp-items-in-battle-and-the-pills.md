@@ -7,8 +7,10 @@ assignee: taro
 agents: [Mulita]
 ---
 
-From taro, on 2026-10-04: "I can't use items that recover SP in battle, and
-I can't use the Agility Pill in general".
+From taro, on 2026-10-04, in their words, translated:
+
+> I can't use items that recover SP in battle, and I can't use the
+> Agility Pill in general
 
 In ABL (dump, `data/db/items.json`):
 

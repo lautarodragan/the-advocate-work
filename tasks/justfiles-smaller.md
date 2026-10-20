@@ -7,8 +7,10 @@ agents: [Calandria]
 assignee: taro
 ---
 
-From taro, on 2026-10-05: "I think we can remove things from the `justfile`,
-right? And simplify others?".
+From taro, on 2026-10-05, in their words, translated:
+
+> I think we can remove things from the `justfile`, right? And simplify
+> others?
 
 ## The inventory (Calandria, 2026-10-04)
 

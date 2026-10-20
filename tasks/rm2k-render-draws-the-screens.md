@@ -6,8 +6,13 @@ status: done
 assignee: taro
 ---
 
-From taro, on 2026-09-30: "go on with all of those", after the CharSets
-(`rm2k-render-draws-the-charsets.md`, Yaguarundí). It is another part of
+From taro, on 2026-09-30, after the CharSets
+(`rm2k-render-draws-the-charsets.md`, Yaguarundí), in their words,
+translated:
+
+> go on with all of those
+
+It is another part of
 `rm2k-render-draws-everything-from-rpg-maker.md`, in parallel with the other one
 (`rm2k-render-draws-the-battle.md` and `rm2k-render-draws-the-screens.md`).
 

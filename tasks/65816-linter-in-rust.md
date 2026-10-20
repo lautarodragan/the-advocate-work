@@ -6,10 +6,16 @@ status: done
 assignee: taro
 ---
 
-From taro, on 2026-10-02: "are there equivalents to linters, formatters or other
-static analysis tools for assembler? In particular, maybe some check for common
-traps —things that compile fine but are surely wrong— would add value". For the 65816 there's nothing worth adopting,
-so it gets made: "and let it be made in Rust".
+From taro, on 2026-10-02, in their words, translated:
+
+> are there equivalents to linters, formatters or other static analysis
+> tools for assembler? In particular, maybe some check for common traps
+> —things that compile fine but are surely wrong— would add value
+
+For the 65816 there's nothing worth adopting, so it gets made —in their
+words, translated—:
+
+> and let it be made in Rust
 
 The precedent is Ratona's bank guard
 (`bank-guard.md`), which reads the `.dbg` and flags branches

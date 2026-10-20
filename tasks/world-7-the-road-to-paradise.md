@@ -6,7 +6,11 @@ status: done
 assignee: taro
 ---
 
-From taro, on 2026-10-01: "let's add maps first". The demo ends today at the
+From taro, on 2026-10-01, in their words, translated:
+
+> let's add maps first
+
+The demo ends today at the
 "Continue onward" of the tunnel to Paradise (66 ev18). On the other side: 105
 Mountain Path, 106 and 108 Distant Paradise, which is another chapter (parent 0 in
 the tree). 108 is one of the five maps that don't fit in VRAM

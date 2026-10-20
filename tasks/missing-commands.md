@@ -9,8 +9,11 @@ assignee: taro
 
 **Done**, 2026-10-12. Superseded: its two pending items were resolved —the quarry, by `eraseevent-for-real.md`, and ChangeMonsterCondition, as a debt, by `monster-conditions-and-flashscreen-in-battle.md`—.
 
-From taro, on 2026-10-05: "which event system commands are we still missing
-implementing?". The compiler knows it page by page, but there is no
+From taro, on 2026-10-05, in their words, translated:
+
+> which event system commands are we still missing implementing?
+
+The compiler knows it page by page, but there is no
 report for the whole game.
 
 # What was done (Aguará, 2026-10-05)

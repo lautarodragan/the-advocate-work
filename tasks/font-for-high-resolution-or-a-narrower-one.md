@@ -7,13 +7,21 @@ assignee: taro
 ---
 
 From taro, on 2026-09-30, after testing on the SNES the ROM from
-`test-rom-the-menu-in-mode-5-on-the-snes.md` (Carancho): "none of them
-convinces me. With the text stretched, it looks weird on the CRT TV. In some
-cases it gets hard to read". But he doesn't rule out mode 5, because **the
+`test-rom-the-menu-in-mode-5-on-the-snes.md` (Carancho), in their words,
+translated:
+
+> none of them convinces me. With the text stretched, it looks weird on
+> the CRT TV. In some cases it gets hard to read
+
+But he doesn't rule out mode 5, because **the
 battle also has a lot of UI problems because of the resolution**, and there
-it could help. What he proposes to try: "a font designed to work well at
-that resolution, that looks as much as possible like the original, but that
-sacrifices fidelity before legibility". And he is willing to touch it up by
+it could help. What he proposes to try:
+
+> a font designed to work well at that resolution, that looks as much as
+> possible like the original, but that sacrifices fidelity before
+> legibility
+
+And he is willing to touch it up by
 hand, pixel by pixel.
 
 ## What was built (Espinillo, 2026-09-30)

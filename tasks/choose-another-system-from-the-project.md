@@ -8,9 +8,13 @@ assignee: taro
 ---
 
 From taro, on 2026-10-05: the four games that don't build because of the window
-build and run with ABL's System put in by hand in a copy. "let's launch it
-now! … a cheap and atomic step forward, without introducing hacks or
-complexity". It is path 2: choose another System, not a recipe over the
+build and run with ABL's System put in by hand in a copy. In their words,
+translated:
+
+> let's launch it now! … a cheap and atomic step forward, without
+> introducing hacks or complexity
+
+It is path 2: choose another System, not a recipe over the
 game's own.
 
 ## What was done

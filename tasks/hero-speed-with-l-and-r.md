@@ -6,8 +6,12 @@ status: done
 assignee: taro
 ---
 
-From taro, on 2026-09-30: "being able to increase or decrease the hero's
-speed with the R and L buttons". It is not something from RM2k: it is an addition of the port,
+From taro, on 2026-09-30, in their words, translated:
+
+> being able to increase or decrease the hero's speed with the R and L
+> buttons
+
+It is not something from RM2k: it is an addition of the port,
 and it is noted in `divergencias/`.
 
 ## How it was

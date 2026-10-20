@@ -6,8 +6,12 @@ status: done
 assignee: taro
 ---
 
-From taro, on 2026-10-03, after seeing the pilot on the SNES: "mode 7 is
-definitely the way to approach the photos", and he chose variant 4, the
+From taro, on 2026-10-03, after seeing the pilot on the SNES, in their
+words, translated:
+
+> mode 7 is definitely the way to approach the photos
+
+And he chose variant 4, the
 **vq hybrid**: the still photo at full resolution in mode 1, as today, and
 when the zoom starts mode 7 with a texture of 255 tiles chosen by
 vector quantization. The pilot, what was measured and the cost of bringing it to the
