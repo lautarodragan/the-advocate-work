@@ -66,3 +66,74 @@ compiler refuses that route, so the page is left out (`culprits` on
 Zounds' release: map 103, event 15, page 1, the `MoveEvent`), the chest
 never appears and the door of map 59 can't be opened. Zounds joins
 Vampires Dawn and Sunset in this task, and it goes first.
+
+## Doing (2026-10-20, Mulita)
+
+From the-advocate, the ports and the book at `hornero-integrate`
+(`5971f850`, `899b2d0`, `ba7c87f`), on branches `mulita-route-switches`.
+
+**What RM2k does**, easyrpg's `Game_Character::UpdateMoveRoute`:
+`switch_on` and `switch_off` set the switch, call `Game_Map::Refresh()` on
+the spot —every event's page, in the middle of the route— and go on to the
+next command on the same frame; if the refresh gave the walking event a new
+page, its own route starts over and the frame's commands stop there. Inside
+a jump `BeginMoveRouteJump` only adds up moves and turns: a switch there is
+not run.
+
+**What the port does**:
+
+* The compiler takes 32 and 33 in a `MoveEvent` with the switch's number
+  in two bytes after the code, low first —`[32, lo, hi]` in OP_ROUTE's
+  path, as 35 carries its sound—, checked against the game's switch table
+  like `ControlSwitches` (`Indices::holds_switch`). Inside a jump it is
+  dropped, as RM2k. No new event opcode: 0x59 is unused.
+* A page's own route takes them too, with the numbers in a new
+  `Page::route_switches` (the route is a bare list of codes). Four pages
+  of the eight games: Sunset's map 56 event 5 page 1 and Vampires Dawn's
+  map 163 event 30, three pages.
+* The runtime: `route_switch` in `runtime/event_routes.s`, from the
+  event's and the hero's route, calls `set_switch`, the `ControlSwitches`
+  path. The refresh is the one `set_switch` asks for: the autostart pass
+  runs on the same frame —routes run before the interpreter—, the full one
+  at the start of the next. That is the divergence.
+* What walks a compiled path skips the two bytes: `route_graphics` in
+  `pages.rs` and the hero's graphic walk in `convert.rs` —which already
+  misread 35's index: a low byte of 34 read as a graphic change—.
+
+**Measured** (2026-10-20), `just culprits` on each `release`, before with
+the tools at `hornero-integrate` (`5971f850`) and the ports at `0031803`,
+after with `mulita-route-switches` (`9329f602`) and the ports at
+`899b2d0`; "route-switch culprits" are pages whose culprit is a
+`MoveEvent` with a 32 or 33 in its route:
+
+| game | map pages that compile | route-switch culprits |
+| --- | --- | --- |
+| Zounds | 3982 → 3984 of 4012 | 2 → 0 (103/15/1 and 71/4/1) |
+| Sunset over Imdahl | 1365 → 1366 of 1369 | 1 → 0 (56/5/2) |
+| Vampires Dawn | 18091 → 18121 of 18773 | 33 → 0 |
+
+Own routes walked (`own-route-not-walked` in `degradations.json`):
+Vampires Dawn 5 → 2 (map 163's event 30, its three pages); Sunset's map 56
+event 5 page 1 is still not walked: its route also changes graphic (34),
+which an own route refuses.
+
+Bank 0: the runtime costs 65 bytes in every cartridge (`just space`):
+Sunset 140 → 75 B left, ABL's `release` 223 → 158, `test-change-system`
+168 → 103, Zounds 250 → 185, Vampires Dawn 160 → 95.
+
+The ROM test is the ports' `tests/test_zounds_silver_key.py`: the room's
+monsters' switches written on, the hero lands under the chest on map 103,
+171 turns on and A on the chest gives the Silver Key. Red at
+`hornero-integrate` —"switch 171 did not turn on"—, green on the branch.
+
+**Where it is** (2026-10-20, Mulita, saved mid-work): code, test and book
+are committed on `mulita-route-switches` in the-advocate (merged with
+`origin/main`), the ports and the book (merged with `main`). Left: the
+final round on the merged tree —ABL's `just tests`, `just boot`, `just
+test`, `just rust-test`, `just lint`— with
+`install-local … project cartridge convert mapdata events battle screens
+wally images`. The round before the merge had ABL reds and two Zounds
+skill-screen reds that came from the global `images`/`screens`/`battle`
+being older than the branch (the slot names, the skill results, the lava
+tunnels, the skill screen's panorama), not from this change; the merged
+round is the one that says so.
