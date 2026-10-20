@@ -71,3 +71,39 @@ and organ from 22, 22 and 13 kHz to ~10, ~9 and ~10 kHz —measured, its
 `audio.json` against `main`'s—, for a rain that never sounds there. With
 the rule, only map 20's package gains `Rain1`, and map 20 had 45,698 B
 free: no instrument moves.
+
+## What it costs, per game (Mulita, 2026-10-20)
+
+Each game's `release` built with the branch's tools against one built with
+`main`'s, comparing `audio.json` and `audio-job.json` (throwaway scripts):
+
+* **A Blurred Line**: only map 20's package gains `Rain1`; no music sample
+  moves and no package loses anything.
+* **Zounds**: `water3` —`Botella con Agua`, on switch 55, which an item
+  turns on— goes into every package, and `fire3` into map 163's
+  (`SONIDO DE PORTON`). The music bank does not move beyond a few Hz.
+  `Envenenamiento`'s `heal8` does not go anywhere: its body does not
+  compile.
+* **Vampires Dawn**: the most expensive. Its rain and thunder (`Regen`,
+  `Gewitter`, `Innenregen`: switches a common event turns on) and two
+  spells' `Holy3` and `Cold10` (switches skills turn on) can sound on any
+  map, so `Rain1`, `Rain2`, `Thunder`, `Holy3` and `Cold10` go into almost
+  every package —before, `Rain1` was in one of the 433—. The shared music
+  bank re-plans: of its 136 samples, 48 go down more than 10% and 12 go up
+  more than 10%, the geometric mean of the rates is 0.93, and 43 are under
+  8 kHz instead of 38. And three packages relieve themselves: map 240
+  leaves out `Thunder`, `Cold10` and `Holy3`, map 4 leaves out `Holy3` —the
+  common events' effects go last, so they are the first left out—, and map
+  252's `WA-Zeik Battle` and map 140's `Battle_Fierce2` and `Angel` are now
+  uploaded when their `PlayBGM` asks for them, with a pause.
+
+Vampires Dawn is a first version to be heard: before, its rain was silent
+on every map but one. If it costs too much, the knob would be per game
+—which common events' effects go everywhere—, the way
+`route_effects_left_out` is.
+
+What is left out: a switch turned on **after** a `Teleport` in the same
+page counts for the map that turns it on, not for the destination (Zounds'
+map 58 does that with 111). And the automatic common events without
+pictures have the same problem: draft
+`automatic-common-events-sound-only-where-the-map-carries-it.md`.
