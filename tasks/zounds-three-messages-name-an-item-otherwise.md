@@ -21,8 +21,10 @@ Seen by Calandria on 2026-10-20, reading every line of Zounds' text for
 
 ## taro's decision (2026-10-20)
 
-> En Zounds: es Grasa de Camaro. Creo que debería ser siempre el nombre
-> del item, y no del mensaje.
+In their words, translated:
+
+> In Zounds: it's `Grasa de Camaro`. I think it should always be the
+> item's name, and not the message's.
 
 The messages take the database's names: Grasa de Camaro, Puré de Papas,
 Kinsh.

@@ -6,16 +6,22 @@ status: done
 assignee: taro
 ---
 
-From taro, on 2026-09-30, playing on the SNES: "the vehicles, when moving,
-look broken because the charsets are half edited, designed so that
-certain vehicles can't rotate. I think there's an event option
-that forces a certain direction on them, and, with it enabled, they don't face where
-they walk". It shows in:
+From taro, on 2026-09-30, playing on the SNES, in their words,
+translated:
+
+> the vehicles, when moving, look broken because the charsets are half
+> edited, designed so that certain vehicles can't rotate. I think
+> there's an event option that forces a certain direction on them, and,
+> with it enabled, they don't face where they walk
+
+It shows in:
 
 - the hover tram at the start;
 - the agency ships, when Lunar Pyramid starts playing;
-- the race car: "at times, I can change the car's colour, or
-  turn it into another vehicle, by pressing the direction keys".
+- the race car, in their words, translated:
+
+  > at times, I can change the car's colour, or turn it into another
+  > vehicle, by pressing the direction keys
 
 Hornero's hint: `tools/runtime/oam.s` says that for the hero "no
 `lock_facing` to look at: `step_route` ignores 26 and 27", that is, the

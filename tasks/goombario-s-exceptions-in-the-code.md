@@ -7,8 +7,11 @@ assignee: taro
 agents: [Mulita]
 ---
 
-taro, on 2026-10-18: "the exceptions into the code, like with js/ts
-linters". Until now they live in `linter-exceptions.txt` of `abl/` in the
+taro, on 2026-10-18:
+
+> the exceptions into the code, like with js/ts linters
+
+Until now they live in `linter-exceptions.txt` of `abl/` in the
 ports —sixteen, each with its why above it— and, since the GitHub workflow
 (`a-github-workflow-for-the-tools`), in a copy in `test-game/` of
 the-advocate, which has to be kept in step by hand.

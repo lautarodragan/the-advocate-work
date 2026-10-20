@@ -7,8 +7,11 @@ assignee: taro
 agents: [Cardón]
 ---
 
-taro, on 2026-10-14: "that's what I want to know: what is in those silent
-holes". The culprits report says every page of ABL's whole game compiles,
+taro, on 2026-10-14:
+
+> that's what I want to know: what is in those silent holes
+
+The culprits report says every page of ABL's whole game compiles,
 but in the same week two features were found missing that it could not
 see, because the pages compiled anyway: the event's touch (trigger 2,
 pages compiled empty) and the movement types 1–5 (ignored). This

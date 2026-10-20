@@ -37,13 +37,18 @@ the same name.
 
 **taro, 2026-10-16**, listening to them: `2-03 Victory!` is probably
 from Star Ocean (not confirmed); `04 - Cavern` from Zelda, Ocarina of Time
-or Majora's Mask; `08. Mugen, Activate` from D.Gray-man. "No vamos a
-encontrar midi de mugen, y no creo que haya uno aceptable de cavern —es
-muy ambiental como para sonar bien en baja calidad. Por ahora no hagamos
-nada. El de victory, si se usa en las batallas, podemos reemplazarlo por
-cualquier tema default de victoria del rtp… y usar el wav con msu, a
-pesar de que serán distintos temas. En otro momento vemos de elegir otra
-música y ya." It is the battle's end music (`battle_end_music` in the
+or Majora's Mask; `08. Mugen, Activate` from D.Gray-man. In their words,
+translated:
+
+> We're not going to find a MIDI of Mugen, and I don't think there's an
+> acceptable one of Cavern —it's too ambient to sound good in low
+> quality. For now let's not do anything. The victory one, if it's used
+> in the battles, we can replace with any default victory theme from the
+> RTP… and use the WAV with MSU, even though they'll be different
+> themes. Some other time we'll see about choosing other music, and
+> that's it.
+
+It is the battle's end music (`battle_end_music` in the
 system data), so without MSU-1 it plays the RTP's `Fanfare1`, put next to
 the WAV as `Music/2-03 Victory!.mid` in the zounds clone (Hornero); with
 MSU-1 the WAV still plays. Cavern, Mugen and Desert flower stay silent
@@ -51,8 +56,9 @@ without MSU-1 until another song is chosen.
 
 ## taro's decision (2026-10-20)
 
-To the wishlist, as Tijereta recommended: taro had already said
+To the wishlist, as Tijereta recommended: taro had already said, in
+their words, translated,
 
-> por ahora no hagamos nada
+> for now let's not do anything
 
 and what is left is choosing other music.

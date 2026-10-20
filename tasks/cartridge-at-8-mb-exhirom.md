@@ -94,5 +94,8 @@ LoROM and says so.
 
 taro, on 2026-10-03, with the FX Pak and the build `2026-10-03-51c48ef-73980930`:
 from the beginning until leaving Lashe City, entering both towns and
-some of their buildings. "Everything seems to keep working perfectly." It is the
-first time ExHiROM runs on the console with the game.
+some of their buildings. In their words, translated:
+
+> Everything seems to keep working perfectly.
+
+It is the first time ExHiROM runs on the console with the game.

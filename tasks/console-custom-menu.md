@@ -9,18 +9,24 @@ assignee: taro
 It was born on 2026-10-04 as "the console's pictures, through the MSU-1": taro
 had decided that the more than 40 pictures of the console would be only in the
 `.msu`. That same day he changed his mind, before anything had been
-committed: "Not having the console, I think, does not prevent playing, but
-it makes the experience somewhat worse. […] I think we can turn that whole
-system into something custom but generic — a feature designed to build
-custom menus, that follows the same rules as the rest of the
-items/etc. menu. Then we would not need any picture. Or maybe only
-the ones that show the characters' art". It is the idea of
+committed, in their words, translated:
+
+> Not having the console, I think, does not prevent playing, but it makes
+> the experience somewhat worse. […] I think we can turn that whole
+> system into something custom but generic — a feature designed to build
+> custom menus, that follows the same rules as the rest of the items/etc.
+> menu. Then we would not need any picture. Or maybe only the ones that
+> show the characters' art
+
+It is the idea of
 `custom-menu-of-our-own-not-made-of-pictures.md`, without mode 5: today there is variable width
 in low resolution.
 
 And two decisions of his for the design: **it is one more option of the pause
-menu**, and **always full screen** ("this system does not allow
-rendering over the map. That way we solve VRAM challenges etc.").
+menu**, and **always full screen**, in their words, translated:
+
+> this system does not allow rendering over the map. That way we solve
+> VRAM challenges etc.
 
 The assignment: a study with mock-ups, **and stopping before touching the ROM**,
 because it is design and taro wants to see it. Lagartija did it, from `main` at
@@ -73,7 +79,10 @@ transcription of the thirteen pages and six tables, with their goldens.
 
 # What taro decided
 
-On 2026-10-04: "the design goes ahead, with portrait, \"Console\", and only with the item".
+On 2026-10-04, in their words, translated:
+
+> the design goes ahead, with portrait, "Console", and only with the item
+
 That is: the study's design ([`research/2026-10-04-the-custom-menu.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-04-the-custom-menu.html))
 as is, with the characters' portraits and not their faces, the label
 "Console" in the pause menu, and the option visible only while item 81

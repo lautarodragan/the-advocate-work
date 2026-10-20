@@ -33,8 +33,9 @@ wasn't counted.
 up to the station bathroom (map 7) and compare with the original in Wine.
 
 taro, on 2026-10-16: Desert Nightmare's toilet (map 7) is practically
-invisible under the darkness the original lays at 35 %; "I'd try rendering
-it at 50 %, if possible".
+invisible under the darkness the original lays at 35 %:
+
+> I'd try rendering it at 50 %, if possible
 
 ## Tijereta, 2026-10-16
 

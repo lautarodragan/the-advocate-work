@@ -405,8 +405,9 @@ it's better to use the same agent or one after the other; an opcode for
    cartridge, and the battles whose background doesn't fit in the ROM share one of the
    ones already there, in low quality, instead of coming out black. It is its own task:
    `all-the-battle-backgrounds-in-the-msu-1.md`.
-7. **The cartridge**: squeeze first. taro: "at this rate, neither 6 MB nor 8 MB
-   will let us cover the whole game".
+7. **The cartridge**: squeeze first. taro, in their words, translated:
+
+   > at this rate, neither 6 MB nor 8 MB will let us cover the whole game
 
 # Questions for taro
 

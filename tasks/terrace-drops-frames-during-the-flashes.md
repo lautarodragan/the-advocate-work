@@ -5,9 +5,12 @@ type: bug
 status: done
 ---
 
-taro notices lag in the terrace scene (map 32) and in Kersh's blue flash
-(`two-flashes-at-once.md`: "it got better, but it isn't perfect; what's
-left is lag"). The chips research (`expansion-chips-sa-1-and-s-dd1.md`, "Dónde se va el
+taro notices lag in the terrace scene (map 32) and in Kersh's blue flash;
+in `two-flashes-at-once.md`, in their words, translated:
+
+> it got better, but it isn't perfect; what's left is lag
+
+The chips research (`expansion-chips-sa-1-and-s-dd1.md`, "Dónde se va el
 cuadro hoy") measured that in the heavy loop iterations almost 200 of the 262
 lines go into recomputing palettes: `destello_tick` ~103 and `flashes_tick`
 ~94. It's pure CPU, and measured in snes9x: on hardware it may be worse (see

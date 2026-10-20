@@ -7,14 +7,23 @@ agents: [Chajá]
 assignee: taro
 ---
 
-From taro, on 2026-10-05: "when I tried the newest maps (the way to
-Paradise), I noticed that some enemies have no graphic (it isn't rendered or it doesn't
-exist). This was with the msu." Played with the build
+From taro, on 2026-10-05, in their words, translated:
+
+> when I tried the newest maps (the way to Paradise), I noticed that some
+> enemies have no graphic (it isn't rendered or it doesn't exist). This
+> was with the msu.
+
+Played with the build
 `2026-10-04-83e4886-3e0b7b59` or the previous one, on the console or the emulator,
-with the tracks and the `.msu` alongside. Later he specified: "in the forest, right
-as you enter from the world map, the one that takes you to Paradise, before the
-agents with the hover tram appear. I think the enemies' name
-was Ogre or something like that", and "it may be the Rogue Bandit".
+with the tracks and the `.msu` alongside. Later he specified:
+
+> in the forest, right as you enter from the world map, the one that takes
+> you to Paradise, before the agents with the hover tram appear. I think
+> the enemies' name was Ogre or something like that
+
+And:
+
+> it may be the Rogue Bandit
 
 ## What it was
 
@@ -93,7 +102,11 @@ and doesn't stay in the suite, because the bug wasn't on that path.
 
 ## Dr. Vago
 
-taro: "Dr Vago doesn't show up in his battle either". It is the same cause: troop
+taro, in their words, translated:
+
+> Dr Vago doesn't show up in his battle either
+
+It is the same cause: troop
 178, the only one with him, fights on 76 with the RTP's `Man5`. Sorbe's
 walkthrough plays that battle and takes a picture of it,
 `sorbe-y-la-curacion/05-la-pelea-con-vago`, but it was in

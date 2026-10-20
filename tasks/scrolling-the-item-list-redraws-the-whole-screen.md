@@ -6,10 +6,12 @@ status: done
 assignee: taro
 ---
 
-From taro, on 2026-09-30, playing: "scrolling in the item menu seems to cause
-a full redraw of the screen, and it flashes for a second. I think the
-main problem is that it goes black for a frame, and that the window borders
-get redrawn too and not just the text".
+From taro, on 2026-09-30, playing, in their words, translated:
+
+> scrolling in the item menu seems to cause a full redraw of the screen,
+> and it flashes for a second. I think the main problem is that it goes
+> black for a frame, and that the window borders get redrawn too and not
+> just the text
 
 Done means: going from one page of the list to the other, only the list's text
 changes, without any black frame or redraw of the borders, measured

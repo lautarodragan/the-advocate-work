@@ -13,9 +13,13 @@ Improve how the sound effects sound. The limits they had —see
 each map's audio package, at 6 kHz and at most three quarters of a second
 (a longer one repeats its last 0.4 s until it lasts as long as in RM2k).
 
-**The condition is taro's**, from 2026-09-26: *"I don't find it acceptable for
-instruments to lose quality because of a single map, but I don't want to lose
-quality in the sound effects either."* Since the per-package budget, the
+**The condition is taro's**, from 2026-09-26, in their words, translated:
+
+> I don't find it acceptable for instruments to lose quality because of a
+> single map, but I don't want to lose quality in the sound effects
+> either.
+
+Since the per-package budget, the
 sound effects are subtracted before allotting, so enlarging one lowers the rate of
 its package's samples **if that package is the one that limits them**. The idea
 he approved: choose the quality effect by effect, as with the thunder.
@@ -202,8 +206,12 @@ arrival and the `PlayBGM`, and that `PlayBGM` frozen for longer. It wasn't done.
 
 # The candidates, whole (2026-09-26, in the branch, unmerged)
 
-taro, listening: *"I have zero doubts that they have to have their full
-length (all of them)"*. First he asked for half (11 kHz) as a minimum; with the
+taro, listening, in their words, translated:
+
+> I have zero doubts that they have to have their full length (all of
+> them)
+
+First he asked for half (11 kHz) as a minimum; with the
 numbers for that —the battle theme and `evilrhys` at a quarter, 196 pairs
 going down— he said that affecting the music so much doesn't please him, and it ended up like this:
 **all whole, at half only where it's free, and otherwise at the usual 6 kHz**.

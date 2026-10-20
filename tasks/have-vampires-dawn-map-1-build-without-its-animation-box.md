@@ -14,7 +14,9 @@ tiles of its box don't fit in the sprite bank: it spends 320 of 0. See
 the map is left without those animations, with a WARNING. Whatever shows up
 behind it, of the same kind, too.
 
-taro, on 2026-10-06: "let's do those two in parallel", with Sonnet.
+taro, on 2026-10-06, with Sonnet, in their words, translated:
+
+> let's do those two in parallel
 
 ## What was done (Carpintero, 2026-10-06)
 

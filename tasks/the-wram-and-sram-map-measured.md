@@ -8,8 +8,9 @@ agents: [Hurón]
 ---
 
 taro, on 2026-10-14, worried by the far RAM pool being nearly full (79 B
-left in release, ~20 B in the whole game, after Tijereta and Hurón): "are
-we going to reach an insurmountable limit?"
+left in release, ~20 B in the whole game, after Tijereta and Hurón):
+
+> are we going to reach an insurmountable limit?
 
 What Hornero answered, unmeasured: the 79 B are of `FARBSS`, an 832-byte
 stretch chosen by hand (`FAR_POOL_START`/`FAR_POOL_SIZE` in

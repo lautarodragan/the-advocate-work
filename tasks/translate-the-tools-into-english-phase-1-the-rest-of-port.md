@@ -6,7 +6,11 @@ status: done
 assignee: taro
 ---
 
-From taro, on 2026-09-29: "translate the tools into English". It is the
+From taro, on 2026-09-29, in their words, translated:
+
+> translate the tools into English
+
+It is the
 AGENTS.md rule for the separate projects, which now reaches all of `tools/`
 (see `decisions/the-tools-split-from-abl.md`).
 

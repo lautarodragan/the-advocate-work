@@ -7,9 +7,10 @@ assignee: taro
 agents: [Cardón]
 ---
 
-taro, on 2026-10-14: "a new analysis of ABL, to list which blockers it has
-today that stop it from being played to the end? I suspect very little is
-missing."
+taro, on 2026-10-14:
+
+> a new analysis of ABL, to list which blockers it has today that stop it
+> from being played to the end? I suspect very little is missing.
 
 ## Log
 
