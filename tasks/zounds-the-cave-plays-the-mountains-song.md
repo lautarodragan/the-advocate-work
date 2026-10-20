@@ -25,13 +25,20 @@ plays the first song it finds, over the one an event started on the map
 before. Only 59 and 99 (Caida) play the dungeon's song, with a `PlayBGM`
 on their autostart page.
 
-**It is the original's**: with the game's own `RPG_RT.exe` (2003) under
-Wine, a copy of the game whose start is map 59 and whose page teleports to
-60 after its `PlayBGM`, saved by an autostart page on 60, has
-`18 - Desert flower` as its current music (Save01's `current_music`).
-EasyRPG's `Game_Map::PlayBgm` does the same. The port matches it, and
-`test_the_cave_east_of_the_start_plays_the_mountains_song`, in the ports'
-`tests/test_zounds.py`, holds it.
+**It is the original's**: measured twice with the game's own `RPG_RT.exe`
+(RPG Maker 2003, 1.0.8.0) under Wine. The second time, on 2026-10-20,
+walking the game's own way in from its `Save02.lsd` with the three
+switches Bandurion's quest sets on (87, 89, 98): 51's stairs, 58's fall,
+59, 60, 63. What it looked up, what it sent to the MIDI port and what was
+recorded from its audio agree: Desert flower on 51, `ff3boss` from the
+fall's `PlayBGM`, Desert flower again on landing on 59 (an event's song
+does not survive a "the parent's" map), `Zounds_Dungeon_01` from 59's
+page, and Desert flower, from its beginning, on entering 60 and on. The
+save it wrote afterwards at 59's save point says `18 - Desert flower`.
+The recording is in `/shared/audio/2026-10-20-zounds-cave-music/`.
+EasyRPG's `Game_Map::PlayBgm` does the same, the port matches it, and
+`test_down_the_crack_the_cave_plays_the_mountains_song`, in the ports'
+`tests/test_zounds.py`, walks that same path and holds the sequence.
 
 The same goes for 51, 52 and 53 outside the crack: they also climb to 33.
 
