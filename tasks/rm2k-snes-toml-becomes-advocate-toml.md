@@ -39,3 +39,27 @@ Baseline: every game's cartridges built from scratch with the local
 tools of 97ae388d (`project cartridge convert patches rm2k-snes-audio`,
 the only crates that compile `rm2k-project`), hashed, to compare against
 the same build after the rename.
+
+**The rename.** In the-advocate, `FILENAME` is `advocate.toml`, with the
+tests, help texts, layering test and `test-game/advocate.toml` in one
+commit, and READMEs and `LAYOUT.md` in another. **No fallback to the old
+name**: the ten projects are ours and moved together, and two names for
+one file are two answers to "which one does it read". But `find` stops at
+a directory with an `rm2k-snes.toml`, and `open` refuses it —"has
+rm2k-snes.toml, which is called advocate.toml since 2026-10-20: rename
+it"—, so an old checkout neither gets "found no advocate.toml" nor walks
+past its game to another project further up; a test of its own, shown
+red first. In the ports, the nine `git mv`, the root's `deliver` glob,
+`tests/games.py`, the two tests that read a setting from the file, and a
+dated section in `RENAMES.md`; the prose in its own commit. The book's
+living pages and AGENTS.md follow; the research snapshots and the
+engine-vs-RM2k data, frozen at their commit, keep the old name.
+
+**Byte for byte.** Every game's cartridges built from scratch with the
+local tools of 97ae388d on the ports at f3cff0e, and again with the
+renamed tools on the renamed ports: the 34 `.sfc` and `.msu` —ABL's
+`release` and its eight test cartridges, and the other eight games'
+`release`— come out with the same sha256. `abl.sfc`:
+`7ec61010ab940141c9925aa74ce53d52d17c0d39dfed7e5ea05627a5175c252e`.
+`just test`, `just rust-test`, `just lint` and `just test-game` green in
+the-advocate.
