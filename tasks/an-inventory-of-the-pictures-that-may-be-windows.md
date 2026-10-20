@@ -2,9 +2,7 @@
 name: "An inventory of the pictures that may be windows"
 description: "A tool that lists every ShowPicture of a game with its context and a tentative class —a menu with a cursor, a message frame, a HUD, a scene—, so that an agent sorts the doubtful ones and taro picks which to turn into windows"
 type: feature
-status: doing
-assignee: Aguará
-agents: [Aguará]
+status: todo
 ---
 
 taro, on 2026-10-20:
@@ -28,6 +26,13 @@ taro, on 2026-10-20:
 > cubra muchos casos, pero podríamos inferir un patrón de los sistemas
 > que hayamos convertido (cuando los tengamos) y ver si podemos dejar una
 > combinación de scripts tradicionales y recetas para IA.
+
+And, the same day, on when:
+
+> no lanzaría nada por ahora — solo crearía la tarea. Por ahora prefiero
+> seguir a mano con los casos que ya conocemos, y luego invertir en esto.
+
+So it waits in `todo` until the known cases are converted by hand.
 
 **The plan** (Hornero, agreed with taro the same day):
 
