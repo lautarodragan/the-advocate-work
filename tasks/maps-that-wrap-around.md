@@ -127,7 +127,9 @@ and the rest do not change.
   the branch's in the same ports worktree: byte for byte the same, twice
   (before and after the last change to the runtime). Its suite with the
   branch's tools, after merging main (the-advocate `f15cca10`, the ports
-  `0bf3b43`): 1573 passed, no golden moved. The round before had nine
+  `0bf3b43`): 1573 passed, no golden moved; and again after merging it
+  once more (`e1e7b6da`, `8ebff17`, Chajá's battle text): 1573 passed, and
+  Zounds' 28 tests of `just boot -k zounds` too. The round before had nine
   reds, all ABL's linter over an annotation in wrap.s that ABL's
   cartridges do not assemble: that is why there is none.
 * **The test game's ring** (map 8, `test_wrap.py`): the hero across the left
