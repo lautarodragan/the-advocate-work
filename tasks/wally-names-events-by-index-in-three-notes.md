@@ -2,7 +2,9 @@
 name: "Wally names events by index in three notes"
 description: "Three of Wally's notes print an event's index plus one, not its RM2k id: on a map with gaps in its numbering they name another event"
 type: bug
-status: todo
+status: doing
+assignee: Hurón
+agents: [Hurón]
 ---
 
 Seen by Hurón on 2026-10-15, reading `rm2k-snes/wally/src/map.rs` at
