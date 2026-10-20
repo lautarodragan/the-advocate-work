@@ -2,7 +2,7 @@
 name: "The Book of Three: the map's place names are hard to read"
 description: "The map item shows the land's map over the whole screen; its place names are partly the picture's transparent colour, which shows the map in RM2k and the backdrop on the console, so they come out grey and dimmer"
 type: bug
-status: draft
+status: todo
 agents: [Chajá]
 ---
 
@@ -41,3 +41,9 @@ If it is taken: a big picture's holes could show a fixed colour of the
 picture's instead of the backdrop —here the letters' white—, or the
 transparent colour could be left opaque for a picture that covers the
 screen. A matter of looks: taro decides whether it is debt.
+
+## taro's decision (2026-10-20)
+
+To todo: taro has not seen it yet, but if they are hard to read it has to be fixed.
+
+**Done**: the place names on the map item read as in RM2k —the transparent colour shows the map behind, not the backdrop—, with a golden of the map item that is red before. **First step**: which pixels of the picture are the transparent colour, and what RM2k draws behind them.

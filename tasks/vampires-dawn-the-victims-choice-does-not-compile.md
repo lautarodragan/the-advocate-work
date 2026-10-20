@@ -2,7 +2,7 @@
 name: "Vampires Dawn: the victims' choice does not compile"
 description: "The choice 'Talk / Suck Blood / Convert / Leave', whose options carry leading spaces and a \\_, refuses 210 pages on 48 maps, with no other culprit in them"
 type: bug
-status: todo
+status: done
 ---
 
 Seen by Chajá on 2026-10-14, with the-advocate `3438a90c` (branch
@@ -71,3 +71,7 @@ counted it read the dump's maps and `culprits.json`.
 So what this task asked for is done, and what keeps the victims' pages out
 now is mostly the variables' cap, which has its own task. Whether this one
 closes, or waits for the test of event 46 the Done asks for, is taro's call.
+
+## taro's decision (2026-10-20)
+
+Closed, as Chajá recommended: what this task asked for —the choice compiling— holds since Chajá's check above. What still leaves those pages out is the cap of 256 variables, and that is followed in [`variables-are-capped-at-256-slots`](variables-are-capped-at-256-slots.md).

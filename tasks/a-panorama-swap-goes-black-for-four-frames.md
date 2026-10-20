@@ -2,7 +2,7 @@
 name: "A panorama swap goes black for four frames"
 description: "A ChangePBG that swaps the picture mid-map leaves the screen black while the ring of its tilemap is built one cell at a time; behind a fade it does not show"
 type: feature
-status: draft
+status: wishlist
 agents: [Aguará]
 ---
 
@@ -29,3 +29,7 @@ into a buffer and blanking only for the DMAs, which takes 4 KB of RAM.
 
 To see it: `measure.py`, in the scratchpad of that day, did the above; any
 map that swaps after its fade shows it as a black blink.
+
+## taro's decision (2026-10-20)
+
+To the wishlist, as Tijereta recommended: today every swap falls behind a fade.

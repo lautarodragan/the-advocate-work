@@ -70,3 +70,9 @@ What the Done asks for and is missing is the golden of that screen in the
 ports' tests (`tests/test_boot.py` already reaches map 16 from it), and the
 line in the book's Known issues of Desert Nightmare, which still blames
 the garbage.
+
+## taro's decision (2026-10-20)
+
+As Chajá recommended: a small golden of the start menu in the ports'
+`tests/test_boot.py`, this task closed and its "Known issues" line removed
+from Desert Nightmare's page in the book, all in the same change.

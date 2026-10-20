@@ -2,8 +2,7 @@
 name: "The goldens of the Neon Vipers playthrough"
 description: "The shots of the vipers playthrough have no golden: a part of playthrough-pending-goldens, which is where they are done"
 type: test
-status: todo
-assignee: taro
+status: done
 ---
 
 `tests/abl/test_playthrough_vipers_golden.py` takes its shots, but none
@@ -31,3 +30,7 @@ Two facts above are out of date: since 2026-09-29 a shot without a golden
 **fails** unless it is in `pending.txt` (see that file's header), so they
 no longer pass in silence; and captures for taro go to
 `/shared/captures/<date>-<topic>/`, not `/shared/goldens/`.
+
+## taro's decision (2026-10-20)
+
+Closed as a duplicate of [`playthrough-pending-goldens`](playthrough-pending-goldens.md), as Chajá recommended; the warning about DummyHero and `set_party(14)` went there.

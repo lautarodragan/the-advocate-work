@@ -2,7 +2,7 @@
 name: "A ChangePBG with no name keeps the panorama"
 description: "In RM2k a ChangePBG with an empty name takes the panorama away; the console keeps the one there is and only changes its scroll"
 type: bug
-status: draft
+status: wishlist
 agents: [Aguará]
 ---
 
@@ -22,3 +22,7 @@ seen playing.
 What it would take: a map with a panorama of its own carrying the empty
 record too —today only a map without one starts with it— and the compiler
 numbering the empty name to it.
+
+## taro's decision (2026-10-20)
+
+To the wishlist, as Tijereta recommended: no game uses it.

@@ -2,7 +2,7 @@
 name: "Desert Nightmare's own message frame"
 description: "Desert draws its messages with two pictures of its own, TextboxInnen and TextboxRahmen; today's release does not draw them in 157 maps"
 type: bug
-status: draft
+status: todo
 ---
 
 Seen by Calandria on 2026-10-11, in passing
@@ -30,3 +30,9 @@ copy "the map has no room for them besides its own". As pictures they
 will rarely fit; what to do needs a decision —for instance the frame
 turned into the game's window look through the port's manual patches, so
 that the console's own window draws it—.
+
+## taro's decision (2026-10-20)
+
+To todo, with Tijereta's recommendation: the frame becomes the game's window look —its System graphic— through the port's manual patches, so that the console's own window draws it, instead of drawing `TextboxInnen` and `TextboxRahmen` as pictures.
+
+**Done**: Desert Nightmare's messages are drawn in a window with its own frame on every map, and `degradations.json` no longer lists those two pictures as not drawn. **First step**: how the common events show the two pictures around a message, and whether a System made from them fits RM2k's window layout.
