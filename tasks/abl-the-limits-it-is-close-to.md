@@ -8,8 +8,10 @@ agents: [Cardón]
 ---
 
 taro, on 2026-10-14, after the whole game reached main with the items cut
-at 255: "Let's keep the forced 1-byte limit for now. Let's measure what
-other limitations like that ABL has."
+at 255:
+
+> Let's keep the forced 1-byte limit for now. Let's measure what other
+> limitations like that ABL has.
 
 ## Log
 

@@ -6,10 +6,12 @@ status: wishlist
 ---
 
 taro, 2026-10-16, deciding how Zounds' picture-made menus go
-([`zounds-pictures-and-the-picture-made-screens`](zounds-pictures-and-the-picture-made-screens.md)):
-"Eventualmente me gustaría extender más aún lo que hicimos para la consola
-de ABL, un sistema de ventanas para RM. Creo que fue un missing feature de
-RM2k que llevó a muchas implementaciones caseras con ShowPicture."
+([`zounds-pictures-and-the-picture-made-screens`](zounds-pictures-and-the-picture-made-screens.md)),
+in their words, translated:
+
+> Eventually I'd like to extend even further what we did for ABL's
+> console, a window system for RM. I think it was a missing feature of
+> RM2k that led to lots of home-made implementations with ShowPicture.
 
 It belongs with RPG Maker 2000 PLUS: new engine features for any game,
 backwards compatible. Not started; nothing blocks on it.

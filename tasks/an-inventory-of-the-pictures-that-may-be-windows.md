@@ -5,32 +5,33 @@ type: feature
 status: todo
 ---
 
-taro, on 2026-10-20:
+taro, on 2026-10-20, in their words, translated:
 
-> tal vez podemos detectar qué cosas podrían reemplazarse por el sistema
-> de ventanas, no? El de la consola salió mucho mejor de lo que esperaba,
-> y luego empezaron a aparecer patrones que podemos detectar bastante
-> bien — el problema original es ShowPicture, así que creo que podríamos
-> analizar estáticamente los ShowPicture e intentar inferir cuáles son
-> ventanas custom.
+> maybe we can detect which things could be replaced by the window
+> system, no? The console's turned out much better than I expected, and
+> then patterns started to show up that we can detect pretty well — the
+> original problem is ShowPicture, so I think we could statically analyse
+> the ShowPictures and try to infer which ones are custom windows.
 >
-> Deberíamos poder
-> - tener un binario (o funcionalidad de uno existente) que analice y
->   liste los ShowPicture, junto a algo de contexto relevante
-> - alimentarle esa lista a un agente para que decida los casos que no
->   son obvios, pero sin tener que partir de cero
+> We should be able to
+> - have a binary (or functionality of an existing one) that analyses and
+>   lists the ShowPictures, along with some relevant context
+> - feed that list to an agent so it decides the cases that aren't
+>   obvious, but without having to start from scratch
 >
-> Eso solo nos daría la lista, pero no implementaría nada.
+> That alone would only give us the list, but wouldn't implement
+> anything.
 >
-> Aún no me animo a asumir que podemos inventar una solución general que
-> cubra muchos casos, pero podríamos inferir un patrón de los sistemas
-> que hayamos convertido (cuando los tengamos) y ver si podemos dejar una
-> combinación de scripts tradicionales y recetas para IA.
+> I don't dare yet to assume we can invent a general solution that covers
+> many cases, but we could infer a pattern from the systems we've
+> converted (when we have them) and see if we can leave a combination of
+> traditional scripts and recipes for AI.
 
-And, the same day, on when:
+And, the same day, on when, in their words, translated:
 
-> no lanzaría nada por ahora — solo crearía la tarea. Por ahora prefiero
-> seguir a mano con los casos que ya conocemos, y luego invertir en esto.
+> I wouldn't launch anything for now — I'd just create the task. For now
+> I'd rather keep going by hand with the cases we already know, and then
+> invest in this.
 
 So it waits in `todo` until the known cases are converted by hand.
 
