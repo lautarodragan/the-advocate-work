@@ -1044,6 +1044,15 @@ pulled—. A new one of those carries its own; one that no longer allows
 anything is red too. Until 2026-10-18 they were a list in ABL,
 `linter-exceptions.txt`.
 
+**The ROM is not shaped around a tool's limits; the tool is improved.**
+If Goombario —or any of ours— cannot follow code that is right, the fix
+goes in the tool, with its own tests, and not in the runtime. A change
+to the runtime made only to please a tool is accepted only if it costs
+nothing at run time; if it costs even one cycle or one byte, the tool
+gets better instead. It is taro's, from 2026-10-20. On that day the maps
+that wrap reached their far code through a pointer in BSS, only so that
+Goombario would not walk the path: an indirect jump on every hook.
+
 ## Git
 
 Commits go straight to `main`, in all four repos, **and are pushed**: since
