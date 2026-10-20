@@ -24,7 +24,8 @@ standing here, and the other repos are next to it:
 **The paths in this file are from inside each repo**, and which one is
 said by the section or by the path itself: `runtime/…`, `snes/…`, `rm2k/…`
 and `rm2k-snes/…` are from `the-advocate`; `tests/…`, `patches/…`, and a
-bare `justfile` and `rm2k-snes.toml`, from `abl/` in `the-advocate-ports`.
+bare `justfile` and `advocate.toml` —each game's project file, called
+`rm2k-snes.toml` until 2026-10-20—, from `abl/` in `the-advocate-ports`.
 Inside `the-advocate`:
 
     justfile         what can be run —testing and installing the
@@ -504,7 +505,7 @@ path is compiled into `project`—: reinstalling from another checkout
 changes which runtime goes into the ROM. No script or test of the ports
 calls `cargo` or names the path of `the-advocate`, and
 `tests/tooling/test_abl_side.py` guards it: what the tools know
-about the project —its paths, the `rm2k-snes.toml`— the harness asks
+about the project —its paths, the `advocate.toml`— the harness asks
 `rm2k-snes-project` (`tests/harness/project.py`).
 
 **To run ABL with the tools of a checkout that changes them** —a worktree
