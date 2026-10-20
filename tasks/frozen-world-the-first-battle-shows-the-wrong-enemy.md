@@ -2,8 +2,8 @@
 name: "Frozen World: the first battle shows the wrong enemy"
 description: "The game's first battle, started by a plant on the map, shows a dark hooded figure —the final enemy's or the intro's wizard's graphic— instead of the plant"
 type: bug
-status: doing
-assignee: Tijereta
+status: testing
+assignee: taro
 agents: [Tijereta]
 ---
 
@@ -68,8 +68,11 @@ their last page and puts it in the table, and the cartridge says it as the
 symbol `TEST_SWITCH` (`mapdata.inc`), which the test game's harness reads
 instead of its own 1023. The Frozen World's is **1078**, inside the table
 it already had (`SWITCH_BYTES` 135); a game that does not name 1023 keeps
-it, which is all the others —ABL, the test game, the seven ports—, so
-their cartridges should not move. ABL's harness still says 1023 in
+it: ABL, the test game and six of the seven ports keep 1023, and ABL's
+release came out byte for byte the main checkout's. **Vampires Dawn moves
+too**, to 1644: its map 69 turns off every switch from 1 to 1641 with a
+range, which until today counted only its ends; its table does not grow
+(`SWITCH_BYTES` 206 either way). ABL's harness still says 1023 in
 `abl/tests/harness/events.py`, which is right for ABL.
 
 The book's decision
@@ -84,3 +87,22 @@ global tools of `2c350d8f` ("switch 1023 is on at the beach"), green with
 this branch's. In the-advocate,
 `the_test_switch_is_one_the_game_does_not_name` (indices) and
 `the_scan_says_the_highest_switch` asks the scan for it.
+
+**Verified**, with this branch's `events`, `mapdata` and `convert`
+installed locally: the crate tests of the three; the-advocate's `just test`
+(29 passed); `just test-game` with `SOUNDFONT=FluidR3_GM.sf2` (45 passed, 1
+skipped), whose harness now reads `TEST_SWITCH`; the ports' `just boot`
+(91 passed, Frozen World's cursor tests and the new one included); ABL's
+suite, 1572 passed, 2 skipped and one red in `test_cores.py`,
+`big-picture-return-240`, which passed twice alone right after on the same
+build —the release it plays was byte for byte main's—: draft
+[`abl-test-cores-big-picture-return-red-once-in-a-full-run`](abl-test-cores-big-picture-return-red-once-in-a-full-run.md).
+
+**Branches**: `tijereta-fw-enemy` in the-advocate, the ports and the book.
+**To install when merging**: `just install events mapdata convert`.
+
+**For taro to play**: a new game to the cave next to the beach, and the
+plant: the first battle shows the plant. Not compared with the original
+under Wine
+([`frozen-world-does-not-open-under-wine`](frozen-world-does-not-open-under-wine.md)):
+what RM2k shows is read in the dump.
