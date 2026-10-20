@@ -151,3 +151,18 @@ counted on `msg_arrow` writing only the arrow, and with the typing
 makes the same test with its own size, and late cells wait for the next
 vblank. The book's lossless page had collided on the same paragraph; it
 says both.
+
+**Where it stands** (Tijereta, 2026-10-20, saved in case the session is
+cut). Branches `tijereta-message-colours`: the-advocate `64a4bf21`
+(merged with `origin/main` 090b0037), the ports `647c189` (merged with
+main), the book `89abf9e` (merged with main). All committed. Measured on
+the merged trees, with every crate main or this branch touched installed
+locally (`text events screens mapdata convert cartridge project battle
+wally images`): the test game 63 passed, 1 skipped; ABL's suite 1,589
+passed, 2 skipped; `just test`, `rust-test` (1,070) and `lint` green. The
+root suite (`just boot`) was running on the merged tree; it was green
+file by file before the merge, after the retimes and the twenty goldens.
+**Left**: the root suite's result on the merged tree; `just space` again
+after the merge; moving this task to `testing` with taro as assignee.
+**Next step**: if the session was cut, run `just boot` from the ports
+worktree with `.local-tools/bin` first in the PATH, and hand back.
