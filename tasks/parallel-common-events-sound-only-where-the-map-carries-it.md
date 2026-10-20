@@ -59,3 +59,15 @@ they call, and every map if a switch item or skill, or a parallel or
 automatic common event, can. ABL: maps 20 and 21. What is left out: a map
 the party reaches with the switch already on and that does not turn it on
 itself stays silent.
+
+**A switch turned on right before a `Teleport`** —only instant commands
+in between: switches, variables, the weather, comments— **counts for the
+destination**: RM2k moves the party in that same frame (easyrpg's
+`Scene_Map::UpdateStage2` starts the pending teleport after the map's
+update, where the parallel common events already ran), so the common event
+never runs on the map that turned it on. It is ABL's map 21: counted there,
+`Rain1` went into its package and the map's song lost its guitar, trumpet
+and organ from 22, 22 and 13 kHz to ~10, ~9 and ~10 kHz —measured, its
+`audio.json` against `main`'s—, for a rain that never sounds there. With
+the rule, only map 20's package gains `Rain1`, and map 20 had 45,698 B
+free: no instrument moves.
