@@ -2,8 +2,8 @@
 name: "Zounds: a debug map"
 description: "A map of our own with doors to the ship after the intro, the desert on first arrival with Kazar, and the desert with the pickaxe; and someone to level Kazar and Uname up"
 type: tooling
-status: doing
-assignee: Carpintero
+status: testing
+assignee: taro
 agents: [Carpintero]
 ---
 
@@ -83,8 +83,8 @@ title** —page 0 is automatic and runs on the first game frame, which
 asks for the room. The boot clears the variables before the title, and
 "New Game" does not touch them.
 
-**For a clean delivery, `false`**: measured, the ROM comes out byte for
-byte as with the map files absent (see below).
+**For a clean delivery, `false`**: measured, `zounds.sfc` comes out byte
+for byte as `acff443`'s, built in a separate worktree.
 
 # The room
 
@@ -146,3 +146,42 @@ levels"; compiled since ABL's debug map (`OP_EXP` with `EXP_BY_LEVELS`).
 Kazar's level stays with him when a door takes him out. The question and
 its three options fit in one box in RM2k; here they are two —see the
 draft below—.
+
+# Tests
+
+`tests/test_zounds_debug_map.py` in the ports, on `release`, snes9x:
+
+* "New Game" lands in the room, at the entrance, with Uname and Kazar,
+  golden `zounds-debug-room`;
+* each door crossed walking, answering "Go": the map, the cell, the party,
+  the gold, the items, every game switch that is on and the variables
+  —map 1's constants, 14 and 17—; a golden of each arrival
+  (`zounds-debug-ship`, `-desert`, `-pickaxe`) and that the hero walks.
+  The game's door plays the intro to map 7;
+* the man: +1 and then +5, Uname and Kazar at 2 and at 7;
+* the clean delivery's cases, asked of the builder without building it.
+
+Shown red with `debug_map = false` (6 of 7: no room). The harness change
+—`real_game` chosen before the title— is covered by every other Zounds
+test, which plays from the title: `just boot` from the ports' root, **90
+passed**. No golden moved; the four new ones were looked at, and are with
+each door's question and options and the man's in
+`/shared/captures/2026-10-20-zounds-debug-map/`.
+
+**Not covered**: playing on from each destination —the ship to the
+desert, the desert to the cave—; "Continue" with a save from before the
+room; bsnes.
+
+# To install when merging
+
+Nothing: no Rust was touched.
+
+# What taro has to test
+
+* "New Game": the room, the man (both levels, his message), each door's
+  question and "Stay".
+* The ship: that the story goes on from Uname's room —the boss, the
+  cafeteria, the bed—.
+* The desert the first time: Kazar's scene, and going on to Bandurion.
+* The pickaxe: using it in the desert, and the rock (switch 59) gone.
+* "Continue" with an old save.
