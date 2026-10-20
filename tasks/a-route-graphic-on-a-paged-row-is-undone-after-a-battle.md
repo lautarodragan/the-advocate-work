@@ -2,7 +2,7 @@
 name: "A route's graphic on a row its pages draw is undone after a battle"
 description: "After a battle or a big picture every row is set up from its page again, and a row whose page draws something gets the page's graphic back over the one a route's command 34 gave it"
 type: bug
-status: draft
+status: todo
 agents: [Calandria]
 ---
 
@@ -27,3 +27,18 @@ a page change), so the route's graphic stays.
 **How to see it**: an event with a graphic on its page, a forced route
 that changes it with command 34, then a battle; after it, the event shows
 its page's graphic. In which game's scene this happens is not measured.
+
+## Defined (2026-10-20, Tijereta)
+
+Checked against the-advocate `8f290c39`: still so. `page_graphic`
+(`runtime/event_pages.s`) looks at `applied_again` only for a page that
+draws nothing; one with a graphic goes through `with_graphic` and takes
+its page's pose bank and palette again. **Done**: after a battle or a big
+picture, a row whose graphic a route's command 34 changed keeps the
+route's graphic, whether its page draws something or not, and a walker
+still uploads its pose; a test-game case —an event with a graphic, a
+forced route that changes it, a battle— whose golden after the battle
+shows the route's graphic. **First step**: that case, red; then whether
+the row can say a route dressed it (a flag `change_graphic` sets and a
+page change clears) or the refresh can upload the row's current graphic
+instead of the page's.

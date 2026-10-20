@@ -2,7 +2,7 @@
 name: "Items that give a condition in battle only hurt"
 description: "Since special items cast their skill, the ones whose skill poisons, paralyzes or puts to sleep are offered and spent, and do only their damage, or nothing: no skill gives conditions in battle yet"
 type: bug
-status: draft
+status: todo
 agents: [Tijereta]
 ---
 
@@ -28,3 +28,9 @@ items the battle now lists whose skill gives a condition:
 
 To see it: in Zounds, Kazar throws a Veneno at an enemy; the enemy loses
 HP and is not poisoned.
+
+## taro's decision (2026-10-20)
+
+To todo, as Tijereta recommended: the fix is skills giving conditions to their targets in battle, which the runtime supports since `battle-conditions-for-real` —and with it these items do what they say—, not hiding the items.
+
+**Done**: a skill with `state_effects` gives (or takes) its conditions to its targets in battle, with RM2k's hit chance, in the model and the console; Kazar's Veneno poisons an enemy in Zounds, in a test that is red before. **First step**: what `divergences/what-battle-conditions-do-not-model.md` in the book says is left, and how easyrpg's `Game_BattleAlgorithm::Skill` applies `state_effects`.

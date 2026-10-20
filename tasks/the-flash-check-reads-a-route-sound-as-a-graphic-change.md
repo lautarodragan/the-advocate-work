@@ -2,7 +2,7 @@
 name: "The flash check reads a route's sound as a graphic change"
 description: "The converter's walk over a route on the hero, to know its graphic when a flash comes, steps over command 35 without its two operand bytes"
 type: bug
-status: draft
+status: todo
 agents: [Calandria]
 ---
 
@@ -22,3 +22,16 @@ graphic, so the worst is a refusal or a missed one, not a wrong ROM.
 
 How to see it: a route on the hero with a sound effect whose index in the
 map's audio package is 34, followed by a flash of the hero.
+
+## Defined (2026-10-20, Tijereta)
+
+Checked against the-advocate `8f290c39`: still so. The walk in
+`rm2k-snes/convert/src/convert.rs` (the flashes' second round, "the
+graphic the hero has then") skips one byte after a 34 and none after a 35,
+while `route_graphics` in `rm2k-snes/events/src/pages.rs` walks the same
+path right —`ROUTE_CHANGE_GRAPHIC` two bytes, `ROUTE_SOUND` three—.
+**Done**: the converter's walk steps over command 35's two operand bytes,
+ideally through one helper both walks share, so that a third command with
+operands cannot split them again; a converter unit test with a hero route
+whose sound index's low byte is 34, followed by a flash, that does not
+read it as a graphic change. **First step**: that test, red.

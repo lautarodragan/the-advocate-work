@@ -2,7 +2,7 @@
 name: "Zounds: four of its .wav songs have no MIDI, and are silent without MSU-1"
 description: "The battle and victory themes, the mountains' (map 33) and the small caves' (89, 91, 92, 177) are recordings; no MIDI of them was found, and three of them were not even identified"
 type: bug
-status: draft
+status: wishlist
 ---
 
 Seen by Aguará on 2026-10-16, looking for MIDIs of Zounds' five `.wav`
@@ -48,3 +48,11 @@ system data), so without MSU-1 it plays the RTP's `Fanfare1`, put next to
 the WAV as `Music/2-03 Victory!.mid` in the zounds clone (Hornero); with
 MSU-1 the WAV still plays. Cavern, Mugen and Desert flower stay silent
 without MSU-1 until another song is chosen.
+
+## taro's decision (2026-10-20)
+
+To the wishlist, as Tijereta recommended: taro had already said
+
+> por ahora no hagamos nada
+
+and what is left is choosing other music.

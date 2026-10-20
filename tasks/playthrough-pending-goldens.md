@@ -35,3 +35,11 @@ new shots were added. How many are left is said by the file. It includes
 the vipers' shots, which
 [`goldens-of-the-neon-vipers-playthrough`](goldens-of-the-neon-vipers-playthrough.md)
 also asked for.
+
+## From `goldens-of-the-neon-vipers-playthrough` (2026-10-20)
+
+That task was closed as a duplicate of this one. Its warning still applies
+to the vipers shots: the game started through "Begin the Story" has
+DummyHero as leader (actor 10, no graphic), so Talan does not appear in
+the shots of `test_playthrough_vipers_golden.py`; the line that solves it
+elsewhere is `set_party(14)` before the final shots.
