@@ -3,8 +3,8 @@ name: "rm2k-snes.toml becomes advocate.toml"
 description: "Each game's project file is renamed advocate.toml; the tools keep their names"
 type: tooling
 status: doing
-assignee: carpintero
-agents: [carpintero]
+assignee: Carpintero
+agents: [Carpintero]
 ---
 
 taro, on 2026-10-20: rename each game's `rm2k-snes.toml`, in the ports,
