@@ -95,5 +95,5 @@ frames after each, frame by frame:
 "Single": each one is one frame alone —at frames 1, 35, 38, 62, 65 and
 82 of the throw at the PC—, never two in a row, so it is a missed vblank
 here and there and not a drop to 30 fps. It is the price of the
-original's 84 events against the redesign's 33, and taro played it
+original's 84 events against the redesign's 34, and taro played it
 without noticing.
