@@ -55,3 +55,32 @@ page 28; the cleanup after that battle turns it off, which is why the later
 battles show the right enemy. Not new from Carpintero's route graphics: it
 is as old as the port. Of the nine games only The Frozen World names 1023
 (Monster A's page 28, and common events 11 and 69).
+
+## The fix (2026-10-19, Tijereta)
+
+The test pages' switch is now **one the game does not name**: the
+converter asks the events' scan for 1023 (`test_switch` in the request),
+and the scan answers it, or the first switch above it that nothing names
+—`indices::test_switch` in `rm2k-snes-events`, over the same sweep as
+`switch_top`; a `ControlSwitches` range now names all of it, not only its
+ends—. The converter turns that one on in the test pages, asks for it in
+their last page and puts it in the table, and the cartridge says it as the
+symbol `TEST_SWITCH` (`mapdata.inc`), which the test game's harness reads
+instead of its own 1023. The Frozen World's is **1078**, inside the table
+it already had (`SWITCH_BYTES` 135); a game that does not name 1023 keeps
+it, which is all the others —ABL, the test game, the seven ports—, so
+their cartridges should not move. ABL's harness still says 1023 in
+`abl/tests/harness/events.py`, which is right for ABL.
+
+The book's decision
+[`the-test-page-switches-itself-off`](https://github.com/lautarodragan/the-advocate-docs/blob/main/src/decisions/the-test-page-switches-itself-off.md)
+says it now.
+
+**Test**: the ports' `tests/test_frozen_world_first_battle.py`, which plays
+to the beach, walks into the cave's plant from below and looks at the
+battle: switch 1023 still off, and Monster A's box against its golden,
+`frozen-world-first-battle-plant` —the plant, `sforceW` 3—. Red with the
+global tools of `2c350d8f` ("switch 1023 is on at the beach"), green with
+this branch's. In the-advocate,
+`the_test_switch_is_one_the_game_does_not_name` (indices) and
+`the_scan_says_the_highest_switch` asks the scan for it.
