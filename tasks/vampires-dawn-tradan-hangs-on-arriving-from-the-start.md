@@ -2,8 +2,8 @@
 name: "Vampires Dawn: Tradan hangs on arriving from the start"
 description: "Jumping to Tradan (170) right after the opening leaves a page active and the main loop without ticks, with main's tools too; maybe a page that waits for state the jump does not give, maybe a hang"
 type: bug
-status: doing
-assignee: Mulita
+status: testing
+assignee: taro
 agents: [Mulita]
 ---
 
@@ -72,3 +72,56 @@ compile. In RM2k the wait does not depend on the move: easyrpg's
 
 The fix that follows: a `MovePicture` with its wait that is not done
 still compiles its wait, an `OP_DELAY` of the duration.
+
+## The fix
+
+**2026-10-20, Mulita.** the-advocate `f6907921` on `mulita-tradan-hang`:
+a `MovePicture` that `compile_picture` cannot do now compiles its wait
+alone, an `OP_DELAY` of its duration, and the three places that emit that
+wait share `picture_wait`. It also stopped skipping a zero duration:
+`SetupWait(0)` waits one frame and `OP_DELAY 0` ends the frame, so a
+zero-length waiting move in a loop cannot hang either —one command in
+Zounds has a zero with a wait—. The compiler's test is
+`a_move_not_done_still_waits`, red without the change (the loop compiled
+to `OP_GOTO 0 0` alone).
+
+The ROM test is `tests/test_vampires_dawn_tradan.py` in the ports, branch
+`mulita-tradan-hang`: the draft's jump and 900 frames watched. Red with
+main's tools —"no tick in 3000 frames, on map 170", already inside
+`go_to_map`—.
+
+The book's divergence `a-loop-that-never-waits-does-not-compile` says that
+the wait counts even when the move is not done, and names the ROM test.
+
+## What was run
+
+With the tools of `mulita-tradan-hang` (`just install-local .local-tools
+events convert`), in the ports worktree of the same branch, on
+2026-10-20:
+
+* `just crate-test events`: 170 green, `a_move_not_done_still_waits`
+  among them; red without the caller's change.
+* ABL's `just tests`: 1576 passed, 2 skipped.
+* `just boot` from the ports' root: 96 passed and one red,
+  `test_the_painted_maps`, Sunset's square. Green with main's tools: the
+  opening's waiting moves now wait, control comes 976 ticks later
+  (11210 against 10234), and three goldens changed only in the phase of
+  what animates on its own. Regenerated until green —snes9x and bsnes—,
+  in their own commit, side by side in
+  `/shared/captures/2026-10-20-tradan-hang/`.
+* `test_vampires_dawn_tradan.py`: red with main's tools, green with the
+  branch's; one tick per frame for the 900, in snes9x and in bsnes.
+* `just space` for every cartridge of every game, before and after: bank
+  0 and everything else equal; only the gaps of the data banks shrink
+  —Vampires Dawn 657 B, Zounds 140 (and its `test-exits` 42), Desert
+  Nightmare 132, Sunset 85, El Dorado 70, The Frozen World 4—, three
+  bytes per wait that comes back. ABL's cartridges do not change.
+
+**Not covered**: no test plays Vampires Dawn's other pages whose waits
+came back —120 of its waiting moves are longer than the byte, and
+others name pictures a map does not carry—; they now wait as in RM2k, so
+a scene that seemed to rush may take its time. Nor the Zounds command
+whose zero-length move now waits one frame.
+
+**To install when merging**: `just install events convert`, from
+`~/the-advocate`.
