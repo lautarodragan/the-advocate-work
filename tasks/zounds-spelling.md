@@ -2,8 +2,8 @@
 name: "Zounds: the spelling of its Spanish text"
 description: "The game's messages, choices and names carry many spelling mistakes —\"save\" for \"sabe\", missing h's, \"uy\"/\"ay\" written wrong—; fixed in the game's own data"
 type: bug
-status: doing
-assignee: Calandria
+status: testing
+assignee: taro
 agents: [Calandria]
 ---
 
@@ -92,3 +92,15 @@ itself".
 
 Not run in RPG_RT: the data changes are strings only, and ditto reads
 every file back.
+
+**Run**: `just boot -k zounds` in the ports' branch, with `GAME_DIR` at
+the game's branch: green, every Zounds test. Its build's
+`converter.log` against `main`'s, same tools: the same warnings; what
+changed is the message window's text (three boxes fewer, 64 B less), two
+more composed tiles of names in the menu bank, and *Taza de Café* in the
+list of medicine names cut in the actor choice, where *Tasa de Café* was.
+`degradations.json` differs in that line alone.
+
+**When merging**: nothing to install. The game's `calandria-spelling`
+goes to its master (taro's repo, like the cave's fixes), the ports' and
+the book's to their `main`.
