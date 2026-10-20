@@ -78,3 +78,80 @@ the ports' games at that branch:
 
 What is still as this draft says: **the small pictures** of every such
 body, which need a map's sprite bank, and the big ones a body stacks.
+
+## Defined (2026-10-20, Carpintero)
+
+Measured with the-advocate `3bc68ac4` and the ports `b5cfc1e`.
+
+**How a page gets its pictures today.** A small picture —one that fits
+the plane of objects— is **the map's**: the converter cuts the pictures
+the scan gathered for the map into 32x32 and 8x8 objects
+(`pictures::for_map` in rm2k-snes-convert), Wally puts their tiles at
+the end of the map's sprite bank and their palettes from sprite palette 7
+down, and the emission writes each one's entry —half size, objects,
+palette, colours, base tile— in the map's `picture_data` table. A
+`ShowPicture` compiles to `OP_PICTURE slot, image, …`: `image` is the
+entry in the **loaded map's** table, and `slot` one of the console's
+sixteen, given per map by number. So the bytecode names a picture by an
+index that only means something on one map, and its tiles are in VRAM
+only because they came up with that map's bank. A body compiled once,
+without a map, cannot name one: its `ShowPicture`s are accepted without
+being done. The big ones are the exception since Chajá's change: the
+cartridge carries them once, in a table every map shares.
+
+**Who is left out, measured.** ABL's portable console is not one any
+more: common 39 has been a custom menu of the engine since 2026-10-04
+(taro: "va el diseño, con retrato, \"Console\", y sólo con el ítem"),
+and what is left with pictures, commons 11 and 16, hangs from switches
+335 and 340, which only item 150, `SCRATCHEDOUT`, turns on, and nothing
+gives it. ABL loses nothing a player reaches. **Zounds** does: its
+pick-axe (21), notebook (29), notes (40) and permit (6) are automatic on
+a switch that a **switch item** turns on —items 23, 35 and 8—, which
+the copies of 939a8bd7 did not count, so Zounds gets no copy at all.
+
+**Options, measured on Zounds.**
+
+1. **The copies, reached by the switch items too** (what `common_pages`
+   does, with the items counted): 187 of 189 maps get the copy event, and
+   the cartridge two banks more of bytecode (62 to 64). But a map takes
+   the copies' pictures all together or none, and the four do not fit
+   together **on any map**: nothing is shown. Each one alone, measured
+   by copying only it: the pick-axe fits on 23 maps, the notes on 135,
+   the permit on 130, the notebook on none.
+2. **The copies, their pictures one common event at a time** —kept if
+   each costs the map nothing beside those kept before—: tried. The
+   permit, first by number, takes 320 tiles on 128 maps and then the
+   pick-axe fits on none; and each map's bank carries the tiles it keeps,
+   **eleven banks** more (62 to 73) for one picture stored 128 times.
+   Which one goes first is a guess the cartridge cannot make.
+3. **A cartridge-wide table of the common events' pictures, their tiles
+   uploaded when one is shown.** The tiles are in the cartridge once; the
+   body compiled once names its pictures by an index every map shares;
+   and each common event is judged **alone** on each map —does its set
+   fit beside the map's bank, palettes and message arrow?—, since only
+   one set is in VRAM at a time. No copies, so it serves the parallel
+   ones and the bodies the automatic ones call too. It costs runtime: an
+   upload of the set's tiles through the vblank when it is first shown,
+   and two reads that take the base tile and the palette from the map.
+
+**Chosen: 3.** 1 and 2 pay for every map the VRAM and the cartridge of
+pictures that are seen on few of them, and 2 makes them compete; 3 pays
+once in the cartridge and only while it is up in VRAM. What none of the
+three does is show the pick-axe screen where it is used, in the desert
+(map 34): its six pictures and digits take 400 object tiles and seven
+sprite palettes —`Zounds_Dialogue_4`, the 320x80 box under its
+messages, is 384 of the tiles—, and no map with characters leaves that.
+That one needs either the characters to give the plane up while the
+screen is up, or the box to be the message window: a decision for taro,
+written as a draft when this is done.
+
+**Done**: the common events that run without a map show their small
+pictures wherever their set fits beside the map; Zounds' notes and permit
+on the maps where they fit, and the pick-axe screen on the ones where it
+fits, with a golden red before; the converter's log says, per set, on
+how many maps it fits; ABL's suite and the ports' `boot` green, the space
+of every cartridge measured before and after; the book's
+`internals/vram.md` and the divergence say it.
+
+**First step**: the set of each common event that runs anywhere, from
+the scan's `commons_pictures`, which today keeps only the big ones.
