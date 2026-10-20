@@ -27,3 +27,17 @@ frames and goes back where the player was.
 
 How to see it: build Zounds' `release` and look for "map 136" in
 `build/release/converter.log`.
+
+**And even fitting, they would not frame its panels** (Calandria,
+2026-10-20, while doing
+[`small-pictures-under-a-big-one-are-hidden`](small-pictures-under-a-big-one-are-hidden.md)):
+map 136 is one RM2k screen whose panorama is the menu's background, and
+the console does not scale a map —it shows a 256x224 window of it, from
+the hero's camera— while it scales the pictures that go with the screen
+to four fifths. So the faces and the bar would land at four fifths of
+their place over panels drawn at full size. Map 190 solved it by drawing
+its big picture over the panorama, which scales the two together; map 136
+has no big picture, so that rule does not take it. What would: on a map of
+one screen whose pictures are the screen, show its still panorama as a big
+picture —scaled, with the small ones over it, as `BIG_KEEPS` does— and
+not as the map's background.
