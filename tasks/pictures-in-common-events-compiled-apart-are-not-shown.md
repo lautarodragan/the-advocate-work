@@ -2,8 +2,8 @@
 name: "The pictures of the common events compiled apart from the maps are not shown"
 description: "An automatic or parallel common event, or one a page calls as a shared body, is compiled once without a map, so without pictures: Zounds' pick-axe and notebook, A Blurred Line's portable console and Vampires Dawn's menus show nothing"
 type: bug
-status: doing
-assignee: Carpintero
+status: testing
+assignee: taro
 agents: [Carpintero]
 ---
 
@@ -197,3 +197,24 @@ done**: the pick-axe and the notebook, which fit beside no map; and ABL's
 portable console, which is the engine's custom menu since 2026-10-04 by
 taro's decision —its pictures are not shown on purpose—, while its other
 picture menus (commons 11 and 16) hang from an item nothing gives.
+
+### Verified, and what to install
+
+Run with the branch's tools: `just test`, `just rust-test` and `just lint`
+in the-advocate; ABL's `just tests` (1578 passed, 2 skipped) and the
+ports' `just boot` (101 passed), at the ports' `521e59e`. The space of
+every cartridge before (main's tools) and after: bank 0 four bytes less on
+each —Sunset's `release` is left the tightest, at 21—, bank 1 39 less,
+bank `$C1` about 460 less, far RAM 9 less; one data bank more on ABL's
+`release`, Desert Nightmare, Sunset and Zounds. What the suites do not
+cover: a set taking another's down, a parallel common event's set (Desert
+Nightmare's 4 fits on 14 maps, no test looks at it), and a battle or a
+big picture putting a set back —only the debug screen is tested—.
+
+After merging the ports' `main` (`59b5658`) Zounds does not build with
+this branch's tools: its `[battle.terms]` gives "dodge", which Cardón's
+`fd543e73` teaches the converter and the-advocate's `main` does not have
+yet. Not this branch's.
+
+When merging: `just install convert events mapdata`; the runtime comes
+with the checkout.
