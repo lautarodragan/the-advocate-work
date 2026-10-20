@@ -2,8 +2,8 @@
 name: "Zounds: the ship's transparent messages come out broken"
 description: "On the ship (map 21), the boss's speech about Unamë's donation is shown in transparent boxes in the middle of the screen, and the text comes out torn in bands over the map; the choice after it too"
 type: bug
-status: doing
-assignee: Chajá
+status: testing
+assignee: taro
 agents: [Chajá]
 ---
 
@@ -104,5 +104,16 @@ the skill screen, red too with the fix taken out. Likely cause of both:
 the other binaries —battle, events, images, screens, wally— are the
 global install's, older than hornero-integrate; not followed.
 
-Left: merging `origin/main` of the-advocate and `main` of the others into
-the branches, and the task to `testing`.
+Merged `origin/main` of the-advocate (51c645ab) and `main` of the ports
+(a95418e) and the book (e22b542) into the branches; the new test is
+green on the merged tree.
+
+**To install when merging**: `just install project cartridge convert
+mapdata` is not needed for this change —it is only `runtime/`, which
+`rm2k-snes-cartridges` assembles from the checkout the tools were
+installed from—; nothing of Rust changed. The cartridges rebuild on their
+own (the runtime is in their fingerprint).
+
+**For taro**: play the ship after the intro (the debug map's door) up to
+the boss's speech; Unamë's "Lo mato" and its choice now come in a blue
+window in the middle, with her face, and the map keeps its colours.
