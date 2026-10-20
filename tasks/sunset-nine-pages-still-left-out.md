@@ -1,6 +1,6 @@
 ---
-name: "Sunset over Imdahl: nine pages still left out"
-description: "After GateStreet's fixes, `just culprits` still leaves out nine map pages of Sunset; at least two are autostarts of story maps, which would stop the game the way GateStreet's man and the statue did"
+name: "Sunset over Imdahl: pages still left out"
+description: "`just culprits` still leaves out map pages of Sunset —nine after GateStreet's fixes, four on 2026-10-20—; one is the autostart of the ruined plains, on the story's way, which would stop the game the way GateStreet's man and the statue did"
 type: bug
 status: todo
 ---
@@ -43,3 +43,23 @@ the author's test map and can stay out. First step: for each culprit, the
 exact form the compiler refuses —which operand of `ControlSwitches` and
 `ControlVars`, why the boxes of 29 and 39, which target of the `MoveEvent`,
 which `TileSubstitution`—, starting with the two autostarts.
+
+## Checked (2026-10-20, Chajá)
+
+Measured with the global tools, installed from the-advocate `8f290c39`,
+over the `events-request.json` of the ports' `release` built that morning
+(ports `68bf55b`): `rm2k-snes-events culprits --every-map` gives **1365 of
+1369** map pages, so **four** are left out, not nine:
+
+| map | event | page | trigger | culprit |
+|---|---|---|---|---|
+| 35 | 1 | 1 | autostart | `ControlVars [1, 1, 30, 0, 0, 0]` and `ControlSwitches [1, 1, 95, 1]`: a range from 1 set to 0, and switches 1–95 off |
+| 56 | 5 | 2 | parallel | `MoveEvent` on this event, the route with a `32` ([`route-switch-commands-leave-the-page-out`](route-switch-commands-leave-the-page-out.md)) |
+| 60 | 6, 7 | 1 | action | `TileSubstitution [0, 1, 0]` |
+
+The boxes of maps 29 and 39 compile: they were refused for a `…` and an
+`ô`, letters the font lacked, which since `f6c884c1` and `d620ca49`
+(2026-10-16) are drawn plain or from Latin-1. Map 14's
+`ChangeSpriteAssociation` compiles too; which change did it was not traced.
+So of the two autostarts only map 35's is left, and the first step is
+now its two range commands.

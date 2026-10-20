@@ -1,6 +1,6 @@
 ---
 name: "A forced route that turns a switch on or off leaves its page out"
-description: "Move commands 32 and 33 in a MoveEvent are refused, and the whole page with them: about 55 pages of Vampires Dawn and one of Sunset over Imdahl"
+description: "Move commands 32 and 33 in a MoveEvent are refused, and the whole page with them: 33 pages of Vampires Dawn and one of Sunset over Imdahl on 2026-10-20"
 type: bug
 status: todo
 ---
@@ -33,3 +33,15 @@ culprits` drops them in Vampires Dawn and Sunset, and a ROM test sees the
 switch change at its step. **First step**: the route's opcode for it, with
 the switch number past 1023 in mind
 ([`branches-and-switch-commands-past-switch-1023`](branches-and-switch-commands-past-switch-1023.md)).
+
+## Checked (2026-10-20, Chajá)
+
+Still refused: `route::known` leaves out 32 and 33 at the-advocate
+`8f290c39`. `rm2k-snes-events culprits --every-map` with the global tools
+(installed from that commit) over each game's `release` built that morning
+(ports `68bf55b`), decoding each `MoveEvent` culprit's route: **33 pages**
+of Vampires Dawn with a 32 or 33 in the route, against the 56 culprits
+above —those may have been commands, several to a page; why it went down
+was not traced—, and Sunset's one, map 56, event 5, page 2,
+which is now one of the last four pages Sunset leaves out
+([`sunset-nine-pages-still-left-out`](sunset-nine-pages-still-left-out.md)).
