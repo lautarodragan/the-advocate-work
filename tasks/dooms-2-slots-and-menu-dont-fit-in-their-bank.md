@@ -125,3 +125,11 @@ and the rest of the tools the global ones (the-advocate `30ab0ca6`):
 actor —the captures show the pause menu—, and a bank that fits only with
 the slot screen's text last *and* faces left out, which no game asks for
 today.
+
+**Hurón, 2026-10-20**, from
+[`abl-the-last-leaders-names-are-cut-in-the-slot-screen`](abl-the-last-leaders-names-are-cut-in-the-slot-screen.md):
+the menu's bank got a third order, each screen's text apart, where the
+slot screen composes its names over the menu's text. Dooms 2's `release`
+takes it —"432 tiles of 448, each screen's text apart"— and the converter
+leaves out only the two Junes' faces: Will (9) has his again. Measured in
+the converter's output; not looked at in a ROM.
