@@ -6,10 +6,14 @@ status: done
 assignee: taro
 ---
 
-From taro, on 2026-10-03, after seeing the variable width: "can we add a
-knob to adjust the spacing between letters, in pixels? … I'd like to try
-one or two… but if it adds a lot of complexity, we leave it for another
-time". Today every letter already carries one pixel of air inside its
+From taro, on 2026-10-03, after seeing the variable width, in their words,
+translated:
+
+> can we add a knob to adjust the spacing between letters, in pixels? …
+> I'd like to try one or two… but if it adds a lot of complexity, we
+> leave it for another time
+
+Today every letter already carries one pixel of air inside its
 advance (`tools/rm2k-snes/text/fonts/README.md`): the knob adds to that.
 
 ## Done (Tordo)

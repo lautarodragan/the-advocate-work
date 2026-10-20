@@ -11,7 +11,9 @@ Cardón found it on 2026-10-06 measuring Vampires Dawn: with the maps that
 didn't fit left out, `rm2k-snes-battle` fails because the encounters don't
 fit in one-byte tables (121 records, 136 zones, 779 troops).
 
-taro, on 2026-10-06: "Go ahead!", with Sonnet.
+taro, on 2026-10-06, with Sonnet, in their words, translated:
+
+> Go ahead!
 
 ## Done, on 2026-10-06 (Tijereta)
 

@@ -115,8 +115,12 @@ Each game's `release`, built with main's tools and with the variant's
 
 ## Decided (taro, 2026-10-16)
 
-*"vamos por el 6k. Coincido en que el salto entre 4 y 6k no tiene
-sentido, y 4k es demasiado poco"*. The experiment became the real change:
+In their words, translated:
+
+> let's go for 6k. I agree that the jump between 4 and 6k makes no
+> sense, and 4k is too little
+
+The experiment became the real change:
 `relief.rs` triggers at the floor, ABL's `paid_by_music` comment says the
 music pays only down to 6 kHz, and the book's internals and lossy pages
 say what triggers the relief now.

@@ -6,11 +6,12 @@ status: done
 assignee: taro
 ---
 
-From taro, on 2026-09-28: "Now let's make the character selection
-screen, inside use item, also work like RPG Maker. The simplest
-example is: choose Cold Sandwich. Our screen currently keeps
-the `>` indicator instead of the red background, and shows neither the item's name
-nor Owned Items on the left."
+From taro, on 2026-09-28, in their words, translated:
+
+> Now let's make the character selection screen, inside use item, also
+> work like RPG Maker. The simplest example is: choose Cold Sandwich. Our
+> screen currently keeps the `>` indicator instead of the red background,
+> and shows neither the item's name nor Owned Items on the left.
 
 ## What the original does
 

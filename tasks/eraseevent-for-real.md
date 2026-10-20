@@ -15,7 +15,9 @@ pages out on its own —127 of the 157 that use it, measured with `culprits
 autostart page that erases itself, if it does not compile, does not let the scene
 continue. El Dorado has 3. It is done whole: erase the event until the
 map is reloaded, in maps and in ABL's quarry; the one in a common event still does nothing.
-taro: "let's go with those two in parallel", with Sonnet.
+taro, with Sonnet, in their words, translated:
+
+> let's go with those two in parallel
 
 ## Hurón, 2026-10-06
 

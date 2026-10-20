@@ -9,9 +9,12 @@ agents: [Calandria]
 taro, on 2026-10-12, playing `/shared/builds/other-games/` (ports
 `a8ee168`, the-advocate `25d93f0a`):
 
-* **The forge**: "I get to the forge's house and the NPC wants me to forge
-  something, but the fire isn't interactive. I can't leave the house." The
-  game is stuck there.
+* **The forge**:
+
+  > I get to the forge's house and the NPC wants me to forge something,
+  > but the fire isn't interactive. I can't leave the house.
+
+  The game is stuck there.
 * **Up to there, everything looks perfect** —behaviour, graphics, all—, so
   it is worth an automated test for this game: what works today shouldn't
   break without anyone noticing.
@@ -102,4 +105,6 @@ the-advocate-docs `calandria-forja`.
 
 ### taro, 2026-10-13
 
-"The forge bug is already fixed": played and confirmed.
+> The forge bug is already fixed
+
+Played and confirmed.

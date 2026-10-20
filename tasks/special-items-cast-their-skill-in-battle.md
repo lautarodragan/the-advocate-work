@@ -7,11 +7,16 @@ assignee: taro
 agents: [Tijereta]
 ---
 
-taro, on 2026-10-19, playing Zounds: "I think a feature of the game let you
-throw some objects, like stones, in battle. I don't know if that was just
-using the item in battle or a hero's special skill… but I couldn't
-reproduce it", with item 20, "Tira una piedra al enemigo", and 21 and 22.
-"Maybe they invoke a skill in battle, and we haven't implemented that yet?"
+taro, on 2026-10-19, playing Zounds:
+
+> I think a feature of the game let you throw some objects, like stones,
+> in battle. I don't know if that was just using the item in battle or a
+> hero's special skill… but I couldn't reproduce it
+
+With item 20, "Tira una piedra al enemigo", and 21 and 22. And:
+
+> Maybe they invoke a skill in battle, and we haven't implemented that
+> yet?
 
 What Hornero saw on the-advocate `54ec3daf`: yes. `item_usable_in_battle`
 in rm2k-snes-battle (`src/rules.rs`) takes only medicines, so

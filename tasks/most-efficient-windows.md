@@ -9,8 +9,10 @@ assignee: taro
 
 taro, on 2026-10-11, after talking about the name screen
 (`hero-name-screen.md`): that it be analyzed for
-all the windows, not only that one. "If we can make the windows, in
-general, more efficient, it's a win all around."
+all the windows, not only that one. In their words, translated:
+
+> If we can make the windows, in general, more efficient, it's a win all
+> around.
 
 What taro said, to keep in mind:
 

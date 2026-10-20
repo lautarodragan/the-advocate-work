@@ -7,11 +7,13 @@ assignee: taro
 agents: [Cardón]
 ---
 
-taro, on 2026-10-18: "is there some optimization we can do so maps load
-faster? We kept accepting tradeoffs to improve or implement things that
-slowed down map loading… and some take quite a while. I wouldn't sacrifice
-quality or functionality to load them faster, but maybe there is something
-we can improve without losing anything."
+taro, on 2026-10-18:
+
+> is there some optimization we can do so maps load faster? We kept
+> accepting tradeoffs to improve or implement things that slowed down map
+> loading… and some take quite a while. I wouldn't sacrifice quality or
+> functionality to load them faster, but maybe there is something we can
+> improve without losing anything.
 
 Done means: a measured table of the load's frames by phase (from the fade
 out to the fade in: decompression, VRAM uploads, the audio package, the

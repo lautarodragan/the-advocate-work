@@ -9,9 +9,13 @@ assignee: taro
 
 **Done**, 2026-10-12. Superseded by `changesystemgraphics.md`, which did it for real.
 
-From taro, on 2026-10-05: "ignore ChangeSystemGraphics. Let's leave a task
-in todo to implement it, and for now let's not allow its lack of
-implementation to prevent pages from compiling". It unblocks the start of Sunset
+From taro, on 2026-10-05, in their words, translated:
+
+> ignore ChangeSystemGraphics. Let's leave a task in todo to implement
+> it, and for now let's not allow its lack of implementation to prevent
+> pages from compiling
+
+It unblocks the start of Sunset
 Over Imdahl (map 11), with the menu still in the wrong System.
 
 Done by Mulita, on 2026-10-05: `CHANGE_SYSTEM_GRAPHICS` (10680) goes into `ACCEPTED_UNDONE` and its branch returns `vec![]`; troop pages go through the same `compile_page`. Test `change_system_graphics_is_accepted_without_emitting`, red before. ABL doesn't use the command (no occurrences in its `data/`), so its ROM doesn't change. Sunset Over Imdahl: the start event of map 11 now runs (title fade, black screen at 15 s like the original); at 30 s the original shows a picture and the cartridge stays black: not investigated.

@@ -14,10 +14,17 @@ as a graphic of its own: 206 graphics and 4096 sprite tiles, the whole
 bank. Without those events, or with opaque water, they are 384; but opaque they are 247
 events for a cache of 18 slots, with up to 30 on screen.
 
-taro, on 2026-10-06: "I suspect that general optimisations for cases where
-events are used purely for aesthetics, like a new map
-layer, could be leveraged on many maps and many games". And: "I don't want
-us to over-optimise an edge case". His captures, of RM2k running:
+taro, on 2026-10-06, in their words, translated:
+
+> I suspect that general optimisations for cases where events are used
+> purely for aesthetics, like a new map layer, could be leveraged on many
+> maps and many games
+
+And:
+
+> I don't want us to over-optimise an edge case
+
+His captures, of RM2k running:
 the game's `Map0095-runtime*.png`; EV0016 shifts some water events by one
 tile at start, because in the editor they can't share a cell.
 

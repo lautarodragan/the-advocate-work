@@ -41,8 +41,11 @@ and the runtime keeps those in 32 bits. Not a priority (taro).
 
 ### taro, 2026-10-14: how to approach it, in order
 
-taro prefers **the hidden high half**: "a kind of carry register for RPG
-Maker's variables". Even with parallel events, execution at run time is
+taro prefers **the hidden high half**:
+
+> a kind of carry register for RPG Maker's variables
+
+Even with parallel events, execution at run time is
 sequential, so a single register can carry what overflowed the last
 result into the next operation on that variable.
 

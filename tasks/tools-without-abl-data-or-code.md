@@ -7,7 +7,11 @@ assignee: taro
 ---
 
 From taro, on 2026-10-02, on seeing that a test of the event compiler uses
-`PhoneCallDiff` as data: "go ahead". A `grep` of ABL names (characters,
+`PhoneCallDiff` as data, in their words, translated:
+
+> go ahead
+
+A `grep` of ABL names (characters,
 places, pictures, the acronym) gives 125 lines in some 50 files of `tools/`.
 
 **The engine comments that name ABL stay**, as

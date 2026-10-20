@@ -7,17 +7,18 @@ assignee: taro
 agents: [Hurón]
 ---
 
-From taro, on 2026-10-10: "Can you add two more doors on ABL's debug
-map?
+From taro, on 2026-10-10, in their words, translated:
 
-1. One that leaves you right after the bridge, in the Northern World / Lashe
-   Area (Map0066, one or two tiles to the left of EV0006, having
-   completed Eisen's story and finished the talk with Vago. The
-   bridge is maps 2059 and 0255)
-
-2. Another that also leaves you in Northern World / Lashe Area, but to the
-   left of EV0020, having finished the sequence of the forest that
-   catches fire, fought the agents and the Hover Tram."
+> Can you add two more doors on ABL's debug map?
+>
+> 1. One that leaves you right after the bridge, in the Northern World /
+>    Lashe Area (Map0066, one or two tiles to the left of EV0006, having
+>    completed Eisen's story and finished the talk with Vago. The bridge
+>    is maps 2059 and 0255)
+>
+> 2. Another that also leaves you in Northern World / Lashe Area, but to
+>    the left of EV0020, having finished the sequence of the forest that
+>    catches fire, fought the agents and the Hover Tram.
 
 It follows `two-more-doors-in-the-debug-map.md`: same method.
 

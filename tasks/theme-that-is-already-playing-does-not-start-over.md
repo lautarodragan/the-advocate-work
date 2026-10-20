@@ -6,10 +6,13 @@ status: done
 assignee: taro
 ---
 
-From taro, on 2026-09-30: "I think in RPG Maker, when a play bgm runs or
-something transitions to a new theme, if the theme is the same one that is
-already playing, it doesn't start from zero, it just keeps playing". He
-notices it in two places:
+From taro, on 2026-09-30, in their words, translated:
+
+> I think in RPG Maker, when a play bgm runs or something transitions to
+> a new theme, if the theme is the same one that is already playing, it
+> doesn't start from zero, it just keeps playing
+
+He notices it in two places:
 
 - **The battle**: the battle theme and the "win battle" one are the same. In
   the original, probably, nothing changed on winning.
