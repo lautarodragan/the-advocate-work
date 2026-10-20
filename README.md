@@ -92,9 +92,11 @@ task" in `AGENTS.md`. In `todo`, with no `assignee`, whoever comes first
 takes it. Many of those in `done` predate these fields and carry no
 `assignee`.
 
-**taro's words go in a quote block**, `> ` at the start of each line, in
-their language, and not inline between quotes: it is taro's, from
-2026-10-20. What came before is not edited for it.
+**taro's words go in a quote block**, `> ` at the start of each line,
+and not inline between quotes; in English like the rest of the task, and
+when taro said them in Spanish, the line that introduces them says so
+—"in their words, translated"—. It is taro's, from 2026-10-20, and it
+applies to the tasks written before too.
 
 **Everything is tracked here**: the tools and the runtime (`the-advocate`),
 the ports (`the-advocate-ports`: A Blurred Line and the other games) and
