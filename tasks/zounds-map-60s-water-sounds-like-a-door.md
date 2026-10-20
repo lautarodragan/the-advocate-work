@@ -2,7 +2,9 @@
 name: "Zounds: map 60's water sounds like a door, because NAU_Splash is a stand-in"
 description: "The Water event on map 60 plays NAU_Splash, which the repository never had; on the snes-port branch it is a copy of Close1, like the other NAU_ sounds"
 type: bug
-status: draft
+status: doing
+assignee: Chajá
+agents: [Chajá]
 ---
 
 Seen by taro on 2026-10-19 playing the port, and measured by Carpintero the
@@ -25,3 +27,13 @@ ROM sample, or its `.msu` version— and the `PlaySound` starts that row.
 
 See
 [`zounds-the-repository-lacks-197-assets`](zounds-the-repository-lacks-197-assets.md).
+
+## taro's decision (2026-10-20)
+
+Look for `NAU_Splash` on the internet by its name; if it is not found, any
+similar sound we have. Hornero searched on 2026-10-20 and found nothing by
+that name. Don Miguel's RTP has `Water1`–`Water6`, but its files carry no
+free license, and this repository replaced its RTP stand-ins with
+EasyRPG's CC BY ones for that reason (`7a5ecc6`); a freely licensed splash
+—for instance OpenGameArt's CC0 "6 short water splashes", by ezwa— fits
+that rule.
