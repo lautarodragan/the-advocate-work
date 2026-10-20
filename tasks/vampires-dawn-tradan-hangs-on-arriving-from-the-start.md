@@ -38,3 +38,37 @@ with a repro whether or not the game itself makes that jump. **Done** is
 the cause found and fixed, and a test in the ports that makes the draft's
 jump and sees `ticks` go on for 900 frames. First step: the draft's own
 —which page is active and where the CPU loops when `ticks` stops—.
+
+## The cause
+
+**2026-10-20, Mulita**, at the-advocate `8f290c39` and the ports `68bf55b`.
+Reproduced as the draft says —the jump needs `fade_base` too, as
+`Session.go_to_map` writes it—: the map loads, the door fade ends about
+270 frames later, and from then on `ev_active` is 1, `ev_running` is 28
+and `ticks` never moves again.
+
+Index 28 is **EV0029**, a parallel page that is all a loop:
+
+    Loop
+      ShowPicture 19 'cloudsky'              (transparency 40, at (0,120))
+      MovePicture 19 to (320,120), 10 s, wait
+    EndLoop
+
+What the cartridge carries for it, read from WRAM where the map's code
+lands: `3D 04 64 64 64 28 64 00` —`OP_BIG_SHOW`, cloudsky as a big
+picture— and `13 00 00` —`OP_GOTO` to the start—. **The `MovePicture` is
+gone, and its wait with it**, so the loop has nothing that lets a frame
+go by: `parallel_tick` enters `run_code` and never comes back.
+
+Why it is gone: `compile_picture` in `rm2k-snes/events/src/compile.rs`
+cannot do this move —the big picture only scrolls up and down, and this
+one slides sideways; and 100 tenths are 600 frames, past the 255 of
+`OP_PICTURE_MOVE`'s byte—, so it answers `None`, "accepted without being
+done", and the caller emits nothing. But `loop_waits`, which refuses a
+loop that never waits because the console has no ten-thousand-command
+cap like RPG_RT's, counted that `MovePicture`'s wait and let the loop
+compile. In RM2k the wait does not depend on the move: easyrpg's
+`CommandMovePicture` calls `SetupWait(duration)` whatever the picture.
+
+The fix that follows: a `MovePicture` with its wait that is not done
+still compiles its wait, an `OP_DELAY` of the duration.
