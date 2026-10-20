@@ -36,3 +36,11 @@ drawn: with them the map loses":
 How to see it: `just cartridges` in each game, and grep `converter.log` for
 "aren't drawn: with them". Playing, the scenes on those maps go on with
 those characters missing, as before the fix.
+
+## Checked (2026-10-20, Tijereta)
+
+In the release builds of the ports `68bf55b` (the-advocate `8f290c39`),
+`grep "aren't drawn: with them"` gives The Book of Three's 46 and ABL's 83
+as above, and a new one: **A Blurred Line, map 246**, events 5 and 6,
+"with them the map loses rain-colors-lent". Still undefined: each map pays
+something different.

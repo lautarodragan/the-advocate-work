@@ -27,3 +27,15 @@ negligible except for its few big maps.
 **To reproduce**: Desert Nightmare's `just cartridges`, and a door of any of
 its maps; the time is the step from `code_carry_after` in
 `enter_map_no_events`, with the probe described in that task's log.
+
+## Checked (2026-10-20, Tijereta)
+
+Still so at the-advocate `8f290c39`: `code_carry_after`
+(`runtime/decompress.s`) decompresses the carried map's whole stream with
+one `lz2_decompress`, and `maps-load-faster-without-losing-anything`
+(`testing`) left it as it was. What to do is not decided: the stream is
+LZ2 and cannot start at the page's stretch, so it is either a stream per
+page or per group of pages for the maps whose bytecode is big, or not
+carrying it when the page has nothing left after its `Teleport` —not
+checked whether a door's page does, nor whether the runtime already skips
+that case—.

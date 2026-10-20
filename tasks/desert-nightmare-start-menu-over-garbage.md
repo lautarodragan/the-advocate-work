@@ -50,3 +50,23 @@ snes9x and bsnes, with a golden of that screen in Desert Nightmare's
 tests. **First step**: a VRAM viewer on that frame —whether the panorama's
 tiles are there, and what BG2's tilemap names—, which says which of the
 three suspects above it is.
+
+## Checked (2026-10-20, Chajá): not seen any more
+
+The `release` built that morning (ports `68bf55b`, tools from the-advocate
+`8f290c39`), run with a throwaway script over ABL's `emulator/retro.py`,
+no MSU-1: the title now fits and comes first ("Begin / Load / Quit" over
+the burning face), and after A on "Begin" map 1's three option pictures
+are over the `Introauswahl` panorama, **the same in snes9x and in bsnes**;
+the repeated orange pattern is gone. Captures in
+`/shared/captures/2026-10-20-task-review/`.
+
+Which change fixed it was not traced. The converter's log for map 1 now
+says "drawn into the map: 'Introauswahl_1' at 100 %" —a picture baked
+into the map instead of shown by the runtime— and the title screen comes
+before the first map since `3996ed61` (2026-10-16); either may be it.
+
+What the Done asks for and is missing is the golden of that screen in the
+ports' tests (`tests/test_boot.py` already reaches map 16 from it), and the
+line in the book's Known issues of Desert Nightmare, which still blames
+the garbage.
