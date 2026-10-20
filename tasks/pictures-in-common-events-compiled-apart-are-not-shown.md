@@ -155,3 +155,45 @@ of every cartridge measured before and after; the book's
 
 **First step**: the set of each common event that runs anywhere, from
 the scan's `commons_pictures`, which today keeps only the big ones.
+
+## 2026-10-20, Carpintero: option 3, built
+
+The-advocate `aadb9151`, branch `carpintero-ce-pictures` (from
+`3bc68ac4`); the ports `e8ffd29` and `521e59e`, branch of the same name;
+the book `785095d`.
+
+* **Sets**: `commons::picture_sets` in the event compiler gathers what
+  each common event that runs without a map shows with every body it calls
+  —an automatic one and its shared bodies, merged when two reach the same
+  body; a parallel one alone, its calls pasted—, and the scan answers them
+  as `common_sets`. The converter cuts each as a map's pictures, from tile 0
+  and palette 0 (`common_pictures.rs`), the fewest pictures first, since the
+  table names 127.
+* **Bytecode**: a body is compiled with its set's pictures; `OP_PICTURE`'s
+  image has bit 7 set and the slot is counted from the top. No new opcode:
+  0x5A is free. A `MovePicture` of a number the body's set shows small moves
+  that one and not a big one under the same number, which another common
+  event shows —the notebook's background took the record player's fade—.
+* **Emission**: the entries after the maps' in `picture_data`, each set's
+  tiles once, and per map the tile and palette where the sets go and a bit
+  per set that fits there, measured alone (`picture_common_section`).
+* **Runtime**: `runtime/picture_common.s`. Shown, a set goes up past the
+  map's bank, arrow and gold window through `vram_drain`'s budget; its
+  pictures are drawn once it is there; one set at a time; `load_sprite`
+  puts it back.
+
+Measured on Zounds: the permit (6) fits on 53 of 189 maps, the notes (40,
+42) on 96, the record player (36) on 128, the music bar (68) on 145; the
+pick-axe (21, 27: 400 tiles, seven palettes) and the notebook (29, 30, 41:
+704 tiles) on none. Those two are
+[`zounds-pick-axe-and-notebook-fit-beside-no-map`](zounds-pick-axe-and-notebook-fit-beside-no-map.md),
+a draft with what they would take. The permit shows, but its slide up is
+a `MovePicture` that zooms it from 60 % to 100 %, which small pictures do
+not do: it stays small and translucent at the bottom.
+
+**Done, against what was asked**: the common events' small pictures show
+where they fit, and Zounds' record player has its golden, red before. **Not
+done**: the pick-axe and the notebook, which fit beside no map; and ABL's
+portable console, which is the engine's custom menu since 2026-10-04 by
+taro's decision —its pictures are not shown on purpose—, while its other
+picture menus (commons 11 and 16) hang from an item nothing gives.
