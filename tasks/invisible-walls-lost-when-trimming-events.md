@@ -53,3 +53,20 @@ Nightmare's eight maps and Vampires Dawn's 164 no longer list walls lost
 in `converter.log`, and a converter test holds it. **First step**: for
 each wall listed, whether any page of it moves, erases itself or changes
 its layer.
+
+## Measured again (2026-10-20, Aguará)
+
+At the-advocate `8f290c39`, ports `68bf55b`, `just cartridges release`:
+the twins (`trim::twins`, 2026-10-17, `5b3c2a9f` —walls on the hero's
+layer can share a row—) saved four of Desert Nightmare's eight maps: 2,
+5, 62 and 172 no longer lose a wall. Four still do, and VD's 164 too:
+
+| map | invisible walls | looks and a wall |
+|---|---|---|
+| DN 4 Werkstatt | 23 | 27 |
+| DN 14 Polizeirevier | 20 | 26 |
+| DN 61 Werkstatt-Nacht | 23 | 28 |
+| DN 66 Polizeirevier-Nacht | 20 | 25 |
+| VD 164 Thessa | 0 | 2 (253 254) |
+
+So the fix is still needed.
