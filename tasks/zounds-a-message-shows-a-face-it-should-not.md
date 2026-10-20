@@ -8,12 +8,13 @@ agents: [Carpintero]
 ---
 
 taro, on 2026-10-19, playing Zounds (delivery of that day, the-advocate
-`54ec3daf`, the ports `c2912ad`): "sometimes they show up when they should
-not. It is not constant, so I think it depends on the game's state and not
-on the command itself. Maybe there is a `hide face` we are not running,
-sometimes, and the next message comes out wrong. It is not impossible that
-it is a bug of the original game, but I suspect ours, from the patterns I
-saw."
+`54ec3daf`, the ports `c2912ad`):
+
+> sometimes they show up when they should not. It is not constant, so I
+> think it depends on the game's state and not on the command itself.
+> Maybe there is a `hide face` we are not running, sometimes, and the
+> next message comes out wrong. It is not impossible that it is a bug of
+> the original game, but I suspect ours, from the patterns I saw.
 
 Four screenshots, in this order, in
 `/shared/captures/2026-10-19-zounds-faces/` (and `~/scratch/hornero/faces/`):

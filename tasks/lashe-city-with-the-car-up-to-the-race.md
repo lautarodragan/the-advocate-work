@@ -9,11 +9,13 @@ status: done
 
 Take `release` from where it ends today —the director and Kersh cutscene,
 map 34, which teleports to 36— up to the `Teleport [49, 1, 26]` of event 3
-of map 36, **without entering the race**. taro asked for it on 2026-09-25: "the
-Lashe City maps in their version with the car, the mafia boss stuff, the optional
-path of getting the droid as part of the party if you went by the hover
-tram… and eventually the race to escape. I'd like to tackle everything up to the
-race, exclusive."
+of map 36, **without entering the race**. taro asked for it on 2026-09-25,
+in their words, translated:
+
+> the Lashe City maps in their version with the car, the mafia boss
+> stuff, the optional path of getting the droid as part of the party if
+> you went by the hover tram… and eventually the race to escape. I'd like
+> to tackle everything up to the race, exclusive.
 
 This is the plan; what gets executed are each milestone's tasks:
 

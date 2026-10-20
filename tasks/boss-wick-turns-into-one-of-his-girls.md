@@ -7,9 +7,12 @@ agents: [Hurón, Tijereta]
 assignee: taro
 ---
 
-From taro, on 2026-10-05: "boss wick changes his graphic to one of his girls on
-returning from the vidcasts. I think that worked at some point, and then
-it broke". Of the same family as Dalia's tank and the missile
+From taro, on 2026-10-05, in their words, translated:
+
+> boss wick changes his graphic to one of his girls on returning from the
+> vidcasts. I think that worked at some point, and then it broke
+
+Of the same family as Dalia's tank and the missile
 hatches: an event that ends up with another's graphic. If it's a
 regression, it gets bisected: candidates from the last few days, the slot cache
 (Yaguareté), the shared poses of 108, the ones that turn (Cotorra).

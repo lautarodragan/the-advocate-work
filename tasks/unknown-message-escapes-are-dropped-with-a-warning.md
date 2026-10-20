@@ -7,10 +7,12 @@ assignee: taro
 agents: [Mulita]
 ---
 
-taro, on 2026-10-15: "about the message codes not implemented yet, in
-general: I'd put a change in now that degrades gracefully —that simply
-ignores them—. That way it can be played without solving that problem.
-I'd leave a compiler warning or whatever so we don't lose and forget it."
+taro, on 2026-10-15:
+
+> about the message codes not implemented yet, in general: I'd put a
+> change in now that degrades gracefully —that simply ignores them—. That
+> way it can be played without solving that problem. I'd leave a compiler
+> warning or whatever so we don't lose and forget it.
 
 At the-advocate `6fa69781`: `escape_tail` in `rm2k-snes/text/src/refit.rs`
 returns `CannotCompile` for any escape left after `with_wait_marks`, which

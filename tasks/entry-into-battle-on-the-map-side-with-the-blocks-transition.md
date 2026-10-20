@@ -6,9 +6,11 @@ status: done
 assignee: taro
 ---
 
-From taro, on 2026-09-30: "let's make the transition into battle the same as
-the one out of it —the blocks one—. It's already like that in the battle-side
-half, on entering, but on the map side it's a fade out".
+From taro, on 2026-09-30, in their words, translated:
+
+> let's make the transition into battle the same as the one out of it
+> —the blocks one—. It's already like that in the battle-side half, on
+> entering, but on the map side it's a fade out
 
 ## What the game asks for
 

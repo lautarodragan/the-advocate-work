@@ -6,7 +6,11 @@ status: done
 assignee: taro
 ---
 
-From taro, on 2026-09-29: "go ahead, set up the workspace". Discussed before:
+From taro, on 2026-09-29, in their words, translated:
+
+> go ahead, set up the workspace
+
+Discussed before:
 the crates are still separate projects —`cargo install --path` installs each
 one on its own, and each one is published alone—; the workspace only makes the
 shared dependencies compile once and there be a single `Cargo.lock`.

@@ -11,6 +11,8 @@ Fixed in the commit that moves this task to `testing/`.
 
 # The report
 
+taro's report, in their words, translated:
+
 > in Boss Wick's house, after watching the vidcasts, Talan turns
 > completely black. Something similar already happened before: in the Lazer Teeth HQ,
 > when Talan is hidden in the barrel [...] Talan appears without the barrel

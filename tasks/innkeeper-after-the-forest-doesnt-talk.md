@@ -7,10 +7,12 @@ agents: [Mulita]
 assignee: taro
 ---
 
-From taro, on 2026-10-05: "on the map that has a house and an NPC at its
-door, which is a few steps after leaving the forest on fire and having fought
-the hover tram, that NPC should be interactable and offer me an inn and a
-shop, but I can't interact with him".
+From taro, on 2026-10-05, in their words, translated:
+
+> on the map that has a house and an NPC at its door, which is a few
+> steps after leaving the forest on fire and having fought the hover
+> tram, that NPC should be interactable and offer me an inn and a shop,
+> but I can't interact with him
 
 # What it is
 

@@ -6,9 +6,11 @@ status: done
 assignee: taro
 ---
 
-From taro, on 2026-10-04: "can you make the text able to show in the
-middle or at the top of the screen, like in the original rpg maker 2000? … there may
-also be an option to show it without background".
+From taro, on 2026-10-04, in their words, translated:
+
+> can you make the text able to show in the middle or at the top of the
+> screen, like in the original rpg maker 2000? … there may also be an
+> option to show it without background
 
 It's `MessageOptions` (10120), which `compile.rs` has in `IGNORABLE` since
 `c64e4d96`: "where and how the message window is drawn, which without

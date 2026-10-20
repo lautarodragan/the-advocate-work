@@ -7,9 +7,13 @@ agents: [Aguará]
 assignee: taro
 ---
 
-From taro, on 2026-10-05: "I left you some games in /shared/otros-juegos/.
-They all have different challenges. I'd try them without MSU first, to
-simplify everything." Copied to local disk in `/extras/otros-juegos/`. The
+From taro, on 2026-10-05, in their words, translated:
+
+> I left you some games in /shared/otros-juegos/. They all have
+> different challenges. I'd try them without MSU first, to simplify
+> everything.
+
+Copied to local disk in `/extras/otros-juegos/`. The
 seven are RM2k (none has `ldb_id` 2003). The Way Episode 1 came
 as an unextracted .exe and is left for later.
 

@@ -6,9 +6,10 @@ status: done
 assignee: taro
 ---
 
-From taro, on 2026-09-30, while playing: "in the auditorium there are two
-NPCs who walk in; in the original game they walk in and in the ROM they
-don't".
+From taro, on 2026-09-30, while playing, in their words, translated:
+
+> in the auditorium there are two NPCs who walk in; in the original game
+> they walk in and in the ROM they don't
 
 They are `WalkIn1` (event 16, at (13,10)) and `WalkIn2` (event 9, at (6,8))
 of map 18. They're moved by page 1 of event 36, an autorun with switch 77:

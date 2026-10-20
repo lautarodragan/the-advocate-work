@@ -10,7 +10,7 @@ assignee: taro
 
 The part of `troop-events.md` that's noticeable **in the battles
 `release` can fight today**, which is what taro asked for on 2026-09-28 with
-two cases from the first big milestone:
+two cases from the first big milestone, in their words, translated:
 
 > - the battle with Rat King isn't like the original. in our version, he appears
 >   with two rats from the start. in the original, rat king summons rats every

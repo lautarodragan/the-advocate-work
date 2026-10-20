@@ -7,8 +7,10 @@ assignee: taro
 agents: [Chajá]
 ---
 
-taro, on 2026-10-12: "I also want the ports repo in English. Basically,
-EVERYTHING in English, but without modifying the git history."
+taro, on 2026-10-12:
+
+> I also want the ports repo in English. Basically, EVERYTHING in
+> English, but without modifying the git history.
 
 Two steps, as AGENTS.md asks for a big cleanup ("What is verifiable and
 what is a matter of judgement do not share a commit"):

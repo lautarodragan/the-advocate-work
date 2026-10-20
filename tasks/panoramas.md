@@ -9,15 +9,26 @@ assignee: taro
 
 From taro, on 2026-10-05: the panoramas show up black. Some can be solved with
 creative patches —the emitter room as an animated tile or CharSet, the window
-of the director's office and Talan as a ChipSet—, but others "are pretty
-important … above all when they do have a parallax effect and move at a
-different speed from the map". The ones he named:
+of the director's office and Talan as a ChipSet—, but others, in their
+words, translated:
 
-* the bridge, above —"it only has events drawn over the sky… two layers should
-  be enough", and "the same applies to the whole upper part"— and below —"it
-  needs 3 layers no matter what, because the floor is like a grate, with
-  transparent portions, and talan and the chests are there … the background
-  moves differently … and it scrolls constantly"—;
+> are pretty important … above all when they do have a parallax effect
+> and move at a different speed from the map
+
+The ones he named:
+
+* the bridge, above:
+
+  > it only has events drawn over the sky… two layers should be enough
+
+  > the same applies to the whole upper part
+
+  and below:
+
+  > it needs 3 layers no matter what, because the floor is like a grate,
+  > with transparent portions, and talan and the chests are there … the
+  > background moves differently … and it scrolls constantly
+
 * the Lashe City rooftop, escaping from the agents;
 * the intro with Kersh: the night sky with clouds, and rain.
 
@@ -80,8 +91,11 @@ checkout.
 
 # All of them
 
-taro, on 2026-10-05, after the prototype: "let's go for all of them". The 45
-maps with a panorama, each with the path the study assigned it, and what the
+taro, on 2026-10-05, after the prototype, in their words, translated:
+
+> let's go for all of them
+
+The 45 maps with a panorama, each with the path the study assigned it, and what the
 study left pending.
 
 ## What was done (Cardón, 2026-10-05, second round)
@@ -175,5 +189,8 @@ patches`.
 # Tested on the SNES
 
 taro, on 2026-10-05, on the console: the intro, the rooftop where the
-Hover-Tram lands and Kersh appears, and the two bridge maps. "they're all
-incredible. I thought it'd be impossible to achieve this much!"
+Hover-Tram lands and Kersh appears, and the two bridge maps. In their
+words, translated:
+
+> they're all incredible. I thought it'd be impossible to achieve this
+> much!

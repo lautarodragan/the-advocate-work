@@ -6,9 +6,13 @@ status: done
 assignee: taro
 ---
 
-From taro, on 2026-10-03, after trying Tordo's three ROMs: "I'll go
-with +1. I like all of them, anyway, and I'd like to keep the knob". And
-he asked whether changing the spacing requires touching code. Today it does, in three fixed
+From taro, on 2026-10-03, after trying Tordo's three ROMs, in their
+words, translated:
+
+> I'll go with +1. I like all of them, anyway, and I'd like to keep the
+> knob
+
+And he asked whether changing the spacing requires touching code. Today it does, in three fixed
 places: the menu's bank (with +1 it is 2 tiles short, with +2 26), the names in
 counted cells (slots, battle skills) and the pair pool of the
 shop and the battle. See `tasks/letter-spacing-as-a-knob.md`.

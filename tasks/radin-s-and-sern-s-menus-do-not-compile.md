@@ -36,8 +36,11 @@ party, Tech Skill, Radin, Mix Formula.
 
 ### Hornero, 2026-10-14: the graphic change is dropped, the menus compile
 
-taro: "can we drop the graphic change command instead of the whole
-page?" `compile_route` now skips a route's graphic change when there is no
+taro:
+
+> can we drop the graphic change command instead of the whole page?
+
+`compile_route` now skips a route's graphic change when there is no
 map's table to resolve it in (a shared body), and the rest compiles:
 common events 42 and 44 run (the converter's log: "left out, not
 compiling: none"). What is lost: the hero keeps its graphic where the

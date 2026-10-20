@@ -9,9 +9,11 @@ agents: [Chajá]
 
 taro, on 2026-10-19, playing Zounds (delivery of that day, the-advocate
 `54ec3daf`, the ports `c2912ad`): in `MiniCave`, of `Oeste de la Grieta /
-Secreto` —map 89, `… / Secreto / 5 - Rocks2`—, "the animation that `Tower
-(Ele)` uses in its second page leaves the colours like this on its second
-or third animation. I think the culprit is `ShowBattleAnimation`."
+Secreto` —map 89, `… / Secreto / 5 - Rocks2`—:
+
+> the animation that `Tower (Ele)` uses in its second page leaves the
+> colours like this on its second or third animation. I think the
+> culprit is `ShowBattleAnimation`.
 
 Two screenshots in `/shared/captures/2026-10-19-zounds-animation-colors/`:
 `23.png`, a message of Kazar's with the background already wrong; `24.png`,

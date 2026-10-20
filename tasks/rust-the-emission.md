@@ -6,8 +6,12 @@ status: done
 assignee: taro
 ---
 
-From taro, on 2026-10-01: "in parallel, can we move forward with some migration
-from Python to Rust?". All the domains that feed the emission are already Rust
+From taro, on 2026-10-01, in their words, translated:
+
+> in parallel, can we move forward with some migration from Python to
+> Rust?
+
+All the domains that feed the emission are already Rust
 (events, maps, screens, battle, images, music, patches); what's left
 in `tools/port/` is almost all emission and glue. It was the last thing in the plan,
 together with the orchestrator (`snes_convert.py`), which comes after.

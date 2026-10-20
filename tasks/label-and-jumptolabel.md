@@ -7,8 +7,9 @@ assignee: taro
 ---
 
 Phase 1 of [`research/2026-10-01-the-picture-system.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-01-the-picture-system.html) (Jilguero),
-from taro on 2026-10-01: "going ahead with Label, JumpToLabel sounds perfect
-to me".
+from taro on 2026-10-01, in their words, translated:
+
+> going ahead with Label, JumpToLabel sounds perfect to me
 
 ## What RM2k does
 

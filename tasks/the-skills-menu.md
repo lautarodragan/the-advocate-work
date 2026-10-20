@@ -6,10 +6,12 @@ status: done
 agents: [Mulita]
 ---
 
-taro, on 2026-10-12: "Something I'd like to do soon: make the skills menu
-work. In ABL it's always disabled. We could start by showing the skills,
-their descriptions and the selector, but not implementing being able to use
-skills on the map, and then implement that in a second phase."
+taro, on 2026-10-12:
+
+> Something I'd like to do soon: make the skills menu work. In ABL it's
+> always disabled. We could start by showing the skills, their
+> descriptions and the selector, but not implementing being able to use
+> skills on the map, and then implement that in a second phase.
 
 ## The phases
 

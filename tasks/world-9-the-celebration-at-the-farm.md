@@ -7,8 +7,12 @@ assignee: taro
 ---
 
 From taro, on 2026-10-03, together with the tools' slot cache
-(`workflow/tasks/*/la-cache-de-ranuras.md` over there, Yaguareté): "put 127
-in release if it fits". It fits.
+(`workflow/tasks/*/la-cache-de-ranuras.md` over there, Yaguareté), in
+their words, translated:
+
+> put 127 in release if it fits
+
+It fits.
 
 Base: ABL `57ef34d`, tools `60097b1a`.
 

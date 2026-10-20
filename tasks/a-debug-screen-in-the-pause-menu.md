@@ -7,9 +7,12 @@ assignee: taro
 agents: [Tijereta]
 ---
 
-taro, on 2026-10-20: "Could you add a debug screen like the original RPG
-Maker 2000's, that lets me change switches? Since we have no F9, I'd add
-it as an entry of the pause menu (as we did with the console in ABL)."
+taro, on 2026-10-20:
+
+> Could you add a debug screen like the original RPG Maker 2000's, that
+> lets me change switches? Since we have no F9, I'd add it as an entry of
+> the pause menu (as we did with the console in ABL).
+
 The precedent is ABL's console
 ([`console-custom-menu`](console-custom-menu.md)): one more option of the
 pause menu, full screen.

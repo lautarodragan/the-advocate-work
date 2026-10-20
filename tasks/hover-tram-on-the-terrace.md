@@ -257,4 +257,7 @@ took (the FPS counter is not part of the game).
 
 # Played
 
-taro played it on 2026-09-23 with the build of `3e028a0`: "it is perfect".
+taro played it on 2026-09-23 with the build of `3e028a0`, in their words,
+translated:
+
+> it is perfect

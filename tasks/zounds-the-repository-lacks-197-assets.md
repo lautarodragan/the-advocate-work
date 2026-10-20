@@ -30,7 +30,7 @@ taro may still have them. The study built with placeholders
 (`~/scratch/aguara/zounds/placeholders.py`); the full lists are in
 `~/scratch/aguara/zounds/missing.json`.
 
-**taro, 2026-10-16**: the 55 that are nowhere are probably lost (said on 2026-10-15); the free RTP of EasyRPG for RM2k3 goes to `~/assets` to cover the 108 of the RM2k3 RTP ("Dale"). Taken by Aguará.
+**taro, 2026-10-16**: the 55 that are nowhere are probably lost (said on 2026-10-15); the free RTP of EasyRPG for RM2k3 goes to `~/assets` to cover the 108 of the RM2k3 RTP ("go ahead", translated). Taken by Aguará.
 
 **Done by Aguará on 2026-10-16.** EasyRPG's free RTP is in
 `~/assets/easyrpg-rtp.zip` and, unzipped, `~/assets/easyrpg-rtp/`: there

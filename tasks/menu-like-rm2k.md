@@ -8,7 +8,7 @@ assignee: Tero
 
 # The menu like RM2k
 
-What taro asked for, on 2026-09-28:
+What taro asked for, on 2026-09-28, in their words, translated:
 
 > - the menu should show how much experience each hero has and at how much
 >   they reach the next level
