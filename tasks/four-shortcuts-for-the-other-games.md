@@ -23,7 +23,9 @@ pages that **only** that command leaves out:
 * `Comment` in troop pages: The Book of Three 153. In maps
   it is already ignored.
 
-taro, on 2026-10-06: "Go ahead!", with Sonnet.
+taro, on 2026-10-06, with Sonnet, in their words, translated:
+
+> Go ahead!
 
 ## Chajá, 2026-10-06
 

@@ -16,11 +16,13 @@
     color-scheme: light dark;
     --bg: #fdfcfa; --fg: #1d1d1f; --muted: #6b6b70; --line: #e4e2dd;
     --card: #ffffff; --accent: #2f6f4f; --code: #f2f0eb;
+    --quote-bar: #b9cfc2; --quote-bg: #f4f7f4;
   }
   @media (prefers-color-scheme: dark) {
     :root {
       --bg: #161618; --fg: #e8e6e3; --muted: #9a9aa0; --line: #2c2c30;
       --card: #1e1e21; --accent: #7cc49f; --code: #26262a;
+      --quote-bar: #3d5a4b; --quote-bg: #1b2320;
     }
   }
   * { box-sizing: border-box; }
@@ -73,6 +75,15 @@
   .body code { padding: 0 .25rem; font-size: .9em; }
   .body pre { padding: .6rem; overflow-x: auto; }
   .body pre code { padding: 0; }
+  /* taro's words go in a quote block (the README's rule): set apart the
+     way Markdown quotes usually are, in the page's green. */
+  .body blockquote {
+    margin: .75rem 0; padding: .45rem .9rem;
+    border-left: 3px solid var(--quote-bar); border-radius: 0 .3rem .3rem 0;
+    background: var(--quote-bg); color: var(--fg);
+  }
+  .body blockquote > :first-child { margin-top: 0; }
+  .body blockquote > :last-child { margin-bottom: 0; }
   .body table { border-collapse: collapse; }
   .body th, .body td { border: 1px solid var(--line); padding: .2rem .5rem; }
   [hidden] { display: none !important; }

@@ -6,10 +6,12 @@ status: done
 assignee: taro
 ---
 
-From taro, on 2026-10-02: "I'd like to remove resample. There's no need to
-keep compatibility with Python. It was fine for the migration, but I'd rather
-simplify the pipeline and have the binaries that need to apply image
-transformations use some standard or popular Rust library".
+From taro, on 2026-10-02, in their words, translated:
+
+> I'd like to remove resample. There's no need to keep compatibility
+> with Python. It was fine for the migration, but I'd rather simplify
+> the pipeline and have the binaries that need to apply image
+> transformations use some standard or popular Rust library
 
 It is used by `rm2k-snes-images` (`pixels.rs`: title, Game Over, large
 pictures, backgrounds and battlers, animations, `ShowPicture` with zoom) and,

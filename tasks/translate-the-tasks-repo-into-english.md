@@ -7,10 +7,12 @@ agents: [Hornero, Chajá, Carpintero, Aguará, Cardón, Hurón, Mulita, Calandri
 assignee: taro
 ---
 
-taro, on 2026-10-11, the same day the repo went public: "could you
-translate the whole work repo into English? It can go in separate
-commits, starting with the readme and tasks.nu, then the tasks that
-aren't done, and then the ones that are."
+taro, on 2026-10-11, the same day the repo went public, in their words,
+translated:
+
+> could you translate the whole work repo into English? It can go in
+> separate commits, starting with the readme and tasks.nu, then the tasks
+> that aren't done, and then the ones that are.
 
 File names are not translated: they never change, they are links.
 

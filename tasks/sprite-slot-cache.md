@@ -6,9 +6,14 @@ status: done
 assignee: taro
 ---
 
-From taro, on 2026-10-03: "let's go with 1", among the paths for ABL's
+From taro, on 2026-10-03, among the paths for ABL's
 farm (`tasks/world-8-distant-paradise-inside.md` and
-`world-7-the-road-to-paradise.md`, option D, in ABL). It belongs to the engine: it serves
+`world-7-the-road-to-paradise.md`, option D, in ABL), in their words,
+translated:
+
+> let's go with 1
+
+It belongs to the engine: it serves
 any crowded map, of any game.
 
 What was measured (Puma, 2026-10-01) on 127: 22 events that walk and 18

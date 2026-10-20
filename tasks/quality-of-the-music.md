@@ -26,9 +26,13 @@ there: what is left are details, in "What is left of the quality of the
 music", at the end of 6.
 
 
-taro, on 2026-09-25: *"`escape_newyork` sounds particularly bad, and maybe
-including the envelopes improves it a lot. And there are notes that cut off
-very abruptly."* This is the investigation: **the diagnosis, eleven versions of
+taro, on 2026-09-25, in their words, translated:
+
+> `escape_newyork` sounds particularly bad, and maybe including the
+> envelopes improves it a lot. And there are notes that cut off very
+> abruptly.
+
+This is the investigation: **the diagnosis, eleven versions of
 the theme recorded coming out of the ROM, and the plan**. Nothing is merged.
 
 * The recordings and what changed in each one:
@@ -1020,10 +1024,14 @@ margin; the battle, 3.1 dB, to -13.1 LUFS.
 
 ## 5b. The battle phrase, which the allocation cut: done
 
-taro, on 2026-09-26, listening to the recordings of 5: *"some improve a lot,
-but one gets worse: the battle theme. [...] the main phrase (which starts at
-second 15 and ends at second 22, approx, and then repeats) is constantly
-interrupted, which makes it unlistenable."*
+taro, on 2026-09-26, listening to the recordings of 5, in their words,
+translated:
+
+> some improve a lot, but one gets worse: the battle theme. [...] the
+> main phrase (which starts at second 15 and ends at second 22, approx,
+> and then repeats) is constantly interrupted, which makes it
+> unlistenable.
+
 Done the same day, in the commit "Música: la melodía de la batalla no llega
 última a su cuadro". The reason lives in `_orden_del_cuadro` of
 `tools/audio/snes_music.py`.
@@ -1162,8 +1170,12 @@ said it makes "a noticeable difference", and approved starting.
 
 ### Done, on 2026-09-26
 
-taro chose option A (*"1.3 s is a very low cost to pay for what we get in
-return"*) and lowering the startup to less than a second. Implemented in four
+taro chose option A and lowering the startup to less than a second; on A,
+in their words, translated:
+
+> 1.3 s is a very low cost to pay for what we get in return
+
+Implemented in four
 commits plus the prose one, on `d5caa40`:
 
 1. **The budget per package** (A): `repartir` and `Banco` in
@@ -1251,9 +1263,13 @@ completes); the converter only checks that the sum fits.
 
 ### Without map 3's ceiling, on 2026-09-26
 
-taro, about the ones that ended up worse: *"I don't find it acceptable that
-instruments lose quality because of a single map, but I don't want to lose
-quality in the sound effects either."* So the sound effects were not touched
+taro, about the ones that ended up worse, in their words, translated:
+
+> I don't find it acceptable that instruments lose quality because of a
+> single map, but I don't want to lose quality in the sound effects
+> either.
+
+So the sound effects were not touched
 —their 92 samples and the 120 rows of `sonido_tabla` come out byte for byte
 identical, with the SRCN shifted; a script compared it against the
 `musicdata.inc` of `d7056b6`— and it was attacked from two sides, in the commit

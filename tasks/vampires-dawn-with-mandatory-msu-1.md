@@ -15,7 +15,12 @@ There is already a path: the battle backgrounds travel in the `.msu` and the ROM
 
 ## What taro asked for when confirming it, on 2026-10-11
 
-"Let's go with the msu, but let's keep the runtime and tools code as generic as possible, always aiming for all games to have optional msu." That is: nothing that is "VD's mode"; the mechanism —what data can travel in the `.msu` and how the ROM reads it— is the same for all, and the mandatory part is only that a game doesn't have enough ROM without it. The underlying goal is still that every game fits without MSU-1.
+In their words, translated:
+
+> Let's go with the msu, but let's keep the runtime and tools code as
+> generic as possible, always aiming for all games to have optional msu.
+
+That is: nothing that is "VD's mode"; the mechanism —what data can travel in the `.msu` and how the ROM reads it— is the same for all, and the mandatory part is only that a game doesn't have enough ROM without it. The underlying goal is still that every game fits without MSU-1.
 
 ## Done, on 2026-10-11 (Tijereta)
 

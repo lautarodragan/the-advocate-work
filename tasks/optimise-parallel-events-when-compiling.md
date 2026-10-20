@@ -8,8 +8,11 @@ status: wishlist
 taro's idea, on 2026-09-26, from what the chips investigation measured
 (`expansion-chips-sa-1-and-s-dd1.md`): on map 11 the 13 parallel pages
 without a wait eat ~123 of the frame's 262 lines, and almost all of them
-compare coordinates. *"It is completely normal for compilers to
-optimise code"*: the converter already is a compiler from RM2k to bytecode.
+compare coordinates. In their words, translated:
+
+> It is completely normal for compilers to optimise code
+
+The converter already is a compiler from RM2k to bytecode.
 
 Ideas, from the cheapest to the most ambitious:
 
@@ -63,8 +66,11 @@ frame on every map** (never in battle): a `ChangeCondition` takes death off
 the whole party, and then, for each actor from 10 to 15, a
 `ConditionalBranch` "has at least 1 HP?" with a `ChangeHP` +1 in its else.
 In practice it only matters right after a battle won: whoever ended it
-fallen leaves with 1 HP. taro: "it's crazy to run this on every frame of
-the game". Since 2026-10-15 it compiles (Calandria, task
+fallen leaves with 1 HP. taro:
+
+> it's crazy to run this on every frame of the game
+
+Since 2026-10-15 it compiles (Calandria, task
 [`book-of-three-reraise-and-eilonwy-dont-compile`](book-of-three-reraise-and-eilonwy-dont-compile.md)),
 so it does run every frame.
 

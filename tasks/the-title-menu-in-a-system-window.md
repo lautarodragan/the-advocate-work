@@ -7,8 +7,10 @@ assignee: taro
 agents: [Tijereta]
 ---
 
-taro, on 2026-10-13: "Could you make the start menu use the System for the
-Begin the Story / Resume the Story menu, like RPG_RT does?"
+taro, on 2026-10-13:
+
+> Could you make the start menu use the System for the Begin the Story /
+> Resume the Story menu, like RPG_RT does?
 
 Today `rm2k-snes/screens/src/title.rs` in the-advocate draws the database's
 `new_game` and `load_game` terms with the message font over the title

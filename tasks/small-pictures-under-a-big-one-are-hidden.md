@@ -2,7 +2,9 @@
 name: "Small pictures over a big one are hidden, and two big ones are one"
 description: "Zounds' skill screen (map 190) puts its selectors and a face over a full-screen picture and a tall skill list: the background layer holds one big picture and hides the map and the small ones"
 type: bug
-status: draft
+status: doing
+assignee: Calandria
+agents: [Calandria]
 ---
 
 Seen by Tijereta on 2026-10-16, with the-advocate `9407d385` plus the

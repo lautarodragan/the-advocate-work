@@ -7,9 +7,12 @@ assignee: taro
 agents: [Calandria]
 ---
 
-taro, on 2026-10-14: "can you do the same for Book of Three and The Frozen
-World?" —the same as for ABL: what is left out and what the compiler
-ignores silently—.
+taro, on 2026-10-14:
+
+> can you do the same for Book of Three and The Frozen World?
+
+The same as for ABL: what is left out and what the compiler ignores
+silently.
 
 Measured by Hornero on the-advocate `14e200fc`, ports `f775b66`: both
 `release`s already carry every map (Frozen World excludes 1 and 2, each

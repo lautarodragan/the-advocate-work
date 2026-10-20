@@ -37,7 +37,13 @@ cause too, followed in
 (in testing). What stays a draft here is the choice above for the
 picture-made screens.
 
-**taro, 2026-10-16**: "Si sale relativamente barato implementar el resto del sistema de imágenes, intentémoslo. Si es algo que, de una u otra, nos acerca a la compatibilidad con RM, me parece bien." So the picture system grows toward RM2k's (more pictures at once), rather than remaking Zounds' screens as the engine's menu; first measured, implemented if the cost is reasonable. Taken by Tijereta.
+**taro, 2026-10-16**, in their words, translated:
+
+> If implementing the rest of the picture system turns out relatively
+> cheap, let's try it. If it's something that, one way or another,
+> brings us closer to compatibility with RM, I'm fine with it.
+
+So the picture system grows toward RM2k's (more pictures at once), rather than remaking Zounds' screens as the engine's menu; first measured, implemented if the cost is reasonable. Taken by Tijereta.
 
 ## Phase 1: measured (Tijereta, 2026-10-16)
 

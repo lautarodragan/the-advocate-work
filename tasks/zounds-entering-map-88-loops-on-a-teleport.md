@@ -12,10 +12,11 @@ taro, on 2026-10-19, playing Zounds (delivery of that day, the-advocate
 sword: on entering that map they loop and cannot move or leave. taro's
 reading: the event `Get Outta Map` triggers one of its pages conditioned on
 X or Y although those should not hold, and loops on a teleport; X and Y are
-never loaded into the variables. "I suppose RPG Maker ran page zero first,
-which is a Parallel Process, and always managed to set the variables.
-Maybe in our case those variables are at 0, 0 by default and nothing sets
-X, Y."
+never loaded into the variables:
+
+> I suppose RPG Maker ran page zero first, which is a Parallel Process,
+> and always managed to set the variables. Maybe in our case those
+> variables are at 0, 0 by default and nothing sets X, Y.
 
 What Hornero saw in `zounds/data/maps/Map0088.json`: Get Outta Map has four
 pages. Page 0, no condition, trigger parallel, 2 commands. Pages 1-3,

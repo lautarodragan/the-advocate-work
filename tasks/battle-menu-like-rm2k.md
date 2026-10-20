@@ -6,9 +6,12 @@ status: done
 assignee: taro
 ---
 
-From taro, on 2026-10-04: "the battle menu. Today it's very different from
-the original. In the original, all the menus and text appear at the bottom of
-the screen". His decisions:
+From taro, on 2026-10-04, in their words, translated:
+
+> the battle menu. Today it's very different from the original. In the
+> original, all the menus and text appear at the bottom of the screen
+
+His decisions:
 
 * No text over the background or over the enemies: the enemies' names go in
   a list on black, below. The bottom strip can be in another mode (HDMA)

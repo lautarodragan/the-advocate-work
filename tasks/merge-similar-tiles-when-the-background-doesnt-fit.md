@@ -11,9 +11,10 @@ assignee: taro
 largest, Uruya, 817; the world, 597): measured by Hornero on 2026-10-06 with
 `wally layers` over the 440 maps, in `/extras/scratch/hornero/vd-tiles/`.
 
-taro, on 2026-10-06: "maybe merging tiles is a good feature to have,
-in general. even if it looks ugly, it lets us have a playable lower bound
-algorithmically".
+taro, on 2026-10-06, in their words, translated:
+
+> maybe merging tiles is a good feature to have, in general. even if it
+> looks ugly, it lets us have a playable lower bound algorithmically
 
 ## Done (Cardón, 2026-10-06)
 

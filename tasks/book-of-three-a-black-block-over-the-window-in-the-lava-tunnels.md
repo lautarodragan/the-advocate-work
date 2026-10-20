@@ -2,8 +2,9 @@
 name: "Book of Three: a black block over the window in the lava tunnels"
 description: "On map 46 the message window carries a black block over its lower right corner, about 32 by 8 pixels with a ragged top"
 type: bug
-status: draft
-agents: [Calandria]
+status: doing
+assignee: Chajá
+agents: [Calandria, Chajá]
 ---
 
 Seen by Calandria on 2026-10-19 in snes9x captures of the `lava` and

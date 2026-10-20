@@ -6,16 +6,21 @@ status: done
 assignee: taro
 ---
 
-From taro, on 2026-10-02: "start the project of having an RPG Maker
-2000 game for tests". Today the tests of "what RM2k does"
+From taro, on 2026-10-02, in their words, translated:
+
+> start the project of having an RPG Maker 2000 game for tests
+
+Today the tests of "what RM2k does"
 (`rom/pruebas/rpgmaker/`) live on ABL's side only because they need a
 game. The crates already have small games in `tests/game/`. It's a plan, not
 code: the tasks come out of it.
 
 # taro's direction (2026-10-02)
 
-"When these are finished, I'd like to go ahead with the test game, if
-Leñatero finds it feasible":
+In their words, translated:
+
+> When these are finished, I'd like to go ahead with the test game, if
+> Leñatero finds it feasible
 
 1. **First, everything of ABL in a single place, outside this repo**: a repo
    of its own, with its history.
@@ -61,7 +66,11 @@ test` 36.
 
 # ABL's history: without filter-repo (taro, 2026-10-02)
 
-"I'm not sure I'm that worried about git-filter-repo. For now, we still have
-the git log here, and what will be left on ABL's side should be very little".
+In their words, translated:
+
+> I'm not sure I'm that worried about git-filter-repo. For now, we still
+> have the git log here, and what will be left on ABL's side should be
+> very little
+
 ABL's repo is born from scratch with today's files, and the history stays in
 this repo.

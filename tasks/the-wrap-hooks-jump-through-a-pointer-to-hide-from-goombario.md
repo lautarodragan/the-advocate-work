@@ -15,10 +15,11 @@ not walk that path. The annotation that would have said why could not be
 used: in ABL's cartridges `wrap.s` assembles nothing, and an annotation
 that allows nothing is red.
 
-taro, on 2026-10-20: "I would not change production code to please a
-linter or to live with a limitation of it. If the change at run time is
-nil, no drama; but if it costs even one cycle, I'd rather improve
-Goombario."
+taro, on 2026-10-20:
+
+> I would not change production code to please a linter or to live with
+> a limitation of it. If the change at run time is nil, no drama; but if
+> it costs even one cycle, I'd rather improve Goombario.
 
 **Done**: the hooks call and return directly, with no pointer and no
 WRAP_JUMP; Goombario handles what it could not —an annotation on code a

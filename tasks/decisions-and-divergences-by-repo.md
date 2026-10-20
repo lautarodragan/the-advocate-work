@@ -6,9 +6,11 @@ status: done
 assignee: taro
 ---
 
-Question 8 of the tools research, which taro left open on 2026-09-28
-("some are ABL's and some aren't: go over them one by one"), and which
-Hornero decides with taro's authorization of 2026-09-29.
+Question 8 of the tools research, which taro left open on 2026-09-28, and
+which Hornero decides with taro's authorization of 2026-09-29. taro's
+words when leaving it open, translated:
+
+> some are ABL's and some aren't: go over them one by one
 
 The criterion: what would hold for any RM2k game ported with the tools
 goes with the tools; what belongs to this game, its maps, its events or

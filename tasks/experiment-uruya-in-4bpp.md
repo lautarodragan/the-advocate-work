@@ -14,8 +14,10 @@ tiles of 8x8 at 8bpp (60x60 cells, 95 in the upper layer), and the largest VRAM
 split gives 544. At 4bpp about 2000 fit. It is throwaway: what
 matters is the ROM to look at and what was measured, not the code.
 
-taro, on 2026-10-06: "as a 100% throwaway experiment, could you build me
-a ROM that only has that map, in 4bpp mode".
+taro, on 2026-10-06, in their words, translated:
+
+> as a 100% throwaway experiment, could you build me a ROM that only has
+> that map, in 4bpp mode
 
 ## Done, on 2026-10-06 (Calandria)
 

@@ -6,7 +6,11 @@ status: done
 assignee: taro
 ---
 
-From taro, on 2026-10-02: "the refactor to free up those banks". Bank 1
+From taro, on 2026-10-02, in their words, translated:
+
+> the refactor to free up those banks
+
+Bank 1
 of `release` was left with 131 B free (`just space`), between the autorun
 common events and the shared `CallEvent` (Picaflor) and the large pictures
 (Aguilucho). It's like what Pirincho did with bank 0's tables

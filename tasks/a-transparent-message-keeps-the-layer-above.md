@@ -51,8 +51,9 @@ palette of the layer above that a baked cell uses, the entry closest to
 each of the text's colours —and its shadow's— becomes that colour. The
 layer above changes colour slightly, maybe differently from tile to tile,
 and that is less disruptive than text whose colour changes between cells,
-however imperceptibly. taro's words: consistency in the text matters more
-than in the background.
+however imperceptibly. taro's words:
+
+> consistency in the text matters more than in the background.
 
 What that leaves to measure (Hornero): the change is to the palette, so
 it is seen on every tile of the map that uses that entry, not only under

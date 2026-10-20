@@ -7,12 +7,17 @@ assignee: taro
 agents: [Hurón]
 ---
 
-From taro, on 2026-10-04: "Can you add one or two more doors to the debug map?
-… one that leaves you in Paradise directly — in the same place where arriving
-normally would leave you, after all the cutscenes, right when you take
-control of Talan", and "one after the Fortitude mini game, after
-regaining control of Talan (I think it would be right when the
-talk with Dr Vago ends, right?)".
+From taro, on 2026-10-04, in their words, translated:
+
+> Can you add one or two more doors to the debug map? … one that leaves
+> you in Paradise directly — in the same place where arriving normally
+> would leave you, after all the cutscenes, right when you take control
+> of Talan
+
+and
+
+> one after the Fortitude mini game, after regaining control of Talan (I
+> think it would be right when the talk with Dr Vago ends, right?)
 
 The debug map is `patches/manual/new/Map0900.json`; each door leaves
 the state of someone who played up to there.

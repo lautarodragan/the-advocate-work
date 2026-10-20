@@ -7,10 +7,13 @@ agents: [Hurón]
 assignee: taro
 ---
 
-From taro, on 2026-10-05: "when you play as Dalia, and you take the agency vehicle
-that takes you to the military base, the tank's graphic turns into
-Dalia's graphic halfway — and it goes the rest of the way on foot, with
-walking animation and everything. I think it always happens when crossing the bridge."
+From taro, on 2026-10-05, in their words, translated:
+
+> when you play as Dalia, and you take the agency vehicle that takes you
+> to the military base, the tank's graphic turns into Dalia's graphic
+> halfway — and it goes the rest of the way on foot, with walking
+> animation and everything. I think it always happens when crossing the
+> bridge.
 
 ## The scene
 

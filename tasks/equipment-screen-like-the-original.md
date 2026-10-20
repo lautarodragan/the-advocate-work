@@ -6,8 +6,10 @@ status: done
 assignee: taro
 ---
 
-From taro, on 2026-09-28: "Now I want to implement the UI improvements
-we made in the item menu for the equipment menu".
+From taro, on 2026-09-28, in their words, translated:
+
+> Now I want to implement the UI improvements we made in the item menu
+> for the equipment menu
 
 The item work is in `items-screen-like-the-original.md`
 (Jacarandá, `f3b0cc90`): the System windows on BG1 behind BG2's

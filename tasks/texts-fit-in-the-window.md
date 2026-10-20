@@ -20,8 +20,11 @@ It is an artistic decision —it changes what is read— so it goes as a
 # Status
 
 **Done on 2026-09-24**, in `4c82f2a` and `6ea392e`. taro played it until after
-the Director and the texts are fine: "we don't need to do anything more
-complex". How it ended up:
+the Director and the texts are fine, in their words, translated:
+
+> we don't need to do anything more complex
+
+How it ended up:
 
 * **The refit is a step of the pipeline, separate from the patches.** taro
   asked that it not compete with `patches/` nor with the forks of `juego/`:

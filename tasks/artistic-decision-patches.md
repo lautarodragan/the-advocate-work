@@ -11,8 +11,9 @@ The **artistic decisions** —what is lost going from RPG Maker to the
 SNES— come out of the converter as **versioned files**, and over time they
 become the source: the converter **reads** them instead of making them again.
 
-Taro summed it up like this: *"it's like a terraform or liquibase but for RPG
-Maker games"*.
+Taro summed it up like this, in their words, translated:
+
+> *it's like a terraform or liquibase but for RPG Maker games*
 
 # Status
 

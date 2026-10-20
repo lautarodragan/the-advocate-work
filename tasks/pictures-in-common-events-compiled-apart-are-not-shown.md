@@ -2,7 +2,9 @@
 name: "The pictures of the common events compiled apart from the maps are not shown"
 description: "An automatic or parallel common event, or one a page calls as a shared body, is compiled once without a map, so without pictures: Zounds' pick-axe and notebook, A Blurred Line's portable console and Vampires Dawn's menus show nothing"
 type: bug
-status: draft
+status: doing
+assignee: Carpintero
+agents: [Carpintero]
 ---
 
 Seen by Tijereta on 2026-10-16, with the-advocate `9407d385` plus the
