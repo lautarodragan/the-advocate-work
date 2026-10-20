@@ -73,3 +73,14 @@ by its own task:
 
 `just arrancan`, in the steps above, is `just boot` since the ports'
 translation.
+
+## Checked (2026-10-20, Chajá)
+
+The check above still holds at the-advocate `8f290c39`: steps 3, 4 and 6
+have no commit, and the cursor is still drawn on BG1. Two things moved:
+[`draw-the-faces`](draw-the-faces.md) is done, not in testing; and the inn's
+gold window (`d76bb565`, 2026-10-19, `runtime/gold_window.s`) is a window
+the runtime draws as objects and composes its number into at run time, the
+nearest precedent for step 6 —see what
+[`show-window-a-window-command-of-our-own`](show-window-a-window-command-of-our-own.md)
+measured of it—.

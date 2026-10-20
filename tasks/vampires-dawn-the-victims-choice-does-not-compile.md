@@ -45,3 +45,29 @@ was never measured. A `just culprits` in `vampires-dawn/` says which.
 a test that opens event 46 of map 6. First step: that `culprits` run; if
 the `\_` was the culprit it is not since `2a142635`, and what remains is the
 padded width, measured against the choice window.
+
+## Checked (2026-10-20, Chajá): the choice compiles; the pages stop elsewhere
+
+The first step, done: `rm2k-snes-events culprits --every-map` with the
+global tools (installed from the-advocate `8f290c39`) over the
+`events-request.json` of Vampires Dawn's `release` built that morning
+(ports `68bf55b`). **`ShowChoice` is no longer a culprit of any map page**:
+it is not in the culprits' table at all, so the `\_` was what refused it,
+and `2a142635` fixed it. The padded options were not measured on screen.
+
+But the pages do not come back. Counting every map page with a
+`ShowChoice` whose options include "Suck Blood" —476 pages on 133 maps; the
+210 above were only those whose sole culprit was the choice—, **263 are
+still left out**, all but one at a `ControlVars` or a `ConditionalBranch`
+(two of them with a box or an `InputNumber` as well); the other, at a shop.
+The most frequent are plain `ControlVars` setting variables past the 256th
+—380, 468, 301, 351—, which have no slot
+([`variables-are-capped-at-256-slots`](variables-are-capped-at-256-slots.md)),
+and branches on actor 11's level. Event 46 of map 6, the one the Done
+names, is left out whole: its page's condition names variable 468, "which
+has no slot in far RAM" (`degradations.json`). The throwaway script that
+counted it read the dump's maps and `culprits.json`.
+
+So what this task asked for is done, and what keeps the victims' pages out
+now is mostly the variables' cap, which has its own task. Whether this one
+closes, or waits for the test of event 46 the Done asks for, is taro's call.

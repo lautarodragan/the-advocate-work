@@ -57,3 +57,21 @@ bytecode stays as it is. First step: list every opcode with a variable
 operand, from `variable_slot`'s callers in `rm2k-snes-events`. It closes
 the second point of
 [`the-converter-caps-what-far-ram-no-longer-limits`](the-converter-caps-what-far-ram-no-longer-limits.md).
+
+## Checked (2026-10-20, Chajá)
+
+Still so at the-advocate `8f290c39`: `variable_slot` returns a `u8` in
+`rm2k-snes/events/src/pages.rs` and in `compile.rs`, and Vampires Dawn's
+`release` built that morning (ports `68bf55b`) still has 224
+`degradations.json` entries "which has no slot in far RAM", for 145
+variables. Those are only the events left out by a page's **condition**: a
+**command** naming such a variable leaves its page out as a culprit of
+`rm2k-snes-events culprits`, which `degradations.json` does not list.
+Measured that way, the cap is now what keeps out most of the victims'
+choice pages
+([`vampires-dawn-the-victims-choice-does-not-compile`](vampires-dawn-the-victims-choice-does-not-compile.md):
+`ControlVars` on 380, 468, 301, 351) and likely part of the summons
+([`vampires-dawn-summons-dont-compile`](vampires-dawn-summons-dont-compile.md):
+402, 417, 461, 463). So the Done's test of the degradations alone is not
+enough: `just culprits` in `vampires-dawn/` should stop naming
+`ControlVars` and branches whose only fault is a variable past the 256th.
