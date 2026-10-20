@@ -51,4 +51,8 @@ without MSU-1 until another song is chosen.
 
 ## taro's decision (2026-10-20)
 
-To the wishlist, as Tijereta recommended: taro had already said "por ahora no hagamos nada"; what is left is choosing other music.
+To the wishlist, as Tijereta recommended: taro had already said
+
+> por ahora no hagamos nada
+
+and what is left is choosing other music.
