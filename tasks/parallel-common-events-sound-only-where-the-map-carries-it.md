@@ -2,8 +2,8 @@
 name: "A parallel common event's sound effect plays only where the map carries it"
 description: "ABL's Raining runs on map 20 with switch 94 on, but its Rain1 every three seconds is silent: a common event's effects are noted in no map's audio package"
 type: bug
-status: doing
-assignee: Mulita
+status: testing
+assignee: taro
 agents: [Mulita]
 ---
 
@@ -107,3 +107,29 @@ page counts for the map that turns it on, not for the destination (Zounds'
 map 58 does that with 111). And the automatic common events without
 pictures have the same problem: draft
 `automatic-common-events-sound-only-where-the-map-carries-it.md`.
+
+## How it was checked (Mulita, 2026-10-20)
+
+* `test_on_map_20_the_raining_common_event_sounds`, in ABL's
+  `tests/abl/test_rain.py`: case `party-11-in-20` with switch 94, 600 ticks.
+  Red before ("Raining's Rain1 started 0 times"), green after.
+* The event compiler's unit tests in `commons.rs`: the effects a parallel
+  body gives back, where a switch can be turned on —by a map, a call, the
+  database, a global common event, and before a `Teleport`—, and that they
+  are noted last.
+* Each game's `release` against `main`'s, as above. The Vampires Dawn
+  boot takes 64 frames from the count to the title instead of 60 —its
+  first map's package goes up behind the title song—, and
+  `test_title_first.py`, which looked exactly at frame 60, now waits 90.
+* ABL's whole suite (1,580 passed, 2 skipped; no golden moved), `just
+  boot` (all green after the title test's change), `just test`, `just
+  rust-test` and `just lint` in the-advocate.
+
+## On merging
+
+the-advocate `mulita-abl-rain` touches the event compiler: **reinstall
+`events`** (`just install events`). The runtime change of the other task
+goes in with the same merge, nothing to install for it. the-advocate-ports
+`mulita-abl-rain`: the new test and the title test's wait.
+the-advocate-docs `mulita-abl-rain`: internals/audio.md and ABL's two known
+issues removed.
