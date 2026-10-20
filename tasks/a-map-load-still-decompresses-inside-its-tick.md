@@ -29,3 +29,11 @@ frames, which does not fit in what a tick has left.
 **To reproduce**: the probe and the scripts described in that task's log
 —`PROBE` marks around `lz2_grid`, `lz2_backdrop`, `lz2_anim` and the
 `lz2_field` of `load_above` and `load_sprite`—.
+
+## Checked (2026-10-20, Tijereta)
+
+Still so at the-advocate `8f290c39`: `maps-load-faster-without-losing-anything`
+is in `testing` and its "What was left" says the same, with its cost —a
+decompressor that can stop and go on next tick, some 400 bytes in a far
+bank and its state in far RAM—. Whether that is worth four to nine
+frames a load is the open question.

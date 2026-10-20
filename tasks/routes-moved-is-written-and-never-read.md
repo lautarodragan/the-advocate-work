@@ -2,7 +2,7 @@
 name: "routes_moved is written and never read"
 description: "A byte of bank 0's BSS whose comment promises a skipped sort that no code does"
 type: bug
-status: draft
+status: todo
 ---
 
 Seen by Hurón on 2026-10-18, reading the runtime for
@@ -23,3 +23,15 @@ The sort it speaks of is done today one row at a time, by `fit_far` in
 being needed; what is left is one byte of a BSS that is full and a comment
 that describes something the code does not do. The book's Optimizations
 section does not tell it, on purpose.
+
+## Defined (2026-10-20, Tijereta)
+
+Checked against the-advocate `8f290c39`: still so —`routes_moved` is a
+`.res 1` in `runtime/low_ram.s` and its only uses are the `stz` and the
+`sta` in `move_events` (`runtime/event_routes.s`)—. The sort it speaks of
+is `fit_far`'s, per row. **Done**: the byte, its two writes and its
+comment gone, in a commit of their own; ABL's suite and the test game's
+green, and their goldens unchanged —nothing reads it, so nothing seen can
+move—. **First step**: `grep -rn routes_moved` over `runtime/` and the
+Rust, to be sure nothing outside the runtime (the harness's symbols,
+Goombario) names it.
