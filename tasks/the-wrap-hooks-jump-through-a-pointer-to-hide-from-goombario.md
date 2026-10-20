@@ -2,8 +2,8 @@
 name: "The wrap hooks jump through a pointer to hide from Goombario"
 description: "The far wrap code is reached and returns through WRAP_JUMP, a pointer in BSS, so the linter does not walk that path; taro wants Goombario improved instead, and the runtime direct"
 type: tooling
-status: doing
-assignee: Hurón
+status: testing
+assignee: taro
 agents: [Hurón]
 ---
 
@@ -77,3 +77,46 @@ Cycles per use on a map that loops: `CALL0` 36 → 18, `RTS0` 35 → 16,
 `rtl` first). Bytes, Zounds, Vampires Dawn and Sunset over Imdahl alike:
 `FAR3` −95, BSS free 77 → 81, bank 0 the same (138, 48, 28), far RAM the
 same. `CALL0` keeps X now.
+
+### `wrap_pass`, the other piece shaped around the linter
+
+The first round's red annotation was on `wrap_pass`, which kept the
+comparison of `pass_x` under a `php`/`plp` and branched on the pulled Z;
+it was rewritten to fold both axes through `WRAP_U` with `eor`/`ora` so
+that it needed none. Now (`8715b90e`) Y counts the axes that moved, the
+cheapest of the three: from the `ldx #0` to the `beq`, 60 cycles before,
+33/39/45 now (none, one, both moved), and `FAR3` 8 bytes fewer. With it,
+`FAR3` is 103 bytes smaller than main's in the three games.
+
+### Verified
+
+With this branch's tools (`goombario`, `cartridge`, `project` installed
+locally) and runtime:
+
+* **A Blurred Line's nine cartridges** byte for byte the same as with
+  main's tools, twice (before and after `wrap_pass`); its suite, 1573
+  passed, its linter included, after the last change. `abl.sfc`
+  `f5c437e663636cba` (sha256, first 16).
+* **The test game's suite**: 51 passed, the ring (`test_wrap.py`, both
+  cores) and its linter included.
+* **`just boot`** from the ports' root: 95 passed, Zounds' two wrap tests
+  included.
+* **Goombario over Zounds', Sunset's and Vampires Dawn's release
+  cartridges** (not in any suite: no linter test runs over them): none
+  found with this one, nine each with main's.
+* `just test` 29 passed; `crate-test goombario` 14 + 6 passed; clippy and
+  rustfmt on goombario clean.
+* `just space` for the three games, with main's tools and with these (the
+  numbers above).
+
+Not covered by any test: Sunset's bats on map 63 and Vampires Dawn's free
+fall on 254 are still not played (see `maps-that-wrap-around`); what they
+run is what the test game's walkers and Zounds' tests run.
+
+### When merging
+
+Reinstall `goombario`, and the runtime goes in with the checkout. The
+ports have no change: `huron-wrap-direct` there is main's old commit with
+nothing on it, and can be deleted. The book's branch updates
+`internals/maps.md` and `tools.md` (whose Goombario still described the
+`--allow` file of before 2026-10-18).
