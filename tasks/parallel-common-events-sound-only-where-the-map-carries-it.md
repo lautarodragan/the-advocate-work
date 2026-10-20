@@ -35,3 +35,27 @@ agent picks and measures what each costs in ARAM—, and
 `test_sound_in_route.py` hears `Rain1` start on map 20 with switch 94 on,
 red before the fix. **First step**: where the packages collect a map's
 effects, and how many common events with sounds each game has.
+
+## How many and where (Mulita, 2026-10-20)
+
+Parallel common events with a `PlaySound` of their own (a throwaway count
+over each port's `data/`): A Blurred Line 1 (`Raining`), Vampires Dawn 18
+—rain, thunder, the summons and the transformations—, Zounds 3; the other
+five games none. Automatic ones with sounds: ABL 3, Vampires Dawn 7,
+Desert Nightmare 5, Zounds 3, and one each in The Book of Three, Frozen
+World and Sunset —menus, mostly—; those are not this task: the ones with
+pictures are already copied into the maps that can start them, and compile
+with them.
+
+Which maps can **be** on with the switch is the closure of the teleports
+from the ones that turn it on, and that is every map: ABL's switch 94 is
+turned on in 20 and 21, and the closure from them is 302 of the 328 maps;
+in Vampires Dawn it is all 440, as many of its switches are turned on by
+skills. And `Rain1` goes whole in ABL, five seconds at 6 kHz, ~17 KB of
+ARAM: in every package it would take that from every map's music. So the
+rule is the one `common_pages.rs` already uses to copy the automatic ones:
+**the maps whose pages can turn the switch on**, through the common events
+they call, and every map if a switch item or skill, or a parallel or
+automatic common event, can. ABL: maps 20 and 21. What is left out: a map
+the party reaches with the switch already on and that does not turn it on
+itself stays silent.
