@@ -50,3 +50,50 @@ and the book:
   are not edited.
 * the-advocate: comments on map 11 talk about the original's lights and
   the stones engine, which are back; nothing to change.
+
+## What the original map costs per frame
+
+Measured on 2026-10-20 over `release`, built from the ports worktree with
+the fork removed and again with it, with the global tools (the-advocate
+`8715b90e`) and snes9x. The instrument is the harness's: `lost_frames`
+—read and reset every 50 frames, since it saturates at 255— and the loop
+laps in `ticks` against hardware frames. The script was thrown away; it
+walked the hero back and forth along each lane for 1200 frames, holding
+the direction to the far end and turning, the lanes stopping one cell
+short of the light events so nothing catches him; "engine on" is after
+talking to `Grate1`, with `EV0017`'s parallel running.
+
+    lane, 1200 frames                       engine   original    redesign
+                                                     lost laps   lost laps
+    row 48, x 8-16 (cones B, C, D on screen)  off      0  1200     0  1200
+                                              on       0  1200     0  1200
+    row 45, x 5-11 (cones B, C)               off      0  1200     0  1200
+                                              on       0  1200     0  1200
+    row 54, x 3-11 (cone E)                   off      0  1200     0  1200
+                                              on       0  1200     0  1200
+    column 23, y 48-52 (cone A)               off      0  1200     0  1200
+                                              on       0  1200     0  1200
+    still at (14,48), between the cones       both     0  1200     0  1200
+    still at (50,50), nothing on screen       both     0  1200     0  1200
+
+The cells of the 2026-09-21 table —(50,50), (26,47), (18,50), (19,46),
+(5,50)— give the same: 0 lost out of 1200 standing and walking, with both
+maps. (At (19,46), which is a cell of cone B, the original's touch
+trigger catches him on the first step and the teleport back loses 2.)
+That is, **walking and standing, the original fits in the frame
+everywhere the minigame is played**, where on 2026-09-21 it was at 30 fps
+flat in three of those cells.
+
+What does cost something is the moments the minigame moves events, 300
+frames after each, frame by frame:
+
+    moment                                   original           redesign
+    stone thrown up at the PC from (19,52)   6 lost, single     1 lost
+    stone thrown left from (26,52)           3 lost, single     0 lost
+    stone on Light5, cone A turned off       6 lost, single     1 lost
+
+"Single": each one is one frame alone —at frames 1, 35, 38, 62, 65 and
+82 of the throw at the PC—, never two in a row, so it is a missed vblank
+here and there and not a drop to 30 fps. It is the price of the
+original's 84 events against the redesign's 33, and taro played it
+without noticing.
