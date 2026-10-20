@@ -28,8 +28,11 @@ below, so that window has nowhere to go without taking rows away from the
 buy list, which already has five. Before implementing it, it has to be
 decided where that space comes from.
 
-taro, on 2026-10-15: "maybe we could try to implement it? It would be nice
-for ABL too." Where the space comes from is decided by the agent with a
+taro, on 2026-10-15:
+
+> maybe we could try to implement it? It would be nice for ABL too.
+
+Where the space comes from is decided by the agent with a
 first version, measured against the original's captures; taro adjusts by
 playing.
 

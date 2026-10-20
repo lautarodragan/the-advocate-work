@@ -8,8 +8,10 @@ agents: [Mulita]
 ---
 
 taro, on 2026-10-19, after the three compiler warnings the workflow printed
-were fixed (the-advocate `54ec3daf`): "Is `fmt` run on the Rust code? And
-`clippy`? It would be nice to have them as checks in the GitHub workflow."
+were fixed (the-advocate `54ec3daf`):
+
+> Is `fmt` run on the Rust code? And `clippy`? It would be nice to have
+> them as checks in the GitHub workflow.
 
 Measured by Hornero on `54ec3daf`, rustfmt 1.9.0 and clippy 0.1.96:
 

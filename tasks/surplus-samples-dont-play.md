@@ -7,10 +7,14 @@ agents: [Mulita]
 assignee: taro
 ---
 
-From taro, on 2026-10-06: "instead of getting the samples to fit, it would
-be nice not to need to exclude those maps, and just drop the samples
-> 255 and that's it. That the game doesn't fail — simply, that it doesn't
-make a sound, where it can't." Dooms 2 today builds only by excluding maps
+From taro, on 2026-10-06, in their words, translated:
+
+> instead of getting the samples to fit, it would be nice not to need to
+> exclude those maps, and just drop the samples > 255 and that's it. That
+> the game doesn't fail — simply, that it doesn't make a sound, where it
+> can't.
+
+Dooms 2 today builds only by excluding maps
 40 to 93.
 
 ## Done (Mulita, 2026-10-06)

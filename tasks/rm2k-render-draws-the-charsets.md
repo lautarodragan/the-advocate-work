@@ -6,8 +6,11 @@ status: done
 assignee: taro
 ---
 
-From taro, on 2026-09-30: "let's go for the CharSets in rm2k-render". It is
-the first part of `rm2k-render-draws-everything-from-rpg-maker.md`, and it comes after
+From taro, on 2026-09-30, in their words, translated:
+
+> let's go for the CharSets in rm2k-render
+
+It is the first part of `rm2k-render-draws-everything-from-rpg-maker.md`, and it comes after
 Adeleine in Rust because the CharSets go through Adeleine before reaching
 Voodoo.
 
