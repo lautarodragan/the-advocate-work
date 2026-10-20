@@ -2,7 +2,9 @@
 name: "rm2k-snes.toml becomes advocate.toml"
 description: "Each game's project file is renamed advocate.toml; the tools keep their names"
 type: tooling
-status: todo
+status: doing
+assignee: carpintero
+agents: [carpintero]
 ---
 
 taro, on 2026-10-20: rename each game's `rm2k-snes.toml`, in the ports,
@@ -17,4 +19,6 @@ the ports' `RENAMES.md`, every ROM byte for byte equal—; then the prose
 that names it, in its own commits: comments, READMEs, the book,
 AGENTS.md. History is not rewritten. Wait for
 [`abl-map-11-back-to-the-original`](abl-map-11-back-to-the-original.md)
-(Mulita), which edits ABL's.
+(Mulita), which edits ABL's —merged on 2026-10-20, with
+[`a-debug-screen-in-the-pause-menu`](a-debug-screen-in-the-pause-menu.md)
+(Tijereta), which edited all nine.
