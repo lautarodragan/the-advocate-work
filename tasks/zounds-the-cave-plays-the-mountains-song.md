@@ -2,7 +2,9 @@
 name: "Zounds: the cave under the crack plays the Mountains' song, in the original too"
 description: "Past map 59 the cave's maps say \"the parent's\" all the way up to map 33, Mountains, so walking on from the dungeon's PlayBGM brings back 18 - Desert flower; RPG_RT 2003 does the same, so it is the game's data, not the port"
 type: bug
-status: draft
+status: doing
+assignee: Calandria
+agents: [Calandria]
 ---
 
 Seen by taro on 2026-10-19 playing the port, and measured by Carpintero the
@@ -43,3 +45,10 @@ EasyRPG's `Game_Map::PlayBgm` does the same, the port matches it, and
 The same goes for 51, 52 and 53 outside the crack: they also climb to 33.
 
 What to do, if anything, is taro's: the data is their game's.
+
+## taro's decision (2026-10-20)
+
+"Dale, usemos la canción del calabozo en los mapas del calabozo en
+Zounds": the dungeon's maps play `Zounds_Dungeon_01`, changed in the
+game's own data, in `~/juegos/zounds` —taro's repo, retouched with their
+approval like the cave's doorways—.
