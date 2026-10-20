@@ -2,8 +2,8 @@
 name: "The pictures of the common events compiled apart from the maps are not shown"
 description: "An automatic or parallel common event, or one a page calls as a shared body, is compiled once without a map, so without pictures: Zounds' pick-axe and notebook, A Blurred Line's portable console and Vampires Dawn's menus show nothing"
 type: bug
-status: doing
-assignee: Carpintero
+status: testing
+assignee: taro
 agents: [Carpintero]
 ---
 
@@ -78,3 +78,143 @@ the ports' games at that branch:
 
 What is still as this draft says: **the small pictures** of every such
 body, which need a map's sprite bank, and the big ones a body stacks.
+
+## Defined (2026-10-20, Carpintero)
+
+Measured with the-advocate `3bc68ac4` and the ports `b5cfc1e`.
+
+**How a page gets its pictures today.** A small picture —one that fits
+the plane of objects— is **the map's**: the converter cuts the pictures
+the scan gathered for the map into 32x32 and 8x8 objects
+(`pictures::for_map` in rm2k-snes-convert), Wally puts their tiles at
+the end of the map's sprite bank and their palettes from sprite palette 7
+down, and the emission writes each one's entry —half size, objects,
+palette, colours, base tile— in the map's `picture_data` table. A
+`ShowPicture` compiles to `OP_PICTURE slot, image, …`: `image` is the
+entry in the **loaded map's** table, and `slot` one of the console's
+sixteen, given per map by number. So the bytecode names a picture by an
+index that only means something on one map, and its tiles are in VRAM
+only because they came up with that map's bank. A body compiled once,
+without a map, cannot name one: its `ShowPicture`s are accepted without
+being done. The big ones are the exception since Chajá's change: the
+cartridge carries them once, in a table every map shares.
+
+**Who is left out, measured.** ABL's portable console is not one any
+more: common 39 has been a custom menu of the engine since 2026-10-04
+(taro: "va el diseño, con retrato, \"Console\", y sólo con el ítem"),
+and what is left with pictures, commons 11 and 16, hangs from switches
+335 and 340, which only item 150, `SCRATCHEDOUT`, turns on, and nothing
+gives it. ABL loses nothing a player reaches. **Zounds** does: its
+pick-axe (21), notebook (29), notes (40) and permit (6) are automatic on
+a switch that a **switch item** turns on —items 23, 35 and 8—, which
+the copies of 939a8bd7 did not count, so Zounds gets no copy at all.
+
+**Options, measured on Zounds.**
+
+1. **The copies, reached by the switch items too** (what `common_pages`
+   does, with the items counted): 187 of 189 maps get the copy event, and
+   the cartridge two banks more of bytecode (62 to 64). But a map takes
+   the copies' pictures all together or none, and the four do not fit
+   together **on any map**: nothing is shown. Each one alone, measured
+   by copying only it: the pick-axe fits on 23 maps, the notes on 135,
+   the permit on 130, the notebook on none.
+2. **The copies, their pictures one common event at a time** —kept if
+   each costs the map nothing beside those kept before—: tried. The
+   permit, first by number, takes 320 tiles on 128 maps and then the
+   pick-axe fits on none; and each map's bank carries the tiles it keeps,
+   **eleven banks** more (62 to 73) for one picture stored 128 times.
+   Which one goes first is a guess the cartridge cannot make.
+3. **A cartridge-wide table of the common events' pictures, their tiles
+   uploaded when one is shown.** The tiles are in the cartridge once; the
+   body compiled once names its pictures by an index every map shares;
+   and each common event is judged **alone** on each map —does its set
+   fit beside the map's bank, palettes and message arrow?—, since only
+   one set is in VRAM at a time. No copies, so it serves the parallel
+   ones and the bodies the automatic ones call too. It costs runtime: an
+   upload of the set's tiles through the vblank when it is first shown,
+   and two reads that take the base tile and the palette from the map.
+
+**Chosen: 3.** 1 and 2 pay for every map the VRAM and the cartridge of
+pictures that are seen on few of them, and 2 makes them compete; 3 pays
+once in the cartridge and only while it is up in VRAM. What none of the
+three does is show the pick-axe screen where it is used, in the desert
+(map 34): its six pictures and digits take 400 object tiles and seven
+sprite palettes —`Zounds_Dialogue_4`, the 320x80 box under its
+messages, is 384 of the tiles—, and no map with characters leaves that.
+That one needs either the characters to give the plane up while the
+screen is up, or the box to be the message window: a decision for taro,
+written as a draft when this is done.
+
+**Done**: the common events that run without a map show their small
+pictures wherever their set fits beside the map; Zounds' notes and permit
+on the maps where they fit, and the pick-axe screen on the ones where it
+fits, with a golden red before; the converter's log says, per set, on
+how many maps it fits; ABL's suite and the ports' `boot` green, the space
+of every cartridge measured before and after; the book's
+`internals/vram.md` and the divergence say it.
+
+**First step**: the set of each common event that runs anywhere, from
+the scan's `commons_pictures`, which today keeps only the big ones.
+
+## 2026-10-20, Carpintero: option 3, built
+
+The-advocate `aadb9151`, branch `carpintero-ce-pictures` (from
+`3bc68ac4`); the ports `e8ffd29` and `521e59e`, branch of the same name;
+the book `785095d`.
+
+* **Sets**: `commons::picture_sets` in the event compiler gathers what
+  each common event that runs without a map shows with every body it calls
+  —an automatic one and its shared bodies, merged when two reach the same
+  body; a parallel one alone, its calls pasted—, and the scan answers them
+  as `common_sets`. The converter cuts each as a map's pictures, from tile 0
+  and palette 0 (`common_pictures.rs`), the fewest pictures first, since the
+  table names 127.
+* **Bytecode**: a body is compiled with its set's pictures; `OP_PICTURE`'s
+  image has bit 7 set and the slot is counted from the top. No new opcode:
+  0x5A is free. A `MovePicture` of a number the body's set shows small moves
+  that one and not a big one under the same number, which another common
+  event shows —the notebook's background took the record player's fade—.
+* **Emission**: the entries after the maps' in `picture_data`, each set's
+  tiles once, and per map the tile and palette where the sets go and a bit
+  per set that fits there, measured alone (`picture_common_section`).
+* **Runtime**: `runtime/picture_common.s`. Shown, a set goes up past the
+  map's bank, arrow and gold window through `vram_drain`'s budget; its
+  pictures are drawn once it is there; one set at a time; `load_sprite`
+  puts it back.
+
+Measured on Zounds: the permit (6) fits on 53 of 189 maps, the notes (40,
+42) on 96, the record player (36) on 128, the music bar (68) on 145; the
+pick-axe (21, 27: 400 tiles, seven palettes) and the notebook (29, 30, 41:
+704 tiles) on none. Those two are
+[`zounds-pick-axe-and-notebook-fit-beside-no-map`](zounds-pick-axe-and-notebook-fit-beside-no-map.md),
+a draft with what they would take. The permit shows, but its slide up is
+a `MovePicture` that zooms it from 60 % to 100 %, which small pictures do
+not do: it stays small and translucent at the bottom.
+
+**Done, against what was asked**: the common events' small pictures show
+where they fit, and Zounds' record player has its golden, red before. **Not
+done**: the pick-axe and the notebook, which fit beside no map; and ABL's
+portable console, which is the engine's custom menu since 2026-10-04 by
+taro's decision —its pictures are not shown on purpose—, while its other
+picture menus (commons 11 and 16) hang from an item nothing gives.
+
+### Verified, and what to install
+
+Run with the branch's tools: `just test`, `just rust-test` and `just lint`
+in the-advocate; ABL's `just tests` (1578 passed, 2 skipped) and the
+ports' `just boot` (101 passed), at the ports' `521e59e`. The space of
+every cartridge before (main's tools) and after: bank 0 four bytes less on
+each —Sunset's `release` is left the tightest, at 21—, bank 1 39 less,
+bank `$C1` about 460 less, far RAM 9 less; one data bank more on ABL's
+`release`, Desert Nightmare, Sunset and Zounds. What the suites do not
+cover: a set taking another's down, a parallel common event's set (Desert
+Nightmare's 4 fits on 14 maps, no test looks at it), and a battle or a
+big picture putting a set back —only the debug screen is tested—.
+
+After merging the ports' `main` (`59b5658`) Zounds does not build with
+this branch's tools: its `[battle.terms]` gives "dodge", which Cardón's
+`fd543e73` teaches the converter and the-advocate's `main` does not have
+yet. Not this branch's.
+
+When merging: `just install convert events mapdata`; the runtime comes
+with the checkout.
