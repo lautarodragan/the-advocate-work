@@ -156,3 +156,12 @@ from the ports' root was green on the pre-merge tree; on the merged one it
 was still running when this was written —if cut, the next step is
 re-running it (`PATH=<the-advocate worktree>/.local-tools/bin:$PATH just
 boot`, about 45 minutes)—.
+
+**`just boot` on the merged tree** found Vampires Dawn not linking: `FAR`
+overflowed bank 1, main's merges plus this branch's wide mode. 3126b799
+moves `tl_stage_clear`, `tl_strip_upload` and `tl_strip_place` —screen-off
+paths of the menus' names— to FAR3: 183 B back in bank 1 in every ABL
+cartridge. ABL's suite after it: red only the delcentric pump golden
+(pre-existing) and, once, test_cores' `test_event` (green on five reruns).
+The other six reds of that boot were Vampires Dawn's; they are being
+re-run with `just boot -k "vampires or walkers or twins or title"`.
