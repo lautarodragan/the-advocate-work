@@ -2,8 +2,8 @@
 name: "A forced route that turns a switch on or off leaves its page out"
 description: "Move commands 32 and 33 in a MoveEvent are refused, and the whole page with them: 33 pages of Vampires Dawn and one of Sunset over Imdahl on 2026-10-20"
 type: bug
-status: doing
-assignee: Mulita
+status: testing
+assignee: taro
 agents: [Mulita]
 ---
 
@@ -137,3 +137,25 @@ skill-screen reds that came from the global `images`/`screens`/`battle`
 being older than the branch (the slot names, the skill results, the lava
 tunnels, the skill screen's panorama), not from this change; the merged
 round is the one that says so.
+
+## To testing (2026-10-20, Mulita)
+
+The final round, on the merged tree —the-advocate `cb6e0e07` (with
+`origin/main`), the ports `c9442a4`, the book `4f26393`, all on
+`mulita-route-switches`—, with `install-local … project cartridge convert
+mapdata events battle screens wally images`: ABL's `just tests` 1590
+passed, `just boot` 109 passed (the Silver Key's test among them), `just
+test`, `just rust-test` and `just lint` green. ABL's `abl.sfc`
+`082731cf58f2b990` (sha256, first 16). The earlier reds were the global
+binaries being older than the branch; they are gone here.
+
+**To install when merging**: `just install project cartridge convert
+mapdata events` —`events` and `convert` changed, and `project` carries
+the runtime's path—. No goldens moved.
+
+**Not covered by a test**: the hero's route switch (`switch_hero`; no
+game's route turns one on the hero), a page's own route with switches
+(Vampires Dawn's map 163, compiled and in the unit tests, not played),
+and the one-frame-late refresh the book's divergence describes. Also
+fixed on the way, in its own commit: the effects' test in
+`commons.rs` that the integration left without `sets`.
