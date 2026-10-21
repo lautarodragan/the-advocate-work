@@ -134,8 +134,8 @@ cartridges rebuild on their own.
 
 **Space**, `just space` in ABL, bank 1 is the one that moved: in the MSU
 test cartridge, the tightest, 252 B at 090b0037, 189 after part 1, 100
-after part 2, and 8 after merging main —main's merges took the rest—;
-`release` 829 → 585. Bank 0 did not move from my changes; far RAM, 12 B
+after part 2, 8 after merging main —main's merges took the rest—, and 191
+after 3126b799 moved the strips' uploads to FAR3; `release` 829 → 768. Bank 0 did not move from my changes; far RAM, 12 B
 of the layer's variables. The 4 KB wide stage is in `LZ2_BUFFER`.
 
 **Not covered by a test**: no test opens another port's debug screen
@@ -163,5 +163,7 @@ moves `tl_stage_clear`, `tl_strip_upload` and `tl_strip_place` —screen-off
 paths of the menus' names— to FAR3: 183 B back in bank 1 in every ABL
 cartridge. ABL's suite after it: red only the delcentric pump golden
 (pre-existing) and, once, test_cores' `test_event` (green on five reruns).
-The other six reds of that boot were Vampires Dawn's; they are being
-re-run with `just boot -k "vampires or walkers or twins or title"`.
+The other six reds of that boot were Vampires Dawn's not building; `just
+boot -k "vampires or walkers or twins or title"` after the move: 15
+passed. The draft about bank 1 that the merge had nearly filled was
+deleted with the move: it is back to what it was at 090b0037.
