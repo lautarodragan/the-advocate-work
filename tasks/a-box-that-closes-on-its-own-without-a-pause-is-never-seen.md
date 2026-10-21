@@ -2,7 +2,9 @@
 name: "A box that closes on its own without a pause is never seen"
 description: "A ShowMessage whose tail is \\^ without any \\| closes before the composer finishes it, so the window never shows; RM2k types it out and then closes it"
 type: bug
-status: todo
+status: testing
+assignee: taro
+agents: [Tijereta]
 ---
 
 Seen by Tijereta on 2026-10-12, reading the code while doing
@@ -41,3 +43,14 @@ then closes, as RM2k's `kill_page`, with the test case the draft describes
 (`auto-close-1` without its `\|`, every frame) red before the fix.
 **First step**: `git blame` that comment to see why it closes early, and
 reuse what `waits-in-the-middle-of-a-box.md` did for the last stretch.
+
+## Done (Tijereta, 2026-10-20)
+
+Fixed by [`message-colours-and-speed`](message-colours-and-speed.md): the
+boxes are typed at RM2k's pace, and `events_tick` holds the page while one
+is typed —`msg_state` is not 0 until it is whole—, so its tail, `\|` and
+`\^`, counts from its last letter, as RPG_RT reads it. A `\^` box is typed
+to its end and then closes. Test: the test game's
+`test_close_on_its_own.py`, case `close-on-its-own` —a line ending in `\^`
+and a switch after it—, red with main's tools (the window never came up),
+green in both cores; the-advocate `c8d13b8d`.
