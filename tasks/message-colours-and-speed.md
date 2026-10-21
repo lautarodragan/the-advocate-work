@@ -2,8 +2,8 @@
 name: "Message colours and speed"
 description: "\\c[n] and \\s[n] in a message box are discarded today: coloured words come out in the plain colour and the text goes at one speed"
 type: feature
-status: doing
-assignee: Tijereta
+status: testing
+assignee: taro
 agents: [Tijereta]
 ---
 
@@ -152,17 +152,54 @@ makes the same test with its own size, and late cells wait for the next
 vblank. The book's lossless page had collided on the same paragraph; it
 says both.
 
-**Where it stands** (Tijereta, 2026-10-20, saved in case the session is
-cut). Branches `tijereta-message-colours`: the-advocate `64a4bf21`
-(merged with `origin/main` 090b0037), the ports `647c189` (merged with
-main), the book `89abf9e` (merged with main). All committed. Measured on
-the merged trees, with every crate main or this branch touched installed
-locally (`text events screens mapdata convert cartridge project battle
-wally images`): the test game 63 passed, 1 skipped; ABL's suite 1,589
-passed, 2 skipped; `just test`, `rust-test` (1,070) and `lint` green. The
-root suite (`just boot`) was running on the merged tree; it was green
-file by file before the merge, after the retimes and the twenty goldens.
-**Left**: the root suite's result on the merged tree; `just space` again
-after the merge; moving this task to `testing` with taro as assignee.
-**Next step**: if the session was cut, run `just boot` from the ports
-worktree with `.local-tools/bin` first in the PATH, and hand back.
+
+**After merging main**, bank 0 has more room in every cartridge, because
+main moved `upload_line` and the battle's message to `FAR3`: Sunset is
+left with 134 bytes, Vampires Dawn with 154, ABL's `test-change-system`
+with 162. Vampires Dawn's data banks keep 624 bytes of gap.
+
+## Done (Tijereta, 2026-10-20)
+
+To testing. Branches `tijereta-message-colours`: the-advocate `64a4bf21`,
+merged with `origin/main` 090b0037 (`origin/main` was ahead of the local
+`main`); the ports `647c189`; the book `89abf9e`; each one merged with its
+main.
+
+**Run on the merged trees**, with every crate this branch or main touched
+installed locally: the test game 63 passed, 1 skipped; ABL's suite 1,589
+passed, 2 skipped; the root suite (`just boot`) 103 passed; `just test`
+29 passed, `rust-test` 1,070 passed, `lint` green.
+
+**The Done criteria**:
+* the test game's `colours` golden has coloured words and is red with
+  main's tools;
+* `test_colours.py` counts the frames per letter at speeds 1, 10 and 20;
+* what does not fit is measured above and degrades without stopping
+  anything: one ink per box, a second colour in the window's nearest
+  shades, and the window one colour short in games that use colours.
+
+**Not covered**:
+* The instant text, `\>`, goes at five letters a frame, not a whole stretch
+  at once.
+* The window opens after four frames of blanking, without RM2k's
+  animation.
+* A second colour in the same box is drawn in the window's nearest
+  entries, not its own.
+* Only a few scenes' press lists were retimed: the ones whose tests
+  failed.
+* Nothing was compared against RPG_RT under Wine; the pace is easyrpg's
+  `Window_Message`.
+* `typed_up` waiting for the next vblank is in no golden.
+
+**Overlaps**:
+* Chajá's `zounds-the-ship-s-transparent-messages-come-out-broken` works
+  on bare windows. This branch rebuilds their HDMA tables when
+  `MSG_ROWS` changes (`msg_pace_vblank`), so a merge of the two needs a
+  look by hand.
+* Vampires Dawn's texts now carry its colours and speeds, 17,712 bytes
+  more.
+
+**To install at merge**: `text events screens mapdata convert cartridge
+project battle` (and `wally images`, which come from main).
+
+Captures, with a README: `/shared/captures/2026-10-20-message-colours/`.
