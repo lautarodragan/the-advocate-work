@@ -2,8 +2,9 @@
 name: "Items that give a condition in battle only hurt"
 description: "Since special items cast their skill, the ones whose skill poisons, paralyzes or puts to sleep are offered and spent, and do only their damage, or nothing: no skill gives conditions in battle yet"
 type: bug
-status: todo
-agents: [Tijereta]
+status: doing
+assignee: Mulita
+agents: [Tijereta, Mulita]
 ---
 
 Seen by Tijereta on 2026-10-19, on the-advocate `54ec3daf` plus
