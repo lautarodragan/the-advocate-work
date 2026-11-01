@@ -46,3 +46,84 @@ flags, and on which maps they are walked on.
 
 So Zounds' first desert is this task's first case, and the same desert
 is the first of [`the-partys-conditions`](the-partys-conditions.md).
+
+## What the nine games use
+
+Measured by Aguará on 2026-11-01 over the dumps in `data/` of the ports at
+`ab38e40`: each terrain that differs from liblcf's default —damage 0,
+rate 100, bush 0, boat and ship no, airship passes and lands—, and the
+maps whose **lower layer** has it, which is where `GetTerrainTag` reads
+it. "Has it" is cells of the map, not cells walked: it does not look at
+the upper layer nor at events. Many games carry RM2k's default database,
+so terrains 5 and 8 —"Poison Swamp", "Alcove Damage"— show up everywhere
+and are on almost no map. The script is a throwaway one; the numbers are
+what it printed.
+
+**Damage** (HP per step):
+
+* ABL: 14 "SwampPoisonFloor", 2, on map 159 *Ill Marshes* (1014 cells).
+  Items 78 *Safe Tea Boots* and 291 *TankTreads-!O* have
+  `no_terrain_damage`.
+* Vampires Dawn: 8 "Alcove Damage", 2, on map 1 *Weltkarte* (1974
+  cells); 11 "Giftwasser", 5, on maps 201, 236, 240, 351 and 435. Items
+  43 *Gargasch's Armor* and 91 *Sunblock Cloak* protect.
+* Zounds: 12 "Piedra Caliente", 1, on maps 28 (the desert's explanation
+  cutscene), **34 *Main* of *Desierto de Urbaddûn* —the first desert,
+  397 cells—**, 35, 37, 38, 40, 88 and 95; 13 "Piedra Caliente2", 2, on
+  59, 75, 93, 96 and 102, where its tiles are not passable below. No item
+  protects.
+* Book of Three, Dooms 2, El Dorado, Frozen World: only the default 5
+  and 8, on no map. Desert Nightmare and Sunset: none.
+
+**The 2003 footstep and the damage sound** (only Zounds is 2003): 12 and
+13 play *Flame2* when they hurt (`on_damage_se`); 14 "Sonido Desert 1"
+plays *NAU_Item* on every step, on maps 33, 47, 55, 56, 57, 81, 87 and
+94.
+
+**Encounter rate**: ABL's 9 and 10 (sea, 20) on 19 and 5 maps, its 2
+(forest, 250) on map 5; Dooms 2's 3 (desert, 200) and 9 on four maps;
+Book of Three and Frozen World's 9 on one map each; Vampires Dawn's world
+map, map 1, has 2 (250), 7 (250), 8 (200), 9 (70), 10 (**0**, 66656
+cells) and 12 (60), and 10 also on maps 59, 341, 396; Zounds' 9 on maps
+35, 186 and 187. It only counts on maps with encounters: today
+`rm2k-snes/battle/src/encounters.rs` fixes the rate at 100 (`RATE`), and
+ABL's `tests/tooling/test_encounters.py` guards that assumption.
+
+**Bush depth**: ABL's 2 on map 5 and 320; Book of Three's 11 "Water in
+Tylwyth" (depth 2) on maps 56, 57 and 84; Vampires Dawn's 2, 7 and 11 on
+map 1 and the five of "Giftwasser". The others only on no map.
+
+**Vehicles**: no game has a `GetOnOffVehicle`, a `SetVehicleLocation`
+nor any vehicle command. Only Zounds places one at the start: the boat,
+on map 187 *Fishing Game* (1, 13), which RM2k boards with the action key.
+Sunset's only terrain forbids the airship, which nobody has.
+
+## Damage: Done
+
+Defined by Aguará on 2026-11-01, from easyrpg's `Game_Player::Move`
+(`game_player.cpp`), `Game_Battler::ChangeHp`, `Game_Actor::
+PreventsTerrainDamage` and `Game_Screen::FlashMapStepDamage`:
+
+* **When**: as the hero **begins** a step onto a cell —`Move` after
+  `Game_Character::Move` succeeded—, with the terrain of the destination
+  cell. Every step of the hero, the pad's and a forced move route's: the
+  check is in `Game_Player::Move`, which a route calls too. A blocked
+  step hurts nobody. Not in the airship, which the console does not have.
+* **How much**: the terrain's `damage` to each actor in the party; a
+  negative one heals. `ChangeHp` with `lethal` false: it leaves no one
+  below 1 HP, it does not touch a fallen actor and it caps at the
+  maximum. **It cannot kill**, so no Game Over; that is EasyRPG's own
+  `easyrpg_damage_can_kill`, which no game here sets.
+* **Who is spared**: an actor with an armor —shield, armor, helmet or
+  accessory, not a weapon— with `no_terrain_damage`, only for positive
+  damage.
+* **The flash**: `FlashOnce(31, 10, 10, 20, 6)` —red, strength 20, six
+  frames— if the damage is positive and someone in the party is not
+  spared, fallen or not.
+* **Not in this part**: the 2003 sounds —footstep and `on_damage_se`—,
+  which need the sample in the map's audio package; it is the next part.
+  And poison's step damage, which is
+  [`the-partys-conditions`](the-partys-conditions.md).
+* **Tested**: a ROM test in Zounds, on map 34: a step onto Piedra
+  Caliente takes 1 HP from each actor and flashes, one onto sand takes
+  nothing, and at 1 HP it stays at 1.
