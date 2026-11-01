@@ -185,9 +185,9 @@ too, but nothing they write changes.
 
 **Verified** on 2026-11-01, with the branch's tools —`battle`, `mapdata`
 and `cartridge` installed locally, so the runtime was the branch's—: ABL's
-whole suite, 1590 passed and 2 skipped, red only in the two new terrain
+whole suite, 1590 passed, 2 skipped and 3 red: the two new terrain
 tests before 291 replaced 78 and in the test index before the new test was
-in it, then those three green; the ports' `just boot`, 112 passed, with no
+in it; those three, with the jumps test, green after; the ports' `just boot`, 112 passed, with no
 golden moved; `just crate-test mapdata` and `battle`; `just space` of
 ABL's cartridges, bank 0 at 89 bytes in `test-change-system`, the
 tightest, and of Zounds'. Not covered by any test: a negative damage
