@@ -56,3 +56,69 @@ and states— to order the work by what is seen most.
 So the first case is Zounds' first desert: its monsters that poison the
 party, and the poison hurting while walking, next to the damaging
 terrain of [`terrains-do-what-rm2k-does`](terrains-do-what-rm2k-does.md).
+
+# Status
+
+2026-11-01, Mulita, from the-advocate `422f904d`, the ports `cd41913` and
+the book `9407191`, on the branches `mulita-conditions` of the three.
+
+## The inventory: how the nine games use conditions on the party
+
+Measured on each game's dump with a throwaway script over `states.json`,
+`skills.json`, `items.json`, `enemies.json`, `actors.json` and every
+command of the maps, common events and troop pages. "Persists" is a
+condition whose `type` is 1, which outlives the battle; the rest are
+`battle_only`.
+
+| | conditions that persist | hurt on the map | enemy actions that give one to the party | weapons that give one | cures: medicines / ally skills | map commands |
+|---|---|---|---|---|---|---|
+| ABL | Poison (2) | 2, 13, 18: 1 HP per 4 steps | 38, over 22 skills | 3 | 10 / 19 | `ChangeCondition` removes the dead one (revive), already compiled |
+| Book of Three | Poison | 1 HP / 4 steps | 23, over 15 skills | — | 5 / 8 | — |
+| Desert Nightmare | — | — | — | — | — | — |
+| Dooms 2 | Bleeding | 1 HP / 4 steps | 2 (Wounding) | — | 0 / 1 | — |
+| El Dorado | Poison | 1 HP / 4 steps | 23, over 15 skills | — | 4 / 6 | — |
+| Frozen World | Poison | 1 HP / 4 steps | 23, over 15 skills | — | 4 / 6 | — |
+| Sunset over Imdahl | — | — | — | — | — | — |
+| Vampires Dawn | Curse, Rage, Sick | Sick: 1 HP and 1 SP / 5 steps | 138, over 39 skills | 20 | 5 / 8 | adds Rage (5) in common event 30; removes 2–12 on maps (healers); `IsActorConditioned` Curse ×9 |
+| Zounds | Env. (2, its poison) | 1 HP / 9 steps | 7, over 6 skills | — | 7 / 1 | removes 1–13 in common events (the food items); `IsActorConditioned` ×4 |
+
+Book of Three, El Dorado and Frozen World carry RM2k's default database
+(Poison, Blind, Silence, Berserk, Chaos, Sleep, Numb, Shock, MindBlow);
+ABL extends it to 23 and Zounds to 15. Every condition that hurts on the
+map persists and is `lose`: none heals walking. Per turn in battle, ABL
+has seven that take HP (and MindBlow SP), Vampires Dawn five, Zounds five.
+Sealing: Silence in the default database and ABL's Stone; Vampires Dawn's
+Silence seals from level 0.
+
+**What is seen most, in order**: (1) an enemy's skill gives a condition to
+an actor —seven of the nine games, every battle that has those
+enemies—, and with it the actor holding it in battle: its restriction,
+its messages, its turns; (2) poison's HP each turn and on the map, which is
+the only thing that outlives the battle in six games; (3) the cures,
+medicines and skills, in battle and on the map; (4) Silence's seal; (5)
+weapons that give one —Vampires Dawn and ABL—; (6) `ChangeCondition` that
+adds, and `IsActorConditioned`: Vampires Dawn and Zounds only.
+
+## Done
+
+**The map half** is done when: an actor holds conditions across maps and
+in the save; `ChangeCondition` adds and removes them on actors and the
+party; `FullHeal` (and the inn) and a fall to 0 HP clear them as RM2k's
+priority purge does; the battle's end drops the `battle_only` ones and
+the persistent ones with `auto_release_prob`; each pad step hurts as
+`Game_Party::ApplyStateDamage` says —every `hp_change_map_steps` of the
+party's steps, never below 1, with `FlashMapStepDamage`— and SP the same;
+`IsActorConditioned` reads it. Test: Zounds' desert, an actor with Env.
+loses 1 HP on the ninth step and the screen flashes, red before.
+
+**The battle half** is done when: the actors' conditions enter the battle
+and come out of it; an actor holding one has its turns, restriction and
+messages as the enemies' already do; an attack with a weapon's
+`state_set`, a skill's `state_effects` and an item casting a skill give or
+take them with RM2k's chance, on both sides, in the model and the
+console; HP and SP change each turn; sealed skills cannot be chosen.
+Test: Zounds, Gwen's Látigo de Seda poisons and Kazar's Veneno poisons an
+enemy, red before.
+
+**Not here, on purpose**: the condition in the main menu's status line and
+the status screen —after Tijereta's menu boxes, a follow-up—.
