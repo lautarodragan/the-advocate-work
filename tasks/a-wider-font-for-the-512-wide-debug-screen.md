@@ -2,8 +2,8 @@
 name: "A wider font for the 512-wide debug screen"
 description: "At 512 wide the debug screen's text is hard to read on a CRT; try one or two new fonts about 1.5 times as wide as the current one, drawn for that mode, and show taro how the screen looks with them"
 type: feature
-status: testing
-assignee: taro
+status: doing
+assignee: Hurón
 agents: [Hurón]
 ---
 
@@ -128,3 +128,24 @@ the hack's swap of the whole tables), and the VRAM room above.
 **Not covered**: no test runs the new fonts; the pages counted short come
 from the model, not from shooting all 145 ranges; the new fonts were not
 seen on a CRT, which is the point of the experiment.
+
+## taro's decision
+
+taro, on 2026-11-01, after trying the three experimental ROMs on a CRT, in
+their words, translated:
+
+> I remembered right: the current one is practically unreadable.
+>
+> But the wide and the compact are good! The compact makes my eyes hurt,
+> and I don't think I could read it from a certain distance, or on a
+> lower-quality TV, but the wide reads perfectly, looks very nice, and more
+> characters fit on screen!
+>
+> Let's go with the wide for the debug menu.
+
+**Done**, now: `hires-wide` is the 512-wide debug screen's own font in the
+cartridge, for every game, whatever font the game uses elsewhere; the
+experiment's `HURON_TABLES_FONT` hack does not reach main; and no page of
+the debug screen loses text for lack of VRAM —measured over every range of
+the nine games, not estimated—. Goldens of the debug screen moved, red
+before.
