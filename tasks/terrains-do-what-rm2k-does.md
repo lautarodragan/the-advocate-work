@@ -2,8 +2,8 @@
 name: "Terrains do what RM2k does"
 description: "A terrain in the database says more than its battle background: damage while walking on it, its encounter rate, a half-hidden character in a bush, which vehicles pass; the console reads only the background and StoreTerrainID"
 type: feature
-status: doing
-assignee: Aguará
+status: testing
+assignee: taro
 agents: [Aguará]
 ---
 
@@ -177,3 +177,19 @@ Each its own part, with what the nine games use above:
 * **Bush depth**: the lower part of a character half-transparent; Book of
   Three's "Water in Tylwyth" (depth 2) and Vampires Dawn's forests.
 * **Vehicles**: wait for the console to have them.
+
+**When merging**: the-advocate's `aguara-terrains` changes the runtime
+and two Rust projects, `battle` and `mapdata` —`just install battle
+mapdata`—. `convert`, `events` and `screens` compile `battle`'s library
+too, but nothing they write changes.
+
+**Verified** on 2026-11-01, with the branch's tools —`battle`, `mapdata`
+and `cartridge` installed locally, so the runtime was the branch's—: ABL's
+whole suite, 1590 passed and 2 skipped, red only in the two new terrain
+tests before 291 replaced 78 and in the test index before the new test was
+in it, then those three green; the ports' `just boot`, 112 passed, with no
+golden moved; `just crate-test mapdata` and `battle`; `just space` of
+ABL's cartridges, bank 0 at 89 bytes in `test-change-system`, the
+tightest, and of Zounds'. Not covered by any test: a negative damage
+—healing—, which no game has, and a forced route's step onto a damaging
+terrain.
