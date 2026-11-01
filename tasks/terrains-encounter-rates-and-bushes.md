@@ -2,8 +2,8 @@
 name: "Terrains: encounter rates and bushes"
 description: "The next two parts of terrains-do-what-rm2k-does: a terrain's encounter rate multiplies the steps to a battle, and its bush depth draws the lower part of a character half-transparent"
 type: feature
-status: doing
-assignee: Aguará
+status: testing
+assignee: taro
 agents: [Aguará]
 ---
 
@@ -111,3 +111,25 @@ four), with their goldens, red with main's tools; ABL's
 Captures, looked at: `/shared/captures/2026-11-01-terrain-bushes/`.
 Commits: the-advocate `e1627246`, ports `21b3108` and the goldens
 `e0659e1`, book `45895d8`.
+
+## When merging, and what was run
+
+the-advocate's `aguara-terrain-rates` (`5034cbdf`, `e1627246`, `01e47d1b`)
+changes the runtime and four Rust projects —`battle`, `bytecode`,
+`events`, `mapdata`—: `just install cartridge battle events mapdata
+convert` (`cartridge` and `convert` compile the bytecode's declaration and
+those libraries; `screens` and `rm2k-snes-audio` compile them too, but
+nothing they write changes). The ports' and the book's branches have
+`main` merged.
+
+**Verified** on 2026-11-01 with the branch's tools —those five installed
+locally, the runtime the branch's—, on the merged branches: ABL's whole
+suite, 1596 passed and 2 skipped (a first round was red on
+`test_jumps_between_banks`, `bush_blend` writing registers absolute: fixed
+in `01e47d1b`); the ports' `just boot`, 117 passed; the-advocate's `just
+test` and `just crate-test` of `battle`, `events`, `mapdata`; `just space`
+of ABL's cartridges, bank 0 at 86 bytes in `test-change-system`, the
+tightest. **Not covered by any test**: a bush under a tint or a flash
+(the copy is taken from `pal_buf` then), depth 3, which no terrain of the
+nine games has, a screen opened while in a bush (`pano_mode3` turning the
+color math off), and the saturation of `ENC_ACC`.
