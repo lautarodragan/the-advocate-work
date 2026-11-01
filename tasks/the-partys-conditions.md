@@ -2,8 +2,8 @@
 name: "The party's conditions"
 description: "The actors never hold a condition: ChangeCondition on them is ignored or refused, skills and items give none, poison does not hurt while walking and the menu never shows one; RM2k keeps them on the map and in battle"
 type: feature
-status: doing
-assignee: Mulita
+status: testing
+assignee: taro
 agents: [Mulita]
 ---
 
@@ -186,3 +186,33 @@ screen, after Tijereta's menu boxes**, as a follow-up.
   happen now, enemy skills are skills— has no test of its own: Kazar's
   Veneno is the skill side, and the party's places across a battle are
   ABL's `test_party_conditions.py`.
+
+## Verified (2026-11-01, Mulita)
+
+Branches `mulita-conditions`, main merged in each: the-advocate
+`3071048a` (main had not moved from `422f904d`), the ports `0aca8ed`, the
+book `5c982c2`.
+
+* ABL's suite whole with these tools: 1593 passed and 2 red, both tests
+  that this branch had to teach —the music's save test, which counts the
+  save's fields from its end, and Agency Badge's results, which now give
+  the droid Shock (9) on the console as in the model—; fixed in the ports'
+  `0aca8ed` and run again, green. No golden moved. `abl.sfc`'s sha256
+  starts `5247b981`.
+* The ports' `just boot`, every game: 117 passed, with the new
+  `test_zounds_poison_walking.py` and `test_zounds_veneno.py`.
+* `cargo test` of events, mapdata and battle; the-advocate's `just test`.
+* `just space`, ABL's release against main: bank 0 122 B free (144),
+  `$C0` 2,332 B (3,319), `$C1` 16,814 B (17,722), far RAM 375 B (905),
+  gaps 15,865 B (20,673).
+
+**On merging, install** `events mapdata battle convert cartridge`.
+
+**What the suite does not cover**: `ChangeCondition` from a troop page; a
+condition carried into a battle restricting an actor —the command menu
+still asks it—; the purge when an actor falls in battle and is raised in
+the same battle (the battle purges only at its end); SP on the map
+(Vampires Dawn's Sick); a condition the armor resists (the model's unit
+test does, no ROM test); a skill on its own side taking a condition away on
+the console (the model's unit test does); a skill that gives death; the
+save carrying the conditions across a load.
