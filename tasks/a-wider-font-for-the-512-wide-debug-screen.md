@@ -2,8 +2,8 @@
 name: "A wider font for the 512-wide debug screen"
 description: "At 512 wide the debug screen's text is hard to read on a CRT; try one or two new fonts about 1.5 times as wide as the current one, drawn for that mode, and show taro how the screen looks with them"
 type: feature
-status: doing
-assignee: Hurón
+status: testing
+assignee: taro
 agents: [Hurón]
 ---
 
@@ -149,3 +149,124 @@ experiment's `HURON_TABLES_FONT` hack does not reach main; and no page of
 the debug screen loses text for lack of VRAM —measured over every range of
 the nine games, not estimated—. Goldens of the debug screen moved, red
 before.
+
+## Work log, the real thing (Hurón)
+
+Branches `huron-debug-font` from the-advocate 422f904d and the ports
+cd41913, with the sheet's commit cherry-picked from the experiment and
+`hires-compact` deleted. The experiment's branches go once this is merged.
+
+**The font is the engine's fixed choice, not a knob.** `Font::debug_screen`
+in `rm2k-snes-text`, out of the bundled list a project can name: its
+letters move the line up to ten pixels, more than a cell of the 256-wide
+screens, so no game can use it as its font, and a `[debug] font` knob
+would choose among one. If a second one is ever drawn, that is when a knob
+earns its keep.
+
+**Latin-1.** The nine games' switch and variable names use `ä ö ü Ä Ö ß`
+(Desert Nightmare, El Dorado, Vampires Dawn) and `á ó ú ô ë Ë ñ Ñ`
+(Zounds). The screens' text layer was ASCII only —a name went plain,
+`Händler` as `Handler`—. `hires-wide` now draws 54 Latin-1 letters, made
+from its own ASCII by a throwaway script (accents from its own `` ` ``,
+`^`, `~`; capitals squashed to rows 2-9 so `Ö` is not `ö`); the cartridge
+carries only the ones the game's names use, as glyphs 97 on —byte 129 on
+in the names, past `TL_FIGURE`—.
+
+**The VRAM: measured with a model first.** A throwaway model of the
+screen —the geometry, the font's advances and reach, the layer's columns
+of sixteen— over every range of the nine games, counting the quads each
+page inks and what a step from one range to the next asks for while the
+old one is still on screen (a row's old quads wait for the switch, and
+the rows not typeset yet keep theirs):
+
+| game | densest page | worst step |
+|---|---|---|
+| ABL | 233 | 256 |
+| The Book of Three | 240 | 264 |
+| Desert Nightmare | 219 | 242 |
+| Doom's 2 | 195 | 213 |
+| El Dorado | 209 | 233 |
+| The Frozen World | 246 | 270 |
+| Sunset over Imdahl | 222 | 242 |
+| Vampires Dawn | 233 | 260 |
+| Zounds | 224 | 255 |
+
+(values at their widest, `-00000`; the experiment's ROM saw 311-320 short
+of 223 and the model gives 233 for that page, so it agrees.) **A tilemap
+word names 1024 tiles, 255 quads**, so moving the tilemaps out of the way
+—the most VRAM can give— is not enough: some steps ask for 270. Cutting
+names on dense pages would lose text, and blanking the rows not typeset
+yet when the pool runs out is the black block taro saw on 2026-10-20.
+
+So **two pools, one per half of the screen**: an HDMA writes BG12NBA at
+line 112, so BG1's upper half takes its tiles from word 0 and the lower
+half from $4000, each its own 1024; the text layer keeps a pool per half
+(255 and 191 quads) and a row only takes, releases and adopts in its own.
+A half is five lines; what it can ask for at once is its five lines and a
+sixth one changing, and a line inks at most 30 columns (1 to 30, inside
+the frames): 180, which both pools hold. **So no page can lose text, in
+any game, whatever its names**: an `.assert` in the runtime, not a
+measurement. The windows' tiles go to $7000 (256 tiles at most; was
+1024 in the converter's check), the tilemaps to $7800 and $7C00.
+
+**Two bugs on the way**, both in the ROM's first try and both seen in the
+captures: `tl_dma_quads` took a quad's VRAM address with `xba`, which is
+times 256 only below quad 256 —the lower half's text went up over the
+upper half's—; and the waiting stack's top was taken as relative to the
+pool's base when it is an index of the whole `TL_FREE`, so the lower
+pool's waiting quads went past the array.
+
+**And measured anyway, in the ROM**: a test walks every range of every
+page —down round the page, right to the next— and reads both pools from
+RAM every frame; a column is left blank only when its row's pool has none
+free. ABL's in `test_debug_screen_golden.py`, the other eight's in the
+ports' `tests/test_debug_screen_room.py` (it opens the pause menu
+allowing it, and goes up to its last row). **Red first**, with the
+runtime built as one pool of 255 —the split moved past the last row,
+everything else the same—: The Book of Three ran out (least free 0, 239
+in use); ABL got to 233 of 255 without running out.
+
+**Green** with the two pools, in all nine games: neither pool got to
+zero on any frame of any step. The tests print, per game, the most quads
+each pool had in use and the least it had free —`just boot
+test_debug_screen_room.py -s` at the ports' root, and ABL's
+`test_no_range_runs_out_of_quads` with `-s`—; on 2026-11-01 no pool had
+more than about half of its quads in use. "Least free" goes low on
+purpose: the layer only switches, and recycles what waits, when a row
+does not fit. Sunset over Imdahl's menu never opened with B —it forbids
+it, reads B itself and walks its hero on an endless route—, so the walk
+asks for the menu in RAM, as `request_menu` does, and ends the route.
+
+**A shop golden moved** with nothing of the debug screen in it:
+`shop-armors-sold`, the walking actor's pose in the party window, 223
+pixels. The party's frames go up only if the vblank's line leaves room,
+and the font's ~125 KB of tables moved other data between fast and slow
+ROM (the packing puts the biggest pieces first). With main's tools it
+matches and the text settles on the same frame with both; moving the
+512-wide finish out of the 256-wide one (which now pays less per column
+than before) did not bring it back. Blessed in its own commit.
+
+### Where it was left
+
+* the-advocate `huron-debug-font`: c2811eb5 (the font, its Latin-1, out of
+  the bundled list), 93b0bd2b (the screen writes with it; the two pools,
+  the HDMA and the VRAM; `tl_dma_quads` past quad 255).
+* the-advocate-ports `huron-debug-font`: c74f879 and 4ae04b1 (the walks),
+  487ac4c (the four debug screen goldens), 18a4fef (the shop golden), and
+  main merged.
+* the-advocate-docs `huron-debug-font`: 8ea9f0b (the pause menu, VRAM and
+  the divergence), and main merged.
+* **To install when merging**: `just install screens mapdata` —`text`
+  changed too, but only by a function those two call—. The runtime comes
+  from the checkout, as always.
+* Captures: `/shared/captures/2026-11-01-debug-wide-font-final/`, with the
+  goldens before and after and photographs of the Latin-1 names.
+
+**Not covered**: no test looks at the Latin-1 letters' pixels (the
+photographs are for taro); the walk steps down and right, so a step up,
+left or a jump between pages that are not neighbours is covered by the
+`.assert`'s argument, not by a measurement; and the font was not seen on a
+CRT after the Latin-1 was drawn. And a note, not a bug: `tl_text_at`
+measures a capped text with the game's font even in the 512-wide mode; the
+debug screen never caps (it writes its names whole, already cut by the
+converter), so nothing measures wrong today.
