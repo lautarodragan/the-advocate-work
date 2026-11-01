@@ -148,3 +148,41 @@ the status screen —after Tijereta's menu boxes, a follow-up—.
 the map (the item and skill menus); equipment's `PermanentStates` and
 resistance; **the condition in the main menu's status line and the status
 screen, after Tijereta's menu boxes**, as a follow-up.
+
+**The battle half, its first two pieces**, on 2026-11-01: the-advocate
+`f27c1d0d` and `3071048a`, the ports `15f9d4f`, the book `b25c0c7`.
+
+* A skill gives and takes its `state_effects` on either side, as
+  `vExecute`: already held against enemies says `message_already` and rolls
+  nothing; otherwise the skill's hit and, against enemies, the condition's
+  odds on the target —`GetStateProbability`, `state_ranks` and the armor—,
+  with `message_actor`/`message_enemy`; on its own side, `message_recovery`.
+  A special item casts its skill: this closes
+  [`items-that-give-a-condition-in-battle-only-hurt`](items-that-give-a-condition-in-battle-only-hurt.md).
+* A condition changes its holder's HP and SP each time it acts,
+  `ApplyConditions`.
+* Model: `skill_states`, `TurnChange` and `states.rs` in
+  `rm2k-snes-battle`; console: `ba_st_skill`, `ba_st_odds`, `ba_st_turn`.
+* Test: the ports' `test_zounds_veneno.py`, red with main's tools.
+
+## Left
+
+* **The condition in the main menu's status line and the status screen**:
+  after Tijereta's merge of the menu's party boxes (one more line for SP),
+  as a follow-up. Not mine on purpose.
+* An actor that cannot act is still asked for its command (RM2k skips it
+  and records the restricted action); its battle status line.
+* A weapon's `state_set` on an attack —Vampires Dawn's twenty, ABL's
+  three—.
+* Sealed skills, `restrict_skill`/`restrict_magic` —Silence—.
+* Medicines and skills that cure a condition: a medicine's `state_set` in
+  battle and on the map, and an item that only cures is not in the
+  battle's list; a skill that only cures can be used on the map but cures
+  nothing there.
+* The enemies' AI weighing a skill on its own side by the conditions it
+  takes away.
+* Equipment's `PermanentStates`.
+* Gwen's Látigo de Seda poisoning the party in Zounds' desert —it should
+  happen now, enemy skills are skills— has no test of its own: Kazar's
+  Veneno is the skill side, and the party's places across a battle are
+  ABL's `test_party_conditions.py`.
