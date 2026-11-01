@@ -122,3 +122,29 @@ enemy, red before.
 
 **Not here, on purpose**: the condition in the main menu's status line and
 the status screen —after Tijereta's menu boxes, a follow-up—.
+
+## Done so far
+
+**The map half**, on 2026-11-01: the-advocate `95e034c7`, the ports
+`8234f68`, the book `9e733e7`.
+
+* Each actor has four places in far RAM, like an enemy in battle, and the
+  party's steps next to them; both in the save. `runtime/party_states.s`.
+* `ChangeCondition` gives and takes: OP_ACTOR with `ACT_STATE` and
+  `ACT_TAKE` —no new opcode—. `IsActorConditioned` is OP_IF_ACTOR sub 6.
+* `State::Add`'s purge with the dead one counted at zero HP; a lethal
+  `ChangeHP` purges; `FullHeal` and the inn clear.
+* The battle takes them in (`ba_actor_setup`), gives them back around each
+  troop page (`ba_sync_out`/`ba_sync_in`) and at its close, where
+  `act_st_battle_end` purges the fallen and drops what `state_end` says.
+* `state_step` in `after_step`, before `encounter_step`: one self-contained
+  `jsl`.
+* Tests: the ports' `test_zounds_poison_walking.py` and ABL's
+  `test_party_conditions.py` (case `party-conditions`).
+* Cost in ABL's release: bank 0 from 144 to 122 B, far RAM from 905 to
+  381 B free.
+
+**Left of the map half**: medicines and skills that cure a condition on
+the map (the item and skill menus); equipment's `PermanentStates` and
+resistance; **the condition in the main menu's status line and the status
+screen, after Tijereta's menu boxes**, as a follow-up.
