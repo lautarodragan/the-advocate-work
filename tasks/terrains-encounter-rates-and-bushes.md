@@ -65,5 +65,49 @@ the-advocate and the ports.
   the integer model against the float formula. Red with main's tools:
   `test_encounter_steps` (the thresholds' layout), the rates test (by a
   missing symbol, `ENC_ACC`) and Vampires Dawn's (an encounter on the first
-  step of sea). Commits: the-advocate `4d69f278`, ports `ae86583`, book
+  step of sea). Commits: the-advocate `5034cbdf`, ports `ae86583`, book
   `dc343c0`.
+
+## Bush depth: what was done
+
+By Aguará, on 2026-11-01. easyrpg's `Sprite_Character::Draw`: `bush_split =
+4 - depth`, `GetHeight() / bush_split` rows from the feet —10 of 32 at
+depth 1, 16 at 2, all at 3— at `(opacity + 1) / 2`, from
+`Game_Character::GetBushDepth`, the terrain of the cell the character is
+on (which changes as its step begins), 0 while jumping or for one on
+another layer than the hero's.
+
+**What the console can do, measured**: its only half opacity is the color
+math, and for objects it blends **every** object in sprite palettes 4 to 7.
+So the hero's last tile rows go again as 8x8 objects in front of it, over
+the same tiles —no VRAM—, in a palette of 4 to 7 that gets a copy of the
+hero's in each vblank, and `pic_blend` turns the math on for them when no
+picture does. Cost: 4 objects at depth 1, 8 at depth 2, none at 3 (the
+whole hero in the copy); one palette; a 32-byte CGRAM DMA per vblank; the
+terrain of the hero's cell once per frame; bank 0 from 89 to 86 bytes free
+in `test-change-system`, the tightest (three `jsl`s, and `pic_blend`'s off
+branch moved out). Depth 1 is 8 rows, not 10: whole tile rows.
+
+**Where the faithful version breaks**: blending only the feet needs either
+the characters in palettes 0 to 3 —so the bush refuses on any map whose
+characters take more— or a color window plus an HDMA channel per line,
+and while a message is up the map's six HDMA channels are taken. Measured
+over the built cartridges: The Book of Three's 57 and 84 and Vampires
+Dawn's 351 and 435 get it; Tylwyth Teg (56, eight palettes), Vampires
+Dawn's 201, 236, 240 (seven) and ABL's 5 (seven) do not. Vampires Dawn's
+forests are on its world map, which the cartridge does not carry. Drafts:
+[`a-bush-on-a-map-with-more-than-four-character-palettes`](a-bush-on-a-map-with-more-than-four-character-palettes.md)
+and [`an-event-in-a-bush-is-drawn-whole`](an-event-in-a-bush-is-drawn-whole.md)
+—only the hero does it—; Known issues in the three ports' pages.
+
+Also: every screen opening over the map turns the color math off
+(`pano_mode3`): with a bush, or a translucent picture, it stayed on into
+the shop, whose arrows are in palette 4.
+
+**Tests**: the ports' `tests/test_book_of_three_bush.py` (map 84, depth 2,
+eight objects) and `tests/test_vampires_dawn_bush.py` (map 435, depth 1,
+four), with their goldens, red with main's tools; ABL's
+`tests/rpgmaker/test_bush.py`, that map 5's forest leaves the feet whole.
+Captures, looked at: `/shared/captures/2026-11-01-terrain-bushes/`.
+Commits: the-advocate `e1627246`, ports `21b3108` and the goldens
+`e0659e1`, book `45895d8`.
