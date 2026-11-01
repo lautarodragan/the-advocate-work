@@ -2,7 +2,9 @@
 name: "Terrains do what RM2k does"
 description: "A terrain in the database says more than its battle background: damage while walking on it, its encounter rate, a half-hidden character in a bush, which vehicles pass; the console reads only the background and StoreTerrainID"
 type: feature
-status: todo
+status: doing
+assignee: Aguará
+agents: [Aguará]
 ---
 
 taro, on 2026-10-20, in their words, translated:
