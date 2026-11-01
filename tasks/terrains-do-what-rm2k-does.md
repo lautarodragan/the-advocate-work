@@ -93,10 +93,14 @@ ABL's `tests/tooling/test_encounters.py` guards that assumption.
 Tylwyth" (depth 2) on maps 56, 57 and 84; Vampires Dawn's 2, 7 and 11 on
 map 1 and the five of "Giftwasser". The others only on no map.
 
-**Vehicles**: no game has a `GetOnOffVehicle`, a `SetVehicleLocation`
-nor any vehicle command. Only Zounds places one at the start: the boat,
-on map 187 *Fishing Game* (1, 13), which RM2k boards with the action key.
-Sunset's only terrain forbids the airship, which nobody has.
+**Vehicles**: only Zounds has one. Its boat starts on map 187 *Fishing
+Game* (1, 13), and two `EnterExitVehicle` there board it; no game has a
+`SetVehicleLocation` nor a `ChangeVehicleGraphic`. The console has no
+vehicles —draft
+[`vehicles-enterexitvehicle-and-the-boat`](vehicles-enterexitvehicle-and-the-boat.md)—,
+so the terrains' vehicle flags wait for it: the boat passes Zounds' 9
+"Beach", on maps 35, 186 and 187. Sunset's only terrain forbids the
+airship, which nobody has.
 
 ## Damage: Done
 
@@ -127,3 +131,49 @@ PreventsTerrainDamage` and `Game_Screen::FlashMapStepDamage`:
 * **Tested**: a ROM test in Zounds, on map 34: a step onto Piedra
   Caliente takes 1 HP from each actor and flashes, one onto sand takes
   nothing, and at 1 HP it stays at 1.
+
+## Damage: what was done
+
+By Aguará, on 2026-11-01, on branches `aguara-terrains` of the-advocate,
+the ports and the book.
+
+* `runtime/terrain_steps.s`, in `FAR3`: `terrain_step`, which `begin_step`
+  calls with `jsl` —four bytes of bank 0—; `hero_terrain`, the lookup of
+  the hero's cell that `scn_terrain` had for the battle's backdrop, now
+  shared by both; `flash_step_damage`; and `spared`, the armors. The HP
+  goes through `actor_change_one`, `ChangeHP`'s own, with a `_l` entry.
+* The emission writes `terrain_damage`, a signed word per terrain id, and
+  bit `$10` of `item_use` for an armor with `no_terrain_damage`. The
+  battle stage's `Db` carries the terrains now.
+* Tests: the ports' `tests/test_zounds_terrain_damage.py` (map 34, 1 HP,
+  never below 1, sand hurts nobody, the flash) and ABL's
+  `tests/rpgmaker/test_terrain_damage.py` (map 159, 2 HP, the
+  *TankTreads-!O* spare their wearer, nobody spared means no flash). ABL's
+  *Safe Tea Boots* also spare, but no cartridge carries them: nothing of
+  the game gives them.
+
+**For poison** ([`the-partys-conditions`](the-partys-conditions.md)): it
+hurts at the same moment in RM2k —after `IncSteps`, pad steps only— with
+the same flash, so it wants `flash_step_damage` and
+`actor_change_one_l`, both in place; the hook is `after_step` in
+`move_hero`, next to `encounter_step`, not `begin_step`, which also runs
+for forced routes.
+
+## What is left
+
+Each its own part, with what the nine games use above:
+
+* **The 2003 sounds**: Zounds' hot stones play *Flame2* when they hurt
+  and "Sonido Desert 1" plays *NAU_Item* on every step. The sample has to
+  be in the audio package of each map that has the terrain —the event
+  compiler and `rm2k-snes-audio` decide those today from `PlaySound`—, and
+  a table from terrain to `sound_table` row. In Zounds' "Known issues".
+* **Encounter rate**: the ROM's model assumes 100 —`RATE` in
+  `rm2k-snes/battle/src/encounters.rs`, guarded by ABL's
+  `tests/tooling/test_encounters.py`—; with a rate per terrain the
+  thresholds are on the accumulated rate and not on the step count, and
+  the chance is multiplied by `rate / 100`, which is no longer a shift.
+  Vampires Dawn's world map, with a 0 on most of its sea, is the case.
+* **Bush depth**: the lower part of a character half-transparent; Book of
+  Three's "Water in Tylwyth" (depth 2) and Vampires Dawn's forests.
+* **Vehicles**: wait for the console to have them.
