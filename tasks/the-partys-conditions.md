@@ -2,8 +2,8 @@
 name: "The party's conditions"
 description: "The actors never hold a condition: ChangeCondition on them is ignored or refused, skills and items give none, poison does not hurt while walking and the menu never shows one; RM2k keeps them on the map and in battle"
 type: feature
-status: doing
-assignee: Mulita
+status: testing
+assignee: taro
 agents: [Mulita]
 ---
 
@@ -56,3 +56,163 @@ and states— to order the work by what is seen most.
 So the first case is Zounds' first desert: its monsters that poison the
 party, and the poison hurting while walking, next to the damaging
 terrain of [`terrains-do-what-rm2k-does`](terrains-do-what-rm2k-does.md).
+
+# Status
+
+2026-11-01, Mulita, from the-advocate `422f904d`, the ports `cd41913` and
+the book `9407191`, on the branches `mulita-conditions` of the three.
+
+## The inventory: how the nine games use conditions on the party
+
+Measured on each game's dump with a throwaway script over `states.json`,
+`skills.json`, `items.json`, `enemies.json`, `actors.json` and every
+command of the maps, common events and troop pages. "Persists" is a
+condition whose `type` is 1, which outlives the battle; the rest are
+`battle_only`.
+
+| | conditions that persist | hurt on the map | enemy actions that give one to the party | weapons that give one | cures: medicines / ally skills | map commands |
+|---|---|---|---|---|---|---|
+| ABL | Poison (2) | 2, 13, 18: 1 HP per 4 steps | 38, over 22 skills | 3 | 10 / 19 | `ChangeCondition` removes the dead one (revive), already compiled |
+| Book of Three | Poison | 1 HP / 4 steps | 23, over 15 skills | — | 5 / 8 | — |
+| Desert Nightmare | — | — | — | — | — | — |
+| Dooms 2 | Bleeding | 1 HP / 4 steps | 2 (Wounding) | — | 0 / 1 | — |
+| El Dorado | Poison | 1 HP / 4 steps | 23, over 15 skills | — | 4 / 6 | — |
+| Frozen World | Poison | 1 HP / 4 steps | 23, over 15 skills | — | 4 / 6 | — |
+| Sunset over Imdahl | — | — | — | — | — | — |
+| Vampires Dawn | Curse, Rage, Sick | Sick: 1 HP and 1 SP / 5 steps | 138, over 39 skills | 20 | 5 / 8 | adds Rage (5) in common event 30; removes 2–12 on maps (healers); `IsActorConditioned` Curse ×9 |
+| Zounds | Env. (2, its poison) | 1 HP / 9 steps | 7, over 6 skills | — | 7 / 1 | removes 1–13 in common events (the food items); `IsActorConditioned` ×4 |
+
+Book of Three, El Dorado and Frozen World carry RM2k's default database
+(Poison, Blind, Silence, Berserk, Chaos, Sleep, Numb, Shock, MindBlow);
+ABL extends it to 23 and Zounds to 15. Every condition that hurts on the
+map persists and is `lose`: none heals walking. Per turn in battle, ABL
+has seven that take HP (and MindBlow SP), Vampires Dawn five, Zounds five.
+Sealing: Silence in the default database and ABL's Stone; Vampires Dawn's
+Silence seals from level 0.
+
+**What is seen most, in order**: (1) an enemy's skill gives a condition to
+an actor —seven of the nine games, every battle that has those
+enemies—, and with it the actor holding it in battle: its restriction,
+its messages, its turns; (2) poison's HP each turn and on the map, which is
+the only thing that outlives the battle in six games; (3) the cures,
+medicines and skills, in battle and on the map; (4) Silence's seal; (5)
+weapons that give one —Vampires Dawn and ABL—; (6) `ChangeCondition` that
+adds, and `IsActorConditioned`: Vampires Dawn and Zounds only.
+
+## Done
+
+**The map half** is done when: an actor holds conditions across maps and
+in the save; `ChangeCondition` adds and removes them on actors and the
+party; `FullHeal` (and the inn) and a fall to 0 HP clear them as RM2k's
+priority purge does; the battle's end drops the `battle_only` ones and
+the persistent ones with `auto_release_prob`; each pad step hurts as
+`Game_Party::ApplyStateDamage` says —every `hp_change_map_steps` of the
+party's steps, never below 1, with `FlashMapStepDamage`— and SP the same;
+`IsActorConditioned` reads it. Test: Zounds' desert, an actor with Env.
+loses 1 HP on the ninth step and the screen flashes, red before.
+
+**The battle half** is done when: the actors' conditions enter the battle
+and come out of it; an actor holding one has its turns, restriction and
+messages as the enemies' already do; an attack with a weapon's
+`state_set`, a skill's `state_effects` and an item casting a skill give or
+take them with RM2k's chance, on both sides, in the model and the
+console; HP and SP change each turn; sealed skills cannot be chosen.
+Test: Zounds, Gwen's Látigo de Seda poisons and Kazar's Veneno poisons an
+enemy, red before.
+
+**Not here, on purpose**: the condition in the main menu's status line and
+the status screen —after Tijereta's menu boxes, a follow-up—.
+
+## Done so far
+
+**The map half**, on 2026-11-01: the-advocate `95e034c7`, the ports
+`8234f68`, the book `9e733e7`.
+
+* Each actor has four places in far RAM, like an enemy in battle, and the
+  party's steps next to them; both in the save. `runtime/party_states.s`.
+* `ChangeCondition` gives and takes: OP_ACTOR with `ACT_STATE` and
+  `ACT_TAKE` —no new opcode—. `IsActorConditioned` is OP_IF_ACTOR sub 6.
+* `State::Add`'s purge with the dead one counted at zero HP; a lethal
+  `ChangeHP` purges; `FullHeal` and the inn clear.
+* The battle takes them in (`ba_actor_setup`), gives them back around each
+  troop page (`ba_sync_out`/`ba_sync_in`) and at its close, where
+  `act_st_battle_end` purges the fallen and drops what `state_end` says.
+* `state_step` in `after_step`, before `encounter_step`: one self-contained
+  `jsl`.
+* Tests: the ports' `test_zounds_poison_walking.py` and ABL's
+  `test_party_conditions.py` (case `party-conditions`).
+* Cost in ABL's release: bank 0 from 144 to 122 B, far RAM from 905 to
+  381 B free.
+
+**Left of the map half**: medicines and skills that cure a condition on
+the map (the item and skill menus); equipment's `PermanentStates` and
+resistance; **the condition in the main menu's status line and the status
+screen, after Tijereta's menu boxes**, as a follow-up.
+
+**The battle half, its first two pieces**, on 2026-11-01: the-advocate
+`f27c1d0d` and `3071048a`, the ports `15f9d4f`, the book `b25c0c7`.
+
+* A skill gives and takes its `state_effects` on either side, as
+  `vExecute`: already held against enemies says `message_already` and rolls
+  nothing; otherwise the skill's hit and, against enemies, the condition's
+  odds on the target —`GetStateProbability`, `state_ranks` and the armor—,
+  with `message_actor`/`message_enemy`; on its own side, `message_recovery`.
+  A special item casts its skill: this closes
+  [`items-that-give-a-condition-in-battle-only-hurt`](items-that-give-a-condition-in-battle-only-hurt.md).
+* A condition changes its holder's HP and SP each time it acts,
+  `ApplyConditions`.
+* Model: `skill_states`, `TurnChange` and `states.rs` in
+  `rm2k-snes-battle`; console: `ba_st_skill`, `ba_st_odds`, `ba_st_turn`.
+* Test: the ports' `test_zounds_veneno.py`, red with main's tools.
+
+## Left
+
+* **The condition in the main menu's status line and the status screen**:
+  after Tijereta's merge of the menu's party boxes (one more line for SP),
+  as a follow-up. Not mine on purpose.
+* An actor that cannot act is still asked for its command (RM2k skips it
+  and records the restricted action); its battle status line.
+* A weapon's `state_set` on an attack —Vampires Dawn's twenty, ABL's
+  three—.
+* Sealed skills, `restrict_skill`/`restrict_magic` —Silence—.
+* Medicines and skills that cure a condition: a medicine's `state_set` in
+  battle and on the map, and an item that only cures is not in the
+  battle's list; a skill that only cures can be used on the map but cures
+  nothing there.
+* The enemies' AI weighing a skill on its own side by the conditions it
+  takes away.
+* Equipment's `PermanentStates`.
+* Gwen's Látigo de Seda poisoning the party in Zounds' desert —it should
+  happen now, enemy skills are skills— has no test of its own: Kazar's
+  Veneno is the skill side, and the party's places across a battle are
+  ABL's `test_party_conditions.py`.
+
+## Verified (2026-11-01, Mulita)
+
+Branches `mulita-conditions`, main merged in each: the-advocate
+`3071048a` (main had not moved from `422f904d`), the ports `0aca8ed`, the
+book `5c982c2`.
+
+* ABL's suite whole with these tools: 1593 passed and 2 red, both tests
+  that this branch had to teach —the music's save test, which counts the
+  save's fields from its end, and Agency Badge's results, which now give
+  the droid Shock (9) on the console as in the model—; fixed in the ports'
+  `0aca8ed` and run again, green. No golden moved. `abl.sfc`'s sha256
+  starts `5247b981`.
+* The ports' `just boot`, every game: 117 passed, with the new
+  `test_zounds_poison_walking.py` and `test_zounds_veneno.py`.
+* `cargo test` of events, mapdata and battle; the-advocate's `just test`.
+* `just space`, ABL's release against main: bank 0 122 B free (144),
+  `$C0` 2,332 B (3,319), `$C1` 16,814 B (17,722), far RAM 375 B (905),
+  gaps 15,865 B (20,673).
+
+**On merging, install** `events mapdata battle convert cartridge`.
+
+**What the suite does not cover**: `ChangeCondition` from a troop page; a
+condition carried into a battle restricting an actor —the command menu
+still asks it—; the purge when an actor falls in battle and is raised in
+the same battle (the battle purges only at its end); SP on the map
+(Vampires Dawn's Sick); a condition the armor resists (the model's unit
+test does, no ROM test); a skill on its own side taking a condition away on
+the console (the model's unit test does); a skill that gives death; the
+save carrying the conditions across a load.
