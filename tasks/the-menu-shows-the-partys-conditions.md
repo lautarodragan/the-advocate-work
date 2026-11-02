@@ -2,8 +2,8 @@
 name: "The menu shows the party's conditions"
 description: "Since the party holds conditions, the main menu's status line and the status screen still say Normal for a poisoned actor; RM2k shows the condition of highest priority, in its colour"
 type: feature
-status: doing
-assignee: Tijereta
+status: testing
+assignee: taro
 agents: [Tijereta]
 ---
 
@@ -123,3 +123,36 @@ choice's redraw check— (ABL `release` 327 → 321 B, Sunset 244 → 238 B);
 bank 1 does not move (`test-msu` 856 B); the code is in FAR3, and the
 skills screen's part left FAR2 when Sunset's overflowed by two bytes.
 ABL `release`'s gaps 10,058 → 9,379 B, far RAM 276 B free.
+
+## Left
+
+* The battle's status line still says Normal or the dead one: Mulita's
+  battle half lists it, and the book's `what-the-battle-menu-does-not-model`.
+* A battle-only condition a page gives on the map has no tiles counted:
+  if the menu's bank has no room, its row shows nothing where Normal was.
+* Not compared against the original under Wine.
+* ABL `release`'s menu bank has no tile left for names: the draft
+  [`abl-s-menu-bank-has-no-tile-left-for-names`](abl-s-menu-bank-has-no-tile-left-for-names.md).
+
+## What to install when merging
+
+`just install screens mapdata cartridge` in the-advocate —the runtime
+comes with the merge—.
+
+## Branches and what was run
+
+Branches `tijereta-menu-conditions`: the-advocate `fbb1a45f` (the code),
+`6f2e9743` (the test game's golden), `3f2c7979` (`menu_state_of`'s Z),
+`f05ccf2b` (the skills screen's part to FAR3) —main had not moved from
+`0ba09da4`—; the ports `995880c` (the tests) and `d68963d` (the golden),
+main merged in `014974a`; the book `2c42a51`, main merged in `a8fb3fe`.
+
+With `just install-local .local-tools screens mapdata cartridge`: ABL's
+`just tests` on the final commits, 1614 passed and 2 skipped (`abl.sfc`
+md5 `cec1ccad…`); the ports' `just boot`, 129 passed; `just space` on the
+nine games; `just test` (29 passed), `just test-game` (63 passed, 1
+skipped) and `cargo test` of `rm2k-snes-screens` and `rm2k-snes-mapdata`.
+Red before, with main's tools: `test_menu_conditions.py` 1 failed (the
+golden), 3 passed. Captures, side by side, in
+`/shared/captures/2026-11-01-menu-conditions/`. Not run: `just lint`'s
+clippy.
