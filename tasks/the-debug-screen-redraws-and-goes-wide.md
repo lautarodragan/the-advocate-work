@@ -2,7 +2,7 @@
 name: "The debug screen: a black block while scrolling, and the whole names in high resolution"
 description: "Scrolling the debug screen redraws the left list when it does not need to and a black block covers part of it for a moment; and taro wants the screen in the console's 512-wide mode, so the switches' names fit whole"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Hurón]
 ---
@@ -167,3 +167,5 @@ The other six reds of that boot were Vampires Dawn's not building; `just
 boot -k "vampires or walkers or twins or title"` after the move: 15
 passed. The draft about bank 1 that the merge had nearly filled was
 deleted with the move: it is back to what it was at 090b0037.
+
+**2026-11-02, taro** declares it done.

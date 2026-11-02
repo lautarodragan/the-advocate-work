@@ -86,6 +86,16 @@
   .body blockquote > :last-child { margin-bottom: 0; }
   .body table { border-collapse: collapse; }
   .body th, .body td { border: 1px solid var(--line); padding: .2rem .5rem; }
+  /* The copy button floats right in the summary, so that the name and the
+     description keep their width. */
+  .copy {
+    float: right; margin-left: .5rem; cursor: pointer;
+    font: inherit; font-size: .75rem; padding: .1rem .5rem;
+    border: 1px solid var(--line); border-radius: .3rem;
+    background: var(--code); color: var(--muted);
+  }
+  .copy:hover { color: var(--fg); }
+  .copy.done { background: var(--accent); border-color: var(--accent); color: var(--bg); }
   [hidden] { display: none !important; }
 </style>
 </head>
@@ -174,6 +184,20 @@
     status = t.dataset.status; type = 'all'; search.value = ''; apply();
     t.open = true; t.scrollIntoView();
   }
+  // The copy button lives inside the summary: preventDefault keeps the click
+  // from also opening or closing the task.
+  document.addEventListener('click', async e => {
+    const b = e.target.closest('button.copy');
+    if (!b) return;
+    e.preventDefault();
+    try {
+      await navigator.clipboard.writeText(b.dataset.copy);
+      b.textContent = 'copied'; b.classList.add('done');
+    } catch {
+      b.textContent = 'failed';
+    }
+    setTimeout(() => { b.textContent = 'copy'; b.classList.remove('done'); }, 1200);
+  });
   window.addEventListener('hashchange', openHash);
   apply();
   openHash();

@@ -2,7 +2,7 @@
 name: "Bank 1 overflows when merging 2026-11-01's branches"
 description: "Merged together, the day's branches —Hurón's debug font, Aguará's terrain rates and bushes, Mulita's conditions, Calandria's tile substitutions, Tijereta's SP in the picker— overflow ABL's test-msu bank 1 (FAR); each alone fit"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Tijereta]
 ---
@@ -77,3 +77,5 @@ is already open for the first).
 adeleine wally images text battle events screens mapdata convert cartridge
 rm2k-snes-audio` —what changed since the global checkout's 422f904d and
 the binaries that compile it in—.
+
+**2026-11-02, Hornero.** Done: nothing in it is played, only built, and every cartridge of the nine games has built and been delivered since —last from the-advocate `5ef467fe`, the ports `1f1d0ea`—, with ABL's `test-msu` among `just cartridges`.

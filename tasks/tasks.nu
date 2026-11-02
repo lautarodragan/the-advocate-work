@@ -165,7 +165,9 @@ def escape [] {
 }
 
 # One task, closed: its anchor is its file name, which never changes, so
-# `#<name>` links it from outside.
+# `#<name>` links it from outside. The summary's button copies that name
+# —what taro pastes into a conversation to point at a task—; it is in the
+# summary so that it works with the task closed.
 def task_html [] {
   let t = $in
   let id = $t.file | path parse | get stem
@@ -175,7 +177,7 @@ def task_html [] {
   let source = $"https://github.com/lautarodragan/the-advocate-work/blob/main/tasks/($id).md"
   [
     $"<details class=\"task\" id=\"($id | escape)\" data-status=\"($t.status | escape)\" data-type=\"($t.task_type | escape)\">"
-    $"<summary><span class=\"type\">($t.task_type | escape)</span><span class=\"name\">($t.name | escape)</span>"
+    $"<summary><button type=\"button\" class=\"copy\" data-copy=\"($id | escape)\" title=\"Copy the task's file name\">copy</button><span class=\"type\">($t.task_type | escape)</span><span class=\"name\">($t.name | escape)</span>"
     $"<span class=\"desc\">($t.description | escape)</span></summary>"
     $"<p class=\"meta\"><a href=\"#($id)\">#</a> · <a href=\"($source)\">($id).md</a>($changed)($assignee)($agents)</p>"
     $"<div class=\"body\">($t.body | render_body)</div>"

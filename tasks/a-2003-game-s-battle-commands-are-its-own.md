@@ -2,7 +2,7 @@
 name: "A 2003 game's battle commands are its own"
 description: "Zounds' battle menu shows the 2000 terms command_attack and command_defend, left as the editor's Japanese defaults —garbled as \"?UOE'\" and \"-hOEa\"—; an RPG Maker 2003 game names its commands in the database's battle commands: Atacar, Técnica, Defender, Objeto, Escapar"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Cardón]
 ---
@@ -123,3 +123,5 @@ beyond the skill one; the Zounds test plays one battle with two actors.
 
 To install when merging: `battle`, `mapdata` and everything that carries
 the runtime —`project`, `cartridge`, `convert`—.
+
+**2026-11-02, taro** declares it done.

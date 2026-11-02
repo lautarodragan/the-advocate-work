@@ -2,7 +2,7 @@
 name: "Zounds: a debug door to the desert's jail"
 description: "One more door in Zounds' debug room: to the desert's jail —or dungeon—, past the crack, the desert's maze and the flags, with what the game has set by then"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Mulita]
 ---
@@ -109,3 +109,5 @@ to install. The door is the sixth, `Door: the maze`, column 13.
   Zounds' Known issues in the book.
 * Not covered: walking the maze itself from 113 into the cave (114),
   and anything past it; the state is checked, the way on is not played.
+
+**2026-11-02, taro** declares it done.
