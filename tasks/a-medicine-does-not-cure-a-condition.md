@@ -53,3 +53,22 @@ branches `mulita-medicine` in the three.
   too, with a "healed" result.
 * Tests: ABL's `test_medicine_conditions.py` with cases
   `medicine-conditions` and `battle-114-medicine`.
+
+## Done
+
+* Red before, with main's tools: `test_medicine_conditions.py` 4 of 5
+  —the Antidote and the skill left the Poison, the model and the list
+  offered no Antidote, A on Use Item did not open a list—; the fifth, the
+  Antidote on someone with nothing, is the control and passed both ways.
+* What the battle's list takes is `item_usable_in_battle`: a medicine that
+  removes a condition **other than death**. A medicine that only revives,
+  with no HP, still stays out as it always did: letting it in moved 15 of
+  the 26 frozen answers of `tests/model.rs`, whose Python left it out, and
+  RM2k's raising to 1 is a separate matter no game of the nine leans on.
+* The messages, seen: "Kersh Antidote used." and under it "Kersh is no
+  longer poisoned", the queue's result line, as a special item's skill
+  result goes. Captures in `/shared/captures/2026-11-01-medicine/`.
+* `cargo fmt --all --check` was red on main for two files: the battle
+  crate's, from my conditions commits, formatted in a commit of its own;
+  and `rm2k-snes/screens/src/debug_screen.rs`, from `93b0bd2b`, which is
+  someone else's and stays as it is.
