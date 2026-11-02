@@ -2,7 +2,7 @@
 name: "The ExFont is an image in the port, not the game's exe"
 description: "`[text] exfont` names a PNG in the port's directory; the tools stop reading `RPG_RT.exe`; each game that has icons today keeps them from a sheet extracted once; without the key, the codes are dropped"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Hurón]
 ---
@@ -133,3 +133,7 @@ convert cartridge screens battle` in the-advocate. The ports' and the
 tools' branches go together: the new tools refuse Zounds' old key, since
 the `.exe` is not in the port's directory, and the old tools look for
 `exfont.png` in the game's directory and stop.
+
+**2026-11-02, taro**, playing Zounds' build of the-advocate `3656d606` and the ports `4ba709b` on the console, in their words, translated:
+
+> And the ExFonts in Zounds too.

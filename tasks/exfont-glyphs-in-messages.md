@@ -2,7 +2,7 @@
 name: "ExFont glyphs in messages"
 description: "RM2k draws `$` plus a letter as an icon from the System's ExFont; the converter prints it as text. Seen in Vampires Dawn: a sign reads \"$s Graveyard\""
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Hornero]
 ---
@@ -41,3 +41,7 @@ gives Vampires Dawn its sheet. The golden of a message with one is
 Zounds' (`test_zounds_exfont.py` in the ports). Vampires Dawn's sign was
 not captured: it goes through the same path. The line in its page's
 Known issues is removed.
+
+**2026-11-02, taro**, playing Zounds' build of the-advocate `3656d606` and the ports `4ba709b` on the console, in their words, translated:
+
+> And the ExFonts in Zounds too.

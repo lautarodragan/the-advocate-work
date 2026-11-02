@@ -2,7 +2,7 @@
 name: "The action key stops at the event under the hero"
 description: "RPG_RT fires the action pages of the hero's own cell and of the one in front, both; the runtime stops at the first that queues, so a rock whose top half is an empty event above the hero cannot be mined from above"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Calandria]
 ---
@@ -114,3 +114,7 @@ it finds —left as it was, not asked here—.
 Branches `calandria-action-sides`: the-advocate `12e19bb4`, the ports
 `946d38f`, the book `0c325ba`. When merging, reinstall nothing of Rust:
 only `runtime/` changed, and the cartridges rebuild from it.
+
+**2026-11-02, taro**, playing Zounds' build of the-advocate `3656d606` and the ports `4ba709b` on the console, in their words, translated:
+
+> The levers work fine now!
