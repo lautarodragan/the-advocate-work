@@ -2,8 +2,8 @@
 name: "RM2k's ExFont icons in names and texts"
 description: "A `$` and a letter in a name, a description or a message is one of RPG_RT's ExFont icons; the port draws the two characters, and Zounds uses them throughout its items and skills"
 type: feature
-status: doing
-assignee: Hurón
+status: testing
+assignee: taro
 agents: [Hurón]
 ---
 
@@ -119,3 +119,43 @@ never counted; capped at 255 now, with its test shown red first.
   `/shared/captures/2026-11-02-exfont/`.
 * Draft for what is still dropped in battle:
   [`a-troop-page-s-box-drops-its-icons`](a-troop-page-s-box-drops-its-icons.md).
+
+### ABL's release and Vampires Dawn are full (2026-11-02)
+
+ABL's release has no bank left: on main it had 8.4 KB of gaps, and the
+first version of this did not link —"a piece of 65536 bytes needs a new
+bank"—. Two things cost it: a blank glyph the screens' and the menu's
+tables got at `TL_FIGURE`'s place even without icons (2.5 KB, gone: no
+icons, no blank), and the two icons of its glitched sign in the message
+window's tables (4 halves, 5 KB, kept: RPG_RT draws them). It links with
+2.2 KB of gaps. `[text] exfont = false` is there for a cartridge that
+cannot pay for its icons; no game says it. Vampires Dawn, also at 126 of
+126 banks, builds: its gaps went from 1,553 to 1,077 B.
+
+### Done
+
+* Every screen that draws a name or a text shows the icon where RPG_RT
+  does —boxes, choices, items, equipment, shop, skills, battle lists— or
+  drops the code: a troop page's box (draft
+  [`a-troop-page-s-box-drops-its-icons`](a-troop-page-s-box-drops-its-icons.md)),
+  actors' names, enemies' names, terms, custom menus, the debug screen.
+  Divergence: "What ExFont icons do not model" in the book; Zounds' Known
+  issues has the troop boxes.
+* Verified: `just test` (29), `cargo test --workspace` (137 results, all
+  ok), clippy over the workspace but `needless_borrow`, which is red on
+  main already with this machine's clippy (convert.rs and emit.rs, lines
+  this does not touch), ABL's suite (1637 passed, 2 skipped), the ports'
+  `just boot` (135 passed, after building every game's cartridges first:
+  the first run's workers rebuilt book-of-three and two others at once and
+  mangled their `.inc`), the test game (63 passed, 1 skipped). `abl.sfc`
+  082139c362608178, Zounds' 8e727d1148f2ae90.
+* **What no test covers**: the battle's lists with an icon (Zounds' skills
+  `$L…`, items in battle), the shop and the equipment screen with icons,
+  a choice's option with one (`Back to $T1`), the actor choice's skill name
+  with one (the menu's bank's tables), and a game with an `ExFont.png`.
+  They go by the same tables as the items screen and the box, which the
+  test looks at.
+
+**To install when merging**: `just install rm2k-render events screens
+battle convert mapdata` (the text crate goes into those; `rm2k-render`'s
+binary and `images`/`wally` only got a refactor of its BMP reader).
