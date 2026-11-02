@@ -2,7 +2,7 @@
 name: "Zounds' map 114 event 13 may not work"
 description: "On Cueva 5 (map 114) EV0013 —action key, no graphic, on switch 207: a sound, a wait, battle animation 194 on event 11, switch 206— may not do anything in the port"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Calandria]
 ---
