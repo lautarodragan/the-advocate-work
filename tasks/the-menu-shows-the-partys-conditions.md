@@ -69,3 +69,28 @@ cells.
   BG2's palette 4, which the text screens leave free.
 * **Test** in ABL on the debug map's full party, a poisoned actor and a
   fallen one, against `render` and a golden; red before.
+
+## Done, as it went
+
+The-advocate `fbb1a45f` on `tijereta-menu-conditions`: as planned.
+
+* `StateInks` in `slots.rs` of `rm2k-snes-screens` decides the inks;
+  `texts::shown_state` is `GetSignificantState` for the render, and
+  `runtime/menu_states.s` the console's: `menu_state_of`,
+  `menu_state_paint`, `menu_states_changed`, `menu_state_ink`. The table
+  is mapdata's `state_names` —each name padded to `STATE_NAME_W`, at
+  least the eight cells, so `tl_strip` cuts it by pixels and not by
+  letters—, `state_ink`, `state_ink_rows`, `state_ink_attr` and
+  `state_ink_cgram`.
+* ABL's inks: nine colours and six free entries in palette 1, so the dead
+  one, Poison and four more get one each and three take the nearest
+  ones. ABL `release`'s menu bank: the names ask for 120 of the 120 tiles
+  the menu leaves —the dead one's strip and Poison's are the twenty
+  added—. **It fits with nothing to spare**: the next actor with a long
+  name, or another condition that outlives a battle, and the converter
+  starts leaving faces out (it says so in its log).
+* Seen on the console, in ABL on the debug map's full party: Talan's
+  Blind, Kersh's Poison and Core's dead one —"Normal", in colour 5, as
+  ABL names its dead condition—; on the actor choice Arden's dead one
+  turning into Normal after the elixir; Kersh's Poison on the skills
+  screen with its gradient.
