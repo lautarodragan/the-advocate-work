@@ -2,7 +2,7 @@
 name: "Zounds: some battle messages cannot be read"
 description: "Some lines of the battle's message window come out as garbage characters, as if the text were read from the wrong place or in the wrong encoding"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Chajá]
 ---

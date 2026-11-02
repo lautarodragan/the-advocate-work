@@ -2,7 +2,7 @@
 name: "Above tiles no character can reach go below"
 description: "A tile marked to be drawn above the hero goes to the layer above (BG2) even where no character can ever stand beside it, like a cave's ceiling; drawn below, the transparent message stops blacking it out and BG2 is freed"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Aguará]
 ---

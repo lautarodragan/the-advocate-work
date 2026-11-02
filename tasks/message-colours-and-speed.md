@@ -2,7 +2,7 @@
 name: "Message colours and speed"
 description: "\\c[n] and \\s[n] in a message box are discarded today: coloured words come out in the plain colour and the text goes at one speed"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Tijereta]
 ---

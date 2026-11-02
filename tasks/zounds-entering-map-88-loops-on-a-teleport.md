@@ -2,7 +2,7 @@
 name: "Zounds: entering map 88 loops on a teleport"
 description: "Entering 'Desierto de Urbaddun / Mountains / Oeste de la Grieta / Secreton / 4 - Desert' (map 88) leaves the hero unable to move or leave: Get Outta Map's autostart pages, conditioned on variables 7 and 8, seem to fire with both still at 0 and teleport in a loop"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Calandria]
 ---

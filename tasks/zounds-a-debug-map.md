@@ -2,7 +2,7 @@
 name: "Zounds: a debug map"
 description: "A map of our own with doors to the ship after the intro, the desert on first arrival with Kazar, and the desert with the pickaxe; and someone to level Kazar and Uname up"
 type: tooling
-status: testing
+status: done
 assignee: taro
 agents: [Carpintero]
 ---

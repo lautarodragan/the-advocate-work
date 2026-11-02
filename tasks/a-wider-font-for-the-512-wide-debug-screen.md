@@ -2,7 +2,7 @@
 name: "A wider font for the 512-wide debug screen"
 description: "At 512 wide the debug screen's text is hard to read on a CRT; try one or two new fonts about 1.5 times as wide as the current one, drawn for that mode, and show taro how the screen looks with them"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Hurón]
 ---

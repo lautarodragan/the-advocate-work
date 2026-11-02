@@ -2,7 +2,7 @@
 name: "Zounds: map 60's water sounds like a door, because NAU_Splash is a stand-in"
 description: "The Water event on map 60 plays NAU_Splash, which the repository never had; on the snes-port branch it is a copy of Close1, like the other NAU_ sounds"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Chajá]
 ---

@@ -2,7 +2,7 @@
 name: "Zounds: three messages name an item otherwise"
 description: "The steal message says Grasa de Camello for the item Grasa de Camaro, the chef's menu Puré con Papas for Puré de Papas, the fishing score Kinshi for the fish Kinsh"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Calandria]
 ---

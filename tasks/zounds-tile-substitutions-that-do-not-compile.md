@@ -2,7 +2,7 @@
 name: "Zounds: tile substitutions that do not compile"
 description: "The Switch event on map 59, Centro (START), does nothing: its pages swap lower tiles 94, 95 and 1 in a ring, and the event compiler refuses the substitution, so the whole page is left out —switch, sound and all—; ten pages on six maps the same"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Calandria]
 ---

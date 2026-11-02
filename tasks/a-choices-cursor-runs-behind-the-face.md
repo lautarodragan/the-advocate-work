@@ -2,7 +2,7 @@
 name: "A choice's cursor runs behind the face"
 description: "When a choice is shown with a face on the left, the selection bar starts at the window's left edge, behind the face; RM2k starts it right of the face and shortens it as much"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Hurón]
 ---
