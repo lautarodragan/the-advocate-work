@@ -2,7 +2,9 @@
 name: "Zounds: the Death Desert has no sandstorm"
 description: "From map 34 into the Death Desert (50, 14, 111, 112, 113) RM2k blows a sandstorm over the screen; the port shows clear sand"
 type: bug
-status: draft
+status: doing
+assignee: Tijereta
+agents: [Tijereta]
 ---
 
 Seen by Mulita on 2026-11-02, with the ports at `1e6663b` and the tools
@@ -18,3 +20,12 @@ and `tasks/weather.md`—, so the sandstorm is left out without a word.
 
 To reproduce: "New Game", the sixth door of the room, "Go"; or play from
 map 34 north into map 50.
+
+## Asked
+
+taro, on 2026-11-02, in their words, translated:
+
+> Meanwhile: could you implement the sandstorm? I don't know how feasible
+> it is... if it can't be done, it can't be done.
+
+Taken by Tijereta, launched by Hornero the same day.
