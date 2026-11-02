@@ -2,7 +2,9 @@
 name: "Items that cast a skill outside battle"
 description: "The items screen greys the special items that cast a skill, like ABL's potions; with the healing skills done, they can be used on the map with the same effect"
 type: feature
-status: todo
+status: doing
+assignee: Chajá
+agents: [Chajá]
 ---
 
 Phase 3.3 of [`the-skills-menu`](the-skills-menu.md): the research

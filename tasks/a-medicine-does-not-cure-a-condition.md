@@ -2,7 +2,9 @@
 name: "A medicine does not cure a condition"
 description: "Since the party holds conditions, a poison caught in battle stays on the map; an Antidote —a medicine whose state_set lists it— is not of use on the map nor offered in battle, so only an inn or a FullHeal take it away"
 type: bug
-status: draft
+status: doing
+assignee: Mulita
+agents: [Mulita]
 ---
 
 Seen by Mulita on 2026-11-01, on the-advocate `3071048a` (branch
