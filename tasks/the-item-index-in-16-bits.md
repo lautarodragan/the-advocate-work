@@ -2,7 +2,7 @@
 name: "The item index in 16 bits"
 description: "The cartridge's item tables are indexed with a byte, so ABL's whole release leaves out the items past 255 (a TEMPORARY hack in the converter): index them with a word and remove the hack"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Chajá]
 ---

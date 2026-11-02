@@ -2,7 +2,7 @@
 name: "A debug screen in the pause menu"
 description: "RPG Maker 2000's F9 screen —switches by groups of ten, with their names, turned on and off— as an option of the pause menu, for any game, behind a debug knob"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Tijereta]
 ---

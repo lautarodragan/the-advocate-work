@@ -2,7 +2,7 @@
 name: "taro's words in quote blocks, in every task"
 description: "The tasks written before 2026-10-20 quote taro inline; each quote becomes a block, in English, said to be translated when it was Spanish"
 type: workflow
-status: testing
+status: done
 assignee: taro
 agents: [Aguará]
 ---

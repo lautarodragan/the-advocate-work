@@ -2,7 +2,7 @@
 name: "An overloaded audio package gets its music at 6 kHz; one that barely fits gets it at the minimum"
 description: "The relief of a package that does not fit in the ARAM leaves its music at the sound effects' rate and drops effects; a package that fits by a few bytes is not relieved and its music is squeezed to the minimum instead. Where the trigger goes is taro's to decide by ear"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Aguará, Cardón]
 ---

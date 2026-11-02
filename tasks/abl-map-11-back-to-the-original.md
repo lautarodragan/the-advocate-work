@@ -2,7 +2,7 @@
 name: "ABL: map 11 back to the original"
 description: "The stones and lights minigame plays well with the game's own map 11 now: drop the redesign's fork, its ChipSet if nobody else uses it, and what tests and docs say about it"
 type: tooling
-status: testing
+status: done
 assignee: taro
 agents: [Mulita]
 ---

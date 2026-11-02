@@ -2,7 +2,7 @@
 name: "Sunset in mode 1, with colour math"
 description: "Sunset's painted maps aren't playable in mode 3: try mode 1 with colour math —exact roofs, lights and shadows that reach the characters, the panorama without the mosaic of the large maps—"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Mulita]
 ---

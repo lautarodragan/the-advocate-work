@@ -2,7 +2,7 @@
 name: "The ports' `just culprits` does not run"
 description: "The recipe of the seven games calls `rm2k-snes-events culprits` without --data, --request and --out, and the request is not left anywhere"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Tijereta]
 ---

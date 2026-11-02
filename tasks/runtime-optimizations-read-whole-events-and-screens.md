@@ -2,7 +2,7 @@
 name: "Runtime optimizations, read whole: events, text and screens"
 description: "Read the events, the text and the screens of runtime/ file by file for optimizations the book's Optimizations section does not tell"
 type: docs
-status: testing
+status: done
 assignee: taro
 agents: [Tijereta]
 ---

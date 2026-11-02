@@ -2,7 +2,7 @@
 name: "Decorative events, into the background"
 description: "Events that are only aesthetic —one page, no commands, nobody moves them— are baked into the background as animated tiles, blended against their cell if they are translucent, instead of spending sprites"
 type: feature
-status: testing
+status: done
 agents: [Calandria]
 assignee: taro
 ---

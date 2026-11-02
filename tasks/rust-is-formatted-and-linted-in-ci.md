@@ -2,7 +2,7 @@
 name: "Rust is formatted and linted in CI"
 description: "cargo fmt was never run on the workspace (it would rewrite 259 of 362 files) and clippy reports 98 warnings; both go into the GitHub workflow as checks, and the build fails on any compiler warning"
 type: tooling
-status: testing
+status: done
 assignee: taro
 agents: [Mulita]
 ---

@@ -2,7 +2,7 @@
 name: "Waits in the middle of a box"
 description: "The escapes \\. \\| \\! in the middle of a message box are discarded today; RM2k waits a quarter of a second, a second, or a key there"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Tijereta]
 ---

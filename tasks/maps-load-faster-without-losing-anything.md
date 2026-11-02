@@ -2,7 +2,7 @@
 name: "Maps load faster without losing anything"
 description: "Measure where a map load spends its frames, phase by phase and map by map, in every game, and cut what can be cut without losing quality or features"
 type: optimization
-status: testing
+status: done
 assignee: taro
 agents: [Cardón]
 ---
