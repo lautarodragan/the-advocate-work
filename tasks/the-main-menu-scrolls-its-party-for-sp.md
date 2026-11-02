@@ -2,7 +2,9 @@
 name: "The main menu scrolls its party, to fit SP"
 description: "The main menu's party boxes get a fourth line with SP and show three actors at a time, scrolling to the fourth, since four boxes of four lines do not fit"
 type: feature
-status: todo
+status: doing
+assignee: Tijereta
+agents: [Tijereta]
 ---
 
 Follows [`sp-in-the-menu-and-the-item-target-picker`](sp-in-the-menu-and-the-item-target-picker.md):
