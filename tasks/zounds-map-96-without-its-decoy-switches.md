@@ -2,8 +2,8 @@
 name: "Zounds' map 96 without its decoy switches"
 description: "An experiment: map 96 patched to keep only the switch that opens the door, to measure how much of its lag the 57 decoy switches are"
 type: feature
-status: doing
-assignee: Cardón
+status: testing
+assignee: taro
 agents: [Cardón]
 ---
 
@@ -126,3 +126,38 @@ test of the suite.
 
 Captures, before and after at each spot side by side, in
 `/shared/captures/2026-11-02-zounds-map-96-no-decoys/`, next to the ROM.
+
+## Delivered, and what is left for taro
+
+The ROM, `zounds.sfc` with its `zounds.msu` and no MSU-1 tracks, from the
+ports' `cardon-map-96-no-decoys` at 82d1bb4 with the global tools of
+244f4013, in `/shared/captures/2026-11-02-zounds-map-96-no-decoys/` with
+a `README.txt` that says it is an experiment.
+
+**taro's call**: whether the fork stays, or the decoys go from the game
+itself —then the fork goes away with the next `just dump`—, or neither.
+If the map keeps its decoys, what would remove the cost without touching
+the game is `build_oam` not walking the rows that are off screen; the
+draft
+[`still-events-that-change-pose-painted-into-the-background`](still-events-that-change-pose-painted-into-the-background.md)
+is the other way, and it also fixes the line limit.
+
+**If the fork stays**: `test_zounds_map_96_switches.py`, which held the
+previous task's turners in a map with a cache, skips itself while
+`Map0096.json` is forked —it has no switches left to look at—, so that
+feature is left with the crate tests of events and wally only, and wants
+another map for its ROM test. And the line in Zounds' "Known issues" of
+the book about too many characters on one line on map 96 would go.
+
+## Verified, and what to install
+
+On the ports' branch, with the global tools: `just boot -k zounds` from
+the ports' root, 50 passed and 1 skipped —the map-96 switches test, on
+purpose—. ABL's suite was not run: nothing of the tools or of ABL
+changed. Not covered by any test: that event 20 still opens the door
+(checked with a throwaway script), and that the room plays through in
+the game —the ingots' scene, the statue—, which only taro's playing
+covers.
+
+Nothing to install: no tool changed. The probe lived in a worktree of
+the-advocate that was removed, uncommitted.
