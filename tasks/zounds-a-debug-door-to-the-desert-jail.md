@@ -99,6 +99,11 @@ to install. The door is the sixth, `Door: the maze`, column 13.
   the file, 11 passed. The other doors' columns moved and their tests
   pass; the room's golden changed (six gaps two apart) and the maze's is
   new: `/shared/captures/2026-11-02-zounds-debug-maze/`.
+* The ports' whole `just boot`, with the tools of the-advocate
+  `3656d606`: 138 passed and 1 red, the record player's golden, whose bar
+  is drawn over the room —the difference only in the bottom wall's rows—;
+  updated in its own commit, and that file and the debug map's, 12
+  passed, after.
 * Found: the sandstorm is not drawn —the console draws only the rain—.
   Draft `zounds-the-death-desert-has-no-sandstorm.md`, and a line in
   Zounds' Known issues in the book.
