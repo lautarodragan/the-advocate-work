@@ -2,8 +2,8 @@
 name: "The main menu scrolls its party, to fit SP"
 description: "The main menu's party boxes get a fourth line with SP and show three actors at a time, scrolling to the fourth, since four boxes of four lines do not fit"
 type: feature
-status: doing
-assignee: Tijereta
+status: testing
+assignee: taro
 agents: [Tijereta]
 ---
 
@@ -67,3 +67,90 @@ depends on the frame it was taken on.
 **Where the code goes**: the panel's painting leaves bank 0 for `FAR3`,
 with three `jsl` doors to the bank 0 routines it uses; the choice and the
 bar leave bank 1 for `FAR3` too.
+
+## Done, measured
+
+As planned. The menu rows are nine cells —`MENU_LIST_ROWS`, `MENU_SHOWN`,
+`MENU_SP_ROW`, `MENU_ARROW_X/Y` in `layout.rs`—, the actor choice keeps
+`TARGET_BAR` and four rows of seven, and the console side is
+`runtime/menu_list.s`. "Normal" stays where it was, in the row's fixed
+block on the level line at `MENU_STATUS_DX`: whoever puts the condition
+there finds the same cells, on both screens.
+
+**A VRAM read-back needs a word thrown away.** The first capture had every
+row one cell to the right: writing VMADD prefetches the word, and the
+first read loads the prefetch again from the same address before
+incrementing —fullsnes calls it a glitch of the hardware, snes9x follows
+it—. `keep` reads one word by hand before each row's DMA; the comment is
+on the line.
+
+**The scroll is one frame.** `test_the_scroll_has_no_frame_in_between`
+looks at every frame from the press: the before screen, then the after
+one, no black and nothing half moved. On the emulator; the vblank budget
+on the console is estimated, not measured: some 50 DMAs —the bar erased
+and painted, 27 cell rows, the OAM— about 2.7 KB, against the 6 KB or so
+a vblank moves.
+
+**The arrow** is the System's, in sprite palette 2, still, both at the
+bottom: see the divergence.
+
+**Space** (`just space`, before at main's integration and after on this
+branch): bank 0 gains what `menu_party_paint` took, about 209 B —ABL
+`release` 118 → 327 B, Sunset 35 → 244 B, every game 240 B or more now—;
+bank 1 gains the choice and the bar, `test-msu` 574 → 856 B. What went to
+`FAR3` shows in `release`'s gaps: 10,282 → 10,058 B. `release` stays at
+126 of 126 banks, as before.
+
+## Tests and goldens
+
+New in ABL, `tests/rpgmaker/test_menu_party_scroll.py`, on the debug
+map's first full-party NPC with Core at 5 SP and Manta at 30: the menu
+against `render` —three rows, the down arrow—, the bar past the third and
+back, the wrap both ways, B leaving it scrolled and the next choice at the
+top, the frame-by-frame scroll, and the golden `menu-full-party-scrolled`.
+`screens.menu` takes `sp` and `top`.
+
+**Red before**, honestly: on main's tools the file is 1 failed, 5 passed.
+The comparisons are against the render of the same tools, so with main's
+both sides are four rows without SP; what is red is the golden. During
+the work, the frame-by-frame case is what caught the rows one cell right.
+
+Goldens that moved, side by side in
+`/shared/captures/2026-11-01-menu-party-scroll/` with a contact sheet:
+`menu`, `menu-2`, `menu-party`, `equipment-a-who`, `console-menu`,
+`console-menu-cursor`, `console-menu-without-item`,
+`console-menu-without-item-cursor`, `console-returns-to-menu`,
+`skills-returns-to-menu`, `debug-screen-menu-option`,
+`debug-screen-back-to-menu`, `picture-menu-open`; and the test game's
+`renamed-menu`. All the same change: rows of nine with SP, three shown,
+the arrow when there is a fourth.
+
+The screens crate's render hashes for the four menus and the converter's
+answer moved —looked at—; mapdata's Python comparison gets the arrows and
+the list's numbers in and out like the SP line before it.
+
+## What to install when merging
+
+`just install screens mapdata cartridge` in the-advocate —the runtime
+comes with the merge—.
+
+## Branches and what was run
+
+Branches `tijereta-menu-scroll`: the-advocate `790185b7` + `74429692`
+(the test game's golden), the ports `e1382bd` + `45f7348` (the goldens),
+the book `6fa7bd8`. `main` did not move in any of the three while this
+ran, so there was nothing to merge.
+
+With `just install-local .local-tools screens mapdata cartridge`: ABL's
+`just tests`, repeated until no new golden went red and then once more
+on the final commits, green (`abl.sfc` md5 `a6df25eb…`); the ports' `just
+boot`, 129 passed; `just space` on the nine games; `just test`, `just
+test-game` (63 passed) and `just crate-test` of `screens` and `mapdata`.
+Not run: `just lint`'s clippy.
+
+**What the suite does not cover**: a scroll with Tech Skill —it is the
+same `menu_choose` as Equipment, which is what is tested—; coming back to
+the menu from a custom menu or a screen with the list scrolled —it is
+painted again at the top—; a full party with an actor the ROM does not
+know; the scroll on bsnes and on the console, where the vblank budget is
+an estimate.
