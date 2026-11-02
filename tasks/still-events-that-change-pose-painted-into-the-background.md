@@ -70,3 +70,23 @@ characters as their layer asks, and their cells rewritten when a page or
 a pose changes; no baking into BG1. Where BG2 already holds a tile in a
 cell the event covers, or its palette or tiles do not fit, the event
 stays an object, measured and said.
+
+taro, later the same day, through Hornero, translated:
+
+> one thing that worries me in particular: the sprite change has to be
+> just as fast. Today the commands that change the map's tiles lag a
+> bit. We'll have to look at that eventually, but for now I care about
+> not making the experience of chests, doors, etc. worse.
+
+So a chest opening, a door, a switch pressed has to show its new pose on
+the same frame it does today as an object —measured from the trigger to
+the pose on screen, before and after—; the cell is not rewritten through
+the `TileSubstitution` path, and an event whose pose change cannot land
+on the same frame stays an object.
+
+## Cardón's notes
+
+Worked from the-advocate 244f4013, the-advocate-ports 6436a39 and the
+book at 9a90e38, on branches `cardon-still-events-bg`; measured against
+the real map 96, with its 55 decoys —the experiment without them stays
+on `cardon-map-96-no-decoys`—.
