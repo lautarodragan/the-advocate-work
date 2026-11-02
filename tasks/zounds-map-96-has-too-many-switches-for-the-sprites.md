@@ -2,8 +2,8 @@
 name: "Zounds' map 96 has too many switches for the sprites"
 description: "Map 96 (Arriba del Cuartito) carries 58 floor-switch events drawn from a CharSet: it lags, a switch is drawn by half, the hero loses everything below the head on some rows, and an opened chest's graphic vanishes until the hero walks"
 type: bug
-status: doing
-assignee: Cardón
+status: testing
+assignee: taro
 agents: [Cardón]
 ---
 
@@ -126,3 +126,21 @@ the OAM the ROM builds in RAM:
   [`still-events-that-change-pose-painted-into-the-background`](still-events-that-change-pose-painted-into-the-background.md).
 
 Captures, before and after: `/shared/captures/2026-11-02-zounds-map-96/`.
+
+## Verified, and what to install
+
+On the branches merged with main (the-advocate 25e99387 on 0ba09da4;
+the ports' `cardon-map-96` merged with main at cc0b966), with the local
+tools of events, wally and cartridge: ABL's suite 1610 passed, 2
+skipped; `just boot` from the ports' root 130 passed —no golden moved—;
+`just test` 29 passed; `crate-test` of events and wally green, with a
+new test in each (`a_route_that_only_turns_is_told_apart`,
+`a_still_one_that_routes_only_turn_stays_still_in_a_cache`).
+
+**Not covered by any test**: `still_turn` after a battle on a map with
+a cache (+12 at $FF, which is why it reads the old pose from the key's
+entry); a turner whose pages show two different characters; and that
+the pressed pose is RPG_RT's, which only the captures show.
+
+To install when merging: `just install events wally cartridge` —the
+runtime changes too: `npcs.s` and `cache_slots.s`—.
