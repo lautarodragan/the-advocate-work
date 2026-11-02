@@ -90,3 +90,51 @@ Worked from the-advocate 244f4013, the-advocate-ports 6436a39 and the
 book at 9a90e38, on branches `cardon-still-events-bg`; measured against
 the real map 96, with its 55 decoys —the experiment without them stays
 on `cardon-map-96-no-decoys`—.
+
+### BG2 cannot hold an event below the hero
+
+Mode 3's order, front to back, is objects 3 / BG1 1 / objects 2 / BG2 1
+/ objects 1 / BG1 0 / objects 0 / BG2 0 (`runtime/far_ram.s` says it
+where the priorities are chosen). The map is BG1 at priority 0 and the
+hero and every event below or beside him are objects at priority 1. BG2
+has **no place between them**: at priority 1 it is in front of the hero
+—that is why the layer above lives there—, and at priority 0 it is
+behind BG1, under the floor. So a switch painted into BG2 would be drawn
+over the hero standing on it, and a chest over the hero standing below
+it; the tile priority bit cannot put them under the characters.
+
+The only way to keep BG2 is to **lift the characters**: a character
+whose drawing overlaps a painted event goes to objects priority 2, in
+front of BG2 1. That is right only where no tile of the layer above is
+within that character's drawing at the same time —he would come out in
+front of the roof too—. Measured on map 96 (the-advocate 244f4013, the
+ports 6436a39), with the layer above as Wally converts it, the switch's
+drawing (x 1–15, y 2–16 of its cell), the hero's (x −1 to 17, y −10 to
+16 of his cell, from Zounds_Hero_01's twelve poses) and a character only
+on the lines between two cells he can stand on (a cell is out if BG2
+covers it whole):
+
+* the 16 switches of row 21 have the layer above **in their own cell**:
+  the room's bottom edge is drawn over their lower half;
+* the 16 of the two columns stand in a corridor two cells wide between
+  ceilings that stay above —the whole ceiling of map 96 stays above
+  because of the statue, as the book's "Maps" says—, and the hero's
+  outer column of pixels reaches them;
+* **15 of 56** pass: row 20 but its two ends. Ignoring the hero's outer
+  pixel, 32; with a character the size of his cell, 38.
+
+Fifteen switches out of fifty-six take neither the frame nor the line
+limit out of map 96: rows 20 and 21 are on the same screen lines, and
+row 21 stays objects.
+
+So, following "experimenting if the plan fails", what this task does
+instead is **the background, BG1, with a block per pose**: the event's
+cell gets one block per pose it can show —the floor with the switch up,
+the floor with it down—, and the runtime writes the grid's cell and its
+four tilemap words when the pose changes. BG1 at priority 0 is under
+every character, which is where RM2k puts an event below the hero; and
+one on the hero's layer whose drawing stays in its cell is only ever
+overlapped by someone in front of it, as decorative events already
+assume. The star tiles over row 21 stay on BG2, over it, as in RM2k.
+taro's "smarter version of the baking" holds; "we don't even need to
+bake them" does not, and that is the reason.
