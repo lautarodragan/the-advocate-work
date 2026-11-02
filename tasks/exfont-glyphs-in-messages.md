@@ -2,7 +2,9 @@
 name: "ExFont glyphs in messages"
 description: "RM2k draws `$` plus a letter as an icon from the System's ExFont; the converter prints it as text. Seen in Vampires Dawn: a sign reads \"$s Graveyard\""
 type: bug
-status: wishlist
+status: testing
+assignee: taro
+agents: [Hornero]
 ---
 
 Seen by Cardón on 2026-10-12, in the captures of
@@ -29,3 +31,13 @@ a letter in a message is drawn as its ExFont icon, for the icons the
 games use, with a golden of a message that carries one. **First step**:
 the grep over each game's `data/` for `$[A-Za-z]` in messages, which says
 how many icons the font needs; if it is many, it becomes `todo`.
+
+## Closed by the ExFont work (2026-11-02, Hornero)
+
+[`rm2k-s-exfont-icons-in-names-and-texts`](rm2k-s-exfont-icons-in-names-and-texts.md)
+draws `$` and a letter as its ExFont icon in every message box, and
+[`the-exfont-is-an-image-in-the-port-not-the-games-exe`](the-exfont-is-an-image-in-the-port-not-the-games-exe.md)
+gives Vampires Dawn its sheet. The golden of a message with one is
+Zounds' (`test_zounds_exfont.py` in the ports). Vampires Dawn's sign was
+not captured: it goes through the same path. The line in its page's
+Known issues is removed.
