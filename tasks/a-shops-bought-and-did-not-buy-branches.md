@@ -2,8 +2,8 @@
 name: "A shop's bought and did-not-buy branches"
 description: "OpenShop with its 'bought' / 'did not buy' branches does not compile, so Zounds' cafeteria on the Hover Tram has no shopkeeper"
 type: feature
-status: doing
-assignee: Carpintero
+status: testing
+assignee: taro
 agents: [Carpintero]
 ---
 
@@ -78,3 +78,30 @@ Why not the alternatives the assignment preferred:
   skipped. `just space` in abl: `release` bank 0 320 B (327 before: the
   7-byte stub), `test-msu` bank 1 844 B (856: the 12 bytes of the flag in
   the shop screen).
+* `just test` in the-advocate: 29 passed. `just boot` at the root of the
+  ports with these tools: 129 passed. `just space` in every game: all
+  link; Sunset `release` bank 0 237 B, Vampires Dawn bank 1 821 B, the
+  tightest.
+* Main merged into the ports branch (1cad9a1: only Zounds' map 96 dump,
+  nothing ABL builds); the-advocate's main had not moved. `abl.sfc` of
+  `release` with these tools: sha256 `8487c243c59057df…`.
+
+## Done
+
+The cook of Zounds' cafeteria opens his shop, and after it the page goes
+on through `Transaction` if something was bought or sold and through
+`NoTransaction` if not; map 21's three pages compile.
+
+**What has to be installed when merging**: `just install cartridge convert
+events` from the-advocate —the bytecode declaration changed, so
+`rm2k-snes-assemble` has to write the new `event_opcodes.inc`, and the
+compiler is in `convert` and in `rm2k-snes-events`—.
+
+**What no test covers**: Zounds' cafeteria itself on a ROM —it is checked
+by `just culprits`, which says the pages compile, not played—; and a
+`NoTransaction` with no `Transaction` above, or a shop inside a shop's
+branch, are covered only by the crate's tests: no game has them.
+
+**For taro to look at**: Zounds' Hover Tram cafeteria (map 21): talk to
+the cook, buy something or leave without buying; after buying, switch 32
+is turned on, which is what the game's pages do next.
