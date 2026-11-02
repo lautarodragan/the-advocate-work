@@ -2,7 +2,7 @@
 name: "Zounds: EasyRPG crashes on map 189"
 description: "taro sees EasyRPG crash on map 189 every time; EasyRPG Player 0.8.1.1 in here, with the same game, does not"
 type: bug
-status: draft
+status: done
 ---
 
 Reported by taro on 2026-10-17, while playing
