@@ -2,8 +2,8 @@
 name: "Above tiles no character can reach go below"
 description: "A tile marked to be drawn above the hero goes to the layer above (BG2) even where no character can ever stand beside it, like a cave's ceiling; drawn below, the transparent message stops blacking it out and BG2 is freed"
 type: feature
-status: doing
-assignee: Aguará
+status: testing
+assignee: taro
 agents: [Aguará]
 ---
 
@@ -123,3 +123,61 @@ converts each map both ways and keeps the lowered one only if the
 panorama's way, both layers' merged colours and the fused cells are the
 same (`lowering_costs` in `wally/src/map.rs`); otherwise its log says
 `the tiles above the hero no character can cover stay above: below, …`.
+
+## Measured (Aguará, 2026-11-02)
+
+the-advocate `aguara-above-tiles` (`b35b4b37`, `b18cc5be`, `4d02e80c`),
+the-advocate-ports `aguara-above-tiles` (`ccfe208`, main merged in), the
+book `aguara-above-tiles` (`30bf691`, `8a2ee2c`). Each game's release
+built with the branch's tools against the same commits with main's
+(`0ba09da4`), converter logs compared map by map.
+
+| game | maps lowered | cells | kept above (why) | layer above's tiles | background tiles |
+|---|---|---|---|---|---|
+| A Blurred Line | off | | | | |
+| The Book of Three | 78 | 368 | 0 | = | = |
+| Desert Nightmare | 120 | 24,360 | 10 (colours) | −87 | +11 |
+| Dooms2 | 73 | 2,601 | 0 | −21 | +113 |
+| El Dorado | 0 | 0 | every map: someone anywhere | | |
+| The Frozen World | 129 | 12,711 | 3 (colours, a panorama's way) | = | +34 |
+| Sunset over Imdahl | 58 | 11,403 | 0 | = | = |
+| Vampires Dawn | 321 | 114,679 | 47 (colours, fused cells, a way) | −65 | +1,336 |
+| Zounds | 162 | 58,560 | 7 (colours) | −208 | +684 |
+
+"Cells" are the converter's lines `map N: K cells draw their tiles above
+the hero below`, summed. **No map merges a colour or fuses a cell more**
+than with main's tools (`lowering_costs`). So the layer above saves
+little and the 8-bit background grows: what it buys is the black band,
+not VRAM. `rm2k-snes-space` on each release: bank 0 and bank 1 unchanged
+in all nine; the data gaps shrink 2.5 to 3.7 KB in Desert Nightmare,
+Dooms2 and The Frozen World; Zounds takes one bank more (66 of 126);
+Vampires Dawn spills ~100 KB more into its `.msu` (it needs MSU-1
+anyway).
+
+**Goldens**: none moved. `just test`, `just crate-test` of rules, wally
+and convert, the test game (`SOUNDFONT=GeneralUser-GS.sf2`, off there),
+ABL's suite (1610 passed, 2 skipped; off in ABL, so it only shows the
+path without `reach` is as before) and `just boot` from the ports root
+(130 passed) green with the branch's tools. New ROM test:
+`test_zounds_sign_on_a_cave.py`, red with main's tools —1280 pixels of the
+ceiling right of the floor go black on the text's lines— and green.
+
+**Captures**: `/shared/captures/2026-11-02-above-tiles/`, maps 86 and 96
+open and closed, before and after: 86 closed identical, 86 open the band
+gone but for the edge column by the floor, 96 unchanged.
+
+**What the suite does not cover**: no test looks at a map where a tile was
+kept above because of a route through walls, a jump or a door beside its
+event (`rm2k-rules`' unit tests do, on maps drawn as text); nor at
+Vampires Dawn, Desert Nightmare or Dooms2 drawing a lowered cell —their
+goldens did not move, which says those cells are not in them or look the
+same—; nor at a boat (Zounds has one, on map 187, whose water `sail`
+adds); nor at the `RecallToLocation` trust.
+
+**Not done**: map 96 —draft
+[`zounds-map-96-keeps-its-ceiling-above-for-its-statue`](zounds-map-96-keeps-its-ceiling-above-for-its-statue.md)—,
+and ABL, which has no bank for it.
+
+**To merge**: the three `aguara-above-tiles` branches. Install `wally`
+and `convert` (rules goes in them; `rm2k-render` and `battle` do not
+change behaviour).
