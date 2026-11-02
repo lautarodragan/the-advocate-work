@@ -156,3 +156,19 @@ Red before, with main's tools: `test_menu_conditions.py` 1 failed (the
 golden), 3 passed. Captures, side by side, in
 `/shared/captures/2026-11-01-menu-conditions/`. Not run: `just lint`'s
 clippy.
+
+## Red after merging with the others, and fixed
+
+Hornero's `hornero-integrate` (main `d950ccc5` + Mulita + this branch) had
+ABL's bank check red on `test-faces`: `menu_state_ink` read its colours
+as `lda f:state_ink_cgram & $FF0000, x` with the table's low word in X,
+and with the table at `$CF0000` that instruction went to `$CE0000`. It
+reads from the label now, indexed by the ink's offset: the-advocate
+`88f7da42`, on `hornero-integrate` merged into `tijereta-menu-conditions`
+(the ports got `hornero-integrate` too, `3ddd45c`).
+
+Run with `install-local` of `adeleine wally images text battle events
+screens mapdata convert cartridge rm2k-snes-audio project`: ABL's `just
+tests` 1637 passed, 2 skipped (`abl.sfc` md5 `e1f1eb7d…`); the ports'
+`just boot` 132 passed; `just space` on the nine games, every one builds
+(ABL `release` bank 0 296 B, VD bank 1 668 B the tightest).
