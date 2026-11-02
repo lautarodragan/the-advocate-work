@@ -2,7 +2,9 @@
 name: "ABL's item text doesn't fit in what the windows leave"
 description: "ABL's build warns that the most loaded item list asks for more tile pairs than the item and equipment windows leave"
 type: bug
-status: draft
+status: doing
+assignee: Chajá
+agents: [Chajá]
 ---
 
 Seen by Tijereta on 2026-10-11 (`most-efficient-windows.md`),
@@ -41,3 +43,15 @@ item text" line, and it is still the only one of the nine games with the
 WARNING (Zounds' list takes all the pairs its windows leave, without
 going past). What the ROM does with such an inventory is still not
 looked at, and that is what would define it.
+
+## Asked (2026-11-02)
+
+Still so in ABL's release built that day (the-advocate `3656d606`): 202
+pairs of the 184. taro, asked whether to measure it with a new test, in
+their words, translated:
+
+> Go ahead. Would it be a new test?
+
+Yes: ABL's suite builds the worst inventory, opens the item screen and
+compares; red if the ROM breaks the text, until it is fixed. Taken by
+Chajá, launched by Hornero.
