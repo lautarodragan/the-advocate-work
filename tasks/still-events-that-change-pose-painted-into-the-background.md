@@ -138,3 +138,99 @@ overlapped by someone in front of it, as decorative events already
 assume. The star tiles over row 21 stay on BG2, over it, as in RM2k.
 taro's "smarter version of the baking" holds; "we don't even need to
 bake them" does not, and that is the reason.
+
+## What was done
+
+`[graphics] posed_events = true` in a game's `advocate.toml` —Zounds
+turns it on— draws its still events that change pose into the
+background's cells (`posed` in Wally, `posed.rs` in rm2k-snes-mapdata,
+`runtime/posed.s`; the book's divergence "Still events drawn into the
+background" and its section in "Maps"):
+
+* **Wally** picks them (`posed::select`): every page that draws draws a
+  CharSet, or a ChipSet tile that does not go above the hero; no page
+  walks, animates still or goes above the hero; nothing moves, flashes or
+  dresses it, and it does not turn toward the hero; routes that only turn
+  it are fine; every pose stays inside its cell; no substitution swaps its
+  cell; not translucent. Not on a map with a panorama, pictures drawn
+  into it, or one that loops. Each pose is a cell in rows drawn below the
+  map, the cell's own tiles with the pose painted over the lower layer,
+  cut off once the blocks exist —the substitutions' extension—; they go
+  in only if the layer above stays as it was, the ground merges no more
+  than decoration may and the background's tiles fit the layouts (all, or
+  CharSet by CharSet). The row stays in the table; the grid starts with
+  its start pose. The log says map by map who went in and why the rest
+  did not.
+* **The row** carries priority 3 in its attributes —no character's
+  object has it—, its character in the palette bits and its number in the
+  tile byte; `page_oam` writes the same for its pages.
+* **The runtime**: `build_oam` sends such a row to `posed_row`, which,
+  when the row's key —character, pose, or hidden— is not the cell's,
+  writes the pose's block into the grid through the WRAM port and the
+  cell's four tilemap words into two runs (top rows, bottom rows; cells
+  side by side join), which `posed_drain` uploads by DMA in the next
+  vblank, after the strips. `still_turn` only stores the pose for such a
+  row. `posed_find` at `enter_map`, `posed_sync` before `fill_window`
+  after a battle. Sixteen runs a region a vblank; a cell that does not
+  fit waits, whole. All of it only in a cartridge with such an event.
+
+### Measured
+
+Map 96 with its 55 decoys, Zounds' release in snes9x, the same spots and
+probe as the previous tasks (before: the global tools of 244f4013; after:
+the branch):
+
+| spot | frames / 120 ticks | max slivers on a line | loop lines | `build_oam` |
+|---|---|---|---|---|
+| (8, 16) | 240 → 120 | 84 → 12 | 305 → 194 | 213 → 102 |
+| (12, 17) | 240 → 120 | 110 → 16 | 333 → 196 | 241 → 104 |
+| (20, 17) | 240 → 120 | 92 → 12 | 295 → 187 | 203 → 95 |
+| (9, 12) | 240 → 120 | 50 → 16 | 291 → 196 | 199 → 104 |
+| (15, 19) | 240 → 120 | 128 → 12 | 337 → 186 | 245 → 94 |
+| (14, 12) | 240 → 120 | 70 → 12 | 284 → 187 | 192 → 95 |
+| (4, 5) | 120 → 120 | 28 → 12 | 244 → 195 | 152 → 103 |
+
+68 of map 96's events go in; the 84 rows are still walked, a posed one
+for about a line. `flush_video` takes 7 lines standing.
+
+**Frames from the trigger to the new pose on screen** (taro's
+constraint), first frame whose pixels change, before → after:
+
+* rubble that switch 206 takes away on map 114 (posed: a page with no
+  graphic): 2 → 2;
+* a door that switch 226 takes away on map 114 (an object before and
+  after: its drawing stands above its cell): 2 → 2;
+* switch 139 turning map 96's decoys, 17 of them on screen looked at: 7
+  → 7 for 16, 8 for one (8, 14). Fifty-five at once are 38 runs; with
+  sixteen a region a vblank the last cells go a frame later. Word by word
+  —the first version— eight cells cost seven lines of the vblank and the
+  map's switches went over six frames; with 32 runs a region a vblank they
+  went in one but `flush_video` reached line 258 of 262.
+* chests: none of Zounds' goes in —each turns toward the hero when opened
+  or draws past its cell—, so a chest is an object as before (the one on
+  map 96, 8 frames before and after).
+* a single switch pressed by its route: not measured on the pixels (the
+  hero stands on it); it is the same path as the page change, the pose in
+  the row and the cell from the same `build_oam`.
+
+**Across the nine games**, with the key on in each and Zounds' release
+cartridge as every game builds it (2026-11-02, the branch's tools):
+
+| game | events into the background | maps |
+|---|---|---|
+| A Blurred Line | 422 | 71 (and the cartridge no longer fits: 126 banks taken) |
+| The Book of Three | 52 | 12 |
+| Desert Nightmare | 27 | 3 |
+| Dooms 2 | 14 | 6 |
+| El Dorado | 35 | 5 |
+| The Frozen World | 117 | 28 |
+| Sunset over Imdahl | 0 | 0 (its maps are painted or draw pictures) |
+| Vampires Dawn | 2727 | 148 |
+| Zounds | 426 | 48 |
+
+What keeps the rest objects, most to least in every game: a pose past
+its cell, animating still, turning toward the hero, a command that moves
+or flashes it, a route that moves it or dresses it. Vampires Dawn's is
+mostly still decoration, which its project does not take as decorative.
+Only Zounds turns the key on in this branch: the rest is taro's call
+—A Blurred Line does not fit with it—.
