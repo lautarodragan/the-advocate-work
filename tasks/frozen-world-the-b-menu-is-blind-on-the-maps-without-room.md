@@ -2,7 +2,7 @@
 name: "Frozen World: the B menu is still blind on the maps without room for it"
 description: "On the maps whose sprites have no room for the menu's three pictures besides their own, B opens the menu and nothing is drawn, as before"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Mulita, Aguará]
 ---
@@ -155,3 +155,5 @@ rm2k-snes-audio, bytecode, patches and ditto): `just lint` and `just test`
 green; `just crate-test ditto` and `convert` green; ABL's `just tests`
 (cartridges included), 1573 passed and 2 skipped; `just boot` from the
 ports' root, 79 passed, Frozen World's three included.
+
+**2026-11-02, taro** declares it done.
