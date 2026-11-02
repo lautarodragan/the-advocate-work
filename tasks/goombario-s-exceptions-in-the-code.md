@@ -2,7 +2,7 @@
 name: "Goombario's exceptions in the code"
 description: "A line Goombario flags on purpose says so with a comment on that same line, with its why, like an eslint-disable comment; the two exception lists —ABL's and the test game's— go away"
 type: tooling
-status: testing
+status: done
 assignee: taro
 agents: [Mulita]
 ---
@@ -62,3 +62,5 @@ same.
 
 To install when merging: `goombario` alone (`just install goombario`):
 nothing else compiles it in.
+
+**2026-11-02, taro** declares it done: merged and verified, nothing in it to play.

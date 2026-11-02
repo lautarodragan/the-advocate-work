@@ -2,7 +2,7 @@
 name: "The wrap hooks jump through a pointer to hide from Goombario"
 description: "The far wrap code is reached and returns through WRAP_JUMP, a pointer in BSS, so the linter does not walk that path; taro wants Goombario improved instead, and the runtime direct"
 type: tooling
-status: testing
+status: done
 assignee: taro
 agents: [Hurón]
 ---
@@ -121,3 +121,5 @@ ports have no change: `huron-wrap-direct` there is main's old commit with
 nothing on it, and can be deleted. The book's branch updates
 `internals/maps.md` and `tools.md` (whose Goombario still described the
 `--allow` file of before 2026-10-18).
+
+**2026-11-02, taro** declares it done: merged and verified, nothing in it to play.

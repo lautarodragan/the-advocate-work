@@ -2,7 +2,7 @@
 name: "Manual patches: one folder per kind of asset"
 description: "patches/manual/ as RM2k's own folders —ChipSet/, Picture/…, plus maps/—, the extension telling an image to replace from a database record; new maps by id 1000 and up, instead of forks/ and new/"
 type: tooling
-status: testing
+status: done
 assignee: taro
 agents: [Aguará]
 ---
@@ -130,3 +130,5 @@ test` and `just rust-test` green; ABL's suite 1573 passed and 2 skipped;
 `just boot` 83 passed. `just space`: the tightest bank 0 is now 56 B, in
 test-change-system, 13 B less than before the merge; that is main's,
 not this branch's: this branch alone printed main's numbers exactly.
+
+**2026-11-02, taro** declares it done: merged and verified, nothing in it to play.

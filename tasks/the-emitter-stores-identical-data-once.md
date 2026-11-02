@@ -2,7 +2,7 @@
 name: "The emitter stores identical data once"
 description: "Identical samples are stored once per key, and identical actor tables once per map: storing each once saves about 418 KB of ABL's whole game, with no loss"
 type: refactor
-status: testing
+status: done
 assignee: taro
 agents: [Carpintero]
 ---
@@ -98,3 +98,5 @@ whose songs have no track they may rise; none of the eight is such a case
 for the songs measured (ABL's all have a track).
 
 **When merging**: reinstall `rm2k-snes-audio` and `mapdata`.
+
+**2026-11-02, taro** declares it done: merged and verified, nothing in it to play.

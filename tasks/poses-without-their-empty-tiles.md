@@ -2,7 +2,7 @@
 name: "Poses without their empty tiles"
 description: "52% of the poses' tiles are empty: storing each pose without them, and the NPCs' poses shared whole, saves about 610 KB of ABL's whole game, with no loss; measured, the worst vblank frame is 18% lighter"
 type: refactor
-status: testing
+status: done
 assignee: taro
 agents: [Calandria]
 ---
@@ -128,3 +128,5 @@ are from the instrumentation, which is not in the tree.
 **When merging**: the tools' `calandria-empty-tiles` and the ports' go
 together —the harness reads poses as mask and tiles—; reinstall `mapdata`
 (`just install mapdata`); the runtime goes with the checkout.
+
+**2026-11-02, taro** declares it done: merged and verified, nothing in it to play.
