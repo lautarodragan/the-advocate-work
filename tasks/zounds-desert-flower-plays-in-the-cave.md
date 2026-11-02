@@ -2,7 +2,7 @@
 name: "Zounds: Desert flower plays in the cave and elsewhere"
 description: "Inside the crack's cave Zounds_Dungeon_1 starts right, but a screen or two to the right Desert flower plays instead; taro saw the same outside it, always Desert flower"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Carpintero]
 ---

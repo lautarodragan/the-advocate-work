@@ -2,7 +2,7 @@
 name: "Zounds: a debug door to the first dungeon"
 description: "One more door in Zounds' debug map, to the start of the first dungeon —the cave inside the crack—, with the switches, variables, items and party the game has there"
 type: tooling
-status: testing
+status: done
 assignee: taro
 agents: [Carpintero]
 ---

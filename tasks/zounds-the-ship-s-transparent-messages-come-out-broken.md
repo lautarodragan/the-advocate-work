@@ -2,7 +2,7 @@
 name: "Zounds: the ship's transparent messages come out broken"
 description: "On the ship (map 21), the boss's speech about Unamë's donation is shown in transparent boxes in the middle of the screen, and the text comes out torn in bands over the map; the choice after it too"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Chajá]
 ---

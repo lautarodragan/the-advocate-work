@@ -2,7 +2,7 @@
 name: "Zounds: the spelling of its Spanish text"
 description: "The game's messages, choices and names carry many spelling mistakes —\"save\" for \"sabe\", missing h's, \"uy\"/\"ay\" written wrong—; fixed in the game's own data"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Calandria]
 ---

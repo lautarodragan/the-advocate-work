@@ -2,7 +2,7 @@
 name: "Zounds: three messages with broken control codes"
 description: "A colour code missing its letter, a \\v[20] where the game's slow text is \\s[20], and a stray backslash: the game's own data, seen while fixing its spelling"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Calandria]
 ---

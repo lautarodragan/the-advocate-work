@@ -2,7 +2,7 @@
 name: "Zounds: the cave under the crack plays the Mountains' song, in the original too"
 description: "Past map 59 the cave's maps say \"the parent's\" all the way up to map 33, Mountains, so walking on from the dungeon's PlayBGM brings back 18 - Desert flower; RPG_RT 2003 does the same, so it is the game's data, not the port"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Calandria]
 ---

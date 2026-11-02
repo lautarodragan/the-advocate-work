@@ -2,7 +2,7 @@
 name: "A forced route that turns a switch on or off leaves its page out"
 description: "Move commands 32 and 33 in a MoveEvent are refused, and the whole page with them: 33 pages of Vampires Dawn and one of Sunset over Imdahl on 2026-10-20"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Mulita]
 ---

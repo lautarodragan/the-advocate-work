@@ -2,7 +2,7 @@
 name: "Zounds: no way back from map 81 to where you came from"
 description: "Map 81 (\"4\", under the cave's Arriba) is entered from map 79 at (46,43) and only lets you out to the left, to 189: nothing takes you back to 79, the crack's side, so the shortcut it makes leads nowhere from there"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Carpintero]
 ---

@@ -2,7 +2,7 @@
 name: "Zounds: a map animation leaves the map's colours wrong"
 description: "In MiniCave (map 89), Tower (Ele)'s second page plays battle animation 89 three times, and after the second or third the map's background is left in wrong colours —yellow and magenta— that stay"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Chajá]
 ---

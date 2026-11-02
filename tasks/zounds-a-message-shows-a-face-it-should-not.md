@@ -2,7 +2,7 @@
 name: "Zounds: a message shows a face it should not"
 description: "Sometimes a message or a choice shows the face of an earlier message, as if an erase-face that RM2k runs was skipped; it depends on the game's state, not on the command: the save point's choice shows Uname's face after a chest's message and not other times"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Carpintero]
 ---

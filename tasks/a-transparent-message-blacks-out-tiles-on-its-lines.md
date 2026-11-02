@@ -2,7 +2,7 @@
 name: "A transparent message blacks out tiles on its lines"
 description: "In Zounds, a sign shown with the message window's transparent background turns part of the map black on the scanlines its text covers, and back when it closes"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Aguará]
 ---
