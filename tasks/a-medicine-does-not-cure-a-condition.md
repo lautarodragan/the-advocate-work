@@ -2,8 +2,8 @@
 name: "A medicine does not cure a condition"
 description: "Since the party holds conditions, a poison caught in battle stays on the map; an Antidote —a medicine whose state_set lists it— is not of use on the map nor offered in battle, so only an inn or a FullHeal take it away"
 type: bug
-status: doing
-assignee: Mulita
+status: testing
+assignee: taro
 agents: [Mulita]
 ---
 
@@ -82,3 +82,17 @@ branches `mulita-medicine` in the three.
   poisoned. Draft
   [`a-revived-actor-keeps-its-conditions-in-battle`](a-revived-actor-keeps-its-conditions-in-battle.md),
   and a line in ABL's known issues.
+
+## To merge
+
+Branches `mulita-medicine` in the-advocate, the ports and the book. Install
+`battle`, `mapdata` and `convert` (the converter's `item_st_at`, the
+battle's list). Verified on the branch: ABL's suite (1615 passed), `just
+boot` (129 passed), `just test`, `cargo test --workspace`, clippy, `just
+space` on the nine games —Sunset's `$C0` 291 B, ABL's test-msu bank 1
+852 B, the banks 0 as before—. Merged on a trial branch with Chajá's
+`chaja-items-cast-skills`: clean, and the cure stays in `sk_heal_one`,
+which `sk_cast` and `item_skills.s` reach, so an item that casts a curing
+skill cures too. On that trial, ABL's new test, `test_healing_skills.py`,
+`test_menu_special_items.py`, `test_materials.py` and `tests/tooling`
+green, and Sunset's `$C0` 285 B.
