@@ -2,7 +2,9 @@
 name: "Still events that change pose, painted into the background"
 description: "A map that lines many still CharSet events up —Zounds' map 96, fifty-six floor switches— draws each as a 32x32 object: past eight and a half on a line the console drops slivers, and sixty objects cost the frame two; painted into the background, with their cell written again when their pose changes, they would cost neither"
 type: feature
-status: draft
+status: doing
+assignee: Cardón
+agents: [Cardón]
 ---
 
 Seen by Cardón on 2026-11-02, with the-advocate `0ba09da4` plus the
@@ -49,3 +51,22 @@ the one their route turns them to—. That needs:
 
 Only for the ones below the hero, as the decorative ones, so the order
 with the characters does not change.
+
+## taro's pick (2026-11-02)
+
+After Cardón's experiment without the decoys
+([`zounds-map-96-without-its-decoy-switches`](zounds-map-96-without-its-decoy-switches.md):
+the decoys were all the lag) Hornero offered three paths —skipping the
+rows off screen by Y, this one, and caching a still event's object—.
+taro, in their words, translated:
+
+> hmm no, let's try 2. It would be a smarter version of the baking
+> system we already have. If the chests, switches etc. can be on BG2, we
+> don't even need to bake them.
+
+So: still events —one pose at a time, never walking— go into BG2's
+cells, with the tile priority bit putting them under or over the
+characters as their layer asks, and their cells rewritten when a page or
+a pose changes; no baking into BG1. Where BG2 already holds a tile in a
+cell the event covers, or its palette or tiles do not fit, the event
+stays an object, measured and said.
