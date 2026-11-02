@@ -51,3 +51,16 @@ Why not the alternatives the assignment preferred:
 * **A new kind of `OP_IF`** costs 11 bytes of bank 0 in `op_if`'s
   dispatch, against 7 of a `jsl`/`jmp` stub, and lands in the same lines
   Calandria is touching for `ConditionalBranch` type 8.
+
+## Log
+
+* **The compiler and the runtime**, the-advocate 3c4bbcbb: `OP_IF_TRADED`
+  (0x53), `shop_traded` in far RAM, `if_traded` in `FAR3`, a 7-byte stub
+  in bank 0. Six tests in `rm2k-snes-events`; five go red with the old
+  `q(2) != 0` refusal put back (the sixth guards that a shop without
+  branches is unchanged).
+* **The ROM test**, in ABL: case `shop-branches` —the same shop twice in
+  a row, each block writing a variable— and
+  `tests/rpgmaker/test_shop_branches.py`: leave twice, buy in the first,
+  sell in the second. Red before: with the global tools `just cartridges
+  release` fails, "the test page doesn't compile".
