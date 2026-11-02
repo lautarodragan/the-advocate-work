@@ -150,5 +150,16 @@ branch's tools, 1639 passed and 2 skipped (main's 1637 and the two new);
 `zounds-exfont-items` red, looked at and blessed (above). Crate tests of
 `screens` and `mapdata`, `just test`, `just lint`.
 
-To install when merging: `screens`, `mapdata`, and `cartridge` with
-`project` for the runtime's new `.assert`.
+After merging `main` (Carpintero's phasing) into the three branches, with
+the merged tools installed locally: ABL `just tests` 1639 passed, 2
+skipped; `just space` 126 of 126; `abl.sfc` the same sha256; ports `just
+boot` 142 passed (the blessed Zounds golden green); `just test` and `just
+lint` green. The merge itself was clean but its mapdata tests were red:
+`b54c480e` fixes them —they were red on `897c3d1b` already, run before
+the fixtures carried `ITEM_MORE_PAIRS`—.
+
+To install when merging: `screens` and `mapdata`; the runtime's new
+`.assert` is assembled from `~/the-advocate`, so nothing else.
+
+taro has something to look at: Zounds' item and equipment windows, now
+drawn with their whole frame. ABL looks the same.
