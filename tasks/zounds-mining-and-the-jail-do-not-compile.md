@@ -2,8 +2,8 @@
 name: "Zounds' mining and the jail's guards do not compile"
 description: "Loops that only end with a BreakLoop, Control Variables taking a modulo or a quotient by a constant past the word, and the branch on the event started by the action key keep Zounds' mining, smelting and its levels, and the jail's guards, out of the cartridge"
 type: bug
-status: doing
-assignee: Calandria
+status: testing
+assignee: taro
 agents: [Calandria]
 ---
 
@@ -97,3 +97,21 @@ decision, and a Known issues line for the dice man.
 
 **Draft**: [`an-input-number-after-a-label-has-no-message`](an-input-number-after-a-label-has-no-message.md),
 map 156's dice man, which the loop was hiding.
+
+**Run, with the branch's `events` installed locally**: `just test` (29
+passed) and `just crate-test events` (184 passed) in the-advocate; ABL's
+`just tests`, 1610 passed, 2 skipped, `abl.sfc` sha256
+`de98298a26284577e188b3ee472dbbc8d6ee0a62c2a820b84df018668fd18258`; `just
+boot` from the ports root, 131 passed; `just space` on every game: the
+runtime did not change, and bank 0 and 1 are what they were (Sunset 244 B,
+ABL release 327 B, test-msu bank 1 856 B; the tightest bank 1 is Vampires
+Dawn's, 833 B). No golden moved.
+
+**When merging**: reinstall only `events` (`just install events` in
+the-advocate). No opcode taken: `0x52` stays `OP_RESERVED_52`.
+
+**What no test covers**: the guards of maps 147, 148 and 149 (same pattern
+as 145's, checked only by the culprits list); the smelting oven (map 133),
+the mining merchant's scene (map 57) and the level-up common events 51,
+52, 54, 26, 62 and 63 run on no ROM test, only compile; a jump to a label
+out of a loop is covered by the crate test alone.
