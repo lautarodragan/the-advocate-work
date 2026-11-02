@@ -130,6 +130,8 @@ def "main html" [
   let page = open --raw ($root | path join site index.html) | str replace '<!-- TASKS -->' $html
   mkdir ($root | path join $out)
   $page | save --force ($root | path join $out index.html)
+  # The page's icon, which `index.html` names next to it.
+  cp ($root | path join site favicon.png) ($root | path join $out favicon.png)
 }
 
 # When each task last changed, from git: `{<stem>: <ISO date>}`. The page
