@@ -64,3 +64,17 @@ Why not the alternatives the assignment preferred:
   `tests/rpgmaker/test_shop_branches.py`: leave twice, buy in the first,
   sell in the second. Red before: with the global tools `just cartridges
   release` fails, "the test page doesn't compile".
+* **The ROM test green**, the-advocate-ports 5472bbd: 3 passed. What
+  bit on the way: the shop freezes the game clock, so the harness's
+  `sess.run` —which waits for ticks— never returns while a shop is open;
+  the test waits in frames, and the case has a `Wait` before each shop
+  so the session's start, and the test's look at the first shop
+  closing, end before the next one opens.
+* **Zounds' cafeteria compiles**: `just culprits` in zounds with these
+  tools no longer lists map 21; with the global ones its event 7 pages 1
+  to 3 were culprits with `OpenShop`, `Transaction`, `NoTransaction`,
+  `EndShop`.
+* ABL's whole suite with these tools, before merging main: 1613 passed, 2
+  skipped. `just space` in abl: `release` bank 0 320 B (327 before: the
+  7-byte stub), `test-msu` bank 1 844 B (856: the 12 bytes of the flag in
+  the shop screen).
