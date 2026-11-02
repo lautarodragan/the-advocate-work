@@ -94,3 +94,32 @@ The-advocate `fbb1a45f` on `tijereta-menu-conditions`: as planned.
   ABL names its dead condition—; on the actor choice Arden's dead one
   turning into Normal after the elixir; Kersh's Poison on the skills
   screen with its gradient.
+
+## Tests and goldens
+
+New in ABL, `tests/rpgmaker/test_menu_conditions.py`: on the debug map's
+full party, Talan poisoned and blind, Kersh poisoned, Core at zero HP —
+the menu against `render`, scrolled too, and the golden
+`menu-conditions`—; Kersh poisoned on the skills screen; and the case
+`heal-menu`'s actor choice, Arden fallen and then raised by the elixir,
+which has to draw the window again with Normal. The harness reads and
+writes an actor's places (`states`, `set_states`) and passes them to the
+stage's render. `test_jumps_between_banks.py` is told menu_states.s's data
+banks.
+
+**Red before**: the golden; the comparisons are against the render of
+the same tools, so with main's both sides say Normal. During the work
+ABL's skills screen tests caught `menu_state_of`'s Z coming from its
+`plb` —an empty name where Normal goes—, fixed in `3f2c7979`.
+
+Goldens: ABL's new `menu-conditions`; the test game's `renamed-menu`,
+whose two fallen actors now say Death, the test game's dead condition
+(it said `normal_status`, which the test game leaves empty). The screens
+crate's test game got three conditions; its answer's hash and a new
+render hash, `menu-conditions`, are in `tests/python.rs`.
+
+**Space** (`just space`, every game): bank 0 loses six bytes —the actor
+choice's redraw check— (ABL `release` 327 → 321 B, Sunset 244 → 238 B);
+bank 1 does not move (`test-msu` 856 B); the code is in FAR3, and the
+skills screen's part left FAR2 when Sunset's overflowed by two bytes.
+ABL `release`'s gaps 10,058 → 9,379 B, far RAM 276 B free.
