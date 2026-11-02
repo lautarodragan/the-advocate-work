@@ -63,8 +63,8 @@ branches `mulita-medicine` in the three.
 * What the battle's list takes is `item_usable_in_battle`: a medicine that
   removes a condition **other than death**. A medicine that only revives,
   with no HP, still stays out as it always did: letting it in moved 15 of
-  the 26 frozen answers of `tests/model.rs`, whose Python left it out, and
-  RM2k's raising to 1 is a separate matter no game of the nine leans on.
+  the 26 frozen answers of `tests/model.rs`, whose Python left it out; it
+  is written in the divergence `what-items-in-battle-do-not-model`.
 * The messages, seen: "Kersh Antidote used." and under it "Kersh is no
   longer poisoned", the queue's result line, as a special item's skill
   result goes. Captures in `/shared/captures/2026-11-01-medicine/`.
@@ -72,3 +72,13 @@ branches `mulita-medicine` in the three.
   crate's, from my conditions commits, formatted in a commit of its own;
   and `rm2k-snes/screens/src/debug_screen.rs`, from `93b0bd2b`, which is
   someone else's and stays as it is.
+* `just boot` overflowed Sunset over Imdahl's FAR2 by 39 bytes:
+  `message_arrow.s`'s half that was there goes to FAR3, in a commit of its
+  own, as `message_waits.s` did on 2026-10-19. And the map's two cures went
+  to FAR3 behind a `jsl` each —`act_st_cure_item`, `act_st_cure_skill`—,
+  so bank 1 and FAR2 pay four bytes each for them.
+* Found and not fixed: a fallen actor keeps its places until the battle
+  ends, so one raised by a Phoenix Down in the same battle gets up still
+  poisoned. Draft
+  [`a-revived-actor-keeps-its-conditions-in-battle`](a-revived-actor-keeps-its-conditions-in-battle.md),
+  and a line in ABL's known issues.
