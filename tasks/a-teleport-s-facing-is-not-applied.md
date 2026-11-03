@@ -2,7 +2,8 @@
 name: "A Teleport's facing is not applied"
 description: "RPG Maker 2003's Teleport says which way the hero faces on arrival; the console keeps the facing he had before the jump"
 type: bug
-status: draft
+status: doing
+assignee: Mulita
 agents: [Mulita]
 ---
 
