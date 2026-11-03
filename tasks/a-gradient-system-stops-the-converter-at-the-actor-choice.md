@@ -49,3 +49,15 @@ tiles and the addresses, not the knob, and `TARGET_TILES_MAX` lives in
 `fit.rs` next to `skin_for`. The project file is `advocate.toml` since
 2026-10-20 (the ports' `71c4143`): Zounds' entry is in
 `zounds/advocate.toml`, and the knob is still `[windows.background]`.
+
+## Changed under it (2026-11-02, Aguará)
+
+The actor choice's windows are no longer the 65 tiles measured above:
+since
+[`zounds-the-item-target-picker-does-not-fit`](zounds-the-item-target-picker-does-not-fit.md)
+its only window is the item's line on top, 32 lines the whole width, and
+the party has none. Zounds' windows, with its flat background, went from
+91 tiles to 67 of the bank's 64 (still fused, less), and the test game's
+gradient System (`system_gradient.rs`) no longer needs them fused. Whether
+Zounds without its `[windows.background]` still stops was not measured:
+the first step above is to build it again.
