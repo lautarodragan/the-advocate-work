@@ -2,8 +2,17 @@
 name: "A window without a background could copy the layer above"
 description: "A message without its background takes the layer above off its text lines across the whole screen, because both are BG2; the one path left is to copy the layer above's cells into the window's plane on those lines, aligned with the camera, at the price of moving the text up to seven pixels and of losing the layer above inside the cells with letters"
 type: feature
-status: draft
+status: done
+assignee: taro
+agents: [Aguará]
 ---
+
+**Done by
+[`a-transparent-message-keeps-the-layer-above`](a-transparent-message-keeps-the-layer-above.md)**
+(Aguará, 2026-11-14): the window carries the layer in its plane on its
+lines of text, and the cells with letters keep it too, in a palette of the
+layer's. The text does not move: with the camera still it is always on
+the 8-pixel grid. What is below is the draft as it was written.
 
 Seen by Aguará on 2026-11-02, measuring
 [`a-transparent-message-blacks-out-tiles-on-its-lines`](a-transparent-message-blacks-out-tiles-on-its-lines.md),

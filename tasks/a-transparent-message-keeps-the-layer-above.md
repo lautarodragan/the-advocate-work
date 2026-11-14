@@ -2,8 +2,8 @@
 name: "A transparent message keeps the map's layer above"
 description: "A message with a transparent background hides the roofs and treetops on its lines, because its text takes BG2 there; RM2k draws the text over them"
 type: feature
-status: doing
-assignee: Aguará
+status: testing
+assignee: taro
 agents: [Aguará]
 ---
 
@@ -160,3 +160,147 @@ above beside and under the text, with the text in RM2k's place and its
 exact colours, the tint not reaching them; the goldens that move looked
 at; what it costs (bank 0, far banks, VRAM, CPU when the window opens,
 palette entries per map) measured.
+
+## Measured first (Aguará, 2026-11-14)
+
+From the-advocate `ec3486d6`, the ports `b5d284f`, the book `95186bc`;
+branches `aguara-layer-above`. ABL's `manta` case —map 5 from (39, 34)
+with switch 16, then map 6— run with a probe that stops on every box
+typed whole and reads the VRAM: the window's bare plane, its text tiles
+and the map's BG2 tilemap at the camera.
+
+**The cells.** Map 5, the fifteen boxes after the page's `Teleport` to
+(31, 24): between 3 and 15 cells with letters fall on the layer above
+per box, always palette 7, tiles 1 to 8 (the treetops), none flipped.
+`EV0002`'s "CORE / I know. You're a telepath, too. / I can tell." is the
+twelfth of them: "I can tell." has 13 cells with letters, 2 on the tree
+and 2 more of the tree beside them —taro's "half a tree"—. Map 6, its
+ten boxes: 12 to 18 cells on the fence, palette 7, tiles 1, 2, 5 and 6
+—the fence at the screen's left edge— and on every line with text 6
+more beside the letters.
+
+**The palettes.** The text takes five entries of the window's palette:
+the glyph's rows 9, 10, 11 and 12 (four greys to white) and the shadow
+2. Map 5's palette 7 has nine colours —black and eight greens— and six
+entries free: **none gives way** if the layer's colours are moved off
+the text's five. Map 6's palette 7 has fifteen greys, full: **five give
+way**, its five nearest to the text's.
+
+**The tint.** The `manta` case runs untinted, but the game does not:
+map 4's page tints (100, 60, 0) with saturation 0 before the
+`Teleport` to map 5, and map 6 takes it off at its end. Under that tone
+the entries the text takes cannot be the layer's own: tinted, the text
+on the trees would be sepia beside white letters on the water; left
+untinted, every pixel of the layer with those colours would stay green
+all over the map. So the text's five colours go to **a palette of their
+own**: a copy of the layer's palette with the text's at the window's
+same indices, used only by the cells with letters —the glyph's composed
+tables carry indices, so they serve unchanged—, and the layer's own
+palette is not touched. taro's rule holds inside those cells: the
+layer's colours nearest the text's are the ones replaced, because the
+build moves them to the text's indices when the palette is full and
+moves the layer off them when it is not. It takes a free BG palette
+under the layer's; map 5 has one (its background reaches entry 84 of
+the 111 it may). Map 6 has none —it is mode 1, and its background takes
+palettes 2 to 6— (corrected below, in "Built").
+
+**The camera.** It does not move while any of those 25 boxes is up, and
+**at rest it is always on the 8-pixel grid**: `follow_camera` puts the
+hero's cell centre —8 mod 16— at 128 and 112, and the clamps are 0 and
+the map's size in 16-pixel cells minus 256 and 224. So with the camera
+still the window's cells are the map's cells, and the text does not
+have to move nor the composer draw it shifted: measured on every box,
+`camera_x` and `camera_y` multiples of 8 (504/440 and 376/200 on map 5,
+0/56 on map 6). Only a camera that moves while the text is up —a pan,
+a parallel route, the shake— puts it off the grid, which is the case
+taro left out of the first phase: such a window keeps today's look.
+
+## Built (Aguará, 2026-11-14)
+
+Branches `aguara-layer-above` in the-advocate, the ports and the book.
+How it works is in the book —the divergence's "The layer above,
+carried", and `internals/cgram.md`— and in `runtime/message_layer.s`; what
+follows is what it cost and what was measured on the way.
+
+**The runtime** (`message_layer.s`, hooks in `message_place.s`,
+`message_pace.s`, `message_arrow.s`, `messages.s` and `tint.s`). Per line of
+a window without its background, with the camera on the grid: the layer's
+tilemap entries of the line's two rows and of the window's bottom row are
+read out of VRAM in a vblank —ahead, in the vblank the line before goes
+up—, the cells without a tile of the layer get the window's own entry, the
+layer's tiles under the text area are read into the composer's buffer in
+the next vblank, and a letter's cells take the composed tile in the
+vblank its tile goes up. The VRAM reads need the word read and thrown away
+after setting VMADD, as `menu_list.s` already knew: without it every row
+landed one cell to the right.
+
+**The pace.** Waiting for the tiles held each line a frame (two before the
+read-ahead), and the box came up later than RPG_RT's pace: in the memory,
+1 to 4 ticks late and growing, and the `manta` scene, with its A presses on
+the tick, stopped on map 5. The frames a line waits are now owed to the
+box, and the waits of the pace after them pay them back with a frame's
+letters and composer passes more (`msg_layer_owed`). Measured box by box on
+the memory's 34 boxes against main's tools: every one up on the same tick.
+Typing the cells with no tile while the tiles are read was tried and lost
+frames: a frame cut in the middle cannot be paid back whole.
+
+**The palettes**, per map of a game with a transparent `MessageOptions`
+and no `\c[n]` (`layer_text` in rm2k-snes-mapdata). In A Blurred Line's
+release, of its 313 maps: 72 keep the text in the layer's own palettes (its
+colours moved off the text's five entries, nothing changes on screen), 23 get
+copies of the layer's palette in a BG palette the background leaves free
+(the layer's colours nearest the text's give way inside the cells with
+letters only), 4 merge colours (maps 3, 6, 10 and 309; map 6's fence, greys
+14 apart at most) and 33 keep the old look: merging would have taken a
+colour's tint away on every one of them, and colours up to 174 apart on
+some —map 32's ship would have lost its
+dull reds into its browns merging colours only 6 apart, which is why a
+merge that changes a colour's channel spread by more than a step counts as
+far—. Zounds, Vampires Dawn, Sunset over Imdahl and Desert Nightmare type
+colours, so they bake nothing and assemble none of it; The Book of Three,
+Dooms2 and The Frozen World bake, and the ports' `just boot` passes with
+them (151, with the branch's tools).
+
+**What it costs**, `just space` on ABL's release against main's tools:
+bank 0 from 294 to 262 free bytes, bank $C1 from 11,536 to 9,162, far RAM
+from 269 to 16, the data gaps from 1,138 to 347 bytes (the 126 banks were
+already all used; the arranged layers compress differently). VRAM: nothing
+—the composed cells are the window's own text tiles—. CGRAM: a palette per
+layer palette on the 23 maps with copies, which their backgrounds left
+free. CPU when a line opens: a vblank reads three rows of 32 entries
+(six DMAs of up to 64 bytes) and, the next one, a 32-byte DMA per cell of
+the text area over the layer, stopping at line 258 and going on in the
+next vblank if they do not fit; the main loop marks the 60 cells and, per
+letter, looks at the glyph's 13 rows.
+
+**Verified**: ABL's `test_message_layer_above.py`, three cases, red with
+main's tools (243 pixels of the tree on map 5 and 1237 of the fence on map
+6 neither the map's nor the text's), red under the tint with the tint's
+step taken out (93 pixels of letters tinted), and the bottom row red before
+it carried the layer (236 pixels on map 6); green. ABL's whole suite with
+the branch's tools, 1642 passed: 137 goldens moved, over six rounds, all of
+maps 3, 6, 10 and 309, the merged shades —side by side in
+`/shared/captures/2026-11-14-layer-above/`, with the scenes before and
+after—. `test_cores.py` caught `LAYER_DIRTY` uninitialised in bsnes, and
+Goombario a width after `layer_camera`; both fixed. `just test`, `just
+crate-test` of mapdata and convert.
+
+**What the suite does not cover**: a window whose camera is off the grid
+(the old look), or moves under it (a stale copy: wishlist,
+[`a-transparent-message-under-a-moving-camera`](a-transparent-message-under-a-moving-camera.md));
+a layer tile flipped under a letter (the cell keeps the window's palette
+over nothing; none in the memory); a map with copies of two or more
+palettes; a choice, a face or digits over the layer (they keep the old
+look); a tile read split over two vblanks (it happens when a line opens
+with many tiles: measured only as the box's timing); the flash over a
+window that carries the layer (the copies are not flashed, the layer's
+own palettes are); a box chained with the window up under a moved camera
+(the read-ahead checks the camera and reads again). Nothing was played on
+hardware or in Mednafen; `test_cores.py` is the only other core.
+
+**To merge**: the three `aguara-layer-above` branches —the-advocate, the
+ports, the book— and this one, all with main merged in (the-advocate
+`a3296891`, the ports `b5b9ac6`, the book `dac748b`). Install `mapdata`
+and `convert`; the runtime is the checkout's. The goldens' commit goes on
+its own in the ports. Not delivered to `/shared/builds/`: the build to play
+comes from merged main.
