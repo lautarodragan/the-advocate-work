@@ -160,3 +160,56 @@ above beside and under the text, with the text in RM2k's place and its
 exact colours, the tint not reaching them; the goldens that move looked
 at; what it costs (bank 0, far banks, VRAM, CPU when the window opens,
 palette entries per map) measured.
+
+## Measured first (Aguará, 2026-11-14)
+
+From the-advocate `ec3486d6`, the ports `b5d284f`, the book `95186bc`;
+branches `aguara-layer-above`. ABL's `manta` case —map 5 from (39, 34)
+with switch 16, then map 6— run with a probe that stops on every box
+typed whole and reads the VRAM: the window's bare plane, its text tiles
+and the map's BG2 tilemap at the camera.
+
+**The cells.** Map 5, the fifteen boxes after the page's `Teleport` to
+(31, 24): between 3 and 15 cells with letters fall on the layer above
+per box, always palette 7, tiles 1 to 8 (the treetops), none flipped.
+`EV0002`'s "CORE / I know. You're a telepath, too. / I can tell." is the
+twelfth of them: "I can tell." has 13 cells with letters, 2 on the tree
+and 2 more of the tree beside them —taro's "half a tree"—. Map 6, its
+ten boxes: 12 to 18 cells on the fence, palette 7, tiles 1, 2, 5 and 6
+—the fence at the screen's left edge— and on every line with text 6
+more beside the letters.
+
+**The palettes.** The text takes five entries of the window's palette:
+the glyph's rows 9, 10, 11 and 12 (four greys to white) and the shadow
+2. Map 5's palette 7 has nine colours —black and eight greens— and six
+entries free: **none gives way** if the layer's colours are moved off
+the text's five. Map 6's palette 7 has fifteen greys, full: **five give
+way**, its five nearest to the text's.
+
+**The tint.** The `manta` case runs untinted, but the game does not:
+map 4's page tints (100, 60, 0) with saturation 0 before the
+`Teleport` to map 5, and map 6 takes it off at its end. Under that tone
+the entries the text takes cannot be the layer's own: tinted, the text
+on the trees would be sepia beside white letters on the water; left
+untinted, every pixel of the layer with those colours would stay green
+all over the map. So the text's five colours go to **a palette of their
+own**: a copy of the layer's palette with the text's at the window's
+same indices, used only by the cells with letters —the glyph's composed
+tables carry indices, so they serve unchanged—, and the layer's own
+palette is not touched. taro's rule holds inside those cells: the
+layer's colours nearest the text's are the ones replaced, because the
+build moves them to the text's indices when the palette is full and
+moves the layer off them when it is not. It takes a free BG palette
+under the layer's; map 5 has one (its background reaches entry 84 of
+the 111 it may), map 6 too.
+
+**The camera.** It does not move while any of those 25 boxes is up, and
+**at rest it is always on the 8-pixel grid**: `follow_camera` puts the
+hero's cell centre —8 mod 16— at 128 and 112, and the clamps are 0 and
+the map's size in 16-pixel cells minus 256 and 224. So with the camera
+still the window's cells are the map's cells, and the text does not
+have to move nor the composer draw it shifted: measured on every box,
+`camera_x` and `camera_y` multiples of 8 (504/440 and 376/200 on map 5,
+0/56 on map 6). Only a camera that moves while the text is up —a pan,
+a parallel route, the shake— puts it off the grid, which is the case
+taro left out of the first phase: such a window keeps today's look.
