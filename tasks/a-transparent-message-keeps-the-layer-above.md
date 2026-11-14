@@ -2,8 +2,8 @@
 name: "A transparent message keeps the map's layer above"
 description: "A message with a transparent background hides the roofs and treetops on its lines, because its text takes BG2 there; RM2k draws the text over them"
 type: feature
-status: doing
-assignee: Aguará
+status: testing
+assignee: taro
 agents: [Aguará]
 ---
 
@@ -257,7 +257,9 @@ some —map 32's ship would have lost its
 dull reds into its browns merging colours only 6 apart, which is why a
 merge that changes a colour's channel spread by more than a step counts as
 far—. Zounds, Vampires Dawn, Sunset over Imdahl and Desert Nightmare type
-colours, so they bake nothing and assemble none of it.
+colours, so they bake nothing and assemble none of it; The Book of Three,
+Dooms2 and The Frozen World bake, and the ports' `just boot` passes with
+them (151, with the branch's tools).
 
 **What it costs**, `just space` on ABL's release against main's tools:
 bank 0 from 294 to 262 free bytes, bank $C1 from 11,536 to 9,162, far RAM
@@ -295,3 +297,10 @@ window that carries the layer (the copies are not flashed, the layer's
 own palettes are); a box chained with the window up under a moved camera
 (the read-ahead checks the camera and reads again). Nothing was played on
 hardware or in Mednafen; `test_cores.py` is the only other core.
+
+**To merge**: the three `aguara-layer-above` branches —the-advocate, the
+ports, the book— and this one, all with main merged in (the-advocate
+`a3296891`, the ports `b5b9ac6`, the book `dac748b`). Install `mapdata`
+and `convert`; the runtime is the checkout's. The goldens' commit goes on
+its own in the ports. Not delivered to `/shared/builds/`: the build to play
+comes from merged main.
