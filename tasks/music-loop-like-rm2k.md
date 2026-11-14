@@ -2,8 +2,9 @@
 name: "The music's loop, like RM2k"
 description: "Neither of the two paths loops like RPG_RT: the MSU-1 goes back to 0 after 2-6 s of fluidsynth tail; without MSU-1 it cuts at the last note; neither skips the initial silence nor reads CC111"
 type: bug
-status: todo
-agents: [Hornero]
+status: doing
+assignee: Tijereta
+agents: [Hornero, Tijereta]
 ---
 
 Measured on 2026-10-11 by Hornero, at taro's request, in their words, translated:
@@ -41,3 +42,31 @@ taro, on 2026-10-11: cutting the tail abruptly would sound ugly. In their words,
 > of the end and loop from 0 + len(tail)
 
 That's how it is done: render the pass and, without resetting the synthesiser, the beginning of the next one —fluidsynth with the MIDI twice and `player.reset-synth=0`—, end the track at E + D and put the loop point at L + D, with E the end of the first pass, L the loop point (CC111, or 0) and D how long the tail lasts, with margin. After D seconds the previous tail has already died out, so E + D and L + D sound the same and the jump isn't heard; the tail of the first pass sounds whole, stuck onto the beginning of the second. With the initial silence skipped (length S), the loop point is `max(L + D, S)` counted from S. Without MSU-1 nothing is needed: the stream is made of notes, and the DSP's reverb carries on through the loop.
+
+## First step: the MSU-1's basic loop, on `hzstream` (taro, 2026-11-14)
+
+taro, on 2026-11-14, in their words, translated:
+
+> The MSU one has an extra complexity, because we would have to bake the
+> tails of effects or instruments. But, for an initial test, I'd like to
+> simply try the basic loop, even if it abruptly cuts the tail of some
+> notes or effects.
+>
+> In particular, the theme I'm using to test is hzstream — the one that
+> plays when you start the game with Talan, after the intro. The
+> original RPG_RT loops it with no silence between loops. I don't know
+> whether it hooks exactly with the bar, but at least it feels that way.
+> It doesn't feel like a bar is left abruptly cut.
+>
+> On the SNES with the EverDrive and MSU, instead, when the theme ends
+> there's ~1 bar of silence (and it doesn't feel like an exact bar, but a
+> little less or more, which makes it sound even worse).
+>
+> […] We can limit it to the MSU, and even limit it to hzstream if it
+> helps, in a first stage.
+
+So the first stage is the MSU-1 only: the track's loop as RPG_RT's
+—the end of the MIDI's track, not fluidsynth's tail; the loop point at
+CC111 or the start; the initial silence skipped the first time—, with
+the tail cut abruptly if baking it is not done yet. The baked tail of
+the section above is the next stage.
