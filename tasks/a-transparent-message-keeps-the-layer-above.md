@@ -2,8 +2,8 @@
 name: "A transparent message keeps the map's layer above"
 description: "A message with a transparent background hides the roofs and treetops on its lines, because its text takes BG2 there; RM2k draws the text over them"
 type: feature
-status: testing
-assignee: taro
+status: doing
+assignee: Aguará
 agents: [Aguará]
 ---
 
@@ -304,3 +304,27 @@ ports, the book— and this one, all with main merged in (the-advocate
 and `convert`; the runtime is the checkout's. The goldens' commit goes on
 its own in the ports. Not delivered to `/shared/builds/`: the build to play
 comes from merged main.
+
+## On the console, the map's palette breaks (taro, 2026-11-15)
+
+taro, on 2026-11-15, playing `/shared/builds/abl/` (ports `82650d7`,
+the-advocate `4b8c58d6`) on a SNES with the EverDrive, on map 5, with
+two photos of the TV —Core's boxes "When I turned six / could sometimes
+hear … of others." and "I used to live in one of the big cities / on
+Circuit Reef. We were happy."—, in their words, translated:
+
+> problems: the palette changed when this text was shown (or the
+> previous one, I don't remember). I think I tried it in mednafen and it
+> worked fine. I'm going to try it again in mednafen and on the SNES
+
+In the photos the whole map's colours are wrong —the sky and the ground
+in hues the scene does not have—, not only the cells under the text;
+the letters are right. The photos are in
+`/shared/captures/2026-11-15-layer-above-palette/`.
+
+Hornero's guess, unchecked: a CGRAM write outside the vblank on real
+hardware —the vblank now carries the layer's tilemap reads, the text's
+tiles and the copies' palettes (`layer_text_upload`, from
+`upload_palettes`, on every tint of the memory's sepia fade)—, so a DMA
+that runs past the vblank's end writes CGRAM during rendering, which
+real hardware does not take where it is told; snes9x does.
