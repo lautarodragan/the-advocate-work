@@ -2,7 +2,7 @@
 name: "A box that closes on its own without a pause is never seen"
 description: "A ShowMessage whose tail is \\^ without any \\| closes before the composer finishes it, so the window never shows; RM2k types it out and then closes it"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Tijereta]
 ---
@@ -54,3 +54,5 @@ to its end and then closes. Test: the test game's
 `test_close_on_its_own.py`, case `close-on-its-own` —a line ending in `\^`
 and a switch after it—, red with main's tools (the window never came up),
 green in both cores; the-advocate `c8d13b8d`.
+
+**2026-11-15, Hornero**: closed, its fix is [`message-colours-and-speed`](message-colours-and-speed.md), which taro played and closed.

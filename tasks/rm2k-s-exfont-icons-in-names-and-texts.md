@@ -2,7 +2,7 @@
 name: "RM2k's ExFont icons in names and texts"
 description: "A `$` and a letter in a name, a description or a message is one of RPG_RT's ExFont icons; the port draws the two characters, and Zounds uses them throughout its items and skills"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Hurón]
 ---
@@ -159,3 +159,5 @@ cannot pay for its icons; no game says it. Vampires Dawn, also at 126 of
 **To install when merging**: `just install rm2k-render events screens
 battle convert mapdata` (the text crate goes into those; `rm2k-render`'s
 binary and `images`/`wally` only got a refactor of its BMP reader).
+
+**2026-11-15, Hornero**: closed, taro saw the ExFont icons in Zounds on the console (see [`exfont-glyphs-in-messages`](exfont-glyphs-in-messages.md), 2026-11-02), on a build that carries this task's `b8e28d6a`.

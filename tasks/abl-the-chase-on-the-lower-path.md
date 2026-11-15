@@ -2,7 +2,7 @@
 name: "ABL: the chase on the lower path"
 description: "Compare the guard of map 105 against the original with Talan walking, along the lower path too, and make the ROM test check the page that the parallel event 6 picks"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Calandria]
 ---
@@ -122,3 +122,5 @@ inside Wine, the drivers of both sides— is in
 `~/scratch/calandria/chase-lower/`.
 
 **Nothing to install when merging**: only tests changed.
+
+**2026-11-15, Hornero**: closed, taro accepted the measurement ("Genial, entonces") and asked for the patch, in [`abl-the-chase-follows-the-row-talan-is-on`](abl-the-chase-follows-the-row-talan-is-on.md).

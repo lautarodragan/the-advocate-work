@@ -2,7 +2,7 @@
 name: "Nothing caps the actor count against FAR_HP and FAR_SP"
 description: "FAR_HP and FAR_SP are 128 B apart and FAR_EQUIPMENT has 752 B, so a game with more than 64 LDB actors has its HP table run into its SP table with no assert on either side; ABL has 61"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Hurón]
 ---
@@ -43,3 +43,5 @@ checks the four sizes per cartridge; it was red on the relocation alone
 which only made sense while both were placed by hand (the ports `d8ced42`).
 
 To install when merging: `cartridge`, with the far RAM task.
+
+**2026-11-15, Hornero**: closed, its fix is [`let-the-linker-place-the-far-ram-map`](let-the-linker-place-the-far-ram-map.md), which taro closed.

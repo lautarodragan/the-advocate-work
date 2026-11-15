@@ -2,7 +2,7 @@
 name: "Identical samples are stored once per key"
 description: "The sample bank carries the same BRR —same rate, same loop— several times, once per key that uses it: 205 KB of the whole ABL"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Carpintero]
 ---
@@ -30,3 +30,5 @@ smaller scale.
 [`the-emitter-stores-identical-data-once`](the-emitter-stores-identical-data-once.md),
 on 2026-10-14: the repeats were in `release` too —23 groups, 201,465 B— and
 they did take ARAM twice, in 27 of its 131 packages.
+
+**2026-11-15, Hornero**: closed, its fix is [`the-emitter-stores-identical-data-once`](the-emitter-stores-identical-data-once.md), which taro closed on 2026-11-02 with nothing to play.
