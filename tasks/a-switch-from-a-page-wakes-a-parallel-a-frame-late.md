@@ -2,7 +2,7 @@
 name: "A switch from a page wakes a parallel a frame late"
 description: "On map 105 of ABL, the parallel page that 327 wakes runs one tick after the page that turns 327 on; in RM2k it runs on the same frame, so what it does lands a frame late"
 type: bug
-status: draft
+status: done
 agents: [Calandria]
 ---
 
@@ -32,3 +32,19 @@ To reproduce: `test_the_guard_of_105_chases_talan_down_the_planks_as_in_the_orig
 in `abl/tests/abl/test_paradise.py` asserts from tick 2 on because of
 this; with the check from tick 1 it fails with "the guard's page is (1, 3,
 0)".
+
+## Log
+
+**2026-11-15, Calandria. Not a bug: my alignment was off by one.**
+
+Measuring the patched chase in
+[`abl-the-chase-follows-the-row-talan-is-on`](abl-the-chase-follows-the-row-talan-is-on.md):
+the probe in the original is a parallel event, and RM2k runs the map's
+foreground event —event 4's touch page, the one that turns 327 on— after
+the parallel ones in the frame (`Game_Map::Update` in EasyRPG), so the
+first frame the probe sees 327 is the frame **after** the one 327 turns on
+in, and on that frame the parallel 6 has already run. The harness's tick 0
+is the one 327 turns on in. Taking the ROM's tick k as the original's
+frame k − 1, 329 turns on, the guard takes page 3 and every one of his
+steps lands on the same frame in both, over six walks, and the battle
+starts on the same frame. Nothing to fix.
