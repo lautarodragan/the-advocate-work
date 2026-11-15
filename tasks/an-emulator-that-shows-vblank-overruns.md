@@ -2,8 +2,8 @@
 name: "An emulator that shows vblank overruns"
 description: "Find whether ares or bsnes with their accurate PPUs reproduce what the console does to VRAM and CGRAM writes past the vblank, and if one does, run it in the suite"
 type: research
-status: doing
-assignee: Aguará
+status: testing
+assignee: taro
 agents: [Aguará]
 ---
 
@@ -217,3 +217,66 @@ bsnes's accurate PPU, asking for zero late accesses— and the full sweep
 as a recipe run on demand, not on every run. taro:
 
 > Go ahead.
+
+## Wiring it in (Aguará, 2026-11-15)
+
+Branches `aguara-display-audit` in the ports and the book, from ports
+`2c9b736` and book `400db17`; nothing in the-advocate.
+
+* **The core**: `just audit-core`, in `abl/` of the ports, fetches
+  bsnes-libretro at a pinned upstream commit (`260f523`, the one the two
+  patches apply to), applies `bsnes-wram.patch` and
+  `bsnes-display-audit.patch` with `git apply`, builds it and installs it
+  in `AUDIT_CORE` —`machine.just`, by default under `/usr/local/lib/libretro/`
+  as `bsnes_audit_libretro.so`—. The plain `bsnes_libretro.so` is not
+  touched. 16 s here.
+* **The harness**: `retro.Console` zeroes the audit on load (ctypes keeps
+  the `.so` for the whole process, so a console would inherit the previous
+  one's counts) and `watch_the_display()` zeroes it before every frame and
+  lists the frames with something refused; `Session` and `suite.session`
+  take the core's `options`, for `bsnes_ppu_fast=OFF`.
+* **The test**: `tests/rpgmaker/test_display_accesses.py`, four scenes on
+  `release` with `bsnes_ppu_fast=OFF`, each asking for no frame with a
+  count. Chosen by measuring eight candidates on main (all 0): the memory
+  (`manta`, 3900 ticks, 27.5 s alone), the opening from the title to map
+  1's cinematic (1500 ticks, A every 30, 12.6 s), `battle-113` two turns
+  (5.2 s) and the items screen with 14 items scrolled down (2.9 s). Left
+  out: `choose`, `close`, `transition-mosaic` and `big-picture-photos`,
+  4 to 6 s each and no path the four do not walk. **Cost: 28 s of wall
+  time for the file alone with 8 processes, 51 s of CPU**; in the whole
+  suite it is the memory's 27 s on one worker.
+* **The sweep**: `just display-sweep [cartridge] [frames]`, every case of
+  the cartridge, 600 hardware frames without input by default (hardware
+  frames, not ticks: the menu, the battle and the shop stop the clock),
+  `PROCESSES` at once, one case per process. The script is
+  `tests/harness/display_audit.py`, which the test also imports.
+
+**Red before, green after.** The test on `release` built with the-advocate
+`ce69b86f` (the probe, before the window's fix) and today's ports: **the
+memory red, 6 frames** —the first, frame 559, 102 VRAM reads on line 5—,
+the same 6 as measured before; the other three green there too, so they
+guard other paths and were never seen red. On main, all four green.
+
+**The sweep on main**: `just display-sweep`, `release`, 373 cases, 600
+hardware frames each: **0 with accesses, 0 that did not run, 375 s on 8
+processes** (6 min of wall time).
+
+What it does not cover, as before: bsnes's timing, not the console's (the
+probe's margin covers the FX Pak's NMI); OAM during display, which it
+counts and nothing here exercised; and the 600 frames without input of
+the sweep reach no box that needs a press.
+
+## To merge (second round)
+
+* The ports, `aguara-display-audit`: `1ac044d` the vblank test's
+  docstring, `ebe3367` the core's recipe, the harness, the test and the
+  sweep.
+* The book, `aguara-display-audit`: `030279f`, "Writes past the vblank"
+  says the suite counts it.
+* Nothing in the-advocate. **To install**: nothing to reinstall, but the
+  suite's machine needs `just audit-core` once, in `abl/` (already run
+  here: `/usr/local/lib/libretro/bsnes_audit_libretro.so`); without it
+  the test skips.
+* Verified on the branch, with the global tools: ABL's `just tests`,
+  1656 passed and 2 skipped (none of them this one), 215 s; `just boot`
+  at the ports root, 151 passed. `release`'s `abl.sfc` sha256 `e228edad…`.
