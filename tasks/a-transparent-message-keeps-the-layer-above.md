@@ -2,7 +2,7 @@
 name: "A transparent message keeps the map's layer above"
 description: "A message with a transparent background hides the roofs and treetops on its lines, because its text takes BG2 there; RM2k draws the text over them"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Aguará]
 ---
@@ -444,3 +444,11 @@ the ports (`4bec555` the test cartridge and test, `f4e79f0` The Book of
 Three's goldens, apart) and the book (`7fb3aaf`, the arrow's upload in the
 divergence and `internals/vram.md`)— and this one. Install `mapdata` and
 `convert` (the `--vblank-probe` flag); the runtime is the checkout's.
+
+## Confirmed on the console (taro, 2026-11-15)
+
+Played on a SNES with an FX Pak, ABL built from ports `7bbddaa` and
+the-advocate `c9860b49`:
+
+> Good news: I can confirm it's fixed on the real SNES. The whole Core
+> Retrospective works perfectly. It's incredible!
