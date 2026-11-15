@@ -2,8 +2,8 @@
 name: "An emulator that shows vblank overruns"
 description: "Find whether ares or bsnes with their accurate PPUs reproduce what the console does to VRAM and CGRAM writes past the vblank, and if one does, run it in the suite"
 type: research
-status: testing
-assignee: taro
+status: doing
+assignee: Aguará
 agents: [Aguará]
 ---
 
@@ -209,3 +209,11 @@ during display, which the audit counts and nothing here exercised.
 * The book, `aguara-emulator-vblank`: `c39357a`, "Writes past the
   vblank" in `reference/snes/emulators.md`.
 * Nothing in the-advocate; nothing to install.
+
+## Into the suite (taro, 2026-11-15)
+
+Hornero proposed the small test in the suite —a few heavy scenes with
+bsnes's accurate PPU, asking for zero late accesses— and the full sweep
+as a recipe run on demand, not on every run. taro:
+
+> Go ahead.
