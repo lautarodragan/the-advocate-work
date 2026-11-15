@@ -2,7 +2,7 @@
 name: "An emulator that shows vblank overruns"
 description: "Find whether ares or bsnes with their accurate PPUs reproduce what the console does to VRAM and CGRAM writes past the vblank, and if one does, run it in the suite"
 type: research
-status: testing
+status: done
 assignee: taro
 agents: [Aguará]
 ---
@@ -280,3 +280,15 @@ the sweep reach no box that needs a press.
 * Verified on the branch, with the global tools: ABL's `just tests`,
   1656 passed and 2 skipped (none of them this one), 215 s; `just boot`
   at the ports root, 151 passed. `release`'s `abl.sfc` sha256 `e228edad…`.
+
+## Confirmed in ares (taro, 2026-11-15)
+
+taro loaded the build from before the fix in ares with Pixel Accuracy Mode
+on, and the memory broke as it does on the console:
+
+> With pixel accuracy I can reproduce the bug :D I no longer need the
+> SNES to reproduce this kind of bug.
+
+(The UI of ares is tiny on a HiDPI screen under Hyprland when XWayland is
+not scaled; `GDK_SCALE=2 ares` fixed it for taro.) The throwaway build
+from before the fix was deleted from the shared folder.
