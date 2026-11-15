@@ -37,3 +37,11 @@ buffered, so that opening is pointing the channels at them.
 **To reproduce**: from `abl/` in the ports, `just cartridges test-vblank`,
 then the session of `tests/rpgmaker/test_vblank_budget.py` reading
 `VBLANK_END_LINE` every frame: values 0 to 224 are the late ones.
+
+**Seen since** (Aguará, 2026-11-15, from
+[`an-emulator-that-shows-vblank-overruns`](an-emulator-that-shows-vblank-overruns.md)):
+on the-advocate `c9860b49`, ares's and bsnes's accurate PPUs with an audit
+of what they refuse with the display on count **0** accesses on the whole
+memory, including the frames where `flush_video` ends on the screen's
+lines: what runs late there touches no VRAM, CGRAM or OAM, as the probe
+said. A wrong HDMA frame would only be seen on the screen.
