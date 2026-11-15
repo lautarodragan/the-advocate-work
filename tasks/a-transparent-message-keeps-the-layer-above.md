@@ -2,8 +2,8 @@
 name: "A transparent message keeps the map's layer above"
 description: "A message with a transparent background hides the roofs and treetops on its lines, because its text takes BG2 there; RM2k draws the text over them"
 type: feature
-status: doing
-assignee: Aguará
+status: testing
+assignee: taro
 agents: [Aguará]
 ---
 
@@ -328,3 +328,119 @@ tiles and the copies' palettes (`layer_text_upload`, from
 `upload_palettes`, on every tint of the memory's sepia fade)—, so a DMA
 that runs past the vblank's end writes CGRAM during rendering, which
 real hardware does not take where it is told; snes9x does.
+
+taro's later reports the same day, through Hornero: it is intermittent and
+on a different box each time ("Can I help you with anything?" once), it
+stays broken until a map change, it shows on boxes of three lines or more,
+the deep water's palette and once the grass —"almost completely white …
+the same white used for the text"—; in a MANTA box the top halves of
+three or four letters of the third line are missing, the bottom halves
+there; with the FX Pak's in-game hooks off it breaks the same; Mednafen
+and Mesen draw it right.
+
+## The vblank ran past its end (Aguará, 2026-11-15)
+
+From the-advocate `c8cab6c3` and the ports `82650d7`, branches
+`aguara-layer-above-console`.
+
+**No emulator here reproduces it.** The memory under the sepia, in
+snes9x, bsnes and Mesen-S, a capture every hundred ticks: the three draw
+it right. They all take a VRAM or CGRAM write where they are told with the
+PPU drawing; the console loses the VRAM one, gives garbage for a VRAM
+read, and puts the CGRAM one on the entry it is reading.
+
+**So the ROM was asked.** A probe that writes the line the PPU is on at
+the end of `flush_video` and after each of the window's steps. On the
+memory, in snes9x, with main's runtime: `flush_video` ended on the
+screen's lines 0 to 7 on 56 frames of `release`; per step, the ones that
+ended there were `arrow_obj_load` (19 frames) —it copies the window's
+colours, the text's white among them, into a sprite palette, and ran from
+`msg_hdma_build` on **every line typed**—, `msg_hdma_build` (15) and the
+layer's rows read ahead under the next line (4). That is taro's white
+grass and deep water: the window's colours written to CGRAM past the
+vblank land on whatever entry the PPU is reading, a map palette nobody
+uploads again until the next map. And the read ahead past the vblank
+gives the console's garbage for the next line's rows of the layer, which
+then say "the layer's tile" or "nothing" where letters go: halves of the
+third line's letters missing, the line whose rows are read ahead right
+after the second's 1920 bytes —a box of three lines or more—.
+
+There are **no tint steps** while the memory is up: maps 5 and 6 carry no
+`TintScreen`, the sepia is the one map 4 leaves, so `layer_text_upload`
+does not run in these vblanks. A red-text or a no-tint diagnostic build
+would not tell more than the probe: the colour that lands is the window's
+own, from `arrow_obj_load`. And the FX Pak's hooks are not it: they run in
+the NMI, at the vblank's start, and the steps that ask the clock see them.
+
+**Why it is new with the layer.** `arrow_obj_load` on every line and the
+per-line `msg_hdma_build` were there before; what came with the layer is
+the work between a line's 1920 bytes and them —the read ahead and the
+layer's steps—, which pushed them past line 261. Everything asked
+`HVBJOY`, which says "vblank" on line 261 too.
+
+**The fix** (the-advocate):
+
+* every window step that writes VRAM or CGRAM in the vblank asks
+  `vblank_line` before it starts and compares with its own last line,
+  below `VBLANK_WRITES_END` (261, minus `flush_video`'s tail, minus 3 of
+  margin); late, it waits for the next vblank: the layer's steps, the
+  read ahead, the per-line tables, the arrow's cells;
+* the arrow's tiles and colours go up from `msg_arrow` when they fit, not
+  from `msg_hdma_build` wherever the vblank is;
+* in a window without its background, the line's 1920 bytes start earlier
+  (`LINE_LATEST_BARE`), and the frame a line waits for that is owed to the
+  box like the layer's; a framed window keeps its line and its pace;
+* the layer's tile fetch checks the clock every eight cells: walking sixty
+  cells with nothing to read took several lines unchecked.
+
+**The test**: `--vblank-probe`, a converter flag only a test cartridge
+asks for —it costs every vblank a few lines—, makes the window's steps
+leave the latest line one of their writes ended on in
+`VBLANK_WRITES_LINE`, and `flush_video` its own last line in
+`VBLANK_END_LINE`. `test-vblank` carries maps 5 and 6 and the case
+`vblank-memory` (the sepia and the memory, with `test_memory.py`'s
+presses), and `test_vblank_budget.py` asks that every window write end by
+line 258. Red without the fix: 62 frames with writes on the screen's lines
+0 to 7. Green with it: **the worst write ends on line 257, four lines
+before the vblank's last** (snes9x, with the probe's own cost).
+
+**What was tried and left out.** First every message budget went under
+`VBLANK_WRITES_END`, framed windows too: 17 goldens moved and the opening's
+playthrough lost its way —a letter a frame late here and there, scenes
+whose A presses land on the tick—. Then the window that opens in a vblank
+too far along waited for the next one: the tables were done in time, but
+a box of map 5 came up later than the scene's A press and the `manta`
+scene went another way. With that frame owed to the box, the same. So
+**the tables of a window that opens are built where they always were**,
+and that leaves one case: when a box's last blanked line goes up in the
+same vblank the window opens in, `flush_video` ends on the screen's lines
+1 to 3 (5 frames of the memory, with the probe's cost). The window's
+writes after the tables ask the clock and wait, so what lands past line
+261 is the end of building the tables in RAM —the HDMA may start that
+frame from part of them, a one-frame glitch at most—, the brightness,
+unchanged, and the HDMA turned on only if the vblank lasts. Draft:
+[`a-window-that-opens-late-builds-its-tables-past-the-vblank`](a-window-that-opens-late-builds-its-tables-past-the-vblank.md).
+
+**What the suite does not cover**: snes9x's timing, not the console's
+—the three lines are the margin for that—; only this scene; the work of
+the vblank before the window's (the tint, the poses, the strips, the
+ChipSet's animation), which keeps its fixed budgets; the tables of a
+window that opens, above. Nothing played on the console: the build to
+play comes from merged main.
+
+**Verified**: ABL's whole suite with the branch's tools, 1652 passed, no
+golden of ABL moved; `test_vblank_budget.py` red without the fix and green
+with it; Goombario on `test-vblank` too. The ports' `just boot`: 150 and
+The Book of Three's walk red on seven captures where only its animated
+flowers are in another phase —a frame's timing, its windows are without
+their background—, looked at and committed apart; green after (36 of The
+Book of Three's). `just test`, `just crate-test mapdata` and `convert`.
+Before and after, and those goldens, in
+`/shared/captures/2026-11-15-layer-above-palette/` with a `README.txt`.
+
+**To merge**: the three `aguara-layer-above-console` branches —the-advocate
+(`ce69b86f` the probe, `7f2a0ae2` the fix, `e0ad0221` the probe's widths),
+the ports (`4bec555` the test cartridge and test, `f4e79f0` The Book of
+Three's goldens, apart) and the book (`7fb3aaf`, the arrow's upload in the
+divergence and `internals/vram.md`)— and this one. Install `mapdata` and
+`convert` (the `--vblank-probe` flag); the runtime is the checkout's.
