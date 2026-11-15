@@ -2,7 +2,7 @@
 name: "Zounds' map 96 without its decoy switches"
 description: "An experiment: map 96 patched to keep only the switch that opens the door, to measure how much of its lag the 57 decoy switches are"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Cardón]
 ---
@@ -161,3 +161,5 @@ covers.
 
 Nothing to install: no tool changed. The probe lived in a worktree of
 the-advocate that was removed, uncommitted.
+
+**2026-11-15, taro**: closed, superseded: taro chose path 2, [`still-events-that-change-pose-painted-into-the-background`](still-events-that-change-pose-painted-into-the-background.md); the experiment's branch `cardon-map-96-no-decoys` was deleted unmerged.

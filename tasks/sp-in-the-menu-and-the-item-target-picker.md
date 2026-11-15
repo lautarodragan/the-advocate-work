@@ -2,7 +2,7 @@
 name: "SP in the menu and in the item target picker"
 description: "The main menu's and the item target picker's party boxes show HP and Ex but not SP, so an SP item cannot be aimed; the selection rectangle leaves a pixel of the text out on top; and the debug map needs a full party to try it"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Tijereta]
 ---
@@ -200,3 +200,5 @@ SP —it has none, see above— is not drawn anywhere to compare.
 * The main menu, as it was: no SP, it does not fit with four actors.
   If taro wants it anyway, it costs something they choose: the state
   "Normal", the experience, or the 512-wide mode.
+
+**2026-11-15, taro**: closed, superseded: what was to be looked at was redone by [`zounds-the-item-target-picker-does-not-fit`](zounds-the-item-target-picker-does-not-fit.md) and [`the-main-menu-scrolls-its-party-for-sp`](the-main-menu-scrolls-its-party-for-sp.md).

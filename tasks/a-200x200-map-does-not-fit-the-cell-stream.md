@@ -2,7 +2,7 @@
 name: "A 200x200 map does not fit the WRAM cell stream"
 description: "rm2k-snes-mapdata stops the whole build at Zounds' map 30 (200x200): its map_cells stream is 47,232 bytes and 32,768 fit in WRAM; no other map of the eight ports gets near"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Aguará]
 ---
@@ -166,3 +166,5 @@ cartridge`): the runtime changed, and `cartridge` is what assembles it.
 Not covered: a grid past 32 KB coming back from a battle —ABL's map 52 no
 longer reaches $7F's half, and the plain and map 30 have no battle—; the
 eight wide maps of ABL are the only wide grids any test plays.
+
+**2026-11-15, taro**: closed, taro played Zounds on past map 30 (see [`zounds-sleeping-in-unames-bed-leaves-the-screen-black`](zounds-sleeping-in-unames-bed-leaves-the-screen-black.md)).

@@ -2,7 +2,7 @@
 name: "The materials' table has room for 21 actors"
 description: "FAR_GROWTH is placed by hand in far RAM with room for 21 experience slots; with every map of ABL 23 actors can join, and the assembler stops"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Tijereta]
 ---
@@ -62,3 +62,5 @@ assembler's output.
 
 To install when merging: `cartridge` (and with it `project`):
 `FAR_POOL_SIZE` is compiled into it.
+
+**2026-11-15, taro**: closed, with nothing to play: verified by its tests, and nothing in it is seen or heard.

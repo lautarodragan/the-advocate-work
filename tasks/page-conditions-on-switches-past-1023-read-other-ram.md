@@ -2,7 +2,7 @@
 name: "Page conditions on switches past 1023 read other RAM"
 description: "A page that asks for a switch past the ROM's 1024 is emitted with that number as is, and the console tests a bit beyond the switch bitmap: Vampires Dawn has 735 such pages on 253 maps, Frozen World 45 on 27"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Tijereta]
 ---
@@ -47,3 +47,5 @@ of the game falls inside it. A condition past the table, which today only
 a mistake can give, leaves its event out with a warning, as a variable
 without a slot does. VD's map 433 reads switch 1521 off now (seen in the
 ROM, not played). Both Known issues lines left the book.
+
+**2026-11-15, taro**: closed, superseded: fixed with [`branches-and-switch-commands-past-switch-1023`](branches-and-switch-commands-past-switch-1023.md).

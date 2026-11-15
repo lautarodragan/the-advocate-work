@@ -2,7 +2,7 @@
 name: "Wally names events by index in three notes"
 description: "Three of Wally's notes print an event's index plus one, not its RM2k id: on a map with gaps in its numbering they name another event"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Hurón]
 ---
@@ -75,3 +75,5 @@ ports reads those notes' text (`git grep` over the notes' strings).
 **At merge**: reinstall `wally` (`just install wally`). `screens` and
 `mapdata` compile Wally in, but only its `sprites`, not `map.rs`: their
 binaries do not change behaviour, and reinstalling them is optional.
+
+**2026-11-15, taro**: closed, with nothing to play: verified by its tests, and nothing in it is seen or heard.

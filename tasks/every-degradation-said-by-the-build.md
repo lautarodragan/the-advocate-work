@@ -2,7 +2,7 @@
 name: "Every degradation, said by the build"
 description: "The converter writes, per cartridge, every place where it compiles a command undone or loses part of it —map, event, page, command, what is lost—, machine-readable, for any game"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Hurón]
 ---
@@ -75,3 +75,5 @@ with these tools, green, and `abl.sfc` byte for byte the one built with
   done: it is not, but the drawing is what was planned.
 * A troop page the game copies into every troop is one entry per troop:
   that is where it is.
+
+**2026-11-15, taro**: closed, with nothing to play: verified by its tests, and nothing in it is seen or heard.

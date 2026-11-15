@@ -2,7 +2,7 @@
 name: "Dooms 2's slots and menu don't fit in their bank"
 description: "With Dooms 2's map 1 (choose a character) in the cartridge, the slot screen and the menu gather more tiles than the 448 of their bank; the map is left out and the game starts on map 2"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Calandria]
 ---
@@ -133,3 +133,5 @@ slot screen composes its names over the menu's text. Dooms 2's `release`
 takes it —"432 tiles of 448, each screen's text apart"— and the converter
 leaves out only the two Junes' faces: Will (9) has his again. Measured in
 the converter's output; not looked at in a ROM.
+
+**2026-11-15, taro**: closed, taro played Dooms 2 from map 1 (see [`dooms-2-the-hero-is-not-drawn-on-some-maps`](dooms-2-the-hero-is-not-drawn-on-some-maps.md)).

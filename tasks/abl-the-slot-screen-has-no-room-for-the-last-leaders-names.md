@@ -2,7 +2,7 @@
 name: "ABL: the slot screen has no room for the last leaders' names"
 description: "With every map of ABL, the leaders' names the slot screen composes ask for 48 tiles and the menu's bank leaves 44: rm2k-snes-screens stops the cartridge"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Chajá]
 ---
@@ -76,3 +76,5 @@ abbreviations; not fixed here, because it is the slot layout (text from x
 [`abl-the-last-leaders-names-are-cut-in-the-slot-screen`](abl-the-last-leaders-names-are-cut-in-the-slot-screen.md).
 
 To install when merging: `screens`.
+
+**2026-11-15, taro**: closed, with nothing to play: what is seen of it went on in [`abl-the-last-leaders-names-are-cut-in-the-slot-screen`](abl-the-last-leaders-names-are-cut-in-the-slot-screen.md).

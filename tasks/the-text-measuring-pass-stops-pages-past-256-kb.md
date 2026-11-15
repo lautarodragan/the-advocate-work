@@ -2,7 +2,7 @@
 name: "The text's measuring pass stops pages past 256 KB"
 description: "compile's first pass gathers the boxes without letter pairs and without a cap, but the compiler still writes each offset in 16 bits: past 256 KB of unpaired text a page stops, and a common event stops the cartridge"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Tijereta]
 ---
@@ -60,3 +60,5 @@ every box: `ShowMessage`, choices, inns, numbers and troops all go through
   test); `just boot` 9; the-advocate `just test` 27.
 
 To install when merging: `events`.
+
+**2026-11-15, taro**: closed, with nothing to play: verified by its tests, and nothing in it is seen or heard.

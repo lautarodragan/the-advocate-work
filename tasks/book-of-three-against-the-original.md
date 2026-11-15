@@ -2,7 +2,7 @@
 name: "The Book of Three against the original"
 description: "An agent plays The Book of Three to its end in the original, under Wine, and in the port, compares them at each milestone and at each place the build says it degrades, and grows the walkthrough with them"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Mulita]
 ---
@@ -112,3 +112,5 @@ branch is `mulita-bot-original` (cases, tests, 30 goldens); the book's,
 `a-maps-own-music-ignores-its-volume-and-tempo`. Two of them —the troop of
 nine and the characters a route dresses— are not in `degradations.json`:
 silent holes for its next round.
+
+**2026-11-15, taro**: closed, a comparison: what it found is in the tasks it opened.
