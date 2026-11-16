@@ -38,3 +38,18 @@ at side by side; and on if it comes out right, with its why in
 `advocate.toml`.
 
 ## Log
+
+Cardón, from the-advocate 63555c31 (the global tools, installed from it)
+and the-advocate-ports 5b6956e, branch `cardon-abl-posed`.
+
+* Talan's Pad door on map 8 is `TalDoorBottom`, event 1 at (11,55),
+  upper tile 117 on the hero's layer, its only page on switch 24; taro's
+  `door-1.png` is map 8 by the save point (event 67 at (9,56)) beside it.
+  The sign at (26,21) is `EV0031`, upper tile 53, same layer, same switch.
+  None of BLChip1's tiles 53, 111, 112, 117 is a star tile, so neither is
+  kept out for going above the hero.
+* Map 8 has a panorama, `Planet1`, that the converter hides ("its
+  panorama goes hidden"); `posed_events` skips a map whose drawn layers
+  keep a panorama, so whether map 8 goes in depends on that.
+* Before turning it on, `release` takes 126 data banks of 126, with 302 B
+  of gaps (`just space release`).
