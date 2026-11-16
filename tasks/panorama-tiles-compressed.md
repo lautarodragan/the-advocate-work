@@ -51,3 +51,27 @@ tiles are bounded by the layouts: 576 4-bit tiles in mode 3 (18,432 B),
 * Painted maps (mode 4) keep raw tiles: they are streamed column by
   column as seen, not loaded whole. Baked panoramas are inside the map's
   tiles (already LZ2); hidden ones carry nothing.
+
+### What changed (the-advocate `carpintero-pano-lz2`)
+
+* `panorama.rs` in mapdata: each distinct picture's tiles compressed once
+  (`compress_many`), emitted as the record's +32 stream; the tilemap stays
+  raw. `LZ2_CAP_PANORAMA` ($6000) is emitted and refused above; `pano.s`
+  asserts it against `ANIM_DRAWINGS`.
+* `pano_load` decompresses into `LZ2_BUFFER` and does its two DMAs from
+  there; the `.msu` path goes through `lz2_decompress`, so its own
+  `msu_dma0` path and `msu_dma0_l` are gone. `pano_image` calls
+  `anim_buf_clear` and `code_carry_after` after the swap.
+* Which ways store tiles: **mode 3, flattened (mode 3 with the ChipSet's
+  above-hero cells in BG1) and mode 1** have a `pano_table` record, and
+  all three now go LZ2. **Painted** (mode 4) keeps raw tiles in
+  `paint_table` —streamed by column—. **Baked** is part of the map's own
+  tiles (already LZ2). **Hidden** carries nothing.
+* Test game: map 10, the lookout, and `test_panorama_swap.py`: a case
+  page carried from map 1 waits there while the map's parallel swaps
+  `Stars` for `Dawn`; `CODE_CARRY` must come through byte for byte. Seen
+  red with `code_carry_after` taken out of `pano_image` (the bytecode came
+  back as the picture's tiles), green with it; its two goldens are
+  identical on the global tools (raw tiles) and on these. A first `Dawn`
+  with plain bands was 3 KB of tiles, under `CODE_CARRY`'s $1100, and
+  could not go red: the second has dithered band edges, 17,248 B.
