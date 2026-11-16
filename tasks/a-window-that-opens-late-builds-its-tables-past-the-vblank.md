@@ -45,3 +45,15 @@ of what they refuse with the display on count **0** accesses on the whole
 memory, including the frames where `flush_video` ends on the screen's
 lines: what runs late there touches no VRAM, CGRAM or OAM, as the probe
 said. A wrong HDMA frame would only be seen on the screen.
+
+**And in The Frozen World** (Aguará, 2026-11-16, from
+[`frozen-world-the-intro-stays-black-after-the-tint`](frozen-world-the-intro-stays-black-after-the-tint.md)):
+on map 6's scene, its boxes without their background, `flush_video` ends
+on the screen's lines 0 or 1 on one to four frames of the scene, by the
+phase of the A presses (a cartridge of the game's built with
+`--vblank-probe`, snes9x); the same frames with c9860b49's runtime and with
+the fix of that task, which lets a line that waited go up as late as a
+framed window's. The accurate bsnes with the display audit counts 0
+accesses on the whole scene with the fix. On A Blurred Line's memory the
+fix leaves it as it was: the same 5 frames, the worst window write on
+line 257.
