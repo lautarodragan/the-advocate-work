@@ -37,3 +37,13 @@ cartridge with start map 4 and map 1), boot "Begin the Story" and press A
 on each box of the opening. Captures —each box up, and box 1 next to the
 same screen a tick after it closes— are in the shared folder,
 `captures/2026-11-16-wait-ceiling/`.
+
+**Not in the test game** (Aguará, 2026-11-16): its terrace, map 9
+—flattened, mode 3, a panorama that scrolls on its own and a transparent
+box in the middle, `test-game/tests/test_terrace.py` in the-advocate—
+shows no stripes on snes9x or bsnes, with the camera against the map's
+left edge (the map 20 wide) or inside it (30 wide). So they come from
+something ABL's map 1 has and the terrace has not: a camera far into a
+100x100 map, its rain, a ChipSet whose cells near the screen's edges are
+not blank, or what VRAM holds past the window's tilemap. Captures of the
+terrace in the shared folder, `captures/2026-11-16-test-game-pano/`.
