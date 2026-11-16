@@ -26,3 +26,39 @@ without it the pause menu does not offer it; gain measured; ROM tests
 with and without MSU-1; the book's `internals/the-msu-file.md` updated.
 
 ## Log
+
+## Work log (Tijereta)
+
+Taken on 2026-11-16 from the-advocate a83c4a12, the ports ff7ac5b and the
+book's main, on branches `tijereta-debug-msu`.
+
+### The plan, and why not the obvious one
+
+The screen's data in ABL's `release`: its font precomposed, `dbg_pre0` to
+`dbg_pre7`, eight phases of 97 glyphs of 156 bytes, 121,056 B; the names,
+`dbg_data`, about 19.5 KB (29 KB in Vampires Dawn); the windows' tilemap
+and the twenty bars, 4,352 B; the windows' tiles and colours, under a KB in
+ABL; the advances and reaches, a few hundred bytes.
+
+**The font cannot be loaded whole**: 121 KB is almost all of WRAM. While
+the screen is open the free WRAM is `LZ2_BUFFER` up to `ANIM_DRAWINGS_END`,
+$7F0000-$7F7FFF —`back_to_map` rebuilds all of it when the pause menu
+closes, and the menu does not open over a big picture—, of which the wide
+stage already takes 4 KB. So:
+
+* **The spill region, forced**: the packing's `.msu` region —until now
+  only for `[rom] msu = "required"`— takes the pieces an emitter marks
+  `.msu_only` in any cartridge: they go to the `.msu` always, and the ROM
+  keeps their label as bank `MSU_SPILL_BANK` and unit, as for Vampires
+  Dawn's spilled streams.
+* **The font is read a letter at a time** through the data port, into a
+  cache of glyph-phases in that WRAM: a miss is a seek and 156 bytes by DMA.
+* **The names go per page** —a hundred switches or variables, its table and
+  its strings—, loaded into one of two WRAM buffers when the page changes:
+  the text layer keeps a by-reference run as an address, so a page never
+  reuses the buffer the screen still shows.
+* **The windows' tilemap and bars** are loaded into WRAM when it opens; the
+  windows' tiles and colours are read and uploaded then.
+* **Without MSU-1** —or with another build's `.msu`— the pause menu does
+  not offer the row: `menu_rows_build` asks the port, each time the menu is
+  drawn.
