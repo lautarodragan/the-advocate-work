@@ -103,3 +103,23 @@ four, then all back—: red before on the old tools (levels stay `[1, 1, 1,
 screen and no hero. The events crate's `python.json` hashes of both `maps`
 moved: the test game's map 1 event 1 has a 40; with the push out, the
 answer was the old one.
+
+Verified, on the branches with main merged (the-advocate `chaja-lb-screen`
+d9837b8e, the-advocate-ports `chaja-lb-screen`, the book
+`chaja-lb-screen`): ABL's `just tests` with these tools, 1661 passed and 2
+skipped; `just boot` of the eight ports, 153 passed (before the merge);
+the-advocate's `just test` (29) and `just rust-test`, green;
+`just test-game` red only on `test_leader_name`'s three captures, the same
+three on 3f3eede3 with the global tools: the draft
+[the-test-games-leader-name-goldens-are-red-on-main](the-test-games-leader-name-goldens-are-red-on-main.md).
+The save grew a byte (`hero_transp`): saves from before do not load.
+
+Install on merge: `just install events wally mapdata convert`, from
+the-advocate (`screens` compiles Wally in but only gained a field, it
+need not be reinstalled). The runtime change rides on the checkout.
+
+Not covered by any test: the hero's level travelling in a save; a
+translucent page starting at 3 (no ABL scene fades one; El Dorado's map 5
+and Vampires Dawn's lights do); the level kept when the same page is set up
+again after a battle. Side by side with RPG_RT:
+`captures/2026-11-16-lb-screen/` in the shared folder.
