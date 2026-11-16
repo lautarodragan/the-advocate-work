@@ -47,3 +47,25 @@ something ABL's map 1 has and the terrace has not: a camera far into a
 100x100 map, its rain, a ChipSet whose cells near the screen's edges are
 not blank, or what VRAM holds past the window's tilemap. Captures of the
 terrace in the shared folder, `captures/2026-11-16-test-game-pano/`.
+
+**Not the rain, and on BG2** (Aguará, 2026-11-16, measuring
+[`the-test-game-s-terrace-in-the-rain`](the-test-game-s-terrace-in-the-rain.md)).
+The map has the rain on while `EV0002`'s boxes are up —`EV0001` sets it
+weak, `WeatherEffects [1, 0]`, 15 drops—. With the-advocate `3f3eede3`
+and the ports `4e3bfac`, the same stress copy built twice, one with
+`EV0001`'s two `WeatherEffects` turned to none: on the first box, at 15
+bits, the screen's 12 left and 12 right columns on the box's rows are
+**identical** with the rain and without it, the stripes in both; and
+without rain snes9x and bsnes agree on the whole screen. The terrace
+shows none, dry or with the rain strong (75 drops). So the rain is ruled
+out.
+
+And which layer: with snes9x's layer switches, the stripes stay with BG1
+off, with the objects off and with the clip windows off
+(`snes9x_gfx_clip`), and go with BG2 off, the text with them. They are
+**BG2's tiles**: the window's own tilemap on its lines, at the screen's
+edges —its first and last columns, or what its scroll brings in past
+them—. Left: what that map's window plane holds at those cells, or the
+plane's horizontal scroll on its lines, against the terrace's, whose
+edges are blank. Captures —dry and wet side by side, and the four layer
+switches— in the shared folder, `captures/2026-11-16-terrace-rain/abl/`.
