@@ -34,3 +34,14 @@ fallback—. A recommendation for taro. Nothing implemented unless it is a
 throwaway measurement.
 
 ## Log
+
+Mulita, from the-advocate a83c4a12 (main; the global tools) and the
+ports ff7ac5b, in throwaway worktrees (`mulita-abl-room`). Read first:
+Carpintero's "Fitting the whole game in 8 MB" in the book
+(`ports/abl/research/2026-10-14-…`), whose four big cuts landed on
+2026-10-14 (samples, actor tables, NPC pose tables, poses without their
+empty tiles). Its other lossless options —nested repeats, panorama tiles
+in LZ2, NPC tables per entry, the sprite pool, the three fonts sharing
+one ink layout— did not, by `git log`: they are the first candidates,
+measured again on today's release. Hornero adds taro's question: which of
+the 426 posed events are chests, and what a chests-only list costs.
