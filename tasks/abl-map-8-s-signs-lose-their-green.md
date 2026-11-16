@@ -26,3 +26,11 @@ On map 9 the same tiles (EV0024 tile 52, EV0026 tile 53) get palettes of
 their own and are drawn exact; whatever looks off there is not the
 palette. See the research "Is there a better palette grouping?" in the
 book, under A Blurred Line.
+
+**What would fix it, and why it is not on** (Cardón, 2026-11-16, see
+[`abl-still-events-painted-into-the-background`](abl-still-events-painted-into-the-background.md)):
+`posed_events = [8]` draws the five monitors and the two doors into the
+background with the ChipSet's colours —seen on a test cartridge with only
+map 8, `/shared/captures/2026-11-16-abl-posed-events/`—, but `release`
+does not link with it: map 8 alone adds more data than the cartridge has
+left (`just space release`). It needs room first.
