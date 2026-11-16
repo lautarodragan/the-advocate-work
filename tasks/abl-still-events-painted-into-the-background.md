@@ -53,3 +53,30 @@ and the-advocate-ports 5b6956e, branch `cardon-abl-posed`.
   keep a panorama, so whether map 8 goes in depends on that.
 * Before turning it on, `release` takes 126 data banks of 126, with 302 B
   of gaps (`just space release`).
+
+### Every map: the cartridge does not link
+
+With `posed_events = true` (global tools of 63555c31) `release` fails:
+"the data does not fit: a piece of 65536 bytes needs a new bank, and the
+126 banks the cartridge has for data are taken". The converter's log, read
+anyway: 426 events into the background on 75 maps —the same count as in
+November—, and the rest objects because a command moves or flashes them
+(167), a pose draws past its cell (139), a route dresses them (81), moves
+them (65), they animate (47), turn toward the hero (43), walk (27), and a
+handful above the hero, translucent or past the layouts' colours or
+tiles (5). Counting the `.inc`'s bytes, the data grows by 38,722 B: map
+tiles +32 KB, the posed tables +16 KB, blocks +4.7 KB, against sprite
+tiles −8.5 KB and poses −5 KB. With 302 B of gaps there is no room.
+
+**Map 8 is not among them**: Lashe City has a panorama, `Planet1`, that
+goes hidden, and `posed_events` skipped every map with a panorama. A
+hidden one is drawn as a map without it, so that is no reason; but the
+hidden way converted the map without the extension's rows, so the poses'
+blocks would not exist. Fixed in Wally —hidden converts with the
+extension, as a map without a panorama does; a trial whose way changes is
+refused—, with a test in `whole_map.rs`, red before.
+
+And since the whole game does not fit, `posed_events` takes a list of
+maps besides `true` (rm2k-snes-convert's `Posed`, with a test): a game
+pays for the maps where it buys something. Branch `cardon-abl-posed` in
+the-advocate.
