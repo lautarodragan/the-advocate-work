@@ -30,3 +30,14 @@ among them, what it costs) and on the other games; side-by-side captures
 of shifted events; tests in the tool.
 
 ## Log
+
+Cardón, from the-advocate cd3fecb8 and the ports b024af2, branches
+`cardon-bake-max-offset` in the-advocate, the ports and the book. The
+shift is decided in Wally's `posed::why_not`, over the union of the
+opaque pixels of every pose the event can show: one shift for all of
+them, the smallest that puts that union inside the 16x16 cell. Each
+pose's frame is moved by it before it is painted, so everything after
+the choice —the extension's cells, `compose`, the blocks— is unchanged.
+If no single shift within the limit fits them all, though each pose
+alone would fit, the event stays an object with a reason of its own,
+so the log tells it apart from one that does not fit at all.
