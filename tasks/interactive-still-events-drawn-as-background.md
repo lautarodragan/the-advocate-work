@@ -1,6 +1,6 @@
 ---
 name: "Interactive still events drawn as background"
-description: "A map with more still NPCs than the sprite VRAM holds could draw the ones that do not fit as background tiles and keep their action page: today only events with no commands go to the background"
+description: "`baked_events` already paints still events with action or touch pages into BG1 when every pose fits their cell; what it refuses is a person-sized NPC (past its cell) and one that turns toward the hero when talked to. Painting those —a two-cell drawing, a turn that rewrites the cell— on a map past the sprite VRAM"
 type: feature
 status: wishlist
 ---
@@ -51,3 +51,17 @@ background, still talks, and goes back to a sprite when a page change
 needs it —or the converter refuses that case and keeps it a sprite—,
 shown on a map taken past the limit on purpose. Becomes `todo` when a map
 stops at the sprites' VRAM.
+
+## Reviewed (Hornero, 2026-11-17)
+
+Much of this was done by `baked_events` (2026-11-02 to 11-17: see
+[`still-events-that-change-pose-painted-into-the-background`](still-events-that-change-pose-painted-into-the-background.md)
+and [`posed-events-tolerate-a-few-pixels-of-overflow`](posed-events-tolerate-a-few-pixels-of-overflow.md)):
+the event stays whole —its action and touch pages too— and only its
+drawing moves to BG1; ABL's signs and doors went in. What it still refuses
+is a talking NPC: one that turns toward the hero (`posed.rs`, triggers
+0/1/2) and any pose past its 16x16 cell, which a person always is. In ABL,
+139 events stay objects for a pose past the cell and 43 for turning. And
+`baked_events` bakes when allowed, not as a fallback when sprite VRAM runs
+out; the only map stopped by VRAM is still Vampires Dawn's
+([`vampires-dawn-maps-that-dont-fit-in-vram`](vampires-dawn-maps-that-dont-fit-in-vram.md)).

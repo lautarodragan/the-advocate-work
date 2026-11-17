@@ -3,7 +3,7 @@ name: "Doors closed on all four sides can be walked through"
 description: "A tile event under the hero whose tile closes everything imposes $00, and `pass_has` stored that value as a flag: it stayed off and `pass_with_event` didn't look at the rows"
 type: bug
 game: abl
-status: testing
+status: done
 assignee: taro
 agents: [Hornero]
 ---
@@ -47,3 +47,5 @@ sides stop you, as in RM2k: to be played.
 **When merging:** nothing to install. `project` finds the runtime in the
 checkout it was installed from, so the global one already sees it, and the
 cartridges' fingerprint rebuilds it.
+
+**2026-11-17, taro**: declared done.

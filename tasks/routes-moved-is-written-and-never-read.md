@@ -2,7 +2,9 @@
 name: "routes_moved is written and never read"
 description: "A byte of bank 0's BSS whose comment promises a skipped sort that no code does"
 type: bug
-status: todo
+status: doing
+assignee: Carpintero
+agents: [Hurón, Tijereta, Carpintero]
 ---
 
 Seen by Hurón on 2026-10-18, reading the runtime for

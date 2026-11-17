@@ -1,6 +1,6 @@
 ---
 name: "The playthrough's pending goldens"
-description: "127 of the playthrough's 135 shots have no golden: take them, have taro look at them, and approve them or fix what they show"
+description: "119 of the playthrough's shots have no golden (pending.txt, 2026-11-17; the 26 debug-* go without one on purpose): take them, have taro look at them, and approve them or fix what they show"
 type: test
 status: todo
 ---
@@ -43,3 +43,11 @@ to the vipers shots: the game started through "Begin the Story" has
 DummyHero as leader (actor 10, no graphic), so Talan does not appear in
 the shots of `test_playthrough_vipers_golden.py`; the line that solves it
 elsewhere is `set_party(14)` before the final shots.
+
+## Reviewed (Hornero, 2026-11-17)
+
+`abl/tests/golden/playthrough/pending.txt` in the ports has 145
+entries: 26 `debug-*`, which the list already marks as "without a golden
+on purpose", and 119 others; 48 goldens are approved. The paths above
+still cite the old `rom/pruebas/...`; today they are under `abl/tests/`
+in the ports.

@@ -30,3 +30,11 @@ once: what a fade would cost, or that nobody tried it— and its line in
 `src/SUMMARY.md`. Making the enemy fade, if that is worth it, is another
 task. **First step**: `git log -S` on that comment for any reason given
 at the time, and what easyrpg's `Sprite_Enemy` does (how many frames).
+
+## Reviewed (Hornero, 2026-11-17)
+
+Unchanged: `runtime/battle_scene.s`'s `scene_tick` still says "RM2k
+makes it disappear with a fade; here it goes all at once", and no commit
+touched it after the move of 2026-10-10. No divergence page tells it yet
+(the book's `optimizations/lossless/battle.md` says so), and no test or
+golden shows it.

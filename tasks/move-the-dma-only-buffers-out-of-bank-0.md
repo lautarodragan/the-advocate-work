@@ -1,6 +1,6 @@
 ---
 name: "Move the DMA-only buffers out of bank 0's BSS"
-description: "oam, oam_high, cgram_shadow and text_buf —3,024 B— are built in bank 0 and leave it by DMA, which reads any bank; the BSS has 97 B left in every game, and EV_MAX cannot grow by more than 13 events"
+description: "oam, oam_high, cgram_shadow and text_buf —3,024 B— are built in bank 0 and leave it by DMA, which reads any bank; the BSS has 75–77 B left, so EV_MAX can grow by about 10 events. FARBSS has no room for them in ABL (kept for the materials), so their place is $7F's GRID_TOP or the SRAM"
 type: feature
 status: wishlist
 ---
@@ -52,3 +52,15 @@ shows the `BSS` room gained in every cartridge; suite and `test_cores.py`
 green. **First step**: start with `cgram_shadow` and `oam`, the cheapest
 (4 and 12 writers), and measure `text_buf`'s compositor's cost before
 moving it.
+
+## Reviewed (Hornero, 2026-11-17)
+
+Checked against main: the four buffers are still in bank 0's BSS
+(`runtime/low_ram.s`), `EV_MAX` is still 120, each event still costs 7 B of
+BSS. The BSS left is no longer 97 B everywhere: 75–77 B in the builds of
+2026-11-17, and `pick_first` took one more since (the comment at
+`far_ram.s` "84 bytes left" is stale too). FARBSS, the planned home, has a
+few hundred bytes in ABL that `load_graphics.s` keeps for the materials
+table; the region at the grid's top in `$7F` (`GRID_TOP`, see the book's
+`internals/wram.md`) is the likelier one. About 30 write sites for `oam`, 5
+for `cgram_shadow`, 9 for `text_buf` (rough grep).

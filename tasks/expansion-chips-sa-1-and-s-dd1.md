@@ -2,7 +2,7 @@
 name: "Expansion chips: SA-1 and S-DD1"
 description: "Whether it is worth moving the cartridge to SA-1 or S-DD1: support, what each one gives measured, what it costs, and when"
 type: refactor
-status: wishlist
+status: done
 ---
 
 # What
@@ -510,3 +510,15 @@ frame— is as it was. Other things that moved: `ram_lejana.s` is
 pattern is compiled to `OP_CELL_TEST` (2026-09-27); and `/extras` is gone
 —the scripts are in `~/scratch/chips/` (with their Spanish names,
 `medir.py` for `measure.py`), and the clones in `~/ref/`—.
+
+## Reviewed (Hornero, 2026-11-17)
+
+Closed: its question is answered. Space was answered by the 8 MB
+ExHiROM (2026-10-01) and the S-DD1 research ("not now"); ABL has room
+again after 2026-11-17's compression (117 of 126 banks). The race, the
+other reason, runs at 60 fps without a chip. And a new cost: the SA-1's
+BW-RAM is the save SRAM, which the FX Pak checksums and writes only at a
+silent data seek ([`the-sram-as-slow-wram`](the-sram-as-slow-wram.md),
+[`a-save-on-the-fx-pak-waits-for-a-silent-seek`](a-save-on-the-fx-pak-waits-for-a-silent-seek.md));
+MSU-1 together with the SA-1 on the FX Pak is unverified. Reopen only for
+CPU that no software fix reaches.
