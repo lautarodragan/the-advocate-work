@@ -246,3 +246,15 @@ off, auto rounds; photos of the TV in the shared folder,
   test ROM's.
 
 Read so far: 256 KB with a `.msu` is not usable as it stands.
+
+Later, after the console was turned off and on (photo
+`after-reboot-three-rounds.jpg`), three rounds with A: at boot **saved
+rounds 134** —the counter of the previous session reached the card— but
+**saved stash LOST** —a stash was there and did not verify—; the three
+rounds `PASS`; after the stash 1.044 s (max 1.055 s), again 0.382 s, the
+same as before. What "LOST" means against this ROM's checks (a stash
+written after the card's last write? half of one?) is to be read from
+`sram.s`; it fits the draft
+[`a-save-on-the-fx-pak-waits-for-a-silent-seek`](a-save-on-the-fx-pak-waits-for-a-silent-seek.md):
+what the SRAM holds at power-off is what the last write took, not what the
+game last wrote.
