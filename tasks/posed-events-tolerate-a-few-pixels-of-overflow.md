@@ -2,8 +2,8 @@
 name: "Posed events tolerate a few pixels of overflow"
 description: "A still event whose pose spills a few pixels out of its cell goes into the background anyway, shifted into the cell: `bake_max_offset`, a number of pixels, on by default; ABL's 33 chests drawn 1 px right and 2 px up are the case"
 type: feature
-status: doing
-assignee: Cardón
+status: testing
+assignee: taro
 agents: [Cardón]
 ---
 
@@ -103,3 +103,26 @@ event. Zounds' map 156 now takes none of its shifted ones.
 The same graphic shifted and left an object on the same map, a pixel or
 two apart: Vampires Dawn's map 148, El Dorado's 2 and 5, Desert
 Nightmare's 105 and 182. None in ABL or Zounds.
+
+The captures, in `captures/2026-11-16-bake-max-offset/`: ABL's are drawn
+offline (its cartridges cannot link with the key on, see above): the
+chest of map 38, the `BLObjs` 3 ones of maps 108 and 244, and the radio
+of map 243, each where RM2k draws it, shifted, and the difference. And
+Zounds' map 17 chest, from the emulator, at nudge 0 and 2. It goes into
+the background 2 px lower, 193 pixels.
+
+`just boot` with the merged tools (the-advocate 112e0984, which has main's
+a7c8c2d0 in it): 152 passed. One golden moved, Zounds' `zounds-debug-ship`,
+by those same 193 pixels of map 17's chest. It was looked at and
+committed apart (ports daf8675), and on the second run the file was
+green. ABL's `just tests` was run before the merge with main (1661
+passed, no golden moved, since ABL has the key off). It was not run again
+on the merged tree.
+
+Branches `cardon-bake-max-offset` in the-advocate (112e0984), the ports
+(b3efc58) and the book (31161e0), each with main merged in.
+
+**To install when merging**: `just install wally convert` in
+the-advocate. Main's Carpintero merge also asks for `mapdata` (Hornero
+said it was not reinstalled yet). Without it, every game's cartridge
+fails with `LZ2_CAP_PANORAMA` undefined.
