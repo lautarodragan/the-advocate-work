@@ -2,8 +2,8 @@
 name: "ABL: Lazer Teeth's rock lags"
 description: "In the Lazer Teeth mini-game on map 11, while the rock flies and when it hits a lamp or a computer, Mesen counts ~35 lag frames: frames the main loop missed"
 type: bug
-status: doing
-assignee: Aguará
+status: testing
+assignee: taro
 agents: [Aguará]
 ---
 
@@ -257,3 +257,15 @@ Aguará's shim was built from. Between them the SNES core changed
 Settings seen: no overclocking (0/0 scanlines), RAM at power on "Random
 Values", rewind on (300 MB), autosave state every 5 minutes, lag counter
 shown. Run-ahead not seen yet (Emulation tab).
+
+taro, a moment later, translated:
+
+> Something interesting happened anyway: my Mesen could load the saves, and
+> the numbers come out the same as Aguará's. And it was also observable by
+> eye and ear.
+
+So the 2.2.1 core counts the same 8 and 2 from Aguará's states; the ~35 of
+the first report came from how the throws were played or counted, not from
+the emulator. The remeasure on `20ba206` was stopped before it measured
+anything. What is left to lose (the animation, the hit's page, the
+refreshes, `build_oam`) is in the three drafts above.
