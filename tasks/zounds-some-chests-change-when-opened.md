@@ -2,8 +2,8 @@
 name: "Zounds: some chests change when opened"
 description: "Opening some chests in Zounds draws a different chest than the closed one"
 type: bug
-status: doing
-assignee: Cardón
+status: testing
+assignee: taro
 agents: [Cardón]
 game: zounds
 ---
@@ -103,3 +103,21 @@ closed and opened against its goldens, checked against RM2k's poses: map
 object whose open page names another sheet) and map 17's (baked into the
 background, turning to another facing). It was not shown red: there was
 no fix; it guards what the console already did.
+
+**Verified**, on the ports' `cardon-chests` and the global tools
+(the-advocate `95863f36`; nothing of the tools changed): ABL's `just
+tests`, 1679 passed and 2 skipped, no golden moved (`abl.sfc` sha256
+`3cfb09a7648de945`), its `test_cores.py` 24 passed; `just boot` at the
+ports' root, 158 passed, the new test's three among them; after merging
+the ports' main (`1d0a6b6`), `just boot -k zounds` again. `just space`:
+the tightest is `abl`'s release, 0 whole banks free and 11 halves; bank
+0's least is 3,752 bytes.
+
+**What the suite does not cover**: of the 29 swept chests only three are
+held by a test; the rest were looked at once, by the sweep. The `object1`
+chests (the RTP's) and the baked chests of maps 19, 33, 60 and the others
+have no golden of their opening.
+
+**Branches**: the ports' `cardon-chests` (the test and its goldens), the
+book's `cardon-chests` (the Known issues line), and this one (the task and
+the draft). **To install when merging**: nothing.
