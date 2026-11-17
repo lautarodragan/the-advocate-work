@@ -170,10 +170,9 @@ the `msu_dma0_l` that went—:
 On the merged tree, with the merge's tools: ABL's `just tests` 1662
 passed, 2 skipped.
 
-**To install when merging**: `just install project cartridge mapdata
-screens` —`project` because the runtime changed and everything that
-compiles it in follows; `cartridge` for `.msu_only`, `mapdata` and
-`screens` for the pieces and the pages—. The `.msu` of every game with
+**To install when merging**: `just install cartridge mapdata screens`
+—`cartridge` for `.msu_only`, `mapdata` and `screens` for the pieces and
+the pages; the runtime travels with the checkout—. The `.msu` of every game with
 `debug_screen = true` changes: it now carries the screen, so it goes with
 its `.sfc`.
 
