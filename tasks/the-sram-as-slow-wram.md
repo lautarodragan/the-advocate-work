@@ -268,3 +268,8 @@ reading of the firmware that nothing is checked while a track plays: either
 the check does run while a track plays, or the ROM's track is not playing
 when it seeks (stopped, or not yet started). To settle from the firmware
 and `sram.s` before trusting either.
+
+And with auto rounds and music on (photo `music-on-auto.jpg`): at boot
+saved rounds 140, stash OK; 14 rounds `PASS`; after the stash 1.044 s (max
+1.053 s), again 0.382 s. The same as with music off, now on 17 rounds with
+it on. Whether the track was heard is the open question (asked of taro).
