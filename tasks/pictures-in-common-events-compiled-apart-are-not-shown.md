@@ -3,7 +3,7 @@ name: "The pictures of the common events compiled apart from the maps are not sh
 description: "An automatic or parallel common event, or one a page calls as a shared body, is compiled once without a map, so without pictures: Zounds' pick-axe and notebook, A Blurred Line's portable console and Vampires Dawn's menus show nothing"
 type: bug
 game: zounds
-status: testing
+status: done
 assignee: taro
 agents: [Carpintero]
 ---
@@ -219,3 +219,9 @@ yet. Not this branch's.
 
 When merging: `just install convert events mapdata`; the runtime comes
 with the checkout.
+
+## Closed (2026-11-17)
+
+> I just tested Zounds, from the start of the ship until entering the desert of death.
+
+By taro, with the builds of the ports `428e7c3` and the-advocate `fe5529a3`.

@@ -2,7 +2,7 @@
 name: "Poses only when an event can show them"
 description: "Every character on a map carries its twelve poses in the cartridge and gets a VRAM slot sized for them, also the NPCs that never move: Dooms 2's map 1 has 16 still NPCs facing down and '31 with their twelve poses'"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Calandria, Hurón, Mulita]
 ---
@@ -326,3 +326,9 @@ not the middle one.
 together: the answer's fourth element of `banks` and the cache's
 `turners` travel Wally → convert → mapdata; a mapdata without them keeps
 the twelve, a convert without them drops them.
+
+## Closed (2026-11-17)
+
+> I just tested Zounds, from the start of the ship until entering the desert of death.
+
+By taro, with the builds of the ports `428e7c3` and the-advocate `fe5529a3`.

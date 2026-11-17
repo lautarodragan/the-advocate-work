@@ -2,7 +2,7 @@
 name: "routes_moved is written and never read"
 description: "A byte of bank 0's BSS whose comment promises a skipped sort that no code does"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Hurón, Tijereta, Carpintero]
 ---
@@ -85,3 +85,9 @@ it.
 
 **To install when merging**: nothing. No Rust changed, and the global
 tools assemble the runtime from `~/the-advocate`, so merging is enough.
+
+## Closed (2026-11-17)
+
+> I just tested Zounds, from the start of the ship until entering the desert of death.
+
+By taro, with the builds of the ports `428e7c3` and the-advocate `fe5529a3`.

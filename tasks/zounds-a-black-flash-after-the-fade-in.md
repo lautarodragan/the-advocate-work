@@ -2,7 +2,7 @@
 name: "Zounds: a black flash after the fade-in"
 description: "Entering a map in Zounds, the fade-in ends and then the screen goes fully black for several frames; when it comes back the scene has changed —lights red to blue, the tubes in other places—, as if an automatic page's changes went through a black reload instead of happening on screen"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Tijereta]
 ---
@@ -125,3 +125,9 @@ golden), the book `tijereta-black-flash` (`internals/vram.md`).
 Reinstall `project` and `cartridge` from the-advocate: the runtime is
 taken from the checkout they were installed from. Then `just cartridges`
 in the games.
+
+## Closed (2026-11-17)
+
+> I just tested Zounds, from the start of the ship until entering the desert of death.
+
+By taro, with the builds of the ports `428e7c3` and the-advocate `fe5529a3`.

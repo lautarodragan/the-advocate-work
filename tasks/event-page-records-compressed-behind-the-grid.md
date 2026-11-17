@@ -3,7 +3,7 @@ name: "Event page records compressed behind the grid"
 description: "Store each map's event page records (`pages_*`) in LZ2 and unpack them with the grid's stream, as the bytecode already is: ~125 KB freed in ABL's release; then turn `posed_events` on for the whole of ABL with that room"
 type: feature
 game: abl
-status: testing
+status: done
 assignee: taro
 agents: [Mulita]
 ---
@@ -212,3 +212,9 @@ compiles the runtime's path —`project`, `cartridge`, `convert`,
 main already has them.
 
 Branches `mulita-pages-lz2` in the-advocate, the ports and the docs.
+
+## Closed (2026-11-17)
+
+> I just tested Zounds, from the start of the ship until entering the desert of death.
+
+By taro, with the builds of the ports `428e7c3` and the-advocate `fe5529a3`.
