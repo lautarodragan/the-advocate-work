@@ -81,11 +81,18 @@ turned into links.
     name: "Short title"
     description: "One line: what it is, for the list"
     type: bug | feature | refactor | test | docs
+    game: abl | [zounds, vampires-dawn] | …
     status: draft | todo | doing | testing | done | wishlist
     assignee: taro
     ---
 
-`type` and `status` are always there. `assignee` says who has it: `taro`
+`type` and `status` are always there. **`game` is where it was seen and
+where it has to be played to close it**: the game's directory in the ports
+(`abl`, `zounds`, `book-of-three`, `test-game` for the test game…), or a
+list. A task whose file name starts with the game's prefix —`abl-…`,
+`zounds-…`— needs no `game`: the page reads it from the name. One that
+belongs to no game —the tools' own— carries none. It is taro's, from
+2026-11-17, to pick what to play from the page, and the page filters by it. `assignee` says who has it: `taro`
 for their own and for those waiting on something from them —playing, looking
 at some goldens—, and the agent's name for those in `doing`. See "Taking a
 task" in `AGENTS.md`. In `todo`, with no `assignee`, whoever comes first

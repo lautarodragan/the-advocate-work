@@ -2,6 +2,7 @@
 name: "Items that cast a skill outside battle"
 description: "The items screen greys the special items that cast a skill, like ABL's potions; with the healing skills done, they can be used on the map with the same effect"
 type: feature
+game: abl
 status: testing
 assignee: taro
 agents: [Chajá]

@@ -2,6 +2,7 @@
 name: "The debug screen in the .msu"
 description: "Move the debug screen's data (its precomposed font and the rest, ~146 KB in ABL's release) out of the ROM and into the .msu: with MSU-1 the pause menu offers it, without it the option is not there and the game is whole"
 type: feature
+game: abl
 status: testing
 assignee: taro
 agents: [Tijereta]

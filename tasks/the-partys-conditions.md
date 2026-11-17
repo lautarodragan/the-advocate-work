@@ -2,6 +2,7 @@
 name: "The party's conditions"
 description: "The actors never hold a condition: ChangeCondition on them is ignored or refused, skills and items give none, poison does not hurt while walking and the menu never shows one; RM2k keeps them on the map and in battle"
 type: feature
+game: abl
 status: testing
 assignee: taro
 agents: [Mulita]

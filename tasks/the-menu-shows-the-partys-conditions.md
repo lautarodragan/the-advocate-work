@@ -2,6 +2,7 @@
 name: "The menu shows the party's conditions"
 description: "Since the party holds conditions, the main menu's status line and the status screen still say Normal for a poisoned actor; RM2k shows the condition of highest priority, in its colour"
 type: feature
+game: abl
 status: testing
 assignee: taro
 agents: [Tijereta]

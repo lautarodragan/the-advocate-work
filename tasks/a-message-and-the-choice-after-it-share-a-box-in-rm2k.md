@@ -2,6 +2,7 @@
 name: "A message and the choice after it share a box in RM2k"
 description: "A ShowMessage followed by a ShowChoice whose options fit under its lines is one box in RM2k; on the console the message waits for A and the options open as a box of their own"
 type: bug
+game: zounds
 status: doing
 assignee: Chajá
 agents: [Carpintero, Chajá]

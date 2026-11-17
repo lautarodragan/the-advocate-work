@@ -2,6 +2,7 @@
 name: "A skill rolls past where vExecute returns"
 description: "Once a skill's damage kills, or once one against enemies missed the HP or SP it touches, RM2k stops rolling and applying; the battle and its model still roll and apply the parameters and the attribute ranks after it"
 type: bug
+game: abl
 status: testing
 assignee: taro
 agents: [Cardón]

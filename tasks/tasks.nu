@@ -26,6 +26,11 @@ def parse_file [file: string] {
   # `assignee` is who has it now —taro, when it moves to testing—, and
   # `agents` everyone who worked on it, which is never erased.
   let agents = $yml | get -o agents | default [] | append $assignee | where { $in != "" }
+  # `game`: the ports' directory of the game where it was seen and where it
+  # has to be played to close it —one, or a list—. Without it, the file
+  # name's prefix says it when it has one (`abl-…`, `zounds-…`); the rest
+  # —the tools' own, or a game the name does not say— has none.
+  let games = $yml | get -o game | default (game_of_name ($file | path parse | get stem)) | append [] | where { $in != "" }
   
   return {
     file: $file,
@@ -36,7 +41,46 @@ def parse_file [file: string] {
     assignee: $assignee,
     agents: $agents,
     listed_agents: ($yml | get -o agents | default []),
+    games: $games,
   }
+}
+
+# The ports' games, by their directory, and the name the page shows. The
+# file-name prefixes the tasks have used for each, the longest first.
+const GAMES = {
+  abl: "A Blurred Line"
+  book-of-three: "The Book of Three"
+  desert-nightmare: "Desert Nightmare"
+  dooms2: "Dooms 2"
+  el-dorado: "El Dorado"
+  frozen-world: "The Frozen World"
+  sunset-over-imdahl: "Sunset Over Imdahl"
+  vampires-dawn: "Vampires Dawn"
+  zounds: "Zounds"
+  test-game: "The test game"
+}
+const GAME_PREFIXES = [
+  [the-test-game- test-game]
+  [book-of-three- book-of-three]
+  [desert-nightmare- desert-nightmare]
+  [sunset-over-imdahl- sunset-over-imdahl]
+  [vampires-dawn- vampires-dawn]
+  [frozen-world- frozen-world]
+  [el-dorado- el-dorado]
+  [dooms-2- dooms2]
+  [dooms2- dooms2]
+  [sunset- sunset-over-imdahl]
+  [zounds- zounds]
+  [abl- abl]
+]
+
+def game_of_name [stem: string] {
+  $GAME_PREFIXES | where { |p| $stem | str starts-with $p.0 } | get -o 0.1 | default ""
+}
+
+def game_label [] {
+  let g = $in
+  $GAMES | get -o $g | default $g
 }
 
 # To compare names: lowercase and without accents.
@@ -177,9 +221,10 @@ def task_html [] {
   let assignee = if ($t.assignee | is-empty) { "" } else { $" · assignee: ($t.assignee | escape)" }
   let changed = if ($t.changed | is-empty) { "" } else { $" · changed <time datetime=\"($t.changed)\">($t.changed | str substring 0..9)</time>" }
   let source = $"https://github.com/lautarodragan/the-advocate-work/blob/main/tasks/($id).md"
+  let games = $t.games | each { |g| $"<span class=\"game\" data-game=\"($g | escape)\">($g | game_label | escape)</span>" } | str join ''
   [
-    $"<details class=\"task\" id=\"($id | escape)\" data-status=\"($t.status | escape)\" data-type=\"($t.task_type | escape)\">"
-    $"<summary><button type=\"button\" class=\"copy\" data-copy=\"($id | escape)\" title=\"Copy the task's file name\">copy</button><button type=\"button\" class=\"pick\" data-id=\"($id | escape)\" aria-pressed=\"false\" title=\"Add the task to the selection, to copy several at once\">select</button><span class=\"type\">($t.task_type | escape)</span><span class=\"name\">($t.name | escape)</span>"
+    $"<details class=\"task\" id=\"($id | escape)\" data-status=\"($t.status | escape)\" data-type=\"($t.task_type | escape)\" data-game=\"($t.games | str join ' ' | escape)\">"
+    $"<summary><button type=\"button\" class=\"copy\" data-copy=\"($id | escape)\" title=\"Copy the task's file name\">copy</button><button type=\"button\" class=\"pick\" data-id=\"($id | escape)\" aria-pressed=\"false\" title=\"Add the task to the selection, to copy several at once\">select</button><span class=\"type\">($t.task_type | escape)</span>($games)<span class=\"name\">($t.name | escape)</span>"
     $"<span class=\"desc\">($t.description | escape)</span></summary>"
     $"<p class=\"meta\"><a href=\"#($id)\">#</a> · <a href=\"($source)\">($id).md</a>($changed)($assignee)($agents)</p>"
     $"<div class=\"body\">($t.body | render_body)</div>"

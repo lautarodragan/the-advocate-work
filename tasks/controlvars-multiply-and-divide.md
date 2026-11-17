@@ -2,6 +2,7 @@
 name: "ControlVars: multiply and divide"
 description: "The compiler does set, add and subtract; multiply, divide and modulo do not compile. Book of Three 53 uses (Cash Reward in 52 troops, the Glory Hound common event), Frozen World 6, Sunset 4, Vampires Dawn 7"
 type: feature
+game: book-of-three
 status: testing
 assignee: taro
 agents: [Tijereta]
