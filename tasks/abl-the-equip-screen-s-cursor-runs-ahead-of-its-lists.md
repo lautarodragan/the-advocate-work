@@ -2,7 +2,7 @@
 name: "ABL: the equip screen's cursor runs ahead of its lists"
 description: "Choosing a body part, the selection bar moves at once and the item list replaces the parts' list frames later (~4 + ~5), and going back takes ~16; the description above lags the cursor up to 5 frames; Mesen's lag counter sees none of it"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Calandria]
 ---
@@ -174,3 +174,7 @@ installed from; the cartridges' fingerprint sees it and rebuilds.
 Not covered by any test: the battle's text with the ring —its drawing
 and golden tests are in the suite and green, but nothing counts its
 frames—, and the debug screen's wide mode, which keeps the old stage.
+
+## Closed (2026-11-17)
+
+By taro, playing the build of the ports `428e7c3`.

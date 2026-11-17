@@ -2,8 +2,8 @@
 name: "ABL: Lazer Teeth's rock lags"
 description: "In the Lazer Teeth mini-game on map 11, while the rock flies and when it hits a lamp or a computer, Mesen counts ~35 lag frames: frames the main loop missed"
 type: bug
-status: testing
-assignee: taro
+status: doing
+assignee: Aguará
 agents: [Aguará]
 ---
 
@@ -154,3 +154,19 @@ which Chajá's OP_ASK changed—:
 
 **To install when merging**: `events`, `convert` and `cartridge` —the
 runtime goes with the checkout—.
+
+## Reopened (2026-11-17, Hornero)
+
+taro, playing the builds of the ports `428e7c3` and the-advocate
+`fe5529a3`/`95863f36` on Mesen, translated:
+
+> I still see the same amount of lag (~35 frames at each lamp/PC).
+
+The harness counts 2-7 lost per throw, Mesen still ~35. Hornero's guess,
+to be checked first: Mesen counts a frame as lag when nothing reads the
+pad registers in it ($4016/$4017/$4218-$421F), and ~35 is about the 33
+ticks of "Hit A"'s flash. If the runtime does not read the pad while the
+animation or a page blocks input, Mesen counts those frames as lag even
+when every tick fits in its frame. Then the fix is not speed but reading
+the pad every tick —or nothing, if the frames are not lost—, and the
+harness's count has to be Mesen's: frames without a pad read.
