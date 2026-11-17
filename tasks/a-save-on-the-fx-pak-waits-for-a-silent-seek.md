@@ -28,3 +28,13 @@ the background and writes within seconds.
 has a track, stay there, turn the console off, turn it on: the slot should
 show the save from before. Then the same pressing reset before turning it
 off.
+
+**2026-11-17, Hornero, from taro's run of the SRAM test ROM on the FX
+Pak** ([`the-sram-as-slow-wram`](the-sram-as-slow-wram.md)): after a power
+cycle the ROM found the previous session's round counter (134) on the card
+but its stash `LOST` —the 96 KB did not sum to that round's—: the card
+held an image of the SRAM taken in the middle of a round, likely by the
+periodic check while auto rounds wrote the SRAM. If so, a save slot being
+written when such a check fires would reach the card half written. To
+look at: whether the runtime's save slots carry a check that refuses a
+torn one at load, and how many frames writing a slot takes.
