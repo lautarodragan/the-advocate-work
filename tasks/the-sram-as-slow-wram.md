@@ -2,8 +2,8 @@
 name: "The SRAM as slow WRAM"
 description: "A 256 KB SRAM, and the part the save slots do not use as working memory reached by DMA through $2180 —the map's grid and code stashed across a battle, more room while the screen is black—; first, whether the FX Pak writes its SD card on every change"
 type: research
-status: doing
-assignee: Aguará
+status: testing
+assignee: taro
 agents: [Aguará]
 ---
 
@@ -32,3 +32,98 @@ proposal: what to stash, the layout beside the save slots, what it
 saves (load frames, WRAM) — measured, not implemented in the games yet.
 
 ## Log
+
+2026-11-16, Aguará. Read from source, in `~/ref` (commits: sd2snes
+`cf7e21d` = firmware 1.11.2, snes9x `890b5d44` = the installed libretro
+core, bsnes `591b7e1`, bsnes-libretro `a7e88d6`, ares `4cb8d92`, Mesen2
+`b9fa69d`, mesen-s `9e4fdeb`, Mednafen 1.32.1):
+
+* **$FFD8 = $08** is 256 KB (1 KB << 8), and it is **the most ExHiROM can
+  address**: the SRAM window is `$20-$3F:6000-7FFF` (and `$A0-$BF`), 32
+  banks of 8 KB; the FX Pak's FPGA takes `{A20:16, A12:0}` (18 bits) for
+  it (`verilog/sd2snes_base/address.v`, mapper `010`). The runtime already
+  uses that window bank per slot, `$20-$23`.
+* **Caps**: bsnes, ares, Mesen2 and mesen-s cap at 8 (ares wraps 9 to 2
+  KB); snes9x at 9, but its libretro core reports at most 128 KB of
+  SAVE_RAM to the frontend; Mednafen's `snes_faust` takes up to 9; **its
+  default `snes` module masks the byte with 7, so $08 is 1 KB, "no RAM"**
+  (`snes/src/cartridge/header.cpp:46`): no saves there at all. The FX Pak
+  takes `1024 << n` with no cap.
+* **The FX Pak does not write on every change**: it CRCs the SRAM and
+  writes the whole `ramsize` to the `.srm`. Without MSU-1 (`snes_main_loop`)
+  64 KB every 250 ms, and saves once the CRC has been stable for five full
+  passes after a change, or every ~50 passes if it never settles. **With
+  MSU-1** (`msu1_loop`, which is ABL's: its builds carry the `.msu`) it
+  checks at most once a second, and **synchronously on every data seek**
+  (`prepare_data` → `msu_savecheck(1)`), saving at once if changed — but
+  only while no MSU audio or data is busy. The "firmware update" is 1.9.0's
+  partial-SRAM CRC for **known** SuperFX/SA-1 games, a table keyed by the
+  ROM's CRC (no homebrew), and 1.11.1's `autosave` / `msu1_autosave`
+  toggles in `config.yml`.
+
+The test ROM, in the ports' `abl/experiments/sram-dma/` (`just sram-dma`,
+branch `aguara-sram-dma`): 8 MB ExHiROM like the game, `$FFD8 = $08`; a
+round fills 96 KB of WRAM ($7E:8000-$7F:FFFF, which is exactly what a
+battle takes from the map), stashes it in banks $24-$2F by DMA through
+`$2180`, wipes it, brings it back and checks it; with MSU-1 it times a data
+seek right after the stash and another after. Delivered to
+`/shared/builds/sram-test/` with a README of what taro should look for.
+
+Measured in the harness (snes9x, bsnes, mesen-s and the audit core, all
+four the same within two lines): **256 KB seen in all**, 96 KB in **597-599
+lines WRAM to SRAM and 598 SRAM to WRAM** = 8.3 master cycles a byte, **~43
+KB a frame** each way; the stash survives a reset; banks $20-$23 untouched.
+snes9x's libretro hands its frontend only the first 128 KB (the slots are
+in the first 32 KB, so saves are unaffected), mesen-s 256 KB, bsnes saves
+it itself. ABL's `release` with `$FFD8` patched to `$08` boots to the same
+screens as without in snes9x, bsnes and mesen-s (frames 120, 300, 600): the
+byte does not move the header detection, in them or in the FX Pak's
+scoring (both header copies lose the same point).
+
+Measured on ABL (snes9x, the case `battle-in-52`: map 52 has the biggest
+grid, 20,000 B, plus 4,850 B behind it). The global tools are behind the
+runtime today (Carpintero's panorama LZ2 is merged but not reinstalled), so
+nothing builds: this ran on a copy of the `release` built at 20:05 in the
+ports' main checkout, consistent with itself, with the harness's staleness
+check bypassed in a scratch script. Nothing on the paths measured changed
+with that merge. The return from the battle, frame by frame:
+
+* **55 frames of audio package without MSU-1, 86 with** (the map's ARAM
+  again), which the SRAM cannot shorten: the SPC700 is fed through its
+  ports, from the ROM. The whole black: 80 frames, 111 with MSU-1.
+* **then ~25 more black frames** of reloading: `lz2_grid` ~6 (grid and
+  what lives behind it, ~25 KB), `fill_window` ~6 (the tilemap, from the
+  grid), `load_map`/`load_above` ~12 (the tiles, decompressed through
+  `LZ2_BUFFER` into VRAM), and the rest. The same with and without MSU-1.
+
+With the map's WRAM (only what it uses, ~25 KB here) and its VRAM tiles and
+tilemaps stashed in SRAM when the battle starts, those ~25 frames become
+the DMA back: ~0.6 frame of WRAM and ~1-1.5 of VRAM (SRAM to `$2118` is an
+A-bus to B-bus DMA like any other; not measured). About **22 frames, ~0.37
+s, of the 80 (111) the black lasts** on map 52.
+
+The book's research, `research/2026-11-16-the-sram-as-slow-wram.md`
+(branch `aguara-sram-slow-wram` of the-advocate-docs), has all of it with
+its sources and the proposal: 256 KB declared, banks $20-$23 the slots as
+today, $24-$2F the map's WRAM across a battle, $30-$37 its VRAM (tiles
+and tilemaps, by DMA from `$2139` and back to `$2118`), $38-$3F free (a
+last-map cache, or the teleport's carried bytecode); the backdrop's seek
+before the stash, so the FX Pak does not write 256 KB in front of it. It
+frees no WRAM: it makes the rebuild after a battle ~22 frames shorter.
+
+**What taro has to do**: run `/shared/builds/sram-test/` on the FX Pak as
+its `README.txt` says, and send the two seek times (after a stash, and
+again), with music off and on, and whether the stash survived power-off
+with and without the `.msu`. That decides whether the stash can go before
+the backdrop's seek or must go after it, and whether 256 KB costs every
+seek too much even unchanged. And whether running Mednafen without
+`-force_module snes_faust` matters: there the game would not save.
+
+**What has to be installed when merging**: nothing. No Rust and no runtime
+changed; the ports' branch `aguara-sram-dma` adds
+`abl/experiments/sram-dma/` and the `sram-dma` recipe, and the book's adds
+the page.
+
+Not run: ABL's suite (nothing it builds changed) and the FX Pak. The ABL
+measurements ran on a copy of a `release` built before the panorama-LZ2
+merge, because the installed tools could not build the current runtime.
