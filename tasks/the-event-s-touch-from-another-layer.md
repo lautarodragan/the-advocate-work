@@ -1,8 +1,9 @@
 ---
 name: "The event's touch from another layer does not fire"
-description: "A trigger-2 page on a layer other than the hero's fires when the hero steps onto it, but not when the event steps onto the hero, nor while the hero stands on it: RM2k's CheckEventCollision and the player's per-frame check"
+description: "A trigger-2 page on a layer other than the hero's fires when the hero steps onto it, but not when the event steps onto the hero, nor while he stands on it: Zounds' Kuak-Man (map 178), whose birds on the layer above chase the hero, never catches him; 44 such pages in Vampires Dawn, 1 in Desert Nightmare"
 type: bug
-status: wishlist
+game: zounds
+status: todo
 ---
 
 Seen by Aguará on 2026-10-14, reading the code while fixing
@@ -40,3 +41,17 @@ Nightmare (1). **Done**: RM2k's two behaviours —`CheckEventCollision`
 and the per-frame check while the hero stands on one—, each with a test
 page in the test game, red before. Becomes `todo` when a Vampires Dawn or
 Desert Nightmare scene is seen stuck on one.
+
+## Reviewed (Hornero, 2026-11-17)
+
+Still unimplemented (`runtime/event_routes.s`: "What is not here is the
+other half, CheckEventCollision"; `queue_by_action` fires only from the
+hero's side). Recounted over the ports (trigger-2 pages with commands on
+another layer): ABL 0, Frozen World 0, Desert Nightmare 1 (map 48, event
+55), Vampires Dawn 44, Zounds 6. Zounds' map 178, Kuak-Man, is exactly
+this case: four "Buddy Bird" events on the layer above walk toward the
+hero and their touch page plays an animation, toggles switch 164 and
+erases the bird; in RM2k a bird reaching a standing hero fires it, on the
+console never. Today only one of the four survives the 120-event cap
+([`zounds-kuak-man-loses-its-coins`](zounds-kuak-man-loses-its-coins.md)).
+The condition to leave the wishlist —a scene seen stuck— is met: to todo.
