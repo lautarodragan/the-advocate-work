@@ -273,3 +273,21 @@ And with auto rounds and music on (photo `music-on-auto.jpg`): at boot
 saved rounds 140, stash OK; 14 rounds `PASS`; after the stash 1.044 s (max
 1.053 s), again 0.382 s. The same as with music off, now on 17 rounds with
 it on. Whether the track was heard is the open question (asked of taro).
+
+The frame test, music off (photos `seeks-writes.jpg`, `seeks.jpg`; taro
+confirmed no music was ever heard, so every run so far was without it —the
+test ROM's Y sent play before the track loaded; fixed in the ports
+`b81744c` and re-delivered—):
+
+* **SEEKS+WRITES** (16 B of SRAM written every frame, a seek every 30):
+  last 1043 ms, mean 1043, max 1063. With the SRAM changing every frame,
+  **every seek waits about a second**: a full write of the 256 KB each
+  time.
+* **SEEKS** (no writes): 14 seeks, last 382 ms, mean 428, max 1035 —the
+  first after the last change pays the write, the rest the checksum—;
+  hundreds of late frames.
+
+So far-RAM variables in the SRAM are out with a `.msu`: they would make
+every silent data seek take a second. Still to see with the fixed ROM:
+music on (whether a playing track really spares the seeks), and the 64 KB
+ROM.
