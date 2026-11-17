@@ -2,7 +2,7 @@
 name: "Events that walk by a movement type stand still"
 description: "A page whose movement type is random, vertical, horizontal, toward the hero or away from him (1 to 5) gets no route, so the event stands at its cell: NPCs that pace in Sector 34 and Yun Town, ABL's chasing skeletons and monsters, most of Vampires Dawn's walkers"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Hurón]
 ---
@@ -125,3 +125,5 @@ Files touched in the-advocate: `rm2k-snes/events/src/{route,codes}.rs`,
 `runtime/{walk_by_type.s (new),event_routes.s,event_pages.s,boot.s,main.s}`.
 No opcode used (0x4F–0x52 left free). Far RAM: 7 bytes in `FARBSS`.
 Install after merging: `just install events convert mapdata wally`.
+
+**2026-11-16, taro**: declared done.

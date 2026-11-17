@@ -2,7 +2,7 @@
 name: "What is missing from the panoramas"
 description: "What each panorama's path does not cover: a ChangePBG in a common event, the sky in mode 1 and the grain of the flattening; a ChangePBG to another picture is done since 2026-10-19"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Aguará]
 ---
@@ -152,3 +152,5 @@ this (`just space`): the swap's code went to FAR3.
 
 **To install when merging**: `just install cartridge events wally mapdata
 convert` —the bytecode changed, which `events` and `cartridge` compile in—.
+
+**2026-11-16, taro**: declared done.

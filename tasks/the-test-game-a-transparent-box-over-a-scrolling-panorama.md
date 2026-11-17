@@ -2,7 +2,7 @@
 name: "The test game: a transparent box over a scrolling panorama"
 description: "A scene in the test game with characters, a transparent message in the middle of the screen, a floor and a panorama that scrolls on its own, with a test that measures it: the stress case of ABL's map 1, kept where it costs ABL nothing"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Aguará]
 ---
@@ -97,3 +97,5 @@ moves while a box is up; the CI's audit core, written and not run.
 `aguara-test-game-pano` (one bullet in `progress/the-test-game.md`).
 Nothing to install. Captures: shared folder,
 `captures/2026-11-16-test-game-pano/`.
+
+**2026-11-16, taro**: declared done.

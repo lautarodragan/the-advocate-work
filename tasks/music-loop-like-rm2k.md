@@ -2,7 +2,7 @@
 name: "The music's loop, like RM2k"
 description: "Neither of the two paths loops like RPG_RT: the MSU-1 goes back to 0 after 2-6 s of fluidsynth tail; without MSU-1 it cuts at the last note; neither skips the initial silence nor reads CC111"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Hornero, Tijereta]
 ---
@@ -199,3 +199,7 @@ The three tracks now play: `6` 114.8 s, `1-00 reset` 197.0 s,
 Every game's `release` built with `TRACKS=1` and the local tools: Book of
 Three 44 tracks, Desert Nightmare 18, Dooms 2 52, El Dorado 3, Frozen
 World 32, Sunset 9, VD 100, Zounds 43; the only warnings are VD's three.
+
+**2026-11-16, taro**: declared done.
+
+The baked tail, the next stage, goes on in [`the-msu-1-loop-bakes-the-tail`](the-msu-1-loop-bakes-the-tail.md).

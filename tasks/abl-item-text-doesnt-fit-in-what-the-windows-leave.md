@@ -2,7 +2,7 @@
 name: "ABL's item text doesn't fit in what the windows leave"
 description: "ABL's build warns that the most loaded item list asks for more tile pairs than the item and equipment windows leave"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Chajá]
 ---
@@ -163,3 +163,5 @@ To install when merging: `screens` and `mapdata`; the runtime's new
 
 taro has something to look at: Zounds' item and equipment windows, now
 drawn with their whole frame. ABL looks the same.
+
+**2026-11-16, taro**: declared done.

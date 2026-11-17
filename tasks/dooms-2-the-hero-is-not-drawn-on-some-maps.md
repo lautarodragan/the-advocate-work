@@ -2,7 +2,7 @@
 name: "Dooms 2: the hero is not drawn on some maps"
 description: "On some maps the hero's graphic is not drawn, as the adult and as the child; the hero walks and interacts, so only the sprite is missing"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Calandria]
 ---
@@ -114,3 +114,5 @@ in the-advocate; ABL's `just cartridges` and `just tests` (1563 passed, 2
 skipped, no golden moved; `abl.sfc` `a3e45c59db07bb6f`), and `just boot`
 at the ports' root (50 passed). Before merging main the second time, ABL's
 `abl.sfc` was byte for byte the one the global tools built at `759aa0ba`.
+
+**2026-11-16, taro**: declared done.
