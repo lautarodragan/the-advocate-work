@@ -2,7 +2,7 @@
 name: "Tile animations that don't fit in WRAM"
 description: "A map whose anim_tiles stream doesn't fit in WRAM stops the build; have the map go without that animation, with a warning"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Cardón]
 ---
@@ -85,3 +85,5 @@ the BoT and Desert cartridges, which build but **nobody has looked at while play
 cut water looks right on the console is unseen.
 
 Install when merging: `mapdata` (`just -f tools/justfile install mapdata`).
+
+**2026-11-16, taro**: declared done.

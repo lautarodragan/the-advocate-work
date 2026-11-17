@@ -2,7 +2,7 @@
 name: "\\N[0] and renamed actors in messages"
 description: "A box with \\N[0] (the leader) or with the \\N[n] of an actor that some ChangeHeroName renames leaves out its whole page"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Carpintero, Mulita]
 ---
@@ -125,3 +125,5 @@ To install when merging: `events`, `mapdata`, `screens`, `convert` and
 
 Book, branch `mulita-leader-name`: divergence "What names in messages do
 not model" and its row in internals/events.md.
+
+**2026-11-16, taro**: declared done.

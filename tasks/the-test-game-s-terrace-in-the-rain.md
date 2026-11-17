@@ -2,7 +2,7 @@
 name: "The test game's terrace, in the rain"
 description: "Add rain to the terrace's stress case: an event that starts the rain when talked to, and more steps and snapshots at the end of the same test, to see whether the striped edges of ABL's map 1 come from the rain"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Aguará]
 ---
@@ -86,3 +86,5 @@ rain's sound, which the terrace does not play.
 **To merge**: the-advocate `aguara-terrace-rain` (two commits: the scene
 and the test, then the goldens) and the book's `aguara-terrace-rain`.
 Nothing to install.
+
+**2026-11-16, taro**: declared done.

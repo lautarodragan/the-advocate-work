@@ -2,7 +2,7 @@
 name: "ABL: the last leaders' names are cut in the slot screen"
 description: "With every map, the slot screen shows \"Advocat\", \"Royal D\" and \"ABL 2.0\" where the original shows the whole name: the name field is seven cells"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Hurón]
 ---
@@ -162,3 +162,5 @@ leaving faces out.
 
 **To install when merging**: `just install screens mapdata convert` —and
 the runtime changes, `runtime/text_layer.s`—.
+
+**2026-11-16, taro**: declared done.

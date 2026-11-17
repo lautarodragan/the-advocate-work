@@ -2,7 +2,7 @@
 name: "Zounds' map 96 has too many switches for the sprites"
 description: "Map 96 (Arriba del Cuartito) carries 58 floor-switch events drawn from a CharSet: it lags, a switch is drawn by half, the hero loses everything below the head on some rows, and an opened chest's graphic vanishes until the hero walks"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Cardón]
 ---
@@ -144,3 +144,5 @@ the pressed pose is RPG_RT's, which only the captures show.
 
 To install when merging: `just install events wally cartridge` —the
 runtime changes too: `npcs.s` and `cache_slots.s`—.
+
+**2026-11-16, taro**: declared done.

@@ -2,7 +2,7 @@
 name: "The main menu scrolls its party, to fit SP"
 description: "The main menu's party boxes get a fourth line with SP and show three actors at a time, scrolling to the fourth, since four boxes of four lines do not fit"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Tijereta]
 ---
@@ -154,3 +154,5 @@ the menu from a custom menu or a screen with the list scrolled —it is
 painted again at the top—; a full party with an actor the ROM does not
 know; the scroll on bsnes and on the console, where the vblank budget is
 an estimate.
+
+**2026-11-16, taro**: declared done.
