@@ -2,6 +2,7 @@
 name: "Characters a route dresses, left out where they cost the map"
 description: "Two maps leave out the rows of the events a route dresses because with them the map loses something of its own: Book of Three's lava tunnels (Gurgi and Eilonwy) and ABL's factory (a tile's palette); Frozen World's Cliff Swamp 3 was the third until 2026-10-19"
 type: bug
+game: [book-of-three, abl]
 status: testing
 assignee: taro
 agents: [Calandria, Chajá]

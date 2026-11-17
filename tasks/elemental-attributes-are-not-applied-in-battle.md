@@ -2,6 +2,7 @@
 name: "Elemental attributes are not applied in battle"
 description: "An enemy's weakness or resistance to an attribute never changes the damage: 74 of the 100 enemies ABL can fight have one the party carries"
 type: bug
+game: abl
 status: testing
 assignee: taro
 agents: [Chajá]

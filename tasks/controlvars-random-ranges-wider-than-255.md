@@ -2,6 +2,7 @@
 name: "ControlVars: random ranges wider than 255"
 description: "A random operand whose range is 256 or wider does not compile; in The Book of Three that skips 82 calls to the chests' common event, 'Random Chest List'"
 type: bug
+game: book-of-three
 status: testing
 assignee: taro
 agents: [Tijereta]

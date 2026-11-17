@@ -2,6 +2,7 @@
 name: "Doors closed on all four sides can be walked through"
 description: "A tile event under the hero whose tile closes everything imposes $00, and `pass_has` stored that value as a flag: it stayed off and `pass_with_event` didn't look at the rows"
 type: bug
+game: abl
 status: testing
 assignee: taro
 agents: [Hornero]
