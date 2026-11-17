@@ -2,8 +2,8 @@
 name: "ABL: Lazer Teeth's rock lags"
 description: "In the Lazer Teeth mini-game on map 11, while the rock flies and when it hits a lamp or a computer, Mesen counts ~35 lag frames: frames the main loop missed"
 type: bug
-status: doing
-assignee: Aguará
+status: testing
+assignee: taro
 agents: [Aguará]
 ---
 
@@ -278,3 +278,103 @@ anything. What is left to lose (the animation, the hit's page, the
 refreshes, `build_oam`) is in the three drafts above.
 
 taro sent a Mesen2 (CE 2.2.1) save state from their own game, just before a throw that loses ~35: kept in `~/scratch/hornero/lazer-teeth/taro-abl_1.mss`. Back to Aguará to reproduce it.
+
+## taro's state reproduced (2026-11-17, Aguará)
+
+Started from the-advocate `95863f36` and the ports `7ea4469`; branches
+`aguara-lazer-teeth-35`. Mesen2 CE `20ba206` built again (the shim at
+`b9fa69d` does not load a 2.2.1 state) in `~/scratch/aguara/mesen2-20ba206`,
+and its shim —`~/scratch/aguara/lt35/shim/`— now also has a line profiler
+that does not touch the ROM: a list of addresses, and for each instruction
+about to run at one of them, the PPU's frame and scanline.
+
+taro's `taro-abl_1.mss` loads on the delivered `abl.sfc`: map 11, Talan at
+(22,50) facing up with the stones —switch 43—, so the throw is at `Light5`.
+A then up, and Mesen2's counter: **33** lag frames, every other frame for
+the ~60 frames of "Hit A". Idle from the state, 300 frames: 0.
+
+What differs from the harness's `in-11` is the screen's tint: taro's is
+(100, 100, 100, **saturation 40**), which the opening leaves —maps 4 and
+7, `TintScreen` 100, 100, 100, 40— and which survives every door after it;
+the harness's `go_to_map` clears it. Writing `tint_s` back to 100 in taro's
+state: 6 frames lost; and with the timer that is also on screen in taro's
+game turned off, 3, the harness's number. `flash_direct` only took the
+flashes without saturation —"every flash in ABL", I wrote, and it is not
+so—, and with saturation `palette_with_flash` saturates the sixteen colors
+on every frame. The profiler, every tick of "Hit A" in taro's state:
+`flashes_tick` **124-144 lines**, against ~32 with the direct path, and
+the tick at 300-360 lines of 262.
+
+In the harness, the same scene with the opening's tint written before the
+jump —`go_to_map(..., tint=False)`—: Light4 33, Light5 32, PC 32 (snes9x).
+
+### The flash with saturation (the-advocate `aguara-lazer-teeth-35`)
+
+`flash_direct` now takes every flash. `build_palette` saturates the raw
+color before looking it up in the tables, so the direct blend gives the
+same palette reading the **saturated** colors instead of the ROM's; they
+are saturated once and kept in far RAM per flash slot, keyed by `tint_s`
+and the palette's ROM address, and any slot's copy serves —a "Hit A"
+flashes the same palette three times, and with only its own slot each
+flash saturated again—. `palette_with_flash` and `flash_channel_table`
+were left without callers and went, in their own commit; the blend's two
+declared debts, which lived in `flash_channel_table`'s comment, moved to
+`flash_direct`'s.
+
+Checked byte for byte: `FAR_FLASH_PAL` and `flash_ev` on the 30 flash
+ticks of throws at Light4, Light5 and the PC, at saturations 40, 100 and
+150, the same as `95863f36`'s, after each of the two commits.
+
+Frames lost per stone, snes9x through the harness:
+
+    target                        neutral tint     opening's tint (sat 40)
+                                  before  after    before  after
+    Light4 (15,42), from (15,48)     7      7        33      8
+    Light5 (22,43), from (22,50)     3      3        32      4
+    LTComputer (19,44), (19,52)      2      2        32      3
+
+The one more under the tint is the first saturation, ~125 lines in one
+tick; on Mesen2's core Light4 gives 9, the same plus one saturation more
+that falls on the tick of the round's refresh (a flash on another palette
+after the map's refresh), which already overran. Under the tint the
+profiler gives `flashes_tick` ~30 lines per tick of "Hit A", and the
+ticks that still overrun are the ones of the drafts above —the
+animation's drawing on its LZ2 ticks, the hit's page, the refreshes—.
+
+taro's own state cannot be replayed on the new ROM —the code moved under
+the saved CPU—, so the number on taro's Mesen is for taro to see. What
+also differs in taro's game and was measured: a timer on screen (its
+digits), 3 frames more per stone on taro's state with the saturation
+cleared (6 against 3 with the timer off as well): `timer_oam` takes ~18
+lines on every frame. Not touched: draft
+[`the-on-screen-timer-is-expensive-to-draw`](the-on-screen-timer-is-expensive-to-draw.md).
+
+ROM tests, in the ports' `tests/abl/test_stones.py`:
+`test_a_stone_at_a_lamp_under_the_opening_s_tint_loses_few_frames`
+(ceiling 9) and `test_a_stone_at_the_pc_under_the_opening_s_tint_loses_few_frames`
+(ceiling 4), which write the opening's tint before the jump and keep it
+(`go_to_map(..., tint=False)`). Red with `95863f36`: 33 and 32.
+
+The book's "Lossless: CPU time in the frame" had the flash's per-channel
+division, which is gone: the book's branch `aguara-lazer-teeth-35`
+replaces it.
+
+### Verified (the-advocate `fa272554`, the ports `3c3af96`, the book `1ab00f1`; main had not moved)
+
+With the branch's `cartridge` installed locally —the runtime goes with the
+checkout `project` was compiled from—:
+
+* ABL's suite: 1681 passed, 2 skipped; no golden moved. `test_cores.py`
+  alone: 24 passed.
+* `just test` in the-advocate: green. `just boot` (all the games): 155
+  passed.
+* The two new tests of `test_stones.py` red with `95863f36` (33 and 32),
+  green with the branch (8 and 3).
+* `just space`: bank 0 at 3979 B on `test-change-system` and 4019 on
+  `release`; bank 1 at 259 on `test-msu`; **far RAM at 131 B on `release`**,
+  the tightest —the saturated colors and their keys take 144—.
+* `abl.sfc` sha256 `f4d08fcfe46ad6bc…`.
+
+**To install when merging**: nothing new to compile —only the runtime
+changed—, but the global install's runtime is `~/the-advocate`'s, so the
+merged checkout is what goes in.
