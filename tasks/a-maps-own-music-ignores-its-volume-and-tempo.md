@@ -2,7 +2,7 @@
 name: "A map's own music ignores its volume and tempo"
 description: "The song a map plays on its own, by its properties, is played as written: a map that asks for it at 50% or 70% plays it at full volume"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Carpintero]
 ---
@@ -91,3 +91,5 @@ and Sunset's two of them a tempo of 90 and 70—, and the level with MSU-1 (the 
 `MSU_BASE`, which `PlayBGM` already used).
 
 **When merging**: see the battle task; this is the same branch.
+
+**2026-11-17, taro**: declared done.

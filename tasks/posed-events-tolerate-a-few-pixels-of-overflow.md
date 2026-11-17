@@ -2,7 +2,7 @@
 name: "Posed events tolerate a few pixels of overflow"
 description: "A still event whose pose spills a few pixels out of its cell goes into the background anyway, shifted into the cell: `bake_max_offset`, a number of pixels, on by default; ABL's 33 chests drawn 1 px right and 2 px up are the case"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Cardón]
 ---
@@ -126,3 +126,5 @@ Branches `cardon-bake-max-offset` in the-advocate (112e0984), the ports
 the-advocate. Main's Carpintero merge also asks for `mapdata` (Hornero
 said it was not reinstalled yet). Without it, every game's cartridge
 fails with `LZ2_CAP_PANORAMA` undefined.
+
+**2026-11-17, taro**: declared done.

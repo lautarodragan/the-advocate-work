@@ -2,7 +2,7 @@
 name: "Route: transparency"
 description: "Orders 40 and 41, which raise and lower transparency"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Chajá]
 ---
@@ -48,3 +48,5 @@ keeps RM2k's level and draws the character all or nothing (under 4 drawn,
 from 4 on hidden). A page's own route still drops them; none of the eight
 games has one. What it loses against RM2k is the book's divergence "A
 route's transparency is all or nothing".
+
+**2026-11-17, taro**: declared done.

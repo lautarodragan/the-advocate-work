@@ -2,7 +2,7 @@
 name: "ABL: room for still events in the background"
 description: "Find the ~38 KB that turning `posed_events` on for every map of A Blurred Line costs, in a release that already fills its 126 banks: what the cartridge carries that could shrink, and what could move to the .msu without the game stopping being playable without it"
 type: research
-status: testing
+status: done
 assignee: taro
 agents: [Mulita]
 ---
@@ -132,3 +132,5 @@ Branches: the-advocate-docs `mulita-abl-room`; the-advocate and the
 ports only throwaway worktrees (nothing committed there). Nothing to
 install. Note that the global tools were not yet reinstalled after
 Cardón's merge: `posed_events` as a list is refused by them.
+
+**2026-11-17, taro**: declared done.

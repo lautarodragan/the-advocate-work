@@ -2,7 +2,7 @@
 name: "A window line cannot wait forever"
 description: "Put a ceiling on how many vblanks a message line may wait for room, uploading it under forced blank past it; and stress it with ABL's map 1, its self-scrolling panorama and a transparent box in the middle of the screen"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Aguará]
 ---
@@ -164,3 +164,5 @@ ports `299088c` plus the uncommitted data change, in the shared folder's
 only) and the ports `aguara-wait-ceiling` (`47b0d18`, the test and the
 index), both on today's main, which did not move. Nothing to install: the
 runtime is the checkout's.
+
+**2026-11-17, taro**: declared done.

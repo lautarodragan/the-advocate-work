@@ -2,7 +2,7 @@
 name: "A debug toggle to walk through everything"
 description: "In a debug build, Select turns on and off walking through walls, events and tiles, as RPG_RT's test play does holding Ctrl"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Carpintero]
 ---
@@ -117,3 +117,5 @@ clean delivery.
 **For taro, on the console**: in Zounds' debug room, Select, and walk into
 the trainer or a wall; the hero blinks while it is on. Select again and
 walls stop him.
+
+**2026-11-17, taro**: declared done.

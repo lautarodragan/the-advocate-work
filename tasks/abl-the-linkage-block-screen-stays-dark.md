@@ -2,7 +2,7 @@
 name: "ABL: the Linkage Block's screen stays dark"
 description: "On map 2 the computer screen at (39,69)-(40,70) is four events that cover the panorama; when Core gets in, a MoveEvent raises their transparency five times and RM2k shows the starry panorama through them; the port ignores the transparency moves and the screen stays dark"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Chajá]
 ---
@@ -123,3 +123,5 @@ translucent page starting at 3 (no ABL scene fades one; El Dorado's map 5
 and Vampires Dawn's lights do); the level kept when the same page is set up
 again after a battle. Side by side with RPG_RT:
 `captures/2026-11-16-lb-screen/` in the shared folder.
+
+**2026-11-17, taro**: declared done.

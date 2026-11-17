@@ -2,7 +2,7 @@
 name: "The SRAM as slow WRAM"
 description: "A 256 KB SRAM, and the part the save slots do not use as working memory reached by DMA through $2180 —the map's grid and code stashed across a battle, more room while the screen is black—; first, whether the FX Pak writes its SD card on every change"
 type: research
-status: testing
+status: done
 assignee: taro
 agents: [Aguará]
 ---
@@ -221,3 +221,5 @@ WRITES; plus the old test's numbers if not sent yet.
 the ports' branch changes only `abl/experiments/sram-dma/` and the
 `sram-dma` recipe. Not run: ABL's suite (nothing it builds changed), the
 FX Pak.
+
+**2026-11-17, taro**: declared done.
