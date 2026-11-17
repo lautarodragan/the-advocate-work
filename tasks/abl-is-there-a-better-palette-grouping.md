@@ -93,7 +93,7 @@ its own. Not measured: the pictures, screens and battle, which call the
 same function, nor the other games; it would move goldens of the five
 mode-1 maps. Calandria's targeted patch stands either way. Drafts:
 [`adeleine-s-grouping-settles-on-its-first-start`](adeleine-s-grouping-settles-on-its-first-start.md),
-[`abl-map-8-s-signs-lose-their-green`](abl-map-8-s-signs-lose-their-green.md)
+`abl-map-8-s-signs-lose-their-green` (a draft, deleted when [`event-page-records-compressed-behind-the-grid`](event-page-records-compressed-behind-the-grid.md) fixed it)
 (and its line in ABL's Known issues). Book: branch
 `carpintero-palette-grouping`,
 `src/ports/abl/research/2026-11-16-the-palette-grouping.md`, links
