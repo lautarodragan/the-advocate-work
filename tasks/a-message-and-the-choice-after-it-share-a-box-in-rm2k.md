@@ -3,8 +3,8 @@ name: "A message and the choice after it share a box in RM2k"
 description: "A ShowMessage followed by a ShowChoice whose options fit under its lines is one box in RM2k; on the console the message waits for A and the options open as a box of their own"
 type: bug
 game: zounds
-status: doing
-assignee: Chajá
+status: testing
+assignee: taro
 agents: [Carpintero, Chajá]
 ---
 
@@ -111,3 +111,46 @@ From the-advocate `865163eb` and the ports `8042dc8`, branches
 * Bank 0: `op_choice`'s table moved to far code (`choice_table`) to pay
   for `op_ask`; the tightest cartridge, `test-change-system`, has 18 B left
   (it overflowed by 23 before the move).
+* Tests moved with it: ABL's inn tests waited for the greeting as a box
+  of its own (`test_inn.py`, `test_inn_golden.py`, `test_touch_head_on.py`)
+  and `test_choose.py`'s "open" took any `pick_active`; they wait for
+  `PICK_CHOICE` now. The `choose` scene lost the press that closed "Should
+  I use it?". Zounds' debug room's man, the same.
+* **Goldens moved**, looked at, side by side in
+  `/shared/captures/2026-11-17-message-with-choices/`: Zounds'
+  `zounds-ship-unames-choice` (the question and its options; the
+  question alone, `-face-left`, is gone) and `-kazars-face-right` (a
+  light's phase); ABL's `choose-104`, `choose-154`, `inn-greeting-gold`,
+  `inn-choice-without-the-price`; The Book of Three's campfire —a
+  question now, no arrow while its options go up— and six more, and
+  Zounds' `zounds-debug-desert`, by animation phase: one A fewer per
+  question.
+
+## Done (2026-11-17, Chajá)
+
+Branches `chaja-msg-choice` in the-advocate, the ports and the book, with
+main merged (the-advocate 071e92b6, the ports 75a1908).
+
+* the-advocate: the face's cells by DMA; `OP_ASK` in the compiler and the
+  runtime; `choice_pick` stops the composer.
+* the ports: the ship's test and the audited one, the moved tests and
+  their goldens.
+* the book: a row in `internals/events.md`, and the inn's divergence
+  loses the bullet this was.
+
+Verified, with the branch's tools on the merged tree: `just crate-test
+events` (new: `a_choice_that_fits_goes_under_its_message`,
+`a_question_a_face_makes_too_long_is_its_own_box`), `just test`, ABL's
+`just tests` (1665 passed), the ports' `just boot` (155 passed, the
+audited ship's test included: it needs `AUDIT_CORE`). `just test-game`
+has four reds that main has too: `test_leader_name.py` —
+[`the-test-games-leader-name-goldens-are-red-on-main`](the-test-games-leader-name-goldens-are-red-on-main.md)—
+and the linter —[`goombario-reads-widths-from-an-untaken-if-branch`](goombario-reads-widths-from-an-untaken-if-branch.md)—.
+
+Not covered by any ROM test: a `\|` or a `\!` at the end of a question, a
+question with no face over a window without its background, a question
+in a common event, and a translation whose box the table made longer.
+Bank 0: `test-change-system` is the tightest, 18 B left.
+
+**When merging**: reinstall `cartridge` (the bytecode's `.inc`), `events`
+and `convert`; the runtime goes with the checkout.
