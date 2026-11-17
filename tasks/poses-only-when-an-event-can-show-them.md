@@ -2,8 +2,8 @@
 name: "Poses only when an event can show them"
 description: "Every character on a map carries its twelve poses in the cartridge and gets a VRAM slot sized for them, also the NPCs that never move: Dooms 2's map 1 has 16 still NPCs facing down and '31 with their twelve poses'"
 type: feature
-status: doing
-assignee: Mulita
+status: testing
+assignee: taro
 agents: [Calandria, Hurón, Mulita]
 ---
 
@@ -190,3 +190,139 @@ recommendation: the four facings instead of twelve for what only turns
 emits per bank only the poses some map can ask for, the spare pointers
 aimed at a pose that is there; a converter guard that every pose a row can
 ask for is in its bank.
+
+## The implementation (Mulita, 2026-11-17)
+
+From the-advocate `ea529d5a` and the ports `69a722b`, branches
+`mulita-poses` in both.
+
+`git blame` first: the twelve poses for `turning` came with the port of
+the map's sprites to Rust (`756fe507`, 2026-09-30), a simplification of
+what the Python did, not a constraint of the runtime.
+
+What the runtime asks the pose table for, read from it before deciding:
+
+* the turn toward the hero: `TURN_DIR * 3` plus the column of the row's
+  previous pose (`turn_toward_hero.s`), from the page's +30 entry;
+* a route's turn: direction times three plus the route slot's column,
+  which `route_for_event` starts at 1 and `fixed_graphic_into_slot` sets
+  to the page's for a fixed graphic (`refresh_npc` in `npcs.s`); a cache's
+  turner takes it as a still key through `still_turn`, which moves the
+  key by as much as the pose: so the cache keeps naming the twelve, and
+  only the cartridge's records shrink;
+* the rest as the study said: rows that walk or animate, `walker_graphic`,
+  the leaders, command 34, the shared slots and the cache's stills.
+
+So "what only turns" carries the four facings of each of its pages'
+columns and, for a cache's turner, of the middle column too.
+
+How:
+
+* **Wally** — `map_poses` gives a still event in `turning` the four
+  facings of its pages' columns (`pose_facings`), and one in `movable`
+  that turns, the twelve; the map's answer carries, per bank, which poses
+  it can show (`cartridge_poses`: `map_poses`, the cache turners' facings
+  and the shared slots' poses), as a fourth element of `banks`.
+* **The converter** passes it on.
+* **mapdata** — `poses()` joins it per bank over the maps and emits only
+  those records; the other pointers aim at a shown pose of the same
+  direction, else column (`stand_in`). Before that, `requested()` reads
+  from the map's own tables —actors, command 34, rows, pages' +30, shared
+  poses, the cache's stills— every pose the console can ask for, and one
+  the bank lacks stops the build. A bank without the fourth element keeps
+  its twelve: the test fixture's tables come out byte for byte the same.
+
+Tests, red before: Wally's
+`one_that_only_turns_carries_the_four_facings_of_its_columns` (red by
+assertion: it got the twelve) and
+`the_cartridge_carries_what_shows_turns_and_takes_turns`; mapdata's
+`tests/poses.rs`, four cases (they did not compile before: no `Bank`, no
+`stand_in`, `poses` without the rows).
+
+Two corrections the first builds asked for, each its own commit:
+
+* **The palettes still count the twelve.** Counted over the four
+  facings, a character that turns came out quantized a little
+  differently and stopped sharing the bank of the maps where it walks:
+  ABL carried twelve banks more, 7 KB of what the facings save, and
+  colours moved. The cartridge carries four; the palettes are chosen as
+  before, so nothing on screen changes.
+* **The guard asks only a cache's turners for facings.** It first took
+  any character whose twelve still poses the cache names as a turner's,
+  and stopped El Dorado (map 12: pressure plates a route turns, and
+  arrowheads of the same `Gold:2` in other columns that never turn) and
+  Desert Nightmare (map 15, `Polizei_Gasse:2`). Who a route turns is not
+  in the tables, so Wally says it in the cache's `turners`; the poses the
+  guard derives from the tables and the runtime's rule.
+
+`main` moved during the measurement (the global runtime went to
+`272a0b66`): the "after" builds run entirely with tools installed from my
+branch —`project cartridge events wally mapdata convert`—, whose runtime
+is `ea529d5a`'s, the same the "before" builds used.
+
+### Measured (Mulita, 2026-11-17)
+
+Each game's `release`, before with the global tools at `ea529d5a` and
+after with my branch's (`237ca6ec`), same runtime, in a ports worktree at
+`69a722b`. "Records" are the pose records the cartridge carries, from
+mapdata's notes (`2 × distinct + 32 × drawn tiles`); "left out", the
+pointers that now aim at a stand-in; the banks, `just space`'s release.
+
+| game | records before | after | saves | left out of | data banks used |
+|---|---|---|---|---|---|
+| ABL | 462,778 B | 393,942 B | 67.2 KB, 1.05 banks | 568 of 2,448 | 117 → 115 (free halves 9 → 11) |
+| Book of Three | 259,558 B | 126,352 B | 130.1 KB, 2.03 | 548 of 1,020 | 45 → 43 |
+| Desert Nightmare | 910,210 B | 799,290 B | 108.3 KB, 1.69 | 1,909 of 6,804 | 92 → 91 |
+| Dooms 2 | 196,344 B | 150,184 B | 45.1 KB, 0.70 | 233 of 936 | 38 → 38 (gaps 2,991 → 49,151 B) |
+| El Dorado | 251,324 B | 199,950 B | 50.2 KB, 0.78 | 543 of 1,632 | 19 → 18 |
+| Frozen World | 424,392 B | 275,146 B | 145.7 KB, 2.28 | 733 of 2,424 | 63 → 61 |
+| Sunset over Imdahl | 502,786 B | 345,924 B | 153.2 KB, 2.39 | 1,916 of 3,816 | 84 → 82 |
+| Vampires Dawn | 1,497,574 B | 1,029,130 B | 457.5 KB, 7.15 | 8,035 of 14,412 | 126 → 126 (full) |
+| Zounds | 344,462 B | 233,254 B | 108.6 KB, 1.70 | 1,077 of 2,412 | 64 → 62 |
+
+Against the study: the same within a few KB —Book of Three and Dooms 2
+exactly; Desert Nightmare, El Dorado and Vampires Dawn a little less,
+because a cache's turner also carries the middle column's facings, where
+a route slot starts—.
+
+**Vampires Dawn's `.msu` spill**: 580 pieces, 4,700,913 bytes, before;
+461 pieces, 4,233,332 bytes, after —467,581 bytes back in the ROM, the
+`.msu` from 33,617,408 to 33,135,360 bytes—. The cartridge stays full:
+what leaves the poses is taken by what used to spill.
+
+### Tests and what is left (Mulita, 2026-11-17)
+
+On the merged tree —the-advocate `mulita-poses` with `main` at
+`df470ebb`, the ports `mulita-poses` with `main`—, every tool from the
+branch (`install-local … project cartridge events wally mapdata
+convert`):
+
+* `just test`, green; `crate-test` of wally, mapdata, convert and events,
+  green.
+* ABL's `just tests`: 1679 passed, 2 skipped; **no golden moved**, which
+  is what says the walkers, the ones that animate and every turn the
+  suite already looked at are unchanged.
+* New, `test_a_still_one_turns_toward_the_hero_from_each_side` in
+  `test_talk_golden.py`: the bar patron of map 10 —still, turns toward
+  the hero— talked to from each side (cases `talk-twin-right`, `-down`,
+  `-left`, and `talk-twin` from above), TURN_EV and TURN_DIR checked and
+  the frame against a golden. The goldens were taken with the twelve
+  poses in the cartridge (the branch's tools with `ea529d5a`'s convert,
+  which drops what the map can show, so mapdata keeps the twelve), and
+  the test is green with the four facings. It is a regression guard: no
+  ROM before the change makes it red.
+* `just boot` at the ports' root: 155 passed.
+* `just test-game`: 4 red —the leader-name goldens and Goombario in
+  `tl_glyph_hi`—, the same 4 on `main` with the global tools: the drafts
+  `the-test-games-leader-name-goldens-are-red-on-main` and
+  `goombario-reads-widths-from-an-untaken-if-branch`.
+
+What the suite does not cover: a cache's turner turned by a route (the
+guard checks its facings are carried; no ROM test turns one and looks at
+it), and a still one that turns toward the hero on a page whose column is
+not the middle one.
+
+**To install when merging**: `wally mapdata convert`. The three go
+together: the answer's fourth element of `banks` and the cache's
+`turners` travel Wally → convert → mapdata; a mapdata without them keeps
+the twelve, a convert without them drops them.
