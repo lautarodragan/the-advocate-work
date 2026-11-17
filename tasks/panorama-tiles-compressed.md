@@ -3,7 +3,7 @@ name: "Panorama tiles compressed"
 description: "Store panorama tiles in LZ2 instead of raw: ~85 KB freed in ABL's release, about three frames more on the largest panorama's load, and care with a ChangePBG mid-map"
 type: feature
 game: abl
-status: testing
+status: done
 assignee: taro
 agents: [Carpintero]
 ---
@@ -148,3 +148,5 @@ none (nothing changed there). **On merging, `just install mapdata
 convert`** —mapdata emits the streams, and convert links mapdata as a
 library—. The runtime changed too, but the global cartridges already
 assemble it from `~/the-advocate`'s checkout.
+
+**2026-11-17, taro**: declared done.

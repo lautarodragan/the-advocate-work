@@ -3,7 +3,7 @@ name: "The debug screen in the .msu"
 description: "Move the debug screen's data (its precomposed font and the rest, ~146 KB in ABL's release) out of the ROM and into the .msu: with MSU-1 the pause menu offers it, without it the option is not there and the game is whole"
 type: feature
 game: abl
-status: testing
+status: done
 assignee: taro
 agents: [Tijereta]
 ---
@@ -183,3 +183,5 @@ its `.sfc`.
 the ROM —on the FX Pak and in an emulator with MSU-1—, and in Mednafen
 without it the menu ends at End Game. On the FX Pak, how long a page of
 the list takes to show the first time, when every letter is a seek.
+
+**2026-11-17, taro**: declared done.
