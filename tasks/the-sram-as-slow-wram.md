@@ -2,8 +2,8 @@
 name: "The SRAM as slow WRAM"
 description: "A 256 KB SRAM, and the part the save slots do not use as working memory reached by DMA through $2180 —the map's grid and code stashed across a battle, more room while the screen is black—; first, whether the FX Pak writes its SD card on every change"
 type: research
-status: doing
-assignee: Aguará
+status: testing
+assignee: taro
 agents: [Aguará]
 ---
 
@@ -88,8 +88,9 @@ ports' main checkout, consistent with itself, with the harness's staleness
 check bypassed in a scratch script. Nothing on the paths measured changed
 with that merge. The return from the battle, frame by frame:
 
-* **~77-86 frames of audio package** (the map's ARAM again), which the SRAM
-  cannot shorten: the SPC700 is fed through its ports, from the ROM.
+* **55 frames of audio package without MSU-1, 86 with** (the map's ARAM
+  again), which the SRAM cannot shorten: the SPC700 is fed through its
+  ports, from the ROM. The whole black: 80 frames, 111 with MSU-1.
 * **then ~25 more black frames** of reloading: `lz2_grid` ~6 (grid and
   what lives behind it, ~25 KB), `fill_window` ~6 (the tilemap, from the
   grid), `load_map`/`load_above` ~12 (the tiles, decompressed through
@@ -99,4 +100,30 @@ With the map's WRAM (only what it uses, ~25 KB here) and its VRAM tiles and
 tilemaps stashed in SRAM when the battle starts, those ~25 frames become
 the DMA back: ~0.6 frame of WRAM and ~1-1.5 of VRAM (SRAM to `$2118` is an
 A-bus to B-bus DMA like any other; not measured). About **22 frames, ~0.37
-s, of the ~105-110 the black lasts** on map 52.
+s, of the 80 (111) the black lasts** on map 52.
+
+The book's research, `research/2026-11-16-the-sram-as-slow-wram.md`
+(branch `aguara-sram-slow-wram` of the-advocate-docs), has all of it with
+its sources and the proposal: 256 KB declared, banks $20-$23 the slots as
+today, $24-$2F the map's WRAM across a battle, $30-$37 its VRAM (tiles
+and tilemaps, by DMA from `$2139` and back to `$2118`), $38-$3F free (a
+last-map cache, or the teleport's carried bytecode); the backdrop's seek
+before the stash, so the FX Pak does not write 256 KB in front of it. It
+frees no WRAM: it makes the rebuild after a battle ~22 frames shorter.
+
+**What taro has to do**: run `/shared/builds/sram-test/` on the FX Pak as
+its `README.txt` says, and send the two seek times (after a stash, and
+again), with music off and on, and whether the stash survived power-off
+with and without the `.msu`. That decides whether the stash can go before
+the backdrop's seek or must go after it, and whether 256 KB costs every
+seek too much even unchanged. And whether running Mednafen without
+`-force_module snes_faust` matters: there the game would not save.
+
+**What has to be installed when merging**: nothing. No Rust and no runtime
+changed; the ports' branch `aguara-sram-dma` adds
+`abl/experiments/sram-dma/` and the `sram-dma` recipe, and the book's adds
+the page.
+
+Not run: ABL's suite (nothing it builds changed) and the FX Pak. The ABL
+measurements ran on a copy of a `release` built before the panorama-LZ2
+merge, because the installed tools could not build the current runtime.
