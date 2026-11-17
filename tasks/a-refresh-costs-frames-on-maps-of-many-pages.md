@@ -29,3 +29,9 @@ looks at all of them.
 
 **To reproduce**: `refresh` set to 1 on every tick from the harness, on
 those maps.
+
+Seen again by Aguará on 2026-11-17, in
+[`abl-lazer-teeth-s-rock-lags`](abl-lazer-teeth-s-rock-lags.md): on ABL's
+map 11 (84 events) a refresh is ~155 lines, and with the frame already
+~200 lines full there it loses one frame each time —a lamp's switch, the
+PC's, and variable 4 at each round of the stones' engine—.
