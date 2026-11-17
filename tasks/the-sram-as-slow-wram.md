@@ -223,3 +223,26 @@ the ports' branch changes only `abl/experiments/sram-dma/` and the
 FX Pak.
 
 **2026-11-17, taro**: declared done.
+
+## On the FX Pak (taro, 2026-11-17)
+
+taro ran `sram-test.sfc` (256 KB) with its `.msu` on the console, music
+off, auto rounds; photos of the TV in the shared folder,
+`captures/2026-11-17-sram-test-fxpak/`. Read off them:
+
+* SRAM seen 256 KB, MSU-1 yes, save slots intact; 13 to 102 rounds, all
+  `PASS`, none failed.
+* 96 KB by DMA: 597–599 lines, ~43 KB per frame, both ways —the same as
+  the emulators—.
+* A data seek **right after the stash: ~1.08 s** (max 1.084 s); the next
+  one, **SRAM unchanged: 0.382 s**. Worse than the estimate (0.5–0.7 s
+  changed), and the unchanged one alone is past `msu_data_seek`'s ~0.35 s
+  cap: with 256 KB declared and a `.msu`, every seek made with no track
+  playing would time out, stash or not.
+* The frame test was at `OFF` and `WRITES` (`SEEKS` 0); 1 to 4 late frames.
+  Still to run: `SEEKS` and `SEEKS+WRITES`, music on (Y), and the 64 KB ROM.
+* The test ROM's background is full of garbage tiles on the console: it
+  does not clear VRAM, which the emulators start at zero. Cosmetic, the
+  test ROM's.
+
+Read so far: 256 KB with a `.msu` is not usable as it stands.
