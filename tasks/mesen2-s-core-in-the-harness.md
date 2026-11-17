@@ -2,7 +2,7 @@
 name: "Mesen2's core in the harness"
 description: "A recipe that builds Mesen2's core with a libretro shim, so a .mss save state from taro's own game is loaded, its lag counted the way Mesen2 counts it, and its frame profiled by lines"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Aguará]
 ---
@@ -105,3 +105,7 @@ state on the current `release` gives 123 "lag" frames and 2693 ticks in
 
 **To install when merging**: nothing of the-advocate. The core is already
 installed by this run; on another machine, `just mesen2-core` in `abl/`.
+
+## Closed (2026-11-17)
+
+By taro. Verified by Aguará: taro's own `.mss` gives the 33 lag frames through `just mesen2` on the ROM rebuilt from its commits.

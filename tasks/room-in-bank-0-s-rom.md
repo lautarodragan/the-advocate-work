@@ -2,7 +2,7 @@
 name: "Room in bank 0's ROM"
 description: "The tightest cartridge has 16 B of bank 0 left; routines that are not hot and need nothing of bank 0 can move from CODE to the FAR banks"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Carpintero]
 ---
@@ -181,3 +181,7 @@ branch has no commits (no golden changed). The book: `internals/maps.md`
 says where `CALL0` lives now. The last runtime commit (main.s's header) is
 comments only: release's `abl.sfc` is byte for byte the same,
 `3cfb09a7648de9459e79fd49ce8fdeec46e99d44a8241013938844eb4274ba0d`.
+
+## Closed (2026-11-17)
+
+By taro, after playing the builds from the-advocate `95863f36` on: the boot, the title, saving and loading on Mesen and on the FX Pak. A Game Over back to the title was not called out.
