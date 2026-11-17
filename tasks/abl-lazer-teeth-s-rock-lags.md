@@ -2,8 +2,8 @@
 name: "ABL: Lazer Teeth's rock lags"
 description: "In the Lazer Teeth mini-game on map 11, while the rock flies and when it hits a lamp or a computer, Mesen counts ~35 lag frames: frames the main loop missed"
 type: bug
-status: testing
-assignee: taro
+status: doing
+assignee: Aguará
 agents: [Aguará]
 ---
 
@@ -247,3 +247,13 @@ book still says what is seen.
 
 **To install when merging**: nothing. The ports' branch only touches a
 comment of `tests/abl/test_stones.py`; no suite was run for it.
+
+## taro's Mesen2 (2026-11-17)
+
+taro's emulator is Mesen Community Edition 2.2.1, commit `20ba206`
+(nesdev-org's fork, built 2026-06-05): not SourMesen's `b9fa69d` that
+Aguará's shim was built from. Between them the SNES core changed
+(`SnesPpu.cpp`, `Spc*`, `InternalRegisters.cpp`, `BaseControlManager.*`).
+Settings seen: no overclocking (0/0 scanlines), RAM at power on "Random
+Values", rewind on (300 MB), autosave state every 5 minutes, lag counter
+shown. Run-ahead not seen yet (Emulation tab).
