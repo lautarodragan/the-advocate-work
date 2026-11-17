@@ -25,8 +25,6 @@ keeps only what it needs to ask; with MSU-1 the screen works as today,
 without it the pause menu does not offer it; gain measured; ROM tests
 with and without MSU-1; the book's `internals/the-msu-file.md` updated.
 
-## Log
-
 ## Work log (Tijereta)
 
 Taken on 2026-11-16 from the-advocate a83c4a12, the ports ff7ac5b and the
@@ -62,3 +60,28 @@ stage already takes 4 KB. So:
 * **Without MSU-1** —or with another build's `.msu`— the pause menu does
   not offer the row: `menu_rows_build` asks the port, each time the menu is
   drawn.
+
+### What was done
+
+* **The packing**: `.msu_only`, a mark next to `.msu`. A piece with it goes
+  to the region always —in any cartridge, `MSU_REQUIRED` or not—, before
+  the halving picks among the `.msu` ones; the region exists then in a
+  cartridge that does not need the MSU-1, with only those, and its
+  signature goes to the ROM as for Vampires Dawn. Without any, nothing
+  changes. Four tests in `rm2k-snes-cartridge`'s `tests/banks.rs`, three
+  of them red on the code before.
+* **The emitter**: the eight phases of the font, a piece per page of names
+  —the format changed: a block per hundred, its table of offsets and its
+  strings, the variables' slot plus two so that zeros say "none"—, the
+  windows' tilemap and bars as one piece, their tiles and colours as
+  another, all `.msu_only`; in the ROM, a table of each page's unit.
+* **The runtime**: `dbg_available` for the pause menu's row; `dbg_seek`
+  and `dbg_read` —a seek with `msu_data_seek`'s cap and a DMA from the port
+  through the WRAM's—; `page_load`, `frame_load`; `dbg_glyph`, the cache
+  of glyph-phases that `tl_glyph_hi` calls instead of computing the ROM
+  address. Its RAM is in `LZ2_BUFFER` after the wide stage: far RAM has
+  12 B free in ABL's `release`, and the first try, with the screen's new
+  variables in `dbg_ram`, overflowed it by 4.
+* **A page flip waits for the text** to be on screen, `DBG_FLIP`: the
+  text layer keeps a by-reference run as an address and compares records
+  by it, so the buffer the screen still shows must not be overwritten.
