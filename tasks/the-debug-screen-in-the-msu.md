@@ -167,8 +167,10 @@ the `msu_dma0_l` that went—:
   pause menu, the VRAM, and what the debug screen does not model; and the
   merge. Relative links checked.
 
-On the merged tree, with the merge's tools: ABL's `just tests` 1662
-passed, 2 skipped.
+On the merged tree, with the merge's tools (project cartridge mapdata
+screens convert events wally): ABL's `just tests` 1662 passed, 2 skipped;
+`just boot` at the ports' root 153 passed —GateStreet's red is gone with
+main—.
 
 **To install when merging**: `just install cartridge mapdata screens`
 —`cartridge` for `.msu_only`, `mapdata` and `screens` for the pieces and
