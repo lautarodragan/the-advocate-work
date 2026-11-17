@@ -2,8 +2,8 @@
 name: "ABL: Lazer Teeth's rock lags"
 description: "In the Lazer Teeth mini-game on map 11, while the rock flies and when it hits a lamp or a computer, Mesen counts ~35 lag frames: frames the main loop missed"
 type: bug
-status: testing
-assignee: taro
+status: doing
+assignee: Aguará
 agents: [Aguará]
 ---
 
@@ -276,3 +276,5 @@ the story. What differs is the state of the game: a `.mss` of taro's from
 just before a throw reproduces it. The remeasure on `20ba206` was stopped before it measured
 anything. What is left to lose (the animation, the hit's page, the
 refreshes, `build_oam`) is in the three drafts above.
+
+taro sent a Mesen2 (CE 2.2.1) save state from their own game, just before a throw that loses ~35: kept in `~/scratch/hornero/lazer-teeth/taro-abl_1.mss`. Back to Aguará to reproduce it.
