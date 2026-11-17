@@ -12,7 +12,7 @@ taro, on 2026-11-16, looking at Lashe City (map 8) on Mesen: the sign at
 `BLChip1` tile, are drawn completely differently. With the background off
 the event's sign is still there: it is an object, and map 8 lends it a
 sprite palette that loses its green
-([`abl-map-8-s-signs-lose-their-green`](abl-map-8-s-signs-lose-their-green.md),
+(`abl-map-8-s-signs-lose-their-green` (a draft, deleted when [`event-page-records-compressed-behind-the-grid`](event-page-records-compressed-behind-the-grid.md) fixed it),
 from [`abl-is-there-a-better-palette-grouping`](abl-is-there-a-better-palette-grouping.md)).
 The event's page asks for switch 24, `LateForWork1`; turned off with the
 debug screen, the map loses the door of Talan's Pad too (half of it stays
@@ -100,7 +100,7 @@ map 8 adds 619 B (map tiles +417, the posed record +337, sprite tiles
 
 **So it stays off in ABL**, with the why as a comment in `advocate.toml`
 (ports `cardon-abl-posed`). The palette of the signs is not fixed:
-[`abl-map-8-s-signs-lose-their-green`](abl-map-8-s-signs-lose-their-green.md)
+`abl-map-8-s-signs-lose-their-green` (a draft, deleted when [`event-page-records-compressed-behind-the-grid`](event-page-records-compressed-behind-the-grid.md) fixed it)
 stays, with a note, and its Known issues line in the book too.
 
 **What it does on screen**, on a test cartridge with only map 8 (not
