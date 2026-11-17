@@ -2,8 +2,8 @@
 name: "routes_moved is written and never read"
 description: "A byte of bank 0's BSS whose comment promises a skipped sort that no code does"
 type: bug
-status: doing
-assignee: Carpintero
+status: testing
+assignee: taro
 agents: [Hurón, Tijereta, Carpintero]
 ---
 
@@ -58,3 +58,30 @@ would have sat over `cmp_a`—.
 `just space` in ABL before and after, with the branch's tools: **8 B of
 bank 0 and 1 B of BSS on every one of the eleven cartridges** (the
 tightest in bank 0, `test-change-system`, goes from 18 to 26 B).
+
+Then merged main (the-advocate `272a0b66`, the ports `ea5a1e7`): merge
+`06c7c437`. Measured again on it, main against the merge, with the same
+local tools —`project cartridge`, plus `events convert` because the
+global converter was older than Aguará's event-compiler change—: the
+same **8 B of bank 0 and 1 B of BSS on every cartridge**;
+`test-change-system` goes from 8 to 16 B.
+
+What was run, all with the branch's tools:
+
+* ABL's `just tests`, on the branch before the merge: 1670 passed, all
+  green. On the merge: 1673 passed and the 2 known reds of `test_msu.py`
+  (`test_with_msu_a_save_pauses_seeks_and_plays_again`,
+  `test_with_msu_and_no_track_a_save_seeks_alone`, red until the audit
+  core is rebuilt with `just audit-core`). No golden moved.
+* `just test-game` (SOUNDFONT FluidR3_GM), on the merge: 66 passed, and
+  the known reds: 3 in `test_leader_name.py` and Goombario's in
+  `test_linter.py` (`tl_glyph_hi` in `runtime/text_layer.s`, not this).
+* `just boot` at the ports root, on the branch before the merge: 155
+  passed. Not repeated on the merge.
+
+What no test sees: nothing read the byte, so the only thing a test could
+catch is a broken `move_events`, and the walkthrough's moving NPCs cover
+it.
+
+**To install when merging**: nothing. No Rust changed, and the global
+tools assemble the runtime from `~/the-advocate`, so merging is enough.
