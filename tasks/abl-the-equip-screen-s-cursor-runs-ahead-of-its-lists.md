@@ -148,15 +148,20 @@ in ABL's known issues.
 ### 2026-11-17, Calandria: verified, and what to install
 
 Branches `calandria-equip-lag` in the-advocate (`2d36514c`, merged with
-main at `1caf906c`), the-advocate-ports (merged at `c5ae4eb`) and
-the-advocate-docs (merged at `fef41fa`: the optimizations page and the
+main at `cbc2824e`), the-advocate-ports (merged at `d715670`) and
+the-advocate-docs (merged at `8b3e0e0`: the optimizations page and the
 items screen's line in ABL's known issues).
 
 Run with `install-local cartridge project` of that branch, on the tree
-merged with main: ABL's `just tests` green; `just display-sweep` of
+merged with main at `1caf906c` (Tijereta's): ABL's `just tests` green
+(1670); `just boot` at the ports' root, 154 green. Merged again with
+Chajá's main (`c48be14b`): 1660 green and ten red, all the inn's and the
+`choose` scene —"the inn did not open its choice"—, and the same ten with
+`c48be14b`'s `runtime/` alone in place of this branch's: main's, not this
+branch's. Also: `just display-sweep` of
 `release`, 375 cases, none with accesses during display; the new
 equipment scene of `test_display_accesses.py` green; `just test` in
-the-advocate green; `just boot` at the ports' root, see the report. Two
+the-advocate green. Two
 goldens moved, the shop's party walkers on another step because the text
 settles sooner: side by side in
 `/shared/captures/2026-11-17-equip-lag/calandria/`, with a sheet per
