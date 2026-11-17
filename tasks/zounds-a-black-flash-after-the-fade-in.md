@@ -2,8 +2,8 @@
 name: "Zounds: a black flash after the fade-in"
 description: "Entering a map in Zounds, the fade-in ends and then the screen goes fully black for several frames; when it comes back the scene has changed —lights red to blue, the tubes in other places—, as if an automatic page's changes went through a black reload instead of happening on screen"
 type: bug
-status: doing
-assignee: Tijereta
+status: testing
+assignee: taro
 agents: [Tijereta]
 ---
 
@@ -102,3 +102,26 @@ game's converter log): Zounds 20, 21 (parallel pages), 31 (autostart),
 `BackdropSetter`) and 145, `Falling 2`, whose autostart swaps to
 `TheHubOnTheScreen` in the middle of a scene, with the screen on: the
 same black there. ABL and the other five carry none.
+
+**The Frozen World's map 145** with the branch (snes9x, entered at
+(11, 3)): its autostart swaps to `TheHubOnTheScreen` on frame 475 after
+the fade, mid-scene, with no black frame; the only black one, 497, is the
+scene's own `TintScreen` to black before it jumps to 147.
+
+**Suites**, with the branch's tools (`install-local .local-tools project
+cartridge`): the-advocate's `just test`, 29 passed; ABL's `just tests`,
+1665 passed and 2 skipped; the ports' `just boot`, 154 passed (all the
+games built with the branch's runtime, Zounds' new test included). Not
+covered by any test: the `apart` path of `pano_live` (tiles of more than
+$5000 bytes, which no picture today has), a box open during a swap, and
+a swap on a PAL console.
+
+Captures, before and after side by side, in
+`/shared/captures/2026-11-17-zounds-black-flash/` with a README.
+
+**On merging**: the-advocate `tijereta-black-flash` (runtime only), the
+ports `tijereta-black-flash` (the test, `go_to_map(by_frames=)` and the
+golden), the book `tijereta-black-flash` (`internals/vram.md`).
+Reinstall `project` and `cartridge` from the-advocate: the runtime is
+taken from the checkout they were installed from. Then `just cartridges`
+in the games.
