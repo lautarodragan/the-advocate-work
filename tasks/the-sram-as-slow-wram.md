@@ -311,3 +311,25 @@ Closed for far RAM: any SRAM that changes every frame makes every silent
 seek pay the write. What is left open: whether a playing track spares the
 seeks (the fixed ROM, Y), and whether the 32 KB the games declare already
 costs what the line above says.
+
+With the fixed ROM (the ports `b81744c`) and the track really playing
+(MUSIC ON is now shown only when the playing bit is up; photos
+`music-fixed-*.jpg`), 256 KB:
+
+* rounds: after the stash **2 ms**, again **2 ms**;
+* **SEEKS**: 25 seeks, last 2 ms, mean 2, max 2, **0 late frames**;
+* **SEEKS+WRITES**: 28 seeks, 2 ms each, **0 late frames**.
+
+So the firmware reading holds: while a track plays, no check, no write,
+and a seek costs 2 ms whatever the SRAM size or how often it changes. Every
+cost above is of seeks made with no track playing. Two consequences:
+
+* For the cost: what matters is not the SRAM's size but **which seeks
+  happen in silence** —in ABL, the sound-effect packages after
+  `map_song_mute` stops the track, and anything read while the music is the
+  SPC's—. Ordering those after the next track starts would make them cheap
+  even today.
+* For the saves: the same rule means that while a track plays the FX Pak
+  never writes the `.srm` (the draft
+  [`a-save-on-the-fx-pak-waits-for-a-silent-seek`](a-save-on-the-fx-pak-waits-for-a-silent-seek.md)):
+  the cheaper the seeks are made, the longer a save waits to reach the card.
