@@ -264,8 +264,15 @@ taro, a moment later, translated:
 > the numbers come out the same as Aguará's. And it was also observable by
 > eye and ear.
 
-So the 2.2.1 core counts the same 8 and 2 from Aguará's states; the ~35 of
-the first report came from how the throws were played or counted, not from
-the emulator. The remeasure on `20ba206` was stopped before it measured
+So the 2.2.1 core counts the same 8 and 2 from Aguará's states: the
+emulator is not the difference. Nor is the counting: taro, translated,
+
+> I always reset the counter to zero before giving you numbers, and I always
+> take several measurements.
+
+so the ~35 are real in taro's own game and are not in the harness's scene,
+which reaches map 11 through the `in-11` case and a door jump, not through
+the story. What differs is the state of the game: a `.mss` of taro's from
+just before a throw reproduces it. The remeasure on `20ba206` was stopped before it measured
 anything. What is left to lose (the animation, the hit's page, the
 refreshes, `build_oam`) is in the three drafts above.
