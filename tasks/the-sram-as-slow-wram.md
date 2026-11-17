@@ -258,3 +258,13 @@ written after the card's last write? half of one?) is to be read from
 [`a-save-on-the-fx-pak-waits-for-a-silent-seek`](a-save-on-the-fx-pak-waits-for-a-silent-seek.md):
 what the SRAM holds at power-off is what the last write took, not what the
 game last wrote.
+
+Then three rounds with A and **MSU-1 music on** (photo
+`music-on-three-rounds.jpg`), after another power cycle: at boot saved
+rounds 137, **saved stash OK** this time; the rounds `PASS`; after the
+stash **~1.03 s** (max ~1.04 s), again **0.382 s** —read off a blurry
+photo, but the same order as with the music off—. That contradicts the
+reading of the firmware that nothing is checked while a track plays: either
+the check does run while a track plays, or the ROM's track is not playing
+when it seeks (stopped, or not yet started). To settle from the firmware
+and `sram.s` before trusting either.
