@@ -2,8 +2,8 @@
 name: "ABL: Lazer Teeth's rock lags"
 description: "In the Lazer Teeth mini-game on map 11, while the rock flies and when it hits a lamp or a computer, Mesen counts ~35 lag frames: frames the main loop missed"
 type: bug
-status: doing
-assignee: Aguará
+status: testing
+assignee: taro
 agents: [Aguará]
 ---
 
@@ -170,3 +170,80 @@ animation or a page blocks input, Mesen counts those frames as lag even
 when every tick fits in its frame. Then the fix is not speed but reading
 the pad every tick —or nothing, if the frames are not lost—, and the
 harness's count has to be Mesen's: frames without a pad read.
+
+### Why the counts differ (2026-11-17, Aguará)
+
+Started from the-advocate `95863f36` and the ports `428e7c3`; branch
+`aguara-pad-read` in the ports (the-advocate's was dropped: nothing changed
+there).
+
+Mesen2's rule, read in its source (`Core/Shared/BaseControlManager.cpp`,
+`ProcessEndOfFrame`; `Core/SNES/InternalRegisters.cpp`,
+`ReadControllerData`; `Core/SNES/SnesControlManager.cpp`, `Read`): a frame
+is lag when the CPU read none of `$4218-$421F`, `$4016` or `$4017` in it.
+The frame ends at the start of vblank (`SnesPpu.cpp`, the NMI scanline).
+The auto-read itself does not count; only the CPU's reads do. Hornero's
+guess about the rule holds.
+
+**But the runtime does read the pad every tick**: `read_pad` is the
+second thing the main loop does after `wait_vblank`, unconditionally, also
+in a fade's frozen ticks, and no map-side path waits for a vblank outside
+that loop (the others are the title, the slots, the menu, the items and
+the battle). The animation and the pages run inside the tick. So a frame
+Mesen counts is a frame no tick started in: a tick that overran, which is
+what "hardware frames minus ticks" already counts. Nothing to win by
+reading the pad more often: it would only hide real slowdowns from the
+counter. The frames Mesen counts in this scene are really lost.
+
+**Measured with Mesen2 itself.** The libretro cores the harness has
+(snes9x, bsnes, mesen-s) all count 7 at Light4, 2 at the PC and 3 at
+Light5, also with the MSU-1 on. mesen-s is not Mesen2 —its libretro
+`RunSingleFrame` does the auto-read at the start of the frame instead of
+timing it—, so Mesen2's core was built from source (`~/ref/mesen2`,
+`b9fa69d`, `make core USE_GCC=true`) and wrapped in a libretro shim
+—`~/scratch/aguara/lazer-teeth/mesen2-retro/shim.cpp`, linked against the
+core's objects— that runs one frame per `retro_run` on the caller's thread
+and exposes Mesen2's own lag counter (memory id `0x8100`) and its `.mss`
+save states. With it the harness plays the same scenes on Mesen2's core,
+and its counter, phase by phase (`phases.py` and `frames.py` next to the
+shim, with the delivered `abl.sfc` and its `.msu`):
+
+    phase                                   Mesen2's counter   hardware - ticks
+    60 ticks standing on map 11                     0                 0
+    talking to the grate (with a door jump)        99                99
+    a door jump onto map 11 (go_to_map)            100               100
+    the throw at Light4, 116 ticks                   8                 9
+    the throw at Light5, from a fresh session        3                 3
+    the throw at the PC, from a fresh session        2                 2
+    200 ticks after each throw                       0                 0
+
+Frame by frame they differ only in where a two-frame overrun is charged.
+Holding A and the direction for 8 ticks instead of 1, or throwing from
+further away —(15,54) and (22,54)—, does not change it. **So the harness
+already counts what Mesen counts**, and `test_stones.py` holds that number;
+its comment now says it was checked against Mesen2.
+
+**What is not explained: taro's ~35.** Mesen2's core, the same ROM
+(`abl.sfc` sha256 `3cfb09a7…`, byte for byte the one in
+`/shared/builds/abl/`) and the same MSU-1 give 2-8 per throw in this
+scene. What could make the difference and was not tried, because there is
+nothing to play it from: taro's Mesen2 version and settings (run-ahead,
+overclocking, anything that changes how frames are counted), and how the
+throws are really played —from where, after what, with what else on the
+map; the harness reaches map 11 through the `in-11` case and a door jump,
+not through the story—. A door jump onto map 11 alone costs ~100 lag
+frames (the map's load), so a counter read across a map change shows far
+more than the throw. The `.srm` in `/shared/builds/abl/` is empty.
+
+For taro: two Mesen2 states made with that core, right before a throw at
+Light4 and at the PC, in `/shared/captures/2026-11-17-lazer-teeth-lag/`,
+with a README of what to press and what Mesen2's core counts from there
+(8 and 2). If taro's Mesen2 shows ~35 from them, it is the emulator or its
+settings; if it shows ~8, the ~35 come from the way the throws are played,
+and a `.mss` saved in taro's own session before one —the shim loads them—
+is what reproduces it. Nothing was optimised: the frames left are the
+ones in the drafts above, and the "Known issues" line of ABL's page in the
+book still says what is seen.
+
+**To install when merging**: nothing. The ports' branch only touches a
+comment of `tests/abl/test_stones.py`; no suite was run for it.
