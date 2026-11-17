@@ -33,3 +33,72 @@ something that cannot be done otherwise, said and minimised—; a ROM test
 on that entry that fails with the black frames.
 
 ## Log
+
+### 2026-11-17, Tijereta
+
+Started from the-advocate 865163eb and the ports 8042dc8, branches
+`tijereta-black-flash` in both.
+
+**The map is 31, `Sala de Máquinas`** (chipset 10, 20x15), found by
+rendering every map's layers with `rm2k-render` and looking: its two
+"lights" are windows onto the panorama, `dawn1`, and the "tubes" are the
+machines, events 1-4 and 8-11, whose pages follow variables 12 and 13
+that two parallel events (6 and 12) step every 8 frames: they move on
+their own, in RM2k too.
+
+**The page is event 7, `Set`, an autostart**: by variable 91 (the time of
+day) a `ChangePBG` to `Zounds_DawnPanorama_01`, `…Morning…`, `…Dusk…` or
+`…Night…`, then 12 and 13 to 0 and `EraseEvent`. The red-to-blue is the
+panorama swap.
+
+**What blanks**: `pano_image` in `runtime/pano.s` swaps the picture with
+the screen in forced blank for the rest of the frame —the LZ2 of its
+tiles, the DMA, and the ring of its tilemap built row by row—. `git blame`:
+d8b7f2cff (Aguará, 2026-10-19), whose message says the swap "loses 4
+frames black on Zounds' map 32 … on these maps it happens behind the
+entering fade"; 8fc13507a (2026-11-16) put the tiles in LZ2, which adds
+the decompression to the blank. So the black was on purpose, on the
+assumption that the swap falls inside the fade.
+
+**RPG_RT does not run it inside the fade.** EasyRPG's `Scene_Map`
+(`FinishPendingTeleport2/3`): after a jump, *parallel* pages get one
+pre-update before the fade-in starts, but foreground ones (autostart)
+only run once the transition ends —a `ShowScreen` in the page that
+jumped is an async op the interpreter waits for—. So on map 31 RM2k
+shows `dawn1` through the fade-in and swaps it in place right after;
+the port does the same thing and then blanks for it. On 20 and 21 the
+pages are parallel.
+
+**Measured** (snes9x, `measure.py` in my scratch, frame by frame from the
+jump by map 19's door to (1, 6)): the fade ends on frame 81, 82-90 are
+all black, the windows come back blue on 91. The main loop is held for
+the whole of it: the tick that swaps lasts ~13 frames.
+
+**The fix** (the-advocate `tijereta-black-flash`, `runtime/pano.s`):
+with `brightness` at 0 the swap goes as before, in forced blank; with
+the screen on, `pano_live` builds the ring into `LZ2_BUFFER` and
+decompresses the tiles after it (when both fit: tiles up to $5000 bytes,
+every picture today; otherwise ring after the tiles went up) while the
+screen shows the frame before, then takes the panorama's layer off `TM`
+and DMAs 512 bytes at a time, each started inside the vblank before line
+256, and puts the layer back with its colours. A picture's tiles and ring
+are up to 28 KB and a vblank takes about 6, and the new tiles go over
+the old ones, so a swap with no visible step is not possible without
+twice the VRAM. Result on map 31: no black frame; the windows show the
+backdrop for 4 frames (90-93), the screen otherwise holds the frame
+before for ~9; the settled frame is the old path's, pixel for pixel but
+for the hero, who now gets moving earlier. Cost: in mode 3 the message
+window is BG2, so a box open during a swap blinks off with it.
+
+**Test**: `test_the_machine_room_swaps_its_panorama_with_the_screen_on` in
+the ports' `tests/test_zounds.py`, with `go_to_map(..., by_frames=True)`
+(by ticks it returned after the black, and passed on the old ROM). Red on
+865163eb: frames 0-8 after the fade all black. Green on the branch, with
+the golden `zounds-machine-room-panorama`.
+
+**Survey**: the swaps the converter carries (`by a ChangePBG` in each
+game's converter log): Zounds 20, 21 (parallel pages), 31 (autostart),
+32 (both); The Frozen World 1 (the battle screen's parallel
+`BackdropSetter`) and 145, `Falling 2`, whose autostart swaps to
+`TheHubOnTheScreen` in the middle of a scene, with the screen on: the
+same black there. ABL and the other five carry none.
