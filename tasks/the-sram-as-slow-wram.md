@@ -291,3 +291,23 @@ So far-RAM variables in the SRAM are out with a `.msu`: they would make
 every silent data seek take a second. Still to see with the fixed ROM:
 music on (whether a playing track really spares the seeks), and the 64 KB
 ROM.
+
+The 64 KB ROM, music off (photos `64k-*.jpg`; it has no rounds, A and B
+do nothing there on purpose: 96 KB do not fit):
+
+* **SEEKS**: 18 seeks, last 97 ms, mean 107, max 282; 119 late frames.
+* **SEEKS+WRITES**: 14 seeks, last 282 ms, mean 284, max 305; 240 late
+  frames.
+* **WRITES** alone: no seeks, 1 late frame.
+
+Both sizes fit one line: about **1.5 ms per KB** to checksum (382 ms for
+256 KB, 97 for 64) and about **2.6 ms per KB** more to write it when it
+changed (1043 − 382 for 256 KB, 282 − 97 for 64). So today's 32 KB would
+cost a silent seek about 48 ms unchanged —three frames— and about 130 ms
+after a save: to be checked against what the games already do (Vampires
+Dawn reads sound effects from the `.msu` on map loads).
+
+Closed for far RAM: any SRAM that changes every frame makes every silent
+seek pay the write. What is left open: whether a playing track spares the
+seeks (the fixed ROM, Y), and whether the 32 KB the games declare already
+costs what the line above says.
