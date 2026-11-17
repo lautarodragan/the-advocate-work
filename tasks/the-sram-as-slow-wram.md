@@ -2,8 +2,8 @@
 name: "The SRAM as slow WRAM"
 description: "A 256 KB SRAM, and the part the save slots do not use as working memory reached by DMA through $2180 —the map's grid and code stashed across a battle, more room while the screen is black—; first, whether the FX Pak writes its SD card on every change"
 type: research
-status: doing
-assignee: Aguará
+status: testing
+assignee: taro
 agents: [Aguará]
 ---
 
@@ -147,3 +147,77 @@ Pak's behaviour when the SRAM changes every frame, from its firmware
 (stalls? data seeks delayed, with and without a track?); and a mode of the
 test ROM that writes the SRAM every frame and times data seeks, with music
 on and off.
+
+### Log
+
+2026-11-17, Aguará. Started from the-advocate `269bb12c`, the ports
+`a311082`, the book `89df6b1`; branches `aguara-sram-far` in the ports and
+the book. Mulita's area (`posed.s`, the grid) only read.
+
+**1. What could move.** The SRAM window costs 8 master cycles a byte, the
+same as WRAM (fullsnes's speed table; bsnes `CPU::read`). ABL's `FARBSS`
+is full (24,436 B + 128 of switches, 12 B left). Classified by how the
+runtime reaches each label (a script over `abl.sfc.dbg` and `runtime/`,
+heuristic): ~4.2 KB only with long addresses —movable with a segment and a
+boot clear—, ~8.2 KB through 16-bit addresses with the data bank at `$7E`,
+~12.1 KB also through `$2180`. `posed.s`'s ~700 B is easy: one line
+(`FAR_VRAM_MAP` read under `^POSED_REG`'s bank). Cannot move: bank 0, the
+direct page, the stack, anything through `$2180`, objects over 8 KB or
+indexed across a window (`far_text_layer` is 8,810 B). And it asks a boot
+clear (the SRAM keeps the last session, invisible to `test_cores.py`).
+
+**2. The FX Pak** (firmware 1.11.2, `msu1.c`, `memory.c`, `sdnative.c`,
+`main.v`). The console never stalls: the MCU reads the SRAM in the FPGA's
+free slots. With a `.msu`, `msu_savecheck` —checksum of all that is
+declared, write of all of it if changed— runs at every data seek made
+with no track playing, before the seek, whose busy bit stays up; once a
+second only if the data side is idle, which after a seek it is not until a
+read reaches the `.msu`'s end (in ABL, almost never); at a track change,
+rate-limited; and on reset. Never while a track plays; never on power off.
+taro's reading is right about the music; without a track it is "a checksum
+**and, if changed, a whole write** at each seek", not once a second.
+Estimated from the loops (not measured): checksum 0.7-1 µs a byte, write
+~1.2-1.5 µs a byte plus the card: a silent seek gains +25-35 ms today
+(32 KB), and with the SRAM changed +0.13-0.2 s at 64 KB, **+0.5-0.7 s at
+256 KB**, past `msu_data_seek`'s ~0.35 s cap. In ABL the silent seeks are
+the sound-effect packages of a map change with a new song
+(`map_song_mute` stops the track first) and the battle's backdrop.
+
+**3. The test ROM** (ports `a3861bf`): X steps a frame test —OFF,
+WRITES (16 B of `$24:6000` a frame; entering it seeks the `.msu`'s last
+sector so the once-a-second check runs), SEEKS (a timed seek every 30
+frames), SEEKS+WRITES— showing the seeks' last, mean and max ms and the
+late frames; and a 64 KB build (`--sram-kb 64`, no rounds). `just
+sram-dma` in snes9x, bsnes, mesen-s and the audit core: both see their
+SRAM, the rounds and the reset as before, 10 seeks in 300 frames with 0
+late frames, the bytes following the frame. The emulators seek at once:
+the timing path never times a non-zero wait there. Re-delivered to
+`/shared/builds/sram-test/` (`sram-test.sfc` sha1 `0d7458be…`,
+`sram-test-64k.sfc` `7eb48770…`) with the README's eight numbers to send.
+
+**4. Recommendation**: no, for `baked_events`. Far RAM changes every
+frame, so the SRAM would be always changed, and every silent seek would
+pay the checksum and the whole write: estimated half a second at 256 KB,
+on the cartridge taro plays; 256 KB also breaks Mednafen's default module.
+Behind the grid (Mulita) costs nothing of that. The SRAM suits what
+changes once per battle (the stash). If the FX Pak's numbers come out far
+below the estimates, a 64 KB SRAM is the one to reconsider.
+
+The book: a new page, `research/2026-11-17-far-ram-in-the-sram.md`
+(branch `aguara-sram-far`, `51b43d0`), not a section of the old one: it
+answers another question at other commits, and a research is a snapshot.
+Relative links checked, `mdbook build` clean.
+
+Found and not fixed: the draft
+[`a-save-on-the-fx-pak-waits-for-a-silent-seek`](a-save-on-the-fx-pak-waits-for-a-silent-seek.md)
+—with a `.msu`, a save reaches the card only at a silent seek or a reset—.
+
+**What taro has to do**: the eight numbers of
+`/shared/builds/sram-test/README.txt` on the FX Pak (both cartridges,
+music off and on, SEEKS and SEEKS+WRITES) and whether the LED blinks in
+WRITES; plus the old test's numbers if not sent yet.
+
+**What has to be installed when merging**: nothing. No Rust, no runtime;
+the ports' branch changes only `abl/experiments/sram-dma/` and the
+`sram-dma` recipe. Not run: ABL's suite (nothing it builds changed), the
+FX Pak.
