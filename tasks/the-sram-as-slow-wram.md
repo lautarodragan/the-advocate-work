@@ -79,3 +79,24 @@ it itself. ABL's `release` with `$FFD8` patched to `$08` boots to the same
 screens as without in snes9x, bsnes and mesen-s (frames 120, 300, 600): the
 byte does not move the header detection, in them or in the FX Pak's
 scoring (both header copies lose the same point).
+
+Measured on ABL (snes9x, the case `battle-in-52`: map 52 has the biggest
+grid, 20,000 B, plus 4,850 B behind it). The global tools are behind the
+runtime today (Carpintero's panorama LZ2 is merged but not reinstalled), so
+nothing builds: this ran on a copy of the `release` built at 20:05 in the
+ports' main checkout, consistent with itself, with the harness's staleness
+check bypassed in a scratch script. Nothing on the paths measured changed
+with that merge. The return from the battle, frame by frame:
+
+* **~77-86 frames of audio package** (the map's ARAM again), which the SRAM
+  cannot shorten: the SPC700 is fed through its ports, from the ROM.
+* **then ~25 more black frames** of reloading: `lz2_grid` ~6 (grid and
+  what lives behind it, ~25 KB), `fill_window` ~6 (the tilemap, from the
+  grid), `load_map`/`load_above` ~12 (the tiles, decompressed through
+  `LZ2_BUFFER` into VRAM), and the rest. The same with and without MSU-1.
+
+With the map's WRAM (only what it uses, ~25 KB here) and its VRAM tiles and
+tilemaps stashed in SRAM when the battle starts, those ~25 frames become
+the DMA back: ~0.6 frame of WRAM and ~1-1.5 of VRAM (SRAM to `$2118` is an
+A-bus to B-bus DMA like any other; not measured). About **22 frames, ~0.37
+s, of the ~105-110 the black lasts** on map 52.
