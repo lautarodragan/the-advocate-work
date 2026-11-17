@@ -2,6 +2,7 @@
 name: "Battle conditions for real"
 description: "A condition system in battle —duration, restrictions, the controlled one's AI, what each changes— so that ChangeMonsterCondition stops being a debt: ABL's Control and BarkWall"
 type: feature
+game: abl
 status: testing
 assignee: taro
 agents: [Chajá]

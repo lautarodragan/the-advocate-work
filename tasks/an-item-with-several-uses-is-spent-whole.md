@@ -2,6 +2,7 @@
 name: "An item with several uses is spent whole"
 description: "An item whose `uses` is above 1 —The Book of Three's bags of five— goes on the first use, in battle and on the map: RM2k counts its uses in the save"
 type: bug
+game: book-of-three
 status: testing
 assignee: taro
 agents: [Tijereta, Aguará]

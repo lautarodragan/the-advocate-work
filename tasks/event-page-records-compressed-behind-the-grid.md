@@ -2,6 +2,7 @@
 name: "Event page records compressed behind the grid"
 description: "Store each map's event page records (`pages_*`) in LZ2 and unpack them with the grid's stream, as the bytecode already is: ~125 KB freed in ABL's release; then turn `posed_events` on for the whole of ABL with that room"
 type: feature
+game: abl
 status: testing
 assignee: taro
 agents: [Mulita]

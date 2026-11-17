@@ -2,6 +2,7 @@
 name: "ControlVars: from an item count"
 description: "A variable set from the number of an item held (operand kind 4) does not compile: Book of Three 5, Frozen World 13 (the use-item menu), Vampires Dawn 47"
 type: feature
+game: book-of-three
 status: testing
 assignee: taro
 agents: [Tijereta]

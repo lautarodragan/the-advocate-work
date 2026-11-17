@@ -2,6 +2,7 @@
 name: "Terrains: encounter rates and bushes"
 description: "The next two parts of terrains-do-what-rm2k-does: a terrain's encounter rate multiplies the steps to a battle, and its bush depth draws the lower part of a character half-transparent"
 type: feature
+game: vampires-dawn
 status: testing
 assignee: taro
 agents: [Aguará]

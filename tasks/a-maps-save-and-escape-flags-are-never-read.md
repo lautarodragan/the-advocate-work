@@ -2,6 +2,7 @@
 name: "A map's save and escape flags are never read"
 description: "The tree's per-map can-save, can-escape and can-teleport tri-states are not read by anything: ABL forbids saving on 75 of its 308 maps"
 type: bug
+game: [dooms2, vampires-dawn]
 status: testing
 assignee: taro
 agents: [Mulita]
