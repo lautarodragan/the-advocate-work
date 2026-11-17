@@ -2,8 +2,8 @@
 name: "Room in bank 0's ROM"
 description: "The tightest cartridge has 16 B of bank 0 left; routines that are not hot and need nothing of bank 0 can move from CODE to the FAR banks"
 type: feature
-status: doing
-assignee: Carpintero
+status: testing
+assignee: taro
 agents: [Carpintero]
 ---
 
@@ -145,3 +145,39 @@ which are the drafts
 and
 [`goombario-reads-widths-from-an-untaken-if-branch`](goombario-reads-widths-from-an-untaken-if-branch.md),
 same pixel counts.
+
+### The other games, and where it stops
+
+`just boot` at the root of the ports, with these tools: 155 passed.
+`just space` in each, release (and Zounds' test-exits), bank 0 and `$C1`:
+
+| game | bank 0 before | after | `$C1` before | after |
+|---|---|---|---|---|
+| book-of-three | 202 | 3939 | 7283 | 3167 |
+| desert-nightmare | 202 | 3948 | 9157 | 5032 |
+| dooms2 | 202 | 3947 | 6820 | 2696 |
+| el-dorado | 269 | 4000 | 9825 | 5715 |
+| frozen-world | 197 | 3939 | 7283 | 3162 |
+| sunset-over-imdahl | 71 | 3813 | 7545 | 3425 |
+| vampires-dawn | 83 | 3842 | 7351 | 3214 |
+| zounds | 73 | 3824 | 4798 | **669** |
+| zounds test-exits | 212 | 3954 | 9182 | 5061 |
+
+**The limit is `$C1` in Zounds**: what is left cold in `CODE` —the map's
+load, ~1.3 KB, and small init-only routines— does not fit there, and
+`FAR2` has 264 B in Sunset. Left as a draft:
+[`far3-has-669-bytes-left-in-zounds`](far3-has-669-bytes-left-in-zounds.md).
+
+What could not move, and why: what the main loop, the NMI and `irq_music`
+reach every frame —`request_menu`, the `access_*`, `key_value` and the
+`actor_gfx_*` stay in menu.s—; the vector's entry and the main loop in
+`reset`; the battle's other `ba_t_*` bridges call hot bank 0 code and
+stay.
+
+### When merging
+
+Only `runtime/` changed in the-advocate: nothing to reinstall. The ports
+branch has no commits (no golden changed). The book: `internals/maps.md`
+says where `CALL0` lives now. The last runtime commit (main.s's header) is
+comments only: release's `abl.sfc` is byte for byte the same,
+`3cfb09a7648de9459e79fd49ce8fdeec46e99d44a8241013938844eb4274ba0d`.
