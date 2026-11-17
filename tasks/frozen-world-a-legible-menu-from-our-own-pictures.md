@@ -2,7 +2,7 @@
 name: "Frozen World: a legible menu, from pictures of our own"
 description: "The custom menu is three pictures (one per highlighted row) whose gradient does not survive the console; redraw them flat in three colours, and let a port's patches carry files that replace the game's by name"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Aguará]
 ---
@@ -141,3 +141,5 @@ files without taking them from a list; what that task says about a stage
 that reads `GAME_DIR` on its own skipping the patches does not happen with
 it. The collision check between an added ChipSet's recipe and a file lying
 there by hand is already in `chipsets.rs`.
+
+**2026-11-16, taro**: declared done.

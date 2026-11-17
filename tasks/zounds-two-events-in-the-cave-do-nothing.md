@@ -2,7 +2,7 @@
 name: "Zounds: two events in the cave do nothing"
 description: "EV0011 on map 79 and EV0005 on map 80, in the cave's Arriba, do not seem to work on the console: dropped?"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Calandria]
 ---
@@ -141,3 +141,5 @@ Captures, with a README: `/shared/captures/2026-10-19-zounds-cave-doorways/`.
 **Conclusion**: the original cannot go through either, from a real path,
 in RPG Maker 2003's own runtime. Whether to fix it in the game is taro's
 call; the test and the game branch stay as they are until then.
+
+**2026-11-16, taro**: declared done.

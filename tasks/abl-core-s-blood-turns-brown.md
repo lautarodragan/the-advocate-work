@@ -2,7 +2,7 @@
 name: "ABL: Core's blood turns brown"
 description: "On map 3, Emitter Room, the Future1 tile Lysander used as Core's blood on the floor (46,19) comes out brown on the console, from how the colours are grouped into palettes; give the map a tile of its own in Core's blood colours"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Calandria]
 ---
@@ -124,3 +124,5 @@ no golden frames (46,19) or (64,45). What shows it are the captures.
 **To install on merging**: `just install convert` (rm2k-snes-convert
 only). Branches: `calandria-core-blood` in the-advocate, the ports and
 the book.
+
+**2026-11-16, taro**: declared done.

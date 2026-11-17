@@ -2,7 +2,7 @@
 name: "Zounds: the Death Desert has no sandstorm"
 description: "From map 34 into the Death Desert (50, 14, 111, 112, 113) RM2k blows a sandstorm over the screen; the port shows clear sand"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Tijereta]
 ---
@@ -179,3 +179,5 @@ checkout. The branches are `tijereta-sandstorm` in the-advocate, the ports
 and the docs. The goldens: `zounds-debug-maze` moves (all of its pixels,
 because of the overlay) and `zounds-sandstorm-113` is new. Both are side
 by side in `/shared/captures/2026-11-02-zounds-sandstorm/`.
+
+**2026-11-16, taro**: declared done.

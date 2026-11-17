@@ -2,7 +2,7 @@
 name: "A map's streams that don't fit in WRAM"
 description: "A map's code (map_code) or its grid (map_cells) going over their LZ2 reserve in WRAM stops the build: it leaves out map 2 of The Frozen World and map 1 of Vampires Dawn, the world map"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Carpintero]
 ---
@@ -121,3 +121,7 @@ mapdata in), plus `events` and `convert` from `huron-tp`.
 against 64 KB of WRAM): this assignment was the code only. The grid is
 read through `ptr_more`/`ptr_minus` across two WRAM halves, so the same
 trick does not apply as is.
+
+**2026-11-16, taro**: declared done.
+
+The grid goes on in [`vampires-dawn-s-world-grid-does-not-fit-in-wram`](vampires-dawn-s-world-grid-does-not-fit-in-wram.md).

@@ -2,7 +2,7 @@
 name: "Frozen World: the intro stays black after the tint"
 description: "At the end of map 6, after EV0005's TintScreen to black, the box \"They were dark days.\" never opens and the screen stays black with the music on; intermittent, on Mesen and bsnes, since the window's vblank writes started waiting for room"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Aguará]
 ---
@@ -194,3 +194,5 @@ by ABL's suite staying green.
 and the ports `aguara-fw-black` (`7350777`, the test), both on today's
 main, which did not move. Nothing to install: the runtime is the
 checkout's. The build to play comes from merged main.
+
+**2026-11-16, taro**: declared done.
