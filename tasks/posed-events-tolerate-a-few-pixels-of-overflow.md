@@ -83,3 +83,23 @@ CharSet at RM2k's place and at the shifted one—, not from the ROM:
 `just test` green (0fdbf5d2); `cargo test -p wally -p rm2k-snes-convert`
 green; ABL's `just tests` with the local wally and convert: 1661 passed,
 2 skipped, no golden moved (ABL has the key off).
+
+The other games, `baked_events = true`, nudge 2 against 0: Desert
+Nightmare +5 (+990 B), El Dorado +2 (+952 B), Vampires Dawn +17
+(+497 B), Zounds +1 —map 17's chest, (0, +2)— (+375 B); The Book of
+Three, Dooms2, The Frozen World and Sunset none. The table is in the
+book's page.
+
+The first Zounds run showed the nudge taking events *out*: on map 156
+four shifted ones went in and three that fit as they are went out,
+because Wally's fallback tries the still events CharSet by CharSet, the
+most numerous first, and a shifted group came first. Fixed in Wally
+(8e670c9e): the ones that fit as they are are tried first, exactly as
+with no nudge, and the shifted ones only on top. Test
+`a_shifted_event_never_takes_the_place_of_one_that_fits_as_it_is`, red
+before. Every game was converted again at 2 with it: none loses an
+event. Zounds' map 156 now takes none of its shifted ones.
+
+The same graphic shifted and left an object on the same map, a pixel or
+two apart: Vampires Dawn's map 148, El Dorado's 2 and 5, Desert
+Nightmare's 105 and 182. None in ABL or Zounds.
