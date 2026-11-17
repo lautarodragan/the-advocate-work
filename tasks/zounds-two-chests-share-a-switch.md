@@ -2,7 +2,7 @@
 name: "Zounds: two secret chests share a switch"
 description: "The Chest 2 of MiniCave 177 turns on and reads switch 129, Secret- Cofre 1, which is MiniCave 89's chest's: opening either shows the other open without its items"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Calandria]
 ---
@@ -63,3 +63,5 @@ tools' fd543e73 —on GitHub's main, not yet in the global install—, and
 with it Zounds does not build; it ran with Hornero's integration tools
 (5971f850). The suite does not play the chests: what holds the fix is the
 data check.
+
+**2026-11-16, taro**: declared done.

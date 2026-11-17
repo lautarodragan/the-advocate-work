@@ -2,7 +2,7 @@
 name: "Zounds: the item target picker does not fit"
 description: "Using an item in Zounds, the item's name wraps and its windows run under the faces, and the party list's border is cut; taro proposes the item's line on top, in one row, and the party list full width"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Aguará]
 ---
@@ -200,3 +200,5 @@ since `23b413cd`, `3e4e95d` and `9e82b10`.
 * ABL: the debug map's full-party NPC and a Cheap Wine-SP —four rows to
   the screen's last line—; a heal from Tech Skill, its name and cost on
   the same line.
+
+**2026-11-16, taro**: declared done.
