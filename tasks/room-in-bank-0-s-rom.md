@@ -110,3 +110,38 @@ as before; what bank 0 calls is entered with `jsl` and leaves with
 test-change-system: bank 0 15 -> 3011 B; `$C1` 7165 -> 3948.
 `test_jumps_between_banks.py`, `test_linter.py`, `test_banks.py` and
 `test_space.py` green on all eleven cartridges.
+
+ABL's `just tests` with those tools: 1679 passed, cores included.
+
+### reset's init out (commit 3)
+
+`reset` keeps the vector's entry, the jump to the fast mirror, the stack,
+the data bank and the main loop; everything it did once before the loop
+is `boot_init`, in `FAR3`, with `ppu_reset`, which only it calls. Its
+bank 0 calls go through `CALL0`. The BOOT_FRAMES wait is what sets when
+the loop starts, so the extra cycles do not move a frame.
+
+Bank 0 and `$C1` in ABL after the three commits, against before:
+
+| cartridge | bank 0 before | after | `$C1` before | after |
+|---|---|---|---|---|
+| release | 44 | 3792 | 6275 | 2148 |
+| test-special | 70 | 3796 | 6275 | 2170 |
+| test-encounter-every-step | 66 | 3792 | 6275 | 2170 |
+| test-twins | 146 | 3866 | 9753 | 5654 |
+| test-teleport-missing | 66 | 3792 | 6275 | 2170 |
+| test-msu | 61 | 3791 | 6245 | 2136 |
+| test-msu-rom | 65 | 3791 | 6275 | 2170 |
+| test-change-system | 16 | 3752 | 7165 | 3050 |
+| test-faces | 146 | 3866 | 9290 | 5191 |
+| test-vblank | 49 | 3785 | 7015 | 2900 |
+| test-title-4bpp | 127 | 3866 | 9753 | 5635 |
+
+ABL's `just tests`: 1679 passed, cores included. The test game: the same
+four reds as at `fe5529a3` with its runtime checked out in the same
+worktree —`test_leader_name.py`'s three captures and its linter test—,
+which are the drafts
+[`the-test-games-leader-name-goldens-are-red-on-main`](the-test-games-leader-name-goldens-are-red-on-main.md)
+and
+[`goombario-reads-widths-from-an-untaken-if-branch`](goombario-reads-widths-from-an-untaken-if-branch.md),
+same pixel counts.
