@@ -75,3 +75,45 @@ tiles are bounded by the layouts: 576 4-bit tiles in mode 3 (18,432 B),
   identical on the global tools (raw tiles) and on these. A first `Dawn`
   with plain bands was 3 KB of tiles, under `CODE_CARRY`'s $1100, and
   could not go red: the second has dithered band edges, 17,248 B.
+
+### Measured
+
+Both sides on the same base: the global tools (the-advocate cd3fecb8,
+`main` merged into the branch) against `.local-tools` of the branch
+(`project cartridge mapdata convert`), the ports at b024af2, every game's
+cartridges built without tracks, `just space` of each. Scripts in
+`~/scratch/carpintero/pano-lz2/scripts/` (`space.sh`, `compare_space.py`,
+`pano_cost.py`, `measure_loads.py`, `swap_frames.py`).
+
+```text
+game              pictures  raw tiles  as LZ2    saved    release, banks used and gaps
+abl                   21     289,568   218,930   70,638   126 -> 124, 656 B -> 2 halves + 20,031 B
+desert-nightmare      44     461,088   352,072  109,016    99 ->  97
+zounds                18     219,280   154,194   65,086    68 ->  67
+frozen-world          20     312,880   268,608   44,272    68 ->  67
+dooms2                 4      70,912    54,053   16,859    41 ->  41
+book-of-three          1      16,160     8,893    7,267    48 ->  48
+sunset-over-imdahl     3      54,752    49,696    5,056    87 ->  86
+el-dorado              1      14,976     9,943    5,033    21 ->  21
+vampires-dawn          1         144       119       25   126 -> 126 (its .msu carries the rest)
+```
+
+ABL frees 70,638 B of data, not the study's 84,911: today's release has
+21 distinct pictures (289,568 B raw) where the study counted 358,720.
+Every ABL test cartridge keeps its banks or loses one. The code: FAR2
+(bank $C0) 17 B more, FAR3 ($C1) 8 B; Sunset's $C0, the tightest, has
+259 B left.
+
+**Load frames**, ABL's `release` in snes9x, hardware frames of
+`go_to_map` plus 40 ticks, raw against LZ2, for the 25 arrivals of
+`test_panorama_golden.py` plus 255: +2 to +6 on the 18 maps with a
+panorama layer, 0 on the seven baked or hidden. **The worst is map 95,
+"Into The Machine"** (flattened, `TasgardePan`, 18,432 B): 52 -> 58. The
+converter's cycle model (700 per command, 60 per byte, on the high side)
+gives it 7.4; the largest elsewhere are 6 to 8 by the model (Frozen
+World's 137, Dooms 2's 8). All of it inside the entering fade.
+
+**A swap mid-map**: the test game's lookout (`Dawn`, 17,248 B, and the
+carried page's bytecode decompressed again), the tick of the
+`ChangePBG`: 5 frames raw, 10 with LZ2, in snes9x and bsnes. Black, as
+before: `pano_image` already turned the screen off for the ring.
