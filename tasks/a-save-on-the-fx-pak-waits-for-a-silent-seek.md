@@ -3,7 +3,7 @@ name: "A save on the FX Pak waits for a silent seek"
 description: "With a .msu, the FX Pak writes the .srm to its card only at a data seek or a once-a-second check made with no MSU-1 track playing, or on a reset: a game saved while a track plays and the console turned off before then loses the save"
 type: bug
 game: abl
-status: testing
+status: done
 assignee: taro
 agents: [Aguará, Hurón]
 ---
@@ -183,3 +183,9 @@ bsnes has a third patch: without it the two new tests skip.
 `.msu` is byte for byte the one in `builds/abl/`, so the `.sfc` goes over
 the card's copy that already has them. To confirm: the save survives power
 off, and how much the dip bothers.
+
+## Closed (2026-11-17)
+
+> Good news: the save works perfectly on the FX Pak now :D
+
+By taro, on the console, with the builds of the ports `428e7c3`.
