@@ -2,8 +2,8 @@
 name: "Panorama tiles compressed"
 description: "Store panorama tiles in LZ2 instead of raw: ~85 KB freed in ABL's release, about three frames more on the largest panorama's load, and care with a ChangePBG mid-map"
 type: feature
-status: doing
-assignee: Carpintero
+status: testing
+assignee: taro
 agents: [Carpintero]
 ---
 
@@ -117,3 +117,33 @@ World's 137, Dooms 2's 8). All of it inside the entering fade.
 carried page's bytecode decompressed again), the tick of the
 `ChangePBG`: 5 frames raw, 10 with LZ2, in snes9x and bsnes. Black, as
 before: `pano_image` already turned the screen off for the ring.
+
+### Tests, and what to install
+
+With the branch's `.local-tools` (`project cartridge mapdata convert`),
+`main` merged in each repo (the-advocate cd3fecb8, the ports b024af2, the
+book b20cf13):
+
+* the-advocate: `just test` 29 passed; `just rust-test` green (mapdata's
+  new `the_tiles_go_compressed`); `just test-game` 67 passed, 1 skipped,
+  and the 3 known reds of `test_leader_name.py`; the new
+  `test_panorama_swap.py` green on snes9x and bsnes. `just lint` is red
+  on rustfmt in four files the branch does not touch: the draft
+  `cargo-fmt-check-flags-three-files-on-main`.
+* ABL: `just tests` 1661 passed, 2 skipped; no golden moved (the
+  panorama arrivals, the moving ones, the Hover-Tram's `ChangePBG`, the
+  save). A first run on the ports' ff7ac5b had two reds that were the
+  ports behind Chajá's merge (`screen-930`, the music in the save): gone
+  with b024af2 merged.
+* The ports' root: `just boot` 153 passed, Zounds' DownLoad Room swap and
+  its two goldens among them.
+
+What no test covers: a battle animation on a map while its panorama is
+swapped (`anim_buf_clear` after the swap); Vampires Dawn's one panorama
+picture through the `.msu` past its boot; a swap on real hardware.
+
+Branches: the-advocate and the book `carpintero-pano-lz2`; the ports
+none (nothing changed there). **On merging, install `mapdata` and
+`cartridge`** —mapdata emits the streams, and the runtime changed, which
+the cartridges assemble from the checkout they were installed from—; the
+rest did not change.
