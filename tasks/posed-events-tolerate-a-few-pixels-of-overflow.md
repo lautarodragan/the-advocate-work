@@ -58,6 +58,28 @@ and none goes out —the 33 chests (`BLObjs` 2, all by (−1, +2)), seven
 `BLObjs` 3 on maps 108, 243 and 244 by (0, +1) and one by (0, +2), and
 the radio of map 243—, for +4,726 B of data (map tiles +4,425, posed
 record +1,591, sprite poses +2,940 against sprite tiles −4,833). The
-pose bank grows because it changes with which poses stay sprites —14
+pose bank grows because it changes with which poses stay sprites —27
 of its blocks are new, 13 gone—, the same +2.4 KB Mulita attributed to
 her edited image.
+
+The nudge on ABL, each value against 0 (all `baked_events = true`): 1 →
++7 events (+1,660 B), 2 → +41 (+4,726 B), 3 → the same 41, 4 and 8 →
++42, the 42nd a `Missiles` drawing 4 px above its cell on purpose. No
+event goes out at any value, and no event needed "different shifts".
+The default is 2: it is where a drawing that is only misaligned stops.
+The graphic shifted and also kept as an object elsewhere: `BLObjs` 2,
+56 events on maps 20, 21, 26, 32, 255 and 316 —moved by a command, or
+on a map whose panorama stays—; no map has both.
+
+Found on the way, and told to Hornero: ABL cannot link any cartridge
+with `baked_events` on, because `posed.s`'s far RAM (~700 B) does not
+fit: release's FARBSS + SWITCHES leave 12 B of FARRAM, and a test
+cartridge holding only maps 38, 59, 108 and 244 overflows by 23 B.
+Mulita is moving `POSED_REG` into `$7F`. So ABL's captures are drawn
+offline —the layers by `rm2k-render`, the pose from the original
+CharSet at RM2k's place and at the shifted one—, not from the ROM:
+`captures/2026-11-16-bake-max-offset/`.
+
+`just test` green (0fdbf5d2); `cargo test -p wally -p rm2k-snes-convert`
+green; ABL's `just tests` with the local wally and convert: 1661 passed,
+2 skipped, no golden moved (ABL has the key off).
