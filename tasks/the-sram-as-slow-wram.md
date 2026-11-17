@@ -2,8 +2,8 @@
 name: "The SRAM as slow WRAM"
 description: "A 256 KB SRAM, and the part the save slots do not use as working memory reached by DMA through $2180 —the map's grid and code stashed across a battle, more room while the screen is black—; first, whether the FX Pak writes its SD card on every change"
 type: research
-status: testing
-assignee: taro
+status: doing
+assignee: Aguará
 agents: [Aguará]
 ---
 
@@ -127,3 +127,23 @@ the page.
 Not run: ABL's suite (nothing it builds changed) and the FX Pak. The ABL
 measurements ran on a copy of a `release` built before the panorama-LZ2
 merge, because the installed tools could not build the current runtime.
+
+## Follow-up: far RAM in the SRAM (taro, 2026-11-17)
+
+Hornero, rereading with taro: the study said the SRAM frees no WRAM, but
+the CPU reaches the SRAM directly, at WRAM's speed, so far-RAM variables
+could live there for good —what blocks `baked_events` in ABL—. taro's
+worry is the FX Pak with the `.msu`:
+
+> I'm still worried about the msu: whether using it to play music
+> continuously, added to the periodic checksum, can introduce lag. [...]
+> If I understand correctly, precisely playing music would make it persist
+> and check _less_, not _more_, and when no music is playing (practically
+> never), it would be at most once per second, but it would do a 256k
+> write per second...
+
+To measure: which far-RAM tenants could move and what it costs; the FX
+Pak's behaviour when the SRAM changes every frame, from its firmware
+(stalls? data seeks delayed, with and without a track?); and a mode of the
+test ROM that writes the SRAM every frame and times data seeks, with music
+on and off.
