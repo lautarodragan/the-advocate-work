@@ -41,3 +41,23 @@ the choice —the extension's cells, `compose`, the blocks— is unchanged.
 If no single shift within the limit fits them all, though each pose
 alone would fit, the event stays an object with a reason of its own,
 so the log tells it apart from one that does not fit at all.
+
+Hornero passed taro's names mid-task: the key `posed_events` is now
+`baked_events` (same values) and the new one `baked_events_nudge`, not
+`bake_max_offset`. The tools refuse the old name with the new one —as
+they refuse an old `rm2k-snes.toml`— instead of keeping an alias; the
+ports' `RENAMES.md` has the row. Wally's own names (`posed`, the request's
+`posed_stills`) stay: they are not the project's.
+
+Red before: the new whole-map test on cd3fecb8's Wally keeps the event an
+object, "a pose is drawn past its cell".
+
+ABL's release converted with `baked_events = true` (throwaway: it does
+not link, as Mulita measured), nudge 0 against 2: 41 more events go in
+and none goes out —the 33 chests (`BLObjs` 2, all by (−1, +2)), seven
+`BLObjs` 3 on maps 108, 243 and 244 by (0, +1) and one by (0, +2), and
+the radio of map 243—, for +4,726 B of data (map tiles +4,425, posed
+record +1,591, sprite poses +2,940 against sprite tiles −4,833). The
+pose bank grows because it changes with which poses stay sprites —14
+of its blocks are new, 13 gone—, the same +2.4 KB Mulita attributed to
+her edited image.
