@@ -63,3 +63,43 @@ the XYZ of `5fa54e6`).
 hero turned right and opened event 63: red closed, brown open, as on the
 console. `Game_Event::RefreshPage` sets the new page's graphic and, when
 the facing or pattern differs, its facing.
+
+**EasyRPG, map 84 too**: started at (5, 5), the hero turned up and opened
+event 4: orange closed, red open, as on the console (`zounds_006`-`008`).
+
+**A sweep over the console**: every chest-like event of two pages —the
+second on the switch the first turns on— that the release cartridge
+carries, 29 of them, reached from the debug room with `go_to_map`, its
+switch written off and on, and its cell compared with RM2k's pose for each
+page. Every one draws its own page's cell and colours, the baked ones too
+(map 17's stands the 2 px lower its cell asks for, as decided). Contact
+sheet in `/shared/captures/2026-11-17-zounds-chests/`. The one exception
+is not about opening: **map 134's chest at (2, 30) is a dark square**,
+closed and opened, because on that map its graphic, `object1:6`, is lent
+another's palette ("10 graphic(s) without a palette of their own" in
+`converter.log`). It is the only chest lent one. Draft:
+[`zounds-map-134-s-chest-is-a-dark-square`](zounds-map-134-s-chest-is-a-dark-square.md),
+and a line in the book's Known issues.
+
+So the chests taro saw change are the game's own pages, and the port is
+faithful. Those whose colour changes in RM2k, by the dump: map 34's events
+1 and 63 (red to brown) and 9 (orange to brown), map 84's 4 (orange to
+red), map 88's five (orange to brown), all `Zounds_Chest_04` closed; the
+rest keep their colour. That lines up with taro's "about half". Not fixed
+here: making them open in their own colour is a change to the game's
+art —`Zounds_Chest_04` has no coloured open chests to point at; red could
+borrow `Zounds_Chest_03`'s, orange has no match— and that is taro's call
+on their own game, done in its repository and dumped, as
+[`zounds-two-chests-share-a-switch`](zounds-two-chests-share-a-switch.md)
+was.
+
+**Same class in ABL**: none. Its 62 two-page `BLObjs` chests all open in
+the same character they close in.
+
+**The test**: `tests/test_zounds_chests_open.py` in the ports opens three
+chests as the player does —beside it, facing it, A— and holds each cell
+closed and opened against its goldens, checked against RM2k's poses: map
+34's (an object whose open page names another character), map 84's (an
+object whose open page names another sheet) and map 17's (baked into the
+background, turning to another facing). It was not shown red: there was
+no fix; it guards what the console already did.
