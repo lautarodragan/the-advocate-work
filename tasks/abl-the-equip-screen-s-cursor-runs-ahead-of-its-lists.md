@@ -47,3 +47,53 @@ bar never showing a part as chosen while the old list is still up; ROM
 tests that hold the new frame counts; goldens that move looked at.
 
 ## Log
+
+### 2026-11-17, Calandria: the measurements before
+
+From the-advocate 865163eb and the-advocate-ports 8042dc8, branches
+`calandria-equip-lag` in both. Measured with a throwaway test in the
+harness —case `equipment-inventory`, Talan with the club ×2, the spear
+and the shield in the inventory—: the button held one frame (f0) and
+then every frame captured, each band of the screen —the description,
+the parameters, the bottom window— compared at 15 bits against
+`screens.equipment` before and after, the bar's row found by its red,
+and the text layer's state read from RAM. **snes9x and bsnes give the
+same frames, one by one.** The number is the first frame that shows it,
+counted from the press:
+
+| transition | bar | text whole |
+|---|---|---|
+| slots, Right Hand → Left Hand (no text changes) | 1 | 1 |
+| slots, Left Hand → Body (empty → Work Clothes-B, two description lines) | 2 | 7 |
+| slots, Body → Left Hand | 1 | 2 |
+| A on Right Hand: the weapon list (three rows) | — (row 0 both) | 11 |
+| A on Body: the armour list (only the empty line) | 1 | 8 |
+| list, down 0 → 1 / 1 → 2 / up 2 → 1 | 1 / 2 / 1 | 4 / 5 / 5 |
+| B from the weapon list | 1 | 10 |
+| B from the armour list | 2 | 14 |
+
+So for 7 frames choosing Body, and 12 going back from it, the bar is on
+a row of the old list: taro's "~4 + ~5" and "~16", as Mesen counts them.
+
+What takes the frames, measured with a scanline counter put in the loop
+for a while and taken out:
+
+* **One text row per frame, at most.** `tl_step` does not start a row
+  while the tiles of the last one wait for the vblank (`TL_UP_N`): the
+  stage is one row wide, and the next row would compose over it. So each
+  changed row costs a frame even when it is four letters —the arrow's
+  `> 19` of a parameter— and one of more than 16 pairs costs two. Going
+  back from the armour list changes eleven rows: two of description, four
+  of parameters, five of slots.
+* **`eq_compose` takes most of the frame it runs in**: from line 235 to
+  115-160 of the next —clear and name 15 lines, a two-line description
+  30, the four parameters 72 without arrows and ~135 with them, the slots
+  55—, so the frame after the press has some 60 lines left to typeset.
+  On A, `eq_list_build` goes first —some 100 lines— and the two together
+  cross the next vblank: one frame with no pad read.
+* The bar moves in the first vblank after the press because `eq_bar`
+  draws from the cursor, which the text layer did not exist to lag when
+  the bar was made (172b924d, 2026-09-28: the text was composed whole
+  every frame). Since the text layer (9041a3ce, 2026-10-03) the text
+  arrives some frames after the cursor, as a debt declared there; the bar
+  was left ahead of it.
