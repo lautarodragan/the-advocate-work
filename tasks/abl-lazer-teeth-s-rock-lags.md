@@ -2,8 +2,8 @@
 name: "ABL: Lazer Teeth's rock lags"
 description: "In the Lazer Teeth mini-game on map 11, while the rock flies and when it hits a lamp or a computer, Mesen counts ~35 lag frames: frames the main loop missed"
 type: bug
-status: doing
-assignee: Aguará
+status: testing
+assignee: taro
 agents: [Aguará]
 ---
 
@@ -122,3 +122,35 @@ What was not done, measured:
 * Not compared against RPG_RT running: the task's premise —the original
   does not lag there— is taro's, and every frame counted here is the
   port's.
+
+With Chajá's and Calandria's merges the tightest test cartridge
+(`test-change-system`) had 18 bytes of bank 0, and the first version of
+the flash took 15 of them: the decision moved into `flash_direct`, which
+returns with carry at 0 when there is saturation, and `paint_flash` only
+calls it first. Six bytes of bank 0, same palettes. And with Hurón's
+MSU-1 seek in, bank 1 overflowed in `test-msu`: `flash_direct` went to
+`FAR3`, same palettes and same frames lost.
+
+### Verified (merged with main: the-advocate `293721a9`, the ports `d618369`, the book `9a0ca9e`)
+
+With the branch's `project`, `cartridge`, `events` and `convert` installed
+locally —`cartridge` too because it carries the bytecode declaration,
+which Chajá's OP_ASK changed—:
+
+* ABL's suite: 1673 passed, 2 skipped; no golden moved. The display audit
+  and the race's frame budget are in it. The two new tests of Hurón's
+  (`test_msu.py`, a save's seek) are red here because the global
+  `bsnes_audit` core has no MSU-1 log yet —`just audit-core` builds it—:
+  an environment thing, not this branch's.
+* `just boot` (all the games, on `ea529d5a`, before Hurón's merge): 155
+  passed. `just test`: green; `just crate-test events`: 199 passed, the new
+  `the_own_cell_in_front_goes_in_a_cell_test_of_its_own` shown red first
+  (without the fusion the page starts `[OP_VAR, OP_VAR, OP_CELL_TEST…]`).
+* The three ROM tests of `test_stones.py`, red with `865163eb`'s tools
+  (14 and 5 lost), green with the branch (7 and 2).
+* `just space`: bank 0 at 8 bytes on `test-change-system` (main had 14
+  there), 36 on `release`; bank 1 at 259 on `test-msu`.
+* `abl.sfc` sha256 `9a06667498bb24f5…`.
+
+**To install when merging**: `events`, `convert` and `cartridge` —the
+runtime goes with the checkout—.
