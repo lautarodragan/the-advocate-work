@@ -143,7 +143,7 @@ swapped (`anim_buf_clear` after the swap); Vampires Dawn's one panorama
 picture through the `.msu` past its boot; a swap on real hardware.
 
 Branches: the-advocate and the book `carpintero-pano-lz2`; the ports
-none (nothing changed there). **On merging, install `mapdata` and
-`cartridge`** —mapdata emits the streams, and the runtime changed, which
-the cartridges assemble from the checkout they were installed from—; the
-rest did not change.
+none (nothing changed there). **On merging, `just install mapdata
+convert`** —mapdata emits the streams, and convert links mapdata as a
+library—. The runtime changed too, but the global cartridges already
+assemble it from `~/the-advocate`'s checkout.
