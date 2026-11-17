@@ -1,6 +1,6 @@
 ---
 name: "A transparent message's layer baked only on the maps that can show one"
-description: "Narrow the baking of the layer above under transparent messages to the maps where one can appear, by a static analysis of the events, so the other maps keep their palettes whole"
+description: "A game with any transparent MessageOptions arranges the layer above's palettes on every map (layer_text); narrow it, by a static analysis of the events, to the maps where one can be shown, so the others keep their palettes and their free BG palettes"
 type: feature
 status: wishlist
 ---
@@ -35,3 +35,15 @@ order, a list that sets it transparent and sets it opaque again before
 ending or teleporting does not leak; one that leaks makes the maps it
 can lead to positive too —or, simplest, the whole game—. How common each
 pattern is in the ports is the first thing to count.
+
+## Reviewed (Hornero, 2026-11-17)
+
+Since 2026-11-14 the runtime carries the layer above under a transparent
+window (`runtime/message_layer.s`; the book's "The layer above, carried"):
+it is not baked any more. What the build still does game-wide is arrange
+the layer's palettes on every map (`mapdata/src/layer_text.rs`,
+`scan::transparent_messages` is one flag per game). What narrowing would
+save is smaller than first thought: in ABL's log, 4 maps lose shades
+map-wide ("merges 5 colours": 3, 6, 10, 309 —6 does show one—), 22 only
+inside cells with letters, 34 keep the old look; copies also take free BG
+palettes.

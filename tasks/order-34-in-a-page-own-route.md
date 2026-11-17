@@ -1,6 +1,6 @@
 ---
 name: "Order 34 in a page's own route"
-description: "change_graphic inside a page's own route, which the compiler rejects today"
+description: "change_graphic inside a page's own route, which route::own rejects —the page is left out whole—: 11 pages in Sunset over Imdahl, 1 in Vampires Dawn. Own routes carry operands since the switches (2026-10-20); the graphic's would go the same way, with the row's bank of poses given by Wally"
 type: feature
 status: todo
 ---
@@ -42,3 +42,13 @@ graphic's operand —`route::own` returns `None` on a 34, and the page record
 holds bare codes—, so it does not fall out of that change: it needs the
 own route's format to carry the operand and the runtime's own-route walker
 to skip it, which that task did not touch.
+
+## Reviewed (Hornero, 2026-11-17)
+
+Still rejected: `rm2k-snes/events/src/route.rs`, `own()` returns `None`
+on `ROUTE_CHANGE_GRAPHIC` (its comment about "the game's 3509 own routes"
+is stale). Same count: 11 pages in Sunset, 1 in Vampires Dawn. The
+blocker moved: since 9329f602 (2026-10-20) own routes carry the switch
+commands' operands (`Page::route_switches`), the precedent for a 34's.
+The forced routes' `route_graphics` does not help: it reads only forced
+`OP_ROUTE`s.

@@ -27,3 +27,13 @@ the book— and it works, but it costs **up to twenty lines per frame** and
 imposes the interrupt's rules. With MSU-1 the SPC700 plays no music and
 this matters less; without it, it still does, and the game has to play
 whole without MSU-1. Kept in the wishlist by taro on 2026-10-12.
+
+## Reviewed (Hornero, 2026-11-17)
+
+Still not started: the 65816 sequences the music (`irq_music`,
+`music_tick` in `runtime/music.s`; the stream in
+`rm2k-snes/bytecode/src/music.rs`). One number above is wrong: the cost is
+not "up to twenty lines per frame" —`quality-of-the-music.md`
+(2026-09-26) measured the worst frame at 89 lines, about 1.0 + 1.34 lines
+per write + 1.27 per voice event—. A sequencer on the SPC700 would need
+an ARAM ring buffer reserved in each package's budget.

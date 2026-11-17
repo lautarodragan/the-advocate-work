@@ -1,6 +1,6 @@
 ---
 name: "The converter still caps experience slots and variables by the hand-written far RAM map"
-description: "rm2k-snes-battle refuses more than 126 experience slots because FAR_EXP had 504 B, and rm2k-snes-mapdata explains its 256-variable cap with 'FAR_ITEMS is 512 bytes from FAR_VARIABLES'; since far RAM is placed by the linker neither is the reason"
+description: "The converter still caps experience slots and variables by the hand-written far RAM map: rm2k-snes-battle refuses more than 128 experience slots ('bytes of FAR_EXP', 512 B), rm2k-snes-mapdata explains its 256-variable cap with 'FAR_ITEMS is 512 bytes from FAR_VARIABLES', and the event compiler caps skills at 'FAR_SKILL holds'; since far RAM is placed by the linker none is the reason"
 type: bug
 status: wishlist
 ---
@@ -43,3 +43,12 @@ touched anyway by
 [`variables-are-capped-at-256-slots`](variables-are-capped-at-256-slots.md),
 so whoever takes that one closes it. First step: for each of the three,
 `git blame` and what the runtime does with the index.
+
+## Reviewed (Hornero, 2026-11-17)
+
+All three checks are still there: `battle/src/experience.rs`
+(`SAVE_BYTES = 0x200`, 128 slots —not 126/504 B as first written—, while
+the runtime sizes experience by the game, `EXP_K*4`), `mapdata/src/emit.rs`
+(the FAR_ITEMS message; [`variables-are-capped-at-256-slots`](variables-are-capped-at-256-slots.md)
+is still todo), and `events/src/indices.rs` (`SKILL_SLOTS_MAX`, "FAR_SKILL
+holds", while `far_ram_game.s` sizes it by game).

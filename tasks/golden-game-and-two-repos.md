@@ -1,6 +1,6 @@
 ---
 name: "The test game"
-description: "An RM2k game of our own, with free assets, that tests the engine, so that its ROM tests stop depending on ABL"
+description: "The test game exists and runs in CI; what is left of the plan is phase 2's harness split —its generic part from ABL's tests/harness to the-advocate— and ABL's ten M1 tests moved onto it, then phases 3 to 5"
 type: test
 status: wishlist
 ---
@@ -51,3 +51,13 @@ nested calls, the faces, the escapes, the map pictures, the System's
 cursor—, run by `just test-game`. What this task still holds is the rest of
 the plan: the harness split and ABL's M1 tests moved over, and phases 3
 to 5.
+
+## Reviewed (Hornero, 2026-11-17)
+
+Done since: `test-game/` with 26 cases and 23 test files, run in CI
+(`.github/workflows/ci.yml`). Not done: `test-game/tests/game.py` still
+calls itself a stopgap until phase 2 brings the harness's generic part
+over; ABL's harness is still in `abl/tests/harness/`; the ten M1 files
+(test_variables, conditional, labels, jumps, same_door, speed, key,
+terrain, own_action, camera) are still in `abl/tests/rpgmaker/`. And the
+the-advocate README still says the repo has no tests that run a ROM.

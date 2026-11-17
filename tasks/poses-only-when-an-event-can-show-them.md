@@ -2,7 +2,9 @@
 name: "Poses only when an event can show them"
 description: "Every character on a map carries its twelve poses in the cartridge and gets a VRAM slot sized for them, also the NPCs that never move: Dooms 2's map 1 has 16 still NPCs facing down and '31 with their twelve poses'"
 type: feature
-status: wishlist
+status: doing
+assignee: Mulita
+agents: [Calandria, Hurón, Mulita]
 ---
 
 Left by Calandria on 2026-10-16, from taro's plan for Dooms 2's map 1
@@ -53,3 +55,21 @@ that gives a route counted— and carrying and slotting only those; the
 `sprites:` line saying how many of each, and the bytes saved per game
 measured. First step: count, over the nine games, how many characters
 fall in each of the three classes.
+
+## The first step, to Mulita (2026-11-17)
+
+taro asked whether this still applies. Hornero found that Wally already
+gives the twelve poses only to what walks, turns or animates
+(`rm2k-snes/wally/src/moves.rs`), yet the log of today's builds still
+says almost every character carries them: Dooms 2's map 1, "34
+characters, 29 slots, 500 tiles in VRAM, 8 palettes; 33 with their twelve
+poses in the cartridge", where this task counted 16 still NPCs nobody
+turns; ABL and Vampires Dawn read the same. taro, translated: go ahead
+with the first step as a short study.
+
+Done for this step: why map 1 counts 33 (a classification that takes still
+NPCs for movers —a route or page naming them without moving them— or a
+log that miscounts); the count per class (one pose, four, twelve) over the
+nine games; the bytes each game would save, and what it would mean for
+Vampires Dawn (full, maps out of VRAM). A recommendation; no
+implementation unless the cause is a plain bug in the classification.
