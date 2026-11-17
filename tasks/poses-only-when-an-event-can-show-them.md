@@ -2,8 +2,8 @@
 name: "Poses only when an event can show them"
 description: "Every character on a map carries its twelve poses in the cartridge and gets a VRAM slot sized for them, also the NPCs that never move: Dooms 2's map 1 has 16 still NPCs facing down and '31 with their twelve poses'"
 type: feature
-status: testing
-assignee: taro
+status: doing
+assignee: Mulita
 agents: [Calandria, Hurón, Mulita]
 ---
 
@@ -181,3 +181,12 @@ game with a `wally` on the PATH that runs the global one and copies
 they ran; every map of both had already been answered by the unchanged
 `wally`, and their "now" matches the converter logs of
 `~/the-advocate-ports`.
+
+## Implement it (taro, 2026-11-17)
+
+taro, after the study's numbers: go ahead. Mulita implements the
+recommendation: the four facings instead of twelve for what only turns
+(and what turns by route on a cache map), from Wally's `map_poses`; mapdata
+emits per bank only the poses some map can ask for, the spare pointers
+aimed at a pose that is there; a converter guard that every pose a row can
+ask for is in its bank.
