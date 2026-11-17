@@ -2,8 +2,8 @@
 name: "ABL: the equip screen's cursor runs ahead of its lists"
 description: "Choosing a body part, the selection bar moves at once and the item list replaces the parts' list frames later (~4 + ~5), and going back takes ~16; the description above lags the cursor up to 5 frames; Mesen's lag counter sees none of it"
 type: bug
-status: doing
-assignee: Calandria
+status: testing
+assignee: taro
 agents: [Calandria]
 ---
 
@@ -97,3 +97,75 @@ for a while and taken out:
   every frame). Since the text layer (9041a3ce, 2026-10-03) the text
   arrives some frames after the cursor, as a debt declared there; the bar
   was left ahead of it.
+
+### 2026-11-17, Calandria: what changed, and the measurements after
+
+Three commits in the-advocate's `calandria-equip-lag`:
+
+1. **The bar goes with the text** (`8b9eb121`): `eq_bar` draws
+   `eq_bar_row`, which follows the cursor only in the vblank the text's
+   tilemap goes up in, or once nothing is left to change —`tl_settled`,
+   new in the text layer—. Every frame after a press is now the whole
+   screen before or the whole screen after.
+2. **The stage is a ring** (`063e16d0`): each column a row inks takes the
+   next of 32 slots of the same 2 KB, the vblank uploads from the oldest,
+   and a row starts while the last ones' tiles wait. The wide mode and the
+   menu bank's strips keep the old stage. The glyph is painted a column at
+   a time, X loaded once per column.
+3. **The bar goes up only when it moves** (`7178ceee`), and the
+   equipment's vblanks with tiles take 24 pairs instead of 16
+   (`TL_PAIR_CAP`): the uploads end by line 254 of 261, measured.
+
+Tried and dropped: the equipment screen at FastROM speed (`+ FAST` on its
+`jsl`) saved some 5 of the ~150 lines `eq_compose` takes; the time is in
+the text writes and the bridges, not in its own code.
+
+| transition | before: bar / text | after (bar = text) |
+|---|---|---|
+| slots, Right Hand → Left Hand | 1 / 1 | 1 |
+| slots, Left Hand → Body | 2 / 7 | 5 |
+| slots, Body → Left Hand | 1 / 2 | 2 |
+| A on Right Hand (weapon list) | — / 11 | 8 |
+| A on Body (armour list) | 1 / 8 | 6 |
+| list, down 0 → 1 / 1 → 2 / up 2 → 1 | 1-2 / 4, 5, 5 | 4, 5, 4 |
+| B from the weapon list | 1 / 10 | 8 |
+| B from the armour list | 2 / 14 | 10 |
+
+snes9x and bsnes alike. ABL's `test_menu_equipment_frames_drawing.py`
+holds both: every frame is the screen before or after (red before the
+first commit, in both cores), and each transition arrives within the
+frames above.
+
+What is left is the letters: some eight scanlines each, and `eq_compose`
+taking most of the frame of the press. taro's idea —keeping the slots'
+tiles in VRAM under the list— was measured and left as a draft:
+`the-equip-screen-could-keep-the-slots-tiles-under-its-list`. VRAM has
+room; the bookkeeping is 320-600 bytes of RAM, and `release` has 565 of
+far RAM left. The items screen has the same bar ahead of its text, two
+frames: draft `the-items-screen-s-bar-runs-ahead-of-its-text`, and a line
+in ABL's known issues.
+
+### 2026-11-17, Calandria: verified, and what to install
+
+Branches `calandria-equip-lag` in the-advocate (`2d36514c`, merged with
+main at `1caf906c`), the-advocate-ports (merged at `c5ae4eb`) and
+the-advocate-docs (merged at `fef41fa`: the optimizations page and the
+items screen's line in ABL's known issues).
+
+Run with `install-local cartridge project` of that branch, on the tree
+merged with main: ABL's `just tests` green; `just display-sweep` of
+`release`, 375 cases, none with accesses during display; the new
+equipment scene of `test_display_accesses.py` green; `just test` in
+the-advocate green; `just boot` at the ports' root, see the report. Two
+goldens moved, the shop's party walkers on another step because the text
+settles sooner: side by side in
+`/shared/captures/2026-11-17-equip-lag/calandria/`, with a sheet per
+transition, before and after, frame by frame.
+
+**On merging**: nothing to install. Only `runtime/` changed —no Rust—,
+and the installed tools assemble the runtime of the checkout they were
+installed from; the cartridges' fingerprint sees it and rebuilds.
+
+Not covered by any test: the battle's text with the ring —its drawing
+and golden tests are in the suite and green, but nothing counts its
+frames—, and the debug screen's wide mode, which keeps the old stage.
