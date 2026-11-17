@@ -2,6 +2,7 @@
 name: "Switch skills from the menu"
 description: "Choosing a switch skill on the map turns its switch on, as RM2k does: the only door to four of ABL's systems —Mix Formula, Field/Battery Repair, Weapon Forging, Change Tape—"
 type: feature
+game: abl
 status: testing
 assignee: taro
 agents: [Mulita]

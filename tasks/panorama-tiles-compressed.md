@@ -2,6 +2,7 @@
 name: "Panorama tiles compressed"
 description: "Store panorama tiles in LZ2 instead of raw: ~85 KB freed in ABL's release, about three frames more on the largest panorama's load, and care with a ChangePBG mid-map"
 type: feature
+game: abl
 status: testing
 assignee: taro
 agents: [Carpintero]

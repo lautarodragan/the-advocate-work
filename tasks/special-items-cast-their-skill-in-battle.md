@@ -2,6 +2,7 @@
 name: "Special items cast their skill in battle"
 description: "An item of kind special casts its skill when used, and in battle the list only offers medicines: Zounds' Piedra, Shuriken and Bomba Chica, which throw damage at an enemy, never show up"
 type: feature
+game: zounds
 status: testing
 assignee: taro
 agents: [Tijereta]

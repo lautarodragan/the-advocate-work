@@ -2,6 +2,7 @@
 name: "A skill with a physical attribute does not ask for the weapon"
 description: "RM2k grays out an actor's skill with a physical attribute unless a weapon it holds carries it; the battle offers it like any other: Saldra's Trip, AG7-17's ArmLaser and TillTheyGlow in A Blurred Line"
 type: bug
+game: abl
 status: testing
 assignee: taro
 agents: [Chajá, Tijereta]

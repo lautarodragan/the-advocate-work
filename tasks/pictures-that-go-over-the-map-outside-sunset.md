@@ -2,6 +2,7 @@
 name: "Pictures that go over the map, outside Sunset"
 description: "In the station bathroom of Desert Nightmare (map 7) a 35% light mask comes out as a large picture and covers the room for about 8 seconds; the map_pictures knob that solves it in Sunset isn't turned on in other games"
 type: bug
+game: desert-nightmare
 status: testing
 assignee: taro
 agents: [Tijereta]

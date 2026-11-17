@@ -2,6 +2,7 @@
 name: "The invisible walls lost when trimming events"
 description: "When a map goes past 120 events, the trim also leaves out invisible walls: on eight maps of Desert Nightmare the hero can pass where the original stops them"
 type: bug
+game: desert-nightmare
 status: testing
 assignee: taro
 agents: [Aguará]

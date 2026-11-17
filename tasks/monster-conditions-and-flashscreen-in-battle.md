@@ -2,6 +2,7 @@
 name: "Monster conditions and FlashScreen in battle"
 description: "ChangeMonsterCondition leaves out 164 troop pages —140 with FlashScreen—: Inscribe (799) and ControlMachines (803), at least 66 of them from release encounters. FlashScreen in the scene is cheap; real conditions are big, and taro decides whether they get done or are accepted as debt"
 type: feature
+game: abl
 status: testing
 agents: [Aguará, Chajá]
 assignee: taro
