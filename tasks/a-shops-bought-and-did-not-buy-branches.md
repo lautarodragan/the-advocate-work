@@ -2,6 +2,7 @@
 name: "A shop's bought and did-not-buy branches"
 description: "OpenShop with its 'bought' / 'did not buy' branches does not compile, so Zounds' cafeteria on the Hover Tram has no shopkeeper"
 type: feature
+game: zounds
 status: testing
 assignee: taro
 agents: [Carpintero]

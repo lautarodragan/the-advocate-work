@@ -223,3 +223,113 @@ the ports' branch changes only `abl/experiments/sram-dma/` and the
 FX Pak.
 
 **2026-11-17, taro**: declared done.
+
+## On the FX Pak (taro, 2026-11-17)
+
+taro ran `sram-test.sfc` (256 KB) with its `.msu` on the console, music
+off, auto rounds; photos of the TV in the shared folder,
+`captures/2026-11-17-sram-test-fxpak/`. Read off them:
+
+* SRAM seen 256 KB, MSU-1 yes, save slots intact; 13 to 102 rounds, all
+  `PASS`, none failed.
+* 96 KB by DMA: 597–599 lines, ~43 KB per frame, both ways —the same as
+  the emulators—.
+* A data seek **right after the stash: ~1.08 s** (max 1.084 s); the next
+  one, **SRAM unchanged: 0.382 s**. Worse than the estimate (0.5–0.7 s
+  changed), and the unchanged one alone is past `msu_data_seek`'s ~0.35 s
+  cap: with 256 KB declared and a `.msu`, every seek made with no track
+  playing would time out, stash or not.
+* The frame test was at `OFF` and `WRITES` (`SEEKS` 0); 1 to 4 late frames.
+  Still to run: `SEEKS` and `SEEKS+WRITES`, music on (Y), and the 64 KB ROM.
+* The test ROM's background is full of garbage tiles on the console: it
+  does not clear VRAM, which the emulators start at zero. Cosmetic, the
+  test ROM's.
+
+Read so far: 256 KB with a `.msu` is not usable as it stands.
+
+Later, after the console was turned off and on (photo
+`after-reboot-three-rounds.jpg`), three rounds with A: at boot **saved
+rounds 134** —the counter of the previous session reached the card— but
+**saved stash LOST** —a stash was there and did not verify—; the three
+rounds `PASS`; after the stash 1.044 s (max 1.055 s), again 0.382 s, the
+same as before. What "LOST" means against this ROM's checks (a stash
+written after the card's last write? half of one?) is to be read from
+`sram.s`; it fits the draft
+[`a-save-on-the-fx-pak-waits-for-a-silent-seek`](a-save-on-the-fx-pak-waits-for-a-silent-seek.md):
+what the SRAM holds at power-off is what the last write took, not what the
+game last wrote.
+
+Then three rounds with A and **MSU-1 music on** (photo
+`music-on-three-rounds.jpg`), after another power cycle: at boot saved
+rounds 137, **saved stash OK** this time; the rounds `PASS`; after the
+stash **~1.03 s** (max ~1.04 s), again **0.382 s** —read off a blurry
+photo, but the same order as with the music off—. That contradicts the
+reading of the firmware that nothing is checked while a track plays: either
+the check does run while a track plays, or the ROM's track is not playing
+when it seeks (stopped, or not yet started). To settle from the firmware
+and `sram.s` before trusting either.
+
+And with auto rounds and music on (photo `music-on-auto.jpg`): at boot
+saved rounds 140, stash OK; 14 rounds `PASS`; after the stash 1.044 s (max
+1.053 s), again 0.382 s. The same as with music off, now on 17 rounds with
+it on. Whether the track was heard is the open question (asked of taro).
+
+The frame test, music off (photos `seeks-writes.jpg`, `seeks.jpg`; taro
+confirmed no music was ever heard, so every run so far was without it —the
+test ROM's Y sent play before the track loaded; fixed in the ports
+`b81744c` and re-delivered—):
+
+* **SEEKS+WRITES** (16 B of SRAM written every frame, a seek every 30):
+  last 1043 ms, mean 1043, max 1063. With the SRAM changing every frame,
+  **every seek waits about a second**: a full write of the 256 KB each
+  time.
+* **SEEKS** (no writes): 14 seeks, last 382 ms, mean 428, max 1035 —the
+  first after the last change pays the write, the rest the checksum—;
+  hundreds of late frames.
+
+So far-RAM variables in the SRAM are out with a `.msu`: they would make
+every silent data seek take a second. Still to see with the fixed ROM:
+music on (whether a playing track really spares the seeks), and the 64 KB
+ROM.
+
+The 64 KB ROM, music off (photos `64k-*.jpg`; it has no rounds, A and B
+do nothing there on purpose: 96 KB do not fit):
+
+* **SEEKS**: 18 seeks, last 97 ms, mean 107, max 282; 119 late frames.
+* **SEEKS+WRITES**: 14 seeks, last 282 ms, mean 284, max 305; 240 late
+  frames.
+* **WRITES** alone: no seeks, 1 late frame.
+
+Both sizes fit one line: about **1.5 ms per KB** to checksum (382 ms for
+256 KB, 97 for 64) and about **2.6 ms per KB** more to write it when it
+changed (1043 − 382 for 256 KB, 282 − 97 for 64). So today's 32 KB would
+cost a silent seek about 48 ms unchanged —three frames— and about 130 ms
+after a save: to be checked against what the games already do (Vampires
+Dawn reads sound effects from the `.msu` on map loads).
+
+Closed for far RAM: any SRAM that changes every frame makes every silent
+seek pay the write. What is left open: whether a playing track spares the
+seeks (the fixed ROM, Y), and whether the 32 KB the games declare already
+costs what the line above says.
+
+With the fixed ROM (the ports `b81744c`) and the track really playing
+(MUSIC ON is now shown only when the playing bit is up; photos
+`music-fixed-*.jpg`), 256 KB:
+
+* rounds: after the stash **2 ms**, again **2 ms**;
+* **SEEKS**: 25 seeks, last 2 ms, mean 2, max 2, **0 late frames**;
+* **SEEKS+WRITES**: 28 seeks, 2 ms each, **0 late frames**.
+
+So the firmware reading holds: while a track plays, no check, no write,
+and a seek costs 2 ms whatever the SRAM size or how often it changes. Every
+cost above is of seeks made with no track playing. Two consequences:
+
+* For the cost: what matters is not the SRAM's size but **which seeks
+  happen in silence** —in ABL, the sound-effect packages after
+  `map_song_mute` stops the track, and anything read while the music is the
+  SPC's—. Ordering those after the next track starts would make them cheap
+  even today.
+* For the saves: the same rule means that while a track plays the FX Pak
+  never writes the `.srm` (the draft
+  [`a-save-on-the-fx-pak-waits-for-a-silent-seek`](a-save-on-the-fx-pak-waits-for-a-silent-seek.md)):
+  the cheaper the seeks are made, the longer a save waits to reach the card.

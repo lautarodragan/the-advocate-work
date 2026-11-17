@@ -2,6 +2,7 @@
 name: "ChangeItems and ChangeMonsterHP by a variable"
 description: "ChangeItems with the item or the amount in a variable, and ChangeMonsterHP with the damage in a variable, do not compile: Book of Three 54 and 52 uses (Eilonwy's Absorb Essence, Taran's Last Stand, six essence pages on the maps), Vampires Dawn 81"
 type: feature
+game: book-of-three
 status: testing
 assignee: taro
 agents: [Chajá]

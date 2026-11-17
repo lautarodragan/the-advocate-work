@@ -2,6 +2,7 @@
 name: "ShowBattleAnimationB in troop pages"
 description: "The battle animation on a monster is not in the troop pages' command list: it keeps out Taran's Last Stand in 52 troops and the two scripted endings of The Book of Three (the Cauldron-Born at map 26, the Horned King with Dyrnwyn at map 78), which may leave those fights without an end"
 type: feature
+game: book-of-three
 status: testing
 assignee: taro
 agents: [Tijereta]

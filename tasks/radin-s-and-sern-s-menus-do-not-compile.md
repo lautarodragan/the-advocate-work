@@ -2,6 +2,7 @@
 name: "Radin's and Sern's menus do not compile"
 description: "ABL's common events 42 and 44, which Mix Formula and Weapon Forging open, are left out by the converter: their MoveEvent changes the hero's graphic, which a shared body cannot"
 type: bug
+game: abl
 status: testing
 assignee: taro
 agents: [Mulita]
