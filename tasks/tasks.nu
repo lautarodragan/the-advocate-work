@@ -179,7 +179,7 @@ def task_html [] {
   let source = $"https://github.com/lautarodragan/the-advocate-work/blob/main/tasks/($id).md"
   [
     $"<details class=\"task\" id=\"($id | escape)\" data-status=\"($t.status | escape)\" data-type=\"($t.task_type | escape)\">"
-    $"<summary><button type=\"button\" class=\"copy\" data-copy=\"($id | escape)\" title=\"Copy the task's file name\">copy</button><span class=\"type\">($t.task_type | escape)</span><span class=\"name\">($t.name | escape)</span>"
+    $"<summary><button type=\"button\" class=\"copy\" data-copy=\"($id | escape)\" title=\"Copy the task's file name\">copy</button><button type=\"button\" class=\"pick\" data-id=\"($id | escape)\" aria-pressed=\"false\" title=\"Add the task to the selection, to copy several at once\">select</button><span class=\"type\">($t.task_type | escape)</span><span class=\"name\">($t.name | escape)</span>"
     $"<span class=\"desc\">($t.description | escape)</span></summary>"
     $"<p class=\"meta\"><a href=\"#($id)\">#</a> · <a href=\"($source)\">($id).md</a>($changed)($assignee)($agents)</p>"
     $"<div class=\"body\">($t.body | render_body)</div>"

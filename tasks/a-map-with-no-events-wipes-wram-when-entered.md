@@ -2,7 +2,7 @@
 name: "A map with no events wipes WRAM when entered"
 description: "Teleporting into a map that has no events at all leaves the whole WRAM at $FF some fifteen frames after map_current changes, on snes9x and on bsnes; with one still event on the map it loads fine"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Cardón, Calandria]
 ---
@@ -106,3 +106,5 @@ no Rust changed.
 **When merging**: nothing to install. Only `runtime/` and the test game
 changed, and `rm2k-snes-cartridges` assembles the runtime of the checkout
 it was installed from, `~/the-advocate`.
+
+**2026-11-16, taro**: declared done.

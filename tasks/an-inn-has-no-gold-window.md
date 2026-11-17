@@ -2,7 +2,7 @@
 name: "A paid inn shows no gold window, and \"Yes\" can be picked without the gold"
 description: "ShowInn with a price: the greeting comes without the gold window, and Yes is not greyed out when the party cannot pay"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Tijereta, Hurón]
 ---
@@ -94,3 +94,5 @@ with `tijereta-inns` after Tijereta brought `hornero-integ` into it.
 
 **To install when merging**: `cartridge events screens mapdata convert`
 —plus whatever `tijereta-inns` asks for—.
+
+**2026-11-16, taro**: declared done.

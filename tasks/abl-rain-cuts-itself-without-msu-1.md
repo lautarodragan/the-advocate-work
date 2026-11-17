@@ -2,7 +2,7 @@
 name: "ABL's opening rain cuts itself without MSU-1"
 description: "Without MSU-1, each new Rain1 on map 1 restarts the voice of the one still playing, and the rain dips almost to silence every four seconds"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Mulita]
 ---
@@ -126,3 +126,5 @@ merge there is enough. Bank 0 is 10 B larger in every cartridge (Sunset 25
 → 35, Vampires Dawn 45 → 55, ABL's `test-change-system` 53 → 63, the
 tightest); no other line of `just space` moves but the gaps and far RAM of
 the games whose packages changed (see the other task).
+
+**2026-11-16, taro**: declared done.

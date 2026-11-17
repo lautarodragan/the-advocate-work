@@ -2,7 +2,7 @@
 name: "Frozen World: the cursor keeps the wrong graphic in the menu and the battle"
 description: "In Frozen World's plate menu and battle the hero, which plays the cursor, shows a graphic that is not the one RM2k would show: a soldier when picking the attack plate in battle, and the plate's graphic after leaving the placement screen instead of Ludine"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Carpintero]
 ---
@@ -136,3 +136,5 @@ goldens did not move.
 Exit: the cursor is Lutine again— and a fight: the plate picked shows on
 the battle screen, and each turn's cursor is whoever picks. Not covered by
 a test: the item screen, map 14, with common event 18.
+
+**2026-11-16, taro**: declared done.

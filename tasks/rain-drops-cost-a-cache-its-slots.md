@@ -2,7 +2,7 @@
 name: "The raindrops cost a cache its slots"
 description: "Rain is drawn whenever its greys fit a palette, before the cache counts its slots: Vampires Dawn's 51 gives up 21 animations for it and its 163 has events waiting"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Calandria]
 ---
@@ -141,3 +141,5 @@ ports' `test_painted.py` moved: Sunset's square now animates its water
 sparkles; before, after and difference in the captures. What stays open
 is in the draft
 [`sunset-towns-crowds-wait-for-a-slot`](sunset-towns-crowds-wait-for-a-slot.md).
+
+**2026-11-16, taro**: declared done.

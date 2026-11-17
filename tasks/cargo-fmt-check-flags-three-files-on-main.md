@@ -19,3 +19,7 @@ version.
 To reproduce: `cargo fmt --check 2>&1 | grep '^Diff in'` in a checkout of
 main. Fixing it is `cargo fmt` and a commit of its own, after checking the
 toolchain CI pins.
+
+Carpintero saw the same on 2026-11-16 at cd3fecb8 (`just lint`), with a
+fourth file: `rm2k-snes/convert/src/game.rs`, one hunk, which came with
+Chajá's merge that day.

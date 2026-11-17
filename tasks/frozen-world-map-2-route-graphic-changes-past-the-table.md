@@ -2,7 +2,7 @@
 name: "Frozen World's map 2: route graphic changes past the ROM's table of 8"
 description: "Map 2 (\"Plate Placement\") builds since its code stays in the cartridge, with 20 warnings: a route changes an event's graphic to one the ROM's table of 8 has no room for, and the change is ignored"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Carpintero]
 ---
@@ -59,3 +59,5 @@ ninth graphic, which was dropped— on the cursor, pixel for pixel as its
 event shows it. Red without the change. The rest of that file is the
 other causes of
 [`frozen-world-the-cursor-keeps-the-wrong-graphic`](frozen-world-the-cursor-keeps-the-wrong-graphic.md).
+
+**2026-11-16, taro**: declared done.

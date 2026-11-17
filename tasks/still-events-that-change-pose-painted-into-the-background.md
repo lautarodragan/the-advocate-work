@@ -2,7 +2,7 @@
 name: "Still events that change pose, painted into the background"
 description: "A map that lines many still CharSet events up —Zounds' map 96, fifty-six floor switches— draws each as a 32x32 object: past eight and a half on a line the console drops slivers, and sixty objects cost the frame two; painted into the background, with their cell written again when their pose changes, they would cost neither"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Cardón]
 ---
@@ -281,3 +281,5 @@ that loops or is painted, which the converter never makes.
 To install when merging: `just install wally convert mapdata cartridge`
 —the runtime changes too: `posed.s`, `oam.s`, `vblank.s`, `enter_map.s`,
 `cache_slots.s`, `main.s`—.
+
+**2026-11-16, taro**: declared done.

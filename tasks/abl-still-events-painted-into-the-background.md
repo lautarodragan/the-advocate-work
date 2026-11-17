@@ -2,7 +2,7 @@
 name: "ABL: still events painted into the background"
 description: "Try `posed_events` in A Blurred Line, as Zounds has it: signs and doors that are events with a ChipSet tile would be drawn with the map's palettes instead of a lent sprite palette; measure which go in, what it costs, and what changes on screen"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Cardón]
 ---
@@ -134,3 +134,5 @@ ROM —the only one, map 8, was looked at in a scratch cartridge—, and a
 posed list in a cartridge that links.
 
 To install when merging: `just install wally convert`.
+
+**2026-11-16, taro**: declared done.

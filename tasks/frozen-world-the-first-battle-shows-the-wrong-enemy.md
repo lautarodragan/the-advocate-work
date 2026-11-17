@@ -2,7 +2,7 @@
 name: "Frozen World: the first battle shows the wrong enemy"
 description: "The game's first battle, started by a plant on the map, shows a dark hooded figure —the final enemy's or the intro's wizard's graphic— instead of the plant"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Tijereta]
 ---
@@ -106,3 +106,5 @@ plant: the first battle shows the plant. Not compared with the original
 under Wine
 ([`frozen-world-does-not-open-under-wine`](frozen-world-does-not-open-under-wine.md)):
 what RM2k shows is read in the dump.
+
+**2026-11-16, taro**: declared done.

@@ -97,6 +97,31 @@
   }
   .copy:hover { color: var(--fg); }
   .copy.done { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+  /* The select button floats right too, after copy in the markup, so it
+     lands just left of it. The same look, and the accent while selected. */
+  .pick {
+    float: right; margin-left: .5rem; cursor: pointer;
+    font: inherit; font-size: .75rem; padding: .1rem .5rem;
+    border: 1px solid var(--line); border-radius: .3rem;
+    background: var(--code); color: var(--muted);
+  }
+  .pick:hover { color: var(--fg); }
+  .pick[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+  /* The selection's bar, fixed at the bottom while anything is selected;
+     the body gets room under the last task so the bar never covers it. */
+  #selection {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
+    display: flex; align-items: center; justify-content: center; gap: .75rem;
+    padding: .6rem 1rem; background: var(--card);
+    border-top: 1px solid var(--line); box-shadow: 0 -2px 8px rgba(0, 0, 0, .08);
+  }
+  #selection button {
+    font: inherit; font-size: .9rem; cursor: pointer;
+    padding: .3rem .8rem; border-radius: 999px;
+    border: 1px solid var(--line); background: var(--card); color: var(--fg);
+  }
+  #selection button.primary { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+  body.selecting { padding-bottom: 5rem; }
   [hidden] { display: none !important; }
 </style>
 </head>
@@ -114,6 +139,12 @@
 <main id="tasks">
 <!-- TASKS -->
 </main>
+
+<div id="selection" role="region" aria-label="Selected tasks" hidden>
+  <span id="selection-count"></span>
+  <button type="button" class="primary" id="copy-all">Copy all</button>
+  <button type="button" id="clear-all">Clear</button>
+</div>
 
 <script>
   const sections = [...document.querySelectorAll('#tasks section')];
@@ -185,20 +216,55 @@
     status = t.dataset.status; type = 'all'; search.value = ''; apply();
     t.open = true; t.scrollIntoView();
   }
-  // The copy button lives inside the summary: preventDefault keeps the click
-  // from also opening or closing the task.
-  document.addEventListener('click', async e => {
-    const b = e.target.closest('button.copy');
-    if (!b) return;
-    e.preventDefault();
-    try {
-      await navigator.clipboard.writeText(b.dataset.copy);
-      b.textContent = 'copied'; b.classList.add('done');
-    } catch {
-      b.textContent = 'failed';
+  // The selection: the file names of the tasks picked with their select
+  // button, in the order they were picked, to copy them at once —one per
+  // line, as the copy button gives one—. It is kept in this browser's
+  // localStorage so a reload does not lose it; without storage (a private
+  // window) it just lives as long as the page.
+  const STORE = 'tasks-selection';
+  let selected = [];
+  try { selected = JSON.parse(localStorage.getItem(STORE)) || []; } catch {}
+  const ids = new Set(tasks.map(t => t.id));
+  selected = selected.filter(id => ids.has(id));     // a task renamed or gone
+  const bar = document.getElementById('selection');
+  const count = document.getElementById('selection-count');
+  const copyAll = document.getElementById('copy-all');
+  function showSelection() {
+    for (const b of document.querySelectorAll('button.pick')) {
+      const on = selected.includes(b.dataset.id);
+      b.setAttribute('aria-pressed', on);
+      b.textContent = on ? 'selected' : 'select';
     }
-    setTimeout(() => { b.textContent = 'copy'; b.classList.remove('done'); }, 1200);
+    bar.hidden = selected.length === 0;
+    document.body.classList.toggle('selecting', selected.length > 0);
+    count.textContent = `${selected.length} task${selected.length === 1 ? '' : 's'} selected`;
+    try { localStorage.setItem(STORE, JSON.stringify(selected)); } catch {}
+  }
+  async function copy(button, text, label) {
+    try {
+      await navigator.clipboard.writeText(text);
+      button.textContent = 'copied'; button.classList.add('done');
+    } catch {
+      button.textContent = 'failed';
+    }
+    setTimeout(() => { button.textContent = label; button.classList.remove('done'); }, 1200);
+  }
+  copyAll.onclick = () => copy(copyAll, selected.join('\n'), 'Copy all');
+  document.getElementById('clear-all').onclick = () => { selected = []; showSelection(); };
+
+  // The copy and select buttons live inside the summary: preventDefault
+  // keeps the click from also opening or closing the task.
+  document.addEventListener('click', e => {
+    const c = e.target.closest('button.copy');
+    const p = e.target.closest('button.pick');
+    if (!c && !p) return;
+    e.preventDefault();
+    if (c) { copy(c, c.dataset.copy, 'copy'); return; }
+    const id = p.dataset.id;
+    selected = selected.includes(id) ? selected.filter(x => x !== id) : [...selected, id];
+    showSelection();
   });
+  showSelection();
   window.addEventListener('hashchange', openHash);
   apply();
   openHash();
