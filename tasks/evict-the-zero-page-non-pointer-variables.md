@@ -1,6 +1,6 @@
 ---
 name: "Evict the zero page's non-pointer variables"
-description: "Of the zero page's 253 used bytes only 55 are [dp],y pointers; the other 198 are there for one byte and one cycle per access, and 3 B are left: move the cold ones to the BSS so a new pointer can exist"
+description: "The zero page is full —0 B left in every cartridge since 2026-10-17— and only about 55 of its bytes are [dp],y pointers; the rest are there for one byte and one cycle per access. Moving the cold ones to the BSS costs a byte of bank 0 each, and bank 0 has very little left"
 type: feature
 status: wishlist
 ---
@@ -42,3 +42,13 @@ variables are the cold ones (read once a frame or less), and the suite
 and `test_cores.py` are green. **First step**: the per-label count of
 accesses, weighted by how often each routine runs; needs the `BSS` room
 of [`move-the-dma-only-buffers-out-of-bank-0`](move-the-dma-only-buffers-out-of-bank-0.md) first.
+
+## Reviewed (Hornero, 2026-11-17)
+
+The last 3 B went on 2026-10-17 (`cell_mask`, 9fea198a; `twins_here`,
+5b3c2a9f); nothing has been evicted since, and on 2026-11-17 `pick_first`
+went to the BSS because the direct page had no byte left. The bank-0
+numbers above are stale: the builds of 2026-11-17 had 65 (ABL) to 290 B,
+and the tightest cartridge 18 B after that day's merges. Each variable
+moved out costs a byte of bank 0, and the BSS room depends on
+[`move-the-dma-only-buffers-out-of-bank-0`](move-the-dma-only-buffers-out-of-bank-0.md).
