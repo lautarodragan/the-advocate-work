@@ -2,7 +2,7 @@
 name: "ABL: Lazer Teeth's rock lags"
 description: "In the Lazer Teeth mini-game on map 11, while the rock flies and when it hits a lamp or a computer, Mesen counts ~35 lag frames: frames the main loop missed"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Aguará]
 ---
@@ -378,3 +378,9 @@ checkout `project` was compiled from—:
 **To install when merging**: nothing new to compile —only the runtime
 changed—, but the global install's runtime is `~/the-advocate`'s, so the
 merged checkout is what goes in.
+
+## Closed (2026-11-17)
+
+> I can confirm the lag fix is good, both on Mesen and on the FX Pak 😁
+
+By taro, with the builds of the ports `f62e91b` and the-advocate `ed8d8590`.
