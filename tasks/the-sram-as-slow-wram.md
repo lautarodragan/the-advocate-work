@@ -60,3 +60,22 @@ core, bsnes `591b7e1`, bsnes-libretro `a7e88d6`, ares `4cb8d92`, Mesen2
   partial-SRAM CRC for **known** SuperFX/SA-1 games, a table keyed by the
   ROM's CRC (no homebrew), and 1.11.1's `autosave` / `msu1_autosave`
   toggles in `config.yml`.
+
+The test ROM, in the ports' `abl/experiments/sram-dma/` (`just sram-dma`,
+branch `aguara-sram-dma`): 8 MB ExHiROM like the game, `$FFD8 = $08`; a
+round fills 96 KB of WRAM ($7E:8000-$7F:FFFF, which is exactly what a
+battle takes from the map), stashes it in banks $24-$2F by DMA through
+`$2180`, wipes it, brings it back and checks it; with MSU-1 it times a data
+seek right after the stash and another after. Delivered to
+`/shared/builds/sram-test/` with a README of what taro should look for.
+
+Measured in the harness (snes9x, bsnes, mesen-s and the audit core, all
+four the same within two lines): **256 KB seen in all**, 96 KB in **597-599
+lines WRAM to SRAM and 598 SRAM to WRAM** = 8.3 master cycles a byte, **~43
+KB a frame** each way; the stash survives a reset; banks $20-$23 untouched.
+snes9x's libretro hands its frontend only the first 128 KB (the slots are
+in the first 32 KB, so saves are unaffected), mesen-s 256 KB, bsnes saves
+it itself. ABL's `release` with `$FFD8` patched to `$08` boots to the same
+screens as without in snes9x, bsnes and mesen-s (frames 120, 300, 600): the
+byte does not move the header detection, in them or in the FX Pak's
+scoring (both header copies lose the same point).
