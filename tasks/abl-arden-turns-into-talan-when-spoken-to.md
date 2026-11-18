@@ -2,7 +2,7 @@
 name: "ABL: Arden turns into Talan when spoken to"
 description: "In the scene with \"Arden... I'm sure everyone's fine\", talking to Arden draws her with Talan's CharSet in her own palette, and then she is Arden again"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Mulita]
 game: abl
@@ -76,3 +76,9 @@ turning in a cache map: only left is looked at.
 
 **When merging**: no Rust changed, only `runtime/cache_slots.s`; the ROM
 takes it from `~/the-advocate` once merged, with `just cartridges`.
+
+## Closed (2026-11-17)
+
+> The Arden thing seems to be fixed.
+
+By taro, with the builds from the-advocate `ed8d8590` on.
