@@ -2,8 +2,8 @@
 name: "A jump in place does not show"
 description: "A route with Begin Jump and End Jump and nothing between —a hop on the spot— shows nothing on the console; in ABL's Hover-Tram the two robbed passengers should hop"
 type: bug
-status: doing
-assignee: Calandria
+status: testing
+assignee: taro
 agents: [Calandria]
 game: abl
 ---
@@ -99,3 +99,33 @@ stands on when it hops, and that was not measured: only the ones on a cell
 not passable from all four sides —or with another event on it— changed.
 The script is a throwaway; it decodes each `MoveEvent`'s parameters with the
 operands of 32 to 35 skipped, as `route::decode` does.
+
+## What was run, and what it does not cover
+
+* ABL's `just tests` with the branch's tools —`project` and `cartridge`
+  installed locally only so that the cartridges assemble this worktree's
+  runtime; no Rust changed—: green but for the index of `tests/README.md`,
+  which was missing the new file and is fixed in the same commit. That
+  includes `test_cores.py`. **No golden moved**: no golden case reaches a
+  hop in place on a cell with no passage.
+* `just boot`, the other eight games: green, serially. (With `-n 8` it
+  is not: each test builds its game, and eight at once race on the same
+  `build/` —"symbol already defined" in `mapdata.inc`—. It runs serial
+  on purpose.)
+* The captures of both hops, frame by frame, are in
+  `/shared/captures/2026-11-18-jump-in-place/` —not goldens—.
+* **Not compared against RPG_RT under Wine**: the height and the frames
+  come from EasyRPG's `Game_Character` (`GetJumpHeight`, `jump_speed`), the
+  same the ROM already followed for jumps that move. taro has not played
+  it.
+* Of the sweep's jumps, the only ones run are the tram's two. A hop in
+  place by an event of a page's **own** route —Vampires Dawn has 76, The
+  Frozen World 4— goes through the same `build_ev_jump`, but no test runs
+  one.
+
+**Branches**: `calandria-jump-in-place` in the-advocate (`9ea86f4d`) and
+in the ports. `just space`: `release` is the tightest in data banks —0
+whole banks free, 11 halves—, and `test-msu` in bank 1, 140 bytes.
+
+**When merging**: nothing to install: the change is in `runtime/`, which
+the cartridges assemble from `~/the-advocate`, and no Rust changed.
