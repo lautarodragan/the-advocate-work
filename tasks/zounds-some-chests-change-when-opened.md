@@ -2,8 +2,8 @@
 name: "Zounds: some chests change when opened"
 description: "Opening some chests in Zounds draws a different chest than the closed one"
 type: bug
-status: testing
-assignee: taro
+status: doing
+assignee: Cardón
 agents: [Cardón]
 game: zounds
 ---
@@ -121,3 +121,16 @@ have no golden of their opening.
 **Branches**: the ports' `cardon-chests` (the test and its goldens), the
 book's `cardon-chests` (the Known issues line), and this one (the task and
 the draft). **To install when merging**: nothing.
+
+## Reopened (2026-11-17, Hornero)
+
+taro, translated, after seeing that RM2k does the same:
+
+> Oh! It must be a bug in Zounds, then. Maybe they use this CharSet.
+
+with a picture of a chest CharSet (kept in
+`~/scratch/hornero/zounds-chest-sheet-from-taro.png`): closed chests in
+many colours, opened ones only brown and grey. So it is fixed in the game
+itself, like
+[`zounds-two-chests-share-a-switch`](zounds-two-chests-share-a-switch.md):
+each coloured chest opens in its own colour.
