@@ -25,3 +25,7 @@ any seat from x=8 on, or beside one: `Leave1`, `EV0004`, `EV0007` and
 event(s) stay objects, someone can stand behind what it draws past its
 cell: 3, 4, 7, …". With the request's `reach.any_open` set to false by
 hand, `wally map` takes all seven seated still people.
+
+**Since 2026-11-18** ABL's map 13 has a fork that bakes its still crowd
+by hand (stage 2 of the task above), so the case is no longer seen
+there: it still holds for any other map whose scene runs once.
