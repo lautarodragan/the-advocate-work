@@ -2,8 +2,8 @@
 name: "ABL: the Hover-Tram's crowd is cut"
 description: "Map 13 has more characters on a line than the PPU draws; still people could be baked into the background if what they draw outside their cell lands where nobody can stand"
 type: feature
-status: doing
-assignee: Cardón
+status: testing
+assignee: taro
 agents: [Cardón]
 game: abl
 ---
@@ -63,3 +63,169 @@ identical floors share their blocks (`EV0019`/`EV0020`). Then say what is
 left for map 13's lower row: e.g. the part of a pose drawn over a cell
 only walkers *behind* it can reach going to the layer above (BG2, in
 front of objects), or stage 2, a patch of the map.
+
+## Log
+
+**2026-11-17, Cardón.** Started from the-advocate `7dab7d82`, the ports
+`e87e936`; branches `cardon-hover-tram` in both.
+
+What map 13 is, read from its data: the seated row is y=5 (seats, closed
+to walking but for x=2 and 17) under row 4 (the seats' backs, closed);
+the standing row is y=9, on the aisle (rows 6-9 open). So the seated
+people's heads fall on closed cells, and the standing people's on the
+aisle, as Hornero said.
+
+**The hero phases on this map.** `EV0028`, autostart, walks Talan right
+six cells, turns Phasing On, sits him on (8,5) through the seats, and
+later walks him down and out by the door with it still on, then teleports
+him to map 16 —whose event 1 turns it off—. `rm2k_rules::reach` read that
+as "the hero walks through walls afterwards", which is anywhere: under
+stage 1's rule as written, map 13 bakes nobody. Refined in `reach`: a
+page in the foreground that takes the hero off the map before it can end
+only *holds* him where its routes leave him —covered, his later routes in
+that list walk from there through walls, but he does not walk on from
+there—. Never covers more than before.
+
+`rm2k_rules::reach` was covering far more of map 13 than RM2k can reach,
+and each of these kept the seated row out; all fixed in `reach`, each a
+commit with its test, each covering fewer cells and never more —which
+also lowers more on a game with `unreachable_above_below`—:
+
+* a parallel list (the common events) walking the hero from where a scene
+  holds him left him free and phasing: now he stays held;
+* every event's cell was open to everyone, so the hero walked from the
+  aisle onto the seats where people sit (CharSets) and from there, phasing,
+  onto the seats' backs: now only events drawn with a tile (bridges) open
+  their cell;
+* every step of a route could fail and the route go on: only a skippable
+  route's; one that is not waits, and a step onto a closed cell never
+  comes —the hero no longer "stops anywhere" on his way to the seat—;
+* an autostart page that asks for nothing, under pages that ask only for
+  switches nothing on the map turns off, starts where the hero arrives
+  (2,7), not wherever he can walk;
+* the hero and events walking on their own stepped diagonally, and passed
+  over the seat beside the end seat: RM2k 2000 walks them in four
+  directions.
+
+And in the converter: ABL's "recall the hero's cell five rows up" put him
+on any open cell of *every* map —the Hover-Tram's window panes are open
+cells, so he could be put on the wall—; the recalls whose map variable is
+only set to numbers go only to those maps (60 and 61 in ABL).
+
+**Horizontal spill, decided**: measured on map 13, the seated people draw
+0 px past their cell's sides but one (`EV0009`, 3 px each side); their
+heads are 16 px wide, so 24-26 px of each head fall in the 4 px columns a
+neighbour's sprite covers. A character on the row above is never let
+through. One on the event's own row to its left —behind it in RM2k's
+order— is let through: it already draws its 4 px side over every event
+baked into its cell, which the book's divergence accepts, and the spill
+adds the same 4 px over the head; one to the right is in front in RM2k
+too. On the event's own cell RM2k puts the higher id in front; the hero is
+taken as behind.
+
+**Panorama**: allowed when the map's panorama goes mode 3 or flattened
+—the ways that draw the poses' rows of the extension; baked, painted,
+black and mode 1 do not— and every cell the bake writes is opaque in
+every drawing. Map 3 (mode 1) crashed the first try: the extension was
+not built.
+
+**Colours**: map 13's background had a budget of 35 CGRAM entries; the
+seated people bring 48 colours more, and `same_split` refuses any budget
+change. For a set with spills, the split may move if the layer above
+keeps its tiles and cells and nothing merges more (`only_the_split_moved`):
+with it 7 of 7 seated still people go in; without it, 2 (`EV0007`,
+`EV0008`).
+
+**What does not reach: ABL recalls a computed place on every map.** The
+recall of `CE42`/`CE44` memorizes the hero's place and recalls it with
+its row changed —"five rows up"— so the converter's `any_open` stays on
+for every map: on map 13 the hero can be put on any aisle cell, and the
+trip scene, which starts where he arrives, can then seat him on any seat
+of the row from x=8 on, or walk him onto a seat beside one of them. So
+only `EV0005`, `EV0008` and `EV0009` pass the rule (and of them only
+`EV0005` goes in: see "Colours, again" below); `Leave1`, `EV0004`, `EV0007`
+and `EV0026` are ruled out by the hero seated on their cell or beside
+them. In RM2k the trip runs once (it turns switch 69 on before leaving),
+from (2,7): that is what `reach` cannot know. With `any_open` off for map
+13 (measured on a hand-edited request), all seven go in.
+
+Measured, ABL, the-advocate `9f0e21d0`, global runtime `7dab7d82`:
+
+* (first measure) events into the background: 478 before, 614 after —112 of them drawn
+  past their cells, on 20 maps (13 21 28 29 42 83 90 199 200 225 229 242
+  258 288 291 295 298 314 316 345); the other 24 are in-cell ones on maps
+  with a panorama that shows, newly allowed—;
+* (first measure, superseded below)
+* sharing: `EV0019`/`EV0020` are on the standing row, which does not
+  bake. On the seated row, with all seven in (the hand-edited request),
+  `EV0007` and `EV0008` —both Future2:5 on the same seat— get the same
+  pose block, 26, and `EV0004` and `EV0005` —Future1:7— the same 25: the
+  blocks are deduplicated by what they draw, and the head cells above are
+  map cells, deduplicated the same way.
+
+**Colours, again.** The suite's patches check showed it: moving the
+split for map 13's people took the panorama from 46 kept colours to 32 —
+the evening outside the windows drawn worse—. `only_the_split_moved` now
+also asks the panorama to keep its colours and tiles; with it, of the
+three that pass the rule only `EV0005` fits. The colours are the second
+wall on this map, after `reach`.
+
+**And the test cartridges.** `teleport-missing` baked more of map 21 than
+`release` (fewer maps, so fewer arrivals): the converter now gathers where
+the hero arrives over the whole game's maps, and a map decides the same
+in every cartridge.
+
+## Final, 2026-11-18
+
+the-advocate `cardon-hover-tram` (from `7dab7d82`, with `f658861c`
+merged), ports `cardon-hover-tram` (with main `da4074f` merged), book
+`cardon-hover-tram`. To install when merging: **wally, convert** (and
+rm2k-rules goes into wally); the runtime is untouched by this branch.
+
+* ABL release: 478 events in the background → 612; 110 of them drawn
+  past their cells, on 20 maps; the rest are inside their cells on maps
+  whose panorama shows, newly allowed. `just space`: release (the
+  tightest) 11 free halves of 32 KB → 10, gaps 20,299 → 29,895 B;
+  test-special unchanged.
+* Map 13: `EV0005` in the background. `just objects-per-line abl --map
+  13`: the seated row's lines 13 characters / 52 slivers → 12 / 48; the
+  standing row's 14 / 56, unchanged. Still over: Mulita's STAT77 test
+  keeps map 13.
+* Zounds (the only other game with `baked_events`): 427 → 457, 22 past
+  their cells on 9 maps (49 59 108 109 126 128 155 175 176); free banks
+  unchanged (46), gaps 44,309 → 32,437 B. The other seven games do not
+  turn `baked_events` on: nothing bakes there (not measured with it on).
+* Sharing: with all seven in (hand-edited request), identical people on
+  identical seats share their pose block (`EV0007`/`EV0008`: 26,
+  `EV0004`/`EV0005`: 25).
+* Goldens: ABL's ten (tram, panorama-13, elevator, delcentric pump 83)
+  and Book of Three's three (the barrel's top, drawn below by the
+  lowering since reach covers less), each looked at, in their own
+  commits; side by side in `/shared/captures/2026-11-17-hover-tram/`.
+* Verified: `just test`; ABL's `just tests` (1686 passed, test_cores
+  included) and `just boot` with the branch's wally, convert and
+  cartridge (the merged runtime) on the PATH.
+
+## What is left: stage 2 (proposal, not implemented)
+
+Map 13's crowd is cut by two things this stage cannot move:
+
+1. **The standing row's heads are over the aisle**, where the hero
+   walks behind them. Proposal: the part of a pose drawn over a cell that
+   only walkers *behind* the event can reach goes to BG2, the layer above
+   (in front of objects at priority 1), and the rest to BG1 as now. BG2
+   is 4-bit and its palettes are the layer above's —the people bring
+   ~48 colours, which on map 13 do not fit with the panorama's—, and a
+   walker in front of the person passing over that cell would go under
+   the head: true only for cells nobody *in front* can cover. Measuring
+   it needs the layer above's palettes on map 13 first.
+2. **ABL's recalls and the run-once scene**, which keep four seated
+   people out (draft
+   [`reach-does-not-know-a-scene-runs-once`](reach-does-not-know-a-scene-runs-once.md)),
+   and **the colours**: map 13's background has 35 entries beside the
+   panorama.
+
+The cheaper way is taro's first plan: a patch of map 13 that bakes the
+crowd as tiles of the map (the people never change), with the colours
+chosen by hand against the panorama's. That is per map and per game, and
+it is the one that reaches the standing row too.
