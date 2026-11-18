@@ -2,8 +2,8 @@
 name: "ABL: the Hover-Tram's crowd is cut"
 description: "Map 13 has more characters on a line than the PPU draws; still people could be baked into the background if what they draw outside their cell lands where nobody can stand"
 type: feature
-status: doing
-assignee: Cardón
+status: testing
+assignee: taro
 agents: [Cardón]
 game: abl
 ---
@@ -240,3 +240,113 @@ this task: a fork of map 13 in `patches/manual/` with a ChipSet that bakes
 the people that never move, and maybe the `Jump` ones baked at first and
 swapped by a `ReplaceTile` for the empty seat when they jump, showing their
 events then.
+
+## Log, stage 2
+
+**2026-11-18, Cardón.** Started from the-advocate `44e25d4f`, the ports
+`45ed2bf`; branches `cardon-hover-tram-patch` in both.
+
+Who moves, read from `EV0028`: its `MoveEvent`s name `Jump1` (1),
+`Jump2` (6), `Leave2` (21), `Leave3` (23), `Leave4` (25), `Stash` (27) and
+the hero, and nothing else on the map moves an event of map 13 (it calls
+no common event). **`Leave1` (3) is never moved**: its name says it was
+meant to, but no command names it, in RM2k either. It is baked with the
+other twenty: 21 still people, 8 seated and 13 standing.
+
+What the map asks of the bake, which `from_charset` could not do:
+
+* the seated people's heads fall on the seat backs, upper tile 73, which
+  RM2k draws below characters (passability 0, no star): the head has to
+  compose over it;
+* `EV0009` (3,5) draws one column past each side of its cell (3 pixels
+  each side, on its body's rows): on (2,5), an open cell, and on (4,5),
+  behind `EV0008` —RM2k draws by row, then column, then id, so the one
+  further right is in front—.
+
+So `from_charset` takes `cells`, `[dx, dy, slot, under]` relative to the
+event's cell, `under` the slot composed below (convert, the-advocate
+`08f42f8d`, with its test red on the old code). `head`/`body` stay.
+
+**The fork** (ports, `abl/patches/manual/`): `maps/Map0013.json` is the
+dump's map without the 21 baked events, `chipset_id` 57 and the `id`;
+`maps/Map0013.tiles` is the dump's but for rows 4, 5, 8 and 9 of the
+upper layer; `ChipSet/0057.json` is `BLChip1` (9) with passability for 22
+new upper slots (100-124) and the recipe: `prune` 13 and twelve
+`from_charset` items. Written by a throwaway script, so the fork's JSON
+is the dump's text with whole event blocks taken out. Passability: the
+person's own cell closed (0) as the event was; a head over the seat back
+keeps 73's 0; a standing head on the aisle and `EV0009`'s spill on (2,5)
+are open, 15. Identical poses on identical backgrounds share their slots
+(`EV0007`/`EV0008`'s head, `EV0002`/`Leave1`, `EV0019`/`EV0020`…; and
+`EV0024`'s body is `EV0002`'s).
+
+**The pattern.** RPG_RT draws `EV0016`-`EV0020` (page pattern 2,
+animation type 0) on the middle pattern, and so does EasyRPG
+(`SetupFromPage` sets the page's pattern only for a fixed graphic or
+spinning); the ROM drew pattern 2. The bake takes 1, as RM2k. The ROM's
+general behaviour is the draft
+[`a-character-stands-on-its-middle-pattern`](a-character-stands-on-its-middle-pattern.md)
+(78 pages of ABL, 46 maps).
+
+**Colours.** The people's colours go to the background: map 13's lower
+layer 29 colours → 85 (budget 35 → 99), no merges; the panorama keeps 15
+of its 157 colours instead of 46. Measured against `Evening2` at 15 bits,
+0.77 → 0.83 levels off per pixel on average: side by side the clouds
+look the same, and it shows through three small windows. Taken that way:
+the people, which fill the screen, keep every colour. `patches/auto/maps/0013.toml`
+regenerated.
+
+**Against RM2k.** (1) `rm2k-render` layers + RM2k's draw order (row,
+column, id), original data against the fork: 9 pixels differ, all
+`Leave2`'s (8,9) right side over `EV0022` (9,9), which RM2k draws in front
+and the bake cannot. (2) RPG_RT 2015 under Wine, two copies of the game
+that start a new game on map 13 at (2,7) —one as it is, one with the fork,
+ChipSet 57 in the database and its built PNG—, a capture 4 s after each
+Return through the scene: every stop of the original matches a stop of
+the patched run but for those same 7 pixels (28 at 2x) —the runs drift
+by one stop where a Return lands during a wait, and the "received" line
+is not shaken with the map—; the people that walk off, the thief's walk
+over the seated row and his turns are the same. The hero is not drawn in
+either copy (the new game's party, actor 10; not chased), so his walk is
+not compared; his cells are unchanged by the fork.
+
+**The line limit.** `just objects-per-line abl --map 13`: 0 over. The
+runtime's STAT77 counts over the whole trip (a probe, not committed:
+arrive at (2,7), A every 30 frames until map 16, 2400 frames): range over
+0, time over 0. So the `Jump` swap is not needed and was not done.
+`test_the_frames_the_ppu_drops_objects_are_counted` went red as expected
+("the Hover-Tram no longer goes over by slivers (0 of 120 frames)") and
+moved to map 318, The Show, whose audience is 14 characters, 56 slivers,
+at the entrance (sweep of 2026-11-17).
+
+## Final, stage 2, 2026-11-18
+
+the-advocate `cardon-hover-tram-patch` (`08f42f8d`, from `44e25d4f`), the
+ports `cardon-hover-tram-patch` (`5515d04` the fork, `f8330dc` the
+goldens, from `45ed2bf`), the book `cardon-hover-tram-patch` (`73e3378`:
+the decision "The Hover-Tram's crowd is part of the map", the known issue
+of crowded lines without the Hover-Tram, the new known issue of the
+pattern). main had not moved in any of them. **To install when merging:
+convert.**
+
+* Map 13: 21 still people baked, 6 movers stay events; busiest line 6
+  characters (seated row, hero included), standing row 1.
+  `objects-per-line`: 0 over. STAT77 over the trip: 0/0. The `Jump` swap
+  was not needed and was not done.
+* `just space`, release (the tightest): 11 free halves of 32 KB, gaps
+  1,392 B, bank 0 3,992 B (stage 1's end: 10 halves, 29,895 B).
+* Goldens: six (panorama-13-arrival, tram-900, tram-1200, tram-trip-10,
+  -30, -60), in their own commit; side by side, with RPG_RT's captures
+  and the composed RM2k reference, in
+  `/shared/captures/2026-11-18-hover-tram-patch/`.
+* Verified: `just test` in the-advocate; ABL's `just tests` (1686 passed,
+  test_cores included) and `just patches-check`, with this branch's
+  convert on the PATH; `abl.sfc` sha256 `94922c66483bc3e8…`.
+
+Not covered by the suite: the RPG_RT comparison and the STAT77 count over
+the whole trip were throwaway runs (scripts in `~/scratch/cardon/tram2/`);
+in the RPG_RT measuring copy the hero is not drawn (a new game's party,
+not chased), so his walk was compared only by its cells, which the fork
+does not change. Drafts: [`a-character-stands-on-its-middle-pattern`](a-character-stands-on-its-middle-pattern.md),
+new; [`reach-does-not-know-a-scene-runs-once`](reach-does-not-know-a-scene-runs-once.md)
+gets a line saying map 13 no longer shows it.
