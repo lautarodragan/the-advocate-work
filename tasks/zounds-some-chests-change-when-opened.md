@@ -2,8 +2,8 @@
 name: "Zounds: some chests change when opened"
 description: "Opening some chests in Zounds draws a different chest than the closed one"
 type: bug
-status: doing
-assignee: Cardón
+status: testing
+assignee: taro
 agents: [Cardón]
 game: zounds
 ---
@@ -134,3 +134,81 @@ many colours, opened ones only brown and grey. So it is fixed in the game
 itself, like
 [`zounds-two-chests-share-a-switch`](zounds-two-chests-share-a-switch.md):
 each coloured chest opens in its own colour.
+
+## Fixed in the game (Cardón, 2026-11-17)
+
+From the-advocate `7dab7d82`, the ports `94fb556` and the game's
+`master` (`bbdaf78`), in `cardon-chests-own-colour` of the ports and of
+the game's repository.
+
+**taro's first picture is `Zounds_Chest_04` itself**, pixel for pixel:
+the sheet these chests use. Its closed chests come in nine colours (the
+facing-down row of characters 0-2 and 3's greys, and character 4 as loose
+cells); every opened one is brown but two grey ones, and there is no
+closed brown chest at all. So no cell of it opens red or orange.
+
+taro then sent a second picture, translated:
+
+> Maybe they can just be replaced by this one.
+
+**That one is `Zounds_Chest_03`**, also pixel for pixel —the sheet map
+34's event 2 and map 84's open page already use—: eight characters, each
+one colour closed (facing down) and opened (facing left): red, gold,
+green, blue, brown, grey, black and orange, purple. Its art is not
+`Zounds_Chest_04`'s (no stripes; a rounded lid), and it has no orange: its
+nearest is character 1, gold with orange bands.
+
+**The fix**, as Hornero passed on from taro: the opened pages point at
+`Zounds_Chest_03`'s opened chest of their colour —facing left, the middle
+pattern, as map 34's event 2 already does—, character 0 for the red
+ones (map 34's events 1 and 63) and 1, the gold one, for the orange ones
+(map 34's event 9, map 84's 4, map 88's 2, 7, 8, 9 and 10). The closed
+pages are untouched, so the colour is kept and the drawing changes: the
+opened one has `Zounds_Chest_03`'s rounded lid, as map 84's already had.
+No other chest of the game has the mismatch (see the data check below).
+
+Before the second picture I had prototyped the other way —recolouring
+`Zounds_Chest_04`'s brown opened chest to each closed one's colours, with
+indices the sheet already holds; its palette is 254 of 256 full—. Not
+used; kept in the captures in case taro wants the striped drawing opened
+too.
+
+* **The game** (branch `cardon-chests-own-colour` of its repository,
+  `7e5c54d`, on `master` `bbdaf78`): `Map0034.lmu`, `Map0084.lmu` and
+  `Map0088.lmu`, the nine opened pages' `character_name` and
+  `character_index`. With `ditto read`/`write`: each file round-tripped
+  byte for byte before editing, and read back equal to the JSON written.
+* **The ports** (`cardon-chests-own-colour`): the new dump of
+  `zounds/data/` —those three maps, nothing else moved—, and
+  `tests/test_zounds_chests_colour.py`, a data check over every two-page
+  chest of the dump: its opened page is the closed one's colour, by a
+  table of which colour each chest cell is, looked at in the sheets
+  (orange may open gold, said there). **Red on the old dump** with exactly
+  the nine; green on the new. In its own commits, the docstring of
+  `test_zounds_chests_open.py` and **its two opened goldens, 34's and
+  84's**, which moved as expected —red and gold opened—; checked against
+  `Zounds_Chest_03`'s cells: the same drawing, with a few colours merged
+  by the sprite's palette (34: 38 of 334 pixels; 84: 20).
+* **The book** (`cardon-chests-own-colour`): a bullet in Zounds' "What is
+  fixed in the game itself". There was no Known issues line for it.
+
+**Seen on the console**: the nine, each closed and opened, against
+RM2k's cells, from the debug room with the switch written off and on (the
+earlier sweep's script): all open in their colour. In
+`/shared/captures/2026-11-17-zounds-chests-own-colour/`, with the two
+goldens before and after.
+
+**Verified**: `GAMES=<a folder with the game's branch as zounds> just
+boot -k zounds` in the ports' `cardon-chests-own-colour`, with the global
+tools (the-advocate `7dab7d82`; nothing of the tools changed): 75 passed,
+the data check and the three opened-chest cases among them. ABL's suite
+was not run: nothing of ABL or the tools changed.
+
+**What the suite does not cover**: of the nine, the ROM test holds two
+(34's event 63 and 84's 4); the other seven were looked at once, by the
+sweep, and are held only by the data check.
+
+**Branches**: the game's `cardon-chests-own-colour` (to merge into its
+`master`, which `~/juegos/zounds` has checked out, and push), the ports'
+and the book's `cardon-chests-own-colour`, and this one. **To install
+when merging**: nothing.
