@@ -2,8 +2,8 @@
 name: "ABL: the Hover-Tram's crowd is cut"
 description: "Map 13 has more characters on a line than the PPU draws; still people could be baked into the background if what they draw outside their cell lands where nobody can stand"
 type: feature
-status: testing
-assignee: taro
+status: doing
+assignee: Cardón
 agents: [Cardón]
 game: abl
 ---
@@ -229,3 +229,14 @@ The cheaper way is taro's first plan: a patch of map 13 that bakes the
 crowd as tiles of the map (the people never change), with the colours
 chosen by hand against the panorama's. That is per map and per game, and
 it is the one that reaches the standing row too.
+
+## Stage 2: a patch of map 13 (2026-11-18, Hornero)
+
+Stage 1 merged (the-advocate `44e25d4f`, the ports `45ed2bf`): one seated
+person baked, the one cut at the right of the upper row now shows; the
+standing row is still 14 characters, 56 slivers. taro, translated, to
+merging it and patching the map: "Dale :D". taro's plan, from the start of
+this task: a fork of map 13 in `patches/manual/` with a ChipSet that bakes
+the people that never move, and maybe the `Jump` ones baked at first and
+swapped by a `ReplaceTile` for the empty seat when they jump, showing their
+events then.
