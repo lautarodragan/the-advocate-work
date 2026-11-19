@@ -2,8 +2,8 @@
 name: "Desert Nightmare: what it takes to be playable"
 description: "A study: play Desert Nightmare's port through the harness as far as it goes, list what breaks or looks wrong against RM2k, find the causes, and rank what would make it playable by cost and gain"
 type: research
-status: doing
-assignee: Hurón
+status: testing
+assignee: taro
 agents: [Hurón]
 game: desert-nightmare
 ---
@@ -69,3 +69,44 @@ ports. Throwaway scripts in `~/scratch/huron/dn/`.
   `Optionen1..5`, the inventory's 155, every one a 320x240 canvas) are
   "not shown here", and A on the invisible "Inventory" says "You have no
   items". 
+* **The playthrough** (`stages.py`, with save states): title, "With
+  Intro", control on map 16 at tick 11,404, the desk, the street, the
+  gate, the bar and Jake, the gate opened, the alley and the dog, the box.
+  **Stop 1, map 12**: the box pushed to (12, 4) shares the cell with event
+  87, the climb; `event_in_cell` returns the box's row and stops. With the
+  box's row moved off by hand, the climb works. The same on map 2's gate:
+  the dog's invisible row on (13, 0) hides twin 151. Past the box by
+  hand: the warehouse, the bulb, and **stop 2, map 26**: B, Inventory, the
+  bulb, nothing (common 20). **Stop 3**, not reached: the safe (map 28).
+* **`baked_events = true`**, on a scratch build: 32 events into the
+  background on maps 48, 104, 105, 182; 73 stay objects; no town map is
+  a candidate. Not committed.
+* **The sweep's four "hung" maps** run from a fresh boot; 147 is a death
+  scene that ends in the title. No hang found.
+* **Wine/EasyRPG**: the menu, map 2 and the motel under RPG_RT 2015; six
+  towns under EasyRPG at the port's cells.
+
+## Done (2026-11-19, Hurón)
+
+* The research, in the book (branch `huron-dn-playable` of
+  the-advocate-docs): `src/ports/desert-nightmare/research/2026-11-19-what-it-takes-to-be-playable.md`,
+  in `SUMMARY.md`, linked from the port's page, and seven new lines in
+  its "Known issues".
+* Five drafts: [`a-second-event-on-a-cell-is-never-asked`](a-second-event-on-a-cell-is-never-asked.md),
+  [`desert-nightmare-items-cannot-be-used`](desert-nightmare-items-cannot-be-used.md),
+  [`desert-nightmare-the-number-locks-do-not-open`](desert-nightmare-the-number-locks-do-not-open.md),
+  [`desert-nightmare-the-game-s-menu-draws-nothing`](desert-nightmare-the-game-s-menu-draws-nothing.md),
+  [`desert-nightmare-the-towns-run-at-half-speed`](desert-nightmare-the-towns-run-at-half-speed.md);
+  and sections added to
+  [`desert-nightmare-roofs-left-out-show-white`](desert-nightmare-roofs-left-out-show-white.md)
+  and [`desert-nightmare-own-message-frame`](desert-nightmare-own-message-frame.md).
+* Captures: `/shared/captures/2026-11-19-desert-nightmare/`, with a
+  `README.txt` and two contact sheets.
+* Nothing to install: no code changed. The ports' branch
+  `huron-dn-playable` has no commits.
+* **Not fixed, on purpose** (a study): the cheap ones are the ranking's
+  1 and 2 —every event on a cell, and the hero's map id—.
+* **Seen and left as it is**: the start menu over garbage, still in the
+  port's "Known issues", is not seen (the title and the menu are right,
+  as Chajá saw on 2026-10-20); its line goes with the golden its task
+  asks for.

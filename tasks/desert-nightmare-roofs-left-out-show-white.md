@@ -3,7 +3,7 @@ name: "Desert Nightmare: the roofs left out show the panorama's white"
 description: "On maps 4, 14, 61 and 66 the trim leaves out drawn events —the buildings' roofs, drawn on the hero's layer over white holes in the panorama— and the console shows the holes"
 type: bug
 status: draft
-agents: [Aguará]
+agents: [Aguará, Hurón]
 ---
 
 Seen by Aguará on 2026-10-20, at the-advocate `8f290c39` and the ports
@@ -34,3 +34,25 @@ in the book: bake what is left out into the background, as
 `decorative_events` does, which today cannot because the trim runs before
 Wally and Wally never sees those events. A roof on the hero's layer whose
 pose spills out of its cell is not baked by `decor.rs` either.
+
+## Checked (2026-11-19, Hurón): on 34 maps, and not only the trim
+
+At the-advocate `62b6e5cb` and the ports `1ea90bf`, for
+[`desert-nightmare-what-it-takes-to-be-playable`](desert-nightmare-what-it-takes-to-be-playable.md):
+the white holes are on many more maps than the four the trim cuts, and
+the trim is the smallest of three causes. Entered with a door's teleport
+and played, maps 3, 4, 5, 12, 14 and 62 show white rectangles where the
+buildings go (`/shared/captures/2026-11-19-desert-nightmare/contact-maps.png`,
+against EasyRPG), and map 2 has no motel or store at all. What leaves the
+pieces undrawn, from `degradations.json`:
+
+* `events-wait-for-a-slot` on **34 maps** —80 events on screen and 15
+  slots on map 2, 90 and 23 on map 5, 74 and 11 on 172—: the ones drawn
+  last never get a slot (still missing after 240 ticks);
+* `events-not-drawn` on 9 —the table's 104—;
+* `event-left-out` on 7 —the RAM's 120—.
+
+Map 3 (116 events, 81 drawn) has white holes with none of the last two.
+`[graphics] baked_events = true`, tried on a scratch build, draws 32
+events into the background on maps 48, 104, 105 and 182 and none on the
+towns. The book's research names what would take them.
