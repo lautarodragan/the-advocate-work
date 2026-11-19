@@ -75,3 +75,20 @@ for the same reason). What `[rom] msu = "required"` does instead is send
 the load-time data —the maps' streams, the panoramas' tiles, the
 samples— to the `.msu` until the rest fits, which leaves the room to the
 painted cells. To be measured.
+
+**The feature (2026-11-19, Cardón).** the-advocate `cardon-painted-pieces`:
+`df6a7eb3` (the list-of-maps knob type renamed, mechanical) and `70c3dd8f`
+(`[graphics] painted_events`, `pieces.rs` in Wally, the trim's
+`Loss::Painted`). With the knob off, the 20 cartridges of the nine games
+—ABL's 11, the release of the other eight and Zounds' `exits`— come out
+byte for byte as with the global tools (`roms-base` against `roms-off`).
+
+**Desert Nightmare, every map** (`painted_events = true`, `msu =
+"required"`): it builds and links, 821 pieces (2.69 MB) to the `.msu`;
+161 maps take pieces, 146 go painted, 17 baked; `event-left-out` 183 → 0,
+`events-not-drawn` 9 → 0, `events-wait-for-a-slot` 34 → 10. But 45 maps
+lose something: 18, 33 and 71 wait for slots (the painted layout's 256
+sprite tiles, as the study said), and 42 one-screen interiors lose the
+message box's two pictures (`TextboxInnen`, `TextboxRahmen`: "with their
+272 tiles the map fits no VRAM layout"). So the list: every map with a
+piece to paint but those 45 —95 maps—.
