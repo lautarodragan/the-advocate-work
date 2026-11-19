@@ -43,3 +43,16 @@ captures against EasyRPG; Desert Nightmare's boot tests and a ROM test of a
 town; ABL, Zounds and the other games unchanged (ROMs byte for byte, or the
 reason); `just space` for every cartridge; the Known issues lines that go
 away removed.
+
+## Log
+
+**2026-11-19, Cardón.** Branches `cardon-painted-pieces` from the-advocate
+`62b6e5cb`, the ports `1ea90bf` and the book `93984ad`, in worktrees under
+`~/scratch/cardon/pp/`. The prototype (`cardon-dn-towns`, `cb45d5a4`) is
+the reference; it passes the pieces from the map's conversion to the
+layers through a global and the knobs through the environment, so the
+feature is written again: the pieces travel with the rest of what the map
+adds to its layers (`Extra` and `LayersRequest`, as the decorations and
+the posed cells do), the knob is `[graphics] painted_events` (`true` or a
+list of maps, as `baked_events`), and the trim ranks the pieces it can
+leave out to be painted before every other drawing.
