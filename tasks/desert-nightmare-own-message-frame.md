@@ -36,3 +36,13 @@ that the console's own window draws it—.
 To todo, with Tijereta's recommendation: the frame becomes the game's window look —its System graphic— through the port's manual patches, so that the console's own window draws it, instead of drawing `TextboxInnen` and `TextboxRahmen` as pictures.
 
 **Done**: Desert Nightmare's messages are drawn in a window with its own frame on every map, and `degradations.json` no longer lists those two pictures as not drawn. **First step**: how the common events show the two pictures around a message, and whether a System made from them fits RM2k's window layout.
+
+## Seen again (2026-11-19, Hurón)
+
+At the-advocate `62b6e5cb` and the ports `1ea90bf`, played on the motel
+(map 16): the converter says the two pictures, as the commons' set, "fit
+on 14 of the 189 maps". A message with a face gets the System's frame;
+one without gets none, and the map's upper layer cuts its letters
+(`/shared/captures/2026-11-19-desert-nightmare/messages.png`). Ranked
+fourth in the book's research
+`ports/desert-nightmare/research/2026-11-19-what-it-takes-to-be-playable.md`.
