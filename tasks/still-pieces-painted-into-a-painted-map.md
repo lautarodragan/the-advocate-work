@@ -56,3 +56,22 @@ adds to its layers (`Extra` and `LayersRequest`, as the decorations and
 the posed cells do), the knob is `[graphics] painted_events` (`true` or a
 list of maps, as `baked_events`), and the trim ranks the pieces it can
 leave out to be painted before every other drawing.
+
+**2026-11-19, taro's decision** (through Hornero, translated):
+
+> If it's impossible to make a game run without the .msu, we make the .msu
+> mandatory. Vampires already works that way. I think it's important that
+> the .msu be optional where we can (ABL, mainly), but it isn't worth
+> looking for a very complex path to satisfy that need. If we go this way,
+> let's decide that the msu will be mandatory for Desert Nightmare for
+> now, to reduce the challenge.
+
+So the room is not solved inside the cartridge for Desert Nightmare, and
+every map that benefits goes painted, not only the slow ones. The painted
+cells themselves cannot leave the ROM: they are uploaded column by column
+while the camera moves, and the `.msu` takes only what is read when a map
+or a battle loads (a seek costs a frame or two; the poses stay in the ROM
+for the same reason). What `[rom] msu = "required"` does instead is send
+the load-time data —the maps' streams, the panoramas' tiles, the
+samples— to the `.msu` until the rest fits, which leaves the room to the
+painted cells. To be measured.
