@@ -32,3 +32,40 @@ with the commits it measured: how far the game plays through the harness
 wrong with its cause, which limits are the console's and which are ours,
 and a ranked list of tasks —cost, gain, what each unblocks— so the next
 steps are clear. The new findings as drafts and Known issues lines.
+
+## Log (Hurón, 2026-11-19)
+
+At the-advocate `62b6e5cb` (the global tools, installed from it) and the
+ports `1ea90bf`, Desert Nightmare's `release` built in my worktree of the
+ports. Throwaway scripts in `~/scratch/huron/dn/`.
+
+* **The build** (5 min): `degradations.json` counts 584
+  `picture-not-shown`, 222 `pictures-not-drawn`, 183 `event-left-out`;
+  `just culprits`: 28 of 30 commons compile, 6,769 of 6,773 map pages.
+  The two commons out are **20, "Sache benutzen" (use an item)** and 14
+  (the map screen), both for `ControlVars` of the hero's **map id**
+  (`[0, 19, 19, 0, 6, 10001, 0]`); common 8 calls 20 and the call is
+  skipped. The four pages out are the number locks: maps 28 (71456, the
+  warehouse safe of day 1), 42, 123 (1759) and 156 (136264) —an
+  `InputNumber` alone after the message, which the ROM does not do, and
+  two numbers past sixteen bits—.
+* **A sweep of every map** (`sweep.py`: a door's teleport, 240 ticks
+  tapping A and walking): no map hangs the ROM except four that end on
+  map 1 (93, 137, 147, 151 —"no tick in 3000 frames"—, to look at); every
+  map with more than ~50 drawn events runs at **2 to 2.65 frames per
+  tick**, half speed or less: 2, 3, 4, 5, 6, 11–14, 43, 59–62, 172…
+  Under ~50, 1.0. The PPU's time over, every frame on 59 maps.
+* **On map 2, with no event drawn (+14 of every row zeroed), 1.0 frame
+  per tick; as is, 2.0.** The slowdown is drawing the events, not running
+  them.
+* **Map 2 has no buildings**: the motel, the store and the gate are 83
+  still events cut from CharSets (`Motel`, `Allzweckladen`) over a
+  panorama with white holes; the console draws none —the cache has 15
+  slots for 80 on screen— and RPG_RT under Wine draws the whole street.
+  `decor.rs` bakes only events inside their 16x16 cell; these are 24x32
+  pieces, and the 16 it takes "moved the background's CGRAM split".
+* **The game's own menu is invisible**: B opens it (common 4, a
+  `KeyInputProc` in a parallel), its pictures (`Introauswahl`,
+  `Optionen1..5`, the inventory's 155, every one a 320x240 canvas) are
+  "not shown here", and A on the invisible "Inventory" says "You have no
+  items". 
