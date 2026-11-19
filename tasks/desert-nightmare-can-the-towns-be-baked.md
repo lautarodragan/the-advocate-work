@@ -49,3 +49,11 @@ the commits measured: a table of the 189 maps —fits generically / fits
 with rule X relaxed / does not fit, short by N—, and the recommendation:
 a converter feature (and which), patches, or a redesign. No fix; the
 prototype stays throwaway.
+
+## Log
+
+**2026-11-19, Cardón.** Worktrees `cardon-dn-towns` at the-advocate
+`62b6e5cb` and the ports `1ea90bf`, under `~/scratch/cardon/dn-adv` and
+`dn-ports`. First: the release built with `baked_events = true` (global
+tools) for the per-map reasons the converter gives today, and a
+classification of every drawn event from the dump.
