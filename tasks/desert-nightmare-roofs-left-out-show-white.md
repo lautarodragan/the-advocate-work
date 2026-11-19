@@ -3,7 +3,7 @@ name: "Desert Nightmare: the roofs left out show the panorama's white"
 description: "On maps 4, 14, 61 and 66 the trim leaves out drawn events —the buildings' roofs, drawn on the hero's layer over white holes in the panorama— and the console shows the holes"
 type: bug
 status: draft
-agents: [Aguará, Hurón]
+agents: [Aguará, Hurón, Cardón]
 ---
 
 Seen by Aguará on 2026-10-20, at the-advocate `8f290c39` and the ports
@@ -56,3 +56,15 @@ Map 3 (116 events, 81 drawn) has white holes with none of the last two.
 `[graphics] baked_events = true`, tried on a scratch build, draws 32
 events into the background on maps 48, 104, 105 and 182 and none on the
 towns. The book's research names what would take them.
+
+## The trim runs before any bake (2026-11-19, Cardón)
+
+At the same commits, for
+[`desert-nightmare-can-the-towns-be-baked`](desert-nightmare-can-the-towns-be-baked.md):
+the RAM's trim (`trim.rs` in the converter) takes events out of the map
+before Wally reads it, so no bake can see them. On maps 2, 4, 14, 59, 61,
+66 and 172 it leaves out 183 drawn events (map 4: 40, 61: 41, 14: 34,
+66: 31); 150 of them always show one look and nobody moves them. The
+study's prototype read them from the whole map and painted them into the
+panorama with the rest: map 4's roofs and walls come back
+(`/shared/captures/2026-11-19-dn-towns/`).

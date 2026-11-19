@@ -2,8 +2,8 @@
 name: "Desert Nightmare: can the towns be baked?"
 description: "A feasibility study, map by map: whether the hundreds of still events that make Desert Nightmare's towns can be drawn into the background generically, what each rule that rejects them protects, and what does not fit the console's VRAM and CGRAM"
 type: research
-status: doing
-assignee: Cardón
+status: testing
+assignee: taro
 agents: [Cardón]
 game: desert-nightmare
 ---
@@ -94,3 +94,36 @@ painting's mean distance to the composite, 8-bit RGB, 5.5 over the 38
 maps without map pictures drawn in (max 10.8), against 7.1 for today's
 panoramas alone on the 24 comparable ones. BG2's 128 tiles for the roofs'
 edges: 156 pixels on the wrong side of the hero on map 172, 0 elsewhere.
+
+**The rest, and the answer (2026-11-19, Cardón).** The 27 other maps that
+went over the line on 2026-11-17, baked on their own cartridge: only map
+44 still goes over (36 slivers: eight events drawn with a ChipSet tile,
+which the prototype leaves alone). The 55 together: 115 banks, the
+cartridge links, only 35 and 44 over. The table of the 189: 133 fine
+today, 48 fit with the bake and rules relaxed, 8 short by 1 to 12 sprite
+slots or a line (35, the exit's walking crowd, is the only one a patch
+would help). Written up in the book:
+`ports/desert-nightmare/research/2026-11-19-can-the-towns-be-baked.md`.
+
+Recommendation, in short: a converter feature —the still pieces painted
+into a panorama fixed to the map, the ChipSet folded in, the front for
+what RM2k draws over a character—, the bake before the RAM's trim, a
+`CallEvent` not counting as an erase unless what it reaches erases, and,
+to paint every map and not only the 55 that need it, the painted cells
+stored once. No patches but map 35; no redesign.
+
+Drafts: [`painted-maps-carry-every-cell`](painted-maps-carry-every-cell.md),
+[`a-call-counts-as-erasing-a-still-event`](a-call-counts-as-erasing-a-still-event.md),
+and a section added to
+[`desert-nightmare-roofs-left-out-show-white`](desert-nightmare-roofs-left-out-show-white.md)
+(the trim runs before any bake).
+
+Captures: `/shared/captures/2026-11-19-dn-towns/` —EasyRPG, the port
+today and the prototype on maps 2, 3, 4, 5, 14 and 62, and every map
+played with the prototype—.
+
+**Branches**: the book, `cardon-dn-towns` (the page and SUMMARY.md), to
+merge. the-advocate, `cardon-dn-towns` at `cb45d5a4`: **the throwaway
+prototype, not to be merged**; it is there so the numbers can be redone.
+The ports: none (only `advocate.toml` was changed to measure, and put
+back). Nothing to install.
