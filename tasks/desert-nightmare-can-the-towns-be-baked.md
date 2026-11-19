@@ -57,3 +57,24 @@ prototype stays throwaway.
 `dn-ports`. First: the release built with `baked_events = true` (global
 tools) for the per-map reasons the converter gives today, and a
 classification of every drawn event from the dump.
+
+**Findings so far.** 161 of the 189 maps have a panorama fixed to the map
+(the size of the map, or one screen): the game is a painting with pieces
+on it. With `baked_events = true` the reasons the converter gives, summed
+over events: 572 "someone can stand behind what it draws past its cell",
+434 decorative ones refused for the CGRAM split (the panorama baked into
+the background already merges colours, and the rule takes no decoration
+over a ground that merges), 194 "drawn past its cell and can go away"
+(the pages call common events 2 and 3, the message box, and no common
+event of the game erases), 109 "the panorama shows through", 81 "above
+the hero"; and posed never runs on the 111 maps whose panorama goes
+baked nor on the 7 in mode 1.
+
+Prototype (`cardon-dn-towns` in the-advocate, `rm2k-snes/wally/src/town.rs`,
+never to merge): every still one-look event painted into the fixed
+panorama, its row dropped, what goes over a character into the front
+mask, and the ChipSet's layers folded in, so the map goes painted. All
+189: 135 go painted, and **the cartridge does not link: painted maps carry
+every 8x8 cell, 85 banks of them**; only 50,480 of their 174,516 cells are
+distinct (25 banks). Next: the 28 maps with 30 or more drawn events only,
+to measure on the console.
