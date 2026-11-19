@@ -74,3 +74,64 @@ Nothing else: `zero_page.s` and `low_ram.s` have no address by hand, and
   them keeps being an offset of the region it borrows.
 * **The battle's overlays, `SCREEN_BUFFER`, `PAINT_Q`**: names of the
   region they borrow —`SCN_SCENE = GRID_HIGH`—, not numbers.
+
+### 2026-11-19, Carpintero: the moves
+
+Branch `carpintero-wram-linker` in the-advocate, from `e51796bf`, one
+commit per move; each verified by building **ABL's eleven cartridges and
+the test game's two** with the branch's tools and comparing them byte for
+byte with the ones built at `e51796bf` with the same tools —all identical
+in every commit—, and the painted maps' one Sunset over Imdahl's
+`release` too, the only game that has them:
+
+1. `f6c7172c` **The grid's two halves**: `GRID` and `GRID_HIGH` are the
+   `GRID` and `GRIDHI` segments, in the `GRIDLO` and `GRIDHI` areas of the
+   `.cfg` (`GRID_START`, `GRID_HIGH_START` in `banks.rs`). Fixed because
+   the converter writes them as numbers into what it compresses: its one
+   copy is now `GRID_AT` and `GRID_HIGH_AT` in `materials.rs` —`posed.rs`
+   and `record.rs` had one each—, written in the `.inc`, and
+   `far_ram_game.s` asserts at link time they are the linker's. Shown red
+   with `GRID_AT + 1`.
+2. `2f3a1a6c` **`GRID_TOP`** is the `GRIDTOP` segment after `GRIDHI` in
+   its area; `GOLD_BUF` and `POSED_REG`/`POSED_T` are `.res` in
+   `gold_window.s` and `posed.s`; `GRIDHI`'s `.res` is the half minus
+   `GRID_TOP_BYTES`, in `far_ram_game.s`, and an `.assert` says
+   `GRID_TOP` lands at the top.
+3. `5aeb305a` **The load buffer**: `LZ2_BUFFER` and `ANIM_DRAWINGS`, two
+   `.res` of the `LOADBUF` segment and area; the big picture's ten
+   numbers, offsets of `ANIM_DRAWINGS`.
+4. `b9907384` **What borrows a region names it**: `SCN_CLEAN =
+   LZ2_BUFFER`, `SCN_SCENE = GRID_HIGH`, `SCREEN_BUFFER = LZ2_BUFFER`,
+   `PAINT_Q = GRID + PAINT_ROOM` —the converter's room for a painted
+   grid, a number in `panorama.rs` until now, in `materials.rs` and the
+   `.inc`—, each with an `.assert` of what it takes.
+5. `7c2fa242` **The `$7F0000, x` bases** of `big_wave_table` and the debug
+   screen, and `scn_fill`'s 0, `$80` and 1, name whose bank and middle
+   byte they are.
+6. `eeb7e54c` **The stack**: an area of the `.cfg` with `define`, and the
+   reset points S at `__STACK_START__ + __STACK_SIZE__ - 1`.
+7. `c085fca0` **`WRAM_AREAS`**: the four far areas in one table, which
+   writes the `.cfg` —the same text— and `--memory-map`'s `wram`, for the
+   tests.
+8. `5a7e35a1` The prose (judgement, after the mechanical ones): far_ram.s's
+   header, the load buffer's list, `GRID_TOP`'s section, the battle scene's
+   "bank $7F nobody uses"; and an `.assert` that `FARBSS` is in the bank
+   `FAR_LENGTH` says.
+
+**Not moved, on purpose: the far bank.** `$7E0000 +` before a sixteen-bit
+name (88 operands), `lda #$7E` before a `plb` (35) and the zero in
+`WMADDH` are `$7E`, the bank where bank 0's RAM shows again and that the
+code running with the data bank there counts on: a property of the
+console, not a placement. `FAR_LENGTH` names it and is now asserted
+against `FARBSS`.
+
+**Ports**, branch `carpintero-wram-linker` from `4c993f4`:
+`test_wram_reservations.py` looks for any long WRAM number in the
+runtime's source —equates, operands, asserts— but `$7E0000`, and checks
+"falls in its area" for every area of `--memory-map`'s `wram`. Shown red
+on the runtime at `e51796bf`: it lists the thirty-four of the inventory.
+`GRID_AT` and `GRID_HIGH_AT` join the list of who may be in the upper
+halves.
+
+**Book**, branch `carpintero-wram-linker` from `0dcf005`:
+`internals/wram.md` and the decision.
