@@ -78,3 +78,19 @@ mask, and the ChipSet's layers folded in, so the map goes painted. All
 every 8x8 cell, 85 banks of them**; only 50,480 of their 174,516 cells are
 distinct (25 banks). Next: the 28 maps with 30 or more drawn events only,
 to measure on the console.
+
+**The 28 towns on the console** (the maps with 30 or more drawn events
+and a fixed panorama, prototype on them only): the cartridge links, 100
+data banks against 91; frames per tick 1.0 on all 18 slow maps (1.13 on
+12, 1.07 on 172; 35 at 1.56 is its 27 walkers); none of the 28 over the
+PPU's line any more. Map 4 still showed white: the RAM's 120-row trim
+runs before Wally, so the pieces it leaves out never reach the bake; the
+prototype now paints those too (36 of 40 on map 4, 31 of 31 on 66).
+
+**All 189 relaxed** (log only, the cartridge overflows): 3,014 pieces
+painted, 137 maps painted; no map keeps more than 31 drawn events (105
+and 48, ChipSet maps with pages), the towns at most 16. Colours: the
+painting's mean distance to the composite, 8-bit RGB, 5.5 over the 38
+maps without map pictures drawn in (max 10.8), against 7.1 for today's
+panoramas alone on the 24 comparable ones. BG2's 128 tiles for the roofs'
+edges: 156 pixels on the wrong side of the hero on map 172, 0 elsewhere.
