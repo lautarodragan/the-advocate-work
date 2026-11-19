@@ -2,7 +2,9 @@
 name: "All WRAM placed by the linker"
 description: "Move what is still at hand-written addresses in WRAM to segments the linker places, subsystem by subsystem, each move byte for byte the same ROM; what has a real reason to be fixed —the grid's halves, overlays, alignment— becomes a declared memory area, not a number"
 type: refactor
-status: todo
+status: doing
+assignee: Carpintero
+agents: [Carpintero]
 ---
 
 taro, on 2026-11-16, after reading the book's
