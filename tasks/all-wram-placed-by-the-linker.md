@@ -2,8 +2,8 @@
 name: "All WRAM placed by the linker"
 description: "Move what is still at hand-written addresses in WRAM to segments the linker places, subsystem by subsystem, each move byte for byte the same ROM; what has a real reason to be fixed —the grid's halves, overlays, alignment— becomes a declared memory area, not a number"
 type: refactor
-status: doing
-assignee: Carpintero
+status: testing
+assignee: taro
 agents: [Carpintero]
 ---
 
@@ -135,3 +135,52 @@ halves.
 
 **Book**, branch `carpintero-wram-linker` from `0dcf005`:
 `internals/wram.md` and the decision.
+
+And `081ac38` in the ports: `test_jumps_between_banks.py` was red on six
+cartridges once `POSED_REG` became a label —of an `=` it only looks at
+what falls in the ROM or the registers, so it had never looked at it—:
+`posed_queue` and what it calls run with the data bank at `^POSED_REG`,
+as posed.s says, and join its `DATA_BANK` with `$7F`.
+
+### 2026-11-19, Carpintero: verified
+
+With the branches' tools (`just install-local .local-tools cartridge
+mapdata`):
+
+* **Every ROM byte for byte the same** as at `e51796bf` with the same
+  tools: the twenty-two cartridges of the nine games and the test game
+  —ABL's eleven, the other eight games' `release` and Zounds' `exits`, the
+  test game's two—. ABL's `release`: `ed62c2f9…`.
+* **`just space` prints the same**, in every cartridge of the nine games:
+  ABL's `release` has 119 B of far RAM and 77 B of `BSS` before and after.
+  The upper areas are full by construction —each segment's `.res` is its
+  half—, so they print nothing.
+* ABL's suite, whole, before `081ac38`: 1,716 passed, 2 skipped and the
+  six of `test_jumps_between_banks.py`, `test_cores.py` and
+  `test_wram_reservations.py` included; after it, that file alone, 12
+  passed. The whole suite was not run again: the ROMs did not change.
+* `just boot` at the ports' root: 167 passed. `just test`: 29 passed.
+  `just crate-test cartridge` and `mapdata`: green.
+* `just test-game`: 66 passed and **4 red, the same 4 at `e51796bf`**
+  with the same tools, which already have their drafts:
+  [`the-test-games-leader-name-goldens-are-red-on-main`](the-test-games-leader-name-goldens-are-red-on-main.md)
+  (three) and
+  [`goombario-reads-widths-from-an-untaken-if-branch`](goombario-reads-widths-from-an-untaken-if-branch.md)
+  (the linter).
+
+What the suite does not cover: since the ROMs are the same, nothing here
+runs differently; what is new is only what the link checks —the
+converter's grid against the linker's (shown red with `GRID_AT + 1`),
+`GRID_TOP` at the top, `FARBSS` in `FAR_LENGTH`'s bank, the borrowers'
+sizes—, and none of those has a game where it fails. Moving an area in
+`banks.rs` is not tried: the grid's would need the converter's numbers to
+move with it, and the rest has code that counts on `$7F`'s bank in
+`.assert`s that would say so.
+
+**To install when merging**: `cartridge` and `mapdata` (`just install
+cartridge mapdata`). The ports' tests need the new `cartridge`:
+`--memory-map` prints `wram`.
+
+Branches: `carpintero-wram-linker` in the-advocate, the ports and the
+book, all three from the `main` they were launched at, which has not
+moved.
