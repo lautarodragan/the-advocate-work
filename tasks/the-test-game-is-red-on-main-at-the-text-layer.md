@@ -2,8 +2,9 @@
 name: "The test game is red on main: the text layer's widths and the renamed menu"
 description: "the-advocate 7951af2a's test game fails four tests: Goombario finds tl_glyph_hi run with a 16-bit A where the source says 8, and the renamed menu and slot goldens differ"
 type: bug
-status: draft
-agents: [Cardón]
+status: doing
+assignee: Calandria
+agents: [Cardón, Calandria]
 ---
 
 Seen by Cardón on 2026-11-20, doing
