@@ -98,3 +98,30 @@ looked for. The biggest map, 171 (80x56), has 4,414 distinct cells of
   tiles were already one DMA each, and go straight from the pieces. So the
   vblank does the same DMAs as today; what the dedup costs is CPU in the
   tick, outside it.
+
+**Changed on the way: one dictionary a map, not one for the cartridge.**
+Sunset Over Imdahl's paintings are drawn pictures: its 60 maps have
+107,280 cells, 93,671 distinct within their map and 90,746 across maps,
+more than a word numbers ("map 41: the painted maps have more than 65536
+distinct cells"). So each map numbers its own cells (at most 4,800 a map
+today, 65,536 by construction), its pieces go in the cartridge's
+`paint_pieces`, and the record carries where its first piece is (+16,
+`PAINT_STRIDE` 18; `PAINT_PB` in the runtime, set by `paint_find`). Desert
+Nightmare loses the 2,366 cells two maps shared, 75 KB.
+
+**And `painted.s` moved from `FAR2` to `FAR3`** (bank `$C1`): with the
+gathering, Desert Nightmare's `$C0` overflowed by 123 bytes.
+
+**Space**, `just space`, the-advocate `3043b395` against the branch, ports
+`09d9b0d`:
+
+| `release` | data banks used, before | after | free after |
+|---|---:|---:|---|
+| Desert Nightmare | 126 of 126 (25 pieces, 217,805 B to the `.msu`) | 82 (22 pieces, 143,341 B) | 26 whole, 18 halves |
+| Sunset Over Imdahl | 81 | 77 | 31 whole, 18 halves |
+
+**Desert Nightmare fits without the `.msu`**: built with `msu =
+"optional"` in a throwaway copy of its `advocate.toml`, it links in the
+same 82 banks; the 22 pieces still in the `.msu` are what goes there in
+any game (the debug screen and the battle backgrounds, which the ROM
+also carries). `msu = "required"` stays until taro decides.
