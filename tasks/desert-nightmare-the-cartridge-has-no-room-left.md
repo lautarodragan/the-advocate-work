@@ -62,3 +62,14 @@ smaller instead of not copied), and the options ranked by cost and room
 won —down to streaming painted cells from the `.msu` in chunks, with its
 read speed and the cycles a walking frame has, measured—. The
 recommendation that makes `commons_not_copied` unnecessary.
+
+## Log (Carpintero)
+
+**2026-11-20.** Worktrees at the-advocate `16081af9` and the ports
+`1177cbc`, branches `carpintero-dn-room` in both and in the book. Desert
+Nightmare's and Vampires Dawn's `release` rebuilt there with the global
+tools (which are `16081af9`'s), to measure from the build's `.dbg` and
+the packed `.inc`. Already known before starting, not measured again:
+the painted cells dedup figures of Cardón's study (29.5% distinct within
+a map), and the FX Pak's seek cost from "The `.msu` file" (about 2 ms
+with a track playing).
