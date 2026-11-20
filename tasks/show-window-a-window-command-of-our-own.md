@@ -173,11 +173,11 @@ alone, with no picture after it, is that. The coordinates are the
 console's 256x224, multiples of 8: RPG_RT never draws the window, so there
 is no RM2k position to keep.
 
-**Opcodes**: `OP_WINDOW` 0x58 and `OP_WINDOW_ERASE` 0x59, the next two on
-main: Hornero's 0x5A and 0x5B leave a gap while Tijereta's 0x58 and 0x59
-are not merged, and the declaration does not compile with one. If
-Tijereta merges first, these go to 0x5A and 0x5B (both sides read the
-declaration; nothing else names the numbers).
+**Opcodes**: `OP_WINDOW` 0x59 and `OP_WINDOW_ERASE` 0x5A. They were
+0x58 and 0x59 while Tijereta's were not on main —the declaration admits no
+gap—; her number locks took 0x58 alone (`OP_IF_WIDE`), and when they were
+merged these followed it (Hornero, 2026-11-20). Both ends read the
+declaration; nothing else names the numbers.
 
 **The tiles are the game's, per window id**: every `@window` of the game is
 measured, each id gets the widest text each of its lines ever has, two
@@ -246,12 +246,12 @@ the layer's entries, 18 of them tiles; with the copy taken out, red (18 of
 a window.
 
 **What it costs** (`just space`, Desert Nightmare's release, against
-main's tools at `afb9165d` —Cardón's painted cells and Calandria's one
-font in— with only the two opcodes declared): bank $C0 2,118 → 645 bytes
-free, bank $C1 3,019 → 1,428, bank 0 4,178 → 4,133, bank 1 1,285 → 1,255,
-far RAM 2,626 → 154 (`SW_MAP`, the screen's 1,792 bytes, is most of it:
-it could hold only the span's rows), the text block +1,384 bytes, data
-banks 78 → 79 of 126. With Cardón's painted cells FAR3 alone no longer
+main's tools at `a462bc14` —Cardón's painted cells, Calandria's one font
+and Tijereta's number locks in— with only the two opcodes declared): bank
+$C0 2,118 → 645 bytes free, bank $C1 2,876 → 1,285, bank 0 4,167 →
+4,122, bank 1 1,181 → 1,151, far RAM 2,608 → 136 (`SW_MAP`, the screen's
+1,792 bytes, is most of it: it could hold only the span's rows), the text
+block +1,420 bytes, data banks 78 → 79 of 126. With Cardón's painted cells FAR3 alone no longer
 held the file (1,043 bytes over, before the one font freed some), so it
 is split: the vblank's half and the doors in FAR2, the composer and the
 composition in FAR3. The letters go through `compose_char_far`, the
@@ -259,8 +259,9 @@ message window's own, inked with its colours.
 A game without a window assembles none of it: **every other game's ROM is
 byte for byte the same** as one built with main's tools plus the two
 opcodes —ABL's release and its ten test cartridges, the six other games'
-releases and Zounds' `exits`—, and Sunset over Imdahl's and Zounds'
-`just space` with it.
+releases and Zounds' `exits`, 19 ROMs—, and so is every other game's
+`just space`, Zounds' included. Against main alone they cannot be: the
+two opcodes' entries in the dispatch are bank 0's.
 
 **Verified**: the event compiler's tests (five in `windows.rs`, two in
 `compile.rs`), `just test` (29), the crates' tests of events, bytecode,
@@ -270,7 +271,9 @@ the same in bsnes, and the layer above beside the window by its tilemap
 entries and its pixels —shown red with the copy taken out—); with the
 branch's tools after the last merge, the ports' `just boot`, 175 passed,
 and ABL's `just tests`, 1,723 passed and 2 skipped, `test_cores.py`
-among them. **Not covered by any test**: a window under a camera that moves
+among them. After merging Tijereta's: `just test` 29, the ports' `just
+boot` 178 passed, ABL's `just tests` 1,723 passed and 2 skipped; the
+five goldens did not move. **Not covered by any test**: a window under a camera that moves
 (the copy goes stale until the camera stops on the grid), a window on a
 map whose BG2 is its panorama (`PANO_ON` 3: nothing beside it), a System
 change with windows up, a window over a battle's return, two non-zero
@@ -288,9 +291,9 @@ rather than a `>`; a page's own text positions (`\x[n]`) so a grid can be
 one window; and the image-to-text prompt run on a real 20 USD plan, which
 was only counted here.
 
-**To merge** (main merged in: the-advocate `afb9165d`, the ports and the
-book at their merges of the one font): the-advocate `mulita-show-window` (opcodes 0x58 and 0x59:
-renumber to 0x5A and 0x5B if Tijereta's land first), the ports'
+**To merge** (main merged in: the-advocate `a462bc14`, Tijereta's number
+locks, and the ports, the book and this repository at theirs): the-advocate `mulita-show-window` (opcodes 0x59 and 0x5A, after
+Tijereta's 0x58), the ports'
 `mulita-show-window` (the goldens in their own commit), the book's
 `mulita-show-window`. Install `events`, `convert`, `mapdata`,
 `cartridge` and `rm2k-snes-audio` (every crate the bytecode's declaration
