@@ -39,3 +39,13 @@ load-time data goes to the `.msu` so that the painted cells fit the ROM
 (95 maps painted, 112 pieces of 1.1 MB to the `.msu`). The cells stay
 stored whole. This draft is still what would make the game's `.msu`
 optional again, and Sunset Over Imdahl's 60 painted maps smaller.
+
+## Measured again on the cartridge that is built (2026-11-20, Carpintero)
+
+On Desert Nightmare's `release` at the-advocate `16081af9` and the ports
+`1177cbc`, read from the ROM's bytes: the 93 painted maps carry 126,756
+cells, 4,056,192 bytes (their attributes and tables add 140,072); 43,935
+of them are distinct within their map (34.7%, 1,405,920 bytes), 41,569
+across maps. Stored once with a two-byte index per cell, about 1.66 MB
+instead of 4.06. See
+[`desert-nightmare-the-cartridge-has-no-room-left`](desert-nightmare-the-cartridge-has-no-room-left.md).
