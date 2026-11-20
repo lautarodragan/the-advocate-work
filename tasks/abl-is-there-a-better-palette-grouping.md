@@ -2,7 +2,7 @@
 name: "ABL: is there a better palette grouping?"
 description: "A short study: whether Adeleine's grouping of colours into palettes has obvious room left, starting from map 3 where Core's blood comes out brown; if not, ABL keeps targeted fixes"
 type: research
-status: testing
+status: done
 assignee: taro
 agents: [Carpintero]
 ---

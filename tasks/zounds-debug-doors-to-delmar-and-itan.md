@@ -2,7 +2,7 @@
 name: "Zounds: debug doors to Delmar and Itân"
 description: "Two more doors in Zounds' debug room, to Delmar (183) and the town of Itân (157), which the story does not reach: only the developer's Tests map (2) leads there"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Mulita]
 ---

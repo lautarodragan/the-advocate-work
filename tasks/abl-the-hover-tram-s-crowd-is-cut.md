@@ -2,7 +2,7 @@
 name: "ABL: the Hover-Tram's crowd is cut"
 description: "Map 13 has more characters on a line than the PPU draws; still people could be baked into the background if what they draw outside their cell lands where nobody can stand"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Cardón]
 game: abl

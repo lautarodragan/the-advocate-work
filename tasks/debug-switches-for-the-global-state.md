@@ -2,7 +2,7 @@
 name: "Debug switches for the global state"
 description: "Switches in the debug screen to turn off the state the game leaves on across maps —the tint, the on-screen timer, the weather…— so lag and other bugs can be bisected in taro's own game"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Tijereta]
 ---
