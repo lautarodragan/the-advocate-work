@@ -46,3 +46,18 @@ one without gets none, and the map's upper layer cuts its letters
 (`/shared/captures/2026-11-19-desert-nightmare/messages.png`). Ranked
 fourth in the book's research
 `ports/desert-nightmare/research/2026-11-19-what-it-takes-to-be-playable.md`.
+
+## Seen again (2026-11-20, Tijereta)
+
+At the-advocate `0d7ab7ed` (branch `tijereta-number-locks`) and the ports
+`a93ca63`, on the tailor's (map 123), one of the maps where the two
+pictures **do** fit: they go as objects —92 of them, the converter says—
+**over** the text layer, so a box with no face is covered by
+`TextboxInnen` and only a few letters show through where a line runs out
+of slivers. Seen with the tailor's number lock, whose digits go in a box
+of no lines and no face: of `0 0 0 0` only `| 0` shows, and the frame's
+picture is left half-drawn around it
+(`/shared/captures/2026-11-20-number-locks/contact-sheet.png`, second
+row). The lock works —the right code opens it, a wrong one does not—; it
+cannot be read. On the maps where the pictures do not fit (28, 42) the
+same digits go over the map with no box, as any faceless message there.
