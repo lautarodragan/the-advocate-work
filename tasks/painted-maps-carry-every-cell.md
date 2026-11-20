@@ -67,3 +67,34 @@ budget (measured on the worst walking frames), every painted map drawn
 the same (goldens, Sunset and Desert Nightmare), `just space` before and
 after, and whether Desert Nightmare then fits without `.msu`
 (`msu = "required"` kept until taro decides).
+
+## Working (2026-11-20, Cardón)
+
+Branches `cardon-painted-cells` in the-advocate and the ports, from
+`3043b395` and `09d9b0d` (main after Chajá's copies).
+
+**Measured** on Desert Nightmare's `release` (the ports' build of
+2026-11-19, the same 93 painted maps Carpintero counted), from its
+`mapdata.inc`: 126,756 cells, 43,935 distinct within their map, 41,569
+across maps; flipped cells would save 0.3% more (41,462), so they are not
+looked for. The biggest map, 171 (80x56), has 4,414 distinct cells of
+4,480 —a photograph—, and its worst 33x30 window has 990 distinct cells of
+990.
+
+**Decided**:
+
+* **One dictionary for the cartridge**, not one per map: 75 KB less, and a
+  cell's number says where it is with one table of pieces of 1,024 cells
+  (32 KB, the most a `.block` may be): piece `n >> 10`, cell `n & 1023`.
+  A word per cell, so up to 65,536 distinct cells; the converter refuses
+  past that.
+* **No VRAM cache.** A cache of distinct cells on screen pays only where a
+  window repeats, and the worst window of map 171 has 990 of 990: VRAM
+  would have to hold the 990 slots anyway. The slots stay by position.
+* **A column is gathered before the vblank**: in `paint_tick`, one DMA a
+  cell from the pieces to WRAM through `$2180` (`PAINT_COL`, behind the
+  queue in the grid's bank; `PAINT_ROOM` goes from `$7E00` to `$7700`), so
+  in the vblank it is still one run, one DMA or two as before. A row's
+  tiles were already one DMA each, and go straight from the pieces. So the
+  vblank does the same DMAs as today; what the dedup costs is CPU in the
+  tick, outside it.
