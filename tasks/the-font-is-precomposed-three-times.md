@@ -38,3 +38,26 @@ copy (or the reason it can't be), every screen that writes text drawn the
 same —goldens unmoved—, the composing time per letter measured before and
 after (messages, text screens, slots), and `just space` for every
 cartridge.
+
+## What differs between the three (2026-11-20, Calandria)
+
+At the-advocate `16081af9` and the ports `1177cbc`, decoding each table
+back to pixels —per glyph, phase, row and cell: which pixels are inked,
+and with which colour index— from each game's `release` `mapdata.inc`:
+
+* **The shape is the same, byte for byte, in all nine games**: every
+  glyph the three share inks the same pixels at the same phase. The bpp,
+  the spacing, the rows and the shadow are the same; they are all
+  `font_prerender` over `font_bytes_with`.
+* **What differs is the colour**: row k of the glyph and the shadow take a
+  different palette index in each —the window's gradient in the
+  messages', entries 1 + k and 13 in the screens', the bank's by-use
+  palette in the slots'—.
+* **And the glyphs after the console's 96**: the messages' carry the
+  Latin-1 letters their boxes draw (`request.letters`); the screens' and
+  the slots' —the same set— carry the ExFont icons' halves after a blank
+  (`items::glyphs_after`). Vampires Dawn and Zounds have both, and they
+  differ from glyph 96 on; the other games have one or none.
+
+So one table colour-free, with the glyphs of both sets, and the colour put
+in by each writer, is possible.
