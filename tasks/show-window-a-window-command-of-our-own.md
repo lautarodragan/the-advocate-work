@@ -2,7 +2,8 @@
 name: "ShowWindow: a window command of our own"
 description: "An RPG Maker 2000 PLUS command like ShowPicture that draws a window from the System and composes its text at run time, so a menu made of pictures can be a window that fits every map"
 type: feature
-status: todo
+status: doing
+assignee: Mulita
 agents: [Mulita]
 ---
 
@@ -107,3 +108,30 @@ ShowWindow narrower than the screen keeps the layer above beside it**,
 however it is done: e.g. its tiles laid into
 BG2's own tilemap instead of swapping the line's, or the console's
 windows limiting the swap to its columns.
+
+## Taken as a proof of concept (2026-11-20, Mulita)
+
+taro, translated, after Carpintero's study of Desert Nightmare's room
+(`ports/desert-nightmare/research/2026-11-20-where-the-room-goes.md`)
+and the talk about common events copied for their pictures:
+
+> A common event's show picture should not be map decoration in any case.
+> It isn't impossible, but it is unlikely. I'd skip that analysis or take
+> it with another depth: assume those show pictures are always custom
+> systems, understand how they work by reading the code and the images,
+> and see if we can replace images with text. A show picture could be
+> converted into a ShowMessage with parametrisable x, y, w, h. That is not
+> necessarily always possible, but if we reduce those windows to
+> multiples of 8 for x, y, w, h and palettes of 2-4 colours, maybe we
+> don't need more than that to show them inside the maps, without making
+> them full screen. I think that's the interesting experiment: can we
+> invent a ShowMessageWindow that replaces ShowPicture one to one, as a
+> POC, and do the image-to-text of the images via AI?
+
+**The POC**: ShowWindow as designed above (stage 1: the message window's
+bank, no open message; the strict requirement on the layer above holds),
+first used by Desert Nightmare's own menu
+([`desert-nightmare-the-game-s-menu-draws-nothing`](desert-nightmare-the-game-s-menu-draws-nothing.md)):
+its pictures read by the agent —an image-to-text done once, by looking at
+each picture, and kept as a reviewed patch, not run at build time— and
+replaced one to one by windows in a patch of the game's data.

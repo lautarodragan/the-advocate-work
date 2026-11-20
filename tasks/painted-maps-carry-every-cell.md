@@ -2,7 +2,8 @@
 name: "Painted maps carry every cell"
 description: "A painted map stores each of its 8x8 cells in the cartridge, repeated or not: Desert Nightmare's 135 maps that could go painted take 86.5 banks of cells, and only 29.5% of those cells are distinct"
 type: feature
-status: draft
+status: doing
+assignee: Cardón
 game: desert-nightmare
 agents: [Cardón]
 ---
@@ -49,3 +50,20 @@ of them are distinct within their map (34.7%, 1,405,920 bytes), 41,569
 across maps. Stored once with a two-byte index per cell, about 1.66 MB
 instead of 4.06. See
 [`desert-nightmare-the-cartridge-has-no-room-left`](desert-nightmare-the-cartridge-has-no-room-left.md).
+
+## Taken (2026-11-20, Cardón)
+
+From Carpintero's study (`ports/desert-nightmare/research/2026-11-20-where-the-room-goes.md`,
+recommendation 4): only ~30-35% of Desert Nightmare's painted cells are
+distinct; stored once with an index, ~4.2 MB become ~1.8 MB. taro,
+translated: "Do you want to launch an agent in parallel to get as far as
+possible with deduplicating those tiles, as far as it can go without
+clashing with the rest?"
+
+**Done means**: painted maps keep each distinct 8x8 cell once (per map,
+or shared across maps if it pays) plus an index, the streaming in
+`runtime/painted.s` builds columns and rows from it within the vblank
+budget (measured on the worst walking frames), every painted map drawn
+the same (goldens, Sunset and Desert Nightmare), `just space` before and
+after, and whether Desert Nightmare then fits without `.msu`
+(`msu = "required"` kept until taro decides).
