@@ -2,9 +2,10 @@
 name: "Desert Nightmare: the towns run at half speed"
 description: "Every map that draws more than ~50 events takes two frames or more per round of the main loop —2.65 on map 62—: the town's streets play at 30 frames a second or less. With no row drawn, map 2 is back at one"
 type: bug
-status: draft
+status: testing
+assignee: taro
 game: desert-nightmare
-agents: [Hurón]
+agents: [Hurón, Cardón]
 ---
 
 Seen by Hurón on 2026-11-19, at the-advocate `62b6e5cb` and the ports
@@ -27,3 +28,11 @@ pieces of CharSets and placed one per cell over the panorama —3,368 of
 the game's 3,977 drawn events never change their look and nobody moves
 them—. See the book's research
 `ports/desert-nightmare/research/2026-11-19-what-it-takes-to-be-playable.md`.
+
+## Fixed, to test (2026-11-19, Cardón)
+
+By [`still-pieces-painted-into-a-painted-map`](still-pieces-painted-into-a-painted-map.md), at the-advocate `cardon-painted-pieces` (`70c3dd8f`) and the ports `cardon-painted-pieces` (`6cb07f1`): the still pieces are painted into the panorama, and the
+26 towns of the sweep play at 1.0 frames per tick walking (1.07 on 172,
+where a first-visit scene runs; 12 is a scene that leaves the map). Map 35,
+the exit, at 1.52: its 27 people walk, and are the draft
+[`desert-nightmare-characters-cut-on-crowded-lines`](desert-nightmare-characters-cut-on-crowded-lines.md).

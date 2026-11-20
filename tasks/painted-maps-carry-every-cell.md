@@ -31,3 +31,11 @@ of their cells repeat was not measured.
 wally` in that branch), `painted_maps = true` in
 `desert-nightmare/advocate.toml`, and `TOWN_BAKE=1 TOWN_FOLD=1 just
 cartridges --force` with that `bin/` first in the PATH.
+
+## Desert Nightmare requires the MSU-1 instead (2026-11-19)
+
+taro's decision, for [`still-pieces-painted-into-a-painted-map`](still-pieces-painted-into-a-painted-map.md): Desert Nightmare requires the MSU-1, and the
+load-time data goes to the `.msu` so that the painted cells fit the ROM
+(95 maps painted, 112 pieces of 1.1 MB to the `.msu`). The cells stay
+stored whole. This draft is still what would make the game's `.msu`
+optional again, and Sunset Over Imdahl's 60 painted maps smaller.

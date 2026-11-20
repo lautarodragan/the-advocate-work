@@ -2,7 +2,8 @@
 name: "Desert Nightmare: the roofs left out show the panorama's white"
 description: "On maps 4, 14, 61 and 66 the trim leaves out drawn events —the buildings' roofs, drawn on the hero's layer over white holes in the panorama— and the console shows the holes"
 type: bug
-status: draft
+status: testing
+assignee: taro
 agents: [Aguará, Hurón, Cardón]
 ---
 
@@ -68,3 +69,15 @@ before Wally reads it, so no bake can see them. On maps 2, 4, 14, 59, 61,
 study's prototype read them from the whole map and painted them into the
 panorama with the rest: map 4's roofs and walls come back
 (`/shared/captures/2026-11-19-dn-towns/`).
+
+## Fixed, to test (2026-11-19, Cardón)
+
+By [`still-pieces-painted-into-a-painted-map`](still-pieces-painted-into-a-painted-map.md), at the-advocate `cardon-painted-pieces` (`70c3dd8f`) and the ports `cardon-painted-pieces` (`6cb07f1`): the 95 maps of `painted_events` paint their still pieces
+into the panorama, the ones the RAM's trim leaves out first among them
+(`Loss::Painted`), so `event-left-out` goes from 183 to 0 and
+`events-not-drawn` from 9 to 0; the white on screen at the start cell, as
+`tests/test_desert_nightmare_towns.py` counts it, from 25 to 44% on maps
+3, 4, 5, 13, 14, 43, 61, 62 and 66 to under 0.2%. What still waits for a
+slot, on 7 maps, is not pieces: the draft
+[`desert-nightmare-events-wait-for-a-slot`](desert-nightmare-events-wait-for-a-slot.md).
+Captures against EasyRPG in `/shared/captures/2026-11-19-dn-painted-pieces/`.

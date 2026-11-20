@@ -92,3 +92,28 @@ sprite tiles, as the study said), and 42 one-screen interiors lose the
 message box's two pictures (`TextboxInnen`, `TextboxRahmen`: "with their
 272 tiles the map fits no VRAM layout"). So the list: every map with a
 piece to paint but those 45 —95 maps—.
+
+**The list, measured (2026-11-19, Cardón).** The ports
+`cardon-painted-pieces` `6cb07f1`: `msu = "required"` and
+`painted_events` on 95 maps. It links: 112 pieces (1.1 MB) to the `.msu`.
+Against the release before, no map has a degradation more;
+`event-left-out` 183 → 0, `events-not-drawn` 9 → 0,
+`events-wait-for-a-slot` 34 → 7, `palette-lent` 47 → 20.
+`just objects-per-line desert-nightmare`: 7 maps over (33, 35, 44, 47,
+48, 71, 102), none with the hero; 53 on 2026-11-17. The sweep of the 26
+slow towns (a door, 240 ticks walking): 1.0 frames per tick, 1.01 on 2,
+1.07 on 172 (a scene), 1.52 on 35 (its crowd walks), and 12 leaves the map
+in a scene; the STAT77 counts zero but 35 (122 frames time-over). White on
+screen at the start cell: 25 to 44% before on 3, 4, 5, 13, 14, 43, 61, 62,
+66, under 0.2% now. Captures against EasyRPG (taken again, at the same
+cells): `/shared/captures/2026-11-19-dn-painted-pieces/`.
+
+The test game: its two cartridges byte for byte the same; its suite has
+the same 4 reds with the global tools at `62b6e5cb` as with these
+(`test_leader_name.py` ×3, `test_linter.py`: widths in `tl_glyph_hi`).
+
+Book: `cardon-painted-pieces` `c6be027` (internals/vram.md, two
+divergences, Desert Nightmare's decisions, page and Known issues).
+Drafts: `desert-nightmare-events-wait-for-a-slot` (new); the roofs and the
+half speed to `testing`; the crowded lines, the `CallEvent` and the
+painted cells updated.
