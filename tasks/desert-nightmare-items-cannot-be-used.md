@@ -36,3 +36,90 @@ and A Blurred Line never asks; for the hero it is the map the party is on.
 ## Taken (2026-11-20)
 
 By Chajá, from Hurón's ranking in `desert-nightmare-what-it-takes-to-be-playable`. taro: "dale!".
+
+## Work (Chajá, 2026-11-20)
+
+From the-advocate `4f38ea03` and the ports `a34b393`, branches
+`chaja-control-vars` in both.
+
+**What the nine games ask of `ControlVars` and does not compile**, read
+from each one's `culprits.json` (`rm2k-snes-events culprits` against the
+`events-request.json` of its `release`, with the global tools of
+`4f38ea03`), grouped by shape:
+
+* **Operand 6, field 0, the hero's map id**: Desert Nightmare's commons 20
+  and 14, five uses. The only operand-6 field missing in any game: nobody
+  asks for the facing (3), nor for an event's map id; the event id (6) is
+  the Maniac patch's.
+* **Operand 7, "other"**: only Vampires Dawn, with 2 (party size, 6 uses),
+  3 (saves), 5 (wins) and 7 (escapes); the variables they write (414, 415, 461,
+  470) have slots past 255, the byte `OP_VAR` carries, so they would not
+  compile for that reason either.
+* **Everything else is not the operand**: Vampires Dawn's ~1,200 are its
+  variables with a slot past 255 (468, 469…), past `OP_VAR`'s byte; Sunset's one and one of Vampires
+  Dawn's set a **range** of variables (`[1, 1, 30, …]`, `[1, 1, 600, …]`);
+  Zounds' one is a random of 500000 to 999999, past the word.
+
+So the change is field 0, and only it: the hero's goes to the ROM, an
+event's is RPG_RT 2000's constant 0 (easyrpg's
+`ControlVariables::Event`, which says so). No new opcode: `OP_VAR` class 6
+with `b` = 0, read from `map_rm2k` —the table `MemorizeLocation` already
+uses—.
+
+**The compiler test** (`the_heros_map_is_class_six_and_an_events_is_zero`
+in `compile.rs`) was red before the change. **The ROM test**,
+`tests/test_desert_nightmare_use_an_item.py` in the ports: the bulb
+picked up on map 23, the hero below the lamp on map 26, switch 1 (the
+menu's, which the intro turns on) set by hand, B, A, A —the menu draws
+nothing, so blind—; red with the global tools at the same point Hurón saw:
+variable 8 at 1 (the bulb chosen), 252 and 242 never.
+
+**Culprits after** (with the branch's `rm2k-snes-events`, same requests):
+Desert Nightmare's commons 28 → 30 of 30; the other eight games exactly as
+before, as the scan said.
+
+**Desert Nightmare then did not fit.** With the branch's tools the build
+fails: "a piece of 23040 bytes needs a new bank, and the 126 banks … are
+taken, even with the 1118 piece(s) that may go to the .msu". The cartridge
+was already 126 of 126 since the painted pieces (0 B free but a 1,395 B
+gap). What tipped it is not common 20 but **14**: it is an automatic
+common with pictures, so `common_pages` copies it into 181 maps, and
+until now its copy did not compile. Compiled, it is ~9 KB in every map's
+bytecode (`map_code` 2,533 KB raw → 4,162 KB), which pushes the maps past
+`LZ2_CAP_CODE` (`code_in_rom` in mapdata) and their code stays in the ROM
+uncompressed: `map_code` in LZ2 went from 1,079.7 KB to 3.1 KB. Taking map
+34 out of `painted_events` (38,400 B) did not make it fit either.
+
+What the copy of 14 would draw is only its cursor, `Kartencursor`: its 40
+maps are 320x240 pictures the console does not show ("its 40 big pictures
+are not shown"). So 14 runs as the shared body, not copied: a new optional
+knob, `[events] commons_not_copied`, read by the converter beside the
+custom menus' and the counters' (absent = none), and `[14]` in Desert
+Nightmare's `advocate.toml`.
+
+With it Desert Nightmare builds (105 pieces, 1,037,034 B, to the `.msu`)
+and **the ROM test is green**: the use runs as the game's script says
+—common 20 turns on 252 and 12,
+the menu closes (6 and 10 off), map 26's autostart on 252 changes the
+lamp's picture to `Lichteffekt_Lager6_2` and turns on 242—. Captures of
+the room before and after, ours only (EasyRPG was not replayed to that
+point: it needs the bulb in hand), side by side in
+`/shared/captures/2026-11-20-dn-use-an-item/`. The room is visibly lit after.
+
+The finding about the room left is a draft:
+[`desert-nightmare-the-cartridge-has-no-room-left`](desert-nightmare-the-cartridge-has-no-room-left.md).
+
+**What is still not supported, and why it was not done** (none of it is
+asked by a page that would compile otherwise):
+
+* operand 6, field 3, the facing (8/6/2/4): no game asks;
+* operand 6, field 6, the event id: the Maniac patch's;
+* operand 7 (other) 2, 3, 5, 7 —party size, saves, wins, escapes—:
+  only Vampires Dawn, eleven uses, whose target variables (414, 415,
+  461, 470) are slots 413 to 469, past the byte `OP_VAR` carries, which is
+  also what leaves out its other ~1,200 `ControlVars`;
+* a range of variables as target (Sunset map 35, Vampires Dawn map 69):
+  already in
+  [`sunset-nine-pages-still-left-out`](sunset-nine-pages-still-left-out.md);
+* a random past the word (Zounds map 2, 500000..999999): the 16-bit
+  variables, `divergences/variables-saturate-at-16-bits.md` in the book.
