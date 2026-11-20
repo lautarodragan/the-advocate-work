@@ -2,8 +2,8 @@
 name: "Painted maps carry every cell"
 description: "A painted map stores each of its 8x8 cells in the cartridge, repeated or not: Desert Nightmare's 135 maps that could go painted take 86.5 banks of cells, and only 29.5% of those cells are distinct"
 type: feature
-status: doing
-assignee: Cardón
+status: testing
+assignee: taro
 game: desert-nightmare
 agents: [Cardón]
 ---
@@ -122,6 +122,52 @@ gathering, Desert Nightmare's `$C0` overflowed by 123 bytes.
 
 **Desert Nightmare fits without the `.msu`**: built with `msu =
 "optional"` in a throwaway copy of its `advocate.toml`, it links in the
-same 82 banks; the 22 pieces still in the `.msu` are what goes there in
-any game (the debug screen and the battle backgrounds, which the ROM
-also carries). `msu = "required"` stays until taro decides.
+same 82 banks, and `test_boot` and `test_desert_nightmare_towns` pass with
+no `.msu` next to the ROM. Its 22 pieces still in the `.msu` are what a
+game whose MSU-1 is optional sends there anyway, as Sunset's 13 (which
+ones was not looked at piece by piece). `msu = "required"` stays until
+taro decides.
+
+## Done (2026-11-20, Cardón)
+
+Branches `cardon-painted-cells`: the-advocate `4662f046` (`painted.s`
+goes to `FAR3`) and `d5ad305e` (the cells once a map), the ports
+`3e4cc78` (only the comment over Desert Nightmare's `msu`), the book
+`e2c41b3` (the VRAM split, the converter's stages, the MSU-1 decision).
+**To install when merging: `just install mapdata`**; the runtime comes
+from the checkout.
+
+**The vblank**, Mesen2's line profiler (`wait_vblank`, `paint_tick` and
+`message_tick` watched), walking the eight directions from where each map
+starts the hero, main against the branch:
+
+| Desert Nightmare map | `paint_tick`, most lines | free lines on a column crossing, median / worst | worst while moving |
+|---|---|---|---|
+| 172 | 5 → 28 | 155.5 / 111 → 151 / 111 | 86 → 86 |
+| 3 | 5 → 28 | 195 / 156 → 172 / 133 | 151 → 133 |
+| 60 | 5 → 28 | 168 / 129 → 146 / 105 | 72 → 72 |
+
+A column's 30 cells cost the tick about 23 lines; the vblank does the same
+DMAs as before. Not measured: more than two pixels a frame, where a tick
+may gather two columns (about 46 lines) besides a row.
+
+**Drawn the same**: against main's build, at 15 bits, on snes9x, every
+painted map entered like a door on a grid of points and walked the four
+ways (Desert Nightmare 641 points, 32,691 captures; Sunset 510, 25,347),
+and wandered for 640 ticks from where the map starts the hero (Desert
+Nightmare 71 maps, 68 scrolling, 22,720 captures; Sunset 54, 51, 17,280;
+the rest left the map or kept the hero in a scene): no capture differs.
+A Blurred Line's `release` and the test game's ROM are byte for byte
+main's.
+
+**Run**: the mapdata crate's tests (a new one reads a table back);
+`just test`; the ports' `just boot`, 172 passed; ABL's `just tests`, 1722
+passed; the test game, the same 4 reds as main at `3043b395` (drafts
+`the-test-games-leader-name-goldens-are-red-on-main` and
+`goombario-reads-widths-from-an-untaken-if-branch`).
+
+What is left, if it is wanted: a column's cells whose numbers are
+consecutive (the first time a stretch is seen, they are) gathered in one
+DMA, which would take back most of those 23 lines on a map like Desert
+Nightmare's; and a map that repeats nothing (Sunset's map 3, 4,799
+distinct of 4,800) pays a word a cell for nothing, 9.6 KB.
