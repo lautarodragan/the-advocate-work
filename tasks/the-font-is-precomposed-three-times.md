@@ -84,13 +84,54 @@ argument (the masks went wrong silently); a global constant read in an
 `.if` or `.repeat` inside a `.proc` has to be `::NAME`; and `.set` takes
 only constants, so a label plus an offset cannot be one.
 
-**Code space** decided the shape. Bank 1 had 117 B left in Vampires Dawn
-and 156 in Desert Nightmare, `FAR2` 70 in Desert Nightmare and 76 in
-Sunset, `FAR3` 90 in Zounds; only bank 0 had ~4 KB in every game. So:
+**Code space and speed** decided the shape. Bank 1 had 117 B left in
+Vampires Dawn and 156 in Desert Nightmare, `FAR2` 70 in Desert Nightmare
+and 76 in Sunset, `FAR3` 90 in Zounds. A first version painted the text
+layer with one rolled routine reading the colours from a table: the text
+screens' letters went from 7.89 to 16 scanlines (with a bug in the masks),
+then 9.44, and `test_menu_equipment_frames_drawing.py` went a frame late
+("choose-body in 7, not 6"); the debug screen's golden caught its page
+turning differently. So:
 
-* the message window's `compose_char`, the one with a frame budget, is
-  unrolled with the colours as immediates, in bank 0 (+1.2 KB there);
-* the text layer —screens, slot bank's names, debug screen's wide stage—
-  shares one rolled routine, `tl_ink_column`, that reads the colours from
-  a table, `scr_ink` / `slot_ink`;
-* the gold window's digits and `msg_ink_char`'s grey read the window's.
+* **a fifth code bank, `FAR4`**, the low half of `$FF` —the data still
+  starts at `$C2:0000`—, its own commit in the-advocate;
+* there, unrolled with the colours as immediates, a routine per writer:
+  `compose_char_far` (bank 0 keeps `compose_char` as its door, so callers
+  —Mulita's ShowWindow— keep their `jsr`), `tl_paint_scr`,
+  `tl_paint_slot`, `tl_paint_hi`;
+* **the text screens' shadow moved from entry 13 to 15** (`ink_palette`
+  in `items.rs`, used by the custom menus too; `menu_state_ink` uploads
+  the shadow to `SCR_INK_SHADOW`): with 13 (`%1101`) planes 0-1 take the
+  long formula in every row; with 15 every pair takes the short one;
+* the gold window's digits and `msg_ink_char`'s grey read the window's
+  colours from a table, `msg_ink` (`msg_ink_char` takes the glyph's pixels
+  from the glyph word now, not by colour).
+
+Routines changed, for merging with Mulita's ShowWindow: in `messages.s`
+`compose_char` (now a door) and the new `compose_char_far`; in
+`gold_window.s` `gold_glyph`, `gold_cell`, `grey_cell`, `msg_ink_char`
+(one line); `message_layer.s` `msg_layer_ink` (the ink test and the
+stride); `text_layer.s` `tl_glyph_paint`, `tl_glyph_hi`, the removed
+`tl_glyph_cell`/`tl_glyph_column`/`tl_glyph_row_hi` and the new
+`tl_paint_*`; `debug_screen.s` `dbg_glyph`'s blank letter (0, not $FFFF);
+`menu_states.s` `menu_state_ink`; `bank1.s` a comment.
+
+### Measured (2026-11-20)
+
+Mean scanlines per letter on Mesen2's core, from the routine's entry to
+its return, before / after:
+
+| writer | case | before | after |
+|---|---|---|---|
+| messages, `compose_char` | `window` | 8.88 | 6.04 |
+| text screens, `tl_glyph_ring` | items list, 12 steps | 7.89 | 8.52 |
+| menu bank's names, `tl_glyph` | same | 6.67 | 7.11 |
+
+Messages are faster: unrolled, the colour costs less than the loop did, so
+`MSG_CHARS` keeps all its margin. Frames until the items screen has typeset
+after each of 28 cursor steps: 51 / 49 in all, worst 5 / 5, opening 9 / 9.
+
+`just space`, ABL —data banks used, bank 0, bank 1, `$C1` free—: release
+116 -> 108, 3,906 -> 4,080, 713 -> 1,842, 1,569 -> 2,599 B; `FAR4` 27,800
+of 32,768 free; every test cartridge the same way (test-msu's bank 1 140
+-> 1,269). The other games: below.
