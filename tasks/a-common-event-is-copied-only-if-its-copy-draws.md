@@ -2,8 +2,8 @@
 name: "A common event is copied only if its copy draws"
 description: "An automatic common event with pictures is copied into each map so its pictures can be drawn; copy it only where the copy draws a picture the shared body cannot, and never let a copy push a map's code past what decompresses, so `commons_not_copied` is no longer needed"
 type: feature
-status: doing
-assignee: Chajá
+status: testing
+assignee: taro
 agents: [Chajá]
 game: desert-nightmare
 ---
@@ -72,3 +72,60 @@ places:
 Not done: the shared set fitting beside the map's bank —Carpintero's "small
 ones only where the common table's set does not fit"— is the emission's to
 say, after all of this; a copy on those maps draws as well, so it stays.
+
+**Chajá, 2026-11-20**, done: the-advocate `c0fa2260` (branch
+`chaja-copies-that-draw`), the ports `d9f7288`, the book `4211b81`, all on
+the same branch name. Install when merging: **convert and mapdata**
+(mapdata's binary answers the same; its library is what convert asks).
+
+`[events] commons_not_copied` is gone from the converter and from Desert
+Nightmare's `advocate.toml`, and from the book's `internals/`
+(`the-converters-stages.md` and `pipeline.md`; the research is a snapshot
+and stays as it is). Nothing needs it: what it did by hand the converter
+now decides.
+
+Measured, with the tools of the branch against `16081af9`'s, every game's
+`just cartridges`:
+
+* **Desert Nightmare**: 12 is not copied ("common events 12: not copied
+  into the maps, every picture they show is big"); 14 is decided into 181
+  maps and **kept in 85**: on the other 96 Wally put the map's own
+  pictures in instead, so the copy would draw nothing. No map's bytecode
+  stays in the cartridge raw (no `rom_code_` in the `.sym`, before and
+  after), and no copy had to be dropped for it. The maps' bytecode in LZ2,
+  every `map_code_N` block of `mapdata.inc` summed: **994,091 bytes before,
+  458,910 after**, the largest map 6,776 and 4,953. What the packing sends
+  to the `.msu`: **105 pieces, 1,037,034 bytes before; 25, 217,805
+  after** —the `.msu` 9,681,152 bytes and 8,851,456—. `just space` says
+  126 of 126 both times, as the study explains (the packing fills the ROM
+  with what may go); the gaps went from 4,436 bytes to 925.
+* **Sunset over Imdahl** changes, on purpose: its common 5 was copied into
+  its 65 maps and Wally put the map's own pictures in on all 65, so every
+  copy drew nothing; now none is kept, and the shared body runs, which
+  draws its pictures on none of them either ("fit on none of the 65
+  maps", as before). `just space`: 82 data banks used, 81 after.
+* **Frozen World**: byte for byte the same. Its common 15 is a
+  `ShowChoice` since 2026-10-19 (`patches/manual`), so it is not copied at
+  all; `test_frozen_world.py` passes.
+* **A Blurred Line, Book of Three, Dooms2, El Dorado, Vampires Dawn,
+  Zounds**: every cartridge byte for byte the same (ABL's eleven).
+
+Run: `just crate-test convert` and `mapdata` (the new test,
+`a_copy_is_kept_only_where_it_draws_and_the_code_goes_to_wram`, red with
+the old rule —a copy always kept—), `just test` (29), ABL's `just tests`
+(1722 passed, 2 skipped) and `test_cores.py` alone (24), and the ports'
+`just boot` (172, the item test and Frozen World's among them). Clippy and
+`cargo fmt --check` are clean on what I touched; on main they are red in
+files I did not touch (the drafts `just-lint-is-red-with-the-local-toolchain`
+and `cargo-fmt-check-flags-three-files-on-main`).
+
+**What no test runs**: the cursor of the maps screen being drawn on one
+of the 85 maps (reaching it takes the menu's keys into the map view); the
+evidence is the converter, which puts `Kartencursor` in those maps'
+tables. And the drop for the WRAM cap runs only in the unit test: no game
+has a copy that pushes a map out of WRAM today.
+
+Drafts: `desert-nightmare-common-12-is-copied-and-draws-nothing` is
+`done` (not deleted: the book's research links it);
+`desert-nightmare-the-map-cursor-is-shared-on-ten-maps` stays, rewritten
+for the 96 maps where the copy goes.

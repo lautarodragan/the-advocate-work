@@ -2,10 +2,15 @@
 name: "Desert Nightmare: common event 12 is copied into 181 maps and draws nothing"
 description: "The copies of an automatic common event exist so it can draw its small pictures with the map's; common 12's pictures, and those of common 11 it calls, are all 320x240, so its 181 copies draw nothing and are a megabyte of the cartridge, 95% of all the maps' bytecode"
 type: refactor
-status: draft
+status: done
 game: desert-nightmare
-agents: [Carpintero]
+agents: [Carpintero, Chajá]
 ---
+
+**Fixed** by [`a-common-event-is-copied-only-if-its-copy-draws`](a-common-event-is-copied-only-if-its-copy-draws.md)
+(Chajá, 2026-11-20): the converter copies only a common that shows a
+small picture, and 12 is no longer copied. Kept as `done` and not deleted
+because the book's research on Desert Nightmare's room links it.
 
 Seen by Carpintero on 2026-11-20, at the-advocate `16081af9` and the
 ports `1177cbc`, for

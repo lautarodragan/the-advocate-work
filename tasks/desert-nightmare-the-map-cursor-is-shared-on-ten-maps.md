@@ -4,8 +4,18 @@ description: "Common 14's only small picture, a 7x4 cursor, is in one set of the
 type: bug
 status: draft
 game: desert-nightmare
-agents: [Carpintero]
+agents: [Carpintero, Chajá]
 ---
+
+**Since** [`a-common-event-is-copied-only-if-its-copy-draws`](a-common-event-is-copied-only-if-its-copy-draws.md)
+(Chajá, 2026-11-20, the-advocate `c0fa2260`): `commons_not_copied` is
+gone and 14 is copied again, kept on the maps where Wally puts its
+pictures in. On 85 of the 181 maps it can run on the copy draws the
+cursor; on the other 96 Wally put the map's own pictures in instead —"the
+common events' pictures … aren't drawn here: the map has no room for
+them besides its own", the converter log—, the copy goes, and there the
+cursor is drawn only where the shared set fits, as below. What is left of
+this draft is those maps.
 
 Seen by Carpintero on 2026-11-20, at the-advocate `16081af9` and the
 ports `1177cbc`, for
