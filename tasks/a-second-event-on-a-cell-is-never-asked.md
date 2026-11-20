@@ -2,7 +2,8 @@
 name: "A second event on a cell is never asked"
 description: "The action button, a bump and a step look at the first event standing on the cell and stop there; RM2k fires every one whose trigger matches. Desert Nightmare's box puzzle on map 12 cannot be climbed, and the middle of the gate on map 2 leads nowhere"
 type: bug
-status: draft
+status: doing
+assignee: Calandria
 game: desert-nightmare
 agents: [Hurón]
 ---
@@ -37,3 +38,7 @@ cell and fires each whose page has the trigger sought.
 `~/scratch/huron/dn/stages.py` (Hurón's throwaway playthrough, with save
 states in `~/scratch/huron/dn/states/`). Captures in
 `/shared/captures/2026-11-19-desert-nightmare/two-events-on-a-cell.png`.
+
+## Taken (2026-11-20)
+
+By Calandria, from Hurón's ranking in `desert-nightmare-what-it-takes-to-be-playable`. taro: "dale!".

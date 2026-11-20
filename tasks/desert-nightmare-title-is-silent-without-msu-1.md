@@ -2,7 +2,7 @@
 name: "Desert Nightmare's title is silent without MSU-1"
 description: "The title's song, music13, only has an MSU-1 track, so without MSU-1 the title plays nothing"
 type: bug
-status: wishlist
+status: done
 ---
 
 Seen by Chajá on 2026-10-16, at the-advocate `3996ed61`, while making the
@@ -29,3 +29,7 @@ Zounds' victory, or another— is a call for taro.
 ## taro's decision (2026-10-20)
 
 To the wishlist.
+
+## Closed (2026-11-20, Hornero)
+
+Moot: since 2026-11-19 Desert Nightmare requires the MSU-1 (taro: "if it is impossible to make a game run without the .msu, we make the .msu mandatory"), so the title always has its track. See the book's `ports/desert-nightmare/decisions/the-msu-1-is-required-for-now.md`.

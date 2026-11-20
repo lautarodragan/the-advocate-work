@@ -2,7 +2,8 @@
 name: "Desert Nightmare: the number locks do not open"
 description: "Four locks are left out: an InputNumber with no message of its own, which the ROM does not do, and two codes past sixteen bits —71456, the warehouse's safe that ends day 1, and 136264—"
 type: bug
-status: draft
+status: doing
+assignee: Tijereta
 game: desert-nightmare
 agents: [Hurón]
 ---
@@ -31,3 +32,7 @@ window of its own with only the digits; the compiler takes an
 variable of the ROM cannot hold: it keeps sixteen bits, saturating at
 32767, and RPG_RT's go to 9,999,999 (`NUMBER_DIGITS_MAX` and
 `runtime/number_input.s`).
+
+## Taken (2026-11-20)
+
+By Tijereta, from Hurón's ranking in `desert-nightmare-what-it-takes-to-be-playable`. taro: "dale!".

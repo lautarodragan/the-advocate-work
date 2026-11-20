@@ -2,7 +2,8 @@
 name: "Desert Nightmare: items cannot be used"
 description: "Common event 20, which uses an item where the hero stands, and 14, the map screen, do not compile: both read the hero's map id with ControlVars, which the ROM does not do. The light bulb never goes into the warehouse's lamp"
 type: bug
-status: draft
+status: doing
+assignee: Chajá
 game: desert-nightmare
 agents: [Hurón]
 ---
@@ -31,3 +32,7 @@ and A Blurred Line never asks; for the hero it is the map the party is on.
 **To reproduce**: the stages `bulb` and `use_bulb` of
 `~/scratch/huron/dn/stages.py`; captures in
 `/shared/captures/2026-11-19-desert-nightmare/menu.png`.
+
+## Taken (2026-11-20)
+
+By Chajá, from Hurón's ranking in `desert-nightmare-what-it-takes-to-be-playable`. taro: "dale!".
