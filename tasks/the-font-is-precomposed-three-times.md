@@ -2,8 +2,8 @@
 name: "The font is precomposed three times"
 description: "Every cartridge carries the font precomposed for the messages, for the text screens and for the slots, eight phases each: about 365 KB, the same letters for three palettes"
 type: refactor
-status: doing
-assignee: Calandria
+status: testing
+assignee: taro
 agents: [Carpintero, Calandria]
 ---
 
@@ -134,4 +134,45 @@ after each of 28 cursor steps: 51 / 49 in all, worst 5 / 5, opening 9 / 9.
 `just space`, ABL —data banks used, bank 0, bank 1, `$C1` free—: release
 116 -> 108, 3,906 -> 4,080, 713 -> 1,842, 1,569 -> 2,599 B; `FAR4` 27,800
 of 32,768 free; every test cartridge the same way (test-msu's bank 1 140
--> 1,269). The other games: below.
+-> 1,269).
+
+The other eight, at 16081af9 / with this branch merged with main at
+07a2e3af (which brings Cardón's painted-cells dedup and moves
+`painted.s` from `FAR2` to `FAR3`) —data banks used, bank 0, bank 1,
+`$C0`, `$C1` free, B—:
+
+| game | data banks | bank 0 | bank 1 | `$C0` | `$C1` |
+|---|---|---|---|---|---|
+| book-of-three | 43 -> 39 | 4,053 -> 4,227 | 759 -> 1,888 | 2,337 | 2,588 -> 3,612 |
+| desert-nightmare | 126 -> 78 | 4,008 -> 4,182 | 156 -> 1,285 | 70 -> 2,118 | 4,258 -> 3,019 |
+| dooms2 | 38 -> 33 | 4,061 -> 4,235 | 835 -> 1,964 | 2,337 | 2,117 -> 3,147 |
+| el-dorado | 18 -> 14 | 4,114 -> 4,288 | 858 -> 1,987 | 2,337 | 5,136 -> 6,156 |
+| frozen-world | 61 -> 57 | 4,053 -> 4,227 | 858 -> 1,987 | 2,337 | 2,583 -> 3,613 |
+| sunset-over-imdahl | 82 -> 74 | 3,927 -> 4,101 | 732 -> 1,861 | 76 -> 2,124 | 2,846 -> 1,607 |
+| vampires-dawn | 126 -> 126 | 3,956 -> 4,130 | 117 -> 1,246 | 2,161 | 2,635 -> 3,649 |
+| zounds | 62 -> 56 | 3,942 -> 4,116 | 671 -> 1,800 | 2,333 | 90 -> 1,104 |
+
+Desert Nightmare's 48 banks are mostly Cardón's; Vampires Dawn stays full
+(what does not fit goes to its `.msu`, which it needs anyway).
+
+### Verified
+
+With the branch's tools, merged with main: ABL's `just tests` 1723
+passed, 2 skipped, no golden moved; `just boot` 172 passed (as at
+16081af9); `just test` 29; the crate tests of rm2k-snes-screens, -mapdata
+and -cartridge (mapdata's hashes unmoved through
+`with_three_fonts_as_before`; the screens' whole-answer hash moved and
+says why). `just test-game` (FluidR3_GM): 74 passed, 1 skipped, 4 failed,
+the same four with the same pixels as at 16081af9 with the global tools
+—drafts already: `the-test-games-leader-name-goldens-are-red-on-main`,
+`goombario-reads-widths-from-an-untaken-if-branch`—.
+
+**Not covered by any test**: a game whose boxes draw Latin-1 letters
+*and* whose screens carry ExFont halves (Vampires Dawn, Zounds) composes
+a box letter past both sets only in `just boot`'s boot screens, not in a
+golden of a box with such a letter; and `gold_glyph` with a letter past
+the console's (a currency term in Latin-1) runs in no test.
+
+**To install when merging**: screens, mapdata, convert, cartridge
+(cartridge carries the new `FAR4`, and `rm2k-snes-space` reports it).
+Branches: `calandria-one-font` in the-advocate, the ports and the book.
