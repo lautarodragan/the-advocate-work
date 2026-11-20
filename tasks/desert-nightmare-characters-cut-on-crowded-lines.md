@@ -46,3 +46,12 @@ screen's last page counts the map's frames in `Time over`.
 What the report cannot say: whether a line is one the player sees with
 everyone on it —a page another switch turns off, people a first scene
 sends away—, and what a scene adds later.
+
+## After the towns were painted (2026-11-19, Cardón)
+
+At the-advocate `cardon-painted-pieces` (`70c3dd8f`) and the ports `cardon-painted-pieces` (`6cb07f1`), with `just objects-per-line desert-nightmare`:
+7 maps over, where 53 were. 33 and 71, the apartment at night, are left
+out of `painted_events` because painted they would wait for sprite
+slots; 35 is the exit's crowd, which walks; 44 keeps eight events drawn
+with a ChipSet tile, which the pieces do not take; 47, 48 and 102 have
+nothing to paint. None with the hero on the line.

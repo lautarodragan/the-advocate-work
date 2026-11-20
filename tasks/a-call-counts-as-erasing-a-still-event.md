@@ -25,3 +25,12 @@ same rule keeps as objects.
 **To reproduce**: `baked_events = true` under `[graphics]` in
 `desert-nightmare/advocate.toml`, `just cartridges`, and
 `grep "can go away" build/release/converter.log`.
+
+## Inside painted_events (2026-11-19, Cardón)
+
+[`still-pieces-painted-into-a-painted-map`](still-pieces-painted-into-a-painted-map.md) counts a `CallEvent` by what it reaches —the common event or the
+map event's page, and theirs— for the still pieces it paints
+(`reached` in `rm2k-snes/wally/src/pieces.rs`). `always_there` in
+`posed.rs` is unchanged: applying it there changes which events every
+game bakes, A Blurred Line's and Zounds' goldens among them, and that is
+this draft.
