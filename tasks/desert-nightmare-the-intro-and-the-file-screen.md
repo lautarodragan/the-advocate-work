@@ -2,8 +2,8 @@
 name: "Desert Nightmare: the intro's menu, the intro, and the file screen"
 description: "The start menu's options move with the arrows but nothing shows which is chosen; the intro has broken letters over its first message and goes black; the file screen's cursor is a few brown bits"
 type: bug
-status: doing
-assignee: Aguará
+status: testing
+assignee: taro
 game: desert-nightmare
 agents: [Aguará]
 ---
@@ -132,6 +132,22 @@ box", Calandria's.
   was red before its fix (the menu's three captures were identical; the
   others were looked at). The load screen only in snes9x: the bsnes core
   does not expose the SRAM.
+
+### The suites
+
+With the tools of the-advocate `d9ff30ba` (this branch): ABL's `just
+tests`, 1723 passed and 2 skipped, no golden moved —`abl.sfc` sha256
+`860789e009143b2d…`—; the ports' `just boot`, 182 passed, the five new
+goldens included. ABL's title is 8bpp and its pages fade no big picture
+to nothing, so neither change reaches it.
+
+**How far the fade-out rule reaches**, counted over the dumps with a
+throwaway copy of its logic, an upper bound —it does not drop the moves
+the console does not compile as big ones, nor the ones an `ErasePicture`
+follows anyway—: Desert Nightmare 48 moves, Vampires Dawn 69, The Book of
+Three 5, Sunset Over Imdahl 1, the others none. The ones looked at in
+Vampires Dawn's map 2 are followed by their own `ErasePicture`, so there
+it changes nothing. None of the others was looked at on screen.
 
 To install when merging: `convert`, `wally`, `events`, and the runtime
 (`cartridge`, which assembles from the checkout).
