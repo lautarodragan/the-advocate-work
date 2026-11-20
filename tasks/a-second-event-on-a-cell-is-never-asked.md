@@ -5,7 +5,7 @@ type: bug
 status: doing
 assignee: Calandria
 game: desert-nightmare
-agents: [Hurón]
+agents: [Hurón, Calandria]
 ---
 
 Seen by Hurón on 2026-11-19, at the-advocate `62b6e5cb` and the ports
