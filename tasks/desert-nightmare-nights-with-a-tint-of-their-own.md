@@ -155,6 +155,7 @@ characters matter. Neither is small: task
   (`ports/desert-nightmare/research/2026-11-19-nights-with-a-tint-of-their-own.md`),
   SUMMARY, the port's page (a section and two Known issues).
 * captures: `/shared/captures/2026-11-19-dn-nights/`, with a README.
+* `just boot` in the ports, on the branch: 169 passed (18 min).
 * Nothing of the-advocate changed: nothing to install. ABL's suite not
   run (no tools or runtime touched).
 
