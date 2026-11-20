@@ -2,8 +2,8 @@
 name: "Desert Nightmare: the number locks do not open"
 description: "Four locks are left out: an InputNumber with no message of its own, which the ROM does not do, and two codes past sixteen bits —71456, the warehouse's safe that ends day 1, and 136264—"
 type: bug
-status: doing
-assignee: Tijereta
+status: testing
+assignee: taro
 game: desert-nightmare
 agents: [Hurón, Tijereta]
 ---
@@ -81,15 +81,16 @@ through `ControlVars` and var-vs-var compares.
   high word, after every other slot** —so nobody's slot moves—; both
   travel in the save as any variable. `OP_NUMBER` gets a
   `high` byte —the high word's slot, or the variable's own when narrow— and
-  writes the number whole into the two; `OP_IF_WIDE` (0x5A) compares the
+  writes the number whole into the two; `OP_IF_WIDE` (0x58) compares the
   two words as a signed 32-bit number with a 24-bit constant. A variable
   that fails the rule stays sixteen bits and its branch past them does not
   compile, as before: nothing that compiled stops compiling.
 * `InputNumber` takes up to seven digits now (RPG_RT's cap); into a narrow
   variable it still saturates at 65535.
 
-Opcodes: 0x5A `OP_IF_WIDE`; 0x58 and 0x59 held as `OP_RESERVED_58/59`
-(Calandria's and Chajá's) so the declaration compiles.
+Opcodes: 0x5A `OP_IF_WIDE` at first, with 0x58 and 0x59 held as `OP_RESERVED_58/59`
+(Calandria's and Chajá's) so the declaration compiles; neither took one, and after
+merging main it is **0x58**, the next free, with no held ones.
 
 ### 2026-11-20, Tijereta: built and played
 
@@ -134,3 +135,37 @@ one too).
 
 In Desert Nightmare's release, 207 and 274 are the wide ones: their high
 words in slots 205 and 206, past the other 205.
+
+### 2026-11-20, Tijereta: merged with main, verified, to testing
+
+Main moved four times while this was being verified (Calandria's cell
+events and one font, Chajá's ControlVars and copies that draw, Cardón's
+painted cells); each was merged. On the way:
+
+* **`OP_IF_WIDE` is 0x58**: neither of the held numbers was taken.
+* **Zounds' `FAR3` overflowed by 53 bytes** with `wide_compare` in it, and
+  Zounds has no wide variable: the converter now says how many a
+  cartridge has, `WIDE_VARIABLES` in `mapdata.inc`, and the runtime
+  leaves `wide_compare` and `op_if_wide` out without one, as it does the
+  System table with one System.
+
+Verified on the-advocate `98f2ae7d` and the ports `a4f94f4` (both
+branches with main merged), with `events cartridge convert mapdata
+screens` installed locally: `just test` green; `crate-test events` and
+`mapdata` green; ABL's suite, with `test_cores` and `test_number`
+(Drust Camp's six digits under a message), 1723 passed, 2 skipped, no
+golden moved; `just boot` 175 passed, `test_desert_nightmare_safe.py`
+among them; `just space` builds every cartridge of the nine games. What
+is left after this, by cartridge (bank 0 / 1 / $C0 / $C1, bytes): Desert
+Nightmare 4171 / 1181 / 2118 / 2876, Sunset 4099 / 1757 / 2124 / 1607,
+Zounds 4114 / 1696 / 2333 / 1104, ABL 4078 / 1738 / 2290 / 2599.
+
+**Not covered by the suite**: maps 42, 123 and 156 were played by hand
+(a throwaway script), not by a test; the comparisons other than `==` on a
+wide variable are only in the compiler's tests, no game uses them; a
+wide variable in a saved game, loaded, was not tried (it travels as two
+slots of the variables, which the save already carries).
+
+**To install when merging**: `events cartridge convert mapdata` (with
+`bytecode` inside them). Every cartridge changes: `OP_NUMBER` has one more
+byte and `mapdata.inc` says `WIDE_VARIABLES`.
