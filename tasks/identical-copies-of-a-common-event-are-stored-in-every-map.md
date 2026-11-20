@@ -1,6 +1,6 @@
 ---
 name: "Identical copies of a common event are stored in every map"
-description: "A copied automatic common event is the same bytecode in almost every map it goes into, and each map carries its own: Desert Nightmare's common 14 is 7,317 bytes, 3 distinct copies in 181 maps, and copied with 12 it pushes every map past what decompresses into WRAM"
+description: "A copied automatic common event is the same bytecode in every map it goes into, and each map carries its own: Desert Nightmare's common 14 is 7,317 bytes, one copy in each of 181 maps, and copied with 12 it pushes every map past what decompresses into WRAM"
 type: feature
 status: draft
 game: desert-nightmare
@@ -13,8 +13,8 @@ ports `1177cbc`, for
 
 **What was seen**: copied into the 181 maps (`common_pages` with 14 and
 12, as before `[events] commons_not_copied = [14]`), the event compiler
-gives common 14's copy as 3 distinct bytecodes, one of them in 179 maps,
-and common 12's as 2. Each map carries its own inside its code stream:
+gives common 14's copy as one bytecode, byte for byte the same in the 181
+maps, and common 12's too. Each map carries its own inside its code stream:
 common 14's copy is 7,317 bytes —3,243 without its seven `CallEvent`s to
 common 13, which a copy pastes— and common 12's 13,833. Together they put
 every one of the 181 maps over `LZ2_CAP_CODE` (19,968 bytes), so every
