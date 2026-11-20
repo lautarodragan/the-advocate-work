@@ -2,8 +2,8 @@
 name: "Desert Nightmare: items cannot be used"
 description: "Common event 20, which uses an item where the hero stands, and 14, the map screen, do not compile: both read the hero's map id with ControlVars, which the ROM does not do. The light bulb never goes into the warehouse's lamp"
 type: bug
-status: doing
-assignee: Chajá
+status: testing
+assignee: taro
 game: desert-nightmare
 agents: [Hurón, Chajá]
 ---
@@ -123,3 +123,25 @@ asked by a page that would compile otherwise):
   [`sunset-nine-pages-still-left-out`](sunset-nine-pages-still-left-out.md);
 * a random past the word (Zounds map 2, 500000..999999): the 16-bit
   variables, `divergences/variables-saturate-at-16-bits.md` in the book.
+
+**Done, to test (2026-11-20, Chajá).** Branches `chaja-control-vars` in
+the-advocate (`b5e353b5` the field, `13d31d21` the knob, merged with main
+`4d8f5157`), the ports (`06ea78a`, merged with `1b33f2f`) and the book
+(`5c86fe4`, merged with `833d5ec`: the Known issue goes —its conflict
+with Calandria's removal resolved by dropping both lines— and the
+converter's stages name the knob). No new opcode. **To install when
+merging**: `just install events convert` (the runtime change goes in
+from the checkout).
+
+Run on the merged tree with the branch's `events convert cartridge`:
+`just test` 29 passed; `crate-test events` 200 + 13 passed, `convert` 69;
+ABL's `just tests` 1722 passed, 2 skipped; `test_cores.py` 24 passed;
+`just boot` 172 passed (with the new Desert Nightmare test).
+`just space`: Desert Nightmare 126 of 126, a 4,436 B gap (1,395 before);
+bank 0 of ABL's `release` 3,906 B (the field costs ~15 B of it), the
+tightest cartridge's 3,866 B. ABL's `abl.sfc`: `03d2c1c3bb6045ab…`.
+
+Not covered by any test: an event's map id (compiles to the constant
+0, only the compiler test sees it); common 14 running as the shared body
+—the maps screen is never opened by a test, and it draws nothing
+anyway—; bsnes for the new ROM test; the console.
