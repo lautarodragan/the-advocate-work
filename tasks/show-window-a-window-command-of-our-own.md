@@ -244,3 +244,49 @@ tilemaps: right of the window, on its rows, the window's tilemap carries
 the layer's entries, 18 of them tiles; with the copy taken out, red (18 of
 264 differ). Not shown on a game whose BG2 draws something there: none has
 a window.
+
+**What it costs** (`just space`, Desert Nightmare's release, against
+main's tools at `07a2e3af` with only the two opcodes declared): bank $C0
+2,118 → 645 bytes free, bank $C1 1,999 → 401, bank 0 4,004 → 3,959, bank 1
+156 → 126, far RAM 2,627 → 155 (`SW_MAP`, the screen's 1,792 bytes, is
+most of it: it could hold only the span's rows), the text block +1,384
+bytes, data banks 82 → 83 of 126. With Cardón's painted cells FAR3 alone
+no longer held the file (1,043 bytes over), so it is split: the vblank's
+half and the doors in FAR2, the composer and the composition in FAR3.
+A game without a window assembles none of it: **every other game's ROM is
+byte for byte the same** as one built with main's tools plus the two
+opcodes —ABL's release and its ten test cartridges, the six other games'
+releases and Zounds' `exits`—, and Sunset over Imdahl's and Zounds'
+`just space` with it.
+
+**Verified**: the event compiler's tests (five in `windows.rs`, two in
+`compile.rs`), `just test`, the crates' tests of events, bytecode,
+convert, mapdata and cartridge; the ports' `test_desert_nightmare_menu.py`
+(three: the menu's four screens against goldens in snes9x, the inventory
+the same in bsnes, and the layer above beside the window by its tilemap
+entries and its pixels —shown red with the copy taken out—), the ports'
+`just boot` and ABL's `just tests` with the branch's tools (numbers
+below). **Not covered by any test**: a window under a camera that moves
+(the copy goes stale until the camera stops on the grid), a window on a
+map whose BG2 is its panorama (`PANO_ON` 3: nothing beside it), a System
+change with windows up, a window over a battle's return, two non-zero
+colours in windows up together (the second goes to the window's nearest),
+the gradient background of a System (drawn flat), and anything on real
+hardware —every vblank step asks `vblank_line` as the transparent
+message's do, but nothing was played on a console or in Mednafen—.
+
+**For a full version**: windows beside an open message (stage two, as
+objects, as the gold window); the keys, notes and maps screens (other
+window ids, or the window ids decoupled from the picture numbers); the
+fades the menu's `MovePicture`s ask for (the windows appear at once); a
+window that follows a moving camera; the cursor as the System's cursor
+rather than a `>`; a page's own text positions (`\x[n]`) so a grid can be
+one window; and the image-to-text prompt run on a real 20 USD plan, which
+was only counted here.
+
+**To merge**: the-advocate `mulita-show-window` (opcodes 0x58 and 0x59:
+renumber to 0x5A and 0x5B if Tijereta's land first), the ports'
+`mulita-show-window` (the goldens in their own commit), the book's
+`mulita-show-window`. Install `events`, `convert`, `mapdata`,
+`cartridge` and `rm2k-snes-audio` (every crate the bytecode's declaration
+reaches); the runtime is the checkout's.
