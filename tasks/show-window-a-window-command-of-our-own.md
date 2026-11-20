@@ -2,8 +2,8 @@
 name: "ShowWindow: a window command of our own"
 description: "An RPG Maker 2000 PLUS command like ShowPicture that draws a window from the System and composes its text at run time, so a menu made of pictures can be a window that fits every map"
 type: feature
-status: doing
-assignee: Mulita
+status: testing
+assignee: taro
 agents: [Mulita]
 ---
 
@@ -135,3 +135,166 @@ first used by Desert Nightmare's own menu
 its pictures read by the agent —an image-to-text done once, by looking at
 each picture, and kept as a reviewed patch, not run at build time— and
 replaced one to one by windows in a patch of the game's data.
+
+taro, translated, through Hornero, on what the image-to-text may cost a
+port:
+
+> "AI" is Claude Code, ChatGPT, whatever. It could also be done by hand by
+> a person, but packaging it in a prompt works too. If each port needs some
+> AI work, as long as it is trivial enough that someone can do it by
+> copy-pasting a prompt we give them, and it runs successfully on a 20 USD
+> plan without consuming a significant % of the 5-hour limit, we're fine.
+
+And Hornero, on the requirement: it is probably what the transparent
+message already does
+([`a-transparent-message-keeps-the-layer-above`](a-transparent-message-keeps-the-layer-above.md)):
+on a window's lines its plane carries the layer above; the columns beside a
+narrow framed window are cells with nothing of the window, which copy the
+layer's entries the same way.
+
+## Log (Mulita, 2026-11-20)
+
+Worktrees from the-advocate `16081af9` and the ports `1177cbc`, branches
+`mulita-show-window` in both and in the book; main merged in at
+`3043b395` / `09d9b0d` / `2d9160a` (Chajá's copies that draw).
+
+**Authoring: a comment in front of the picture.** Of the two ways, the
+`Comment` directive, placed **right before the `ShowPicture` it stands in
+for**: `@window <id> <x> <y> <w> <h> [plain]`, its lines the text, and the
+`ShowPicture` of picture `<id>` right after it is not compiled; an
+`ErasePicture` of `<id>` takes the window down too. That is the one-to-one
+replacement taro framed, and it keeps the fork running in RPG_RT with its
+pictures: RPG_RT skips the comment and shows the picture. A replacement
+at the patch level —a table "picture `Optionen2` is this window" read by
+the build— would leave the game's data alone, but it is a rule applied at
+build time, which is what the POC was asked not to be, and it cannot say
+"here a window and no picture" for a game written for PLUS. A comment
+alone, with no picture after it, is that. The coordinates are the
+console's 256x224, multiples of 8: RPG_RT never draws the window, so there
+is no RM2k position to keep.
+
+**Opcodes**: `OP_WINDOW` 0x59 and `OP_WINDOW_ERASE` 0x5A. They were
+0x58 and 0x59 while Tijereta's were not on main —the declaration admits no
+gap—; her number locks took 0x58 alone (`OP_IF_WIDE`), and when they were
+merged these followed it (Hornero, 2026-11-20). Both ends read the
+declaration; nothing else names the numbers.
+
+**The tiles are the game's, per window id**: every `@window` of the game is
+measured, each id gets the widest text each of its lines ever has, two
+cell rows of it, and all ids together must fit the message window's 240
+text tiles (239: the last is the windows' background). Measured for
+Desert Nightmare's menu with the console's font: the options 19 cells
+(38 tiles), each item square 8 (16, six of them 96), the description 8 +
+21 + 18 (94), the cursor and the page arrows 2 each. It fits with a few
+tiles to spare. The keys screen —the same grid, with names like "Clothing
+store key", 11 cells— would not fit beside it in the same ids, which is
+why only the inventory is done.
+
+**The layer above beside a narrow window** is the transparent message's
+mechanism, rebuilt for a framed window rather than reused: `message_layer.s`
+carries the layer on the *message's* text lines, inside its pipeline. Here
+the screen's span from the first row a window covers to the last is
+composed whole in RAM —the layer's tilemap rows read from VRAM in the
+vblank, then each window's cells over them— and goes to the window's
+tilemap; HDMA points BG2 at it on those lines. Same rule: only with the
+camera on the 8-pixel grid, as it always is at rest.
+
+**Built.** the-advocate: `windows.rs` in the event compiler (the
+directive, the registry of tiles, the pictures it stands in for),
+`compile_window` and the erase in `compile.rs`, the converter's
+`window_slots` and `SHOW_WINDOW_SLOTS` in mapdata's emission, and
+`runtime/show_window.s` with hooks in `boot.s` (the main loop),
+`vblank.s` (`flush_video` with no message up), `messages.s`
+(`stamp_window_at`: a map, a big picture or a System loaded draws them
+again), `picture_far.s` (`pic_clear`: a map change erases them, as RM2k's
+pictures) and `interpreter_message.s` (the two opcodes). A game without a
+`@window` assembles none of it.
+
+Things learned on the way, each in a comment where it bites:
+
+* Desert Nightmare's face behind the options is a **big picture** since
+  Chajá's copies that draw: the windows go over it, at the window's
+  tilemap where the big picture moved it (`MSG_SC`), and the layer above
+  they copy is the one it emptied.
+* **The vblank needs its own scratch**: `flush_video` can come in the
+  middle of the main loop's overlay, and sharing `SW_T`/`SW_U` with it
+  wrote the overlay all over far RAM (the first build hung on the
+  inventory).
+* **The menu shows its options twice in a row** (common 4, then 5): a
+  window shown again exactly as it is up costs nothing now (`SW_CHG`).
+* **A line's text tiles are the widest the game writes on that line of
+  that window**, so a narrow window would ink its neighbour with the
+  blank rest of them: the cells drawn are clipped to the window's room.
+
+**The menu, measured** (snes9x, the bulb picked up, room 4 of the
+warehouse): the options appear about 20 ticks after B (five lines, one a
+frame, the layer read in two vblanks, the rows up in one); the inventory
+about 30 more. A box over the menu ("You have no items.", "Really
+quit?") takes the windows off and they come back when it closes. Side by
+side with the original's pictures in
+`/shared/captures/2026-11-20-show-window/`.
+
+**The layer above beside a narrow window**: the case
+`window-beside-roofs` shows the options' window alone on map 4's street.
+Desert Nightmare paints what is above the hero into BG1 and moves the
+unreachable upper tiles below (`unreachable_above_below`), so the pixels
+beside the window came out the same even with the runtime's copy taken
+out —tried on maps 4, 10 and 37—. What the test checks then is the
+tilemaps: right of the window, on its rows, the window's tilemap carries
+the layer's entries, 18 of them tiles; with the copy taken out, red (18 of
+264 differ). Not shown on a game whose BG2 draws something there: none has
+a window.
+
+**What it costs** (`just space`, Desert Nightmare's release, against
+main's tools at `a462bc14` —Cardón's painted cells, Calandria's one font
+and Tijereta's number locks in— with only the two opcodes declared): bank
+$C0 2,118 → 645 bytes free, bank $C1 2,876 → 1,285, bank 0 4,167 →
+4,122, bank 1 1,181 → 1,151, far RAM 2,608 → 136 (`SW_MAP`, the screen's
+1,792 bytes, is most of it: it could hold only the span's rows), the text
+block +1,420 bytes, data banks 78 → 79 of 126. With Cardón's painted cells FAR3 alone no longer
+held the file (1,043 bytes over, before the one font freed some), so it
+is split: the vblank's half and the doors in FAR2, the composer and the
+composition in FAR3. The letters go through `compose_char_far`, the
+message window's own, inked with its colours.
+A game without a window assembles none of it: **every other game's ROM is
+byte for byte the same** as one built with main's tools plus the two
+opcodes —ABL's release and its ten test cartridges, the six other games'
+releases and Zounds' `exits`, 19 ROMs—, and so is every other game's
+`just space`, Zounds' included. Against main alone they cannot be: the
+two opcodes' entries in the dispatch are bank 0's.
+
+**Verified**: the event compiler's tests (five in `windows.rs`, two in
+`compile.rs`), `just test` (29), the crates' tests of events, bytecode,
+convert, mapdata and cartridge; the ports' `test_desert_nightmare_menu.py`
+(three: the menu's four screens against goldens in snes9x, the inventory
+the same in bsnes, and the layer above beside the window by its tilemap
+entries and its pixels —shown red with the copy taken out—); with the
+branch's tools after the last merge, the ports' `just boot`, 175 passed,
+and ABL's `just tests`, 1,723 passed and 2 skipped, `test_cores.py`
+among them. After merging Tijereta's: `just test` 29, the ports' `just
+boot` 178 passed, ABL's `just tests` 1,723 passed and 2 skipped; the
+five goldens did not move. **Not covered by any test**: a window under a camera that moves
+(the copy goes stale until the camera stops on the grid), a window on a
+map whose BG2 is its panorama (`PANO_ON` 3: nothing beside it), a System
+change with windows up, a window over a battle's return, two non-zero
+colours in windows up together (the second goes to the window's nearest),
+the gradient background of a System (drawn flat), and anything on real
+hardware —every vblank step asks `vblank_line` as the transparent
+message's do, but nothing was played on a console or in Mednafen—.
+
+**For a full version**: windows beside an open message (stage two, as
+objects, as the gold window); the keys, notes and maps screens (other
+window ids, or the window ids decoupled from the picture numbers); the
+fades the menu's `MovePicture`s ask for (the windows appear at once); a
+window that follows a moving camera; the cursor as the System's cursor
+rather than a `>`; a page's own text positions (`\x[n]`) so a grid can be
+one window; and the image-to-text prompt run on a real 20 USD plan, which
+was only counted here.
+
+**To merge** (main merged in: the-advocate `a462bc14`, Tijereta's number
+locks, and the ports, the book and this repository at theirs): the-advocate `mulita-show-window` (opcodes 0x59 and 0x5A, after
+Tijereta's 0x58), the ports'
+`mulita-show-window` (the goldens in their own commit), the book's
+`mulita-show-window`. Install `events`, `convert`, `mapdata`,
+`cartridge` and `rm2k-snes-audio` (every crate the bytecode's declaration
+reaches); the runtime is the checkout's.
