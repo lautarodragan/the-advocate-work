@@ -135,3 +135,66 @@ first used by Desert Nightmare's own menu
 its pictures read by the agent —an image-to-text done once, by looking at
 each picture, and kept as a reviewed patch, not run at build time— and
 replaced one to one by windows in a patch of the game's data.
+
+taro, translated, through Hornero, on what the image-to-text may cost a
+port:
+
+> "AI" is Claude Code, ChatGPT, whatever. It could also be done by hand by
+> a person, but packaging it in a prompt works too. If each port needs some
+> AI work, as long as it is trivial enough that someone can do it by
+> copy-pasting a prompt we give them, and it runs successfully on a 20 USD
+> plan without consuming a significant % of the 5-hour limit, we're fine.
+
+And Hornero, on the requirement: it is probably what the transparent
+message already does
+([`a-transparent-message-keeps-the-layer-above`](a-transparent-message-keeps-the-layer-above.md)):
+on a window's lines its plane carries the layer above; the columns beside a
+narrow framed window are cells with nothing of the window, which copy the
+layer's entries the same way.
+
+## Log (Mulita, 2026-11-20)
+
+Worktrees from the-advocate `16081af9` and the ports `1177cbc`, branches
+`mulita-show-window` in both and in the book; main merged in at
+`3043b395` / `09d9b0d` / `2d9160a` (Chajá's copies that draw).
+
+**Authoring: a comment in front of the picture.** Of the two ways, the
+`Comment` directive, placed **right before the `ShowPicture` it stands in
+for**: `@window <id> <x> <y> <w> <h> [plain]`, its lines the text, and the
+`ShowPicture` of picture `<id>` right after it is not compiled; an
+`ErasePicture` of `<id>` takes the window down too. That is the one-to-one
+replacement taro framed, and it keeps the fork running in RPG_RT with its
+pictures: RPG_RT skips the comment and shows the picture. A replacement
+at the patch level —a table "picture `Optionen2` is this window" read by
+the build— would leave the game's data alone, but it is a rule applied at
+build time, which is what the POC was asked not to be, and it cannot say
+"here a window and no picture" for a game written for PLUS. A comment
+alone, with no picture after it, is that. The coordinates are the
+console's 256x224, multiples of 8: RPG_RT never draws the window, so there
+is no RM2k position to keep.
+
+**Opcodes**: `OP_WINDOW` 0x58 and `OP_WINDOW_ERASE` 0x59, the next two on
+main: Hornero's 0x5A and 0x5B leave a gap while Tijereta's 0x58 and 0x59
+are not merged, and the declaration does not compile with one. If
+Tijereta merges first, these go to 0x5A and 0x5B (both sides read the
+declaration; nothing else names the numbers).
+
+**The tiles are the game's, per window id**: every `@window` of the game is
+measured, each id gets the widest text each of its lines ever has, two
+cell rows of it, and all ids together must fit the message window's 240
+text tiles (239: the last is the windows' background). Measured for
+Desert Nightmare's menu with the console's font: the options 19 cells
+(38 tiles), each item square 8 (16, six of them 96), the description 8 +
+21 + 18 (94), the cursor and the page arrows 2 each. It fits with a few
+tiles to spare. The keys screen —the same grid, with names like "Clothing
+store key", 11 cells— would not fit beside it in the same ids, which is
+why only the inventory is done.
+
+**The layer above beside a narrow window** is the transparent message's
+mechanism, rebuilt for a framed window rather than reused: `message_layer.s`
+carries the layer on the *message's* text lines, inside its pipeline. Here
+the screen's span from the first row a window covers to the last is
+composed whole in RAM —the layer's tilemap rows read from VRAM in the
+vblank, then each window's cells over them— and goes to the window's
+tilemap; HDMA points BG2 at it on those lines. Same rule: only with the
+camera on the 8-pixel grid, as it always is at rest.
