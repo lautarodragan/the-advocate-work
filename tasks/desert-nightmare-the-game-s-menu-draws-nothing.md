@@ -2,9 +2,10 @@
 name: "Desert Nightmare: the game's menu draws nothing"
 description: "B opens the game's own menu —Inventory, Keys, Notes, Maps, Quit, made of 320x240 pictures— and the console draws none of it: the map stays on screen while the menu takes the buttons"
 type: bug
-status: draft
+status: doing
+assignee: Mulita
 game: desert-nightmare
-agents: [Hurón]
+agents: [Hurón, Mulita]
 ---
 
 Seen by Hurón on 2026-11-19, at the-advocate `62b6e5cb` and the ports
@@ -47,3 +48,14 @@ fit the bank beside the inventory's; the notes themselves (`Notiz_Bild`)
 and the maps (`KarteG`) are drawings. Ways on: other window ids for those
 screens (a `@window` that stands in for a picture of another number), or
 the description lines rewrapped narrower.
+
+taro, on 2026-11-20, translated, on the build with the options and the
+inventory as windows:
+
+> In the menu, Inventory seems to work fine (and I could even use the
+> lightbulb), but Keys, Notes and Maps show nothing on screen. They do
+> seem to respond to input and play sounds.
+
+> I could play until the first monster shows up, lock it in the room, and
+> I _think_ I could go on, but I'm not sure because the Keys menu doesn't
+> work, and the door on the left side is locked.
