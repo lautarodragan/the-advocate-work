@@ -61,3 +61,36 @@ and with which colour index— from each game's `release` `mapdata.inc`:
 
 So one table colour-free, with the glyphs of both sets, and the colour put
 in by each writer, is possible.
+
+## One table, colour-free (2026-11-20, Calandria)
+
+Branch `calandria-one-font` in the-advocate and the ports. The font goes
+once, `font_pre0`–`7`, with per glyph, phase, row and cell two words: what
+it inks, and of that the glyph's —`font_prerender`, colour-free—; 104
+bytes a letter instead of 156. The glyph set is the screens' (console,
+`TL_FIGURE`'s blank, the ExFont halves) and then the boxes' Latin-1
+letters, which `compose_char` moves by `FONT_LETTERS_AT`. Each writer's
+colours are the converter's constants —`MSG_INK_k`, `SCR_INK_k`,
+`SLOT_INK_k` and their `_SHADOW`— and the formula, in `runtime/font_ink.s`:
+
+    plane pair = ((buf ^ SM) & ~ink) ^ ((glyph & (CM ^ SM)) ^ SM)
+
+A Rust test checks it against the old coloured tables, for five inks, every
+glyph, phase and row.
+
+Pitfalls of ca65 met on the way, so nobody meets them again: a `.define`
+with arguments followed by more of an expression reads the rest into its
+argument (the masks went wrong silently); a global constant read in an
+`.if` or `.repeat` inside a `.proc` has to be `::NAME`; and `.set` takes
+only constants, so a label plus an offset cannot be one.
+
+**Code space** decided the shape. Bank 1 had 117 B left in Vampires Dawn
+and 156 in Desert Nightmare, `FAR2` 70 in Desert Nightmare and 76 in
+Sunset, `FAR3` 90 in Zounds; only bank 0 had ~4 KB in every game. So:
+
+* the message window's `compose_char`, the one with a frame budget, is
+  unrolled with the colours as immediates, in bank 0 (+1.2 KB there);
+* the text layer —screens, slot bank's names, debug screen's wide stage—
+  shares one rolled routine, `tl_ink_column`, that reads the colours from
+  a table, `scr_ink` / `slot_ink`;
+* the gold window's digits and `msg_ink_char`'s grey read the window's.
