@@ -2,8 +2,8 @@
 name: "Still pieces painted into a painted map"
 description: "A converter feature behind a project knob: the still events of one appearance standing on a panorama fixed to the map are painted into the painted map, in RM2k's order, and lose their row; first for Desert Nightmare's towns"
 type: feature
-status: doing
-assignee: Cardón
+status: testing
+assignee: taro
 agents: [Cardón]
 game: desert-nightmare
 ---
@@ -117,3 +117,25 @@ divergences, Desert Nightmare's decisions, page and Known issues).
 Drafts: `desert-nightmare-events-wait-for-a-slot` (new); the roofs and the
 half speed to `testing`; the crowded lines, the `CallEvent` and the
 painted cells updated.
+
+**Done, to test (2026-11-19, Cardón).** Run with the branch's tools
+(`convert` and `wally` in `.local-tools`): `just test` in the-advocate, 29
+passed; `just boot` in the ports, 168 passed (Desert Nightmare's boot in
+both cores with its `.msu`, and the new
+`tests/test_desert_nightmare_towns.py`); ABL's `just tests`, 1722 passed,
+2 skipped, and `test_cores.py` alone, 24 passed. `just space`: Desert
+Nightmare 126 of 126 data banks, as Vampires Dawn, since the packing
+fills the ROM and sends the rest to the `.msu`; every other cartridge as
+before (their ROMs are byte for byte the same).
+
+Not covered by any test: a map whose pieces the trim leaves out first and
+Wally then does not paint (none here: every dropped piece on the 7
+trimmed maps was painted); bsnes for the town test; the night maps' tint
+and lights after a real arrival (the jump clears them); the console.
+Nothing delivered to `/shared/builds/`: that comes from merged `main`.
+
+**Branches**: the-advocate `cardon-painted-pieces` (`df6a7eb3`,
+`70c3dd8f`); the ports `cardon-painted-pieces` (`6cb07f1`); the book
+`cardon-painted-pieces` (`c6be027`). **To install when merging**:
+`just install convert wally`. The prototype `cardon-dn-towns`
+(`cb45d5a4`, worktree `~/scratch/cardon/dn-adv`) can be deleted.
