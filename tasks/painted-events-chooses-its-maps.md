@@ -31,3 +31,5 @@ twice— which the cache absorbs.
 maps painted (or the difference explained), every other game's ROMs byte
 for byte the same, and the converter saying which maps it did not paint
 and why.
+
+Related: [`the-trim-guesses-which-maps-go-painted`](the-trim-guesses-which-maps-go-painted.md) —with `true`, the trim has to know which maps wally will actually paint.
