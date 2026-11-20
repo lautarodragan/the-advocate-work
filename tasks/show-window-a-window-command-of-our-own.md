@@ -246,13 +246,16 @@ the layer's entries, 18 of them tiles; with the copy taken out, red (18 of
 a window.
 
 **What it costs** (`just space`, Desert Nightmare's release, against
-main's tools at `07a2e3af` with only the two opcodes declared): bank $C0
-2,118 → 645 bytes free, bank $C1 1,999 → 401, bank 0 4,004 → 3,959, bank 1
-156 → 126, far RAM 2,627 → 155 (`SW_MAP`, the screen's 1,792 bytes, is
-most of it: it could hold only the span's rows), the text block +1,384
-bytes, data banks 82 → 83 of 126. With Cardón's painted cells FAR3 alone
-no longer held the file (1,043 bytes over), so it is split: the vblank's
-half and the doors in FAR2, the composer and the composition in FAR3.
+main's tools at `afb9165d` —Cardón's painted cells and Calandria's one
+font in— with only the two opcodes declared): bank $C0 2,118 → 645 bytes
+free, bank $C1 3,019 → 1,428, bank 0 4,178 → 4,133, bank 1 1,285 → 1,255,
+far RAM 2,626 → 154 (`SW_MAP`, the screen's 1,792 bytes, is most of it:
+it could hold only the span's rows), the text block +1,384 bytes, data
+banks 78 → 79 of 126. With Cardón's painted cells FAR3 alone no longer
+held the file (1,043 bytes over, before the one font freed some), so it
+is split: the vblank's half and the doors in FAR2, the composer and the
+composition in FAR3. The letters go through `compose_char_far`, the
+message window's own, inked with its colours.
 A game without a window assembles none of it: **every other game's ROM is
 byte for byte the same** as one built with main's tools plus the two
 opcodes —ABL's release and its ten test cartridges, the six other games'
@@ -284,7 +287,8 @@ rather than a `>`; a page's own text positions (`\x[n]`) so a grid can be
 one window; and the image-to-text prompt run on a real 20 USD plan, which
 was only counted here.
 
-**To merge**: the-advocate `mulita-show-window` (opcodes 0x58 and 0x59:
+**To merge** (main merged in: the-advocate `afb9165d`, the ports and the
+book at their merges of the one font): the-advocate `mulita-show-window` (opcodes 0x58 and 0x59:
 renumber to 0x5A and 0x5B if Tijereta's land first), the ports'
 `mulita-show-window` (the goldens in their own commit), the book's
 `mulita-show-window`. Install `events`, `convert`, `mapdata`,
