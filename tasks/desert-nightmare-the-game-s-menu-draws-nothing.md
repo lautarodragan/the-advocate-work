@@ -29,3 +29,21 @@ where the game writes its safe codes.
 
 **To reproduce**: the stage `use_bulb` of `~/scratch/huron/dn/stages.py`;
 captures in `/shared/captures/2026-11-19-desert-nightmare/menu.png`.
+
+## The menu and the inventory, as windows (Mulita, 2026-11-20)
+
+Since [`show-window-a-window-command-of-our-own`](show-window-a-window-command-of-our-own.md)
+the options and the inventory are RPG Maker 2000 PLUS windows: common
+events 4, 5 and 7 forked with a `@window` comment in front of each picture
+(`desert-nightmare/patches/manual/commonevents/`, made from
+`desert-nightmare/windows/menu.toml` in the ports). The burning face
+behind them is a drawing, and is the big picture it was. **What is still
+drawn as nothing**: the keys, the notes and the maps screens (commons 9 to
+14), which are the same grid with other pictures. The keys and the notes'
+names and descriptions read as text too, but the windows' text tiles are
+counted per window id for the whole game, and the keys' longer names
+("Clothing store key", eleven cells) in the same ids as the items' do not
+fit the bank beside the inventory's; the notes themselves (`Notiz_Bild`)
+and the maps (`KarteG`) are drawings. Ways on: other window ids for those
+screens (a `@window` that stands in for a picture of another number), or
+the description lines rewrapped narrower.

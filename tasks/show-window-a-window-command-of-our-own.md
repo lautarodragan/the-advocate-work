@@ -198,3 +198,49 @@ composed whole in RAM —the layer's tilemap rows read from VRAM in the
 vblank, then each window's cells over them— and goes to the window's
 tilemap; HDMA points BG2 at it on those lines. Same rule: only with the
 camera on the 8-pixel grid, as it always is at rest.
+
+**Built.** the-advocate: `windows.rs` in the event compiler (the
+directive, the registry of tiles, the pictures it stands in for),
+`compile_window` and the erase in `compile.rs`, the converter's
+`window_slots` and `SHOW_WINDOW_SLOTS` in mapdata's emission, and
+`runtime/show_window.s` with hooks in `boot.s` (the main loop),
+`vblank.s` (`flush_video` with no message up), `messages.s`
+(`stamp_window_at`: a map, a big picture or a System loaded draws them
+again), `picture_far.s` (`pic_clear`: a map change erases them, as RM2k's
+pictures) and `interpreter_message.s` (the two opcodes). A game without a
+`@window` assembles none of it.
+
+Things learned on the way, each in a comment where it bites:
+
+* Desert Nightmare's face behind the options is a **big picture** since
+  Chajá's copies that draw: the windows go over it, at the window's
+  tilemap where the big picture moved it (`MSG_SC`), and the layer above
+  they copy is the one it emptied.
+* **The vblank needs its own scratch**: `flush_video` can come in the
+  middle of the main loop's overlay, and sharing `SW_T`/`SW_U` with it
+  wrote the overlay all over far RAM (the first build hung on the
+  inventory).
+* **The menu shows its options twice in a row** (common 4, then 5): a
+  window shown again exactly as it is up costs nothing now (`SW_CHG`).
+* **A line's text tiles are the widest the game writes on that line of
+  that window**, so a narrow window would ink its neighbour with the
+  blank rest of them: the cells drawn are clipped to the window's room.
+
+**The menu, measured** (snes9x, the bulb picked up, room 4 of the
+warehouse): the options appear about 20 ticks after B (five lines, one a
+frame, the layer read in two vblanks, the rows up in one); the inventory
+about 30 more. A box over the menu ("You have no items.", "Really
+quit?") takes the windows off and they come back when it closes. Side by
+side with the original's pictures in
+`/shared/captures/2026-11-20-show-window/`.
+
+**The layer above beside a narrow window**: the case
+`window-beside-roofs` shows the options' window alone on map 4's street.
+Desert Nightmare paints what is above the hero into BG1 and moves the
+unreachable upper tiles below (`unreachable_above_below`), so the pixels
+beside the window came out the same even with the runtime's copy taken
+out —tried on maps 4, 10 and 37—. What the test checks then is the
+tilemaps: right of the window, on its rows, the window's tilemap carries
+the layer's entries, 18 of them tiles; with the copy taken out, red (18 of
+264 differ). Not shown on a game whose BG2 draws something there: none has
+a window.
