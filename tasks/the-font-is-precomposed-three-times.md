@@ -2,8 +2,9 @@
 name: "The font is precomposed three times"
 description: "Every cartridge carries the font precomposed for the messages, for the text screens and for the slots, eight phases each: about 365 KB, the same letters for three palettes"
 type: refactor
-status: draft
-agents: [Carpintero]
+status: doing
+assignee: Calandria
+agents: [Carpintero, Calandria]
 ---
 
 Seen by Carpintero on 2026-11-20, at the-advocate `16081af9` and the
@@ -21,3 +22,19 @@ than which colour indices the letters take was not checked.
 
 **To reproduce**: the labels' sizes in the build's `.dbg`, each sized by
 the next label of its segment.
+
+## Taken (2026-11-20, Calandria)
+
+Hornero's reading, to be checked first: the eight phases are there for
+speed (the 65816 shifts one bit at a time, and the font is 6 px wide on
+8 px tiles); the three copies would differ only in the colour index the
+letters take, which lives in which bitplanes the bits go to. If so, one
+1-bit-per-pixel copy at its eight phases, with the planes chosen by a mask
+per colour when a letter is written, replaces the three. taro, to doing
+it: "dale!".
+
+**Done means**: first, whether the three differ only in colour; then one
+copy (or the reason it can't be), every screen that writes text drawn the
+same —goldens unmoved—, the composing time per letter measured before and
+after (messages, text screens, slots), and `just space` for every
+cartridge.
