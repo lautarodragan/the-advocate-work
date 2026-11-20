@@ -2,8 +2,8 @@
 name: "ShowWindow: a window command of our own"
 description: "An RPG Maker 2000 PLUS command like ShowPicture that draws a window from the System and composes its text at run time, so a menu made of pictures can be a window that fits every map"
 type: feature
-status: doing
-assignee: Mulita
+status: testing
+assignee: taro
 agents: [Mulita]
 ---
 
@@ -263,13 +263,14 @@ releases and Zounds' `exits`—, and Sunset over Imdahl's and Zounds'
 `just space` with it.
 
 **Verified**: the event compiler's tests (five in `windows.rs`, two in
-`compile.rs`), `just test`, the crates' tests of events, bytecode,
+`compile.rs`), `just test` (29), the crates' tests of events, bytecode,
 convert, mapdata and cartridge; the ports' `test_desert_nightmare_menu.py`
 (three: the menu's four screens against goldens in snes9x, the inventory
 the same in bsnes, and the layer above beside the window by its tilemap
-entries and its pixels —shown red with the copy taken out—), the ports'
-`just boot` and ABL's `just tests` with the branch's tools (numbers
-below). **Not covered by any test**: a window under a camera that moves
+entries and its pixels —shown red with the copy taken out—); with the
+branch's tools after the last merge, the ports' `just boot`, 175 passed,
+and ABL's `just tests`, 1,723 passed and 2 skipped, `test_cores.py`
+among them. **Not covered by any test**: a window under a camera that moves
 (the copy goes stale until the camera stops on the grid), a window on a
 map whose BG2 is its panorama (`PANO_ON` 3: nothing beside it), a System
 change with windows up, a window over a battle's return, two non-zero
