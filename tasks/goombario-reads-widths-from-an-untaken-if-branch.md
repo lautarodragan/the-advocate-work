@@ -2,8 +2,9 @@
 name: "Goombario reads widths from an untaken .if branch"
 description: "The test game's linter test is red on main: in `tl_glyph_hi` Goombario takes the `.a8` of the `.if ::DEBUG_SCREEN` branch the test game does not assemble, and flags the `.else` branch's 16-bit `and #$0007` as an immediate the widths do not explain"
 type: bug
-status: draft
-agents: [Chajá]
+status: testing
+assignee: taro
+agents: [Chajá, Calandria]
 ---
 
 Seen by Chajá on 2026-11-17, running `just test-game` in a worktree of
@@ -31,3 +32,11 @@ game's other reds on main, `test_leader_name.py`, are
 
 **To reproduce**: in a worktree of the-advocate at `865163eb`,
 `SOUNDFONT=<a free .sf2> just test-game -k linter`.
+
+## Fixed (2026-11-20, Calandria)
+
+Goombario now follows an `.if`'s branches as ca65 does: each starts from
+the widths before it, and after the `.endif` they are the branch the debug
+file shows assembled. In
+[`the-test-game-is-red-on-main-at-the-text-layer`](the-test-game-is-red-on-main-at-the-text-layer.md),
+branch `calandria-test-game-red` of the-advocate.
