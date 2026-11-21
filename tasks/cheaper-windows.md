@@ -87,3 +87,15 @@ the runtime draws as objects and composes its number into at run time, the
 nearest precedent for step 6 —see what
 [`show-window-a-window-command-of-our-own`](show-window-a-window-command-of-our-own.md)
 measured of it—.
+
+### 2026-11-21, Hornero: checked
+
+At the-advocate `b18e4d4f`, Chajá's check above still holds: no window
+background is a gradient through HDMA (steps 3 and 4), the System's
+cursor is still drawn on BG1 (`runtime/system_cursors.s`, step 5), and
+the menu's faces are where they were (step 7's other half). What moved is
+step 6's neighbour: ShowWindow
+([`show-window-a-window-command-of-our-own`](show-window-a-window-command-of-our-own.md),
+Mulita, `runtime/show_window.s`) is a window the runtime draws from the
+System's frame at run time, for Desert Nightmare's menu; the hero name
+screen it was meant to start on is still a wishlist.
