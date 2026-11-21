@@ -2,7 +2,7 @@
 name: "Maps with more objects on a line than the PPU draws"
 description: "Nothing tells today when a map puts more than 32 objects or 34 slivers on a line; a sweep in the harness over every map of every game, and the PPU's own flags counted in the debug screen"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Mulita]
 ---

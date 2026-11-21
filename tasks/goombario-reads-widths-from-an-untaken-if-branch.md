@@ -2,7 +2,7 @@
 name: "Goombario reads widths from an untaken .if branch"
 description: "The test game's linter test is red on main: in `tl_glyph_hi` Goombario takes the `.a8` of the `.if ::DEBUG_SCREEN` branch the test game does not assemble, and flags the `.else` branch's 16-bit `and #$0007` as an immediate the widths do not explain"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Chajá, Calandria]
 ---

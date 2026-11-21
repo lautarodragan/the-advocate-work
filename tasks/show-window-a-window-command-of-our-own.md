@@ -2,7 +2,7 @@
 name: "ShowWindow: a window command of our own"
 description: "An RPG Maker 2000 PLUS command like ShowPicture that draws a window from the System and composes its text at run time, so a menu made of pictures can be a window that fits every map"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Mulita]
 ---
