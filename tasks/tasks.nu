@@ -176,16 +176,19 @@ def "main check" [
         }
         # A paragraph that opens with a bold entry —`**Checked on
         # 2026-10-16** by Cardón:`, `**2026-10-16, Hurón**`— is an entry
-        # without a heading. `**Done** means` is the definition's, and a
-        # bare `**Measured**` or `**Since <date>**` is usually the finding
+        # without a heading, and so is a bold lead followed by `(<agent>,
+        # <date>)`. `**Done** means` is the definition's, and a bare
+        # `**Measured**` or `**Since <date>**` is usually the finding
         # itself. So is the first paragraph under a bare `## Defined`, which
         # dates the definition: `**2026-10-16, Hurón**, checked against…`.
-        let b = $text | parse --regex '^\*\*(?<lead>[^*]+)\*\*'
+        let b = $text | parse --regex '^\*\*(?<lead>[^*]+)\*\*(?<paren> \([^)]*\))?'
         let opens_defined = $defined_next
         if ($text | str trim | is-not-empty) { $defined_next = false }
         if $log_at < 0 and ($b | is-not-empty) and not $opens_defined {
           let lead = $b.0.lead | normalize
-          if (not ($lead =~ '\btaro\b') and ($lead =~ $"^($date)"
+          let paren = $b.0.paren? | default "" | normalize
+          if (not ($lead =~ '\btaro\b') and (($lead =~ $date and not ($lead =~ '^since\b'))
+              or ($paren =~ $date and $paren =~ $"\\b\(($agent_re)\)\\b")
               or $lead =~ $"^\(($agent_re)\)\\b"
               or $lead =~ '^(checked|verified|reviewed|measured again|seen again)\b')) {
             $problems = $problems | append {line: ($l.index + 1), heading: ($text | str substring 0..60), why: "a bold entry, above ## Log"}
