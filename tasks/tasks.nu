@@ -146,8 +146,9 @@ def all_tasks [] {
 # `Defined` with a date or an agent after it (a bare `## Defined` is the
 # definition's own heading), when it carries a date, or when it starts
 # with an agent's name or ends with one alone in parentheses —`(Cardón)`—.
-# The date and the agent do not count in a heading that names taro: taro's words and
-# decisions define the task.
+# The date and the agent do not count in a heading that names taro: taro's
+# words and decisions define the task. The older tasks' `#` headings count
+# too.
 def "main check" [
   --status (-s): string = "*"
 ] {
@@ -195,16 +196,20 @@ def "main check" [
           }
           continue
         }
-        let h = $text | parse --regex '^(?<hashes>#{2,6}) (?<title>.*)$'
+        let h = $text | parse --regex '^(?<hashes>#{1,6}) (?<title>.*)$'
         if ($h | is-empty) { continue }
         let title = $h.0.title | normalize
         $defined_next = $h.0.hashes == "##" and $title == "defined"
         if $log_at >= 0 {
-          if $h.0.hashes == "##" {
-            $problems = $problems | append {line: ($l.index + 1), heading: $text, why: "a ## section after ## Log"}
+          if ($h.0.hashes | str length) <= 2 {
+            $problems = $problems | append {line: ($l.index + 1), heading: $text, why: "a section after ## Log"}
           }
           continue
         }
+        # The older tasks' `# Status` is a line of where the task stands
+        # —"Noted, not started"—: when it is a step's history instead, that
+        # is judged by reading it.
+        if $h.0.hashes == "#" and $title == "status" { continue }
         let by_taro = $title =~ '\btaro\b'
         let entry = ($title =~ $word
           or $title =~ '^defined\b.+'
