@@ -2,8 +2,10 @@
 name: "Desert Nightmare's own message frame"
 description: "Desert draws its messages with two pictures of its own, TextboxInnen and TextboxRahmen; today's release does not draw them in 157 maps"
 type: bug
-status: todo
+status: doing
+assignee: Hurón
 author: hornero
+agents: [Hurón]
 ---
 
 Seen by Calandria on 2026-10-11, in passing
@@ -25,6 +27,21 @@ maps they are was not compared.
 To todo, with Tijereta's recommendation: the frame becomes the game's window look —its System graphic— through the port's manual patches, so that the console's own window draws it, instead of drawing `TextboxInnen` and `TextboxRahmen` as pictures.
 
 **Done**: Desert Nightmare's messages are drawn in a window with its own frame on every map, and `degradations.json` no longer lists those two pictures as not drawn. **First step**: how the common events show the two pictures around a message, and whether a System made from them fits RM2k's window layout.
+
+taro, on 2026-11-21, translated (captures in
+`/shared/bug-reports-etc/dn-broken-text-window/`):
+
+> dn-broken-text-window: what the folder says. they're 3 different cases.
+> I think there are more
+
+The game's own box as it shows today: its frame cut into lines across
+the screen and the text missing or cut, over map 24's office and two
+other rooms —the frame's 93 objects over the PPU's 32 a line, measured by
+Calandria on 2026-11-20 (see the log)—.
+
+![The office: the frame in lines, the text cut](images/desert-nightmare-own-message-frame/broken-text-window-001.png)
+![Another room: the frame in lines, no text](images/desert-nightmare-own-message-frame/broken-text-window-002.png)
+![A third: "Poster fragment" and the frame in lines](images/desert-nightmare-own-message-frame/broken-text-window-004.png)
 
 ## Log
 
