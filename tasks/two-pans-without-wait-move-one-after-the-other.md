@@ -4,6 +4,7 @@ description: "A PanScreen without Wait followed by another on the other axis pan
 type: bug
 status: testing
 assignee: taro
+author: taro
 agents: [Tijereta]
 game: [zounds, frozen-world]
 ---

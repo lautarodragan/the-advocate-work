@@ -3,6 +3,7 @@ name: "A page waiting on a pan goes on two frames late"
 description: "After a PanScreen with a wait, the console runs the next command two ticks after the camera's last move; easyrpg's reading says the same frame. One or two frames, and not checked against RPG_RT"
 type: bug
 status: draft
+author: tijereta
 ---
 
 Seen by Tijereta on 2026-11-20, doing
