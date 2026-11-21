@@ -71,7 +71,9 @@ cells.
 * **Test** in ABL on the debug map's full party, a poisoned actor and a
   fallen one, against `render` and a golden; red before.
 
-## Done, as it went
+## Log
+
+### Tijereta: done, as it went
 
 The-advocate `fbb1a45f` on `tijereta-menu-conditions`: as planned.
 
@@ -96,7 +98,7 @@ The-advocate `fbb1a45f` on `tijereta-menu-conditions`: as planned.
   turning into Normal after the elixir; Kersh's Poison on the skills
   screen with its gradient.
 
-## Tests and goldens
+#### Tests and goldens
 
 New in ABL, `tests/rpgmaker/test_menu_conditions.py`: on the debug map's
 full party, Talan poisoned and blind, Kersh poisoned, Core at zero HP —
@@ -125,7 +127,7 @@ bank 1 does not move (`test-msu` 856 B); the code is in FAR3, and the
 skills screen's part left FAR2 when Sunset's overflowed by two bytes.
 ABL `release`'s gaps 10,058 → 9,379 B, far RAM 276 B free.
 
-## Left
+#### Left
 
 * The battle's status line still says Normal or the dead one: Mulita's
   battle half lists it, and the book's `what-the-battle-menu-does-not-model`.
@@ -135,12 +137,12 @@ ABL `release`'s gaps 10,058 → 9,379 B, far RAM 276 B free.
 * ABL `release`'s menu bank has no tile left for names: the draft
   [`abl-s-menu-bank-has-no-tile-left-for-names`](abl-s-menu-bank-has-no-tile-left-for-names.md).
 
-## What to install when merging
+#### What to install when merging
 
 `just install screens mapdata cartridge` in the-advocate —the runtime
 comes with the merge—.
 
-## Branches and what was run
+#### Branches and what was run
 
 Branches `tijereta-menu-conditions`: the-advocate `fbb1a45f` (the code),
 `6f2e9743` (the test game's golden), `3f2c7979` (`menu_state_of`'s Z),
@@ -158,7 +160,7 @@ golden), 3 passed. Captures, side by side, in
 `/shared/captures/2026-11-01-menu-conditions/`. Not run: `just lint`'s
 clippy.
 
-## Red after merging with the others, and fixed
+### Red after merging with the others, and fixed
 
 Hornero's `hornero-integrate` (main `d950ccc5` + Mulita + this branch) had
 ABL's bank check red on `test-faces`: `menu_state_ink` read its colours

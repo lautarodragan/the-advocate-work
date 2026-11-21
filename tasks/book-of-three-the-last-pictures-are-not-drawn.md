@@ -27,7 +27,9 @@ covered them.
 `test_the_end`, plays up to them; it does not photograph map 72's last
 scene because it is black.
 
-## Defined (2026-10-16, Carpintero)
+## Defined
+
+On 2026-10-16, by Carpintero.
 
 The game's ending is missing: part of the whole game. **Done**: maps 69
 and 72 show `credits3`, `quote1`–`quote4` and `theend` with their moves,
@@ -38,7 +40,9 @@ one at a time as each is shown. **First step**: what else those two maps
 draw, and how many tiles each picture takes alone. Related:
 [`book-of-three-the-map-item-shows-nothing`](book-of-three-the-map-item-shows-nothing.md).
 
-## Chajá, 2026-10-19
+## Log
+
+### 2026-10-19, Chajá: the work
 
 Taken together with
 [`book-of-three-the-map-item-shows-nothing`](book-of-three-the-map-item-shows-nothing.md):

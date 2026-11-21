@@ -48,7 +48,9 @@ red before. **First step**: `skill_usable` in rm2k-snes-battle's
 `rules.rs`, and whether the stage can still carry the skill and only mark
 it grey.
 
-## Doing
+## Log
+
+### 2026-10-20, Cardón: doing
 
 By Cardón, from 2026-10-20, with the-advocate `8f290c39` and the ports
 `68bf55b`; branches `cardon-map-only-skills` in both and in the book.

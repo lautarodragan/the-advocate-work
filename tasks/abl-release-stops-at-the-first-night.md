@@ -40,7 +40,9 @@ plays—, is section 3 of the research.
 **How to see it**: a cartridge in `rm2k-snes.toml` with every map
 reachable from 4 and the fork of 108 set aside; the research says how.
 
-### Hornero, 2026-10-14: release with every map, the next stop
+## Log
+
+### 2026-10-14, Hornero: release with every map, the next stop
 
 With the four small stops and the space fixed (Tijereta, Chajá,
 Carpintero, Calandria), taro asked to carry the whole game in `release`.
@@ -64,7 +66,7 @@ really name, if that is below 255 —to measure first—. After that, the
 space has to be measured on the real `release`, which carries the cases
 too.
 
-### Hornero, 2026-10-14: the whole game builds, on a branch
+### 2026-10-14, Hornero: the whole game builds, on a branch
 
 taro: go on without investing in the stops, with a temporary hard-code.
 On the `whole-game` branch of the-advocate (`9c9b0f66`) and of the ports
@@ -81,7 +83,7 @@ Delivered to taro as `2026-10-14-74eb754-9c9b0f66`. ABL's suite: 11 red of
 and tram talks, the tram scene, three of the music ceilings, and the
 versioned patches—.
 
-### Hornero, 2026-10-14: in main
+### 2026-10-14, Hornero: in main
 
 The `whole-game` branches merged into main (the-advocate `0255f8f7`, ports
 `a6823c8`): `release` is the whole game. ABL's suite 1514 green and 2

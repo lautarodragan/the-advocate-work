@@ -18,7 +18,9 @@ ports `42f70e8` in Mesen2, left captures named after what they show, in
 - `missing-graphic-1.png` and `-2.png`: a graphic shown as a white
   rectangle, by the stairs and beside the hero in a dark room.
 
-## What each capture is (Cardón)
+## Log
+
+### Cardón: what each capture is
 
 None of the three comes from the painted still pieces. Each one was matched
 against the panoramas and played again in the ROM and in EasyRPG:
@@ -47,7 +49,7 @@ against the panoramas and played again in the ROM and in EasyRPG:
   later page's character had no pose bank: the row drew the page's pose of
   the spinning character, which on those CharSets is a white cell.
 
-## The fixes (Cardón)
+#### The fixes
 
 Three commits in the-advocate, branch `cardon-dn-walls`:
 
@@ -70,7 +72,7 @@ The book: the divergence "Pictures drawn into the map" says it.
 The ports' `tests/test_desert_nightmare_scenes_and_items.py` plays each
 capture's state and was red on main on all three.
 
-## Measured (Cardón)
+#### Measured
 
 - ABL's suite with the branch's tools: 1723 passed, 2 skipped; no golden
   moved, although every ROM changes (the runtime). `abl.sfc` sha1
@@ -91,7 +93,7 @@ capture's state and was red on main on all three.
 - Captures, taro's against the ROM before and after and EasyRPG, in
   `/shared/captures/2026-11-20-dn-walls/`.
 
-## What no test covers
+#### What no test covers
 
 - The pictures taken out of Desert Nightmare's maps 28, 95 and 171 and
   Sunset's 51: read in the converter's log and the maps' commands, not
@@ -103,14 +105,14 @@ capture's state and was red on main on all three.
 - Jake under the table's edge is tested on his row's priority, not on
   pixels; the capture shows it.
 
-## Found and not fixed
+#### Found and not fixed
 
 - [`desert-nightmare-the-warehouse-is-darker`](desert-nightmare-the-warehouse-is-darker.md):
   map 21's light is the scene's, not the room's; a line in the port's
   "Known issues".
 - [`the-test-game-is-red-on-main-at-the-text-layer`](the-test-game-is-red-on-main-at-the-text-layer.md).
 
-## Merging
+#### Merging
 
 Install `wally`, `mapdata` and `convert`; the runtime changes too
 (`runtime/event_pages.s`). Branches `cardon-dn-walls` in the-advocate, the

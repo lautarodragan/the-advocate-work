@@ -38,6 +38,10 @@ on each box of the opening. Captures —each box up, and box 1 next to the
 same screen a tick after it closes— are in the shared folder,
 `captures/2026-11-16-wait-ceiling/`.
 
+## Log
+
+### 2026-11-16, Aguará: not in the test game
+
 **Not in the test game** (Aguará, 2026-11-16): its terrace, map 9
 —flattened, mode 3, a panorama that scrolls on its own and a transparent
 box in the middle, `test-game/tests/test_terrace.py` in the-advocate—
@@ -47,6 +51,8 @@ something ABL's map 1 has and the terrace has not: a camera far into a
 100x100 map, its rain, a ChipSet whose cells near the screen's edges are
 not blank, or what VRAM holds past the window's tilemap. Captures of the
 terrace in the shared folder, `captures/2026-11-16-test-game-pano/`.
+
+### 2026-11-16, Aguará: not the rain, and on BG2
 
 **Not the rain, and on BG2** (Aguará, 2026-11-16, measuring
 [`the-test-game-s-terrace-in-the-rain`](the-test-game-s-terrace-in-the-rain.md)).

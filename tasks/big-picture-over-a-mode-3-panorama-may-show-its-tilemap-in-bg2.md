@@ -34,12 +34,9 @@ The header of `big_picture.s` also says BG2's tiles are above `$5000` in
 every layout, which this layout contradicts: see
 [`stale-comments-on-the-vram-layouts`](stale-comments-on-the-vram-layouts.md).
 
-**Checked on 2026-10-16** at the-advocate `759aa0ba`, by Cardón: the code
-is as described and nothing has reproduced it. The last paragraph is
-stale: `acf3153c` (2026-10-15) fixed the header of `big_picture.s`, which
-now says BG2's base is at `$4000` in "panorama" and links this draft.
+## Defined
 
-## Defined (2026-10-16, Carpintero)
+On 2026-10-16, by Carpintero.
 
 Suspected by reading; no game is known to hit it. **Done**: a test page
 —in the test game, which can make the map it needs— that shows a big
@@ -47,7 +44,16 @@ picture over a map converted with the "panorama" layout; if it shows
 the pattern, the fix (a blank BG2 tile for that layout) with the test red
 before. Becomes `todo` if a game shows it.
 
-## 2026-10-19, Chajá: shown once, not seen
+## Log
+
+### 2026-10-16, Cardón: checked
+
+**Checked on 2026-10-16** at the-advocate `759aa0ba`, by Cardón: the code
+is as described and nothing has reproduced it. The last paragraph is
+stale: `acf3153c` (2026-10-15) fixed the header of `big_picture.s`, which
+now says BG2's base is at `$4000` in "panorama" and links this draft.
+
+### 2026-10-19, Chajá: shown once, not seen
 
 The Book of Three's map item —common event 23, which shows the big
 `bo3map` on any map since the-advocate's branch `chaja-map-item`— was

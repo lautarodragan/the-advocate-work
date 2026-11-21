@@ -17,7 +17,7 @@ Repair, Sern's Weapon Forging and Emily's Change Tape (common events 42,
 
 ## Log
 
-### Mulita, 2026-10-12: done, to testing, with two of ABL's four
+### 2026-10-12, Mulita: done, to testing, with two of ABL's four
 
 On the same branches as [`the-skills-screen`](the-skills-screen.md), and
 on top of it. A on an enabled switch skill does what easyrpg's

@@ -26,7 +26,19 @@ A decision for taro before starting: the 14 `debug-*` of
 Are they pending or permanent? If they are permanent, the list should
 tell them apart, so they don't remain as debt.
 
-## Checked on 2026-10-16 (Carpintero)
+## From `goldens-of-the-neon-vipers-playthrough`
+
+On 2026-10-20.
+
+That task was closed as a duplicate of this one. Its warning still applies
+to the vipers shots: the game started through "Begin the Story" has
+DummyHero as leader (actor 10, no graphic), so Talan does not appear in
+the shots of `test_playthrough_vipers_golden.py`; the line that solves it
+elsewhere is `set_party(14)` before the final shots.
+
+## Log
+
+### 2026-10-16, Carpintero: checked
 
 Still open. The list is `abl/tests/golden/playthrough/pending.txt` in
 the-advocate-ports (it was `rom/pruebas/golden/playthrough/pendientes.txt`),
@@ -36,15 +48,7 @@ the vipers' shots, which
 [`goldens-of-the-neon-vipers-playthrough`](goldens-of-the-neon-vipers-playthrough.md)
 also asked for.
 
-## From `goldens-of-the-neon-vipers-playthrough` (2026-10-20)
-
-That task was closed as a duplicate of this one. Its warning still applies
-to the vipers shots: the game started through "Begin the Story" has
-DummyHero as leader (actor 10, no graphic), so Talan does not appear in
-the shots of `test_playthrough_vipers_golden.py`; the line that solves it
-elsewhere is `set_party(14)` before the final shots.
-
-## Reviewed (Hornero, 2026-11-17)
+### 2026-11-17, Hornero: reviewed
 
 `abl/tests/golden/playthrough/pending.txt` in the ports has 145
 entries: 26 `debug-*`, which the list already marks as "without a golden

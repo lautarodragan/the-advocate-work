@@ -189,7 +189,9 @@ tells apart two battlers with the same drawing.
   non-lossy kind. What would be missing to emit is which graphic was treated that way in each
   map, which is little more than repeating the list.
 
-# Checked on 2026-10-16
+## Log
+
+### 2026-10-16, Cardón: checked
 
 At the-advocate `759aa0ba` and the ports `4b2d41e`, by Cardón. Phase 1
 stands as described and phase 2 has not started: the converter still
@@ -212,7 +214,7 @@ followed:
   cut, events left out—. It is not versioned and it is not the desired
   state phase 2 asks for, but it is the list of what is lost, by place.
 
-## Checked (2026-10-20, Chajá)
+### 2026-10-20, Chajá: checked
 
 Phase 2 has still not started for what the converter decides. What moved
 since the check above:

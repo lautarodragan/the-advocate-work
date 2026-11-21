@@ -60,7 +60,12 @@ same thing before, start from there and do not measure it again.
 
 ## While you work
 
-* **The task is written while working**, not at the end.
+* **The task is written while working**, not at the end, **and what you
+  do goes in its `## Log`**, the task's last section: one entry per step
+  at its end, `### <date>, <your name>: <what>`, with its own subheadings
+  at `####`. Above the log stays what defines the task; do not open a
+  `## Done` or `## Checked` there. See "A task's log" in this repo's
+  README, and `nu tasks/tasks.nu check`.
 * What is verifiable and what is a matter of judgement, in separate
   commits; the assignment usually says how to split them.
 * **A new test is shown red** before the fix.

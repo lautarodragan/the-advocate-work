@@ -25,17 +25,9 @@ milestone (or of `lava`), with
 `/shared/captures/2026-10-19-book-of-three-route-graphics/map46-window-block.png`
 as the capture.
 
-## Checked (2026-10-20, Tijereta)
+## Defined
 
-Not looked at on screen. A lead, not checked: in The Book of Three's
-release build of the ports `68bf55b`, map 46 is one of the maps whose
-message arrow "stays in the window's cells" because its eight sprite
-palettes are taken —see
-[`the-bare-window-s-arrow-keeps-its-band-on-maps-with-eight-sprite-palettes`](the-bare-window-s-arrow-keeps-its-band-on-maps-with-eight-sprite-palettes.md)—,
-and it is the map whose route-dressed characters are left out for its
-palettes. Maps 21 and 32, without the block, could be compared on that.
-
-## Defined (2026-10-20, Chajá)
+On 2026-10-20, by Chajá.
 
 Reproduced on the-advocate `3bc68ac4` and the ports `b5cfc1e`, snes9x,
 case `milestone-rescue`: 135 ticks after the step, when Fflewddur's "Look!
@@ -70,7 +62,19 @@ appear before its last line is up. Map 46's rescue scene has no hole.
 set when it is too late; `flush_video` does not finish a window whose last
 line is still waiting.
 
-## Done (2026-10-20, Chajá)
+## Log
+
+### 2026-10-20, Tijereta: checked
+
+Not looked at on screen. A lead, not checked: in The Book of Three's
+release build of the ports `68bf55b`, map 46 is one of the maps whose
+message arrow "stays in the window's cells" because its eight sprite
+palettes are taken —see
+[`the-bare-window-s-arrow-keeps-its-band-on-maps-with-eight-sprite-palettes`](the-bare-window-s-arrow-keeps-its-band-on-maps-with-eight-sprite-palettes.md)—,
+and it is the map whose route-dressed characters are left out for its
+palettes. Maps 21 and 32, without the block, could be compared on that.
+
+### 2026-10-20, Chajá: done
 
 the-advocate `0b8847c0`, on the branch `chaja-lava-tunnels`. `upload_line` moved to FAR3 and reads the
 scanline first: from `LINE_LATEST` (line 246) on, it leaves the line for

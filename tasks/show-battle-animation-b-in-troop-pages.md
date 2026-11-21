@@ -36,7 +36,9 @@ at the cost of the animation; drawing one needs the battle scene to play an
 animation on a monster, which it does not do for anything today (see
 [`animations-in-battle`](animations-in-battle.md), for the skills').
 
-## Done (Tijereta, 2026-10-14): accepted as a debt
+## Log
+
+### 2026-10-14, Tijereta: done, accepted as a debt
 
 From the-advocate `14e200fc` and the ports `f775b66`, branch
 `tijereta-bot-fixes` in both. taro:

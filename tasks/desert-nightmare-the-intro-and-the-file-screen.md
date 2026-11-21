@@ -47,12 +47,14 @@ This task also takes over
 [`desert-nightmare-start-menu-over-garbage`](desert-nightmare-start-menu-over-garbage.md):
 taro sees the background fine now.
 
-## Done (2026-11-20, Aguará)
+## Log
+
+### 2026-11-20, Aguará: done
 
 Branches `aguara-dn-intro-menu` in the-advocate, the ports and the book.
 Captures in `/shared/captures/2026-11-20-dn-intro-and-file-screen/`.
 
-### 1. The start menu: the pictures, shown
+#### 1. The start menu: the pictures, shown
 
 **Why they were not shown**: none of the suspects —VRAM, slots, the
 converter dropping them for size—. `Introauswahl_1` to `_3` are three
@@ -91,7 +93,7 @@ wrong in their own way, the draft
 [`desert-nightmare-the-locks-pictures-are-drawn-into-their-rooms`](desert-nightmare-the-locks-pictures-are-drawn-into-their-rooms.md)
 and a Known issues line.
 
-### 2. The file screen's cursor
+#### 2. The file screen's cursor
 
 The cursor's tiles and tilemap were right —VRAM compared word for word
 against the save screen opened in game, which drew it whole—: the
@@ -108,7 +110,7 @@ and one around the header: so does A Blurred Line's (its golden
 `suite/save.png`), the port's screen as it was built. taro calls the layout
 fine, so it stays.
 
-### 3. The intro
+#### 3. The intro
 
 **The original** (2015 RPG_RT under Wine): the title fades in and out over
 black, then the black picture fades out and the whole conversation is
@@ -125,7 +127,7 @@ reloads (`big_fade_outs` in the events compiler). The messages still go
 without the game's box: that is the Known issue "Most messages have no
 box", Calandria's.
 
-### Tests
+#### Tests
 
 * the-advocate: `drawings_under_one_number_are_drawn_in_common_and_each_shows_its_own`
   (convert), `a_part_of_a_drawing_in_the_map_goes_with_the_map` and
@@ -138,7 +140,7 @@ box", Calandria's.
   others were looked at). The load screen only in snes9x: the bsnes core
   does not expose the SRAM.
 
-### The suites
+#### The suites
 
 With the tools of the-advocate `d9ff30ba` (this branch): ABL's `just
 tests`, 1723 passed and 2 skipped, no golden moved —`abl.sfc` sha256
@@ -156,7 +158,7 @@ Three 5, Sunset Over Imdahl 1, the others none. The ones looked at in
 Vampires Dawn's map 2 are followed by their own `ErasePicture`, so there
 it changes nothing. None of the others was looked at on screen.
 
-### After merging main with Cardón's `cardon-dn-walls`
+#### After merging main with Cardón's `cardon-dn-walls`
 
 His scene rule and the parts' compose with his winning: a number one of
 whose shows his rule leaves out is not split (`daf3e4b0`). Then, from

@@ -33,7 +33,9 @@ moves with it.
 **What to decide**: which ones go, by how often each is read; the saving
 is the sum of what is moved, 60–100 B by inspection.
 
-## Defined (2026-10-16, Carpintero)
+## Defined
+
+On 2026-10-16, by Carpintero.
 
 An optimisation: nothing is blocked until a new pointer is needed. Then
 it becomes `todo`. **Done**: `just space` shows the zero page with room
@@ -43,7 +45,9 @@ and `test_cores.py` are green. **First step**: the per-label count of
 accesses, weighted by how often each routine runs; needs the `BSS` room
 of [`move-the-dma-only-buffers-out-of-bank-0`](move-the-dma-only-buffers-out-of-bank-0.md) first.
 
-## Reviewed (Hornero, 2026-11-17)
+## Log
+
+### 2026-11-17, Hornero: reviewed
 
 The last 3 B went on 2026-10-17 (`cell_mask`, 9fea198a; `twins_here`,
 5b3c2a9f); nothing has been evicted since, and on 2026-11-17 `pick_first`

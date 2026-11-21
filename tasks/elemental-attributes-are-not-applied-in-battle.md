@@ -32,7 +32,9 @@ the data: The Book of Three (66 of 80 enemies), El Dorado and Frozen World
 the method.
 [What the compiler ignores silently](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-14-what-the-compiler-ignores-silently.html).
 
-## Chajá, 2026-10-15
+## Log
+
+### 2026-10-15, Chajá: the work
 
 Worktrees `chaja-attributes` in the three code repos, from the-advocate
 `497be031`, ports `0ddf815`, docs `6ae64a9`.
@@ -60,7 +62,7 @@ there as well.
   Cut D, Flame D). Red with main's tools (Manta's hit 81 where the
   attribute leaves 44; MinorFire 34 where it leaves 15), green with these.
 
-## Verified, and what to install
+#### Verified, and what to install
 
 With the tools of `chaja-attributes` (`cartridge battle mapdata convert`
 installed locally): `just test`, `just rust-test`, ABL's `just tests` and

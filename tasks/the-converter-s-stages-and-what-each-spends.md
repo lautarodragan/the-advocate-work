@@ -31,6 +31,8 @@ change; if the order is found wrong somewhere, a draft.
 
 ## Log
 
+### 2026-11-19, Carpintero: the work
+
 **2026-11-19, Carpintero.** From the-advocate `4f38ea03` and the book's
 `2a7d52a`, branch `carpintero-converter-stages` of the-advocate-docs. The
 order read from `convert::run` (`convert.rs` in rm2k-snes-convert),

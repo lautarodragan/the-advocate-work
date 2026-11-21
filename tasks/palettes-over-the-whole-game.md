@@ -28,7 +28,9 @@ place where it is decided which color is lost: see "`tools/snes/voodoo/` no deci
 in `AGENTS.md`. Doing it requires looking at the whole game at once and not at a cartridge,
 which is what makes it different from what Adeleine does today.
 
-## Checked on 2026-10-16 (Carpintero)
+## Log
+
+### 2026-10-16, Carpintero: checked
 
 Still not tackled, but its motivation moved: the cartridge is ExHiROM, 8 MB,
 since 2026-10-01 (the book's `decisions/the-cartridge-goes-to-8-mb.md`), not

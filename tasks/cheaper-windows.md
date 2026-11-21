@@ -52,7 +52,9 @@ trusted), how long `irq_music` takes, the battle windows' gradient groups,
 and what a smooth gradient looks like next to RM2k's bands: see the
 research's "What was not measured".
 
-## Checked on 2026-10-16
+## Log
+
+### 2026-10-16, Cardón: checked
 
 At the-advocate `759aa0ba`, by Cardón. What is done of the steps, each
 by its own task:
@@ -74,7 +76,7 @@ by its own task:
 `just arrancan`, in the steps above, is `just boot` since the ports'
 translation.
 
-## Checked (2026-10-20, Chajá)
+### 2026-10-20, Chajá: checked
 
 The check above still holds at the-advocate `8f290c39`: steps 3, 4 and 6
 have no commit, and the cursor is still drawn on BG1. Two things moved:

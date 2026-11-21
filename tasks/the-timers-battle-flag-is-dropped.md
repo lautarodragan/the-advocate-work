@@ -21,10 +21,14 @@ sets it.
 **How to see it**: parameter 4 of code 10230 in that command; changing it
 leaves `events.json` unchanged.
 
-## Defined (2026-10-16, Carpintero)
+## Defined
+
+On 2026-10-16, by Carpintero.
 
 Still dropped at the-advocate `f4709d0b` (`compile.rs`, "no battles").
 One command in ABL, the quarry's timer. **Done**: a timer without the
 flag pauses during a battle and one with it keeps counting, with a ROM
 test of each. **First step**: what the ROM's timer does in a battle
 today.
+
+## Log

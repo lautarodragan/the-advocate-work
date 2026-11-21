@@ -36,7 +36,9 @@ ending or teleporting does not leak; one that leaks makes the maps it
 can lead to positive too —or, simplest, the whole game—. How common each
 pattern is in the ports is the first thing to count.
 
-## Reviewed (Hornero, 2026-11-17)
+## Log
+
+### 2026-11-17, Hornero: reviewed
 
 Since 2026-11-14 the runtime carries the layer above under a transparent
 window (`runtime/message_layer.s`; the book's "The layer above, carried"):

@@ -44,7 +44,9 @@ exact form the compiler refuses —which operand of `ControlSwitches` and
 `ControlVars`, why the boxes of 29 and 39, which target of the `MoveEvent`,
 which `TileSubstitution`—, starting with the two autostarts.
 
-## Checked (2026-10-20, Chajá)
+## Log
+
+### 2026-10-20, Chajá: checked
 
 Measured with the global tools, installed from the-advocate `8f290c39`,
 over the `events-request.json` of the ports' `release` built that morning

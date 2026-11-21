@@ -38,10 +38,14 @@ forms; the compiler's unit test
 `key_input_proc_long_forms_that_are_the_short_form_compile_as_it` has one
 of each.
 
-## Defined (2026-10-16, Carpintero)
+## Defined
+
+On 2026-10-16, by Carpintero.
 
 No game of the nine asks for the two forms that do not compile. **Done**:
 a page with some directions and not others, and one with 2003's timed
 form, compile and behave like easyrpg's, each with a unit test in the
 events crate. Becomes `todo` when a game asks for either; `just
 culprits` says so.
+
+## Log

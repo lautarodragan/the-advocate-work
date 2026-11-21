@@ -87,6 +87,10 @@ one, and the order that comes out of what was measured is: layers (1.6 MB), char
 the rest. The font is already inside the repo —`tools/port/fuente.py` is
 generated from easyrpg-player— and doesn't count.
 
+## Log
+
+### 2026-10-16, Mulita: checked
+
 **Checked on 2026-10-16 (Mulita)**, at the-advocate 759aa0ba: still not started. The names above are of the Python, which is gone:
 the layers are drawn by `rm2k-render` and `wally`, the characters by
 `wally`, the windows and title by `rm2k-snes-screens`, the battle by

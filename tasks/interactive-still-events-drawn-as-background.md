@@ -43,7 +43,9 @@ that did not fit are `vampires-dawn-maps-that-dont-fit-in-vram.md`.
 would be taking a map past the sprite limit on purpose, like
 `vampires-dawn-maps-that-dont-fit-in-vram.md` lists.
 
-## Defined (2026-10-16, Carpintero)
+## Defined
+
+On 2026-10-16, by Carpintero.
 
 No map of the eight ports needs it today. **Done**: a still NPC with an
 action page that does not fit in the sprite VRAM is baked into the
@@ -52,7 +54,9 @@ needs it —or the converter refuses that case and keeps it a sprite—,
 shown on a map taken past the limit on purpose. Becomes `todo` when a map
 stops at the sprites' VRAM.
 
-## Reviewed (Hornero, 2026-11-17)
+## Log
+
+### 2026-11-17, Hornero: reviewed
 
 Much of this was done by `baked_events` (2026-11-02 to 11-17: see
 [`still-events-that-change-pose-painted-into-the-background`](still-events-that-change-pose-painted-into-the-background.md)

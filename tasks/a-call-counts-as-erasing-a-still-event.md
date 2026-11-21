@@ -26,7 +26,9 @@ same rule keeps as objects.
 `desert-nightmare/advocate.toml`, `just cartridges`, and
 `grep "can go away" build/release/converter.log`.
 
-## Inside painted_events (2026-11-19, Cardón)
+## Log
+
+### 2026-11-19, Cardón: inside painted_events
 
 [`still-pieces-painted-into-a-painted-map`](still-pieces-painted-into-a-painted-map.md) counts a `CallEvent` by what it reaches —the common event or the
 map event's page, and theirs— for the still pieces it paints

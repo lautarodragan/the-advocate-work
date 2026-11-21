@@ -40,7 +40,9 @@ culprits list loses those pages, and a loop that never breaks and never
 waits still does not compile. Tests in the events crate, and a ROM test
 for what the runtime changes.
 
-## Calandria's work
+## Log
+
+### Calandria: the work
 
 Branches `calandria-zounds-mining` in the-advocate (from 0ba09da4) and the
 ports (from 31fb291). Only the events compiler changes; the runtime does

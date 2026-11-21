@@ -87,6 +87,30 @@ the link's text, so it opens from the tasks page or from GitHub. It is
 taro's, from 2026-10-12, the day the research cited in the tasks were
 turned into links.
 
+## A task's log
+
+**What was done on a task goes in its last section, `## Log`**, one entry
+per step, oldest first:
+
+    ## Log
+
+    ### 2026-11-20, Carpintero: the page folds the log
+
+    What was done, checked, measured or reviewed, and what it left.
+
+Above it goes what defines the task —what, why, taro's words, the plan as
+decided, the images— and it is what one reads first; the log is its
+history. Whoever works on a task adds an entry at the end, and does not
+open a `## Done` or `## Checked (date, agent)` section above it; inside an
+entry, its own subheadings are `####`. The page cuts the body at the
+exact line `## Log` and shows what follows folded, closed, in a box with
+its own scroll, labelled with how many `### ` entries it has; images work
+there as anywhere in the task. `nu tasks/tasks.nu check` lists the tasks
+not `done` with a heading above their log that reads like an entry, or
+with a `##` section after it: a report to read, not a gate. It is taro's,
+from 2026-11-20; the tasks that were not `done` that day were moved to it
+by hand, and the `done` ones were left as they were.
+
 ## A task's frontmatter
 
     ---

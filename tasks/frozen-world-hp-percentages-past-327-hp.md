@@ -67,7 +67,9 @@ Priorities (taro):
 2. Second, optimise at build time as much as possible (the synthetic
    commands; the width by the values a variable must hold).
 
-## Defined (2026-10-16, Carpintero)
+## Defined
+
+On 2026-10-16, by Carpintero.
 
 taro already said how (the carry register first, build-time synthetic
 commands second) and that it is not a priority. **Done**: The Frozen
@@ -75,3 +77,5 @@ World's common event 38 gives 100 for 944 HP of 944, with a test of a
 multiply-then-divide past 32767. Becomes `todo` when the combat on maps
 1 and 2 is played. **First step**: the carry register's semantics —which
 operations set it and which read it— against EasyRPG's 32-bit variables.
+
+## Log

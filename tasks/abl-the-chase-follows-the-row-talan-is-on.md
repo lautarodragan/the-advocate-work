@@ -26,7 +26,7 @@ say the new one, on purpose; the book says it is a change to the game.
 
 ## Log
 
-**2026-11-15, Calandria. The fork, and the patched game measured in both.**
+### 2026-11-15, Calandria: the fork, and the patched game measured in both
 
 The fork is `abl/patches/manual/maps/Map0105.{json,tiles}` on
 `calandria-chase-patched` in the ports: the dump's JSON as text with three

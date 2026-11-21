@@ -39,7 +39,9 @@ the cause found and fixed, and a test in the ports that makes the draft's
 jump and sees `ticks` go on for 900 frames. First step: the draft's own
 —which page is active and where the CPU loops when `ticks` stops—.
 
-## The cause
+## Log
+
+### 2026-10-20, Mulita: the cause
 
 **2026-10-20, Mulita**, at the-advocate `8f290c39` and the ports `68bf55b`.
 Reproduced as the draft says —the jump needs `fade_base` too, as
@@ -73,7 +75,7 @@ compile. In RM2k the wait does not depend on the move: easyrpg's
 The fix that follows: a `MovePicture` with its wait that is not done
 still compiles its wait, an `OP_DELAY` of the duration.
 
-## The fix
+### 2026-10-20, Mulita: the fix
 
 **2026-10-20, Mulita.** the-advocate `f6907921` on `mulita-tradan-hang`:
 a `MovePicture` that `compile_picture` cannot do now compiles its wait
@@ -93,7 +95,7 @@ main's tools —"no tick in 3000 frames, on map 170", already inside
 The book's divergence `a-loop-that-never-waits-does-not-compile` says that
 the wait counts even when the move is not done, and names the ROM test.
 
-## What was run
+#### What was run
 
 With the tools of `mulita-tradan-hang` (`just install-local .local-tools
 events convert`), in the ports worktree of the same branch, on

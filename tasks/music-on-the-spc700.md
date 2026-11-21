@@ -28,7 +28,9 @@ imposes the interrupt's rules. With MSU-1 the SPC700 plays no music and
 this matters less; without it, it still does, and the game has to play
 whole without MSU-1. Kept in the wishlist by taro on 2026-10-12.
 
-## Reviewed (Hornero, 2026-11-17)
+## Log
+
+### 2026-11-17, Hornero: reviewed
 
 Still not started: the 65816 sequences the music (`irq_music`,
 `music_tick` in `runtime/music.s`; the stream in

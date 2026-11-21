@@ -28,7 +28,9 @@ negligible except for its few big maps.
 its maps; the time is the step from `code_carry_after` in
 `enter_map_no_events`, with the probe described in that task's log.
 
-## Checked (2026-10-20, Tijereta)
+## Log
+
+### 2026-10-20, Tijereta: checked
 
 Still so at the-advocate `8f290c39`: `code_carry_after`
 (`runtime/decompress.s`) decompresses the carried map's whole stream with

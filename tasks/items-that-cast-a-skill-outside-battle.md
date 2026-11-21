@@ -16,7 +16,9 @@ the effect and the target choice are the same, and the items screen stops
 greying the items whose kind is "special" and whose skill is usable on the
 map.
 
-## Checked (2026-10-20, Chajá)
+## Log
+
+### 2026-10-20, Chajá: checked
 
 Still open, and no longer blocked: `healing-skills-from-the-menu` and
 `the-skills-menu` are done. At the-advocate `8f290c39` `item_usable` in
@@ -35,7 +37,7 @@ screen does —spending the item if it has uses, not the SP—, as RPG_RT's
 **First step**: how the skills screen reaches `sk_heal_one`, and whether
 the items screen can call it with the item's skill.
 
-## Plan (2026-11-01, Chajá)
+### 2026-11-01, Chajá: plan
 
 From the-advocate `0ba09da4` and the ports `31fb291`, on
 `chaja-items-cast-skills` in both.
@@ -74,7 +76,7 @@ skill; in the runtime `item_skills.s` (FAR2) with `item_cast_use`, and
 item. ABL's potions —Cloudy, Milky, Opaque, items 316–318, skill on an
 ally— are the test's.
 
-## Done (2026-11-01, Chajá)
+### 2026-11-01, Chajá: done
 
 the-advocate `bc1f6e38`, the ports `90a5158`, the book `46e6d6c`, on
 `chaja-items-cast-skills`, each with main merged.

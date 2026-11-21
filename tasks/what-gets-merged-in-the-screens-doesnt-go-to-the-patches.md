@@ -35,11 +35,6 @@ that versions them will miss it.
 **How to see it**: `just cartridges release` in `book-of-three/` of the ports and
 `grep WARNING build/release/converter.log`.
 
-**Checked on 2026-10-16 (Mulita)**, at the-advocate 759aa0ba: still so —`WindowDecision` in `rm2k-snes/patches/src/lib.rs` holds
-only the message window's merges—. The folder is
-`build/release/patches/auto/windows/` since `5d78ada7`, which put the
-names the tools write into a build in English.
-
 ## Defined
 
 **2026-10-16, Hurón**, checked against the-advocate `f4709d0b` and the ports `66ed09c`.
@@ -49,3 +44,12 @@ screens' colour merges, the merged cells and End Game's colours, and the
 converter writing them into `patches/auto/windows/` as it does the message
 window's, with a `rm2k-snes-patches` test per kind. First step: the shape
 of each kind in `borders.rs`, `fit.rs` and `merge_until`.
+
+## Log
+
+### 2026-10-16, Mulita: checked
+
+**Checked on 2026-10-16 (Mulita)**, at the-advocate 759aa0ba: still so —`WindowDecision` in `rm2k-snes/patches/src/lib.rs` holds
+only the message window's merges—. The folder is
+`build/release/patches/auto/windows/` since `5d78ada7`, which put the
+names the tools write into a build in English.

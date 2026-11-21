@@ -51,14 +51,6 @@ What it has to take care of: RM2k's semantics (the order of `Game_Map::Update`,
 what a page sees in the frame in which another one changes it), and that it be
 general to the engine and not specific to ABL.
 
-**On 2026-09-27 number 3 was done for one pattern**, the one of "is this character
-on the cell of these variables?", which is the one of the race cars, the lights
-on map 11 and some two hundred and fifty pages of the game: `OP_CELL_TEST`, and
-a shortcut that runs those pages without the interpreter when they don't get past the
-condition. See `race-2-at-60-frames.md`, which also has measured
-the limit of number 2 for the race: zero on the heaviest tick,
-because the hero changes cell every two ticks.
-
 ### Another example: Book of Three's `Reraise KO'd chars` (taro, 2026-10-15)
 
 Book of Three's common event 18 is parallel, has no switch and runs **every
@@ -88,3 +80,15 @@ do not change on the map. They do in RM2k —a condition like poison, a
 terrain that damages—; the console does not do either yet, but will
 soon, and the optimisation has to count them as one more moment to run
 after.
+
+## Log
+
+### 2026-09-27: number 3 done for one pattern
+
+**On 2026-09-27 number 3 was done for one pattern**, the one of "is this character
+on the cell of these variables?", which is the one of the race cars, the lights
+on map 11 and some two hundred and fifty pages of the game: `OP_CELL_TEST`, and
+a shortcut that runs those pages without the interpreter when they don't get past the
+condition. See `race-2-at-60-frames.md`, which also has measured
+the limit of number 2 for the race: zero on the heaviest tick,
+because the hero changes cell every two ticks.

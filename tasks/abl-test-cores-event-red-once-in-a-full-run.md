@@ -24,6 +24,10 @@ twin" anyway; it was not proven to be unrelated.
 **How to reproduce it**: `just tests` in `abl/` of the ports, several times;
 the captures stay in `tests/snapshots/cores/`.
 
+## Log
+
+### 2026-10-19, Carpintero: seen again
+
 **Seen again** by Carpintero on 2026-10-19, the same way —bsnes drew an
 empty box over a black screen, snes9x the tinted map, 89% of the pixels—,
 in a full run on the branch `carpintero-faces` merged with `main`

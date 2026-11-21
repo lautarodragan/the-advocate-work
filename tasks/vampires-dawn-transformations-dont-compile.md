@@ -24,11 +24,6 @@ them. The `Loop`s these bodies have compile since `f0fd7e18`.
 **How to see it**: `just cartridges release` in `vampires-dawn/`, and the
 line "parallel common events" of `build/release/converter.log`.
 
-**Mulita, 2026-10-16**: once the bat compiles, it will still walk with the
-ground's passability: the maps' parallel pages that open every cell for it
-swap the ChipSet with `ChangeMapTileset`, which is dropped since that day.
-See `changemaptileset-is-not-done.md`.
-
 ## Defined
 
 **2026-10-16, Hurón**, checked against the-advocate `f4709d0b` and the ports `66ed09c`.
@@ -43,6 +38,17 @@ bat walking over water also needs `ChangeMapTileset`, which is
 [`changemaptileset-is-not-done`](changemaptileset-is-not-done.md) and not
 this. First step: count the distinct (CharSet, index) pairs the common
 events and each map of the game name.
+
+## Log
+
+### 2026-10-16, Mulita: a note
+
+**Mulita, 2026-10-16**: once the bat compiles, it will still walk with the
+ground's passability: the maps' parallel pages that open every cell for it
+swap the ChipSet with `ChangeMapTileset`, which is dropped since that day.
+See `changemaptileset-is-not-done.md`.
+
+### 2026-10-19, Carpintero: the table is no longer eight
 
 **Carpintero, 2026-10-19**: the table is no longer eight. Since
 `carpintero-cursor-graphic` (the-advocate) `ROUTE_GFX_MAX` is the
