@@ -3,6 +3,7 @@ name: "Variables are capped at 256 slots, and Vampires Dawn names 401"
 description: "The RM2k variable's slot is one byte in the bytecode and the converter stops at 256, so a game with more than 256 variables loses every event that names the rest: Vampires Dawn leaves 224 events out for 145 variables without a slot"
 type: feature
 status: todo
+author: huron
 ---
 
 Seen by Hurón on 2026-10-15, in the study

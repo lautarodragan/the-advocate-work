@@ -3,6 +3,7 @@ name: "Order 34 in a page's own route"
 description: "change_graphic inside a page's own route, which route::own rejects —the page is left out whole—: 11 pages in Sunset over Imdahl, 1 in Vampires Dawn. Own routes carry operands since the switches (2026-10-20); the graphic's would go the same way, with the row's bank of poses given by Wally"
 type: feature
 status: todo
+author: tijereta
 ---
 
 # What

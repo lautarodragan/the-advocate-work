@@ -3,6 +3,7 @@ name: "A dead enemy does not fade out"
 description: "RM2k fades a dead enemy away; the console erases it all at once, and no divergence page tells it"
 type: docs
 status: todo
+author: huron
 ---
 
 Seen by Hurón on 2026-10-18, writing the book's "A dead enemy redraws

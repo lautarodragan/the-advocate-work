@@ -3,6 +3,7 @@ name: "An enemy with 32-bit numbers breaks the assembler"
 description: "Zounds' debug troop has 99,999 HP and gives 9,999,999 experience: the converter refuses the experience with a message but writes the HP into a .word and ca65 fails with a range error on mapdata.inc"
 type: bug
 status: todo
+author: aguara
 ---
 
 Seen by Aguará on 2026-10-15, in the study

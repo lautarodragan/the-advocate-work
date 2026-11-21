@@ -3,6 +3,7 @@ name: "A forced route's repeat flag is dropped"
 description: "A MoveEvent with 'repeat' set runs its route once: OP_ROUTE has no bit for it and the compiler only reads the flag to check the frequency"
 type: bug
 status: todo
+author: cardon
 ---
 
 Seen by Cardón on 2026-10-14 (`what-the-compiler-ignores-silently.md`),

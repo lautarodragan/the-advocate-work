@@ -3,6 +3,7 @@ name: "A route's graphic on a row its pages draw is undone after a battle"
 description: "After a battle or a big picture every row is set up from its page again, and a row whose page draws something gets the page's graphic back over the one a route's command 34 gave it"
 type: bug
 status: todo
+author: calandria
 agents: [Calandria]
 ---
 

@@ -3,6 +3,7 @@ name: "A ChangePBG after a Teleport keeps the picture"
 description: "The Frozen World's encounters jump to its battle map and then name the backdrop; the console keeps the battle map's picture on those, because a page that jumped no longer knows which map's records to number"
 type: feature
 status: todo
+author: aguara
 agents: [Aguará]
 ---
 

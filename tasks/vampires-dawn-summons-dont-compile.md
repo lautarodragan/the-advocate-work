@@ -3,6 +3,7 @@ name: "Vampires Dawn's summons don't compile"
 description: "Parallel common events 1, 2, 5, 6, 8 and 9 (the summons), 30, 48 and 49 stop at ControlVars and branches the compiler leaves out, and 52 is on a switch past 1023"
 type: bug
 status: todo
+author: aguara
 ---
 
 Seen by Aguará on 2026-10-12, with the-advocate `6ed7c4a0` and the ports

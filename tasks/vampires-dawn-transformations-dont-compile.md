@@ -3,6 +3,7 @@ name: "Vampires Dawn's transformations don't compile"
 description: "The wolf and bat transformations (parallel common events 10, 11 and 18) stop at their ChangeSpriteAssociation: the CharSet is past the eight graphics every map reserves"
 type: bug
 status: todo
+author: aguara
 ---
 
 Seen by Aguará on 2026-10-12, with the-advocate `6ed7c4a0` and the ports

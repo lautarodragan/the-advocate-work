@@ -3,6 +3,7 @@ name: "EraseEvent: no test looks at what is seen"
 description: "That an erased event stops being drawn, stops blocking, and that a parallel one that erases itself is cut, is enforced by no test: it was looked at playing Desert Nightmare"
 type: test
 status: todo
+author: calandria
 ---
 
 Hurón left it on 2026-10-06 in `eraseevent-for-real.md`: the

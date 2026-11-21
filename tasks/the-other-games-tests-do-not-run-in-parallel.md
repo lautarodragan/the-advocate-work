@@ -3,6 +3,7 @@ name: "The other games' tests do not run in parallel"
 description: "`just boot -n 8` in the ports builds the same game from several workers at once and they step on each other"
 type: test
 status: todo
+author: chaja
 ---
 
 Seen by Chajá on 2026-10-18, at the ports `ffc3a5b` with the-advocate

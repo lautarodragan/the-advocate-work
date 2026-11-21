@@ -3,6 +3,7 @@ name: "Artistic-decision patches"
 description: "What is lost in the conversion, as versioned files"
 type: feature
 status: todo
+author: taro
 ---
 
 # What

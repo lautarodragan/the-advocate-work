@@ -3,6 +3,7 @@ name: "painted_events chooses its maps"
 description: "`painted_events = true` paints every map where painting adds no degradation, decided by the converter from the degradations it already computes, so no game keeps a hand-written list that ages"
 type: feature
 status: todo
+author: taro
 ---
 
 From [`still-pieces-painted-into-a-painted-map`](still-pieces-painted-into-a-painted-map.md):

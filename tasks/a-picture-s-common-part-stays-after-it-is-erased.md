@@ -3,6 +3,7 @@ name: "A picture's common part stays after it is erased"
 description: "When several drawings of one place share a picture number, their common part is drawn into the map and stays there after the game's ErasePicture; in Desert Nightmare, the treasure's plate (map 115) and probably the shrine's (161)"
 type: bug
 status: todo
+author: hornero
 game: desert-nightmare
 ---
 

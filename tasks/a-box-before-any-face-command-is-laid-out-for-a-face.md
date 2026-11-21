@@ -3,6 +3,7 @@ name: "A box before any face command is laid out for a face"
 description: "In a game that shows faces, a foreground page's boxes before its first ChangeFaceGraphic are compiled for the 168 pixels a face leaves, and since 2026-10-19 the console shows no face there: narrower lines and more boxes than RM2k"
 type: bug
 status: todo
+author: carpintero
 agents: [Carpintero]
 ---
 

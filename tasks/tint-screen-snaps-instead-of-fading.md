@@ -3,6 +3,7 @@ name: "TintScreen snaps instead of fading"
 description: "A TintScreen with a duration changes the screen at once and waits the time out; scenes that fade to night, to black or back to day jump instead"
 type: bug
 status: todo
+author: mulita
 ---
 
 Seen by Mulita on 2026-10-15, comparing The Book of Three with the original

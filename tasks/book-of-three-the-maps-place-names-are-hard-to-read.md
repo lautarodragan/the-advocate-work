@@ -3,6 +3,7 @@ name: "The Book of Three: the map's place names are hard to read"
 description: "The map item shows the land's map over the whole screen; its place names are partly the picture's transparent colour, which shows the map in RM2k and the backdrop on the console, so they come out grey and dimmer"
 type: bug
 status: todo
+author: chaja
 agents: [Chajá]
 ---
 

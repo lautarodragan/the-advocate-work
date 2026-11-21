@@ -3,6 +3,7 @@ name: "Items past 450 are silently left out"
 description: "ITEMS_N is ABL's database size, fixed in the tools: a game with more items loses the ones past 450 without a warning, and Frozen World has 500"
 type: bug
 status: todo
+author: chaja
 agents: [Chajá]
 ---
 

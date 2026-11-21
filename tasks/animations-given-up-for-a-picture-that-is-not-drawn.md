@@ -3,6 +3,7 @@ name: "Still animations given up for a picture that is then not drawn"
 description: "Sunset's map 46 stops its two animated events to make room for the picture 'Meny', and the picture is left out anyway for lack of a palette"
 type: bug
 status: todo
+author: calandria
 ---
 
 Seen by Calandria on 2026-10-16, with the-advocate `8c6a345b` and the

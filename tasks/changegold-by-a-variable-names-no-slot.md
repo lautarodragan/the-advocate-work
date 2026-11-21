@@ -3,6 +3,7 @@ name: "ChangeGold by a variable does not give its variable a slot"
 description: "The variable sweep of the event compiler does not name ChangeGold's variable, so a page whose variable only ChangeGold names is left out"
 type: bug
 status: todo
+author: chaja
 ---
 
 Seen by Chajá on 2026-10-14, reading the code while doing

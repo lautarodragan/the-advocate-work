@@ -3,6 +3,7 @@ name: "A route's graphic after a picture is left out of the scan's table"
 description: "The scan compiles each page without pictures, so a page with a ShowPicture stops there and the graphics its routes give after it are not in the map's table: the real compilation drops them with a warning. Sunset over Imdahl's map 14, MockGuard's CT1 2"
 type: bug
 status: todo
+author: carpintero
 agents: [Carpintero]
 ---
 

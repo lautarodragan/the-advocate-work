@@ -3,6 +3,7 @@ name: "Audio in two lossy steps"
 description: "Reduced and versioned MIDI and SoundFont, to listen to them in a DAW"
 type: feature
 status: todo
+author: hornero
 ---
 
 # What

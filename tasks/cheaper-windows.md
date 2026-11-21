@@ -3,6 +3,7 @@ name: "Cheaper windows"
 description: "Build what 'The windows, made cheaper' measured: a background of the project's own by setting, its gradient through HDMA, the cursor in sprites, windows drawn by the runtime and the faces out of BG1, in seven small steps"
 type: feature
 status: todo
+author: taro
 ---
 
 taro, on 2026-10-12: the implementation of the research, which had no task
