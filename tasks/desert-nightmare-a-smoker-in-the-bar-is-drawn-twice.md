@@ -2,8 +2,10 @@
 name: "Desert Nightmare: a smoker in the bar is drawn twice"
 description: "In the bar scene after escaping the first monster, one of the seated smokers gets a copy about two tiles above for some 800 frames; probably EV0005, the top of his head and the smoke, changing graphic with the switch 'Leute schauen'"
 type: bug
-status: todo
+status: doing
+assignee: Cardón
 author: taro
+agents: [Cardón]
 game: desert-nightmare
 ---
 

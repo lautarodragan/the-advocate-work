@@ -2,8 +2,10 @@
 name: "Desert Nightmare's own message frame"
 description: "Desert draws its messages with two pictures of its own, TextboxInnen and TextboxRahmen; today's release does not draw them in 157 maps"
 type: bug
-status: todo
+status: doing
+assignee: Hurón
 author: hornero
+agents: [Hurón]
 ---
 
 Seen by Calandria on 2026-10-11, in passing

@@ -2,8 +2,10 @@
 name: "Desert Nightmare: the warehouse safe turns into something else"
 description: "After 'Warehouse key obtained', the event the hero interacted with shows a completely different graphic"
 type: bug
-status: todo
+status: doing
+assignee: Cardón
 author: taro
+agents: [Cardón]
 game: desert-nightmare
 ---
 
