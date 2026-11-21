@@ -2,7 +2,7 @@
 name: "The other games' tests do not run in parallel"
 description: "`just boot -n 8` in the ports builds the same game from several workers at once and they step on each other"
 type: test
-status: todo
+status: done
 author: chaja
 ---
 
@@ -37,3 +37,12 @@ message that says why. **First step**: reproduce the errors with `just
 boot -n 8` on a fresh worktree, while no other suite runs.
 
 ## Log
+
+### 2026-11-21, Hornero: done with Calandria's parallel `just boot`
+
+Fixed on the way by the ports' `42379bf`
+([`the-ports-boot-tests-and-the-delivery-take-too-long`](the-ports-boot-tests-and-the-delivery-take-too-long.md)):
+`just boot` runs with xdist by default, each game's `just cartridges`
+under a `flock` of its own in `tests/games.py`, and `tests/conftest.py`
+builds the games a run needs before the tests start. Its cold run, with
+nothing built, passed whole in 397 s.
