@@ -25,7 +25,9 @@ event with a graphic and on the hero's layer that erases itself (that it is not 
 that its cell can be walked through), and a parallel that erases itself in the middle of
 its page (that what comes after does not run).
 
-## Defined (2026-10-16, Carpintero)
+## Defined
+
+On 2026-10-16, by Carpintero.
 
 A path no test executes is what bit most often (AGENTS.md). **Done**: the
 cases of `test_erase_event_for_real.py` cover an event with a graphic on
@@ -34,3 +36,5 @@ parallel that erases itself mid-page —what follows does not run—; each
 new test shown red first by breaking its runtime path (`apply_pages`,
 `conditions_ok`, `pair_ev`). **First step**: the two test pages, and
 whether `test-special` has room for them or they belong in the test game.
+
+## Log

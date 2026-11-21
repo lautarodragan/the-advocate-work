@@ -21,13 +21,9 @@ lost and the picture too, where losing only the picture was possible.
 map 46 has both `still-animation-dropped` (2 events, 0 of 1 looks) and
 `pictures-not-drawn`.
 
-**2026-10-17, Calandria**: 46 no longer shows it since the raindrops go
-into the free columns of the last row of blocks
-([`rain-drops-cost-a-cache-its-slots`](rain-drops-cost-a-cache-its-slots.md)):
-its two still events animate, and only the picture is left out. The order
-in `convert` that caused it is the same, so another map can still meet it.
+## Defined
 
-## Defined (2026-10-20, Tijereta)
+On 2026-10-20, by Tijereta.
 
 Checked against the release builds of the ports `68bf55b` (the-advocate
 `8f290c39`): Sunset's 46 is gone, but the pair is still there on other
@@ -42,3 +38,13 @@ without the pictures, and keeps whichever loses less; a Wally test with a
 map where the pictures do not fit either way. **First step**: on El
 Dorado's 7, `wally map` with the pictures left out by hand, to see whether
 the animations then fit.
+
+## Log
+
+### 2026-10-17, Calandria: 46 no longer shows it
+
+**2026-10-17, Calandria**: 46 no longer shows it since the raindrops go
+into the free columns of the last row of blocks
+([`rain-drops-cost-a-cache-its-slots`](rain-drops-cost-a-cache-its-slots.md)):
+its two still events animate, and only the picture is left out. The order
+in `convert` that caused it is the same, so another map can still meet it.

@@ -31,7 +31,9 @@ a code other than 0.
 **Elsewhere**: El Dorado is reported with the same "0 of 80" and may be the
 same; not checked.
 
-## Defined (2026-10-16, Carpintero)
+## Defined
+
+On 2026-10-16, by Carpintero.
 
 Still open at the-advocate `f4709d0b` (`culprits.rs` counts every `None`
 of `trigger()` under one name). The report is what the survey and the
@@ -42,3 +44,5 @@ refusals, the book's sentence about Frozen World's troops is fixed, and a
 unit test in `culprits.rs` holds it. **First step**: tell `trigger()`'s
 "looks at nothing" from its refusals —another variant or a flag— and
 check El Dorado.
+
+## Log

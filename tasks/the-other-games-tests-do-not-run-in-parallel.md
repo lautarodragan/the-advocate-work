@@ -22,7 +22,9 @@ The recipe's comment says nothing about running it in parallel, and ABL's
 `just tests` does run with xdist, so the flag is an easy thing to reach
 for.
 
-## Defined (2026-10-20, Tijereta)
+## Defined
+
+On 2026-10-20, by Tijereta.
 
 Checked against the ports `68bf55b`: still so —the root's `boot` recipe
 is `cd tests && pytest "$@"`, and its comment does not mention `-n`—.
@@ -32,3 +34,5 @@ built, passes as the serial run does: each game's tests in one worker
 around each game's `just cartridges`), or the recipe refusing `-n` with a
 message that says why. **First step**: reproduce the errors with `just
 boot -n 8` on a fresh worktree, while no other suite runs.
+
+## Log

@@ -28,7 +28,9 @@ a page change), so the route's graphic stays.
 that changes it with command 34, then a battle; after it, the event shows
 its page's graphic. In which game's scene this happens is not measured.
 
-## Defined (2026-10-20, Tijereta)
+## Defined
+
+On 2026-10-20, by Tijereta.
 
 Checked against the-advocate `8f290c39`: still so. `page_graphic`
 (`runtime/event_pages.s`) looks at `applied_again` only for a page that
@@ -42,3 +44,5 @@ shows the route's graphic. **First step**: that case, red; then whether
 the row can say a route dressed it (a flag `change_graphic` sets and a
 page change clears) or the refresh can upload the row's current graphic
 instead of the page's.
+
+## Log

@@ -19,7 +19,9 @@ game changes the inn's.)
 **How to see it**: `degradations.json` of Dooms 2's `release`, kind
 `system-bgm-not-changed`.
 
-## Defined (2026-10-20, Tijereta)
+## Defined
+
+On 2026-10-20, by Tijereta.
 
 Checked against the-advocate `8f290c39` and the release builds of the
 ports `68bf55b`: still so. `CHANGE_SYSTEM_BGM` in
@@ -35,3 +37,5 @@ line in "Known issues" of Dooms 2's page in the book removed. **First
 step**: where the Game Over screen picks its song in the runtime, and
 whether that song's samples can go up there as the battle's extra one
 does.
+
+## Log

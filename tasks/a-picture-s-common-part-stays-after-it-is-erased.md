@@ -31,7 +31,9 @@ part as its own layer of the map that can be dropped, or as small
 pictures too, or redrawing the cells it covered from the map without
 it— and looks at 115 and 161 against Wine or EasyRPG before and after.
 
-## Note (2026-11-20, Aguará)
+## Log
+
+### 2026-11-20, Aguará: a note
 
 Since the-advocate `d1972f68` (branch `aguara-dn-intro-menu`) the rule no
 longer takes 115 and 161: it splits only numbers every show of which

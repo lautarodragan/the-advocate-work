@@ -19,7 +19,15 @@ The port's page in the book already said, more generally, that "136 maps
 don't draw some of their pictures" (from 2026-10-10); which of those 157
 maps they are was not compared.
 
-## Checked (2026-10-20, Tijereta)
+## taro's decision (2026-10-20)
+
+To todo, with Tijereta's recommendation: the frame becomes the game's window look —its System graphic— through the port's manual patches, so that the console's own window draws it, instead of drawing `TextboxInnen` and `TextboxRahmen` as pictures.
+
+**Done**: Desert Nightmare's messages are drawn in a window with its own frame on every map, and `degradations.json` no longer lists those two pictures as not drawn. **First step**: how the common events show the two pictures around a message, and whether a System made from them fits RM2k's window layout.
+
+## Log
+
+### 2026-10-20, Tijereta: checked
 
 Still so in Desert Nightmare's release build of the ports `68bf55b`
 (the-advocate `8f290c39`), on fewer maps than the draft says and for
@@ -31,13 +39,7 @@ will rarely fit; what to do needs a decision —for instance the frame
 turned into the game's window look through the port's manual patches, so
 that the console's own window draws it—.
 
-## taro's decision (2026-10-20)
-
-To todo, with Tijereta's recommendation: the frame becomes the game's window look —its System graphic— through the port's manual patches, so that the console's own window draws it, instead of drawing `TextboxInnen` and `TextboxRahmen` as pictures.
-
-**Done**: Desert Nightmare's messages are drawn in a window with its own frame on every map, and `degradations.json` no longer lists those two pictures as not drawn. **First step**: how the common events show the two pictures around a message, and whether a System made from them fits RM2k's window layout.
-
-## Seen again (2026-11-19, Hurón)
+### 2026-11-19, Hurón: seen again
 
 At the-advocate `62b6e5cb` and the ports `1ea90bf`, played on the motel
 (map 16): the converter says the two pictures, as the commons' set, "fit
@@ -47,7 +49,7 @@ one without gets none, and the map's upper layer cuts its letters
 fourth in the book's research
 `ports/desert-nightmare/research/2026-11-19-what-it-takes-to-be-playable.md`.
 
-## Seen again (2026-11-20, Tijereta)
+### 2026-11-20, Tijereta: seen again
 
 At the-advocate `0d7ab7ed` (branch `tijereta-number-locks`) and the ports
 `a93ca63`, on the tailor's (map 123), one of the maps where the two
@@ -62,7 +64,7 @@ row). The lock works —the right code opens it, a wrong one does not—; it
 cannot be read. On the maps where the pictures do not fit (28, 42) the
 same digits go over the map with no box, as any faceless message there.
 
-## Seen again (2026-11-20, Calandria)
+### 2026-11-20, Calandria: seen again
 
 At the-advocate `7951af2a` and the ports `42f70e8`, on the office (map 24),
 another map where they fit, with a face: taro saw the frame "as lines

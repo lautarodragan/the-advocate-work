@@ -31,7 +31,9 @@ To see it: build The Frozen World and read the losses of kind
 `panorama-not-changed` in its `degradations.json`; the converter log says
 nothing of them, because the field maps carry none.
 
-## Defined (2026-10-20, Tijereta)
+## Defined
+
+On 2026-10-20, by Tijereta.
 
 Checked against the-advocate `8f290c39` and The Frozen World's release
 build of the ports `68bf55b`: still so —`CHANGE_PBG` in
@@ -48,3 +50,5 @@ on map 1, its `degradations.json` loses those losses, and a compiler test
 holds it. **First step**: how `landings` carries the route graphics to
 the target's table, and Wally's `named_panoramas`, which today sees one
 map.
+
+## Log

@@ -42,7 +42,9 @@ with a test in rm2k-snes-screens over a gradient skin. **First step**: the
 check in `checks.rs` and `fit::skin_for`, to see whether the background
 can join the frame's path.
 
-## Checked (2026-10-20, Chajá)
+## Log
+
+### 2026-10-20, Chajá: checked
 
 Still so at the-advocate `8f290c39`: the message in `checks.rs` names the
 tiles and the addresses, not the knob, and `TARGET_TILES_MAX` lives in
@@ -50,7 +52,7 @@ tiles and the addresses, not the knob, and `TARGET_TILES_MAX` lives in
 2026-10-20 (the ports' `71c4143`): Zounds' entry is in
 `zounds/advocate.toml`, and the knob is still `[windows.background]`.
 
-## Changed under it (2026-11-02, Aguará)
+### 2026-11-02, Aguará: changed under it
 
 The actor choice's windows are no longer the 65 tiles measured above:
 since

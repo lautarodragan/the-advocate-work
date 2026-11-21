@@ -22,12 +22,6 @@ looked at.
 **How to see it**: changing the parameter (index 2 of code 11330) in those
 commands leaves `events.json` unchanged.
 
-**Checked on 2026-10-16** at the-advocate `759aa0ba`, by Cardón: still
-runs once —`OP_ROUTE` has no repeat bit—, but it is no longer silent:
-since `3a954b30` (2026-10-15) `compile_route` notes it as the loss
-`route-repeat-dropped`, which the converter writes to `degradations.json`
-next to the ROM. That is now the way to see it, instead of `events.json`.
-
 ## Defined
 
 Todo, on 2026-10-16, by Cardón: still dropped at the-advocate `f4709d0b`, now as the loss
@@ -41,3 +35,13 @@ runtime's route slot looping, and the loss gone; a test-game case with a
 repeating route over more frames than a lap. **First step**: look at the
 pages of those 31 routes in the other games, to know which ones show and
 pick one as the ports' case.
+
+## Log
+
+### 2026-10-16, Cardón: checked
+
+**Checked on 2026-10-16** at the-advocate `759aa0ba`, by Cardón: still
+runs once —`OP_ROUTE` has no repeat bit—, but it is no longer silent:
+since `3a954b30` (2026-10-15) `compile_route` notes it as the loss
+`route-repeat-dropped`, which the converter writes to `degradations.json`
+next to the ROM. That is now the way to see it, instead of `events.json`.

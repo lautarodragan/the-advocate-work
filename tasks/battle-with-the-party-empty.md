@@ -34,7 +34,9 @@ does under Wine (lost at once, Game Over or the page's defeat branch),
 with its golden, and the runtime fixed if it does not. **First step**: the
 original under Wine with that case, to know what to expect.
 
-## Checked (2026-10-20, Chajá)
+## Log
+
+### 2026-10-20, Chajá: checked
 
 Still open: no test of ABL's or of the test game's enters a battle with
 nobody in the party (`test_empty_party.py` covers the hero, the menu,

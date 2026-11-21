@@ -29,7 +29,9 @@ inside another —a called common event, a page another page calls— and the
 parallel ones do inherit a face, so for them the guess still holds, and a
 map event's page can be both started by the player and called.
 
-## Defined (2026-10-20, Tijereta)
+## Defined
+
+On 2026-10-20, by Tijereta.
 
 Checked against the-advocate `8f290c39`: still so —`Ctx::box_faced` in
 `rm2k-snes/events/src/compile.rs` answers "a face" for `face: None`
@@ -44,3 +46,5 @@ that keeps the face's width); Zounds' boxes of such pages wrap as in the
 original. **First step**: whether the compiler knows, when it compiles a
 map page, that something calls it (`CallEvent` to a map event, from the
 map or a common event), and where.
+
+## Log

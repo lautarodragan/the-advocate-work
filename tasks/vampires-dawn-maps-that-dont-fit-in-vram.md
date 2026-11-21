@@ -58,7 +58,9 @@ left as the next step. First step: take each map out of `excluded` with
 today's tools and write down what each says now; the numbers above are of
 2026-10-11.
 
-## Checked (2026-10-20, Chajá)
+## Log
+
+### 2026-10-20, Chajá: checked
 
 Still out: the nine are in `excluded` with the same comments, and the
 `release` built that morning (ports `68bf55b`) passes `--maps` without
