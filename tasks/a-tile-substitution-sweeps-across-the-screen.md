@@ -4,6 +4,7 @@ description: "When a map's tiles are substituted —Zounds' spikes going up and 
 type: bug
 status: testing
 assignee: taro
+author: taro
 agents: [Chajá]
 game: zounds
 ---
@@ -31,7 +32,9 @@ The suite already plays the switch:
 `test_zounds_tile_substitutions.py::test_the_switch_swaps_the_spikes_up_and_down`
 in the ports.
 
-## Chajá's work
+## Log
+
+### 2026-11-20, Chajá: the whole screen in one frame
 
 **Where it comes from: on purpose, and measured.** `git blame` and `git
 log -S sub_refresco` in the-advocate lead to `5c5e5f1e` (2026-09-21), the
