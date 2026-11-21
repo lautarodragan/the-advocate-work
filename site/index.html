@@ -95,6 +95,14 @@
   }
   .body blockquote > :first-child { margin-top: 0; }
   .body blockquote > :last-child { margin-bottom: 0; }
+  /* A task's images (README: "Images"): small, in a row that wraps, and
+     each a link to the whole image. Pixelated, because most are captures
+     of a 256x224 screen and smoothing them blurs what they show. */
+  .body p:has(> a.shot) { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .body a.shot img {
+    display: block; height: 7.5rem; width: auto; max-width: 100%;
+    image-rendering: pixelated; border: 1px solid var(--line); border-radius: .25rem;
+  }
   .body table { border-collapse: collapse; }
   .body th, .body td { border: 1px solid var(--line); padding: .2rem .5rem; }
   /* The copy button floats right in the summary, so that the name and the

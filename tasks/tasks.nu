@@ -176,6 +176,10 @@ def "main html" [
   $page | save --force ($root | path join $out index.html)
   # The page's icon, which `index.html` names next to it.
   cp ($root | path join site favicon.png) ($root | path join $out favicon.png)
+  # The tasks' images, at the same path relative to the page as to the
+  # tasks in the repo, so one `images/<task>/x.png` works in both.
+  let images = $root | path join tasks images
+  if ($images | path exists) { cp -r $images ($root | path join $out) }
 }
 
 # When each task last changed, from git: `{<stem>: <ISO date>}`. The page
@@ -194,10 +198,14 @@ def last_changes [root: string] {
 # reads like the file on GitHub—: built here and not in the browser, so the
 # page needs no script to be read. Raw HTML in a task comes out escaped,
 # cmark-gfm's default. A link to another task —`other.md`, as they are
-# written in the repo— goes to its anchor in the page.
+# written in the repo— goes to its anchor in the page. An image is shown
+# small and is a link to itself, which opens it whole (a tap, on a phone);
+# `loading="lazy"` so that a closed task does not fetch its images.
 def render_body [] {
   $in | ^cmark-gfm --extension table --extension autolink --extension strikethrough
     | str replace --all --regex 'href="(?:\./)?([\w-]+)\.md(?:#[^"]*)?"' 'href="#$1"'
+    | str replace --all --regex '<img src="([^"]*)"' '<a class="shot" href="$1"><img loading="lazy" src="$1"'
+    | str replace --all --regex '(<a class="shot"[^>]*><img [^>]*>)' '$1</a>'
 }
 
 # What comes after the frontmatter.
