@@ -211,7 +211,8 @@ def "main check" [
         # is judged by reading it.
         if $h.0.hashes == "#" and $title == "status" { continue }
         let by_taro = $title =~ '\btaro\b'
-        let entry = ($title =~ $word
+        # `## Done means`, like `**Done** means`, is the definition's.
+        let entry = (($title =~ $word and not ($title =~ '^done means\b'))
           or $title =~ '^defined\b.+'
           or (not $by_taro and $title =~ $date)
           or (not $by_taro and $title =~ $"^\(($agent_re)\)\\b")
