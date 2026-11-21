@@ -163,6 +163,7 @@ def "main check" [
       let lines = open --raw $t.file | lines
       mut fence = false
       mut log_at = -1
+      mut defined_next = false
       mut problems = []
       for l in ($lines | enumerate) {
         let text = $l.item
@@ -177,9 +178,12 @@ def "main check" [
         # 2026-10-16** by Cardón:`, `**2026-10-16, Hurón**`— is an entry
         # without a heading. `**Done** means` is the definition's, and a
         # bare `**Measured**` or `**Since <date>**` is usually the finding
-        # itself.
+        # itself. So is the first paragraph under a bare `## Defined`, which
+        # dates the definition: `**2026-10-16, Hurón**, checked against…`.
         let b = $text | parse --regex '^\*\*(?<lead>[^*]+)\*\*'
-        if $log_at < 0 and ($b | is-not-empty) {
+        let opens_defined = $defined_next
+        if ($text | str trim | is-not-empty) { $defined_next = false }
+        if $log_at < 0 and ($b | is-not-empty) and not $opens_defined {
           let lead = $b.0.lead | normalize
           if (not ($lead =~ '\btaro\b') and ($lead =~ $"^($date)"
               or $lead =~ $"^\(($agent_re)\)\\b"
@@ -191,6 +195,7 @@ def "main check" [
         let h = $text | parse --regex '^(?<hashes>#{2,6}) (?<title>.*)$'
         if ($h | is-empty) { continue }
         let title = $h.0.title | normalize
+        $defined_next = $h.0.hashes == "##" and $title == "defined"
         if $log_at >= 0 {
           if $h.0.hashes == "##" {
             $problems = $problems | append {line: ($l.index + 1), heading: $text, why: "a ## section after ## Log"}
