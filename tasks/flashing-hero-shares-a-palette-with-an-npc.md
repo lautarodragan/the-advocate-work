@@ -3,7 +3,7 @@ name: "The flashing hero shares a palette with an NPC"
 description: "If a page makes the hero flash and its graphic is also used by an NPC on the map, the converter stops: on the console they would share a palette and both would flash. It leaves out map 1 of The Frozen World"
 type: bug
 game: frozen-world
-status: testing
+status: done
 assignee: taro
 author: calandria
 agents: [Hurón]
