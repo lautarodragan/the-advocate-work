@@ -4,6 +4,7 @@ description: "The night maps (59, 61, 62, 66…) show as day on the console: the
 type: feature
 status: testing
 assignee: taro
+author: taro
 agents: [Hurón]
 game: desert-nightmare
 ---

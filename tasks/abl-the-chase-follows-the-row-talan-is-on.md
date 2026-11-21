@@ -4,6 +4,7 @@ description: "Patch map 105 so event 6 turns the other switch off, and the guard
 type: feature
 status: testing
 assignee: taro
+author: taro
 agents: [Calandria]
 ---
 

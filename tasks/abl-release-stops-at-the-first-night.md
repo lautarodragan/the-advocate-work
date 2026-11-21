@@ -4,6 +4,7 @@ description: "About 180 maps of the story, from the next day in Paradise to the 
 type: feature
 status: testing
 assignee: taro
+author: cardon
 ---
 
 Seen by Cardón on 2026-10-14, with the-advocate `a7f278e6` and the ports

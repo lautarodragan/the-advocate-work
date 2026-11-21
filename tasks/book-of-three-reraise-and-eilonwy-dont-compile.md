@@ -4,6 +4,7 @@ description: "Its last parallel common event, Reraise, stopped at an actor's HP 
 type: bug
 status: testing
 assignee: taro
+author: aguara
 agents: [Calandria]
 ---
 

@@ -5,6 +5,7 @@ type: bug
 game: [frozen-world, vampires-dawn]
 status: testing
 assignee: taro
+author: calandria
 agents: [Tijereta]
 ---
 

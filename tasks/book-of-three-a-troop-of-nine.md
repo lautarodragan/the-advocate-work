@@ -4,6 +4,7 @@ description: "Troop 83 has nine members and the cartridge carries eight; its fir
 type: bug
 status: testing
 assignee: taro
+author: mulita
 agents: [Mulita, Tijereta]
 ---
 

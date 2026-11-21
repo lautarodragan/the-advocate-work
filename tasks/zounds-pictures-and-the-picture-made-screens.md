@@ -4,6 +4,7 @@ description: "Zounds builds its menu (map 136), its skill screen (map 190), a ra
 type: bug
 status: testing
 assignee: taro
+author: aguara
 agents: [Aguará, Tijereta]
 ---
 

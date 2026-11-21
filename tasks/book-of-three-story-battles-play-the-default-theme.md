@@ -4,6 +4,7 @@ description: "Each scripted fight sets its own battle and victory music with Cha
 type: bug
 status: testing
 assignee: taro
+author: mulita
 agents: [Carpintero]
 ---
 

@@ -4,6 +4,7 @@ description: "The work done on a task goes in a final `## Log` section, one date
 type: feature
 status: testing
 assignee: taro
+author: taro
 agents: [Carpintero]
 ---
 

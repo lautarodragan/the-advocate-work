@@ -4,6 +4,7 @@ description: "Four locks are left out: an InputNumber with no message of its own
 type: bug
 status: testing
 assignee: taro
+author: huron
 game: desert-nightmare
 agents: [Hurón, Tijereta]
 ---

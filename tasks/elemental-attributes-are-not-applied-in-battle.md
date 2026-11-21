@@ -5,6 +5,7 @@ type: bug
 game: abl
 status: testing
 assignee: taro
+author: cardon
 agents: [Chajá]
 ---
 

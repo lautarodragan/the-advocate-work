@@ -4,6 +4,7 @@ description: "With the quarry (150) in the cartridge, the converter gives the ti
 type: bug
 status: testing
 assignee: taro
+author: cardon
 agents: [Chajá]
 ---
 

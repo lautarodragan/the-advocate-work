@@ -5,6 +5,7 @@ type: bug
 game: desert-nightmare
 status: testing
 assignee: taro
+author: calandria
 agents: [Aguará]
 ---
 

@@ -4,6 +4,7 @@ description: "The pictures the game shows over its last two maps (69 and 72) do 
 type: bug
 status: testing
 assignee: taro
+author: mulita
 agents: [Chajá]
 ---
 

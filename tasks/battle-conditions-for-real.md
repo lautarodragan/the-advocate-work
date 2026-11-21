@@ -5,6 +5,7 @@ type: feature
 game: abl
 status: testing
 assignee: taro
+author: taro
 agents: [Chajá]
 ---
 

@@ -4,6 +4,7 @@ description: "On map 46 the message window carries a black block over its lower 
 type: bug
 status: testing
 assignee: taro
+author: calandria
 agents: [Calandria, Chajá]
 ---
 
