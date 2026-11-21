@@ -2,7 +2,7 @@
 name: "Desert Nightmare: the cartridge has no room left"
 description: "Since the painted pieces the ROM is 126 of 126 data banks with a 1,395-byte gap, and what cannot go to the .msu no longer fits: one more common event that compiles was enough to stop the build"
 type: bug
-status: testing
+status: done
 assignee: taro
 game: desert-nightmare
 agents: [Chajá, Carpintero]

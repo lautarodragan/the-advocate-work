@@ -2,7 +2,7 @@
 name: "The test game's leader-name goldens are red on main"
 description: "test_leader_name.py fails three captures —renamed-menu on both cores, rename-slot on snes9x— by the cursor's frame around the slot's number, with c9860b49's tools"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Aguará, Calandria]
 ---

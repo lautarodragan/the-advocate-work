@@ -2,7 +2,7 @@
 name: "Still pieces painted into a painted map"
 description: "A converter feature behind a project knob: the still events of one appearance standing on a panorama fixed to the map are painted into the painted map, in RM2k's order, and lose their row; first for Desert Nightmare's towns"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Cardón]
 game: desert-nightmare

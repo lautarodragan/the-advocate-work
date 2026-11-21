@@ -2,7 +2,7 @@
 name: "A jump in place does not show"
 description: "A route with Begin Jump and End Jump and nothing between —a hop on the spot— shows nothing on the console; in ABL's Hover-Tram the two robbed passengers should hop"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Calandria]
 game: abl

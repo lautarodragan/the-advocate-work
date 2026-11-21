@@ -2,7 +2,7 @@
 name: "Zounds: some chests change when opened"
 description: "Opening some chests in Zounds draws a different chest than the closed one"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Cardón]
 game: zounds

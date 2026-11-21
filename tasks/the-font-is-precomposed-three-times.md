@@ -2,7 +2,7 @@
 name: "The font is precomposed three times"
 description: "Every cartridge carries the font precomposed for the messages, for the text screens and for the slots, eight phases each: about 365 KB, the same letters for three palettes"
 type: refactor
-status: testing
+status: done
 assignee: taro
 agents: [Carpintero, Calandria]
 ---

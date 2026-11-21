@@ -2,7 +2,7 @@
 name: "ABL: Dessen walks without turning or stepping"
 description: "Arriving at Delcentric Factory (map 17), RunFactoryScene walks Dessen to Talan: he moves, but keeps one pose, no turn and no step animation; talking to him afterwards turns him fine. It used to work"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Mulita]
 game: abl

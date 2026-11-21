@@ -2,7 +2,7 @@
 name: "Desert Nightmare: can the towns be baked?"
 description: "A feasibility study, map by map: whether the hundreds of still events that make Desert Nightmare's towns can be drawn into the background generically, what each rule that rejects them protects, and what does not fit the console's VRAM and CGRAM"
 type: research
-status: testing
+status: done
 assignee: taro
 agents: [Cardón]
 game: desert-nightmare

@@ -2,7 +2,7 @@
 name: "Desert Nightmare: items cannot be used"
 description: "Common event 20, which uses an item where the hero stands, and 14, the map screen, do not compile: both read the hero's map id with ControlVars, which the ROM does not do. The light bulb never goes into the warehouse's lamp"
 type: bug
-status: testing
+status: done
 assignee: taro
 game: desert-nightmare
 agents: [Hurón, Chajá]

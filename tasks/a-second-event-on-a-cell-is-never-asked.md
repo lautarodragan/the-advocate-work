@@ -2,7 +2,7 @@
 name: "A second event on a cell is never asked"
 description: "The action button, a bump and a step look at the first event standing on the cell and stop there; RM2k fires every one whose trigger matches. Desert Nightmare's box puzzle on map 12 cannot be climbed, and the middle of the gate on map 2 leads nowhere"
 type: bug
-status: testing
+status: done
 assignee: taro
 game: desert-nightmare
 agents: [Hurón, Calandria]

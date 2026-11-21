@@ -2,7 +2,7 @@
 name: "A common event is copied only if its copy draws"
 description: "An automatic common event with pictures is copied into each map so its pictures can be drawn; copy it only where the copy draws a picture the shared body cannot, and never let a copy push a map's code past what decompresses, so `commons_not_copied` is no longer needed"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [Chajá]
 game: desert-nightmare

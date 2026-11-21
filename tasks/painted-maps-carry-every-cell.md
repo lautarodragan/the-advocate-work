@@ -2,7 +2,7 @@
 name: "Painted maps carry every cell"
 description: "A painted map stores each of its 8x8 cells in the cartridge, repeated or not: Desert Nightmare's 135 maps that could go painted take 86.5 banks of cells, and only 29.5% of those cells are distinct"
 type: feature
-status: testing
+status: done
 assignee: taro
 game: desert-nightmare
 agents: [Cardón]
