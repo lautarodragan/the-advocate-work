@@ -91,3 +91,7 @@ the stop made not to apply to pages that now only show the box).
   fails only on frozen-world because of it (20 of 21 pass).
 * Pages that compile in the converter (sum of "runnable"): 2962 before, 3286
   of 3303 now, +324 = the 324 pages on 72 maps.
+
+See also [`a-battle-animation-on-the-map-leaves-the-hero-s-palette-wrong`](a-battle-animation-on-the-map-leaves-the-hero-s-palette-wrong.md)
+(2026-11-20): in Zounds a battle animation on another event tints the
+hero and leaves his palette wrong, maybe through a shared palette too.
