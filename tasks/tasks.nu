@@ -134,6 +134,75 @@ def all_tasks [] {
   ls ($env.FILE_PWD | path join '*.md' | into glob) | where type == file | get name | each { parse_file $in }
 }
 
+# The tasks whose history is not in their `## Log` (README, "A task's
+# log"): a heading above it that reads like a log entry, or a `## Log` that
+# is not the last `##` section. A report, not a gate: a heading it lists
+# may be the task's definition, and that is judged by reading it. `done`
+# tasks are left out unless asked for with `--status`.
+#
+# A heading reads like an entry when it starts with a word of the log
+# —Done, Checked, Verified, What was done, When merging…—, when it is
+# `Defined` with a date or an agent after it (a bare `## Defined` is the
+# definition's own heading), when it carries a date, or when it starts
+# with an agent's name or ends with one alone in parentheses —`(Cardón)`—.
+# The date and the agent do not count in a heading that names taro: taro's words and
+# decisions define the task.
+def "main check" [
+  --status (-s): string = "*"
+] {
+  let agents = ls ($env.FILE_PWD | path dirname | path join .claude agents '*.md' | into glob)
+    | get name | each { path parse | get stem } | append hornero
+  let agent_re = $agents | str join '|'
+  let word = '^(done|doing|checked|reviewed|verified|verification|work|what was done|what was run|what ran|status|left|where it was left|closed|measured|measured again|delivered|result|taken|seen again|changed under it|merged|merging|when merging|on merging|for merging|to merge|to install|what to install|after merging|red after merging|tested|how it was verified|handed back|resumed)\b'
+  let date = '\d{4}-\d{2}-\d{2}'
+
+  let found = all_tasks
+    | where { |t| if $status == "*" { $t.status != done } else { $t.status == $status } }
+    | each { |t|
+      let lines = open --raw $t.file | lines
+      mut fence = false
+      mut log_at = -1
+      mut problems = []
+      for l in ($lines | enumerate) {
+        let text = $l.item
+        if ($text | str starts-with '```') { $fence = not $fence; continue }
+        if $fence { continue }
+        if $text == "## Log" {
+          if $log_at >= 0 { $problems = $problems | append {line: ($l.index + 1), heading: $text, why: "a second ## Log"} }
+          $log_at = $l.index
+          continue
+        }
+        let h = $text | parse --regex '^(?<hashes>#{2,6}) (?<title>.*)$'
+        if ($h | is-empty) { continue }
+        let title = $h.0.title | normalize
+        if $log_at >= 0 {
+          if $h.0.hashes == "##" {
+            $problems = $problems | append {line: ($l.index + 1), heading: $text, why: "a ## section after ## Log"}
+          }
+          continue
+        }
+        let by_taro = $title =~ '\btaro\b'
+        let entry = ($title =~ $word
+          or $title =~ '^defined\b.+'
+          or (not $by_taro and $title =~ $date)
+          or (not $by_taro and $title =~ $"^\(($agent_re)\)\\b")
+          or (not $by_taro and $title =~ $"\\\(\(($agent_re)\)\\\)$"))
+        if $entry {
+          $problems = $problems | append {line: ($l.index + 1), heading: $text, why: "log-like, above ## Log"}
+        }
+      }
+      $problems | each { |p| $p | insert file ($t.file | path basename) | insert status $t.status }
+    }
+    | flatten
+
+  if ($found | is-empty) { print "Nothing to move to a ## Log."; return }
+  $found | group-by file | items { |file, ps|
+    print $"(ansi green)($ps.0.status)(ansi reset) ($file)"
+    $ps | each { |p| print $"  ($p.line): ($p.heading)  (ansi dark_gray)\(($p.why)\)(ansi reset)" }
+  }
+  print $"($found | get file | uniq | length) tasks, ($found | length) headings."
+}
+
 # Pick a task with a fuzzy filter and open it in $EDITOR.
 def "main open" [
   --status (-s): string = "*"
