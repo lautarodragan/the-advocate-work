@@ -20,6 +20,23 @@ nothing on the screen. In RPG_RT the room is clean, and looking at the
 lock opens its screen: the plate and four wheels, the chosen one framed,
 each turning with the keys.
 
+The ROM's come from the-advocate `d1972f68` (branch
+`aguara-dn-intro-menu`; `e4bbee1e` draws these maps the same), the
+original's from the 2015 RPG_RT under Wine. The safe, 115: the room, then
+the lock after the keys, on the ROM and in RPG_RT —
+
+![115, the ROM: the room, symbols frozen in it](images/desert-nightmare-the-locks-pictures-are-drawn-into-their-rooms/115-rom-the-room.png)
+![115, the ROM: after the keys, nothing turned](images/desert-nightmare-the-locks-pictures-are-drawn-into-their-rooms/115-rom-the-lock-turned.png)
+![115, RPG_RT: the room](images/desert-nightmare-the-locks-pictures-are-drawn-into-their-rooms/115-rpg-rt-the-room.png)
+![115, RPG_RT: the lock's screen, a symbol turned](images/desert-nightmare-the-locks-pictures-are-drawn-into-their-rooms/115-rpg-rt-the-lock-turned.png)
+
+The shrine, 161, the same four —
+
+![161, the ROM: the room, digits frozen in it](images/desert-nightmare-the-locks-pictures-are-drawn-into-their-rooms/161-rom-the-room.png)
+![161, the ROM: after the keys, nothing turned](images/desert-nightmare-the-locks-pictures-are-drawn-into-their-rooms/161-rom-the-lock-turned.png)
+![161, RPG_RT: the room](images/desert-nightmare-the-locks-pictures-are-drawn-into-their-rooms/161-rpg-rt-the-room.png)
+![161, RPG_RT: the lock's screen, a wheel turned](images/desert-nightmare-the-locks-pictures-are-drawn-into-their-rooms/161-rpg-rt-the-lock-turned.png)
+
 **Why**: the lock's pictures are shown by an action-key page (event 18 on
 115, 16 on 161, called by the lock's event) and erased by another page
 when the lock closes; `map_pictures` takes them as still pictures of the
@@ -30,9 +47,7 @@ The parts rule (`Parts` in `map_pictures.rs`) leaves numbers shown on
 demand out since 2026-11-20: split, the safe's 24 parts did not fit the
 map's VRAM (341 tiles) and its symbols were never seen.
 
-**To reproduce**: the captures of both, the ROM and RPG_RT, in
-`/shared/captures/2026-11-20-dn-intro-and-file-screen/locks/`. The ROM's
-come from a throwaway script that teleports to (11, 8) on 115, or to
+**To reproduce**: the ROM's captures come from a throwaway script that teleports to (11, 8) on 115, or to
 (10, 7) on 161 with switch 585 on, and presses up and A; the original's
 from a copy of the game whose LMT starts there (and on 161, event 2's
 page 3 without its switch).

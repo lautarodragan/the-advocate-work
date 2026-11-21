@@ -41,4 +41,7 @@ RPG_RT under Wine (`/shared/captures/2026-11-20-dn-intro-and-file-screen/locks/`
 they are drawn in as before the rule, one symbol frozen in the room, the
 draft `desert-nightmare-the-locks-pictures-are-drawn-into-their-rooms`.
 Today no number of any port is split and erased, so this bug has no case
-on screen; map 1 never erases its menu.
+on screen; map 1 never erases its menu. **So no captures here**, of 115
+nor of 161: at `e4bbee1e` neither shows this bug —what they show, a
+symbol frozen in the room and a lock that never opens, is in that draft,
+with the ROM and RPG_RT side by side—.
