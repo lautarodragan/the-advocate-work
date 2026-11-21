@@ -28,7 +28,9 @@ of the edges that do not fit in the 127 (the debt in
 `sunset-in-mode-1-with-colour-math.md`, now
 `roof-edges-that-dont-fit-in-the-127.md`).
 
-## Defined (2026-10-16, Carpintero)
+## Defined
+
+On 2026-10-16, by Carpintero.
 
 Still open: nothing on main touched `oam.s`'s mode-1 priorities
 (`bbbd2692` traded BG1 and BG2 only under a message window). Cosmetic: one
@@ -37,3 +39,5 @@ guard in Sunset's square; nothing stops. **Done**: on a painted map an
 the original does, with a golden of map 2's guard at (13,23).
 **First step**: the original under Wine on that spot, to confirm what
 RM2k draws, then which priority an "above" object gets on a painted map.
+
+## Log

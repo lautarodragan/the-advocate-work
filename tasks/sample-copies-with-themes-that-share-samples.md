@@ -26,7 +26,9 @@ use a sample, not of the order in which they arrive, and measure it pair by pair
 455f9fc1). Whatever cannot be recovered without losing something else, recorded for
 taro to listen to.
 
-# What was thought on 2026-09-30, and why it goes to the wishlist
+# What was thought, and why it goes to the wishlist
+
+On 2026-09-30.
 
 With the radio of the troop pages (`common-35-and-the-radio-music.md`)
 it happened again: without MSU-1, the battle theme went down from 11.5 to 10 kHz and another
@@ -54,6 +56,10 @@ ask for; and quality gets tuned when the whole game is playable
 
 **When it is taken**: first an analysis and a plan —measure the graph, the weights
 and how much ROM each option costs—, and from that plan come the tasks.
+
+## Log
+
+### 2026-10-16, Mulita: checked
 
 **Checked on 2026-10-16 (Mulita)**, at the-advocate 759aa0ba: still open. Two things changed around it. The cartridge went to
 ExHiROM at 8 MB on 2026-10-01, so "`release` has few banks left" no

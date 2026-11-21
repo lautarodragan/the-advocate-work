@@ -22,6 +22,10 @@ MSU-1 tracks —the tracks would change bytes: it is decided by listening—, an
 whether `symphonia` (decoders in Rust) is enough for the replacements. And
 where it would live: probably in `gunter`, which already reads the SoundFont.
 
+## Log
+
+### 2026-10-16, Mulita: checked
+
 **Checked on 2026-10-16 (Mulita)**, at the-advocate 759aa0ba: both are still used, now from Rust: fluidsynth in `rm2k-snes-audio`
 (`tracks.rs`, `ceilings.rs`, `bin/msu.rs`), and ffmpeg for the
 replacements, a game's own `.wav` songs and, since `30ab0ca6`, the MP3 a

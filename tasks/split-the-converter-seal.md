@@ -16,6 +16,10 @@ would cost about 4 s instead of ~15. It is a structural change in
 
 taro left it in wishlist: the gain is not much.
 
+## Log
+
+### 2026-10-16, Mulita: checked
+
 **Checked on 2026-10-16 (Mulita)**, at the-advocate 759aa0ba: still one fingerprint for everything —`fingerprint_files` in
 `rm2k-snes/cartridge/src/cartridges.rs`, which replaced
 `tools/ensamblado/cartuchos.py`—. `rom/src/` is `runtime/` since

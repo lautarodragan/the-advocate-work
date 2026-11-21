@@ -69,6 +69,18 @@ cells pixel by pixel at 15 bits):
   centre, whether it fades too.
 * A recommendation with a measured limit, and phases.
 
+## taro, 2026-10-13: the research stays, the zoom waits
+
+> Let's not change anything yet. If we decide to implement the zoom and
+> we see it working, then we'll decide whether to change ABL. For now,
+> let's leave the research in the book and that's it. Having other
+> transitions has less priority than bug fixing and implementing RPG
+> Maker features or commands we don't have yet. It can stay in the
+> wishlist for now. As long as it doesn't block anything, we're fine.
+
+So: wishlist, with the research
+done; ABL keeps the mosaic to start a battle.
+
 ## Log
 
 ### 2026-10-12, Carpintero
@@ -160,15 +172,3 @@ untouched. **The recommendation does not change.**
   count by key on the ROM, not only by captured pixels; measure a few
   misaligned-camera screens; report latency and visible black separately;
   keep mosaic/fade as the per-screen fallback.
-
-### taro, 2026-10-13: the research stays, the zoom waits
-
-> Let's not change anything yet. If we decide to implement the zoom and
-> we see it working, then we'll decide whether to change ABL. For now,
-> let's leave the research in the book and that's it. Having other
-> transitions has less priority than bug fixing and implementing RPG
-> Maker features or commands we don't have yet. It can stay in the
-> wishlist for now. As long as it doesn't block anything, we're fine.
-
-So: wishlist, with the research
-done; ABL keeps the mosaic to start a battle.
