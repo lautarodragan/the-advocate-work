@@ -189,7 +189,9 @@ tells apart two battlers with the same drawing.
   non-lossy kind. What would be missing to emit is which graphic was treated that way in each
   map, which is little more than repeating the list.
 
-# Checked on 2026-10-16
+## Log
+
+### 2026-10-16, Cardón: checked
 
 At the-advocate `759aa0ba` and the ports `4b2d41e`, by Cardón. Phase 1
 stands as described and phase 2 has not started: the converter still
@@ -211,8 +213,6 @@ followed:
   animations given up, rain and pictures not drawn, the ChipSet animation
   cut, events left out—. It is not versioned and it is not the desired
   state phase 2 asks for, but it is the list of what is lost, by place.
-
-## Log
 
 ### 2026-10-20, Chajá: checked
 
