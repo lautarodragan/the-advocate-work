@@ -2,7 +2,7 @@
 name: "PlayBGM's fade-in is dropped"
 description: "The compiler reads a PlayBGM's volume, tempo and balance and emits it without the fade-in, so the theme starts at once"
 type: bug
-game: dooms2
+game: abl
 status: testing
 assignee: taro
 author: cardon
