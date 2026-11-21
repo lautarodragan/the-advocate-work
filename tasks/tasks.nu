@@ -175,13 +175,15 @@ def "main check" [
         }
         # A paragraph that opens with a bold entry —`**Checked on
         # 2026-10-16** by Cardón:`, `**2026-10-16, Hurón**`— is an entry
-        # without a heading. `**Done** means` is the definition's.
+        # without a heading. `**Done** means` is the definition's, and a
+        # bare `**Measured**` or `**Since <date>**` is usually the finding
+        # itself.
         let b = $text | parse --regex '^\*\*(?<lead>[^*]+)\*\*'
         if $log_at < 0 and ($b | is-not-empty) {
           let lead = $b.0.lead | normalize
-          if (not ($lead =~ '\btaro\b') and ($lead =~ $date
+          if (not ($lead =~ '\btaro\b') and ($lead =~ $"^($date)"
               or $lead =~ $"^\(($agent_re)\)\\b"
-              or $lead =~ '^(checked|verified|reviewed|measured|measured again|seen again)\b')) {
+              or $lead =~ '^(checked|verified|reviewed|measured again|seen again)\b')) {
             $problems = $problems | append {line: ($l.index + 1), heading: ($text | str substring 0..60), why: "a bold entry, above ## Log"}
           }
           continue
