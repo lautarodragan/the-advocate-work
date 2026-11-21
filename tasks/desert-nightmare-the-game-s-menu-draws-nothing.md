@@ -173,3 +173,11 @@ hardware.
 ports' and the book's `mulita-dn-menu-keys`. Install `events`,
 `convert`, `mapdata`, `cartridge` and `rm2k-snes-audio`; the runtime is
 the checkout's. The goldens are in their own commit, `0fb2535`.
+
+**After merging main** (Cardón's walls: the-advocate `82ce793c`, the ports
+`3fe8f6d`): his `map_pictures` rule is the converter's, for a map's own
+pictures; the menu's commons and the cover opcode do not reach it. With
+the merged tools: `just test` 29, the DN menu and safe tests 7 passed —
+**none of the six new goldens moved**, nor the earlier ones—, the ports'
+`just boot` 182 passed, ABL's `just tests` 1,723 passed and 2 skipped,
+`abl.sfc` `6b0c217d…`.
