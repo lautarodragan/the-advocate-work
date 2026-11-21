@@ -2,7 +2,7 @@
 name: "Desert Nightmare: the towns run at half speed"
 description: "Every map that draws more than ~50 events takes two frames or more per round of the main loop —2.65 on map 62—: the town's streets play at 30 frames a second or less. With no row drawn, map 2 is back at one"
 type: bug
-status: testing
+status: done
 assignee: taro
 game: desert-nightmare
 agents: [Hurón, Cardón]

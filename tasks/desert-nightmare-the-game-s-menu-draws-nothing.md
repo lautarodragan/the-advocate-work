@@ -2,7 +2,7 @@
 name: "Desert Nightmare: the game's menu draws nothing"
 description: "B opens the game's own menu —Inventory, Keys, Notes, Maps, Quit, made of 320x240 pictures— and the console draws none of it: the map stays on screen while the menu takes the buttons"
 type: bug
-status: testing
+status: done
 assignee: taro
 game: desert-nightmare
 agents: [Hurón, Mulita]
