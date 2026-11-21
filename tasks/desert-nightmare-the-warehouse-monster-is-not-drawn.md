@@ -1,0 +1,38 @@
+---
+name: "Desert Nightmare: the warehouse's monster is not drawn"
+description: "The silhouette that comes down from the roof on map 28 and the shadow that crosses map 21 are small pictures now, and neither room has a sprite tile to spare for them: the scene plays over the room without them"
+type: bug
+status: draft
+author: aguara
+agents: [Aguará]
+game: desert-nightmare
+---
+
+Seen by Aguará on 2026-11-21, closing
+[`desert-nightmare-the-screen-goes-black-before-the-first-monster`](desert-nightmare-the-screen-goes-black-before-the-first-monster.md),
+with the-advocate at `aguara-dn-black` (from `a537d967`) and the ports at
+`aguara-dn-black` (from `d17237a`).
+
+**What is seen**: in the warehouse's last room, map 28, after "None of the
+doors lead out...", the room stays as it is for six seconds and then the
+battle animation: RPG_RT shows over it a dark silhouette coming down from
+the cabinet, a few pixels every half second (`LagerhausDach_Szene2` to `4`,
+picture 1, at 50 %), and a piece of the cabinet (`LagerhausDach_Szene1`).
+The same on the entrance, map 21: RPG_RT shows a shadow crossing the room
+(`Lagerhaus_Szene2` and `3`, with the map). Until that task the screen
+went black instead.
+
+**Why**: they are small pictures now —a few objects each— and the maps
+have no room in their sprites: map 28's sprite bank takes 256 of its 256
+tiles with its characters, and not even the 4 tiles of the green marks
+(`Interaktion`) fit. The converter's log says it as "WARNING, the pictures
+'TextboxInnen, TextboxRahmen, Interaktion, …, LagerhausDach_Szene2, …'
+aren't drawn here". `LagerhausDach_Szene1` and the cabinet's piece of map
+21 are a scene's, and accepted without being done: see "whether it stays"
+in `rm2k-snes/convert/src/map_pictures.rs`.
+
+**What could make room**: a picture shown only while a page runs could
+take the tiles of what that page hides or of a cache slot; or the map's
+pictures could go in without the ones that never fit —see
+[`a-map-s-small-pictures-go-in-all-or-none`](a-map-s-small-pictures-go-in-all-or-none.md)—,
+though on map 28 that alone does not make room.
