@@ -167,5 +167,12 @@ at `e4bbee1e`: ABL's suite 1723 passed, 2 skipped, `abl.sfc` sha256
 185 passed. **The five goldens did not move**: the start menu's test
 passes against them as committed.
 
+Then main again (Calandria's and Mulita's, with `OP_WINDOW_COVER`): a big
+picture taken down after its fade uncovers the windows as its
+`ErasePicture` would (`0a0ff067`). With the-advocate at `0a0ff067`:
+`just lint` and `just test` green, ABL's suite 1723 passed, 2 skipped,
+`abl.sfc` sha256 `75612b88b10d30ae…`; the ports' `just boot` 187 passed.
+The five goldens, approved by taro, did not move.
+
 To install when merging: `convert`, `wally`, `events`, and the runtime
 (`cartridge`, which assembles from the checkout).
