@@ -208,6 +208,26 @@ def render_body [] {
     | str replace --all --regex '(<a class="shot"[^>]*><img [^>]*>)' '$1</a>'
 }
 
+# A task's body, with its log apart: what comes before the exact line
+# `## Log` defines the task and is rendered as it is; what comes after is
+# its history, one `### <date>, <who>: <what>` entry per step (README, "A
+# task's log"), and goes folded in a box of its own, closed, saying how
+# many entries it has. A task without that line is all definition.
+def body_html [] {
+  let body = $in
+  let lines = $body | lines
+  let at = $lines | enumerate | where item == "## Log" | get -o 0.index
+  if $at == null { return ($body | render_body) }
+  let log = $lines | skip ($at + 1)
+  let n = $log | where { $in | str starts-with "### " } | length
+  # Logs older than the convention may have no `### ` entries: just "Log".
+  let label = match $n { 0 => "", 1 => " · 1 entry", _ => $" · ($n) entries" }
+  [
+    ($lines | first $at | str join "\n" | render_body)
+    $"<details class=\"log\"><summary>Log($label)</summary><div class=\"log-body\">($log | str join "\n" | render_body)</div></details>"
+  ] | str join ''
+}
+
 # What comes after the frontmatter.
 def task_body [file: string] {
   open --raw $file | str replace --regex '(?s)\A---\n.*?\n---\n' '' | str trim
@@ -235,7 +255,7 @@ def task_html [] {
     $"<summary><button type=\"button\" class=\"copy\" data-copy=\"($id | escape)\" title=\"Copy the task's file name\">copy</button><button type=\"button\" class=\"pick\" data-id=\"($id | escape)\" aria-pressed=\"false\" title=\"Add the task to the selection, to copy several at once\">select</button><span class=\"type\">($t.task_type | escape)</span>($games)<span class=\"name\">($t.name | escape)</span>"
     $"<span class=\"desc\">($t.description | escape)</span></summary>"
     $"<p class=\"meta\"><a href=\"#($id)\">#</a> · <a href=\"($source)\">($id).md</a>($changed)($assignee)($agents)</p>"
-    $"<div class=\"body\">($t.body | render_body)</div>"
+    $"<div class=\"body\">($t.body | body_html)</div>"
     "</details>"
   ] | str join ''
 }
