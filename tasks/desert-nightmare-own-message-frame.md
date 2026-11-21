@@ -61,3 +61,16 @@ picture is left half-drawn around it
 row). The lock works —the right code opens it, a wrong one does not—; it
 cannot be read. On the maps where the pictures do not fit (28, 42) the
 same digits go over the map with no box, as any faceless message there.
+
+## Seen again (2026-11-20, Calandria)
+
+At the-advocate `7951af2a` and the ports `42f70e8`, on the office (map 24),
+another map where they fit, with a face: taro saw the frame "as lines
+across the whole screen" while a message fades in
+(`/shared/bug-reports-etc/dn/show-message-fadein-broken-*.png`). It is
+common event 2 fading the two pictures in before the box: counted in the
+OAM during the fade, up to 40 objects and 56 slivers on a line, over the
+PPU's 32 and 34 on 39 lines, so what goes past is not drawn and lines are
+what is left; and 320 wide on a 256 screen, so their right edge is never
+seen. When the box opens, the window's mask hides them. Looked at from
+task `desert-nightmare-message-text-cut-by-the-map`, and left to this one.
