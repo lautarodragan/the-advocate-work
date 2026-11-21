@@ -2,8 +2,10 @@
 name: "Desert Nightmare: the screen goes black before the first monster"
 description: "In the first dungeon, when the first monster shows up, the screen stays black for about 363 frames and comes back in pieces over four frames; RM2k does not go black there"
 type: bug
-status: todo
+status: doing
+assignee: Aguará
 author: taro
+agents: [Aguará]
 game: desert-nightmare
 ---
 
