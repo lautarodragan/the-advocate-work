@@ -3,6 +3,7 @@ name: "A transparent window over a flattened panorama shows striped edges"
 description: "On ABL's map 1 (Night1 panorama, mode 3, flattened) a transparent message in the middle shows a red-and-white striped column at both screen edges on its text lines, where the panorama's night sky is with the window closed"
 type: bug
 status: draft
+author: aguara
 ---
 
 Seen by Aguará on 2026-11-16, measuring

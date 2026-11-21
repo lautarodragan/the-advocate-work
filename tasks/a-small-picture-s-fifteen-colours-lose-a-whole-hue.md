@@ -3,6 +3,7 @@ name: "A small picture's fifteen colours lose a whole hue"
 description: "A face shown as a picture keeps its fifteen most used colours: Unamë's green hair and eyes on Zounds' skill screen come out orange, the skin's"
 type: bug
 status: draft
+author: calandria
 ---
 
 Seen by Calandria on 2026-10-20, with the-advocate `3bc68ac4` plus the

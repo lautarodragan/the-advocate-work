@@ -3,6 +3,7 @@ name: "The on-screen timer is expensive to draw"
 description: "While a timer is shown, `timer_oam` takes ~18 of the frame's 262 lines on every frame for its five 8x8 glyphs, and on a busy map that is what tips a tick over the frame"
 type: refactor
 status: draft
+author: aguara
 ---
 
 Seen by Aguará on 2026-11-17, measuring

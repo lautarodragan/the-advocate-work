@@ -3,6 +3,7 @@ name: "The battle leaves teleport and escape skills out of the list"
 description: "RM2k 2000 lists every skill an actor knows in battle, a teleport or escape one grey; this battle leaves them out, so Zounds' Teleport is not in its party's battle list"
 type: bug
 status: draft
+author: cardon
 agents: [Cardón]
 ---
 

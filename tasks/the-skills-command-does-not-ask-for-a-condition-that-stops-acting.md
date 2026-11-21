@@ -3,6 +3,7 @@ name: "The skills command does not ask for a condition that stops acting"
 description: "The pause menu's Skills refuses only an actor at 0 HP; RM2k's CanAct also refuses one holding a condition whose restriction is 'does nothing', which the party can hold on the map since 2026-11-01"
 type: bug
 status: draft
+author: chaja
 ---
 
 Seen by Chajá on 2026-11-01, doing

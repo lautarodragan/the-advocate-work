@@ -3,6 +3,7 @@ name: "The action key fires only the first event of a cell"
 description: "RPG_RT's CheckEventTriggerHere and CheckEventTriggerThere walk every event on the cell; the runtime's event_in_cell returns the first row it finds, so a second event on the same cell, with its own page, is never fired by the action key or a touch"
 type: bug
 status: draft
+author: calandria
 ---
 
 Seen by Calandria on 2026-11-02, reading the code while doing

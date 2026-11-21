@@ -3,6 +3,7 @@ name: "Zounds' boot test once saw snes9x and bsnes arrive sixteen ticks apart"
 description: "`just boot` failed once on zounds with 'snes9x and bsnes arrive differently': the same map, cell and direction, at tick 4437 and 4453; it passed alone right after"
 type: bug
 status: draft
+author: carpintero
 ---
 
 Seen by Carpintero on 2026-10-17, with the-advocate `c116cd7b` (branch

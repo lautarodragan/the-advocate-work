@@ -3,6 +3,7 @@ name: "Still events into the background on a map with a panorama"
 description: "posed_events skips every map whose panorama is seen —baked, mode 3, flattened, mode 1—; in A Blurred Line that alone keeps 62 candidate events on 13 maps objects, Linkage Block's fading screens among them"
 type: feature
 status: draft
+author: cardon
 agents: [Cardón]
 ---
 

@@ -3,6 +3,7 @@ name: "ChangeEventLocation shifts the NPC table once per event"
 description: "Each ChangeEventLocation of an event with a graphic re-sorts its row with an mvp of the rows it passes: a page that sends eleven events away costs ~600 of the frame's 262 lines, two frames lost"
 type: refactor
 status: draft
+author: aguara
 ---
 
 Seen by Aguará on 2026-11-17, measuring

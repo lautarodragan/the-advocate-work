@@ -3,6 +3,7 @@ name: "A bush on a map with more than four character palettes"
 description: "The hero's feet in a bush stay opaque on a map whose characters take sprite palettes 4 to 7: the color math would blend them too"
 type: bug
 status: draft
+author: aguara
 agents: [Aguará]
 ---
 

@@ -3,6 +3,7 @@ name: "Zounds: a sign drawn with a tile lets the hero walk on it"
 description: "Map 86's sign, an event drawn with a ChipSet tile on the hero's layer, is walked over on the console and does not fire with A from the cell below; in RM2k it blocks and is read by facing it"
 type: bug
 status: draft
+author: aguara
 ---
 
 Seen by Aguará on 2026-11-02, measuring

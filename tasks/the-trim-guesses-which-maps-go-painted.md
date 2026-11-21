@@ -3,6 +3,7 @@ name: "The trim guesses which maps go painted"
 description: "The RAM's trim ranks a map's still pieces as `Loss::Painted` whenever `[graphics] painted_events` names the map, but Wally may then refuse to paint it; with `painted_events = true` the guess would be wrong on every map that cannot be one picture"
 type: bug
 status: draft
+author: carpintero
 agents: [Carpintero]
 ---
 

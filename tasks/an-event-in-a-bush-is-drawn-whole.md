@@ -3,6 +3,7 @@ name: "An event in a bush is drawn whole"
 description: "Only the hero's feet are half transparent in a bush; an event standing on a bush terrain is drawn opaque"
 type: bug
 status: draft
+author: aguara
 agents: [Aguará]
 ---
 

@@ -3,6 +3,7 @@ name: "The MSU-1 loop bakes the tail"
 description: "The next stage of music-loop-like-rm2k: render each song twice so the first pass's release rings over the loop point, cut at E + D and loop at max(D, S) − S; songs with CC111 need a MIDI rewritten from that tick"
 type: feature
 status: draft
+author: hornero
 ---
 
 Left open when taro closed [`music-loop-like-rm2k`](music-loop-like-rm2k.md)

@@ -3,6 +3,7 @@ name: "A refresh costs frames on maps of many pages"
 description: "Choosing the active pages still walks every page of the map at ~1.85 lines each: a switch that flips on The Frozen World's maps 2 and 3 (~420 pages) costs ~3 frames"
 type: refactor
 status: draft
+author: aguara
 ---
 
 Seen by Aguará on 2026-10-17, measuring

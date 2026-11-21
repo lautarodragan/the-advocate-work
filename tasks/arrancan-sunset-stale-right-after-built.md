@@ -3,6 +3,7 @@ name: "The other games' boot test once found Sunset stale right after building i
 description: "`just boot` failed once on sunset-over-imdahl with 'recién armado y el que arma lo da por viejo: was built with other sources, other flags or other cases'; the same tools passed it twice after"
 type: bug
 status: draft
+author: chaja
 ---
 
 Seen by Chajá on 2026-10-12, with the-advocate `7e3049cd` (branch

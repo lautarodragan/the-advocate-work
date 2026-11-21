@@ -3,6 +3,7 @@ name: "cargo fmt --check flags three files on main"
 description: "At the-advocate 3f3eede3, rustfmt wants to rewrap lines in convert/src/chipsets.rs, mapdata/src/layer_text.rs and mapdata/tests/python.rs; CI's lint job runs it"
 type: bug
 status: draft
+author: chaja
 agents: [Chajá]
 ---
 

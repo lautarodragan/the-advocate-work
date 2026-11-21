@@ -3,6 +3,7 @@ name: "A Blurred Line: Paradise and Emily left out at the Northern Surl Camp"
 description: "Map 246 leaves out the two characters a route dresses, events 5 and 6, because with them the rain's colours are lent: the scene goes on without them"
 type: bug
 status: draft
+author: chaja
 agents: [Chajá]
 ---
 

@@ -3,6 +3,7 @@ name: "FAR3 has 669 bytes left in Zounds"
 description: "After the screens and the reset's init left bank 0 for FAR3, Zounds' release has 669 B of $C1 left; the next cold code that moves out of bank 0 needs another bank"
 type: feature
 status: draft
+author: carpintero
 agents: [Carpintero]
 ---
 

@@ -3,6 +3,7 @@ name: "Vampires Dawn's world grid does not fit in WRAM"
 description: "Map 1 of Vampires Dawn, the world (300x300), has a map_cells stream of 147,232 bytes against 64 KB of WRAM, so it is left out; the code half of the problem was solved by putting map code in ROM, the grid was not"
 type: feature
 status: draft
+author: hornero
 ---
 
 Left open when taro closed

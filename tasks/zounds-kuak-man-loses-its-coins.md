@@ -3,6 +3,7 @@ name: "Zounds: the Kuak-Man mini-game loses 206 of its 314 coins"
 description: "Map 178 has 327 events and the console keeps 120 rows; the coins are drawn, touch and erase themselves, so no twin folding keeps them"
 type: bug
 status: draft
+author: carpintero
 ---
 
 Seen by Carpintero on 2026-10-17, measuring

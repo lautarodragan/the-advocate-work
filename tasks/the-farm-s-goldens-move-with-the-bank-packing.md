@@ -3,6 +3,7 @@ name: "The farm's goldens move with the bank packing"
 description: "paradise-127-celebration and paradise-127-farmers-jump catch four farmers in the other frame of their idle animation when map 127's data lands in other banks, with nothing changed in the map or the runtime"
 type: bug
 status: draft
+author: tijereta
 ---
 
 Seen by Tijereta on 2026-11-01, with the-advocate `422f904d` (main's

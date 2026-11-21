@@ -3,6 +3,7 @@ name: "A map load still decompresses inside its tick"
 description: "Inside a teleport's fade, the grid, the background, the ChipSet animation, the upper layer and the sprites still decompress in the load's own tick: some four to nine frames a load, every game"
 type: refactor
 status: draft
+author: cardon
 ---
 
 Seen by Cardón on 2026-10-18, measuring

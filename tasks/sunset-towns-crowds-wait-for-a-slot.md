@@ -3,6 +3,7 @@ name: "Sunset's towns: part of a crowd waits for a slot"
 description: "On Sunset Over Imdahl's busiest painted maps more events can be on screen than the cache of slots holds, even with no still event animating, so the last drawn appear late"
 type: bug
 status: draft
+author: calandria
 ---
 
 Seen by Calandria on 2026-10-17, with the-advocate `eb16d48b` (branch

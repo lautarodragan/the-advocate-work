@@ -3,6 +3,7 @@ name: "The song a map turns on goes up inside the load"
 description: "With the rest of the package in the fade's frozen ticks, the samples of the map's own song still go up in the load's tick, because the song starts there: what is left of the slowest loads, up to some 60 frames"
 type: refactor
 status: draft
+author: cardon
 ---
 
 Seen by Cardón on 2026-10-18, measuring

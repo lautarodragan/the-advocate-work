@@ -3,6 +3,7 @@ name: "Identical copies of a common event are stored in every map"
 description: "A copied automatic common event is the same bytecode in every map it goes into, and each map carries its own: Desert Nightmare's common 14 is 7,317 bytes, one copy in each of 181 maps, and copied with 12 it pushes every map past what decompresses into WRAM"
 type: feature
 status: draft
+author: carpintero
 game: desert-nightmare
 agents: [Carpintero]
 ---

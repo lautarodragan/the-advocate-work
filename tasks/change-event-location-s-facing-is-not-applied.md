@@ -3,6 +3,7 @@ name: "ChangeEventLocation's facing is not applied"
 description: "RPG Maker 2003's ChangeEventLocation says which way the event faces where it is placed; the console keeps the facing it had"
 type: bug
 status: draft
+author: mulita
 agents: [Mulita]
 ---
 

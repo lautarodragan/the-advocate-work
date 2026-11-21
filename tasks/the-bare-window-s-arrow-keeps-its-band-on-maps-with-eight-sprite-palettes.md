@@ -3,6 +3,7 @@ name: "The bare window's arrow keeps its band on maps with eight sprite palettes
 description: "Where no sprite palette or no two sprite tiles are free, the arrow of a message without a background stays in the window's cells and its bottom row still hides the layer above: in A Blurred Line, the busy maps, the city of Core and Manta's memory among them"
 type: feature
 status: draft
+author: chaja
 ---
 
 Seen by Chajá on 2026-10-18, closing

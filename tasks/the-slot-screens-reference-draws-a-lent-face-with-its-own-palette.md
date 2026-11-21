@@ -3,6 +3,7 @@ name: "The slot screen's reference draws a lent face with its own palette"
 description: "screens.slot_screen builds its bank with the parties it is given, so a face the cartridge draws with another's palette —Royal Dalia's in ABL— comes out in its own colours, and comparing the ROM against it is red"
 type: test
 status: draft
+author: huron
 agents: [Hurón]
 ---
 

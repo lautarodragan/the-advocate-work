@@ -3,6 +3,7 @@ name: "Zounds: the menu's pictures on map 136 need 512 object tiles"
 description: "Two faces of 180x59, a bar as wide as the screen and an HP picture are 512 tiles of 32x32 objects, and with the hero's the map fits no VRAM layout: the whole set is left out"
 type: bug
 status: draft
+author: tijereta
 ---
 
 Seen by Tijereta on 2026-10-16, with the-advocate `9407d385` plus the

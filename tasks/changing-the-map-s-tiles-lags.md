@@ -3,6 +3,7 @@ name: "Changing the map's tiles lags"
 description: "The commands that change the map's tiles —TileSubstitution and the like— take visibly longer to show than RPG_RT"
 type: bug
 status: draft
+author: taro
 ---
 
 taro, on 2026-11-02, in their words, translated, while Cardón was
