@@ -135,8 +135,9 @@ def all_tasks [] {
 }
 
 # The tasks whose history is not in their `## Log` (README, "A task's
-# log"): a heading above it that reads like a log entry, or a `## Log` that
-# is not the last `##` section. A report, not a gate: a heading it lists
+# log"): a heading above it that reads like a log entry —or a paragraph
+# that opens with one in bold—, or a `## Log` that is not the last `##`
+# section. A report, not a gate: a heading it lists
 # may be the task's definition, and that is judged by reading it. `done`
 # tasks are left out unless asked for with `--status`.
 #
@@ -170,6 +171,19 @@ def "main check" [
         if $text == "## Log" {
           if $log_at >= 0 { $problems = $problems | append {line: ($l.index + 1), heading: $text, why: "a second ## Log"} }
           $log_at = $l.index
+          continue
+        }
+        # A paragraph that opens with a bold entry —`**Checked on
+        # 2026-10-16** by Cardón:`, `**2026-10-16, Hurón**`— is an entry
+        # without a heading. `**Done** means` is the definition's.
+        let b = $text | parse --regex '^\*\*(?<lead>[^*]+)\*\*'
+        if $log_at < 0 and ($b | is-not-empty) {
+          let lead = $b.0.lead | normalize
+          if (not ($lead =~ '\btaro\b') and ($lead =~ $date
+              or $lead =~ $"^\(($agent_re)\)\\b"
+              or $lead =~ '^(checked|verified|reviewed|measured|measured again|seen again)\b')) {
+            $problems = $problems | append {line: ($l.index + 1), heading: ($text | str substring 0..60), why: "a bold entry, above ## Log"}
+          }
           continue
         }
         let h = $text | parse --regex '^(?<hashes>#{2,6}) (?<title>.*)$'
