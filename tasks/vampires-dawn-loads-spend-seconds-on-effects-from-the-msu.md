@@ -24,7 +24,9 @@ tick, where an overrun does not show (`whole_ones`). The slowest maps: 195 (215 
 script described in that task's log, or any door between two maps of the
 list above, counting hardware frames until `fade` goes back to zero.
 
-## Checked (2026-10-20, Tijereta)
+## Log
+
+### 2026-10-20, Tijereta: checked
 
 Still so at the-advocate `8f290c39`: `whole_ones`
 (`runtime/audio_package.s`) still puts the effects that go up whole on

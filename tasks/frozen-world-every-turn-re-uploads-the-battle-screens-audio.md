@@ -28,7 +28,9 @@ anticipated the round trips without measuring them.
 grid and A on Monster A; count the hardware frames of the ticks that load
 maps 1 and 3.
 
-## Checked (2026-10-20, Tijereta)
+## Log
+
+### 2026-10-20, Tijereta: checked
 
 Not measured again. Two things moved since: `maps-load-faster-without-losing-anything`
 (`testing`) uploads a teleport's package in the fade's frozen ticks, and
