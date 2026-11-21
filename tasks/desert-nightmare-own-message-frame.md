@@ -2,8 +2,8 @@
 name: "Desert Nightmare's own message frame"
 description: "Desert draws its messages with two pictures of its own, TextboxInnen and TextboxRahmen; today's release does not draw them in 157 maps"
 type: bug
-status: doing
-assignee: Hurón
+status: testing
+assignee: taro
 author: hornero
 agents: [Hurón]
 ---
@@ -180,9 +180,19 @@ office and the lock, every tick checked against the PPU's 32 objects and
 34 slivers, the frame equal on both maps and not the map under it, and
 the lock's line with ink for four digits. Red on main: 39 lines over on
 map 24 (35 objects, 56 slivers), 6 columns of ink on the lock. Goldens in
-their own commit, two new and four moved —the menu's two, the message
-after the menu, the intro's first message—, side by side in
-`/shared/captures/2026-11-21-dn-own-box/`.
+their own commit, two new and ten moved —the menu's eight, frame only;
+the message after the menu; the intro's first message, which now has its
+box—, side by side in `/shared/captures/2026-11-21-dn-own-box/`.
+
+Run on the branch, with the tools as installed: ABL's suite, 1728 passed
+and 2 skipped; `just boot`, 187 passed and 2 red, the menu's goldens
+behind the first ones, then accepted —frame only—; the Desert Nightmare
+tests again, 21 passed. `just lint` is the-advocate's, which this does not
+touch, and was not run.
+
+To merge: nothing to install —the change is the ports' patches and
+tests, and the book's known issue and decision (branch `huron-dn-frame`
+in both)—.
 
 What no test covers: the box closing and opening between messages, the
 `ShowChoice` in the box, and any of the other 1,646 calls; the fork run by
