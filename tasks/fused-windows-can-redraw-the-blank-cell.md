@@ -36,7 +36,9 @@ Dooms 2 and Zounds fuse the actor choice's windows (82, 85 and 81 tiles of
 64 since the cursors) and none merges it—. Then the converter stops on
 that game.
 
-## Defined (2026-10-16, Carpintero)
+## Defined
+
+On 2026-10-16, by Carpintero.
 
 Latent: with each game's `[windows.background]` no cartridge merges the
 blank cell today, and if one did the converter would stop rather than
@@ -44,3 +46,5 @@ draw stripes. **Done**: `fit` never merges the blank cell (tile 0) into
 another, with a unit test in the screens crate red before the fix; the
 request above, rendered without `--window-background`, draws the menu's
 background black. Becomes `todo` the day a game stops on it.
+
+## Log

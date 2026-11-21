@@ -134,6 +134,105 @@ def all_tasks [] {
   ls ($env.FILE_PWD | path join '*.md' | into glob) | where type == file | get name | each { parse_file $in }
 }
 
+# The tasks whose history is not in their `## Log` (README, "A task's
+# log"): a heading above it that reads like a log entry —or a paragraph
+# that opens with one in bold—, or a `## Log` that is not the last `##`
+# section. A report, not a gate: a heading it lists
+# may be the task's definition, and that is judged by reading it. `done`
+# tasks are left out unless asked for with `--status`.
+#
+# A heading reads like an entry when it starts with a word of the log
+# —Done, Checked, Verified, What was done, When merging…—, when it is
+# `Defined` with a date or an agent after it (a bare `## Defined` is the
+# definition's own heading), when it carries a date, or when it starts
+# with an agent's name or ends with one alone in parentheses —`(Cardón)`—.
+# The date and the agent do not count in a heading that names taro: taro's
+# words and decisions define the task. The older tasks' `#` headings count
+# too.
+def "main check" [
+  --status (-s): string = "*"
+] {
+  let agents = ls ($env.FILE_PWD | path dirname | path join .claude agents '*.md' | into glob)
+    | get name | each { path parse | get stem } | append hornero
+  let agent_re = $agents | str join '|'
+  let word = '^(done|doing|checked|reviewed|verified|verification|work|what was done|what was run|what ran|status|left|where it was left|closed|measured|measured again|delivered|result|taken|seen again|changed under it|merged|merging|when merging|on merging|for merging|to merge|to install|what to install|after merging|red after merging|tested|how it was verified|handed back|resumed)\b'
+  let date = '\d{4}-\d{2}-\d{2}'
+
+  let found = all_tasks
+    | where { |t| if $status == "*" { $t.status != done } else { $t.status == $status } }
+    | each { |t|
+      let lines = open --raw $t.file | lines
+      mut fence = false
+      mut log_at = -1
+      mut defined_next = false
+      mut problems = []
+      for l in ($lines | enumerate) {
+        let text = $l.item
+        if ($text | str starts-with '```') { $fence = not $fence; continue }
+        if $fence { continue }
+        if $text == "## Log" {
+          if $log_at >= 0 { $problems = $problems | append {line: ($l.index + 1), heading: $text, why: "a second ## Log"} }
+          $log_at = $l.index
+          continue
+        }
+        # A paragraph that opens with a bold entry —`**Checked on
+        # 2026-10-16** by Cardón:`, `**2026-10-16, Hurón**`— is an entry
+        # without a heading, and so is a bold lead followed by `(<agent>,
+        # <date>)`. `**Done** means` is the definition's, and a bare
+        # `**Measured**` or `**Since <date>**` is usually the finding
+        # itself. So is the first paragraph under a bare `## Defined`, which
+        # dates the definition: `**2026-10-16, Hurón**, checked against…`.
+        let b = $text | parse --regex '^\*\*(?<lead>[^*]+)\*\*(?<paren> \([^)]*\))?'
+        let opens_defined = $defined_next
+        if ($text | str trim | is-not-empty) { $defined_next = false }
+        if $log_at < 0 and ($b | is-not-empty) and not $opens_defined {
+          let lead = $b.0.lead | normalize
+          let paren = $b.0.paren? | default "" | normalize
+          if (not ($lead =~ '\btaro\b') and (($lead =~ $date and not ($lead =~ '^since\b'))
+              or ($paren =~ $date and $paren =~ $"\\b\(($agent_re)\)\\b")
+              or $lead =~ $"^\(($agent_re)\)\\b"
+              or $lead =~ '^(checked|verified|reviewed|measured again|seen again)\b')) {
+            $problems = $problems | append {line: ($l.index + 1), heading: ($text | str substring 0..60), why: "a bold entry, above ## Log"}
+          }
+          continue
+        }
+        let h = $text | parse --regex '^(?<hashes>#{1,6}) (?<title>.*)$'
+        if ($h | is-empty) { continue }
+        let title = $h.0.title | normalize
+        $defined_next = $h.0.hashes == "##" and $title == "defined"
+        if $log_at >= 0 {
+          if ($h.0.hashes | str length) <= 2 {
+            $problems = $problems | append {line: ($l.index + 1), heading: $text, why: "a section after ## Log"}
+          }
+          continue
+        }
+        # The older tasks' `# Status` is a line of where the task stands
+        # —"Noted, not started"—: when it is a step's history instead, that
+        # is judged by reading it.
+        if $h.0.hashes == "#" and $title == "status" { continue }
+        let by_taro = $title =~ '\btaro\b'
+        # `## Done means`, like `**Done** means`, is the definition's.
+        let entry = (($title =~ $word and not ($title =~ '^done means\b'))
+          or $title =~ '^defined\b.+'
+          or (not $by_taro and $title =~ $date)
+          or (not $by_taro and $title =~ $"^\(($agent_re)\)\\b")
+          or (not $by_taro and $title =~ $"\\\(\(($agent_re)\)\\\)$"))
+        if $entry {
+          $problems = $problems | append {line: ($l.index + 1), heading: $text, why: "log-like, above ## Log"}
+        }
+      }
+      $problems | each { |p| $p | insert file ($t.file | path basename) | insert status $t.status }
+    }
+    | flatten
+
+  if ($found | is-empty) { print "Nothing to move to a ## Log."; return }
+  $found | group-by file | items { |file, ps|
+    print $"(ansi green)($ps.0.status)(ansi reset) ($file)"
+    $ps | each { |p| print $"  ($p.line): ($p.heading)  (ansi dark_gray)\(($p.why)\)(ansi reset)" }
+  }
+  print $"($found | get file | uniq | length) tasks, ($found | length) headings."
+}
+
 # Pick a task with a fuzzy filter and open it in $EDITOR.
 def "main open" [
   --status (-s): string = "*"
@@ -208,6 +307,26 @@ def render_body [] {
     | str replace --all --regex '(<a class="shot"[^>]*><img [^>]*>)' '$1</a>'
 }
 
+# A task's body, with its log apart: what comes before the exact line
+# `## Log` defines the task and is rendered as it is; what comes after is
+# its history, one `### <date>, <who>: <what>` entry per step (README, "A
+# task's log"), and goes folded in a box of its own, closed, saying how
+# many entries it has. A task without that line is all definition.
+def body_html [] {
+  let body = $in
+  let lines = $body | lines
+  let at = $lines | enumerate | where item == "## Log" | get -o 0.index
+  if $at == null { return ($body | render_body) }
+  let log = $lines | skip ($at + 1)
+  let n = $log | where { $in | str starts-with "### " } | length
+  # Logs older than the convention may have no `### ` entries: just "Log".
+  let label = match $n { 0 => "", 1 => " · 1 entry", _ => $" · ($n) entries" }
+  [
+    ($lines | first $at | str join "\n" | render_body)
+    $"<details class=\"log\"><summary>Log($label)</summary><div class=\"log-body\">($log | str join "\n" | render_body)</div></details>"
+  ] | str join ''
+}
+
 # What comes after the frontmatter.
 def task_body [file: string] {
   open --raw $file | str replace --regex '(?s)\A---\n.*?\n---\n' '' | str trim
@@ -235,7 +354,7 @@ def task_html [] {
     $"<summary><button type=\"button\" class=\"copy\" data-copy=\"($id | escape)\" title=\"Copy the task's file name\">copy</button><button type=\"button\" class=\"pick\" data-id=\"($id | escape)\" aria-pressed=\"false\" title=\"Add the task to the selection, to copy several at once\">select</button><span class=\"type\">($t.task_type | escape)</span>($games)<span class=\"name\">($t.name | escape)</span>"
     $"<span class=\"desc\">($t.description | escape)</span></summary>"
     $"<p class=\"meta\"><a href=\"#($id)\">#</a> · <a href=\"($source)\">($id).md</a>($changed)($assignee)($agents)</p>"
-    $"<div class=\"body\">($t.body | render_body)</div>"
+    $"<div class=\"body\">($t.body | body_html)</div>"
     "</details>"
   ] | str join ''
 }

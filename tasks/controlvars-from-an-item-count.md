@@ -33,7 +33,9 @@ data is already there.
 47 (its summons, see
 [`vampires-dawn-summons-dont-compile`](vampires-dawn-summons-dont-compile.md)).
 
-## Done (Tijereta, 2026-10-14)
+## Log
+
+### 2026-10-14, Tijereta: done
 
 From the-advocate `51f05d7c` and the ports `5272c1e`, branches
 `tijereta-controlvars`.

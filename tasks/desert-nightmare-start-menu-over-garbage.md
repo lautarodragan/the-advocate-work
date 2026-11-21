@@ -2,8 +2,8 @@
 name: "Desert Nightmare: the start menu over garbage"
 description: "Map 1's menu ('With Intro / No Intro / Quit') shows its three pictures over a repeated 8x8 pattern instead of the Introauswahl panorama; not EraseScreen"
 type: bug
-status: todo
-agents: [Calandria]
+status: done
+agents: [Calandria, Aguará]
 ---
 
 Seen by Calandria on 2026-10-11, at the-advocate `0bf46fb1` and the ports
@@ -76,3 +76,13 @@ the garbage.
 As Chajá recommended: a small golden of the start menu in the ports'
 `tests/test_boot.py`, this task closed and its "Known issues" line removed
 from Desert Nightmare's page in the book, all in the same change.
+
+## Closed (2026-11-20, Aguará)
+
+Taken over by
+[`desert-nightmare-the-intro-and-the-file-screen`](desert-nightmare-the-intro-and-the-file-screen.md):
+taro sees the background fine, and what was left —the option chosen not
+shown— is fixed there. Its Known issues line left the book in the same
+change, and the golden taro asked for here is three, one per option, in
+the ports' `tests/test_desert_nightmare_start_menu.py` instead of
+`test_boot.py`. No golden pinned the garbage.

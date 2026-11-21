@@ -20,7 +20,9 @@ No page of the book's `divergences/` tells it: it is a divergence the
 book does not have. Seen in any game with battles, on the frame an enemy
 dies.
 
-## Defined (2026-10-20, Tijereta)
+## Defined
+
+On 2026-10-20, by Tijereta.
 
 Checked against the-advocate `8f290c39` and the book at `8c5c4c0`: the
 comment is still in `scene_tick` (`runtime/battle_scene.s`) and no page
@@ -31,7 +33,9 @@ once: what a fade would cost, or that nobody tried it— and its line in
 task. **First step**: `git log -S` on that comment for any reason given
 at the time, and what easyrpg's `Sprite_Enemy` does (how many frames).
 
-## Reviewed (Hornero, 2026-11-17)
+## Log
+
+### 2026-11-17, Hornero: reviewed
 
 Unchanged: `runtime/battle_scene.s`'s `scene_tick` still says "RM2k
 makes it disappear with a fade; here it goes all at once", and no commit

@@ -23,7 +23,9 @@ graphic, so the worst is a refusal or a missed one, not a wrong ROM.
 How to see it: a route on the hero with a sound effect whose index in the
 map's audio package is 34, followed by a flash of the hero.
 
-## Defined (2026-10-20, Tijereta)
+## Defined
+
+On 2026-10-20, by Tijereta.
 
 Checked against the-advocate `8f290c39`: still so. The walk in
 `rm2k-snes/convert/src/convert.rs` (the flashes' second round, "the
@@ -35,3 +37,5 @@ ideally through one helper both walks share, so that a third command with
 operands cannot split them again; a converter unit test with a hero route
 whose sound index's low byte is 34, followed by a flash, that does not
 read it as a graphic change. **First step**: that test, red.
+
+## Log

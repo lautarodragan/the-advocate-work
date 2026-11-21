@@ -26,7 +26,9 @@ map's layers at once.
 To see it: Desert Nightmare's map 34, the dream apartment, keeps its first
 panorama where RM2k changes it.
 
-## Defined (2026-10-20, Tijereta)
+## Defined
+
+On 2026-10-20, by Tijereta.
 
 Checked against the release builds of the ports `68bf55b` (the-advocate
 `8f290c39`): still so —"the map's pictures are drawn into its own
@@ -38,3 +40,5 @@ three maps no longer list `panorama-not-changed`, and a Wally test with a
 map whose panorama carries pictures and has a second one. **First step**:
 whether `compose` can be called once per panorama with the same cells in
 front of the hero, and what the extra pictures cost in ROM.
+
+## Log

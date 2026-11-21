@@ -26,7 +26,9 @@ branch in `runtime/battle.s` writes the two using lines and stops. Since
 Declared in the book's `divergences/what-items-in-battle-do-not-model.md`
 for the items; the skills have no divergence of their own.
 
-## Defined (2026-10-20, Tijereta)
+## Defined
+
+On 2026-10-20, by Tijereta.
 
 Checked against the-advocate `8f290c39`: still so —`ba_message`'s
 `skill:` branch (`runtime/battle.s`) writes `skill_msg1` and `skill_msg2`
@@ -41,7 +43,9 @@ committed apart. **First step**: which of easyrpg's
 `ProcessBattleActionParamEffects` lines the attack's path already writes,
 and whether the skill's path can go through it.
 
-## Done (2026-10-20, Cardón)
+## Log
+
+### 2026-10-20, Cardón: done
 
 From the-advocate `3bc68ac4`, the ports `3cd810d` and the book `0b96ba4`,
 on branches `cardon-skill-results`; main merged into each before handing

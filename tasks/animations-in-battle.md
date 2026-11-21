@@ -47,7 +47,9 @@ battle none of that runs, and what it would take, looked at on 2026-09-27:
 It shows. taro confirms it by playing: today a skill is a message and a number
 going down.
 
-## Checked on 2026-10-16
+## Log
+
+### 2026-10-16, Cardón: checked
 
 At the-advocate `759aa0ba`, by Cardón: still not started —no battle code
 reads a skill's or weapon's `animation_id`—. Names above that moved with

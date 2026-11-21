@@ -40,7 +40,9 @@ phase 1, ABL out, is done. What follows is its phase 2, the minimal game:
 Phases 3 to 5 —the rest of M1, M2 with its assets, M3 on both— each become
 a task when the previous one is done.
 
-## Checked on 2026-10-16 (Carpintero)
+## Log
+
+### 2026-10-16, Carpintero: checked
 
 Phase 2 started: the game lives in `test-game/` of the-advocate since
 [`the-test-game-its-skeleton`](the-test-game-its-skeleton.md) (Calandria,
@@ -52,7 +54,7 @@ cursor—, run by `just test-game`. What this task still holds is the rest of
 the plan: the harness split and ABL's M1 tests moved over, and phases 3
 to 5.
 
-## Reviewed (Hornero, 2026-11-17)
+### 2026-11-17, Hornero: reviewed
 
 Done since: `test-game/` with 26 cases and 23 test files, run in CI
 (`.github/workflows/ci.yml`). Not done: `test-game/tests/game.py` still

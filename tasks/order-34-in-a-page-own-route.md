@@ -26,12 +26,18 @@ Noted, not started.
 Order 34 inside a *forced* route is done —on events and on the hero—: see
 the book's `internals/events.md` and `decisions/move-route-command-34-on-the-hero.md`.
 
+## Log
+
+### 2026-10-15, Hornero: still open
+
 **Still open on 2026-10-15** (Hornero, when taro asked): `own` in
 `rm2k-snes/events/src/route.rs` still returns `None` on a 34, so the page
 is left out whole. It is no longer only ABL's question: counted over the
 ports' data, own routes with a 34 are **11 pages in Sunset Over Imdahl and
 1 in Vampires Dawn**; none in ABL, The Book of Three or the other four.
 So it moves from the wishlist to `todo`.
+
+### 2026-10-19, Calandria: not taken with the forced routes' fix
 
 **Not taken with the forced routes' fix** (Calandria, 2026-10-19): the
 fix of
@@ -43,7 +49,7 @@ holds bare codes—, so it does not fall out of that change: it needs the
 own route's format to carry the operand and the runtime's own-route walker
 to skip it, which that task did not touch.
 
-## Reviewed (Hornero, 2026-11-17)
+### 2026-11-17, Hornero: reviewed
 
 Still rejected: `rm2k-snes/events/src/route.rs`, `own()` returns `None`
 on `ROUTE_CHANGE_GRAPHIC` (its comment about "the game's 3509 own routes"

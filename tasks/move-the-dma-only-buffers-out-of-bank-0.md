@@ -32,17 +32,9 @@ is a DMA whose `A1B` stays at zero: the screen shows it at once, and
 own draft), or into a stretch of the hand-written map—, and whether
 `text_buf`'s compositor, which writes it per letter row, pays the cycle.
 
-## Checked on 2026-10-16 (Carpintero)
+## Defined
 
-Still open: `oam`, `oam_high`, `cgram_shadow` and `text_buf` are still in
-`runtime/low_ram.s` at the-advocate `759aa0ba`. What moved is the choice of
-where they would go: since `fb156a3e` (2026-10-16) the linker places all of
-`$7E2000-$7E7FFF` as `FARBSS`
-([`let-the-linker-place-the-far-ram-map`](let-the-linker-place-the-far-ram-map.md),
-in testing), so there is no hand-written map left: they would be a `.res`
-in `FARBSS`, and the "its own draft" above is that task.
-
-## Defined (2026-10-16, Carpintero)
+On 2026-10-16, by Carpintero.
 
 An optimisation: it buys `BSS` room, which nothing asks for today. It
 becomes `todo` the day `EV_MAX` has to grow, or a new low-RAM buffer
@@ -53,7 +45,19 @@ green. **First step**: start with `cgram_shadow` and `oam`, the cheapest
 (4 and 12 writers), and measure `text_buf`'s compositor's cost before
 moving it.
 
-## Reviewed (Hornero, 2026-11-17)
+## Log
+
+### 2026-10-16, Carpintero: checked
+
+Still open: `oam`, `oam_high`, `cgram_shadow` and `text_buf` are still in
+`runtime/low_ram.s` at the-advocate `759aa0ba`. What moved is the choice of
+where they would go: since `fb156a3e` (2026-10-16) the linker places all of
+`$7E2000-$7E7FFF` as `FARBSS`
+([`let-the-linker-place-the-far-ram-map`](let-the-linker-place-the-far-ram-map.md),
+in testing), so there is no hand-written map left: they would be a `.res`
+in `FARBSS`, and the "its own draft" above is that task.
+
+### 2026-11-17, Hornero: reviewed
 
 Checked against main: the four buffers are still in bank 0's BSS
 (`runtime/low_ram.s`), `EV_MAX` is still 120, each event still costs 7 B of

@@ -30,7 +30,9 @@ The second one, the same day: while a message fades in, the frame of its
 window shows as lines across the whole screen (`show-message-fadein-
 broken-1` to `-8`, over map 18's office).
 
-## What it is (2026-11-20, Calandria)
+## Log
+
+### 2026-11-20, Calandria: what it is
 
 From the-advocate `7951af2a` and the ports `42f70e8`. Reproduced in snes9x
 on the warehouse's corridor (map 22, the switches, event 5): the message
@@ -90,7 +92,7 @@ the message opens the window's mask hides them. That is
 pictures turned into the game's System so the console's window draws the
 frame; not taken here.
 
-## Verified (2026-11-20, Calandria)
+### 2026-11-20, Calandria: verified
 
 * `tests/test_desert_nightmare_message_over_the_map.py`, new in the ports:
   the same message on map 22 with the menu opened and closed before it and

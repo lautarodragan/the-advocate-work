@@ -44,7 +44,9 @@ touched anyway by
 so whoever takes that one closes it. First step: for each of the three,
 `git blame` and what the runtime does with the index.
 
-## Reviewed (Hornero, 2026-11-17)
+## Log
+
+### 2026-11-17, Hornero: reviewed
 
 All three checks are still there: `battle/src/experience.rs`
 (`SAVE_BYTES = 0x200`, 128 slots —not 126/504 B as first written—, while

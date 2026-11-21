@@ -26,7 +26,21 @@ The runtime places `FAR_ITEM_LIST` right after the inventory, at $2A00,
 and asserts that the inventory does not reach it: `ITEMS_N` up to 512
 fits as it is; more needs the inventory moved.
 
-## Checked on 2026-10-16 (Carpintero)
+## Defined
+
+On 2026-10-16, by Carpintero.
+
+Still open (see the check above). **Done**: `ITEMS_N` sized by the game's
+database —the inventory a `.res` of that size in `FARBSS`— in both
+crates from one place, or, if it does not fit, the items left out named
+in `degradations.json`; Frozen World's 451–500 in its cartridge, and a
+test that holds the size. **First step**: whether Frozen World's
+pages, shops or drops name any item past 450, and how much `FARBSS` room
+`just space` gives.
+
+## Log
+
+### 2026-10-16, Carpintero: checked
 
 Still open: `ITEMS_N` is 451 in `rm2k-snes/events/src/compile.rs` and
 `rm2k-snes/mapdata/src/engine.rs` at the-advocate `759aa0ba`, and the scan
@@ -37,13 +51,3 @@ the inventory is `far_items: .res ITEMS_N` in `runtime/far_ram_game.s` and
 `FAR_ITEM_LIST` a `.res` of its own in `runtime/items.s`, so raising
 `ITEMS_N` —or sizing it by the game— moves nothing by hand: what limits it
 is the `FARBSS` pool, and `just space` says how much is left.
-
-## Defined (2026-10-16, Carpintero)
-
-Still open (see the check above). **Done**: `ITEMS_N` sized by the game's
-database —the inventory a `.res` of that size in `FARBSS`— in both
-crates from one place, or, if it does not fit, the items left out named
-in `degradations.json`; Frozen World's 451–500 in its cartridge, and a
-test that holds the size. **First step**: whether Frozen World's
-pages, shops or drops name any item past 450, and how much `FARBSS` room
-`just space` gives.

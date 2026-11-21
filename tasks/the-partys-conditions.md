@@ -58,11 +58,6 @@ So the first case is Zounds' first desert: its monsters that poison the
 party, and the poison hurting while walking, next to the damaging
 terrain of [`terrains-do-what-rm2k-does`](terrains-do-what-rm2k-does.md).
 
-# Status
-
-2026-11-01, Mulita, from the-advocate `422f904d`, the ports `cd41913` and
-the book `9407191`, on the branches `mulita-conditions` of the three.
-
 ## The inventory: how the nine games use conditions on the party
 
 Measured on each game's dump with a throwaway script over `states.json`,
@@ -100,7 +95,7 @@ medicines and skills, in battle and on the map; (4) Silence's seal; (5)
 weapons that give one —Vampires Dawn and ABL—; (6) `ChangeCondition` that
 adds, and `IsActorConditioned`: Vampires Dawn and Zounds only.
 
-## Done
+## Done means
 
 **The map half** is done when: an actor holds conditions across maps and
 in the save; `ChangeCondition` adds and removes them on actors and the
@@ -124,7 +119,14 @@ enemy, red before.
 **Not here, on purpose**: the condition in the main menu's status line and
 the status screen —after Tijereta's menu boxes, a follow-up—.
 
-## Done so far
+## Log
+
+### 2026-11-01, Mulita: started
+
+2026-11-01, Mulita, from the-advocate `422f904d`, the ports `cd41913` and
+the book `9407191`, on the branches `mulita-conditions` of the three.
+
+### 2026-11-01, Mulita: done so far
 
 **The map half**, on 2026-11-01: the-advocate `95e034c7`, the ports
 `8234f68`, the book `9e733e7`.
@@ -166,7 +168,7 @@ screen, after Tijereta's menu boxes**, as a follow-up.
   `rm2k-snes-battle`; console: `ba_st_skill`, `ba_st_odds`, `ba_st_turn`.
 * Test: the ports' `test_zounds_veneno.py`, red with main's tools.
 
-## Left
+#### Left
 
 * **The condition in the main menu's status line and the status screen**:
   after Tijereta's merge of the menu's party boxes (one more line for SP),
@@ -188,7 +190,7 @@ screen, after Tijereta's menu boxes**, as a follow-up.
   Veneno is the skill side, and the party's places across a battle are
   ABL's `test_party_conditions.py`.
 
-## Verified (2026-11-01, Mulita)
+### 2026-11-01, Mulita: verified
 
 Branches `mulita-conditions`, main merged in each: the-advocate
 `3071048a` (main had not moved from `422f904d`), the ports `0aca8ed`, the

@@ -48,11 +48,13 @@ it.
 
 ## Log
 
+### 2026-11-19, Hurón: the nights
+
 **2026-11-19, Hurón.** Worktrees: the ports `huron-dn-nights` from
 `aa850b4` in `~/scratch/huron/the-advocate-ports`; the tools are the global
 ones (the-advocate `4f38ea03`), nothing installed.
 
-### 1. Why the night is not drawn
+#### 1. Why the night is not drawn
 
 Swept every `ShowPicture` of a `*Nacht*` picture in the dump (48 maps
 name one). The night is never a tint: it is `Lichteffekt_*_Nacht`, a
@@ -87,7 +89,7 @@ canvas with only the lit windows and bulbs. The night panoramas
   8 s as bright as the console, at 10 s the first message box. And its
   lamp is off in the original too: it is day.
 
-### 2. The patches
+#### 2. The patches
 
 The fit: RM2k's night composed over the panorama in software (the mask at
 its opacity as easyrpg blends it, the windows' picture with its
@@ -125,7 +127,7 @@ New test `tests/test_desert_nightmare_nights.py` (map 59 tinted and
 dark): red on `aa850b4`'s build, "the tint is [100, 100, 100, 100]",
 green with the forks. It covers 59 only.
 
-### 3. The lights
+#### 3. The lights
 
 Measured in software over the panoramas (scripts `night.py` and
 `lights.py` in `~/scratch/huron/nights/`), not on a console; the numbers
@@ -148,7 +150,7 @@ draft does) and a per-map number in the runtime; then (b) if the
 characters matter. Neither is small: task
 [`desert-nightmare-lit-cells-over-a-tinted-night`](desert-nightmare-lit-cells-over-a-tinted-night.md).
 
-### Delivered
+#### Delivered
 
 * the ports `huron-dn-nights`: `b61ee79` the forks, `6d16d18` the test.
 * the book `huron-dn-nights`: `b90dde7`, the study

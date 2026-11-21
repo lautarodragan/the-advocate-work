@@ -32,6 +32,10 @@ It is work for the ROM, not the converter: reserve and free when starting and
 stopping the timer, with what that implies for what is already drawn with that
 palette.
 
+## Log
+
+### 2026-10-16, Mulita: checked
+
 **Checked on 2026-10-16 (Mulita)**, at the-advocate 759aa0ba: the converter no longer gives the digits to every map. A walk hands
 them to the maps the timer can reach by teleports from where it starts
 (`[graphics] timer_never_runs_in` and, since `16c9abfd`, `timer_stays_in`

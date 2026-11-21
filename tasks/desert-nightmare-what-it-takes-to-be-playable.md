@@ -2,7 +2,7 @@
 name: "Desert Nightmare: what it takes to be playable"
 description: "A study: play Desert Nightmare's port through the harness as far as it goes, list what breaks or looks wrong against RM2k, find the causes, and rank what would make it playable by cost and gain"
 type: research
-status: testing
+status: done
 assignee: taro
 agents: [Hurón]
 game: desert-nightmare

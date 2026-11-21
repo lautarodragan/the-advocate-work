@@ -27,7 +27,9 @@ what `paint_load` and the column streaming do on a load.
 
 To see it: on map 26, the door that opens in RM2k stays shut.
 
-## Defined (2026-10-20, Tijereta)
+## Defined
+
+On 2026-10-20, by Tijereta.
 
 Checked against Sunset Over Imdahl's release build of the ports
 `68bf55b` (the-advocate `8f290c39`): still so —its `converter.log` says
@@ -42,3 +44,5 @@ the door open, with its golden. **First step**: what one more painting
 costs in ROM and in the paint table for each of the three maps, and
 whether the refill fits in a frame or needs the screen off, as
 `pano_image` does.
+
+## Log

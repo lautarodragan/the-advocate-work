@@ -30,7 +30,9 @@ ninth and was dropped too.
 **What it probably looks like**: in that scene the guard keeps the graphic
 he had where the original changes it.
 
-## Defined (2026-10-20, Tijereta)
+## Defined
+
+On 2026-10-20, by Tijereta.
 
 Checked against the release build of the ports `68bf55b`, the-advocate
 `8f290c39`: still so, and the only such warning in the nine games —Sunset
@@ -42,3 +44,5 @@ with a page whose route gives a graphic after a `ShowPicture`. **First
 step**: why the scan stops at the picture —what a page compiled with
 `pictures: None` answers to command 11110 in the scan, and whether it can
 accept it without doing it, as the shared bodies do—.
+
+## Log

@@ -30,18 +30,6 @@ that carries a variable —`ControlVars`, the conditions, `InputNumber`,
 ranks it second and estimates the RAM at 802 B for Vampires Dawn, which
 fits once the far RAM map is placed by the linker.
 
-**Checked on 2026-10-16 (Mulita)**, at the-advocate 759aa0ba: far RAM is
-no longer a hand-written map. Since `d121156e` `far_variables` is a
-`.res VARIABLES_N * 2` in `runtime/far_ram_game.s`, placed by the linker,
-so the 512-byte region at `$7E2600` with `FAR_ITEMS` behind it is gone and
-RAM is not what caps it. What still does is the byte slot in the bytecode
-and the converter's check in `rm2k-snes/mapdata/src/emit.rs`, whose
-message still gives the old reason: see
-[`the-converter-caps-what-far-ram-no-longer-limits`](the-converter-caps-what-far-ram-no-longer-limits.md).
-The same loss was noted earlier, from the converter's log, in
-[`variables-past-256`](variables-past-256.md) (2026-10-06); this one is
-kept as the one to follow, since it says where the cap is.
-
 ## Defined
 
 **2026-10-16, Hurón**, checked against the-advocate `f4709d0b` and the ports `66ed09c`.
@@ -58,7 +46,23 @@ operand, from `variable_slot`'s callers in `rm2k-snes-events`. It closes
 the second point of
 [`the-converter-caps-what-far-ram-no-longer-limits`](the-converter-caps-what-far-ram-no-longer-limits.md).
 
-## Checked (2026-10-20, Chajá)
+## Log
+
+### 2026-10-16, Mulita: checked
+
+**Checked on 2026-10-16 (Mulita)**, at the-advocate 759aa0ba: far RAM is
+no longer a hand-written map. Since `d121156e` `far_variables` is a
+`.res VARIABLES_N * 2` in `runtime/far_ram_game.s`, placed by the linker,
+so the 512-byte region at `$7E2600` with `FAR_ITEMS` behind it is gone and
+RAM is not what caps it. What still does is the byte slot in the bytecode
+and the converter's check in `rm2k-snes/mapdata/src/emit.rs`, whose
+message still gives the old reason: see
+[`the-converter-caps-what-far-ram-no-longer-limits`](the-converter-caps-what-far-ram-no-longer-limits.md).
+The same loss was noted earlier, from the converter's log, in
+[`variables-past-256`](variables-past-256.md) (2026-10-06); this one is
+kept as the one to follow, since it says where the cap is.
+
+### 2026-10-20, Chajá: checked
 
 Still so at the-advocate `8f290c39`: `variable_slot` returns a `u8` in
 `rm2k-snes/events/src/pages.rs` and in `compile.rs`, and Vampires Dawn's

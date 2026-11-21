@@ -28,7 +28,9 @@ script that did it compared `bank.keys` against `bank.voices[].rate`.
 With MSU-1 —how ABL is played— none of it is heard: the songs with a track
 do not upload samples.
 
-## Checked (2026-10-20, Tijereta)
+## Log
+
+### 2026-10-20, Tijereta: checked
 
 Still so in A Blurred Line's release build of the ports `68bf55b`
 (the-advocate `8f290c39`): `bank.limited_by` in its `audio.json` still

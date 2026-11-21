@@ -30,7 +30,9 @@ style —state up to map 16, teleport to (13, 18)— and a step left; or play
 `tests/test_book_of_three.py` one milestone further than it goes. The
 walkthrough stops before it on purpose and says so.
 
-## Tijereta, 2026-10-15
+## Log
+
+### 2026-10-15, Tijereta: the work
 
 From the-advocate `07fa9010` and the ports `dc01b28`, branches
 `tijereta-troop9` in both and in the book.

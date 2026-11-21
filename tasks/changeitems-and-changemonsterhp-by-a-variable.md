@@ -35,7 +35,9 @@ option of the command) because `OP_ENEMY` carries a signed word.
 Vampires Dawn 81; `ChangeMonsterHP` by a variable, Book of Three 52, no
 other game.
 
-## Chajá, 2026-10-14
+## Log
+
+### 2026-10-14, Chajá: the work
 
 From the-advocate `51f05d7c` and the ports `5272c1e`, on branches
 `chaja-by-variable` in both.

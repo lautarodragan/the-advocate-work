@@ -22,7 +22,9 @@ in snes9x**. What was measured by hand and has no test:
   without `--sin-msu` and compares the length of the audio with that of the
   picture is enough.
 
-## Checked on 2026-10-16 (Carpintero)
+## Log
+
+### 2026-10-16, Carpintero: checked
 
 Still open, with two facts that moved: `abl/tests/abl/test_video.py`
 (2026-09-29) now runs `video.py`'s factories against the conftest's —that

@@ -23,9 +23,13 @@ maps' pages without code are pages whose commands compile to nothing
 "automatic", and apart from the test pages. Reproduce: `just cartridges
 release` in `abl/`, `grep 'automatic event page' build/release/converter.log`.
 
-## Defined (2026-10-16, Carpintero)
+## Defined
+
+On 2026-10-16, by Carpintero.
 
 Still the same line at the-advocate `f4709d0b` (`convert.rs`). Only a log
 wording; nothing is lost. **Done**: the line says how many pages carry
 code of how many triggerable pages, without "automatic" and with the
 test pages apart.
+
+## Log

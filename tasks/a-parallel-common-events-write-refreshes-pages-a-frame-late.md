@@ -28,7 +28,9 @@ To reproduce it a case would need a parallel common event that writes,
 on the frame a map is entered or in the middle of play, the variable or
 switch an autostart page of the map asks for.
 
-## Defined (2026-10-20, Tijereta)
+## Defined
+
+On 2026-10-20, by Tijereta.
 
 Checked against the-advocate `8f290c39`: still so. `map_events`
 (`runtime/event_pages.s`) does the owed refresh, then `compar_tick`, then
@@ -40,3 +42,5 @@ autostart page of the map asks for, which starts on the same frame RPG_RT
 starts it —and one that turns it off, which does not start once more—.
 **First step**: that case, red; and how much a second refresh pass costs
 on the frames where nothing changed (it has to cost nothing there).
+
+## Log

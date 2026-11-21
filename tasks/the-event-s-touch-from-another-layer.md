@@ -34,7 +34,9 @@ none in ABL (64 pages, all on the hero's layer) nor in Frozen World
 (92); 1 of 40 in Desert Nightmare; 44 of 152 in Vampires Dawn, 39 of
 them below the hero.
 
-## Defined (2026-10-16, Carpintero)
+## Defined
+
+On 2026-10-16, by Carpintero.
 
 No case seen in a game; the pages are in Vampires Dawn (44) and Desert
 Nightmare (1). **Done**: RM2k's two behaviours —`CheckEventCollision`
@@ -42,7 +44,9 @@ and the per-frame check while the hero stands on one—, each with a test
 page in the test game, red before. Becomes `todo` when a Vampires Dawn or
 Desert Nightmare scene is seen stuck on one.
 
-## Reviewed (Hornero, 2026-11-17)
+## Log
+
+### 2026-11-17, Hornero: reviewed
 
 Still unimplemented (`runtime/event_routes.s`: "What is not here is the
 other half, CheckEventCollision"; `queue_by_action` fires only from the

@@ -24,7 +24,9 @@ shell. One with `uses` 0 is never spent, on both sides, since 2026-10-19.
 To see it: give The Book of Three's party a BagOfVolatileShells and throw
 it in a battle: it is gone after the first.
 
-## Defined (2026-10-20, Tijereta)
+## Defined
+
+On 2026-10-20, by Tijereta.
 
 Checked against the-advocate `8f290c39`: still so. `MED_USES`
 (`runtime/far_ram.s`) is a flag, "it has uses: using it spends one", and
@@ -37,7 +39,9 @@ five shells; a test that uses one twice and still has it. **First step**:
 how the converter emits `uses` today (only whether it is zero), and where
 a byte per item fits in the save.
 
-## Doing (2026-10-20, Aguará)
+## Log
+
+### 2026-10-20, Aguará: doing
 
 From the-advocate `3bc68ac4` and the ports `3cd810d`, branches
 `aguara-item-uses` in both.
@@ -76,7 +80,7 @@ throws of its 5"), and a failed escape that gives the throw back— and
 ABL's `rpgmaker/test_item_uses.py`, on a copy of the ROM with the Agility
 Pill at three uses: three uses from the menu, and the count in the save.
 
-## Done (2026-10-20, Aguará)
+### 2026-10-20, Aguará: done
 
 Branches `aguara-item-uses`: the-advocate `58064b7f` (the change and
 mapdata's Python comparison, which with `item_uses` taken out and the two

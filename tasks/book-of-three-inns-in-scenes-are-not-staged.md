@@ -39,7 +39,9 @@ goes for both prices or only the free one; a golden of
 and a song from a page today (`TintScreen`, `PlayBGM`), to stage it with
 them.
 
-## Work
+## Log
+
+### 2026-10-19, Tijereta: work
 
 Tijereta, from 2026-10-19, at the-advocate `9592b88b` and the ports
 `c420032`; branches `tijereta-inns` in the-advocate, the ports and the
@@ -128,7 +130,7 @@ above. Captures in `/shared/captures/2026-10-19-inns/`, the camp's night
 heard in `/shared/audio/2026-10-19-inns/`. Branches `tijereta-inns` in the
 three repos; draft: `an-inn-has-no-gold-window`.
 
-## On Carpintero's music (2026-10-19, after the hand-back)
+### 2026-10-19: on Carpintero's music, after the hand-back
 
 Hornero merged `hornero-integ` (`main` plus Carpintero's, Calandria's
 and Chajá's branches) into `tijereta-inns` in the three repos. `op_bgm` is

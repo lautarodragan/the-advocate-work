@@ -26,7 +26,9 @@ every story fight relies on it.
 **How to see it**: the ports' case `milestone-cauldron` and the song in
 RAM (`games.Session.song`) during the first battle.
 
-## Defined (2026-10-16, Carpintero)
+## Defined
+
+On 2026-10-16, by Carpintero.
 
 Still open: `compile.rs` drops `ChangeSystemBGM` with
 `system-bgm-not-changed` at the-advocate `f4709d0b`. It is a missing
@@ -39,7 +41,9 @@ ports' `milestone-cauldron` asserting "talisn" in the first battle.
 changes (battle, victory, inn, vehicles, game over), to decide which go in
 the first version.
 
-## Doing (2026-10-19, Carpintero)
+## Log
+
+### 2026-10-19, Carpintero: doing
 
 Branches `carpintero-music` in the-advocate (from `9592b88b`) and the
 ports (from `c420032`), shared with the two other music tasks —
@@ -69,7 +73,7 @@ always rebuilt `map_current`'s package, also in a battle. A troop page's
 `PlayBGM` —ABL's radio— left the battle without its sound effects. It now
 rebuilds the package loaded last (`PKG_LOADED`), the battle's in a battle.
 
-### For whoever starts a song from the runtime (Tijereta's inn jingle)
+#### For whoever starts a song from the runtime (Tijereta's inn jingle)
 
 The interface, written at the top of `runtime/bgm_level.s` too:
 
@@ -90,7 +94,7 @@ The interface, written at the top of `runtime/bgm_level.s` too:
 `ChangeSystemBGM` does not change the inn's song in any of the nine games,
 so the inn's is the database's `inn_music`; its level is not emitted yet.
 
-## Done (2026-10-19, Carpintero)
+### 2026-10-19, Carpintero: done
 
 `ChangeSystemBGM` of the battle and the victory is `OP_SYSTEM_BGM` (0x39,
 the number handed out; 0x3A stays reserved). A new game starts with the

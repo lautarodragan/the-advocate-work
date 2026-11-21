@@ -95,7 +95,9 @@ the final step consumes.
 The encoding to BRR. It loses signal —16 bits to 4— but there is nothing to
 choose: it is the hardware's format, like the 8x8 tiles.
 
-## Checked on 2026-10-16 (Carpintero)
+## Log
+
+### 2026-10-16, Carpintero: checked
 
 Still open: nothing in the-advocate `759aa0ba` writes a reduced SoundFont or
 MIDI. Two names above moved: the envelopes' families are in `sdsp.rs` of

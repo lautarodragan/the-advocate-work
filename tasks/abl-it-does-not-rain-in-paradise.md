@@ -40,6 +40,8 @@ each of their greys is from the drops'.
 
 ## Log
 
+### 2026-10-17, Calandria: done on the way of rain-drops-cost-a-cache-its-slots
+
 **2026-10-17, Calandria**, done on the way of
 [`rain-drops-cost-a-cache-its-slots`](rain-drops-cost-a-cache-its-slots.md),
 on the-advocate's branch `calandria-rain-and-slots`: the second way. A map

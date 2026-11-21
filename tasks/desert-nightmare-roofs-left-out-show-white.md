@@ -2,7 +2,7 @@
 name: "Desert Nightmare: the roofs left out show the panorama's white"
 description: "On maps 4, 14, 61 and 66 the trim leaves out drawn events —the buildings' roofs, drawn on the hero's layer over white holes in the panorama— and the console shows the holes"
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Aguará, Hurón, Cardón]
 ---

@@ -20,12 +20,6 @@ what each one changes. EasyRPG: `Game_Battler`'s `AddState`. Measured in
 [`research/2026-10-05-the-missing-commands.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-05-the-missing-commands.html),
 "The battle ones".
 
-
-# Status
-
-2026-10-12, Chajá, from the-advocate `25d93f0a`, the ports `742e127` and
-the book `381001b`, on the branches `chaja-condiciones` of the three.
-
 ## The plan, after reading EasyRPG
 
 What RM2k does with a condition in battle, and therefore what the console
@@ -57,7 +51,14 @@ same order:
 Only enemies get conditions: no skill, attack or item gives them, and the
 actors have none. That is the scope; what stays out goes to a divergence.
 
-## Done so far
+## Log
+
+### 2026-10-12, Chajá: started
+
+2026-10-12, Chajá, from the-advocate `25d93f0a`, the ports `742e127` and
+the book `381001b`, on the branches `chaja-condiciones` of the three.
+
+### 2026-10-12, Chajá: done so far
 
 * The opcode, `OP_MONSTER_STATE` (0x4E): place, remove, condition.
   `ChangeMonsterCondition` left `ACCEPTED_UNDONE`; taking the dead one away
@@ -76,7 +77,7 @@ actors have none. That is the scope; what stays out goes to a divergence.
 * The book: the divergence `what-battle-conditions-do-not-model`, and the
   three that said the battle had none.
 
-# What was done (2026-10-12, Chajá)
+### 2026-10-12, Chajá: what was done
 
 Branches `chaja-condiciones`, with main merged in all three: the-advocate
 `af6758b6` (far RAM grows) and `7e3049cd` (the conditions), the ports

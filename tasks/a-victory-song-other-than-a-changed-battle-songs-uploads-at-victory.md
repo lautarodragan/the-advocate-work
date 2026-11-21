@@ -24,7 +24,9 @@ where songs with a track upload nothing).
 alone, without MSU-1: the frames between the last hit and the victory
 message.
 
-## Checked (2026-10-20, Tijereta)
+## Log
+
+### 2026-10-20, Tijereta: checked
 
 Still so at the-advocate `8f290c39` by reading: `battle_extra_l`
 (`runtime/audio_package.s`) puts one extra song in the battle's package,

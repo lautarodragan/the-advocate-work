@@ -31,7 +31,9 @@ From taro, on 2026-10-02, looking at the goldens of
 If the mode 7 pilot (`mode-7-pilot-for-the-zoom-of-the-diff-photos.md`) turns out well, the zoom
 of the photos comes back, and this goes together with it.
 
-## Checked on 2026-10-16 (Carpintero)
+## Log
+
+### 2026-10-16, Carpintero: checked
 
 **The crop is done**: [`cropping-a-picture-instead-of-scaling-it`](cropping-a-picture-instead-of-scaling-it.md)
 (`[graphics] cropped_pictures`, the four Diff photos and the montage's,

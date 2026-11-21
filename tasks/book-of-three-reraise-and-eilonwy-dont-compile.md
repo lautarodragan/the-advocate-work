@@ -21,6 +21,16 @@ from the number of an item held (operand 4).
 **How to see it**: the line "parallel common events" of
 `book-of-three/build/release/converter.log`.
 
+### taro, 2026-10-15
+
+"We can guess by the name… surely it does what it says. So it must be
+important —auto-reviving fallen characters after winning battles—. It's
+not the end of the world, but it's worth having it working."
+
+## Log
+
+### 2026-10-14, Calandria: measured again
+
 **Measured again** (Calandria, 2026-10-14; [research](https://lautarodragan.github.io/the-advocate-docs/progress/book-of-three-and-frozen-world.html)):
 the branch is on an actor's HP (6 uses, only in this game); the item count is
 `ControlVars` operand kind 4
@@ -29,17 +39,13 @@ essences common event 21 counts are the ones Eilonwy's Absorb Essence adds in
 battle, which does not compile either
 ([`changeitems-and-changemonsterhp-by-a-variable`](changeitems-and-changemonsterhp-by-a-variable.md)).
 
+### 2026-10-14: Eilonwy's Upgrades compiles
+
 **Eilonwy's Upgrades compiles** since 2026-10-14 (Tijereta,
 [`controlvars-from-an-item-count`](controlvars-from-an-item-count.md)): what
 is left is `Reraise KO'd chars`, at the actor's HP branch.
 
-### taro, 2026-10-15
-
-"We can guess by the name… surely it does what it says. So it must be
-important —auto-reviving fallen characters after winning battles—. It's
-not the end of the world, but it's worth having it working."
-
-### Calandria, 2026-10-15: the HP branch
+### 2026-10-15, Calandria: the HP branch
 
 **What the common event does** (18, parallel, no switch, so every frame of
 the map and never in a battle): `ChangeCondition` removes death from the

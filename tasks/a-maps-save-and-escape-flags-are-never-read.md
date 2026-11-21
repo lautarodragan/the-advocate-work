@@ -28,7 +28,9 @@ of 430, escaping on 377 and teleporting on 422.
 field outside Ditto's schema. Not played: from the code, the pause menu's Save on one of those maps
 follows only `ChangeSaveAccess`.
 
-### Mulita, 2026-10-15
+## Log
+
+### 2026-10-15, Mulita: the work
 
 Started from the-advocate `99140946`, ports `94e794c`, book `33e9cfe`.
 
@@ -100,7 +102,7 @@ bridge (255's autostart forbids it). 66 allows escaping explicitly, so RM2k
 gives it back on entering; the assertion was what the ROM did while nothing
 read the tree. Changed in its own commit. No golden moved.
 
-### Mulita, 2026-10-15: done, to testing
+### 2026-10-15, Mulita: done, to testing
 
 **Branches** `mulita-map-flags` in the-advocate, the ports and the book,
 each with main merged (the-advocate `d5648f1e`, ports `2d6aacc`, book

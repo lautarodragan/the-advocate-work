@@ -23,7 +23,9 @@ With MSU-1 and a track for that song, it uploads nothing.
 **To reproduce**: ABL's `release` without tracks, `go_to_map` from map 69
 to 66, counting hardware frames until `fade` goes back to zero.
 
-## Checked (2026-10-20, Tijereta)
+## Log
+
+### 2026-10-20, Tijereta: checked
 
 Still so at the-advocate `8f290c39`, and said again in "What was left" of
 `maps-load-faster-without-losing-anything` (`testing`): starting the song

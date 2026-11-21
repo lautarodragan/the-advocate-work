@@ -30,7 +30,9 @@ frames, which does not fit in what a tick has left.
 —`PROBE` marks around `lz2_grid`, `lz2_backdrop`, `lz2_anim` and the
 `lz2_field` of `load_above` and `load_sprite`—.
 
-## Checked (2026-10-20, Tijereta)
+## Log
+
+### 2026-10-20, Tijereta: checked
 
 Still so at the-advocate `8f290c39`: `maps-load-faster-without-losing-anything`
 is in `testing` and its "What was left" says the same, with its cost —a

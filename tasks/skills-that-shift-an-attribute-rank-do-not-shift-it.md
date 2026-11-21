@@ -41,7 +41,9 @@ divergence page losing that paragraph. First step: read
 `Game_BattleAlgorithm::Skill::vExecute` and `Game_Battler::ShiftAttributeRate`
 for the roll and the bounds.
 
-## Aguará, 2026-10-18
+## Log
+
+### 2026-10-18, Aguará: the work
 
 Worktrees `aguara-attr-shift` in the three code repos, from the-advocate
 `b066b885`, ports `74068b8`, docs `239069e`.
@@ -98,7 +100,7 @@ new case made it two off. Fixed (it asks for the cartridge that carries
 `battle`), and the goldens re-taken: the list now starts with Detect Aura.
 Side by side in `/shared/captures/2026-10-18-attribute-shift/`.
 
-## Verified, and what to install
+#### Verified, and what to install
 
 With the tools of `aguara-attr-shift` (`cartridge battle mapdata` installed
 locally), on the tree merged with main (the-advocate `846ecc5b`, ports
