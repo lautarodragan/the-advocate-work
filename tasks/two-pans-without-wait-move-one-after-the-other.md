@@ -2,10 +2,10 @@
 name: "Two pans without a wait move one after the other"
 description: "A PanScreen without Wait followed by another on the other axis pans diagonally in RM2k —each axis has its own target and both move at once—; the console runs them one after the other. Zounds' map 97 and The Frozen World's intro"
 type: bug
-status: doing
-assignee: Tijereta
+status: testing
+assignee: taro
 agents: [Tijereta]
-game: zounds
+game: [zounds, frozen-world]
 ---
 
 taro, on 2026-11-20, translated:
@@ -37,9 +37,18 @@ both finishes at once, at the last pan's speed. So a pan without a wait
 followed by one on the other axis is one diagonal move, and two on the
 same axis add up.
 
-## What it was
+![Zounds map 97, pan frame 48, before](images/two-pans-without-wait-move-one-after-the-other/zounds-97-frame-48-before.png)
+![Zounds map 97, pan frame 48, after](images/two-pans-without-wait-move-one-after-the-other/zounds-97-frame-48-after.png)
 
-Tijereta, 2026-11-20. The runtime already had EasyRPG's model —a finish
+![Frozen World map 10, pan frame 240, before](images/two-pans-without-wait-move-one-after-the-other/frozen-world-10-frame-240-before.png)
+![Frozen World map 10, pan frame 240, without the edge fix](images/two-pans-without-wait-move-one-after-the-other/frozen-world-10-frame-240-without-the-edge.png)
+![Frozen World map 10, pan frame 240, after](images/two-pans-without-wait-move-one-after-the-other/frozen-world-10-frame-240-after.png)
+
+## Log
+
+### 2026-11-20, Tijereta: a pan without a wait, and a pan at the edge
+
+The runtime already had EasyRPG's model —a finish
 per axis in `pan_dest_x`/`pan_dest_y`, `pan_tick` walking both at the last
 pan's step, `pan_frames` as `GetPanWait`— but **every pan waited**:
 `op_pan` read the wait byte, did `iny`, and branched on Z, which `iny`
@@ -62,14 +71,7 @@ Speed: one step per axis per frame, `2 << speed` sixteenths, so a diagonal
 lasts as long as its longer leg —`UpdatePan` and `GetPanWait`—, which the
 runtime already did.
 
-![Zounds map 97, pan frame 48, before](images/two-pans-without-wait-move-one-after-the-other/zounds-97-frame-48-before.png)
-![Zounds map 97, pan frame 48, after](images/two-pans-without-wait-move-one-after-the-other/zounds-97-frame-48-after.png)
-
-![Frozen World map 10, pan frame 240, before](images/two-pans-without-wait-move-one-after-the-other/frozen-world-10-frame-240-before.png)
-![Frozen World map 10, pan frame 240, without the edge fix](images/two-pans-without-wait-move-one-after-the-other/frozen-world-10-frame-240-without-the-edge.png)
-![Frozen World map 10, pan frame 240, after](images/two-pans-without-wait-move-one-after-the-other/frozen-world-10-frame-240-after.png)
-
-## How many games
+#### How many games
 
 A throwaway script over the eight dumps —every map page, common event and
 troop page—, moves (`p[0]` 2 or 3) without a wait, and of those how many
@@ -86,7 +88,7 @@ are followed by another move:
 Every move without a wait was affected, not only the pairs: the page held
 everything after it for the pan's frames.
 
-## Done
+#### Done
 
 * the-advocate, `tijereta-diagonal-pan`: the `cmp #0` in `op_pan`;
   `pan_at_edge` in `runtime/camera.s` with `CAM_WANT`, filled by
@@ -95,3 +97,34 @@ everything after it for the pan's frames.
   `tests/rpgmaker/test_pan_axes.py` and its cases `pan-diagonal`,
   `pan-adds-up` and `pan-edge`, the camera tick by tick against the model;
   `tests/test_zounds_map_97_pan.py`. All red before their fix.
+* Two other tests moved with the timing, each in its own commit in the
+  ports: the race's `EXTRA_FRAMES` goes from 7 to 8 per hundred (the
+  race's events pan 7 cells left without a wait, so the stretch counted is
+  another: 70 extra frames in 919 ticks, against 62 in 976 on main; the
+  same 70 with only the wait fix, so it is not `pan_at_edge`'s cost), and
+  Zounds' bed tests start from the debug room (the intro hands control
+  over 81 ticks earlier with the hero still on a route, which carried over
+  the jump and left him stuck a row above the bed). No golden moved.
+
+#### Verified
+
+On the merge with main (the-advocate `61ce3fc6`, ports `ba8a368`), with
+the branch's `cartridge`, `convert`, `events`, `mapdata`, `screens` and
+`wally`: ABL's suite 1726 passed, the other games' 188 passed, `just lint`
+green. `abl.sfc` starts `94fb00befb10ba9b`. Captures side by side in
+`/shared/captures/2026-11-20-diagonal-pan/`.
+
+#### Not covered by any test
+
+* Frozen World's map 10 pan: measured frame by frame with a throwaway
+  probe, not held by a test.
+* A locked camera at an edge (the hidden part goes to `PAN_ANCHOR`), a map
+  that loops (left alone), and a pan slower than a pixel a frame reaching
+  an edge (cut up to a fraction early).
+* The frame the page goes on after a waiting pan: see the draft
+  [`a-page-waiting-on-a-pan-goes-on-two-frames-late`](a-page-waiting-on-a-pan-goes-on-two-frames-late.md).
+
+#### To install when merging
+
+Nothing: only `runtime/` changed, which the installed tools read from the
+checkout they were installed from. No Rust was touched.
