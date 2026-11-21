@@ -35,7 +35,9 @@ What was measured:
 To reproduce: build `release`, read `converter.log`; or play: Radin in the
 party, Tech Skill, Radin, Mix Formula.
 
-### Hornero, 2026-10-14: the graphic change is dropped, the menus compile
+## Log
+
+### 2026-10-14, Hornero: the graphic change is dropped, the menus compile
 
 taro:
 

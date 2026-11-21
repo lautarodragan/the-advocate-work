@@ -45,8 +45,9 @@ it refuses the branch only.
 **How to see it**: `rm2k-snes-events compile` with `frozen-world/build/release/events-request.json`
 and the game's `data/`; map 19's page code starts `011b0401`.
 
+## Log
 
-## The fix (Tijereta, 2026-10-15)
+### 2026-10-15, Tijereta: the fix
 
 Taken together with
 [`page-conditions-on-switches-past-1023-read-other-ram`](page-conditions-on-switches-past-1023-read-other-ram.md):

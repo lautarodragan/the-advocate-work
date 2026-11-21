@@ -17,6 +17,31 @@ invisible walls could go into the map's passability, and the decoration
 be baked (`decorative_events`) instead of lost: the trim runs before
 Wally, so today what goes away isn't baked".
 
+**What you see while playing**: on those maps the hero walks through cells that
+are blocked in the original. Which ones they are, and whether they let you reach
+somewhere you shouldn't, wasn't looked at in an emulator.
+
+**How to see it**: `just cartridges release` in `desert-nightmare/` and
+`grep "lose an invisible wall\|looks and a wall" build/release/converter.log`;
+the event numbers are on each line.
+
+## Defined
+
+On 2026-10-16, by Carpintero.
+
+A wall that goes away can open a way the original closes, which can
+break a game. **Done**: an invisible wall the trim leaves out becomes
+blocked passability of its cell when the event is still and its pages
+never change that —else it stays a candidate to keep—; Desert
+Nightmare's eight maps and Vampires Dawn's 164 no longer list walls lost
+in `converter.log`, and a converter test holds it. **First step**: for
+each wall listed, whether any page of it moves, erases itself or changes
+its layer.
+
+## Log
+
+### Checked
+
 **Checked today** (the-advocate `fc6f7456`, ports `a85b7e3`): the
 `converter.log` of Desert Nightmare's release gives the same lists as on
 2026-10-10. These lose invisible walls (wall only, or drawing and wall):
@@ -36,26 +61,7 @@ In Vampires Dawn, map 164 (Thessa) loses two with drawing and wall,
 events 253 and 254 (also checked today, in a VD build with its
 own System: the trim doesn't depend on that).
 
-**What you see while playing**: on those maps the hero walks through cells that
-are blocked in the original. Which ones they are, and whether they let you reach
-somewhere you shouldn't, wasn't looked at in an emulator.
-
-**How to see it**: `just cartridges release` in `desert-nightmare/` and
-`grep "lose an invisible wall\|looks and a wall" build/release/converter.log`;
-the event numbers are on each line.
-
-## Defined (2026-10-16, Carpintero)
-
-A wall that goes away can open a way the original closes, which can
-break a game. **Done**: an invisible wall the trim leaves out becomes
-blocked passability of its cell when the event is still and its pages
-never change that —else it stays a candidate to keep—; Desert
-Nightmare's eight maps and Vampires Dawn's 164 no longer list walls lost
-in `converter.log`, and a converter test holds it. **First step**: for
-each wall listed, whether any page of it moves, erases itself or changes
-its layer.
-
-## Measured again (2026-10-20, Aguará)
+### 2026-10-20, Aguará: measured again
 
 At the-advocate `8f290c39`, ports `68bf55b`, `just cartridges release`:
 the twins (`trim::twins`, 2026-10-17, `5b3c2a9f` —walls on the hero's
@@ -72,7 +78,7 @@ layer can share a row—) saved four of Desert Nightmare's eight maps: 2,
 
 So the fix is still needed.
 
-## First step: what each lost wall is (2026-10-20, Aguará)
+### 2026-10-20, Aguará: first step: what each lost wall is
 
 Read from the dump: of DN map 4's 50 and map 14's 46, and VD 164's two,
 every one has no commands, nobody names it, no move type and no route.
@@ -81,7 +87,7 @@ map 14 that have two pages: one below the hero and one on his layer,
 one of them under a switch —a wall that comes and goes—. Those four are
 not still; the other 94 (and the night maps' copies) are.
 
-## What was done
+#### What was done
 
 `trim::still_wall` (the-advocate, `rm2k-snes/convert/src/trim.rs`): an
 event that runs nothing and nobody names, with every page on the hero's
@@ -106,7 +112,7 @@ cartridge with one —ABL's too— for maps that fit, and moves the divergence
 not) to maps that have no reason to pay it. Recommended only if some map
 needs the rows.
 
-## Result (2026-10-20, Aguará)
+### 2026-10-20, Aguará: result
 
 Branches `aguara-invisible-walls` in the-advocate (fix `57082d0a`), the
 ports (test `492f21b`) and the book (`86e3692`), each with main merged.

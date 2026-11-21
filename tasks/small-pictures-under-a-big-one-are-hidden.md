@@ -29,7 +29,9 @@ the picture 'Zounds_SkillScreen_Skills' is 133x211 on the console: bigger
 than the plane of objects". The book's research "More pictures at once",
 option 4, weighs what it would cost.
 
-## Defined (2026-10-20, Calandria)
+## Defined
+
+On 2026-10-20, by Calandria.
 
 At the-advocate `3bc68ac4`, the-advocate-ports `b5cfc1e`.
 
@@ -103,7 +105,9 @@ What this leaves out, on purpose:
   and its pictures are, so even fitting, its faces would not frame its
   panels. That is written in its draft.
 
-## Work (2026-10-20, Calandria)
+## Log
+
+### 2026-10-20, Calandria: work
 
 Branches `calandria-skill-screen` in the-advocate (`66d602ec`), the ports
 and the book, from the starting points above with main merged in the last

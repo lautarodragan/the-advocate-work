@@ -34,7 +34,9 @@ none.
 [Variables saturate at sixteen bits](https://lautarodragan.github.io/the-advocate-docs/divergences/variables-saturate-at-16-bits.html));
 what a multiplication that overflows does is a question for whoever takes it.
 
-## Done (Tijereta, 2026-10-14)
+## Log
+
+### 2026-10-14, Tijereta: done
 
 From the-advocate `51f05d7c` and the ports `5272c1e`, branches
 `tijereta-controlvars` in both, and in the book.

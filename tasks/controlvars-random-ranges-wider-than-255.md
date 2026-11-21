@@ -27,7 +27,9 @@ here.
 **How to see it**: `just culprits` in `book-of-three/` and look for common 19
 in `build/release/culprits.json`, or the "skipped_calls" list.
 
-## Done (Tijereta, 2026-10-14)
+## Log
+
+### 2026-10-14, Tijereta: done
 
 From the-advocate `14e200fc` and the ports `f775b66`, branch
 `tijereta-bot-fixes` in both.

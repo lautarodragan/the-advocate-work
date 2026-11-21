@@ -39,7 +39,9 @@ and the console, and that bullet leaves the divergence page. **First
 step**: where the battle list decides grey (`ba_skill_reaches`), and what
 the cartridge already carries of each weapon's `attribute_set`.
 
-## Tijereta, 2026-10-18
+## Log
+
+### 2026-10-18, Tijereta: the work
 
 Worktrees `tijereta-attr-weapon` in the three code repos, from the-advocate
 `b066b885`, ports `74068b8`, docs `239069e`.
@@ -93,7 +95,7 @@ carries a physical attribute (the eight that carry one: 141, 142, 145, 236,
 compared against `screens.skills`, which greys by the same rule, but the
 console only reaches the weapon walk after `skill_on_map` says yes.
 
-## Verified, and what to install
+#### Verified, and what to install
 
 With main merged (the-advocate `846ecc5b`, ports `0da079e`) and the tools of
 `tijereta-attr-weapon` installed locally (`cartridge battle mapdata convert

@@ -28,6 +28,8 @@ in the middle of the job.
 
 ## Log
 
+### 2026-10-14, Chajá: the work
+
 **Chajá, 2026-10-14.** Tools `51b4b1b2`, ports `d91049e`; branches
 `chaja-end-blockers` in the-advocate, the ports and the book.
 

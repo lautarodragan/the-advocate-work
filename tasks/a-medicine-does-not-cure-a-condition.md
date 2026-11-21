@@ -32,7 +32,9 @@ Measured in the inventory of `the-partys-conditions`: medicines that cure
 conditions, 10 in ABL, 5 in The Book of Three, 4 in El Dorado and The
 Frozen World, 5 in Vampires Dawn.
 
-## Plan (Mulita, 2026-11-01)
+## Log
+
+### 2026-11-01, Mulita: plan
 
 Taken on the-advocate `0ba09da4`, the ports `31fb291`, the book `a9aa2bd`;
 branches `mulita-medicine` in the three.
@@ -55,7 +57,7 @@ branches `mulita-medicine` in the three.
 * Tests: ABL's `test_medicine_conditions.py` with cases
   `medicine-conditions` and `battle-114-medicine`.
 
-## Done
+### Mulita: done
 
 * Red before, with main's tools: `test_medicine_conditions.py` 4 of 5
   —the Antidote and the skill left the Poison, the model and the list
@@ -84,7 +86,7 @@ branches `mulita-medicine` in the three.
   [`a-revived-actor-keeps-its-conditions-in-battle`](a-revived-actor-keeps-its-conditions-in-battle.md),
   and a line in ABL's known issues.
 
-## To merge
+#### To merge
 
 Branches `mulita-medicine` in the-advocate, the ports and the book. Install
 `battle`, `mapdata` and `convert` (the converter's `item_st_at`, the

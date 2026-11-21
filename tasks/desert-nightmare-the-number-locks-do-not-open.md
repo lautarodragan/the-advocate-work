@@ -33,11 +33,11 @@ variable of the ROM cannot hold: it keeps sixteen bits, saturating at
 32767, and RPG_RT's go to 9,999,999 (`NUMBER_DIGITS_MAX` and
 `runtime/number_input.s`).
 
-## Taken (2026-11-20)
+## Log
+
+### 2026-11-20, Tijereta: taken
 
 By Tijereta, from Hurón's ranking in `desert-nightmare-what-it-takes-to-be-playable`. taro: "dale!".
-
-## Log
 
 ### 2026-11-20, Tijereta: what the four pages do, and the design
 

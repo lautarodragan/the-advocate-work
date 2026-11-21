@@ -45,7 +45,9 @@ taro, in their words, translated:
 So: like RM2k, in the model and the console, and the hashes of the
 battles it moves change, each looked at and explained in its commit.
 
-## Work (Cardón, 2026-10-20)
+## Log
+
+### 2026-10-20, Cardón: work
 
 From the-advocate, the-advocate-ports and the-advocate-docs at Hornero's
 `hornero-integrate` (`fc4bfad7`, `59b5658`, `50cae07`), branches

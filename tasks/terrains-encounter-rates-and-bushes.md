@@ -30,7 +30,9 @@ every pending one that could run in parallel:
 
 Each part its own commit, red before.
 
-## Encounter rate: what was done
+## Log
+
+### 2026-11-01, Aguará: encounter rate: what was done
 
 By Aguará, on 2026-11-01, on branches `aguara-terrain-rates` of
 the-advocate and the ports.
@@ -69,7 +71,7 @@ the-advocate and the ports.
   step of sea). Commits: the-advocate `5034cbdf`, ports `ae86583`, book
   `dc343c0`.
 
-## Bush depth: what was done
+### 2026-11-01, Aguará: bush depth: what was done
 
 By Aguará, on 2026-11-01. easyrpg's `Sprite_Character::Draw`: `bush_split =
 4 - depth`, `GetHeight() / bush_split` rows from the feet —10 of 32 at
@@ -113,7 +115,7 @@ Captures, looked at: `/shared/captures/2026-11-01-terrain-bushes/`.
 Commits: the-advocate `e1627246`, ports `21b3108` and the goldens
 `e0659e1`, book `45895d8`.
 
-## When merging, and what was run
+#### When merging, and what was run
 
 the-advocate's `aguara-terrain-rates` (`5034cbdf`, `e1627246`, `01e47d1b`)
 changes the runtime and four Rust projects —`battle`, `bytecode`,

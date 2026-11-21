@@ -19,8 +19,9 @@ unblocks the 164 pages of `Inscribe` and `ControlMachines`, knowing that
 `Control` and `BarkWall` don't happen yet. The real condition system is a
 task of its own, in todo: `battle-conditions-for-real.md`.
 
+## Log
 
-# Status
+### 2026-10-12, Chajá: started
 
 2026-10-12, Chajá, from the-advocate 2c7b10ce and the ports b3063e2,
 on the branches `chaja-destello` of both.
@@ -48,7 +49,7 @@ The plan, after reading the runtime:
   the converter warns about it in troop pages too, which until now only
   maps' automatic pages did.
 
-# What was done (2026-10-12, Chajá)
+### 2026-10-12, Chajá: what was done
 
 Branches `chaja-destello`: the-advocate `5238c200`, the ports `38befdb`
 (test and cases) and `3952062` (goldens), the book `eeb3d08`. `main` had

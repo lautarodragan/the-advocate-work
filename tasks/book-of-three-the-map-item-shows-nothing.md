@@ -34,7 +34,9 @@ the converter leaves it out —a common event's picture has no map of its
 own, so it needs a layout on every map where switch 38 can come on—, which
 `degradations.json` and `map_pictures.rs` should say.
 
-## Chajá, 2026-10-19
+## Log
+
+### 2026-10-19, Chajá: the work
 
 **Why it was left out**: no VRAM layout and no picture limit. Common
 event 23 is automatic, and an automatic common event is compiled once, as

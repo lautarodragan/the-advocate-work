@@ -31,12 +31,6 @@ custom menu was (the book's "The custom menu"), or the picture system
 grows past two —the book's "The picture system and the portable
 console"—; and how the intro gets past without them.
 
-**Noted on 2026-10-16 (Hurón)**: the boot stalling on map 106 had another
-cause too, followed in
-[`zounds-the-intro-on-map-106-waits-for-a-key-nobody-reads`](zounds-the-intro-on-map-106-waits-for-a-key-nobody-reads.md)
-(in testing). What stays a draft here is the choice above for the
-picture-made screens.
-
 **taro, 2026-10-16**, in their words, translated:
 
 > If implementing the rest of the picture system turns out relatively
@@ -45,7 +39,17 @@ picture-made screens.
 
 So the picture system grows toward RM2k's (more pictures at once), rather than remaking Zounds' screens as the engine's menu; first measured, implemented if the cost is reasonable. Taken by Tijereta.
 
-## Phase 1: measured (Tijereta, 2026-10-16)
+## Log
+
+### 2026-10-16, Hurón: a note
+
+**Noted on 2026-10-16 (Hurón)**: the boot stalling on map 106 had another
+cause too, followed in
+[`zounds-the-intro-on-map-106-waits-for-a-key-nobody-reads`](zounds-the-intro-on-map-106-waits-for-a-key-nobody-reads.md)
+(in testing). What stays a draft here is the choice above for the
+picture-made screens.
+
+### 2026-10-16, Tijereta: phase 1: measured
 
 With the-advocate `9407d385`+ and the ports `6d5c491`, by a throwaway
 script over each game's `data/` and its `Picture/` folder: it walks every
@@ -54,7 +58,7 @@ ignoring branches—, adds a number on `ShowPicture` and takes it away on
 `ErasePicture`, and counts what is up at once. "Small" is what fits the
 plane of objects: 256x128 or less on the console's screen.
 
-### How many at once
+#### How many at once
 
     game              ShowPicture  most small ones up at once         maps with more than 2 small numbers
     abl                   348      3 on map 95; 11 in the console     1 (95)
@@ -75,7 +79,7 @@ plane of objects: 256x128 or less on the console's screen.
 
 **Typical is one; the screens made of pictures are four to fourteen.**
 
-### Zounds' screens, picture by picture (size in RM2k, colours)
+#### Zounds' screens, picture by picture (size in RM2k, colours)
 
 * **Map 75**, the race's score: digits `0`..`9` and `0Points`, 7x8 and 3
   or 4 colours, placed by variables, under numbers 20 to 24: up to five
@@ -101,7 +105,7 @@ plane of objects: 256x128 or less on the console's screen.
   once without a map, so without pictures** (`pictures: None` in
   `commons.rs`): today none of them shows anything, whatever the slots.
 
-### What limits two today, one by one
+#### What limits two today, one by one
 
 * **The slots**: `PIC_SLOTS = 2` in `far_ram.s`, `SLOTS` in the
   converter. Each slot is ten bytes of far RAM: the number is arbitrary.
@@ -125,7 +129,7 @@ plane of objects: 256x128 or less on the console's screen.
 * **CPU per frame**: `pic_oam` emits each object; a few dozen objects a
   frame are nothing next to the characters'. **WRAM**: nothing.
 
-### The options, and what each costs
+#### The options, and what each costs
 
 1. **More slots, palettes shared** —the converter groups the map's
    pictures into palettes when their colours together fit fifteen, and
@@ -158,7 +162,7 @@ plane of objects: 256x128 or less on the console's screen.
 behaviour, not Zounds': phase 2 below. 4 and 5 stay as drafts with these
 numbers.
 
-## Phase 2: more pictures at once (Tijereta, 2026-10-16)
+### 2026-10-16, Tijereta: phase 2: more pictures at once
 
 Branches `tijereta-more-pictures` in the-advocate, the ports and the book.
 

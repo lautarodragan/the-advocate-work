@@ -37,7 +37,9 @@ To todo, as Tijereta recommended: the fix is skills giving conditions to their t
 
 **Done**: a skill with `state_effects` gives (or takes) its conditions to its targets in battle, with RM2k's hit chance, in the model and the console; Kazar's Veneno poisons an enemy in Zounds, in a test that is red before. **First step**: what `divergences/what-battle-conditions-do-not-model.md` in the book says is left, and how easyrpg's `Game_BattleAlgorithm::Skill` applies `state_effects`.
 
-# What was done (2026-11-01, Mulita)
+## Log
+
+### 2026-11-01, Mulita: what was done
 
 Within [`the-partys-conditions`](the-partys-conditions.md), its battle
 half: a skill gives and takes its `state_effects` on its targets, on

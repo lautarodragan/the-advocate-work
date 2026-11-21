@@ -38,12 +38,14 @@ invisible under the darkness the original lays at 35 %:
 
 > I'd try rendering it at 50 %, if possible
 
-## Tijereta, 2026-10-16
+## Log
+
+### 2026-10-16, Tijereta: the work
 
 Starting from the-advocate `30ab0ca6`, ports `f8aca68`, docs `3f105f2`.
 Branches `tijereta-translucent-pictures` in the three.
 
-### What the mask is
+#### What the mask is
 
 `Lichteffekt_Tankstelle_WC` is 320x240, 169 colours, 88 % its transparent
 colour: the room's rectangle in near-black (`#080805`) with a cone of light
@@ -54,7 +56,7 @@ map 6 six seconds later, and RM2k erases every picture on the jump. So it
 is a mask that stays put on the map for the whole visit, which is exactly
 what `map_pictures` draws into the map in Sunset.
 
-### The count, in the eight games
+#### The count, in the eight games
 
 `ShowPicture`s with `0 < transparency < 100` whose file is bigger than
 what the objects take (256x128), by the dumps and the games' `Picture/`
@@ -78,7 +80,7 @@ over the screen (150 of the shows, at 25/50/75, on the game-over and intro
 maps). ABL's seven are 217's montage and 311's hovershadow, which
 have their divergence already; Vampires Dawn's 73 are not looked at here.
 
-### What the console has free: no layer
+#### What the console has free: no layer
 
 In mode 3 a map takes BG1 (the ChipSet, 8bpp) and BG2 (the layer above the
 hero, the message window and, when it has one, the panorama); the objects
@@ -98,7 +100,7 @@ are —`[graphics] map_pictures = true` in Desert's project—, which is exact
 for a mask that stays put and loses that the characters are not shaded.
 Not colour math at 50 %: see the measurement.
 
-### Measured against RPG_RT 2015 under Wine (15 bits)
+#### Measured against RPG_RT 2015 under Wine (15 bits)
 
 Map 7 of the original, started on it with Sandra in the party (a copy
 edited with ditto), captured on `:91`, against rm2k-render's layers of the
@@ -117,7 +119,7 @@ Baked is five times closer than any colour math; among those, 50 % and a
 subtract are the same error, each about two levels off in the opposite
 direction. The 0.35 that is left in "baked" is rounding and the capture.
 
-### Done
+#### Done
 
 * `wally`'s `map_pictures::compose` blends a translucent map picture into
   the **layer above the hero** too, where it has pixels: with only the
@@ -170,7 +172,7 @@ direction. The 0.35 that is left in "baked" is rounding and the capture.
   game's page.
 * Captures, with a README: `/shared/captures/2026-10-16-translucent-pictures/`.
 
-### What was run
+#### What was run
 
 With the branch's tools (`just install-local .local-tools wally convert`):
 
@@ -190,13 +192,13 @@ With the branch's tools (`just install-local .local-tools wally convert`):
   masks drawn in —126 of them— were not looked at; map 172's `Sandsturm`
   (above) in particular.
 
-### Branches
+#### Branches
 
 `tijereta-translucent-pictures` in the-advocate (two commits: the code
 and the test game, then its goldens), the ports (Desert's project and the
 case) and the docs (the book, with `main` merged); this task here.
 
-### To install when merging
+#### To install when merging
 
 `just install wally convert` from `~/the-advocate`. Sunset converts the
 same (the panorama branch of `compose` is untouched, and no mist of its is

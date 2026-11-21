@@ -26,7 +26,9 @@ of Three 1.
 `release` request, with and without that parameter changed to 0 in those
 commands: same `events.json`.
 
-## Defined (2026-10-16, Carpintero)
+## Defined
+
+On 2026-10-16, by Carpintero.
 
 An audio detail: three commands in ABL, a few dozen in other games;
 nothing stops. **Done**: `OP_BGM` carries the fade-in and the driver
@@ -34,7 +36,9 @@ ramps the volume in over it, with a compiler unit test and a ROM test that
 hears the first frames quieter. **First step**: whether the music driver
 already has a volume ramp to reuse.
 
-## Doing (2026-10-19, Carpintero)
+## Log
+
+### 2026-10-19, Carpintero: doing
 
 The driver already had the ramp: `FadeOutBGM`'s, `bgm_fade_tick`, a
 sixteen-bit level that scales each music voice's volume —or the MSU-1
@@ -44,7 +48,7 @@ the same number `OP_FADE_BGM` carries. `OP_BGM` carries it as a word after
 the step, and the map table and `OP_SYSTEM_BGM` carry it too, so a map's
 own song and a battle's fade in if their RM2k music asks.
 
-## Done (2026-10-19, Carpintero)
+### 2026-10-19, Carpintero: done
 
 `OP_BGM` carries the fade-in as a word after the step —the same
 `ceil(65536 / frames)` `OP_FADE_BGM` carries, clamped to easyrpg's ten

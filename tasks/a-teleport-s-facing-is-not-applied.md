@@ -29,12 +29,14 @@ dump, ports `3e4e95d`). The maze door, from 2026-11-02, too: right, onto
 To reproduce: "New Game", the seventh door of the room, "Go": Uname faces
 down on Delmar's path.
 
-## The fix (Mulita, 2026-11-03)
+## Log
+
+### 2026-11-03, Mulita: the fix
 
 taro said "dale" to fixing it. From the-advocate `36dde02d`, the ports
 `3e9b2cc` and the book `d432096`.
 
-### What RM2k does, in easyrpg-player
+#### What RM2k does, in easyrpg-player
 
 `CommandTeleport` only stores it: `ReserveTeleport(map, x, y,
 parameters[3] - 1)`, -1 to keep it. It is applied in
@@ -46,7 +48,7 @@ being left, and the new map fades in with him already turned. It applies
 on a jump to the same map too, and `UpdateFacing` does nothing over a
 locked facing: the direction changes, the drawn facing does not.
 
-### The encoding: a new opcode, `OP_TELEPORT_FACING` (0x56)
+#### The encoding: a new opcode, `OP_TELEPORT_FACING` (0x56)
 
 `(direction: byte, map: word, x: word, y: word)`, appended at the end of
 the declaration; a `Teleport` that keeps the facing is still
@@ -68,7 +70,7 @@ asks the cartridge whether some `Teleport` asks for a facing
 page_ends`, and an RM2k cartridge pays only its two bytes in the dispatch
 table.
 
-### Who else carries a facing (Zounds' dump, ports `3e9b2cc`)
+#### Who else carries a facing (Zounds' dump, ports `3e9b2cc`)
 
 * `TeleportTargets` (11810): no facing —map, x, y, switch—. The Teleport
   and Escape skills land facing down (`ReserveTeleport(SaveTarget)`), but
@@ -84,7 +86,7 @@ table.
   Not trivial —`OP_PLACE` has no room for it—: a draft,
   `change-event-location-s-facing-is-not-applied`.
 
-### What it costs
+#### What it costs
 
 `just space`, with the branch's tools: ABL's `abl.sfc` keeps 294 B of
 bank 0 (296 at main) and its 80 B of BSS. Its `mapdata.inc` is identical,
@@ -96,7 +98,7 @@ gate on, pays about 22 B of bank 0 —the table entry, the handler, the
 preamble of `op_teleport`, the boot's `stz`, the `jsl`— and one byte of
 BSS; the body is in the far bank.
 
-### What ran
+#### What ran
 
 * `just crate-test` of bytecode, events, convert, mapdata and cartridge,
   green; clippy on them clean. The events test
@@ -122,7 +124,7 @@ with a facing to the same map, a `RecallToLocation` right after a
 happens on —the test looks at `hero_dir` once he has control, not at the
 black frame—.
 
-### To install when merging
+#### To install when merging
 
 `just install events convert mapdata cartridge`, from `~/the-advocate`:
 the bytecode changes, the converter and mapdata write the gate, and

@@ -41,7 +41,9 @@ them a page of 1,801), and 324 pages on 72 maps that teleport to it are left
 out. The stop was run again today with only map 1 brought back, and it is the
 same message; what comes after it is not known.
 
-### Carpintero, 2026-10-15: on map 1 the refusal is a false positive
+## Log
+
+### 2026-10-15, Carpintero: on map 1 the refusal is a false positive
 
 Read with the-advocate `497be031` and the ports `0ddf815`
 ([research](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-15-frozen-worlds-battle-system.html)).
@@ -70,7 +72,7 @@ NPC, and the page used to be left out together with its teleport to map 1 or
 2. The Frozen World does not build with that change until this is fixed (or
 the stop made not to apply to pages that now only show the box).
 
-### Hurón, 2026-10-15: the check follows the page (the-advocate `ca228059`, branch `huron-tp`)
+### 2026-10-15, Hurón: the check follows the page (the-advocate `ca228059`, branch `huron-tp`)
 
 * The check now walks each page's bytecode tracking where the hero is: a
   `Teleport` moves it to the destination, and a route on the hero with
