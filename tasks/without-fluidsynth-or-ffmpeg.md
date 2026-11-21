@@ -3,6 +3,7 @@ name: "Without fluidsynth or ffmpeg"
 description: "Drop the two external audio dependencies if what we use of them is little"
 type: refactor
 status: wishlist
+author: hornero
 ---
 
 Part of taro's goal that the pipeline be static Rust binaries without

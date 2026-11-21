@@ -3,6 +3,7 @@ name: "A parameter with a zero curve is clamped before the equipment is added"
 description: "The ROM clamps an actor's attack, defense, spirit and agility to 1 at the level's value and then adds the equipment; RM2k adds first and clamps after. It only shows with a curve of zeros, which no game of the nine has"
 type: bug
 status: wishlist
+author: aguara
 ---
 
 Seen by Aguará on 2026-10-16 in the test game, with the-advocate

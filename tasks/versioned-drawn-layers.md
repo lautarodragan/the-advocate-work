@@ -3,6 +3,7 @@ name: "Versioned drawn layers"
 description: "Each map's layers as an artifact that is looked at in git"
 type: test
 status: wishlist
+author: hornero
 ---
 
 # What

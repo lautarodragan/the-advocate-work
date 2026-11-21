@@ -3,6 +3,7 @@ name: "The Frozen World's HP percentages come out low past 327 HP"
 description: "CalculateHPPercents multiplies the HP by 100 and then divides by the maximum; the product passes the sixteen-bit variable and clamps at 32767"
 type: bug
 status: wishlist
+author: tijereta
 ---
 
 Seen by Tijereta on 2026-10-14, with the-advocate `51f05d7c` plus the branch

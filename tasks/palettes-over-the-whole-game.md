@@ -3,6 +3,7 @@ name: "Palettes over the whole game"
 description: "Compute the palettes with all the images at once"
 type: feature
 status: wishlist
+author: hornero
 ---
 
 # What

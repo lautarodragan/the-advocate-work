@@ -3,6 +3,7 @@ name: "A transparent message under a moving camera keeps the layer above"
 description: "A window without its background carries the map's layer above only with the camera still on the 8-pixel grid; one that opens while the camera moves takes the layer off its lines, and one under which it moves keeps a stale copy"
 type: feature
 status: wishlist
+author: taro
 ---
 
 Split from

@@ -3,6 +3,7 @@ name: "Lowering unreachable above tiles decides itself"
 description: "`[graphics] unreachable_above_below` is a per-game switch, on in eight games and off in ABL because there it costs banks; with always / auto / never and auto by default, leaving the key out should give each game its best"
 type: feature
 status: wishlist
+author: taro
 ---
 
 Follows [`above-tiles-no-character-can-reach-go-below`](above-tiles-no-character-can-reach-go-below.md):

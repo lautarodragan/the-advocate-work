@@ -3,6 +3,7 @@ name: "The shop's party ignores ChangeSpriteAssociation"
 description: "The shop's party window draws every member with the database's CharSet, not the one a ChangeSpriteAssociation gave them"
 type: bug
 status: wishlist
+author: chaja
 ---
 
 Seen by Chajá on 2026-10-15, while making the party window

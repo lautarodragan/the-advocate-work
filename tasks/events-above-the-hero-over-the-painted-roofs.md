@@ -3,6 +3,7 @@ name: "Events above the hero, over the painted roofs"
 description: "In a painted map (mode 1), an event with 'above the hero' priority is drawn over the roofs; in RM2k the roofs are pictures and go above everything"
 type: bug
 status: wishlist
+author: cardon
 ---
 
 Seen by Cardón on 2026-10-11 (`other-games-build-and-boot.md`),

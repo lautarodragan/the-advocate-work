@@ -3,6 +3,7 @@ name: "The test game"
 description: "The test game exists and runs in CI; what is left of the plan is phase 2's harness split —its generic part from ABL's tests/harness to the-advocate— and ABL's ten M1 tests moved onto it, then phases 3 to 5"
 type: test
 status: wishlist
+author: taro
 ---
 
 Until 2026-10-12 this task was "The golden game and two repos", taro's

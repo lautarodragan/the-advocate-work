@@ -3,6 +3,7 @@ name: "Vehicles: EnterExitVehicle and the boat"
 description: "Zounds starts its boat on map 187 'Fishing Game' and boards it with EnterExitVehicle on two pages, plus a TeleportTargets; the compiler has no vehicles, and the System's boat/ship/airship music slots point at RTP songs the repo lacks"
 type: feature
 status: wishlist
+author: aguara
 ---
 
 Seen by Aguará on 2026-10-15, in the study

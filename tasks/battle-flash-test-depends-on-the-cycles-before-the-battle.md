@@ -3,6 +3,7 @@ name: "The battle flash test depends on the cycles before the battle"
 description: "test_the_flash_lasts_what_the_page_says saw the flash's first level twice when the map's frames before the battle cost a few more scan lines"
 type: bug
 status: wishlist
+author: aguara
 ---
 
 Seen by Aguará on 2026-10-12, with the-advocate `25d93f0a` plus a first

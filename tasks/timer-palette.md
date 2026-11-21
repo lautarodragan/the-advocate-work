@@ -3,6 +3,7 @@ name: "The timer's palette"
 description: "Reserve it only while the timer is running"
 type: refactor
 status: wishlist
+author: hornero
 ---
 
 # What

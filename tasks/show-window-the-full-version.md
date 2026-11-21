@@ -3,6 +3,7 @@ name: "ShowWindow: the full version"
 description: "What the proof of concept left: windows beside an open message, the MovePicture fades, a window that follows the camera, the System's cursor, text positions inside a line, and the image-to-text prompt run on a real plan"
 type: feature
 status: wishlist
+author: hornero
 agents: [Mulita]
 ---
 

@@ -3,6 +3,7 @@ name: "A big picture over a mode-3 panorama may show its own tilemap in BG2"
 description: "In the 'panorama' VRAM layout BG2's base is $4000, where a big picture puts its tilemap; the emptied layer above points at BG2's tile 0, which would be that tilemap. Suspected by reading, not reproduced"
 type: bug
 status: wishlist
+author: huron
 ---
 
 Seen by Hurón on 2026-10-12 reading the code while bringing the book's

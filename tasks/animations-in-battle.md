@@ -3,6 +3,7 @@ name: "Animations in battle"
 description: "The animation_id of skills and weapons, drawn over the scene"
 type: feature
 status: wishlist
+author: hornero
 ---
 
 # What

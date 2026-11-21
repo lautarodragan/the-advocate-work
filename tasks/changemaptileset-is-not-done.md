@@ -3,6 +3,7 @@ name: "ChangeMapTileset is not done"
 description: "The command is dropped since 2026-10-16: the map keeps its ChipSet. Frozen World's frozen bazaar and temple don't show, and Vampires Dawn's bat would keep the ground's passability"
 type: feature
 status: wishlist
+author: mulita
 ---
 
 Seen by Mulita on 2026-10-16, with the-advocate `759aa0ba` plus branch

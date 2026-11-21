@@ -3,6 +3,7 @@ name: "The zoom, baked at run time"
 description: "Compose the mode 3 screen —both layers and the sprites— into mode 7's single layer at run time, so the zoom transition can be done: every battle of every game starts and ends with it"
 type: research
 status: wishlist
+author: taro
 agents: [Carpintero]
 ---
 

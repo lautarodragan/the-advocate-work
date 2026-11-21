@@ -3,6 +3,7 @@ name: "One optimisation for all the converter's decisions"
 description: "Instead of stages that decide one after another, each map's decisions —bake or sprite, which colours merge, which pictures, which VRAM layout— taken together against shared prices for each budget, with one measure of loss: the pixels that differ from RM2k's render at 15 bits"
 type: research
 status: wishlist
+author: taro
 ---
 
 taro, on 2026-11-19, after

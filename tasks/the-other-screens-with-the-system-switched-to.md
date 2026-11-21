@@ -3,6 +3,7 @@ name: "The other screens with the System a game switches to"
 description: "ChangeSystemGraphics changes only the message window: the menu, the slot screen, the item, equipment and shop screens, End Game, the battle's windows and the title keep the starting System"
 type: feature
 status: wishlist
+author: cardon
 ---
 
 Found by Cardón on 2026-10-12, doing

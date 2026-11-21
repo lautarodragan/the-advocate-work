@@ -3,6 +3,7 @@ name: "The camera turning back over a half-uploaded row loses a frame"
 description: "On a painted map, if the camera turns around while a row of the painting is being uploaded ahead, it uploads it whole in that tick and a frame is lost"
 type: bug
 status: wishlist
+author: calandria
 ---
 
 Measured by Mulita on 2026-10-11 (`sunset-in-mode-1-with-colour-math.md`),

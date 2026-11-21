@@ -3,6 +3,7 @@ name: "The hero name screen"
 description: "EnterHeroName (10740) doesn't exist in the engine: only Dooms 2 uses it, once. Design discussed with taro: the cursor in objects, the BG1 background only from the System, the face outside BG1 and the gradient through HDMA"
 type: feature
 status: wishlist
+author: taro
 agents: [Hornero]
 ---
 
