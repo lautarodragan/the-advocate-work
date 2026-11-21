@@ -36,3 +36,62 @@ the previous one left, and `UpdatePan` walks the current position toward
 both finishes at once, at the last pan's speed. So a pan without a wait
 followed by one on the other axis is one diagonal move, and two on the
 same axis add up.
+
+## What it was
+
+Tijereta, 2026-11-20. The runtime already had EasyRPG's model —a finish
+per axis in `pan_dest_x`/`pan_dest_y`, `pan_tick` walking both at the last
+pan's step, `pan_frames` as `GetPanWait`— but **every pan waited**:
+`op_pan` read the wait byte, did `iny`, and branched on Z, which `iny`
+sets from Y. Born with the pan on 2026-09-06 (`ae388b4e` in
+the-advocate), so the second command was only read when the first had
+finished. Measured on map 97: the first `OP_PAN`'s byte is 0 and the page
+still sat on it for 96 frames.
+
+And a second difference, which Frozen World's intro shows: RM2k's
+`UpdatePan` moves the **screen**, clamped by the map's edge
+(`Game_Map::AddScreenX`), and advances the pan only by what the screen
+moved. The console added the pan to the hero and clamped the sum, so at an
+edge part of it was hidden and a pan away from the edge spent it before the
+camera moved. Map 10 leaves the hero on its bottom row and pans up 30 cells
+and left 15 at half a pixel a frame. Before both fixes the camera stood
+still for 240 frames, went up, and only after 960 went left; with only the
+first one it went left alone for 240 frames before it began to go up.
+
+Speed: one step per axis per frame, `2 << speed` sixteenths, so a diagonal
+lasts as long as its longer leg —`UpdatePan` and `GetPanWait`—, which the
+runtime already did.
+
+![Zounds map 97, pan frame 48, before](images/two-pans-without-wait-move-one-after-the-other/zounds-97-frame-48-before.png)
+![Zounds map 97, pan frame 48, after](images/two-pans-without-wait-move-one-after-the-other/zounds-97-frame-48-after.png)
+
+![Frozen World map 10, pan frame 240, before](images/two-pans-without-wait-move-one-after-the-other/frozen-world-10-frame-240-before.png)
+![Frozen World map 10, pan frame 240, without the edge fix](images/two-pans-without-wait-move-one-after-the-other/frozen-world-10-frame-240-without-the-edge.png)
+![Frozen World map 10, pan frame 240, after](images/two-pans-without-wait-move-one-after-the-other/frozen-world-10-frame-240-after.png)
+
+## How many games
+
+A throwaway script over the eight dumps —every map page, common event and
+troop page—, moves (`p[0]` 2 or 3) without a wait, and of those how many
+are followed by another move:
+
+    abl                  46 without a wait, 2 followed by another
+    book-of-three         8, 2   (map 70 EV0004: three in a row)
+    frozen-world          2, 1   (map 10 EV0045, the intro)
+    sunset-over-imdahl    3, 0
+    vampires-dawn         9, 3   (maps 116 and 125)
+    zounds                8, 3   (maps 97 and 101)
+    desert-nightmare, dooms2, el-dorado: none
+
+Every move without a wait was affected, not only the pairs: the page held
+everything after it for the pan's frames.
+
+## Done
+
+* the-advocate, `tijereta-diagonal-pan`: the `cmp #0` in `op_pan`;
+  `pan_at_edge` in `runtime/camera.s` with `CAM_WANT`, filled by
+  `follow_camera` and `wrap_camera`.
+* the-advocate-ports, `tijereta-diagonal-pan`: ABL's
+  `tests/rpgmaker/test_pan_axes.py` and its cases `pan-diagonal`,
+  `pan-adds-up` and `pan-edge`, the camera tick by tick against the model;
+  `tests/test_zounds_map_97_pan.py`. All red before their fix.
