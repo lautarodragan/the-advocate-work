@@ -30,3 +30,18 @@ shown again. Whoever takes it measures what it costs first —the common
 part as its own layer of the map that can be dropped, or as small
 pictures too, or redrawing the cells it covered from the map without
 it— and looks at 115 and 161 against Wine or EasyRPG before and after.
+
+## Note (2026-11-20, Aguará)
+
+Since the-advocate `d1972f68` (branch `aguara-dn-intro-menu`) the rule no
+longer takes 115 and 161: it splits only numbers every show of which
+comes from an autostart or parallel page, and the locks' pictures come
+from pages the action key starts. Both were looked at on screen against
+RPG_RT under Wine (`/shared/captures/2026-11-20-dn-intro-and-file-screen/locks/`):
+they are drawn in as before the rule, one symbol frozen in the room, the
+draft `desert-nightmare-the-locks-pictures-are-drawn-into-their-rooms`.
+Today no number of any port is split and erased, so this bug has no case
+on screen; map 1 never erases its menu. **So no captures here**, of 115
+nor of 161: at `e4bbee1e` neither shows this bug —what they show, a
+symbol frozen in the room and a lock that never opens, is in that draft,
+with the ROM and RPG_RT side by side—.
