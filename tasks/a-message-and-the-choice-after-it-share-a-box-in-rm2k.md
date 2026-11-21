@@ -5,6 +5,7 @@ type: bug
 game: zounds
 status: done
 assignee: taro
+author: carpintero
 agents: [Carpintero, Chajá]
 ---
 

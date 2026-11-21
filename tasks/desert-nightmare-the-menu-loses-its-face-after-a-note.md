@@ -3,6 +3,7 @@ name: "Desert Nightmare: the menu loses its burning face after a note or a map"
 description: "A note or a map shown on A is a big picture over the menu's face, another big picture; the console carries one at a time, so when the note goes the menu's windows stand over the map until the menu is opened again"
 type: bug
 status: draft
+author: mulita
 game: desert-nightmare
 agents: [Mulita]
 ---

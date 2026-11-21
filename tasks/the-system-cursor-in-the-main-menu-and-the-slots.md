@@ -4,6 +4,7 @@ description: "The main menu's command list and the Save/Load screen mark the sel
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Chajá]
 ---
 

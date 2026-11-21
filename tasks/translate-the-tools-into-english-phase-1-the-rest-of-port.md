@@ -4,6 +4,7 @@ description: "Comments, docstrings, messages and prose into English, without tou
 type: refactor
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-09-29, in their words, translated:

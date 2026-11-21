@@ -3,6 +3,7 @@ name: "Opaque events into the map"
 description: "An event that is a fixed opaque tile is baked into the map"
 type: feature
 status: done
+author: hornero
 ---
 
 # What

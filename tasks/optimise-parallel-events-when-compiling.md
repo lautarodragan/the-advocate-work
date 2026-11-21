@@ -3,6 +3,7 @@ name: "Optimise parallel events when compiling"
 description: "Detect patterns in the parallel pages and generate something cheaper: run less often, or only when something moves"
 type: refactor
 status: wishlist
+author: taro
 ---
 
 taro's idea, on 2026-09-26, from what the chips investigation measured

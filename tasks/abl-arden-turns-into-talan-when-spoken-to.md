@@ -4,6 +4,7 @@ description: "In the scene with \"Arden... I'm sure everyone's fine\", talking t
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Mulita]
 game: abl
 ---

@@ -4,6 +4,7 @@ description: "Move the 24 KB of $7E2000-$7E7FFF written by hand into segments th
 type: feature
 status: done
 assignee: taro
+author: huron
 agents: [Hurón]
 ---
 

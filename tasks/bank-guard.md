@@ -4,6 +4,7 @@ description: "A test that walks the .dbg and flags every absolute jsr/jmp that l
 type: feature
 status: done
 assignee: taro
+author: hornero
 ---
 
 Pepitero proposed it (`bank-1-filled-up.md`), without doing it: the

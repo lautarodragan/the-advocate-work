@@ -4,6 +4,7 @@ description: "The third hand-written reader of the dump: cartridges.rs reads map
 type: refactor
 status: done
 assignee: taro
+author: zorzal
 ---
 
 Zorzal noted it on 2026-09-29 (`rust-ditto-as-a-library-and-rm2k-rules.md`):

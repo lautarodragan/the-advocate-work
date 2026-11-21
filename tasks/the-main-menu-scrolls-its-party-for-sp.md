@@ -4,6 +4,7 @@ description: "The main menu's party boxes get a fourth line with SP and show thr
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Tijereta]
 ---
 

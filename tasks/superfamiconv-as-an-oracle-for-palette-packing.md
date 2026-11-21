@@ -3,6 +3,7 @@ name: "SuperFamiconv as an oracle for palette packing"
 description: "A differential test for Adeleine: hand the same tiles to SuperFamiconv without quantizing and flag every picture it packs in fewer palettes than try_pack, or fits where try_pack says no"
 type: test
 status: todo
+author: hornero
 ---
 
 # What

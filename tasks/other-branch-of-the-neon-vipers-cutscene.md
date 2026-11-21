@@ -3,6 +3,7 @@ name: "The other branch of the Neon Vipers cutscene"
 description: "What the map 12 walkthrough left unexecuted: the `no` branch, the fence and map 14"
 type: test
 status: done
+author: hornero
 ---
 
 `tests/abl/test_playthrough_vipers_golden.py` plays the whole stretch through the

@@ -3,6 +3,7 @@ name: "A slow-read video breaks wait_for_control"
 description: "video.read_slowly swaps Playthrough.wait for a wrapper without its press-if parameter, which wait_for_control passes, so a recording with slow reading fails with a TypeError at the first wait for control"
 type: bug
 status: todo
+author: calandria
 ---
 
 Seen by Calandria on 2026-10-12, reading the code, with the ports at

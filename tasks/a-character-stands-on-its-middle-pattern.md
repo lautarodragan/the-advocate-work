@@ -3,6 +3,7 @@ name: "A character stands on its middle pattern"
 description: "RM2k draws an event on its page's pattern only with a fixed graphic or spinning; any other stands on the middle one, and the ROM draws the page's pattern: a step where RM2k shows feet together"
 type: bug
 status: draft
+author: cardon
 ---
 
 Seen by Cardón on 2026-11-18, in

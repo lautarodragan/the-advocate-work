@@ -3,6 +3,7 @@ name: "A victory song other than a changed battle song is uploaded when the batt
 description: "When ChangeSystemBGM gives the battle a song and the victory keeps another, winning uploads the victory's song with the picture still"
 type: bug
 status: draft
+author: carpintero
 ---
 
 Seen by Carpintero on 2026-10-19, reading the runtime of the-advocate

@@ -4,6 +4,7 @@ description: "A Teleport to a map the cartridge does not carry leaves the whole 
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Hurón]
 ---
 

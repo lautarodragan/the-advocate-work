@@ -3,6 +3,7 @@ name: "The slot screen shows no HP"
 description: "Every save's row shows the level and not the leader's hit points, which RPG_RT writes after it: \"L 1\" where the original says \"L 1  HP 40\""
 type: bug
 status: draft
+author: huron
 agents: [Hurón]
 ---
 

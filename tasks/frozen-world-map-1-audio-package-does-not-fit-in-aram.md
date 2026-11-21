@@ -4,6 +4,7 @@ description: "With map 1 (\"Battle Screen\") brought back into The Frozen World,
 type: bug
 status: done
 assignee: taro
+author: carpintero
 agents: [Carpintero, Aguará]
 ---
 

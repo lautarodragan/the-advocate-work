@@ -3,6 +3,7 @@ name: "Switch skills from the menu play no sound"
 description: "A switch skill used from the pause menu's skills screen turns its switch on silently; RM2k plays the skill's sound effect"
 type: bug
 status: wishlist
+author: mulita
 agents: [Mulita]
 ---
 

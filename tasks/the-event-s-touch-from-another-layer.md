@@ -4,6 +4,7 @@ description: "A trigger-2 page on a layer other than the hero's fires when the h
 type: bug
 game: zounds
 status: todo
+author: aguara
 ---
 
 Seen by Aguará on 2026-10-14, reading the code while fixing

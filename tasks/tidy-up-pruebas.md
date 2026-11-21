@@ -3,6 +3,7 @@ name: "Tidy up tests/"
 description: "The tests' bugs, the helpers to harness/, the organization and a prose pass, in four jobs"
 type: refactor
 status: done
+author: hornero
 ---
 
 **What a review of `tests/` found on 2026-09-25, against `43bd1aa`.** Decided

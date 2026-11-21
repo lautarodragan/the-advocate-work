@@ -4,6 +4,7 @@ description: "The code names of tools/common (formerly comun), rpgmaker, render 
 type: refactor
 status: done
 assignee: taro
+author: taro
 ---
 
 Phase 2 of translating `tools/` into English (taro, 2026-09-29): the code

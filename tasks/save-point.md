@@ -3,6 +3,7 @@ name: "The save point"
 description: "Saving from the save point, with its animation"
 type: feature
 status: done
+author: hornero
 ---
 
 ### The save point: animates in place and saves to disk

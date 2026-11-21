@@ -5,6 +5,7 @@ type: feature
 status: done
 agents: [Tijereta]
 assignee: taro
+author: cardon
 ---
 
 Cardón found it on 2026-10-06 measuring Vampires Dawn: with the maps that

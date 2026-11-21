@@ -3,6 +3,7 @@ name: "Holding an arrow scrolls a list slower than RM2k"
 description: "On the composed screens a held arrow waits for the text, and a step that scrolls takes 6-12 frames to typeset where RM2k repeats every 4"
 type: feature
 status: draft
+author: huron
 ---
 
 Seen by Hurón on 2026-10-18, fixing

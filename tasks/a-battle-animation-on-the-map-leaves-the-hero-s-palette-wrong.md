@@ -3,6 +3,7 @@ name: "A battle animation on the map leaves the hero's palette wrong"
 description: "In Zounds' cave (map 114), a ShowBattleAnimation on another event tints the hero while it plays, and when it ends the hero keeps wrong colours until the map is left"
 type: bug
 status: todo
+author: taro
 game: zounds
 ---
 

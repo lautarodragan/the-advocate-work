@@ -4,6 +4,7 @@ description: "With the variable-width font and spacing 0, 6 of the 367 skill nam
 type: bug
 status: done
 assignee: taro
+author: tordo
 ---
 
 Tordo measured it on 2026-10-03, counting by hand against the cell cap, while

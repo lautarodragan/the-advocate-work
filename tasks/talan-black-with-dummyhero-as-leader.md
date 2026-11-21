@@ -4,6 +4,7 @@ description: "an actor without a graphic uploaded fifteen zero colours to sprite
 type: bug
 status: done
 assignee: taro
+author: taro
 ---
 
 Reported by taro playing on the SNES on 2026-09-27. **It happened in `release`.**

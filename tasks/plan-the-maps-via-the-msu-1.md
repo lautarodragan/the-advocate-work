@@ -4,6 +4,7 @@ description: "Neither 6 nor 8 MB are enough for the whole game: how much it weig
 type: research
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-10-01, when asking about more maps. Already decided: the

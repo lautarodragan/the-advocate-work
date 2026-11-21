@@ -5,6 +5,7 @@ type: feature
 status: done
 agents: [Aguará, Calandria]
 assignee: taro
+author: taro
 ---
 
 From Aguará's brief analysis (Sonnet), on 2026-10-05, of what taro saw playing the ROMs of the other games. See also the wishlist las-otras-transiciones-de-rm2k.

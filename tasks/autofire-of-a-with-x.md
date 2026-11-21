@@ -3,6 +3,7 @@ name: "Autofire of A with X"
 description: "Holding X presses and releases A on its own, to skip through text and repeat choices without mashing the button"
 type: feature
 status: done
+author: taro
 ---
 
 taro's idea, on 2026-09-25: RM2k uses two buttons and the SNES controller

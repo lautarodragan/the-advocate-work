@@ -3,6 +3,7 @@ name: "Move the DMA-only buffers out of bank 0's BSS"
 description: "oam, oam_high, cgram_shadow and text_buf —3,024 B— are built in bank 0 and leave it by DMA, which reads any bank; the BSS has 75–77 B left, so EV_MAX can grow by about 10 events. FARBSS has no room for them in ABL (kept for the materials), so their place is $7F's GRID_TOP or the SRAM"
 type: feature
 status: wishlist
+author: huron
 ---
 
 Suggested by Hurón on 2026-10-15, in the study

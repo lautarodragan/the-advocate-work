@@ -3,6 +3,7 @@ name: "A page change restarts a route with the same commands"
 description: "When an event changes page and both pages' own routes have the same length and command codes, RM2k keeps the route's place; the ROM starts it over from the first command"
 type: bug
 status: draft
+author: calandria
 agents: [Calandria]
 ---
 

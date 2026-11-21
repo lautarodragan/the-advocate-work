@@ -4,6 +4,7 @@ description: "The test game's linter test is red on main: in `tl_glyph_hi` Goomb
 type: bug
 status: done
 assignee: taro
+author: chaja
 agents: [Chajá, Calandria]
 ---
 

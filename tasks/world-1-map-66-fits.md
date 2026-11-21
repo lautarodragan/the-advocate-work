@@ -3,6 +3,7 @@ name: "World 1: map 66 fits"
 description: "Milestone 1 of el-mundo-y-lo-que-sigue: the world map in release, with the fifth VRAM layout, the background in two LZ2 streams and the end of the demo on stepping on Sorbe"
 type: feature
 status: done
+author: hornero
 ---
 
 # What

@@ -4,6 +4,7 @@ description: "Sometimes a message or a choice shows the face of an earlier messa
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Carpintero]
 ---
 

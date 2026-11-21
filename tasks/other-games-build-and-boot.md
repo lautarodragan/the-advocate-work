@@ -5,6 +5,7 @@ type: feature
 status: done
 agents: [Cardón]
 assignee: taro
+author: taro
 ---
 
 taro, on 2026-10-11, approved the proposal: tests of the other games,

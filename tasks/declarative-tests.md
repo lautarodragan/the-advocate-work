@@ -3,6 +3,7 @@ name: "Declarative tests"
 description: "A runner for tests written as data"
 type: test
 status: wishlist
+author: hornero
 ---
 
 # What

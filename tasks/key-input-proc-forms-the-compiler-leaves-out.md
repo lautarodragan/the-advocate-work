@@ -3,6 +3,7 @@ name: "KeyInputProc: the forms the compiler leaves out"
 description: "Some directions and not others, the timed form of RPG Maker 2003 and the keys the pad does not have: no game of the nine asks for the first two, and the third is noted as a degradation"
 type: feature
 status: wishlist
+author: aguara
 ---
 
 Seen by Aguará on 2026-10-16, with the-advocate `af7c399d` and the ports

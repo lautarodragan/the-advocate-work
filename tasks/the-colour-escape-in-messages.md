@@ -3,6 +3,7 @@ name: "The colour escape \\c[n] in messages"
 description: "Any escape but a tail of \\| and \\^ refuses the box, on purpose; Zounds colours speaker names with \\c[n] in 2,604 of its 7,102 message lines, and that alone keeps 678 map pages out of 981"
 type: feature
 status: done
+author: aguara
 ---
 
 Seen by Aguará on 2026-10-15, in the study

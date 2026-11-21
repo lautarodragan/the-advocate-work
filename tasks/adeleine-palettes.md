@@ -5,6 +5,7 @@ type: feature
 status: done
 agents: [Codex, Hornero]
 assignee: taro
+author: calandria
 ---
 
 Measured by Calandria on 2026-10-06, in `experiment-uruya-in-4bpp.md`: with the

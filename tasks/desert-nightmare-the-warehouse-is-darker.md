@@ -3,6 +3,7 @@ name: "Desert Nightmare: the warehouse is darker than the original's"
 description: "Map 21's light is drawn into the map as the picture the opening scene leaves, not the one the map shows each time it is entered: the room comes out a third darker"
 type: bug
 status: draft
+author: cardon
 game: desert-nightmare
 agents: [Cardón]
 ---

@@ -3,6 +3,7 @@ name: "Map 3 may be missing a sound effect"
 description: "It is missing none: the package arrives incomplete, but what is missing is not asked for until evilrhys's PlayBGM completes it"
 type: bug
 status: done
+author: hornero
 ---
 
 # What

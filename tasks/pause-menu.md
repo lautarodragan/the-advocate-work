@@ -3,6 +3,7 @@ name: "Pause menu"
 description: "B opens the menu, which is RM2k's Scene_Menu"
 type: feature
 status: done
+author: hornero
 ---
 
 # The pause menu

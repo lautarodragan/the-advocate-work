@@ -4,6 +4,7 @@ description: "Both already carry every map; their culprits report still leaves p
 type: research
 status: done
 assignee: taro
+author: taro
 agents: [Calandria]
 ---
 

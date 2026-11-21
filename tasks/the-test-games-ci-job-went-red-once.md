@@ -3,6 +3,7 @@ name: "The test game's CI job went red once"
 description: "on the ci branch, run 39199346132, the test game's suite failed and the same tree passed on the next run; which test is unknown"
 type: bug
 status: draft
+author: mulita
 ---
 
 Seen by Mulita on 2026-10-19, bringing up rustfmt and clippy in the-advocate's

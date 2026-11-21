@@ -5,6 +5,7 @@ type: feature
 status: done
 agents: [Cardón]
 assignee: taro
+author: taro
 ---
 
 18 Vampires Dawn maps go past the ceiling of about 544 background tiles (the

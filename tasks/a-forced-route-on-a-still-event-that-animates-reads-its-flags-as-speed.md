@@ -3,6 +3,7 @@ name: "A forced route on a still event that animates reads its flags as speed"
 description: "The runtime takes a forced route's speed from +13 of the event's row, which on a still event that animates also carries bit 7 —and bit 6 since 2026-10-15—"
 type: bug
 status: wishlist
+author: calandria
 ---
 
 Seen by Calandria on 2026-10-15, reading the runtime for

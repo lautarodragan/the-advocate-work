@@ -4,6 +4,7 @@ description: "RM2k's \\\\ (a backslash on screen) is refused by escape_tail: The
 type: feature
 status: done
 assignee: taro
+author: calandria
 agents: [Mulita]
 ---
 

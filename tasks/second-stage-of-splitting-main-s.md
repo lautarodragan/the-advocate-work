@@ -3,6 +3,7 @@ name: "The second stage of splitting main.s"
 description: "Moves, interprete.s split (B) and the table dispatch (C): done"
 type: refactor
 status: done
+author: hornero
 ---
 
 The cut of 2026-09-25 (`391930c`, see `done/partir-main.s.md`) split

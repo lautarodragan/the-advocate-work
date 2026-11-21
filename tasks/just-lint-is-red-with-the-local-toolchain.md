@@ -3,6 +3,7 @@ name: "`just lint` is red with this machine's toolchain"
 description: "On the-advocate a83c4a12, clippy 1.96 refuses mapdata's layer_text.rs:274 (useless_vec) and rustfmt wants convert's chipsets.rs and game.rs changed: none of it from the change that found it"
 type: chore
 status: draft
+author: tijereta
 ---
 
 Seen by Tijereta on 2026-11-16, on the-advocate a83c4a12, finishing

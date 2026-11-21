@@ -4,6 +4,7 @@ description: "Espinillo's low-variable-width font across the whole game: the mes
 type: feature
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-10-03, after seeing `2026-09-30-fuentes` on the SNES: he

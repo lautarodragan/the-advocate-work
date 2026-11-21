@@ -4,6 +4,7 @@ description: "With MSU-1 all the sound effects of a package go at a single rate,
 type: feature
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-09-28, when putting the take-off's `Thunder9` into the battle: with

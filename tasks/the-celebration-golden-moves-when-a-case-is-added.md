@@ -3,6 +3,7 @@ name: "The celebration's golden moves when a case is added"
 description: "Adding one test case to ABL's test cartridge turns paradise-127-celebration red: two People4 farmers of map 127 come out with other sleeve colours, a palette that depends on the cartridge's layout"
 type: bug
 status: draft
+author: cardon
 agents: [Cardón]
 ---
 

@@ -3,6 +3,7 @@ name: "The lowering takes the boot start on every map"
 description: "`layers::below` adds where the ROM would put the hero if it booted on the map to where he can be, on every map; the still events drawn past their cells take it only on the boot map"
 type: feature
 status: draft
+author: cardon
 ---
 
 Seen by Cardón on 2026-11-18, in

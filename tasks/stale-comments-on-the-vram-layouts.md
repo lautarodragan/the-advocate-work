@@ -4,6 +4,7 @@ description: "big_picture.s and vram.rs say things about the layouts that stoppe
 type: docs
 status: done
 assignee: taro
+author: huron
 agents: [Hurón, Cardón]
 ---
 

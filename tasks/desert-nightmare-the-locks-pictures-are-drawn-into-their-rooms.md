@@ -3,6 +3,7 @@ name: "Desert Nightmare: the locks' pictures are drawn into their rooms"
 description: "The safe (115) and the shrine (161) show their lock's symbols frozen in the room, and opening the lock shows no plate and turns nothing; the original opens a screen with four wheels"
 type: bug
 status: draft
+author: aguara
 agents: [Aguará]
 ---
 

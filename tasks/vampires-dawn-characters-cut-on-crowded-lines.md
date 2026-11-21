@@ -3,6 +3,7 @@ name: "Vampires Dawn: characters cut on crowded lines"
 description: "58 maps put more characters on a line than the console draws —nine characters are 36 slivers, past the PPU's 34—, and the ones further back lose columns or vanish"
 type: bug
 status: draft
+author: mulita
 ---
 
 Seen by Mulita on 2026-11-17 with the ports' `just objects-per-line`, at

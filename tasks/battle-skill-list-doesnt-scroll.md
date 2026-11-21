@@ -4,6 +4,7 @@ description: "The battle gathers at most 16 skills and shows 14: with more, the 
 type: bug
 status: done
 assignee: Chingolo
+author: carpintero
 ---
 
 Carpintero found it on 2026-10-04, measuring the pair pool with Talan

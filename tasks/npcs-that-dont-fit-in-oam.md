@@ -4,6 +4,7 @@ description: "A map with more NPCs than fit in OAM cuts the build; make it draw 
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Carpintero]
 ---
 

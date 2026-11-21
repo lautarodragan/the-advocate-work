@@ -3,6 +3,7 @@ name: "Desert Nightmare: events wait for a slot"
 description: "With the towns painted, 7 maps still have more events on screen than the sprite cache has slots —doors, lights and people that change look, and the exit's walking crowd—: the ones drawn last are not drawn until a slot frees"
 type: bug
 status: draft
+author: cardon
 game: desert-nightmare
 agents: [Cardón]
 ---

@@ -3,6 +3,7 @@ name: "build_oam costs a third of the frame on busy maps"
 description: "With some thirty events on screen —ABL's map 11, the cones of light— building the OAM takes 83-93 of the frame's 262 lines, and whatever else the map does lands on a frame with ~60 lines spare"
 type: refactor
 status: draft
+author: aguara
 ---
 
 Seen by Aguará on 2026-11-17, measuring

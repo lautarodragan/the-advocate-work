@@ -4,6 +4,7 @@ description: "Map 2 (\"Plate Placement\") builds since its code stays in the car
 type: bug
 status: done
 assignee: taro
+author: carpintero
 agents: [Carpintero]
 ---
 

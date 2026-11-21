@@ -3,6 +3,7 @@ name: "Vampires Dawn's loads spend seconds on effects from the .msu"
 description: "A door in Vampires Dawn adds 78 frames to the fade on average, up to 215: most of it uploading sound effects read from the .msu, which go up whole and do not fit in the fade's frozen ticks"
 type: refactor
 status: draft
+author: cardon
 ---
 
 Seen by Cardón on 2026-10-18, measuring

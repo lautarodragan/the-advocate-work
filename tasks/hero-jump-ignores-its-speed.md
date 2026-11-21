@@ -3,6 +3,7 @@ name: "The hero's jump ignores its speed"
 description: "Events jump according to their speed and the hero always at the normal step's"
 type: bug
 status: done
+author: hornero
 ---
 
 **The hero's jump uses a fixed speed** —`SALTO_VELOCIDAD`, that of speed

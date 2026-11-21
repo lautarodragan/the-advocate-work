@@ -4,6 +4,7 @@ description: "A route with Begin Jump and End Jump and nothing between —a hop 
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Calandria]
 game: abl
 ---

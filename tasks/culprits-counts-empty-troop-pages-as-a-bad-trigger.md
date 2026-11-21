@@ -3,6 +3,7 @@ name: "Culprits counts empty troop pages as a bad trigger"
 description: "A troop page with no condition and no command is counted under 'a trigger the ROM cannot look at', which says The Frozen World compiles 0 of 80 troop pages and The Book of Three leaves out 95 for a trigger; nothing is lost, an RM2k page without a condition never runs"
 type: bug
 status: todo
+author: calandria
 ---
 
 Seen by Calandria on 2026-10-14, with the-advocate `14e200fc` and the ports

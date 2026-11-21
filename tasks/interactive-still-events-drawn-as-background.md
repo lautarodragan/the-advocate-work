@@ -3,6 +3,7 @@ name: "Interactive still events drawn as background"
 description: "`baked_events` already paints still events with action or touch pages into BG1 when every pose fits their cell; what it refuses is a person-sized NPC (past its cell) and one that turns toward the hero when talked to. Painting those —a two-cell drawing, a turn that rewrites the cell— on a map past the sprite VRAM"
 type: feature
 status: wishlist
+author: calandria
 ---
 
 Left by Calandria on 2026-10-16, from taro's plan for Dooms 2's map 1

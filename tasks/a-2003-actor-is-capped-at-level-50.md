@@ -3,6 +3,7 @@ name: "A 2003 actor is capped at level 50"
 description: "RPG Maker 2003's actors go to level 99 by default and the rules clamp max_level to RM2k's 50; Zounds' actors read 99 since Ditto reads 2003, and their curves have 50 entries, so nothing shows there yet"
 type: feature
 status: wishlist
+author: aguara
 ---
 
 Seen by Aguará on 2026-10-15, while making Ditto read RPG Maker 2003

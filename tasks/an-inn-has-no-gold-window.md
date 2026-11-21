@@ -4,6 +4,7 @@ description: "ShowInn with a price: the greeting comes without the gold window, 
 type: bug
 status: done
 assignee: taro
+author: tijereta
 agents: [Tijereta, Hurón]
 ---
 

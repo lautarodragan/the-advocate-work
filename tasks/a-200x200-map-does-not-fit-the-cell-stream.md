@@ -4,6 +4,7 @@ description: "rm2k-snes-mapdata stops the whole build at Zounds' map 30 (200x200
 type: bug
 status: done
 assignee: taro
+author: aguara
 agents: [Aguará]
 ---
 

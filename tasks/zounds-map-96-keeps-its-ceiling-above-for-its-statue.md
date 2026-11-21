@@ -3,6 +3,7 @@ name: "Zounds' map 96 keeps its ceiling above for its statue"
 description: "On Zounds' map 96 the sign's message still blacks out the cave's ceiling on its lines: the analysis of where characters can be does not follow variables, and the statue the hero pushes walks through walls when its own coordinates, copied into two variables, say so"
 type: feature
 status: draft
+author: aguara
 ---
 
 Seen by Aguará on 2026-11-02, doing

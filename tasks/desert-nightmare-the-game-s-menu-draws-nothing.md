@@ -4,6 +4,7 @@ description: "B opens the game's own menu —Inventory, Keys, Notes, Maps, Quit,
 type: bug
 status: done
 assignee: taro
+author: huron
 game: desert-nightmare
 agents: [Hurón, Mulita]
 ---

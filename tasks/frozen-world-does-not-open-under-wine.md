@@ -4,6 +4,7 @@ description: "With ABL's RPG_RT copied in, as Dooms 2 needed, the window opens a
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Chajá]
 ---
 

@@ -4,6 +4,7 @@ description: "Classify each file in workflow/decisiones/ and workflow/divergenci
 type: docs
 status: done
 assignee: taro
+author: taro
 ---
 
 Question 8 of the tools research, which taro left open on 2026-09-28, and

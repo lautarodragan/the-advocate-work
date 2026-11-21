@@ -3,6 +3,7 @@ name: "Draw the faces and really wait on the escapes"
 description: "Today ChangeFaceGraphic is accepted without drawing the face, and the escapes \\. \\! \\| in the middle of a box are discarded without waiting. Do them for real"
 type: feature
 status: done
+author: tijereta
 agents: [Tijereta]
 ---
 

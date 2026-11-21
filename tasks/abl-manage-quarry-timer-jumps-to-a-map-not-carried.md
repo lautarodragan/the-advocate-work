@@ -3,6 +3,7 @@ name: "ABL's ManageQuarryTimer jumps to a map the cartridge does not carry"
 description: "Parallel common event 36 does not compile: its Teleport goes to map 150, which is not among release's maps"
 type: bug
 status: done
+author: aguara
 ---
 
 Seen by Aguará on 2026-10-12, with the-advocate `6ed7c4a0` and the ports

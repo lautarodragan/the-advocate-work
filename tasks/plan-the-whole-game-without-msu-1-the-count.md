@@ -4,6 +4,7 @@ description: "What Lechuza's count left out (the battle animations, their sound 
 type: research
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-10-01, after reading

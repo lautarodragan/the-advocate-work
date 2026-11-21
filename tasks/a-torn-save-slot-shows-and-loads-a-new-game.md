@@ -3,6 +3,7 @@ name: "A torn save slot shows on the slot screen and loads a new game"
 description: "A slot whose saved game does not add up to its checksum —half written when the console lost power, or when the FX Pak took its image— is shown on the slot screen like a good one, and picking it starts a new game without saying why; and the previous save in that slot is gone with it"
 type: bug
 status: draft
+author: huron
 ---
 
 Seen by Hurón on 2026-11-17, reading the runtime for

@@ -5,6 +5,7 @@ type: research
 status: done
 agents: [Cardón]
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-10-05: the panoramas show up black. Some can be solved with

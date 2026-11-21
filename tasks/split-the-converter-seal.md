@@ -3,6 +3,7 @@ name: "Split the converter's seal"
 description: "One seal for the converter and another for rom/src/, so that editing assembly doesn't reconvert everything"
 type: refactor
 status: wishlist
+author: hornero
 ---
 
 Proposed on 2026-09-26 by the `just cartridges` optimisation (see

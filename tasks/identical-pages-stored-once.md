@@ -4,6 +4,7 @@ description: "Pages whose compiled bytecode is identical are stored once per map
 type: refactor
 status: done
 assignee: taro
+author: taro
 agents: [Carpintero]
 ---
 

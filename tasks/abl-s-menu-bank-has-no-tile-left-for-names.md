@@ -3,6 +3,7 @@ name: "ABL's menu bank has no tile left for names"
 description: "ABL release's slot and menu bank leaves the menu 120 tiles for what it composes, and since the party's conditions the names ask for exactly 120: one more long name or one more condition that outlives a battle and the converter starts leaving faces out"
 type: bug
 status: draft
+author: tijereta
 ---
 
 Seen by Tijereta on 2026-11-02, measuring

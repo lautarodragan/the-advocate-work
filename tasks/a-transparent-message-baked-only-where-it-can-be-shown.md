@@ -3,6 +3,7 @@ name: "A transparent message's layer baked only on the maps that can show one"
 description: "A game with any transparent MessageOptions arranges the layer above's palettes on every map (layer_text); narrow it, by a static analysis of the events, to the maps where one can be shown, so the others keep their palettes and their free BG palettes"
 type: feature
 status: wishlist
+author: taro
 ---
 
 Split from

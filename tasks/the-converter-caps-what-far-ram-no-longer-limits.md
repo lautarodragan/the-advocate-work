@@ -3,6 +3,7 @@ name: "The converter still caps experience slots and variables by the hand-writt
 description: "The converter still caps experience slots and variables by the hand-written far RAM map: rm2k-snes-battle refuses more than 128 experience slots ('bytes of FAR_EXP', 512 B), rm2k-snes-mapdata explains its 256-variable cap with 'FAR_ITEMS is 512 bytes from FAR_VARIABLES', and the event compiler caps skills at 'FAR_SKILL holds'; since far RAM is placed by the linker none is the reason"
 type: bug
 status: wishlist
+author: huron
 ---
 
 Seen by Hurón on 2026-10-16, while letting the linker place the far RAM map

@@ -4,6 +4,7 @@ description: "A box a troop page shows draws no ExFont icon, as it draws no Lati
 type: feature
 status: draft
 assignee: null
+author: huron
 agents: [Hurón]
 ---
 

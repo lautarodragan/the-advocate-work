@@ -3,6 +3,7 @@ name: "A window system for RM games"
 description: "Extend what was built for ABL's console into a window system any RM game can use, the feature RM2k lacked and that many games built by hand out of ShowPicture"
 type: feature
 status: wishlist
+author: taro
 ---
 
 taro, 2026-10-16, deciding how Zounds' picture-made menus go

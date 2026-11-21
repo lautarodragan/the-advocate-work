@@ -4,6 +4,7 @@ description: "The sample bank carries the same BRR —same rate, same loop— se
 type: bug
 status: done
 assignee: taro
+author: carpintero
 agents: [Carpintero]
 ---
 

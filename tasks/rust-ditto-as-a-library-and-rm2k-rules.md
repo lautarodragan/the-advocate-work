@@ -4,6 +4,7 @@ description: "A single place in Rust that reads the data/ dump with types (Ditto
 type: refactor
 status: done
 assignee: taro
+author: taro
 ---
 
 A step before the event compiler in Rust, discussed with taro on

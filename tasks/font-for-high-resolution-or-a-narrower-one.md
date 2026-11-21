@@ -4,6 +4,7 @@ description: "Font candidates that read well on a CRT TV and fit in 256 or 512 w
 type: research
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-09-30, after testing on the SNES the ROM from

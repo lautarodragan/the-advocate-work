@@ -4,6 +4,7 @@ description: "The converter's first domain in Rust: the rm2k-snes-battle crate w
 type: refactor
 status: done
 assignee: taro
+author: taro
 ---
 
 Step 4 of the road to Rust, with what was discussed with taro on 2026-09-29:

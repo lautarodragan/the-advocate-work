@@ -4,6 +4,7 @@ description: "In a debug build, Select turns on and off walking through walls, e
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Carpintero]
 ---
 

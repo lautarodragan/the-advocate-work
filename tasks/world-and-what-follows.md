@@ -3,6 +3,7 @@ name: "The world and what follows"
 description: "Plan: the world map (66) in release, the Lashe Area chapter up to the tunnel to Paradise, and the space still missing to fit it whole"
 type: feature
 status: done
+author: hornero
 ---
 
 **Done**, closed on 2026-10-12: it was the plan, and its six milestones

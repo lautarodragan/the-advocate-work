@@ -5,6 +5,7 @@ type: bug
 game: zounds
 status: done
 assignee: taro
+author: tijereta
 agents: [Carpintero]
 ---
 

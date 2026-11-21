@@ -4,6 +4,7 @@ description: "Sunset Over Imdahl changes the System in its startup event (map 11
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Aguará, Cardón]
 ---
 

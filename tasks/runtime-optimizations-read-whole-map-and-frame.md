@@ -4,6 +4,7 @@ description: "Read the map, the characters and the frame of runtime/ file by fil
 type: docs
 status: done
 assignee: taro
+author: taro
 agents: [Cardón]
 ---
 

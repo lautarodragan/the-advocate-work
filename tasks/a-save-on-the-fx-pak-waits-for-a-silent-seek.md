@@ -5,6 +5,7 @@ type: bug
 game: abl
 status: done
 assignee: taro
+author: aguara
 agents: [Aguará, Hurón]
 ---
 

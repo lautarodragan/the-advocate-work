@@ -4,6 +4,7 @@ description: "With MSU-1, the sound effects at whatever rate fits, in full, from
 type: feature
 status: done
 assignee: taro
+author: taro
 ---
 
 # What

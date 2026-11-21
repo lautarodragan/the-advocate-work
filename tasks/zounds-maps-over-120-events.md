@@ -4,6 +4,7 @@ description: "Maps 47 (284 events), 51 (214), 57 (131) and 178 (327) lose 155, 8
 type: bug
 status: done
 assignee: taro
+author: aguara
 agents: [Carpintero]
 ---
 

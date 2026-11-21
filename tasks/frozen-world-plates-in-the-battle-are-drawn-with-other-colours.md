@@ -3,6 +3,7 @@ name: "Frozen World: plates in the battle are drawn with other colours"
 description: "On the battle screen, map 1, thirteen of the plates —Fire's among them— are drawn with another graphic's palette: on the cursor after picking them in the grid, and on the battle's events that show them; Fire's flame comes out grey instead of orange"
 type: bug
 status: draft
+author: carpintero
 agents: [Carpintero]
 ---
 

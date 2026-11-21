@@ -4,6 +4,7 @@ description: "The 40 decisions in decisiones/ to the book, translated: the tools
 type: docs
 status: done
 assignee: taro
+author: taro
 agents: [Mulita]
 ---
 

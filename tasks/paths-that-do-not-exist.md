@@ -3,6 +3,7 @@ name: "Paths that do not exist"
 description: "A test that fails if a .md or a comment names a file that is no longer there"
 type: test
 status: wishlist
+author: hornero
 ---
 
 # What

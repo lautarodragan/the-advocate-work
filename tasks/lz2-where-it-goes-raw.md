@@ -4,6 +4,7 @@ description: "Compressing with LZ2 what today goes raw and is uploaded on loadin
 type: feature
 status: done
 assignee: taro
+author: taro
 ---
 
 Phase 1 of the plan of [`ports/abl/research/2026-10-01-the-whole-game-without-msu-1.md`](https://lautarodragan.github.io/the-advocate-docs/ports/abl/research/2026-10-01-the-whole-game-without-msu-1.html)

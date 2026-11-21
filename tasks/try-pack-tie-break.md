@@ -3,6 +3,7 @@ name: "try_pack's tie-break"
 description: "That the color distribution not depend on CPython's hash order"
 type: bug
 status: done
+author: hornero
 ---
 
 # What

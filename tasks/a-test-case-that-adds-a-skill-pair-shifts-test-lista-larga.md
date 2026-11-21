@@ -3,6 +3,7 @@ name: "A test case that adds a skill pair shifts test_long_list"
 description: "With a test page that teaches Kersh a skill the game never teaches him, ABL's test_long_list.py stops seeing the first skill of Talan's battle list"
 type: bug
 status: done
+author: mulita
 agents: [Mulita, Chajá]
 ---
 

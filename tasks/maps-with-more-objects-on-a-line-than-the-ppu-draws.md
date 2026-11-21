@@ -4,6 +4,7 @@ description: "Nothing tells today when a map puts more than 32 objects or 34 sli
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Mulita]
 ---
 

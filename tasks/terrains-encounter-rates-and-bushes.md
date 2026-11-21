@@ -5,6 +5,7 @@ type: feature
 game: vampires-dawn
 status: testing
 assignee: taro
+author: taro
 agents: [Aguará]
 ---
 

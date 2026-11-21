@@ -4,6 +4,7 @@ description: "On some maps a wall covers the hero where it should not, Jake stan
 type: bug
 status: testing
 assignee: taro
+author: taro
 game: desert-nightmare
 agents: [Cardón]
 ---

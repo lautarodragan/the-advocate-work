@@ -4,6 +4,7 @@ description: "A minimal ROM that shows the mockup of the menu in mode 5 (×1.5) 
 type: research
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-09-30, after the mockup

@@ -3,6 +3,7 @@ name: "Sets of common pictures the cartridge carries for nothing"
 description: "The common events' small pictures go in the cartridge by sets since 2026-10-20: A Blurred Line carries one for a menu nothing opens, and Desert Nightmare the same 320 tiles twice, under two sets"
 type: refactor
 status: draft
+author: carpintero
 ---
 
 Seen by Carpintero on 2026-10-20, with the-advocate's branch

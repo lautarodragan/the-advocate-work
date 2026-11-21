@@ -4,6 +4,7 @@ description: "Common event 23 shows a full-screen picture of the land and waits 
 type: bug
 status: testing
 assignee: taro
+author: mulita
 agents: [Chajá]
 ---
 

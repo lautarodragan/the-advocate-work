@@ -5,6 +5,7 @@ type: feature
 status: done
 agents: [Aguará, Carpintero]
 assignee: taro
+author: taro
 ---
 
 From Aguará's (Sonnet) brief analysis, on 2026-10-05, of what taro saw playing the ROMs of the other games. It is the first thing it recommends: the cheapest and the most general (4 games).

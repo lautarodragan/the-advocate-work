@@ -3,6 +3,7 @@ name: "Book of Three: the forge, and a walkthrough test"
 description: "At the forge's house the NPC asks to forge something, but the fire isn't interactive and the house can't be left; and up to there the game is right, so a played walkthrough test with goldens is worth having"
 type: bug
 status: done
+author: taro
 agents: [Calandria]
 ---
 

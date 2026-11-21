@@ -3,6 +3,7 @@ name: "The getaway car isn't visible"
 description: "With an autorun running, the full refresh only looks at autoruns"
 type: bug
 status: done
+author: taro
 ---
 
 **After choosing the car on the rooftop, map 4's cutscene runs with a black

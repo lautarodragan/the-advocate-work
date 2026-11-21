@@ -3,6 +3,7 @@ name: "Music on the SPC700"
 description: "A sequencer on the SPC700 instead of the 65816"
 type: refactor
 status: wishlist
+author: hornero
 ---
 
 # What

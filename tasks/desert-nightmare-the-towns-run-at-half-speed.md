@@ -4,6 +4,7 @@ description: "Every map that draws more than ~50 events takes two frames or more
 type: bug
 status: done
 assignee: taro
+author: huron
 game: desert-nightmare
 agents: [Hurón, Cardón]
 ---

@@ -4,6 +4,7 @@ description: "The long comments of each command that were left in tools/port/eve
 type: docs
 status: done
 assignee: taro
+author: hornero
 ---
 
 Guazú left it noted when moving the event compiler to Rust

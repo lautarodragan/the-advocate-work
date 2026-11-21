@@ -4,6 +4,7 @@ description: "The race's three laps (49, 52, 54) without dropping frames while d
 type: refactor
 status: done
 assignee: taro
+author: hornero
 ---
 
 # What

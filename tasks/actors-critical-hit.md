@@ -4,6 +4,7 @@ description: "The LDB gives almost every actor a critical hit, and the ROM sets 
 type: bug
 status: done
 assignee: taro
+author: cardon
 ---
 
 Cardón found it on 2026-09-30, while moving the battle model to Rust

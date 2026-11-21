@@ -4,6 +4,7 @@ description: "The tasks written before 2026-10-20 quote taro inline; each quote 
 type: workflow
 status: done
 assignee: taro
+author: taro
 agents: [Aguará]
 ---
 

@@ -4,6 +4,7 @@ description: "Eisen's minigame (map 95) keeps the count in variable 48 and shows
 type: bug
 status: done
 assignee: taro
+author: hornero
 ---
 
 From the plan `world-and-what-follows.md` (question 4). The minigame on 95

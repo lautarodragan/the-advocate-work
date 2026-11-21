@@ -3,6 +3,7 @@ name: "The flash check reads a route's sound as a graphic change"
 description: "The converter's walk over a route on the hero, to know its graphic when a flash comes, steps over command 35 without its two operand bytes"
 type: bug
 status: todo
+author: calandria
 agents: [Calandria]
 ---
 

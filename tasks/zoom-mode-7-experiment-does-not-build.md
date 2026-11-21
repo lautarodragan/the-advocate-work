@@ -3,6 +3,7 @@ name: "The zoom-mode-7 experiment does not build"
 description: "abl/experiments/zoom-mode-7/build.py reads a top-level mapping from adeleine reduce's answer, which today's adeleine gives per tile; it fails before assembling"
 type: bug
 status: wishlist
+author: calandria
 ---
 
 Seen by Calandria on 2026-10-13, with the-advocate `9f95b248` and the

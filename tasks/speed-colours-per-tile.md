@@ -3,6 +3,7 @@ name: "Speed: colours per tile"
 description: "Keep each tile's colours instead of recomputing them"
 type: refactor
 status: done
+author: hornero
 ---
 
 # What

@@ -4,6 +4,7 @@ description: "One more door in Zounds' debug room: to the desert's jail —or du
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Mulita]
 ---
 

@@ -4,6 +4,7 @@ description: "Milestone 3 of el-mundo-y-lo-que-sigue: bank packing with first-fi
 type: refactor
 status: done
 assignee: taro
+author: hornero
 ---
 
 # What

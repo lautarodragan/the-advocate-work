@@ -5,6 +5,7 @@ type: bug
 game: [dooms2, vampires-dawn]
 status: testing
 assignee: taro
+author: cardon
 agents: [Mulita]
 ---
 

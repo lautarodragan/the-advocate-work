@@ -104,7 +104,9 @@ same thing before, start from there and do not measure it again.
   —see this repo's README—. And if it shows while playing a port, a line in
   "Known issues" of its page in the book, `src/ports/<game>/README.md`,
   told from what is seen. A finding that only stays in your task or in
-  your report is lost.
+  your report is lost. A task you open on your own —a draft, a finding—
+  carries your name as its `author`, in lowercase ASCII (`huron`); Hornero
+  writes `taro` in the ones that come from taro's reports and requests.
 * **If you fixed something that was in a port's "Known issues"**, remove
   its line in the same change, and the draft, if there was one.
 * **Leave nothing running**: suites, waits, Wine, Xvfb.

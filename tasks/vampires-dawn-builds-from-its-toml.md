@@ -5,6 +5,7 @@ type: feature
 status: done
 agents: [Aguará]
 assignee: taro
+author: taro
 ---
 
 taro, on 2026-10-11: the next thing for Vampires Dawn. Today the committed

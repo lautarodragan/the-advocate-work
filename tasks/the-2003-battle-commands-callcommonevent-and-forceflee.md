@@ -4,6 +4,7 @@ description: "The only RM2k3-only commands Zounds uses, both in troop pages: Cal
 type: feature
 status: done
 assignee: taro
+author: aguara
 agents: [Aguará]
 ---
 

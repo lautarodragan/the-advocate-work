@@ -4,6 +4,7 @@ description: "Past map 59 the cave's maps say \"the parent's\" all the way up to
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Calandria]
 ---
 

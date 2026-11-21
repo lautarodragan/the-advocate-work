@@ -4,6 +4,7 @@ description: "Find whether ares or bsnes with their accurate PPUs reproduce what
 type: research
 status: done
 assignee: taro
+author: taro
 agents: [Aguará]
 ---
 

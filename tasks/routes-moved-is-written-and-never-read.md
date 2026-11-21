@@ -4,6 +4,7 @@ description: "A byte of bank 0's BSS whose comment promises a skipped sort that 
 type: bug
 status: done
 assignee: taro
+author: huron
 agents: [Hurón, Tijereta, Carpintero]
 ---
 

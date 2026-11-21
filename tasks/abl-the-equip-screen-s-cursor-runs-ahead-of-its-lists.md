@@ -4,6 +4,7 @@ description: "Choosing a body part, the selection bar moves at once and the item
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Calandria]
 ---
 

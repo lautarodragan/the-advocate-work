@@ -4,6 +4,7 @@ description: "VD asks for ~11.7 MB of blocks against 7.94 MB in the 127 banks (p
 type: feature
 status: done
 assignee: taro
+author: tijereta
 agents: [Tijereta]
 ---
 

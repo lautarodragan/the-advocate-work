@@ -3,6 +3,7 @@ name: "reach does not know a scene runs once"
 description: "An autostart scene that turns on the switch of the page above it runs once, from where the hero first arrives; reach takes it as starting wherever a recall can put him, and on ABL's Hover-Tram that keeps four seated people out of the background"
 type: feature
 status: draft
+author: cardon
 game: abl
 ---
 

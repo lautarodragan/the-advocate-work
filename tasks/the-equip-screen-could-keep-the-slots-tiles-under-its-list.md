@@ -3,6 +3,7 @@ name: "The equipment screen could keep the slots' tiles under its list"
 description: "taro's idea for going back from the list: the slots' rows kept in VRAM while the list is up, so they come back without typesetting; VRAM has room, far RAM and bank 1 barely"
 type: feature
 status: draft
+author: taro
 agents: [Calandria]
 ---
 

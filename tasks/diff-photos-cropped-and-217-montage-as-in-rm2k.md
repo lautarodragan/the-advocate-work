@@ -3,6 +3,7 @@ name: "The Diff photos cropped, and 217's montage as in RM2k"
 description: "217's montage as in RM2k: each Diff photo at 50 % over black with a white flash on top; the crop of the photos, the other half of this task, is done"
 type: feature
 status: todo
+author: taro
 ---
 
 From taro, on 2026-10-02, looking at the goldens of

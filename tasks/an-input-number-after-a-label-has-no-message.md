@@ -3,6 +3,7 @@ name: "An InputNumber after a label has no message to go into"
 description: "Zounds' dice man (map 156, event 26) asks for the die's number with a ShowMessage, a Label and then the InputNumber: the label sits between them, so the number is a window of its own, which the ROM does not draw, and the page stays out"
 type: bug
 status: draft
+author: calandria
 ---
 
 Seen by Calandria on 2026-11-02, doing

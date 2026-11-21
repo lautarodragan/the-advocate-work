@@ -4,6 +4,7 @@ description: "RM2k sets the jump's direction before checking whether it can land
 type: bug
 status: done
 assignee: taro
+author: hornero
 ---
 
 It showed up while reading the gate of map 12 —event 1 at (1,47)— for

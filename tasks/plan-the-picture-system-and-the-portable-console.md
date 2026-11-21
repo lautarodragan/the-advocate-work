@@ -4,6 +4,7 @@ description: "What ABL's portable console uses (ShowPicture, MovePicture, autost
 type: research
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-10-01: he is interested in `ShowPicture` and "the whole

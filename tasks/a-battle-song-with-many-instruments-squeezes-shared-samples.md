@@ -3,6 +3,7 @@ name: "A battle song with many instruments squeezes the samples it shares"
 description: "Since ChangeSystemBGM is done, each song it names has to fit in the battle's package next to the battle's sound effects; in ABL one of them pulls thirteen shared samples down to ~9.5 kHz for the whole cartridge"
 type: bug
 status: draft
+author: carpintero
 ---
 
 Seen by Carpintero on 2026-10-19, with the-advocate `carpintero-music`

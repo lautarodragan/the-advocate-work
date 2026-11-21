@@ -3,6 +3,7 @@ name: "An automatic common event's sound effect plays only where the map carries
 description: "The shared body of an automatic common event without pictures is compiled without a map, and its PlaySounds go into no audio package; parallel ones got theirs on 2026-10-20"
 type: bug
 status: draft
+author: mulita
 ---
 
 Seen by Mulita on 2026-10-20, reading the event compiler at the-advocate

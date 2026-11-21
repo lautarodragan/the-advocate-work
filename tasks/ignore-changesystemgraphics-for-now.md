@@ -5,6 +5,7 @@ type: feature
 status: done
 agents: [Mulita]
 assignee: taro
+author: taro
 ---
 
 **Done**, 2026-10-12. Superseded by `changesystemgraphics.md`, which did it for real.

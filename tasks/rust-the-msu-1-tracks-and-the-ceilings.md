@@ -4,6 +4,7 @@ description: "The second part of the audio: tools/audio/msu.py and ceilings.py t
 type: refactor
 status: done
 assignee: taro
+author: hornero
 ---
 
 Second part of the audio on the road to Rust. Hornero decided it: `msu.py`

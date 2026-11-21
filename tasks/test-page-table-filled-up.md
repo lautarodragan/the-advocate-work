@@ -4,6 +4,7 @@ description: "The test page number was a byte and release already had 256: one m
 type: bug
 status: done
 assignee: taro
+author: tacuarita
 ---
 
 Tacuarita found it on 2026-10-01 (`world-5-tangle-forest.md`): the `release`

@@ -3,6 +3,7 @@ name: "Sample copies with themes that share samples"
 description: "A new theme that shares samples with the old ones changes which copies rm2k-snes-audio makes and lowers their rate without MSU-1"
 type: feature
 status: wishlist
+author: hornero
 ---
 
 From milestone 4 of the world (2026-09-27): the chapter's five themes share

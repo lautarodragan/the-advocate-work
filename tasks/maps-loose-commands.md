@@ -5,6 +5,7 @@ type: feature
 status: done
 agents: [Aguará, Chajá]
 assignee: taro
+author: aguara
 ---
 
 From Aguará's study, [`research/2026-10-05-the-missing-commands.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-05-the-missing-commands.html); `rm2k-snes-events culprits` measured it. taro, on 2026-10-05: leave them in todo, without launching yet. None is in release; common event 45, since it doesn't compile, makes 47

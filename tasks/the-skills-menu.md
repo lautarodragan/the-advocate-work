@@ -3,6 +3,7 @@ name: "The skills menu"
 description: "Tech Skill in the pause menu is always greyed out: show the skills, their descriptions and the selector first, and using them on the map in a second phase"
 type: feature
 status: done
+author: taro
 agents: [Mulita]
 ---
 

@@ -4,6 +4,7 @@ description: "In Frozen World's plate menu and battle the hero, which plays the 
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Carpintero]
 ---
 

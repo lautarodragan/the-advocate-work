@@ -4,6 +4,7 @@ description: "A CallEvent to a common event or another event's page compiles to 
 type: feature
 status: done
 assignee: taro
+author: hornero
 agents: [Carpintero]
 ---
 

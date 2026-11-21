@@ -3,6 +3,7 @@ name: "Sunset over Imdahl: pages still left out"
 description: "`just culprits` still leaves out map pages of Sunset —nine after GateStreet's fixes, four on 2026-10-20—; one is the autostart of the ruined plains, on the story's way, which would stop the game the way GateStreet's man and the statue did"
 type: bug
 status: todo
+author: tijereta
 ---
 
 Seen by Tijereta on 2026-10-16, with the tools of the branch

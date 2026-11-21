@@ -4,6 +4,7 @@ description: "Merged together, the day's branches —Hurón's debug font, Aguar�
 type: bug
 status: done
 assignee: taro
+author: hornero
 agents: [Tijereta]
 ---
 

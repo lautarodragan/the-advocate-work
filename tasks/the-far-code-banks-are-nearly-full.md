@@ -3,6 +3,7 @@ name: "The far code banks are nearly full"
 description: "Sunset over Imdahl's FAR2 ($C0) and Zounds' FAR3 ($C1) have about a hundred bytes left: the next feature of a few hundred bytes in either stops that game's link"
 type: chore
 status: draft
+author: tijereta
 ---
 
 Seen by Tijereta on 2026-11-17, adding the debug screen's state switches

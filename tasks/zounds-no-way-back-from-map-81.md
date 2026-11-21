@@ -4,6 +4,7 @@ description: "Map 81 (\"4\", under the cave's Arriba) is entered from map 79 at 
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Carpintero]
 ---
 

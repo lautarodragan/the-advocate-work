@@ -4,6 +4,7 @@ description: "The still ones that no camera shows together take turns on a VRAM 
 type: feature
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-10-01, among the options of `world-7-the-road-to-paradise.md`

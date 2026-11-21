@@ -4,6 +4,7 @@ description: "The System's windows and the red cursor bar, as items and equipmen
 type: feature
 status: done
 assignee: taro
+author: taro
 ---
 
 It was born on 2026-09-28, when taro approved the equipment screen, to write

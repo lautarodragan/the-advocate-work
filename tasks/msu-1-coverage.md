@@ -3,6 +3,7 @@ name: "MSU-1 coverage"
 description: "No test runs bsnes or mesen-s with the tracks alongside, nor covers just video"
 type: test
 status: todo
+author: hornero
 ---
 
 Since 2026-09-25 `release` always carries its MSU-1 tracks and the harness

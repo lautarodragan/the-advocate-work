@@ -3,6 +3,7 @@ name: "World 4: Tasgarde, Eisen and the bridge"
 description: "Milestone 4 of el-mundo-y-lo-que-sigue: the main path of the world chapter in release, toggling switches, the cut for erasing, and the end of the demo at the entrance to Tangle Forest"
 type: feature
 status: done
+author: hornero
 ---
 
 # What

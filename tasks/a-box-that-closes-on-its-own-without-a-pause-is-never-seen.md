@@ -4,6 +4,7 @@ description: "A ShowMessage whose tail is \\^ without any \\| closes before the 
 type: bug
 status: done
 assignee: taro
+author: tijereta
 agents: [Tijereta]
 ---
 

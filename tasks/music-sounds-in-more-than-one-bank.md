@@ -4,6 +4,7 @@ description: "Vampires Dawn stops at 'rm2k-snes-audio: the music's sounds go ove
 type: feature
 status: done
 assignee: taro
+author: hornero
 agents: [Tijereta]
 ---
 

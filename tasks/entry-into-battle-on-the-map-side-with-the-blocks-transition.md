@@ -4,6 +4,7 @@ description: "Leaving the battle, and entering on the battle side, it's already 
 type: feature
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-09-30, in their words, translated:

@@ -4,6 +4,7 @@ description: "Each event asks for a VRAM slot when it comes on screen and releas
 type: feature
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-10-03, among the paths for ABL's

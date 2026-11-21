@@ -3,6 +3,7 @@ name: "The interpreter by family"
 description: "The opcode handlers grouped by family, and eventos_tick out of cargar_mapa.s: done"
 type: refactor
 status: done
+author: hornero
 ---
 
 Dispatch has been by table since 2026-09-25 (part C of

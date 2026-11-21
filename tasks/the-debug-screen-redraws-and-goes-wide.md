@@ -4,6 +4,7 @@ description: "Scrolling the debug screen redraws the left list when it does not 
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Hurón]
 ---
 

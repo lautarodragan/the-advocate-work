@@ -3,6 +3,7 @@ name: "The roof edges that don't fit in the 127"
 description: "On painted maps, the exact roof edges go in BG2 and 127 fit; in Sunset's plazas and streets there are more, and the rest go by whole cell: the roof covers too much or too little"
 type: bug
 status: wishlist
+author: calandria
 ---
 
 Measured by Mulita on 2026-10-11 (`sunset-in-mode-1-with-colour-math.md`):

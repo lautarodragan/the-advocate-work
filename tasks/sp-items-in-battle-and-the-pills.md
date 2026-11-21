@@ -4,6 +4,7 @@ description: "In battle the items that recover SP can't be used, and the Agility
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Mulita]
 ---
 

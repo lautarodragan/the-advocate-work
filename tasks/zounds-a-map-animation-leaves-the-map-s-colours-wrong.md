@@ -4,6 +4,7 @@ description: "In MiniCave (map 89), Tower (Ele)'s second page plays battle anima
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Chajá]
 ---
 

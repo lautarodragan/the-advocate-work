@@ -4,6 +4,7 @@ description: "A map of our own with doors to the ship after the intro, the deser
 type: tooling
 status: done
 assignee: taro
+author: taro
 agents: [Carpintero]
 ---
 

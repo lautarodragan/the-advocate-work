@@ -4,6 +4,7 @@ description: "With a full page of skills, the battle's text layer runs out of ti
 type: bug
 status: done
 assignee: taro
+author: hornero
 ---
 
 Measured by Benteveo on 2026-10-03, when making the converter count the pool

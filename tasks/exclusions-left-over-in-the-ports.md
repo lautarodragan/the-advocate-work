@@ -4,6 +4,7 @@ description: "The ports' rm2k-snes.toml exclude maps from the survey that alread
 type: chore
 status: done
 assignee: taro
+author: calandria
 agents: [Calandria]
 ---
 

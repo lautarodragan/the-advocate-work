@@ -4,6 +4,7 @@ description: "EV_MAX: a map with more than 120 events cuts the build; make the o
 type: feature
 status: done
 assignee: taro
+author: carpintero
 agents: [Carpintero]
 ---
 

@@ -3,6 +3,7 @@ name: "Zounds: skill names show a `?` for an accent"
 description: "The battle's text block carries the skills' names from the database as they are, without the plain stand-ins, so Zounds' \"Látigo de Seda\" is \"L?tigo de Seda\" in the cartridge, where the items' \"Poción\" is \"Pocion\""
 type: bug
 status: draft
+author: aguara
 ---
 
 Seen by Aguará on 2026-11-02, while doing

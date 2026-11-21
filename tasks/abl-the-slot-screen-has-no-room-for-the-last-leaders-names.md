@@ -4,6 +4,7 @@ description: "With every map of ABL, the leaders' names the slot screen composes
 type: bug
 status: done
 assignee: taro
+author: cardon
 agents: [Chajá]
 ---
 

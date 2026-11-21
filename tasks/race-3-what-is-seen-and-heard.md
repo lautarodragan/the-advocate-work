@@ -4,6 +4,7 @@ description: "The race's controls card as a message, and the sound effects insid
 type: feature
 status: done
 assignee: taro
+author: hornero
 ---
 
 # What

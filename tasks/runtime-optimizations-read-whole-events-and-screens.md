@@ -4,6 +4,7 @@ description: "Read the events, the text and the screens of runtime/ file by file
 type: docs
 status: done
 assignee: taro
+author: taro
 agents: [Tijereta]
 ---
 

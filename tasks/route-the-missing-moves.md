@@ -4,6 +4,7 @@ description: "The move commands the ROM didn't do: move forward, the relative tu
 type: feature
 status: done
 assignee: taro
+author: hornero
 agents: [Hurón]
 ---
 

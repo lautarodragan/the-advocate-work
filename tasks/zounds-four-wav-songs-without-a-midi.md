@@ -3,6 +3,7 @@ name: "Zounds: four of its .wav songs have no MIDI, and are silent without MSU-1
 description: "The battle and victory themes, the mountains' (map 33) and the small caves' (89, 91, 92, 177) are recordings; no MIDI of them was found, and three of them were not even identified"
 type: bug
 status: wishlist
+author: aguara
 ---
 
 Seen by Aguará on 2026-10-16, looking for MIDIs of Zounds' five `.wav`

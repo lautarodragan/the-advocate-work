@@ -4,6 +4,7 @@ description: "Phases 4 and 5 of the picture system: what the compiler and the in
 type: feature
 status: done
 assignee: taro
+author: taro
 ---
 
 Phases 4 and 5 of [`research/2026-10-01-the-picture-system.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-01-the-picture-system.html)

@@ -3,6 +3,7 @@ name: "The timer's battle flag is dropped"
 description: "TimerOperation's 'also in battle' flag is compiled and ignored, on the comment that there are no battles; there are"
 type: bug
 status: wishlist
+author: cardon
 ---
 
 Seen by Cardón on 2026-10-14 (`what-the-compiler-ignores-silently.md`),

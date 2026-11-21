@@ -4,6 +4,7 @@ description: "On Cueva 5 (map 114) EV0013 —action key, no graphic, on switch 2
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Calandria]
 ---
 

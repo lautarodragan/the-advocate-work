@@ -4,6 +4,7 @@ description: "The first step to Rust: tools/project/ (finding the project, the k
 type: refactor
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-09-29: take on the new tools in Rust in the order of

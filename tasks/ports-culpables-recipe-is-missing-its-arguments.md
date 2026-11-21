@@ -4,6 +4,7 @@ description: "The recipe of the seven games calls `rm2k-snes-events culprits` wi
 type: bug
 status: done
 assignee: taro
+author: calandria
 agents: [Tijereta]
 ---
 

@@ -3,6 +3,7 @@ name: "Every theme has an MSU-1 track"
 description: "Today only some themes have a track (PISTAS_MSU); taro wants all of them, always"
 type: feature
 status: done
+author: taro
 ---
 
 taro, on 2026-09-26: **every theme should always have its MSU-1 version**.

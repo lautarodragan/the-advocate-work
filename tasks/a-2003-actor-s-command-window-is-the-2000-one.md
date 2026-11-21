@@ -3,6 +3,7 @@ name: "A 2003 actor's command window is the 2000 one"
 description: "Since 2026-10-20 a 2003 game's battle commands carry the names of each actor's own list, but the window is still the 2000 battle's five in its order: not the actor's order, not its presence, no row or subskill commands, and a special escape stood in for by the 2000 one"
 type: feature
 status: draft
+author: cardon
 ---
 
 Seen by Cardón on 2026-10-20, doing

@@ -5,6 +5,7 @@ type: feature
 game: frozen-world
 status: testing
 assignee: taro
+author: calandria
 agents: [Mulita]
 ---
 

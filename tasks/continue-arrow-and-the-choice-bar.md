@@ -4,6 +4,7 @@ description: "What the message window is missing to look like RM2k's: the arrow 
 type: feature
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-10-04, to carry on with the two differences

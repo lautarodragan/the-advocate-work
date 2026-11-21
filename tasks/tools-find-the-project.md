@@ -4,6 +4,7 @@ description: "The tools stop knowing that ABL lives in rom/ and stop reading ABL
 type: refactor
 status: done
 assignee: taro
+author: hornero
 ---
 
 What's left so that `tools/` knows nothing about where or how ABL is, after

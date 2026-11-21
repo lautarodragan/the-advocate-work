@@ -4,6 +4,7 @@ description: "Evaluate the project's architecture, quality, tests, documentation
 type: docs
 status: done
 assignee: Sol
+author: hornero
 ---
 
 Request of 2026-09-28: do a complete inspection and evaluation of the repo.

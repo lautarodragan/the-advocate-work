@@ -4,6 +4,7 @@ description: "rom/src becomes tools/runtime; data/, patches/, tests/, pytest.ini
 type: refactor
 status: done
 assignee: taro
+author: taro
 ---
 
 Decided by taro on 2026-09-29 (see

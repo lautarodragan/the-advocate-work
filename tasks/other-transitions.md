@@ -3,6 +3,7 @@ name: "The other transitions"
 description: "RM2k's screen transitions the console does not do yet —border to center, blinds, stripes, scrolls, divisions, random blocks, wave, zoom—, what each would take, and which games ask for them"
 type: feature
 status: wishlist
+author: hornero
 ---
 
 # What

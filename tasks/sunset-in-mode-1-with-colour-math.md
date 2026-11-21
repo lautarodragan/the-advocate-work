@@ -4,6 +4,7 @@ description: "Sunset's painted maps aren't playable in mode 3: try mode 1 with c
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Mulita]
 ---
 

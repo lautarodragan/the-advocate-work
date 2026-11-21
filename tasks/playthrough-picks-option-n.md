@@ -3,6 +3,7 @@ name: "The playthrough picks option N"
 description: "Let Recorrido move a ShowChoice's cursor before confirming"
 type: test
 status: done
+author: hornero
 ---
 
 # What

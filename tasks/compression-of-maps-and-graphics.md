@@ -3,6 +3,7 @@ name: "Compression of maps and graphics"
 description: "How much each thing in the cartridge weighs, how much it compresses and how much it costs to decompress it; done: the pilot, the tiles and grids in LZ2 and the deduplicated poses"
 type: refactor
 status: done
+author: taro
 ---
 
 # What

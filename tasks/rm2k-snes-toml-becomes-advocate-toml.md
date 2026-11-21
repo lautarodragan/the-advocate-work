@@ -4,6 +4,7 @@ description: "Each game's project file is renamed advocate.toml; the tools keep 
 type: tooling
 status: done
 assignee: taro
+author: taro
 agents: [Carpintero]
 ---
 

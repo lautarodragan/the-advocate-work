@@ -3,6 +3,7 @@ name: "Several samples per instrument"
 description: "Multisample like a real piano"
 type: feature
 status: wishlist
+author: hornero
 ---
 
 # What

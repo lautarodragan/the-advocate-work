@@ -4,6 +4,7 @@ description: "On the screens that list items, the rows that come in while scroll
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Hurón]
 ---
 

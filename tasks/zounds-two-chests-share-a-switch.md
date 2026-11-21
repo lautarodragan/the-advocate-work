@@ -4,6 +4,7 @@ description: "The Chest 2 of MiniCave 177 turns on and reads switch 129, Secret-
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Calandria]
 ---
 

@@ -4,6 +4,7 @@ description: "On map 83 the pump's red light is drawn grey: Forem, whom a scene 
 type: bug
 game: abl
 status: draft
+author: hornero
 ---
 
 Left in the book's Known issues by

@@ -3,6 +3,7 @@ name: "The items screen's bar runs ahead of its text"
 description: "Moving the cursor on the items screen, the bar is on the new item two frames before the description and the list say so; the equipment screen had the same and was fixed"
 type: bug
 status: draft
+author: calandria
 agents: [Calandria]
 ---
 

@@ -5,6 +5,7 @@ type: feature
 status: done
 agents: [Carpintero]
 assignee: taro
+author: taro
 ---
 
 **Done**, 2026-10-12. taro closed it on 2026-10-12. Point 4, the names that don't fit in the menu's bank, is what is left, and it was already a draft: `dooms-2-slots-and-menu-dont-fit-in-their-bank.md`.

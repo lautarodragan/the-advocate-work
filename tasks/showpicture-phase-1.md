@@ -3,6 +3,7 @@ name: "ShowPicture, phase 1"
 description: "The One year previously card"
 type: feature
 status: done
+author: hornero
 ---
 
 ### ShowPicture

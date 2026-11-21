@@ -4,6 +4,7 @@ description: "A box with \\N[0] (the leader) or with the \\N[n] of an actor that
 type: feature
 status: done
 assignee: taro
+author: calandria
 agents: [Carpintero, Mulita]
 ---
 

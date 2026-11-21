@@ -4,6 +4,7 @@ description: "resample (Pillow's LANCZOS bit for bit) and rm2k-render's bilinear
 type: refactor
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-10-02, in their words, translated:

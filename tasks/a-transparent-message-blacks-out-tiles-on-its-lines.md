@@ -4,6 +4,7 @@ description: "In Zounds, a sign shown with the message window's transparent back
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Aguará]
 ---
 

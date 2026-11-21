@@ -4,6 +4,7 @@ description: "Before touching the ROM, how the pause menu would look in mode 5 (
 type: research
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-09-30. The original menu shows, per actor, the **title**

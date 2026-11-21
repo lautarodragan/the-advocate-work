@@ -3,6 +3,7 @@ name: "The race in release"
 description: "The car chase, which today does not go into any ROM"
 type: feature
 status: done
+author: hornero
 ---
 
 # What

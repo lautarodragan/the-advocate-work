@@ -4,6 +4,7 @@ description: "The steal message says Grasa de Camello for the item Grasa de Cama
 type: bug
 status: done
 assignee: taro
+author: calandria
 agents: [Calandria]
 ---
 

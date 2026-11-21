@@ -4,6 +4,7 @@ description: "patches/manual/ as RM2k's own folders —ChipSet/, Picture/…, pl
 type: tooling
 status: done
 assignee: taro
+author: taro
 agents: [Aguará]
 ---
 

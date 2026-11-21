@@ -4,6 +4,7 @@ description: "The tightest cartridge has 16 B of bank 0 left; routines that are 
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Carpintero]
 ---
 

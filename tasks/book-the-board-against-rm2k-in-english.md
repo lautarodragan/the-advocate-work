@@ -4,6 +4,7 @@ description: "The artifact \"El motor contra RPG Maker 2000\" into the book as H
 type: docs
 status: done
 assignee: taro
+author: taro
 agents: [Aguará]
 ---
 

@@ -4,6 +4,7 @@ description: "ChangeFaceGraphic is accepted without drawing the face: the messag
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Tijereta]
 ---
 

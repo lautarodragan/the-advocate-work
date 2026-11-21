@@ -3,6 +3,7 @@ name: "The Vampires Dawn maps that don't fit in VRAM"
 description: "Nine Vampires Dawn maps —Shannar, Uruya, Melsan, Asran among them— are left out because of VRAM: five with no layout that holds background, sprites and upper layer, two with no room for the message window and two because of their panorama in mode 1"
 type: feature
 status: todo
+author: aguara
 ---
 
 What is left out of Vampires Dawn because of VRAM, measured by Aguará on

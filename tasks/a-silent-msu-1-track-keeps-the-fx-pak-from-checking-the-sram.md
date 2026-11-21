@@ -3,6 +3,7 @@ name: "A silent MSU-1 track keeps the FX Pak from checking the SRAM"
 description: "If the SRAM is ever used as working memory with a .msu, play a silent track whenever no MSU-1 music plays: the FX Pak skips its SRAM checksum and write while any track plays, so every data seek stays at ~2 ms"
 type: feature
 status: wishlist
+author: taro
 ---
 
 From [`the-sram-as-slow-wram`](the-sram-as-slow-wram.md): on the FX Pak a

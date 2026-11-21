@@ -4,6 +4,7 @@ description: "Another part of rm2k-render drawing everything RPG Maker draws: th
 type: refactor
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-09-30, after the CharSets

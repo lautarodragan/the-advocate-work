@@ -4,6 +4,7 @@ description: "Checks for common traps that assemble fine but are wrong: pl* befo
 type: feature
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-10-02, in their words, translated:

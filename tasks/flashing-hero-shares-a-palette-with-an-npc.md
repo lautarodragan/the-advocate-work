@@ -5,6 +5,7 @@ type: bug
 game: frozen-world
 status: testing
 assignee: taro
+author: calandria
 agents: [Hurón]
 ---
 

@@ -4,6 +4,7 @@ description: "On map 18 (Auditorium), WalkIn1 and WalkIn2 walk in in RM2k and no
 type: bug
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-09-30, while playing, in their words, translated:

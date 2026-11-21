@@ -5,6 +5,7 @@ type: feature
 status: done
 agents: [Hurón, Carpintero]
 assignee: taro
+author: huron
 ---
 
 Hurón found it on 2026-10-04, while adding the doors of Paradise and of

@@ -3,6 +3,7 @@ name: "Map 11 redesigned"
 description: "The 52 light tiles become tiles: from 30 fps to smooth. Undone on 2026-10-20, when the original fit in the frame"
 type: bug
 status: done
+author: hornero
 ---
 
 # What

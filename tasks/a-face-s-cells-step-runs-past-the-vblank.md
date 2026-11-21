@@ -3,6 +3,7 @@ name: "A face's cells step runs past the vblank"
 description: "In bsnes, the vblank that writes a box's face cells (msg_face_vblank's second step) ended at line 270, eight lines into the next frame, on Zounds' map 89"
 type: bug
 status: draft
+author: chaja
 ---
 
 Seen by Chajá on 2026-10-19, at the-advocate `54ec3daf` and the ports

@@ -4,6 +4,7 @@ description: "A 256 KB SRAM, and the part the save slots do not use as working m
 type: research
 status: done
 assignee: taro
+author: taro
 agents: [Aguará]
 ---
 

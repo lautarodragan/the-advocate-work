@@ -4,6 +4,7 @@ description: "The game uses ShowInn as the night passing in several scenes; the 
 type: bug
 status: testing
 assignee: taro
+author: mulita
 agents: [Tijereta]
 ---
 

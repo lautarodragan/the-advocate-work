@@ -5,6 +5,7 @@ type: feature
 status: done
 agents: [Carpintero]
 assignee: taro
+author: taro
 ---
 
 Vampires Dawn doesn't build: with ABL's System through the knob (b8224c3 in the

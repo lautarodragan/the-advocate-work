@@ -4,6 +4,7 @@ description: "The book's pages keep the Spanish file names they had before the t
 type: chore
 status: done
 assignee: taro
+author: taro
 agents: [Cardón]
 ---
 

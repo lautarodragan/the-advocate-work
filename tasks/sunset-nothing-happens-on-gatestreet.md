@@ -4,6 +4,7 @@ description: "On GateStreet (map 10) the scene ran but its transparent messages 
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Tijereta]
 ---
 

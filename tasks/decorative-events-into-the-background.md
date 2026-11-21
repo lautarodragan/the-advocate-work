@@ -5,6 +5,7 @@ type: feature
 status: done
 agents: [Calandria]
 assignee: taro
+author: taro
 ---
 
 Measured by Hornero on 2026-10-06 on Vampires Dawn's map 95 (Weg):

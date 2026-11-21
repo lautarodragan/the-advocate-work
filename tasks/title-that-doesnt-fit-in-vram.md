@@ -4,6 +4,7 @@ description: "Desert Nightmare, The Frozen World and Vampires Dawn start without
 type: feature
 status: done
 assignee: taro
+author: calandria
 agents: [Carpintero]
 ---
 

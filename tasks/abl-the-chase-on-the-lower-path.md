@@ -4,6 +4,7 @@ description: "Compare the guard of map 105 against the original with Talan walki
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Calandria]
 ---
 

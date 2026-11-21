@@ -3,6 +3,7 @@ name: "The quality of the music"
 description: "Why escape_newyork sounds bad through the SPC700, eleven versions recorded to compare, and in what order to fix it"
 type: feature
 status: done
+author: taro
 ---
 
 **What taro chose by listening, on 2026-09-25**: what matters most to him, and

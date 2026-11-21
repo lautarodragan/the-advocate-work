@@ -3,6 +3,7 @@ name: "ChangeSystemBGM of the Game Over is ignored"
 description: "Dooms 2 gives the Game Over screen another song once; the port keeps the database's"
 type: bug
 status: todo
+author: carpintero
 ---
 
 Seen by Carpintero on 2026-10-19, counting `ChangeSystemBGM` over the nine

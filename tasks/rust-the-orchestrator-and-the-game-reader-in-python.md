@@ -4,6 +4,7 @@ description: "The last part of the migration: snes_convert.py and what's left in
 type: refactor
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-10-02: the last step of the migration, after the

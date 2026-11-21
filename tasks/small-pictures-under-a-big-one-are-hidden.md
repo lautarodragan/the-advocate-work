@@ -5,6 +5,7 @@ type: bug
 game: zounds
 status: testing
 assignee: taro
+author: tijereta
 agents: [Calandria]
 ---
 

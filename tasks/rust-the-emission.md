@@ -4,6 +4,7 @@ description: "What writes mapdata.inc (mapdata, map_record, materials, blocks, v
 type: refactor
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-10-01, in their words, translated:

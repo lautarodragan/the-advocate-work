@@ -4,6 +4,7 @@ description: "A box with an escape the console cannot show leaves its whole page
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Mulita]
 ---
 

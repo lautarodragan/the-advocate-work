@@ -4,6 +4,7 @@ description: "From map 34 into the Death Desert (50, 14, 111, 112, 113) RM2k blo
 type: bug
 status: done
 assignee: taro
+author: mulita
 agents: [Tijereta]
 ---
 

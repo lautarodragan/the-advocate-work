@@ -4,6 +4,7 @@ description: "The start menu's options move with the arrows but nothing shows wh
 type: bug
 status: testing
 assignee: taro
+author: taro
 game: desert-nightmare
 agents: [Aguará]
 ---

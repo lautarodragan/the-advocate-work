@@ -4,6 +4,7 @@ description: "A large picture that shrinks or grows with ShowPicture/MovePicture
 type: feature
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-10-03, after seeing the pilot on the SNES, in their

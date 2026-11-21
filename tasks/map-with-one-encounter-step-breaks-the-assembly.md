@@ -4,6 +4,7 @@ description: "encounter_steps = 1 gives enc_base 65536, which does not fit in a 
 type: bug
 status: done
 assignee: taro
+author: surubi
 ---
 
 Surubí found it on 2026-09-29 while moving the battle tables to Rust

@@ -3,6 +3,7 @@ name: "A parallel common event's write refreshes the pages a frame late"
 description: "What a parallel common event writes changes the active pages only on the next frame, after the autostart pages were already looked at; in RM2k it is refreshed before the map's events look"
 type: bug
 status: todo
+author: calandria
 ---
 
 Seen by Calandria on 2026-10-19, at the-advocate `54ec3daf`, reading the

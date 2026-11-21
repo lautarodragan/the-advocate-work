@@ -3,6 +3,7 @@ name: "The effects' directory"
 description: "Sound effects share slots in the SPC700 directory, and with the entries the copies free they give back to the music what can be given without lowering anyone"
 type: refactor
 status: done
+author: hornero
 ---
 
 # What

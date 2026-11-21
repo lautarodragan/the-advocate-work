@@ -3,6 +3,7 @@ name: "Lashe City with the car, up to the race"
 description: "Plan: from the director and Kersh cutscene up to the Teleport to 49, exclusive"
 type: feature
 status: done
+author: taro
 ---
 
 # What

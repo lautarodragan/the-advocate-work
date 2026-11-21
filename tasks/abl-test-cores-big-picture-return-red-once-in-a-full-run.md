@@ -3,6 +3,7 @@ name: "ABL's test_cores big-picture-return-240 went red once in a full run"
 description: "bsnes drew the map back after the big picture without its lower rows of trees and the person on them, and with a message arrow at the bottom; alone the test passes"
 type: bug
 status: draft
+author: tijereta
 ---
 
 Seen by Tijereta on 2026-10-19, in a full run of ABL's suite on the branch

@@ -3,6 +3,7 @@ name: "Frozen World: every turn re-uploads the battle screen's audio"
 description: "Each turn of a fight teleports map 3 → map 1 → map 3, and each teleport uploads the map's audio package again: a tick of ~62 frames entering map 1 and ~34 entering map 3, about 66 frames of every turn"
 type: bug
 status: draft
+author: aguara
 ---
 
 Seen by Aguará on 2026-10-17, measuring

@@ -4,6 +4,7 @@ description: "Opening some chests in Zounds draws a different chest than the clo
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Cardón]
 game: zounds
 ---

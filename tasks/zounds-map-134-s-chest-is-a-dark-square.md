@@ -3,6 +3,7 @@ name: "Zounds: map 134's chest is a dark square"
 description: "The chest at (2, 30) of map 134, the cave north of Misërenia, is drawn as a dark brown square on the console, closed and opened; RM2k draws it red"
 type: bug
 status: draft
+author: cardon
 game: zounds
 ---
 

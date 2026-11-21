@@ -4,6 +4,7 @@ description: "The whole battle menu and text in the bottom strip, on black, like
 type: feature
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-10-04, in their words, translated:

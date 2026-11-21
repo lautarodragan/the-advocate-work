@@ -4,6 +4,7 @@ description: "A tile marked to be drawn above the hero goes to the layer above (
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Aguará]
 ---
 

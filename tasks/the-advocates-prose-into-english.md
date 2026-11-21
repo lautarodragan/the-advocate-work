@@ -5,6 +5,7 @@ type: chore
 status: done
 agents: [Tijereta]
 assignee: taro
+author: taro
 ---
 
 taro, on 2026-10-12: `the-advocate` goes in English entirely, commits

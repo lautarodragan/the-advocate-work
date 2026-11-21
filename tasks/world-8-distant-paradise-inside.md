@@ -4,6 +4,7 @@ description: "The first day in Paradise in release —the Council and Pierson's 
 type: feature
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-10-02: keep going with ABL in parallel, "add more maps".

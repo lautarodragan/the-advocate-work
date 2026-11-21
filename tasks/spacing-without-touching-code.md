@@ -4,6 +4,7 @@ description: "Changing [text] letter_spacing should not require touching the eng
 type: feature
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-10-03, after trying Tordo's three ROMs, in their

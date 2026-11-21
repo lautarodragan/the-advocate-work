@@ -3,6 +3,7 @@ name: "A revived actor keeps its conditions in battle"
 description: "An actor that falls in battle keeps its places until the battle ends, where the death's purge runs; raised in the same battle by a Phoenix Down it gets up still poisoned, where RM2k's death had already taken the poison"
 type: bug
 status: draft
+author: mulita
 ---
 
 Seen by Mulita on 2026-11-01, reading `runtime/battle_states.s` and

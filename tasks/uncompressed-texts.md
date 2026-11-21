@@ -4,6 +4,7 @@ description: "119 KB of text at one byte per letter: repeated messages, names an
 type: feature
 status: done
 assignee: taro
+author: taro
 ---
 
 Not urgent: it gets done when space gets tight, probably with the chapter

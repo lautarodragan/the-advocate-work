@@ -3,6 +3,7 @@ name: "A System with a gradient under its frame stops the converter at the actor
 description: "Zounds' System has 215 colours under its window frame and no `[windows.background]` entry: the actor choice's windows come out as 65 tiles in a 64-tile bank and rm2k-snes-screens stops, instead of fusing or saying which knob"
 type: bug
 status: todo
+author: aguara
 ---
 
 Seen by Aguará on 2026-10-15, in the study

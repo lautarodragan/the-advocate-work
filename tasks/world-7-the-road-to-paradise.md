@@ -4,6 +4,7 @@ description: "105 Mountain Path, 106 and 107 in release, fleeing with escape_mod
 type: feature
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-10-01, in their words, translated:

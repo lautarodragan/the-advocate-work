@@ -4,6 +4,7 @@ description: "[text] letter_spacing in the project file: pixels added to the adv
 type: feature
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-10-03, after seeing the variable width, in their words,

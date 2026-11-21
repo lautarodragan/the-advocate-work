@@ -4,6 +4,7 @@ description: "A much shorter README.md: out with the narrative and the duplicate
 type: docs
 status: done
 assignee: taro
+author: hornero
 ---
 
 taro started it by hand on 2026-09-25 and on 2026-09-26 handed it to an

@@ -3,6 +3,7 @@ name: "Two flashes at once"
 description: "Kersh stays blue on the terrace: two flashes together upload only one palette"
 type: bug
 status: done
+author: taro
 ---
 
 **On the terrace of map 32, the Agency Captain —Kersh— stays tinted blue

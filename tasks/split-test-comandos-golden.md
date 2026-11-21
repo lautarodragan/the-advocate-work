@@ -3,6 +3,7 @@ name: "Split test_commands_golden"
 description: "A test file that gathers many different RM2k commands"
 type: test
 status: wishlist
+author: hornero
 ---
 
 `tests/rpgmaker/test_commands_golden.py` compares many different event

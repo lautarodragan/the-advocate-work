@@ -3,6 +3,7 @@ name: "Desert Nightmare: the maps screen's cursor, shared, fits on ten maps"
 description: "Common 14's only small picture, a 7x4 cursor, is in one set of the common table with the two 320x84 textbox pictures, 273 tiles, which fits beside the map's bank on 10 of the 189 maps"
 type: bug
 status: draft
+author: carpintero
 game: desert-nightmare
 agents: [Carpintero, Chajá]
 ---

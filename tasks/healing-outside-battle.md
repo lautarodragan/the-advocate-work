@@ -3,6 +3,7 @@ name: "Healing outside battle"
 description: "Medicines from the menu, and the selection that broke"
 type: feature
 status: done
+author: taro
 ---
 
 **Using a healing item from the menu, outside battle.**

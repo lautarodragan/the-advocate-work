@@ -4,6 +4,7 @@ description: "The game's first battle, started by a plant on the map, shows a da
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Tijereta]
 ---
 

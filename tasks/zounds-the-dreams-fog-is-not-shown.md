@@ -3,6 +3,7 @@ name: "Zounds: the dream's fog is not shown"
 description: "Map 30's autostart shows fog2 at 110% zoom, and the console only shrinks pictures, so the dream plays without its reddish fog"
 type: bug
 status: draft
+author: aguara
 agents: [Aguará]
 ---
 

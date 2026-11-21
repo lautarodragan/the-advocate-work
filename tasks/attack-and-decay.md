@@ -3,6 +3,7 @@ name: "Attack and decay"
 description: "Each instrument's envelopes, read from the SoundFont"
 type: feature
 status: done
+author: hornero
 ---
 
 # What

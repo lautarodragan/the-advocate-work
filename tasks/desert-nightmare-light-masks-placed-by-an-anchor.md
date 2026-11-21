@@ -3,6 +3,7 @@ name: "Desert Nightmare: light masks placed by an anchor are not drawn"
 description: "On 17 maps that scroll —the motel's rooms, the warehouse, the dream, the mines, the workshop's cellar— the light mask is placed at an anchor event's screen position, read into variables, and the console leaves it out: the rooms are lit as by day"
 type: bug
 status: draft
+author: huron
 game: desert-nightmare
 ---
 

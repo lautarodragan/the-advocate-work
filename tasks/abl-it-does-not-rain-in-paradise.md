@@ -4,6 +4,7 @@ description: "Map 108 sets rain for the crying girl's scene, and the converter l
 type: bug
 status: testing
 assignee: taro
+author: chaja
 agents: [Calandria]
 ---
 

@@ -3,6 +3,7 @@ name: "Samples per package"
 description: "Splitting the ARAM per map package and not per bank"
 type: feature
 status: done
+author: hornero
 ---
 
 # Done, on 2026-09-26

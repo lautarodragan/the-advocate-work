@@ -4,6 +4,7 @@ description: "A terrain in the database says more than its battle background: da
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Aguará]
 ---
 

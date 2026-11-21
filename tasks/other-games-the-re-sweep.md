@@ -4,6 +4,7 @@ description: "Measure the seven games again with today's tools —what builds, w
 type: research
 status: done
 assignee: taro
+author: taro
 agents: [Aguará]
 ---
 

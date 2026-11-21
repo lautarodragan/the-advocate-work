@@ -3,6 +3,7 @@ name: "test-msu boots different from its twin, once, on bsnes"
 description: "In a whole run of ABL's suite, test_msu_twins.py's boot case on bsnes was red in 116 of 120 frames from frame 4; five runs of the file alone right after were green"
 type: test
 status: draft
+author: huron
 agents: [Hurón]
 ---
 

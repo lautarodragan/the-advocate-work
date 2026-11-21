@@ -4,6 +4,7 @@ description: "Arriving at Delcentric Factory (map 17), RunFactoryScene walks Des
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Mulita]
 game: abl
 ---

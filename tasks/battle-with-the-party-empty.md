@@ -3,6 +3,7 @@ name: "A battle with the party empty"
 description: "RM2k immediately loses a battle with nobody in the party; what the ROM does wasn't looked at, and the eight ports start with the database's party, which in several of them is nobody"
 type: test
 status: todo
+author: calandria
 ---
 
 Mulita left it on 2026-10-10 in "Lo que no cubre" of

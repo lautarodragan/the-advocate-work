@@ -3,6 +3,7 @@ name: "A panorama with pictures drawn into it is not swapped"
 description: "Desert Nightmare's 34 and 82, and Sunset's 60, draw their map pictures into their own panorama; swapping it would take them away, so their ChangePBGs keep it"
 type: feature
 status: todo
+author: aguara
 agents: [Aguará]
 ---
 

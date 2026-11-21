@@ -5,6 +5,7 @@ type: bug
 status: done
 agents: [Codex]
 assignee: taro
+author: aguara
 ---
 
 Aguará found it on 2026-10-06 while building the board against RM2k: the branch

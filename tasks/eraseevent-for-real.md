@@ -5,6 +5,7 @@ type: feature
 status: done
 agents: [Aguará, Hurón]
 assignee: taro
+author: aguara
 ---
 
 From Aguará's study, [`research/2026-10-05-the-missing-commands.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-05-the-missing-commands.html); `rm2k-snes-events culprits` measured it. taro, on 2026-10-05: leave them all, without launching yet. It is the first thing it recommends: a small one and a medium one.

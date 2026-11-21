@@ -4,6 +4,7 @@ description: "A game of our own, made from scratch with free assets, where the e
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Calandria]
 ---
 

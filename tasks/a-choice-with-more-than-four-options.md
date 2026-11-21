@@ -4,6 +4,7 @@ description: "The fifth option of a choice does not compile (CHOICE_MAX is 4): T
 type: feature
 status: done
 assignee: taro
+author: calandria
 agents: [Chajá]
 ---
 

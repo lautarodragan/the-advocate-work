@@ -3,6 +3,7 @@ name: "A ChangePBG with no name keeps the panorama"
 description: "In RM2k a ChangePBG with an empty name takes the panorama away; the console keeps the one there is and only changes its scroll"
 type: bug
 status: wishlist
+author: aguara
 agents: [Aguará]
 ---
 

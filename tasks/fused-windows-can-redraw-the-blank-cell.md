@@ -3,6 +3,7 @@ name: "Fused windows can redraw the blank cell"
 description: "When a System's windows do not fit their 8bpp bank, fit merges the cells that show the least, and the blank one can be among them: the screens over nothing —the menu's bar and cursors, the slot cursor— then draw every empty cell"
 type: bug
 status: wishlist
+author: chaja
 ---
 
 Seen by Chajá on 2026-10-16, while doing

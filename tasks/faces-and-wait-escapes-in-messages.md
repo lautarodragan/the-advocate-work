@@ -5,6 +5,7 @@ type: feature
 status: done
 agents: [Aguará, Tijereta]
 assignee: taro
+author: taro
 ---
 
 From Aguará's (Sonnet) brief analysis, on 2026-10-05, of what taro saw playing the ROMs of the other games. It affects Dooms 2, Desert Nightmare and Sunset Over Imdahl.

@@ -3,6 +3,7 @@ name: "The MSU-1 music, distributed in Opus"
 description: "ABL's .pcm files weigh 1.4 GB; distributed in Opus at 160 kbps they would be ~180 MB, and in FLAC ~550 MB, and they are converted to .pcm once at install time"
 type: feature
 status: wishlist
+author: taro
 agents: [Hornero]
 ---
 

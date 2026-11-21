@@ -4,6 +4,7 @@ description: "Neither of the two paths loops like RPG_RT: the MSU-1 goes back to
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Hornero, Tijereta]
 ---
 

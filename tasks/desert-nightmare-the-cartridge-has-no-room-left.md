@@ -4,6 +4,7 @@ description: "Since the painted pieces the ROM is 126 of 126 data banks with a 1
 type: bug
 status: done
 assignee: taro
+author: chaja
 game: desert-nightmare
 agents: [Chajá, Carpintero]
 ---

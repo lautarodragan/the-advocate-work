@@ -3,6 +3,7 @@ name: "Overload-and-remove for try_pack"
 description: "try_pack is best-fit decreasing; overload-and-remove, the pagination heuristic SuperFamiconv and rgbgfx use, finds packings best-fit misses. Measure how many layers fall into reduce_colors only because of that, and adopt it if any do"
 type: feature
 status: todo
+author: hornero
 ---
 
 # What

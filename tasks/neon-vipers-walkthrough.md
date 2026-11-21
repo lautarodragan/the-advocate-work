@@ -3,6 +3,7 @@ name: "The Neon Vipers walkthrough"
 description: "A long playthrough that covers the scene where the two bugs showed up"
 type: test
 status: done
+author: taro
 ---
 
 **A test that plays the Neon Vipers stretch end to end**: start

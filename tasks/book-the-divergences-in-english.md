@@ -4,6 +4,7 @@ description: "The 42 divergences in divergencias/ to the book, translated, in di
 type: docs
 status: done
 assignee: taro
+author: taro
 agents: [Calandria]
 ---
 

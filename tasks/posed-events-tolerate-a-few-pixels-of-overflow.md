@@ -4,6 +4,7 @@ description: "A still event whose pose spills a few pixels out of its cell goes 
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Cardón]
 ---
 

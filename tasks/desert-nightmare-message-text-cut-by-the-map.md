@@ -4,6 +4,7 @@ description: "Over some maps parts of BG1 and of the characters draw over a mess
 type: bug
 status: testing
 assignee: taro
+author: taro
 game: desert-nightmare
 agents: [Calandria]
 ---

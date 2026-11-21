@@ -4,6 +4,7 @@ description: "Use in battle an item that only works on a fallen ally"
 type: feature
 status: done
 assignee: taro
+author: hornero
 ---
 
 **Use in battle an item that only works on a fallen ally.**

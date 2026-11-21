@@ -3,6 +3,7 @@ name: "Desert Nightmare's title is silent without MSU-1"
 description: "The title's song, music13, only has an MSU-1 track, so without MSU-1 the title plays nothing"
 type: bug
 status: done
+author: hornero
 ---
 
 Seen by Chajá on 2026-10-16, at the-advocate `3996ed61`, while making the

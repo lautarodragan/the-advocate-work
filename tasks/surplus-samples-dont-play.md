@@ -5,6 +5,7 @@ type: feature
 status: done
 agents: [Mulita]
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-10-06, in their words, translated:

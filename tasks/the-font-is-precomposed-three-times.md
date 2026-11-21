@@ -4,6 +4,7 @@ description: "Every cartridge carries the font precomposed for the messages, for
 type: refactor
 status: done
 assignee: taro
+author: carpintero
 agents: [Carpintero, Calandria]
 ---
 

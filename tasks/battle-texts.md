@@ -4,6 +4,7 @@ description: "Battle messages cut at 31 characters or running past the edge"
 type: bug
 status: done
 assignee: taro
+author: hornero
 ---
 
 **The battle texts that don't fit in the width of the screen.**

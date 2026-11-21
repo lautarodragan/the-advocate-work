@@ -3,6 +3,7 @@ name: "The playthrough's pending goldens"
 description: "119 of the playthrough's shots have no golden (pending.txt, 2026-11-17; the 26 debug-* go without one on purpose): take them, have taro look at them, and approve them or fix what they show"
 type: test
 status: todo
+author: irupe
 ---
 
 Irupé measured it on 2026-09-29 (`tests-without-silent-holes.md`):

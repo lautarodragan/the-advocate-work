@@ -4,6 +4,7 @@ description: "Phase 3 of the picture system: the ones that cover the screen with
 type: feature
 status: done
 assignee: taro
+author: taro
 ---
 
 Phase 3 of [`research/2026-10-01-the-picture-system.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-01-the-picture-system.html) (Jilguero),

@@ -4,6 +4,7 @@ description: "The loose ends Mara left when moving the maps to Rust"
 type: refactor
 status: done
 assignee: taro
+author: hornero
 ---
 
 From `rust-the-maps-domain.md` (Mara, 2026-09-30):

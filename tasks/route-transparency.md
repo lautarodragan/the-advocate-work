@@ -4,6 +4,7 @@ description: "Orders 40 and 41, which raise and lower transparency"
 type: feature
 status: done
 assignee: taro
+author: hornero
 agents: [Chajá]
 ---
 

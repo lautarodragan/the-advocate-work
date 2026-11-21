@@ -4,6 +4,7 @@ description: "The title's Begin the Story / Resume the Story menu is drawn as ba
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Tijereta]
 ---
 

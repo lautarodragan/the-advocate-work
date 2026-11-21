@@ -4,6 +4,7 @@ description: "In the dance on 127, 37 and 38 have a route and the spin animation
 type: bug
 status: done
 assignee: taro
+author: yaguarete
 ---
 
 Yaguareté saw it on 2026-10-03, while putting in the farm with the slot cache

@@ -4,6 +4,7 @@ description: "After Picaflor's common events and Aguilucho's large pictures, ban
 type: refactor
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-10-02, in their words, translated:

@@ -4,6 +4,7 @@ description: "The farm (127) and the grove (128) in release: the celebration fit
 type: feature
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-10-03, together with the tools' slot cache

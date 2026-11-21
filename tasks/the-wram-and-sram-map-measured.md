@@ -4,6 +4,7 @@ description: "How much of the 128 KB of WRAM and the 8 KB of SRAM is really used
 type: research
 status: done
 assignee: taro
+author: taro
 agents: [Hurón]
 ---
 

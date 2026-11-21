@@ -4,6 +4,7 @@ description: "In the Lazer Teeth mini-game on map 11, while the rock flies and w
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Aguará]
 ---
 

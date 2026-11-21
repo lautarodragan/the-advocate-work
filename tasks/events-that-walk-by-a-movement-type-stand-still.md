@@ -4,6 +4,7 @@ description: "A page whose movement type is random, vertical, horizontal, toward
 type: bug
 status: done
 assignee: taro
+author: aguara
 agents: [Hurón]
 ---
 

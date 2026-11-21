@@ -4,6 +4,7 @@ description: "A door that drops you in Distant Paradise right when you take cont
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Hurón]
 ---
 

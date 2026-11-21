@@ -3,6 +3,7 @@ name: "An inventory of the pictures that may be windows"
 description: "A tool that lists every ShowPicture of a game with its context and a tentative class —a menu with a cursor, a message frame, a HUD, a scene—, so that an agent sorts the doubtful ones and taro picks which to turn into windows"
 type: feature
 status: todo
+author: taro
 ---
 
 taro, on 2026-10-20, in their words, translated:

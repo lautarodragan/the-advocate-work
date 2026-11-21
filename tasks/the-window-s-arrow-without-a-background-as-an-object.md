@@ -4,6 +4,7 @@ description: "A window without a background still takes the map's upper layer on
 type: optimization
 status: done
 assignee: taro
+author: taro
 agents: [Chajá]
 ---
 

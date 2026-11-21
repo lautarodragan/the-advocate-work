@@ -3,6 +3,7 @@ name: "The jump that hangs"
 description: "A jump at the end of a forced route leaves the hero floating forever"
 type: bug
 status: done
+author: taro
 ---
 
 **A hero jump that is the last order of its forced route never

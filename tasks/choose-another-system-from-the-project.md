@@ -5,6 +5,7 @@ type: feature
 status: done
 agents: [Calandria]
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-10-05: the four games that don't build because of the window

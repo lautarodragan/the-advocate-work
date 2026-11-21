@@ -4,6 +4,7 @@ description: "Booting Dooms 2 and Desert Nightmare, the start map is drawn for a
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Chajá]
 ---
 

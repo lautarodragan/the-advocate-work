@@ -5,6 +5,7 @@ type: bug
 game: book-of-three
 status: testing
 assignee: taro
+author: calandria
 agents: [Tijereta]
 ---
 

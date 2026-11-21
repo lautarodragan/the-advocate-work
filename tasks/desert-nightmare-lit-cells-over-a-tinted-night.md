@@ -3,6 +3,7 @@ name: "Desert Nightmare: lit cells over a tinted night"
 description: "The night maps that scroll are a tint since 2026-11-19, with no lamps and no lit windows. Draw the cones and windows into the cells the tint misses, in palettes the tint skips; then, maybe, light the characters with colour math"
 type: feature
 status: todo
+author: huron
 game: desert-nightmare
 ---
 

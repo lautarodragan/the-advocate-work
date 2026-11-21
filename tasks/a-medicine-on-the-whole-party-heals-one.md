@@ -3,6 +3,7 @@ name: "A medicine on the whole party heals one"
 description: "A medicine marked entire_party opens the actor choice with the bar on one row and heals only that one, where RM2k puts the bar over everyone and heals the whole party"
 type: bug
 status: draft
+author: chaja
 ---
 
 Seen by Chajá on 2026-11-01, doing

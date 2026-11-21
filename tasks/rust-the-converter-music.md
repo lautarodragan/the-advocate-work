@@ -4,6 +4,7 @@ description: "What the converter decides about the music and the .msu (music.py,
 type: refactor
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-09-30, in the migration of the converter to Rust. `music.py`

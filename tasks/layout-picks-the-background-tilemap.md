@@ -3,6 +3,7 @@ name: "The layout picks the background's tilemap"
 description: "A fourth VRAM layout that moves BG1's tilemap down to $1800 and makes room for map 38"
 type: refactor
 status: done
+author: hornero
 ---
 
 Option (d) of question 2 about map 38 in `lashe-city-with-the-car-up-to-the-race.md`:

@@ -4,6 +4,7 @@ description: "The original's text colors and window separators on the items scre
 type: feature
 status: done
 assignee: Jacarandá
+author: taro
 ---
 
 From taro, on 2026-09-28, in their words, translated:

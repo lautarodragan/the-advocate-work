@@ -4,6 +4,7 @@ description: "On map 4 the hero walks with no walking animation and always facin
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Calandria]
 ---
 

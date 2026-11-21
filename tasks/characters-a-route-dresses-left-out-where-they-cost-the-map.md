@@ -5,6 +5,7 @@ type: bug
 game: [book-of-three, abl]
 status: done
 assignee: taro
+author: calandria
 agents: [Calandria, Chajá]
 ---
 

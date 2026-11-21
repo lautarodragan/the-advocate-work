@@ -4,6 +4,7 @@ description: "While playing, the window started staying at the top all the time 
 type: bug
 status: done
 assignee: Calancate
+author: taro
 ---
 
 From taro, on 2026-10-04, with the build `2026-10-04-5b29ba9-f6a44973`, in

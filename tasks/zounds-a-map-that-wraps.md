@@ -4,6 +4,7 @@ description: "Map 70, Subsuelo / Passage 1, has Wrap: Both; the runtime does not
 type: research
 status: done
 assignee: taro
+author: taro
 agents: [Hurón]
 ---
 

@@ -4,6 +4,7 @@ description: "ABL's Raining runs on map 20 with switch 94 on, but its Rain1 ever
 type: bug
 status: done
 assignee: taro
+author: aguara
 agents: [Mulita]
 ---
 

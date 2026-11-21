@@ -4,6 +4,7 @@ description: "Without MSU-1, when map 3 appears the game stays frozen and silent
 type: bug
 status: done
 assignee: taro
+author: hornero
 ---
 
 Measured on 2026-09-26 while verifying `map-3-may-be-missing-a-sound-effect.md`:

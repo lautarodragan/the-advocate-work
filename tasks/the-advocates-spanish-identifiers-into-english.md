@@ -5,6 +5,7 @@ type: refactor
 status: done
 agents: [Hurón]
 assignee: taro
+author: taro
 ---
 
 taro, on 2026-10-12: `the-advocate` goes in English entirely (see "The

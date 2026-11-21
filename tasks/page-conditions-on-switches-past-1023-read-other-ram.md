@@ -4,6 +4,7 @@ description: "A page that asks for a switch past the ROM's 1024 is emitted with 
 type: bug
 status: done
 assignee: taro
+author: huron
 agents: [Tijereta]
 ---
 

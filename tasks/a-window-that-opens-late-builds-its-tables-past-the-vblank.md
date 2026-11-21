@@ -3,6 +3,7 @@ name: "A window that opens late builds its tables past the vblank"
 description: "When a box's last blanked line goes up in the vblank its window opens in, msg_hdma_build ends near line 261 and flush_video on the screen's first lines"
 type: bug
 status: draft
+author: aguara
 agents: [Aguará]
 ---
 

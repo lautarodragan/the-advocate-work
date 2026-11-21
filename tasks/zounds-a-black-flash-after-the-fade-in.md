@@ -4,6 +4,7 @@ description: "Entering a map in Zounds, the fade-in ends and then the screen goe
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Tijereta]
 ---
 

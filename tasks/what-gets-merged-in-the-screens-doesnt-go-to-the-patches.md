@@ -3,6 +3,7 @@ name: "What gets merged in the screens doesn't go to the patches"
 description: "Of what the converter loses in the windows, only the message window's colours reach patches/auto/; the colours of the 8bpp screens, the merged cells and End Game's stay in a WARNING in the log"
 type: chore
 status: wishlist
+author: calandria
 ---
 
 Tijereta said it on 2026-10-05 in

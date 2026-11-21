@@ -3,6 +3,7 @@ name: "A battle message box empties two frames late"
 description: "When A closes a troop page's message, the battle's message window still shows its text for two frames; RM2k empties it at once. Seen next to a FlashScreen, which starts on the first of those frames"
 type: bug
 status: wishlist
+author: chaja
 ---
 
 Seen by Chajá on 2026-10-12, with the-advocate `5238c200` and the ports

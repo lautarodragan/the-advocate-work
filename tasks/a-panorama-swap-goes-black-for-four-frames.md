@@ -3,6 +3,7 @@ name: "A panorama swap goes black for four frames"
 description: "A ChangePBG that swaps the picture mid-map leaves the screen black while the ring of its tilemap is built one cell at a time; behind a fade it does not show"
 type: feature
 status: wishlist
+author: aguara
 agents: [Aguará]
 ---
 

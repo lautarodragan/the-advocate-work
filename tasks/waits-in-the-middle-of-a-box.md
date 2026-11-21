@@ -4,6 +4,7 @@ description: "The escapes \\. \\| \\! in the middle of a message box are discard
 type: feature
 status: done
 assignee: taro
+author: hornero
 agents: [Tijereta]
 ---
 

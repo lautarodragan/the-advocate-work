@@ -3,6 +3,7 @@ name: "Talan's battle system"
 description: "Detect Aura and Absorb Aura run their troop's pages"
 type: feature
 status: done
+author: hornero
 ---
 
 **Talan's battle system: `Detect Aura` and `Absorb Aura` in battle.**

@@ -3,6 +3,7 @@ name: "ABL's test_cores test_event went red once in a full run"
 description: "bsnes drew an empty message box over the event case and snes9x did not; alone the test passes"
 type: bug
 status: draft
+author: carpintero
 ---
 
 Seen by Carpintero on 2026-10-17, in a full run of ABL's suite on the

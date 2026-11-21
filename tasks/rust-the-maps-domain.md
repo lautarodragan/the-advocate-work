@@ -4,6 +4,7 @@ description: "The converter's layers, sprites, VRAM, blocks and baking (map_laye
 type: refactor
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-09-30: keep going with the migration of the converter to Rust, with

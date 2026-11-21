@@ -3,6 +3,7 @@ name: "Dooms 2: three autostart pages are lost to their ChangeSpriteAssociation"
 description: "The autostart pages of maps 45, 58 and 59 don't compile: their ChangeSpriteAssociation names a graphic past the eight every map's table reserves"
 type: bug
 status: done
+author: calandria
 ---
 
 Seen by Calandria on 2026-10-16, with the-advocate `759aa0ba` and the

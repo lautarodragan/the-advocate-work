@@ -3,6 +3,7 @@ name: "The release always carries MSU-1"
 description: "The tracks go next to release/abl.sfc, and it is the harness that decides whether the core sees them"
 type: feature
 status: done
+author: taro
 ---
 
 taro decided on 2026-09-25 that **the release always carries MSU-1**:

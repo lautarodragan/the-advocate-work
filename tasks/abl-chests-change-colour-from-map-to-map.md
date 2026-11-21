@@ -4,6 +4,7 @@ description: "The chests' palette changes between maps: open ones look flatter t
 type: research
 status: done
 assignee: taro
+author: taro
 agents: [Carpintero]
 ---
 

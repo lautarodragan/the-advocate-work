@@ -3,6 +3,7 @@ name: "A painted map keeps its first painting"
 description: "Sunset Over Imdahl's door that opens (26, 36) and its grass field (34) swap their painting with ChangePBG; a painted map carries only its first"
 type: feature
 status: todo
+author: aguara
 agents: [Aguará]
 ---
 

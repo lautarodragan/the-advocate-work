@@ -3,6 +3,7 @@ name: "Make building the cartridges take less time"
 description: "Optimize the time of `just cartridges` without refactors: memoizing, parallelizing and numpy, with the ROMs byte for byte identical"
 type: refactor
 status: done
+author: taro
 ---
 
 Request from taro, on 2026-09-26: optimize the time of `snes_convert.py` and

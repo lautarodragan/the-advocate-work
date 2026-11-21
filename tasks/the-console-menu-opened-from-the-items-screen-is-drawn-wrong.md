@@ -4,6 +4,7 @@ description: "ABL's Portable Console, opened by using the console from the items
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Carpintero]
 ---
 

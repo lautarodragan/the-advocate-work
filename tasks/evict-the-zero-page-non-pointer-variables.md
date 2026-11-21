@@ -3,6 +3,7 @@ name: "Evict the zero page's non-pointer variables"
 description: "The zero page is full —0 B left in every cartridge since 2026-10-17— and only about 55 of its bytes are [dp],y pointers; the rest are there for one byte and one cycle per access. Moving the cold ones to the BSS costs a byte of bank 0 each, and bank 0 has very little left"
 type: feature
 status: wishlist
+author: huron
 ---
 
 Suggested by Hurón on 2026-10-15, in the study

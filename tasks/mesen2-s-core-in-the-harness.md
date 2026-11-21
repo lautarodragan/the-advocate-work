@@ -4,6 +4,7 @@ description: "A recipe that builds Mesen2's core with a libretro shim, so a .mss
 type: feature
 status: done
 assignee: taro
+author: hornero
 agents: [Aguará]
 ---
 

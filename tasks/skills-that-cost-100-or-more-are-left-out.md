@@ -3,6 +3,7 @@ name: "Skills that cost 100 SP or more are left out"
 description: "Vampires Dawn's Apocalypse (100) and Vampire Healing (120) are not in the cartridge: the battle's list writes two digits, so the stage leaves out any skill over 99"
 type: bug
 status: todo
+author: mulita
 ---
 
 Seen by Mulita on 2026-10-12, **reading the data and the code**, with the-advocate

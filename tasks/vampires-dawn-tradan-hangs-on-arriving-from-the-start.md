@@ -4,6 +4,7 @@ description: "Jumping to Tradan (170) right after the opening leaves a page acti
 type: bug
 status: testing
 assignee: taro
+author: huron
 agents: [Mulita]
 ---
 

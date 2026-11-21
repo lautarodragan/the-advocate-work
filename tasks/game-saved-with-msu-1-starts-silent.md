@@ -3,6 +3,7 @@ name: "The game saved with MSU-1 starts silent"
 description: "Saving while an MSU-1 track plays saves music_apagada as 1, and on loading the game nothing plays"
 type: bug
 status: done
+author: hornero
 ---
 
 Seen reading the code on 2026-09-26, while fixing "the title track keeps

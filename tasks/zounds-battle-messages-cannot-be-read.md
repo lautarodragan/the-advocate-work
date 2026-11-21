@@ -4,6 +4,7 @@ description: "Some lines of the battle's message window come out as garbage char
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Chajá]
 ---
 

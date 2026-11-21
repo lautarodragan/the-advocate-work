@@ -3,6 +3,7 @@ name: "The converter's per-map page line says \"automatic\" and counts every pag
 description: "\"map 4: 337 automatic event page(s), 336 runnable\" counts all the triggerable pages plus the suite's test pages, and the one without code is the test switch's own"
 type: bug
 status: wishlist
+author: tijereta
 ---
 
 Seen by Tijereta on 2026-10-14, with the-advocate `0255f8f7` and the ports

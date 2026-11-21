@@ -3,6 +3,7 @@ name: "The map-by-id rule"
 description: "release carries the maps with id below 65, minus a short exclusion, plus the additions: it stops being a hand-written list"
 type: refactor
 status: done
+author: hornero
 ---
 
 # What
