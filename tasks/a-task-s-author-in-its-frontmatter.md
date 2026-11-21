@@ -2,7 +2,7 @@
 name: "A task's author in its frontmatter"
 description: "An `author` field says who the task comes from —taro for their reports and requests, the agent that found it for its own drafts—; the page shows it and filters by it; every task gets one, done included"
 type: feature
-status: testing
+status: done
 assignee: taro
 author: taro
 agents: [Carpintero]
