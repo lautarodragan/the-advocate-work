@@ -36,6 +36,18 @@ is built by `nu tasks/tasks.nu html`, which fills the `<!-- TASKS -->` of
 `_site/index.html`; `.github/workflows/pages.yml` publishes it on each
 push. It is taro's, from 2026-10-11.
 
+**A task can carry images**: captures of what it is about —the bug as
+it shows, the original next to it—. They go in `tasks/images/<task>/`,
+named after what they show, and the task shows them with a Markdown image
+at the place it talks about them, `![what it shows](images/<task>/x.png)`;
+images written one after the other make a row. On GitHub they show as the
+file does; on the page, small, and a tap opens each one whole. It is
+taro's, from 2026-11-20, knowing that the repo is public and that a
+capture of a port shows its game's graphics. Until that day captures were
+left in a folder the task named, which only taro and the agents could
+open. Each one is a PNG at the size it was taken —a capture of the console
+is 256x224—: the page enlarges it without smoothing.
+
 **This repo is public**: nothing written here can be private.
 
 **A draft is not ready to be taken.** It is what an agent finds and does
