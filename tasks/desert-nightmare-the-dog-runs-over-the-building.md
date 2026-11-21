@@ -3,7 +3,7 @@ name: "Desert Nightmare: the dog runs over the building"
 description: "In the scene where the dog seems to die (map 11, EV0080), the running dog is drawn over the warehouse instead of behind it, shows twice for one frame, and its hit picture stays on the roof"
 type: bug
 status: doing
-assignee: aguara
+assignee: Aguará
 agents: [Aguará]
 author: taro
 game: desert-nightmare
