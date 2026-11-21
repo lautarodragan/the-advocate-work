@@ -2,8 +2,8 @@
 name: "Desert Nightmare: the trash can's lid goes missing while it opens"
 description: "Opening the trash can next to the motel in Dusty Creek, the tile of its lid disappears for two frames before the open can shows"
 type: bug
-status: doing
-assignee: Cardón
+status: testing
+assignee: taro
 author: taro
 agents: [Cardón]
 game: desert-nightmare
@@ -53,3 +53,38 @@ until the open can and the raised lid show, together, on the same frame.
 **Test**: `tests/test_desert_nightmare_trash_can.py` in the ports, frame
 by frame: every frame the can's cells show the closed can or the open one.
 Red before the fix (frames 4 and 5 after the key), green after.
+
+### 2026-11-21, Cardón: verified, to testing
+
+#### What was run
+
+With the tools of the-advocate's `cardon-dn-trash` (`convert`, `mapdata`,
+`cartridge` and `project` installed locally), on the ports'
+`cardon-dn-trash`:
+
+* ABL's suite, `just tests` in `abl/`: 1728 passed, 2 skipped. No golden
+  moved.
+* The ports' `just boot`, every game: 196 passed —`just boot -k desert`
+  alone, 37—. No golden moved.
+
+Every map with a cache of slots, in any game, goes through the same path;
+none of the suites' captures changed.
+
+#### What the suite does not cover
+
+The test opens this can only. The route side —`still_turn`, a still row
+that a route turns in a cache map— goes through the same `cache_was_note`
+and no test plays it on screen. The cases the header of `cache_slots.s`
+leaves out —a row whose look changes as it comes into view, more than
+four at once— still wait a tick with nothing drawn.
+
+#### To install when merging
+
+`cartridge`: the runtime changed. `project` was reinstalled in the
+worktree only so that its tools assemble the worktree's runtime.
+
+#### To play
+
+Dusty Creek by day, map 2: open the trash can to the right of the
+motel's door. The closed can stays until the open can and its raised lid
+show, on the same frame.
