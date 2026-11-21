@@ -2,7 +2,7 @@
 name: "A tile substitution sweeps across the screen"
 description: "When a map's tiles are substituted —Zounds' spikes going up and down— the screen changes one column of 8x8 cells a frame, right to left, over 15 frames; RM2k changes it all in one frame"
 type: bug
-status: testing
+status: done
 assignee: taro
 author: taro
 agents: [Chajá]
