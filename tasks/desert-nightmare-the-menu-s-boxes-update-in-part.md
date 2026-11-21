@@ -2,7 +2,7 @@
 name: "Desert Nightmare: the menu's boxes update in part"
 description: "After each press in the B menu its windows take several frames to redraw, and meanwhile show half the old state and half the new: a title over another note's text, two texts over each other, a box missing"
 type: bug
-status: testing
+status: done
 assignee: taro
 author: taro
 agents: [Mulita]

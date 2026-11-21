@@ -2,7 +2,7 @@
 name: "Two pans without a wait move one after the other"
 description: "A PanScreen without Wait followed by another on the other axis pans diagonally in RM2k —each axis has its own target and both move at once—; the console runs them one after the other. Zounds' map 97 and The Frozen World's intro"
 type: bug
-status: testing
+status: done
 assignee: taro
 author: taro
 agents: [Tijereta]
