@@ -2,8 +2,8 @@
 name: "Desert Nightmare: the screen goes black before the first monster"
 description: "In the first dungeon, when the first monster shows up, the screen stays black for about 363 frames and comes back in pieces over four frames; RM2k does not go black there"
 type: bug
-status: doing
-assignee: Aguará
+status: testing
+assignee: taro
 author: taro
 agents: [Aguará]
 game: desert-nightmare
@@ -126,3 +126,28 @@ each scene played from the door the game enters by, every tick at least
 half as lit as the room when the hero arrived. Red with main's tools: map
 28 at 0 % 78 ticks into the scene, against 49.7 %; map 21 at 0 % at 370
 ticks, against 10.5 %. Green with the branch's.
+
+### 2026-11-21, Aguará: verified, to testing
+
+On the branches merged with main (the-advocate `aguara-dn-black` over
+`a537d967`, the ports `aguara-dn-black` over `8c73bdc`), with
+`rm2k-snes-convert` and `rm2k-snes-mapdata` installed locally:
+
+* ABL's `just tests`: 1728 passed, 2 skipped. `abl.sfc` byte for byte the
+  same as main's (`b8e8248c…`): ABL has no picture this rule changes.
+* The ports' `just boot`: 190 passed, with the two new tests. No golden
+  moved.
+* `just lint` and the crates' tests of `convert` and `mapdata` green.
+
+Map 28 after the fix, up to "What... what...": the room all along, and no
+pieces; the silhouette is the draft's.
+
+![Map 28's scene after the fix](images/desert-nightmare-the-screen-goes-black-before-the-first-monster/after-map28-scene.png)
+
+**To install when merging**: `just install convert mapdata`.
+
+**What no test covers**: that the 50 pictures of Desert Nightmare that stop
+being big ones are drawn right over their maps —each is where its file puts
+it, and only the two scenes are played—; maps 143 and 144 losing
+`Mondphasen` and the switchboard's needle and cursor; and the offsets of
+`picture_data` past 32 KB, which no cartridge reaches today.
