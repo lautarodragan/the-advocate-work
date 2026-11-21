@@ -120,6 +120,7 @@ by hand, and the `done` ones were left as they were.
     game: abl | [zounds, vampires-dawn] | …
     status: draft | todo | doing | testing | done | wishlist
     assignee: taro
+    author: taro | hornero | chaja | …
     ---
 
 `type` and `status` are always there. **`game` is where it was seen and
@@ -134,6 +135,18 @@ at some goldens—, and the agent's name for those in `doing`. See "Taking a
 task" in `AGENTS.md`. In `todo`, with no `assignee`, whoever comes first
 takes it. Many of those in `done` predate these fields and carry no
 `assignee`.
+
+**`author` is who the task comes from**, not who wrote the file —git
+says that, with the first commit's trailer—: `taro` when it comes from a
+report or a request of theirs, even if Hornero wrote it; the agent that
+found it and opened it, for its own drafts and findings. Lowercase and
+ASCII, as in the trailers' addresses (`taro`, `hornero`, `chaja`,
+`huron`…). Every task carries one, `done` included; the page shows it and
+filters by it, `nu tasks/tasks.nu ls -u <author>` lists them, and `nu
+tasks/tasks.nu check` lists those without one. It is taro's, from
+2026-11-20; that day every task got one, by a rule: a task that opens
+with taro's words is theirs, and otherwise its first commit's trailer
+says who opened it.
 
 **taro's words go in a quote block**, `> ` at the start of each line,
 and not inline between quotes; in English like the rest of the task, and

@@ -23,6 +23,11 @@ def parse_file [file: string] {
   let task_description = $yml | get -o description | default "(no task description)"
   let status = $yml | get -o status | default "(no status)"
   let assignee = $yml | get -o assignee | default ""
+  # `author`: who the task comes from —taro for their reports and
+  # requests, even when Hornero wrote the file; the agent that found it for
+  # its own drafts—, lowercase and ASCII as in the trailers' addresses. Not
+  # who wrote the file: git says that.
+  let author = $yml | get -o author | default ""
   # `assignee` is who has it now —taro, when it moves to testing—, and
   # `agents` everyone who worked on it, which is never erased.
   let agents = $yml | get -o agents | default [] | append $assignee | where { $in != "" }
@@ -39,6 +44,7 @@ def parse_file [file: string] {
     status: $status,
     description: $task_description,
     assignee: $assignee,
+    author: $author,
     agents: $agents,
     listed_agents: ($yml | get -o agents | default []),
     games: $games,
@@ -109,13 +115,18 @@ def print_task [] {
 # `assignee` or their `agents` list—: this is how a sub-agent finds its
 # own, in any state with `-s "*"`. Ignoring case and accents, so that
 # "huron" finds Hurón.
+#
+# With `--author`, only those that come from that one —their `author`—, the
+# same way: `-u taro -s "*"` is everything taro asked for.
 def "main ls" [
   --status (-s): string = "doing"
   --assignee (-a): string
+  --author (-u): string
 ] {
   let tasks = all_tasks
     | where { $status == "*" or $in.status == $status }
     | where { |t| $assignee == null or ($t.agents | any { ($in | normalize) == ($assignee | normalize) }) }
+    | where { |t| $author == null or ($t.author | normalize) == ($author | normalize) }
 
   $tasks | group-by status | items { |group, parsed|
     if $status == "*" {
@@ -225,12 +236,28 @@ def "main check" [
     }
     | flatten
 
-  if ($found | is-empty) { print "Nothing to move to a ## Log."; return }
-  $found | group-by file | items { |file, ps|
-    print $"(ansi green)($ps.0.status)(ansi reset) ($file)"
-    $ps | each { |p| print $"  ($p.line): ($p.heading)  (ansi dark_gray)\(($p.why)\)(ansi reset)" }
+  if ($found | is-empty) {
+    print "Nothing to move to a ## Log."
+  } else {
+    $found | group-by file | items { |file, ps|
+      print $"(ansi green)($ps.0.status)(ansi reset) ($file)"
+      $ps | each { |p| print $"  ($p.line): ($p.heading)  (ansi dark_gray)\(($p.why)\)(ansi reset)" }
+    }
+    print $"($found | get file | uniq | length) tasks, ($found | length) headings."
   }
-  print $"($found | get file | uniq | length) tasks, ($found | length) headings."
+
+  # Every task says who it comes from, `done` ones included (README, "A
+  # task's frontmatter"): those that do not are listed, whatever their
+  # state, unless `--status` asks for one.
+  let authorless = all_tasks
+    | where { |t| $status == "*" or $t.status == $status }
+    | where { $in.author | is-empty }
+  if ($authorless | is-not-empty) {
+    print ''
+    print $"(ansi yellow)Without an author:(ansi reset)"
+    $authorless | sort-by status file | each { |t| print $"  (ansi green)($t.status)(ansi reset) ($t.file | path basename)" }
+    print $"($authorless | length) tasks."
+  }
 }
 
 # Pick a task with a fuzzy filter and open it in $EDITOR.
@@ -346,14 +373,15 @@ def task_html [] {
   let id = $t.file | path parse | get stem
   let agents = if ($t.listed_agents | is-empty) { "" } else { $" · agents: ($t.listed_agents | str join ', ' | escape)" }
   let assignee = if ($t.assignee | is-empty) { "" } else { $" · assignee: ($t.assignee | escape)" }
+  let author = if ($t.author | is-empty) { "" } else { $" · author: ($t.author | escape)" }
   let changed = if ($t.changed | is-empty) { "" } else { $" · changed <time datetime=\"($t.changed)\">($t.changed | str substring 0..9)</time>" }
   let source = $"https://github.com/lautarodragan/the-advocate-work/blob/main/tasks/($id).md"
   let games = $t.games | each { |g| $"<span class=\"game\" data-game=\"($g | escape)\">($g | game_label | escape)</span>" } | str join ''
   [
-    $"<details class=\"task\" id=\"($id | escape)\" data-status=\"($t.status | escape)\" data-type=\"($t.task_type | escape)\" data-game=\"($t.games | str join ' ' | escape)\">"
+    $"<details class=\"task\" id=\"($id | escape)\" data-status=\"($t.status | escape)\" data-type=\"($t.task_type | escape)\" data-game=\"($t.games | str join ' ' | escape)\" data-author=\"($t.author | escape)\">"
     $"<summary><button type=\"button\" class=\"copy\" data-copy=\"($id | escape)\" title=\"Copy the task's file name\">copy</button><button type=\"button\" class=\"pick\" data-id=\"($id | escape)\" aria-pressed=\"false\" title=\"Add the task to the selection, to copy several at once\">select</button><span class=\"type\">($t.task_type | escape)</span>($games)<span class=\"name\">($t.name | escape)</span>"
     $"<span class=\"desc\">($t.description | escape)</span></summary>"
-    $"<p class=\"meta\"><a href=\"#($id)\">#</a> · <a href=\"($source)\">($id).md</a>($changed)($assignee)($agents)</p>"
+    $"<p class=\"meta\"><a href=\"#($id)\">#</a> · <a href=\"($source)\">($id).md</a>($changed)($author)($assignee)($agents)</p>"
     $"<div class=\"body\">($t.body | body_html)</div>"
     "</details>"
   ] | str join ''
