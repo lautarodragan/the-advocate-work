@@ -22,3 +22,11 @@ page shows another graphic. Since 2026-11-20 every graphic of a moving
 event's pages gets its pose bank (Cardón's `6ec2fad8`, wally): a page's
 graphic drawn from the wrong bank is a suspect, as is a page whose
 graphic was never given one.
+
+taro, the same day, added another case, in another place —the motel,
+by the stairs—, translated:
+
+> it's another case, in another place (the hotel), but I suspect the same
+> bug
+
+![The motel: a graphic that does not belong by the stairs](images/desert-nightmare-the-warehouse-safe-turns-into-something-else/hotel-map-graphic.png)
