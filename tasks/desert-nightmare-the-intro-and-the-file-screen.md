@@ -79,12 +79,17 @@ compiler). It is general, not a Desert Nightmare knob.
   its own; each lit box would need its 59 colours in entries nothing
   else uses, and the 1 px inner shadow is pixels, not colours. Not done.
 
-**It also changes two other maps of the game**, which qualify: the safe
-on map 115 (`Tresor_Bild1` to `6`) and the shrine on 161
-(`Schrein_Zahl0` to `9`). Before, one symbol was drawn in for good; now
-the plate is drawn in and the symbol shown follows the game. The plate
-still stays after the game erases the picture, as before. **Not looked
-at on screen**: no test reaches those pages.
+**Only map 1 splits.** The first version also took the safe (115) and the
+shrine (161); merging Cardón's scene rule (`05f61c64`) and looking at both
+on screen against RPG_RT under Wine showed them broken —the safe's parts
+did not fit its VRAM, the shrine's wheels took each other's files— and
+both are screens the player opens, which the room should not keep. Since
+the merge the parts are only for numbers shown from autostart or
+parallel pages, by map, number and name, and never for a number Cardón's
+rule takes as a scene's (his wins). 115 and 161 are drawn in as on main:
+wrong in their own way, the draft
+[`desert-nightmare-the-locks-pictures-are-drawn-into-their-rooms`](desert-nightmare-the-locks-pictures-are-drawn-into-their-rooms.md)
+and a Known issues line.
 
 ### 2. The file screen's cursor
 
@@ -141,6 +146,8 @@ tests`, 1723 passed and 2 skipped, no golden moved —`abl.sfc` sha256
 goldens included. ABL's title is 8bpp and its pages fade no big picture
 to nothing, so neither change reaches it.
 
+After merging main with Cardón's `cardon-dn-walls`: see the end.
+
 **How far the fade-out rule reaches**, counted over the dumps with a
 throwaway copy of its logic, an upper bound —it does not drop the moves
 the console does not compile as big ones, nor the ones an `ErasePicture`
@@ -148,6 +155,17 @@ follows anyway—: Desert Nightmare 48 moves, Vampires Dawn 69, The Book of
 Three 5, Sunset Over Imdahl 1, the others none. The ones looked at in
 Vampires Dawn's map 2 are followed by their own `ErasePicture`, so there
 it changes nothing. None of the others was looked at on screen.
+
+### After merging main with Cardón's `cardon-dn-walls`
+
+His scene rule and the parts' compose with his winning: a number one of
+whose shows his rule leaves out is not split (`daf3e4b0`). Then, from
+looking at 115 and 161 on screen, the parts go by number and only for
+pages that run on their own (`d1972f68`, `e4bbee1e`). With the-advocate
+at `e4bbee1e`: ABL's suite 1723 passed, 2 skipped, `abl.sfc` sha256
+`d2c519b24ff824b3…` (Cardón's runtime changed it); the ports' `just boot`
+185 passed. **The five goldens did not move**: the start menu's test
+passes against them as committed.
 
 To install when merging: `convert`, `wally`, `events`, and the runtime
 (`cartridge`, which assembles from the checkout).
