@@ -4,6 +4,7 @@ description: "On a real SNES, Zounds' build with MSU-1 boots and stays on the fi
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Aguará]
 ---
 

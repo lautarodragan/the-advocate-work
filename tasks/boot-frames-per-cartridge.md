@@ -4,6 +4,7 @@ description: "Vampires Dawn's start map asks for 46 frames of BOOT_FRAMES and th
 type: feature
 status: done
 assignee: taro
+author: carpintero
 agents: [Carpintero]
 ---
 

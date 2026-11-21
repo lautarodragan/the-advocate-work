@@ -4,6 +4,7 @@ description: "The backgroundless message window takes BG2 on all 80 of its lines
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Chajá]
 ---
 

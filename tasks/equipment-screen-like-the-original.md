@@ -4,6 +4,7 @@ description: "The System windows and the red cursor bar from the item screen, br
 type: feature
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-09-28, in their words, translated:

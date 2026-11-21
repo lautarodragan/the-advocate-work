@@ -4,6 +4,7 @@ description: "The battle's model, its scenes, its animations and its text screen
 type: refactor
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-09-30, in the converter's migration to Rust: after the

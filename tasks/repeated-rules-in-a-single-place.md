@@ -4,6 +4,7 @@ description: "What several agents noted two or three times: the actor rules, the
 type: refactor
 status: done
 assignee: taro
+author: hornero
 ---
 
 From 2026-10-02, while taro can't review anything: a refactor that verifies

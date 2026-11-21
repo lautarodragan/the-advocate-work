@@ -4,6 +4,7 @@ description: "tools/render in Rust: rm2k-render draws a map's layers from the du
 type: refactor
 status: done
 assignee: taro
+author: hornero
 ---
 
 Second step of the road to Rust of [`research/the-tools-today.md`](https://lautarodragan.github.io/the-advocate-docs/research/the-tools-today.html),

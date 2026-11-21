@@ -3,6 +3,7 @@ name: "A switch from a page wakes a parallel a frame late"
 description: "On map 105 of ABL, the parallel page that 327 wakes runs one tick after the page that turns 327 on; in RM2k it runs on the same frame, so what it does lands a frame late"
 type: bug
 status: done
+author: calandria
 agents: [Calandria]
 ---
 

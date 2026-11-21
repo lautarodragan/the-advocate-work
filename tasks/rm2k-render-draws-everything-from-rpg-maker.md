@@ -4,6 +4,7 @@ description: "Move into rm2k-render what the converter draws in Python today: Ch
 type: refactor
 status: done
 assignee: taro
+author: taro
 ---
 
 Decided with taro on 2026-09-29 (see

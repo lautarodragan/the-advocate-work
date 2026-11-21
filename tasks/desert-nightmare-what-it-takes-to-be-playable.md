@@ -4,6 +4,7 @@ description: "A study: play Desert Nightmare's port through the harness as far a
 type: research
 status: done
 assignee: taro
+author: taro
 agents: [Hurón]
 game: desert-nightmare
 ---

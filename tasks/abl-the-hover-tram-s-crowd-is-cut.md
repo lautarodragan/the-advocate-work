@@ -4,6 +4,7 @@ description: "Map 13 has more characters on a line than the PPU draws; still peo
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Cardón]
 game: abl
 ---

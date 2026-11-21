@@ -4,6 +4,7 @@ description: "The 9 dated studies in snes-rm2k's docs/research/ to the book, tra
 type: docs
 status: done
 assignee: taro
+author: taro
 agents: [Cardón]
 ---
 

@@ -4,6 +4,7 @@ description: "The scaling and colour reduction of images (palette, picture, titl
 type: refactor
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-09-30, in the migration of the converter to Rust. It's what

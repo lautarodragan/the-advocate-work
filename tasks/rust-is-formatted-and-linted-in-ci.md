@@ -4,6 +4,7 @@ description: "cargo fmt was never run on the workspace (it would rewrite 259 of 
 type: tooling
 status: done
 assignee: taro
+author: taro
 agents: [Mulita]
 ---
 

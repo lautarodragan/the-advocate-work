@@ -4,6 +4,7 @@ description: "VD doesn't fit in the 127 banks even with the reasonable stuff com
 type: feature
 status: done
 assignee: taro
+author: tijereta
 agents: [Hornero, Tijereta]
 ---
 

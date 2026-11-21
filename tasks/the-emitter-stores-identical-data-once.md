@@ -4,6 +4,7 @@ description: "Identical samples are stored once per key, and identical actor tab
 type: refactor
 status: done
 assignee: taro
+author: cardon
 agents: [Carpintero]
 ---
 

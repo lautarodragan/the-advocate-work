@@ -4,6 +4,7 @@ description: "The object plane of the picture system: ShowPicture, MovePicture a
 type: feature
 status: done
 assignee: taro
+author: taro
 ---
 
 Phase 2 of [`research/2026-10-01-the-picture-system.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-01-the-picture-system.html) (Jilguero),

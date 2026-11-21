@@ -4,6 +4,7 @@ description: "tools/port/adeleine.py (which colours are lost and how they are gr
 type: refactor
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-09-29: start with Adeleine to Rust. Already decided

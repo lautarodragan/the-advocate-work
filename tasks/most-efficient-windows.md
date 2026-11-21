@@ -5,6 +5,7 @@ type: research
 status: done
 agents: [Tijereta]
 assignee: taro
+author: taro
 ---
 
 taro, on 2026-10-11, after talking about the name screen

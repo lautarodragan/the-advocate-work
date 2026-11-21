@@ -4,6 +4,7 @@ description: "In the scene where the agents chase the hero down the wooden scaff
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Calandria]
 ---
 

@@ -4,6 +4,7 @@ description: "Common event 20, which uses an item where the hero stands, and 14,
 type: bug
 status: done
 assignee: taro
+author: huron
 game: desert-nightmare
 agents: [Hurón, Chajá]
 ---

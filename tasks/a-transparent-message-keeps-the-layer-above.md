@@ -4,6 +4,7 @@ description: "A message with a transparent background hides the roofs and treeto
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Aguará]
 ---
 

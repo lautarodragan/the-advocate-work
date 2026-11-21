@@ -4,6 +4,7 @@ description: "An RPG Maker 2000 PLUS command like ShowPicture that draws a windo
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Mulita]
 ---
 

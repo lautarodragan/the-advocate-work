@@ -4,6 +4,7 @@ description: "Add rain to the terrace's stress case: an event that starts the ra
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Aguará]
 ---
 

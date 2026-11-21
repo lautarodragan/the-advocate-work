@@ -4,6 +4,7 @@ description: "An automatic common event with pictures is copied into each map so
 type: feature
 status: done
 assignee: taro
+author: carpintero
 agents: [Chajá]
 game: desert-nightmare
 ---

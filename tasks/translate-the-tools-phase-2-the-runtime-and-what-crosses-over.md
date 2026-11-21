@@ -4,6 +4,7 @@ description: "The runtime's symbols, labels and files into English, together wit
 type: refactor
 status: done
 assignee: taro
+author: hornero
 ---
 
 The last area of phase 2 of the translation of `tools/` into English. It's the most

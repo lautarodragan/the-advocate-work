@@ -4,6 +4,7 @@ description: "just video is broken with playthroughs since 991bf935: video.py's 
 type: bug
 status: done
 assignee: taro
+author: irupe
 ---
 
 Irupé found it on 2026-09-29 (`tests-without-silent-holes.md`):

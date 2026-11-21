@@ -3,6 +3,7 @@ name: "The 2000 RPG_RT runs under Wine"
 description: "The book's End Game divergence says the 2000 RPG_RT crashes under Wine; on 2026-10-13 it ran ABL's title fine, so what was measured only with the 2015 one can be measured with the one the author used"
 type: research
 status: done
+author: tijereta
 ---
 
 Seen by Tijereta on 2026-10-13, with the-advocate `28ba001f` and the docs

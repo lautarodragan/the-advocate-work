@@ -4,6 +4,7 @@ description: "The pause menu's End Game command has to work as in RM2k"
 type: feature
 status: done
 assignee: Yaguareté
+author: taro
 ---
 
 From taro, on 2026-09-28, in their words, translated:

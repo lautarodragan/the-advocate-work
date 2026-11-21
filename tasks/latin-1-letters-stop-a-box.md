@@ -4,6 +4,7 @@ description: "A text box with a letter outside printable ASCII —é, ñ, ¿, ü
 type: feature
 status: done
 assignee: taro
+author: mulita
 agents: [Mulita, Aguará]
 ---
 

@@ -3,6 +3,7 @@ name: "The variables past 256"
 description: "Vampires Dawn names 600 variables and the cartridge holds 256 (duplicate of variables-are-capped-at-256-slots): the pages that use one of the other 344 are left out"
 type: feature
 status: done
+author: calandria
 ---
 
 Carpintero declared it on 2026-10-06 as a degradation

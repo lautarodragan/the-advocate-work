@@ -4,6 +4,7 @@ description: "Tech Skill in the pause menu opens the list: who, their skills, th
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Mulita]
 ---
 

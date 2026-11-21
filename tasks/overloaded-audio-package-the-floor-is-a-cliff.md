@@ -4,6 +4,7 @@ description: "The relief of a package that does not fit in the ARAM leaves its m
 type: bug
 status: done
 assignee: taro
+author: aguara
 agents: [Aguará, Cardón]
 ---
 

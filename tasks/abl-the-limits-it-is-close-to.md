@@ -4,6 +4,7 @@ description: "With the whole game in release, which hard limits of the tools and
 type: research
 status: done
 assignee: taro
+author: taro
 agents: [Cardón]
 ---
 

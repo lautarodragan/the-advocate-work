@@ -4,6 +4,7 @@ description: "Tech Skill on the map uses a healing skill: on one ally, on onesel
 type: feature
 status: done
 assignee: taro
+author: hornero
 agents: [Mulita]
 ---
 

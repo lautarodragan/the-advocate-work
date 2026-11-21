@@ -4,6 +4,7 @@ description: "An event whose pages all lack a graphic and that a forced route gi
 type: bug
 status: done
 assignee: taro
+author: mulita
 agents: [Calandria]
 ---
 

@@ -4,6 +4,7 @@ description: "A room where Begin the Story starts, with a door to each key point
 type: feature
 status: done
 assignee: taro
+author: taro
 ---
 
 # What taro asked for

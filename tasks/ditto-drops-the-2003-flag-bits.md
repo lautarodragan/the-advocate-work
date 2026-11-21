@@ -4,6 +4,7 @@ description: "On an RPG Maker 2003 game the round trip is not byte for byte: a t
 type: bug
 status: done
 assignee: taro
+author: aguara
 agents: [Aguará]
 ---
 

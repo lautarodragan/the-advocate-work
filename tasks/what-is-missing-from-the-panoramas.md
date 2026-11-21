@@ -4,6 +4,7 @@ description: "What each panorama's path does not cover: a ChangePBG in a common 
 type: feature
 status: done
 assignee: taro
+author: cardon
 agents: [Aguará]
 ---
 

@@ -4,6 +4,7 @@ description: "The Switch event on map 59, Centro (START), does nothing: its page
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Calandria]
 ---
 

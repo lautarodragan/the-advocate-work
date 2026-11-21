@@ -4,6 +4,7 @@ description: "ChangeActorFace (the actor's database face) has no arm and leaves 
 type: feature
 status: done
 assignee: taro
+author: calandria
 agents: [Tijereta]
 ---
 

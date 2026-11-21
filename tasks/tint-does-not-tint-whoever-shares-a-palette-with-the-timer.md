@@ -4,6 +4,7 @@ description: "tinte.s uploaded the digits' whole palette untinted, which since 0
 type: bug
 status: done
 assignee: taro
+author: hornero
 ---
 
 Found while measuring whether `release` and `test-main` can be merged (see

@@ -4,6 +4,7 @@ description: "'the song uses N sounds…' does not say which song or which map, 
 type: chore
 status: done
 assignee: taro
+author: cardon
 agents: [Hornero, Cardón]
 ---
 

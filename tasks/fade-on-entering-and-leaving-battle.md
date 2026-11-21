@@ -3,6 +3,7 @@ name: "The fade on entering and leaving battle"
 description: "RM2k's transition when a battle starts and ends, which also covers the loading of the audio package"
 type: feature
 status: done
+author: hornero
 ---
 
 Today the battle enters and leaves without a transition. In RM2k there is

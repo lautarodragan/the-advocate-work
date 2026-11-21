@@ -4,6 +4,7 @@ description: "map-background and map-sprites stop being crates: they become Wall
 type: refactor
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-10-02, in their words, translated:

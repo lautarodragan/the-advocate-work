@@ -3,6 +3,7 @@ name: "All of release's backgrounds in the ROM"
 description: "Every background a battle in the cartridge asks for goes in the ROM, at 128x64 with 16 colours and enlarged by the console; the replacement is kept for what can't be known when converting"
 type: feature
 status: done
+author: taro
 ---
 
 From taro, on 2026-09-27, after trying to take two of the three backgrounds out of the

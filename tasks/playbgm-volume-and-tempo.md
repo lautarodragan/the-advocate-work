@@ -4,6 +4,7 @@ description: "The ROM ignores the volume and tempo a PlayBGM asks for: 69 of the
 type: feature
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-09-30, as the next task after

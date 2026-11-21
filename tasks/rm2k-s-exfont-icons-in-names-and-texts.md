@@ -4,6 +4,7 @@ description: "A `$` and a letter in a name, a description or a message is one of
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Hurón]
 ---
 

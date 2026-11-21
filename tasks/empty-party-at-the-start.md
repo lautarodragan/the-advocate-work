@@ -4,6 +4,7 @@ description: "RM2k starts with nobody in the party and no visible hero; the conv
 type: feature
 status: done
 assignee: taro
+author: mulita
 agents: [Mulita]
 ---
 

@@ -4,6 +4,7 @@ description: "Inside the crack's cave Zounds_Dungeon_1 starts right, but a scree
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Carpintero]
 ---
 

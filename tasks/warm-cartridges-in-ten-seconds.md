@@ -3,6 +3,7 @@ name: "Warm cartridges in ten seconds"
 description: "Second round of optimising `just cartridges`: taro's goal was under 10 s warm, with no refactors and all of rom/build identical byte for byte"
 type: refactor
 status: done
+author: taro
 ---
 
 Request from taro, on 2026-09-26, after `make-building-the-cartridges-take-less-time.md`:

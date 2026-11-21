@@ -4,6 +4,7 @@ description: "snes_convert.py split into eighteen modules by console resource, w
 type: refactor
 status: done
 assignee: taro
+author: taro
 ---
 
 `tools/port/snes_convert.py` is huge (how many lines and functions: `wc -l`

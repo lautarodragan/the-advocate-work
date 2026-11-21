@@ -4,6 +4,7 @@ description: "Frozen World's combat is made of events on maps 1 and 2, excluded 
 type: research
 status: done
 assignee: taro
+author: taro
 agents: [Carpintero]
 ---
 

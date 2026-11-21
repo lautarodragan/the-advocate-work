@@ -4,6 +4,7 @@ description: "On the ship (map 21), the boss's speech about Unamë's donation is
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Chajá]
 ---
 

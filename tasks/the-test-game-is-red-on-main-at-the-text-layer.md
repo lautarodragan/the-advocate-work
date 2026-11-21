@@ -4,6 +4,7 @@ description: "the-advocate 7951af2a's test game fails four tests: Goombario find
 type: bug
 status: done
 assignee: taro
+author: cardon
 agents: [Cardón, Calandria]
 ---
 

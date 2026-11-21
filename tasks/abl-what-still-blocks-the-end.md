@@ -4,6 +4,7 @@ description: "A fresh count of what stops A Blurred Line from being played from 
 type: research
 status: done
 assignee: taro
+author: taro
 agents: [Cardón]
 ---
 

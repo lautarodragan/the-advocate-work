@@ -4,6 +4,7 @@ description: "Without MSU-1, each new Rain1 on map 1 restarts the voice of the o
 type: bug
 status: done
 assignee: taro
+author: mulita
 agents: [Mulita]
 ---
 

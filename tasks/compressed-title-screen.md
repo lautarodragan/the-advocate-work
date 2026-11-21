@@ -4,6 +4,7 @@ description: "The title takes 31.7 KB uncompressed; in LZ2, by the same path as 
 type: refactor
 status: done
 assignee: Chajá
+author: taro
 ---
 
 From taro, on 2026-09-28, after the Game Over screen

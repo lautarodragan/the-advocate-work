@@ -4,6 +4,7 @@ description: "The custom systems run far below 60 frames: Command Grid, Plate Pl
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Aguará]
 ---
 

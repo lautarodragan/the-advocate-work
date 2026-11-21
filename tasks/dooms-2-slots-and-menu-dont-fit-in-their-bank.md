@@ -4,6 +4,7 @@ description: "With Dooms 2's map 1 (choose a character) in the cartridge, the sl
 type: bug
 status: done
 assignee: taro
+author: calandria
 agents: [Calandria]
 ---
 

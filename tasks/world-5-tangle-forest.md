@@ -4,6 +4,7 @@ description: "Maps 310 to 313 in release, up to the tunnel to Paradise: measured
 type: feature
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-10-01, in their words, translated:

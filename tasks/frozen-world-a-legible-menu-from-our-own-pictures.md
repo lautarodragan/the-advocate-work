@@ -4,6 +4,7 @@ description: "The custom menu is three pictures (one per highlighted row) whose 
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Aguará]
 ---
 

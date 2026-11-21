@@ -4,6 +4,7 @@ description: "On map 3, Emitter Room, the Future1 tile Lysander used as Core's b
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Calandria]
 ---
 

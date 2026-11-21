@@ -3,6 +3,7 @@ name: "The panorama of map 2"
 description: "The little dots over blue that scroll diagonally"
 type: feature
 status: done
+author: hornero
 ---
 
 # What

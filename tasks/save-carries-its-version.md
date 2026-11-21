@@ -3,6 +3,7 @@ name: "The save carries its version"
 description: "That a save from another build be rejected cleanly instead of loading corrupted"
 type: bug
 status: done
+author: hornero
 ---
 
 Since `release` and `test-main` are a single cartridge (2026-09-25), the

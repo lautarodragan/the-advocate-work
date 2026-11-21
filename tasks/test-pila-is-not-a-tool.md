@@ -3,6 +3,7 @@ name: "test_stack is not a tool"
 description: "tooling/test_stack.py runs the ROM, and tooling/ are the tests that don't"
 type: test
 status: done
+author: hornero
 ---
 
 `tests/README.md` says that `tests/tooling/` are the tests that do

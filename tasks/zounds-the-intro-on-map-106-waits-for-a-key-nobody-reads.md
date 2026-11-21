@@ -4,6 +4,7 @@ description: "Map 106's autostart waits for variable 4 to be 5 or 6 (the action 
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Aguará]
 ---
 

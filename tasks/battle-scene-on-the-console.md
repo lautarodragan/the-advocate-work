@@ -3,6 +3,7 @@ name: "The battle scene on the console"
 description: "Background and enemies composed when the battle starts; the dead disappear"
 type: feature
 status: done
+author: hornero
 ---
 
 **The battle scene, composed on the console and not in the converter.**

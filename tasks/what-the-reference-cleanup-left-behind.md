@@ -3,6 +3,7 @@ name: "What the reference cleanup left behind"
 description: "Four things that the cleanup of the reference's leftovers left out on purpose, because they weren't comments"
 type: refactor
 status: done
+author: hornero
 ---
 
 **Done**, 2026-10-12, with nothing to do: the four had stopped applying

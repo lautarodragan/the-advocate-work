@@ -4,6 +4,7 @@ description: "On some maps the hero's graphic is not drawn, as the adult and as 
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Calandria]
 ---
 

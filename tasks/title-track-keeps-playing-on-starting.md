@@ -3,6 +3,7 @@ name: "The title track keeps playing on starting"
 description: "With MSU-1, the title track keeps playing when the game starts if the first map starts silent"
 type: bug
 status: done
+author: hornero
 ---
 
 Found on 2026-09-26 by the agent of "with MSU-1 the theme's samples aren't uploaded",

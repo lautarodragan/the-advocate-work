@@ -4,6 +4,7 @@ description: "Map 44's event 7 teleports to map 189 (5 > Arriba), whose exits ba
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Calandria]
 ---
 

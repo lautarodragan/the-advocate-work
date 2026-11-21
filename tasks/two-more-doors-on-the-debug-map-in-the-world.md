@@ -4,6 +4,7 @@ description: "One that leaves you in the Northern World / Lashe Area past the br
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Hurón]
 ---
 

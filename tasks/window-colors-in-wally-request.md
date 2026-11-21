@@ -5,6 +5,7 @@ type: refactor
 status: done
 agents: [Hornero, Tijereta]
 assignee: taro
+author: tijereta
 ---
 
 `wally::the_layers_are_the_ones_the_python_made` is red on `main`

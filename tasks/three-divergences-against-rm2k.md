@@ -4,6 +4,7 @@ description: "Verify with RPG_RT under Wine three divergences that were measured
 type: test
 status: done
 assignee: taro
+author: guayabo
 ---
 
 Guayabo flagged them on 2026-09-29, when classifying the divergences by repo

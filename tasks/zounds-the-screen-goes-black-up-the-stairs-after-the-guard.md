@@ -4,6 +4,7 @@ description: "In the intro, after Uname knocks out a guard, takes his uniform an
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Aguará]
 ---
 

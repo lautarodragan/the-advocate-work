@@ -4,6 +4,7 @@ description: "Every character on a map carries its twelve poses in the cartridge
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Calandria, Hurón, Mulita]
 ---
 

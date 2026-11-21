@@ -4,6 +4,7 @@ description: "A map with Wrap (scroll_type) is a torus in RM2k —hero, events, 
 type: feature
 status: done
 assignee: taro
+author: huron
 agents: [Hurón]
 ---
 

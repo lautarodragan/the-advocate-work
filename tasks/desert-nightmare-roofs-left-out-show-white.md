@@ -4,6 +4,7 @@ description: "On maps 4, 14, 61 and 66 the trim leaves out drawn events —the b
 type: bug
 status: done
 assignee: taro
+author: aguara
 agents: [Aguará, Hurón, Cardón]
 ---
 

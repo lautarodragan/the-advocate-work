@@ -4,6 +4,7 @@ description: "A painted map stores each of its 8x8 cells in the cartridge, repea
 type: feature
 status: done
 assignee: taro
+author: cardon
 game: desert-nightmare
 agents: [Cardón]
 ---

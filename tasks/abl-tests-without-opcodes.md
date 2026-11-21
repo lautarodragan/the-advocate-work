@@ -4,6 +4,7 @@ description: "That no Python test needs the numbers of the bytecode: the ones th
 type: refactor
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-10-02, before moving the bytecodes to Rust, in their

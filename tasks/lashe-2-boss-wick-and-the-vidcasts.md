@@ -4,6 +4,7 @@ description: "From Talan's neighbour to Boss Wick's favour: maps 40 to 45 and th
 type: feature
 status: done
 assignee: taro
+author: hornero
 ---
 
 # What

@@ -3,6 +3,7 @@ name: "Vampires Dawn: the victims' choice does not compile"
 description: "The choice 'Talk / Suck Blood / Convert / Leave', whose options carry leading spaces and a \\_, refuses 210 pages on 48 maps, with no other culprit in them"
 type: bug
 status: done
+author: chaja
 ---
 
 Seen by Chajá on 2026-10-14, with the-advocate `3438a90c` (branch

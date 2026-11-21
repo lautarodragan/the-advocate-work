@@ -5,6 +5,7 @@ type: feature
 status: done
 agents: [Tijereta]
 assignee: taro
+author: aguara
 ---
 
 From Aguará's survey ([`research/2026-10-05-other-games.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-05-other-games.html)): it

@@ -4,6 +4,7 @@ description: "Try `posed_events` in A Blurred Line, as Zounds has it: signs and 
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Cardón]
 ---
 

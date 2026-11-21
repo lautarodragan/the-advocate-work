@@ -5,6 +5,7 @@ type: feature
 status: done
 agents: [Tijereta]
 assignee: taro
+author: aguara
 ---
 
 From Aguará's analysis of 2026-10-06: Desert Nightmare (`\c[1]Sandra: \c[0]`

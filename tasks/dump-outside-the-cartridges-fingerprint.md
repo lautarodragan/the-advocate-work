@@ -4,6 +4,7 @@ description: "just cartridges said 'up to date' with Sunset's data/maps/Map0022.
 type: chore
 status: done
 assignee: taro
+author: cardon
 agents: [Hornero, Cardón]
 ---
 

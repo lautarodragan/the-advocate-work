@@ -4,6 +4,7 @@ description: "Map 3, the opening's hall, has six still events that animate in RM
 type: bug
 status: done
 assignee: taro
+author: mulita
 agents: [Mulita, Calandria]
 ---
 

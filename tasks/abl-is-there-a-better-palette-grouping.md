@@ -4,6 +4,7 @@ description: "A short study: whether Adeleine's grouping of colours into palette
 type: research
 status: done
 assignee: taro
+author: taro
 agents: [Carpintero]
 ---
 

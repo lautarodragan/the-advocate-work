@@ -5,6 +5,7 @@ type: feature
 status: done
 agents: [Hurón]
 assignee: taro
+author: huron
 ---
 
 From `vampires-dawn-builds-from-its-toml.md` (Aguará, 2026-10-11):

@@ -4,6 +4,7 @@ description: "When using an item, actor selection with the windows, the red bar,
 type: feature
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-09-28, in their words, translated:

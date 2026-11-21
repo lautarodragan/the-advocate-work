@@ -4,6 +4,7 @@ description: "RPG Maker 2003 saves images as .xyz (a zlib stream of a 256-colour
 type: feature
 status: done
 assignee: taro
+author: aguara
 agents: [Aguará]
 ---
 

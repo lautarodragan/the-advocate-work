@@ -4,6 +4,7 @@ description: "test_leader_name.py fails three captures —renamed-menu on both c
 type: bug
 status: done
 assignee: taro
+author: aguara
 agents: [Aguará, Calandria]
 ---
 

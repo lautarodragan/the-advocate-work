@@ -4,6 +4,7 @@ description: "EV0011 on map 79 and EV0005 on map 80, in the cave's Arriba, do no
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Calandria]
 ---
 

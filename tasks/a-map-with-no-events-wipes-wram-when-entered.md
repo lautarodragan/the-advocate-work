@@ -4,6 +4,7 @@ description: "Teleporting into a map that has no events at all leaves the whole 
 type: bug
 status: done
 assignee: taro
+author: cardon
 agents: [Cardón, Calandria]
 ---
 

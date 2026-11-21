@@ -4,6 +4,7 @@ description: "Step 2 of the plan: comun/project.py gathers the eleven root compu
 type: refactor
 status: done
 assignee: taro
+author: hornero
 ---
 
 Step 2 of the plan in [`research/the-map-of-the-python-tools.md`](https://lautarodragan.github.io/the-advocate-docs/research/the-map-of-the-python-tools.html)

@@ -4,6 +4,7 @@ description: "With every map, ABL asks for 8.42 MB of data and the 127 data bank
 type: bug
 status: done
 assignee: taro
+author: cardon
 agents: [Carpintero]
 ---
 

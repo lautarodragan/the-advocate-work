@@ -4,6 +4,7 @@ description: "A synthetic game, with no copyrighted assets, so the tests of what
 type: research
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-10-02, in their words, translated:

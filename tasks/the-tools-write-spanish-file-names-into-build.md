@@ -3,6 +3,7 @@ name: "The tools write Spanish file names into a port's build/"
 description: "memory.cfg, music.json, effects.json, crudos/, patches/uses.json and stamp.txt come out of the already-English projects with Spanish names, and the ports' harness opens them by name"
 type: refactor
 status: done
+author: huron
 ---
 
 Seen by Hurón on 2026-10-12, at the-advocate 57abdca3, while listing the

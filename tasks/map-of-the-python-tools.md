@@ -4,6 +4,7 @@ description: "Dependency graph, responsibilities and what is ABL-agnostic in the
 type: docs
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-09-28, in their words, translated:

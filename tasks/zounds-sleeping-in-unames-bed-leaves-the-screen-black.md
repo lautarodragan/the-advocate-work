@@ -4,6 +4,7 @@ description: "Sleeping in the bed of Uname's room fades the screen out and it ne
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Aguará]
 ---
 

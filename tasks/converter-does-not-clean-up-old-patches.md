@@ -3,6 +3,7 @@ name: "The converter does not clean up old patches"
 description: "rom/build/<cartucho>/patches/ keeps the tomls of maps that no longer go in, and test_patches fails because of it"
 type: bug
 status: done
+author: hornero
 ---
 
 Found on 2026-09-25 while measuring whether `release` and `test-main` can be

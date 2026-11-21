@@ -5,6 +5,7 @@ type: feature
 status: done
 agents: [Mulita]
 assignee: taro
+author: mulita
 ---
 
 From `vampires-dawn-builds-from-its-toml.md` (Aguará, 2026-10-11):

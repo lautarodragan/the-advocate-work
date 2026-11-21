@@ -3,6 +3,7 @@ name: "MSU-1: the backgrounds through the data port"
 description: "Pilot: the battle backgrounds also in the .msu, and with MSU-1 the ROM reads them from there; without it, from itself"
 type: feature
 status: done
+author: taro
 ---
 
 taro's idea, on 2026-09-25: use MSU-1's **data port** to store things outside

@@ -4,6 +4,7 @@ description: "An experiment: map 96 patched to keep only the switch that opens t
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Cardón]
 ---
 

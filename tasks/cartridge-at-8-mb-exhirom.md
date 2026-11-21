@@ -4,6 +4,7 @@ description: "First an ExHiROM test ROM for the FX Pak; then move release over, 
 type: feature
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-10-01: `decisions/the-cartridge-goes-to-8-mb.md`. What

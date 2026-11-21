@@ -5,6 +5,7 @@ type: feature
 status: done
 agents: [Aguará]
 assignee: taro
+author: taro
 ---
 
 taro, on 2026-10-06: see it "relative to the project 100% complete", without

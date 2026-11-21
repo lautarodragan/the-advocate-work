@@ -4,6 +4,7 @@ description: "What Yarará left open in the battle systems: ResetAfterBattles, s
 type: feature
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-09-30, answering about `troop-events.md`

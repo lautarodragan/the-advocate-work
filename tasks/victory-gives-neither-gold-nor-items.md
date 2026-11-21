@@ -3,6 +3,7 @@ name: "Victory gives neither gold nor items"
 description: "RM2k gives and reports the gold and the items on winning; the port does not yet"
 type: feature
 status: done
+author: hornero
 ---
 
 It was left out of `victory-announces-the-experience.md` (2026-09-26): in

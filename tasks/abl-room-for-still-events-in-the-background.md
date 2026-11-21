@@ -4,6 +4,7 @@ description: "Find the ~38 KB that turning `posed_events` on for every map of A 
 type: research
 status: done
 assignee: taro
+author: taro
 agents: [Mulita]
 ---
 

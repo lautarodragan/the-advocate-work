@@ -4,6 +4,7 @@ description: "Choose who to equip on the main menu, like Scene_Menu, and not on 
 type: feature
 status: done
 assignee: taro
+author: hornero
 ---
 
 It came up on 2026-09-28, looking at the actor choice's `equipment-a-who`

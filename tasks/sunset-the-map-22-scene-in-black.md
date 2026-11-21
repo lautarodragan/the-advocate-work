@@ -4,6 +4,7 @@ description: "In a small Sunset Over Imdahl cartridge (maps 11, 22, 21, 23 and 1
 type: bug
 status: done
 assignee: taro
+author: mulita
 agents: [Mulita]
 ---
 

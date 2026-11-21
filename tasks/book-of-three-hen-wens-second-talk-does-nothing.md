@@ -3,6 +3,7 @@ name: "The Book of Three: talking to Hen Wen a second time does nothing"
 description: "Map 4's Hen Wen page that turns the hero away stops at a MoveEvent with route command 22, so the whole page is left out"
 type: bug
 status: done
+author: calandria
 agents: [Hurón]
 ---
 

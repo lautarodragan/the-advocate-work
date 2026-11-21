@@ -5,6 +5,7 @@ type: bug
 status: done
 agents: [Hurón]
 assignee: taro
+author: huron
 ---
 
 Hurón found it on 2026-10-04 (`workflow/tasks/*/dos-puertas-mas-en-el-mapa-de-debug.md`,

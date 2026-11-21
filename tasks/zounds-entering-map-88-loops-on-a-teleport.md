@@ -4,6 +4,7 @@ description: "Entering 'Desierto de Urbaddun / Mountains / Oeste de la Grieta / 
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Calandria]
 ---
 

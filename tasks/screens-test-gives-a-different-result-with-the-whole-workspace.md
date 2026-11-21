@@ -5,6 +5,7 @@ type: bug
 status: done
 agents: [Hornero]
 assignee: taro
+author: hornero
 ---
 
 Seen on 2026-10-06 when merging Mulita's and Carpintero's work. Bisected: at

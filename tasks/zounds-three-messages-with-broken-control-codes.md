@@ -4,6 +4,7 @@ description: "A colour code missing its letter, a \\v[20] where the game's slow 
 type: bug
 status: done
 assignee: taro
+author: calandria
 agents: [Calandria]
 ---
 

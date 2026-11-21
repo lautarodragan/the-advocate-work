@@ -4,6 +4,7 @@ description: "Using an item in Zounds, the item's name wraps and its windows run
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Aguará]
 ---
 

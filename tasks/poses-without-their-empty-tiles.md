@@ -4,6 +4,7 @@ description: "52% of the poses' tiles are empty: storing each pose without them,
 type: refactor
 status: done
 assignee: taro
+author: cardon
 agents: [Calandria]
 ---
 

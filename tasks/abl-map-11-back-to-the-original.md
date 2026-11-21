@@ -4,6 +4,7 @@ description: "The stones and lights minigame plays well with the game's own map 
 type: tooling
 status: done
 assignee: taro
+author: taro
 agents: [Mulita]
 ---
 

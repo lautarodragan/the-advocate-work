@@ -4,6 +4,7 @@ description: "Losing a battle or a GameOver go straight back to the title; RM2k 
 type: feature
 status: done
 assignee: Carpincho
+author: taro
 ---
 
 Requested by taro, on 2026-09-28.

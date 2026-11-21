@@ -4,6 +4,7 @@ description: "compile's first pass gathers the boxes without letter pairs and wi
 type: bug
 status: done
 assignee: taro
+author: cardon
 agents: [Tijereta]
 ---
 

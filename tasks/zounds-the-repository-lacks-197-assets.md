@@ -4,6 +4,7 @@ description: "22 chipsets, 15 charsets, 17 songs, 131 sounds, 6 backdrops, 2 fac
 type: chore
 status: done
 assignee: taro
+author: aguara
 agents: [Aguará]
 ---
 

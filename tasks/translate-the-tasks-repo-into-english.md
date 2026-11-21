@@ -5,6 +5,7 @@ type: docs
 status: done
 agents: [Hornero, Chajá, Carpintero, Aguará, Cardón, Hurón, Mulita, Calandria, Tijereta]
 assignee: taro
+author: taro
 ---
 
 taro, on 2026-10-11, the same day the repo went public, in their words,

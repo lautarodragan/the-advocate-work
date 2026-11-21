@@ -4,6 +4,7 @@ description: "Compressing the poses with LZ2 costs ABL frames; the S-DD1 decompr
 type: research
 status: done
 assignee: taro
+author: taro
 agents: [Carpintero]
 ---
 

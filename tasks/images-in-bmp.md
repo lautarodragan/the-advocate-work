@@ -5,6 +5,7 @@ type: feature
 status: done
 agents: [Chajá]
 assignee: taro
+author: taro
 ---
 
 From the survey of other games ([`research/2026-10-05-other-games.md`](https://lautarodragan.github.io/the-advocate-docs/research/2026-10-05-other-games.html)):

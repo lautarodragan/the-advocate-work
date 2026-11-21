@@ -3,6 +3,7 @@ name: "Equipment, skills and Game Over"
 description: "ChangeEquipment, ChangeSkills and GameOver, which were blocking the rooftop and the Workshop"
 type: feature
 status: done
+author: hornero
 ---
 
 **Implement `ChangeEquipment` (10450), `ChangeSkills` (10440) and `GameOver` (12420).**

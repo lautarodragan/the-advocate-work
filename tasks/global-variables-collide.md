@@ -5,6 +5,7 @@ type: refactor
 status: done
 agents: [Carpintero]
 assignee: taro
+author: hornero
 ---
 
 The `main.s` split spread the code out by subsystem, but memory is still

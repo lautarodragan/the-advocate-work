@@ -4,6 +4,7 @@ description: "Do the eight games leave RM2k's default items unused at the start 
 type: research
 status: done
 assignee: taro
+author: taro
 agents: [Mulita]
 ---
 

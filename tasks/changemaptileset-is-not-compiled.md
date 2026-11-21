@@ -4,6 +4,7 @@ description: "A page that changes the map's tileset at run time is left out whol
 type: feature
 status: done
 assignee: taro
+author: calandria
 agents: [Calandria, Mulita]
 ---
 

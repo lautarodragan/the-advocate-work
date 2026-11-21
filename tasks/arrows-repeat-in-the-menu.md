@@ -4,6 +4,7 @@ description: "Holding an arrow in the menu moves the selection on its own after 
 type: feature
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-09-28, in their words, translated:

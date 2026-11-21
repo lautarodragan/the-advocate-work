@@ -4,6 +4,7 @@ description: "RM2k draws `$` plus a letter as an icon from the System's ExFont; 
 type: bug
 status: done
 assignee: taro
+author: hornero
 agents: [Hornero]
 ---
 

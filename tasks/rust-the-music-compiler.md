@@ -4,6 +4,7 @@ description: "The audio chain from MIDI to the S-DSP stream and the per-map audi
 type: refactor
 status: done
 assignee: taro
+author: hornero
 ---
 
 Third step of the road to Rust in [`research/the-tools-today.md`](https://lautarodragan.github.io/the-advocate-docs/research/the-tools-today.html),

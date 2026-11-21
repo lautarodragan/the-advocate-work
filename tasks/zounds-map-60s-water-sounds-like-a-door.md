@@ -4,6 +4,7 @@ description: "The Water event on map 60 plays NAU_Splash, which the repository n
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Chajá]
 ---
 

@@ -3,6 +3,7 @@ name: "Compression"
 description: "Compress what travels in the ROM: measured, 75% less"
 type: feature
 status: done
+author: hornero
 ---
 
 What can be expected from compressing, measured: the used part of

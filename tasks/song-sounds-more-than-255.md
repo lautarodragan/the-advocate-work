@@ -4,6 +4,7 @@ description: "Dooms 2 leaves out maps 10, 14 and 63 because of 'the song uses 29
 type: feature
 status: done
 assignee: taro
+author: tijereta
 agents: [Hornero, Tijereta]
 ---
 

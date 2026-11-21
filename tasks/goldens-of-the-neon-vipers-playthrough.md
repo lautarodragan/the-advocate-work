@@ -3,6 +3,7 @@ name: "The goldens of the Neon Vipers playthrough"
 description: "The shots of the vipers playthrough have no golden: a part of playthrough-pending-goldens, which is where they are done"
 type: test
 status: done
+author: hornero
 ---
 
 `tests/abl/test_playthrough_vipers_golden.py` takes its shots, but none

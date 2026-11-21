@@ -5,6 +5,7 @@ type: feature
 status: done
 agents: [Mulita]
 assignee: taro
+author: taro
 ---
 
 Request from taro on 2026-09-26, for after today's suite (not now).

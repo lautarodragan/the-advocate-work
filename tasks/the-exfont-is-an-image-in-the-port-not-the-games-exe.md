@@ -4,6 +4,7 @@ description: "`[text] exfont` names a PNG in the port's directory; the tools sto
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Hurón]
 ---
 

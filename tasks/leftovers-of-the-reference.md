@@ -3,6 +3,7 @@ name: "Leftovers of the reference"
 description: "Comments that lean on the Python reference, and unused constants"
 type: refactor
 status: done
+author: hornero
 ---
 
 The Python reference went away on 2026-09-16, and on 2026-09-25 what was left

@@ -4,6 +4,7 @@ description: "The party's sprites and the 'can equip it' arrows in the shop, lik
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Chajá]
 ---
 

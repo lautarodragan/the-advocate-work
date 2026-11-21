@@ -4,6 +4,7 @@ description: "An engine option so that a full-screen picture is cropped to the c
 type: feature
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-10-02 (the game's task is in ABL:

@@ -5,6 +5,7 @@ type: feature
 game: abl
 status: done
 assignee: taro
+author: taro
 agents: [Tijereta]
 ---
 

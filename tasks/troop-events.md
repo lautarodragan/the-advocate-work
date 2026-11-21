@@ -4,6 +4,7 @@ description: "The characters' 32 battle systems, besides Talan's"
 type: feature
 status: done
 assignee: taro
+author: hornero
 ---
 
 **Running the troops' event pages during battle.**

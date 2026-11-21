@@ -4,6 +4,7 @@ description: "The experience in the menu, the enemies' HP in battle and the colo
 type: feature
 status: done
 assignee: Tero
+author: taro
 ---
 
 # The menu like RM2k

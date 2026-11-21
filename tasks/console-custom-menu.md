@@ -4,6 +4,7 @@ description: "ABL's Portable Console as a custom menu of the engine, described a
 type: feature
 status: done
 assignee: taro
+author: taro
 ---
 
 It was born on 2026-10-04 as "the console's pictures, through the MSU-1": taro

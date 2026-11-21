@@ -4,6 +4,7 @@ description: "Move commands 32 and 33 in a MoveEvent are refused, and the whole 
 type: bug
 status: done
 assignee: taro
+author: huron
 agents: [Mulita]
 ---
 

@@ -5,6 +5,7 @@ type: docs
 status: done
 agents: [Calandria]
 assignee: taro
+author: taro
 ---
 
 taro, on 2026-10-11, created the `draft` status (see this repo's README and

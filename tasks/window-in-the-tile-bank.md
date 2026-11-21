@@ -5,6 +5,7 @@ type: feature
 status: done
 agents: [Tijereta]
 assignee: taro
+author: tijereta
 ---
 
 **Done**, 2026-10-12. Superseded: it asked taro to judge the fused windows, and the windows' background by System (`windows-background-setting-and-flat-text-area.md`) undid almost all the fusing.

@@ -3,6 +3,7 @@ name: "Pipe bug on map 0008"
 description: "Edge case when climbing onto the pipe in Lashe City 34,35"
 type: bug
 status: done
+author: hornero
 ---
 
 If I hold down the emulator's auto-fire (which is faster than

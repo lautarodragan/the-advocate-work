@@ -3,6 +3,7 @@ name: "The Rust on main is not formatted"
 description: "cargo fmt --all --check fails on the-advocate's main: the terrains' lines in rm2k-snes/battle/src/db.rs and rm2k-snes/mapdata/src/emit.rs, and the conditions' in battle/src/simulate.rs and battle/tests/states.rs, which CI's lint step checks"
 type: bug
 status: done
+author: tijereta
 ---
 
 Seen by Tijereta on 2026-11-01, on the-advocate `422f904d` ("A

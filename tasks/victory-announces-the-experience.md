@@ -4,6 +4,7 @@ description: "Make the battle say N EXP received and Level up"
 type: feature
 status: done
 assignee: taro
+author: hornero
 ---
 
 **Make victory say the experience gained and who levelled up.**

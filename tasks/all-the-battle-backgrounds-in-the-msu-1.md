@@ -3,6 +3,7 @@ name: "All the battle backgrounds in the MSU-1"
 description: "Every background of the game in the .msu in high quality; in the ROM only those that fit, and the rest share a low-quality replacement"
 type: feature
 status: done
+author: taro
 ---
 
 From taro, on 2026-09-27, on seeing that the battles in the world (66) came out black

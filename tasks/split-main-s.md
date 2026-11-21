@@ -3,6 +3,7 @@ name: "Split main.s"
 description: "main.s, a single file of more than thirty thousand lines, into several"
 type: refactor
 status: done
+author: hornero
 ---
 
 **Split `rom/src/main.s`**, which is more than thirty thousand lines in one

@@ -4,6 +4,7 @@ description: "A message without its background takes the layer above off its tex
 type: feature
 status: done
 assignee: taro
+author: aguara
 agents: [Aguará]
 ---
 

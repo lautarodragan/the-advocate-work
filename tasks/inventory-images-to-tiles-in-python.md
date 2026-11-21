@@ -3,6 +3,7 @@ name: "Inventory: images to tiles in Python"
 description: "Which image-to-tiles conversions are still in Python and which ones Voodoo can do"
 type: refactor
 status: done
+author: hornero
 ---
 
 **Count which image-to-tiles conversions are still done in Python**, and for

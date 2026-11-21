@@ -4,6 +4,7 @@ description: "VD's map 3 ('Intro') builds alone, but instead of the panorama wit
 type: bug
 status: done
 assignee: taro
+author: huron
 agents: [Hurón]
 ---
 

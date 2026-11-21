@@ -4,6 +4,7 @@ description: "Switches in the debug screen to turn off the state the game leaves
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Tijereta]
 ---
 

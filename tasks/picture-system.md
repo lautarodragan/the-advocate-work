@@ -3,6 +3,7 @@ name: "The picture system"
 description: "ShowPicture in full, beyond the sign"
 type: feature
 status: done
+author: hornero
 ---
 
 # What

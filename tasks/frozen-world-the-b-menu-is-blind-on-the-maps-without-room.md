@@ -4,6 +4,7 @@ description: "On the maps whose sprites have no room for the menu's three pictur
 type: bug
 status: done
 assignee: taro
+author: mulita
 agents: [Mulita, Aguará]
 ---
 

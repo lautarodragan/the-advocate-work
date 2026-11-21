@@ -3,6 +3,7 @@ name: "Desert Nightmare: the start menu over garbage"
 description: "Map 1's menu ('With Intro / No Intro / Quit') shows its three pictures over a repeated 8x8 pattern instead of the Introauswahl panorama; not EraseScreen"
 type: bug
 status: done
+author: calandria
 agents: [Calandria, Aguará]
 ---
 

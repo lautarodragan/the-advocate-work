@@ -4,6 +4,7 @@ description: "In a map with a cache of slots each still event that animates want
 type: bug
 status: done
 assignee: taro
+author: calandria
 agents: [Calandria]
 ---
 

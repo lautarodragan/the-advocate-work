@@ -4,6 +4,7 @@ description: "The first part of rm2k-render drawing everything of RPG Maker: the
 type: refactor
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-09-30, in their words, translated:

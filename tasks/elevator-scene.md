@@ -3,6 +3,7 @@ name: "The elevator scene"
 description: "A case of its own in the suite for the elevator scene on map 2"
 type: test
 status: done
+author: hornero
 ---
 
 # What

@@ -3,6 +3,7 @@ name: "The terrace drops frames during the flashes"
 description: "Recomputing FlashSprite's and FlashScreen's palettes eats almost the whole frame on map 32's terrace"
 type: bug
 status: done
+author: taro
 ---
 
 taro notices lag in the terrace scene (map 32) and in Kersh's blue flash;

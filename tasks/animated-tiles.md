@@ -3,6 +3,7 @@ name: "Animated tiles"
 description: "The two families of animated tiles of the ChipSet"
 type: feature
 status: done
+author: hornero
 ---
 
 ### The water moves, and it costs a DMA of 1664 bytes

@@ -4,6 +4,7 @@ description: "A test ROM that does the 100 to 0 % zoom of a Diff photo in mode 7
 type: research
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-10-02, after seeing Bandurria's video

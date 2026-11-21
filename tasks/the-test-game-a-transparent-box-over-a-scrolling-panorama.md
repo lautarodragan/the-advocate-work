@@ -4,6 +4,7 @@ description: "A scene in the test game with characters, a transparent message in
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Aguará]
 ---
 

@@ -4,6 +4,7 @@ description: "On the map with the panorama where an agent knocks Arden down, the
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Aguará]
 ---
 

@@ -4,6 +4,7 @@ description: "Of the two decorative pumps on the left of map 17, the right one m
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Hurón]
 ---
 

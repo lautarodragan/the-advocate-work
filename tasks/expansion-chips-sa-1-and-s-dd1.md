@@ -3,6 +3,7 @@ name: "Expansion chips: SA-1 and S-DD1"
 description: "Whether it is worth moving the cartridge to SA-1 or S-DD1: support, what each one gives measured, what it costs, and when"
 type: refactor
 status: done
+author: taro
 ---
 
 # What

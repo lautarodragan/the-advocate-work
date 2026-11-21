@@ -4,6 +4,7 @@ description: "A feasibility study, map by map: whether the hundreds of still eve
 type: research
 status: done
 assignee: taro
+author: taro
 agents: [Cardón]
 game: desert-nightmare
 ---

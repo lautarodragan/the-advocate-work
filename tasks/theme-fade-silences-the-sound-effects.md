@@ -3,6 +3,7 @@ name: "The theme's fade silences the sound effects"
 description: "Without MSU-1, a FadeOutBGM leaves the DSP's master volume at zero and the sound effects stay mute until the next theme"
 type: bug
 status: done
+author: hornero
 ---
 
 Noted down as a divergence on 2026-09-26

@@ -4,6 +4,7 @@ description: "RPG_RT fires the action pages of the hero's own cell and of the on
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Calandria]
 ---
 

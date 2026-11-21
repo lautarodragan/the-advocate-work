@@ -5,6 +5,7 @@ type: bug
 status: done
 agents: [Mulita]
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-10-05, in their words, translated:

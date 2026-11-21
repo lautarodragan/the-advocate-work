@@ -5,6 +5,7 @@ type: feature
 status: done
 agents: [Chajá]
 assignee: taro
+author: hornero
 ---
 
 Measured by Hornero on 2026-10-06 with `rm2k-snes-events culprits --every-map`

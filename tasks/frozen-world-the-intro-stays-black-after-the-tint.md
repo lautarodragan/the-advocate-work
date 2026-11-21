@@ -4,6 +4,7 @@ description: "At the end of map 6, after EV0005's TintScreen to black, the box \
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Aguará]
 ---
 

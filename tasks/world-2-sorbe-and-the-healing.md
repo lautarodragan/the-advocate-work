@@ -3,6 +3,7 @@ name: "World 2: Sorbe and the healing"
 description: "Milestone 2 of el-mundo-y-lo-que-sigue: the layout with a 256-tile above layer, ChangeEncounterSteps, maps 69 and 76 to 84 in release, the sign on 81 and the end of the demo at Tasgarde's entrance"
 type: feature
 status: done
+author: hornero
 ---
 
 # What

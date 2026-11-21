@@ -4,6 +4,7 @@ description: "FAR_HP and FAR_SP are 128 B apart and FAR_EQUIPMENT has 752 B, so 
 type: bug
 status: done
 assignee: taro
+author: huron
 agents: [Hurón]
 ---
 

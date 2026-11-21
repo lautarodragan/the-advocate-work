@@ -4,6 +4,7 @@ description: "A map whose anim_tiles stream doesn't fit in WRAM stops the build;
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Cardón]
 ---
 

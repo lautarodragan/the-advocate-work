@@ -4,6 +4,7 @@ description: "A map's code (map_code) or its grid (map_cells) going over their L
 type: feature
 status: done
 assignee: taro
+author: calandria
 agents: [Carpintero]
 ---
 

@@ -4,6 +4,7 @@ description: "The tests that do not need the game move to tools/pruebas/; Ditto'
 type: refactor
 status: done
 assignee: taro
+author: taro
 ---
 
 It comes from what `tools-justfile.md` left open

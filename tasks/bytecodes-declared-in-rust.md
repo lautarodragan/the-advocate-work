@@ -4,6 +4,7 @@ description: "The two bytecodes in a crate in tools/rm2k-snes/ with a macro, the
 type: refactor
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-10-02. It goes **after** `abl-tests-without-opcodes.md`,

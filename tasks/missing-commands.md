@@ -5,6 +5,7 @@ type: research
 status: done
 agents: [Aguará]
 assignee: taro
+author: taro
 ---
 
 **Done**, 2026-10-12. Superseded: its two pending items were resolved —the quarry, by `eraseevent-for-real.md`, and ChangeMonsterCondition, as a debt, by `monster-conditions-and-flashscreen-in-battle.md`—.

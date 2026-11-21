@@ -3,6 +3,7 @@ name: "The map shifted after returning from a cutscene"
 description: "The drawn tiles end up one or two cells above the collision"
 type: bug
 status: done
+author: taro
 ---
 
 Taro reported it on 2026-09-22, and says that **at some point it worked

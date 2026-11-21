@@ -3,6 +3,7 @@ name: "Vampires Dawn: 36 samples of other maps lose rate under the 6 kHz relief"
 description: "Relieving map 4's package at 6 kHz uploads Game22 apart and raises its music, but 36 samples of other maps go down (VIOLN68 23.3→16.7 kHz on map 221, TRMBN62A 13.8→9.2 on 240) and 9 go up; why was not measured"
 type: bug
 status: done
+author: hornero
 ---
 
 Seen by Cardón on 2026-10-16, making the relief trigger at 6 kHz

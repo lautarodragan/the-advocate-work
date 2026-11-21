@@ -4,6 +4,7 @@ description: "Sunset's release takes ~2 h 40 min; a single one of its 138 large 
 type: bug
 status: done
 assignee: taro
+author: hornero
 agents: [Calandria]
 ---
 

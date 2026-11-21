@@ -4,6 +4,7 @@ description: "The action button, a bump and a step look at the first event stand
 type: bug
 status: done
 assignee: taro
+author: huron
 game: desert-nightmare
 agents: [Hurón, Calandria]
 ---

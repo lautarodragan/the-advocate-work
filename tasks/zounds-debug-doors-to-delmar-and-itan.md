@@ -4,6 +4,7 @@ description: "Two more doors in Zounds' debug room, to Delmar (183) and the town
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Mulita]
 ---
 

@@ -4,6 +4,7 @@ description: "The code names of tools/audio and tools/ensamblado into English, a
 type: refactor
 status: done
 assignee: taro
+author: hornero
 ---
 
 Phase 2 of the translation of `tools/` into English, second area: `tools/audio/`,

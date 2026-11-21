@@ -4,6 +4,7 @@ description: "The Back Alleys let you move, the party does not get scrambled nor
 type: bug
 status: done
 assignee: taro
+author: taro
 ---
 
 # What taro reported

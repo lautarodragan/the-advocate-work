@@ -4,6 +4,7 @@ description: "The nine crates of tools/ in a Cargo workspace: one Cargo.lock and
 type: refactor
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-09-29, in their words, translated:

@@ -3,6 +3,7 @@ name: "Notes released too early"
 description: "When a note steals another's voice, the stolen note's scheduled release cuts off the new one"
 type: bug
 status: done
+author: hornero
 ---
 
 Seen while measuring the music stream on 2026-09-25 (see `music-weighs-789-kb.md`),

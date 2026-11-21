@@ -4,6 +4,7 @@ description: "Put a ceiling on how many vblanks a message line may wait for room
 type: feature
 status: done
 assignee: taro
+author: hornero
 agents: [Aguará]
 ---
 

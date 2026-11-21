@@ -4,6 +4,7 @@ description: "Vampires Dawn stops at 'Music/ has 281 songs and the track goes in
 type: feature
 status: done
 assignee: taro
+author: tijereta
 agents: [Tijereta]
 ---
 

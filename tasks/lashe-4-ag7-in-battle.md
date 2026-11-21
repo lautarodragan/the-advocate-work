@@ -3,6 +3,7 @@ name: "Lashe 4: AG7 in battle"
 description: "The droid's skills according to its parts, the weapons' SP, and the enemies' ShortCircuit"
 type: feature
 status: done
+author: hornero
 ---
 
 # What

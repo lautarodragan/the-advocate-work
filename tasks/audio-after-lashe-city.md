@@ -3,6 +3,7 @@ name: "The audio after Lashe City"
 description: "Recover the quality that the packages of Lashe City's new maps take away from the instruments without MSU-1"
 type: bug
 status: done
+author: hornero
 ---
 
 # What

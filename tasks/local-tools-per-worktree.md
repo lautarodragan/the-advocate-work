@@ -4,6 +4,7 @@ description: "Each worktree's own bin/, first in just's PATH, instead of ejecuta
 type: refactor
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-09-29, after step 1 (`justfile-doesnt-know-python-exists.md`):

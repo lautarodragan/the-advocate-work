@@ -4,6 +4,7 @@ description: "The main menu's and the item target picker's party boxes show HP a
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Tijereta]
 ---
 

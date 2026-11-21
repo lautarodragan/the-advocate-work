@@ -4,6 +4,7 @@ description: "RPG Maker 2000's F9 screen —switches by groups of ten, with thei
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Tijereta]
 ---
 

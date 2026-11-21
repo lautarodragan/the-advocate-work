@@ -4,6 +4,7 @@ description: "A study of how much of Zounds —taro's game, made in RPG Maker 20
 type: research
 status: done
 assignee: taro
+author: taro
 agents: [Aguará]
 ---
 

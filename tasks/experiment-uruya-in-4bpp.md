@@ -5,6 +5,7 @@ type: research
 status: done
 agents: [Calandria]
 assignee: taro
+author: taro
 ---
 
 **Done**, 2026-10-12. Superseded: the ROM was a throwaway, and what it showed was followed by `adeleine-palettes.md`.

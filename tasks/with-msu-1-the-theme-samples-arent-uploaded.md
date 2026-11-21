@@ -3,6 +3,7 @@ name: "With MSU-1 the theme's samples aren't uploaded"
 description: "If there's MSU-1 and the theme has a track, its music samples aren't needed in ARAM: faster loads and more room for the sound effects"
 type: feature
 status: done
+author: hornero
 ---
 
 With MSU-1, a theme that has a track (`PISTAS_MSU`, 22 themes) plays from the

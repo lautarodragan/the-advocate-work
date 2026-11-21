@@ -4,6 +4,7 @@ description: "Hide the enemies' HP like RM2k (with a flag for debugging) and rec
 type: feature
 status: done
 assignee: Ombú
+author: hornero
 ---
 
 Two small battle things, from 2026-09-28.

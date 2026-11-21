@@ -4,6 +4,7 @@ description: "A converter feature behind a project knob: the still events of one
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Cardón]
 game: desert-nightmare
 ---

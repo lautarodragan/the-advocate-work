@@ -4,6 +4,7 @@ description: "The optional part of the world in release: Yun Town (67, 70 to 73)
 type: feature
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-10-01, in their words, translated:

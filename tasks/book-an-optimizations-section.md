@@ -4,6 +4,7 @@ description: "A section of the book for the port's optimizations, Lossy and Loss
 type: docs
 status: done
 assignee: taro
+author: taro
 agents: [Cardón]
 ---
 

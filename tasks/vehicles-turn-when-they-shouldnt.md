@@ -4,6 +4,7 @@ description: "The hover tram, the agency ships and the race car have charsets ma
 type: bug
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-09-30, playing on the SNES, in their words,

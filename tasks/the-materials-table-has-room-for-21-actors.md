@@ -4,6 +4,7 @@ description: "FAR_GROWTH is placed by hand in far RAM with room for 21 experienc
 type: bug
 status: done
 assignee: taro
+author: cardon
 agents: [Tijereta]
 ---
 

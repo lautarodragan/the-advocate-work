@@ -4,6 +4,7 @@ description: "Three of Wally's notes print an event's index plus one, not its RM
 type: bug
 status: done
 assignee: taro
+author: huron
 agents: [Hurón]
 ---
 

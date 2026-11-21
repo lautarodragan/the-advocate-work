@@ -3,6 +3,7 @@ name: "The Hover Tram on the terrace"
 description: "Draw the ship on the Warehouse roof, baked into a fork of the map"
 type: feature
 status: done
+author: hornero
 ---
 
 **Make the Hover Tram visible** in the cutscene on the roof of the `Sector 27 Warehouse`

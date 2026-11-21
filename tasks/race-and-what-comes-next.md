@@ -3,6 +3,7 @@ name: "The race and what comes next"
 description: "Plan: the car chase (49 to 54) and 64 in release, the end of the demo after the race, and the map rule by id"
 type: feature
 status: done
+author: taro
 ---
 
 # What

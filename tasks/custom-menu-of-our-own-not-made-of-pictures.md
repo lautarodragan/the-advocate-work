@@ -3,6 +3,7 @@ name: "A custom menu of our own, not made of pictures"
 description: "An addition RM2k doesn't have: describe a custom menu as data (text, lists, a face) instead of pictures of text on white, so that it weighs much less, aligns well and looks better; probably in mode 5 with its own font"
 type: feature
 status: done
+author: taro
 ---
 
 From taro, on 2026-10-01, talking about ABL's portable console

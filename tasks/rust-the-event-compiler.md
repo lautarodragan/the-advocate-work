@@ -4,6 +4,7 @@ description: "tools/port/events.py (event pages to bytecode) as its own crate in
 type: refactor
 status: done
 assignee: taro
+author: taro
 ---
 
 The converter's most expensive piece, discussed with taro on 2026-09-29: the

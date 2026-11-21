@@ -4,6 +4,7 @@ description: "RM2k's MessageOptions: the window's position (top, middle, bottom)
 type: feature
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-10-04, in their words, translated:

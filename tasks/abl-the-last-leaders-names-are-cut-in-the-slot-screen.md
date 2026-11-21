@@ -4,6 +4,7 @@ description: "With every map, the slot screen shows \"Advocat\", \"Royal D\" and
 type: bug
 status: done
 assignee: taro
+author: chaja
 agents: [Hurón]
 ---
 

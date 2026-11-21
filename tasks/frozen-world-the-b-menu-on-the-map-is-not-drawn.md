@@ -4,6 +4,7 @@ description: "Pressing B on the map opens something with three options that work
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Mulita]
 ---
 

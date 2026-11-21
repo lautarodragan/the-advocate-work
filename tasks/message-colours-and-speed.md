@@ -4,6 +4,7 @@ description: "\\c[n] and \\s[n] in a message box are discarded today: coloured w
 type: feature
 status: done
 assignee: taro
+author: hornero
 agents: [Tijereta]
 ---
 

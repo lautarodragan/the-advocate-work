@@ -3,6 +3,7 @@ name: "The Auditorium audience"
 description: "The NPCs that are decoration, baked into a ChipSet of their own"
 type: feature
 status: done
+author: hornero
 ---
 
 # What

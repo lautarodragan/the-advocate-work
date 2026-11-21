@@ -3,6 +3,7 @@ name: "The three clocks of tocar"
 description: "Partida.tocar counts in ticks, menu.tocar and Pelea.tocar in frames: three identical verbs with different clocks"
 type: refactor
 status: done
+author: hornero
 ---
 
 In the harness in `tests/` there are three `tocar`: `Partida.tocar` in ticks, and

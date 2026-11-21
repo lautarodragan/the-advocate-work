@@ -4,6 +4,7 @@ description: "The troop pages that release's battles ask for: the Rat King who c
 type: feature
 status: done
 assignee: taro
+author: taro
 ---
 
 # What

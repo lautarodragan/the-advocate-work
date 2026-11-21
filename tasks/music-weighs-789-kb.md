@@ -4,6 +4,7 @@ description: "The stream was raw DSP writes; the per-note format (done) brought 
 type: refactor
 status: done
 assignee: taro
+author: hornero
 ---
 
 # For taro

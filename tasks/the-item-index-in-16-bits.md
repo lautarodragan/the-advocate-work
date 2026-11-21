@@ -4,6 +4,7 @@ description: "The cartridge's item tables are indexed with a byte, so ABL's whol
 type: feature
 status: done
 assignee: taro
+author: hornero
 agents: [Chajá]
 ---
 

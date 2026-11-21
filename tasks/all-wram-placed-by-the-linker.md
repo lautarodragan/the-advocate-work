@@ -4,6 +4,7 @@ description: "Move what is still at hand-written addresses in WRAM to segments t
 type: refactor
 status: done
 assignee: taro
+author: taro
 agents: [Carpintero]
 ---
 

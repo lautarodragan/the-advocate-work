@@ -4,6 +4,7 @@ description: "Zounds' battle menu shows the 2000 terms command_attack and comman
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Cardón]
 ---
 

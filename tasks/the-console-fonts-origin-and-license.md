@@ -4,6 +4,7 @@ description: "low-variable.png was derived from 'easyrpg's Mincho'; which of Eas
 type: research
 status: done
 assignee: taro
+author: hornero
 agents: [Mulita]
 ---
 

@@ -4,6 +4,7 @@ description: "tools/port/patches.py (rm2k-snes-patches: writes and checks the TO
 type: refactor
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-09-30, in the converter's migration to Rust. `patches.py`

@@ -4,6 +4,7 @@ description: "Parallel common events run in the ROM, each with its own interpret
 type: feature
 status: done
 assignee: taro
+author: aguara
 agents: [Aguará]
 ---
 

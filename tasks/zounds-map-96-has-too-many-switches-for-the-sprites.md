@@ -4,6 +4,7 @@ description: "Map 96 (Arriba del Cuartito) carries 58 floor-switch events drawn 
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Cardón]
 ---
 

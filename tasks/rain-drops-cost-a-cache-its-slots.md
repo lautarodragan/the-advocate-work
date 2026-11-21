@@ -4,6 +4,7 @@ description: "Rain is drawn whenever its greys fit a palette, before the cache c
 type: bug
 status: done
 assignee: taro
+author: calandria
 agents: [Calandria]
 ---
 

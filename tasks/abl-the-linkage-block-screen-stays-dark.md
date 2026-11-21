@@ -4,6 +4,7 @@ description: "On map 2 the computer screen at (39,69)-(40,70) is four events tha
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Chajá]
 ---
 

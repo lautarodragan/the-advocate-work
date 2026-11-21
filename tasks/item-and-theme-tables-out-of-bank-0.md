@@ -4,6 +4,7 @@ description: "Bank 0 of release was down to 95 B: the tables that grow with each
 type: refactor
 status: done
 assignee: taro
+author: hornero
 ---
 
 After Yun, Drust and Paradise (2026-10-01), bank 0 of `release`

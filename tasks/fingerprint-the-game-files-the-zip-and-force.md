@@ -4,6 +4,7 @@ description: "The game's resources go into the fingerprint by content; the game 
 type: feature
 status: done
 assignee: taro
+author: cardon
 agents: [Cardón]
 ---
 

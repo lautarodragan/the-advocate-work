@@ -4,6 +4,7 @@ description: "An agent plays The Book of Three to its end in the original, under
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Mulita]
 ---
 

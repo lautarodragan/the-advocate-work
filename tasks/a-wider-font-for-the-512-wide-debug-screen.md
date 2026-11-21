@@ -4,6 +4,7 @@ description: "At 512 wide the debug screen's text is hard to read on a CRT; try 
 type: feature
 status: done
 assignee: taro
+author: taro
 agents: [Hurón]
 ---
 

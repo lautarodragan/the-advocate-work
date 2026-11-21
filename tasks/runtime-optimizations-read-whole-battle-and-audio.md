@@ -4,6 +4,7 @@ description: "Read the battle and the audio of runtime/ file by file for optimiz
 type: docs
 status: done
 assignee: taro
+author: taro
 agents: [Mulita]
 ---
 

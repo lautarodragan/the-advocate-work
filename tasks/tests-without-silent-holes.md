@@ -4,6 +4,7 @@ description: "A missing playthrough golden is declared instead of passing green,
 type: test
 status: done
 assignee: taro
+author: hornero
 ---
 
 The two improvements from Codex's inspection

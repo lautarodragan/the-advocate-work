@@ -4,6 +4,7 @@ description: "The song a map plays on its own, by its properties, is played as w
 type: bug
 status: done
 assignee: taro
+author: mulita
 agents: [Carpintero]
 ---
 

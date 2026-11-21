@@ -4,6 +4,7 @@ description: "The game's messages, choices and names carry many spelling mistake
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Calandria]
 ---
 

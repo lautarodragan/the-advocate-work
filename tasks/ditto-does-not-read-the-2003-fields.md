@@ -4,6 +4,7 @@ description: "118 of liblcf's 1,043 field rows are RM2k3-only and Ditto's genera
 type: feature
 status: done
 assignee: taro
+author: aguara
 agents: [Aguará]
 ---
 

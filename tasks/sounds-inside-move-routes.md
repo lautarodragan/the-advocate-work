@@ -3,6 +3,7 @@ name: "The sounds inside move routes"
 description: "The converter drops the sound effects a forced move route asks for between steps"
 type: feature
 status: done
+author: hornero
 ---
 
 Seen on 2026-09-26 while measuring map 3: evilrhys's scene asks for a

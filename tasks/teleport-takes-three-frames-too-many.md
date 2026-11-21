@@ -4,6 +4,7 @@ description: "Against RPG_RT, each Wait+Teleport of map 16's scene lasted 161 ti
 type: bug
 status: done
 assignee: taro
+author: hornero
 ---
 
 It showed up on 2026-09-29 while measuring against RPG_RT the three

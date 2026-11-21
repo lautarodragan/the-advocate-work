@@ -4,6 +4,7 @@ description: "Going down the item list the screen goes black for a frame and the
 type: bug
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-09-30, playing, in their words, translated:

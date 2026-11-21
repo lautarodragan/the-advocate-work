@@ -4,6 +4,7 @@ description: "When a choice is shown with a face on the left, the selection bar 
 type: bug
 status: done
 assignee: taro
+author: taro
 agents: [Hurón]
 ---
 

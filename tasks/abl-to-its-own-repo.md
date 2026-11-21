@@ -4,6 +4,7 @@ description: "Phase 1 of the test game: everything of ABL's —rom/, its justfil
 type: refactor
 status: done
 assignee: taro
+author: taro
 ---
 
 From taro, on 2026-10-02, with the plan in

@@ -4,6 +4,7 @@ description: "Map 148's Crown7 flames animate in RM2k and stand still in the por
 type: bug
 status: done
 assignee: taro
+author: calandria
 agents: [Calandria]
 ---
 

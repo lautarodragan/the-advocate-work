@@ -3,6 +3,7 @@ name: "Desert Nightmare: common event 12 is copied into 181 maps and draws nothi
 description: "The copies of an automatic common event exist so it can draw its small pictures with the map's; common 12's pictures, and those of common 11 it calls, are all 320x240, so its 181 copies draw nothing and are a megabyte of the cartridge, 95% of all the maps' bytecode"
 type: refactor
 status: done
+author: carpintero
 game: desert-nightmare
 agents: [Carpintero, Chajá]
 ---
