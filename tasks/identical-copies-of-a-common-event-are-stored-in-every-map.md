@@ -2,7 +2,7 @@
 name: "Identical copies of a common event are stored in every map"
 description: "A copied automatic common event is the same bytecode in every map it goes into, and each map carries its own: Desert Nightmare's common 14 is 7,317 bytes, one copy in each of 181 maps, and copied with 12 it pushes every map past what decompresses into WRAM"
 type: feature
-status: draft
+status: todo
 author: carpintero
 game: desert-nightmare
 agents: [Carpintero]
@@ -30,3 +30,18 @@ largest map's pages are 10,021 bytes.
 **To reproduce**: as in
 [`desert-nightmare-common-12-is-copied-and-draws-nothing`](desert-nightmare-common-12-is-copied-and-draws-nothing.md),
 with `common_pages.commons` set to `[14, 12]` and to `[14]`.
+
+## Log
+
+### 2026-11-22, Hornero: still so, to todo
+
+At the ports `89f77b4` and the-advocate `0ae40e0a`, after Chajá's
+[`a-common-event-is-copied-only-if-its-copy-draws`](a-common-event-is-copied-only-if-its-copy-draws.md):
+the release's `converter.log` says common 12 is no longer copied (all its
+pictures are big) and common 14 is copied into 181 maps and kept in 145
+(36 draw nothing with it, none would keep its bytecode in the cartridge).
+So nothing breaks any more, but the 145 copies of 14 are still the same
+bytecode, one per map.
+
+taro wants it in `todo`: three to seven kilobytes less per map is worth
+having in general, unless it turns out very complex.
