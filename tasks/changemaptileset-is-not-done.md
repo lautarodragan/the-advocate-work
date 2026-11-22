@@ -2,7 +2,8 @@
 name: "ChangeMapTileset is not done"
 description: "The command is dropped since 2026-10-16: the map keeps its ChipSet. Frozen World's frozen bazaar and temple don't show, and Vampires Dawn's bat would keep the ground's passability"
 type: feature
-status: wishlist
+game: [frozen-world, vampires-dawn]
+status: todo
 author: mulita
 ---
 
@@ -45,3 +46,18 @@ this one becomes needed for its passability.
 map's variants converted over its grid and swapped at run time with an
 opcode, and the `tileset-not-changed` losses gone. Vampires Dawn's case
 alone —every cell open, no drawing— is a smaller first piece.
+
+## Log
+
+### 2026-11-22, Carpintero: still so, to todo
+
+Checked against the-advocate `0ae40e0a` and the ports `89f77b4`. The
+compiler still drops it: `CHANGE_MAP_TILESET` in
+`rm2k-snes/events/src/compile.rs` notes `tileset-not-changed` and
+emits nothing. The `build/release/degradations.json` of that day lists
+10 `tileset-not-changed` in The Frozen World, on maps 9, 47, 99, 129 and
+149, and 8 in Vampires Dawn, on maps 28, 56, 89 and 90; Vampires Dawn's
+map 1, which has the fifth page (event 16), has no line in either file.
+Counted in the `data/` of the nine games, `ChangeMapTileset` (11710) is
+in those two only, 10 each. Moved to `todo` by taro's request, with
+`game: [frozen-world, vampires-dawn]`.
