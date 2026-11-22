@@ -2,7 +2,9 @@
 name: "The Frozen World: characters cut on crowded lines"
 description: "1 map put more characters on a line than the console draws —nine characters are 36 slivers, past the PPU's 34—, and the ones further back lose columns or vanish"
 type: bug
-status: todo
+status: doing
+agents: [Chajá]
+assignee: Chajá
 author: mulita
 game: frozen-world
 ---
