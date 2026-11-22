@@ -14,3 +14,16 @@ red; taro closed that task on 2026-11-17, and the light stays to be looked
 at here. Not re-measured since: the palette grouping and the still events
 drawn into the background have changed since that task, so the first step
 is to see whether it is still grey.
+
+## Log
+
+### 2026-11-22, Tijereta: Forem is out again
+
+Seen in passing, in ABL's release build of the ports `89f77b4`
+(the-advocate `0ae40e0a`): map 83's `converter.log` no longer has a
+"drawn with someone else's" line —no tile of it is lent a palette now—,
+and it says instead that Forem (event 13) is left out because with him
+the rain's colours would be lent. So the trade this draft is about seems
+gone the other way: the light should have its red, and Forem is missing.
+Not looked at on screen. The missing Forem is its own draft,
+[`abl-forem-left-out-at-the-factory`](abl-forem-left-out-at-the-factory.md).
