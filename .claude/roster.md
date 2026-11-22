@@ -101,7 +101,9 @@ same thing before, start from there and do not measure it again.
   this repo.
 * **What you found and did not fix is a draft**, one file per finding:
   what was seen, in which game, at which commit and how to reproduce it
-  —see this repo's README—. And if it shows while playing a port, a line in
+  —see this repo's README—, and, when it can be seen, a capture of it in
+  `tasks/images/<draft>/`, shown in the draft, so taro tells it apart at a
+  glance. And if it shows while playing a port, a line in
   "Known issues" of its page in the book, `src/ports/<game>/README.md`,
   told from what is seen. A finding that only stays in your task or in
   your report is lost. A task you open on your own —a draft, a finding—

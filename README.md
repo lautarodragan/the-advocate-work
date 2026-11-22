@@ -54,7 +54,9 @@ is 256x224—: the page enlarges it without smoothing.
 not fix —a bug that is not part of its task, a path it did not cover, "the
 next thing, measured"—: a short file with what was seen, in which game, at
 which commit and how to reproduce it, with no `assignee` and without saying
-how to fix it. It leaves that state when someone defines it —to `todo` or
+how to fix it. **If what it found can be seen, it carries a capture of
+it** (see "A task can carry images"), so that it is told apart at a
+glance: taro's, from 2026-11-22. It leaves that state when someone defines it —to `todo` or
 to `wishlist`— or it is deleted if something else fixed it. The difference
 from `wishlist`: a task in the wishlist is defined and only needs to be
 prioritised; a draft is not defined. It is taro's, from 2026-10-11: until
