@@ -2,8 +2,9 @@
 name: "Frozen World: every turn re-uploads the battle screen's audio"
 description: "Each turn of a fight teleports map 3 → map 1 → map 3, and each teleport uploads the map's audio package again: a tick of ~62 frames entering map 1 and ~34 entering map 3, about 66 frames of every turn"
 type: bug
-status: draft
+status: todo
 author: aguara
+game: frozen-world
 ---
 
 Seen by Aguará on 2026-10-17, measuring
@@ -39,3 +40,34 @@ Not measured again. Two things moved since: `maps-load-faster-without-losing-any
 a turn's two teleports gain from the first depends on whether they fade;
 the turn's frames have to be counted again on today's `main` before this
 is defined, with the same steps as above.
+
+### 2026-11-22, Chajá: smaller, still there
+
+Measured in snes9x with a throwaway script over the ports' `tests/games.py`
+(Frozen World's release, the ports `89f77b4`, global tools at the-advocate
+`0ae40e0a`), counting the hardware frames of every tick. The audio
+packages are still the same in `build/release/converter.log`: map 1 "0
+song(s), 16 sound effect(s), and separate …" (six more), map 3 "0 song(s),
+7 sound effect(s)".
+
+* **The fight's own entry** —walking right from (11, 33) on map 12 into
+  Sandflower.1, tapping A— enters map 1 with ticks of 8, 4, 13, 27 and 20
+  frames over some 45 ticks, and the grid, map 3, with one tick of 11.
+* **A round trip by the harness's door jump** (`FADE_DOOR`, the same
+  request `go_to_map` writes), twice, the same both times: into map 1,
+  122 frames in 74 ticks, with ticks of 8, 4, 22 and 17 frames; into map
+  3, 84 frames in 74 ticks, one tick of 11.
+
+So against the numbers above —one tick of ~62 frames into map 1 and one
+of ~34 into map 3, ~94 frames over a frame a tick— a round trip now
+costs some 57 extra frames: ~47 entering map 1, spread over four ticks
+of its fade, and 10 entering map 3. The one-tick black stalls are gone
+(`maps-load-faster-without-losing-anything` moved the package into the
+fade's ticks); the cost per turn is not.
+
+**Not measured**: the turn itself —my script tapped A on the grid with
+switch 6 on and never left map 3 in 4,000 ticks, so the round trip is
+the harness's jump and not the game's teleports, which may fade
+otherwise—; and how much of those frames is `package_load_l`: no line
+profiler was run, so that the extra frames are the audio is still
+Aguará's measurement, not mine. To `todo`, with the numbers above.

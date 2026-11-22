@@ -55,3 +55,16 @@ the runtime sizes experience by the game, `EXP_K*4`), `mapdata/src/emit.rs`
 (the FAR_ITEMS message; [`variables-are-capped-at-256-slots`](variables-are-capped-at-256-slots.md)
 is still todo), and `events/src/indices.rs` (`SKILL_SLOTS_MAX`, "FAR_SKILL
 holds", while `far_ram_game.s` sizes it by game).
+
+### 2026-11-22, Chajá: still applies
+
+Checked at the-advocate `0ae40e0a`: the three checks are as Hornero left
+them —`SAVE_BYTES = 0x200` and "don't fit in the {SAVE_BYTES} bytes of
+FAR_EXP" in `rm2k-snes/battle/src/experience.rs`, "FAR_ITEMS is 512
+bytes from FAR_VARIABLES" in `rm2k-snes/mapdata/src/emit.rs`,
+`SKILL_SLOTS_MAX = 256 * 8` and "`FAR_SKILL` holds" in
+`rm2k-snes/events/src/indices.rs`—, none of the three files touched since
+2026-11-16, and `FAR_EXP` and `FAR_SKILL` still `.res` sized by the game
+in `runtime/far_ram_game.s` (`runtime/far_ram.s` says so).
+[`variables-are-capped-at-256-slots`](variables-are-capped-at-256-slots.md)
+is still `todo`. Stays in wishlist: no game hits any of the three.
