@@ -2,8 +2,10 @@
 name: "A big DMA from the MSU-1's data port is unverified on the FX Pak"
 description: "The battle backdrops already DMA 32 KB from $2001 in one go, and raw maps from the .msu would DMA up to 64 KB: nobody checked that the FX Pak refills its 16 KB buffer from the SD card as fast as a DMA drains it"
 type: research
-status: draft
+status: doing
 author: chaja
+assignee: Aguará
+agents: [Chajá, Hornero, Aguará]
 ---
 
 Found by Chajá on 2026-11-22, in
@@ -38,3 +40,11 @@ and 64 KB from each in one go, and show each block's checksum against the
 expected one, with and without an MSU-1 track playing, plus how long each
 seek waited. If big blocks come out wrong, the DMAs go in pieces with a
 wait between them, and the same test finds the largest piece that holds.
+
+taro, 2026-11-22, asked whether to start with the FX Pak test ROM:
+
+> Go ahead
+
+## Log
+
+### 2026-11-22, Hornero: taken for Aguará, the test ROM
