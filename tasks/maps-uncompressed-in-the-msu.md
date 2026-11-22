@@ -2,9 +2,9 @@
 name: "Maps uncompressed in the .msu"
 description: "Could each map's streams be stored compressed or not, per map, in the ROM and in the .msu? With MSU-1 a map uncompressed in the .msu goes up by DMA instead of through LZ2: faster loads without committing ROM"
 type: research
-status: doing
+status: testing
 author: taro
-assignee: Chajá
+assignee: taro
 agents: [Hornero, Chajá]
 game: vampires-dawn
 ---
@@ -249,3 +249,233 @@ twin `test-msu-rom`. A raw format needs a third twin —or `test-msu` with
 some maps raw— so that each new path (raw from the ROM, raw from the
 `.msu`, the fallback when the `.msu` is not valid) is run by the suite;
 without it, they are paths no test runs.
+
+### 2026-11-22, Chajá: the experiment, a background and a grid raw from the `.msu`
+
+A throwaway prototype, not for merging: the-advocate branch
+`chaja-msu-raw` (`c9eed3da`, on `ec672f4c`; diff kept in
+`~/scratch/chaja/msu-raw/prototype.diff`). `lz2_backdrop` and `lz2_grid`
+first seek a slot per map in the `.msu` —at `$04000000 + index ×
+$40000`, written by `append_raw.py` after the build, sparse— and, if its
+length is not 0, DMA from `$2001`: the background tiles to `VMDATA` in
+one DMA, the grid's first half to `$7E8000` and its second half with
+`map_ram` behind to `$7F8000`, both through `WMDATA`. The bytecode and
+the page table stay LZ2, so `lz2_grid`'s raw time still carries them.
+Upper layer, sprites and the ChipSet animation are untouched. Without
+the slots (or without an MSU-1) it falls back to LZ2.
+
+**It loads the same bytes**: `check.py` compares VRAM's background
+tiles and WRAM's grid and `map_ram` against `raw/` after each jump, main
+and prototype alike: 0 bytes differ on ABL's 8, 9, 38, 52, 11, 312 and
+VD's 195, 164, 201, 338 —66's and 312's tiles differ in the same ChipSet
+animation drawings in both ROMs, which `anim_load` overwrites—.
+
+**Measured** with `loads.py` on Mesen2's core and its line profiler: the
+harness's door jump (`go_to_map`: the same fade and load a door does)
+from a fixed map, twice, keeping the second. "Load" is from `lz2_grid`'s
+entry to `pano_ppu`'s, the frozen tick's work: all of the map's loads,
+the window, the tint and `code_carry_after`. Frames of 262 lines.
+
+#### A Blurred Line, `release`: LZ2 from the ROM against raw from the `.msu`
+
+| map | background LZ2 → raw | grid LZ2 → raw | load LZ2 → raw | saved |
+|---|---:|---:|---:|---:|
+| 8 (Lashe sector) | 8.39 → 0.63 | 4.02 → 1.87 | 16.48 → 6.58 | 9.9 |
+| 9 (Lashe sector) | 7.45 → 0.55 | 3.24 → 1.25 | 14.17 → 5.26 | 8.9 |
+| 11 (Lazer Teeth HQ) | 3.59 → 0.26 | 4.38 → 2.74 | 11.80 → 6.84 | 5.0 |
+| 38 (sector 34) | 10.28 → 0.74 | 3.51 → 1.08 | 16.23 → 4.25 | 12.0 |
+| 66 (largest background) | 10.84 → 0.79 | 8.07 → 1.16 | 23.01 → 5.83 | 17.2 |
+| 148 | 10.16 → 0.81 | 5.08 → 1.10 | 19.85 → 6.52 | 13.3 |
+| 108 | 8.68 → 0.71 | 5.06 → 2.47 | 21.90 → 11.27 | 10.6 |
+
+#### A Blurred Line, `test-msu` and `test-msu-rom`: the three paths
+
+The twins carry the same maps; `test-msu` sends everything that may go to
+the `.msu` (all six pieces of each map), and the prototype was built from
+`test-msu-rom` with the slots appended.
+
+| map | load: LZ2 from the ROM | LZ2 from the `.msu` | raw from the `.msu` |
+|---|---:|---:|---:|
+| 66 | 22.94 | 25.53 | 6.07 |
+| 312 | 19.30 | 21.76 | 7.52 |
+| 52 | 14.93 | 15.83 | 5.39 |
+| 11 | 11.65 | 12.53 | 6.63 |
+
+LZ2 from the `.msu` is 0.9 to 2.6 frames slower than from the ROM in
+Mesen2 —the literals through the CPU, as the book says—, and raw is 8 to
+17 faster than either.
+
+#### Vampires Dawn, `release`: LZ2 from the `.msu` against raw from it
+
+The eight heaviest maps; all have their background in the `.msu` today,
+six their grid too (164's grid is in the ROM and its bytecode in the
+`.msu`; 201's grid is in the ROM).
+
+| map | background LZ2 → raw | grid LZ2 → raw | load LZ2 → raw | saved |
+|---|---:|---:|---:|---:|
+| 195 | 14.17 → 0.84 | 12.92 → 1.69 | 35.63 → 11.08 | 24.6 |
+| 338 | 13.03 → 0.83 | 12.74 → 2.10 | 31.47 → 8.63 | 22.8 |
+| 164 | 9.93 → 0.62 | 10.82 → 7.53 | 28.44 → 15.83 | 12.6 |
+| 181 | 9.60 → 0.60 | 11.53 → 1.21 | 25.71 → 6.39 | 19.3 |
+| 179 | 9.63 → 0.59 | 12.65 → 1.42 | 26.52 → 6.25 | 20.3 |
+| 161 | 11.94 → 0.71 | 6.97 → 2.24 | 25.69 → 9.74 | 16.0 |
+| 163 | 13.69 → 0.84 | 7.10 → 2.36 | 26.26 → 8.68 | 17.6 |
+| 201 | 12.23 → 0.77 | 5.41 → 2.24 | 28.27 → 13.64 | 14.6 |
+
+**A background goes up raw in 0.3 to 0.8 frames, against 3.6 to 14 in
+LZ2**: the DMA's 8 master cycles a byte (26 KB, 0.6 frames) and the
+seek. What is left of the raw loads is the rest of the map, still LZ2:
+sprites 1 to 2.6 frames, the bytecode and pages inside `lz2_grid` (164's
+25 KB of bytecode, in the `.msu`, is its 7.5), the animation up to 3.3,
+the upper layer up to 1.3. All raw, a map would load in some 3 to 5
+(estimated from those shares, not built).
+
+#### Mednafen: computed, not run
+
+Mednafen is the only emulator here whose seek takes time, and its model
+is a constant: `MSU1_WriteDataSeek` sets the busy bit for **400,000
+master cycles**, 1.12 frames, whatever the distance (`snes_faust/msu1.cpp`
+in Mednafen 1.32.1, `~/ref/mednafen-src`), and the status read does not
+catch up, so it clears at the end of the frame where they elapse: 1.1 to
+2.1 frames a seek. Its reads and DMAs cost what the other cores'. So
+Mednafen = Mesen2 + seeks × 1.1–2.1, and the seeks per load are:
+
+* ABL, LZ2 from the ROM: none. Raw from the `.msu` (prototype): 2
+  (background, grid), **+2.2 to 4.2 frames**: Lashe 9 would be 7.5 to
+  9.5 against 14.2. One seek if the map's pieces are laid out together.
+* ABL `test-msu`, LZ2 from the `.msu`: 6, +6.7 to 12.7.
+* VD: the same pieces from the `.msu` either way (two for most of these
+  maps), so the saving is Mesen2's.
+
+Running it would have taken a ROM that measures itself into the SRAM
+—Mednafen has no scripting and the harness does not drive it—, for a
+number its source already gives.
+
+#### The FX Pak: not measured here
+
+What is known, from taro's runs of the SRAM test ROM
+([`the-sram-as-slow-wram`](the-sram-as-slow-wram.md)): **a data seek
+with an MSU-1 track playing costs 2 ms** (0.12 frames); with none
+playing, the firmware first checksums the SRAM, ~1.5 ms per KB, ~48 ms
+(3 frames) for a 32 KB SRAM. A door between maps with the same song keeps
+the track playing; one that changes it stops it first (`map_song_mute`),
+so its seeks are the silent kind. **What is not known is whether the FX
+Pak feeds `$2001` as fast as a DMA reads it**: the FPGA serves a 16 KB
+buffer in two 8 KB halves, and the MCU refills the half left behind from
+the SD card (`msu1_loop` in sd2snes's `src/msu1.c`); a DMA drains 8 KB in
+~3 ms. If the card cannot refill a half in that time, the DMA reads stale
+bytes —it would show as broken tiles, not as lag—. The battle backdrops'
+32 KB DMA from the port has the same open question since 2026-09-26.
+Without a source for the card's sustained rate, no estimate.
+
+#### The limits on the `.msu`'s size
+
+None is near:
+
+* **The MSU-1's data port** is seeked with 32 bits (`$2000-$2003`): 4 GB.
+  So do the emulators: bsnes `uint32 dataSeekOffset`
+  (`sfc/coprocessor/msu1/msu1.hpp`), Mesen2 `uint32_t _dataPointer` and
+  `_dataSize` (`Core/SNES/Coprocessors/MSU1/Msu1.h`), snes9x `uint32_t
+  MSU1_DataSeekOffset` (`msu1.h`), Mednafen a `uint32` seek position; all
+  stream the file instead of loading it.
+* **The FX Pak's SD card is FAT32**: its FatFs (`src/ff.h` in sd2snes,
+  `cf7e21d`) has no exFAT and keeps the size in a `DWORD`, so 4 GB − 1 per
+  file. ABL's tracks are 2.5 GB in 106 files, each far under.
+* **Ours**: the spill region's 16-bit units of 256 reach 16 MB. VD with
+  every map raw would use ~12 MB of it. That is the only one in sight,
+  and it is ours to widen.
+
+The largest `.msu` in play would be VD's 40.7 MB, 1 % of 4 GB.
+
+#### Zip
+
+Zipped, raw maps take **less** than LZ2 ones (the table in the first
+entry): −160 KB for VD's `.msu` as it is, −230 KB if every map went raw.
+A zip of the game does not grow.
+
+#### A correction to [`lashe-city-transitions-lag`](lashe-city-transitions-lag.md)
+
+Its `measure.py` turned the profiler's `(frame, scanline)` into lines as
+`frame × 262 + scanline`, but the core's frame turns at the NMI's line
+(225), as `Mesen2.ticks` in the harness has it. So each routine's share
+there could be off by up to a frame, either way; the doors' totals, which
+come from `ticks`, are right. With the right formula (`loads.py` here),
+LZ2 in Lashe's load is 13.3 (9), 15.1 (8), 15.3 (38) and 10.1 (11)
+frames —background, grid and sprites—: the top of that task's "7 to 15",
+and a bit over it on 38.
+
+### 2026-11-22, Chajá: recommendation
+
+**For a game that needs the MSU-1, keeping the maps compressed buys
+nothing that matters.** In Vampires Dawn it saves 1.2 MB of `.msu` (the
+pieces there today) or 7.9 MB (every map), in a file of 33 to 41 MB that
+**zips smaller raw than compressed**, 1 % of the MSU-1's and FAT32's
+4 GB. What it costs is **13 to 25 frames per load on its heaviest maps**
+in Mesen2 (35.6 → 11.1 on 195), the same in Mednafen, where the seeks
+are the same either way.
+
+**For A Blurred Line, where the `.msu` is optional, a raw copy in it
+saves 5 to 17 frames per load** with the MSU-1 (Lashe's sectors 9 to 12,
+66 seventeen), 2 to 4 fewer in Mednafen for its two seeks, for +4.9 MB
+next to 2.5 GB of tracks and no ROM. Raw in the ROM is out for now: every
+map would be +2.5 MB against 576 KB free, and the backgrounds alone +852
+KB.
+
+So, in order:
+
+1. **First, the FX Pak**: a test ROM like the SRAM one that DMAs 32 and
+   64 KB from `$2001` in one go, from far-apart places, and checks them
+   against a checksum, timing the seeks with and without a track. It
+   answers this task's open question and the battle backdrops' at once.
+   If the card does not keep up, the raw DMAs go in pieces with a
+   wait in between, or this stops here. New draft:
+   [`a-big-dma-from-the-msu-1-data-port-is-unverified-on-the-fx-pak`](a-big-dma-from-the-msu-1-data-port-is-unverified-on-the-fx-pak.md).
+2. **Vampires Dawn: every map stream raw in the `.msu`.** With
+   `msu = "required"` the converter can decide alone —no per-map choice,
+   no help from the packing—: the map's pieces go raw and `.msu_only`,
+   one piece per map in load order (one seek per load), and the ROM
+   gets 2.3 MB back for what spills today. Runtime: a raw branch in each
+   loader (`lz2_backdrop`, `lz2_field` through `msu_dma0`, `lz2_anim`,
+   `lz2_grid`, `code_carry_after`), a seek per map, `WMDATA` for WRAM.
+   No fallback path: without the `.msu` the game does not boot.
+3. **A Blurred Line: the raw copy, used only when the `.msu` is valid**
+   (shape 3 above): the ROM untouched, a `.msu_only` piece per map and a
+   ROM table of where each is (~1 KB), the loaders asking the region's
+   flag the debug screen already uses. The fallback is today's LZ2.
+4. **A per-map choice** in the same cartridge (shape 2, the packing
+   choosing between two emitted forms) only if a game needs raw maps in
+   the ROM; none does today.
+
+What it costs, all of it:
+
+* **Runtime**: ~150–200 lines in `decompress.s` (the prototype's two
+  loaders are 180 with their comments), the fourth-byte flag or a table,
+  and splitting a DMA if `irq_music` minds a 1-frame stall (not measured).
+* **Converter**: the raw emission and the dedupe key by format (or no
+  dedupe for the `.msu` copies, for one seek a map), the lengths in front
+  of each raw block, `decompress_frames`' raw term.
+* **Packing**: little —`.msu_only` already exists—; the region's 16 MB
+  only if a game grows past VD.
+* **Tests**: a third twin of `test-msu` with raw maps, so that
+  `test_what_travels_in_the_msu_arrives_the_same_as_from_the_rom` runs
+  the raw paths and the fallback; without it they are paths no test runs.
+* **Size**: VD +7.9 MB of `.msu` (less zipped), ABL +4.9 MB.
+
+#### What was run
+
+* `just cartridges release` for ABL and VD, and `test-msu` and
+  `test-msu-rom` for ABL, in a ports worktree at `cb9f4f5`: with the
+  global tools (main, `ec672f4c`) and with `.local-tools` (`project`,
+  `cartridge`) from the prototype's worktree. Copies in
+  `~/scratch/chaja/msu-raw/rom-*`.
+* `sizes.py` and `summ.py` (sizes; with `DUMP=` the concatenations
+  gzipped and xz'd in `zip/`), `append_raw.py` (the slots), `loads.py`
+  (the timings, `runall.sh` and `runvd.sh`, outputs in `out/`) and
+  `check.py` (the bytes), all in `~/scratch/chaja/msu-raw/`.
+* No suite: the prototype is not for merging and nothing else changed.
+  `main` moved to `1b8825d8` (Hurón's `try_pack`, Adeleine) while this
+  ran; it was not merged into the prototype, and it may move these sizes
+  by a little, not the timings' shape.
+
+Nothing to install or merge: the prototype branches stay local —the-advocate
+`chaja-msu-raw` (`c9eed3da`); the ports' `chaja-msu-raw` has no commit—.
