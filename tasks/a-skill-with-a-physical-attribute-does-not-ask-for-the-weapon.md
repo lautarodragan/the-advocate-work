@@ -6,7 +6,7 @@ game: abl
 status: testing
 assignee: taro
 author: chaja
-agents: [Chajá, Tijereta]
+agents: [Chajá, Tijereta, Cardón]
 ---
 
 Seen by Chajá on 2026-10-15, at the-advocate's branch `chaja-attributes`
@@ -122,3 +122,21 @@ greying or whitening a skill mid-battle.
 but only those use what it added; the runtime comes from the checkout).
 Branches `tijereta-attr-weapon` in the-advocate, the-advocate-ports and
 the-advocate-docs.
+
+### 2026-11-22, Cardón: what to look at
+
+![AG7-17 with his starting ArmCannon: ArmLaser is grey (TillTheyGlow, under the cursor, is grey too)](images/a-skill-with-a-physical-attribute-does-not-ask-for-the-weapon/ag7-armcannon.png)
+
+![The same list with the ArmMountedLaser-!R equipped: ArmLaser white](images/a-skill-with-a-physical-attribute-does-not-ask-for-the-weapon/ag7-laser.png)
+
+![Saldra with her Bent Staff: Trip grey under the cursor, and A does nothing](images/a-skill-with-a-physical-attribute-does-not-ask-for-the-weapon/saldra-trip.png)
+
+Shot today from main (ports `22c7559`, tools at the-advocate main) on the
+cases `battle-114-skills-weapons` and `-laser`, against a Junkbot.
+
+**In play**: any battle with AG7-17 or Saldra in the party. Open Skill:
+with the ArmCannon-!R, ArmLaser and TillTheyGlow have to be grey and A on
+them buzzes. Equip the ArmMountedLaser-!R (item 275) from the menu and
+they turn white, unless TillTheyGlow's 60 SP don't reach. Saldra's Trip
+stays grey with any weapon she can hold. The menu's Tech Skill greys them
+anyway, because they target enemies.

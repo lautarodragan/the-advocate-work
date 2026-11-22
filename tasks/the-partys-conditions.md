@@ -6,7 +6,7 @@ game: abl
 status: testing
 assignee: taro
 author: taro
-agents: [Mulita]
+agents: [Mulita, Cardón]
 ---
 
 taro, on 2026-10-20, in their words, translated, after correcting
@@ -220,3 +220,20 @@ the same battle (the battle purges only at its end); SP on the map
 test does, no ROM test); a skill on its own side taking a condition away on
 the console (the model's unit test does); a skill that gives death; the
 save carrying the conditions across a load.
+
+### 2026-11-22, Cardón: what to look at
+
+![Kersh poisoned, walking on Paradise (108): every fourth step the screen flashes red](images/the-partys-conditions/poison-step-flash.png)
+
+![After a few steps: Kersh at 164/168 and Poison in the menu](images/the-partys-conditions/poison-menu.png)
+
+Shot today from main (ports `22c7559`), on `release` with Kersh poisoned
+by hand on 108. The cases of the suite do the same thing with a battle in
+between (`party-conditions`).
+
+**In play**: let an enemy poison someone. In ABL that means the Slime Coater
+(Drust Mines, map 103), the Actual Viper or Coiled Serpent (Ill Marshes,
+159; Murgator Cave) or the Wall Clinger (Sorbe Mountain). Win, and walk:
+1 HP every 4 steps with a red flash, never below 1. The poison stays across
+maps and in a save. An inn or a FullHeal removes it. In Zounds the same
+thing shows in the first desert (Env., 1 HP per 9 steps).

@@ -6,7 +6,7 @@ game: abl
 status: testing
 assignee: taro
 author: chaja
-agents: [Chajá, Aguará]
+agents: [Chajá, Aguará, Cardón]
 ---
 
 Seen by Chajá on 2026-10-15, at the-advocate's branch `chaja-attributes`
@@ -122,3 +122,12 @@ an enemy choosing a barrier (`skill_works_alone`; no ABL enemy has one).
 **On merging, install** `cartridge battle mapdata`. Branches
 `aguara-attr-shift` in the-advocate, the-advocate-ports and
 the-advocate-docs.
+
+### 2026-11-22, Cardón: what to look at
+
+No image. In ABL as it is played nobody learns Heat Barrier or Cold
+Barrier: only the test case `battle-69-attribute-shift` teaches it to
+Kersh. And the change is a damage number, not a look. Nothing to see in
+ABL's play. If it is checked by hand, it is with that case: Kersh casts Heat
+Barrier and the Dragon's Flame Field then does about half (30 where it was
+~57).

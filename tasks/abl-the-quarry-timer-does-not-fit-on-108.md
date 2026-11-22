@@ -5,7 +5,7 @@ type: bug
 status: testing
 assignee: taro
 author: cardon
-agents: [Chajá]
+agents: [Chajá, Cardón]
 ---
 
 Seen by Cardón on 2026-10-14, with the-advocate `a7f278e6` and the ports
@@ -90,3 +90,18 @@ tests and the experiment.
 
 To install when merging: `wally`, `convert` (and `screens`, from the slot
 screen's task).
+
+### 2026-11-22, Cardón: what to look at
+
+![Paradise (108) during the quarry job: the timer at 04:52, top left, with its red drawn in a lent palette](images/abl-the-quarry-timer-does-not-fit-on-108/timer-on-108.png)
+
+Shot today from main (ports `22c7559`): `release` with the job's switches
+(396, 385) and the day's on, the timer written running and visible, and
+Talan put at the quarry's exit onto 108 (58,40). Its red is palette 3's nearest,
+(28,5,6) instead of (31,0,0).
+
+**In play**: far in, the second day in Paradise. Take the defender's job at
+the Rock Quarry (150), which starts a five-minute timer, and leave by the
+exit at the top right. On 108 the timer has to keep showing and counting.
+The houses of Paradise start with it stopped (`timer_stays_in`). That is a
+decision, not a bug.
