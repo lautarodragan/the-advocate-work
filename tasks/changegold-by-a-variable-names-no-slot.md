@@ -2,7 +2,9 @@
 name: "ChangeGold by a variable does not give its variable a slot"
 description: "The variable sweep of the event compiler does not name ChangeGold's variable, so a page whose variable only ChangeGold names is left out"
 type: bug
-status: todo
+status: doing
+assignee: Cardón
+agents: [Cardón]
 author: chaja
 ---
 
@@ -39,3 +41,14 @@ one arm.
 names `ChangeGold`'s variable when `[1]` is 1, as `ChangeItems` does, with
 a unit test red before; and `just culprits` run over the eight ports, to
 say whether any page comes back. **First step**: the arm and its test.
+
+## Log
+
+### 2026-11-22, Hornero: still missing, taken by Cardón
+
+taro, translated:
+
+> Is this one still current? Fixing it should be simple, right?
+
+Still so at the-advocate `6a8f4162`: `command_variables` has no
+`CHANGE_GOLD` arm.
