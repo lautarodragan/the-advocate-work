@@ -5,7 +5,7 @@ type: bug
 status: testing
 assignee: taro
 author: taro
-agents: [Calandria]
+agents: [Calandria, Hurón]
 ---
 
 taro, on 2026-11-01, in their words, translated, after Hornero listed
@@ -118,3 +118,32 @@ as 145's, checked only by the culprits list); the smelting oven (map 133),
 the mining merchant's scene (map 57) and the level-up common events 51,
 52, 54, 26, 62 and 63 run on no ROM test, only compile; a jump to a label
 out of a loop is covered by the crate test alone.
+
+### 2026-11-22, Hurón: what to look at
+
+![The jail, map 145: the guard sees Uname west of him, "¡Hey! ¿Qué estás haciendo?!", and she ends up in the cell, map 144](images/zounds-mining-and-the-jail-do-not-compile/jail-guard-catches.png)
+
+![Misërenia's north cave, map 134: the young man takes the minerals, "La paga será de 50."](images/zounds-mining-and-the-jail-do-not-compile/mining-paid.png)
+
+Shot from the ports' main (`22c7559`, global tools at the-advocate
+`1b8825d8`) with the two tests' own steps
+(`test_the_jail_guard_catches_the_player` and `test_the_mining_is_paid` in
+`tests/test_zounds.py`): the switch the story turns on, a jump to the map,
+and for the mining three asked, three mined, two Querril and two Sonifal
+held. Before the fix neither page compiled: the guard walked past and let
+her go, and the young man said nothing.
+
+**How to get there in play**: both are far into the game, and no door of
+the debug room leads to them.
+
+* **The jail** is Unamë's rescue (maps 145, 147, 148 and 149; 145 is
+  "Left-Way"). Stand where a guard can see you: 145's sees the cell west
+  of him whichever way he turns. He says "¡Hey!" and the screen fades to
+  the cell. Maps 147 to 149 have the same guard page; no test plays them.
+* **The mining** is paid by the boss's young man in Misërenia's north cave
+  (map 134), once you have mined what was asked: talk to him and he takes
+  the minerals (Querril first, then Sonifal, one at a time) and pays. Look
+  at the gold and the items before and after. The smelting oven (map 133),
+  the merchant's scene in the mining place (map 57) and the level-up
+  common events (26, 51, 52, 54, 62, 63) only compile; no test runs them,
+  so they are worth a look if you pass by.

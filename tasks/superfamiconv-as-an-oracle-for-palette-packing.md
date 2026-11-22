@@ -208,3 +208,13 @@ There is no Rust to reinstall, because only a test was added.
 `~/ref/superfamiconv`: clone the repository, check out `v0.12.0-beta4`,
 run `cargo fetch --locked`, then run `cargo build --release --locked
 --offline`.
+
+### 2026-11-22, Hurón: no capture
+
+A test only: Adeleine against SuperFamiconv over generated pictures, with
+nothing in any game changing. How to check it: `just crate-test adeleine`
+in the-advocate, with `superfamiconv` on the PATH, runs the referee; with
+it off the PATH (`PATH=/usr/bin:/bin`) the same test says it is skipped.
+What it found and changed on screen is
+[`try-pack-picks-the-smallest-group`](try-pack-picks-the-smallest-group.md),
+which carries the capture.

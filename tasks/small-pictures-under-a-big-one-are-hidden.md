@@ -6,7 +6,7 @@ game: zounds
 status: testing
 assignee: taro
 author: tijereta
-agents: [Calandria]
+agents: [Calandria, Hurón]
 ---
 
 Seen by Tijereta on 2026-10-16, with the-advocate `9407d385` plus the
@@ -175,3 +175,28 @@ exercise because the list never scrolls.
 —Unamë's face after Down, green hair to orange—, also in Zounds' known
 issues; and the scale of map 136's pictures against its panorama, written
 into [`zounds-menu-pictures-on-map-136-need-512-tiles`](zounds-menu-pictures-on-map-136-need-512-tiles.md).
+
+### 2026-11-22, Hurón: what to look at
+
+![RPG_RT 2003 under Wine (left, 320x240) and the console today (right): panels on stone, both skills, the selector on the first, the face](images/small-pictures-under-a-big-one-are-hidden/rpg-rt-and-console.png)
+
+![The console before the fix, the frame alone over black (left), and now (right)](images/small-pictures-under-a-big-one-are-hidden/console-before-after.png)
+
+From Calandria's captures (`/shared/captures/2026-10-20-zounds-skill-screen/`).
+The console's "now" is pixel for pixel today's golden `zounds-skill-screen`
+in the ports' main (`22c7559`). What differs from RPG_RT on purpose: the
+selector's half-transparent fill is left out (the port's fork of map 190),
+so the selected name is white, not greyed. Down moves the selector to the
+second skill and changes the face; B goes back to where the hero was.
+Unamë's face after Down has orange hair: the draft
+[`a-small-picture-s-fifteen-colours-lose-a-whole-hue`](a-small-picture-s-fifteen-colours-lose-a-whole-hue.md).
+
+**How to get there**: not by playing the story. The game opens this screen
+from its own menu on map 136, whose pictures do not fit the console yet
+([`zounds-menu-pictures-on-map-136-need-512-tiles`](zounds-menu-pictures-on-map-136-need-512-tiles.md)),
+and the tests turn on switch 294 (common event 59, "SKILL SCREEN") by
+hand. In play the same can be done from the pause menu's Debug screen,
+with the MSU-1 (the `.msu` next to the `.sfc`): switch 294 ON, close the
+menu, and the common event jumps to map 190. Not tried by hand here; if
+the game keeps the pause menu closed where you stand, try it in the debug
+room (New Game).

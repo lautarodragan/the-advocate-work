@@ -5,7 +5,7 @@ type: docs
 status: testing
 assignee: taro
 author: taro
-agents: [Carpintero]
+agents: [Carpintero, Hurón]
 ---
 
 taro, on 2026-11-19, translated:
@@ -62,3 +62,11 @@ Draft: [`the-trim-guesses-which-maps-go-painted`](the-trim-guesses-which-maps-go
 —the trim reads the `painted_events` knob, not whether Wally can paint
 the map; harmless with Desert Nightmare's measured list, wrong with
 `painted_events = true`—.
+
+### 2026-11-22, Hurón: no capture
+
+A book page, with no code change: nothing on any screen. How to check it:
+read "The converter's stages" in the book's internals
+(`src/internals/the-converters-stages.md` in the-advocate-docs), which is
+published, and see whether it answers your question about which lossy
+step runs before which.

@@ -6,7 +6,7 @@ game: zounds
 status: testing
 assignee: taro
 author: mulita
-agents: [Mulita]
+agents: [Mulita, Hurón]
 ---
 
 Seen by Mulita on 2026-11-02, with the ports at `3e4e95d` and the tools
@@ -130,3 +130,21 @@ black frame—.
 `just install events convert mapdata cartridge`, from `~/the-advocate`:
 the bytecode changes, the converter and mapdata write the gate, and
 `cartridge` assembles the runtime.
+
+### 2026-11-22, Hurón: what to look at
+
+![Delmar's path from the debug room's door: before the fix Uname lands facing down (left), now facing up, her back to the camera (right)](images/a-teleport-s-facing-is-not-applied/delmar-before-after.png)
+
+The two halves are Mulita's before and after of the golden
+`zounds-debug-delmar` (`/shared/captures/2026-11-03-teleport-facing/`);
+the right one is pixel for pixel today's golden in the ports' main
+(`22c7559`), so the fix is still there.
+
+**How to get there**: "New Game" starts in the debug room (map 1000).
+Walk down to the row above the doors in the bottom wall, go right to the
+seventh door (Delmar, column 15), step down into its gap and answer "Go".
+On Delmar's path (map 183, cell (4, 37)) Uname has to face **up**. The
+eighth door (Itân, map 157) also lands facing up, and the sixth (the end
+of the maze, map 113) facing **right**; before the fix all three faced
+down, the way she walked into the door. The turn should not be seen
+happening: the map fades in with her already turned.
