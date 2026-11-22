@@ -2,7 +2,8 @@
 name: "The flash check reads a route's sound as a graphic change"
 description: "The converter's walk over a route on the hero, to know its graphic when a flash comes, steps over command 35 without its two operand bytes"
 type: bug
-status: todo
+status: doing
+assignee: Calandria
 author: calandria
 agents: [Calandria]
 ---
@@ -40,3 +41,16 @@ whose sound index's low byte is 34, followed by a flash, that does not
 read it as a graphic change. **First step**: that test, red.
 
 ## Log
+
+### 2026-11-22, Hornero: the skip was already fixed; taken by Calandria
+
+The converter's walk already steps over 35's two bytes since the-advocate
+`9329f602` (2026-10-20, Mulita, "Routes turn switches on and off"), which
+added 32 and 33 with two bytes too and fixed both walks; Tijereta's check
+that day was on `8f290c39`, before it. `convert.rs` has
+`32 | 33 | 35 => k += 2` today.
+
+What is left of "Done" is the shared helper and the unit test. taro,
+translated, choosing between closing it and doing those:
+
+> Let's go with 2
