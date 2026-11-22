@@ -2,7 +2,10 @@
 name: "EraseEvent: no test looks at what is seen"
 description: "That an erased event stops being drawn, stops blocking, and that a parallel one that erases itself is cut, is enforced by no test: it was looked at playing Desert Nightmare"
 type: test
-status: todo
+status: doing
+assignee: Tijereta
+agents: [Tijereta]
+game: test-game
 author: calandria
 ---
 
@@ -39,3 +42,13 @@ new test shown red first by breaking its runtime path (`apply_pages`,
 whether `test-special` has room for them or they belong in the test game.
 
 ## Log
+
+### 2026-11-22, Hornero: to the test game, taken by Tijereta
+
+taro, translated:
+
+> Could we add a test for this to the test game?
+
+So the two pages go in the test game in the-advocate, not in ABL's
+`test-special`: it answers the "First step"'s question. Tijereta moved
+the first ten tests there today.
