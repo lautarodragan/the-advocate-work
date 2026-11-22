@@ -132,3 +132,20 @@ taro looked at the two `test_delcentric_pump[17]` goldens and approved them:
 Merged in the ports (001cfb7) and the book (00f515a). taro asked for
 before/after captures of what no test covers —maps 199, 307, 315 and 17
 away from the pumps—, which Tijereta is taking.
+
+### 2026-11-22, Hornero: map 17's egg, to check by hand
+
+The one to confirm by playing: on map 17, the cell (60,61), right above
+event 51's egg (Future1, at (60,62)), looks like the factory's floor. The
+converter says no entrance reaches it, so the egg is drawn into the
+background; if the hero can stand there, the egg stays behind him instead
+of in front, and that is a bug of the reach analysis. In these captures the
+test placed the hero there, he did not walk: before (the egg a sprite, in
+front), after (in the background, behind), and the difference.
+
+![Map 17, the hero on (60,61): before, after, difference](images/abl-the-moved-tests-cases-leave-its-maps/17-ev51-behind-pair.png)
+![The same, zoomed](images/abl-the-moved-tests-cases-leave-its-maps/17-ev51-behind-zoom.png)
+
+taro will try it by hand:
+
+> Nah, it's fine. I'll test it by hand.
