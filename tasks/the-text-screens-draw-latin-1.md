@@ -426,3 +426,18 @@ book `calandria-latin1`. Install `battle screens mapdata convert`: `text`
 is a library inside them, and `project` and `cartridge` were installed
 here only to point the runtime at this worktree —in the main checkout
 the global ones already read its `runtime/`—. `events` did not change.
+
+### 2026-11-22, Hornero: the goldens approved, merged
+
+taro looked at Calandria's goldens —Zounds' five that move and the test
+game's five new ones— and at the two that Tijereta's reconciliation with
+the hub moved again:
+
+> Approved!
+
+> Approved :D
+
+Merged: the-advocate `7e8da728`, the ports `e886c7e`. Verified on that
+tree, with its tools: `just test` 29 passed, the test game 208 passed and
+6 skipped, ABL 1686 passed and 2 skipped, the ports' `just boot` 201
+passed.

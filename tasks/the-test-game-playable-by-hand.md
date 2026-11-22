@@ -198,3 +198,14 @@ Run: `just install-local .local-tools battle screens mapdata convert
 project cartridge` in that worktree, and `SOUNDFONT=…/FluidR3_GM.sf2 just
 test-game` from its root: 208 passed, 6 skipped, at `efd24639`. Installed
 when merging: those six, as Calandria's branch needs.
+
+### 2026-11-22, Hornero: the goldens approved, merged
+
+taro approved the eighteen meadow goldens and, after the reconciliation
+with Calandria's Latin-1 cases, the two that moved again:
+
+> Approved!
+
+> Approved :D
+
+Merged in the-advocate `a30ca61d` and `7e8da728`.
