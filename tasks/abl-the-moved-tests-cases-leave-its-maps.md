@@ -122,3 +122,13 @@ holds their colour counts, not what they look like.
 
 Nothing to install: no tool changed. The CI's cores cache key changes
 (the cases and patches moved).
+
+### 2026-11-22, Hornero: the pump goldens approved, merged
+
+taro looked at the two `test_delcentric_pump[17]` goldens and approved them:
+
+> I agree! They look better. Approved!
+
+Merged in the ports (001cfb7) and the book (00f515a). taro asked for
+before/after captures of what no test covers —maps 199, 307, 315 and 17
+away from the pumps—, which Tijereta is taking.
