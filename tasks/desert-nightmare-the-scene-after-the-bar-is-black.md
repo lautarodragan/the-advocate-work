@@ -26,9 +26,11 @@ taro, 2026-11-22, playing on Mesen2, with frame-by-frame captures in
 ![The last frame in the bar, 41793](images/desert-nightmare-the-scene-after-the-bar-is-black/frame-41793.png)
 ![The hotel room, 43663, after the black](images/desert-nightmare-the-scene-after-the-bar-is-black/frame-43663.png)
 
-The capture wrote 126 files over those 1,867 frames, which `runs.txt`
-printed as "126 frames the same"; `dedupe_frames.py` now says the span
-(the ports' `33c55dd`).
+`runs.txt` reads "126 frames the same" for 41794-43660: those are the
+files, not the frames. taro paused the capture over the black and started
+it again just before the hotel, with Mesen2's rewind. `dedupe_frames.py`
+now says such a run's files and the span they cover (the ports'
+`769676f`).
 
 ## Log
 
