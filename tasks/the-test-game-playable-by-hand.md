@@ -154,3 +154,47 @@ because of it, so the hub does not depend on it.
   from inside a case's page.
 * The RM2k files `just game` makes, `build/game/`, were not opened in
   EasyRPG or in the editor to see the hub there.
+
+### 2026-11-22, Tijereta: Calandria's letter cases join the hub
+
+Hornero's request, after the merge of the hub and taro's approval of its
+18 meadow goldens: bring Calandria's `calandria-latin1` —actor 4 Zoë
+Peña, item 2 the Poción Ácida, the Avispón, and three cases on the
+meadow— into the hub. the-advocate `tijereta-latin1-hub`, from `a30ca61d`:
+
+* `0777bbbf`, the merge. Its one conflict, `src/db/items.json`: her item
+  2 and the Way Home, 3, both stay.
+* `f3202f8c`, her cases from `cases/` to `tester/`, in a group of their
+  own, "Letters", and `test_screen_letters.py` playing them through the
+  board.
+* `efd24639`, two of her goldens moved.
+
+**Each case is now a page of its own**, on a shelf the tester calls:
+event 13, no graphic, in the meadow's top left bush. Inline in the
+tester's branches, `screen-letters` drew no hero under Zoë's box: the
+converter's `possible_leaders` plays a page's batches of
+`ChangePartyMembers` in a row, so the cases before had filled the party,
+her `ChangePartyMembers` added no one, and she was not among the meadow's
+leaders —3 characters on the meadow where Calandria's branch had 4—. On a
+page of its own the scan plays her case from the cartridge's party, as it
+played the test page. It costs a level of the call stack —`nested-calls`
+goes six of eight—. Teaching the scan that a choice's branches are
+alternatives would be the tool's fix, but it changes which leaders the
+ports' maps reserve palettes for; not done.
+
+How a new case gets offered is the same: a file in `tester/`, its name in
+a group of `hub.toml`, `just hub`.
+
+The goldens, against her branch, before, after and difference in
+`/shared/captures/2026-11-22-test-game-latin1-hub/`:
+
+* `screen-letters-name`, 319 pixels at 15 bits: the signpost and board;
+* `screen-letters-items`, 256: the Way Home under the potion, since the
+  tester hands it out. The battle's item list does not show it —RM2k's
+  shows every item, those not usable greyed, as far as I know; not
+  checked against RPG_RT—.
+
+Run: `just install-local .local-tools battle screens mapdata convert
+project cartridge` in that worktree, and `SOUNDFONT=…/FluidR3_GM.sf2 just
+test-game` from its root: 208 passed, 6 skipped, at `efd24639`. Installed
+when merging: those six, as Calandria's branch needs.
