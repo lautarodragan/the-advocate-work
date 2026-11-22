@@ -2,8 +2,8 @@
 name: "Desert Nightmare: the menu's burning face is lost on a painted map"
 description: "On a painted map the menu's face shows behind the options, but the inventory, keys, notes and maps screens show black where the face should be, with a sliver of it at the right edge"
 type: bug
-status: doing
-assignee: Mulita
+status: testing
+assignee: taro
 author: huron
 game: desert-nightmare
 agents: [Hurón, Mulita]
@@ -93,3 +93,14 @@ six goldens past the options with the face, as committed on main.
 [`painted-map-strips-may-land-on-a-big-picture`](painted-map-strips-may-land-on-a-big-picture.md):
 `paint_flush` uploads a painted map's columns with a big picture up too,
 and the slots share VRAM with the picture's tiles. Read, not reproduced.
+
+#### Verified, and what to install
+
+On the ports branch merged with main (`283339f`) and the fix's tools:
+`just boot -k desert`, 40 passed; ABL's `just tests`, 1728 passed and 2
+skipped. Not covered by any test: the zoomed big picture's load
+(`big_picture_zoom.s`) on a painted map, and a framed message over a big
+picture on a painted map past the empty notes' one-line box. Merging
+needs only `just install cartridge` —the runtime is compiled into it—.
+Hurón's `huron-dn-interiors` book branch adds a "Known issues" line for
+this; main's book has none, so it goes when that branch is merged.
