@@ -2,7 +2,9 @@
 name: "try_pack picks the smallest group, not the one that grows least"
 description: "try_pack's comment says each tile goes to the group that grows the least, but the code puts it in the group whose union ends smallest; doing what the comment says packs in fewer palettes in most of SuperFamiconv's wins"
 type: bug
-status: draft
+status: doing
+assignee: Hurón
+agents: [Hurón]
 author: huron
 ---
 
@@ -45,3 +47,12 @@ and goldens that move without a pixel changing. The cheap fix is worth
 measuring first, as the first step there: it might already turn the `None`s
 that task is looking for into fits. In the oracle test, the seeds this would
 fix are the first group in `KNOWN`.
+
+## Log
+
+### 2026-11-22, Hornero: taken by Hurón
+
+taro, translated, on whether to take it on knowing it moves goldens in
+every game:
+
+> Yes!
