@@ -2,8 +2,8 @@
 name: "The test game takes the harness and the first ten tests"
 description: "Phase 2's last two items: split ABL's harness so its generic part serves the test game in the-advocate, and move the ten M1 tests of what RM2k does from ABL's suite to the test game"
 type: test
-status: doing
-assignee: Tijereta
+status: testing
+assignee: taro
 agents: [Tijereta]
 author: taro
 game: test-game
@@ -147,3 +147,49 @@ VRAM.
   of the test game changed and none is new: nothing to look at in
   `/shared/captures/2026-11-22-test-game-m1/` but captures of the two new
   maps, which are not goldens.
+
+### 2026-11-22, Tijereta: ABL without them, merged with main, to testing
+
+ABL's ten files are deleted. **Their sixteen cases stay**, unused by any
+test: deleting them was tried first, and ABL's suite went red in two
+places —`test_the_versioned_patches_are_what_the_converter_decides`, with
+maps 17, 199, 307 and 315 keeping more colours (53 to 75, 59 to 74, 15 to
+18, 18 to 45), and `test_delcentric_pump[17]`, 9 of 57,344 pixels—: the
+cases are pages of the `release` taro plays, and taking them out moves
+what the converter decides for other maps. With them back the suite is
+green, so that was the cause. Taking them out is a change of what is
+seen, with its patches regenerated and its golden looked at: left for a
+change that wants it. The README's index loses the ten and says where they
+went; four comments that cited them point to the test game.
+
+The book: the progress page says phase 2 is done and what is next —the
+rest of the harness (ABL's menus, screens, models, and its `Session`'s
+clock, which the generic one copies), and phase 3—; A Blurred Line's page
+and the emulators' reference say where the driver and the audit patch
+live now. Research pages are snapshots and were not touched. The
+the-advocate README no longer says it runs no ROM test.
+
+#### Verified on the merged tree
+
+The ports merged with main (`1850365`), with `rm2k-snes-project` from
+the-advocate's branch (`65f68fee`'s harness) and the rest global:
+
+* ABL's `just tests`: **1686 passed, 2 skipped** —the 1728 less the 42
+  tests the ten files held—.
+* the ports' `just boot`: **196 passed, 3 failed**, the three of
+  `test_desert_nightmare_menu.py` (15,568 pixels off each): main has
+  Mulita's goldens for the menu on painted maps, whose runtime fix is
+  the-advocate's `mulita-dn-menu-face`, not in the-advocate's main nor in
+  the global tools. Not from this change; the 196 others are green.
+* the-advocate needed no merge: its main has not moved from `0ae40e0a`.
+
+#### When merging
+
+* the-advocate touches `rm2k-project` —`rm2k-snes-project --harness`, and
+  `suite.harness` in its JSON—: `just install project` at least, before
+  the ports run, since ABL's `places.py` and the root's `games.py` ask it
+  on import; AGENTS.md says a `project` change reinstalls everything.
+* the CI's cores cache key changes (the patches moved): a first run
+  rebuilds them.
+* What the test game's maps gained —maps 12 and 13, a dispatcher on map
+  10, terrains on ChipSet 2— changed no golden of it.
