@@ -2,9 +2,9 @@
 name: "The Frozen World: characters cut on crowded lines"
 description: "1 map put more characters on a line than the console draws —nine characters are 36 slivers, past the PPU's 34—, and the ones further back lose columns or vanish"
 type: bug
-status: doing
+status: testing
 agents: [Chajá]
-assignee: Chajá
+assignee: taro
 author: mulita
 game: frozen-world
 ---
@@ -66,3 +66,56 @@ original (a baked stall is under every character, an object was over
 the ones behind it), and the Known issues line of the book's Frozen World
 page removed. Not done here: no ROM was looked at and no test was run
 with the change. To `todo`.
+
+### 2026-11-22, Chajá: `baked_events = [128]`, measured and turned on
+
+taro asked to turn it on if it has no negative impact. Ports branch
+`chaja-tfw-market` from `238c90b`, global tools (the-advocate
+`0ae40e0a`), the release built without and with the line.
+
+#### What it costs
+
+* `degradations.json`: equal, byte for byte.
+* The converter's log: only map 128 changes —17 colours of 104 where it
+  had 11, 0 merged; 28 unique tiles where 24; 17 blocks where 16; 5
+  sprite characters where 6—. Of Adeleine's 415 images only map 128's
+  two change, and only by a row of the poses' blocks below the map.
+* `just space`: 57 banks used and 50 free, as before; 784 B less in the
+  gaps, 936 of `$C1`, 27 of bank 0, 25 of bank 1 and 109 of far RAM
+  (1,317 B left).
+
+#### Layering, against RM2k
+
+A ChipSet tile stays inside its 16x16 cell, so a character behind a
+stall (the row above) never overlaps it: in RM2k it is drawn under, and
+here too. The only change is a character on the stall's row to its
+left, whose side RM2k draws under the stall and the console over it: the
+divergence the book already states. Counted on the sprites, opaque
+pixels in columns 20-23 of rows 16-31: Lutine up to 10 facing up, 1-2
+facing right, 0 facing down or left; shopkeeper 21 (left of stall 14) 2
+facing up or down; 7 and 25, 0. Nothing that shows in the captures.
+
+#### Captured
+
+A throwaway script (`~/scratch/chaja/tfw-market/scripts/`) plays the
+intro to the beach, jumps to map 128 and takes the arrival, nine spots
+around the stalls —behind, in front, left, right— with A pressed on what
+the hero faces, and two walks along rows 14 and 12; against a render of
+the map with RM2k's order (rm2k-render's layers and sheets). Before and
+after are equal pixel for pixel everywhere except spots 02 and 03, the
+hero on row 13 left of a stall: before, her head was cut; after, she is
+whole. A opens the same message on every stall and crate, and control
+comes back. In `/shared/captures/2026-11-22-tfw-market/`.
+
+#### Applied
+
+The line, with its why, in Frozen World's `advocate.toml` (ports
+`chaja-tfw-market`, `9f13196`); the Known issues line out of the book's
+Frozen World page, and the divergence page says Frozen World turns it on
+for map 128 (docs `chaja-tfw-market`, `1080fc4`). Run with the change:
+`just boot -k frozen`, 14 passed, no golden moved; `just objects-per-line
+frozen-world`, 150 maps counted, 0 over (maps 1, 2, 3, 4 and 7 not
+counted, as before: the jump does not arrive). Not run: the full `just
+boot` of the other games, which the change does not touch, nor bsnes on
+map 128 —no test of the suite goes there; the captures are snes9x only—.
+Nothing to install when merging: no tools changed. To `testing`.
