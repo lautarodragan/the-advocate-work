@@ -2,7 +2,9 @@
 name: "Zounds: skill names show a `?` for an accent"
 description: "The battle's text block carries the skills' names from the database as they are, without the plain stand-ins, so Zounds' \"Látigo de Seda\" is \"L?tigo de Seda\" in the cartridge, where the items' \"Poción\" is \"Pocion\""
 type: bug
-status: todo
+status: doing
+assignee: Aguará
+agents: [Aguará]
 author: aguara
 ---
 
@@ -43,3 +45,14 @@ paths the draft names, unchanged: `skill_texts` in
 `emit.rs` adds it with `texts.add` both for `skill_txt` and for the
 taught skill's whole name (`whole_skill_text`), without `plain`. Moved
 to `todo` by taro's request.
+
+### 2026-11-22, Hornero: taken by Aguará
+
+taro, translated, on whether it can be done without new problems:
+
+> Go ahead!
+
+Hornero's read before launching: both paths are in `emit.rs` of the
+mapdata stage, which already has `plain`; the skill's description and its
+two using messages (`using_message1`, `using_message2`) are added without
+it too, and go in the same change.
