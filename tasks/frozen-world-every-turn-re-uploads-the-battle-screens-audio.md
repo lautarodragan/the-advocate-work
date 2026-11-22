@@ -2,7 +2,9 @@
 name: "Frozen World: every turn re-uploads the battle screen's audio"
 description: "Each turn of a fight teleports map 3 → map 1 → map 3, and each teleport uploads the map's audio package again: a tick of ~62 frames entering map 1 and ~34 entering map 3, about 66 frames of every turn"
 type: bug
-status: todo
+status: doing
+assignee: Chajá
+agents: [Chajá]
 author: aguara
 game: frozen-world
 ---
@@ -71,3 +73,25 @@ the harness's jump and not the game's teleports, which may fade
 otherwise—; and how much of those frames is `package_load_l`: no line
 profiler was run, so that the extra frames are the audio is still
 Aguará's measurement, not mine. To `todo`, with the numbers above.
+
+### 2026-11-22, Hornero: taken by Chajá
+
+taro, translated:
+
+> Can something be done about it? I can confirm it is pretty annoying.
+> Does it also happen with MSU and PCM?
+
+Hornero's read of the runtime: with a valid `.msu`, `se_msu_prepare`
+(`runtime/msu_effects.s`) forgets every sound effect on each package
+load and uploads them all again from the `.msu`, at the package's rate;
+so with MSU-1 a round trip should cost the same or more. Without MSU-1,
+`package_load_done` keeps what was already in ARAM. Not measured.
+
+The plan taro approved ("Go ahead!"), from the simplest:
+
+1. In the runtime, a package equal to the one loaded uploads nothing.
+2. In the converter, two maps that teleport into each other all the
+   time —the grid and the battle screen— share one package, the union
+   of both, if it fits.
+3. If it does not fit, the effects both share stay, and only the
+   difference goes up.
