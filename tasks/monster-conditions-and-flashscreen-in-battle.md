@@ -4,7 +4,7 @@ description: "ChangeMonsterCondition leaves out 164 troop pages —140 with Flas
 type: feature
 game: abl
 status: testing
-agents: [Aguará, Chajá]
+agents: [Aguará, Chajá, Cardón]
 assignee: taro
 author: aguara
 ---
@@ -114,3 +114,19 @@ on turn 10 it goes black and ends with no victory screen.
 **Draft**: `battle-message-box-empties-two-frames-late.md`.
 Captures: `~/scratch/chaja/capturas/2026-10-12-destello/`, with its
 `LEEME.txt`.
+
+### 2026-11-22, Cardón: what to look at
+
+![Inscribe after Talan's wall of bark: the scene flashes in the wall's colour, and the message window does not](images/monster-conditions-and-flashscreen-in-battle/flash-1.png)
+
+![Fifteen frames later, the flash fading out over the scene](images/monster-conditions-and-flashscreen-in-battle/flash-15.png)
+
+Today's goldens `battle-inscribe-flash-1` and `-15` (case
+`battle-inscribe`, the Lumbering Giant).
+
+**In play**: WallOfBark and then Inscribe, Talan's switch skills, in a battle
+against the Lumbering Giant (troop 128: the Lashe Area's northwest and
+southwest encounters, map 66). And the agency captain's battle on map 207
+(Memnosyne's Adobe), which is far into the game. It has to open with its
+colours although the map was black, and on turn 10 it goes black and ends
+with no victory screen.

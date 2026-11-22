@@ -115,3 +115,19 @@ left, 154 now).
 checkout it was installed from—.
 
 Captures: `/shared/captures/2026-10-20-map-only-skills/`.
+
+### 2026-11-22, Cardón: what to look at
+
+![The ROM: Emily's list in battle, with Change Tape grey (under the cursor) and Play Radio white](images/battle-offers-skills-that-are-only-for-the-map/rom-emily.png)
+
+![RPG_RT 2015 under Wine, the same list: Change Tape grey (the window's bottom is cut off by Wine's desktop)](images/battle-offers-skills-that-are-only-for-the-map/original-emily.png)
+
+The first is today's golden `battle-map-only-skills` (case
+`battle-114-emily-413`), the second is from
+`/shared/captures/2026-10-20-map-only-skills/`.
+
+**In play**: any battle with Emily in the party, Skill. Change Tape is grey,
+and A on it does nothing and leaves the list open. With Radin: Mix
+Formula, Dig Ingredients and Field/Battery Repair are grey too. That case
+has no ROM capture; the original's is `original-radin.png` in the same
+folder. On the map, from Tech Skill, all of them still work.
