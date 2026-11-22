@@ -2,7 +2,7 @@
 name: "cargo fmt --check flags three files on main"
 description: "At the-advocate 3f3eede3, rustfmt wants to rewrap lines in convert/src/chipsets.rs, mapdata/src/layer_text.rs and mapdata/tests/python.rs; CI's lint job runs it"
 type: bug
-status: draft
+status: done
 author: chaja
 agents: [Chajá]
 ---
@@ -28,3 +28,14 @@ toolchain CI pins.
 Carpintero saw the same on 2026-11-16 at cd3fecb8 (`just lint`), with a
 fourth file: `rm2k-snes/convert/src/game.rs`, one hunk, which came with
 Chajá's merge that day.
+
+### 2026-11-22, Hornero: already fixed, done
+
+the-advocate `83e536bd` (2026-11-20, "rustfmt over chipsets.rs,
+compile.rs, windows.rs, layer_text.rs and python.rs") rewrapped them.
+On main `cce50c91`, `cargo fmt --all -- --check` is clean (local rustfmt
+1.98), and CI's "rustfmt and clippy" job, on its pinned 1.96.0, passed at
+`6a8f4162`. Carpintero's `game.rs` shows no diff either. taro,
+translated:
+
+> Go ahead

@@ -618,6 +618,20 @@ catch an altered binary is the same thing that catches any regression: the
 goldens and `test_cores.py`. Recompiling them without looking stops being
 harmless.
 
+**SuperFamiconv is compiled in here too, and only as a referee.** It is not
+part of the toolchain: Adeleine's `tests/superfamiconv.rs` hands it the
+same tiles as `try_pack`, and is skipped without it, as in CI. It is cloned
+in `~/ref/superfamiconv`, pinned at the tag `v0.12.0-beta4`, built with
+`cargo fetch --locked` and then `cargo build --release --locked --offline`
+—the network only for the fetch—, and linked as
+`/usr/local/bin/superfamiconv`. What was checked, on 2026-11-22: it has no
+`build.rs` and no committed binaries, and its sources have no `unsafe`,
+network or process calls; 57 crates go into the release build, and their
+12 build scripts only probe `rustc --version` and write into their
+`OUT_DIR`; the binary imports nothing about network or execution. What was
+**not** checked: the tag is not signed, nobody read the crates beyond their
+build scripts, and the build ran as root. taro's, from 2026-11-22.
+
 **The repos in `~/ref` are cloned inside and are not the host's.** `liblcf`
 is where Ditto's schema comes from —and with it the defaults that a game's
 `data/` already brings applied and the names of RM2k's commands, against
