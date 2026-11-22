@@ -46,3 +46,104 @@ Started from the-advocate `0ae40e0a`, the ports `238c90b`, the book
 `3e6bb0b`. Branches `tijereta-test-game-harness` in the three, worktrees
 under `~/scratch/tijereta/tg/`. ABL's suite and the ports' `just boot` run
 first on `238c90b` untouched, with the global tools, as the "before".
+
+### 2026-11-22, Tijereta: the harness's generic part, to the-advocate
+
+What knows no game went to the-advocate as one Python package,
+`rm2k_snes_harness`, in `rm2k-snes/harness/`: ABL's libretro driver
+(`retro.py`, the superset: it has the MSU-1 log), the three bsnes patches
+and Mesen2's shim (`cores/`), RPG Maker's rules (`rm2k.py`), the engine's
+numbers and the stage runner (`engine.py`, `stage.py`), and what was the
+test game's stopgap, made generic: a `Game` (its root, its builder flags,
+its goldens) handed once to `use`, the `Cartridge`, the tick-clock
+`Session` and the 15-bit `golden`. `test-game/tests/game.py` and the
+test game's copy of the driver are gone; its `conftest.py` says what is
+its own.
+
+**How the ports find it**: `rm2k-snes-project --harness` prints the
+directory, with no project needed —the ports' root runs several games—,
+and the JSON's `suite.harness` says it too. It is the checkout the tools
+were installed from, like the runtime, so a worktree's `.local-tools/`
+brings its own harness and its own runtime together, and nothing in the
+ports names where the-advocate is. ABL's `places.py`, which every entry
+point imports first, appends it to `sys.path`; the root's `games.py` does
+the same; the four experiments ask the binary; `just audit-core` and
+`just mesen2-core` take the patches and the shim from there. A release's
+archive carries `rm2k-snes/harness/` and its smoke test checks the binary
+finds the archive's. The test game names it in its `pytest.ini`, by its
+place in the repo: it is tested with its own checkout's harness.
+
+**What ABL's harness takes from it**: the driver, the rules, the engine
+and the stages. Its `console.Session` —title screen, menus, saves through
+the slot screen, the frame-clock `run`— is still its own, and the generic
+`Session` copies its clock; rebasing one on the other is part of what the
+progress page now lists as next, with the menus and models.
+
+#### Verified
+
+* the-advocate: `just test` 29 passed; `just crate-test project`; clippy
+  and rustfmt on `rm2k-project`; `just test-game` 78 passed, 1 skipped
+  (the same as before: the rename's save, in bsnes).
+* ABL's `just tests` and the ports' `just boot`, before (`238c90b`, global
+  tools) and after (the harness commits, with only `rm2k-snes-project`
+  from a frozen worktree of the-advocate's branch): **1728 passed, 2
+  skipped** and **198 passed**, both times.
+
+### 2026-11-22, Tijereta: the ten tests, to the test game
+
+All ten moved, each rewritten on the test game's maps and run in snes9x
+and bsnes —ABL ran them in snes9x alone—, and then deleted from ABL with
+the sixteen cases only they used (`save-198` stays: others use it).
+What the test game needed:
+
+* **cases** for each (`variables*`, `screen-of-*`, `labels`, `branch*`,
+  `key-wait-for-*`, `speed*`, `terrain`, `camera-fast*`), switches in
+  1400-1430, the RM2k variable numbers ABL's used;
+* **the lookout** (map 10) gets "Dispatcher", an automatic page on switch
+  1430 that teleports to the clearing: `test_jumps`'s dispatcher case;
+* **terrains** 2-4 in the database, and the showcase's ChipSet (2) gives
+  tiles 5000-5003 terrains 1-4 and the first water 3: `test_terrain`,
+  whose expected values come from the dump's `.tiles` and `terrain_data`;
+* **the doors**, map 12, two rooms crossed by teleports to the same map,
+  a door that opens (moving itself and a marker) and a hatch above the
+  hero: `test_same_door` and `test_own_action`. Its events are
+  `move_type: stationary` —the format's default is random, and the first
+  run had them wandering—;
+* **the patchwork**, map 13, 60x60 of diagonal stripes of five lower
+  tiles: `test_camera`, with a guard that no row or column draws like its
+  neighbours one or two away, which the plain would fail.
+
+The generic `Session` learned `variable(number)` (through the event
+compiler's `scan`, as ABL's `data.variable_slots`), `switches=` at boot
+and `turn_on`, `put_byte`/`put_word`, `event`, `party`, `box_up`,
+`running_a_page`, `run(ticks, holding)`, `until_control`, `go_to_map`,
+`window` and `wrongly_drawn_cells`.
+
+Differences from ABL's versions, on purpose: the screen-place case uses
+the plain (pan) and the meadow (screen-sized) instead of ABL's map 5; the
+saturation case writes 999999 itself instead of calling ABL's common event
+45; the item count uses the Sword; the own-action "head on" half faces the
+hatch itself, which is the rule's other half (ABL's faced a blocking event
+two cells short of it); the conditional's "game page" half is a case with
+the shape of ABL's map 52 page.
+
+Seen red on the way, and why: the key cases pressed during the case's
+`Wait 5` —tenths of a second, thirty frames: measured, a press before them
+is not read—, and the doors' events wandering. The moved tests were not
+seen red against the defects they guard: that was done in ABL, where they
+were born.
+
+#### Skips in bsnes (5 new)
+
+The two saves (variables, speed), as the leader-name rename already did:
+bsnes keeps the SRAM between consoles in a process and does not let it be
+cleared. The three window checks of `test_camera`: bsnes's core exposes no
+VRAM.
+
+#### Verified
+
+* the-advocate at `65f68fee`: `just test` 29 passed; `just test-game -rs`
+  **164 passed, 6 skipped** (the five above and the rename's). No golden
+  of the test game changed and none is new: nothing to look at in
+  `/shared/captures/2026-11-22-test-game-m1/` but captures of the two new
+  maps, which are not goldens.
