@@ -1,8 +1,8 @@
 ---
-name: "Desert Nightmare: the warehouse's monster is not drawn"
-description: "The silhouette that comes down from the roof on map 28 and the shadow that crosses map 21 are small pictures now, and neither room has a sprite tile to spare for them: the scene plays over the room without them"
+name: "Desert Nightmare: the silhouette coming down from the warehouse's cabinet is not drawn"
+description: "On map 28, the warehouse's last room, the silhouette that comes down from the cabinet before the monster's battle is a small picture with no sprite tiles to spare, and the scene plays without it; map 21's shadow is drawn since 2026-11-21"
 type: bug
-status: draft
+status: todo
 author: aguara
 agents: [Aguará]
 game: desert-nightmare
@@ -36,3 +36,21 @@ take the tiles of what that page hides or of a cache slot; or the map's
 pictures could go in without the ones that never fit —see
 [`a-map-s-small-pictures-go-in-all-or-none`](a-map-s-small-pictures-go-in-all-or-none.md)—,
 though on map 28 that alone does not make room.
+
+## Log
+
+### 2026-11-22, Hornero: map 21 draws its shadow, map 28 still not
+
+At the ports `89f77b4` and the-advocate `0ae40e0a`, the release's
+`converter.log`: map 21 now carries `Lagerhaus_Szene2` ("the pictures
+'Lagerhaus_Szene2, Kartencursor', 4 objects in 4 tiles from 128"), but map
+28 still warns "the pictures 'Interaktion, …, LagerhausDach_Szene2, …'
+aren't drawn here: with their 9 tiles the map fits no VRAM layout". The
+silhouette coming down from the cabinet is still missing.
+
+### 2026-11-22, Hornero: to todo, retitled
+
+taro: the monster shows now, so the title names what is still missing,
+map 28's silhouette. To be taken up with Hurón's
+[`desert-nightmare-interiors-painted-now-that-the-box-is-a-window`](desert-nightmare-interiors-painted-now-that-the-box-is-a-window.md),
+which changes what map 28's sprites have to share.

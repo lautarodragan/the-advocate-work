@@ -2,7 +2,7 @@
 name: "A call counts as erasing a still event"
 description: "posed_events keeps as an object every still event drawn past its cell whose pages call a common event, as if the call could erase it; in Desert Nightmare the pages call the message box and no common event erases: 194 events on 25 maps"
 type: feature
-status: draft
+status: todo
 author: cardon
 game: desert-nightmare
 agents: [Cardón]

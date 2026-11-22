@@ -2,7 +2,7 @@
 name: "Desert Nightmare's map 95 trades two events for the map cursor"
 description: "With the message box's pictures gone, the converter draws the menu's map cursor on map 95 and leaves out two events a route dresses, 4 and 13"
 type: bug
-status: draft
+status: todo
 author: huron
 ---
 
