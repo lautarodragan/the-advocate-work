@@ -35,3 +35,50 @@ pictures `map_pictures` takes.
 **To reproduce**: build Zounds' `release` and look at `degradations.json`,
 or play `test_the_dream_turns_switch_47_on_and_goes_back_to_the_room` in
 the ports' `tests/test_zounds.py` and look at the screen on map 30.
+
+## Log
+
+### 2026-11-22, Carpintero: still so, and 100 % alone is not enough
+
+taro asked whether it can be done without much complexity, showing the
+fog at 100 % instead of 110 %. Checked against the-advocate `0ae40e0a`
+and the ports `89f77b4`.
+
+**Still so**: Zounds' `build/release/degradations.json` has
+`picture 1 "fog2" is not shown here`, `picture-not-shown`, on map 30,
+event 1, page 1, command 3; `picture_shows` in
+`rm2k-snes/events/src/compile.rs` still takes a zoom of 1 to 100 only.
+
+**At 100 % alone** —a fork of map 30 in `patches/manual/maps/` with that
+`ShowPicture`'s zoom at 100— the compiler takes it, and it is a big
+picture: at transparency 50 it hides the map ("The map is not visible
+while it is there", in the book's "What large pictures do not model"),
+so the dream plays as the fog over black. Not built: it is what the code
+says.
+
+**At 100 % and drawn into the map**, which is what the fog needs, the
+rule exists: with `[graphics] map_pictures = true`, `map_pictures.rs` in
+rm2k-snes-convert takes a translucent picture that goes with the screen,
+on a map that scrolls, unmoved and at 100 %, as a mist repeated over the
+map, with its tone; its wave is not done. Built with both changes —the
+fork and the switch— on a ports worktree, `just cartridges` in
+`zounds/`, and thrown away:
+
+    pictures drawn into their map: 4 in 4 of the 189 maps
+    map 17: drawn into the map: 'fog2' at 80 %
+    map 30: drawn into the map: 'fog2' at 50 %
+    map 86: drawn into the map: 'sign' at 80 %
+    map 190: drawn into the map: 'Zounds_SystemBox_Pic' at 100 %
+    map 30: wally: the picture needs more than 1024 distinct tiles; a tilemap entry has ten bits for the tile number
+
+It does not build: map 30 is 200x200, and the mist blended over all of
+it makes more distinct tiles than a tilemap entry can number. And the
+switch is the project's, not the picture's: it would also draw map 17's
+`fog2` —the bed's, shown during the erased screen just before the
+teleport to map 30— into the ship's cabin for good, and take map 86's
+sign and map 190's skill-screen box, which are pictures today.
+
+**Answer**: not without some complexity. The zoom is the easy part, a
+fork; what is missing is a way to show a translucent fog over a big map:
+a rule that takes this one picture and not Zounds' other three, and a
+way to draw it that does not multiply map 30's tiles.

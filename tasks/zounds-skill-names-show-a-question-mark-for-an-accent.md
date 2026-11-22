@@ -2,7 +2,7 @@
 name: "Zounds: skill names show a `?` for an accent"
 description: "The battle's text block carries the skills' names from the database as they are, without the plain stand-ins, so Zounds' \"Látigo de Seda\" is \"L?tigo de Seda\" in the cartridge, where the items' \"Poción\" is \"Pocion\""
 type: bug
-status: draft
+status: todo
 author: aguara
 ---
 
@@ -29,3 +29,17 @@ Violeta", "Muerte Espontánea"— in the battle's skill list.
 
 The actor choice does not show it since that task: it has its own copy of
 a skill's name, `skill_target_names`, made with `item_text`.
+
+## Log
+
+### 2026-11-22, Carpintero: still so, to todo
+
+Checked against the-advocate `0ae40e0a` and the ports `89f77b4`, on
+Zounds' `build/release/mapdata.inc` of that day: Aguará's
+`texts_scan.py` counts `L?tigo` 2, `Latigo` 1, `P?talo` 1, `Petalo` 1,
+`Pocion` 3 and `Poci?n` 0 in `item_texts`. The `?` ones are the two
+paths the draft names, unchanged: `skill_texts` in
+`rm2k-snes/battle/src/model.rs` still hands `s.name` as it is, and
+`emit.rs` adds it with `texts.add` both for `skill_txt` and for the
+taught skill's whole name (`whole_skill_text`), without `plain`. Moved
+to `todo` by taro's request.

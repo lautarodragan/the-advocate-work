@@ -35,3 +35,36 @@ for the actor's graphic or the shop carrying the changed ones; a test page
 that changes a member's CharSet and opens a shop. First step: count, in the
 nine games, the `ChangeSpriteAssociation`s on actors that can stand in a
 shop's party.
+
+## Log
+
+### 2026-11-22, Carpintero: still so, and two more games could show it
+
+**Still so** on the-advocate `0ae40e0a`: `runtime/shop_party.s` says it
+in its header —"What a member is drawn with is the database's CharSet: a
+`ChangeSpriteAssociation` is not followed"—, and neither it nor `party.rs`
+in rm2k-snes-screens has a commit about it since `8486ea52`, which made
+the window. Not played.
+
+Counted in the `data/` of the nine games of the ports at `89f77b4`,
+maps and common events: `OpenShop` (10720) and
+`ChangeSpriteAssociation` (10630) by actor.
+
+    game                shops  ChangeSpriteAssociation by actor
+    abl                    43  19: 106, 20: 106
+    book-of-three          19  —
+    vampires-dawn         297  1: 8, 2: 20, 11: 69
+    zounds                  7  1: 9
+    desert-nightmare        0  1: 16
+    dooms2                  0  nine actors, 87
+    el-dorado               0  1: 663
+    sunset-over-imdahl      0  1: 92
+    frozen-world            0  —
+
+So the games where it can show are Vampires Dawn and Zounds: both have
+shops and change the graphic of actors that join the party (all of them
+are added by an `AddRemoveActors` somewhere). Zounds' nine are on
+Unamë, on maps 7, 13, 17, 30 and 99 —the bed and the dream—. Whether a
+shop is ever opened with a changed graphic in effect was not looked at.
+No `game:` added: it would be where it was seen, and it was not seen in
+any.

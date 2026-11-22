@@ -2,6 +2,7 @@
 name: "Vehicles: EnterExitVehicle and the boat"
 description: "Zounds starts its boat on map 187 'Fishing Game' and boards it with EnterExitVehicle on two pages, plus a TeleportTargets; the compiler has no vehicles, and the System's boat/ship/airship music slots point at RTP songs the repo lacks"
 type: feature
+game: zounds
 status: wishlist
 author: aguara
 ---
@@ -33,3 +34,16 @@ music—, `TeleportTargets` compiled, and a test game page that boards the
 boat and crosses water; the other vehicles' commands are left for when a
 game needs them. First step: easyrpg's `Game_Vehicle` and what of the
 hero's movement it changes.
+
+## Log
+
+### 2026-11-22, Carpintero: Zounds is the only game that uses them
+
+Counted in the `data/` of the nine games of the ports at `89f77b4`,
+every map and common event: `EnterExitVehicle` (10840) is only in
+Zounds, once each on maps 186 and 187; `TeleportTargets` (11810), only
+on its map 2; `ChangeVehicleGraphic` (10650) and `SetVehicleLocation`
+(10850), in none. So `game: zounds`. Still not compiled on
+the-advocate `0ae40e0a`: `just culprits release` in `zounds/` gives
+`EnterExitVehicle` as the culprit of its 2 pages, alone in both, and
+`TeleportTargets` as one of the culprits of its page.
