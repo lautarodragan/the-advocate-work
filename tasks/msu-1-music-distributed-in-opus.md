@@ -2,7 +2,7 @@
 name: "The MSU-1 music, distributed in Opus"
 description: "ABL's .pcm files weigh 1.4 GB; distributed in Opus at 160 kbps they would be ~180 MB, and in FLAC ~550 MB, and they are converted to .pcm once at install time"
 type: feature
-status: wishlist
+status: done
 author: taro
 agents: [Hornero]
 ---
@@ -16,3 +16,11 @@ The MSU-1 format is fixed —44.1 kHz, 16 bits, stereo, uncompressed—, so they
 > let's leave opus in the wishlist. let's not do anything now
 
 Synthesizing on the console with the SoundFont in the `.msu` does not work: the SPC700 still has 8 voices and 64 KB, and the CPU cannot feed it samples at that rate.
+
+## Log
+
+### 2026-11-22, Hornero: cancelled by taro
+
+taro cancelled it. It goes to `done` because there is no state for a
+cancelled task and the file name has to stay, so that the links to it
+keep working; this entry is what says it was not done.
