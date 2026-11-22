@@ -3,7 +3,7 @@ name: "The zoom-mode-7 experiment does not build"
 description: "abl/experiments/zoom-mode-7/build.py reads a top-level mapping from adeleine reduce's answer, which today's adeleine gives per tile; it fails before assembling"
 type: bug
 game: abl
-status: wishlist
+status: done
 author: calandria
 ---
 
@@ -63,3 +63,9 @@ the suite now covers (`big-picture-photo-*` goldens); the pilot's own
 numbers are in its task, and git keeps the code. Fixing `build.py` would
 only keep alive a ROM nobody will build again. `game: abl` added, since the
 code is ABL's, whichever way it closes.
+
+### 2026-11-22, Hornero: done, the experiment removed
+
+taro asked to close it and remove the experiment: the ports' `238c90b` deletes `abl/experiments/zoom-mode-7/`. The zoom it piloted is in the engine
+([`picture-zoom-in-mode-7`](picture-zoom-in-mode-7.md)); the pilot is
+rebuilt from the commit before, if ever.

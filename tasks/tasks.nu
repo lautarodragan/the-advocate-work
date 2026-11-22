@@ -108,7 +108,8 @@ def print_task [] {
 }
 
 # The tasks all live in this folder, and their state is the `status` in
-# the frontmatter: draft, todo, doing, testing, done or wishlist. With
+# the frontmatter: draft, todo, doing, testing, done, wishlist or
+# cancelled. With
 # `--status "*"`, all of them, grouped by state.
 #
 # With `--assignee`, only those that one has or worked on —their
@@ -150,6 +151,7 @@ def all_tasks [] {
 # that opens with one in bold—, or a `## Log` that is not the last `##`
 # section. A report, not a gate: a heading it lists
 # may be the task's definition, and that is judged by reading it. `done`
+# and `cancelled`
 # tasks are left out unless asked for with `--status`.
 #
 # A heading reads like an entry when it starts with a word of the log
@@ -170,7 +172,7 @@ def "main check" [
   let date = '\d{4}-\d{2}-\d{2}'
 
   let found = all_tasks
-    | where { |t| if $status == "*" { $t.status != done } else { $t.status == $status } }
+    | where { |t| if $status == "*" { $t.status not-in [done cancelled] } else { $t.status == $status } }
     | each { |t|
       let lines = open --raw $t.file | lines
       mut fence = false
@@ -266,7 +268,7 @@ def "main open" [
 ] {
   let tasks = all_tasks
     | where { $status == "*" or $in.status == $status }
-    | sort-by { $in.status == done } status task_type
+    | sort-by { $in.status in [done cancelled] } status task_type
 
   let chosen = $tasks | input list --fuzzy --display { |t| [$t.status '  ' ($t | task_title) '  ' (ansi dark_gray) $t.description (ansi reset)] | str join } "Task:"
   if ($chosen | is-empty) { return }
@@ -282,7 +284,7 @@ def "main html" [
   --out (-o): string = "_site"
 ] {
   let root = $env.FILE_PWD | path dirname
-  let order = [doing testing todo draft wishlist done]
+  let order = [doing testing todo draft wishlist done cancelled]
 
   let changed = last_changes $root
   let tasks = all_tasks | each { |t|

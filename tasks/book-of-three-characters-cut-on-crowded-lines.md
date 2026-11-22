@@ -76,11 +76,15 @@ What is left, none of it measured:
   pieces —a painted map carries a tile per cell and uploads them as they
   come into view, so the question is its colours—; together with the
   reach knowing that an unconditioned autostart that ends in a teleport
-  leaves the hero no cell to stand on.
-* **Generic, in the runtime**: rotate which objects go first in OAM
-  every frame, so that past the 34 slivers a different character is cut
-  each frame —flicker, as commercial games do— instead of the same ones
-  always.
-* **Game-specific**: a patch that thins the crowd. taro's call.
+  leaves the hero no cell to stand on. **taro's preferred way.**
+* **Game-specific**: a patch that thins the crowd. taro's call, if the
+  converter's way does not reach.
 
-To `todo`: it applies, and whoever takes it chooses among those.
+To `todo`: it applies. Flicker —rotating which objects go first in OAM
+every frame— was the third way, and taro ruled it out on 2026-11-22.
+
+### 2026-11-22, Hornero: the converter's way, preferred
+
+taro: no flicker, and the converter knowing the scene leaves the hero
+no cell to stand on is the way to take; the patch only if that does not
+reach.

@@ -14,6 +14,8 @@ The tasks all live in `tasks/`, one file per task, and their state is the
 - `testing`: done and waiting for taro to test them by playing
 - `done`: finished tasks
 - `wishlist`: what we would like to do and nobody is doing
+- `cancelled`: what taro decided not to do; its log says why. It stays,
+  like every task, because its file name is linked from elsewhere
 
 **A task's file name never changes**, even if its title does: it is its
 address, and it is linked from the other repos and from the book
@@ -120,7 +122,7 @@ by hand, and the `done` ones were left as they were.
     description: "One line: what it is, for the list"
     type: bug | feature | refactor | test | docs
     game: abl | [zounds, vampires-dawn] | …
-    status: draft | todo | doing | testing | done | wishlist
+    status: draft | todo | doing | testing | done | wishlist | cancelled
     assignee: taro
     author: taro | hornero | chaja | …
     ---
