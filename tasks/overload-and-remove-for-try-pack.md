@@ -99,3 +99,22 @@ SuperFamiconv's three palettes:
     [4, 5, 7, 8, 9, 10, 11, 12, 14, 16, 17, 18, 21, 23, 27]
     [0, 2, 4, 6, 7, 8, 10, 12, 13, 17, 21, 22, 23, 25, 29]
     [0, 1, 3, 4, 8, 10, 15, 19, 20, 22, 24, 26, 28, 29]
+
+### 2026-11-22, Hurón: growth first leaves one case for this task
+
+[`try-pack-picks-the-smallest-group`](try-pack-picks-the-smallest-group.md)
+made `try_pack` put each tile in the group that grows the least. Over the
+500 pictures of the oracle that needs one more palette than before in a
+single one, seed 198 (11 against 10): an early placement that best fit
+never undoes. Cut down, the 17 tiles are in that task's log, 6 palettes
+with the old key and 7 with the new one. Whatever replaces best fit here
+should fit them in 6 or fewer. The `KNOWN` seeds of this task's reason
+are the same ten after the change.
+
+The same shows in the games, in the layer above the hero of three maps,
+measured with each `release`'s `converter.log`: Vampires Dawn 378 merged
+nothing and now merges 1 colour, Vampires Dawn 391 merged nothing and now
+merges 2, and Frozen World 62 takes 4 palettes instead of 3 with nothing
+merged either way. They are the real cases for this task's step 1: with
+the old key they fitted, so a packer that can undo a placement should
+too.
