@@ -2,6 +2,7 @@
 name: "The test game"
 description: "The test game exists and runs in CI; what is left of the plan is phase 2's harness split —its generic part from ABL's tests/harness to the-advocate— and ABL's ten M1 tests moved onto it, then phases 3 to 5"
 type: test
+game: test-game
 status: wishlist
 author: taro
 ---
@@ -64,3 +65,27 @@ over; ABL's harness is still in `abl/tests/harness/`; the ten M1 files
 (test_variables, conditional, labels, jumps, same_door, speed, key,
 terrain, own_action, camera) are still in `abl/tests/rpgmaker/`. And the
 the-advocate README still says the repo has no tests that run a ROM.
+
+### 2026-11-22, Tijereta: not done, by what it asks
+
+Checked against the-advocate `0ae40e0a`, the ports `89f77b4` and the
+book's `research/2026-10-02-the-test-game.md`, section 5, phase 2.
+
+* **Done**: the two repos (ABL in the ports since 2026-10-02); the game,
+  `test-game/` in the-advocate, with its cases and tests, run by `just
+  test-game` and by the `test-game` job of `.github/workflows/ci.yml` in
+  snes9x and bsnes; and the README no longer says the repo runs no ROM
+  —it says CI runs the test game—, so that line of the previous entry is
+  stale.
+* **Not done**: the harness split —`test-game/tests/game.py` still says
+  it is "a stopgap" until phase 2 brings the generic part over, and ABL's
+  harness is whole in `abl/tests/harness/`—; and the ten M1 files are all
+  still in `abl/tests/rpgmaker/` (`test_variables`, `test_conditional`,
+  `test_labels`, `test_jumps`, `test_same_door`, `test_speed`, `test_key`,
+  `test_terrain`, `test_own_action`, `test_camera`), with no copy in
+  `test-game/tests/`. Phases 3 to 5 have not started. No other task holds
+  the harness split.
+
+So it is not done as written, and it stays in `wishlist`. If taro wants
+it closed, what is left is phase 2's last two items, and they would need
+a task of their own first. `game: test-game` added.

@@ -1,5 +1,5 @@
 ---
-name: "reach does not know a scene runs once"
+name: "`rm2k_rules::reach::standing` does not know a scene runs once"
 description: "An autostart scene that turns on the switch of the page above it runs once, from where the hero first arrives; reach takes it as starting wherever a recall can put him, and on ABL's Hover-Tram that keeps four seated people out of the background"
 type: feature
 status: draft
@@ -30,3 +30,37 @@ hand, `wally map` takes all seven seated still people.
 **Since 2026-11-18** ABL's map 13 has a fork that bakes its still crowd
 by hand (stage 2 of the task above), so the case is no longer seen
 there: it still holds for any other map whose scene runs once.
+
+## Log
+
+### 2026-11-22, Tijereta: no game hits it today
+
+Retitled with the function's path: `reach` is the module,
+`rm2k/rules/src/reach.rs` in the-advocate, and the start of a page that
+runs on arrival is decided in `standing` (`Run::on_arrival`, seeded with
+`arrival`, which already holds the `any_open` cells), which `covered`
+calls.
+
+**Measured**, with the-advocate `0ae40e0a`'s global tools and the ports
+at `89f77b4`: the bug needs `any_open`, and only three games set it
+—their `converter.log` says "the hero can be on any cell one can step
+on": ABL, Vampires Dawn and Zounds—; the other six start a once-run scene
+only where the hero arrives, which is right. Those three were built with
+a throwaway `wally` on the PATH that ran each map's request twice, as the
+converter asked and with `reach.any_open` false, and compared the "stay
+objects" lines. The fix can only take away cells `any_open` adds, so a
+map where turning it off changes nothing cannot be touched by it.
+
+* **Vampires Dawn and Zounds**: no map changes.
+* **ABL**: maps 17, 199, 288, 291, 295, 307 and 315 keep one to three
+  more events as objects ("someone can stand behind…") with `any_open`,
+  and none of them has a page `on_arrival` takes —an autostart asking
+  for nothing, under switch-only pages, that teleports the hero away—:
+  that is the recall itself, taken on trust, not this bug. ABL has 39
+  such pages (a loose filter over the dump: a superset of what
+  `on_arrival` takes), all on maps where `any_open` changes nothing,
+  map 13 included now that its crowd is baked by hand.
+
+So today it shows in no log or degradation of any game; it would come
+back on a map that has such a scene and is not forked, in a game that
+recalls computed places.

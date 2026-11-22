@@ -1,8 +1,8 @@
 ---
 name: "ABL: characters cut on crowded lines"
-description: "8 maps put more characters on a line than the console draws —nine characters are 36 slivers, past the PPU's 34—, and the ones further back lose columns or vanish"
+description: "Crowded maps put more characters on a line than the console draws —nine characters are 36 slivers, past the PPU's 34—, and the ones further back lose columns or vanish"
 type: bug
-status: draft
+status: todo
 author: mulita
 ---
 
@@ -38,6 +38,27 @@ full report of that day, with captures of a few maps in both cores, is in
 `/shared/captures/2026-11-17-objects-per-line/`. Playing, the debug
 screen's last page counts the map's frames in `Time over`.
 
+![Map 267, Kersh and the Droid Army, at the entrance: gaps in the droids' rows](images/abl-characters-cut-on-crowded-lines/map-267-entrance.png)
+![Map 318, The Show, at the entrance: the audience's front row cut on the right](images/abl-characters-cut-on-crowded-lines/map-318-entrance.png)
+
 What the report cannot say: whether a line is one the player sees with
 everyone on it —a page another switch turns off, people a first scene
 sends away—, and what a scene adds later.
+
+## Log
+
+### 2026-11-22, Tijereta: still so, to todo
+
+`just objects-per-line abl` in a worktree of the ports at `89f77b4`, with
+the-advocate `0ae40e0a`'s global tools (its `abl.sfc` byte for byte the
+main checkout's): every map of the list but one is still over, with the
+same events on the same rows —3, 20, 52, 54, 199, 267 and 318—, and 267,
+318 and 199 already at the entrance. **Map 13 is no longer over**: its
+still crowd is baked into the background since
+[`abl-the-hover-tram-s-crowd-is-cut`](abl-the-hover-tram-s-crowd-is-cut.md).
+Map 49, Escape Lashe City LV1, goes over only with the hero on the line.
+Moved to `todo`; `description` no longer counts the maps.
+
+The two captures above are snes9x, entering the map as the sweep does (a
+door's teleport to its start cell, 30 ticks), with the camera where the
+entrance leaves it.

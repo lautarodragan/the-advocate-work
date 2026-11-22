@@ -25,3 +25,22 @@ looked at on screen, nor compared with the original.
     grep "map 246: WARNING" build/release/converter.log
 
 says "with them the map loses rain-colors-lent".
+
+## Log
+
+### 2026-11-22, Tijereta: no longer so on map 246
+
+Checked in ABL's release build of the ports `89f77b4` (the-advocate
+`0ae40e0a`, global tools), the main checkout's and one of my own, byte
+for byte equal: `grep "map 246: WARNING" converter.log` finds nothing;
+map 246 now says "events 5, 6 draw nothing on any page and a route
+dresses them: a hidden row each" and "2 event(s) stay objects, a route
+gives it a graphic: 5, 6", so both are drawn. `degradations.json` has
+for map 246 only event 11 drawn opaque. Which commit fixed it was not
+bisected, and it was not looked at on screen.
+
+The same warning shows now on map 83, for Forem (event 13), which went to
+its own draft,
+[`abl-forem-left-out-at-the-factory`](abl-forem-left-out-at-the-factory.md).
+This one is not moved to `todo`: with nothing left to fix, it can be
+deleted, as the README says of a draft something else fixed.
