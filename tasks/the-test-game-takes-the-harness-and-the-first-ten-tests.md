@@ -39,3 +39,10 @@ test-game` and by CI, and ABL's suite without them. With that,
 this.
 
 ## Log
+
+### 2026-11-22, Tijereta: taken
+
+Started from the-advocate `0ae40e0a`, the ports `238c90b`, the book
+`3e6bb0b`. Branches `tijereta-test-game-harness` in the three, worktrees
+under `~/scratch/tijereta/tg/`. ABL's suite and the ports' `just boot` run
+first on `238c90b` untouched, with the global tools, as the "before".
