@@ -5,7 +5,7 @@ type: bug
 status: testing
 assignee: taro
 author: mulita
-agents: [Chajá]
+agents: [Chajá, Mulita]
 ---
 
 Seen by Mulita on 2026-10-15, comparing the port with the original under
@@ -86,3 +86,18 @@ same places.
 
 **To install when merging**: `events` and `convert` (rm2k-snes-events and
 rm2k-snes-convert); the runtime is not touched. SAVE_BYTES does not change.
+
+### 2026-11-22, Mulita: what to look at
+
+![Map 69: credits3 in the port](images/book-of-three-the-last-pictures-are-not-drawn/credits3-port.png) ![and in the original, under Wine (320x240)](images/book-of-three-the-last-pictures-are-not-drawn/credits3-original.png) ![Map 72's last picture in the port: The End](images/book-of-three-the-last-pictures-are-not-drawn/theend-port.png)
+
+What to look for: over the black screen of the ending, **each picture
+fades in and out**: `credits3` on map 69, then on map 72 the four quotes and
+"The End". Before, those moments were a plain black screen. The port's are
+the goldens of `test_the_end` from today's main; the original's is Chajá's
+capture (`/shared/captures/2026-10-19-book-of-three-map-item/`), where the
+other five are too, side by side, in `ending-sheet.png`.
+
+**To get there in play**: the very end of the game —after the Horned King,
+the festival at Caer Dathyl and the way home—; the pictures play on their
+own before the title screen.

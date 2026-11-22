@@ -6,7 +6,7 @@ game: book-of-three
 status: testing
 assignee: taro
 author: calandria
-agents: [Tijereta]
+agents: [Tijereta, Mulita]
 ---
 
 Seen by Calandria on 2026-10-14, with the-advocate `14e200fc` and the ports
@@ -61,3 +61,27 @@ the old tools.
 Book of Three's `Eilonwy's Upgrades` (common 21) and map 89's page compile
 now; Frozen World's use menu (map 14) no longer stops at ControlVars, but
 still does at `InputNumber`, and is behind its combat anyway.
+
+### 2026-11-22, Mulita: what to look at
+
+![Eilonwy's Upgrades, with 90 Essences of Fire held: she masters Fire Blast](images/controlvars-from-an-item-count/eilonwy-masters-fire-blast.png) ![Morda's grave on map 89 with 50 Denner's Tails held: they begin to move](images/controlvars-from-an-item-count/denners-tails-begin-to-move.png) ![and the battle it starts, against Denner's Shadow](images/controlvars-from-an-item-count/denners-shadow-battle.png)
+
+Both count an item held into a variable and then ask the variable:
+
+* **Eilonwy's Upgrades** (common event 21, parallel): with 90 or more
+  Essences of Fire, Water or Thunder, a message on whatever map says she
+  masters the next spell of that element, and the essences are spent.
+  Before, nothing happened however many she had.
+* **Morda's grave** (map 89, Morda's Cottage, the grave at cell (2, 6)):
+  with 50 Denner's Tails, after the inscription "Bring 50 of the lowliest",
+  the tails begin to move and a battle starts; with fewer, only the
+  inscription.
+
+Shot in snes9x from the ports `22c7559` and the tools of the-advocate `1b8825d8`, the release cartridge: a jump to each map with the count written in RAM (90 Essences of
+Fire; 50 Denner's Tails), and A on the grave.
+
+**To get there in play**: the essences come from the Nexuses and Eilonwy's
+Absorb Essence (see
+[`changeitems-and-changemonsterhp-by-a-variable`](changeitems-and-changemonsterhp-by-a-variable.md));
+90 of one element is a lot of play. Denner's Tails drop from Denners; Morda's
+Cottage is an optional place, late. Both are far into the game.

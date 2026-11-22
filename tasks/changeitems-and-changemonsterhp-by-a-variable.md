@@ -6,7 +6,7 @@ game: book-of-three
 status: testing
 assignee: taro
 author: calandria
-agents: [Chajá]
+agents: [Chajá, Mulita]
 ---
 
 Seen by Calandria on 2026-10-14, with the-advocate `14e200fc` and the ports
@@ -105,3 +105,27 @@ opcodes). Opcode used: 0x4F, `OP_ITEM_VAR`. Functions touched: the
 **Found and not fixed**: `ChangeGold` by a variable is not in
 `command_variables` either; draft
 [`changegold-by-a-variable-names-no-slot`](changegold-by-a-variable-names-no-slot.md).
+
+### 2026-11-22, Mulita: what to look at
+
+![The Water Nexus on map 31: EILONWY absorbed 49 Essences of Water](images/changeitems-and-changemonsterhp-by-a-variable/water-nexus-absorbed.png) ![The pause menu's Items right after: Essence of Water, 49](images/changeitems-and-changemonsterhp-by-a-variable/items-menu-essences.png) ![Taran's Last Stand in a battle: 72 points of damage](images/changeitems-and-changemonsterhp-by-a-variable/last-stand-damage.png)
+
+What to look for: the essences a Nexus gives (a random 20 to 50, the
+`ChangeItems` by a variable) **show up in Items with that same number**;
+before, the message said it and the inventory stayed empty. And Taran's
+Last Stand says how much damage it did and the enemy takes it —the HP are
+not shown, so the sign is that a weak enemy dies or a strong one dies
+sooner—. Shot in snes9x from the ports `22c7559` and the tools of the-advocate `1b8825d8`, the release cartridge: the Nexus with a jump to map 31 and A, the Last Stand from
+the case `last-stand-burrboar`.
+
+**To get there in play**:
+
+* **The Nexuses**: map 31, Outside Spiral Castle, the Water Nexus at cell
+  (45, 26) —stand below it and press A—; the others are on maps 42 (Thunder,
+  (9, 44)), 46 (Fire, (35, 15), only with Eilonwy in the party), 52 (Water,
+  (27, 11)), 86 (Fire, (2, 5)) and 87 (Thunder, (11, 8)). Then pause, Items.
+* **Last Stand** (skill 153) is Taran's after choosing *Dreams of Glory*
+  the night in the cell of Spiral Castle (map 32); in a battle, Special,
+  Last Stand: a message with the damage, and Taran left at 1 HP.
+* **Absorb Essence** is Eilonwy's, in battle; its message is the same
+  "absorbed N Essences" and the Items count should grow by N too.

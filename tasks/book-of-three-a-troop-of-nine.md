@@ -91,3 +91,16 @@ original under Wine; the battle's first command was, by Mulita.
 **When merging**: reinstall `battle events convert mapdata screens`
 (`events` and `convert` now depend on `rm2k-snes-battle`). Captures in
 `/shared/captures/2026-10-15-troop-of-nine/`.
+
+### 2026-11-22, Mulita: what to look at
+
+![The horsemen's battle after its opening scene: one enemy left, and the command menu](images/book-of-three-a-troop-of-nine/horsemen-battle-one-enemy-left.png)
+
+What to look for: after the battle's opening scene —horsemen appearing and
+falling, one fewer than in the original—, **one enemy is left standing**
+and the battle can be won; after it, Gwydion's camp (map 17). Before, no
+enemy was left and the command menu came back for ever. The golden of
+`test_book_of_three.py`, `book-of-three-horsemen-battle`, from today's main.
+
+**To get there in play**: Deep In Yern Forest, map 16: the touch at cell
+(12, 18), on the way from the village (the story's first stretch, early).
