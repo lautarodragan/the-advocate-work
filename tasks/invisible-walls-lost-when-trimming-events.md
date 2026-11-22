@@ -6,7 +6,7 @@ game: desert-nightmare
 status: testing
 assignee: taro
 author: calandria
-agents: [Aguará]
+agents: [Aguará, Carpintero]
 ---
 
 Measured by Carpintero on 2026-10-10 (`events-that-dont-fit-in-the-map-ram.md`):
@@ -153,3 +153,23 @@ The roofs of map 4 that show white are a draft:
 `desert-nightmare-roofs-left-out-show-white`.
 
 **At merge**: install `wally` and `convert` (`just install wally convert`).
+
+### 2026-11-22, Carpintero: what to look at
+
+Shot on today's main (the-advocate `a30ca61d`, the ports `22c7559`),
+snes9x, with the steps of `tests/test_invisible_walls.py`.
+
+![Map 4, the workshop: the hero walked left along row 17 and stopped at (17, 17), against the counter's end at (16, 17), which is an invisible wall](images/invisible-walls-lost-when-trimming-events/workshop-stopped-at-17-17.png)
+
+**What to look at**: on map 4, the workshop (`Werkstatt`), the dark room
+south of the red car. Walk left along row 17 from its right side: the
+hero stops at (17, 17), one cell in, where the counter ends in the
+original. Before the fix he walked on to (13, 17). The cell he is
+stopped by draws nothing: the wall is invisible in the original too.
+
+The same check, if they come up while playing: the police station (map
+14) and the two night copies (61 and 66) should stop the hero wherever
+the original does —counters and shelves—, and Vampires Dawn's Thessa
+(164) at its two drawn walls (events 253 and 254). Nothing else in
+those maps should block where the original lets you walk: a still wall
+closes its cell for everyone, events included.

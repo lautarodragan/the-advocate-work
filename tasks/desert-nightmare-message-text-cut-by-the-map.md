@@ -6,7 +6,7 @@ status: testing
 assignee: taro
 author: taro
 game: desert-nightmare
-agents: [Calandria]
+agents: [Calandria, Carpintero]
 ---
 
 taro, on 2026-11-20, playing the build of the-advocate `7951af2a` and the
@@ -117,3 +117,27 @@ book.
 **Merging**: the-advocate's branch `calandria-dn-message-over-map` is the
 runtime only, no Rust, so nothing to reinstall; the ports' and the book's
 branches have the same name. Opcode 0x5D not used.
+
+### 2026-11-22, Carpintero: what to look at
+
+The golden of the test that covers this,
+`desert-nightmare-message-after-the-menu` in the ports' `tests/golden/`,
+which today's main still matches:
+
+![Map 22, the warehouse corridor: Sandra's "( Some switches. )" after the menu was opened and closed, with nothing of the wall or the crates over the window's text](images/desert-nightmare-message-text-cut-by-the-map/message-after-the-menu.png)
+
+**What to look at**: the message window's text and frame whole, with no
+piece of the map or of a character drawn over them, **after the pause
+menu has been opened and closed** —that was the trigger; before the
+menu it was always clean—.
+
+**How to get there**: day 1, the warehouse's corridor (map 22). Open the
+menu with B and close it, then walk to the switches on the corridor's
+wall (event 5, at (12, 5); stand below it, at (12, 6), facing up) and
+press A. Any message after the menu on a painted map works the same; the
+corridor is where it showed most.
+
+Not covered here: the frame drawn as lines across the screen while a
+message fades in, the second capture of the report: that one went to
+[`desert-nightmare-own-message-frame`](desert-nightmare-own-message-frame.md),
+done since.
