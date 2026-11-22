@@ -2,7 +2,7 @@
 name: "The MSU-1 music, distributed in Opus"
 description: "ABL's .pcm files weigh 1.4 GB; distributed in Opus at 160 kbps they would be ~180 MB, and in FLAC ~550 MB, and they are converted to .pcm once at install time"
 type: feature
-status: done
+status: cancelled
 author: taro
 agents: [Hornero]
 ---
@@ -21,6 +21,6 @@ Synthesizing on the console with the SoundFont in the `.msu` does not work: the 
 
 ### 2026-11-22, Hornero: cancelled by taro
 
-taro cancelled it. It goes to `done` because there is no state for a
-cancelled task and the file name has to stay, so that the links to it
-keep working; this entry is what says it was not done.
+taro cancelled it. It went to `done` for a moment, since there was no
+state for it; the same day taro asked for `cancelled`, and it is the
+first one.

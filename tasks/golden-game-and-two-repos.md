@@ -89,3 +89,9 @@ book's `research/2026-10-02-the-test-game.md`, section 5, phase 2.
 So it is not done as written, and it stays in `wishlist`. If taro wants
 it closed, what is left is phase 2's last two items, and they would need
 a task of their own first. `game: test-game` added.
+
+### 2026-11-22, Hornero: what is left, in a task of its own
+
+At taro's word, phase 2's last two items went to
+[`the-test-game-takes-the-harness-and-the-first-ten-tests`](the-test-game-takes-the-harness-and-the-first-ten-tests.md),
+in `todo`; this one closes when that one does.
