@@ -2,7 +2,9 @@
 name: "SuperFamiconv as an oracle for palette packing"
 description: "A differential test for Adeleine: hand the same tiles to SuperFamiconv without quantizing and flag every picture it packs in fewer palettes than try_pack, or fits where try_pack says no"
 type: test
-status: todo
+status: doing
+assignee: Hurón
+agents: [Hurón]
 author: hornero
 ---
 
@@ -50,3 +52,16 @@ from outside, and keeps measuring it after it lands.
 * A case where SuperFamiconv wins is a bug in Adeleine or a known limit:
   the second kind goes in the test with its reason, like Goombario's
   `pull-branch` exceptions, so the list stays honest.
+
+## Log
+
+### 2026-11-22, Hornero: taken by Hurón
+
+taro, translated:
+
+> Can we start this one?
+
+What Hornero checked first, through GitHub's public API: SuperFamiconv
+is Rust and MIT on `main` (pushed 2026-11-16); the only Rust tag is
+`v0.12.0-beta4`, the ones before it are the C++ tool. Its dependencies
+are `clap`, `png`, `quantette` and `serde_json`.
