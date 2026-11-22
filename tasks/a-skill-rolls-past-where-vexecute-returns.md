@@ -107,3 +107,13 @@ back, so there was nothing to merge.
 **To install when merging**: `battle` (the model) and, for the runtime,
 nothing but the checkout: the runtime is read from it. `just install
 battle` from `~/the-advocate`; the cartridges rebuild on their own.
+
+### 2026-11-22, Cardón: what to look at
+
+No image. Nothing in ABL as it is played reaches either return: no skill
+that can be chosen in battle touches HP and then something else, as the
+work entry says. The only ROM test runs on a copy of `release` whose
+MinorFire also lowers agility. The change shows only in randomness and
+in a parameter of a dead or missed target, and neither is on screen.
+There is nothing to play-test here. What covers it is the model's
+`tests/skill_results.rs` and `test_a_kill_lowers_nothing_after_it`.

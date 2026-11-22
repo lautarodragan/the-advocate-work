@@ -4,6 +4,7 @@ description: "About 180 maps of the story, from the next day in Paradise to the 
 type: feature
 status: testing
 assignee: taro
+agents: [Cardón]
 author: cardon
 ---
 
@@ -109,3 +110,19 @@ where needed"; what is cheap was fixed, the rest is listed):
   to be pointed at a map that still does, or removed.
 * The farm's playthrough ends the next morning (114) instead of the end
   sign, which is gone with the fork of 108.
+
+### 2026-11-22, Cardón: what to look at
+
+![Where release used to end: Emily's good night after the grove (108)](images/abl-release-stops-at-the-first-night/good-night.png)
+
+![What comes after now: the next morning in Talan's house (114), "Is it morning already?"](images/abl-release-stops-at-the-first-night/next-morning.png)
+
+Today's goldens of the farm's playthrough, `farm/09-good-night` and
+`farm/10-next-morning`.
+
+**In play**: from the farm's celebration (127) through the grove to Emily's
+good night. Instead of the end sign, the game has to go on to the next
+morning, and from there to the jobs, the bandits, the agency and on to
+"To be concluded..." on 241 and the teaser. That is about 180 maps past
+the first night. This task is "play on and report where it breaks", so no
+single picture covers it.

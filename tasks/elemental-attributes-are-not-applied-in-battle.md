@@ -6,7 +6,7 @@ game: abl
 status: testing
 assignee: taro
 author: cardon
-agents: [Chajá]
+agents: [Chajá, Cardón]
 ---
 
 Seen by Cardón on 2026-10-14 (`what-the-compiler-ignores-silently.md`),
@@ -88,3 +88,16 @@ both are in the book's divergence `what-attributes-do-not-model`.
 **On merging, install** `cartridge battle mapdata convert`. Branches
 `chaja-attributes` in the-advocate, the-advocate-ports and
 the-advocate-docs.
+
+### 2026-11-22, Cardón: what to look at
+
+![Talan's MinorFire (Flame) on the Junkbot, which resists Flame (rank D): 13 damage where the neutral damage was about 34](images/elemental-attributes-are-not-applied-in-battle/minorfire-on-junkbot.png)
+
+Today's golden `battle-skill-damage`, from the same case as this task's
+test (`battle-114-attributes`: the Junkbot has Ray B, Cut D, Flame D).
+Without the attributes, the console's MinorFire did 34 and Manta's hit 81.
+
+**In play** it is a number, not a look: the Junkbot (Recycling Plant,
+maps 59 to 62) takes noticeably less from cutting weapons and from fire,
+and more from Ray. Any enemy with a weakness should take more from the
+weapon or skill that carries it. In RM2k the difference is just as big.

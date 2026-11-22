@@ -139,3 +139,19 @@ line, seen in the original—, with its line in ABL's Known issues.
 `screens` and `events` —the runtime changes, `rm2k-snes-cartridges`
 assembles the checkout it was installed from, and `screens` and `events`
 link `rm2k-snes-battle`—.
+
+### 2026-11-22, Cardón: what to look at
+
+![The ROM: "Talan casts MinorFire." and under it the result, "Junkbot 13 health lost."](images/a-skill-in-battle-writes-no-result-line/rom-minorfire.png)
+
+![RPG_RT 2015 under Wine, the same battle: the result goes under the using line too (the 2015 runtime drops the name and the number)](images/a-skill-in-battle-writes-no-result-line/original-minorfire.png)
+
+The first is today's golden `battle-skill-damage` (case
+`battle-114-attributes`), the second is from
+`/shared/captures/2026-10-20-skill-results/`.
+
+**In play**: any battle where an actor uses a damaging or healing skill.
+Kersh's Healing Syringe on an ally has to write the HP recovered, and
+Agency Badge has to write one line per parameter it moves. The Junkbot of the
+pictures is fought in the Recycling Plant (maps 59 to 62), but Talan
+doesn't learn MinorFire in the game. The case teaches it to him.

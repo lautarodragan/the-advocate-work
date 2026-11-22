@@ -6,7 +6,7 @@ game: abl
 status: testing
 assignee: taro
 author: mulita
-agents: [Mulita]
+agents: [Mulita, Cardón]
 ---
 
 Seen by Mulita on 2026-11-01, on the-advocate `3071048a` (branch
@@ -100,3 +100,21 @@ which `sk_cast` and `item_skills.s` reach, so an item that casts a curing
 skill cures too. On that trial, ABL's new test, `test_healing_skills.py`,
 `test_menu_special_items.py`, `test_materials.py` and `tests/tooling`
 green, and Sunset's `$C0` 285 B.
+
+### 2026-11-22, Cardón: what to look at
+
+![Kersh poisoned uses an Antidote in battle: the item's line and, under it, "Kersh is no longer poisoned"](images/a-medicine-does-not-cure-a-condition/battle-antidote.png)
+
+![The Antidote used from the menu: Kersh's row says Normal again and the Antidote is spent](images/a-medicine-does-not-cure-a-condition/menu-antidote.png)
+
+Both are Mulita's captures of 2026-11-01 (`/shared/captures/2026-11-01-medicine/`),
+from the suite's cases `battle-114-medicine` and `medicine-conditions`.
+
+**In play**: get poisoned first. The enemies that poison the party are the
+Slime Coater (Drust Mines, map 103), the Actual Viper and the Coiled
+Serpent (Ill Marshes, 159; Murgator Cave; the bandits' lair) and the Wall
+Clinger (Sorbe Mountain). Then: in the same battle, Item. The Antidote has to be
+in the list and has to write the second line. After the battle, the
+menu row says Poison in its colour. Item → Antidote → the poisoned actor: the
+row goes back to Normal and the count drops by one. On an actor with no
+condition the Antidote does nothing and is not spent.
