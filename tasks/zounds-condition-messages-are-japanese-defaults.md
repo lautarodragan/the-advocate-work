@@ -31,3 +31,19 @@ first: the nine terms were never shown by it, and were given the project's
 **To reproduce**: `scripts/db_scan.py` of that task, in
 `~/scratch/aguara/skill-accents/`, over the ports, lists them; on the
 console, an actor revived in battle, or a condition given by a skill.
+
+## Log
+
+### 2026-11-22, Hurón: seen on the screen
+
+![Kazar's Veneno poisons the Pez Shark, and the poison's line reads as garbage](images/zounds-condition-messages-are-japanese-defaults/poison-line.png)
+
+Seen while shooting
+[`items-that-give-a-condition-in-battle-only-hurt`](items-that-give-a-condition-in-battle-only-hurt.md),
+on the ports' main `22c7559` with the global tools (the-advocate
+`1b8825d8`): with the case `battle-veneno` and the seed of
+`test_zounds_veneno.py`, Kazar's Veneno takes, and the line under "Pez
+Shark 6 HP perdidos." is `Pez Shark'I"A'E-~3'e'1/2?I`. So the console does
+put a condition's "given" message on the screen. Whether RPG Maker 2003's
+battle shows it at all is still the first thing to measure. Added to
+Zounds' "Known issues" in the book.

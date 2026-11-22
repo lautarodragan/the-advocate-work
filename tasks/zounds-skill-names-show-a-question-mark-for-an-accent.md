@@ -4,7 +4,7 @@ description: "The battle's text block carries the skills' names from the databas
 type: bug
 status: testing
 assignee: taro
-agents: [Aguará]
+agents: [Aguará, Hurón]
 author: aguara
 ---
 
@@ -141,3 +141,20 @@ All with the worktree's `.local-tools` (mapdata) first in the PATH:
   Dawn, whose five skill names with `ä` and `ß` go plain too.
 
 When merging: reinstall `mapdata`.
+
+### 2026-11-22, Hurón: what to look at
+
+![Unamë's skills in battle, the cursor on "Punal Punzante", its help "Tecnica de combate.": plain stand-ins with the icon, no `?`](images/zounds-skill-names-show-a-question-mark-for-an-accent/skill-list.png)
+
+Shot from the ports' main (`22c7559`, global tools at the-advocate
+`1b8825d8`) with the case `battle-commands` (Unamë and Kazar against the
+Pez Shark): Unamë's "Tecnica", Down once. Before this task it read
+"Pu?al Punzante" and "T?cnica de combate." (Aguará's before, after and
+difference are in `/shared/captures/2026-11-22-zounds-skill-accents/`).
+**Once Calandria's Latin-1 change lands, the same screen should show the
+accented letters themselves**, "Puñal Punzante" and "Técnica de combate.",
+instead of the plain `n` and `e`.
+
+**How to get there in play**: any battle with Unamë. "Tecnica", and the
+cursor on an accented skill: "Puñal Punzante", "Látigo de Seda", "Pétalo
+Violeta", "Muerte Espontánea". The help line above shows its description.
