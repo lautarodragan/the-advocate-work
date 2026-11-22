@@ -2,7 +2,7 @@
 name: "Desert Nightmare: the hit dog lands beside the roof"
 description: "In the dog scene on map 11 the hit dog shows on the sand left of the warehouse's roof, a little lower, slides behind it and leaves a sliver at its edge; RM2k hides it behind the roof: it goes with the screen, and the console scales those"
 type: bug
-status: draft
+status: todo
 author: aguara
 game: desert-nightmare
 ---
