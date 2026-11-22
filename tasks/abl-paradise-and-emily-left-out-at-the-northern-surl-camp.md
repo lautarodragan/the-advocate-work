@@ -2,7 +2,7 @@
 name: "A Blurred Line: Paradise and Emily left out at the Northern Surl Camp"
 description: "Map 246 leaves out the two characters a route dresses, events 5 and 6, because with them the rain's colours are lent: the scene goes on without them"
 type: bug
-status: draft
+status: done
 author: chaja
 agents: [Chajá]
 ---
@@ -44,3 +44,11 @@ its own draft,
 [`abl-forem-left-out-at-the-factory`](abl-forem-left-out-at-the-factory.md).
 This one is not moved to `todo`: with nothing left to fix, it can be
 deleted, as the README says of a draft something else fixed.
+
+### 2026-11-22, Hornero: done, fixed along the way
+
+Tijereta's check above: map 246 draws both now. It goes to `done`
+instead of being deleted because other tasks link to it; its line in
+the book's "Known issues" went, and Forem's
+([`abl-forem-left-out-at-the-factory`](abl-forem-left-out-at-the-factory.md))
+took its place.
