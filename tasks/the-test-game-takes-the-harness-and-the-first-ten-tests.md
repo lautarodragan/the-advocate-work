@@ -2,7 +2,9 @@
 name: "The test game takes the harness and the first ten tests"
 description: "Phase 2's last two items: split ABL's harness so its generic part serves the test game in the-advocate, and move the ten M1 tests of what RM2k does from ABL's suite to the test game"
 type: test
-status: todo
+status: doing
+assignee: Tijereta
+agents: [Tijereta]
 author: taro
 game: test-game
 ---
