@@ -2,10 +2,11 @@
 name: "Desert Nightmare: the menu's burning face is lost on a painted map"
 description: "On a painted map the menu's face shows behind the options, but the inventory, keys, notes and maps screens show black where the face should be, with a sliver of it at the right edge"
 type: bug
-status: draft
+status: doing
+assignee: Mulita
 author: huron
 game: desert-nightmare
-agents: [Hurón]
+agents: [Hurón, Mulita]
 ---
 
 Seen by Hurón on 2026-11-22, at the-advocate `0ae40e0a` (tools as
