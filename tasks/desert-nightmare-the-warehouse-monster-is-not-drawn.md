@@ -36,3 +36,14 @@ take the tiles of what that page hides or of a cache slot; or the map's
 pictures could go in without the ones that never fit —see
 [`a-map-s-small-pictures-go-in-all-or-none`](a-map-s-small-pictures-go-in-all-or-none.md)—,
 though on map 28 that alone does not make room.
+
+## Log
+
+### 2026-11-22, Hornero: map 21 draws its shadow, map 28 still not
+
+At the ports `89f77b4` and the-advocate `0ae40e0a`, the release's
+`converter.log`: map 21 now carries `Lagerhaus_Szene2` ("the pictures
+'Lagerhaus_Szene2, Kartencursor', 4 objects in 4 tiles from 128"), but map
+28 still warns "the pictures 'Interaktion, …, LagerhausDach_Szene2, …'
+aren't drawn here: with their 9 tiles the map fits no VRAM layout". The
+silhouette coming down from the cabinet is still missing.
