@@ -70,3 +70,34 @@ is a talking NPC: one that turns toward the hero (`posed.rs`, triggers
 `baked_events` bakes when allowed, not as a fallback when sprite VRAM runs
 out; the only map stopped by VRAM is still Vampires Dawn's
 ([`vampires-dawn-maps-that-dont-fit-in-vram`](vampires-dawn-maps-that-dont-fit-in-vram.md)).
+
+### 2026-11-22, Chajá: still applies, narrower
+
+Checked at the-advocate `0ae40e0a` and the ports `89f77b4`.
+
+**What `painted_events` does not cover**: it is the same kind of
+painting —the event keeps its pages, its drawing goes into the map,
+and what it draws past its cell goes in front of the hero by the painted
+map's priority— but `pieces.rs` in Wally takes only a map that shows a
+panorama of its own (on Book of Three's map 79 the converter says "the
+still pieces are not painted into it: it shows no panorama of its own"),
+and it refuses the same two things `baked_events` does: one that turns
+toward the hero (`why_not`, a compiled page with `turns` and triggers
+0-2) and one drawn with a ChipSet tile.
+
+**What `baked_events` refuses today**, counted in ABL's
+`build/release/converter.log` (events per first reason): 212 "it turns
+toward the hero"; past the cell, 195 "what it draws past its cell
+changes with its pose", 180 "someone can stand behind what it draws past
+its cell", 176 "it is drawn past its cell and can go away" and 31 "a
+pose is drawn past its cell". So a pose past the cell is no longer
+refused as such —it goes in when nobody can stand behind it—, and the
+talking NPC that turns is still the core of this task. Turning on
+`baked_events = [128]` in The Frozen World took the sixteen ChipSet-tile
+stalls of map 128 and left its three shopkeepers as objects for turning
+(measured for
+[`frozen-world-characters-cut-on-crowded-lines`](frozen-world-characters-cut-on-crowded-lines.md)).
+
+**Still not a fallback**: both are opt-in per map; nothing bakes because
+sprite VRAM ran out. Vampires Dawn's maps are still left out by its
+`advocate.toml`, and that task is `todo`. Stays in wishlist.

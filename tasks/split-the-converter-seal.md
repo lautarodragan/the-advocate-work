@@ -27,3 +27,17 @@ taro left it in wishlist: the gain is not much.
 2026-09-29 and `ram_lejana.s` is `far_ram.s`; what the converter still
 reads from it is `BOOT_FRAMES_FLOOR`, in `rm2k-snes-audio`. The timings
 above were measured with the Python and were not measured again.
+
+### 2026-11-22, Chajá: still applies
+
+Checked at the-advocate `0ae40e0a`: still one fingerprint for everything,
+`fingerprint_files` in `rm2k-snes/cartridge/src/cartridges.rs`, which
+takes all of `runtime/` (`files_below(runtime)`) together with the
+binaries, the dump and the game's files. What the converter's stages read
+from `runtime/` at build time is still only `far_ram.s`, for
+`BOOT_FRAMES_FLOOR`, in `rm2k-snes-audio`'s `main.rs`; the other two reads
+of `runtime/` in the converter (`low_ram.s` and `common_events.s`, in
+`convert.rs`) are tests. So the split is still possible and still not
+done. The ~4 s against ~15 were not measured again. The text's old names:
+`rom/src/` is `runtime/`, `ram_lejana.s` is `far_ram.s`,
+`tools/ensamblado/cartuchos.py` is `rm2k-snes/cartridge/`.
