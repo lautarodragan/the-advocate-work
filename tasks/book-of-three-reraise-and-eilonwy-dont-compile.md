@@ -5,7 +5,7 @@ type: bug
 status: testing
 assignee: taro
 author: aguara
-agents: [Calandria]
+agents: [Calandria, Mulita]
 ---
 
 Seen by Aguará on 2026-10-12, with the-advocate `6ed7c4a0` and the ports
@@ -91,3 +91,17 @@ from today's main. Verified with the branch's tools: `just test` 27,
 `just rust-test`, ABL's `just tests` 1531 (2 skipped), `just boot` 21.
 **To install when merging**: `events`, `mapdata`, `convert` and
 `cartridge` (it brings the runtime).
+
+### 2026-11-22, Mulita: what to look at
+
+![The pause menu right after a won battle in which Gwydion fell: H 1/72](images/book-of-three-reraise-and-eilonwy-dont-compile/gwydion-up-with-1-hp.png)
+
+What to look for: after winning a battle in which someone fell, open the
+pause menu: **the fallen one has 1 HP** and no death state. Before, they
+stayed at 0. Shot in snes9x from the ports `22c7559` and the tools of the-advocate `1b8825d8`, the release cartridge, case `reraise` (`test_book_of_three_reraise.py`): Taran
+and Gwydion against Denner, Gwydion knocked out, the battle won, then B.
+Eilonwy's Upgrades, the other half, is shown in
+[`controlvars-from-an-item-count`](controlvars-from-an-item-count.md).
+
+**To get there in play**: any battle won with a fallen member, from the
+first ones on.

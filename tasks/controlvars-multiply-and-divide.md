@@ -6,7 +6,7 @@ game: book-of-three
 status: testing
 assignee: taro
 author: calandria
-agents: [Tijereta]
+agents: [Tijereta, Mulita]
 ---
 
 Seen by Calandria on 2026-10-14, with the-advocate `14e200fc` and the ports
@@ -79,3 +79,20 @@ does not compile, so the release cartridge does not build.
   commons and 1427 → 1396 in maps (what is left is other causes).
 
 **Install when merging**: `events`, `convert`; the runtime changes too.
+
+### 2026-11-22, Mulita: what to look at
+
+![Taran's Cash Reward in a battle: he steals 41 silver pieces](images/controlvars-multiply-and-divide/cash-reward-steals-silver.png)
+
+What to look for: Taran's **Cash Reward** gives a message with how much
+silver he stole (a random 1 to 100, times a variable the page sets to 1), or
+"not able to steal any" when the roll fails —about half the time—, and only
+once per battle ("I've used up my chance…" after). Before, the skill did
+nothing at all. Shot in snes9x from the ports `22c7559` and the tools of the-advocate `1b8825d8`, the release cartridge, case `last-stand-burrboar` with switch 92 turned on
+by hand in the battle, which is what the skill does.
+
+**To get there in play**: Cash Reward (skill 149) is Taran's after choosing
+*Dreams of Adventure* the night in the cell of Spiral Castle (map 32). In any
+battle of troops 83 to 135: Special, Cash Reward. The gold the message
+promises is not checked here. Glory Hound (common event 13), the other
+multiplication, was not looked at.

@@ -6,7 +6,7 @@ game: book-of-three
 status: testing
 assignee: taro
 author: tijereta
-agents: [Tijereta, Aguará]
+agents: [Tijereta, Aguará, Mulita]
 ---
 
 Seen by Tijereta on 2026-10-19, on the-advocate `54ec3daf`, while making
@@ -118,3 +118,19 @@ To install when merging: `mapdata` (the emission, `rm2k-snes-mapdata`),
 and the runtime goes in with the checkout the tools are installed from.
 `project`, `cartridge` and `convert` were installed locally only to point
 at this worktree's runtime: their code did not change.
+
+### 2026-11-22, Mulita: what to look at
+
+![Gwydion's Item list right after Taran threw the bag: BagOfVolatileShells is still there, 1](images/an-item-with-several-uses-is-spent-whole/bag-still-there-after-one-throw.png)
+
+The battle's Item list on the turn after a throw: the bag has to be **still
+there** after the first throw, and after the second, third and fourth; the
+fifth spends it. Before, it was gone after the first. The menu shows only
+the count —the bag stays at 1 the whole time—, so what is looked at is that
+it is listed. Shot in snes9x from the ports `22c7559` and the tools of the-advocate `1b8825d8`, the release cartridge, case `bag-of-shells` (`test_book_of_three_item_uses.py`).
+
+**To get there in play**: a BagOfVolatileShells is in a chest of the Lava
+Tunnels (map 46, the chest at cell (0, 54)), and a PouchOfPebbles (also five
+uses) in the chest at (23, 13); the random chests can give either, rarely. In
+any battle: Item, the bag, a target, and look at the list on the next actor's
+or the next turn's Item. On the map's pause menu the item is not usable.

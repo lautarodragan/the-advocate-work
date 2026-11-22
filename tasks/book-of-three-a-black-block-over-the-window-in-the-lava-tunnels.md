@@ -5,7 +5,7 @@ type: bug
 status: testing
 assignee: taro
 author: calandria
-agents: [Calandria, Chajá]
+agents: [Calandria, Chajá, Mulita]
 ---
 
 Seen by Calandria on 2026-10-19 in snes9x captures of the `lava` and
@@ -100,3 +100,17 @@ right corner is whole.
 
 **What to install when merging**: nothing for this one —it is runtime
 only, and the global tools assemble the runtime of `~/the-advocate`—.
+
+### 2026-11-22, Mulita: what to look at
+
+![Before the fix (Chajá's capture, 2026-10-20): the black block over the box's lower right corner](images/book-of-three-a-black-block-over-the-window-in-the-lava-tunnels/rescue-window-before-the-fix.png) ![Today's main, same moment: the box is whole](images/book-of-three-a-black-block-over-the-window-in-the-lava-tunnels/rescue-window-now.png)
+
+What to look for: the **lower right corner of the message box**, over the
+lava, when Fflewddur says "Look! It's Taran... he's in trouble!" —it must be
+plain box, with no black band—. It came and went with the lava's animation,
+so it is worth watching every box on that map. Shot in snes9x from the ports `22c7559` and the tools of the-advocate `1b8825d8`, the release cartridge, case
+`milestone-rescue`, 154 ticks after its step: the corner is whole.
+
+**To get there in play**: the Lava Tunnels, map 46, the second time the
+party goes in (the rescue of Taran, after the camp with Gurgi and
+Fflewddur); the line is the scene's first box. Mid-game.

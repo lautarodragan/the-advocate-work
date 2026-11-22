@@ -5,7 +5,7 @@ type: bug
 status: testing
 assignee: taro
 author: mulita
-agents: [Tijereta]
+agents: [Tijereta, Mulita]
 ---
 
 Seen by Mulita on 2026-10-15, comparing the port with the original under
@@ -157,3 +157,20 @@ skipped, `abl.sfc` `0a3cce588992ccea`; `just boot` 77 passed and the
 guard red until the photo moved, then the guard and the inn's test again,
 green. `just space`: `test-change-system` 49 B of bank 0, `release` 104.
 **When merging**: reinstall `events`, `convert`, `cartridge`.
+
+### 2026-11-22, Mulita: what to look at
+
+![Taran's Prison, map 32: the dream choice right before the night](images/book-of-three-inns-in-scenes-are-not-staged/cell-before-the-night.png) ![The screen going down to black](images/book-of-three-inns-in-scenes-are-not-staged/cell-fading-to-black.png) ![After the jingle, the cell coming back up](images/book-of-three-inns-in-scenes-are-not-staged/cell-coming-back.png)
+
+What to look for, and **to listen to**: the night is a fade to black, the
+inn's jingle (`Inn1`) played once in the black —some six seconds—, and the
+screen coming back up, with the map's song back after it; before, the party
+was healed on the spot and the scene went on. Shot in snes9x from the ports `22c7559` and the tools of the-advocate `1b8825d8`, the release cartridge, case
+`milestone-guard`, ticks 350, 370 and 770 after talking to the guard. In
+Gwydion's camp (map 17) it is heard but not seen: the camp is already tinted
+black.
+
+**To get there in play**: Spiral Castle, the cell (map 32), after the guard
+scene, when Taran picks a dream; also Gwydion's camp (map 17, early), the
+free resting places on maps 20, 24, 41, 53 and 62, Medwyn's house (80) and
+map 63. With MSU-1 the jingle comes from its track: that path no test runs.

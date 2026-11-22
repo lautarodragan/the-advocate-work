@@ -5,7 +5,7 @@ type: bug
 status: testing
 assignee: taro
 author: mulita
-agents: [Carpintero]
+agents: [Carpintero, Mulita]
 ---
 
 Seen by Mulita on 2026-10-15, comparing the port with the original's event
@@ -151,3 +151,13 @@ moved. Bank 0 (`just space` in ABL): `release` 146 B left,
 `test-change-system` 91 B, the tightest; main had 98 and 52, since
 `op_bgm`'s and `op_fade_bgm`'s bodies and the MSU-1 fade's multiply went
 to FAR3.
+
+### 2026-11-22, Mulita: what to look at
+
+No image: it is music. **To listen to**: the scripted fights play
+their own song instead of the default battle theme ("intothefireedit"), and
+keep it for the victory. The first one is the horsemen in Deep In Yern
+Forest (map 16, the touch at (12, 18), early), which asks for "talisn"; the
+Cauldron-Born ambush on map 26 asks for "dowds". A random encounter after
+either has to be back on "intothefireedit". With MSU-1 the songs come from
+their tracks, a path no test runs.
