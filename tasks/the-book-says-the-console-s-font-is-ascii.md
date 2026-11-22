@@ -3,8 +3,9 @@ name: "The book says the console's font is ASCII"
 description: "El Dorado's and Sunset over Imdahl's pages still say the console's font is ASCII, and the divergence says the menu draws ASCII; the boxes draw Latin-1 since 2026-10-16, and what the screens draw when building always did"
 type: docs
 game: [el-dorado, sunset-over-imdahl]
-status: draft
+status: done
 author: aguara
+agents: [Calandria]
 ---
 
 Seen by Aguará on 2026-11-22, in
@@ -32,3 +33,12 @@ with the game's font, Latin-1 included: `rm2k-snes-screens render` of
 Zounds' End Game draws `¿Deseas salir?` and `Sí`. What the cartridge
 composes at run time —names, items, skills, the battle's lines— is what
 shows the stand-ins.
+
+## Log
+
+### 2026-11-22, Calandria: fixed in the book
+
+Folded into [`the-text-screens-draw-latin-1`](the-text-screens-draw-latin-1.md):
+El Dorado's and Sunset's pages say what is drawn since 2026-10-16, and the
+divergence says what the text screens draw since that task's stage 1.
+Book branch `calandria-latin1`.

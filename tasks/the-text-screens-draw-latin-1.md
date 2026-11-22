@@ -2,9 +2,9 @@
 name: "The text screens draw Latin-1"
 description: "The message boxes draw the accents, ¿, ¡, umlauts and ß each game uses; the menu, the shops, the battle, the slots, \\N[0] and a troop page's box still show the plain stand-ins. Measure the room each screen has for those glyphs and estimate the work before doing it"
 type: feature
-status: doing
+status: testing
 author: taro
-assignee: Calandria
+assignee: taro
 agents: [Hornero, Aguará, Calandria]
 ---
 
@@ -305,3 +305,124 @@ taro, asked whether to do stage 1:
 
 Stage 1 only: the database's texts on every text screen, with `\N[0]`'s
 translation, and the test game's case. Aguará is on another task.
+
+### 2026-11-22, Calandria: stage 1, the database's texts on the text screens
+
+Started at the-advocate `1b8825d8` and the ports `544f9bc`, in worktrees of
+my own, branch `calandria-latin1` in each repo and in the book.
+
+#### The shape
+
+* **One rule, three places.** `rm2k_snes_text::plain::screen_text(text,
+  letters)` keeps the icons' halves and `letters`, and stands the rest in;
+  the screens stage's `item_text`, the battle's and the emission's
+  `Texts::add` all go through it, so a letter is cut and measured where it
+  is drawn. `SCREEN_GLYPHS`, 224, in `rm2k_snes_text::font`: a screen's
+  byte is its glyph plus 32.
+* **Which letters**: the converter's new `letters.rs` collects the ones the
+  font draws over the texts the cartridge composes at run time —actors'
+  names, items, skills with their messages, enemies, conditions with their
+  messages, the terms but a 2003 game's unshown ones, a 2003 game's battle
+  commands, the project's `[battle.terms]`, the `ChangeHeroName` names—,
+  leaving out a text with a cp1252 hole, as Aguará's count did; and hands
+  them to the screens stage as `screen_letters`.
+* **Where they go**: `texts::ScreenLetters` in the screens stage. The font's
+  letters are the boxes' and then the ones only the screens write; the
+  screens reach every one whose glyph is below 224, **and none when no
+  screen text has a letter**, which is what keeps the seven games without
+  any byte for byte. When the screens carry letters and no icon, the blank
+  at 96 goes in anyway: the text layer takes glyph 96 for `TL_FIGURE`.
+  The screens' `font_advance` and `font_reach` grow to the last letter;
+  the message window's too, by the letters only the screens write, so a
+  name's letter in a box has its advance.
+* **`\N[0]`**: `msg_name_letter` takes a glyph from `FONT_LETTERS_AT` on
+  back to the window's letter, `.if FONT_LETTERS_AT <> FONT_CONSOLE_GLYPHS`.
+* `mapdata.inc` names each letter the screens carry, `FONT_LETTER_<code>`,
+  an equate and no byte: the tests decode a screen's bytes with them.
+
+**Changed on the way**: the `.if` is not `FONT_LETTERS_AT <>
+FONT_CONSOLE_GLYPHS`, as planned, but `.defined(FONT_SCREEN_LETTERS)`,
+an equate `mapdata.inc` writes only when the screens carry letters. The
+planned one is also true of a cartridge whose screens carry icons and no
+letter: The Book of Three's ROM moved by those six bytes, with nothing to
+translate. And `Texts::add` does not stand a letter in: what comes raw to
+it —the shop's three terms— keeps its `?` for a letter the screens do not
+carry, as before, and the mapdata stage's Python test holds.
+
+#### Measured: every game's cartridges, byte for byte
+
+Each game's `just cartridges` in the ports at `544f9bc`, once with the six
+crates —`project cartridge battle screens mapdata convert`— installed from
+`1b8825d8` and once from this branch, the rest global; every `.sfc` and
+`.msu` of each `build/` compared:
+
+| Game | Result |
+|---|---|
+| ABL (22 cartridges), The Book of Three, Desert Nightmare, Dooms 2, El Dorado, The Frozen World, Sunset over Imdahl | the same, ROMs and `.msu`s |
+| Zounds | both ROMs move, the `.msu`s do not: `Á` at glyph 187, its last; 916 B fewer of gaps, 6 B fewer of bank $C1 (`just space`) |
+| Vampires Dawn | ROM and `.msu` move: one piece more, 5,001 B, goes to the `.msu` (406 of them), and $C1 6 B fewer |
+
+The pools' counts in Zounds' `converter.log` do not move.
+
+#### The test game
+
+Actor 4, Zoë Peña —`ñ`, a box's letter too, and `ë`, only the screens'—,
+item 2, the Poción Ácida, and the first enemy and troop, the Avispón
+(EasyRPG's `Monster/Hornet.png`, in `AUTHORS.md`; `just game` copies
+`Monster/` now). No new map. Three cases, `screen-letters`,
+`screen-letters-shop`, `screen-letters-battle`, on the meadow, and
+`test_screen_letters.py`: the box with `\N[0]`, the menu, the items
+screen, the shop's buy list and the battle's item list, five new goldens.
+**Seen red** with `msg_name_letter`'s code turned off: the box read "Zoó
+PeÁa is here.", each letter the glyph after its own. For Tijereta's hub:
+what was added is those four database rows, three cases, the picture, the
+test, its goldens, a line in `justfile` and the README's.
+
+#### Run, with this branch's `.local-tools`
+
+* the-advocate `just test`: green. `just rust-test --no-fail-fast`: green,
+  after updating the screens stage's Python test for the new key.
+  `cargo clippy --workspace --all-targets -D warnings` and `cargo fmt
+  --check`: clean.
+* `SOUNDFONT=…/FluidR3_GM.sf2 just test-game`: 176 passed, 6 skipped.
+* ABL's `just tests`: 1,685 passed, 1 red,
+  `test_patches.py::…what_the_converter_decides`, map 145's patch.
+* The ports' `just boot`: 199 passed, 2 red: the known Frozen World one,
+  and `test_zounds.py::test_the_download_room_shows_the_panoramas_its_event_sets`,
+  31 pixels of the map.
+* **Both reds that are not the known one are red with `1b8825d8`'s tools
+  too** —checked for the download room—: they are Hurón's `try_pack`,
+  which the ports' goldens and patches already have and the global
+  `wally`, `rm2k-snes-images` and the rest installed at 07:09-07:13 from
+  `ec672f4c` do not. Not this branch's; reinstalling the global ones
+  that compile `adeleine` should turn them green.
+* Zounds' goldens that moved, in their own commit in the ports:
+  `zounds-exfont-items`, `zounds-item-target`, `zounds-item-target-used`,
+  `zounds-battle-commands-uname`, `zounds-battle-commands-kazar`. Before,
+  after and difference in `/shared/captures/2026-11-22-text-screens-latin-1/`
+  with the test game's new ones, for taro to approve.
+  `test_zounds_battle_text.py` decodes the battle's bytes through
+  `FONT_LETTER_*`, and is green.
+
+#### Book
+
+The divergence, Zounds' known issue —now only a troop page's boxes—,
+Vampires Dawn's, gone, and the draft
+[`the-book-says-the-console-s-font-is-ascii`](the-book-says-the-console-s-font-is-ascii.md),
+done.
+
+#### What no test covers
+
+Vampires Dawn's screens with `Ä` and its umlauts (no test opens its menu,
+shop or battle lists), the slot screen's saved name with a letter (no game
+has one; the emission's rows go through the same byte rule), a letter
+past glyph 223 on a cartridge (only the emission's unit test), and
+renames with letters (no game has one).
+
+#### Branches, and what to install when merging
+
+the-advocate `calandria-latin1`, ports `calandria-latin1` (main merged),
+book `calandria-latin1`. Install `battle screens mapdata convert`: `text`
+is a library inside them, and `project` and `cartridge` were installed
+here only to point the runtime at this worktree —in the main checkout
+the global ones already read its `runtime/`—. `events` did not change.
