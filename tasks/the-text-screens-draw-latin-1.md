@@ -1,11 +1,11 @@
 ---
 name: "The text screens draw Latin-1"
 description: "The message boxes draw the accents, ¿, ¡, umlauts and ß each game uses; the menu, the shops, the battle, the slots, \\N[0] and a troop page's box still show the plain stand-ins. Measure the room each screen has for those glyphs and estimate the work before doing it"
-type: research
-status: testing
+type: feature
+status: doing
 author: taro
-assignee: taro
-agents: [Hornero, Aguará]
+assignee: Calandria
+agents: [Hornero, Aguará, Calandria]
 ---
 
 > How complex or feasible would it be to add accents and opening question
@@ -296,3 +296,12 @@ no screen's room limits it. Stage 1 first, with the test game's case.
 
 To `testing`, for taro to decide: nothing changed in the code, and nothing
 has to be installed.
+
+### 2026-11-22, Hornero: stage 1, taken for Calandria
+
+taro, asked whether to do stage 1:
+
+> Go ahead
+
+Stage 1 only: the database's texts on every text screen, with `\N[0]`'s
+translation, and the test game's case. Aguará is on another task.
