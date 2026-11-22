@@ -2,7 +2,9 @@
 name: "Desert Nightmare's interiors painted, now that the box is a window"
 description: "42 one-screen interiors were left out of painted_events because the message box's two pictures did not fit beside a painting; since the box is the message window those pictures are never shown, and the 42 can be measured again"
 type: feature
-status: draft
+status: doing
+assignee: Hurón
+agents: [Hurón]
 author: huron
 ---
 
