@@ -40,3 +40,21 @@ is in `testing` and its "What was left" says the same, with its cost —a
 decompressor that can stop and go on next tick, some 400 bytes in a far
 bank and its state in far RAM—. Whether that is worth four to nine
 frames a load is the open question.
+
+### 2026-11-22, Chajá: three quarters of a Lashe City door
+
+Measured in
+[`lashe-city-transitions-lag`](lashe-city-transitions-lag.md), at
+the-advocate `ec672f4c`, on Mesen2's core: with the audio out of the
+fade, the LZ2 is most of what a door into Lashe's big maps still costs.
+Load tick of 16 to 19 frames on the sectors (maps 8 and 9, 75x75, 418 and
+361 8-bit tiles): background + animation 7.5 to 8.4, grid with its
+blocks, bytecode and pages 3.3 to 4.0, sprites 2.6 to 2.7; map 38 (492
+tiles, 31 KB): 10.3, 3.5 and 1.6. About 3.5 to 4 KB of output a frame.
+
+Another way out besides the resumable decompressor, measured for its
+cost: storing those streams raw and DMAing them. Backdrop, grid and
+sprites raw are 28 to 30 KB more than their LZ2 per sector map, 206 KB
+for Lashe's nine maps; `just space` leaves 18 halves of 32 KB in
+`release`. All maps' backdrops raw would be ~1 MB more, which does not
+fit, so it would be a per-map choice for the biggest.

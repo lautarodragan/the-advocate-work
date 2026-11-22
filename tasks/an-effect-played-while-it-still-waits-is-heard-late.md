@@ -31,3 +31,18 @@ one block at a time during it, not for the whole upload.
 **To reproduce**: at that commit, ABL's `just tests
 tests/abl/test_msu_effects.py`; or play any waiting effect on demand and
 compare the frame `SE_FRAMES` goes up with the first frame of its audio.
+
+## Log
+
+### 2026-11-22, Chajá: on busy maps the effects wait for seconds
+
+Measured in [`lashe-city-transitions-lag`](lashe-city-transitions-lag.md)
+at the-advocate `ec672f4c`, on Mesen2's core, walking after each door: the
+effects a teleport leaves waiting go up in two to three seconds on
+Lashe's sectors with the `.msu` (121 to 161 ticks), but **in the Lazer
+Teeth HQ (map 11) more than five and a half**: its ticks rarely end before
+`PUMP_LINE`, so in 330 ticks one effect went up and two were still
+waiting —likely `Glass` and `Dark1`, 21.6 and 20.2 KB in the `.msu`—;
+without the `.msu`, 249 ticks. No gameplay tick got longer, and on these
+doors no page played an effect in that window, but the HQ's puzzle plays
+those from action pages: at ~1 frame a KB, up to ~21 frames late.

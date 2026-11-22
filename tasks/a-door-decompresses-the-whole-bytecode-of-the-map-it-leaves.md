@@ -42,3 +42,10 @@ page or per group of pages for the maps whose bytecode is big, or not
 carrying it when the page has nothing left after its `Teleport` —not
 checked whether a door's page does, nor whether the runtime already skips
 that case—.
+
+### 2026-11-22, Chajá: in Lashe City
+
+Measured in [`lashe-city-transitions-lag`](lashe-city-transitions-lag.md)
+at the-advocate `ec672f4c`: `code_carry_after` is 0.6 frames on Lashe's
+doors and 1.6 leaving the Lazer Teeth HQ (map 11, 7 KB of bytecode).
+Still small next to the load's LZ2.
