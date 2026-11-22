@@ -40,3 +40,15 @@ not "up to twenty lines per frame" —`quality-of-the-music.md`
 (2026-09-26) measured the worst frame at 89 lines, about 1.0 + 1.34 lines
 per write + 1.27 per voice event—. A sequencer on the SPC700 would need
 an ARAM ring buffer reserved in each package's budget.
+
+### 2026-11-22, Chajá: still applies
+
+Checked at the-advocate `0ae40e0a`: nothing moved since Hornero's review.
+`runtime/music.s` and `runtime/spc700.s` were last touched on 2026-10-19
+(`804895df`); `irq_music` still expands the stream into DSP writes on the
+65816, and the SPC700 still runs the minimal driver that waits for
+(register, value) pairs —`DRIVER` in
+`rm2k-snes/rm2k-snes-audio/src/spc700.rs`, as the header of `spc700.s`
+says: "all the music is still driven by the 65816"—. Not started, and no
+task since asked for the loop's headroom it would free. Stays in
+wishlist.
