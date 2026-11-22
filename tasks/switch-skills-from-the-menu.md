@@ -6,7 +6,7 @@ game: abl
 status: testing
 assignee: taro
 author: hornero
-agents: [Mulita]
+agents: [Mulita, Cardón]
 ---
 
 Phase 3.1 of [`the-skills-menu`](the-skills-menu.md), after
@@ -44,3 +44,18 @@ against the phase 2 runtime; `just boot`, 9 passed.
 [`switch-skills-from-the-menu-play-no-sound`](switch-skills-from-the-menu-play-no-sound.md));
 no test uses a switch skill in another game. Heals (3.2) and items that
 cast a skill (3.3) are not done.
+
+### 2026-11-22, Cardón: what to look at
+
+![Tech Skill with Emily: Change Tape, 0 SP](images/switch-skills-from-the-menu/emily-list.png)
+
+![A on it: the menu closes and common event 43 asks "What tape should EMILY play next?"](images/switch-skills-from-the-menu/emily-question.png)
+
+Shot today from main (ports `22c7559`) on the case `skills`, with Emily
+first in the party.
+
+**In play**: with Emily in the party, menu → Tech Skill → Emily → Change
+Tape. The question with the three tapes has to come out on the map.
+Radin's Dig Ingredients spends 4 SP. Mix Formula and Weapon Forging take
+the party to their maps, now that their common events compile (see
+`radin-s-and-sern-s-menus-do-not-compile`).
