@@ -2,9 +2,9 @@
 name: "The map comes back in pieces after a big picture"
 description: "When a big picture is erased the map is reloaded with the screen off, but the characters' poses are uploaded over the next frames: for three or four frames they show as black boxes or other characters' tiles"
 type: bug
-status: draft
+status: todo
 author: aguara
-agents: [Aguará, Carpintero]
+agents: [Aguará, Carpintero, Hornero]
 ---
 
 Seen by taro on 2026-11-21 in Desert Nightmare, map 28, frames 63697 to
@@ -48,3 +48,17 @@ the layer goes down on frame 240 after the jump, the room is on screen on
 
 Since the fix of that task the corridor before it, map 32, is taken down
 the same way halfway through its scene, and comes back the same.
+
+### 2026-11-22, Hornero: to todo
+
+taro, on hearing that Carpintero's fix of
+[`desert-nightmare-the-scene-after-the-bar-is-black`](desert-nightmare-the-scene-after-the-bar-is-black.md)
+makes map 32's hallway come back this way too, in the middle of the
+scene:
+
+> Would it make sense to move it from draft straight to `todo`?
+
+It touches how every game takes a big picture down, and the poses' upload
+that Cardón's
+[`desert-nightmare-the-motel-s-other-trash-cans-blink-while-they-open`](desert-nightmare-the-motel-s-other-trash-cans-blink-while-they-open.md)
+changed in `runtime/cache_slots.s`: it starts after both are merged.
