@@ -5,7 +5,7 @@ type: feature
 status: testing
 assignee: taro
 author: taro
-agents: [Hurón]
+agents: [Hurón, Carpintero]
 game: desert-nightmare
 ---
 
@@ -166,3 +166,27 @@ characters matter. Neither is small: task
 lamps and windows (the Known issue), and the maps behind its doors —the
 bar at night (60), the store (74), the alleys (63 to 65, 67)— exactly as
 before: lit by their own pictures, not doubly dark.
+
+### 2026-11-22, Carpintero: what to look at
+
+Shot on today's main (the-advocate `a30ca61d`, the ports `22c7559`),
+snes9x; the other two from Hurón's captures of 2026-11-19
+(`/shared/captures/2026-11-19-dn-nights/`).
+
+![Map 59, the town's entrance at night: before the patches (day), the console now (tinted), and the original in EasyRPG (with its lamps and windows lit)](images/desert-nightmare-nights-with-a-tint-of-their-own/map59-before-now-original.png)
+
+**What to look at**: the night town dark and evenly tinted, close to
+the original's overall darkness. What is still missing, and expected:
+the lamps' cones and the lit windows the original draws over the
+darkness —the Known issue, and the task
+[`desert-nightmare-lit-cells-over-a-tinted-night`](desert-nightmare-lit-cells-over-a-tinted-night.md)—.
+And through the doors, the night interiors —the bar at night (60), the
+store (74), the alleys (63 to 65, 67)— lit by their own masks as before,
+not darker twice.
+
+**How to get there**: map 59 is the town's entrance (the "Dusty Creek"
+sign) when the story turns to night; the other night streets are 61, 62,
+66 and 68 to 70. Walking in and out of a night interior through its door
+is the check for "not darker twice". The screenshot comes from a jump to
+(0, 10), the cell the bar's door at night leaves you on, so the camera
+may sit differently from where you arrive playing.

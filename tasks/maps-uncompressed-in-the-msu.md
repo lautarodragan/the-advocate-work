@@ -5,7 +5,7 @@ type: research
 status: testing
 author: taro
 assignee: taro
-agents: [Hornero, Chajá]
+agents: [Hornero, Chajá, Carpintero]
 game: vampires-dawn
 ---
 
@@ -479,3 +479,11 @@ What it costs, all of it:
 
 Nothing to install or merge: the prototype branches stay local —the-advocate
 `chaja-msu-raw` (`c9eed3da`); the ports' `chaja-msu-raw` has no commit—.
+
+### 2026-11-22, Carpintero: what to look at
+
+No capture: this is a research —sizes and load times measured over a
+prototype that was not merged—, and no build taro plays carries anything
+of it. There is nothing to look at on the console; what is left to decide
+is in the log above: the sizes, the load frames, and what the per-map
+choice would cost.

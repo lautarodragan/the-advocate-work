@@ -6,7 +6,7 @@ game: [dooms2, vampires-dawn]
 status: testing
 assignee: taro
 author: cardon
-agents: [Mulita]
+agents: [Mulita, Carpintero]
 ---
 
 Seen by Cardón on 2026-10-14 (`what-the-compiler-ignores-silently.md`),
@@ -125,3 +125,22 @@ unchanged.
 show on Dooms 2 and Vampires Dawn, which were not built nor played. The
 new-game path in `title.s` (`leave`) runs in every session that goes
 through the title, but no test looks at the permissions right after it.
+
+### 2026-11-22, Carpintero: what to look at
+
+Shot on today's main (the-advocate `a30ca61d`, the ports `22c7559`),
+Dooms 2's release, snes9x.
+
+![Dooms 2, map 1 "Choose", B at the start: Save grey on the left, where the map forbids saving; red on the right, the same menu with the map's bit cleared by hand](images/a-maps-save-and-escape-flags-are-never-read/dooms2-menu-save-forbidden-and-allowed.png)
+
+**What to look at**: in Dooms 2, B right after the start, on the black
+room where Will asks whose story to hear (map 1, "Choose"): **Save is
+grey**, the other options red. The map tree forbids saving there and on
+every map of the game except the last four (84 "End is near" and the
+three after it), so Save should stay grey wherever you open the menu, as
+in RPG_RT, until the end. The right half is only there to show what an
+allowed Save looks like: it was made by clearing the bit in RAM, not by
+playing.
+
+Not looked at here: Vampires Dawn, which forbids saving on all of its
+maps by the same tree.

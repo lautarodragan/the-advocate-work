@@ -6,7 +6,7 @@ game: [frozen-world, vampires-dawn]
 status: testing
 assignee: taro
 author: calandria
-agents: [Tijereta]
+agents: [Tijereta, Carpintero]
 ---
 
 Seen by Calandria on 2026-10-14, with the-advocate `14e200fc` and the ports
@@ -111,3 +111,32 @@ is covered).
 
 **To install when merging**: `events`, `mapdata`, `convert` and `cartridge`
 —`cartridge` because the runtime's memory map gets the `SWITCHRAM` area—.
+
+### 2026-11-22, Carpintero: what to look at
+
+Shot on today's main (the-advocate `a30ca61d`, the ports `22c7559`),
+Frozen World's release in snes9x. The box is one of the 78 commands that
+used to write outside the switch table: it uses switch 1051,
+`CoastBox.Oint`.
+
+![Map 19, Coast Road 4e: the box at (2, 1) closed on arriving (left), and still open after taking it, leaving the map and coming back (right), enlarged 4x](images/branches-and-switch-commands-past-switch-1023/map19-coast-box-closed-and-open.png)
+
+![A on the box again: "It's empty.", the page under switch 1051](images/branches-and-switch-commands-past-switch-1023/map19-its-empty.png)
+
+**What to look at**: a chest whose "taken" switch is past 1023 behaves
+like any other —it opens, gives its item (Strength Ointment here), and
+stays open and empty after leaving the map and coming back (shot here)
+and after saving and loading (not tried here)—. Before, its switch went past the table: the box
+could close again or something unrelated could change.
+
+**Where**: Coast Road 4e (map 19), the box on the cliff top at (2, 1),
+pressed from below. The game's other switches past 1023 are the boxes,
+fights and kills from there on —`BeazBox`, the Demon and Gold Miser
+fights—, and in battle the Study and Steal commands (common events 23,
+24, 26, 27, 36 and 37), whose branches were refused before. Saves made
+before this change do not load.
+
+In the captures the hero is not drawn: the harness jumps there from the
+opening's map 9, before the point where Chajá's market captures show her.
+Not looked into; if Lutine is missing on these maps while playing, that
+is a finding of its own.

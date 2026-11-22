@@ -5,7 +5,7 @@ type: bug
 status: testing
 assignee: taro
 author: huron
-agents: [Mulita]
+agents: [Mulita, Carpintero]
 ---
 
 Seen by Hurón on 2026-10-14, with the-advocate `51b4b1b2` and the ports
@@ -128,3 +128,27 @@ whose zero-length move now waits one frame.
 
 **To install when merging**: `just install events convert`, from
 `~/the-advocate`.
+
+### 2026-11-22, Carpintero: what to look at
+
+Shot on today's main (the-advocate `a30ca61d`, the ports `22c7559`),
+Vampires Dawn's release with its `.msu`, snes9x, with the jump of
+`tests/test_vampires_dawn_tradan.py`.
+
+![Map 170, Tradan, 900 frames after arriving and five steps later: the game ticks and the hero walks, but the screen is all clouds](images/vampires-dawn-tradan-hangs-on-arriving-from-the-start/tradan-ticking-under-the-clouds.png)
+
+**The fix is there**: 900 frames after the jump the main loop is still
+ticking (1,460 ticks), and the hero walks from (49, 27) to (44, 27).
+
+**But Tradan cannot be seen.** The page that hung —the cloud picture
+that drifts over the town, at transparency 40 in RM2k— now waits as it
+should, and on the console the picture is a big one, which takes the
+map off the screen: what shows is only clouds, on every visit. A new
+draft,
+[`vampires-dawn-tradan-is-hidden-under-its-clouds`](vampires-dawn-tradan-is-hidden-under-its-clouds.md),
+and a line in the port's Known issues. So what can be checked here is
+only that Tradan does not freeze: the hero answers the pad, unseen.
+
+**Where**: Tradan is map 170. The jump arrives at (49, 27), the cell the
+world map's door leaves you on; the world map is not in the cartridge,
+and which other way reaches Tradan in play was not looked at.

@@ -6,7 +6,7 @@ status: testing
 assignee: taro
 author: taro
 game: desert-nightmare
-agents: [Aguará]
+agents: [Aguará, Carpintero]
 ---
 
 taro, on 2026-11-20, playing the build of the-advocate `7951af2a` and the
@@ -179,3 +179,31 @@ The five goldens, approved by taro, did not move.
 
 To install when merging: `convert`, `wally`, `events`, and the runtime
 (`cartridge`, which assembles from the checkout).
+
+### 2026-11-22, Carpintero: what to look at
+
+The goldens of `tests/test_desert_nightmare_start_menu.py` in the ports,
+which today's main still matches (on the left of each), next to the
+original under Wine from Aguará's captures
+(`/shared/captures/2026-11-20-dn-intro-and-file-screen/`) on the right.
+
+![The start menu with "No Intro" chosen: the chosen box lit on the console (left); the original, with "With Intro" lit (right)](images/desert-nightmare-the-intro-and-the-file-screen/start-menu-no-intro-lit-and-original.png)
+
+![The load screen from the title: the cursor a whole rectangle around "File 1" (left); the original draws a frame around each file (right), which the port does not](images/desert-nightmare-the-intro-and-the-file-screen/load-screen-and-original.png)
+
+![The intro's first message, over the gas station and not over black, with no broken letters (left); the original (right)](images/desert-nightmare-the-intro-and-the-file-screen/intro-first-message-and-original.png)
+
+**What to look at, and where**:
+
+* **The start menu**, right after the title: up and down move the lit box
+  among "With Intro", "No Intro" and "Quit", and the lit one is always
+  the one A would pick.
+* **The load screen**: "Load" on the title with at least one saved game.
+  The cursor is a whole rectangle around the file, not brown bits. The
+  original's frame around each file is not drawn: known, and the same in
+  A Blurred Line.
+* **The intro**: "With Intro". The title fades over black, then the
+  whole conversation plays over the gas station, never over black, and
+  the first message has no broken letters over it. The messages still go
+  without the game's text box: the Known issue "Most messages have no
+  box".

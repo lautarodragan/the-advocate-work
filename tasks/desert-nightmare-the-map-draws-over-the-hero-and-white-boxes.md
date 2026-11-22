@@ -6,7 +6,7 @@ status: testing
 assignee: taro
 author: taro
 game: desert-nightmare
-agents: [Cardón]
+agents: [Cardón, Carpintero]
 ---
 
 taro, on 2026-11-20, playing the build of the-advocate `7951af2a` and the
@@ -118,3 +118,27 @@ capture's state and was red on main on all three.
 Install `wally`, `mapdata` and `convert`; the runtime changes too
 (`runtime/event_pages.s`). Branches `cardon-dn-walls` in the-advocate, the
 ports and the book.
+
+### 2026-11-22, Carpintero: what to look at
+
+Shot on today's main (the-advocate `a30ca61d`, the ports `22c7559`),
+snes9x, with the states `tests/test_desert_nightmare_scenes_and_items.py`
+sets up, cropped and enlarged 3x.
+
+![Left: map 21, the warehouse, the hero below the door facing it after the opening scene, head whole. Right: map 19, the bar after Jake's invitation, the pool table's top edge drawn over Jake](images/desert-nightmare-the-map-draws-over-the-hero-and-white-boxes/warehouse-door-and-jake.png)
+
+![Left: map 16, the motel, with the map of Dusty Creek taken; right: map 24, the warehouse's second room, with its item taken. Neither item's cell is a white box](images/desert-nightmare-the-map-draws-over-the-hero-and-white-boxes/items-taken-maps-16-and-24.png)
+
+**What to look at, and where**:
+
+* **Map 21, the warehouse (`Lager1`)**, after its opening scene: stand
+  below the door, at (10, 7), and walk around under it. No piece of wall
+  covers the hero's head. The room is darker in the original: the draft
+  [`desert-nightmare-the-warehouse-is-darker`](desert-nightmare-the-warehouse-is-darker.md).
+* **Map 19, the bar inside**, after the scene where Jake invites Sandra:
+  Jake stands at (15, 8) by the pool table, and the table's top edge goes
+  over him, as in the original.
+* **Map 16, the motel**, once the map of Dusty Creek is taken (where
+  taro's `missing-graphic-1` was), and **map 24, the warehouse's second
+  room**, once its item is taken (`missing-graphic-2`): the spot where
+  the item was shows its own graphic, not a white rectangle.

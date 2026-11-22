@@ -6,7 +6,7 @@ game: desert-nightmare
 status: testing
 assignee: taro
 author: huron
-agents: [Tijereta]
+agents: [Tijereta, Carpintero]
 ---
 
 Seen by Hurón on 2026-10-06 (`eraseevent-for-real.md`): in the
@@ -204,3 +204,26 @@ case) and the docs (the book, with `main` merged); this task here.
 `just install wally convert` from `~/the-advocate`. Sunset converts the
 same (the panorama branch of `compose` is untouched, and no mist of its is
 moved); ABL has the knob off.
+
+### 2026-11-22, Carpintero: what to look at
+
+Shot on today's main (the-advocate `a30ca61d`, the ports `22c7559`),
+snes9x, with Desert Nightmare's case `wc` (Sandra in the party, teleport
+to map 7).
+
+![Map 7, the gas station's bathroom: the room visible under the 65 % darkness, the lamp's cone lit](images/pictures-that-go-over-the-map-outside-sunset/station-wc-under-the-mask.png)
+
+**What to look at**: the bathroom's darkness is part of the map, so the
+room is visible under it from the first frame, with the lamp's cone,
+and the scene goes on to map 6 by itself. Before, the mask came out
+opaque and covered the room for about eight seconds, as if it had hung.
+Sandra is lit while the room is dark: the original shades her too, and
+the console does not (the divergence "Pictures drawn into the map").
+
+taro asked to try it at 50 %; it is drawn at the original's 65 %, which
+measured five times closer to RPG_RT than any half-and-half blend (the
+table in the log above).
+
+**How to get there**: early in the game, the gas station's bathroom (map
+7); its scene ends by jumping to map 6 by itself. The other interiors and nights with
+a light mask are drawn the same way; 126 maps, not looked at one by one.

@@ -6,7 +6,7 @@ status: testing
 assignee: taro
 author: huron
 game: desert-nightmare
-agents: [Hurón, Tijereta]
+agents: [Hurón, Tijereta, Carpintero]
 ---
 
 Seen by Hurón on 2026-11-19, at the-advocate `62b6e5cb` and the ports
@@ -170,3 +170,31 @@ slots of the variables, which the save already carries).
 **To install when merging**: `events cartridge convert mapdata` (with
 `bytecode` inside them). Every cartridge changes: `OP_NUMBER` has one more
 byte and `mapdata.inc` says `WIDE_VARIABLES`.
+
+### 2026-11-22, Carpintero: what to look at
+
+Shot on today's main (the-advocate `a30ca61d`, the ports `22c7559`),
+snes9x, with the steps of `tests/test_desert_nightmare_safe.py`.
+
+![Map 28, the warehouse: the safe's digits in their own window, with 71456 typed](images/desert-nightmare-the-number-locks-do-not-open/warehouse-safe-digits.png)
+
+![The safe on the wall at (11, 5), enlarged 4x: closed before the code (left), open after 71456 (right)](images/desert-nightmare-the-number-locks-do-not-open/warehouse-safe-closed-and-open.png)
+
+**What to look at**: after "( A safe... )" closes, the digits come up in
+a window of their own (the System's frame, the digits on its first
+line), up and down change a digit, left and right move, A enters. The
+right code opens the lock; a wrong one gives the game's "wrong" line.
+Since the 2026-11-20 captures the window has its frame.
+
+**Where**, the four locks:
+
+* **Map 28, the warehouse's safe, end of day 1**: on the wall at (11, 5),
+  pressed from (11, 6). It needs the poster read first. Code **71456**
+  —past sixteen bits, the case that could not work before—; 71457 says
+  "( That was wrong. )". Its key is the way out of the warehouse.
+* **Map 42, day 2**: the chest, **26538**.
+* **Map 123, day 3**: the tailor's door, **1759**. On 2026-11-20 the
+  game's own picture box went over the digits there; worth a look now
+  that `desert-nightmare-own-message-frame` is done.
+* **Map 156, day 3**: the chest in the second vault, **136264**, six
+  digits, with the slip with the code shown.

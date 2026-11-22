@@ -6,7 +6,7 @@ game: frozen-world
 status: testing
 assignee: taro
 author: calandria
-agents: [Mulita]
+agents: [Mulita, Carpintero]
 ---
 
 Seen by Calandria on 2026-10-14, with the-advocate `14e200fc` and the ports
@@ -37,3 +37,24 @@ No other game has a `\V` in an option: 6 in the eight dumps, all here.
 ### 2026-10-14, Mulita: done
 
 **Done** by Mulita on 2026-10-14 (the-advocate `84cc60e5`, same commit as [`a-literal-backslash-in-messages`](a-literal-backslash-in-messages.md)). `choice_boxes` and `compile_number` now run `with_names` and `with_variables` like the `ShowMessage` arm. In Frozen World `just culprits`, `ShowChoice` and `InputNumber` are no longer among the culprits: the three merchants and the use-item menu's boxes compile (the `InputNumber` pages did not need another fix; the item-count `ControlVars` was already done). Tests: compiler unit test (red before) and ABL `test_escapes_in_text.py` (option with `\V` against the same option with the number written). The merchants' Known issue is removed from the book.
+
+### 2026-11-22, Carpintero: what to look at
+
+Shot on today's main (the-advocate `a30ca61d`, the ports `22c7559`),
+Frozen World's release in snes9x, with the party's gold written to 123
+before talking.
+
+![Map 50, Highway 2w: the left stall's choice, its last option "[Keep Lutine's 123 gold]" with the number in place of \V[0126]](images/variables-in-a-choice-option-and-before-an-input-number/map50-keep-lutines-gold.png)
+
+**What to look at**: the last option of a merchant's choice reads
+"[Keep Lutine's N gold]" with the party's gold as digits —not a
+backslash, and the merchant does answer: before, these pages were left
+out and the merchants sold nothing—. Buying something and talking again
+shows the new amount.
+
+**Where**: the market on map 50, Highway 2w: stand on the cell in front
+of the left stall (4, 8) and press A; the shopkeeper speaks, then the
+choice. The same option is in the "Lightning" plate merchant on map 51,
+Highway 3w, once the bandits' story gets there, and in the shopkeepers
+of map 128, the market of Desolation Plains 8e. The use-item menu's
+"(have N)" before a number input is on map 14, part of the battles.
