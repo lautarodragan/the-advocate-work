@@ -5,7 +5,7 @@ type: bug
 status: testing
 assignee: taro
 author: chaja
-agents: [Calandria]
+agents: [Calandria, Cardón]
 ---
 
 Seen by Chajá on 2026-10-14, with the-advocate `51b4b1b2` and the ports
@@ -58,3 +58,19 @@ Not done: the golden of the scene. The paradise-day playthrough photographs
 the crying girl but does not bless its photos, and its photo is before the
 rain starts. What was looked at is a capture of 108 with the rain turned on
 in far RAM, in `/shared/captures/2026-10-17-rain-and-animations/`.
+
+### 2026-11-22, Cardón: what to look at
+
+![Paradise (108) at the crying girl's scene: the rain falling over the village](images/abl-it-does-not-rain-in-paradise/rain-108.png)
+
+![The scene going on under the rain: "It's coming from this way."](images/abl-it-does-not-rain-in-paradise/rain-108-girl.png)
+
+Shot today from main (ports `22c7559`): `release`, the story's switches
+for that night turned on (333, 484, 350, 361, 362), and Talan put at the
+door of his house (108, 49,22). The drops use palette 5's one grey,
+`[8, 8, 8]`, which is why they are dark.
+
+**In play**: the first night in Paradise. After Pierson's "Yes" in the
+Council, go to bed in Talan's house (114). Leave the house at night: event
+34 starts, the crying girl, and it has to rain while Talan follows her to
+the lookout.

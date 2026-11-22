@@ -5,7 +5,7 @@ type: bug
 status: testing
 author: taro
 assignee: taro
-agents: [Hornero, Chajá]
+agents: [Hornero, Chajá, Cardón]
 game: abl
 ---
 
@@ -340,3 +340,13 @@ trades the door's hitch for one on a `PlayBGM`, which is taro's call.
 * The book, branch `chaja-lashe-lag` (`09945ae`): a line in ABL's "Known
   issues" for the black that Lashe's doors still hold. Nothing to install
   when merging; the ports and the-advocate have no branch of mine.
+
+### 2026-11-22, Cardón: what to look at
+
+No image: what this task looks at is time in black frames, which a still
+capture doesn't show. Nothing was changed. Chajá measured where the frames
+go and left drafts. **To check it in play**, in Lashe City (maps 8 and 9,
+with the houses on map 10 and the Lazer Teeth HQ on 11): go through a few
+doors between the two sectors, and into and out of the HQ, with the `.msu`
+and without it. What can be seen is how long the screen stays black. It
+should be shorter with the `.msu`, and longest leaving the HQ.

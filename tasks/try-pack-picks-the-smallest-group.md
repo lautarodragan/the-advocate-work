@@ -197,3 +197,23 @@ ABL 145): those are seen only in Adeleine's images and in playing.
 
 `adeleine`, `wally`, `screens`, `images`, `mapdata` and `convert` (every
 binary that links Adeleine).
+
+### 2026-11-22, Hurón: what to look at
+
+![Zounds' DownLoad Room, map 32, with its second panorama seen through the grate: before, after, and the 31 pixels that got their own colour back in magenta](images/try-pack-picks-the-smallest-group/zounds-32-before-after-diff.png)
+
+The only golden that moved, `zounds-download-room-screenshot`, from
+`/shared/captures/2026-11-22-try-pack-grows-least/zounds/golden/`; the
+"after" is pixel for pixel today's golden in the ports' main (`22c7559`).
+The change is barely visible: the panorama kept 28 of its 30 colours and
+now keeps all 30. The rest of the games' maps that changed (better on 13
+maps, worse by one or two merged colours on Vampires Dawn 378 and 391)
+are Adeleine's images, side by side, in the same folder; none is a
+golden.
+
+**How to get there in play**: the DownLoad Room is map 32, in the Hover
+Tram's engine room. The first visit shows the desert behind the grate; the
+screenshot panorama shows on a later visit, once the story has set
+variable 14 to 2 and switch 50. Look through the grate's holes at the left
+and at the bottom right, where the magenta marks are. Not worth a detour:
+what this task is about is the packing, and the suites are its check.

@@ -5,7 +5,7 @@ type: feature
 status: testing
 assignee: taro
 author: taro
-agents: [Calandria]
+agents: [Calandria, Hurón]
 ---
 
 taro, on 2026-11-21, translated:
@@ -173,3 +173,12 @@ same disk the host has.
   their builds, but it was not run.
 
 To install when merging: nothing; only the ports change.
+
+### 2026-11-22, Hurón: no capture
+
+Tooling: the suite's speed and the delivery's copying, nothing on any
+screen. How to check it: `just boot` from the ports' root should run in
+parallel and take minutes, not the 22 of before; and after a `just
+deliver`, the next one should copy only the ROMs, the `.msu`s and the
+`.dbg`, not the tracks again, leaving your
+saves in each game's folder of `/shared/builds/` alone.

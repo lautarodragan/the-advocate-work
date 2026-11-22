@@ -6,7 +6,7 @@ game: book-of-three
 status: testing
 assignee: taro
 author: calandria
-agents: [Tijereta]
+agents: [Tijereta, Mulita]
 ---
 
 Seen by Calandria on 2026-10-14, with the-advocate `14e200fc` and the ports
@@ -69,3 +69,21 @@ it 52 pages "alone"—: the animation no longer counts among their culprits.
 **In the ROM**: `tests/test_book_of_three_endings.py` in the ports (in `just boot`), with two test pages of the game, `book-of-three/cases/battle-96.json` and `battle-136.json`: Taran alone, his HP filled every frame (and the Horned King put at a third), A tapped; each battle ends with neither the victory nor the defeat handler, RM2k's Abort. Red with the old tools: troop 96 never ends, 136 is won. Measured with a probe: troop 96 reaches turn 6 and the battle goes to `BA_M_ABORT`; troop 136 does at turn 1. **Not played by hand**, and the real fights on maps 26 and 78 were not reached by playing: what the test covers is the troop, not the map event that starts it. Fleeing was not looked at.
 
 **When merging**: reinstall `events`, `convert` and `cartridge` (the runtime changed with the other task, `controlvars-random-ranges-wider-than-255`, same branches). The animation is still not drawn: that is [`animations-in-battle`](animations-in-battle.md) territory, and a line in Book of Three's Known issues says so.
+
+### 2026-11-22, Mulita: what to look at
+
+![Troop 96, turn 6: Gwydion's Summon... BLAZING STAR!](images/show-battle-animation-b-in-troop-pages/blazing-star-message.png) ![Right after: an empty pause where the three animations would play](images/show-battle-animation-b-in-troop-pages/blazing-star-wait-no-animation.png)
+
+What to look for: the fight against the **three Cauldron-Born** has to end
+by itself at turn 6, with Gwydion's "Summon... BLAZING STAR!", a pause, his
+lines, and back to the map —not won, not lost—. The pause is where RM2k
+plays the animations on the monsters: the port does not draw them (declared
+debt), so it is an empty window for as long as they would last. The same
+with the Horned King (troop 136): at half HP, Dyrnwyn and the end. Shot in snes9x from the ports `22c7559` and the tools of the-advocate `1b8825d8`, the release cartridge,
+case `battle-96` (`test_book_of_three_endings.py`), Taran alone and kept
+alive.
+
+**To get there in play**: the Cauldron-Born are the fixed fight on map 26,
+South Mtns - Front (event 10), in the ambush on the way to Spiral Castle;
+the Horned King with Dyrnwyn is map 78, The Final Showdown, at the very
+end. Survive six turns; the battle ends on its own.

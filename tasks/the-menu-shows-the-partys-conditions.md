@@ -6,7 +6,7 @@ game: abl
 status: testing
 assignee: taro
 author: hornero
-agents: [Tijereta]
+agents: [Tijereta, Cardón]
 ---
 
 The follow-up [`the-partys-conditions`](the-partys-conditions.md) left on
@@ -176,3 +176,19 @@ screens mapdata convert cartridge rm2k-snes-audio project`: ABL's `just
 tests` 1637 passed, 2 skipped (`abl.sfc` md5 `e1f1eb7d…`); the ports'
 `just boot` 132 passed; `just space` on the nine games, every one builds
 (ABL `release` bank 0 296 B, VD bank 1 668 B the tightest).
+
+### 2026-11-22, Cardón: what to look at
+
+![The pause menu: Talan Blind and Kersh Poison, each in its colour, Core at 0 HP with ABL's dead condition (which ABL names "Normal")](images/the-menu-shows-the-partys-conditions/menu.png)
+
+![The skills screen's status line: Kersh's Poison, with its gradient](images/the-menu-shows-the-partys-conditions/skills-screen.png)
+
+The first is today's golden `menu-conditions`, the second is Tijereta's
+capture of 2026-11-01 (`/shared/captures/2026-11-01-menu-conditions/`,
+which also has the actor choice of a fallen actor raised by the elixir).
+
+**In play**: get a condition that outlives the battle. In ABL that is Poison,
+from the Slime Coater (Drust Mines), the Vipers (Ill Marshes) or the Wall
+Clinger (Sorbe Mountain). Open the menu: the row says Poison, in its
+colour, where it said Normal. Also look at Tech Skill → that actor, and at
+the actor choice of Use Item. After an Antidote it says Normal again.

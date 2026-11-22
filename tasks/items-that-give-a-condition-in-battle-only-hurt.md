@@ -6,7 +6,7 @@ game: zounds
 status: testing
 assignee: taro
 author: tijereta
-agents: [Tijereta, Mulita]
+agents: [Tijereta, Mulita, Hurón]
 ---
 
 Seen by Tijereta on 2026-10-19, on the-advocate `54ec3daf` plus
@@ -63,3 +63,26 @@ model's. Red with main's tools: the shark holds nothing.
 Left, in the divergence `what-battle-conditions-do-not-model`: a weapon's
 `state_set`, a medicine's in battle, and the AI weighing a skill on its own
 side by the conditions it takes away.
+
+### 2026-11-22, Hurón: what to look at
+
+![Kazar's item list with the Veneno chosen; the shark loses 6 HP; the next line is the poison's message](images/items-that-give-a-condition-in-battle-only-hurt/veneno-chosen-hit-poisoned.png)
+
+Shot from the ports' main (`22c7559`, global tools at the-advocate
+`1b8825d8`) with the test's own case, `battle-veneno` (Kazar alone, one
+Veneno, troop 23, the Pez Shark), and the seed `test_zounds_veneno.py`
+sets so the poison takes. What to look for: after "Kazar ✕Veneno usado."
+and "Pez Shark 6 HP perdidos.", **a second line about the shark**: that
+is the condition given. Before the fix there was none and the shark kept
+no condition. The line itself is garbage, `Pez Shark'I"A'E-~3'e'1/2?I`:
+Zounds' states carry the editor's Japanese default messages, which is the
+draft
+[`zounds-condition-messages-are-japanese-defaults`](zounds-condition-messages-are-japanese-defaults.md),
+not this task. RM2k draws no mark on a poisoned enemy, so the message and
+the turns after are all there is to see.
+
+**How to get there in play**: Kazar has to carry a Veneno (item 67). A
+chest on map 117 (event 19) gives three; the case `battle-veneno`, which
+only the tests choose, gives one. In any battle: Kazar's "Tirar-Usar", the
+Veneno, an enemy. The poison can miss: the hit roll and the enemy's rank
+decide (the shark's B gives it 70 %).

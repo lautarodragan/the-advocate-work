@@ -6,7 +6,7 @@ game: book-of-three
 status: testing
 assignee: taro
 author: calandria
-agents: [Tijereta]
+agents: [Tijereta, Mulita]
 ---
 
 Seen by Calandria on 2026-10-14, with the-advocate `14e200fc` and the ports
@@ -54,3 +54,20 @@ From the-advocate `14e200fc` and the ports `f775b66`, branch
 **When merging**: reinstall `events`, `convert` and `cartridge` (the runtime changed). `op_var` grew in bank 0 by the long division; `just space` measured on the branch (see the report). The draws below 256 give the same numbers as before: no golden moved in ABL's suite.
 
 **Not covered**: whether the chests' loot is right in play (not played); the test looks at the draw, the culprits at the common compiling.
+
+### 2026-11-22, Mulita: what to look at
+
+![A random chest on map 20 rolling the 1000 to 2500 silver branch: 1265 silver pieces](images/controlvars-random-ranges-wider-than-255/chest-1265-silver.png)
+
+What to look for: **the random chests give something**. Before, their common
+event (19, `Random Chest List`) did not compile and every one of them opened
+to nothing; now each gives an item or silver, with a "TARAN found:" message.
+The wide ranges are two of its hundred rolls: 100 to 500 silver and 1000 to
+2500, one chest in a hundred each, so seeing one in play is luck. Shot in snes9x from the ports `22c7559` and the tools of the-advocate `1b8825d8`, the release cartridge: a
+jump to map 20 and A on the chest at (1, 17), with the random generator set
+so that the roll is the 1000–2500 one.
+
+**To get there in play**: map 20, Woods By River, has seven random chests
+—(1, 17), (37, 17), (32, 30), (11, 25), (38, 48), (3, 45), (7, 48)—; maps 21,
+26 to 28, 41, 44, 47 to 50, 53, 55 and 62 to 64 have more. Opening any of
+them is the test; a second open says the chest is empty.

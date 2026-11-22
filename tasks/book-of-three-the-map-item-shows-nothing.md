@@ -5,7 +5,7 @@ type: bug
 status: testing
 assignee: taro
 author: mulita
-agents: [Chajá]
+agents: [Chajá, Mulita]
 ---
 
 Seen by Mulita on 2026-10-15 in the build's `degradations.json`
@@ -103,3 +103,18 @@ names—.
 
 **To install when merging**: `events` and `convert` (rm2k-snes-events and
 rm2k-snes-convert); the runtime is not touched. SAVE_BYTES does not change.
+
+### 2026-11-22, Mulita: what to look at
+
+![The Map of Prydain used on the world map: the port](images/book-of-three-the-map-item-shows-nothing/map-port.png) ![the original, under Wine (320x240)](images/book-of-three-the-map-item-shows-nothing/map-original.png)
+
+What to look for: using the Map of Prydain shows **the land full screen**
+until a key is pressed, and then the map as it was. Its place names read
+worse than the original's (draft
+[`book-of-three-the-maps-place-names-are-hard-to-read`](book-of-three-the-maps-place-names-are-hard-to-read.md)).
+The port's is the golden `book-of-three-map-item` from today's main; the
+original's, Chajá's capture.
+
+**To get there in play**: the Map of Prydain (item 112) is sold in the Item
+Shop of the village, map 14 (the shopkeeper at (10, 6)), early. Pause, Items,
+the map; it works on any map.

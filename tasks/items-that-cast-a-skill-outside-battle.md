@@ -6,7 +6,7 @@ game: abl
 status: testing
 assignee: taro
 author: hornero
-agents: [Chajá]
+agents: [Chajá, Cardón]
 ---
 
 Phase 3.3 of [`the-skills-menu`](the-skills-menu.md): the research
@@ -125,3 +125,18 @@ compile it in too but do not call the new function—. Mulita's
 `sk_heal_one` in `skills_screen.s`: `sk_heal_one` is called as it is, and
 `sk_heal_use` lost its middle to `sk_cast` here, so a conflict there is a
 cut, not a change of behaviour.
+
+### 2026-11-22, Cardón: what to look at
+
+![The items screen on the map: Cloudy and Milky Potion-HP in white, usable](images/items-that-cast-a-skill-outside-battle/items-white.png)
+
+![A on the Cloudy Potion: the actor choice, with the item's name and count](images/items-that-cast-a-skill-outside-battle/actor-choice.png)
+
+Chajá's captures of 2026-11-01 (`/shared/captures/2026-11-01-items-cast-skills/`,
+case `potion-menu`). Before the change both potions were grey.
+
+**In play**: the potions (items 316 to 318) are only given in Radin's
+Chemistry (map 298), which Radin's Mix Formula opens from Tech Skill (see
+`radin-s-and-sern-s-menus-do-not-compile`). With one in the bag: menu →
+Use Item → the potion is white → A → choose a hurt actor: the HP go up and
+the count drops by one. On someone at full HP it is not spent.

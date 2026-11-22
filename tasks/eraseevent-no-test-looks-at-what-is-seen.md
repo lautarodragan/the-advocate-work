@@ -4,7 +4,7 @@ description: "That an erased event stops being drawn, stops blocking, and that a
 type: test
 status: testing
 assignee: taro
-agents: [Tijereta]
+agents: [Tijereta, Hurón]
 game: test-game
 author: calandria
 ---
@@ -158,3 +158,31 @@ the merge.
 * the draft
   [`abl-s-eraseevent-tests-leave-for-the-test-game`](abl-s-eraseevent-tests-leave-for-the-test-game.md)
   is the follow-up for ABL's test.
+
+### 2026-11-22, Hurón: what to look at
+
+![The statue stops the hero (left); after A on it, it is gone and the hero walked through its cell up to the bushes (right)](images/eraseevent-no-test-looks-at-what-is-seen/statue-blocks-then-erased.png)
+
+![The pacer, the girl at the left, walking (left); a second after its Wait it is erased and no longer drawn (right)](images/eraseevent-no-test-looks-at-what-is-seen/pacer-walking-then-erased.png)
+
+Tijereta's captures from `/shared/captures/2026-11-22-eraseevent-test-game/`
+(snes9x, before the hub: the keeper is not in them). They are not goldens:
+the test compares the event's cells with plain grass three cells to the
+right.
+
+**How to get there from the hub**: on the meadow, talk to the guide, the
+signpost left of where the hero starts, and choose "Erasure" (map 14). The
+hero lands below the statue, facing it.
+
+* **The statue**: walk up, it blocks. A on it: it disappears. Walk up
+  through the cell where it stood, to the bushes. Take the Way Home (item
+  3, from the pause menu) and come back with the guide: the statue is
+  there again, and blocks.
+* **The pacer**: talk to the keeper in the bottom-right corner, (14, 13),
+  and wake the pacer. The girl at the left, (6, 7), walking up and down,
+  is erased a second later and stays gone: nothing of her is drawn, and
+  she does not come back while you stay on the map.
+* **The statue's other page**: the keeper's other option turns on its
+  second page. A same-map jump (the touch tile at the left edge, (1, 3),
+  teleports to (14, 9)) keeps an erased statue erased; leaving the map and
+  coming back runs that other page, and the statue is drawn and blocks.

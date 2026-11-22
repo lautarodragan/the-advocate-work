@@ -5,7 +5,7 @@ type: research
 status: testing
 author: chaja
 assignee: taro
-agents: [Chajá, Hornero, Aguará]
+agents: [Chajá, Hornero, Aguará, Hurón]
 ---
 
 Found by Chajá on 2026-11-22, in
@@ -139,3 +139,22 @@ largest size that held; and whether the battle backdrop's 32 KB DMA is safe.
 
 **What has to be installed when merging**: nothing. Not run: ABL's suite
 (nothing it builds changed), the console.
+
+### 2026-11-22, Hurón: what to look at
+
+![Page 1 in snes9x: OK in every row of both columns, DMA lines 50/198/396, LARGEST OK 64K in both, the music PLAYED, "ALL 80 BLOCKS CAME RIGHT."](images/a-big-dma-from-the-msu-1-data-port-is-unverified-on-the-fx-pak/emulator-summary.png)
+
+Aguará's `emulator-summary.png`, from `/shared/builds/msu-dma-test/`, at
+2x: what page 1 looks like when big DMAs from the data port hold. On the
+FX Pak, compare row by row. The seek times will differ and that is not a
+failure: snes9x seeks at once (0.0), the card takes milliseconds, and how
+many is part of the answer. What does decide it is any red "n BAD", a
+LARGEST OK below 64K, DMA lines other than 49-50/198/396, or a last line
+in red. The `README.txt` next to the ROM explains every row.
+
+**How to test it**: copy the three `msu-dma-test` files (`.sfc`, `.msu`,
+`-1.pcm`) to the card together and run it. It runs on its own for about
+half a minute (the screen goes black for a few seconds while it reads
+into VRAM) and then shows page 1. Photograph page 1 and every page with a
+red row; press START two or three times for more runs, and note whether
+the hum played and whether it stuttered.

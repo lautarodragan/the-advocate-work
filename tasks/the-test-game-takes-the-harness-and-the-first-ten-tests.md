@@ -4,7 +4,7 @@ description: "Phase 2's last two items: split ABL's harness so its generic part 
 type: test
 status: testing
 assignee: taro
-agents: [Tijereta]
+agents: [Tijereta, Hurón]
 author: taro
 game: test-game
 ---
@@ -193,3 +193,38 @@ the-advocate's branch (`65f68fee`'s harness) and the rest global:
   rebuilds them.
 * What the test game's maps gained —maps 12 and 13, a dispatcher on map
   10, terrains on ChipSet 2— changed no golden of it.
+
+### 2026-11-22, Hurón: what to look at
+
+![Map 12, the doors: the hero below the door's gap (left); after A on the door, the door (the elder) is gone from the gap and the marker went to the bottom-right corner (right)](images/the-test-game-takes-the-harness-and-the-first-ten-tests/doors-closed-open.png)
+
+![Map 13, the patchwork, on arrival (left) and after camera-fast's walk and pan (right): diagonal stripes, no row or column drawn like its neighbour](images/the-test-game-takes-the-harness-and-the-first-ten-tests/patchwork-arrived-after-pan.png)
+
+Tijereta's captures from `/shared/captures/2026-11-22-test-game-m1/`
+(snes9x, before the hub; not goldens). Eight of the ten tests read RAM,
+not the screen: variables, branches, labels, jumps, speed and keys have
+nothing to look at beyond the box each case shows at its end. The two that
+can be seen are the doors (`test_same_door`, `test_own_action`) and the
+camera (`test_camera`).
+
+**How to get there from the hub**: on the meadow, the guide (the signpost
+left of the start) for the maps, the tester (the board right below the
+start) for the cases.
+
+* **Doors**: the guide's "Doors" puts the hero in front of the door,
+  facing it. A on it: it moves out of the gap, and the marker moves to
+  the corner. The two rooms are joined by teleports to the same map: walk
+  through each and the screen should fade and come back on this map. The
+  hatch over the hero's head answers A only when faced head on.
+* **Patchwork**: the guide's "Patchwork", or the tester's "Maps" group,
+  "camera-fast" and "camera-fast-x". Walk and let the camera pan: the
+  stripes must stay diagonal and whole; a row or a column repeating the
+  one next to it is the bug the test guards.
+* **The rest**: the tester's "Variables", "Events" and "Hero and keys"
+  groups run each moved case; what each one should end with is in its
+  test (`test-game/tests/test_*.py` in the-advocate).
+* **Lookout, sent on**: the guide's second Lookout sends the hero on to
+  the clearing at once, the dispatcher `test_jumps` uses.
+
+Back to the meadow from anywhere with the Way Home (item 3, from the
+pause menu).

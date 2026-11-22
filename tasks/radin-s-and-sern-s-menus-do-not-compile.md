@@ -6,7 +6,7 @@ game: abl
 status: testing
 assignee: taro
 author: mulita
-agents: [Mulita]
+agents: [Mulita, Cardón]
 ---
 
 Seen by Mulita on 2026-10-12, at the-advocate's `mulita-skills-screen`
@@ -50,3 +50,20 @@ common events 42 and 44 run (the converter's log: "left out, not
 compiling: none"). What is lost: the hero keeps its graphic where the
 original changed it. Not played: choose Mix Formula and Weapon Forging
 from Tech Skill and see that the party goes to Radin's and Sern's maps.
+
+### 2026-11-22, Cardón: what to look at
+
+![Radin's Tech Skill: Mix Formula costs 0](images/radin-s-and-sern-s-menus-do-not-compile/radin-list.png)
+
+![A on Mix Formula: the party lands in Radin Chemistry (map 298), the ingredient shelves](images/radin-s-and-sern-s-menus-do-not-compile/radin-map-298.png)
+
+![Sern's Weapon Forging does the same: Sern Forging (map 321)](images/radin-s-and-sern-s-menus-do-not-compile/sern-map-321.png)
+
+Shot today from main (ports `22c7559`) on the case `skills`, with Radin and
+then Sern put first in the party.
+
+**In play**: with Radin in the party, menu → Tech Skill → Radin → Mix
+Formula. The menu closes and the party goes to Radin's chemistry. Leave by
+the EXIT at the bottom. The same with Sern and Weapon Forging. The hero's
+graphic stays as it was where the original changes it: that is the drop
+Hornero made, on purpose.

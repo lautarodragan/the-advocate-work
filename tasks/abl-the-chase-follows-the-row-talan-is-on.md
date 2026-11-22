@@ -5,7 +5,7 @@ type: feature
 status: testing
 assignee: taro
 author: taro
-agents: [Calandria]
+agents: [Calandria, Cardón]
 ---
 
 Follows [`abl-the-chase-on-the-lower-path`](abl-the-chase-on-the-lower-path.md),
@@ -136,3 +136,16 @@ setup —the patched Wine copy, the drivers, the runs, the replay— is in
 
 **Nothing to install when merging**: the fork and the tests are ABL's;
 the tools were not touched.
+
+### 2026-11-22, Cardón: what to look at
+
+![The guard's track on Mountain Path (105) when Talan waits 30 frames and goes down to the planks. Top: the original as it is. Middle: the original with the patch. Bottom: the ROM with the patch. Blue is Talan, red is the guard](images/abl-the-chase-follows-the-row-talan-is-on/track-lower-after-waiting.png)
+
+Calandria's capture of 2026-11-15 (`/shared/captures/2026-11-15-chase-patched/`,
+which has the other five walks and a README). This walk is the one where
+the patch changes the guard's path.
+
+**In play**: Mountain Path (105), the guard's chase from (52,17). Go down
+to the planks (row 18 or below) and the guard has to go down after Talan
+instead of zigzagging along the upper path. Going back up, he follows
+again. It is a change to the game, on purpose.
