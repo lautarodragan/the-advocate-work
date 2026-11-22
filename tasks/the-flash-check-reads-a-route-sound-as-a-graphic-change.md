@@ -5,7 +5,7 @@ type: bug
 status: testing
 assignee: taro
 author: calandria
-agents: [Calandria]
+agents: [Calandria, Hurón]
 ---
 
 Seen by Calandria on 2026-10-19, reading `rm2k-snes/convert/src/convert.rs`
@@ -118,3 +118,11 @@ in the runtime still call 34 "the only one with an operand" —the
 `graphic_hero` dispatch in `runtime/hero_route.s` and the header of
 `change_graphic` in `runtime/event_routes.s`—. Left alone so this change
 stays out of the runtime.
+
+### 2026-11-22, Hurón: no capture
+
+Nothing to see: no game has a hero route with a sound whose index's low
+byte is 34 before a flash, and Calandria rebuilt ABL, Zounds and Frozen
+World before and after with the `.sfc` and `.msu` byte for byte equal.
+It is checked by the converter's and the events crate's unit tests (`just
+crate-test convert`, `just crate-test events` in the-advocate).

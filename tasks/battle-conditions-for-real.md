@@ -6,7 +6,7 @@ game: abl
 status: testing
 assignee: taro
 author: taro
-agents: [Chajá]
+agents: [Chajá, Cardón]
 ---
 
 taro, on 2026-10-12: after `monster-conditions-and-flashscreen-in-battle.md`
@@ -142,3 +142,21 @@ after a wall of bark (729): the enemy hits softer and misses more, and
 
 Captures: `~/scratch/chaja/capturas/2026-10-12-condiciones/`, with its
 `LEEME.txt`. Draft: `arrancan-sunset-stale-right-after-built.md`.
+
+### 2026-11-22, Cardón: what to look at
+
+![Control: the controlled Scrapped Droid hits its own side until a hit frees it, "Scrapped Droid is no longer controlled!"](images/battle-conditions-for-real/control-frees.png)
+
+![BarkWall: some turns after Inscribe, "Lumbering Giant shakes off the wooden barbs!"](images/battle-conditions-for-real/bark-wall-goes.png)
+
+Both are today's goldens, `battle-control-frees` and
+`battle-inscribe-goes-wall` (cases `battle-control` and `battle-inscribe`).
+
+**In play**: Talan's ControlMachines (a switch skill, 803) in an encounter
+against troop 111, the Scrapped Droid and the rat. That troop shows up
+outside the Recycling Plant (map 59) and on its floors 1 and 2 (60, 62).
+The droid hits the rat or itself, and a hit frees it with that message.
+For BarkWall: the Lumbering Giant (troop 128, in the Lashe Area's
+northwest and southwest encounters, map 66). Cast WallOfBark, then
+Inscribe. The giant hits softer and misses more, and some turns later it
+shakes it off.

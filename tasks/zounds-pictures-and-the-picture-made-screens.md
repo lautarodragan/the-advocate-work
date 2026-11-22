@@ -5,7 +5,7 @@ type: bug
 status: testing
 assignee: taro
 author: aguara
-agents: [Aguará, Tijereta]
+agents: [Aguará, Tijereta, Hurón]
 ---
 
 Seen by Aguará on 2026-10-15, in the study
@@ -216,3 +216,33 @@ board is read from the build, not played.
 To install when merging: `events`, `convert`, `mapdata`, `wally` and
 `cartridge` (the bytecode's `OP_PICTURE_MOVE` grew, and `cartridge` writes
 `event_opcodes.inc`).
+
+### 2026-11-22, Hurón: what to look at
+
+![The race's score board, map 75: four pictures at once at the top left, the clock "0:04"](images/zounds-pictures-and-the-picture-made-screens/race-score-board.png)
+
+![The skill screen, map 190, and after Down: five pictures over the panorama](images/zounds-pictures-and-the-picture-made-screens/skill-screen-and-down.png)
+
+The race shot from the ports' main (`22c7559`, global tools at the-advocate
+`1b8825d8`): a jump to map 75 from past the opening, "Contar Tiempo" on
+"Tipo de Juego", and forty ticks later. Its digits are pictures placed by
+variables; until this task only two numbers went in. In the shots of the
+following seconds the digits count up and the colon blinks, shown on one
+and gone on the next; the blink was not compared with RM2k. The skill
+screen is today's goldens `zounds-skill-screen` and `-down`. RPG_RT next
+to it is in
+[`small-pictures-under-a-big-one-are-hidden`](small-pictures-under-a-big-one-are-hidden.md),
+and the orange hair after Down is the draft
+[`a-small-picture-s-fifteen-colours-lose-a-whole-hue`](a-small-picture-s-fifteen-colours-lose-a-whole-hue.md).
+
+**How to get there in play**: neither is on the story's path today.
+
+* **Map 75, "Super Race"**, is reached only from map 2, "Tests", which
+  the story does not reach and no door of the debug room leads to.
+* **Map 190** is opened by the game's menu on map 136, which does not fit
+  ([`zounds-menu-pictures-on-map-136-need-512-tiles`](zounds-menu-pictures-on-map-136-need-512-tiles.md)).
+  With the MSU-1, the pause menu's Debug screen and switch 294 ON jump
+  there (not tried by hand).
+
+The menu on 136 and the pick-axe and notebook screens are still missing:
+Zounds' "Known issues" in the book, and their drafts.

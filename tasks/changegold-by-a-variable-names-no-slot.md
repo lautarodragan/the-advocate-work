@@ -4,7 +4,7 @@ description: "The variable sweep of the event compiler does not name ChangeGold'
 type: bug
 status: testing
 assignee: taro
-agents: [Cardón]
+agents: [Cardón, Hurón]
 author: chaja
 ---
 
@@ -105,3 +105,13 @@ crate-test events`, 219 green) and by the ROMs being identical.
 **To merge**: the-advocate `cardon-gold-slot` (`4f822987`, main merged);
 reinstall `events` and `convert` (`just install events convert`). Nothing
 in the ports.
+
+### 2026-11-22, Hurón: no capture
+
+Nothing to see: the change gives a slot to variables that only
+`ChangeGold`, `ChangeEXP`/`ChangeLevel`, `MovePicture` by variables or a
+choice's `\V[n]` name, and no port has one. Cardón rebuilt every release
+before and after and the `.sfc` and `.msu` came out byte for byte equal,
+so no screen of any game changes. It is checked by its four unit tests in
+the events crate (`just crate-test events`) and by `just culprits` in each
+game listing the same pages.

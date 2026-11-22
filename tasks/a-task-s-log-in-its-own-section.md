@@ -5,7 +5,7 @@ type: feature
 status: testing
 assignee: taro
 author: taro
-agents: [Carpintero]
+agents: [Carpintero, Hurón]
 ---
 
 taro, on 2026-11-20, translated:
@@ -108,3 +108,20 @@ Judged, and could be judged the other way:
   they went above it.
 - Entries without a date in the text carry none, and some without an
   agent carry none either.
+
+### 2026-11-22, Hurón: what to look at
+
+![This task on the page, its log closed: "▶ Log · 2 entries" under what defines it](images/a-task-s-log-in-its-own-section/log-closed.png)
+
+![The same, the log opened: its own box, another background, padding, the page's font, and its own scroll past 20em](images/a-task-s-log-in-its-own-section/log-open.png)
+
+Rendered from this repo's main (`dc5e74b`) with `nu tasks/tasks.nu html`,
+this task alone, in headless chromium at 900 px, light mode. Not a game
+screen: it is the tasks page.
+
+**How to test it**: open the published tasks page (or `_site/index.html`
+after `nu tasks/tasks.nu html`), open any task in `testing` and look for
+the "Log · N entries" line at its end: closed by default, and opened, a
+box that scrolls inside itself. Try it in dark mode and on the phone,
+which were not looked at here. `nu tasks/tasks.nu check` is the other
+half: it should report nothing on the tasks already migrated.
