@@ -2,7 +2,7 @@
 name: "Desert Nightmare: the trash can's lid goes missing while it opens"
 description: "Opening the trash can next to the motel in Dusty Creek, the tile of its lid disappears for two frames before the open can shows"
 type: bug
-status: testing
+status: done
 assignee: taro
 author: taro
 agents: [Cardón]

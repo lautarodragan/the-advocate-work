@@ -2,7 +2,7 @@
 name: "Desert Nightmare: the menu's empty text breaks sometimes"
 description: "In the game's menu, the 'You have no notes' or 'You have no items' text sometimes comes out cut into two narrow lines, in a box with another frame, depending on which detail was opened before"
 type: bug
-status: testing
+status: done
 assignee: taro
 author: taro
 agents: [Mulita]
