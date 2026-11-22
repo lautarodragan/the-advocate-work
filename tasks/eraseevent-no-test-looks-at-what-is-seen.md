@@ -2,8 +2,8 @@
 name: "EraseEvent: no test looks at what is seen"
 description: "That an erased event stops being drawn, stops blocking, and that a parallel one that erases itself is cut, is enforced by no test: it was looked at playing Desert Nightmare"
 type: test
-status: doing
-assignee: Tijereta
+status: testing
+assignee: taro
 agents: [Tijereta]
 game: test-game
 author: calandria
@@ -52,3 +52,109 @@ taro, translated:
 So the two pages go in the test game in the-advocate, not in ABL's
 `test-special`: it answers the "First step"'s question. Tijereta moved
 the first ten tests there today.
+
+### 2026-11-22, Tijereta: the erasure, map 14, and `test_erase_event.py`
+
+`git blame` on the three paths: all from `4ff38fada` (2026-10-06, "EraseEvent
+de verdad"), whose message says what each one is for and that no test
+looks at what is drawn, what blocks or the cut parallel. The intent is
+whole; nothing to fix, only to test.
+
+**The map**, `test-game/src/maps/Map0014.json` ("Erasure"), 20x15 of bare
+grass with bushes around:
+
+* event 1, the statue, (14, 5): People1, the hero's layer, an action page
+  `EraseEvent` + variable 201 = 1; a second page, automatic on switch 1452,
+  variable 202 = 1 and 1452 off;
+* event 2, the pacer, (6, 7): People1, the hero's layer, walking up and
+  down, a parallel page on switch 1450: variable 200 += 1, `Wait` 1 s,
+  `EraseEvent`, switch 1451 on;
+* event 3, the loop, (1, 3): below, touched, `Teleport` to (14, 9) of this
+  same map.
+
+Numbers: switches 1450-1452, variables 200-202, map 14.
+
+**The test**, `test-game/tests/test_erase_event.py`, three tests on both
+cores:
+
+* the statue blocks, A erases it, the hero walks through its cell up to
+  the bushes, and it is not drawn;
+* the statue's page goes on past the erase (201), its other page does not
+  start with 1452 on (202 at 0), the loop's same-map jump keeps it erased
+  and not drawn, and the clearing and back brings it back: the other page
+  runs, it is drawn and it blocks;
+* the pacer, with 1450 turned on on the map: drawn and started once, and
+  two seconds later 1451 off, 200 still 1, not drawn, and still for a
+  second more.
+
+**What is drawn is a pixel region, not a golden**: the event's cell and
+the one above it, four pixels wider each side, against the same region
+three cells to the right —the field is one grass tile, measured equal cell
+by cell—. Each test first checks the region does see the figure, so a
+check that sees nothing is red. A golden would also freeze the hero's pose
+and the pacer's step, which are not what this is about. So nothing to show
+before merging; four captures for looking, not goldens, are in
+`/shared/captures/2026-11-22-eraseevent-test-game/`.
+
+The first try used the harness's `go_to_map` for the same-map jump and was
+red: that loads the map, which is what brings the event back. Hence the
+loop, a real `Teleport`.
+
+#### Seen red
+
+Each one a change in the worktree's runtime, the test game's cartridges
+built with it (`.local-tools` with `project` and `cartridge`), the three
+tests run on both cores and the file put back:
+
+| broken | red, in both cores |
+|---|---|
+| `apply_pages`: no `hide_npc` for the erased | "the erased statue is still drawn", "the erased pacer is still drawn", "a jump to the same map draws the erased statue again" |
+| `apply_pages`: no `remove_page_from_slot` | "the erased pacer is still walking: its move route was not let go" |
+| `apply_pages`: the erased block skipped | statue drawn, same-map drawn, pacer walking |
+| `conditions_ok`: the erased check skipped | "the hero cannot walk through the cell of an erased event", "a page of an erased event started" |
+| `op_erase_event`: `pair_ev` ignored, the parallel goes on | "a parallel page went on past the EraseEvent of its own event" |
+| `op_erase_event`: the foreground cut too | "a foreground page has to go on after erasing its event" |
+| the map load keeps row 0's erasure (`enter_map.s`) | "after loading the map again the statue's other page did not start" |
+| `apply_pages` block **and** `conditions_ok` | adds "the erased pacer's parallel page started again" |
+
+The pacer not starting again is guarded twice —`apply_pages` leaves the
+erased event out of the parallels it rebuilds, `conditions_ok` gives it no
+page— so that assert is red only with both broken. A first try at the
+load break kept `FLAG_ERASED` in `clear_waits` itself: the boot calls it
+too, the WRAM's garbage (snes9x's $55 has the bit) left events erased from
+the start, and the tests went red earlier than the assert they were for.
+
+#### ABL's test, and the crate's three
+
+The test game now asks everything ABL's `test_erase_event_for_real.py`
+asks, of an event with a graphic, and the same-map jump its comment leaves
+out. Moving it is not trivial —its two cases live in `test-special`, and
+deleting them means ABL's suite again— so it is a draft:
+[`abl-s-eraseevent-tests-leave-for-the-test-game`](abl-s-eraseevent-tests-leave-for-the-test-game.md).
+ABL's `test_erase_event.py` (after a jump to another map, nothing) and the
+ROM side of "in a common event it does nothing" are not in the test game;
+the events crate's three are bytecode tests and stay.
+
+The book: the divergence page says the test game enforces it now, and the
+test game's progress page says what the erasure carries.
+
+### 2026-11-22, Tijereta: merged with main, to testing
+
+#### Verified
+
+On the-advocate `tijereta-erase-event` at `e93c89ae` (from `6a8f4162`),
+with `.local-tools` holding `project` and `cartridge` and the rest global:
+`just test` 29 passed; `just test-game -rs` **170 passed, 6 skipped** —the
+164 and 6 it had, and the six new—. No golden of the test game moved and
+none is new. Then main merged in (`74c216b3`): it brings Rust changes to
+the events crate, the converter, mapdata and Adeleine, and nothing in
+`runtime/`, `test-game/` or the harness, so the suite was not run again on
+the merge.
+
+#### When merging
+
+* the-advocate: only `test-game/` changes; nothing to install.
+* the book, `tijereta-erase-event`: two pages, absolute links only.
+* the draft
+  [`abl-s-eraseevent-tests-leave-for-the-test-game`](abl-s-eraseevent-tests-leave-for-the-test-game.md)
+  is the follow-up for ABL's test.
