@@ -6,7 +6,7 @@ game: vampires-dawn
 status: testing
 assignee: taro
 author: taro
-agents: [Aguará]
+agents: [Aguará, Carpintero]
 ---
 
 The two parts left in [`terrains-do-what-rm2k-does`](terrains-do-what-rm2k-does.md)
@@ -137,3 +137,30 @@ tightest. **Not covered by any test**: a bush under a tint or a flash
 (the copy is taken from `pal_buf` then), depth 3, which no terrain of the
 nine games has, a screen opened while in a bush (`pano_mode3` turning the
 color math off), and the saturation of `ENC_ACC`.
+
+### 2026-11-22, Carpintero: what to look at
+
+The golden of `tests/test_vampires_dawn_bush.py`, which today's main
+still matches (run: 1 passed), and Aguará's before and after of the same
+frame (`/shared/captures/2026-11-01-terrain-bushes/`), enlarged 5x.
+
+![Vampires Dawn, map 435 (Level): the hero at the top left, in the poisoned water at (1, 3)](images/terrains-encounter-rates-and-bushes/vd-435-poison-water.png)
+
+![The hero's feet, enlarged: whole without the bush (left), the last 8 rows half-transparent over the water now (right)](images/terrains-encounter-rates-and-bushes/vd-435-feet-whole-and-blended.png)
+
+**What to look at, the bush**: a character on a bush terrain has its
+lower rows half-transparent, mixed with the ground: in Vampires Dawn the
+poisoned water ("Giftwasser", depth 1, the last 8 rows), in The Book of
+Three the "Water in Tylwyth" of the Flooded Cell (map 84, depth 2, the
+lower half). Only the hero does it, and not on maps whose characters
+take more than four palettes —Tylwyth Teg (56), Vampires Dawn's 201, 236
+and 240—, where the feet stay whole: the Known issue.
+
+**Where**: Vampires Dawn's map 435 is deep in a dungeon; the capture
+comes from a jump to (2, 3) and one step left. The Flooded Cell in The
+Book of Three is the easier one to reach.
+
+**The encounter rate** has no capture: it is how often battles come.
+To try it, walk Vampires Dawn's sea where an upper tile lets the hero
+step on it —map 396, Strand4 (1), cells (18..22, 16)—: no battle comes
+there, however long you walk; on grass they come as before.

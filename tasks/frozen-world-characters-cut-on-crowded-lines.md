@@ -3,7 +3,7 @@ name: "The Frozen World: characters cut on crowded lines"
 description: "1 map put more characters on a line than the console draws —nine characters are 36 slivers, past the PPU's 34—, and the ones further back lose columns or vanish"
 type: bug
 status: testing
-agents: [Chajá]
+agents: [Chajá, Carpintero]
 assignee: taro
 author: mulita
 game: frozen-world
@@ -119,3 +119,23 @@ counted, as before: the jump does not arrive). Not run: the full `just
 boot` of the other games, which the change does not touch, nor bsnes on
 map 128 —no test of the suite goes there; the captures are snes9x only—.
 Nothing to install when merging: no tools changed. To `testing`.
+
+### 2026-11-22, Carpintero: what to look at
+
+From Chajá's captures of the same day
+(`/shared/captures/2026-11-22-tfw-market/`), taken on the branch that was
+merged; the market's stalls have not changed since.
+
+![Map 128, the market, with the stalls drawn into the map: Lutine on row 13, left of stall 19](images/frozen-world-characters-cut-on-crowded-lines/market-after.png)
+
+![Lutine left of stall 19, enlarged: RM2k (a render of the map), before (her head cut), and now (whole)](images/frozen-world-characters-cut-on-crowded-lines/left-of-stall-19-rm2k-before-after.png)
+
+**What to look at**: on map 128, Desolation Plains 8e (the market), walk
+along the lower stalls, rows 12 to 14, and stand left of a stall on row
+13. Lutine is drawn whole —before, her head lost columns or vanished—,
+and so are the shopkeepers behind the stalls. A on any stall or crate
+opens its message and gives control back as before.
+
+What differs from RM2k and is accepted: a character standing left of a
+stall draws the few pixels of its side over the stall, where RM2k draws
+the stall over it (up to 10 px of Lutine facing up).

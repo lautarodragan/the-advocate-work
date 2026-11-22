@@ -5,7 +5,7 @@ type: bug
 status: testing
 author: hornero
 assignee: taro
-agents: [Hornero, Chajá]
+agents: [Hornero, Chajá, Carpintero]
 game: frozen-world
 ---
 
@@ -104,3 +104,13 @@ and `test-game` were not run.
 #### When merging
 
 Nothing to install: only the ports' test changed.
+
+### 2026-11-22, Carpintero: what to look at
+
+No capture: this task changed only a test of the ports
+(`tests/test_frozen_world_turn_audio.py`), which now passes with and
+without the MSU-1 tracks. Nothing in the ROM changed, so there is nothing
+new to see or play here. What the player notices of the turn's audio is
+tried as
+[`frozen-world-every-turn-re-uploads-the-battle-screens-audio`](frozen-world-every-turn-re-uploads-the-battle-screens-audio.md)
+says.

@@ -4,7 +4,7 @@ description: "Each turn of a fight teleports map 3 → map 1 → map 3, and each
 type: bug
 status: testing
 assignee: taro
-agents: [Chajá]
+agents: [Chajá, Carpintero]
 author: aguara
 game: frozen-world
 ---
@@ -295,3 +295,29 @@ while it waits, with the `.msu`, for how late it sounds (the draft above).
 
 Install `project` and `cartridge` (the runtime path; no Rust changed).
 Branches: the-advocate, the ports and the book, `chaja-tfw-turn-audio`.
+
+### 2026-11-22, Carpintero: what to look at
+
+No capture: what changed is how long the screen stays black between the
+command grid and the battle screen, and a still image cannot show a
+length of time.
+
+**How to try it**: any fight —the first one is the Sandflower on the
+beach, map 12, walking into it from (11, 33)—. Each turn: A on a plate of
+the command grid (map 3), the walk onto Monster A on the battle screen
+(map 1) and A, until the grid has control again. Before, each of those
+two jumps stopped on a black screen for one long tick: about a second
+without MSU-1 (64 frames into the battle screen, 33 back) and nearly two
+with it (105 and 102). Now both are an ordinary door fade, whose longest
+tick is the map's own load, 16 frames.
+
+* **With MSU-1**: the build's folder as it is, `frozen-world.msu` and its
+  `.pcm` tracks next to the `.sfc`. This was the worse of the two.
+* **Without MSU-1**: the `.sfc` alone in another folder, so the effects
+  come from the cartridge.
+
+What to listen for in both: the battle's sound effects. They now go up
+after the fade, in the idle time of the following ticks, so one played
+right after arriving freezes the picture a few frames while it uploads,
+and with MSU-1 it can be heard a little late (the draft
+[`an-effect-played-while-it-still-waits-is-heard-late`](an-effect-played-while-it-still-waits-is-heard-late.md)).
