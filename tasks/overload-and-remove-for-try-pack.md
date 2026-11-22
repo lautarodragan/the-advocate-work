@@ -67,3 +67,35 @@ invents colours and dithers—, but this algorithm is the part worth taking.
    scope** here: it packs whole graphics in an order the game decides, not
    tiles. Noted only so that whoever measures does not take it for
    forgotten.
+
+## Log
+
+### 2026-11-22, Hurón: measured from outside, with SuperFamiconv
+
+From [`superfamiconv-as-an-oracle-for-palette-packing`](superfamiconv-as-an-oracle-for-palette-packing.md).
+Its test, `tests/superfamiconv.rs` in `snes/adeleine/` (the-advocate),
+builds pictures from seeds. Over 500 of them with no limit on palettes,
+SuperFamiconv needs fewer palettes than `try_pack` in 361 pictures, the
+same in 133 and more in 6. Most of that is not best fit against
+overload-and-remove. `try_pack` puts each tile in the group whose union
+ends smallest, not in the one that grows least, as its comment says:
+[`try-pack-picks-the-smallest-group`](try-pack-picks-the-smallest-group.md).
+A copy that minimises growth still loses to SuperFamiconv in 90 of the 500
+and wins in 46. Those 90 are what this task would gain on these pictures,
+and they are the second group in the test's `KNOWN`. Step 1 should measure
+both changes separately on the real layers.
+
+The smallest of those cut down from seed 1: nine tiles and 30 colours,
+numbered in colour order. `try_pack` needs 4 palettes and so does the copy
+that minimises growth. SuperFamiconv needs 3:
+
+    [7, 8, 9, 10, 17, 23]  [5, 9, 11, 12, 14, 16, 18, 21, 27]
+    [1, 8, 10, 15, 19, 22, 24, 28]  [4, 7, 8, 10, 17, 23, 25]
+    [8, 10, 15, 24, 26, 28]  [4, 7, 10, 17, 18]  [0, 20, 29]
+    [3, 4, 8, 15, 24, 28]  [0, 2, 6, 12, 13, 21, 22, 25, 29]
+
+SuperFamiconv's three palettes:
+
+    [4, 5, 7, 8, 9, 10, 11, 12, 14, 16, 17, 18, 21, 23, 27]
+    [0, 2, 4, 6, 7, 8, 10, 12, 13, 17, 21, 22, 23, 25, 29]
+    [0, 1, 3, 4, 8, 10, 15, 19, 20, 22, 24, 26, 28, 29]
