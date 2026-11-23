@@ -2,8 +2,8 @@
 name: "A conversion cache shared by the worktrees"
 description: "Every worktree of the ports rebuilds every game's cartridges from nothing, with the same inputs; a cache outside the checkouts —~/.cache/advocate?— keyed by the inputs and the binaries' hashes, extended to Wally, rm2k-snes-audio and whatever else is worth it, would build only what a branch changes"
 type: refactor
-status: doing
-assignee: Hurón
+status: testing
+assignee: taro
 agents: [Hornero, Hurón]
 author: taro
 ---
@@ -258,3 +258,43 @@ them, not by name, so nothing else moves. the-advocate `59ce9926`.
   11 failed, naming `/root/scratch/huron/cache/ports/abl/...`; with these,
   after the first worktree filled the version-2 objects, 11 objects from
   the cache and the file 14 passed.
+
+### 2026-11-23, Hurón: to testing again
+
+Main had not moved since Hornero undid the merge —the-advocate
+`71f96c80`, the ports `73f5b68`, both already in the branches—, so the
+code branches are the-advocate `huron-shared-cache` at `59ce9926` and the
+ports one at `ffcd37d`, unchanged.
+
+#### `NO_CACHE=1`, ROMs and `.dbg`
+
+With the first ports worktree filling the version-2 objects, the nine
+games built in the second one with `NO_CACHE=1 … --force`, then again
+from the cache with `--force`: the 20 ROMs byte for byte equal, and the
+20 `.dbg` equal except the `mtime=` of the generated files, which the
+second build writes again. That those are right was checked on the
+cached build's `.dbg` themselves: their 3000 `file` records each name a
+file that exists, in the tools' checkout or the cartridge's directory,
+with its size and its date.
+
+Wall of `just cartridges --force` for the nine, in series, the second
+worktree, nobody else running: `NO_CACHE=1` 535 s, from the cache 65 s
+—ABL 115 → 14, Vampires Dawn 130 → 18, Desert Nightmare 81 → 8—. The
+first worktree, with every stage in the cache and only the objects
+missing, 151 s. Rewriting the `.dbg` costs nothing that shows.
+
+#### The four suites
+
+From the second worktree, cache filled by the first, with the branch's
+tools (`install-local` of project, convert, cartridge and
+rm2k-snes-audio): the-advocate `just test` 29 passed, `just test-game`
+with FluidR3 226 passed and 6 skipped, ABL's `just tests` 1692 passed and
+2 skipped, the ports' `just boot` 207 passed. `abl.sfc`
+`b4f04fb979d6d0bf`, as before.
+
+**When merging**: everything is reinstalled —`just install`—, as before,
+since the branch touches `rm2k-project`; this commit adds
+`rm2k-snes-assemble` to what changes. The version-1 objects already in
+`/root/.cache/advocate/ca65/` are no longer read —another key— and stay as
+dead weight; deleting that folder costs one cold `ca65` per cartridge. The
+AGENTS.md paragraph reverted in `4889c88` can come back with the merge.
