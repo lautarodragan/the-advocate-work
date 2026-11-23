@@ -650,6 +650,28 @@ from nowhere else, because the first version of the doors filter put them
 in from memory and three were wrong. If something is needed that cannot be
 obtained from here, taro is asked to copy it to `~`.
 
+**The FX Pak can be reached over USB**, as `/dev/fxpak`: a udev rule of the
+host's (`70-fxpak.rules`, vendor `1209`, product `5a22`) gives the device
+to taro's session alone with `uaccess`, without adding them to `uucp` or
+any group —taro's, from 2026-11-22: their user stays as small as it can—,
+and the container gets it with `--device /dev/fxpak`. It exists only with
+the console on. It speaks usb2snes: read and write the ROM in its PSRAM,
+the SRAM and the WRAM copy while a game runs, put files on the SD card,
+boot one, reset. What may be done with it, taro's, the same day:
+
+* **Write only inside `/advocate/` on the SD card**: never delete or
+  overwrite anything outside it, least of all `/sd2snes/` —the firmware,
+  the settings, the saves—.
+* **Say so before booting anything**: taro may be playing, and a boot cuts
+  the game.
+* **No command built from memory**: each one is checked first against the
+  firmware's source (`usbinterface.c` in sd2snes). A GET built from memory
+  left it answering nothing until the cable was pulled with the console
+  off —with the cable in, the FX Pak stays half powered and a console
+  reset does not clear it—.
+* **What has to be seen or heard still goes through taro**: this is for
+  tests whose results the console can be read for.
+
 **taro runs nothing on the host**: if they run something by hand, they do it
 in here, and ask first. It is theirs, from 2026-10-05. The only things that
 belong to the host are the `git push`, the EverDrive over USB, and
