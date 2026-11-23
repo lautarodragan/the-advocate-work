@@ -222,3 +222,39 @@ one per cartridge: the `.dbg` names
 and `mapdata.inc`, the checkout that compiled the `.o` first. The other
 three suites were green. So a cache hit across worktrees breaks
 Mesen2's sources for a delivered build. Back to Hurón.
+
+### 2026-11-23, Hurón: a cached object gives the `.dbg` a fresh one gives
+
+The uncached path gets root-relative names by running `ca65` standing in
+the tools' checkout with paths relative to it; but the cartridge's
+directory —where the generated `.inc` files are— is outside that checkout,
+so `ca65` names those by their absolute path, on purpose, and that path
+goes into the object. A cached object carried the directory of the build
+that assembled it first: another worktree, or another cartridge of the
+same worktree with the same sources. The dates and sizes of every file
+went with it too. No relative path can be the same in two worktrees and
+still name the cartridge's own files, so the object stays shared and the
+`.dbg` is fixed after linking.
+
+What the cache keeps under a key —version 2 now, the old objects carry no
+names— is the object plus the two directories `ca65` named its files by:
+the source's and the include directory, in one value, so two builds
+racing on a key cannot pair one's names with the other's object. On a
+hit, after `ld65`, each `file` record of the `.dbg` is moved to this
+build's directories and given this build's size and date, as `ca65` takes
+them on opening each file. `ld65` numbers the files in the order it read
+them, not by name, so nothing else moves. the-advocate `59ce9926`.
+
+#### Red, then green
+
+* A new test in `rm2k-snes-cartridge`'s `tests/assemble.rs` assembles a
+  toy runtime in one worktree, then in a second from the cache and again
+  without it: the two `.dbg` byte for byte equal. Red before the change —
+  the other worktree's path and dates—, green after.
+* ABL's `tests/tooling/test_cartridges.py`, from a second ports worktree
+  (`/root/scratch/huron/cache/ports2`) whose cache was filled by the
+  first: with the previous tools, `just cartridges` took every object from
+  the cache and `test_the_dbg_names_the_sources_relative_to_the_root` gave
+  11 failed, naming `/root/scratch/huron/cache/ports/abl/...`; with these,
+  after the first worktree filled the version-2 objects, 11 objects from
+  the cache and the file 14 passed.
