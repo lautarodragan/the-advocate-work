@@ -358,3 +358,12 @@ once more, photos of all eleven pages, and of page 9 whenever the top line
 turns red while idle.
 
 **What to install when merging**: nothing; no tool of the-advocate changed.
+
+### 2026-11-22, Aguará: a second ROM that logs to SRAM
+
+taro: the tests may write the SRAM freely, and will send the `.srm`
+afterwards —simpler and more reliable than photos—; photos still, to
+cross-check. The no-SRAM ROM stays exactly as it is (`f4e0a142…`, rebuilt
+byte for byte from the ports' main `4aa4d58`); a second variant declares
+SRAM and logs everything there. Branch `aguara-msu-dma-3` of the ports,
+from main `4aa4d58`.
