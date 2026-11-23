@@ -215,3 +215,27 @@ What the pages say:
 * Run 1, the same places, was all right. Nothing changed between the two
   but that the places had been read before.
 * Seeks, ~2 ms as in run 1; DMA lines, the same.
+
+### 2026-11-22, Hornero: run 3, one more place, and a suspicion about the reference
+
+taro, a third run with START:
+
+> second manual run. every page has errors.
+
+![Run 3, page 1](images/a-big-dma-from-the-msu-1-data-port-is-unverified-on-the-fx-pak/fx-pak-run-3-page-1.jpg)
+![Run 3, page 2](images/a-big-dma-from-the-msu-1-data-port-is-unverified-on-the-fx-pak/fx-pak-run-3-page-2.jpg)
+![Run 3, page 3](images/a-big-dma-from-the-msu-1-data-port-is-unverified-on-the-fx-pak/fx-pak-run-3-page-3.jpg)
+![Run 3, page 4](images/a-big-dma-from-the-msu-1-data-port-is-unverified-on-the-fx-pak/fx-pak-run-3-page-4.jpg)
+![Run 3, page 5](images/a-big-dma-from-the-msu-1-data-port-is-unverified-on-the-fx-pak/fx-pak-run-3-page-5.jpg)
+![Run 3, page 6](images/a-big-dma-from-the-msu-1-data-port-is-unverified-on-the-fx-pak/fx-pak-run-3-page-6.jpg)
+![Run 3, page 7](images/a-big-dma-from-the-msu-1-data-port-is-unverified-on-the-fx-pak/fx-pak-run-3-page-7.jpg)
+
+Every place bad in run 2 is bad again at the same byte, and one more
+joins them, D + `3F5A` —so 32 and 64 KB at D and every piece of D—: 56
+blocks. GOT still equals WANT on every bad row.
+
+Bad places that stay bad and add up run after run, the same on every page
+and mode, with the sum of what arrived right: that reads more like the
+ROM's **reference copy** being written over —on the FX Pak the ROM is in
+its SDRAM and may take writes no emulator lets through— than like the
+MSU-1 serving wrong bytes. Aguará checks that first.
