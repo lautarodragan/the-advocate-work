@@ -158,3 +158,27 @@ half a minute (the screen goes black for a few seconds while it reads
 into VRAM) and then shows page 1. Photograph page 1 and every page with a
 red row; press START two or three times for more runs, and note whether
 the hum played and whether it stuttered.
+
+### 2026-11-22, Hornero: run 1 on the FX Pak, all right
+
+taro ran `/shared/builds/msu-dma-test/` on the SNES with the FX Pak:
+
+> no row not ok. now running more tests with START...
+
+![Run 1, page 1, on the console](images/a-big-dma-from-the-msu-1-data-port-is-unverified-on-the-fx-pak/fx-pak-run-1-page-1.jpg)
+
+What page 1 says, against the emulators:
+
+| | no music | music on |
+|---|---|---|
+| into WRAM, into VRAM, 64 KB in pieces | OK | OK |
+| seek, ms, min / mean / max | 2.0 / 2.0 / 2.3 | 2.0 / 2.0 / 2.4 |
+| DMA lines, 8 / 32 / 64 KB | 50 / 198 / 396 | 50 / 198 / 396 |
+| largest piece OK | 64 KB | 64 KB |
+
+All 80 blocks right, and the track played. The DMA takes the same lines as
+in every emulator: the FX Pak keeps up with a DMA from `$2001` of up to
+64 KB in one go, with and without a track playing. The seeks take some
+2 ms both ways —this ROM has no SRAM, so the ~48 ms silent seeks of
+`a-save-on-the-fx-pak-waits-for-a-silent-seek` do not happen here—.
+taro is repeating it with START.
