@@ -2,9 +2,9 @@
 name: "Desert Nightmare: the scene after the bar is black"
 description: "Leaving the bar, the whole scene of the Indian painting the door and what follows plays on a black screen for some 1,867 frames, until the hotel room; holding A gets through it"
 type: bug
-status: testing
+status: doing
 author: taro
-assignee: taro
+assignee: Carpintero
 agents: [Hornero, Carpintero]
 game: desert-nightmare
 ---
@@ -199,3 +199,37 @@ the screen is, not by a golden.
 **To install when merging**: `events` and `convert`. The book's
 `carpintero-dn-bar` goes with it: the divergence of large pictures, and the
 rooms in pieces in Desert Nightmare's known issues.
+
+### 2026-11-23, Hornero: taro, on merged main —the corridor is back, the four thoughts are not
+
+taro played the delivery from ports 0699267 and the-advocate 1240ecc9 on
+the FX Pak and on Mesen2, with captures in
+`/shared/bug-reports-etc/dn-black-screen-after-bar-2/` (`runs.txt`):
+
+> DN improved too, but I don't know if completely. [...] the scene after
+> the bar seems to be there, but I don't know if complete. There were many
+> black frames. [...] I confirmed that _something_ is wrong. I have to
+> press A several times, with the screen black, to be able to go on, so
+> there must be ShowMessages I am not seeing.
+>
+> - 30935: last frame inside the bar
+> - 30936-32092: many frames in black.
+> - 32093: first frame visible after the black screen.
+> - 33350: first frame in the room. The graphics keep loading in parts,
+>   for several frames. [...] maybe it is still in `todo`, in which case,
+>   it's OK.
+>
+> Before the last fix, the first thing seen was the hotel room, so
+> _something_ improved, but those ~1k black frames don't look good.
+
+![30935, the last frame in the bar](images/desert-nightmare-the-scene-after-the-bar-is-black/frame-30935.png)
+![30936, black with no box, while A is pressed through the thoughts](images/desert-nightmare-the-scene-after-the-bar-is-black/frame-30936.png)
+![32093, the corridor, after the black](images/desert-nightmare-the-scene-after-the-bar-is-black/frame-32093.png)
+
+The black is pure black, with no message window: the four thoughts
+Carpintero's log says play over `Schwarz` before the fade ("They didn't
+believe me...") are not drawn, though they wait for A. The original shows
+them over the black. The room in pieces is the `todo` one,
+`the-map-comes-back-in-pieces-after-a-big-picture`, not this.
+
+### 2026-11-23, Hornero: back to Carpintero
