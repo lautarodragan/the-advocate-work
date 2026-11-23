@@ -260,7 +260,13 @@ root of `the-advocate`.
 Until 2026-09-16 there was one more, `w65/`, the 65816 assembler. It was
 replaced by `ca65` and `ld65`, from the cc65 project: see "Where this runs".
 
-**They are consumed from the PATH, not from `target/release`.** They are
+**A few of them are commands, and the rest are libraries under them**:
+which is which, in `LAYOUT.md` and in the book's "The tools". Gunter,
+Voodoo, LZ2, Adeleine and `rm2k-render` were commands until 2026-11-23,
+from when the converter was Python; since then they are only libraries,
+and a change to one is installed by reinstalling the binaries that link it.
+
+**The commands are consumed from the PATH, not from `target/release`.** They are
 installed with `just install` —`cargo install --locked --path …`— and from
 then on they are system tools, like `python3` or a libretro core: **no
 script or test of this game calls `cargo`**. It is taro's, from 2026-09-15,
@@ -975,8 +981,9 @@ What always has to be done:
   no Python scripts left, since 2026-10-02—; `justfile` puts it first in
   the PATH of its recipes, and ABL uses it if it is put first in its own
   (see "Where this runs"). **A Rust project is passed to it only if the
-  agent is going to modify it** —`… install-local .local-tools lz2`—:
-  compiling costs, and without names it compiles nothing. And **everything
+  agent is going to modify it** —`… install-local .local-tools wally`—, or
+  the binaries that link it if it is a library: compiling costs, and
+  without names it compiles nothing. And **everything
   is run through `just`**: a loose command does not see that `bin/` and
   uses the global one. It is taro's, from 2026-09-29, and it replaced an
   implicit re-exec the scripts did on their own.
@@ -1038,7 +1045,8 @@ So when merging a sub-agent's branch:
   tools installed, not on the branches. That each one came green says
   nothing about the merge.
 * **Reinstall into the global one only the Rust the branch touched**:
-  `just install lz2`, from `~/the-advocate`. A branch that touches
+  `just install wally`, from `~/the-advocate`; for a library, the binaries
+  that link it. A branch that touches
   `rm2k-project` —`project`— changes all the binaries that compile it in,
   and everything is reinstalled. Until 2026-10-02 there were also Python
   scripts, installed as symlinks, and an `install-scripts` recipe to
