@@ -2,7 +2,9 @@
 name: "Desert Nightmare: the hit dog lands beside the roof"
 description: "In the dog scene on map 11 the hit dog shows on the sand left of the warehouse's roof, a little lower, slides behind it and leaves a sliver at its edge; RM2k hides it behind the roof: it goes with the screen, and the console scales those"
 type: bug
-status: todo
+status: doing
+assignee: Aguará
+agents: [Aguará, Hornero]
 author: aguara
 game: desert-nightmare
 ---
@@ -35,3 +37,13 @@ with the screen. What would do it: the same number shown by the same
 variables with the map and with the screen on a map RM2k never scrolls,
 both with the map, and the move done for it. Measured over the eight games:
 only map 11 does that.
+
+## Log
+
+### 2026-11-23, Hornero: taken for Aguará
+
+> I would start this one as soon as possible —in parallel or when it
+> doesn't cause troublesome conflicts
+
+(taro.) Taken after Carpintero's `carpintero-dn-thoughts` was merged, which
+touched how big pictures are split between texture and still layers.
