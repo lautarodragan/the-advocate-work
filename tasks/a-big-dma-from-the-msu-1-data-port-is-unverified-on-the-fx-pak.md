@@ -259,3 +259,102 @@ on, SuperCIC off; CPU/PPU1/PPU2 2/1/2, 60 Hz.
 ![In-game settings](images/a-big-dma-from-the-msu-1-data-port-is-unverified-on-the-fx-pak/fx-pak-settings-3.jpg)
 ![SGB settings](images/a-big-dma-from-the-msu-1-data-port-is-unverified-on-the-fx-pak/fx-pak-settings-4.jpg)
 ![SuperCIC settings](images/a-big-dma-from-the-msu-1-data-port-is-unverified-on-the-fx-pak/fx-pak-settings-5.jpg)
+
+### 2026-11-22, Aguará: the firmware read, and a ROM that tells the copy from the data
+
+#### The firmware: `msu1.c` does not predict these places
+
+Read in sd2snes `cf7e21d` (`src/VERSION` 1.11.2; taro's FX Pak runs
+1.11.0, not diffed). `prepare_data` reloads the whole 16 KB buffer from
+the sector holding the offset whenever the offset is in neither 8 KB half;
+it takes the "within the buffer" shortcut only when it is. In this test
+every seek jumps megabytes, so **every seek is a miss** and reloads from a
+sector-aligned offset; `msu1_loop` then refills the half the read left,
+from the file pointer, which stays in step as long as each toggle of the
+read MSB is seen once. Nothing in that path depends on whether a place was
+read before, and a stale half or a misplaced sector would change hundreds
+of bytes —the low byte matching 1 time in 256— and the sum of what arrived.
+What was seen is one byte per place, always the high byte of its word for
+A, B, C, with GOT = WANT. So the firmware's buffer does not explain it.
+
+What does: **the sum is of what arrived** (`verify` adds BUFFER), and WANT
+is `build.py`'s, from the `.msu`. A byte wrong in what arrived would change
+GOT; a byte wrong in the ROM's copy, which `verify` compares against
+(`cmp [ref],y`), would not. So the data was most likely right, and either
+the copy changed or reading it went wrong. The 65816 cannot write the copy:
+in `verilog/sd2snes_base/address.v` a SNES write reaches PSRAM only through
+the save RAM (off: no SRAM, mask 0) or the patch regions, which land at the
+raw address, $C0xxxx and up, not the ROM image at $01xxxx-$04xxxx. dma.s has
+no long or indirect store, and its only B-to-A DMA goes to bank $7F.
+
+The four places in the ROM: $C1:8E93, $C2:2B17, $C3:946F, $C4:3F5A (PSRAM
+$018E93, $022B17, $03946F, $043F5A), one in each place's 64 KB and nothing
+common in the low 16 bits; D's offset is even, so there it is the low byte.
+
+What the FX Pak writes or contends with in PSRAM while a game runs, for the
+next step: the context shadow (`ctx.v`) copies every SNES write to WRAM
+(also through `$2180`), VRAM, CGRAM, OAM and the registers into
+$F5xxxx-$F9xxxx, and those writes take the PSRAM bus ahead of the SNES's
+address (`main.v`, the ROM address mux) —`verify` writes WRAM on every
+word—; the MCU's SD DMA into PSRAM (target 0); USB. Which of these is
+switched on with savestates off is not settled by reading.
+
+#### The ROM
+
+Branch `aguara-msu-dma-2` of the ports, `a8df535`, `1264ead`, `597d674`.
+A run's first 80 blocks are unchanged. New:
+
+* for every bad block a verdict (`judge`): compared again with a loop that
+  writes nothing, and each differing word against the true bytes, which the
+  ROM computes from `build.py`'s formula: **OK, BAD** (what arrived is not
+  the truth), **REF** (it is; the copy is not) or **RD** (the second look
+  matched); on pages 2-7 and counted on page 1;
+* the copy checked against sums of the truth (`chunk_sums`, 256 bytes
+  each, written by `build.py`) at power on, at a run's start, between its
+  passes, after them, after the rereads, and continuously while the pages
+  are shown (a whole check every ~2 s); each changed byte logged with its
+  old and true value, the run, the phase and the second; every page's top
+  line turns red with the count when one is found (page 9);
+* page 8: the first bad block of each place up close —12 bytes got, copy
+  and truth, the three counts, the copy's word read again at once 16-bit
+  twice and 8-bit—;
+* after the two passes, each place read again: then, at once, after an 8
+  KB read elsewhere (page 10);
+* a clock: the SPC700, idle otherwise, counts hundredths of a second in
+  its ports, loaded through its boot ROM, so time is kept through DMAs and
+  with NMI off. Page 1: when the run started, how long it took, how long
+  the pages were shown before it; page 11, every run;
+* Y held at power on or reset: NMI is never enabled, the pages poll.
+
+`just msu-dma` builds and checks it, and now also builds one with a byte
+of the copy flipped (`build.py --rot 0:8E93`) that `measure.py --rot`
+checks.
+
+#### Measured in the emulators
+
+Under `nice -n 19`, between 22:33:26 and 22:44:16 (22:33:26-22:33:36,
+22:36:14-22:36:17, 22:36:58-22:38:22, 22:39:08-22:39:10,
+22:39:16-22:40:40, 22:42:18-22:42:32, 22:42:40-22:44:16), one emulator at a
+time.
+
+* `just msu-dma`, exit 0: snes9x, bsnes, mesen-s, bsnes-accurate, Mesen2,
+  Mednafen `snes_faust`, and snes9x with Y held; snes9x and Y-held snes9x
+  again with START. Every block OK, the copy unchanged, the rereads OK.
+* The `--rot` build in snes9x: the byte found at power on (BOOT, 0.2 s,
+  $23 for $63), the 12 blocks that read it and A's three rereads REF,
+  none BAD; page 8 shows GOT = TRUE, REF red at the byte.
+* By hand, a `.msu` with a byte changed at B + `3001`: those blocks BAD,
+  the copy unchanged.
+* Not reachable in any emulator: RD, the FX Pak's PSRAM and its MSU-1
+  buffer.
+
+#### Delivered
+
+`/shared/builds/msu-dma-test/`: `msu-dma-test.sfc` sha1 `f4e0a142…` (the
+`.msu` and `-1.pcm` unchanged), `emulator-summary.png`,
+`example-planted-copy-error.png` and the `README.txt`: two sessions, a
+normal one and one with Y held at power on, START until it goes wrong and
+once more, photos of all eleven pages, and of page 9 whenever the top line
+turns red while idle.
+
+**What to install when merging**: nothing; no tool of the-advocate changed.
