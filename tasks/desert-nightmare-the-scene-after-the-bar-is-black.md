@@ -2,9 +2,9 @@
 name: "Desert Nightmare: the scene after the bar is black"
 description: "Leaving the bar, the whole scene of the Indian painting the door and what follows plays on a black screen for some 1,867 frames, until the hotel room; holding A gets through it"
 type: bug
-status: doing
+status: testing
 author: taro
-assignee: Carpintero
+assignee: taro
 agents: [Hornero, Carpintero]
 game: desert-nightmare
 ---
@@ -277,4 +277,36 @@ Tests, each seen red first:
   lit on the first thought. Green with the branch's.
 
 The ROM now shows the four thoughts as the original does.
+
+### 2026-11-23, Carpintero: the other games, run, and to testing
+
+Which ROMs change: only where a picture is zoomed on one map and shown
+still on another. Desert Nightmare (`Schwarz`, zoomed on 151), Vampires
+Dawn (`Kerl`, zoomed on 27, still on 70) and A Blurred Line (the four
+diff photos, zoomed on 12 and 212 to 216, still in the montage of 217);
+the other five games' big pictures are the same. In ABL the montage's
+photos share their data with the zoomed ones; in Vampires Dawn the two
+`Kerl` layers differ, so the cartridge carries both. The montage's
+goldens did not move.
+
+With the tools of the-advocate's `carpintero-dn-thoughts` (853c13e1), only
+`mapdata` and `convert` in its `.local-tools`:
+
+* the-advocate: `just test`, 29 passed; `cargo test` of
+  rm2k-snes-convert (75) and rm2k-snes-mapdata, clippy clean; `just
+  test-game` with FluidR3, 226 passed and 6 skipped;
+* the ports (`carpintero-dn-thoughts`, af585a7): `just boot`, 206 passed;
+  ABL's `just tests`, 1692 passed and 2 skipped. `abl.sfc` f6e88398…,
+  `desert-nightmare.sfc` 990d2322….
+
+No golden moved or was added. Side by side with the original in
+`/shared/captures/2026-11-23-dn-thoughts/`. What the suite does not cover:
+the other fifty-odd maps of Desert Nightmare with messages over `Schwarz`
+are not played by any test, nor Vampires Dawn's map 70; the test game has
+no case of a picture zoomed on one map and still on another —the rule is
+held by the converter's unit test and Desert Nightmare's map 32—.
+
+**To install when merging**: `mapdata` and `convert`. The book's
+`carpintero-dn-thoughts` goes with it: the divergence of large pictures
+and the VRAM page.
 
