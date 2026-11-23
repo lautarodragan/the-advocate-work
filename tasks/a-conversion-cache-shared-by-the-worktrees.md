@@ -164,7 +164,14 @@ path after a path flag goes as missing—, with its test red first.
   equal, and every `.inc`, `.msu`, `.pcm` and JSON; only the `.dbg`, the
   `.o`, `stamp.txt` and `events-request.json` differ, which carry paths,
   dates or the binaries' hashes and differ between any two worktrees.
-* **Two worktrees at once**: (see the next entry).
+* **Two worktrees at once**: The Book of Three, Desert Nightmare and
+  Zounds built with `--force` in two worktrees at the same time, into one
+  empty cache —970 stage answers written, most of them by both—: the
+  ROMs of both equal to the `NO_CACHE=1` ones, and no file left aside in
+  the cache. (A first try came out different from `NO_CACHE=1`, and the
+  two racers equal to each other: I had merged main into the tools'
+  checkout in the middle, so they assembled another runtime. Redone with
+  the merged tools on both sides.)
 * New tests, each shown red first: `rm2k-project`'s `tests/cache.rs`
   (writers that race, a fetched link replaced, a tree by content), the
   converter's `stage::tests` (a key by content and not by place, a
