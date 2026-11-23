@@ -21,7 +21,7 @@ with a teleport:
 
 * map 79: 26 characters and 104 slivers on cell row 11 (events 8, 9, 10, 11 Taran, 12 Isabella, 13, 14, 15, 16, 17, 18 Arden, 19, 20, 21 Saldra, 22, 23, 24, 25 Wick's Girl1, 26 Wick's Girl2, 27 "Wickie", 28, 29 Kersh, 30, 31, 32, 33 AG7-17); at the entrance too
 
-How to reproduce: `just objects-per-line book-of-three` at the root of the ports,
+How to reproduce: `tests/objects_per_line.py book-of-three` at the root of the ports,
 which prints each map's worst lines and the camera X that shows them; the
 full report of that day, with captures of a few maps in both cores, is in
 `/shared/captures/2026-11-17-objects-per-line/`. Playing, the debug

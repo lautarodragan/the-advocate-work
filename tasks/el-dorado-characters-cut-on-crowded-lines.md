@@ -20,7 +20,7 @@ with a teleport:
 
 * map 4: 11 characters and 42 slivers on cell row 6 (events 3 Gold, 19 Rasen/Akt. Indio 4, 20 Rasen, 21 Rasen, 22 Rasen, 26 Rasen/Akt. Indio 4, 27 Rasen, 33 Rasen, 34 Rasen, 36 Feuer setzen, 51 Wasserschüssel); at the entrance too
 
-How to reproduce: `just objects-per-line el-dorado` at the root of the ports,
+How to reproduce: `tests/objects_per_line.py el-dorado` at the root of the ports,
 which prints each map's worst lines and the camera X that shows them; the
 full report of that day, with captures of a few maps in both cores, is in
 `/shared/captures/2026-11-17-objects-per-line/`. Playing, the debug

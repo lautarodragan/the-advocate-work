@@ -22,7 +22,7 @@ with a teleport:
 * map 75: 11 characters and 44 slivers on cell row 7 (events 7, 12, 23, 27, 33, 34, 43, 44, 48, 108, 109)
 * map 65: 9 characters and 36 slivers on cell row 19 (events 1 Reja, 2 Reja, 3 Reja, 4 Reja, 13 Reja, 14 Reja, 15 Reja, 16 Reja, 31 Switch)
 
-How to reproduce: `just objects-per-line zounds` at the root of the ports,
+How to reproduce: `tests/objects_per_line.py zounds` at the root of the ports,
 which prints each map's worst lines and the camera X that shows them; the
 full report of that day, with captures of a few maps in both cores, is in
 `/shared/captures/2026-11-17-objects-per-line/`. Playing, the debug

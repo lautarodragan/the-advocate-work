@@ -38,7 +38,7 @@ with events —see
 a ChipSet tile as an event is still a 32x32 object here, four slivers for
 16 pixels.
 
-How to reproduce: `just objects-per-line desert-nightmare` at the root of the ports,
+How to reproduce: `tests/objects_per_line.py desert-nightmare` at the root of the ports,
 which prints each map's worst lines and the camera X that shows them; the
 full report of that day, with captures of a few maps in both cores, is in
 `/shared/captures/2026-11-17-objects-per-line/`. Playing, the debug
