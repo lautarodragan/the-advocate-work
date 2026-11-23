@@ -2,8 +2,8 @@
 name: "A conversion cache shared by the worktrees"
 description: "Every worktree of the ports rebuilds every game's cartridges from nothing, with the same inputs; a cache outside the checkouts —~/.cache/advocate?— keyed by the inputs and the binaries' hashes, extended to Wally, rm2k-snes-audio and whatever else is worth it, would build only what a branch changes"
 type: refactor
-status: doing
-assignee: Hurón
+status: testing
+assignee: taro
 agents: [Hornero, Hurón]
 author: taro
 ---
@@ -185,3 +185,28 @@ returns what the stage or `ca65` would have made is covered only by the
 stage reads a file its request and flags do not name —the key's
 assumption, written next to `key` in `stage.rs`—. A stage that started to
 read something else would be served stale answers without a word.
+
+### 2026-11-23, Hurón: to testing
+
+Both code branches merged with main —the-advocate `0eb33358`, the ports
+`ffcd37d`—, and the four suites run once on them with the branch's tools
+(`install-local` of project, convert, cartridge and rm2k-snes-audio) and
+`CACHE` at its default, `/root/.cache/advocate`: the-advocate `just test`
+29 passed and `just rust-test` green, `just test-game` with FluidR3 226
+passed and 6 skipped, ABL's `just tests` 1692 passed and 2 skipped, and
+the ports' `just boot` 207 passed. `abl.sfc` `b4f04fb979d6d0bf`.
+
+**When merging**: the branch touches `rm2k-project`, so every binary that
+compiles it in changes, and it is all reinstalled —`just install`—; the
+ones whose behaviour changes are `rm2k-snes-convert`,
+`rm2k-snes-assemble`, `rm2k-snes-cartridges` and `rm2k-snes-msu`. From
+then on the ports' recipes pass `--cache /root/.cache/advocate`, and the
+first build of each game fills it; each checkout's `build/cache/` stays
+there unused and can be deleted. The paragraph on `build/cache/` in
+AGENTS.md ("Environment traps") describes the old cache and needs
+redoing.
+
+Two drafts left: the cache grows without bound
+([`the-shared-conversion-cache-grows-without-bound`](the-shared-conversion-cache-grows-without-bound.md)),
+and the tools' checkout among the folders searched
+([`the-tools-checkout-is-searched-for-a-game-s-resources`](the-tools-checkout-is-searched-for-a-game-s-resources.md)).
