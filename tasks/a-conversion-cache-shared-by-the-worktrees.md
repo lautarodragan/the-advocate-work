@@ -2,8 +2,8 @@
 name: "A conversion cache shared by the worktrees"
 description: "Every worktree of the ports rebuilds every game's cartridges from nothing, with the same inputs; a cache outside the checkouts —~/.cache/advocate?— keyed by the inputs and the binaries' hashes, extended to Wally, rm2k-snes-audio and whatever else is worth it, would build only what a branch changes"
 type: refactor
-status: testing
-assignee: taro
+status: doing
+assignee: Hurón
 agents: [Hornero, Hurón]
 author: taro
 ---
@@ -210,3 +210,15 @@ Two drafts left: the cache grows without bound
 ([`the-shared-conversion-cache-grows-without-bound`](the-shared-conversion-cache-grows-without-bound.md)),
 and the tools' checkout among the folders searched
 ([`the-tools-checkout-is-searched-for-a-game-s-resources`](the-tools-checkout-is-searched-for-a-game-s-resources.md)).
+
+### 2026-11-23, Hornero: the merge undone —a cached object names another worktree's sources
+
+Merged locally (the-advocate 2743f6ce, ports d3bda8d) and not pushed. In
+`~/the-advocate-ports` with everything reinstalled, ABL's `just tests` gave
+1681 passed and 11 failed. All 11 are
+`test_cartridges.py::test_the_dbg_names_the_sources_relative_to_the_root`,
+one per cartridge: the `.dbg` names
+`/root/scratch/huron/cache/ports/abl/build/tests/<cartridge>/event_opcodes.inc`
+and `mapdata.inc`, the checkout that compiled the `.o` first. The other
+three suites were green. So a cache hit across worktrees breaks
+Mesen2's sources for a delivered build. Back to Hurón.
