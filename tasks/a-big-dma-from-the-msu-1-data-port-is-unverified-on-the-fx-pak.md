@@ -2,9 +2,9 @@
 name: "A big DMA from the MSU-1's data port is unverified on the FX Pak"
 description: "The battle backdrops already DMA 32 KB from $2001 in one go, and raw maps from the .msu would DMA up to 64 KB: nobody checked that the FX Pak refills its 16 KB buffer from the SD card as fast as a DMA drains it"
 type: research
-status: doing
+status: testing
 author: chaja
-assignee: Aguará
+assignee: taro
 agents: [Chajá, Hornero, Aguará, Hurón]
 ---
 
@@ -367,3 +367,97 @@ cross-check. The no-SRAM ROM stays exactly as it is (`f4e0a142…`, rebuilt
 byte for byte from the ports' main `4aa4d58`); a second variant declares
 SRAM and logs everything there. Branch `aguara-msu-dma-3` of the ports,
 from main `4aa4d58`.
+
+#### The ROM
+
+Ports `56e3a4a`. `build.py --sram` builds `msu-dma-test-sram.sfc` from
+the same `dma.s`: every hook is inside `.ifdef SRAM_KB`, the log itself in
+`sram_log.s`, so without the flag the ROM is still `f4e0a142…` (checked
+after every change). What it adds:
+
+* **32 KB of SRAM** (`$FFD6 = $02`, `$FFD8 = $05`), the size the games
+  declare, so a silent seek pays what it pays in them: by the rule taro's
+  console gave on 2026-11-17, ~48 ms of checksum before each seek made
+  with no track playing, ~130 ms when the SRAM changed. That is the
+  comparison: the FX Pak's save check and the CPU's writes into the PSRAM
+  the ROM lives in are both new here.
+* **A ring of records** from offset `$20`: sync `A5 5A`, type, 16-bit
+  length, 32-bit number, payload, 16-bit checksum; two copies of a header
+  (next offset, next number, boots) written A then B after every record;
+  a record never split by the ring's end. Records: BOOT (build id, flags
+  —Y/no NMI, PAL, warm reset vs power on, MSU-1, `--rot`, wiped, fresh—,
+  boots, SRAM KB, lines, time), RUN (start, idle before, idle sweeps,
+  seeks per place), PASS (×3 per run: no music, music on, rereads; start
+  and end, MSU-1 status, and per block verdict, bad, first byte, seek and
+  DMA lines, start), DIFF (per bad block: the counts, the copy's word
+  reread, 16 bytes got / copy / truth around the first bad byte, and up to
+  8 differing words), COPY (per changed byte of the copy: time, run,
+  phase, place, offset, truth, found, read again as a byte, a word and
+  after ~4 ms, the chunk's old and new sum), HEAL (a chunk back to the
+  truth), END. Copy events capped at 64 between two runs' starts, the rest
+  counted. A whole block does not fit (8 KB at the least, 32 KB of SRAM).
+* **Written to the WRAM first** and copied to the SRAM after the boot's
+  check, at a run's start, between passes, before the rereads, at the end,
+  and while the pages are shown: inside a pass the SRAM does not change,
+  so its seeks pay the checksum alone.
+* SELECT at power on or reset empties the log. Page 1's last two lines:
+  boots and the last record's number, and "RESET, THEN SEND THE .SRM".
+
+`parse_srm.py` looks for records at every byte, keeps the ones whose
+checksum holds, orders them by number, says the gaps and the broken ones,
+and computes the truth again from `build.py`'s formula; `--json` too.
+
+#### Measured in the emulators
+
+Under `nice -n 19`, the load at 4-18 with Chajá's and others' suites:
+23:10:08-23:10:12, 23:12:07-23:13:31, 23:13:52-23:14:00, 23:14:15-23:14:21,
+23:14:45-23:14:46, 23:15:05-23:18:15, 23:18:21-23:20:25, 23:23:07-23:23:17,
+23:23:49-23:27:31.
+
+`just msu-dma`, exit 0 (23:23:49-23:27:31): the first two ROMs as before,
+and `measure.py --sram`: in snes9x, mesen-s, Mesen2 and Mednafen's own
+save file, every PASS entry equal to the WRAM's results, every run
+whole, no gaps; bsnes and the audit core do not expose their SRAM. snes9x:
+START and reset —the second boot logged as warm—, Y held (the flag on the
+first boot only), and the `.srm` with a byte damaged, cut and without its
+header: the rest read, the damaged one said. The `--rot` build: the byte
+logged at BOOT, every block that read it a DIFF with verdict REF and got =
+truth ≠ copy at `8E93`, and —with the sums the ROM last saw changed in its
+WRAM, since no emulator changes its ROM— the same byte logged again IDLE,
+and a HEAL for a chunk with none. An 8 KB `--rot` build went round its ring
+after 4 runs: records 18-82 read, 1-17 said missing, the newest run whole.
+By hand: SELECT at reset wiped it (flags warm, wiped, fresh; numbers from
+1, nothing left past the new records).
+
+Once, at load ~12, Mednafen left no save state in its 20 s: `measure.py`
+now gives it a second try of 60 s when the run did not end.
+
+#### Where the `.srm` goes, and when (read, sd2snes `cf7e21d`)
+
+Not next to the ROM: `save_srm` writes `/sd2snes/saves/<rom name>.srm`,
+and an `.srm` next to a ROM is moved there when it loads. With a `.msu`,
+written only at a silent data seek, at a track start (once a second at
+most), at a short reset (`save_during_msu_shortreset`) and at a reset to
+the menu (`prepare_reset`); never at power off. taro confirmed the short
+reset with ABL on 2026-11-17; the menu path is read, not tried. So the
+README asks to go back to the menu before turning off, and to copy the
+`.srm` off the card after each session: the 32 KB ring holds about four
+runs full of bad blocks.
+
+#### Delivered
+
+`/shared/builds/msu-dma-test/`, next to the second delivery's files,
+which did not change: `msu-dma-test-sram.sfc` sha1
+`98da8606bc73095c65c4e339e694df67a02114b9`, its `.msu` and `-1.pcm` (the
+same bytes under its name), `emulator-summary-sram.png`, two example
+`.srm` from snes9x with their `parse_srm.py` reports (a normal one with
+START and reset; the planted copy error), and the `README.txt`: what each
+ROM is for, the order (sessions 1-2 the old ROM, 3-4 the SRAM one, normal
+and with Y), what looks different and is expected (silent seeks ~50 ms),
+where the `.srm` is and how to get it written.
+
+**What taro has to do**: sessions 3 and 4 of the README, and send the
+`.srm` copies with a photo of page 1 of each run.
+
+**What to install when merging**: nothing; no tool of the-advocate
+changed. Not run: ABL's suite (nothing it builds changed), the console.
