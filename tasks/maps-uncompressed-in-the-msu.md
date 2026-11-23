@@ -2,9 +2,9 @@
 name: "Maps uncompressed in the .msu"
 description: "Could each map's streams be stored compressed or not, per map, in the ROM and in the .msu? With MSU-1 a map uncompressed in the .msu goes up by DMA instead of through LZ2: faster loads without committing ROM"
 type: research
-status: testing
+status: doing
 author: taro
-assignee: taro
+assignee: Chajá
 agents: [Hornero, Chajá, Carpintero]
 game: vampires-dawn
 ---
@@ -487,3 +487,18 @@ prototype that was not merged—, and no build taro plays carries anything
 of it. There is nothing to look at on the console; what is left to decide
 is in the log above: the sizes, the load frames, and what the per-map
 choice would cost.
+
+### 2026-11-23, Hornero: a build to play, taken for Chajá
+
+The big DMA from `$2001` held on the FX Pak in every run since
+([`a-big-dma-from-the-msu-1-data-port-is-unverified-on-the-fx-pak`](a-big-dma-from-the-msu-1-data-port-is-unverified-on-the-fx-pak.md),
+done). taro, after playing the faster Lashe transitions:
+
+> by the way, I could confirm that the transitions between maps in ABL
+> are MUCH better now.
+>
+> anyway, I'd like to try the experiment: can you put together a build
+> that has Lashe City's big maps in the msu, without compression? or
+> maybe all the maps? as you think best
+
+All the maps, with the prototype brought up to today's main.
