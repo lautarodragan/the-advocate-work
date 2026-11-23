@@ -2,9 +2,9 @@
 name: "A big DMA from the MSU-1's data port is unverified on the FX Pak"
 description: "The battle backdrops already DMA 32 KB from $2001 in one go, and raw maps from the .msu would DMA up to 64 KB: nobody checked that the FX Pak refills its 16 KB buffer from the SD card as fast as a DMA drains it"
 type: research
-status: testing
+status: doing
 author: chaja
-assignee: taro
+assignee: Aguará
 agents: [Chajá, Hornero, Aguará, Hurón]
 ---
 
@@ -182,3 +182,36 @@ in every emulator: the FX Pak keeps up with a DMA from `$2001` of up to
 2 ms both ways —this ROM has no SRAM, so the ~48 ms silent seeks of
 `a-save-on-the-fx-pak-waits-for-a-silent-seek` do not happen here—.
 taro is repeating it with START.
+
+### 2026-11-22, Hornero: run 2 on the FX Pak, 40 blocks wrong the same way
+
+taro pressed START for a second run:
+
+> damn 😭
+
+![Run 2, page 1](images/a-big-dma-from-the-msu-1-data-port-is-unverified-on-the-fx-pak/fx-pak-run-2-page-1.jpg)
+![Run 2, page 2: no music, into WRAM](images/a-big-dma-from-the-msu-1-data-port-is-unverified-on-the-fx-pak/fx-pak-run-2-page-2.jpg)
+![Run 2, page 3: no music, into VRAM](images/a-big-dma-from-the-msu-1-data-port-is-unverified-on-the-fx-pak/fx-pak-run-2-page-3.jpg)
+![Run 2, page 4: no music, 64 KB in pieces](images/a-big-dma-from-the-msu-1-data-port-is-unverified-on-the-fx-pak/fx-pak-run-2-page-4.jpg)
+![Run 2, page 5: music on, into WRAM](images/a-big-dma-from-the-msu-1-data-port-is-unverified-on-the-fx-pak/fx-pak-run-2-page-5.jpg)
+![Run 2, page 6: music on, into VRAM](images/a-big-dma-from-the-msu-1-data-port-is-unverified-on-the-fx-pak/fx-pak-run-2-page-6.jpg)
+![Run 2, page 7: music on, 64 KB in pieces](images/a-big-dma-from-the-msu-1-data-port-is-unverified-on-the-fx-pak/fx-pak-run-2-page-7.jpg)
+
+What the pages say:
+
+* **The same blocks fail, at the same byte, on all six pages**: 32 KB
+  at B, first bad `2B17`; 64 KB at A `8E93`, at B `2B17`, at C `946F`;
+  and every piece size, 16 down to 2 KB, of A, B and C, with the same
+  first bad bytes. With and without music, into WRAM and into VRAM, in one
+  DMA and in pieces 4 ms apart. 8 KB blocks, 32 KB at A, C and D, and
+  everything at D are right.
+* So the wrong bytes are at fixed places of the file —A + `8E93`,
+  B + `2B17`, C + `946F`, all odd—, not where a DMA outran the card:
+  pieces with 4 ms between them fail at the same byte.
+* **GOT equals WANT on every bad row**: the word sum of what arrived is
+  the right one, though a word differs (`verify` in `dma.s`). The wrong
+  bytes add up to the right ones: the right data in another order, by the
+  look of it, more than garbage.
+* Run 1, the same places, was all right. Nothing changed between the two
+  but that the places had been read before.
+* Seeks, ~2 ms as in run 1; DMA lines, the same.
