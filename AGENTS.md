@@ -681,6 +681,21 @@ its README says which. A command it lacks is added to it, checked against
 the source. Since 2026-11-23; until then it was Hornero's
 `fxpak.py`, in their scratch folder.
 
+**Inside `/advocate/` each thing has its folder**, taro's, from
+2026-11-23:
+
+    /advocate/builds/<game>/      what /shared/builds/<game>/ has, for the
+                                  console: the .sfc, the .msu, the tracks
+                                  and the README
+    /advocate/experiments/<name>/ test ROMs for the hardware, like the
+                                  big-DMA one
+    /advocate/tmp/                what the tool's own tests write; it can
+                                  always be thrown away
+
+The tracks are not uploaded again when they did not change: at some 380
+KB/s the 2.4 GB of ABL's take two hours, and while a file goes up the FX
+Pak's MCU serves nothing else.
+
 **taro runs nothing on the host**: if they run something by hand, they do it
 in here, and ask first. It is theirs, from 2026-10-05. The only things that
 belong to the host are the `git push`, the EverDrive over USB, and
