@@ -2,9 +2,9 @@
 name: "Zounds: a camera pan on map 27 starts with a jump"
 description: "Right after the fade-in on map 27, the camera jumps about a tile, horizontally and vertically, in one frame, then scrolls diagonally for a few frames and then horizontally"
 type: bug
-status: doing
+status: testing
 author: taro
-assignee: Hurón
+assignee: taro
 agents: [Hornero, Hurón]
 game: zounds
 ---
@@ -85,3 +85,18 @@ own copy goes, with its comment.
   hero arrives with `step_left` 0 and stands on (160, 112) for 120 frames.
   Red before on both cores: "arrived on the clearing with 32 of his step
   still to go".
+
+### 2026-11-22, Hurón: suites green, to testing
+
+Branches: `huron-pan-jump` in the-advocate (`e1bbec84`, from `7e8da728`)
+and in the ports (`677fa09`, from `769676f`). With `.local-tools` of
+`project` and `cartridge` from the-advocate's branch: the-advocate `just
+test` green (29); the test game, the whole suite, 210 passed, 6 skipped;
+ABL's `just tests` 1686 passed, 2 skipped; the ports' `just boot` 202
+passed. No golden moved. When merging, reinstall `project` and
+`cartridge`: the runtime is read from the checkout they were installed
+from.
+
+Not covered by any test: a teleport while the hero is in the air.
+easyrpg's `SetJumping(false)` on a map change fixes an RPG_RT bug, and
+this change does not touch `route_jump`.
