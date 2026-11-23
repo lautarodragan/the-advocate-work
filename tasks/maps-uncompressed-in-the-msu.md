@@ -2,9 +2,9 @@
 name: "Maps uncompressed in the .msu"
 description: "Could each map's streams be stored compressed or not, per map, in the ROM and in the .msu? With MSU-1 a map uncompressed in the .msu goes up by DMA instead of through LZ2: faster loads without committing ROM"
 type: research
-status: doing
+status: testing
 author: taro
-assignee: Chajá
+assignee: taro
 agents: [Hornero, Chajá, Carpintero]
 game: vampires-dawn
 ---
@@ -502,3 +502,135 @@ done). taro, after playing the faster Lashe transitions:
 > maybe all the maps? as you think best
 
 All the maps, with the prototype brought up to today's main.
+
+### 2026-11-23, Chajá: every map raw, a build to play
+
+On the-advocate `75d46e3c` and the ports `8aef866`, branches
+`chaja-msu-raw-2` in both (local, not for merging).
+
+#### What changed from the prototype
+
+* **All five map pieces raw**: background tiles, grid (with `map_ram`),
+  ChipSet animation, upper layer and sprites. The bytecode and the page
+  table stay LZ2: they are small in ABL (346 KB raw over 308 pieces), and
+  whether a map's bytecode goes to WRAM at all is the converter's choice
+  (`code_in_rom`), which the post-processor cannot see.
+* **One seek per load**: a map's five pieces go one behind the other in
+  `enter_map`'s order, each at a 256-byte unit, and a loader that finds
+  the port at most 255 bytes before its piece reads the padding instead of
+  seeking. Where the port was left is `MSU_SE_NEXT`, which the sound
+  effects already keep; `msu_data_seek` now forgets it too, so the
+  backdrops and the save's flush make the next piece seek. On the FX Pak
+  a silent seek costs ~48 ms with ABL's 32 KB SRAM
+  ([`a-save-on-the-fx-pak-waits-for-a-silent-seek`](a-save-on-the-fx-pak-waits-for-a-silent-seek.md)),
+  so this matters on doors that change the song.
+* **Packed, not sparse**: the prototype's 256 KB slots at 64 MB would be
+  a 144 MB file on the card's FAT32. Now the pieces go right behind the
+  `.msu`, and **the directory (10 bytes a map, 3 KB) goes in the ROM**,
+  in bank `$FF`, zeros as built: far RAM has 64 bytes left, and a
+  directory in the `.msu` would cost a second seek per load. So the
+  post-processor, `pack_raw.py`, also fills it and writes the header
+  checksum again: **the delivered `abl.sfc` is not the build's byte for
+  byte**.
+* **Tied to the ROM**: the `.msu`'s header carries "RAWM" and the packed
+  ROM's header checksum at `$FFF0`, in the zeros that pad its index; a
+  `.msu` without them, or another build's, falls back to LZ2. That is
+  what the suite runs.
+* **The loaders live in bank `$FF`**, reached with `jsl`: `test-msu`,
+  the cartridge that needs the MSU-1, had less than their 700 bytes left
+  in bank 1 and did not link.
+
+#### The bytes
+
+`check_raw.py` (in the ports' `abl/experiments/msu-raw/`) runs the same
+packed ROM twice on Mesen2's core, with the raw `.msu` and with today's
+(the fallback), and after the harness's door jump from map 10 compares
+the whole VRAM, the grid with `map_ram` and the ChipSet drawings in WRAM
+between them, and the grid, drawings and background tiles against
+`raw/`. On maps 8, 9, 11, 38, 52, 66, 108, 148, 312, 1, 2, 20, 100, 150,
+200, 250, 300 and 350: **the whole VRAM identical, 0 words**, and grid,
+`map_ram` and drawings equal to `raw/`. (The background tiles differ from
+`raw/` on the maps with a ChipSet animation, in the drawings `anim_load`
+overwrites, the same on both sides, as in the prototype.)
+
+With `MENU=1` it also goes to the pause menu and back, which reloads
+through `back_to_map` in another order —the loaders seek instead of
+finding the port in place—: 8, 66 and 148 identical; 9 differs in 193
+words of the sprite slots (`$0947-$0BBC`), which hold the poses the
+characters show at that tick. Background, upper layer and grid equal
+there too; I read it as the two sides not landing on the same tick after
+the menu, not proven. A battle and back is not checked.
+
+#### The doors, in Mesen2
+
+`loads.py` as in the prototype —the harness's door jump from map 10,
+twice, the second kept; "load" from `lz2_grid`'s entry to `pano_ppu`'s,
+in frames of 262 lines—, on the packed ROM with today's `.msu` (LZ2, the
+path main takes) and with the raw one:
+
+| map | load: LZ2 | raw, all five pieces | the prototype's raw (two pieces) | seeks LZ2 → raw |
+|---|---:|---:|---:|---:|
+| 8 (Lashe sector) | 16.49 | 4.37 | 6.58 | 1 → 2 |
+| 9 (Lashe sector) | 14.17 | 3.13 | 5.26 | 1 → 2 |
+| 38 (sector 34) | 16.24 | 3.12 | 4.25 | 1 → 2 |
+| 11 (Lazer Teeth HQ) | 12.06 | 5.06 | 6.84 | 1 → 2 |
+| 66 (largest background) | 23.00 | 3.52 | 5.83 | 0 → 1 |
+| 148 | 19.85 | 3.94 | 6.52 | 0 → 1 |
+| 108 | 22.15 | 8.40 | 11.27 | 0 → 1 |
+
+The LZ2 column is the prototype's main to a hundredth. **One seek more
+per door, never more**: the one seek LZ2 already has on the Lashe maps
+is not a map's (a sound effect's, I think). In raw, the background goes up in 0.3-0.9 frames,
+the sprites in 0.1-0.4, the animation and the upper layer under 0.2;
+what is left is the grid's DMA plus the bytecode and pages, still LZ2
+(1.1-3.1 frames, 108's the most), and the rest of `enter_map`.
+
+On the FX Pak that seek is ~2 ms with the song playing, ~48 ms (3
+frames) when the door changes the song and the firmware checksums the
+SRAM first. Not measured on the console.
+
+#### The suite
+
+ABL's whole suite with the branch's tools (`project`, `cartridge`
+installed in `.local-tools`): **1692 passed, 2 skipped**, in 5 min 35 s.
+It runs the fallback only: no test packs a raw `.msu`. Before it,
+`test_decompressed_load.py` and `test_linter.py` alone, green.
+
+#### Delivered
+
+`/shared/builds/abl-msu-raw/`, copied by hand from the committed
+branches (the-advocate `7794939c`, the ports `146127c`; the build's
+`release`, packed again from it): `abl.sfc` sha1
+`73c82d04ec30816f11dbcc272dd04ff0e5060f69`, `abl.msu` (13,519,872 bytes)
+sha1 `3b4378fe2e9c79d214e7bf90aee95e367d659fe0`, `abl.sfc.dbg`,
+`runtime/` and a `README.txt`. No tracks: ABL's `abl-N.pcm` from
+`/shared/builds/abl/` go next to them, with the same names.
+
+#### What no test covers
+
+* The raw path itself: the suite runs only the fallback. `check_raw.py`
+  is a script run by hand, on 18 maps and 4 menu trips.
+* A battle and back (`back_from_battle` reads the grid after the
+  sprites), saving and loading, and a sound effect from the `.msu`
+  between two pieces of a load.
+* Mednafen (each seek 1-2 frames there) and the console.
+* Whether the DMA from the port, up to ~35 KB (map 66's background,
+  ~0.8 frames with the CPU stopped), drops a note in the music.
+
+#### Found and not fixed
+
+* [`msu-data-seek-does-not-forget-where-the-effects-left-the-port`](msu-data-seek-does-not-forget-where-the-effects-left-the-port.md):
+  `msu_data_seek` moves the port without resetting `MSU_SE_NEXT`, so
+  after a save a sound effect from the `.msu` could read from the wrong
+  place. Read, not seen. The branch fixes it for itself.
+
+#### Branches, local, not for merging
+
+* the-advocate `chaja-msu-raw-2`: `782daa0b` (the prototype,
+  cherry-picked), `6c2b5375`, `7794939c`.
+* the ports `chaja-msu-raw-2`: `59a65b4`, `146127c`
+  (`abl/experiments/msu-raw/`: `pack_raw.py`, `check_raw.py`,
+  `loads.py`).
+
+Nothing to install. `main` was not merged into them, so they stay the
+commits the build came from.

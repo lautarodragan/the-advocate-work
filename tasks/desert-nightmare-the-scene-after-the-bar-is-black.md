@@ -2,9 +2,9 @@
 name: "Desert Nightmare: the scene after the bar is black"
 description: "Leaving the bar, the whole scene of the Indian painting the door and what follows plays on a black screen for some 1,867 frames, until the hotel room; holding A gets through it"
 type: bug
-status: doing
+status: testing
 author: taro
-assignee: Carpintero
+assignee: taro
 agents: [Hornero, Carpintero]
 game: desert-nightmare
 ---
@@ -233,3 +233,80 @@ them over the black. The room in pieces is the `todo` one,
 `the-map-comes-back-in-pieces-after-a-big-picture`, not this.
 
 ### 2026-11-23, Hornero: back to Carpintero
+
+### 2026-11-23, Carpintero: why the thoughts are not drawn
+
+Not the map: the picture. Map 151 zooms `Schwarz` —picture 3 to 20 %
+while it fades—, so the converter carries it with a mode 7 texture, and
+`number_big` (rm2k-snes-convert's `pictures.rs`) gave that texture to the
+one layer every map shares: "still it looks the same", the-advocate's
+c30ea5b0, 2026-10-03. It does not look the same: a picture with a texture
+is shown still from VRAM's upper half, over the window's tiles, with BG2
+off —`big_load_hybrid` in `runtime/big_picture_zoom.s`, whose comment
+already said "that takes the message window while it is still"—. So
+every message over Desert Nightmare's black screen was not drawn, on the
+fifty-odd maps that show it, not only on 32. Seen in snes9x from a jump to
+map 32: brightness 15, the layer up, `MSG_SC` at $48 as it should be, and
+the window's tilemap at $4800 never stamped.
+
+The original under Wine (the copy from the previous entry, which starts on
+map 32): the four thoughts are orange text in the middle of the black,
+with no frame —the page's `MessageOptions` asks for a transparent window
+in the middle—.
+
+### 2026-11-23, Carpintero: the fix
+
+The layer a map zooms, with its texture, and the one the other maps show
+still are now two layers; the emission points the second's `big_table`
+entry at the first one's tiles, tilemap and colours when they are the
+same (`big_shared` in rm2k-snes-mapdata's `emit.rs`), so only the texture
+is extra. On map 151 itself the picture still hides a message while it is
+still, as before; it shows none. The-advocate's `carpintero-dn-thoughts`,
+853c13e1. To install when merging: `mapdata` and `convert`.
+
+Tests, each seen red first:
+
+* rm2k-snes-convert: `a_layer_has_a_texture_only_on_the_maps_that_zoom_it`,
+  which replaces the test that asserted the old sharing; red against the
+  old `number_big`.
+* rm2k-snes-mapdata: `a_layer_with_the_same_tiles_tilemap_and_colours_shares_them`
+  (new function: red is not compiling).
+* The ports' `test_desert_nightmare_after_the_bar.py` plays the scene once
+  for two checks: each thought's text lit with the black still up, and the
+  corridor after the fade. Red with the global tools: 0.00 % of the screen
+  lit on the first thought. Green with the branch's.
+
+The ROM now shows the four thoughts as the original does.
+
+### 2026-11-23, Carpintero: the other games, run, and to testing
+
+Which ROMs change: only where a picture is zoomed on one map and shown
+still on another. Desert Nightmare (`Schwarz`, zoomed on 151), Vampires
+Dawn (`Kerl`, zoomed on 27, still on 70) and A Blurred Line (the four
+diff photos, zoomed on 12 and 212 to 216, still in the montage of 217);
+the other five games' big pictures are the same. In ABL the montage's
+photos share their data with the zoomed ones; in Vampires Dawn the two
+`Kerl` layers differ, so the cartridge carries both. The montage's
+goldens did not move.
+
+With the tools of the-advocate's `carpintero-dn-thoughts` (853c13e1), only
+`mapdata` and `convert` in its `.local-tools`:
+
+* the-advocate: `just test`, 29 passed; `cargo test` of
+  rm2k-snes-convert (75) and rm2k-snes-mapdata, clippy clean; `just
+  test-game` with FluidR3, 226 passed and 6 skipped;
+* the ports (`carpintero-dn-thoughts`, af585a7): `just boot`, 206 passed;
+  ABL's `just tests`, 1692 passed and 2 skipped. `abl.sfc` f6e88398…,
+  `desert-nightmare.sfc` 990d2322….
+
+No golden moved or was added. Side by side with the original in
+`/shared/captures/2026-11-23-dn-thoughts/`. What the suite does not cover:
+the other fifty-odd maps of Desert Nightmare with messages over `Schwarz`
+are not played by any test, nor Vampires Dawn's map 70; the test game has
+no case of a picture zoomed on one map and still on another —the rule is
+held by the converter's unit test and Desert Nightmare's map 32—.
+
+**To install when merging**: `mapdata` and `convert`. The book's
+`carpintero-dn-thoughts` goes with it: the divergence of large pictures
+and the VRAM page.
+
