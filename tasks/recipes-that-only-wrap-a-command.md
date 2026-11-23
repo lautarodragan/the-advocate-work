@@ -2,8 +2,8 @@
 name: "Recipes that only wrap a command"
 description: "Recipes that add nothing to the command they run go; the eight identical games' justfiles become one shared file; and the dump's round trip stops being a recipe repeated nine times and becomes a test, on the test game and on the nine games"
 type: refactor
-status: doing
-assignee: huron
+status: testing
+assignee: taro
 agents: [huron]
 author: taro
 ---
@@ -136,4 +136,18 @@ game's README, `hub.toml`, `hub.py` and `test_hub.py`'s message; in the
 book, `testing.md` (a section on the round trip), `ports/README.md`, ABL's
 README and pipeline, `the-pause-menu.md`, `progress/the-test-game.md`;
 here, the open crowded-lines tasks' how-to-reproduce. Researches and
-logs, untouched. AGENTS.md names none of the removed recipes.
+logs, untouched. AGENTS.md names none of the removed recipes; its
+"`machine.just` …, which each game's `justfile` imports" is still true,
+through `game.just`, and was left as it was.
+
+#### Verified at the end, once
+
+On the branches, with the global tools (no Rust changed, nothing to
+install): the-advocate's `just test`, 29 passed; `just rust-test`, green;
+the test game's suite, `SOUNDFONT=…/FluidR3_GM.sf2 just test-game`, 231
+passed and 6 skipped, the round trip among the passed; the ports' `just
+boot`, 218 passed; ABL's `just tests`, 1694 passed and 2 skipped.
+`abl.sfc` `3bf35fd7665c2045…`, the same as before the change;
+frozen-world's, rebuilt for its `advocate.toml` comment, the same bytes.
+
+To merge: the three `huron-recipes` branches. Nothing to install.
