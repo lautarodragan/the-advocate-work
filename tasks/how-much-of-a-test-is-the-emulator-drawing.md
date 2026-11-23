@@ -2,8 +2,10 @@
 name: "How much of a test is the emulator drawing"
 description: "Many ROM tests advance hundreds of frames nobody looks at; measure how much of a suite's CPU goes to the core rendering frames, and whether skipping the render of frames no test captures would save it, without changing what the tests see"
 type: research
-status: todo
+status: doing
 author: taro
+assignee: Chajá
+agents: [Hornero, Chajá]
 ---
 
 > I would measure the emulator itself.
@@ -21,3 +23,14 @@ captures —snes9x's and bsnes' frame skip, a null video callback, the
 harness asking for the screen only when a test reads it— and how much
 that saves, measured, without moving any golden. And whether `PROCESSES`
 should follow the number of agents running.
+
+## Log
+
+### 2026-11-22, Hornero: taken for Chajá, on a free machine
+
+taro:
+
+> Yes, let's wait. Let's do the measurement first, anyway.
+
+Launched with nothing else running, after merging the six fixes of the
+afternoon (the-advocate `1240ecc9`, the ports `0699267`).
