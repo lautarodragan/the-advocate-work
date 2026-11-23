@@ -461,3 +461,36 @@ where the `.srm` is and how to get it written.
 
 **What to install when merging**: nothing; no tool of the-advocate
 changed. Not run: ABL's suite (nothing it builds changed), the console.
+
+### 2026-11-23, Hornero: read live over USB, and the error gone on both consoles
+
+With the FX Pak's USB in the container (see "Where this runs" in
+`AGENTS.md`), Hornero read the ROM's copy in its PSRAM with usb2snes GETs
+—the client, checked against sd2snes v1.11.0's `src/usbinterface.c`, in
+`~/scratch/hornero/fxpak/fxpak.py`— at the four places, A+8E93, B+2B17,
+C+946F and D+3F5A, 16 bytes around each:
+
+* The second ROM, freshly loaded and after several START runs, all green:
+  the four places identical to the delivered `.sfc`. No COPY CHANGED.
+* The first ROM, rebuilt from the ports' `512ef02` —sha1 `a5908a44…`, the
+  one that failed—, uploaded to `/advocate/msu-dma-v1/` with PUT (~380
+  KB/s, read back with the same hashes) and booted with BOOT: clean after
+  the automatic run, and then green for five or six START runs; green too
+  with the USB cable unplugged.
+* taro then noticed the failing sessions had been on the **Super Famicom**
+  in the living room, and these on the SNES (CPU/PPU1/PPU2 2/1/2). Back
+  on the Super Famicom, many runs: all green as well.
+
+taro:
+
+> I give up. Many runs, all green on the Super Famicom too 😭
+
+What changed between the failing sessions and these: the FX Pak was
+powered off with the cable out —a full reset of its MCU; with the cable
+in it stays half powered—, savestates are off, and time went by. The
+likeliest reading is that the FX Pak was left in a bad state that
+session and a full power-off cleared it; it is not proven. Every received
+block summed right in every run, so **the big DMA from `$2001` holds on
+the FX Pak**: what failed was the comparison against the ROM's copy. If it
+comes back, the second ROM's verdicts and a live read over USB tell which
+side it is.
