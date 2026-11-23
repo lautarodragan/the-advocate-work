@@ -233,3 +233,48 @@ them over the black. The room in pieces is the `todo` one,
 `the-map-comes-back-in-pieces-after-a-big-picture`, not this.
 
 ### 2026-11-23, Hornero: back to Carpintero
+
+### 2026-11-23, Carpintero: why the thoughts are not drawn
+
+Not the map: the picture. Map 151 zooms `Schwarz` —picture 3 to 20 %
+while it fades—, so the converter carries it with a mode 7 texture, and
+`number_big` (rm2k-snes-convert's `pictures.rs`) gave that texture to the
+one layer every map shares: "still it looks the same", the-advocate's
+c30ea5b0, 2026-10-03. It does not look the same: a picture with a texture
+is shown still from VRAM's upper half, over the window's tiles, with BG2
+off —`big_load_hybrid` in `runtime/big_picture_zoom.s`, whose comment
+already said "that takes the message window while it is still"—. So
+every message over Desert Nightmare's black screen was not drawn, on the
+fifty-odd maps that show it, not only on 32. Seen in snes9x from a jump to
+map 32: brightness 15, the layer up, `MSG_SC` at $48 as it should be, and
+the window's tilemap at $4800 never stamped.
+
+The original under Wine (the copy from the previous entry, which starts on
+map 32): the four thoughts are orange text in the middle of the black,
+with no frame —the page's `MessageOptions` asks for a transparent window
+in the middle—.
+
+### 2026-11-23, Carpintero: the fix
+
+The layer a map zooms, with its texture, and the one the other maps show
+still are now two layers; the emission points the second's `big_table`
+entry at the first one's tiles, tilemap and colours when they are the
+same (`big_shared` in rm2k-snes-mapdata's `emit.rs`), so only the texture
+is extra. On map 151 itself the picture still hides a message while it is
+still, as before; it shows none. The-advocate's `carpintero-dn-thoughts`,
+853c13e1. To install when merging: `mapdata` and `convert`.
+
+Tests, each seen red first:
+
+* rm2k-snes-convert: `a_layer_has_a_texture_only_on_the_maps_that_zoom_it`,
+  which replaces the test that asserted the old sharing; red against the
+  old `number_big`.
+* rm2k-snes-mapdata: `a_layer_with_the_same_tiles_tilemap_and_colours_shares_them`
+  (new function: red is not compiling).
+* The ports' `test_desert_nightmare_after_the_bar.py` plays the scene once
+  for two checks: each thought's text lit with the black still up, and the
+  corridor after the fade. Red with the global tools: 0.00 % of the screen
+  lit on the first thought. Green with the branch's.
+
+The ROM now shows the four thoughts as the original does.
+
