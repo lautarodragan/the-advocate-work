@@ -2,7 +2,9 @@
 name: "Recipes that only wrap a command"
 description: "Recipes that add nothing to the command they run go; the eight identical games' justfiles become one shared file; and the dump's round trip stops being a recipe repeated nine times and becomes a test, on the test game and on the nine games"
 type: refactor
-status: todo
+status: doing
+assignee: huron
+agents: [huron]
 author: taro
 ---
 
