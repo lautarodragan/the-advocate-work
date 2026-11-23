@@ -77,6 +77,16 @@ same thing before, start from there and do not measure it again.
   and of `runtime/low_ram.s`—.
 * There may be other agents running: two suites at once fight over CPU; be
   patient and do not kill anything that is not yours.
+* **Widen the test run step by step; the whole suites once, at the end.**
+  The CPU is what everyone waits on, not you. First the one test that
+  shows the bug or the new one (`just tests tests/abl/test_x.py -k name`);
+  when it passes, its file, then the folder of what the change touches,
+  then the suites the change can reach; and only when those are green, the
+  four whole suites the assignment asks for, once. After a red, run
+  again **only what failed** —pytest's `--lf`, last-failed— before widening
+  again. Hornero runs them all again on the merged tree. taro's, from
+  2026-11-22: five agents each running the four whole suites over and over
+  kept the sixteen threads full.
 * **The original** runs with Wine: the recipe is in
   `~/wine/abl/LEEME.txt`. Use your own Xvfb display.
 
@@ -86,9 +96,10 @@ same thing before, start from there and do not measure it again.
   difference— to `/shared/captures/<date>-<topic>/`, with a contact sheet
   and a `README.txt`; with the original alongside when comparing against
   RM2k.
-* **Repeat the suite until no new red golden shows up**: a test with
-  several goldens stops at the first red one, and the ones behind it only
-  show up on the next round.
+* **Repeat until no new red golden shows up**: a test with several
+  goldens stops at the first red one, and the ones behind it only show up
+  on the next round. Repeat with `--lf`, only what failed, not the whole
+  suite.
 * Commit them on your ABL branch, in their own commit; Hornero reviews
   them. **What looks broken is not blessed.**
 

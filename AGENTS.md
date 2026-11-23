@@ -618,6 +618,16 @@ catch an altered binary is the same thing that catches any regression: the
 goldens and `test_cores.py`. Recompiling them without looking stops being
 harmless.
 
+**Cargo compiles through `sccache`**, set as `rustc-wrapper` in
+`~/.cargo/config.toml` —Arch's `sccache` package—: each worktree of
+`the-advocate` has its own `target/`, and each agent's `just
+install-local` compiled the whole workspace from nothing, some 1.8 GB a
+worktree. `sccache` caches each crate's compilation by its content, so
+the dependencies are compiled once for all of them; what the paths make
+different —the workspace's own crates, from another worktree— still
+compiles. It is taro's, from 2026-11-22, when five agents at once kept the
+sixteen threads full.
+
 **SuperFamiconv is compiled in here too, and only as a referee.** It is not
 part of the toolchain: Adeleine's `tests/superfamiconv.rs` hands it the
 same tiles as `try_pack`, and is skipped without it, as in CI. It is cloned
