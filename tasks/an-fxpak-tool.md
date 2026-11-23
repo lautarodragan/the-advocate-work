@@ -2,9 +2,9 @@
 name: "A tool for the FX Pak over USB"
 description: "Hornero's throwaway usb2snes client made into one of the tools: a small Rust binary in snes/ that talks to the FX Pak —info, peek, put, boot, ls—, finds it by its USB ids, and holds the rules of AGENTS.md (write only under /advocate/) in its code"
 type: feature
-status: doing
+status: testing
 author: taro
-assignee: Aguará
+assignee: taro
 agents: [Hornero, Aguará]
 ---
 
@@ -100,4 +100,36 @@ INFO test builds it from the source's layout.
 
 The real FX Pak: Hornero asked to wait —they were using the port, and then
 it was wedged by the missing-file GET until taro power-cycles it and
-recreates the container—.
+recreates the container, which ends this session—. **Nothing of `fxpak`
+has run against the real device**; only against the fake.
+
+#### The hardware run, still to do
+
+With the console on, in the FX Pak menu, after the container is back.
+Install from the branch: `just install-local .local-tools fxpak` in a
+worktree of `aguara-fxpak` (or `just install fxpak` after the merge), and
+from that worktree, with `F=.local-tools/bin/fxpak`. Nothing boots or
+resets:
+
+1. `$F info`: the menu's ROM, `1.11.0`, the device name. This shows the
+   port was found by its USB ids, with no `--device`.
+2. `$F peek 0 64` and `$F peek '$C00000' 64`, the ROM's copy and the
+   menu's image; twice each, so you can see the same bytes come back.
+3. `$F ls /` and `$F ls /advocate`.
+4. `$F get /advocate/msu-dma-v1/msu-dma-test.sfc /root/scratch/aguara/fxpak/v1.sfc`
+   then `sha1sum` it: `a5908a44…`.
+5. `$F get /advocate/does-not-exist.sfc x`: refused before anything is
+   sent; then `$F info` still answers. This one checks the guard against
+   today's hang.
+6. `$F mkdir /advocate/fxpak-test`, then `$F put <a ~1.5 KB file>
+   /advocate/fxpak-test/round-trip.bin` (it reads it back), then `$F ls
+   /advocate/fxpak-test`.
+7. `$F put Cargo.toml /sd2snes/x`: refused, nothing sent.
+8. `FXPAK_DEVICE=/dev/ttyACM0 just crate-test fxpak`: the hardware test
+   does 1, 2 and 6 again on its own.
+
+Not to run without asking: `boot`, `reset`, `menu`, `poke`.
+
+**What to install when merging**: `just install fxpak` (new binary; no
+other crate changed). ABL's suite is not needed: nothing it builds
+changed.
