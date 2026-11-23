@@ -29,3 +29,13 @@ How to reproduce: the frame-by-frame helper of ABL's
 `test_menu_equipment_frames_drawing.py`, on the items screen, with
 `screens.items(INVENTORY, 0, 0)` before and `screens.items(INVENTORY, 1,
 0)` after.
+
+Aguará, 2026-11-22, doing
+[`abl-a-shop-s-screens-show-half-composed-frames`](abl-a-shop-s-screens-show-half-composed-frames.md):
+the shop had it, worse, and waits for `tl_settled` since then —its
+windows, its bar and its party—. The items screen was looked at frame by
+frame on the test page `items-screen-many`, at the-advocate `7e8da728`:
+still there, the bar on the next item with the old description for three
+frames on the first two steps down from Potion and five on the third. The
+skills screen and a custom menu are in
+[`the-skills-screen-s-and-a-custom-menu-s-bar-may-run-ahead-of-their-text`](the-skills-screen-s-and-a-custom-menu-s-bar-may-run-ahead-of-their-text.md).
