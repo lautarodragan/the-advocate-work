@@ -766,19 +766,12 @@ the recipe's `.o`; that still works for the only thing the recipe cannot
 do, which is a ROM that does not link: there `ld65` says by how much it
 overflows.
 
-**The conversion cache is one for every checkout**: `CACHE` in the
-ports' `machine.just`, `~/.cache/advocate` here, passed to the tools as
-`--cache`. It keeps the stages' answers —Wally, images, screens, events,
-battle—, `ca65`'s objects and the MSU-1 tracks, so a new worktree builds
-in a minute what took ten. Its key carries the content of the inputs **and
+**`build/cache/`, in the port, is an on-disk cache** —which MSU-1 tracks
+are already there— and its key carries the hash of the sources **and that
 of the binaries that produce what is stored**, so it does not have to be
-deleted when touching code; it rests on a stage reading nothing its
-request and flags do not name, as `key` in `stage.rs` says. Any change in
-what is cached is verified with `NO_CACHE=1`: the ROMs have to be byte for
-byte equal. It has no eviction yet. Without `--cache` the tools still use
-each game's `build/cache/`. See `cache.rs` in `rm2k-project`. Shared since
-2026-11-23 (taro's, the day before); until then each checkout had its own
-`build/cache/`, only for the tracks.
+deleted when touching code. The only thing it asks is that any change in
+what is cached be verified with `NO_CACHE=1`: both ROMs have to be byte for
+byte equal. See `cache.rs` in `rm2k-project`.
 
 **While the tests are running no source is touched**, not from the other
 repo either. The fingerprint of `rm2k-snes-cartridges` covers all of
