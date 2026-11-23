@@ -239,3 +239,23 @@ and mode, with the sum of what arrived right: that reads more like the
 ROM's **reference copy** being written over —on the FX Pak the ROM is in
 its SDRAM and may take writes no emulator lets through— than like the
 MSU-1 serving wrong bytes. Aguará checks that first.
+
+### 2026-11-22, Hornero: after a reset, green again; the FX Pak's settings
+
+taro:
+
+> I tried a reset (without powering off and on) and it was all green.
+> Then, a manual run: 56 red blocks. Every page with bad rows.
+
+A reset does not reload the ROM into the FX Pak's PSRAM, so a byte written
+over there would have stayed bad: what breaks is state a reset clears and
+a first run leaves behind —the console's, the test's, or the FX Pak's
+FPGA or MCU—, or a read that goes wrong under it. Firmware **1.11.0**; in-game
+hook off, cheats off, auto region patch on, reset patch for clock phase
+on, SuperCIC off; CPU/PPU1/PPU2 2/1/2, 60 Hz.
+
+![System information](images/a-big-dma-from-the-msu-1-data-port-is-unverified-on-the-fx-pak/fx-pak-settings-1.jpg)
+![Chip options](images/a-big-dma-from-the-msu-1-data-port-is-unverified-on-the-fx-pak/fx-pak-settings-2.jpg)
+![In-game settings](images/a-big-dma-from-the-msu-1-data-port-is-unverified-on-the-fx-pak/fx-pak-settings-3.jpg)
+![SGB settings](images/a-big-dma-from-the-msu-1-data-port-is-unverified-on-the-fx-pak/fx-pak-settings-4.jpg)
+![SuperCIC settings](images/a-big-dma-from-the-msu-1-data-port-is-unverified-on-the-fx-pak/fx-pak-settings-5.jpg)
