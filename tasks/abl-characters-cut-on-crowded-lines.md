@@ -32,7 +32,7 @@ numbers here are from before that merge. The rest were not reported.
 * map 199: 9 characters and 36 slivers on cell row 1 (events 1, 2, 3, 8, 9, 10, 13, 15, 16); at the entrance too
 * map 20: 9 characters and 35 slivers on cell row 0 (events 6 Slum30Chest1o, 8 Slum30Chest2o, 10 Slum30Chest3o, 12 Slum30Chest4o, 14 Slum30Chest5o, 16 Slum30Chest6o, 18 Slum30Chest7o, 20 Slum30Chest8o, 25 Slum30Chest9o)
 
-How to reproduce: `just objects-per-line abl` at the root of the ports,
+How to reproduce: `tests/objects_per_line.py abl` at the root of the ports,
 which prints each map's worst lines and the camera X that shows them; the
 full report of that day, with captures of a few maps in both cores, is in
 `/shared/captures/2026-11-17-objects-per-line/`. Playing, the debug

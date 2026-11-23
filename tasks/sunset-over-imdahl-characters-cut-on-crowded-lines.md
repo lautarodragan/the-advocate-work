@@ -20,7 +20,7 @@ with a teleport:
 
 * map 58: 9 characters and 35 slivers on cell row 24 (events 17, 19, 26, 46, 47, 65, 70, 71, 76)
 
-How to reproduce: `just objects-per-line sunset-over-imdahl` at the root of the ports,
+How to reproduce: `tests/objects_per_line.py sunset-over-imdahl` at the root of the ports,
 which prints each map's worst lines and the camera X that shows them; the
 full report of that day, with captures of a few maps in both cores, is in
 `/shared/captures/2026-11-17-objects-per-line/`. Playing, the debug

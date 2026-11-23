@@ -35,7 +35,7 @@ only by slivers.
 * map 59: 18 characters and 68 slivers on cell row 0 (events 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 25, 26, 27, 28, 29, 30, 31)
 * and 46 more, in the report
 
-How to reproduce: `just objects-per-line vampires-dawn` at the root of the ports,
+How to reproduce: `tests/objects_per_line.py vampires-dawn` at the root of the ports,
 which prints each map's worst lines and the camera X that shows them; the
 full report of that day, with captures of a few maps in both cores, is in
 `/shared/captures/2026-11-17-objects-per-line/`. Playing, the debug
