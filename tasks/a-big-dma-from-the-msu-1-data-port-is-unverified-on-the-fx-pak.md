@@ -2,7 +2,7 @@
 name: "A big DMA from the MSU-1's data port is unverified on the FX Pak"
 description: "The battle backdrops already DMA 32 KB from $2001 in one go, and raw maps from the .msu would DMA up to 64 KB: nobody checked that the FX Pak refills its 16 KB buffer from the SD card as fast as a DMA drains it"
 type: research
-status: testing
+status: done
 author: chaja
 assignee: taro
 agents: [Chajá, Hornero, Aguará, Hurón]
@@ -494,3 +494,11 @@ block summed right in every run, so **the big DMA from `$2001` holds on
 the FX Pak**: what failed was the comparison against the ROM's copy. If it
 comes back, the second ROM's verdicts and a live read over USB tell which
 side it is.
+
+### 2026-11-23, Hornero: done
+
+taro closed it, with eight others:
+
+> podemos cerrar estas, no?
+
+(taro: "we can close these, right?")

@@ -2,7 +2,7 @@
 name: "The test game, playable by hand"
 description: "A playable build of the test game in /shared/builds/test-game/, where every map and every case the tests reach through the harness can be reached in play, from a hub, without the harness"
 type: feature
-status: testing
+status: done
 author: taro
 assignee: taro
 agents: [Hornero, Tijereta]
@@ -209,3 +209,11 @@ with Calandria's Latin-1 cases, the two that moved again:
 > Approved :D
 
 Merged in the-advocate `a30ca61d` and `7e8da728`.
+
+### 2026-11-23, Hornero: done
+
+taro closed it, with eight others:
+
+> podemos cerrar estas, no?
+
+(taro: "we can close these, right?")

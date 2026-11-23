@@ -3,7 +3,9 @@ name: "ChangeMapTileset is not done"
 description: "The command is dropped since 2026-10-16: the map keeps its ChipSet. Frozen World's frozen bazaar and temple don't show, and Vampires Dawn's bat would keep the ground's passability"
 type: feature
 game: [frozen-world, vampires-dawn]
-status: todo
+status: doing
+assignee: Mulita
+agents: [Carpintero, Hornero, Mulita]
 author: mulita
 ---
 
@@ -61,3 +63,9 @@ map 1, which has the fifth page (event 16), has no line in either file.
 Counted in the `data/` of the nine games, `ChangeMapTileset` (11710) is
 in those two only, 10 each. Moved to `todo` by taro's request, with
 `game: [frozen-world, vampires-dawn]`.
+
+### 2026-11-23, Hornero: taken for Mulita, with opcode 0x5C
+
+> ChangeMapTileset-is-not-done too?
+
+(taro, asking whether it can run in parallel with the others.)

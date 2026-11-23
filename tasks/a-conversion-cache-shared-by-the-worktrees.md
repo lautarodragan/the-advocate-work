@@ -2,7 +2,9 @@
 name: "A conversion cache shared by the worktrees"
 description: "Every worktree of the ports rebuilds every game's cartridges from nothing, with the same inputs; a cache outside the checkouts —~/.cache/advocate?— keyed by the inputs and the binaries' hashes, extended to Wally, rm2k-snes-audio and whatever else is worth it, would build only what a branch changes"
 type: refactor
-status: todo
+status: doing
+assignee: Hurón
+agents: [Hornero, Hurón]
 author: taro
 ---
 
@@ -28,3 +30,9 @@ rm2k-snes-audio's music and samples, whatever a measurement shows is
 worth it—. The rule that already holds goes on holding: a change to what
 is cached is verified with `NO_CACHE=1`, both ROMs byte for byte equal. And
 two worktrees writing the same entry at once must not corrupt it.
+
+## Log
+
+### 2026-11-23, Hornero: taken for Hurón
+
+> great! and can this one be done in parallel?

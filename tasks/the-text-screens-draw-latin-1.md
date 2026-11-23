@@ -2,7 +2,7 @@
 name: "The text screens draw Latin-1"
 description: "The message boxes draw the accents, ¿, ¡, umlauts and ß each game uses; the menu, the shops, the battle, the slots, \\N[0] and a troop page's box still show the plain stand-ins. Measure the room each screen has for those glyphs and estimate the work before doing it"
 type: feature
-status: testing
+status: done
 author: taro
 assignee: taro
 agents: [Hornero, Aguará, Calandria]
@@ -441,3 +441,11 @@ Merged: the-advocate `7e8da728`, the ports `e886c7e`. Verified on that
 tree, with its tools: `just test` 29 passed, the test game 208 passed and
 6 skipped, ABL 1686 passed and 2 skipped, the ports' `just boot` 201
 passed.
+
+### 2026-11-23, Hornero: done
+
+taro closed it, with eight others:
+
+> podemos cerrar estas, no?
+
+(taro: "we can close these, right?") Stage 2, a troop page's box, stays in the draft [`a-troop-page-s-box-drops-its-icons`](a-troop-page-s-box-drops-its-icons.md).

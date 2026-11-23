@@ -2,7 +2,7 @@
 name: "ABL: a shop's screens show half-composed frames"
 description: "Going from one shop screen to another —the Buy/Sell/Leave choice, the buy list— shows a few frames that mix the new screen's windows with the old one's text, or windows whose text is not composed yet"
 type: bug
-status: testing
+status: done
 author: taro
 assignee: taro
 agents: [Hornero, Aguará]
@@ -183,3 +183,11 @@ the actor choice and End Game coming on at a vblank's start. The menu's
 and the items screen's were looked at frame by frame with a throwaway
 script, once; the rest only share the routine the shop's test covers
 (`screen_ppu_on`) or the same two lines (`target_ppu_on`, End Game).
+
+### 2026-11-23, Hornero: done
+
+taro closed it, with eight others:
+
+> podemos cerrar estas, no?
+
+(taro: "we can close these, right?")
