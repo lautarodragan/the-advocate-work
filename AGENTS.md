@@ -330,7 +330,7 @@ In `rm2k-snes/bytecode/` and nowhere else. There are two declarations,
 each one an invocation of the `bytecode!` macro: `src/events.rs`, the
 bytecode that `run_code` interprets, and `src/music.rs`, the stream that
 `irq_music` reads. The Rust side takes the constants with a `use`, and
-`rm2k-snes-assemble` writes the 65816 one —`event_opcodes.inc` and
+`rm2k-snes-cartridges assemble` writes the 65816 one —`event_opcodes.inc` and
 `music_opcodes.inc`— in the cartridge's directory on each build: there is
 no committed generated file that can go stale. Both land in the same symbol
 space of the assembler, so two opcodes of different bytecodes can share a
@@ -743,7 +743,8 @@ data. Until 2026-09-16 the `convert` recipe wrote right there —in
 `rom/src/`, where the runtime lived until 2026-09-29; it was "global
 state", and that is how map 6 ended up being looked at in the belief that
 it was the demo of milestone 12—; today each cartridge writes its own in
-its directory of the project's `build/`, and `rm2k-snes-assemble` refuses
+its directory of the project's `build/`, and `rm2k-snes-cartridges
+assemble` refuses
 to build if it finds one in `runtime/`. **ROMs come out of a recipe, not
 of a loose `ca65`.**
 
@@ -763,7 +764,7 @@ written, it is measured**, and all of them have to be measured: `abl` and
 the ones `cartridges` builds.
 
 **It is measured with `just space`, in `abl/` of the ports**, which runs
-`rm2k-snes-space` and prints for each cartridge the free data banks and
+`rm2k-snes-cartridges space` and prints for each cartridge the free data banks and
 the gaps, bank 0, bank 1, `BSS`, `ZEROPAGE` and the text block; with the
 path of a ROM built separately, it measures that one. What counts is **how
 many banks are left**, not a percentage: banks `$7E` and `$7F` are not
@@ -789,7 +790,7 @@ each game's `build/cache/`. See `cache.rs` in `rm2k-project`. Shared since
 **While the tests are running no source is touched**, not from the other
 repo either. The fingerprint of `rm2k-snes-cartridges` covers all of
 `runtime/` of the checkout the tools were installed from and the binaries
-that build —`ca65`, `ld65`, `rm2k-snes-assemble` and the ones the converter
+that build —`ca65`, `ld65`, `rm2k-snes-cartridges` itself and the ones the converter
 runs—: touching any of those while ABL's suite is running, or reinstalling
 one, mixes two versions and the result says nothing.
 

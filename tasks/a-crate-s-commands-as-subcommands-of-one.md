@@ -145,4 +145,4 @@ ceilings` without `--measure`, which writes the table, and the ports'
   places (see above).
 
 Found and not fixed:
-[`just-lint-is-red-on-main-again`](just-lint-is-red-on-main-again.md).
+[`the-workspace-fails-its-own-lint`](the-workspace-fails-its-own-lint.md).
