@@ -672,6 +672,15 @@ boot one, reset. What may be done with it, taro's, the same day:
 * **What has to be seen or heard still goes through taro**: this is for
   tests whose results the console can be read for.
 
+**It is driven with `fxpak`**, a tool of the-advocate (`snes/fxpak/`,
+installed by `just install`), not with scratch scripts: it finds the port
+by its USB ids —inside the container the node is `/dev/ttyACM0`, owned by
+`nobody`, and `/dev/fxpak` does not exist—, holds the first rule in its
+code, and never takes the paths of firmware v1.11.0 that hang the FX Pak;
+its README says which. A command it lacks is added to it, checked against
+the source. Since 2026-11-23; until then it was Hornero's
+`fxpak.py`, in their scratch folder.
+
 **taro runs nothing on the host**: if they run something by hand, they do it
 in here, and ask first. It is theirs, from 2026-10-05. The only things that
 belong to the host are the `git push`, the EverDrive over USB, and
