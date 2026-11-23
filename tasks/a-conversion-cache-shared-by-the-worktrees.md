@@ -91,3 +91,90 @@ What that says:
   free. `rm2k-snes-audio cartridge` and `rm2k-snes-mapdata emit` write
   outside their answer —into the cartridge's directory, `raw/`—, and add
   up to 71 s over the nine: not worth a cache of their own for now.
+
+### 2026-11-23, Hurón: the cache, shared, and what it saves
+
+#### What is cached
+
+the-advocate `huron-shared-cache`, the ports `huron-shared-cache`.
+
+* **Every stage that goes through `stage::run`** —Wally, the images, the
+  screens, the events, the battle—: its whole answer, the files it writes
+  into `--out`, under the key of its binary by content, the command, the
+  request and the flags, with every path in them by what it holds. A
+  `--search-dir` goes by its RM2k folders alone —one of them is the root
+  of the tools' checkout, see the draft
+  [`the-tools-checkout-is-searched-for-a-game-s-resources`](the-tools-checkout-is-searched-for-a-game-s-resources.md)—,
+  a folder the cache made by its name, and a folder that is not there as
+  missing.
+* **`ca65`'s object**, keyed by the binary, its flags and every file it
+  reads by name and content. Copied, not linked: `ca65` rewrites it in
+  place. `ld65` runs always.
+* **The MSU-1 tracks themselves**, hard-linked into `msu-tracks/` next to
+  the sha256 the cache already kept, and linked from there into a build
+  that lacks them.
+* The games unpacked from their `.zip` and the merged own files were
+  already in the cache, by content: now they are shared too.
+
+**Not cached**: `rm2k-snes-mapdata emit` —it writes `raw/` besides its
+answer— and `rm2k-snes-audio cartridge` —it writes straight into the
+cartridge's directory and the `.msu`—: 31 s and 36 s of CPU over the nine
+games, which is most of what a warm build still does. The converter
+itself, `ld65` and the bank packing run always.
+
+**Where**: `CACHE` in the ports' `machine.just`, `/root/.cache/advocate`
+by default, which every game's `justfile` passes as `--cache` and ABL's
+harness reads (`ABL_CACHE` is gone). The tools know no path: without
+`--cache` they keep it in each game's `build/cache/`, as before.
+
+**Two writers**: every value is written aside —under a name of the
+process, the call and the time, since two threads of one process share
+the pid— and renamed. The old tracks' store used the pid alone; the new
+test, four writers against four readers on an 8 MB value, was red with a
+plain write and with the pid-only name.
+
+#### Measured
+
+Total wall of `just cartridges` for the nine games in series, ABL with its
+tracks. The machine was loaded by other agents' suites during the second
+and third columns —load 13 to 28—, so the CPU column says more:
+
+| | wall | CPU |
+|---|---:|---:|
+| before, cold (global tools) | 687 s | 2426 s |
+| cold, empty cache | 777 s | 2616 s |
+| a second worktree, warm cache | **68 s** | **134 s** |
+| `NO_CACHE=1` (no shims) | 925 s | |
+
+Per game, cold before → second worktree warm: ABL 116 → 15 s, Vampires
+Dawn 235 → 18, Desert Nightmare 97 → 8.5, Sunset 118 → 5.5, Zounds 39 →
+6. A cold build fills the cache with ~750 MB of stage answers and
+~390 MB of objects; the tracks are links.
+
+The first warm run found no Wally answer for Sunset, Vampires Dawn and
+Zounds: their `--search-dir <worktree>/build/patches-manual` does not
+exist, and went into the key as the worktree's path. Fixed —a missing
+path after a path flag goes as missing—, with its test red first.
+
+#### Verified
+
+* **`NO_CACHE=1` gives the same ROMs**: the nine games built in a fresh
+  worktree with `NO_CACHE=1`, compared byte for byte with the cold build
+  with the cache and with the second worktree's warm one: the 20 ROMs
+  equal, and every `.inc`, `.msu`, `.pcm` and JSON; only the `.dbg`, the
+  `.o`, `stamp.txt` and `events-request.json` differ, which carry paths,
+  dates or the binaries' hashes and differ between any two worktrees.
+* **Two worktrees at once**: (see the next entry).
+* New tests, each shown red first: `rm2k-project`'s `tests/cache.rs`
+  (writers that race, a fetched link replaced, a tree by content), the
+  converter's `stage::tests` (a key by content and not by place, a
+  search dir by its RM2k folders, a missing folder), `object_key` in
+  `rm2k-snes-cartridge`, and a track another build made, in
+  `rm2k-snes-audio`.
+
+**What no test covers**: that a hit in `stage::run` or in `assemble`
+returns what the stage or `ca65` would have made is covered only by the
+`NO_CACHE=1` comparison above, which nothing runs on its own; and that no
+stage reads a file its request and flags do not name —the key's
+assumption, written next to `key` in `stage.rs`—. A stage that started to
+read something else would be served stale answers without a word.
