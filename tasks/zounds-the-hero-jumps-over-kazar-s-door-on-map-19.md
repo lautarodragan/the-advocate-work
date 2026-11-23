@@ -2,7 +2,7 @@
 name: "Zounds: the hero jumps over Kazar's door on map 19"
 description: "Going through the door to Kazar's room (event Puerta A-1) in the Hover Tram's east corridor, map 19, Unamë is drawn under the door and, from one frame to the next, over it, before the fade-out"
 type: bug
-status: testing
+status: done
 author: taro
 assignee: taro
 agents: [Hornero, Mulita]
@@ -100,3 +100,11 @@ Captures in `/shared/captures/2026-11-22-zounds-door/`: map 19 before and
 after, and the test game's awning.
 
 To install when merging: `just install wally`.
+
+### 2026-11-23, Hornero: done
+
+taro closed it, with eight others:
+
+> podemos cerrar estas, no?
+
+(taro: "we can close these, right?")

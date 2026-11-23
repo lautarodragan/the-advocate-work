@@ -2,7 +2,7 @@
 name: "Zounds: a camera pan on map 27 starts with a jump"
 description: "Right after the fade-in on map 27, the camera jumps about a tile, horizontally and vertically, in one frame, then scrolls diagonally for a few frames and then horizontally"
 type: bug
-status: testing
+status: done
 author: taro
 assignee: taro
 agents: [Hornero, Hurón]
@@ -100,3 +100,11 @@ from.
 Not covered by any test: a teleport while the hero is in the air.
 easyrpg's `SetJumping(false)` on a map change fixes an RPG_RT bug, and
 this change does not touch `route_jump`.
+
+### 2026-11-23, Hornero: done
+
+taro closed it, with eight others:
+
+> podemos cerrar estas, no?
+
+(taro: "we can close these, right?")

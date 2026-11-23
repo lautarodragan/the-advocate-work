@@ -2,7 +2,7 @@
 name: "Desert Nightmare: the motel's other trash cans blink while they open"
 description: "Opening the two trash cans left of the motel's door in Dusty Creek, the left one loses its body for two frames and its lid floats alone, before both show open; the same kind of blink as the can fixed in desert-nightmare-the-trash-can-s-lid-goes-missing-while-it-opens"
 type: bug
-status: testing
+status: done
 author: taro
 assignee: taro
 agents: [Hornero, Cardón]
@@ -141,3 +141,11 @@ worktree only so that its tools assemble the worktree's runtime.
 Dusty Creek, map 2, with the motel's other can already open and whatever
 else keeps the cache busy: open the two cans left of the motel's door.
 Neither goes missing; the left one may open a frame before the right one.
+
+### 2026-11-23, Hornero: done
+
+taro closed it, with eight others:
+
+> podemos cerrar estas, no?
+
+(taro: "we can close these, right?")

@@ -2,7 +2,7 @@
 name: "A tool for the FX Pak over USB"
 description: "Hornero's throwaway usb2snes client made into one of the tools: a small Rust binary in snes/ that talks to the FX Pak —info, peek, put, boot, ls—, finds it by its USB ids, and holds the rules of AGENTS.md (write only under /advocate/) in its code"
 type: feature
-status: testing
+status: done
 author: taro
 assignee: taro
 agents: [Hornero, Aguará]
@@ -133,3 +133,11 @@ Not to run without asking: `boot`, `reset`, `menu`, `poke`.
 **What to install when merging**: `just install fxpak` (new binary; no
 other crate changed). ABL's suite is not needed: nothing it builds
 changed.
+
+### 2026-11-23, Hornero: done
+
+taro closed it, with eight others:
+
+> podemos cerrar estas, no?
+
+(taro: "we can close these, right?")

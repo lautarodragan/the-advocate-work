@@ -2,7 +2,7 @@
 name: "ABL: the rock's hit flashes Talan instead of the computer"
 description: "In the Lazer Teeth HQ, when the thrown rock hits the computer, Talan flashes red instead of the computer, while the hit animation plays on the computer"
 type: bug
-status: testing
+status: done
 author: taro
 assignee: taro
 agents: [Hornero, Calandria]
@@ -137,3 +137,11 @@ Not covered by any test: a battle animation named from a common event on
 "this event" —`posed` already turns itself off for the whole map then,
 and no game has one—, and `baking` still reads only the map's own pages,
 not the common events, for every command it looks at.
+
+### 2026-11-23, Hornero: done
+
+taro closed it, with eight others:
+
+> podemos cerrar estas, no?
+
+(taro: "we can close these, right?")
