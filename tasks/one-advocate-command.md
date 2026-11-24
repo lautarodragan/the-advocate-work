@@ -48,6 +48,38 @@ To decide in its design, each with its why:
   `rm2k-sketch`, `rm2k-snes-events culprits`, `rm2k-snes-patches`— and the
   stages' subcommands the ports' tests call, if the stages' task left them.
 
+**The goal at the end: `advocate` as one static musl binary, with nothing
+beside it.** taro's, 2026-11-24:
+
+> I would love to have that as a goal for `advocate`, if it can be done.
+> We go back to really having a statically linked binary, with no
+> dependencies, fully self-contained.
+
+What stands in the way today, measured on the-advocate `90d1041d`:
+
+* **The Linux releases are glibc because of one `dlopen`**: the libretro
+  core `rm2k-snes-audio volume-ceilings` plays the songs in (`retro.rs`),
+  and `release.yml` says so. It is not in what `advocate` links —the
+  audio stage does not use `retro.rs`—, and
+  [`the-volume-ceilings-are-measured-without-a-rom`](the-volume-ceilings-are-measured-without-a-rom.md)
+  takes it away for good. No crate of the workspace links C today.
+* **The runtime is not inside the binary**: `rm2k-project`'s `suite.rs`
+  finds `runtime/` through the checkout the binary was compiled from
+  (`CARGO_MANIFEST_DIR`), or beside the release's `bin/`. Self-contained
+  means the runtime's sources embedded in `advocate` —a couple of MB of
+  text—. What it costs: editing a `.s` then needs a rebuild of `advocate`
+  before a ROM sees it, so a flag pointing at a `runtime/` on disk is
+  probably kept for whoever works on the engine; and `just deliver`, which
+  copies the commit's `runtime/` beside the ROM for Mesen2, takes it from
+  git as it does now.
+* **What it still runs is not ours**: `ca65` and `ld65`, and the MSU-1
+  tracks' synthesizer and encoder. Self-contained is about `advocate`
+  itself; those stay requirements on the `PATH`, as the book's decision
+  says.
+* **If `snes_spc` comes in** for the volume ceilings, it is C++: building
+  it statically for musl needs the C++ standard library for that target,
+  which is to be checked then.
+
 The cartridges' fingerprint, which hashes the binaries the build runs,
 shrinks with them; the recipes, the harness, AGENTS.md, the book and
 `release.yml` follow the new name.
@@ -66,3 +98,7 @@ Nothing done yet.
 ### 2026-11-24, Hornero: the project as a file the build leaves
 
 At taro's word; the decision is in the book, `src/decisions/one-command-and-no-tool-runs-another.md`.
+
+### 2026-11-24, Hornero: a static musl binary as the goal
+
+At taro's word; what blocks it, measured, above.
