@@ -2,8 +2,7 @@
 name: "ABL: Forem left out at the factory"
 description: "Map 83 leaves out Forem, event 13, whom a route dresses, because with him the rain's colours are lent: the converter says so, as it said of Northern Surl Camp's Paradise and Emily"
 type: bug
-status: draft
-assignee: taro
+status: todo
 agents: [cardon]
 author: tijereta
 links:
@@ -144,3 +143,17 @@ route dresses him in Kersh's sprite (`Future1` 5) and Dalia calls him
 
 So what (a) leaves out is Kersh, a main character, in a scene where he is
 spoken to.
+
+### 2026-11-24, Hornero: taro chose c
+
+> Let's go with C.
+
+(taro, 2026-11-24)
+
+To `todo`: Kersh drawn on map 83, the raindrops paying —`(6,6,7)` drawn
+`(6,6,6)`—, the pump keeping its red light. Cardón's note above says
+where: `loses_more` in Wally must not count `rain-colors-lent` against a
+character a route dresses here. Say whether that is a rule for every map
+or this map's patch, and check that no other map's choice moves (the nine
+games' builds, byte for byte except map 83). ABL's Known issues lines
+about map 83 go in the same change.
