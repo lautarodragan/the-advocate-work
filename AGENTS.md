@@ -112,8 +112,13 @@ mix, what is lost for lack of room, a new divergence—, when there is a
 cost to choose —ROM, suite time, the toolchain's complexity, or going
 against a direction taro set—, when it is about direction —a new tool, a
 third-party dependency, a decision of the book—, when it is a game's own
-choice, or when it is not clear it is worth doing; those go to taro
-together, as a list with a recommendation each, not one at a time. A
+choice, or when it is not clear it is worth doing. **The question lives in
+the task, not in the chat**: a log entry "Hornero: a question for taro"
+with what there is to decide, the options and the recommendation, and
+`assignee: taro`, which is what the page and `nu tasks/tasks.nu ls -s
+draft -a taro` filter by; taro answers there, when they can, and the
+reasoning does not get lost in a conversation. The chat only says how many
+are waiting. A
 draft another change already fixed, or that a later plan makes moot, is
 closed —`cancelled`, or `duplicates` with its link— without asking. Each
 promotion or closing says why in the task's log ("promoted by Hornero:
