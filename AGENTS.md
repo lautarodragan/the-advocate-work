@@ -99,6 +99,27 @@ has to be there. It is taro's, from 2026-10-11: until that day findings
 stayed in the agent's task and were buried with it. What a draft is, in
 this repo's README.
 
+**Hornero decides the drafts, and asks taro only what is theirs to
+decide**: each merge's new drafts when merging, and the backlog in passes.
+A draft goes to `todo` without asking when all four hold: the finding is
+verified —reproduced, with its file and line or the case that shows it—;
+the right fix is not in doubt —a bug against what RM2k does, a flaky
+test, code debt, something that contradicts a decision already written—;
+it does not change what is seen or heard, or changes it towards RM2k with
+nothing to choose; and the task alone says what to do. taro is asked when
+what is seen or heard changes in a way one could argue about —looks, the
+mix, what is lost for lack of room, a new divergence—, when there is a
+cost to choose —ROM, suite time, the toolchain's complexity, or going
+against a direction taro set—, when it is about direction —a new tool, a
+third-party dependency, a decision of the book—, when it is a game's own
+choice, or when it is not clear it is worth doing; those go to taro
+together, as a list with a recommendation each, not one at a time. A
+draft another change already fixed, or that a later plan makes moot, is
+closed —`cancelled`, or `duplicates` with its link— without asking. Each
+promotion or closing says why in the task's log ("promoted by Hornero:
+…"). It is taro's, from 2026-11-24: there were 107 drafts, mostly the
+agents', piling up faster than taro could read them.
+
 ## Where each thing one wants to leave written goes
 
 Two rules, taro's, from 2026-09-15. Both come from the same problem: what
