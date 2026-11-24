@@ -7,6 +7,7 @@ author: mulita
 links:
   found-in: [the-stages-speak-json-nobody-types]
   part-of: [the-stages-speak-json-nobody-types]
+  relates: [the-emission-s-request-still-takes-seven-pieces-through-json]
 ---
 
 Seen by Mulita on 2026-11-24, doing B7 of
