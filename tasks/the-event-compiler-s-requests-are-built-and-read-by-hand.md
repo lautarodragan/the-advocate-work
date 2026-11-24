@@ -2,7 +2,8 @@
 name: "The event compiler's requests are built and read by hand"
 description: "The converter builds the event compiler's scan and compile requests as a serde_json Map key by key (`compiler.rs`), and the events crate reads them back field by field (`lib.rs`); so `MapInfo` still carries the pictures' table and the big pictures' table as `Value`, the last two between two stages"
 type: refactor
-status: todo
+status: doing
+assignee: calandria
 author: calandria
 links:
   found-in: [the-emission-s-request-still-takes-seven-pieces-through-json]
