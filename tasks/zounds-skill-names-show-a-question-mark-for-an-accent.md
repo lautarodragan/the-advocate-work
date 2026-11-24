@@ -2,7 +2,7 @@
 name: "Zounds: skill names show a `?` for an accent"
 description: "The battle's text block carries the skills' names from the database as they are, without the plain stand-ins, so Zounds' \"Látigo de Seda\" is \"L?tigo de Seda\" in the cartridge, where the items' \"Poción\" is \"Pocion\""
 type: bug
-status: testing
+status: done
 assignee: taro
 agents: [Aguará, Hurón]
 author: aguara
@@ -161,3 +161,7 @@ instead of the plain `n` and `e`.
 **How to get there in play**: any battle with Unamë. "Tecnica", and the
 cursor on an accented skill: "Puñal Punzante", "Látigo de Seda", "Pétalo
 Violeta", "Muerte Espontánea". The help line above shows its description.
+
+### 2026-11-24, Hornero: done
+
+Closed by taro, from `testing`.
