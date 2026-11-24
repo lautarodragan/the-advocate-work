@@ -2,7 +2,7 @@
 name: "The slots screen's line counts no row cells"
 description: "The converter's `slots screen: … B of cells` line adds the slots' rows through `s[\"rows\"][0][0][0]`, one index too many since the port from Python: it is a number, so the rows always count 0 and the line says only the headers' bytes"
 type: bug
-status: draft
+status: todo
 author: calandria
 agents: [calandria]
 links:
@@ -32,3 +32,11 @@ dead term, with a comment pointing here.
 and full, times two planes?— so the right count has to be worked out from
 `slots::Slots::rows` and the runtime's `slot_n_m` blocks before fixing
 it. The fix changes one line of every `converter.log`, not a ROM.
+
+## Log
+
+### 2026-11-24, Hornero: promoted to `todo`
+
+Promoted by Hornero: verified against the Python it was ported from, the
+fix is not in doubt —the line counts what it says—, and it changes only
+`converter.log`, nothing seen or heard.

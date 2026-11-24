@@ -2,11 +2,12 @@
 name: "MapInfo carries Wally's answer as JSON between two types"
 description: "Since B4 and B1, the converter reads Wally's typed answer, turns its sprite, NPCs, posed table, runs and panorama back into `Value` with json! for `MapInfo`, and `emit::map_record` deserializes them into mapdata's request types: a round trip through JSON between two sets of types the compiler could join"
 type: refactor
-status: draft
+status: todo
 author: calandria
 agents: [calandria]
 links:
   found-in: [the-stages-speak-json-nobody-types]
+  part-of: [the-stages-speak-json-nobody-types]
 ---
 
 Seen by Calandria on 2026-11-24, merging main —Aguará's B4— into her
@@ -39,3 +40,12 @@ builds byte for byte— and changes no cache value (the emission is
 uncached). Where Wally's and mapdata's shapes differ (mapdata's `Bank`,
 `Slot`, `RouteGfx` read tuples Wally may write as structs), the
 difference has to be looked at, not papered over.
+
+## Log
+
+### 2026-11-24, Hornero: promoted to `todo`
+
+Promoted by Hornero: verified in the merged code, it finishes what the
+stages task set out to do along the producer's-crate rule taro already
+chose, and it is checked byte for byte with nothing seen or heard
+changing. It goes as a step of phase B, after B7.
