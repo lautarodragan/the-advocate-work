@@ -2,8 +2,9 @@
 name: "The .inc's constants are format strings with their values far below"
 description: "mapdata's emission writes ~480 `NAME = value` constants as format strings: 105 header arguments that only repeat a constant's name, ~250 positional `{}` whose value is twenty lines below, 77 geometry numbers passed through under their own name"
 type: refactor
-status: draft
+status: todo
 author: calandria
+agents: [cardon]
 links:
   found-in: [where-mapdata-and-convert-could-be-shorter]
   relates: [the-emission-reads-the-screens-answer-and-the-battle-model-by-name]
@@ -69,3 +70,14 @@ does not matter to ca65.
 defines, with their values, equal —the `.dbg` or `ld65`'s map lists
 them—, which catches a constant lost or renamed that the ROM does not
 read.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+Still so at the-advocate `8b069fc2`: `format!(header!(), …)` at `emit.rs` 682,
+and the positional blocks of `Rest`; the writing-style task left "the
+header's format string" as it was on purpose. Code debt with the fix written,
+verified by ROMs byte for byte; it goes after phase B of
+[`the-stages-speak-json-nobody-types`](the-stages-speak-json-nobody-types.md),
+which rewrites most of `emit.rs`.

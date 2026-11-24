@@ -2,7 +2,8 @@
 name: "ABL's EraseEvent tests leave for the test game"
 description: "The test game's test_erase_event.py now asks everything ABL's test_erase_event_for_real.py asked, of an event with a graphic; ABL's test and its two cases in test-special are left over"
 type: test
-status: draft
+status: todo
+agents: [cardon]
 author: tijereta
 game: abl
 links:
@@ -39,3 +40,15 @@ The events crate's three `EraseEvent` tests (`compile.rs`: after a jump,
 this event's row, in a common event) are the compiler's bytecode and need
 no ROM: they stay where they are. The ROM side of "in a common event it
 does nothing" is tested nowhere.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+Part of
+[`abl-s-test-cartridges-become-test-game-cases`](abl-s-test-cartridges-become-test-game-cases.md),
+which taro approved on 2026-11-24 and which names this move as the first.
+The test game's `tests/test_erase_event.py` (the-advocate `e93c89ae`) asks
+everything ABL's `test_erase_event_for_real.py` asks; deleting that test
+and its two cases changes only `test-special`, not `release`. ABL's
+`test_erase_event.py` (map 311, played) stays, as the draft says.

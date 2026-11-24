@@ -2,9 +2,11 @@
 name: "The slot screen's reference draws a lent face with its own palette"
 description: "screens.slot_screen builds its bank with the parties it is given, so a face the cartridge draws with another's palette —Royal Dalia's in ABL— comes out in its own colours, and comparing the ROM against it is red"
 type: test
-status: draft
+status: cancelled
 author: huron
-agents: [Hurón]
+agents: [Hurón, cardon]
+links:
+  relates: [tests-without-the-stages-subcommands]
 ---
 
 Seen by Hurón on 2026-10-20, with the-advocate `07b002f5` (branch
@@ -27,3 +29,15 @@ not match it.
 Royal Dalia's `(30,)`; the snapshot lands in `tests/snapshots/screens/`.
 That test leaves her out for this; her slot is in the golden
 `title-slots-long-names`, which is the ROM against itself.
+
+## Log
+
+### 2026-11-24, Cardón: cancelled
+
+Made moot by
+[`tests-without-the-stages-subcommands`](tests-without-the-stages-subcommands.md):
+the reference that does not match the ROM is `screens.slot_screen` in
+ABL's `tests/harness/screens.py`, which asks `rm2k-snes-screens render`
+(`screen_stage.render("slots", …)`) for what to expect. That plan replaces
+every such oracle by a golden or by what RM2k's rules say, and `render`
+goes; the ROM side is right, as the draft says.

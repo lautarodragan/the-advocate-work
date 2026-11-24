@@ -3,8 +3,9 @@ name: "A bush on a map with more than four character palettes"
 description: "The hero's feet in a bush stay opaque on a map whose characters take sprite palettes 4 to 7: the color math would blend them too"
 type: bug
 status: draft
+assignee: taro
 author: aguara
-agents: [Aguará]
+agents: [Aguará, cardon]
 links:
   found-in: [terrains-encounter-rates-and-bushes]
 ---
@@ -34,3 +35,18 @@ the pictures and their color math are. Each has its own cost.
 **How to see it**: the debug map to Book of Three's 56 and a step into the
 water; or ABL's `tests/rpgmaker/test_bush.py`, which guards that the feet
 stay whole there.
+
+## Log
+
+### 2026-11-24, Cardón: a question for taro
+
+Still so: ABL's `tests/rpgmaker/test_bush.py` guards that the feet stay
+whole on those maps, and the book's divergence "What a bush does not
+model" says why. It changes what is seen towards RM2k, but each way has a
+cost to choose: a colour window plus an HDMA channel for the lines, which
+must be free while a message is up; or the leaders' palette in 4 to 7,
+where the pictures and their colour math live.
+
+**Recommendation**: leave it as the written divergence —five maps in three
+games, half-transparent feet— unless taro sees it while playing; if not,
+the window plus HDMA, which touches no palette.

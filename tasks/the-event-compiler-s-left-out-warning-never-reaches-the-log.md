@@ -2,8 +2,9 @@
 name: "The event compiler's left-out warning never reaches the log"
 description: "rm2k-snes-events writes \"map N: WARNING, event E is left out\" on standard error; since A2 of the stages' task it reaches converter.log, but only when the compiler runs: an answer from the cache brings no warning, and each event is told three times, after everything else"
 type: bug
-status: draft
+status: todo
 author: calandria
+agents: [cardon]
 links:
   found-in: [the-stages-speak-json-nobody-types]
   relates: [variables-are-capped-at-256-slots]
@@ -54,3 +55,12 @@ converter's stderr, which `rm2k-snes-cartridges` appends to
 To see it: build Vampires Dawn twice with the same tools, the first with
 `NO_CACHE=1`, and compare `grep -c 'WARNING, event' build/release/converter.log`
 after each: 672, then 0.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+Still so at the-advocate `8b069fc2`: the `eprintln!` at
+`rm2k-snes/events/src/pages.rs` 483. The fix is not in doubt —the warning
+travels in the compiler's answer, so the cache keeps it, and the converter
+prints it once beside the map's other warnings— and changes no ROM.

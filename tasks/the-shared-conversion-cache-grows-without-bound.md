@@ -3,7 +3,9 @@ name: "The shared conversion cache grows without bound"
 description: "Nothing ever deletes an entry of the machine's cache: every reinstall of a stage, of ca65 or of the runtime leaves the whole previous set of answers behind, and a full set for the nine games is over a gigabyte"
 type: refactor
 status: draft
+assignee: taro
 author: huron
+agents: [cardon]
 links:
   found-in: [a-conversion-cache-shared-by-the-worktrees]
 ---
@@ -29,3 +31,22 @@ reinstalling `wally` and building the games once more.
 It can be emptied by hand whenever nothing is building; deleting it while
 something builds can take away a game unpacked from its `.zip` under a
 converter that is reading it.
+
+## Log
+
+### 2026-11-24, Cardón: a question for taro
+
+**What to decide**: what evicts the machine's conversion cache (AGENTS.md
+says "It has no eviction yet"). It matters more while
+`the-stages-speak-json-nobody-types` keys every stage's answer by the
+converter's binary: every converter change leaves a full set (~1 GB for
+the nine games) behind.
+
+**Options**: (a) nothing automatic, a recipe that empties it when nothing
+builds; (b) each build deletes entries not read in N days (by atime or a
+touched stamp); (c) a size cap, oldest first; (d) wait for
+`a-stage-s-cache-key-once-it-is-a-library`, then decide.
+
+**Recommendation**: (b), with N around 14 days, done in `cache.rs` with a
+lock so that nothing reads an entry being deleted; it is toolchain code
+with a cost to choose (disk against rebuilding), so it is yours.

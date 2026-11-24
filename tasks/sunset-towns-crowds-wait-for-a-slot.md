@@ -3,7 +3,9 @@ name: "Sunset's towns: part of a crowd waits for a slot"
 description: "On Sunset Over Imdahl's busiest painted maps more events can be on screen than the cache of slots holds, even with no still event animating, so the last drawn appear late"
 type: bug
 status: draft
+assignee: taro
 author: calandria
+agents: [cardon]
 links:
   found-in: [rain-drops-cost-a-cache-its-slots]
 ---
@@ -41,3 +43,23 @@ is the big one: four blocks that only an animation on the map uses.
 **How to see it**: `events-wait-for-a-slot` in
 `sunset-over-imdahl/build/release/degradations.json`; in the game,
 maps 3 and 58 when they are full.
+
+## Log
+
+### 2026-11-24, Cardón: a question for taro
+
+Still so: the ports' Sunset
+`build/release/degradations.json` of 2026-11-24 says `events-wait-for-a-slot`
+on maps 3, 4, 12, 47, 56 and 58 (58: 36 at once, 10 slots). What to decide
+is how much of Sunset's towns is worth paying for, and it is the game's:
+
+* **a)** `baked_events` on those maps, as Frozen World's map 128 did: the
+  still crowd goes into the background. Those events already stand still
+  here (`still-animation-dropped` on 3 and 12), so little is lost; it costs
+  background tiles, which a painted map may not have.
+* **b)** engine work for every game: the battle animation's four blocks only
+  while an animation plays, or OBJ's second name table at $4E00 for the
+  timer and drops —one slot each—. Neither reaches 36.
+* **c)** leave it, as a Known issue (it is already one).
+
+Recommendation: **a**, tried map by map, and **c** for whatever does not fit.

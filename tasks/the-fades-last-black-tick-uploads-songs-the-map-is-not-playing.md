@@ -3,8 +3,10 @@ name: "The fade's last black tick uploads songs the map is not playing"
 description: "Without MSU-1, a teleport's fade forces up on its last black tick every song of the destination's package, not only the one playing: 5 to 16 frames on Lashe City's doors"
 type: optimization
 status: draft
+assignee: taro
 author: chaja
 game: abl
+agents: [cardon]
 links:
   found-in: [lashe-city-transitions-lag]
   relates: [frozen-world-every-turn-re-uploads-the-battle-screens-audio]
@@ -37,3 +39,21 @@ It trades the door's hitch for one on that `PlayBGM`.
 **To reproduce**: `measure.py` in `~/scratch/chaja/lashe-lag/` (the task's
 log says how it runs), or walk from 8's (73,56) right into 9 with
 hzstream playing and count the frames of the fade's tick 43.
+
+## Log
+
+### 2026-11-24, Cardón: a question for taro
+
+Without the `.msu`, a door's black lasts
+5 to 16 frames longer on Lashe City because songs the map is not playing go
+up then (`package_settle`, `runtime/audio_package.s` 661, unchanged since).
+Where the wait goes is a choice:
+
+* **a)** leave it: the wait is in the black, where nothing is seen;
+* **b)** those songs wait like the effects and go up in the free time of the
+  vblanks after the fade; a `PlayBGM` that comes before they are up finishes
+  them then, freezing at about a frame per KB;
+* **c)** b without the trickle: only on the `PlayBGM`.
+
+Recommendation: **b**: most of the time they are up before anyone asks, and
+with the `.msu` none of it happens.

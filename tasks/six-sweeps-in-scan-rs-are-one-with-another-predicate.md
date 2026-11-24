@@ -2,8 +2,9 @@
 name: "Six sweeps in scan.rs are one with another predicate"
 description: "has_rain, has_sandstorm, teleports_with_a_facing, transparent_messages, types_a_colour and window_slots each walk the maps, the common events and the test pages with their own copy of the loop, and convert.rs passes them the same three arguments six times"
 type: refactor
-status: draft
+status: todo
 author: calandria
+agents: [cardon]
 links:
   found-in: [where-mapdata-and-convert-could-be-shorter]
 ---
@@ -52,3 +53,12 @@ another one. `git blame` on it first.
 **How to verify**: every port's ROM byte for byte equal before and after
 (`NO_CACHE=1 just cartridges`, `cmp`); `just crate-test rm2k-snes-convert`,
 whose scan tests cover rain and the sandstorm.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+Still so at the-advocate `8b069fc2`: the six functions at `scan.rs` 71-161,
+called from `convert.rs` 258, 460-469, 1968-1982. Code debt with the fix
+written, verified by ROMs byte for byte; whether rain looks at the common
+events stays out of it, as the draft says (that one would be a question).

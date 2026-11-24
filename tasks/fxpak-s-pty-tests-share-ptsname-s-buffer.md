@@ -2,11 +2,13 @@
 name: "fxpak's pty tests share ptsname's buffer"
 description: "openpt() in snes/fxpak/tests/pty.rs names each fake FX Pak with ptsname, whose buffer is static: tests running in parallel threads can read each other's name and open the same pty, which the tool then refuses as another client's"
 type: bug
-status: draft
+status: todo
+agents: [cardon]
 author: carpintero
 links:
   relates: [fxpak-s-pty-tests-fail-under-load]
   found-in: [the-stages-speak-json-nobody-types]
+  duplicated-by: [fxpak-s-pty-tests-fail-under-load]
 ---
 
 Seen by Carpintero on 2026-11-24, running `just rust-test --no-fail-fast`
@@ -39,3 +41,15 @@ checked which it is.
 
 **How to reproduce**: `just rust-test --no-fail-fast` while other builds
 fill the CPU; the name in the six messages is the tell.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+A flaky test with its cause read in the code and its fix named: `openpt()`
+still calls `libc::ptsname` (`snes/fxpak/tests/pty.rs:107`), whose static
+buffer threads share; `ptsname_r` closes it. The task also runs the pty
+tests under load after the fix: if the "no response to Ls in 2s" of
+[`fxpak-s-pty-tests-fail-under-load`](fxpak-s-pty-tests-fail-under-load.md),
+which was closed into this one, is still there, the fake's 2 s timeout
+widens too.

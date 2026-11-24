@@ -2,9 +2,9 @@
 name: "A window that opens late builds its tables past the vblank"
 description: "When a box's last blanked line goes up in the vblank its window opens in, msg_hdma_build ends near line 261 and flush_video on the screen's first lines"
 type: bug
-status: draft
+status: todo
 author: aguara
-agents: [Aguará]
+agents: [Aguará, cardon]
 links:
   found-in: [a-transparent-message-keeps-the-layer-above]
   relates: [an-emulator-that-shows-vblank-overruns, frozen-world-the-intro-stays-black-after-the-tint]
@@ -61,3 +61,15 @@ framed window's. The accurate bsnes with the display audit counts 0
 accesses on the whole scene with the fix. On A Blurred Line's memory the
 fix leaves it as it was: the same 5 frames, the worst window write on
 line 257.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+Measured with the vblank probe (5 frames of ABL's memory, 1 to 4 of The
+Frozen World's map 6 scene), unchanged since: no commit after 2026-11-15
+touches `msg_hdma_build` (`git log -S`). What runs late writes only RAM
+and `HDMAEN`, so on the console a frame of the window's bands could be
+wrong. The draft says the fix that keeps every golden —tables built
+outside the vblank, double buffered, opening points the channels at them—
+after the two that moved the `manta` golden; nothing seen changes.

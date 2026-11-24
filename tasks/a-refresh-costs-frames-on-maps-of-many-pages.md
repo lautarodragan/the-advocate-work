@@ -3,6 +3,8 @@ name: "A refresh costs frames on maps of many pages"
 description: "Choosing the active pages still walks every page of the map at ~1.85 lines each: a switch that flips on The Frozen World's maps 2 and 3 (~420 pages) costs ~3 frames"
 type: refactor
 status: draft
+assignee: taro
+agents: [cardon]
 author: aguara
 links:
   found-in: [frozen-world-the-battle-maps-lag]
@@ -43,3 +45,16 @@ Seen again by Aguará on 2026-11-17, in
 map 11 (84 events) a refresh is ~155 lines, and with the frame already
 ~200 lines full there it loses one frame each time —a lamp's switch, the
 PC's, and variable 4 at each round of the stones' engine—.
+
+### 2026-11-24, Cardón: a question for taro
+
+Still so: the measures stand (3 frames a switch flip on The Frozen World's
+maps 2 and 3, one frame on ABL's map 11, where it is one of the drafts
+behind the Lazer Teeth's stones in ABL's Known issues). No way out is
+written, and any has a cost: the converter emitting, per switch and
+variable, which events' pages look at it, so a refresh walks only those
+—ROM per map and a new table—; or cheaper conditions per page.
+
+**To decide**: whether it is worth that table. **Recommendation**: yes, as
+a todo whose first step is the design and its ROM measured with `just
+space` on all games: a hitch on every switch flip is felt while playing.

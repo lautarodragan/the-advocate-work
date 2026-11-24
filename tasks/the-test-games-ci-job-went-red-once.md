@@ -3,7 +3,9 @@ name: "The test game's CI job went red once"
 description: "on the ci branch, run 39199346132, the test game's suite failed and the same tree passed on the next run; which test is unknown"
 type: bug
 status: draft
+assignee: taro
 author: mulita
+agents: [cardon]
 links:
   relates: [abl-test-cores-event-red-once-in-a-full-run]
 ---
@@ -29,3 +31,21 @@ up once and not again, as in
 **How to reproduce it**: run the workflow several times on the same commit,
 or `just test-game -rs` in a loop; the captures that differ are uploaded
 as the `test-game-snapshots` artifact.
+
+## Log
+
+### 2026-11-24, Cardón: a question for taro
+
+**What to decide**: whether a single CI red with no test named is worth
+keeping open. Nothing fixed it and no plan makes it moot, so closing it is
+not mine to do; and verifying it is not cheap —the workflow run many times
+on one commit—.
+
+**Options**: (a) cancel it: a recurrence brings its own evidence, since
+the job uploads the captures that differ as `test-game-snapshots`
+(`.github/workflows/ci.yml`, "Captures that differ"), and is a new draft
+with them; (b) `todo`: loop the workflow or `just test-game -rs` until it
+goes red.
+
+**Recommendation**: (a). One red on 2026-10-19, none since, and nothing
+anyone could check today.

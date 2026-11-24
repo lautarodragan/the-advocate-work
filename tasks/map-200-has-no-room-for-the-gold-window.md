@@ -3,8 +3,9 @@ name: "The inn of ABL's map 200 shows no gold window"
 description: "The gold window goes in objects past the sprite bank and in a free sprite palette, and map 200 has its eight palettes taken"
 type: bug
 status: draft
+assignee: taro
 author: huron
-agents: [Hurón]
+agents: [Hurón, cardon]
 links:
   found-in: [an-inn-has-no-gold-window]
 ---
@@ -29,3 +30,25 @@ What it would take: a palette for the window on the maps that ask for
 it —the layout choice in `vram.rs` reserving one when a map's pages open
 a gold window, or the window borrowing a character palette on the lines
 it covers—. Either changes how the map's characters are packed.
+
+## Log
+
+### 2026-11-24, Cardón: a question for taro
+
+Still so at the-advocate `8b069fc2`: the build still reports
+`inn-no-gold-window` (`rm2k-snes/mapdata/src/main.rs:262`), and ABL's page
+in the book lists it in "Known issues".
+
+**What to decide**: what map 200 gives up for its inn's gold window, since
+its eight sprite palettes are its characters'. Either way changes how the
+map's characters are packed: what is lost for lack of room.
+
+**Options**: (a) the layout in `vram.rs` reserves a palette on maps whose
+pages open a gold window, and two characters on map 200 share one (some
+colours lost); (b) the window borrows a character palette on the lines it
+covers (HDMA; no colour lost, more runtime); (c) leave it: "Yes" is greyed
+without the price on one map.
+
+**Recommendation**: (a): the general rule is small and the colours a
+shared palette loses are measurable in the build; if map 200's loss shows,
+(c).

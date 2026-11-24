@@ -2,9 +2,9 @@
 name: "msu_data_seek does not forget where the effects left the port"
 description: "The backdrops' seeks and the save's flush move the MSU-1's data port without resetting MSU_SE_NEXT, so the next sound effect from the .msu could take the port as in place and read from wherever the seek left it; read, not seen"
 type: bug
-status: draft
+status: todo
 author: chaja
-agents: [Chajá]
+agents: [Chajá, cardon]
 links:
   found-in: [maps-uncompressed-in-the-msu]
 ---
@@ -37,3 +37,14 @@ play the effect whose row in `se_msu_rows` follows it, before anything
 else seeks. The fix is three `sta f:MSU_SE_NEXT` of `$FF` in
 `msu_data_seek`: the branch `chaja-msu-raw-2` of the-advocate carries it
 (`7794939c`), because its raw map loaders rely on the same variable.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+Read in the code and the reading still holds at the-advocate `8b069fc2`:
+`runtime/msu1.s` never writes `MSU_SE_NEXT`. The fix is named and written
+—three `sta f:MSU_SE_NEXT` of `$FF` in `msu_data_seek`, `7794939c` on
+`chaja-msu-raw-2`, which is not in `main`—; nothing seen changes but a
+possibly corrupt effect after a save. The task: that commit on its own,
+with a case that saves and plays the next effect from the `.msu`.

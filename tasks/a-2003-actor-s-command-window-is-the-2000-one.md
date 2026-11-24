@@ -3,6 +3,8 @@ name: "A 2003 actor's command window is the 2000 one"
 description: "Since 2026-10-20 a 2003 game's battle commands carry the names of each actor's own list, but the window is still the 2000 battle's five in its order: not the actor's order, not its presence, no row or subskill commands, and a special escape stood in for by the 2000 one"
 type: feature
 status: draft
+assignee: taro
+agents: [cardon]
 author: cardon
 links:
   found-in: [a-2003-game-s-battle-commands-are-its-own]
@@ -41,3 +43,28 @@ read by easyrpg's `Game_Actor::GetBattleCommands`:
 
 The book's divergence:
 [A 2003 game's battle commands](https://github.com/lautarodragan/the-advocate-docs/blob/main/src/divergences/a-2003-game-s-battle-commands.md).
+
+## Log
+
+### 2026-11-24, Cardón: a question for taro
+
+Still as described: the divergence page
+`divergences/a-2003-game-s-battle-commands.md` lists all four gaps, and
+[`the-2003-battle-commands-callcommonevent-and-forceflee`](the-2003-battle-commands-callcommonevent-and-forceflee.md)
+(done) says Zounds' 36 `ForceFlee` pages sit on its special Escape and
+never run here.
+
+**To decide**: whether a 2003 game's window follows each actor's list,
+which undoes part of a written divergence and of the PLUS decision "Escape
+is the fifth command" for 2003 games.
+
+* (a) Order and presence from the actor's list —Unamë's item command
+  before Defender, Bandurion with no Escape—, and a special command that
+  only runs its troop pages, so Zounds' escape counts its turns as in
+  RM2k3; row, subskill and `ChangeClass` left until a game uses them.
+* (b) Only the order, keeping the console's Escape for everyone.
+* (c) Leave it as the divergence says.
+
+**Recommendation**: (a): it is what RM2k3 does with nothing to choose once
+the scope is set, and Zounds is the only 2003 game; (b) if taro wants
+Escape always there.

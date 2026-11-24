@@ -2,8 +2,9 @@
 name: "Zounds: characters cut on crowded lines"
 description: "3 maps put more characters on a line than the console draws —nine characters are 36 slivers, past the PPU's 34—, and the ones further back lose columns or vanish"
 type: bug
-status: draft
+status: todo
 author: mulita
+agents: [cardon]
 links:
   found-in: [maps-with-more-objects-on-a-line-than-the-ppu-draws]
 ---
@@ -33,3 +34,14 @@ screen's last page counts the map's frames in `Time over`.
 What the report cannot say: whether a line is one the player sees with
 everyone on it —a page another switch turns off, people a first scene
 sends away—, and what a scene adds later.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+As its siblings —[ABL's](abl-characters-cut-on-crowded-lines.md), [Book of
+Three's](book-of-three-characters-cut-on-crowded-lines.md), [Desert
+Nightmare's](desert-nightmare-characters-cut-on-crowded-lines.md), all
+`todo`—: measured by the sweep, and taro set the way on 2026-11-22 (no
+flicker; the converter's ways first; a game's patch is their call). Three
+maps; the first step is the sweep again at today's main.

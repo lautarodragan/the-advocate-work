@@ -2,8 +2,9 @@
 name: "Zounds' map 96 keeps its ceiling above for its statue"
 description: "On Zounds' map 96 the sign's message still blacks out the cave's ceiling on its lines: the analysis of where characters can be does not follow variables, and the statue the hero pushes walks through walls when its own coordinates, copied into two variables, say so"
 type: feature
-status: draft
+status: todo
 author: aguara
+agents: [cardon]
 links:
   found-in: [above-tiles-no-character-can-reach-go-below]
 ---
@@ -46,3 +47,15 @@ a row over every cell he stands on).
 `Wait [10]`, `MessageOptions [1, 1, 0, 0]` and the sign's `ShowMessage`
 lines; the converter's log has no line `map 96: N cells draw their tiles
 above the hero below`.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+Still so in the ports' build of 2026-11-24: Zounds' `converter.log` has no
+`map 96: N cells draw their tiles above the hero below` line, though
+`rm2k/rules` `reach` changed since (`93adbf19`, `c0bde4fd`…). To todo with
+the draft's first way, the generic one —a branch on a variable that only
+holds an event's own coordinate (`ControlVariables` operand 6) runs its
+route only from the cells it names—: it changes what is seen towards RM2k.
+The second way, a project's word, would be a question for taro.

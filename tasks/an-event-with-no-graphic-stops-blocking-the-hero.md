@@ -2,7 +2,8 @@
 name: "An event with no graphic on the hero's layer stops blocking the hero"
 description: "On the test game's meadow, a graphic-less event on the hero's layer stops the hero right after the boot, and lets them walk through it once the game has idled thirty ticks"
 type: bug
-status: draft
+status: todo
+agents: [cardon]
 author: tijereta
 game: test-game
 links:
@@ -35,3 +36,14 @@ parallel pages —"Every Frame", event 9, is one— or the boot's test page
 refreshing the pages are what drops the event from what blocks. The tile
 is impassable since that commit, so the hub does not depend on it, and no
 test covers it.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+A bug against RM2k (a graphic-less event on the hero's layer always
+blocks), reproduced with the steps above on the test game, nothing to
+choose. No commit on the-advocate's `main` since `a0e3c1b9` mentions it
+(searched the log for blocking and graphic). The task is finding which
+tick drops the event from what blocks; it needs a case in the test game,
+whose tile is impassable since `a0e3c1b9`.
