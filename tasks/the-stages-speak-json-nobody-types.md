@@ -8,7 +8,7 @@ agents: [calandria, aguara, cardon, carpintero, chaja, mulita, tijereta]
 author: taro
 links:
   found: [the-event-compiler-s-left-out-warning-never-reaches-the-log, fxpak-s-pty-tests-share-ptsname-s-buffer, the-msu-and-the-tracks-are-written-through-a-nuevo-file, the-patches-request-of-release-repeats-five-maps, the-stage-subcommands-only-the-converter-called-have-no-caller, the-picture-key-is-declared-twice, the-slots-screen-line-counts-no-row-cells, mapinfo-carries-wally-s-answer-as-json-between-two-types, the-compiler-s-songs-and-the-music-s-losses-cross-the-converter-as-json]
-  relates: [artistic-decision-patches, battle-tests-without-simulate, tests-without-the-stages-subcommands, the-emission-s-request-still-takes-seven-pieces-through-json, the-emission-s-answer-is-read-by-key, the-event-compiler-s-requests-are-built-and-read-by-hand]
+  relates: [artistic-decision-patches, battle-tests-without-simulate, tests-without-the-stages-subcommands, the-emission-s-request-still-takes-seven-pieces-through-json, the-emission-s-answer-is-read-by-key, the-event-compiler-s-requests-are-built-and-read-by-hand, the-losses-the-stages-hand-over-are-json-the-converter-reads-by-key]
   blocked-by: [emit-rs-writes-each-table-through-a-call-rustfmt-spreads-over-seven-lines, picture-tables-and-common-entries-write-the-same-entry-twice, rm2k-snes-mapdata-maps-has-no-caller, small-repeats-inside-emit-rs-s-rest, the-battle-terms-by-name-are-a-42-arm-match]
   blocks: [a-stage-s-cache-key-once-it-is-a-library, one-advocate-command]
   has-part: [the-converter-reads-the-stages-answers-with-python-s-truthiness, the-converter-writes-the-emission-s-request-by-hand, the-emission-keeps-fallbacks-for-answers-older-than-its-fixtures, the-emission-reads-the-screens-answer-and-the-battle-model-by-name, mapinfo-carries-wally-s-answer-as-json-between-two-types, the-compiler-s-songs-and-the-music-s-losses-cross-the-converter-as-json, the-emission-s-request-still-takes-seven-pieces-through-json, the-event-compiler-s-requests-are-built-and-read-by-hand, the-emission-s-answer-is-read-by-key]
@@ -1988,3 +1988,20 @@ the emission's own answer is read by key, another
 byte against `3e71d3a1`, the four suites green; the task's log has the
 detail. **Install when merging**: `convert`, `mapdata`, `screens` and
 `images`.
+
+### 2026-11-24, Mulita: the songs, the battle's audio and the music's losses typed
+
+[`the-compiler-s-songs-and-the-music-s-losses-cross-the-converter-as-json`](the-compiler-s-songs-and-the-music-s-losses-cross-the-converter-as-json.md),
+in the-advocate `mulita-songs` (main's `2695bd89` merged in): the event
+compiler answers `answer::Songs` and `answer::BattleAudio`, its own types;
+the converter reads the songs into the music's `cartridge::Songs` with
+plain Rust and hands `BattleAudio` to the emission as it is, so
+`Songs::to_json`, the `from_value` and the last `emit::typed` —with the
+function— went; the music's `cartridge` answers its losses as
+`relief::Loss` beside its files, and the converter no longer reads
+`audio.json` by key. The nine games byte for byte against `3e71d3a1`, cold
+and warm, the four suites green; the task's log has the detail and what
+is left read by key, with a
+[draft](the-losses-the-stages-hand-over-are-json-the-converter-reads-by-key.md)
+for the losses. **Install when merging**: `events`, `rm2k-snes-audio`,
+`mapdata` and `convert`.

@@ -6,7 +6,7 @@ status: todo
 author: calandria
 links:
   found-in: [the-emission-s-request-still-takes-seven-pieces-through-json]
-  relates: [the-stages-speak-json-nobody-types]
+  relates: [the-stages-speak-json-nobody-types, the-losses-the-stages-hand-over-are-json-the-converter-reads-by-key]
   part-of: [the-stages-speak-json-nobody-types]
 ---
 
