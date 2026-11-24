@@ -8,10 +8,10 @@ agents: [calandria, aguara, cardon, carpintero, chaja, mulita, tijereta]
 author: taro
 links:
   found: [the-event-compiler-s-left-out-warning-never-reaches-the-log, fxpak-s-pty-tests-share-ptsname-s-buffer, the-msu-and-the-tracks-are-written-through-a-nuevo-file, the-patches-request-of-release-repeats-five-maps, the-stage-subcommands-only-the-converter-called-have-no-caller, the-picture-key-is-declared-twice, the-slots-screen-line-counts-no-row-cells, mapinfo-carries-wally-s-answer-as-json-between-two-types, the-compiler-s-songs-and-the-music-s-losses-cross-the-converter-as-json]
-  relates: [artistic-decision-patches, battle-tests-without-simulate, tests-without-the-stages-subcommands, the-emission-s-request-still-takes-seven-pieces-through-json, the-emission-s-answer-is-read-by-key, the-event-compiler-s-requests-are-built-and-read-by-hand, the-losses-the-stages-hand-over-are-json-the-converter-reads-by-key]
+  relates: [artistic-decision-patches, battle-tests-without-simulate, tests-without-the-stages-subcommands, the-emission-s-request-still-takes-seven-pieces-through-json, the-emission-s-answer-is-read-by-key, the-event-compiler-s-requests-are-built-and-read-by-hand, the-losses-the-stages-hand-over-are-json-the-converter-reads-by-key, the-screens-requests-are-built-and-read-by-hand, wally-s-map-request-is-built-and-read-by-hand]
   blocked-by: [emit-rs-writes-each-table-through-a-call-rustfmt-spreads-over-seven-lines, picture-tables-and-common-entries-write-the-same-entry-twice, rm2k-snes-mapdata-maps-has-no-caller, small-repeats-inside-emit-rs-s-rest, the-battle-terms-by-name-are-a-42-arm-match]
   blocks: [a-stage-s-cache-key-once-it-is-a-library, one-advocate-command]
-  has-part: [the-converter-reads-the-stages-answers-with-python-s-truthiness, the-converter-writes-the-emission-s-request-by-hand, the-emission-keeps-fallbacks-for-answers-older-than-its-fixtures, the-emission-reads-the-screens-answer-and-the-battle-model-by-name, mapinfo-carries-wally-s-answer-as-json-between-two-types, the-compiler-s-songs-and-the-music-s-losses-cross-the-converter-as-json, the-emission-s-request-still-takes-seven-pieces-through-json, the-event-compiler-s-requests-are-built-and-read-by-hand, the-emission-s-answer-is-read-by-key, the-losses-the-stages-hand-over-are-json-the-converter-reads-by-key]
+  has-part: [the-converter-reads-the-stages-answers-with-python-s-truthiness, the-converter-writes-the-emission-s-request-by-hand, the-emission-keeps-fallbacks-for-answers-older-than-its-fixtures, the-emission-reads-the-screens-answer-and-the-battle-model-by-name, mapinfo-carries-wally-s-answer-as-json-between-two-types, the-compiler-s-songs-and-the-music-s-losses-cross-the-converter-as-json, the-emission-s-request-still-takes-seven-pieces-through-json, the-event-compiler-s-requests-are-built-and-read-by-hand, the-emission-s-answer-is-read-by-key, the-losses-the-stages-hand-over-are-json-the-converter-reads-by-key, the-screens-requests-are-built-and-read-by-hand, wally-s-map-request-is-built-and-read-by-hand]
 ---
 
 **Why**: the converter's stages —screens, battle, events, images, Wally,
@@ -2005,3 +2005,75 @@ is left read by key, with a
 [draft](the-losses-the-stages-hand-over-are-json-the-converter-reads-by-key.md)
 for the losses. **Install when merging**: `events`, `rm2k-snes-audio`,
 `mapdata` and `convert`.
+
+### 2026-11-24, Calandria: the last three JSON steps, and what is left
+
+In the-advocate `calandria-last` over `5fa3d860`, one commit a step, each
+built byte for byte before the next —the tasks' logs have the detail—:
+
+* `e1d44127`,
+  [`the-event-compiler-s-requests-are-built-and-read-by-hand`](the-event-compiler-s-requests-are-built-and-read-by-hand.md):
+  the scan and compile requests are `request::Asked`, built as a struct
+  and read with serde; the picture tables are `request::Picture`, the
+  picture key moved into the events crate, the screens' `boxes` answer is
+  typed. +174 net lines.
+* `a9174754`,
+  [`the-emission-s-answer-is-read-by-key`](the-emission-s-answer-is-read-by-key.md):
+  `mapdata::answer::Answer` and its `Loss`, read with `stage::typed`;
+  `stage::json` goes. +23.
+* `120fcd9e`,
+  [`the-losses-the-stages-hand-over-are-json-the-converter-reads-by-key`](the-losses-the-stages-hand-over-are-json-the-converter-reads-by-key.md):
+  `losses::Entry`, `Where` and `CommonRun` in the event compiler, which
+  `degradations.rs` keeps and the four `forget`s read by field. +210.
+
+**On the final tree**: the nine games `NO_CACHE=1` against the global
+tools' builds of `5fa3d860`, every file of `build/` equal —19469, the 20
+`.sfc`, `converter.log`, `degradations.json` and `events-request.json`
+included— but the 20 `.o` and 20 `.dbg` (ca65's mtimes) and the 20
+`stamp.txt`; `abl.sfc` `8f3fcb518d8cd4ec5dcfe7a94123deef`. Then twice
+warm with the shared cache, in a second ports worktree: the first equal
+(checkout paths aside), the second equal but for Vampires Dawn's 672
+left-out warnings a cached compile does not print, as before
+([`the-event-compiler-s-left-out-warning-never-reaches-the-log`](the-event-compiler-s-left-out-warning-never-reaches-the-log.md)).
+`just lint`, `just test` (29), `just rust-test --no-fail-fast` (133
+binaries, none red), `just test-game` (231 passed, 6 skipped), the ports'
+`just boot` (218) and ABL's `just tests` (1694 passed, 2 skipped) green.
+
+#### What is left of JSON between stages in the converter
+
+Counted on `120fcd9e` (`from_value`, `Value` fields, reads by key in
+`rm2k-snes/convert/src`):
+
+* **Wally's map request**, `maps.rs`: a `json!` of some thirty keys and
+  more inserted by name (`variants::request`, `OnMap::to_json`,
+  `ForMap::asked`, `Arrivals::json_of`, `MapInfo::request: Value`), read by
+  Wally's `from_json`s. Phase B typed Wally's answer (B4), not its
+  request: a
+  [draft](wally-s-map-request-is-built-and-read-by-hand.md).
+* **The screens' four requests**, `screens.rs` —`convert`, `boxes`,
+  `window`, `faces`—, with `FontChoice::request()`, the custom menus'
+  `{"name", "spec"}` and their `before_bodies` (`convert.rs`), read by
+  the screens' `Json` reader. B3 typed their answers: a
+  [draft](the-screens-requests-are-built-and-read-by-hand.md).
+* **Not between stages, and staying**: the dump and the project's forks
+  (`game.rs`, `fork.rs`, `letters.rs`: ditto's sections, read as the dump
+  writes them); the project file's settings (`settings.rs`'s `list` and
+  `table`, the custom menus' `spec`, which is the game's table, not a
+  stage's contract —its keys are read in `settings.rs` for the variables
+  and switches it names—); the test cases' files (`convert.rs`'s
+  `commands_of`); what the converter writes for people (`patch_uses`'s
+  `uses.json`, the queries' stdout, `degradations.json`'s `json!` of
+  four keys); the cache's key (`stage::request_in_key`, the `json!` of a
+  typed request the battle's two calls hand it); `[sound_effects]`'s
+  `from_value` in `compiler.rs`, which reads the project file into the
+  request's types; and the tests (`trim.rs`, `chipsets.rs`).
+
+So phase B is not closed: two requests are still JSON both ways. The
+task stays in `doing` for Hornero to decide whether those two drafts are
+its last steps.
+
+**Install when merging**: `convert`, `events`, `screens` and `mapdata`
+(`just install convert events screens mapdata`). The scan's cached
+answers move once —its request's key order changed—; the compile's do
+not.
+
