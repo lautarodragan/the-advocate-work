@@ -1239,3 +1239,108 @@ cartridge`). Every cartridge is stale once (the fingerprint's list
 changed), and the shared cache stores each stage's answers once more (the
 converter's binary changed), as any new converter does. Phase A is done;
 the task stays in `doing`, for phase B.
+
+### 2026-11-24, Cardón: B5, the event compiler's answers typed
+
+On the-advocate `cardon-b5`, from `cef2cdda`; ports `cardon-b5` at
+`4c23c9e`, untouched. One commit, `00660dba`.
+
+#### What B5 is
+
+* **The types live in the events crate**, `rm2k_snes_events::answer`:
+  `Scan` and `Compiled`, with `Indices` flattened into both, `ScanMap` and
+  `CompiledMap`, `Page` and its `OwnRoute`, `CommonPictures`,
+  `CommonSet`, `Messages`, `Troops`, `TroopPages`, `Shared` and
+  `Degradations`. `scan` and `compile` build them where they built
+  `json!`; `route::own`, `map_pages`, `TroopPages::answer`,
+  `Shared::answer` and `parallel_commons` answer fields. Bytecode is
+  `answer::Hex`, a newtype serde writes as the hex string it always was.
+* **What the converter only hands on stays a `Value` inside the types**:
+  the picture keys and zooms (the pictures' stage reads them —B6's picture
+  key—), `songs` (the audio's request, B7), `battle_audio` (the
+  emission's) and the losses (`degradations.json`, with every other
+  stage's).
+* **The converter reads fields.** `compiler.rs`'s `run` deserializes the
+  cached file into the type; `map_entry`, the converter's own `Indices`
+  and its `from_answer` go (`variable_slot` stays, as a function over
+  `answer::Indices`); `scan.rs`, `common_pages.rs`, `common_pictures.rs`,
+  `maps.rs`, `convert.rs` and `degradations.rs` read fields.
+  **`PageRecord`'s ten `Value`s are typed**, which takes the
+  `unwrap_or` defaults out of `emit::page_record` (Calandria's file: one
+  hunk, the `own` route's fields) and `lay_out_code`.
+* **Not done**: mapdata's request still takes `troop_pages` as a `Value`
+  (`request.rs:363`) and reads it by hand (`emit.rs` `troop_pages`); the
+  converter passes it `answer::TroopPages`, serialized with the same keys.
+  Making that field `Option<rm2k_snes_events::answer::TroopPages>` is one
+  line plus that reader, and is B1/B3's to do with the rest of `Emit`:
+  left there so as not to rewrite mapdata's `emit.rs` beside B1-B3. The
+  requests to the compiler are still built by hand in `compiler.rs`: B5
+  was the answers.
+* **Other agents' files touched**: `maps.rs` (Aguará's B4), where the scan
+  is read —the map's entry, its graphics, pictures, tinted and zooms— and
+  where `PageRecord` and `pages` live; `emit.rs` (Calandria's), the one
+  hunk above; `convert.rs`, the compile's readers and the emission's
+  request's `troop_pages`, `battle_audio`, `commons` and `skill_pairs`
+  lines, which keep their keys. And one line in the converter's
+  `Cargo.toml`, `serde`, which other B steps may add too.
+
+#### Key order, and the binary's output
+
+**The fields go in the order the `json!` literals wrote them**, and what was
+written only when there were some is skipped the same way
+(`skip_serializing_if`): under `preserve_order` the converter writes the
+same bytes from them. A2's two reordered files, `degradations.json` and
+`events-request.json`, now come out **byte for byte equal** to the global
+tools'.
+
+**The binary writes its answer through a `Value`** (`stage::files`), whose
+keys serde_json sorts in a binary without `preserve_order`: the tests'
+`rm2k-snes-events scan` keeps its bytes. Checked on the crate's small game:
+`scan` and `compile` with `tests/scan.json` and `tests/compile.json`, the
+global binary (`cef2cdda`) against this one, `cmp` equal.
+
+The cache keeps the answer as the binary's file, deserialized on the way
+out; its bytes follow the types' order, which the new converter's key
+throws away anyway.
+
+#### The builds, byte for byte
+
+`NO_CACHE=1 just cartridges --force` in the nine games (ABL
+`--without-tracks`), the global tools (`cef2cdda`) against `convert` and
+`events` from this branch: **the 20 `.sfc` equal, every file of the nine
+`build/` equal, `converter.log`, `degradations.json` and
+`events-request.json` included**; aside, `stamp.txt` and the `.o`/`.dbg`
+(mtimes; ABL's and Vampires Dawn's release `.dbg` equal without their `file`
+lines). Then twice with a
+cache of its own (`CACHE=` a scratch directory): the first stored 2,702
+stage answers and its builds equal the uncached ones, `converter.log`
+included; the second stored none, 3:42 for the nine against 17:47 for
+the first (with three other agents building beside it), and equals them
+but for Vampires Dawn's `converter.log` without the 672
+left-out warnings a cached compile does not print (A2).
+
+#### Lines
+
+The commit is 837 lines in, 777 out: **net +60**, against the table's -50
+to -150. The converter lost 155 (243 in, 398 out), as the table expected;
+the events crate gained 213, which is the declaration: `answer.rs` is 279
+lines, 71 of them comments and 21 blank, against the `json!` literals and
+`to_json`s it replaced. The table's estimate counted the reading by hand
+that goes and not the types that come.
+
+#### The suites
+
+On `00660dba` (main had not moved), `convert` and `events` first in the
+PATH: `just lint` clean; the-advocate's `just test` 29 passed; `just
+rust-test --no-fail-fast` 1,246 passed, 0 failed, 3 ignored (no flake
+showed); the test game (`SOUNDFONT=FluidR3_GM.sf2`) 231 passed, 6
+skipped; the ports' `just boot` 218 passed; ABL's `just tests` 1,694
+passed, 2 skipped. No golden moved: the ports' worktree is clean.
+`abl.sfc` `3bf35fd7665c`, as A9's. **Not covered by a test of their
+own**: the cache's round trip of the typed answers is covered only by
+the warm builds above, which read every answer back; `Hex`'s refusal of
+a string that is not hex has no test.
+
+**Install when merging**: `convert` and `events` (`just install convert
+events`). The shared cache stores the compiler's answers once more (the
+converter's binary changed). The task stays in `doing`, for phase B.
