@@ -3,7 +3,9 @@ name: "Zounds: the Kuak-Man mini-game loses 206 of its 314 coins"
 description: "Map 178 has 327 events and the console keeps 120 rows; the coins are drawn, touch and erase themselves, so no twin folding keeps them"
 type: bug
 status: draft
+assignee: taro
 author: carpintero
+agents: [cardon]
 links:
   found-in: [zounds-maps-over-120-events]
   relates: [the-event-s-touch-from-another-layer]
@@ -30,3 +32,22 @@ map that a touch replaces.
 **How to see it**: `just cartridges` in `zounds/` of the ports, and
 `map 178: WARNING` in `build/release/converter.log`; on the console, the
 right half of the maze has no coins.
+
+## Log
+
+### 2026-11-24, Cardón: a question for taro
+
+**What to decide**: Kuak-Man (map 178) keeps 108 of its 314 coins: still
+so in the ports' build of 2026-11-24 (`map 178: WARNING, 327 events … 207
+are left out`).
+
+**Options**: (a) something new in the engine: coins as map tiles that a
+touch replaces, or a per-cell erased bit drawn from a table —generic,
+costs runtime and converter work—; (b) a Zounds patch that redraws the
+mini-game with fewer coins, or lowers whatever count it needs to win; (c)
+leave it, the right half of the maze empty.
+
+**Recommendation**: first see whether the mini-game can be finished with
+108 coins (what its variable asks for); if not, (b), the cheapest; (a)
+only if another game needs the same. It is a game's choice and has a cost,
+so it is yours.

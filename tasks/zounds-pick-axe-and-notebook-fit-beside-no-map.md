@@ -3,7 +3,9 @@ name: "Zounds: the pick-axe screen and the notebook fit beside no map"
 description: "The common events' small pictures go up when shown since 2026-10-20, beside the loaded map's characters; Zounds' pick-axe screen (400 object tiles, seven sprite palettes) and notebook (704 tiles) fit on none of its maps, so using the items still shows nothing"
 type: bug
 status: draft
+assignee: taro
 author: carpintero
+agents: [cardon]
 links:
   found-in: [pictures-in-common-events-compiled-apart-are-not-shown]
   relates: [small-pictures-under-a-big-one-are-hidden]
@@ -54,3 +56,21 @@ What it would take, as far as it was looked at —not measured—:
   leaves it out —the console's own window under the same messages— would
   leave the pick-axe screen some 16 tiles and four or five palettes. A
   decision for taro: it changes how the screen looks.
+
+## Log
+
+### 2026-11-24, Cardón: a question for taro
+
+**What to decide**: still so in the ports' build of 2026-11-24 (`common
+events 29, 30, 41: … fit on none of the 189 maps`; `common events 21, 27:
+… 104 small pictures aren't shown`): using the pick-axe or the notebook
+shows nothing. The draft already names it a decision of yours.
+
+**Options**: (a) the map's characters give the plane up while such a
+screen is up —a divergence: the people vanish—; (b) a Zounds patch that
+draws `Zounds_Dialogue_4` as the console's message window, freeing most of
+the pick-axe's tiles; (c) leave both out.
+
+**Recommendation**: (b) for the pick-axe, which the game needs to mine;
+the notebook, under its own big picture, with (a) only if it matters to
+you.

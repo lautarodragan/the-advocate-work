@@ -4,7 +4,7 @@ description: "Read in the code, not seen: both upload their bar in the vblank af
 type: bug
 status: draft
 author: aguara
-agents: [Aguará]
+agents: [Aguará, cardon]
 links:
   found-in: [abl-a-shop-s-screens-show-half-composed-frames]
   relates: [the-items-screen-s-bar-runs-ahead-of-its-text]
@@ -33,3 +33,15 @@ its own code:
 If they show it, it is the shop's picture on a smaller scale: the bar on
 the new row with the old description for a few frames. To be measured
 with a party whose skill list moves, and a custom menu's game (Zounds).
+
+## Log
+
+### 2026-11-24, Cardón: stays a draft
+
+Read in the code, never seen, and still read the same at `8b069fc2` (no
+`tl_settled` outside `equipment_screen.s` and `shop.s`). Cheap to verify:
+the frame-by-frame helper of ABL's `test_menu_equipment_frames_drawing.py`
+on the skills screen with an actor of two or more skills, and a Zounds
+custom menu, one step down. If it shows, it goes to `todo` with
+[`the-items-screen-s-bar-runs-ahead-of-its-text`](the-items-screen-s-bar-runs-ahead-of-its-text.md)'s
+fix.
