@@ -2,9 +2,9 @@
 name: "The slot screen shows no HP"
 description: "Every save's row shows the level and not the leader's hit points, which RPG_RT writes after it: \"L 1\" where the original says \"L 1  HP 40\""
 type: bug
-status: draft
+status: todo
 author: huron
-agents: [Hurón]
+agents: [Hurón, cardon]
 ---
 
 Seen by Hurón on 2026-10-20, with the-advocate `07b002f5` (branch
@@ -23,3 +23,15 @@ so the row has the room the original gives it.
 **How to see it**: the golden `title-slots-long-names` against
 `slots-original.png` (Chajá's, of 2026-10-14), side by side in
 `sheet-long-names.png` of the captures of 2026-10-20, `slot-names`.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+Seen against the original under Wine (golden `title-slots-long-names`
+against `slots-original.png`), and still so at `8b069fc2`:
+`rm2k-snes/screens/src/layout.rs` line 41 still says "three lines of text
+on the left". It changes what is seen towards RM2k with nothing to choose
+—`Window_SaveFile::Refresh` says where and in which colour— and the row
+has the room since `huron-slot-names`. The save's header needs the
+leader's HP; breaking saves is no problem.

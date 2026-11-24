@@ -2,8 +2,9 @@
 name: "The cached .dbg test sees a date move"
 description: "a_cached_object_gives_the_dbg_a_fresh_one_gives failed once: the fresh build's .dbg gave mapdata.inc a modification time one second later than the cached one's, though the test writes the file once"
 type: bug
-status: draft
+status: todo
 author: hornero
+agents: [cardon]
 links:
   relates: [a-conversion-cache-shared-by-the-worktrees]
 ---
@@ -32,3 +33,14 @@ giving side two a fixed date too.
 
 **How to reproduce**: `cargo test -p rm2k-snes-cartridge --test assemble`
 in a loop under load; it failed once in two full `rust-test` runs.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+A flaky test, seen with its exact output; the assert is still
+`rm2k-snes/cartridge/tests/assemble.rs` 241, and side two's files still get
+no fixed date (only side one's, 204-214). `retarget_line` in `assemble.rs`
+truncates to seconds as ld65 does, so the two readings differ only if the
+file changed: the task already says how to tell the test's fault from the
+rewrite's.

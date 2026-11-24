@@ -2,9 +2,9 @@
 name: "record, scene and panorama write their tables outside the Inc writer"
 description: "mapdata's emission writes its tables through `Inc` since 2026-11-23, but record.rs, scene.rs, panorama.rs and posed.rs still build their pieces as Vec<String> lines with `format!(\".block {}\")` and `.join`, each table with its own empty case"
 type: refactor
-status: draft
+status: todo
 author: calandria
-agents: [Calandria]
+agents: [Calandria, cardon]
 links:
   found-in: [emit-rs-writes-each-table-through-a-call-rustfmt-spreads-over-seven-lines]
 ---
@@ -33,3 +33,15 @@ carry their own `max(1)` for the empty case. `Inc` takes `out` as the
 (`NO_CACHE=1 just cartridges`, `cmp`), the `.inc` equal or different only
 in whitespace, and `just crate-test mapdata`, whose `tests/made_up.rs`
 reaches the empty tables no game does.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+Code debt continuing `Inc` (`5302c03c`) into the four modules left out,
+verified with a byte-for-byte check: at the-advocate `8b069fc2` there are
+still 85 `push(format!`/`.block` lines in
+`rm2k-snes/mapdata/src/record.rs`, 3 in `scene.rs`, 8 in `panorama.rs` and
+2 in `posed.rs`. Better after the emission's rewrite in
+[`the-stages-speak-json-nobody-types`](the-stages-speak-json-nobody-types.md),
+which goes through the same files.

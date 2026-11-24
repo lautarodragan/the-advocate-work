@@ -3,7 +3,9 @@ name: "Vampires Dawn: Tradan is hidden under its clouds"
 description: "Tradan's parallel page shows a cloud picture at transparency 40 over the whole map; on the console it is a big picture, so the town is never seen: only clouds, while the hero walks underneath"
 type: bug
 status: draft
+assignee: taro
 author: carpintero
+agents: [cardon]
 game: vampires-dawn
 links:
   found-in: [vampires-dawn-tradan-hangs-on-arriving-from-the-start]
@@ -40,3 +42,23 @@ map by `map_pictures` either: it moves.
 `pass_the_title()`, `until_control(30000)`, `go_to_map(170, 49, 27)`—,
 then 900 frames and `sess.image()`. Every visit to Tradan should show it,
 since the page has no conditions; not played to Tradan by its own roads.
+
+## Log
+
+### 2026-11-24, Cardón: a question for taro
+
+**What to decide**: what Tradan (map 170) shows instead of a translucent,
+drifting `cloudsky` the console cannot draw over the map. Still so: the
+book's Vampires Dawn page has it in Known issues, and no commit since
+2026-11-22 touches it.
+
+**Options**: (a) the converter leaves out a big picture that is
+translucent and moves over a map the hero walks —the town without clouds,
+said in `degradations.json`—, as a rule for every game; (b) a VD patch
+that drops the cloud loop on map 170 only; (c) the clouds drawn otherwise
+(colour math over a background layer), which goes against mode 3 and needs
+room; (d) as it is.
+
+**Recommendation**: (a): today the town cannot be seen at all, and the
+rule protects any game with the same picture. It changes what is seen and
+adds a divergence, so it is yours.

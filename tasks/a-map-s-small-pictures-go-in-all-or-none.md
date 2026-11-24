@@ -3,8 +3,9 @@ name: "A map's small pictures go in all or none"
 description: "Wally takes a map's small pictures as one bank of tiles: when they do not fit, every one is lost. In Desert Nightmare the two message box pictures, 270 tiles, take with them the green marks on what can be used, on dozens of rooms"
 type: bug
 status: draft
+assignee: taro
 author: aguara
-agents: [Aguará]
+agents: [Aguará, cardon]
 game: desert-nightmare
 links:
   found-in: [desert-nightmare-the-screen-goes-black-before-the-first-monster]
@@ -46,3 +47,22 @@ written and measured, and is in Aguará's scratch as
 
 A better cut may be by what each picture is: the message box ones are a
 window, see [`an-inventory-of-the-pictures-that-may-be-windows`](an-inventory-of-the-pictures-that-may-be-windows.md).
+
+## Log
+
+### 2026-11-24, Cardón: a question for taro
+
+Still so by the draft's measure (`convert_fitting` in
+`rm2k-snes/wally/src/map.rs` drops every small picture of a map when the
+bank does not fit). It changes what is seen in Desert Nightmare on ~40
+maps, arguably: Aguará's rounds kept a box's frame without its inside on
+map 21, and `picture_data` grows past 32 KB.
+
+**To decide**: (a) Aguará's rounds, dropping the costliest picture first,
+with taro looking at the 61 maps; (b) first
+[`an-inventory-of-the-pictures-that-may-be-windows`](an-inventory-of-the-pictures-that-may-be-windows.md)
+(todo), so the message box pictures become a window and the small marks
+fit; (c) leave it.
+
+**Recommendation**: (b) first, then (a) only for what still does not fit;
+link this draft as blocked by that inventory.

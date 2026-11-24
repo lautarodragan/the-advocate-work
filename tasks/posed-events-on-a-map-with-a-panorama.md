@@ -3,6 +3,7 @@ name: "Still events into the background on a map with a panorama"
 description: "posed_events skips every map whose panorama is seen —baked, mode 3, flattened, mode 1—; in A Blurred Line that alone keeps 62 candidate events on 13 maps objects, Linkage Block's fading screens among them"
 type: feature
 status: draft
+assignee: taro
 author: cardon
 agents: [Cardón]
 links:
@@ -66,3 +67,26 @@ has to land before any panorama map is let in.
 
 And in A Blurred Line none of it can go in until `release` has room:
 see the task above.
+
+## Log
+
+### 2026-11-24, Cardón: a question for taro
+
+**What to decide**: whether to let still events go into the background on
+maps with a panorama —62 events on 13 of ABL's maps, measured—, which
+costs background tiles in a `release` that, per
+[`abl-still-events-painted-into-the-background`](abl-still-events-painted-into-the-background.md),
+has no room for them yet, and work in Wally's ways (the extension
+converted in mode 3/1/flattened, baked's non-opaque cells, mode 1's 4-bit
+palettes, a path no test runs). taro asked whether it could be done; this
+answers it. Route transparency reaches the ROM since `67668cab`, and
+`in_place` (`rm2k-snes/events/src/pages.rs:857`) does not count 40/41, so
+Linkage Block's fading screens stay objects as the draft asks.
+
+**Options**: (a) `todo` for flattened and mode 3 only (24 events on 7
+maps), leaving baked and mode 1 out; (b) all four ways; (c) `wishlist`
+until a game's crowded lines need it.
+
+**Recommendation**: (c): it is what the crowded-lines and slot drafts
+would reach for, so it is worth doing when one of them asks for it, with
+(a)'s scope.

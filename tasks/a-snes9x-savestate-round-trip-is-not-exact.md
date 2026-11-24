@@ -2,9 +2,9 @@
 name: "A snes9x savestate round trip is not exact"
 description: "Serializing and unserializing at once, with no frame in between, leaves snes9x a few bytes of WRAM apart from never having done it, some hundred frames later: anything that restores a savestate mid-play goes another way"
 type: bug
-status: draft
+status: cancelled
 author: chaja
-agents: [Chajá]
+agents: [Chajá, cardon]
 links:
   found-in: [how-much-of-a-test-is-the-emulator-drawing]
 ---
@@ -33,3 +33,16 @@ savestate, and any harness shortcut that restores a state in the middle
 of a play —a boot reused from a savestate taken after its frames—. It
 also means a test that saves and loads a state would not be checking the
 same run the suite plays.
+
+## Log
+
+### 2026-11-24, Cardón: cancelled
+
+Not ours to fix —it is snes9x's—, and what it ruled out was acted on:
+the-advocate `96cec117` ("Harness: frames nobody looks at go undrawn, and
+a ROM's power-on is kept") keeps only the savestate taken right after the
+load, before any frame, which is exact, and says in its message that
+replaying from a mid-play savestate was measured and dropped;
+`test_retro.py` plays the same input fresh and from the kept power-on and
+asks for the same screens, WRAM and audio. The finding also stays in
+[`how-much-of-a-test-is-the-emulator-drawing`](how-much-of-a-test-is-the-emulator-drawing.md).

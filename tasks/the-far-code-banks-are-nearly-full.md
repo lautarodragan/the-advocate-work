@@ -2,8 +2,9 @@
 name: "The far code banks are nearly full"
 description: "Sunset over Imdahl's FAR2 ($C0) and Zounds' FAR3 ($C1) have about a hundred bytes left: the next feature of a few hundred bytes in either stops that game's link"
 type: chore
-status: draft
+status: cancelled
 author: tijereta
+agents: [cardon]
 links:
   found-in: [debug-switches-for-the-global-state]
 ---
@@ -30,3 +31,12 @@ What it would take: room for the next feature —more code banks the
 packing does not fill (a fifth code segment in a half bank taken from the
 data, which `rm2k-snes-cartridge` lays out), or moving what only one game
 needs out of the shared ones—. Not measured.
+
+## Log
+
+### 2026-11-24, Cardón: cancelled
+
+What it asked for came: the-advocate `8b2e7b2a` (2026-11-20, "A fifth code
+bank, FAR4, in the low half of $FF") gave every game a fifth code segment for
+the same reason; its message measures FAR2 and FAR3 as tight then. How much
+is left is `just space`'s to say, not a task's.

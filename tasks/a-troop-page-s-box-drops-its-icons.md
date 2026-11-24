@@ -2,10 +2,9 @@
 name: "A troop page's box drops its icons"
 description: "A box a troop page shows draws no ExFont icon, as it draws no Latin-1 letter: the battle composes it with the text screens' glyphs, and the event compiler writes it without letters"
 type: feature
-status: draft
-assignee: null
+status: todo
 author: huron
-agents: [Hurón]
+agents: [Hurón, cardon]
 links:
   found-in: [rm2k-s-exfont-icons-in-names-and-texts]
 ---
@@ -35,3 +34,17 @@ text screens carry any.
 
 To reproduce: build Zounds' release and grep its `degradations.json` for
 `"the icon` with `"troop"`.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+Still so at `8b069fc2`: the troops' window carries no letter (`Window`'s
+doc and `carrying(&[])` in `rm2k-snes/events/src/messages.rs`), while the
+text screens carry the database's icons from `ICON_GLYPH_FIRST`
+(`rm2k-snes/screens/src/items.rs`). An icon RM2k draws is dropped: towards
+RM2k with nothing to choose. What makes it awkward —the compiler runs
+before the screens decide the list— is easier once the stages are
+functions in one process
+([`the-stages-speak-json-nobody-types`](the-stages-speak-json-nobody-types.md)),
+so it relates to it.

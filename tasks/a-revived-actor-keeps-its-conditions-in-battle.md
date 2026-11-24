@@ -2,7 +2,8 @@
 name: "A revived actor keeps its conditions in battle"
 description: "An actor that falls in battle keeps its places until the battle ends, where the death's purge runs; raised in the same battle by a Phoenix Down it gets up still poisoned, where RM2k's death had already taken the poison"
 type: bug
-status: draft
+status: todo
+agents: [cardon]
 author: mulita
 links:
   found-in: [a-medicine-does-not-cure-a-condition]
@@ -31,3 +32,15 @@ battle: it should stand with no condition.
 **Where it would go**: the purge `ba_st_add` runs after a condition is
 given, at the revival in `ba_item_use` —or, closer to RM2k, when an actor's
 HP reach zero—. FAR2 has little room in Sunset over Imdahl: `just space`.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+Still so by reading at `8b069fc2`: `act_st_battle_end`
+(`runtime/party_states.s` line 502) purges the party at the battle's end,
+and `ba_item_use`'s `fallen` path (`runtime/battle_items.s`, `MED_RAISES`)
+revives without a purge; `27727355` (cure lists) did not touch it. RM2k's
+`State::Add(kDeathID)` purges at the fall. Towards RM2k with nothing to
+choose; reproducing it is the first step (the draft's steps). It is in
+ABL's Known issues. Watch FAR2 in Sunset over Imdahl with `just space`.

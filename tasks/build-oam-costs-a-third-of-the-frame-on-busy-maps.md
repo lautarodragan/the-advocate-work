@@ -2,7 +2,8 @@
 name: "build_oam costs a third of the frame on busy maps"
 description: "With some thirty events on screen —ABL's map 11, the cones of light— building the OAM takes 83-93 of the frame's 262 lines, and whatever else the map does lands on a frame with ~60 lines spare"
 type: refactor
-status: draft
+status: todo
+agents: [cardon]
 author: aguara
 links:
   found-in: [abl-lazer-teeth-s-rock-lags]
@@ -25,3 +26,16 @@ what each visible row costs was not measured inside.
 a routine that reads `OPVCT` and adds the lines to a bucket, around each
 `jsr` of the main loop. `tests/abl/test_stones.py`'s
 `frames_lost_throwing(p, (15, 48), "up")` is the scene.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+Measured with a line profiler (83-93 of 262 lines on ABL's map 11), and no
+commit since 2026-11-17 touches `build_oam`'s walk (the log of `runtime/`
+for `build_oam` only shows the still-row looks, `02745f5a`, `b40e6f32`).
+It is the lag taro played in
+[`abl-lazer-teeth-s-rock-lags`](abl-lazer-teeth-s-rock-lags.md), done with
+this left over; making it cheaper changes nothing seen but frames not
+lost, towards RM2k. The task: measure a visible row's cost inside, then
+cut it.

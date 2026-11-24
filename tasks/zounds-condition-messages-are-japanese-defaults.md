@@ -2,8 +2,9 @@
 name: "Zounds: the conditions' battle messages are the editor's Japanese defaults"
 description: "Zounds' states carry RPG Maker 2003's untranslated Japanese messages, read as Windows-1252, and the battle's text block writes them as garbage: the revival line, and what a condition says when it is given, lasts, goes or is already held"
 type: bug
-status: draft
+status: todo
 author: aguara
+agents: [cardon]
 links:
   found-in: [items-that-give-a-condition-in-battle-only-hurt, zounds-skill-names-show-a-question-mark-for-an-accent]
   relates: [zounds-battle-messages-cannot-be-read]
@@ -50,3 +51,13 @@ Shark 6 HP perdidos." is `Pez Shark'I"A'E-~3'e'1/2?I`. So the console does
 put a condition's "given" message on the screen. Whether RPG Maker 2003's
 battle shows it at all is still the first thing to measure. Added to
 Zounds' "Known issues" in the book.
+
+### 2026-11-24, Cardón: to todo
+
+Seen on screen by Hurón (the poison's line as garbage), and it is
+[`zounds-battle-messages-cannot-be-read`](zounds-battle-messages-cannot-be-read.md)
+for the states: that one's fix —a 2003 database's unshown texts from
+`[battle.terms]` or English stand-ins, `UNSHOWN_IN_2003` in
+`rm2k-snes/mapdata/src/emit.rs`— is the pattern. First what the draft
+says: whether RPG Maker 2003's battle shows a state's messages (easyrpg's
+2k3 battle); shown or not, garbage goes.

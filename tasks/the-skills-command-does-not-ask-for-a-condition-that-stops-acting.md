@@ -2,8 +2,9 @@
 name: "The skills command does not ask for a condition that stops acting"
 description: "The pause menu's Skills refuses only an actor at 0 HP; RM2k's CanAct also refuses one holding a condition whose restriction is 'does nothing', which the party can hold on the map since 2026-11-01"
 type: bug
-status: draft
+status: todo
 author: chaja
+agents: [cardon]
 links:
   found-in: [items-that-cast-a-skill-outside-battle]
   relates: [the-partys-conditions]
@@ -28,3 +29,14 @@ To reproduce: an actor with a condition that does nothing and lasts past a
 battle, on the map —or given by an event's `ChangeCondition`—, and Skills
 on it from the pause menu: RM2k sounds the buzzer, the console opens the
 list.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+Still so at `8b069fc2`: `runtime/menu_list.s` lines 977-979 ask Skills for
+someone who can act and read only the HP ("Outside battle this port keeps
+no states"), while `ic_can_act` in `runtime/item_skills.s` (line 146)
+already asks `Game_Battler::CanAct` with the conditions. A bug against
+RM2k with the fix in the tree: the menu asks `ic_can_act`. Read, not run:
+the task's first step is the case that shows the buzzer.

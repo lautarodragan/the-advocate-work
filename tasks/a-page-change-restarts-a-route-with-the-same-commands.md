@@ -2,9 +2,9 @@
 name: "A page change restarts a route with the same commands"
 description: "When an event changes page and both pages' own routes have the same length and command codes, RM2k keeps the route's place; the ROM starts it over from the first command"
 type: bug
-status: draft
+status: todo
 author: calandria
-agents: [Calandria]
+agents: [Calandria, cardon]
 links:
   found-in: [abl-the-chase-follows-the-row-talan-is-on]
 ---
@@ -35,3 +35,14 @@ the walk over. Not looked at in the game.
 
 To find others: the pages of one event with `move_type` custom and the
 same list of `command_id`s in `move_route`.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+Still so at `8b069fc2`: `apply_pages` (`runtime/event_pages.s` line 391)
+loads the new page's route from the start through `load_page_into_slot`
+whatever the routes. easyrpg's `Game_Event::RefreshPage` keeps the index
+when both routes have the same length and command codes, and says RPG_RT
+does it. A bug against RM2k with nothing to choose; ABL's map 37 event 18
+is the one case found.

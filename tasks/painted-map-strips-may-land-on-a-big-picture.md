@@ -2,7 +2,8 @@
 name: "A painted map's columns may go up over a big picture's tiles"
 description: "paint_flush uploads a painted map's new columns and rows in every vblank, also with a big picture up, whose tiles share VRAM with the painting's slots; the map's own strips are dropped then. Suspected by reading, not reproduced"
 type: bug
-status: draft
+status: cancelled
+agents: [cardon]
 author: mulita
 links:
   found-in: [desert-nightmare-the-menu-s-face-is-lost-on-painted-maps]
@@ -33,3 +34,15 @@ with a column or a row of cells of the painting in it, until it is erased
 (erasing reloads the map, and `paint_load` rebuilds every slot). The fix
 that suggests itself: `paint_flush` drops its queue while `BIG_ON` is set;
 `paint_load` on the way back starts over from the camera.
+
+## Log
+
+### 2026-11-24, Cardón: cancelled
+
+The path it suspects does not exist: `paint_flush`
+(`runtime/vblank.s:142`) is inside `map_up`, which the `BIG_ON` question
+at lines 25-29 skips with `jmp big_up` (line 245) whenever a big picture
+is up; it has been so since `40cbad47` (2026-10-11), before this draft.
+The only other upload, `paint_flush_queue` at `painted.s:1359`, is
+`paint_load`'s, in a forced blank. What `paint_tick` queues meanwhile is
+redone by `paint_load` when the picture is erased, as the draft says.

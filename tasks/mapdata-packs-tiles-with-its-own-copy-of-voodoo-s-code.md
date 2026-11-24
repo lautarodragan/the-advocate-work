@@ -2,7 +2,8 @@
 name: "mapdata packs tiles with its own copy of Voodoo's code"
 description: "mapdata's snes.rs repeats Voodoo's pack_tile and cgram_word, and emit.rs has a third tile packer, pack4, for a flat cell: one tile packer for the workspace would do"
 type: refactor
-status: draft
+status: todo
+agents: [cardon]
 author: calandria
 links:
   found-in: [where-mapdata-and-convert-could-be-shorter]
@@ -42,3 +43,16 @@ cover them. It adds a dependency to mapdata, which costs a crate's compile.
 **How to verify**: every port's ROM byte for byte equal before and after
 (`NO_CACHE=1 just cartridges`, `cmp`); `just crate-test rm2k-snes-mapdata
 voodoo`.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+Code debt with the shape already said and a byte-for-byte check: still so
+at the-advocate `8b069fc2` —`pack_tile` and `cgram_word` in
+`rm2k-snes/mapdata/src/snes.rs` (lines 18 and 34), `pack4` now at
+`emit.rs:1898`—. A dependency on `voodoo` is a layer below, allowed by
+`tests/test_layers.py`, and costs one crate's compile, which `sccache`
+shares. Better after the emission's rewrite in
+[`the-stages-speak-json-nobody-types`](the-stages-speak-json-nobody-types.md)
+lands, to not collide in `emit.rs`.

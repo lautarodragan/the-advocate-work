@@ -2,8 +2,9 @@
 name: "The converter's command line is clap's builder, read back by hand"
 description: "rm2k-snes-convert declares its 23 flags with clap's builder API and copies each into Options with get_one/get_flag; the derive API, which mapdata already uses, declares and reads them in one place"
 type: refactor
-status: draft
+status: cancelled
 author: calandria
+agents: [cardon]
 links:
   found-in: [where-mapdata-and-convert-could-be-shorter]
 ---
@@ -47,3 +48,12 @@ their defaults and the errors stay.
 every port's `just cartridges` building the same ROMs (`cmp`), since every
 cartridge's flags go through it; `--case` without `--test-commands` and a
 cartridge flag after `--case` still refused.
+
+## Log
+
+### 2026-11-24, Cardón: cancelled
+
+Made moot by [`one-advocate-command`](one-advocate-command.md): the converter
+becomes a library that `advocate build` calls, so `Options` is built by the
+caller and the builder, `parse` and the copy-out go with the command line.
+Whatever command line `advocate` keeps is written then, with the derive API.

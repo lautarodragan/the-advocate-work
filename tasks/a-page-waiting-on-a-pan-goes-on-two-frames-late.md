@@ -3,6 +3,7 @@ name: "A page waiting on a pan goes on two frames late"
 description: "After a PanScreen with a wait, the console runs the next command two ticks after the camera's last move; easyrpg's reading says the same frame. One or two frames, and not checked against RPG_RT"
 type: bug
 status: draft
+agents: [cardon]
 author: tijereta
 links:
   found-in: [two-pans-without-wait-move-one-after-the-other]
@@ -32,3 +33,14 @@ last move, not two after.
 say it, counting frames between a pan's end and a tint— and whether the
 two frames come from `ev_waiting`'s countdown or from where `pan_tick`
 sits in the main loop (`runtime/boot.s`, after the interpreter).
+
+## Log
+
+### 2026-11-24, Cardón: stays a draft
+
+Not verified against RPG_RT, and the two readings disagree (the ROM: two
+ticks after the last move; easyrpg's reading: the same frame, with the pan
+starting a frame later). Cheap to verify: the original under Wine
+(`~/wine/abl/LEEME.txt`), a waiting `PanScreen` followed by a
+`TintScreen`, counting frames between the camera's last move and the tint;
+then it is a todo towards whatever RPG_RT does.

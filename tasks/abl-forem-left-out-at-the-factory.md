@@ -3,10 +3,13 @@ name: "ABL: Forem left out at the factory"
 description: "Map 83 leaves out Forem, event 13, whom a route dresses, because with him the rain's colours are lent: the converter says so, as it said of Northern Surl Camp's Paradise and Emily"
 type: bug
 status: draft
+assignee: taro
+agents: [cardon]
 author: tijereta
 links:
   found-in: [abl-paradise-and-emily-left-out-at-the-northern-surl-camp]
   relates: [abl-the-factory-pump-s-light-is-grey, characters-a-route-dresses-left-out-where-they-cost-the-map]
+  duplicated-by: [abl-the-factory-pump-s-light-is-grey]
 ---
 
 Seen by Tijereta on 2026-11-22, grooming
@@ -32,3 +35,21 @@ plays the scene that places him.
 
 says "events 13 draw nothing on any page and a route dresses them, and
 they aren't drawn: with them the map loses rain-colors-lent".
+
+## Log
+
+### 2026-11-24, Cardón: a question for taro
+
+On map 83 one of three things has to go, and that is the game's own
+choice: today Forem (event 13), whom a scene places there, is left out so
+the rain keeps its colours (the converter says so in `converter.log`, ABL
+release at ports `89f77b4`); from 2026-10-20 he was drawn and the pump's
+light lost its red
+([`abl-the-factory-pump-s-light-is-grey`](abl-the-factory-pump-s-light-is-grey.md),
+closed as the other side of this).
+
+**To decide**: (a) Forem out, as now; (b) Forem in, paying with the pump's
+red, as from 2026-10-20 to whenever it went back; (c) Forem in, paying
+with the rain's colours. **Recommendation**: (b): a character missing from
+a scene loses more than a grey light; looked at on screen before choosing.
+Both of ABL's Known issues lines about map 83 become one.

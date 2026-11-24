@@ -4,6 +4,7 @@ description: "`just boot` failed once on zounds with 'snes9x and bsnes arrive di
 type: bug
 status: draft
 author: carpintero
+agents: [cardon]
 ---
 
 Seen by Carpintero on 2026-10-17, with the-advocate `c116cd7b` (branch
@@ -29,3 +30,13 @@ colours of characters drawn with someone else's palette.
 **How to reproduce it**: not reproduced. `just boot -k zounds` in a loop,
 counting reds, would say how often; with main's tools, whether it is older
 than the branch.
+
+## Log
+
+### 2026-11-24, Cardón: stays a draft
+
+Not reproduced, and not seen since 2026-10-17 as far as the tasks say.
+Cheap to verify once the CPU is free: `just boot -k zounds` twenty times
+with main's tools, counting reds; red again means the cores differ (bsnes'
+WRAM garbage, `test_cores.py`'s kind) and it goes to `todo`; twenty
+greens, cancelled.
