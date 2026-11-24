@@ -226,3 +226,28 @@ version 14, in 2020; the `toggle` event and `:scope`, older.
 
 Found and not fixed:
 [a placeholder in angle brackets vanishes from the page](a-placeholder-in-angle-brackets-vanishes-from-the-page.md).
+
+### 2026-11-24, Hornero: the search highlights its matches
+
+> The browser's native search is not important for the tasks, but the
+> question made me think of something: the native search highlights the
+> results, ours does not. It is a small feature I like. What I do not
+> love is having to add spans, etc. I would love to try the Highlight
+> API. Could the search's matches be highlighted with the highlight API?
+
+(taro, 2026-11-24)
+
+Done in `site/index.html` with the CSS Custom Highlight API: a
+`Highlight` registered as `search`, one `StaticRange` per match over the
+shown tasks' text —summaries and opened bodies—, and a body painted when
+it opens; `::highlight(search)` paints it, with a colour for each theme.
+No element is added to the text. Without the API the search filters as
+before.
+
+The ranges are `StaticRange`s on purpose: with `Range`s, which are live,
+a search's thousands stayed in the browser's books until collected, and
+the filters' next pass went from 18 ms to 1.5 s at 4x CPU. Measured in
+headless Chromium, all 893 tasks shown, 4x CPU: painting `the` (4,385
+matches) costs ~60 ms, a one-letter search (22,376) ~100 ms; a search's
+filter pass with painting, 25 ms against 18 ms without. Not tried in
+Safari: the API is there since 17.2.

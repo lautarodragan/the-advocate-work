@@ -23,12 +23,14 @@
     --bg: #fdfcfa; --fg: #1d1d1f; --muted: #6b6b70; --line: #e4e2dd;
     --card: #ffffff; --accent: #2f6f4f; --code: #f2f0eb;
     --quote-bar: #b9cfc2; --quote-bg: #f4f7f4; --log-bg: #f5f5f7;
+    --mark: #f6dd7a;
   }
   @media (prefers-color-scheme: dark) {
     :root {
       --bg: #161618; --fg: #e8e6e3; --muted: #9a9aa0; --line: #2c2c30;
       --card: #1e1e21; --accent: #7cc49f; --code: #26262a;
       --quote-bar: #3d5a4b; --quote-bg: #1b2320; --log-bg: #19191c;
+      --mark: #6b5a17;
     }
   }
   * { box-sizing: border-box; }
@@ -51,6 +53,8 @@
   }
   .filters .count { opacity: .7; margin-left: .3rem; }
   .filters button.empty { opacity: .45; }
+  /* The search's matches (the script's `marks`). */
+  ::highlight(search) { background-color: var(--mark); color: var(--fg); }
   #search {
     width: 100%; font: inherit; padding: .5rem .75rem; margin-bottom: 1.5rem;
     border: 1px solid var(--line); border-radius: .5rem;
@@ -287,6 +291,39 @@
     game === 'all' ? url.searchParams.delete('game') : url.searchParams.set('game', game);
     author === 'all' ? url.searchParams.delete('author') : url.searchParams.set('author', author);
     history.replaceState(null, '', url);
+    highlight();
+  }
+
+  // The search's matches, painted with the CSS Custom Highlight API: a
+  // range per match, and no element added to the text. Only what can be
+  // seen is looked at —the shown tasks' summaries and the bodies already
+  // opened; an unopened body is a script's text—, and a body is painted
+  // when it opens. Without the API the search still filters.
+  const marks = window.CSS?.highlights && window.Highlight ? new Highlight() : null;
+  if (marks) CSS.highlights.set('search', marks);
+  const query = () => search.value.trim().toLowerCase();
+  function paint(el, q) {
+    const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, {
+      acceptNode: n => n.parentNode.nodeName === 'SCRIPT' ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT,
+    });
+    for (let n; (n = w.nextNode());) {
+      // Lowercasing can change a text's length (İ); a match past the
+      // node's end is skipped rather than thrown.
+      const s = n.data.toLowerCase();
+      for (let i = s.indexOf(q); i !== -1 && i + q.length <= n.length; i = s.indexOf(q, i + q.length)) {
+        // A StaticRange, not a Range: a Range is live, and the browser
+        // updates every one still alive —painted or waiting for the
+        // collector— on each change to the page; with a search's thousands,
+        // the filters' next pass went from 18 ms to 1.5 s with the CPU at 4x.
+        marks.add(new StaticRange({startContainer: n, startOffset: i, endContainer: n, endOffset: i + q.length}));
+      }
+    }
+  }
+  function highlight() {
+    if (!marks || !tasks) return;
+    marks.clear();
+    const q = query();
+    if (q) for (const t of tasks) if (!t.el.hidden) paint(t.el, q);
   }
 
   // A task's body comes as the text of a script the browser does not run
@@ -300,6 +337,7 @@
     d.className = 'body';
     d.innerHTML = b.textContent;
     b.replaceWith(d);
+    if (marks && query()) paint(d, query());
   }, true);
   // What the search looks in: the task as it reads, its body too. An
   // unopened body is HTML in a string, so its tags and comments go and its
