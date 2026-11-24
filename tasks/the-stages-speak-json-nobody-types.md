@@ -4,7 +4,7 @@ description: "Each stage builds its answer with json! and whoever reads it walks
 type: refactor
 status: doing
 assignee: calandria
-agents: [calandria, aguara, cardon, carpintero, chaja]
+agents: [calandria, aguara, cardon, carpintero, chaja, mulita, tijereta]
 author: taro
 links:
   found: [the-event-compiler-s-left-out-warning-never-reaches-the-log, fxpak-s-pty-tests-share-ptsname-s-buffer]
@@ -851,3 +851,7 @@ suites did not.
 
 **Install when merging**: `convert` and `screens` (`just install convert
 screens`).
+
+### 2026-11-24, Hornero: A1-A4 merged and verified together; A6-A8 to three agents
+
+the-advocate `8b069fc2`, with `convert wally events images screens` installed: `just lint` clean, `just test` ok, `rust-test` 1242 passed 0 failed, test game 231 passed 6 skipped, `boot` 218 passed, ABL 1694 passed 2 skipped; the nine games' release ROMs byte for byte the ones in the last delivery. A6 (mapdata) to Calandria, A7 (audio) to Mulita, A8 (patches) to Tijereta.
