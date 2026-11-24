@@ -2,7 +2,7 @@
 name: "Where mapdata and convert could be shorter"
 description: "A read-only look at the two biggest crates of the converter —some 11,500 lines of code each— for code that is longer than what it does: repeated shapes, hand-written tables, layers that only pass things on. Each finding becomes a draft with its estimated saving"
 type: research
-status: testing
+status: done
 author: taro
 assignee: taro
 agents: [Calandria]
@@ -129,3 +129,7 @@ the battle answer the same way—, so it is the larger piece of work and the
 one with the most to gain besides lines.
 
 Nothing to install when merging: no code was changed.
+
+### 2026-11-24, Hornero: done
+
+Closed by taro, from `testing`.

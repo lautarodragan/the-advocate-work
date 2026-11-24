@@ -2,7 +2,7 @@
 name: "Lashe City's transitions lag"
 description: "Going from one sector of Lashe City to another, or into and out of a house, costs many frames of lag; measure where they go —the audio package, the map's tiles, events, graphics— before choosing what to fix"
 type: bug
-status: testing
+status: done
 author: taro
 assignee: taro
 agents: [Hornero, Chajá, Cardón]
@@ -353,3 +353,7 @@ with the houses on map 10 and the Lazer Teeth HQ on 11): go through a few
 doors between the two sectors, and into and out of the HQ, with the `.msu`
 and without it. What can be seen is how long the screen stays black. It
 should be shorter with the `.msu`, and longest leaving the HQ.
+
+### 2026-11-24, Hornero: done
+
+Closed by taro, from `testing`.

@@ -2,7 +2,7 @@
 name: "Desert Nightmare: the intro's menu, the intro, and the file screen"
 description: "The start menu's options move with the arrows but nothing shows which is chosen; the intro has broken letters over its first message and goes black; the file screen's cursor is a few brown bits"
 type: bug
-status: testing
+status: done
 assignee: taro
 author: taro
 game: desert-nightmare
@@ -210,3 +210,7 @@ original under Wine from Aguará's captures
   the first message has no broken letters over it. The messages still go
   without the game's text box: the Known issue "Most messages have no
   box".
+
+### 2026-11-24, Hornero: done
+
+Closed by taro, from `testing`.

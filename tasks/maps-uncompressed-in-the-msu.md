@@ -2,7 +2,7 @@
 name: "Maps uncompressed in the .msu"
 description: "Could each map's streams be stored compressed or not, per map, in the ROM and in the .msu? With MSU-1 a map uncompressed in the .msu goes up by DMA instead of through LZ2: faster loads without committing ROM"
 type: research
-status: testing
+status: done
 author: taro
 assignee: taro
 agents: [Hornero, Chajá, Carpintero]
@@ -638,3 +638,7 @@ sha1 `3b4378fe2e9c79d214e7bf90aee95e367d659fe0`, `abl.sfc.dbg`,
 
 Nothing to install. `main` was not merged into them, so they stay the
 commits the build came from.
+
+### 2026-11-24, Hornero: done
+
+Closed by taro, from `testing`.
