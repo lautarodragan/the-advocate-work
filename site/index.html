@@ -258,7 +258,7 @@
   // it changes.
   let last = null, visible = [];
   function apply() {
-    const q = search.value.trim().toLowerCase();
+    const q = query();
     const was = last;
     last = {q, status, type, game, author};
     const narrowing = was && was.q && q.startsWith(was.q) && was.status === status
@@ -317,7 +317,9 @@
   // when it opens. Without the API the search still filters.
   const marks = window.CSS?.highlights && window.Highlight ? new Highlight() : null;
   if (marks) CSS.highlights.set('search', marks);
-  const query = () => search.value.trim().toLowerCase();
+  // The search, once it has three characters: fewer match nearly every
+  // task and would only cost a pass and thousands of marks.
+  const query = () => { const q = search.value.trim().toLowerCase(); return q.length < 3 ? '' : q; };
   // Each shown task's matches, as [text node, offset, the node's text in
   // lowercase], kept for the next search: when it only grows, every new
   // match starts where an old one did, so the old ones are checked and the

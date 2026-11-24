@@ -278,3 +278,15 @@ and the same counts at all 21 steps. Per key at 4x CPU: the first letter
 140-250 ms (it reads each task's text the first time, as before), then
 `converter` 18, 8, 20, 6, 6, 9, 8, 6 ms; before this, a key with all 893
 tasks shown took 60-75 ms.
+
+### 2026-11-24, Hornero: the search starts at three characters
+
+> Ah, and not filter if the text has fewer than 3 characters?
+
+(taro, 2026-11-24)
+
+Done: `query()` gives nothing below three characters, so one or two
+neither filter nor paint, and the third is the first full pass. The same
+key-by-key check against a fresh page: no difference at any step; per
+key at 4x CPU, `converter` 2, 3, 336 (the first read of every task's
+text, which moved to the third key), then 12, 8, 10, 9, 9, 7 ms.
