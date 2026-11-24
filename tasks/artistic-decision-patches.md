@@ -190,6 +190,43 @@ tells apart two battlers with the same drawing.
   non-lossy kind. What would be missing to emit is which graphic was treated that way in each
   map, which is little more than repeating the list.
 
+## Phase 2 against a decision that depends on use
+
+A decision is only as editable as its key is true. The colours merged in a
+map's layers are keyed by the map and its ChipSet, and nothing else moves
+them: a file per map can be the source. But most of what is lost depends on
+**how the asset is used**, not on the asset alone: how a ChipSet or a
+CharSet is reduced depends on which maps use it, which poses are seen and
+what it shares a palette with; each sample's quality, on every track, the
+SoundFont and each map's packages —why
+[`audio-in-two-lossy-steps`](audio-in-two-lossy-steps.md) left voices and
+samples out of phase 1—. A reduced intermediate per asset, made the
+source, freezes a decision that is really a function of its use: when the
+use changes, the edit goes stale or invalid, and nothing says so.
+
+> My original plan ignored optimization details anyway, like a ChipSet or
+> CharSet having to be reduced according to how it is used and not only
+> as an isolated element... so maybe that plan loses its sense.
+
+(taro, 2026-11-24)
+
+So phase 2 is to be rethought before it starts:
+
+* **Phase 1 still holds whole**: reflecting the decisions so that the diff
+  warns does not depend on how they are made.
+* **"The intermediate is the source" holds only where the decision belongs
+  to one asset**, like the map's merged colours.
+* **For what depends on use, constraints instead of snapshots**: what is
+  versioned is "this colour survives", "this voice goes first", "this
+  animation at this size", and the converter keeps optimizing over the
+  real use while honouring what is pinned. A partial desired state, which
+  is still terraform's shape.
+* **The plumbing helps**: with the stages' answers as Rust types
+  ([`the-stages-speak-json-nobody-types`](the-stages-speak-json-nobody-types.md)),
+  a patch is a decision serialized with serde instead of a TOML written
+  and read by hand; and phase 2's `plan`/`apply` fit as subcommands of
+  [`one-advocate-command`](one-advocate-command.md).
+
 ## Log
 
 ### 2026-10-16, Cardón: checked
@@ -231,3 +268,7 @@ since the check above:
   `92e18a22`, 2026-10-19). What is in `manual/` rules and no tool writes
   there: it is the "edited by hand" half of phase 2, but for whole files,
   not for the converter's decisions this task is about.
+
+### 2026-11-24, Hornero: phase 2 against a decision that depends on use
+
+Written above, at taro's request; nothing built.
