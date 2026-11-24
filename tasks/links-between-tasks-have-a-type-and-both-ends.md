@@ -2,7 +2,7 @@
 name: "Links between tasks have a type and both ends"
 description: "The 938 links between tasks are prose: nothing checks they resolve, and the other end does not show them. Typed relations in the frontmatter —blocks, part-of, duplicates, relates—, written on both ends and checked by `tasks.nu check`, shown on the page as a list before the log; and `check` catches broken links"
 type: feature
-status: testing
+status: done
 assignee: taro
 agents: [huron]
 author: taro
@@ -231,3 +231,8 @@ a duplicate of `playthrough-pending-goldens` and was closed as one; it is
 `relates` and could be `duplicates`. Left as it is: this pass was only
 `found-in`.
 
+### 2026-11-24, Hornero: done
+
+> It turned out spectacular!! We can move it to done.
+
+(taro, 2026-11-24, in their words, translated)
