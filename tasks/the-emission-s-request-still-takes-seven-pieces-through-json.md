@@ -2,7 +2,8 @@
 name: "The emission's request still takes seven pieces through JSON"
 description: "After MapInfo was typed, `emit::typed` —serde_json::from_value of a Value the converter built or a stage answered— still builds seven fields of the emission's and the battle model's requests, besides the battle's audio: the MSU-1 option, the window's other Systems, the faces, the battle terms, the shared common bodies, the big pictures' layers and the item names' width"
 type: refactor
-status: todo
+status: doing
+assignee: calandria
 author: calandria
 links:
   found-in: [mapinfo-carries-wally-s-answer-as-json-between-two-types]
