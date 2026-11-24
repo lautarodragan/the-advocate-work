@@ -620,6 +620,135 @@ the builds above.
 **Install when merging**: `convert` and `images` (`just install convert
 images`).
 
+### 2026-11-24, Cardón: A2
+
+On the-advocate `cardon-a2`, from `394e634a`, with main (`508b8c95`)
+merged; ports `cardon-a2` at `4c23c9e`, untouched. One commit, on the
+battle's model: `rm2k_snes_events::stage::{scan, compile}` answer
+`events.json` as the binary wrote it, the binary is a main over them, and
+`compiler.rs` calls both through `stage::call` with the same request and
+`--data` it ran the binary with. `read_request` splits the file from
+`Request::from_json`, which already existed; the library's `write` went to
+the binary. `culprits` stays a command, as it was.
+
+#### What was checked
+
+* **State**: the crate's only lazy state is `Game::windows`, a `OnceLock`
+  in the `Game` each call builds; no `thread_local!` or `static`.
+* **Key order**: the request's objects are read by `by_map` into
+  `BTreeMap`s, so nothing the compiler reads sees `preserve_order`. Its
+  answer does: `events.json` now keeps insertion order, and two files of
+  every `build/<cartridge>/` change bytes but parse equal,
+  `degradations.json` and `events-request.json` (the compile request carries
+  the scan's `common_pictures`). Deterministic: a second cold build gave
+  the same bytes.
+* **stderr**: the compiler's "map N: WARNING, event E is left out" now
+  reaches `converter.log`, after the converter's stdout: **672 lines in
+  Vampires Dawn, 224 events in 89 maps, each three times** (scan once,
+  compile twice; the design's 448 was compile alone), none in the other
+  eight. Only when the compiler runs: a build that finds its answer in the
+  cache prints none. The draft
+  [`the-event-compiler-s-left-out-warning-never-reaches-the-log`](the-event-compiler-s-left-out-warning-never-reaches-the-log.md)
+  stays a draft, rewritten with what is left.
+
+#### The builds, byte for byte
+
+`NO_CACHE=1 just cartridges --force` in the nine games (ABL
+`--without-tracks`), the global tools (`394e634a`) against these: **the 20
+`.sfc` equal**, and every file of every `build/` but the two JSON above,
+`stamp.txt`, the `.o`/`.dbg` (mtimes) and Vampires Dawn's `converter.log`.
+Then twice with a cache of its own (`CACHE=` a scratch directory): the
+first stored 2,703 stage answers and its builds equal the `NO_CACHE`
+ones; the second stored none, and its builds equal the first's but for
+the 672 warnings.
+
+#### The suites
+
+On the merged branch, with its `convert` and `events` first in the PATH:
+the-advocate's `just test` 29 passed; `just rust-test --no-fail-fast`
+1,240 passed, 0 failed, 3 ignored; the test game (`SOUNDFONT=FluidR3_GM.sf2
+just test-game`) 231 passed, 6 skipped; the ports' `just boot` 218 passed;
+ABL's `just tests` 1,694 passed, 2 skipped. No golden moved: the ports'
+worktree is clean. `just lint` green on the merged tree (main fixed the
+three known ones). The binary's `scan` and `compile` now go through the
+same `stage` functions; the crate's `command_line.rs` and the harness's
+`scan` calls (the-advocate's `game.py`, the ports' `games.py`) cover them.
+
+Then main moved to `dedf5252` (Chajá's A4) and merged cleanly, the
+`Cargo.toml` line included; on that tree only clippy, fmt and `just
+crate-test convert` (86 passed) were run, not the suites.
+
+**Install when merging**: `convert` and `events` (`just install convert
+events`). The task stays in `doing`.
+
+### 2026-11-24, Aguará: A1
+
+On the-advocate `aguara-a1`, from `394e634a`, main (`508b8c95`) merged;
+ports `4c23c9e`, untouched. Four commits: Wally's reach memos scoped to one
+map's conversion; Wally through `stage::call`; a `cargo fmt` of
+`events.rs` that main's `508b8c95` also made, identical; and the two
+sentences of Wally's README and crate doc that said it writes into a
+directory.
+
+#### What A1 is
+
+`wally::stage::map(dump, search_dirs, request)`, called from
+`maps.rs`' `run_requests` on the same sixteen threads, under `WALLY_MAP`
+and the same `--data`/`--search-dir` flags, built from the same absolute
+paths the closure gets. `layers::write` and `map::write` became
+`layers::files` and `map::files`; the PNGs go through a new
+`voodoo::image::encode`, which `voodoo::image::write` now calls. The
+binary keeps `layers`, `map`, `bakeable` and `split` as a `main` over
+`wally::stage`.
+
+#### State, stderr, key order
+
+* **The memos** (`layers.rs` `below` and `standing`): a `static`, keyed by
+  the dump, the map, the reach and the starts, never the ChipSet. In one
+  converter process a ChipSet variant of a map (same map, reach and
+  starts, other passability, through the request's `chipsets`) would get
+  the map's own cells, or the other way round, whichever thread went
+  first. Now per thread and emptied by `map::convert` on entry: what the
+  process gave. **Measured, the risk did not show**: a converter without
+  the reset built Frozen World and Vampires Dawn, the two games with
+  variants, byte for byte the same as with it. The reset stays: it costs
+  nothing, it is the process's behaviour, and it bounds what the memos
+  hold. Nothing else in Wally or what it links keeps state (ditto's
+  `thread_local!` is scoped).
+* **stderr**: Wally prints only `main`'s error; `converter.log` gains no
+  line (the 20 are byte for byte the same).
+* **Key order**: Wally iterates six request objects (`map_files`,
+  `chipset_files`, `dropped_events`, `walls`, `chipsets`,
+  `palette_weight`), each into a map keyed by number or name, so the
+  order does not matter. Its answers' keys now go in insertion order;
+  the converter reads them by key, and `maps.rs`' one `as_object()`
+  (`shared`) reads by key too.
+
+#### The builds
+
+`NO_CACHE=1 just cartridges --force` in the nine games (ABL
+`--without-tracks`), the global tools (`394e634a`) against these: **the 20
+`.sfc` equal**, and every file of every `build/`, the `converter.log`s
+included; set aside `stamp.txt` and the `.o`/`.dbg` (the sources' mtimes).
+Then twice warm: the first stored new answers (Wally's new key; the count
+is shared with three other agents building at once), the second **stored
+none**, and both are byte for byte the cold build's.
+
+#### The suites
+
+With these tools first, on the merged branch: `just test` 29 passed;
+`just rust-test --no-fail-fast` 1,240 passed, 0 failed, 3 ignored; the
+test game 231 passed, 6 skipped; the ports' `just boot` 218 passed; ABL's
+`just tests` 1,694 passed, 2 skipped. No golden moved. `cargo fmt --check`
+and `clippy --all-targets` clean on `wally`, `voodoo` and
+`rm2k-snes-convert`. No new test: the reset has none of its own, since the
+variants did not show the risk; the ABL tooling tests that call `wally
+bakeable` and `split` cover the binary over `wally::stage`.
+
+**Install when merging**: `convert` and `wally`, and whatever else links
+`voodoo` (`screens`, `images`) only to stay in step: `voodoo::image::write`
+writes the same bytes.
+
 ### 2026-11-24, Carpintero: A3, the screens
 
 On the-advocate `carpintero-a3`, from `394e634a`, with main (`dedf5252`,
