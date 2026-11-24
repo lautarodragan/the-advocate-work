@@ -7,7 +7,7 @@ assignee: calandria
 agents: [calandria, aguara, cardon, carpintero, chaja, mulita, tijereta]
 author: taro
 links:
-  found: [the-event-compiler-s-left-out-warning-never-reaches-the-log, fxpak-s-pty-tests-share-ptsname-s-buffer, the-msu-and-the-tracks-are-written-through-a-nuevo-file, the-patches-request-of-release-repeats-five-maps, the-stage-subcommands-only-the-converter-called-have-no-caller]
+  found: [the-event-compiler-s-left-out-warning-never-reaches-the-log, fxpak-s-pty-tests-share-ptsname-s-buffer, the-msu-and-the-tracks-are-written-through-a-nuevo-file, the-patches-request-of-release-repeats-five-maps, the-stage-subcommands-only-the-converter-called-have-no-caller, the-picture-key-is-declared-twice]
   relates: [artistic-decision-patches, battle-tests-without-simulate, tests-without-the-stages-subcommands]
   blocked-by: [emit-rs-writes-each-table-through-a-call-rustfmt-spreads-over-seven-lines, picture-tables-and-common-entries-write-the-same-entry-twice, rm2k-snes-mapdata-maps-has-no-caller, small-repeats-inside-emit-rs-s-rest, the-battle-terms-by-name-are-a-42-arm-match]
   blocks: [a-stage-s-cache-key-once-it-is-a-library, one-advocate-command]
@@ -1240,6 +1240,222 @@ changed), and the shared cache stores each stage's answers once more (the
 converter's binary changed), as any new converter does. Phase A is done;
 the task stays in `doing`, for phase B.
 
+### 2026-11-24, Aguará: B4, Wally's answer
+
+On the-advocate `aguara-b4`, from `cef2cdda`: `94f3312c`, the typing,
+and `ae968484`, Wally's README. Ports `aguara-b4` at `4c23c9e`,
+untouched.
+
+#### What B4 is
+
+**`wally::answer`**, a new module of Wally: `map.json` is an
+`answer::Map`, `layers.json` an `answer::Layers`, both `Serialize` and
+`Deserialize`, and `Answer::read(&Files)` reads the two back. `map::files`
+and `layers::files` build them where they built `json!`, and serde writes
+them. `sprites::npc::Npc`, `posed::Placed` and `map::SharedObjects` derive
+serde themselves —their fields were already their keys, in order, and
+they say so—; the rest are types of the answer, because what Wally keeps
+inside (bytes, pictures, `BTreeMap`s) is not what it answers. The three
+shapes that are no struct are untagged enums that write the same JSON as
+before: a slot by the one key it has (`{"hero": true}`, `{"event": 3}`,
+`{"charset": …, "index": …, "pose": …}`…), a merge with or without its
+palette first, a route graphic with or without its colours. `Note.kind`
+is an enum (`note`, `discard`, `stop`) inside Wally too.
+
+**The converter**: `maps::wally_answer` reads it, and `map_info` and
+`variants::drawn` work on fields. The background's runs and its colour
+words, which both built the same way, are `maps::runs` and
+`maps::words`. Gone: `maps.rs`' `truthy` and `slot_key` (the slots are
+counted as distinct `Slot`s, which is what the keys were for), and
+`variants.rs`' `fn int`. `maps.rs` keeps its `int`, for `pages`, which
+reads the compiler's records (B5).
+
+**What stays a `Value`**: `MapInfo`'s fields that carry Wally's answer on
+to the emission —`objects`, `npcs`, `movable`, `animates_*`,
+`posed_table`, `panorama`, `runs`, the merges, `panorama_way`— are built
+from the types with `json!` and keep their type, because B1 (Calandria,
+beside this) reads them into mapdata's typed request with `typed(&Value)`.
+They become Wally's types when the emission's request takes them; one
+reader of them by hand is left outside `maps.rs`: `convert.rs`' flashes
+(`m.npcs.as_array()`, about 1383).
+
+#### State, stderr, key order
+
+* **Key order**: the fields are declared in the order `json!` wrote them,
+  and `answer.rs` says why it matters —the converter's serde_json keeps
+  it, and the emission gets these parts as JSON—. In the converter the
+  answer's bytes are the same as before (`json!` there already kept the
+  insertion order). `wally map` and `wally layers` write field order
+  where they wrote sorted keys: nothing calls the first (the
+  [draft](the-stage-subcommands-only-the-converter-called-have-no-caller.md)),
+  and the second is a person's.
+* **The cache** still keeps the stage's files, packed: `map.json` and
+  `layers.json` are bytes among them. A typed answer stored as base64
+  JSON was not needed for Wally —most of its answer is binaries (tiles,
+  blocks, PNGs), which the pack already holds as they are—; that is
+  for whichever step types `stage::call` itself.
+* **Defaults that carried an absence**: none showed. The only one that
+  changed meaning is a map with no objects (`sprite: null`), which used to
+  stop at "wally did not write " and now stops at "wally answered no
+  objects"; no map of the nine has one.
+* **No new state, no new stderr**: nothing in Wally runs differently.
+
+#### The builds
+
+`NO_CACHE=1 just cartridges --force` in the nine games (ABL
+`--without-tracks`), the global tools (`cef2cdda`) against `convert` and
+`wally` from this branch: **the 20 `.sfc` equal**, and every file of the
+nine `build/` (19,469), the 20 `converter.log` included. Aside, as in
+A1-A9: `stamp.txt`, and the `.o`/`.dbg`, the runtime's mtimes from
+another checkout (a `.dbg` compared without them is equal). So no JSON
+on disk moved: the parts of the answer the emission gets come out of the
+types in the order they came out of `json!`.
+
+Then twice with the shared cache: the first stored 4,642 stage answers
+(with three other agents building at once; every stage's, since the
+converter's binary changed), and equals the uncached build; the second
+stored **none**, 92 s for the nine, and equals it but for Vampires Dawn's
+`converter.log`, the 672 lines of "is left out" a cached compile does not
+print (Cardón's A2, as in A9).
+
+#### The tests
+
+`wally::answer`'s two, which pin the JSON of the untagged shapes and of a
+note with and without its loss, and read them back. Wally's
+`tests/halves.rs` caught a doc line of mine on `Npc` that linked
+`crate::answer` from the sprites half (`18aed7f1`).
+
+#### Lines
+
+`94f3312c`: the converter **-138** (242 in, 380 out: `maps.rs` -106,
+`variants.rs` -32), inside the table's -100 to -200. Wally **+457**:
+`answer.rs` is 455 lines, 76 of them its tests and the rest the types,
+their derives and their docs; `map.rs` and `layers.rs` build the types in about the
+lines `json!` took. The whole step is **+320**, with `Cargo.lock`'s
+line: the draft's estimate was the converter's, "less what the types
+cost on Wally's side", and that cost is larger than the saving. What it buys is the point of the task:
+the converter reads no key of Wally's by name.
+
+#### The suites
+
+With `convert` and `wally` from this branch first in the PATH (main had
+not moved): `just lint` clean; the-advocate's `just test` 29 passed;
+`just rust-test --no-fail-fast` 1,247 passed, 1 failed, 3 ignored —the
+failure was `tests/halves.rs` and its fix above, after which Wally's
+tests pass whole—; the test game (`SOUNDFONT=FluidR3_GM.sf2`) 231 passed,
+6 skipped; the ports' `just boot` 218 passed; ABL's `just tests` 1,694
+passed, 2 skipped. No golden moved: the ports' worktree is clean.
+`abl.sfc` `3bf35fd7665c`, as A9's. **Not covered by a test of its own**:
+that `Answer::read` reads every field back as Wally wrote it is shown by
+the nine games' builds, not by a test that writes a whole answer and
+reads it.
+
+**Install when merging**: `convert` and `wally` (`just install convert
+wally`). Wally's stage answers are stored once more, as with any new
+converter.
+
+### 2026-11-24, Chajá: B6, the images
+
+On the-advocate `chaja-b6`, from `cef2cdda` (main had not moved when
+handing back); ports `4c23c9e`, untouched. Two commits: `2fcfc544`, the
+step, and `efdde40b`, a fix of the crate's own (below).
+
+**The six answers are the images crate's types**, and serde writes them:
+`fullscreen::Screen`, `show_picture::Converted`, `scene::{Backdrop, Light,
+Battler}` and `animation::Converted` already were the answers field for
+field and only derive now —a battler's `merges` go through a small `with`
+module, as `[victim, target, pixels]`, because Adeleine's `Merge` knows no
+serde—; the layer of `background`, which carries its tiles as hex and its
+texture's centre, is `request::Layer`, and a backdrop's pair
+`request::BackdropAnswer`. The requests derive `Serialize` too: the
+converter builds them as structs, not with `json!`, and calls the stage
+with the typed request, so the `Value` doors of A4 and `request::of` went,
+and the seven `*_answer` builders. The crate's pinned hashes
+(`tests/answers.rs`, now over the types' JSON) did not move.
+
+**The converter reads fields**: `images.rs` keeps one generic `answer`
+that serializes the typed answer into `<command>.json` for the cache and
+reads it back; `fullscreen.rs`, `scene.rs` and `animations.rs` lost their
+walks over arrays of arrays, and the palettes are `[u8; 3]`s.
+
+**The picture key is `pictures::Key`**, read once from the scan's answer
+(`pictures::keys`) with the four fields the converter adds on a map
+(`path`, `with_map`, `behind_map`, `screen_on_map`); `truthy` left
+`pictures.rs`. Its fields go in the order the scan writes them and the
+converter adds them, the last four only when set, so a table entry made
+from it —what reaches the compiler and the emission— is the same object.
+It is the converter's type and not the events crate's because B5 types
+the scan at the same time:
+[draft](the-picture-key-is-declared-twice.md) for joining them once both
+are in.
+
+**Left as `Value`, on purpose**: a big picture's layer once the converter
+puts its `half`, `center` and `under` after the answer's fields, because
+it goes on to the emission's request as it is (B1-B3's); the scan's
+`zooms` (B5's); and `Shown`'s table entry, which goes on to the compiler.
+
+**Outside my files**, kept small: `maps.rs` (Aguará's) where the keys are
+read and marked, 400-440 and the names of `big_over_black` near 1025;
+`convert.rs` (Calandria's), three lines —the common events' keys, their
+numbers, a light's palette length—; `common_pages.rs`,
+`common_pictures.rs`, `map_pictures.rs` (`Shown::key` builds a `Key`);
+and `serde` in the converter's `Cargo.toml`, which B1 may add too.
+
+**Net lines**: 639 in, 680 out, **-41** for the step (the table said -30
+to -80); the fix adds 26, almost all its test.
+
+#### What was checked
+
+* **The binary**: `main` serializes each answer through a `Value`, whose
+  keys come out sorted without `preserve_order`, as `json!`'s did. The
+  five converter-only commands, against the global binary on the crate's
+  test game: byte for byte. One case changes, not reached by anyone: a
+  background asked for a texture that does not fit answered `"mode7":
+  null` and now leaves `mode7` out, as one not asked for it; the
+  emission reads both as null, and no test asks for a background. The
+  binary's help says so.
+* **State and stderr**: nothing new; the crate prints nothing while it
+  succeeds.
+* **The cache**: no base64 needed —the images' bytes were already a hex
+  string or arrays of numbers in the JSON the binary wrote—; the typed
+  answer is stored as its JSON, in its fields' order.
+
+#### The builds, byte for byte
+
+`NO_CACHE=1 just cartridges --force` in the nine games (ABL
+`--without-tracks`), the global tools (`cef2cdda`) in one ports worktree
+against `convert` and `images` from this branch in another: **the 20
+`.sfc` equal**, and the 19,409 other files of the nine `build/`, the raw
+data and every JSON included; 34 of them —the `converter.log`s and ABL's
+test cartridges' `events-request.json`— differ only by the worktree's
+path in them, and are equal with it replaced. The 20 `.dbg` equal without
+the mtimes; `stamp.txt` and the `.o` aside. Then twice with the shared
+cache: the first stored the answers again (the converter's binary
+changed) and equals the uncached builds; the second answered from the
+cache, 86 s for the nine, and equals them but for Vampires Dawn's
+`converter.log` without the left-out warnings a cached compile does not
+print (Cardón's A2).
+
+#### The suites
+
+With `convert` and `images` from the branch first in the PATH: `just
+lint` clean; the-advocate's `just test` 29 passed; `just rust-test
+--no-fail-fast` 1,245 passed, 1 failed, 3 ignored —the failure the known
+cached-`.dbg` flake, `a_cached_object_gives_the_dbg_a_fresh_one_gives`,
+which passed run alone—; the test game (`SOUNDFONT=FluidR3_GM.sf2`) 231
+passed, 6 skipped; the ports' `just boot` 218 passed; ABL's `just tests`
+1,694 passed, 2 skipped. No golden moved. `abl.sfc` `3bf35fd7665c`.
+`cargo fmt --check` and `clippy --all-targets -D warnings` clean on both
+crates. The tests' calls to `backdrops`, `battlers` and `animations`
+(`image_stage.py`) go through the binary; `fullscreen`, `picture` and
+`background` are covered only by the builds and by the comparison of the
+binaries above. `efdde40b` ran after the suites: only the crate's tests,
+fmt and clippy, and it changes no path the converter takes.
+
+**Install when merging**: `convert` and `images` (`just install convert
+images`). The shared cache stores the images' answers once more, as any
+new converter does.
+
 ### 2026-11-24, Cardón: B5, the event compiler's answers typed
 
 On the-advocate `cardon-b5`, from `cef2cdda`; ports `cardon-b5` at
@@ -1344,3 +1560,63 @@ a string that is not hex has no test.
 **Install when merging**: `convert` and `events` (`just install convert
 events`). The shared cache stores the compiler's answers once more (the
 converter's binary changed). The task stays in `doing`, for phase B.
+
+### 2026-11-24, Cardón: B5 merged with B4 and B6, and the picture key once
+
+Hornero merged B4 (Aguará) and B6 (Chajá) into the-advocate `main`,
+`1f33793d`, and asked for it merged into `cardon-b5`, then Chajá's draft
+`the-picture-key-is-declared-twice` in its own commit.
+
+#### The merge, `c8348c20`
+
+Five files in conflict —`convert.rs`, `maps.rs`, `common_pages.rs`,
+`common_pictures.rs`, the converter's `Cargo.toml`—, all one convention met
+from two sides: B6 read the scan's picture keys as `pictures::Key` through
+`pictures::keys(Option<&Value>)`, over the scan as a `Value`; B5 made the
+scan a type, with its pictures still JSON values. `pictures::keys` took
+those values (`&[Value]`) and its four callers, grepped for by hand, pass
+the typed scan's lists; `pictures_own` and `tinted` come from the type.
+`Cargo.toml` keeps B6's `serde` with `derive`. `maps.rs` now imports B4's
+`wally::answer` too, so the events' `Page` is imported by name. Two
+helpers the branches together left dead went: `maps.rs`' `int`, `text.rs`'
+`unhex`.
+
+#### The picture key, `b5d4b7a2`
+
+Small, so done:
+
+* `PictureKey` (`registry.rs`) derives serde, its fields in `to_json`'s
+  order, `at`'s `(i32, i32)` the `[x, y]` it was. The scan's maps, common
+  pictures and sets answer `Vec<PictureKey>` —the last picture keys that
+  were `Value` in B5's `answer`—. `to_json` and `picture_key` go: the
+  compile reads each table entry's key with serde, which skips the
+  converter's fields after it.
+* The converter's `Key` is `#[serde(flatten)] key: PictureKey` first and
+  its four fields after, so a table entry is the object it was; it derefs
+  to the key, so its readers did not change. The key's numbers are `i32`
+  and the converter computes in `i64`: about a dozen places that do
+  arithmetic with a number, a zoom or a centre widen them there (`wide()`
+  for the centre). `pictures::keys` is now the plain conversion of the
+  scan's typed list; nothing in the converter deserializes a `Key` any
+  more.
+* 118 lines in, 119 out. **Chajá's draft is done by this commit**: it
+  came in with main, and goes to `testing` here, with its log entry.
+
+#### Verified again, on `b5d4b7a2`
+
+With `convert`, `events`, `images` and `wally` from this branch first in
+the PATH: `NO_CACHE=1 just cartridges --force` in the nine games (ABL
+`--without-tracks`) against the global tools of `cef2cdda` (B5's `base`
+snapshot): **the 20 `.sfc` equal, every file of the nine `build/` equal,
+`converter.log` included**; aside, `stamp.txt` and the `.o`/`.dbg` as
+before, and three files the earlier suites had left in this worktree's
+`build/` and the converter does not write (`cartridges.lock`, two `.srm`).
+`just lint` clean; `just rust-test --no-fail-fast` 1,242 passed and the 7
+fxpak pty tests failed (the known flake), which passed run alone (`cargo
+test -p fxpak`, 27 passed); the test game (`SOUNDFONT=FluidR3_GM.sf2`)
+231 passed, 6 skipped; ABL's `just tests` 1,694 passed, 2 skipped. No
+golden moved; `abl.sfc` `3bf35fd7665c`. Not run again: `just test` and
+the ports' `just boot`, nor a cached build.
+
+**Install when merging**: `convert` and `events` (`just install convert
+events`); `images` and `wally` come with main already.
