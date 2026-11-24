@@ -2,9 +2,9 @@
 name: "The items screen's bar runs ahead of its text"
 description: "Moving the cursor on the items screen, the bar is on the new item two frames before the description and the list say so; the equipment screen had the same and was fixed"
 type: bug
-status: draft
+status: todo
 author: calandria
-agents: [Calandria]
+agents: [Calandria, cardon]
 links:
   found-in: [abl-the-equip-screen-s-cursor-runs-ahead-of-its-lists]
   relates: [abl-a-shop-s-screens-show-half-composed-frames, the-skills-screen-s-and-a-custom-menu-s-bar-may-run-ahead-of-their-text]
@@ -42,3 +42,14 @@ still there, the bar on the next item with the old description for three
 frames on the first two steps down from Potion and five on the third. The
 skills screen and a custom menu are in
 [`the-skills-screen-s-and-a-custom-menu-s-bar-may-run-ahead-of-their-text`](the-skills-screen-s-and-a-custom-menu-s-bar-may-run-ahead-of-their-text.md).
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+Verified twice (Calandria, Aguará at `7e8da728`, frame by frame), and
+still so at the-advocate `8b069fc2`: `tl_settled` is called only in
+`equipment_screen.s` and `shop.s`, not in `items.s`. The fix is not in
+doubt —the bar waits for `tl_settled`, as `8b9eb121` did for the equipment
+and `1e9244e6` for the shop— and what changes on screen is three to five
+half-composed frames going away.

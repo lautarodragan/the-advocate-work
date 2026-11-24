@@ -2,9 +2,9 @@
 name: "ChangeEventLocation's facing is not applied"
 description: "RPG Maker 2003's ChangeEventLocation says which way the event faces where it is placed; the console keeps the facing it had"
 type: bug
-status: draft
+status: todo
 author: mulita
-agents: [Mulita]
+agents: [Mulita, cardon]
 links:
   found-in: [a-teleport-s-facing-is-not-applied]
 ---
@@ -26,3 +26,14 @@ page 1 places event 20 at (43,40) facing left; map 99, event 2, places
 event 1 at (13,0) facing down; map 144, event 15, places 16 at (1,22)
 facing right; map 160, event 6, places 7 at (22,19) facing down. Nobody
 has looked at what shows on any of them.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+Still so at the-advocate `8b069fc2`: `CHANGE_EVENT_LOCATION` in
+`rm2k-snes/events/src/compile.rs:6490` drops the fifth parameter ("only
+RM2k3 touches the direction"). The same 2003 parameter of `Teleport` was
+done the same way in `ac0b848b` ("A Teleport's facing turns the hero, in a
+cartridge that asks for one"), so the fix is not in doubt: towards RPG_RT,
+nothing to choose, four uses in Zounds named above.

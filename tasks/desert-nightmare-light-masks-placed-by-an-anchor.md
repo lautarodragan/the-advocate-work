@@ -2,7 +2,8 @@
 name: "Desert Nightmare: light masks placed by an anchor are not drawn"
 description: "On 17 maps that scroll —the motel's rooms, the warehouse, the dream, the mines, the workshop's cellar— the light mask is placed at an anchor event's screen position, read into variables, and the console leaves it out: the rooms are lit as by day"
 type: bug
-status: draft
+status: todo
+agents: [cardon]
 author: huron
 game: desert-nightmare
 links:
@@ -47,3 +48,16 @@ measure the nights (the scripts are in the task above's log).
 `degradations.json` for "its place is by a variable"; or enter map 102
 with the harness's `go_to_map` and compare with EasyRPG Player on the same
 cell.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+Still so at the-advocate `8b069fc2`: `placed()` in
+`rm2k-snes/convert/src/map_pictures.rs:460` and `:492` still answers "its
+place is by a variable". Towards the original —the rooms are lit as RPG_RT
+lights them— with the way already said: on its own map the anchor's cell
+is known, so the variable is the cell plus the constants, and the mask is
+drawn into the map as the constant ones are (the book's divergence
+"Pictures drawn into the map"). If a mask does not fit, that is the
+question, then.

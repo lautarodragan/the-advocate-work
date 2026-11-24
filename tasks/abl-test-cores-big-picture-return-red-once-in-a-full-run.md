@@ -2,10 +2,12 @@
 name: "ABL's test_cores big-picture-return-240 went red once in a full run"
 description: "bsnes drew the map back after the big picture without its lower rows of trees and the person on them, and with a message arrow at the bottom; alone the test passes"
 type: bug
-status: draft
+status: cancelled
+agents: [cardon]
 author: tijereta
 links:
   relates: [abl-test-cores-event-red-once-in-a-full-run]
+  duplicates: [abl-test-cores-event-red-once-in-a-full-run]
 ---
 
 Seen by Tijereta on 2026-10-19, in a full run of ABL's suite on the branch
@@ -29,3 +31,15 @@ after, on the same build.
 the captures stay in `tests/snapshots/cores/`. See also
 [`abl-test-cores-event-red-once-in-a-full-run`](abl-test-cores-event-red-once-in-a-full-run.md),
 the same kind of intermittent red on another case.
+
+## Log
+
+### 2026-11-24, Cardón: duplicates abl-test-cores-event-red-once-in-a-full-run
+
+The same finding as
+[`abl-test-cores-event-red-once-in-a-full-run`](abl-test-cores-event-red-once-in-a-full-run.md):
+`test_cores.py` red once in a full run, green alone, and bsnes drawing a
+message window piece (here an arrow, there an empty box) where snes9x
+draws none —likely one read of uninitialised memory in the window—. Kept
+as one task, which goes to todo; this one's captures and case stay linked
+from there.

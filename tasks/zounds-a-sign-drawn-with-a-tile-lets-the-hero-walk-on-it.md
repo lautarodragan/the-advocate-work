@@ -2,8 +2,9 @@
 name: "Zounds: a sign drawn with a tile lets the hero walk on it"
 description: "Map 86's sign, an event drawn with a ChipSet tile on the hero's layer, is walked over on the console and does not fire with A from the cell below; in RM2k it blocks and is read by facing it"
 type: bug
-status: draft
+status: todo
 author: aguara
+agents: [cardon]
 links:
   found-in: [a-transparent-message-blacks-out-tiles-on-its-lines]
 ---
@@ -27,3 +28,14 @@ likely the same.
 
 **To reproduce**: `go_to_map(86, 17, 11)` in the ports' harness —it
 lands on row 10—, then tap up: `hero()` goes from y 160 through 144.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+A bug against RM2k with its reproduction (`go_to_map(86, 17, 11)`, tap up)
+and easyrpg's rule (`WouldCollide`: same layer, not through, blocks
+whatever its graphic). Zounds' converter log at the ports' build of
+2026-11-24 draws map 96's sign (event 14) into the background, so likely
+the still event loses its object and with it its cell; the task's first
+step is to reproduce at main and see which.

@@ -2,7 +2,8 @@
 name: "ChangeEventLocation shifts the NPC table once per event"
 description: "Each ChangeEventLocation of an event with a graphic re-sorts its row with an mvp of the rows it passes: a page that sends eleven events away costs ~600 of the frame's 262 lines, two frames lost"
 type: refactor
-status: draft
+status: todo
+agents: [cardon]
 author: aguara
 links:
   found-in: [abl-lazer-teeth-s-rock-lags]
@@ -29,3 +30,15 @@ forty rows each, ~50 lines per event.
 What might do: one shift for a run of `ChangeEventLocation`s, or a sorted
 index instead of moving whole rows. Neither is small: route slots and the
 OAM walk read the rows by offset.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+Measured (380-600 lines on the tick that breaks `Light4`), and
+`fit_far`/`plant_event` are untouched since (no commit in `runtime/` since
+2026-11-17 mentions `fit_far`). It is the rest of the lag taro played in
+[`abl-lazer-teeth-s-rock-lags`](abl-lazer-teeth-s-rock-lags.md), done;
+nothing seen changes but frames not lost. Which of the two ways (one shift
+per run, or a sorted index) is a technical choice the task makes and
+measures.

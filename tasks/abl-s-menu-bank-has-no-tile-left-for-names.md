@@ -3,6 +3,8 @@ name: "ABL's menu bank has no tile left for names"
 description: "ABL release's slot and menu bank leaves the menu 120 tiles for what it composes, and since the party's conditions the names ask for exactly 120: one more long name or one more condition that outlives a battle and the converter starts leaving faces out"
 type: bug
 status: draft
+assignee: taro
+agents: [cardon]
 author: tijereta
 links:
   found-in: [the-menu-shows-the-partys-conditions]
@@ -40,3 +42,17 @@ composed names ask for 120 of the 120 the menu leaves and 72 of the 156
 the slot screen does". No face is left out yet: the slot screen's line
 lists the same 17 actors with a face, and nothing in the log says one was
 dropped for room.
+
+### 2026-11-24, Cardón: a question for taro
+
+Still so on 2026-11-22 (Tijereta): 120 of 120, and no face left out yet.
+Nothing is wrong today, and when something grows the converter already
+says which face it dropped in `converter.log`.
+
+**To decide**: whether to act before it bites. (a) Cancel: the log says it
+when it happens, and then it is a real finding; (b) make the build fail,
+or warn on the terminal, when a face is left out for room; (c) give the
+menu bank more room now.
+
+**Recommendation**: (a), or (b) if taro wants it loud: (c) spends room
+nothing needs yet.

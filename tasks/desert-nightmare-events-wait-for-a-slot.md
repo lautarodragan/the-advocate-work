@@ -3,6 +3,7 @@ name: "Desert Nightmare: events wait for a slot"
 description: "With the towns painted, 7 maps still have more events on screen than the sprite cache has slots —doors, lights and people that change look, and the exit's walking crowd—: the ones drawn last are not drawn until a slot frees"
 type: bug
 status: draft
+assignee: taro
 author: cardon
 game: desert-nightmare
 agents: [Cardón]
@@ -37,3 +38,22 @@ not exist, and a patch for map 35's crowd. 33, 71 and 18 are left out of
 
 **To reproduce**: `just cartridges` in `desert-nightmare/` and
 `grep events-wait-for-a-slot build/release/degradations.json`.
+
+## Log
+
+### 2026-11-24, Cardón: a question for taro
+
+**What to decide**: what to do with Desert Nightmare's 7 maps whose events
+wait for a sprite slot (doors and lights that change look, people walking,
+map 35's crowd): what is lost is seen —late-drawn events— and every way
+out costs.
+
+**Options**: (a) the posed mechanism over a painting (a ring cell
+rewritten when the page changes), which the book's research
+`ports/desert-nightmare/research/2026-11-19-can-the-towns-be-baked.md`
+section 4 says does not exist: a runtime feature for every game; (b) a
+game patch for map 35's crowd (the game's own choice: fewer walkers); (c)
+leave it declared in Desert Nightmare's "Known issues".
+
+**Recommendation**: (b) for map 35 now, the cheapest and the most visible
+one, and (a) to `wishlist` until a second game asks for it.

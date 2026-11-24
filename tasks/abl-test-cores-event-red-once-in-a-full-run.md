@@ -2,10 +2,12 @@
 name: "ABL's test_cores test_event went red once in a full run"
 description: "bsnes drew an empty message box over the event case and snes9x did not; alone the test passes"
 type: bug
-status: draft
+status: todo
+agents: [cardon]
 author: carpintero
 links:
   relates: [abl-test-cores-big-picture-return-red-once-in-a-full-run, the-test-games-ci-job-went-red-once]
+  duplicated-by: [abl-test-cores-big-picture-return-red-once-in-a-full-run]
 ---
 
 Seen by Carpintero on 2026-10-17, in a full run of ABL's suite on the
@@ -39,3 +41,13 @@ branch's tools and `events` installed from it. Alone, `test_event` passed
 twenty times out of twenty on the same tree, and two full runs before the
 merge were green. That branch's change only writes the message face, never
 reads uninitialised memory: it was not proven to be unrelated either.
+
+### 2026-11-24, Cardón: to todo
+
+Seen three times (2026-10-17, 2026-10-19, and the big picture case of
+[`abl-test-cores-big-picture-return-red-once-in-a-full-run`](abl-test-cores-big-picture-return-red-once-in-a-full-run.md),
+now a duplicate of this one), all with bsnes drawing a message window
+piece snes9x did not. A red in `test_cores.py` is what AGENTS.md says it
+means: the ROM reads memory nobody wrote; a bug, nothing to choose. Not
+seen in a task since 2026-10-19, so the first step is to make it reproduce
+—several bsnes power-ons of those two cases— and then find the read.

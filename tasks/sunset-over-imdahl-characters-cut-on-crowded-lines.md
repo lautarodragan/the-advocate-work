@@ -4,6 +4,7 @@ description: "1 map put more characters on a line than the console draws —nine
 type: bug
 status: draft
 author: mulita
+agents: [cardon]
 links:
   found-in: [maps-with-more-objects-on-a-line-than-the-ppu-draws]
 ---
@@ -31,3 +32,13 @@ screen's last page counts the map's frames in `Time over`.
 What the report cannot say: whether a line is one the player sees with
 everyone on it —a page another switch turns off, people a first scene
 sends away—, and what a scene adds later.
+
+## Log
+
+### 2026-11-24, Cardón: stays a draft
+
+Measured on 2026-11-17, before Sunset's maps went painted; its siblings were
+measured again on 2026-11-22 before moving (ABL's, Book of Three's, Frozen
+World's). To verify: `just objects-per-line sunset-over-imdahl` at the ports'
+root with main's tools, once the CPU is free; if map 58 is still over, to
+`todo` like ABL's, saying whether `baked_events` (Frozen World's fix) takes it.

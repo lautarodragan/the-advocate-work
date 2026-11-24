@@ -3,6 +3,8 @@ name: "A small picture's fifteen colours lose a whole hue"
 description: "A face shown as a picture keeps its fifteen most used colours: Unamë's green hair and eyes on Zounds' skill screen come out orange, the skin's"
 type: bug
 status: draft
+assignee: taro
+agents: [cardon]
 author: calandria
 links:
   found-in: [small-pictures-under-a-big-one-are-hidden]
@@ -32,3 +34,20 @@ the pictures, as the big ones already have.
 
 How to see it: Zounds' `release`, switch 294 on from anywhere (the skill
 screen's common event), then Down: the face in the right panel.
+
+## Log
+
+### 2026-11-24, Cardón: a question for taro
+
+Still so by the draft (`convert_shown` in
+`rm2k-snes/images/src/show_picture.rs` keeps the fifteen most used
+colours). Changing the quantiser changes every small picture of every game
+—arguably towards the original, but goldens of all games move and the
+book's divergence "What pictures as sprites do not model" changes.
+
+**To decide**: (a) Adeleine's grouping for small pictures, as AGENTS.md
+says colours are Adeleine's to decide; (b) a median cut inside the images
+stage; (c) leave it.
+
+**Recommendation**: (a): one answer to "which colour was lost", and the
+big pictures already go that way.

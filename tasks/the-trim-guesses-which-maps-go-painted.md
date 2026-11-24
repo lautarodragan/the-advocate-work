@@ -2,12 +2,13 @@
 name: "The trim guesses which maps go painted"
 description: "The RAM's trim ranks a map's still pieces as `Loss::Painted` whenever `[graphics] painted_events` names the map, but Wally may then refuse to paint it; with `painted_events = true` the guess would be wrong on every map that cannot be one picture"
 type: bug
-status: draft
+status: todo
 author: carpintero
-agents: [Carpintero]
+agents: [Carpintero, cardon]
 links:
   found-in: [the-converter-s-stages-and-what-each-spends]
   relates: [painted-events-chooses-its-maps]
+  blocks: [painted-events-chooses-its-maps]
 ---
 
 Found by Carpintero on 2026-11-19, reading the code for
@@ -40,3 +41,15 @@ the map's panorama and ChipSet animation before the trim; or Wally's
 refusal reported back so the trim runs again on that map without
 `painting`. Either way, the trim keeps running before Wally, which needs
 its numbering: see the book's `internals/the-converters-stages.md`.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+Read from the code and still so at `8b069fc2`: `game.rs` line 607 and
+`maps.rs` line 604 of rm2k-snes-convert take `painted_events.on(id)`, the
+knob alone. It does not show today but it is what
+[`painted-events-chooses-its-maps`](painted-events-chooses-its-maps.md)
+(`todo`, taro's) needs first, so it blocks it. The fix is technical,
+either of the two the draft names, and nothing seen changes for the maps
+painted today.

@@ -3,7 +3,9 @@ name: "Zounds: the menu's pictures on map 136 need 512 object tiles"
 description: "Two faces of 180x59, a bar as wide as the screen and an HP picture are 512 tiles of 32x32 objects, and with the hero's the map fits no VRAM layout: the whole set is left out"
 type: bug
 status: draft
+assignee: taro
 author: tijereta
+agents: [cardon]
 links:
   found-in: [zounds-pictures-and-the-picture-made-screens]
   relates: [small-pictures-under-a-big-one-are-hidden]
@@ -45,3 +47,22 @@ has no big picture, so that rule does not take it. What would: on a map of
 one screen whose pictures are the screen, show its still panorama as a big
 picture —scaled, with the small ones over it, as `BIG_KEEPS` does— and
 not as the map's background.
+
+## Log
+
+### 2026-11-24, Cardón: a question for taro
+
+**What to decide**: Zounds' menu (map 136) shows none of its pictures
+—still so in the ports' build of 2026-11-24: 512 tiles fit no VRAM layout—
+and, fitting, they would land at four fifths over panels at full size
+(Calandria).
+
+**Options**: (a) Calandria's rule: a one-screen map whose pictures are the
+screen shows its still panorama as a big picture, scaled with the small
+ones over it (`BIG_KEEPS`), plus room for 512 tiles (the bar as 8x8
+objects, or the faces cut); (b) a Zounds patch that redraws the menu for
+the console; (c) leave it, the menu shown ten frames without its pictures.
+
+**Recommendation**: (b) if the menu is only Zounds': it is one screen and
+a patch is cheaper than a new rule; (a) if another game has picture-made
+screens. Its looks and the cost are yours.

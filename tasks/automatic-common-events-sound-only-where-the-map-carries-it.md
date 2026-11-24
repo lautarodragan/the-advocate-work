@@ -2,7 +2,8 @@
 name: "An automatic common event's sound effect plays only where the map carries it"
 description: "The shared body of an automatic common event without pictures is compiled without a map, and its PlaySounds go into no audio package; parallel ones got theirs on 2026-10-20"
 type: bug
-status: draft
+status: todo
+agents: [cardon]
 author: mulita
 ---
 
@@ -36,3 +37,15 @@ was (Vampires Dawn's music moved there).
 
 **How to see it**: in Desert Nightmare, open one of those menus on a map
 whose pages play no `Beep_3`, and listen to its cursor; in RM2k it beeps.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+Still so at the-advocate `8b069fc2`: the effects of shared common bodies
+go into packages only for parallel ones
+(`rm2k-snes/events/src/lib.rs:1284-1306`, `parallel_switches` filters
+`COMMON_PARALLEL`). Towards RM2k, nothing to choose, and the way is the
+one already taken for parallel ones on 2026-10-20 (`commons::turned_on`,
+`Songs::loose`); the ARAM it costs is measured per game in the task, as
+then. If a game's music has to move for it, that game is asked.

@@ -7,7 +7,7 @@ assignee: calandria
 agents: [calandria, aguara, cardon, carpintero, chaja, mulita, tijereta]
 author: taro
 links:
-  found: [the-event-compiler-s-left-out-warning-never-reaches-the-log, fxpak-s-pty-tests-share-ptsname-s-buffer]
+  found: [the-event-compiler-s-left-out-warning-never-reaches-the-log, fxpak-s-pty-tests-share-ptsname-s-buffer, the-msu-and-the-tracks-are-written-through-a-nuevo-file]
   relates: [artistic-decision-patches, battle-tests-without-simulate, tests-without-the-stages-subcommands]
   blocked-by: [emit-rs-writes-each-table-through-a-call-rustfmt-spreads-over-seven-lines, picture-tables-and-common-entries-write-the-same-entry-twice, rm2k-snes-mapdata-maps-has-no-caller, small-repeats-inside-emit-rs-s-rest, the-battle-terms-by-name-are-a-42-arm-match]
   blocks: [a-stage-s-cache-key-once-it-is-a-library, one-advocate-command]
@@ -855,6 +855,95 @@ screens`).
 ### 2026-11-24, Hornero: A1-A4 merged and verified together; A6-A8 to three agents
 
 the-advocate `8b069fc2`, with `convert wally events images screens` installed: `just lint` clean, `just test` ok, `rust-test` 1242 passed 0 failed, test game 231 passed 6 skipped, `boot` 218 passed, ABL 1694 passed 2 skipped; the nine games' release ROMs byte for byte the ones in the last delivery. A6 (mapdata) to Calandria, A7 (audio) to Mulita, A8 (patches) to Tijereta.
+
+### 2026-11-24, Mulita: A7, the music
+
+On the-advocate `mulita-a7`, from `8b069fc2` (main had not moved when
+merging); ports `mulita-a7` at `4c23c9e`, untouched. One commit,
+`05f27b7b`, on the recipe above: `rm2k_snes_audio::stage::cartridge`
+answers `musicdata.inc`, `music.json`, `audio.json`, `audio-job.json`,
+`effects.json` and the `.msu`, the last under `stage::MSU` because it does
+not go into `--out` but where `--msu` says. It writes nothing. The
+converter calls it through `stage::call_uncached` under `AUDIO_CARTRIDGE`,
+writes each file into the cartridge's directory and the `.msu` alongside
+and renamed, as the binary did, and reads the `losses` from the answer
+instead of from `audio.json` on disk. `compile`, which only a person or a
+test runs, goes through the same `stage::compile`; the binary is a `main`
+over both and keeps every subcommand and flag. `rm2k-snes-audio` joins
+the converter's `Cargo.toml`. `msu` and `volume-ceilings` did not move.
+
+**Uncached, as `hand_over` was**: one answer per cartridge, and it reads
+the runtime's `far_ram.s` (`BOOT_FRAMES_FLOOR`) through `suite::runtime()`,
+which no flag names: a key would miss it. Whoever gives it a key, in
+[`a-stage-s-cache-key-once-it-is-a-library`](a-stage-s-cache-key-once-it-is-a-library.md),
+has to name that file.
+
+#### State, stdout and stderr, key order
+
+* **State**: none on the `cartridge` path. `retro.rs`' `static` is the
+  libretro core's, which `cartridge` never reaches; `tracks.rs`'
+  `OnceLock`s live in an instance; nothing in Gunter, `rm2k-rules` or
+  `bytecode`.
+* **stdout**: the process's went out with the converter's
+  (`Stdio::inherit`), and the library prints from deep inside `compile`
+  —`relief`, `compile.rs`, `effects.rs`—, so the stage still prints: its
+  lines are the log, not the answer, and threading a sink through the
+  compiler is not mechanical. In the same order and the same stream: the
+  20 `converter.log` are byte for byte. They name the paths where the
+  files go, so `stage::Flags` carries `out` and `msu` only for that. What
+  changes is a failure: a process that stopped halfway had already printed
+  its lines and written some files; now it has printed its lines and
+  written nothing.
+* **stderr**: the crate prints nothing there while it succeeds.
+* **Key order**: none changes. The audio crate already linked
+  `serde_json` with `preserve_order`, so its binary kept insertion order
+  as the converter does; and the request it gets in memory is the same
+  `Value` it used to read back from the file.
+* **The tracks' key**: `OWN_SOURCES` (`tracks.rs`, `midi.rs`, `game.rs`,
+  `fail.rs`, `commands/msu.rs`) names none of the files this touches; the
+  tracks do not render again.
+
+#### The builds, byte for byte
+
+`NO_CACHE=1 just cartridges --force` in the nine games (ABL
+`--without-tracks`), the global tools (`8b069fc2`) against `convert` and
+`rm2k-snes-audio` from this branch: **the 20 `.sfc`, the 20 `.msu` and
+the 19,469 files of the nine `build/` equal**, `converter.log` included;
+aside `stamp.txt` and the 40 `.o`/`.dbg`, which differ only in the mtimes
+`ca65` records (checked on every `.dbg` with them stripped). Then twice
+with a private cache (`CACHE=` a scratch directory): the first filled it
+(2,702 stage answers, new keys because the converter's binary changed) and
+its builds equal the uncached ones; the second **wrote no file** to it, in
+85 s for the nine, and its builds equal the uncached ones but for
+Vampires Dawn's `converter.log`, without the 672 event compiler warnings a
+cached build does not print (Cardón's, above).
+
+Found, not fixed: the `.msu` and the tracks are written through a Spanish
+`<file>.nuevo`
+([draft](the-msu-and-the-tracks-are-written-through-a-nuevo-file.md)); A7
+kept it so that the step moved nothing but where the code runs. And
+`stage::hand_over`'s doc still names the music as one of its two callers;
+it goes in A9 with the function, and A8 touches the same lines.
+
+#### The suites
+
+On the branch (main had not moved), `convert` and `rm2k-snes-audio`
+first in the PATH: `just lint` clean; the-advocate's `just test` 29
+passed; `just rust-test --no-fail-fast` 1,242 passed, 0 failed, 3 ignored
+(the audio crate's, with the Microsoft GS SoundFont in `SOUNDFONT`, 109
+passed); the test game (`SOUNDFONT=FluidR3_GM.sf2`) 231 passed, 6
+skipped; the ports' `just boot` 218 passed; ABL's `just tests` 1,694
+passed, 2 skipped. No golden moved: the ports' worktree is clean.
+`abl.sfc` `3bf35fd7665c`. `cargo fmt --check` and `clippy --all-targets
+-D warnings` clean on both crates. The binary's `cartridge` and `compile`
+go through the same `stage` functions. **No test runs the binary's
+`cartridge`**: only the converter called it, so the stage function is
+covered by the builds and the suites above, and the binary's `main` over it
+by nothing. `compile` is covered by the crate's `command_line.rs` and ABL's
+`run_compiler` (`music.py`).
+
+**Install when merging**: `convert` and `rm2k-snes-audio` (`just install
+convert rm2k-snes-audio`).
 
 ### 2026-11-24, Calandria: A6
 

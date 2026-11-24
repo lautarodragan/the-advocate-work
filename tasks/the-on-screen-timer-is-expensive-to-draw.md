@@ -2,8 +2,9 @@
 name: "The on-screen timer is expensive to draw"
 description: "While a timer is shown, `timer_oam` takes ~18 of the frame's 262 lines on every frame for its five 8x8 glyphs, and on a busy map that is what tips a tick over the frame"
 type: refactor
-status: draft
+status: todo
 author: aguara
+agents: [cardon]
 links:
   found-in: [abl-lazer-teeth-s-rock-lags]
 ---
@@ -32,3 +33,14 @@ five OAM entries could be built when a digit or the colon changes and
 copied otherwise, or written straight to OAM as the raindrops are —see
 "The raindrops go straight to OAM" in the book's "Lossless: CPU time in
 the frame"—. Not measured.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+Measured by Aguará with the line profiler (~18 lines a frame for five
+glyphs), and `timer_oam` in `runtime/timer.s` is unchanged since: at
+`8b069fc2` it still rebuilds the five glyphs' objects every frame (only
+`230325f9`, the debug screen forcing it off, touched it). Lossless CPU
+time, nothing seen changes; the task says the two ways (rebuild when a
+digit or the colon changes, or straight to OAM as the raindrops).

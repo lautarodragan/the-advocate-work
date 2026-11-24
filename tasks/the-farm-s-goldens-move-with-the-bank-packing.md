@@ -2,10 +2,12 @@
 name: "The farm's goldens move with the bank packing"
 description: "paradise-127-celebration and paradise-127-farmers-jump catch four farmers in the other frame of their idle animation when map 127's data lands in other banks, with nothing changed in the map or the runtime"
 type: bug
-status: draft
+status: todo
 author: tijereta
+agents: [cardon]
 links:
   found-in: [sp-in-the-menu-and-the-item-target-picker]
+  duplicated-by: [the-celebration-golden-moves-when-a-case-is-added]
 ---
 
 Seen by Tijereta on 2026-11-01, with the-advocate `422f904d` (main's
@@ -32,3 +34,14 @@ frame-by-frame check of the slots stays green throughout.
 How to see it: on the ports at `cd41913`, add any event to
 `abl/patches/manual/maps/Map1000.json`, `just cartridges` and
 `just tests tests/abl/test_farm.py` in `abl/`.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+Seen twice —here, and by Cardón on 2026-10-20, now its duplicate
+[`the-celebration-golden-moves-when-a-case-is-added`](the-celebration-golden-moves-when-a-case-is-added.md)—:
+a golden that moves when nothing it shows changed, which is a flaky test.
+What to do: the farm's captures in `tests/abl/test_farm.py` taken where
+the farmers' idle frame does not depend on when the slot cache uploaded
+them.

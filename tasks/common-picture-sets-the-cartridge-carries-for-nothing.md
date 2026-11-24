@@ -2,7 +2,8 @@
 name: "Sets of common pictures the cartridge carries for nothing"
 description: "The common events' small pictures go in the cartridge by sets since 2026-10-20: A Blurred Line carries one for a menu nothing opens, and Desert Nightmare the same 320 tiles twice, under two sets"
 type: refactor
-status: draft
+status: todo
+agents: [cardon]
 author: carpintero
 links:
   found-in: [pictures-in-common-events-compiled-apart-are-not-shown]
@@ -30,3 +31,14 @@ Only cartridge is lost; nothing is seen wrong.
 
 How to see it: the lines "common events …: their small pictures …, go up
 when shown" and "…fit on N of the M maps" in each game's converter log.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+Only cartridge space, nothing seen: code debt with an obvious fix —a set
+asks whether its switch can be turned on (switch items included, as
+`common_pages.rs` should too), and two sets with the same pictures are
+one—. No commit since `54cf582b` touches the sets' choice (log of
+`rm2k-snes/convert/src/common_pages.rs` since 2026-10-20). The task starts
+by confirming the two converter-log lines still say so.

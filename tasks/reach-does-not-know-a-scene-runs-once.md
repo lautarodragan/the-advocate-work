@@ -3,6 +3,8 @@ name: "`rm2k_rules::reach::standing` does not know a scene runs once"
 description: "An autostart scene that turns on the switch of the page above it runs once, from where the hero first arrives; reach takes it as starting wherever a recall can put him, and on ABL's Hover-Tram that keeps four seated people out of the background"
 type: feature
 status: draft
+assignee: taro
+agents: [cardon]
 author: cardon
 game: abl
 links:
@@ -66,3 +68,18 @@ map where turning it off changes nothing cannot be touched by it.
 So today it shows in no log or degradation of any game; it would come
 back on a map that has such a scene and is not forked, in a game that
 recalls computed places.
+
+### 2026-11-24, Cardón: a question for taro
+
+**What to decide**: whether this is worth doing. Tijereta measured on
+2026-11-22 (log above) that no map of any game hits it today —ABL's map 13
+is forked by hand, and the other `any_open` maps change nothing—; it would
+come back only on an unforked map with a once-run scene in a game that
+recalls computed places.
+
+**Options**: (a) `todo`: teach `rm2k_rules::reach::standing` that a page
+turning on its own successor's switch runs once, from the first arrival;
+(b) cancel, reopened if a converter log shows it.
+
+**Recommendation**: (b): the measure says it costs nothing today, and the
+rule is subtle enough to get wrong without a case that shows it.

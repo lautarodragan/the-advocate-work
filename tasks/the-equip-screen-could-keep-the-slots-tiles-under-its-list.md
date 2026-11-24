@@ -3,8 +3,9 @@ name: "The equipment screen could keep the slots' tiles under its list"
 description: "taro's idea for going back from the list: the slots' rows kept in VRAM while the list is up, so they come back without typesetting; VRAM has room, far RAM and bank 1 barely"
 type: feature
 status: draft
+assignee: taro
 author: taro
-agents: [Calandria]
+agents: [Calandria, cardon]
 links:
   found-in: [abl-the-equip-screen-s-cursor-runs-ahead-of-its-lists]
 ---
@@ -33,3 +34,20 @@ What was measured:
   stage lives there—, but a big picture keeps its tilemap there while it is
   shown, and whether `back_to_map` restores it after the menu was not
   looked at.
+
+## Log
+
+### 2026-11-24, Cardón: a question for taro
+
+Your idea, measured: going back from the
+armour list could save some 3 of its 10 frames, at 320 to 600 bytes of far
+RAM (565 free in `release` that day) and code in bank 1 (390 B free in
+`test-msu`). A cost to choose:
+
+* **a)** do it, and pay the RAM and bank 1;
+* **b)** `wishlist`, until RAM or bank 1 has room to spare;
+* **c)** cancel: [the lag
+  task](abl-the-equip-screen-s-cursor-runs-ahead-of-its-lists.md) was
+  closed by you, playing, on 2026-11-17.
+
+Recommendation: **b**.

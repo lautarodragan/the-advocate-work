@@ -3,8 +3,9 @@ name: "Zounds: the dream's fog is not shown"
 description: "Map 30's autostart shows fog2 at 110% zoom, and the console only shrinks pictures, so the dream plays without its reddish fog"
 type: bug
 status: draft
+assignee: taro
 author: aguara
-agents: [Aguará]
+agents: [Aguará, cardon]
 links:
   found-in: [a-200x200-map-does-not-fit-the-cell-stream]
 ---
@@ -84,3 +85,19 @@ sign and map 190's skill-screen box, which are pictures today.
 fork; what is missing is a way to show a translucent fog over a big map:
 a rule that takes this one picture and not Zounds' other three, and a
 way to draw it that does not multiply map 30's tiles.
+
+### 2026-11-24, Cardón: a question for taro
+
+**What to decide**: you asked whether the fog could be shown without much
+complexity, and Carpintero's answer (2026-11-22) is no: at 100% it becomes
+a big picture over black, and drawn into map 30 (200x200) it passes 1024
+tiles. Still so (`degradations.json`: `picture 1 "fog2" is not shown
+here`).
+
+**Options**: (a) accept the dream without its fog, as a Known issue; (b) a
+new way to draw a translucent fog over a big map —a tiled layer that
+repeats a small piece of the fog, with its own rule to pick this picture
+and not Zounds' other three—.
+
+**Recommendation**: (a), and cancel this draft: it is a few seconds of one
+scene, and (b) is a new feature for it.
