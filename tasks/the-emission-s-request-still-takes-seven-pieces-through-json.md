@@ -2,11 +2,12 @@
 name: "The emission's request still takes seven pieces through JSON"
 description: "After MapInfo was typed, `emit::typed` —serde_json::from_value of a Value the converter built or a stage answered— still builds seven fields of the emission's and the battle model's requests, besides the battle's audio: the MSU-1 option, the window's other Systems, the faces, the battle terms, the shared common bodies, the big pictures' layers and the item names' width"
 type: refactor
-status: draft
+status: todo
 author: calandria
 links:
   found-in: [mapinfo-carries-wally-s-answer-as-json-between-two-types]
   relates: [the-stages-speak-json-nobody-types, the-compiler-s-songs-and-the-music-s-losses-cross-the-converter-as-json]
+  part-of: [the-stages-speak-json-nobody-types]
 ---
 
 Seen by Calandria on 2026-11-24, typing `MapInfo`
@@ -46,3 +47,9 @@ the request where the shape is the same, plain Rust where it differs—;
 the big layers are the longest, since `number_big` dedups them by their
 JSON. Checked byte for byte with the nine games, as the stages task's
 steps are.
+
+### 2026-11-24, Hornero: promoted to `todo`
+
+Promoted by Hornero: counted in the merged code, the same rule as the
+rest of phase B, checked byte for byte with nothing seen or heard
+changing. A step of the stages task, beside Mulita's songs and losses.
