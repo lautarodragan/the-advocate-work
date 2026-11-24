@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: taro
 agents: [Aguará]
+links:
+  relates: [a-gradient-system-stops-the-converter-at-the-actor-choice, an-enemy-with-32-bit-numbers-breaks-the-assembler, zounds-pictures-and-the-picture-made-screens]
 ---
 
 From taro, on 2026-10-05, in their words, translated:

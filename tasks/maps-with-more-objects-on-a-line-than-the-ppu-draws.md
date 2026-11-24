@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: taro
 agents: [Mulita]
+links:
+  relates: [abl-characters-cut-on-crowded-lines, book-of-three-characters-cut-on-crowded-lines, desert-nightmare-characters-cut-on-crowded-lines, el-dorado-characters-cut-on-crowded-lines, frozen-world-characters-cut-on-crowded-lines, sunset-over-imdahl-characters-cut-on-crowded-lines, vampires-dawn-characters-cut-on-crowded-lines, zounds-characters-cut-on-crowded-lines]
 ---
 
 Opened by Hornero on 2026-11-17, at the-advocate `7dab7d82` and the ports

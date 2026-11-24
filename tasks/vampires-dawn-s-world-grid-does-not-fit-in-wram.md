@@ -4,6 +4,8 @@ description: "Map 1 of Vampires Dawn, the world (300x300), has a map_cells strea
 type: feature
 status: draft
 author: hornero
+links:
+  relates: [map-streams-that-dont-fit-in-wram]
 ---
 
 Left open when taro closed

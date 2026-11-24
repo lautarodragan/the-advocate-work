@@ -7,6 +7,8 @@ assignee: taro
 author: taro
 agents: [Tijereta]
 game: [zounds, frozen-world]
+links:
+  relates: [a-page-waiting-on-a-pan-goes-on-two-frames-late]
 ---
 
 taro, on 2026-11-20, translated:

@@ -4,6 +4,8 @@ description: "With the rest of the package in the fade's frozen ticks, the sampl
 type: refactor
 status: draft
 author: cardon
+links:
+  relates: [maps-load-faster-without-losing-anything]
 ---
 
 Seen by Cardón on 2026-10-18, measuring

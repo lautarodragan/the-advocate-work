@@ -4,6 +4,8 @@ description: "What a parallel common event writes changes the active pages only 
 type: bug
 status: todo
 author: calandria
+links:
+  relates: [zounds-entering-map-88-loops-on-a-teleport]
 ---
 
 Seen by Calandria on 2026-10-19, at the-advocate `54ec3daf`, reading the

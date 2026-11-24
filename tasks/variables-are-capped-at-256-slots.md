@@ -4,6 +4,11 @@ description: "The RM2k variable's slot is one byte in the bytecode and the conve
 type: feature
 status: todo
 author: huron
+links:
+  relates: [the-event-compiler-s-left-out-warning-never-reaches-the-log, the-wram-and-sram-map-measured]
+  blocks: [vampires-dawn-summons-dont-compile, vampires-dawn-the-victims-choice-does-not-compile]
+  part-of: [the-converter-caps-what-far-ram-no-longer-limits]
+  duplicated-by: [variables-past-256]
 ---
 
 Seen by Hurón on 2026-10-15, in the study

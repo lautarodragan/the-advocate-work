@@ -4,6 +4,8 @@ description: "Crowded maps put more characters on a line than the console draws 
 type: bug
 status: todo
 author: mulita
+links:
+  relates: [abl-the-hover-tram-s-crowd-is-cut, maps-with-more-objects-on-a-line-than-the-ppu-draws]
 ---
 
 Seen by Mulita on 2026-11-17 with the ports' `just objects-per-line`, at

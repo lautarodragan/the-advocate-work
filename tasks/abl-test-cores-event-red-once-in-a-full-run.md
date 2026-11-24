@@ -4,6 +4,8 @@ description: "bsnes drew an empty message box over the event case and snes9x did
 type: bug
 status: draft
 author: carpintero
+links:
+  relates: [abl-test-cores-big-picture-return-red-once-in-a-full-run, the-test-games-ci-job-went-red-once]
 ---
 
 Seen by Carpintero on 2026-10-17, in a full run of ABL's suite on the

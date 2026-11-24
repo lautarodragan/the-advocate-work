@@ -5,6 +5,8 @@ type: bug
 status: todo
 author: aguara
 agents: [Aguará]
+links:
+  relates: [desert-nightmare-the-intro-and-the-file-screen]
 ---
 
 Seen by Aguará on 2026-11-20, at the-advocate `d1972f68` and later

@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: aguara
 agents: [Aguará]
+links:
+  relates: [zounds-the-dreams-fog-is-not-shown]
 ---
 
 Seen by Aguará on 2026-10-15, in the study

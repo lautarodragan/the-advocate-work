@@ -4,6 +4,8 @@ description: "The shots of the vipers playthrough have no golden: a part of play
 type: test
 status: done
 author: hornero
+links:
+  relates: [playthrough-pending-goldens]
 ---
 
 `tests/abl/test_playthrough_vipers_golden.py` takes its shots, but none

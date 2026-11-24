@@ -5,6 +5,8 @@ type: feature
 status: done
 assignee: taro
 author: taro
+links:
+  relates: [diff-photos-cropped-and-217-montage-as-in-rm2k]
 ---
 
 From taro, on 2026-10-03, after seeing the pilot on the SNES, in their

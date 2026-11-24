@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: taro
 agents: [Hurón]
+links:
+  relates: [a-troop-page-s-box-drops-its-icons]
 ---
 
 taro, on 2026-11-02, in their words, translated:

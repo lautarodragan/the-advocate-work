@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: aguara
 agents: [Hurón]
+links:
+  relates: [vampires-dawn-tradan-hangs-on-arriving-from-the-start]
 ---
 
 Seen by Aguará on 2026-10-14, with the-advocate `a7f278e6` and the ports

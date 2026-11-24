@@ -7,6 +7,8 @@ status: testing
 assignee: taro
 author: chaja
 agents: [Chajá, Tijereta, Cardón]
+links:
+  relates: [elemental-attributes-are-not-applied-in-battle]
 ---
 
 Seen by Chajá on 2026-10-15, at the-advocate's branch `chaja-attributes`

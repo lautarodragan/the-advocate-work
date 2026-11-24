@@ -7,6 +7,8 @@ assignee: taro
 author: huron
 game: desert-nightmare
 agents: [Hurón, Mulita]
+links:
+  relates: [desert-nightmare-interiors-painted-now-that-the-box-is-a-window, painted-map-strips-may-land-on-a-big-picture]
 ---
 
 Seen by Hurón on 2026-11-22, at the-advocate `0ae40e0a` (tools as

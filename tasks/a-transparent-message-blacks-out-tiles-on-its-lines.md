@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: taro
 agents: [Aguará]
+links:
+  relates: [zounds-a-sign-drawn-with-a-tile-lets-the-hero-walk-on-it]
 ---
 
 taro, on 2026-11-02, in their words, translated, with two captures of

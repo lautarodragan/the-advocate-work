@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: taro
 agents: [Aguará]
+links:
+  relates: [zounds-pictures-and-the-picture-made-screens]
 ---
 
 Found by Hornero on 2026-10-16, with the-advocate `af7c399d` and the ports

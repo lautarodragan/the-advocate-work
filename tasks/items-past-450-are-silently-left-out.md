@@ -5,6 +5,8 @@ type: bug
 status: todo
 author: chaja
 agents: [Chajá]
+links:
+  relates: [let-the-linker-place-the-far-ram-map, the-item-index-in-16-bits]
 ---
 
 Seen by Chajá on 2026-10-15, reading the tools at the-advocate `5b757bc7`

@@ -4,6 +4,8 @@ description: "With some thirty events on screen —ABL's map 11, the cones of li
 type: refactor
 status: draft
 author: aguara
+links:
+  relates: [abl-lazer-teeth-s-rock-lags]
 ---
 
 Seen by Aguará on 2026-11-17, measuring

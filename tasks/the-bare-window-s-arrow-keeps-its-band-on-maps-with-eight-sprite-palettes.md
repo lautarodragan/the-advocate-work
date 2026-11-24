@@ -4,6 +4,8 @@ description: "Where no sprite palette or no two sprite tiles are free, the arrow
 type: feature
 status: draft
 author: chaja
+links:
+  relates: [book-of-three-a-black-block-over-the-window-in-the-lava-tunnels, the-window-s-arrow-without-a-background-as-an-object]
 ---
 
 Seen by Chajá on 2026-10-18, closing

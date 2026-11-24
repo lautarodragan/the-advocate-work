@@ -6,6 +6,8 @@ status: testing
 assignee: taro
 author: chaja
 agents: [Calandria, Cardón]
+links:
+  relates: [abl-the-quarry-timer-does-not-fit-on-108, rain-drops-cost-a-cache-its-slots]
 ---
 
 Seen by Chajá on 2026-10-14, with the-advocate `51b4b1b2` and the ports

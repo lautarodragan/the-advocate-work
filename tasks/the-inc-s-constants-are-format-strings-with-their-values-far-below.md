@@ -4,6 +4,8 @@ description: "mapdata's emission writes ~480 `NAME = value` constants as format 
 type: refactor
 status: draft
 author: calandria
+links:
+  relates: [the-emission-reads-the-screens-answer-and-the-battle-model-by-name, where-mapdata-and-convert-could-be-shorter]
 ---
 
 Seen by Calandria on 2026-11-23, reading `rm2k-snes/mapdata` at the-advocate

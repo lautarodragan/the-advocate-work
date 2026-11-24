@@ -6,6 +6,8 @@ status: testing
 assignee: taro
 agents: [Aguará, Hurón]
 author: aguara
+links:
+  relates: [zounds-condition-messages-are-japanese-defaults, zounds-the-item-target-picker-does-not-fit]
 ---
 
 Seen by Aguará on 2026-11-02, while doing

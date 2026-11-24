@@ -4,6 +4,9 @@ description: "Each song's volume ceiling is measured today by hand, building a R
 type: refactor
 status: todo
 author: taro
+links:
+  relates: [one-advocate-command, tests-without-the-stages-subcommands]
+  blocked-by: [cartridges-runs-itself-to-assemble]
 ---
 
 **Why**: `rm2k-snes-audio volume-ceilings`

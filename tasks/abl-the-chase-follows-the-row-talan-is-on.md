@@ -6,6 +6,8 @@ status: testing
 assignee: taro
 author: taro
 agents: [Calandria, Cardón]
+links:
+  relates: [a-page-change-restarts-a-route-with-the-same-commands, a-switch-from-a-page-wakes-a-parallel-a-frame-late, abl-the-chase-on-the-lower-path]
 ---
 
 Follows [`abl-the-chase-on-the-lower-path`](abl-the-chase-on-the-lower-path.md),

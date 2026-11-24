@@ -5,6 +5,8 @@ type: feature
 status: draft
 author: cardon
 game: abl
+links:
+  relates: [abl-the-hover-tram-s-crowd-is-cut]
 ---
 
 Seen by Cardón on 2026-11-18, in

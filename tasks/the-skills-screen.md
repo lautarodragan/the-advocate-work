@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: taro
 agents: [Mulita]
+links:
+  blocks: [switch-skills-from-the-menu]
 ---
 
 Phase 2 of [`the-skills-menu`](the-skills-menu.md), as section 7 of the

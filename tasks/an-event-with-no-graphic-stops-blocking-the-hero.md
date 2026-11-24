@@ -5,6 +5,8 @@ type: bug
 status: draft
 author: tijereta
 game: test-game
+links:
+  relates: [the-test-game-playable-by-hand]
 ---
 
 Seen by Tijereta on 2026-11-22, doing

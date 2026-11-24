@@ -4,6 +4,8 @@ description: "Choosing the active pages still walks every page of the map at ~1.
 type: refactor
 status: draft
 author: aguara
+links:
+  relates: [abl-lazer-teeth-s-rock-lags, frozen-world-the-battle-maps-lag]
 ---
 
 Seen by Aguará on 2026-10-17, measuring

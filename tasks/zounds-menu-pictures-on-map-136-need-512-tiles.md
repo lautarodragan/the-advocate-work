@@ -4,6 +4,8 @@ description: "Two faces of 180x59, a bar as wide as the screen and an HP picture
 type: bug
 status: draft
 author: tijereta
+links:
+  relates: [small-pictures-under-a-big-one-are-hidden, zounds-pictures-and-the-picture-made-screens]
 ---
 
 Seen by Tijereta on 2026-10-16, with the-advocate `9407d385` plus the

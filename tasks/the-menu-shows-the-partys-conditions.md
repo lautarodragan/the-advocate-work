@@ -7,6 +7,9 @@ status: testing
 assignee: taro
 author: hornero
 agents: [Tijereta, Cardón]
+links:
+  relates: [abl-s-menu-bank-has-no-tile-left-for-names, the-partys-conditions]
+  blocked-by: [the-main-menu-scrolls-its-party-for-sp]
 ---
 
 The follow-up [`the-partys-conditions`](the-partys-conditions.md) left on

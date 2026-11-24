@@ -7,6 +7,8 @@ assignee: taro
 author: taro
 game: desert-nightmare
 agents: [Calandria, Carpintero]
+links:
+  relates: [desert-nightmare-own-message-frame]
 ---
 
 taro, on 2026-11-20, playing the build of the-advocate `7951af2a` and the

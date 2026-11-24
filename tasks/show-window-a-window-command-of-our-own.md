@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: taro
 agents: [Mulita]
+links:
+  relates: [an-inventory-of-the-pictures-that-may-be-windows, cheaper-windows]
 ---
 
 Asked by taro on 2026-10-19, while Frozen World's B menu was blind on 22

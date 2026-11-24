@@ -4,6 +4,8 @@ description: "The common events' small pictures go up when shown since 2026-10-2
 type: bug
 status: draft
 author: carpintero
+links:
+  relates: [pictures-in-common-events-compiled-apart-are-not-shown, small-pictures-under-a-big-one-are-hidden]
 ---
 
 Seen by Carpintero on 2026-10-20, with the-advocate's branch

@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: hornero
 agents: [Mulita]
+links:
+  blocks: [items-that-cast-a-skill-outside-battle]
 ---
 
 Phase 3.2 of [`the-skills-menu`](the-skills-menu.md), after the list

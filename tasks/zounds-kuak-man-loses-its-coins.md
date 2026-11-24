@@ -4,6 +4,8 @@ description: "Map 178 has 327 events and the console keeps 120 rows; the coins a
 type: bug
 status: draft
 author: carpintero
+links:
+  relates: [the-event-s-touch-from-another-layer, zounds-maps-over-120-events]
 ---
 
 Seen by Carpintero on 2026-10-17, measuring

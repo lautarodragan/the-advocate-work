@@ -6,6 +6,8 @@ status: testing
 author: taro
 assignee: taro
 agents: [carpintero]
+links:
+  relates: [the-python-s-last-traces-in-the-tools]
 ---
 
 **Why**: when the converter went from Python to Rust, around 2026-10-01,

@@ -7,6 +7,8 @@ author: taro
 assignee: taro
 agents: [Hornero, Carpintero]
 game: desert-nightmare
+links:
+  blocks: [the-map-comes-back-in-pieces-after-a-big-picture]
 ---
 
 taro, 2026-11-22, playing on Mesen2, with frame-by-frame captures in

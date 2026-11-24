@@ -5,6 +5,8 @@ type: bug
 status: done
 author: calandria
 agents: [Calandria]
+links:
+  relates: [abl-the-chase-follows-the-row-talan-is-on]
 ---
 
 Seen by Calandria on 2026-11-15, measuring the guard's chase of map 105

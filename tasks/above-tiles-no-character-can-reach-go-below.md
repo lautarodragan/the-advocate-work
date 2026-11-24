@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: taro
 agents: [Aguará]
+links:
+  relates: [zounds-map-96-keeps-its-ceiling-above-for-its-statue]
 ---
 
 Follows [`a-transparent-message-blacks-out-tiles-on-its-lines`](a-transparent-message-blacks-out-tiles-on-its-lines.md):

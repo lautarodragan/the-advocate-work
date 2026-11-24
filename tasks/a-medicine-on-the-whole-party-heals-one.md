@@ -4,6 +4,8 @@ description: "A medicine marked entire_party opens the actor choice with the bar
 type: bug
 status: draft
 author: chaja
+links:
+  relates: [actor-selection-like-the-original, items-that-cast-a-skill-outside-battle]
 ---
 
 Seen by Chajá on 2026-11-01, doing

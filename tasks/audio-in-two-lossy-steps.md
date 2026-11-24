@@ -4,6 +4,8 @@ description: "Reduced and versioned MIDI and SoundFont, to listen to them in a D
 type: feature
 status: todo
 author: hornero
+links:
+  relates: [artistic-decision-patches]
 ---
 
 # What

@@ -5,6 +5,8 @@ type: feature
 status: todo
 author: huron
 game: desert-nightmare
+links:
+  relates: [desert-nightmare-light-masks-placed-by-an-anchor, desert-nightmare-nights-with-a-tint-of-their-own]
 ---
 
 What [`desert-nightmare-nights-with-a-tint-of-their-own`](desert-nightmare-nights-with-a-tint-of-their-own.md)

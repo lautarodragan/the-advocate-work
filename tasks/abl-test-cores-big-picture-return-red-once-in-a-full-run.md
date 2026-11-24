@@ -4,6 +4,8 @@ description: "bsnes drew the map back after the big picture without its lower ro
 type: bug
 status: draft
 author: tijereta
+links:
+  relates: [abl-test-cores-event-red-once-in-a-full-run]
 ---
 
 Seen by Tijereta on 2026-10-19, in a full run of ABL's suite on the branch

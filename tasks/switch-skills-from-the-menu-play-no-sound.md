@@ -5,6 +5,8 @@ type: bug
 status: wishlist
 author: mulita
 agents: [Mulita]
+links:
+  relates: [switch-skills-from-the-menu]
 ---
 
 Seen by Mulita on 2026-10-12, reading the code of phase 3.1 of

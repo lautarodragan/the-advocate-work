@@ -4,6 +4,8 @@ description: "When a page goes on after a Teleport —every door—, code_carry_
 type: refactor
 status: draft
 author: cardon
+links:
+  relates: [lashe-city-transitions-lag, maps-load-faster-without-losing-anything]
 ---
 
 Seen by Cardón on 2026-10-18, measuring

@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: huron
 agents: [Hurón]
+links:
+  relates: [items-past-450-are-silently-left-out]
 ---
 
 Suggested by Hurón on 2026-10-15, in the study

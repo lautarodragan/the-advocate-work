@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: taro
 agents: [Chajá]
+links:
+  relates: [zounds-condition-messages-are-japanese-defaults]
 ---
 
 Seen by taro on 2026-10-19, playing Zounds' delivery of that day (the ports `1182513`, the-advocate `2c350d8f`).

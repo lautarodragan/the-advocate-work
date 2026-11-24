@@ -5,6 +5,8 @@ type: bug
 status: done
 author: calandria
 agents: [Calandria, Aguará]
+links:
+  relates: [desert-nightmare-the-intro-and-the-file-screen]
 ---
 
 Seen by Calandria on 2026-10-11, at the-advocate `0bf46fb1` and the ports

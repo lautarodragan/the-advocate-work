@@ -7,6 +7,8 @@ status: testing
 assignee: taro
 author: tijereta
 agents: [Calandria, Hurón]
+links:
+  relates: [a-small-picture-s-fifteen-colours-lose-a-whole-hue, zounds-menu-pictures-on-map-136-need-512-tiles, zounds-pictures-and-the-picture-made-screens, zounds-pick-axe-and-notebook-fit-beside-no-map]
 ---
 
 Seen by Tijereta on 2026-10-16, with the-advocate `9407d385` plus the

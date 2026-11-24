@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: taro
 agents: [Calandria]
+links:
+  relates: [the-equip-screen-could-keep-the-slots-tiles-under-its-list, the-items-screen-s-bar-runs-ahead-of-its-text]
 ---
 
 taro, on 2026-11-17, playing ABL's build on Mesen with Hornero's

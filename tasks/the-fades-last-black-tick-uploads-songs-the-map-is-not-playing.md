@@ -5,6 +5,8 @@ type: optimization
 status: draft
 author: chaja
 game: abl
+links:
+  relates: [lashe-city-transitions-lag, frozen-world-every-turn-re-uploads-the-battle-screens-audio]
 ---
 
 Seen by Chajá on 2026-11-22, measuring

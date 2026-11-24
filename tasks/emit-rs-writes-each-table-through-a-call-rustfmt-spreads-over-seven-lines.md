@@ -6,6 +6,9 @@ status: testing
 assignee: taro
 agents: [Calandria]
 author: calandria
+links:
+  relates: [picture-tables-and-common-entries-write-the-same-entry-twice, record-scene-and-panorama-write-their-tables-outside-the-inc-writer, rm2k-snes-mapdata-maps-has-no-caller, small-repeats-inside-emit-rs-s-rest, the-battle-terms-by-name-are-a-42-arm-match, the-workspace-fails-its-own-lint, where-mapdata-and-convert-could-be-shorter]
+  blocks: [the-stages-speak-json-nobody-types]
 ---
 
 Seen by Calandria on 2026-11-23, reading `rm2k-snes/mapdata` at the-advocate

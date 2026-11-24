@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: taro
 agents: [Aguará]
+links:
+  relates: [a-transparent-window-over-a-flattened-panorama-shows-striped-edges]
 ---
 
 Follows [`the-test-game-a-transparent-box-over-a-scrolling-panorama`](the-test-game-a-transparent-box-over-a-scrolling-panorama.md):

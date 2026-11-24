@@ -6,6 +6,8 @@ status: done
 author: carpintero
 game: desert-nightmare
 agents: [Carpintero, Chajá]
+links:
+  relates: [identical-copies-of-a-common-event-are-stored-in-every-map]
 ---
 
 **Fixed** by [`a-common-event-is-copied-only-if-its-copy-draws`](a-common-event-is-copied-only-if-its-copy-draws.md)

@@ -7,6 +7,8 @@ author: hornero
 assignee: taro
 agents: [Hornero, Chajá, Carpintero]
 game: frozen-world
+links:
+  relates: [frozen-world-every-turn-re-uploads-the-battle-screens-audio, try-pack-picks-the-smallest-group]
 ---
 
 Seen by Hornero on 2026-11-22, verifying the merge of

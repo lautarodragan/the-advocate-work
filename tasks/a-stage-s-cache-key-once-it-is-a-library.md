@@ -4,6 +4,9 @@ description: "When the stages live inside rm2k-snes-convert, the cache can no lo
 type: refactor
 status: todo
 author: taro
+links:
+  relates: [abl-s-test-cartridges-become-test-game-cases]
+  blocked-by: [the-stages-speak-json-nobody-types]
 ---
 
 **Why**: since `be1f43a5` the stage cache keys each answer by the hash of

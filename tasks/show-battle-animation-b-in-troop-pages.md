@@ -7,6 +7,8 @@ status: testing
 assignee: taro
 author: calandria
 agents: [Tijereta, Mulita]
+links:
+  relates: [changeitems-and-changemonsterhp-by-a-variable, animations-in-battle]
 ---
 
 Seen by Calandria on 2026-10-14, with the-advocate `14e200fc` and the ports

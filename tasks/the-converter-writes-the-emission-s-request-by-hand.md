@@ -4,6 +4,9 @@ description: "rm2k-snes-convert links rm2k-snes-mapdata, whose request.rs types 
 type: refactor
 status: draft
 author: calandria
+links:
+  relates: [the-emission-reads-the-screens-answer-and-the-battle-model-by-name, where-mapdata-and-convert-could-be-shorter]
+  part-of: [the-stages-speak-json-nobody-types]
 ---
 
 Seen by Calandria on 2026-11-23, reading `rm2k-snes/convert` at the-advocate

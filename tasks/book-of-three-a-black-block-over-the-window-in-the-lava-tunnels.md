@@ -6,6 +6,8 @@ status: testing
 assignee: taro
 author: calandria
 agents: [Calandria, Chajá, Mulita]
+links:
+  relates: [the-bare-window-s-arrow-keeps-its-band-on-maps-with-eight-sprite-palettes]
 ---
 
 Seen by Calandria on 2026-10-19 in snes9x captures of the `lava` and

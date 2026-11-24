@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: taro
 agents: [Hornero, Tijereta]
+links:
+  relates: [the-msu-1-loop-bakes-the-tail]
 ---
 
 Measured on 2026-10-11 by Hornero, at taro's request, in their words, translated:

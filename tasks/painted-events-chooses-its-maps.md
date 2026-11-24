@@ -4,6 +4,8 @@ description: "`painted_events = true` paints every map where painting adds no de
 type: feature
 status: todo
 author: taro
+links:
+  relates: [still-pieces-painted-into-a-painted-map, the-trim-guesses-which-maps-go-painted]
 ---
 
 From [`still-pieces-painted-into-a-painted-map`](still-pieces-painted-into-a-painted-map.md):

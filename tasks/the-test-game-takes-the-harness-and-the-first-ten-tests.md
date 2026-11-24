@@ -7,6 +7,9 @@ assignee: taro
 agents: [Tijereta, Hurón]
 author: taro
 game: test-game
+links:
+  relates: [abl-the-moved-tests-cases-leave-its-maps]
+  part-of: [golden-game-and-two-repos]
 ---
 
 taro, on 2026-11-22, translated, about closing

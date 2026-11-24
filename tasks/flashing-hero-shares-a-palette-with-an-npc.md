@@ -7,6 +7,8 @@ status: done
 assignee: taro
 author: calandria
 agents: [Hurón]
+links:
+  relates: [a-battle-animation-on-the-map-leaves-the-hero-s-palette-wrong]
 ---
 
 Measured by Calandria on 2026-10-11 (`exclusions-left-over-in-the-ports.md`)
