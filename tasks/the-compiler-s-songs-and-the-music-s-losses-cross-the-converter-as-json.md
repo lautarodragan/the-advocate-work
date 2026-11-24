@@ -2,10 +2,11 @@
 name: "The compiler's songs and the music's losses cross the converter as JSON"
 description: "After B7 the music stage's request is typed, but its songs arrive as the event compiler's `Compiled::songs: Value` and are read into `rm2k_snes_audio::cartridge::Songs` with one `from_value`; and the losses the music decides come back in `audio.json`, which the converter reads by key with `unwrap_or` defaults"
 type: refactor
-status: draft
+status: todo
 author: mulita
 links:
   found-in: [the-stages-speak-json-nobody-types]
+  part-of: [the-stages-speak-json-nobody-types]
 ---
 
 Seen by Mulita on 2026-11-24, doing B7 of
@@ -45,3 +46,10 @@ nine games' builds byte for byte.
 
 **How to reproduce**: `rg 'from_value\(compiled.songs' rm2k-snes/convert`
 and `rg '"losses"' rm2k-snes/convert` in the-advocate.
+
+### 2026-11-24, Hornero: promoted to `todo`
+
+Promoted by Hornero: verified in the merged code, it finishes the stages
+task along the producer's-crate rule taro chose, checked byte for byte
+with nothing seen or heard changing. A step of phase B, after the MapInfo
+one.
