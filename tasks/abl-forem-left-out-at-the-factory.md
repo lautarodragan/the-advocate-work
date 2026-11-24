@@ -2,14 +2,15 @@
 name: "ABL: Forem left out at the factory"
 description: "Map 83 leaves out Forem, event 13, whom a route dresses, because with him the rain's colours are lent: the converter says so, as it said of Northern Surl Camp's Paradise and Emily"
 type: bug
-status: doing
-assignee: cardon
+status: draft
+assignee: taro
 agents: [cardon]
 author: tijereta
 links:
   found-in: [abl-paradise-and-emily-left-out-at-the-northern-surl-camp]
   relates: [abl-the-factory-pump-s-light-is-grey, characters-a-route-dresses-left-out-where-they-cost-the-map]
   duplicated-by: [abl-the-factory-pump-s-light-is-grey]
+  found: [share-data-on-the-rom-s-last-byte-does-not-link]
 ---
 
 Seen by Tijereta on 2026-11-22, grooming
@@ -64,3 +65,65 @@ Both of ABL's Known issues lines about map 83 become one.
 
 Taken by Cardón only for the captures; it goes back to `draft` with
 `assignee: taro` when they are in `/shared`.
+
+### 2026-11-24, Cardón: the captures of a, b and c
+
+In `/shared/captures/2026-11-24-forem-factory/`: `side-by-side.png` puts
+the three ROMs and the original next to each other, and `README.txt`
+says what each file is. ABL release, ports `4c23c9e`, the-advocate
+`5572e9e8`. (b) and (c) were built with a wally changed only for this
+experiment (branch `cardon-forem` in the-advocate, not to merge): (c)
+keeps the dressed rows on map 83 whatever they cost; (b) does the same
+and also lends `@tile:ChipSet1:138` a palette on map 83 only, without
+trying to fit its own colours. The converter says the same as the
+captures: (b) "drawn with someone else's: @tile:ChipSet1:138" and no rain
+warning; (c) "the raindrops … are lent 6, drawn with its nearest colors:
+[6, 6, 7] as [6, 6, 6]".
+
+The scene is reached by teleporting Dalia (actor 21) to (68, 68), where
+map 82's door leaves her, and letting event 9's autostart run with A
+pressed on each box. The pump is seen from `test_delcentric_pump`'s cell,
+(29, 61), with switch 276 on so the scene does not start. The rain is
+written into `far_weather` by hand —strong, with its seed—: **as far as
+the pages say, it does not rain on map 83 in the game**. No page of maps
+82 or 83 sets the weather; the rain is set on maps 1, 20, 21, 108, 209,
+223 and 309, and the weather survives a map change, so it would rain here
+only if one of those left it on and nothing cleared it before Dalia's
+scene —not checked by playing—. Every map carries the rain's colours
+because some page of the game sets rain somewhere (`has_rain` in the
+converter's `scan.rs`).
+
+#### What is seen
+
+* **Forem and the pump light are never on screen together.** Forem stands
+  at x 55-58 for the whole scene; the pumps are at x 27-31, 24 cells away.
+* **(a)**: the Agency Captain speaks from nowhere; the pump has its red
+  light.
+* **(b)**: the Captain is drawn, as in the original —with Kersh's sprite,
+  `Future1` 5, which is what the route dresses him in—. The right pump's
+  base loses its red light: nine pixels, red and two teal shades drawn
+  grey, seen only by walking to the pumps. The rain, if it rained, would
+  keep its colours.
+* **(c)**: the Captain is drawn the same; the pump keeps its red light,
+  identical to (a). What it pays is the raindrops' colour, `(6, 6, 7)` in
+  15 bits drawn as `(6, 6, 6)`: a slightly bluish grey drawn neutral grey
+  —186 pixels of a full-rain frame—, and only if it rained here, which it
+  does not.
+
+#### What each costs, as seen
+
+(b) costs a small detail that is always visible near the pumps; (c)
+costs nothing visible unless it rains here, and then one step of blue
+in the drops. Seen this way, **(c) costs less than (b)**, against
+Cardón's earlier recommendation, which did not know that the rain's cost
+is that small and that the scene shows no rain. The fix for (c) would be the converter
+counting `rain-colors-lent` as a cost only where a page can make it rain,
+or not counting a lent rain colour this close; that is a change to
+`loses_more` in wally, for whoever implements the choice.
+
+Found on the way and left as a draft:
+[`share-data-on-the-rom-s-last-byte-does-not-link`](share-data-on-the-rom-s-last-byte-does-not-link.md)
+—a first try at (b), which lent the tile on map 17 too, packed
+`share_data` at `$FFFFFF` and did not link—.
+
+Back to `draft`, `assignee: taro`, for the choice.

@@ -2,10 +2,10 @@
 name: "The emission reads the screens' answer and the battle model by name"
 description: "rm2k-snes-screens and rm2k-snes-battle build their answers with json! and mapdata reads them back as serde_json::Value, key by key, with some 290 accessor calls and the shape checks that come with them: one set of serde types both ends share would take the reading off emit.rs"
 type: refactor
-status: doing
-assignee: calandria
+status: testing
+assignee: taro
 author: calandria
-agents: [cardon]
+agents: [cardon, calandria]
 links:
   found-in: [where-mapdata-and-convert-could-be-shorter]
   relates: [the-converter-reads-the-stages-answers-with-python-s-truthiness, the-converter-writes-the-emission-s-request-by-hand, the-inc-s-constants-are-format-strings-with-their-values-far-below]
@@ -90,3 +90,18 @@ requests regenerated through the new types.
 It is step **B3** —and, with B2, the battle model's half— of the plan in
 [`the-stages-speak-json-nobody-types`](the-stages-speak-json-nobody-types.md)
 (`part-of` it, in `doing`): defined and ordered there.
+
+### 2026-11-24, Calandria: done as B2 and B3
+
+the-advocate `66dfeb92` (the battle's `tables` and `model`) and
+`6fa77fe7` (the screens' answer), on `calandria-b`. `Emit::battle_model`
+is `rm2k_snes_battle::model::Model`, `BattleTables::slots` the slots'
+type, `Emit::screens` `rm2k_snes_screens::answer::Answer` and
+`window_systems` a list of `OtherSystem`; mapdata depends on the screens
+crate. Of mapdata's accessor calls, some 446 became 113 —what is left is
+the geometry lists by name, which stay maps on purpose—; with B5 merged,
+the troops' pages are `rm2k_snes_events::answer::TroopPages` too, and
+`json.rs` went from 113 lines to 56, the geometry's readers. Net lines +147 and +66, not the -200 to -300 this draft
+guessed for the reading alone: the types' declarations (`answer.rs` is
+418 lines) are most of it. The details in the log of
+[`the-stages-speak-json-nobody-types`](the-stages-speak-json-nobody-types.md).
