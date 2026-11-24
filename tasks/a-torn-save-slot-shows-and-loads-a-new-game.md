@@ -5,7 +5,8 @@ type: bug
 status: draft
 author: huron
 links:
-  relates: [a-save-on-the-fx-pak-waits-for-a-silent-seek, the-sram-as-slow-wram]
+  found-in: [a-save-on-the-fx-pak-waits-for-a-silent-seek]
+  relates: [the-sram-as-slow-wram]
 ---
 
 Seen by Hurón on 2026-11-17, reading the runtime for

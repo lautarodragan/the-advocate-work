@@ -8,7 +8,7 @@ author: taro
 agents: [Cardón]
 game: zounds
 links:
-  relates: [zounds-map-134-s-chest-is-a-dark-square]
+  found: [zounds-map-134-s-chest-is-a-dark-square]
 ---
 
 taro, on 2026-11-17, translated:

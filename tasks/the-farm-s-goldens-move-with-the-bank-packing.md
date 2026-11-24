@@ -5,7 +5,7 @@ type: bug
 status: draft
 author: tijereta
 links:
-  relates: [sp-in-the-menu-and-the-item-target-picker]
+  found-in: [sp-in-the-menu-and-the-item-target-picker]
 ---
 
 Seen by Tijereta on 2026-11-01, with the-advocate `422f904d` (main's

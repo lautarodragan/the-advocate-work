@@ -6,7 +6,8 @@ status: draft
 author: calandria
 agents: [Calandria]
 links:
-  relates: [abl-a-shop-s-screens-show-half-composed-frames, abl-the-equip-screen-s-cursor-runs-ahead-of-its-lists, the-skills-screen-s-and-a-custom-menu-s-bar-may-run-ahead-of-their-text]
+  found-in: [abl-the-equip-screen-s-cursor-runs-ahead-of-its-lists]
+  relates: [abl-a-shop-s-screens-show-half-composed-frames, the-skills-screen-s-and-a-custom-menu-s-bar-may-run-ahead-of-their-text]
 ---
 
 Seen by Calandria on 2026-11-17, in A Blurred Line, with the-advocate at

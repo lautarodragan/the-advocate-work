@@ -5,7 +5,8 @@ type: bug
 status: draft
 author: chaja
 links:
-  relates: [frozen-world-every-turn-re-uploads-the-battle-screens-audio, lashe-city-transitions-lag]
+  found-in: [frozen-world-every-turn-re-uploads-the-battle-screens-audio]
+  relates: [lashe-city-transitions-lag]
 ---
 
 Seen by Chajá on 2026-11-22, doing

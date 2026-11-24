@@ -6,7 +6,7 @@ status: done
 author: chaja
 agents: [Chajá]
 links:
-  relates: [abl-forem-left-out-at-the-factory]
+  found: [abl-forem-left-out-at-the-factory]
 ---
 
 Seen by Tijereta on 2026-10-20 in the release build of the ports `68bf55b`

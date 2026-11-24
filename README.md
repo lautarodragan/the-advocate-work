@@ -164,6 +164,7 @@ inverse on the other end:
 | `blocks` | `blocked-by` | "it goes after X" |
 | `part-of` | `has-part` | a big task and its steps |
 | `duplicates` | `duplicated-by` | a duplicate kept, instead of deleted without a trace |
+| `found-in` | `found` | a finding, and the task it was found while doing |
 | `relates` | `relates` | related, no order |
 
 Few on purpose; one more is added when one is missing, in `RELATIONS` of
@@ -176,7 +177,9 @@ are, checked only for existence: they say why, and `links` says what
 one task is to the other. It is taro's, from 2026-11-24; that day the
 open tasks —`draft`, `todo`, `doing`, `testing`— got theirs from what
 their prose said, and the `done` and `cancelled` ones only the inverses
-of those.
+of those. `found-in` came the same day, also taro's: most of those links
+were a finding and the task it turned up in, which are not related as
+tasks, and the page is navigated better by where something was found.
 
 **`nu tasks/tasks.nu check` checks the links**, without the network: a
 typed link with an unknown relation, to a task that does not exist or

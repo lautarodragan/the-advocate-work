@@ -8,7 +8,8 @@ assignee: taro
 author: calandria
 agents: [Calandria, Chajá]
 links:
-  relates: [abl-forem-left-out-at-the-factory, abl-the-factory-pump-s-light-is-grey]
+  found: [abl-the-factory-pump-s-light-is-grey]
+  relates: [abl-forem-left-out-at-the-factory]
 ---
 
 Seen by Calandria on 2026-10-19, measured with the converter of the-advocate

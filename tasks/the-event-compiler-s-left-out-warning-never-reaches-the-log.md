@@ -5,7 +5,8 @@ type: bug
 status: draft
 author: calandria
 links:
-  relates: [the-stages-speak-json-nobody-types, variables-are-capped-at-256-slots]
+  found-in: [the-stages-speak-json-nobody-types]
+  relates: [variables-are-capped-at-256-slots]
 ---
 
 Seen by Calandria on 2026-11-24, reading the-advocate `0d9f187c` for the

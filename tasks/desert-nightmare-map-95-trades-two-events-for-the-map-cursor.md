@@ -5,7 +5,7 @@ type: bug
 status: todo
 author: huron
 links:
-  relates: [desert-nightmare-own-message-frame]
+  found-in: [desert-nightmare-own-message-frame]
 ---
 
 Seen by Hurón on 2026-11-21, doing

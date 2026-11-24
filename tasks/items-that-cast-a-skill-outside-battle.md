@@ -8,7 +8,7 @@ assignee: taro
 author: hornero
 agents: [Chajá, Cardón]
 links:
-  relates: [a-medicine-on-the-whole-party-heals-one, the-skills-command-does-not-ask-for-a-condition-that-stops-acting]
+  found: [a-medicine-on-the-whole-party-heals-one, the-skills-command-does-not-ask-for-a-condition-that-stops-acting]
   blocked-by: [healing-skills-from-the-menu]
   part-of: [the-skills-menu]
 ---

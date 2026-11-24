@@ -7,7 +7,8 @@ assignee: taro
 agents: [Hurón]
 author: hornero
 links:
-  relates: [overload-and-remove-for-try-pack, try-pack-picks-the-smallest-group]
+  found: [try-pack-picks-the-smallest-group]
+  relates: [overload-and-remove-for-try-pack]
 ---
 
 # What

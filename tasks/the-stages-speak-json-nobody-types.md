@@ -7,7 +7,8 @@ assignee: calandria
 agents: [calandria, aguara, cardon, carpintero, chaja]
 author: taro
 links:
-  relates: [artistic-decision-patches, battle-tests-without-simulate, tests-without-the-stages-subcommands, the-event-compiler-s-left-out-warning-never-reaches-the-log]
+  found: [the-event-compiler-s-left-out-warning-never-reaches-the-log]
+  relates: [artistic-decision-patches, battle-tests-without-simulate, tests-without-the-stages-subcommands]
   blocked-by: [emit-rs-writes-each-table-through-a-call-rustfmt-spreads-over-seven-lines, picture-tables-and-common-entries-write-the-same-entry-twice, rm2k-snes-mapdata-maps-has-no-caller, small-repeats-inside-emit-rs-s-rest, the-battle-terms-by-name-are-a-42-arm-match]
   blocks: [a-stage-s-cache-key-once-it-is-a-library, one-advocate-command]
   has-part: [the-converter-reads-the-stages-answers-with-python-s-truthiness, the-converter-writes-the-emission-s-request-by-hand, the-emission-keeps-fallbacks-for-answers-older-than-its-fixtures, the-emission-reads-the-screens-answer-and-the-battle-model-by-name]

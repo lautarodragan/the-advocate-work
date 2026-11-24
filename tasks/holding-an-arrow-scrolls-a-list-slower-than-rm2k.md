@@ -5,7 +5,7 @@ type: feature
 status: draft
 author: huron
 links:
-  relates: [scrolling-a-list-shows-the-last-row-repeated-for-a-moment]
+  found-in: [scrolling-a-list-shows-the-last-row-repeated-for-a-moment]
 ---
 
 Seen by Hurón on 2026-10-18, fixing

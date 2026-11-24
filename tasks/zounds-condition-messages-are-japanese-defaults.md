@@ -5,7 +5,8 @@ type: bug
 status: draft
 author: aguara
 links:
-  relates: [items-that-give-a-condition-in-battle-only-hurt, zounds-battle-messages-cannot-be-read, zounds-skill-names-show-a-question-mark-for-an-accent]
+  found-in: [items-that-give-a-condition-in-battle-only-hurt, zounds-skill-names-show-a-question-mark-for-an-accent]
+  relates: [zounds-battle-messages-cannot-be-read]
 ---
 
 Seen by Aguará on 2026-11-22, while doing

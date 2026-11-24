@@ -5,7 +5,7 @@ type: chore
 status: draft
 author: tijereta
 links:
-  relates: [debug-switches-for-the-global-state]
+  found-in: [debug-switches-for-the-global-state]
 ---
 
 Seen by Tijereta on 2026-11-17, adding the debug screen's state switches

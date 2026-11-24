@@ -5,7 +5,7 @@ type: bug
 status: draft
 author: aguara
 links:
-  relates: [a-transparent-message-blacks-out-tiles-on-its-lines]
+  found-in: [a-transparent-message-blacks-out-tiles-on-its-lines]
 ---
 
 Seen by Aguará on 2026-11-02, measuring

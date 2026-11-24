@@ -6,7 +6,7 @@ status: draft
 author: cardon
 agents: [Cardón]
 links:
-  relates: [a-skill-in-battle-writes-no-result-line]
+  found-in: [a-skill-in-battle-writes-no-result-line]
 ---
 
 Seen by Cardón on 2026-10-20, **reading the code against easyrpg's**, with

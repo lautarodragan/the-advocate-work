@@ -5,7 +5,7 @@ type: bug
 status: draft
 author: hornero
 links:
-  relates: [the-library-crates-carry-binaries-nobody-runs]
+  found-in: [the-library-crates-carry-binaries-nobody-runs]
 ---
 
 Seen by Hornero on 2026-11-23, running `just rust-test` on the-advocate at

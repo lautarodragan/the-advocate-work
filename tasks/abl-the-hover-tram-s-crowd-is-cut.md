@@ -8,7 +8,8 @@ author: taro
 agents: [Cardón]
 game: abl
 links:
-  relates: [a-character-stands-on-its-middle-pattern, abl-characters-cut-on-crowded-lines, reach-does-not-know-a-scene-runs-once, the-lowering-takes-the-boot-start-on-every-map]
+  found: [a-character-stands-on-its-middle-pattern, reach-does-not-know-a-scene-runs-once, the-lowering-takes-the-boot-start-on-every-map]
+  relates: [abl-characters-cut-on-crowded-lines]
 ---
 
 taro, on 2026-11-17, translated (screenshots kept in

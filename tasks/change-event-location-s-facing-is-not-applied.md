@@ -6,7 +6,7 @@ status: draft
 author: mulita
 agents: [Mulita]
 links:
-  relates: [a-teleport-s-facing-is-not-applied]
+  found-in: [a-teleport-s-facing-is-not-applied]
 ---
 
 Seen by Mulita on 2026-11-03, over Zounds' dump at ports `3e9b2cc` and the

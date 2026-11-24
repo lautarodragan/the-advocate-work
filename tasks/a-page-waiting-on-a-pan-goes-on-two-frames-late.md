@@ -5,7 +5,7 @@ type: bug
 status: draft
 author: tijereta
 links:
-  relates: [two-pans-without-wait-move-one-after-the-other]
+  found-in: [two-pans-without-wait-move-one-after-the-other]
 ---
 
 Seen by Tijereta on 2026-11-20, doing

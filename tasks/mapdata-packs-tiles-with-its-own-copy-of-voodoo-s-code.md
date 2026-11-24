@@ -5,7 +5,7 @@ type: refactor
 status: draft
 author: calandria
 links:
-  relates: [where-mapdata-and-convert-could-be-shorter]
+  found-in: [where-mapdata-and-convert-could-be-shorter]
 ---
 
 Seen by Calandria on 2026-11-23, reading `rm2k-snes/mapdata` at the-advocate

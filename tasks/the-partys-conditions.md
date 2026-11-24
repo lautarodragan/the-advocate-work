@@ -8,7 +8,8 @@ assignee: taro
 author: taro
 agents: [Mulita, Cardón]
 links:
-  relates: [a-medicine-does-not-cure-a-condition, the-menu-shows-the-partys-conditions, battle-conditions-for-real, optimise-parallel-events-when-compiling, terrains-do-what-rm2k-does, the-skills-command-does-not-ask-for-a-condition-that-stops-acting]
+  found: [a-medicine-does-not-cure-a-condition]
+  relates: [the-menu-shows-the-partys-conditions, battle-conditions-for-real, optimise-parallel-events-when-compiling, terrains-do-what-rm2k-does, the-skills-command-does-not-ask-for-a-condition-that-stops-acting]
   has-part: [items-that-give-a-condition-in-battle-only-hurt]
 ---
 

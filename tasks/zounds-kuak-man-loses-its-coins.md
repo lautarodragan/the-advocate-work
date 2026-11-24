@@ -5,7 +5,8 @@ type: bug
 status: draft
 author: carpintero
 links:
-  relates: [the-event-s-touch-from-another-layer, zounds-maps-over-120-events]
+  found-in: [zounds-maps-over-120-events]
+  relates: [the-event-s-touch-from-another-layer]
 ---
 
 Seen by Carpintero on 2026-10-17, measuring

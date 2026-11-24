@@ -8,7 +8,7 @@ agents: [Tijereta, Hurón]
 game: test-game
 author: calandria
 links:
-  relates: [abl-s-eraseevent-tests-leave-for-the-test-game]
+  found: [abl-s-eraseevent-tests-leave-for-the-test-game]
 ---
 
 Hurón left it on 2026-10-06 in `eraseevent-for-real.md`: the

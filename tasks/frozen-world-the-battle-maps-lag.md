@@ -7,7 +7,7 @@ assignee: taro
 author: taro
 agents: [Aguará]
 links:
-  relates: [a-refresh-costs-frames-on-maps-of-many-pages, frozen-world-every-turn-re-uploads-the-battle-screens-audio]
+  found: [a-refresh-costs-frames-on-maps-of-many-pages, frozen-world-every-turn-re-uploads-the-battle-screens-audio]
 ---
 
 taro, on 2026-10-17, playing Frozen World on Mednafen: the intro, moving,

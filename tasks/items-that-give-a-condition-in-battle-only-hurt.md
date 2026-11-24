@@ -9,7 +9,8 @@ author: tijereta
 agents: [Tijereta, Mulita, Hurón]
 links:
   part-of: [the-partys-conditions]
-  relates: [special-items-cast-their-skill-in-battle, zounds-condition-messages-are-japanese-defaults]
+  found-in: [special-items-cast-their-skill-in-battle]
+  found: [zounds-condition-messages-are-japanese-defaults]
 ---
 
 Seen by Tijereta on 2026-10-19, on the-advocate `54ec3daf` plus

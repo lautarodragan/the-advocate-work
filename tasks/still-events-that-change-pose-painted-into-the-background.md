@@ -7,7 +7,7 @@ assignee: taro
 author: cardon
 agents: [Cardón]
 links:
-  relates: [changing-the-map-s-tiles-lags]
+  found: [changing-the-map-s-tiles-lags]
 ---
 
 Seen by Cardón on 2026-11-02, with the-advocate `0ba09da4` plus the

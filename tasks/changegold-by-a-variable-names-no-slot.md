@@ -7,7 +7,7 @@ assignee: taro
 agents: [Cardón, Hurón]
 author: chaja
 links:
-  relates: [changeitems-and-changemonsterhp-by-a-variable]
+  found-in: [changeitems-and-changemonsterhp-by-a-variable]
 ---
 
 Seen by Chajá on 2026-10-14, reading the code while doing

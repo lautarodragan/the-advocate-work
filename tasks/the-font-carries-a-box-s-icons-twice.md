@@ -6,7 +6,7 @@ game: zounds
 status: draft
 author: aguara
 links:
-  relates: [the-text-screens-draw-latin-1]
+  found-in: [the-text-screens-draw-latin-1]
 ---
 
 Seen by Aguará on 2026-11-22, in

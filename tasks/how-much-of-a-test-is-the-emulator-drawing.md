@@ -7,7 +7,7 @@ author: taro
 assignee: taro
 agents: [Hornero, Chajá]
 links:
-  relates: [a-snes9x-savestate-round-trip-is-not-exact, bsnes-draws-every-frame-of-the-suites]
+  found: [a-snes9x-savestate-round-trip-is-not-exact, bsnes-draws-every-frame-of-the-suites]
 ---
 
 > I would measure the emulator itself.

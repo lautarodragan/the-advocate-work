@@ -2,8 +2,8 @@
 name: "Links between tasks have a type and both ends"
 description: "The 938 links between tasks are prose: nothing checks they resolve, and the other end does not show them. Typed relations in the frontmatter —blocks, part-of, duplicates, relates—, written on both ends and checked by `tasks.nu check`, shown on the page as a list before the log; and `check` catches broken links"
 type: feature
-status: doing
-assignee: huron
+status: testing
+assignee: taro
 agents: [huron]
 author: taro
 ---
@@ -170,3 +170,64 @@ What to look at: the page's "Links" list, in any task of the chain
 
 (taro, 2026-11-24, in their words, translated, on Hurón's note that most
 of the 272 `relates` mean "found while doing X")
+
+### 2026-11-24, Hurón: `found-in` and `found`
+
+Two commits again, the tool apart from the judgement.
+
+#### The relation (`5fffac6`)
+
+**`found-in`** on the finding, **`found`** on the task it turned up in:
+one more pair in `RELATIONS`, a row in the README's table, and on the
+page "found in" and "found" between "duplicated by" and "relates". The
+names are the ones Hornero suggested: the finding is the one whose
+prose says "Seen by X, doing [B]", so `found-in: [B]` reads as that line
+does, and `found` on B reads as its "Drafts:" lists. Longer names
+—`found-while`, `turned-up`— say the same with less in common between
+the two ends.
+
+#### The pass (`efc2a04`)
+
+The 272 `relates` pairs, each read by the paragraph around the link on
+both ends. **147 became `found-in`/`found`**: where one end says it was
+seen, found, measured or read while doing, fixing, measuring or closing
+the other —or on the other's branch—, or the other lists it among its
+drafts. **125 stay `relates`**: follow-ups ("From X", "Follows X", "goes
+on in X", "left open when taro closed X"), tasks citing each other for a
+number or a precedent, siblings found in the same third task, and a
+draft seen again somewhere other than where it was found. Only the
+`links` lines change, in 226 tasks; `the-stages-speak-json-nobody-types`
+only in its frontmatter. `check`: 630 typed links, all with both ends; no
+broken links. The page: `a-conversion-cache-shared-by-the-worktrees`
+shows "found" with its two drafts and "relates" with the `.dbg` test;
+`the-shared-conversion-cache-grows-without-bound` shows "found in" the
+cache task in `testing`.
+
+**Unsure, and decided so**:
+
+* `found-in`, though the finding was not what the task was about: the
+  drafts Hornero saw verifying a merge
+  (`frozen-world-s-turn-audio-test-passes-only-with-the-tracks` in
+  `try-pack-picks-the-smallest-group`,
+  `fxpak-s-pty-tests-fail-under-load` in
+  `the-library-crates-carry-binaries-nobody-runs`); what taro said while
+  looking at another task's captures
+  (`changing-the-map-s-tiles-lags` in
+  `still-events-that-change-pose-painted-into-the-background`,
+  `desert-nightmare-nights-with-a-tint-of-their-own` in
+  `still-pieces-painted-into-a-painted-map`); and the measurement drafts
+  of a study (`bsnes-draws-every-frame-of-the-suites` in
+  `how-much-of-a-test-is-the-emulator-drawing`).
+* `relates`, though close: `the-cached-dbg-test-sees-a-date-move` names
+  the cache task as where its test came from, not where it was seen;
+  `a-refresh-costs-frames-on-maps-of-many-pages` was *seen again* in
+  `abl-lazer-teeth-s-rock-lags` (it is `found-in`
+  `frozen-world-the-battle-maps-lag`); `painted-events-chooses-its-maps`
+  and `overload-and-remove-for-try-pack` say "From X", a next step more
+  than a finding.
+
+**For taro**: `goldens-of-the-neon-vipers-playthrough` (`done`) says it is
+a duplicate of `playthrough-pending-goldens` and was closed as one; it is
+`relates` and could be `duplicates`. Left as it is: this pass was only
+`found-in`.
+

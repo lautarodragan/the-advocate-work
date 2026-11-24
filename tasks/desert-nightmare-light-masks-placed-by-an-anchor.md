@@ -6,7 +6,8 @@ status: draft
 author: huron
 game: desert-nightmare
 links:
-  relates: [desert-nightmare-nights-with-a-tint-of-their-own, desert-nightmare-lit-cells-over-a-tinted-night]
+  found-in: [desert-nightmare-nights-with-a-tint-of-their-own]
+  relates: [desert-nightmare-lit-cells-over-a-tinted-night]
 ---
 
 Seen by Hurón on 2026-11-19, in

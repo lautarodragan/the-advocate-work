@@ -5,7 +5,7 @@ type: bug
 status: draft
 author: calandria
 links:
-  relates: [rain-drops-cost-a-cache-its-slots]
+  found-in: [rain-drops-cost-a-cache-its-slots]
 ---
 
 Seen by Calandria on 2026-10-17, with the-advocate `eb16d48b` (branch

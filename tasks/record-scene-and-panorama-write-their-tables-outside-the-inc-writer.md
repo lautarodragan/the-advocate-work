@@ -6,7 +6,7 @@ status: draft
 author: calandria
 agents: [Calandria]
 links:
-  relates: [emit-rs-writes-each-table-through-a-call-rustfmt-spreads-over-seven-lines]
+  found-in: [emit-rs-writes-each-table-through-a-call-rustfmt-spreads-over-seven-lines]
 ---
 
 Seen by Calandria on 2026-11-23, at the-advocate `ae30bac6` (branch

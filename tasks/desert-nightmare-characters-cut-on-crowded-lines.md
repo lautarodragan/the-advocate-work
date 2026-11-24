@@ -5,7 +5,8 @@ type: bug
 status: todo
 author: mulita
 links:
-  relates: [desert-nightmare-roofs-left-out-show-white, maps-with-more-objects-on-a-line-than-the-ppu-draws]
+  found-in: [maps-with-more-objects-on-a-line-than-the-ppu-draws]
+  relates: [desert-nightmare-roofs-left-out-show-white]
 ---
 
 Seen by Mulita on 2026-11-17 with the ports' `just objects-per-line`, at

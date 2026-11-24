@@ -5,7 +5,8 @@ type: feature
 status: todo
 author: huron
 links:
-  relates: [the-event-compiler-s-left-out-warning-never-reaches-the-log, the-wram-and-sram-map-measured]
+  found-in: [the-wram-and-sram-map-measured]
+  relates: [the-event-compiler-s-left-out-warning-never-reaches-the-log]
   blocks: [vampires-dawn-summons-dont-compile, vampires-dawn-the-victims-choice-does-not-compile]
   part-of: [the-converter-caps-what-far-ram-no-longer-limits]
   duplicated-by: [variables-past-256]

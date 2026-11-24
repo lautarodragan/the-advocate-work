@@ -9,7 +9,8 @@ agents: [Hornero, Chajá, Carpintero]
 game: vampires-dawn
 links:
   blocked-by: [a-big-dma-from-the-msu-1-data-port-is-unverified-on-the-fx-pak]
-  relates: [a-save-on-the-fx-pak-waits-for-a-silent-seek, lashe-city-transitions-lag, msu-data-seek-does-not-forget-where-the-effects-left-the-port, the-sram-as-slow-wram]
+  found: [msu-data-seek-does-not-forget-where-the-effects-left-the-port]
+  relates: [a-save-on-the-fx-pak-waits-for-a-silent-seek, lashe-city-transitions-lag, the-sram-as-slow-wram]
 ---
 
 > Technically ROM doesn't "spare". Or rather, it's debatable. The msu is

@@ -7,7 +7,7 @@ author: mulita
 game: desert-nightmare
 agents: [Mulita]
 links:
-  relates: [desert-nightmare-the-game-s-menu-draws-nothing]
+  found-in: [desert-nightmare-the-game-s-menu-draws-nothing]
 ---
 
 Seen by Mulita on 2026-11-20, at the-advocate `810d483c` and the ports

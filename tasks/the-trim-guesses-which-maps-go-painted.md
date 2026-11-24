@@ -6,7 +6,8 @@ status: draft
 author: carpintero
 agents: [Carpintero]
 links:
-  relates: [painted-events-chooses-its-maps, the-converter-s-stages-and-what-each-spends]
+  found-in: [the-converter-s-stages-and-what-each-spends]
+  relates: [painted-events-chooses-its-maps]
 ---
 
 Found by Carpintero on 2026-11-19, reading the code for

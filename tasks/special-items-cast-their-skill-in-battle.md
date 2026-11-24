@@ -8,7 +8,7 @@ assignee: taro
 author: taro
 agents: [Tijereta]
 links:
-  relates: [a-skill-in-battle-writes-no-result-line, an-item-with-several-uses-is-spent-whole, items-that-give-a-condition-in-battle-only-hurt]
+  found: [a-skill-in-battle-writes-no-result-line, an-item-with-several-uses-is-spent-whole, items-that-give-a-condition-in-battle-only-hurt]
 ---
 
 taro, on 2026-10-19, playing Zounds:

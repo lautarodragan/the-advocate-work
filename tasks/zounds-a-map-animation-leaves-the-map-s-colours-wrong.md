@@ -7,7 +7,7 @@ assignee: taro
 author: taro
 agents: [Chajá]
 links:
-  relates: [a-face-s-cells-step-runs-past-the-vblank]
+  found: [a-face-s-cells-step-runs-past-the-vblank]
 ---
 
 taro, on 2026-10-19, playing Zounds (delivery of that day, the-advocate

@@ -5,7 +5,7 @@ type: bug
 status: draft
 author: tijereta
 links:
-  relates: [the-menu-shows-the-partys-conditions]
+  found-in: [the-menu-shows-the-partys-conditions]
 ---
 
 Seen by Tijereta on 2026-11-02, measuring

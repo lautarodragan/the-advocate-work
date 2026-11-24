@@ -7,7 +7,8 @@ assignee: taro
 author: mulita
 agents: [Chajá, Mulita]
 links:
-  relates: [book-of-three-the-last-pictures-are-not-drawn, big-picture-over-a-mode-3-panorama-may-show-its-tilemap-in-bg2, book-of-three-the-maps-place-names-are-hard-to-read, pictures-in-common-events-compiled-apart-are-not-shown]
+  found: [book-of-three-the-maps-place-names-are-hard-to-read]
+  relates: [book-of-three-the-last-pictures-are-not-drawn, big-picture-over-a-mode-3-panorama-may-show-its-tilemap-in-bg2, pictures-in-common-events-compiled-apart-are-not-shown]
 ---
 
 Seen by Mulita on 2026-10-15 in the build's `degradations.json`

@@ -8,7 +8,8 @@ assignee: taro
 author: hornero
 agents: [Tijereta, Cardón]
 links:
-  relates: [abl-s-menu-bank-has-no-tile-left-for-names, the-partys-conditions]
+  found: [abl-s-menu-bank-has-no-tile-left-for-names]
+  relates: [the-partys-conditions]
   blocked-by: [the-main-menu-scrolls-its-party-for-sp]
 ---
 

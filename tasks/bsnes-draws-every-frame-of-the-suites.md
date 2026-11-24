@@ -6,7 +6,7 @@ status: draft
 author: chaja
 agents: [Chajá]
 links:
-  relates: [how-much-of-a-test-is-the-emulator-drawing]
+  found-in: [how-much-of-a-test-is-the-emulator-drawing]
 ---
 
 Measured by Chajá on 2026-11-22, with the-advocate at `96cec117` (branch

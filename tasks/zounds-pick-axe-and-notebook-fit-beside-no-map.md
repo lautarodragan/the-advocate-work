@@ -5,7 +5,8 @@ type: bug
 status: draft
 author: carpintero
 links:
-  relates: [pictures-in-common-events-compiled-apart-are-not-shown, small-pictures-under-a-big-one-are-hidden]
+  found-in: [pictures-in-common-events-compiled-apart-are-not-shown]
+  relates: [small-pictures-under-a-big-one-are-hidden]
 ---
 
 Seen by Carpintero on 2026-10-20, with the-advocate's branch

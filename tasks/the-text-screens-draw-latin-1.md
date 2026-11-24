@@ -7,7 +7,7 @@ author: taro
 assignee: taro
 agents: [Hornero, Aguará, Calandria]
 links:
-  relates: [the-font-carries-a-box-s-icons-twice]
+  found: [the-font-carries-a-box-s-icons-twice]
 ---
 
 > How complex or feasible would it be to add accents and opening question

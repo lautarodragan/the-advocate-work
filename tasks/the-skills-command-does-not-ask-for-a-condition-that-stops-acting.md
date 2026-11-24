@@ -5,7 +5,8 @@ type: bug
 status: draft
 author: chaja
 links:
-  relates: [items-that-cast-a-skill-outside-battle, the-partys-conditions]
+  found-in: [items-that-cast-a-skill-outside-battle]
+  relates: [the-partys-conditions]
 ---
 
 Seen by Chajá on 2026-11-01, doing

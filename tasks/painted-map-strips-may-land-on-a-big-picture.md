@@ -5,7 +5,7 @@ type: bug
 status: draft
 author: mulita
 links:
-  relates: [desert-nightmare-the-menu-s-face-is-lost-on-painted-maps]
+  found-in: [desert-nightmare-the-menu-s-face-is-lost-on-painted-maps]
 ---
 
 Seen by Mulita on 2026-11-22 reading the code while fixing

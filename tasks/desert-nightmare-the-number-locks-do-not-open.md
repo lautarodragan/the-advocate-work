@@ -8,7 +8,7 @@ author: huron
 game: desert-nightmare
 agents: [Hurón, Tijereta, Carpintero]
 links:
-  relates: [desert-nightmare-what-it-takes-to-be-playable]
+  found-in: [desert-nightmare-what-it-takes-to-be-playable]
 ---
 
 Seen by Hurón on 2026-11-19, at the-advocate `62b6e5cb` and the ports

@@ -7,7 +7,8 @@ assignee: taro
 author: calandria
 agents: [Calandria]
 links:
-  relates: [abl-it-does-not-rain-in-paradise, animations-given-up-for-a-picture-that-is-not-drawn, sunset-towns-crowds-wait-for-a-slot]
+  found: [sunset-towns-crowds-wait-for-a-slot]
+  relates: [abl-it-does-not-rain-in-paradise, animations-given-up-for-a-picture-that-is-not-drawn]
 ---
 
 Seen by Calandria on 2026-10-16, with the-advocate `8c6a345b` and the

@@ -7,7 +7,7 @@ assignee: null
 author: huron
 agents: [Hurón]
 links:
-  relates: [rm2k-s-exfont-icons-in-names-and-texts]
+  found-in: [rm2k-s-exfont-icons-in-names-and-texts]
 ---
 
 Seen by Hurón on 2026-11-02, the-advocate `huron-exfont` (on top of

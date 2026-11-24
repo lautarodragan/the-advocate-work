@@ -7,7 +7,8 @@ author: aguara
 agents: [Aguará]
 game: desert-nightmare
 links:
-  relates: [a-map-s-small-pictures-go-in-all-or-none, desert-nightmare-interiors-painted-now-that-the-box-is-a-window, desert-nightmare-the-screen-goes-black-before-the-first-monster]
+  found-in: [desert-nightmare-the-screen-goes-black-before-the-first-monster]
+  relates: [a-map-s-small-pictures-go-in-all-or-none, desert-nightmare-interiors-painted-now-that-the-box-is-a-window]
 ---
 
 Seen by Aguará on 2026-11-21, closing

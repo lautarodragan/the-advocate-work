@@ -5,7 +5,7 @@ type: bug
 status: todo
 author: huron
 links:
-  relates: [route-the-missing-moves]
+  found-in: [route-the-missing-moves]
 ---
 
 Seen by Hurón on 2026-10-14, measuring with `just culprits` after
