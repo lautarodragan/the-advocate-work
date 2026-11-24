@@ -1,19 +1,26 @@
 ---
-name: "Battle tests expect RM2k, not our dice"
-description: "Twenty battle tests ask rm2k-snes-battle simulate for the exact HP the ROM must leave, which holds only because the model and the ROM roll our own random sequence in the same order; they should expect what RM2k's rules say —exact where RM2k is deterministic, a range or an average where it rolls—, computed from RM2k's formulas and not from our model"
+name: "Battle tests without simulate"
+description: "Twenty battle tests ask rm2k-snes-battle simulate, our own model of the battle, for the exact HP the ROM must leave: they test our implementation against itself. They should expect what RM2k's rules say —exact where RM2k is deterministic, a range or an average where it rolls—, computed from RM2k's formulas, and simulate goes"
 type: refactor
 status: todo
 author: taro
 ---
 
-**Why**: the battle model, `rm2k-snes-battle simulate`, plays RM2k's
-battle "with the same rules and the same randomness as the ROM"
-(`abl/tests/harness/model.py` in the ports), so a test can demand the exact
-number each HP ends at, turn by turn. But that randomness is ours: RM2k's
-sequence cannot be reproduced. An exact HP proves the ROM and the model
-consume our dice in the same order, not that the damage behaves as RM2k's
-does; changing the generator, or the order a roll is taken in, turns them
-red with nothing wrong. It is a test tied to an implementation detail.
+**Why**: the battle tests take their expected values from
+`rm2k-snes-battle simulate` (`abl/tests/harness/model.py` in the ports),
+our own model of RM2k's battle, and demand that the ROM leave exactly what
+it says. So what they check is that two implementations of ours agree, in
+every detail —the order of each step, each rounding, each roll—, not that
+the battle does what RM2k does: they test implementation details, and the
+model is one more thing to keep in step with the ROM. A test should state
+what RM2k's rules say and nothing else, and then `simulate` has no reason
+to exist.
+
+The randomness is the clearest case, though not the main one: the model
+plays "with the same randomness as the ROM", which is ours —RM2k's
+sequence cannot be reproduced—, so an exact HP proves the two consume our
+dice in the same order; changing the generator turns them red with nothing
+wrong.
 
 > If they are not part of what is needed to build a ROM, I would not put
 > them in advocate.
@@ -24,6 +31,9 @@ red with nothing wrong. It is a test tied to an implementation detail.
 > can also set a very high HP, land 20 hits, compute the average damage and
 > expect it to be in a certain range for certain cases, and in another range
 > if there is poison or if there are type advantages or disadvantages.
+
+> [the name] Something about simulate going away, because we are testing
+> implementation details; the random part is secondary.
 
 (taro, 2026-11-24)
 
@@ -46,7 +56,8 @@ ports' root, `tests/test_zounds_special_items.py` and
    RM2k —a fixed heal, a skill with variance 0, poison per step, a
    victory's experience and gold— or rolls, and what it would expect
    instead. Shown to taro.
-2. **Then the tests**:
+2. **Then the tests, and `simulate` goes** —with the harness's `model.py`
+   and whatever only it used—:
    * **exact where RM2k is deterministic**;
    * **a range where it rolls**, its bounds from RM2k's formula —liblcf
      and easyrpg-player, in `~/ref`, are the sources, as for the rest of
@@ -61,11 +72,10 @@ ports' root, `tests/test_zounds_special_items.py` and
    rolls; and many hits per case cost suite time. The task says, per file,
    what it stops catching and how long the suite takes before and after.
 
-If no test asks `simulate` any more, whether the subcommand stays —as a
-tool to ask, or not at all— is decided with
-[`the-stages-speak-json-nobody-types`](the-stages-speak-json-nobody-types.md),
-where the stages' subcommands the tests call are already a question; per
-taro, they do not go in [`one-advocate-command`](one-advocate-command.md),
+The other stages' subcommands the tests call —`rm2k-snes-screens window`,
+`render`…— are a question of
+[`the-stages-speak-json-nobody-types`](the-stages-speak-json-nobody-types.md);
+per taro, none goes in [`one-advocate-command`](one-advocate-command.md),
 which is only what builds a ROM.
 
 ## Log
@@ -73,3 +83,8 @@ which is only what builds a ROM.
 ### 2026-11-24, Hornero: written
 
 Nothing done yet.
+
+### 2026-11-24, Hornero: renamed before anything linked it
+
+Born as `battle-tests-expect-rm2k-not-our-dice.md` minutes earlier;
+nothing in the four repos named it yet.
