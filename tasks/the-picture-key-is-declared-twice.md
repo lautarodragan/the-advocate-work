@@ -2,7 +2,9 @@
 name: "The picture key is declared twice"
 description: "A ShowPicture's key is rm2k-snes-events' PictureKey, written by hand with to_json and read back by hand with picture_key; since B6 the converter reads the same object as its own pictures::Key. One serde type in the events crate, with the converter's four fields beside it, would leave one declaration"
 type: refactor
-status: draft
+status: testing
+assignee: taro
+agents: [cardon]
 author: chaja
 links:
   found-in: [the-stages-speak-json-nobody-types]
@@ -37,3 +39,14 @@ first, then the converter's). Then
 `to_json` and `picture_key` go, and a field renamed on one side does not
 compile on the other. The ROMs cannot change; the check is the nine games
 byte for byte, as every step of the task.
+
+## Log
+
+### 2026-11-24, Cardón: done, on B5's branch
+
+the-advocate `cardon-b5`, `b5d4b7a2`, after merging main (B4, B6):
+`PictureKey` derives serde and is what the scan answers; `to_json` and
+`picture_key` went; the converter's `pictures::Key` flattens it and keeps
+its four fields after it. The nine games byte for byte against
+`cef2cdda`'s tools, and the suites: see
+[the stages task's log](the-stages-speak-json-nobody-types.md).
