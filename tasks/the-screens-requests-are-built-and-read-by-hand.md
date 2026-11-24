@@ -2,7 +2,8 @@
 name: "The screens' requests are built and read by hand"
 description: "rm2k-snes-convert's `screens.rs` builds the screens' four requests —`convert`, `boxes`, `window`, `faces`— as `json!` with keys inserted by name after, the custom menus going as their project table and their bodies as `json!`, and rm2k-snes-screens reads them back key by key through its `Json` reader: the screens' answers are types since B3 and the seven pieces, their requests are not"
 type: refactor
-status: todo
+status: doing
+assignee: carpintero
 author: calandria
 links:
   found-in: [the-losses-the-stages-hand-over-are-json-the-converter-reads-by-key]
