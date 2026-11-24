@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: taro
 agents: [Hurón]
+links:
+  found: [variables-are-capped-at-256-slots]
 ---
 
 taro, on 2026-10-14, worried by the far RAM pool being nearly full (79 B

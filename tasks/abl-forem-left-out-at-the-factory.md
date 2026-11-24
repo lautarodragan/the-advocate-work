@@ -4,6 +4,9 @@ description: "Map 83 leaves out Forem, event 13, whom a route dresses, because w
 type: bug
 status: draft
 author: tijereta
+links:
+  found-in: [abl-paradise-and-emily-left-out-at-the-northern-surl-camp]
+  relates: [abl-the-factory-pump-s-light-is-grey, characters-a-route-dresses-left-out-where-they-cost-the-map]
 ---
 
 Seen by Tijereta on 2026-11-22, grooming

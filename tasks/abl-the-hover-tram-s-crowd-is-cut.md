@@ -7,6 +7,9 @@ assignee: taro
 author: taro
 agents: [Cardón]
 game: abl
+links:
+  found: [a-character-stands-on-its-middle-pattern, reach-does-not-know-a-scene-runs-once, the-lowering-takes-the-boot-start-on-every-map]
+  relates: [abl-characters-cut-on-crowded-lines]
 ---
 
 taro, on 2026-11-17, translated (screenshots kept in

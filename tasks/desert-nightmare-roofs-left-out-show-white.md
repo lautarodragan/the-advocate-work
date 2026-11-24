@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: aguara
 agents: [Aguará, Hurón, Cardón]
+links:
+  relates: [desert-nightmare-characters-cut-on-crowded-lines]
 ---
 
 Seen by Aguará on 2026-10-20, at the-advocate `8f290c39` and the ports

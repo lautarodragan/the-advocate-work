@@ -5,6 +5,8 @@ type: bug
 status: draft
 author: calandria
 agents: [Calandria]
+links:
+  found-in: [abl-the-chase-follows-the-row-talan-is-on]
 ---
 
 Seen by Calandria on 2026-11-15, reading the code while measuring the

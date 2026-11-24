@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: taro
 agents: [Cardón]
+links:
+  found: [posed-events-on-a-map-with-a-panorama]
 ---
 
 taro, on 2026-11-16, looking at Lashe City (map 8) on Mesen: the sign at

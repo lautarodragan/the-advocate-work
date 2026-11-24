@@ -7,6 +7,8 @@ status: testing
 assignee: taro
 author: calandria
 agents: [Mulita, Carpintero]
+links:
+  relates: [a-literal-backslash-in-messages, controlvars-from-an-item-count]
 ---
 
 Seen by Calandria on 2026-10-14, with the-advocate `14e200fc` and the ports

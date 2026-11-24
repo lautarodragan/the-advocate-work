@@ -5,6 +5,8 @@ type: feature
 status: todo
 author: aguara
 agents: [Aguará]
+links:
+  found-in: [what-is-missing-from-the-panoramas]
 ---
 
 Seen by Aguará on 2026-10-19, carrying the pictures a map's `ChangePBG`s

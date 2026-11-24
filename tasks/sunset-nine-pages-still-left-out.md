@@ -4,6 +4,8 @@ description: "`just culprits` still leaves out map pages of Sunset —nine after
 type: bug
 status: todo
 author: tijereta
+links:
+  relates: [route-switch-commands-leave-the-page-out]
 ---
 
 Seen by Tijereta on 2026-10-16, with the tools of the branch

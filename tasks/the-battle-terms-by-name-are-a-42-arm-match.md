@@ -6,6 +6,10 @@ status: testing
 assignee: taro
 agents: [Calandria]
 author: calandria
+links:
+  found-in: [where-mapdata-and-convert-could-be-shorter]
+  relates: [emit-rs-writes-each-table-through-a-call-rustfmt-spreads-over-seven-lines, picture-tables-and-common-entries-write-the-same-entry-twice, rm2k-snes-mapdata-maps-has-no-caller, small-repeats-inside-emit-rs-s-rest]
+  blocks: [the-stages-speak-json-nobody-types]
 ---
 
 Seen by Calandria on 2026-11-23, reading `rm2k-snes/mapdata` at the-advocate

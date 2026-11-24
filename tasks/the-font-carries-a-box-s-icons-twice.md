@@ -5,6 +5,8 @@ type: refactor
 game: zounds
 status: draft
 author: aguara
+links:
+  found-in: [the-text-screens-draw-latin-1]
 ---
 
 Seen by Aguará on 2026-11-22, in

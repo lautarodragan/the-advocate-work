@@ -4,6 +4,8 @@ description: "The converter still caps experience slots and variables by the han
 type: bug
 status: wishlist
 author: huron
+links:
+  has-part: [variables-are-capped-at-256-slots]
 ---
 
 Seen by Hurón on 2026-10-16, while letting the linker place the far RAM map

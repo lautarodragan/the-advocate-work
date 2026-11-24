@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: taro
 agents: [Tijereta]
+links:
+  found: [the-farm-s-goldens-move-with-the-bank-packing]
 ---
 
 taro, on 2026-11-01, in their words, translated:

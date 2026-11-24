@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: huron
 agents: [Tijereta]
+links:
+  relates: [branches-and-switch-commands-past-switch-1023]
 ---
 
 Seen by Hurón on 2026-10-14, with the-advocate `51b4b1b2` and the ports

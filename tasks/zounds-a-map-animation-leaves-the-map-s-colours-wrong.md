@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: taro
 agents: [Chajá]
+links:
+  found: [a-face-s-cells-step-runs-past-the-vblank]
 ---
 
 taro, on 2026-10-19, playing Zounds (delivery of that day, the-advocate

@@ -7,6 +7,9 @@ status: done
 assignee: taro
 author: aguara
 agents: [Aguará, Hurón]
+links:
+  found: [a-torn-save-slot-shows-and-loads-a-new-game]
+  relates: [maps-uncompressed-in-the-msu]
 ---
 
 Seen by Aguará on 2026-11-17, reading the FX Pak's firmware for

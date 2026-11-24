@@ -6,6 +6,9 @@ status: testing
 assignee: taro
 author: huron
 agents: [Mulita, Carpintero]
+links:
+  found-in: [events-that-walk-by-a-movement-type-stand-still]
+  found: [vampires-dawn-tradan-is-hidden-under-its-clouds]
 ---
 
 Seen by Hurón on 2026-10-14, with the-advocate `51b4b1b2` and the ports

@@ -6,6 +6,9 @@ status: done
 assignee: taro
 author: taro
 agents: [Aguará]
+links:
+  found: [zounds-skill-names-show-a-question-mark-for-an-accent]
+  relates: [a-gradient-system-stops-the-converter-at-the-actor-choice]
 ---
 
 taro, on 2026-11-02, playing Zounds' build of the-advocate `23b413cd` and

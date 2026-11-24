@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: hornero
 agents: [Hurón]
+links:
+  found: [moveevent-on-an-event-the-map-does-not-have]
 ---
 
 # What

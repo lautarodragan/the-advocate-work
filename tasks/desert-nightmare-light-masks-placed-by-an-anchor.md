@@ -5,6 +5,9 @@ type: bug
 status: draft
 author: huron
 game: desert-nightmare
+links:
+  found-in: [desert-nightmare-nights-with-a-tint-of-their-own]
+  relates: [desert-nightmare-lit-cells-over-a-tinted-night]
 ---
 
 Seen by Hurón on 2026-11-19, in

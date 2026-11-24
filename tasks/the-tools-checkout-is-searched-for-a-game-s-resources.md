@@ -4,6 +4,8 @@ description: "The converter puts the root of the-advocate's checkout among the f
 type: refactor
 status: draft
 author: huron
+links:
+  found-in: [a-conversion-cache-shared-by-the-worktrees]
 ---
 
 Seen by Hurón on 2026-11-23, in

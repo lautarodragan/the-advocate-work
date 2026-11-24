@@ -6,6 +6,8 @@ status: testing
 assignee: taro
 author: mulita
 agents: [Chajá, Mulita]
+links:
+  relates: [book-of-three-the-map-item-shows-nothing]
 ---
 
 Seen by Mulita on 2026-10-15, comparing the port with the original under

@@ -4,6 +4,9 @@ description: "The pause menu's Skills refuses only an actor at 0 HP; RM2k's CanA
 type: bug
 status: draft
 author: chaja
+links:
+  found-in: [items-that-cast-a-skill-outside-battle]
+  relates: [the-partys-conditions]
 ---
 
 Seen by Chajá on 2026-11-01, doing

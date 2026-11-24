@@ -5,6 +5,8 @@ type: bug
 status: draft
 author: cardon
 agents: [Cardón]
+links:
+  found-in: [battle-offers-skills-that-are-only-for-the-map]
 ---
 
 Seen by Cardón on 2026-10-20, with the-advocate `8f290c39` —the global

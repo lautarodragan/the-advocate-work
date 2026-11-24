@@ -4,6 +4,8 @@ description: "RM2k draws an event on its page's pattern only with a fixed graphi
 type: bug
 status: draft
 author: cardon
+links:
+  found-in: [abl-the-hover-tram-s-crowd-is-cut]
 ---
 
 Seen by Cardón on 2026-11-18, in

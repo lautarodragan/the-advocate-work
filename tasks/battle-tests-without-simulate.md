@@ -4,6 +4,9 @@ description: "Twenty battle tests ask rm2k-snes-battle simulate, our own model o
 type: refactor
 status: todo
 author: taro
+links:
+  blocks: [abl-s-test-cartridges-become-test-game-cases]
+  relates: [one-advocate-command, the-stages-speak-json-nobody-types, tests-without-the-stages-subcommands]
 ---
 
 **Why**: the battle tests take their expected values from

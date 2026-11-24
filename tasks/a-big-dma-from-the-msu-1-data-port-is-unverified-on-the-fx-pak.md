@@ -6,6 +6,8 @@ status: done
 author: chaja
 assignee: taro
 agents: [Chajá, Hornero, Aguará, Hurón]
+links:
+  blocks: [maps-uncompressed-in-the-msu]
 ---
 
 Found by Chajá on 2026-11-22, in

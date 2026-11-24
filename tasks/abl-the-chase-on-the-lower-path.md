@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: taro
 agents: [Calandria]
+links:
+  relates: [abl-the-chase-follows-the-row-talan-is-on]
 ---
 
 taro, on 2026-11-15, reading map 105 in RPG Maker:

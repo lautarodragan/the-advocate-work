@@ -4,6 +4,8 @@ description: "try_pack is best-fit decreasing; overload-and-remove, the paginati
 type: feature
 status: todo
 author: hornero
+links:
+  relates: [superfamiconv-as-an-oracle-for-palette-packing, try-pack-picks-the-smallest-group, try-pack-tie-break]
 ---
 
 # What

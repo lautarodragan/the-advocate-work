@@ -5,6 +5,8 @@ type: feature
 status: done
 assignee: taro
 author: taro
+links:
+  relates: [a-medicine-on-the-whole-party-heals-one]
 ---
 
 From taro, on 2026-09-28, in their words, translated:

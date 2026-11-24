@@ -6,6 +6,9 @@ status: testing
 assignee: taro
 agents: [aguara]
 author: taro
+links:
+  blocked-by: [the-library-crates-carry-binaries-nobody-runs]
+  found: [the-workspace-fails-its-own-lint]
 ---
 
 **Why**: two crates install three binaries each, and every one of them is

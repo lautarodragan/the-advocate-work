@@ -5,6 +5,9 @@ type: bug
 status: draft
 author: aguara
 agents: [Aguará]
+links:
+  found-in: [a-transparent-message-keeps-the-layer-above]
+  relates: [an-emulator-that-shows-vblank-overruns, frozen-world-the-intro-stays-black-after-the-tint]
 ---
 
 Seen by Aguará on 2026-11-15, fixing

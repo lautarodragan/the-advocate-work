@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: calandria
 agents: [Mulita]
+links:
+  relates: [variables-in-a-choice-option-and-before-an-input-number]
 ---
 
 Seen by Calandria on 2026-10-14, with the-advocate `14e200fc` and the ports

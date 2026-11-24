@@ -4,6 +4,10 @@ description: "Once the stages are libraries, the converter becomes one too, and 
 type: refactor
 status: todo
 author: taro
+links:
+  relates: [artistic-decision-patches, battle-tests-without-simulate, the-volume-ceilings-are-measured-without-a-rom, tests-without-the-stages-subcommands, the-cartridges-fingerprint-hashes-the-path-s-builder]
+  has-part: [cartridges-runs-itself-to-assemble]
+  blocked-by: [the-stages-speak-json-nobody-types]
 ---
 
 **Why**: building a game is today a chain of processes —

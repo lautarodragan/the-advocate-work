@@ -4,6 +4,8 @@ description: "Detect patterns in the parallel pages and generate something cheap
 type: refactor
 status: wishlist
 author: taro
+links:
+  relates: [the-partys-conditions]
 ---
 
 taro's idea, on 2026-09-26, from what the chips investigation measured

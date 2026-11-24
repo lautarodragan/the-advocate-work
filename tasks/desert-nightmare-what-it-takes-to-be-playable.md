@@ -7,6 +7,8 @@ assignee: taro
 author: taro
 agents: [Hurón]
 game: desert-nightmare
+links:
+  found: [desert-nightmare-the-number-locks-do-not-open]
 ---
 
 taro, on 2026-11-19, translated:

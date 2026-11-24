@@ -6,6 +6,11 @@ status: testing
 assignee: taro
 agents: [mulita]
 author: taro
+links:
+  part-of: [one-advocate-command]
+  found: [the-cartridges-fingerprint-hashes-the-path-s-builder]
+  relates: [the-workspace-fails-its-own-lint]
+  blocks: [the-volume-ceilings-are-measured-without-a-rom]
 ---
 
 **Why**: `Cartridges::convert`, in `rm2k-snes/cartridge/src/cartridges.rs`

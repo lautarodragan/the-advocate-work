@@ -6,6 +6,8 @@ status: testing
 assignee: taro
 agents: [Cardón]
 author: cardon
+links:
+  blocked-by: [abl-the-quarry-timer-does-not-fit-on-108, abl-the-slot-screen-has-no-room-for-the-last-leaders-names, abl-the-whole-game-does-not-fit-in-8-mb, the-item-index-in-16-bits, the-materials-table-has-room-for-21-actors, the-text-measuring-pass-stops-pages-past-256-kb]
 ---
 
 Seen by Cardón on 2026-10-14, with the-advocate `a7f278e6` and the ports

@@ -7,6 +7,8 @@ assignee: taro
 agents: [Tijereta]
 author: taro
 game: abl
+links:
+  relates: [the-test-game-takes-the-harness-and-the-first-ten-tests]
 ---
 
 taro, on 2026-11-22, translated, on taking the cases out:

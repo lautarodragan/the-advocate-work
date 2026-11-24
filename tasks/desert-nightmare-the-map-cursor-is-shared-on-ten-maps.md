@@ -6,6 +6,9 @@ status: todo
 author: carpintero
 game: desert-nightmare
 agents: [Carpintero, Chajá]
+links:
+  found-in: [desert-nightmare-the-cartridge-has-no-room-left]
+  relates: [a-common-event-is-copied-only-if-its-copy-draws]
 ---
 
 **Since** [`a-common-event-is-copied-only-if-its-copy-draws`](a-common-event-is-copied-only-if-its-copy-draws.md)

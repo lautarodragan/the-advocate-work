@@ -6,6 +6,9 @@ status: testing
 author: taro
 assignee: taro
 agents: [tijereta]
+links:
+  blocks: [a-crate-s-commands-as-subcommands-of-one]
+  found: [fxpak-s-pty-tests-fail-under-load, the-workspace-fails-its-own-lint]
 ---
 
 **Why**: `voodoo`, `gunter`, `lz2`, `adeleine` and `rm2k-render` became

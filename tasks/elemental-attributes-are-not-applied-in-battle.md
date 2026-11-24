@@ -7,6 +7,8 @@ status: testing
 assignee: taro
 author: cardon
 agents: [Chajá, Cardón]
+links:
+  found: [a-skill-with-a-physical-attribute-does-not-ask-for-the-weapon, skills-that-shift-an-attribute-rank-do-not-shift-it]
 ---
 
 Seen by Cardón on 2026-10-14 (`what-the-compiler-ignores-silently.md`),

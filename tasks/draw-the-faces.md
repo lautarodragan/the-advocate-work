@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: taro
 agents: [Tijereta]
+links:
+  part-of: [cheaper-windows]
 ---
 
 Split from `draw-the-faces-and-really-wait-on-the-escapes.md` on

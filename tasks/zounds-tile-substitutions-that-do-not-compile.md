@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: taro
 agents: [Calandria]
+links:
+  relates: [changing-the-map-s-tiles-lags]
 ---
 
 taro, on 2026-11-01, in their words, translated —it blocks them in Zounds—:

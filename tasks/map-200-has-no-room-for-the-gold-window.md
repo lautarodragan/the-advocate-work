@@ -5,6 +5,8 @@ type: bug
 status: draft
 author: huron
 agents: [Hurón]
+links:
+  found-in: [an-inn-has-no-gold-window]
 ---
 
 Seen by Hurón on 2026-10-19, building the inn's gold window

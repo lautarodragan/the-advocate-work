@@ -4,6 +4,10 @@ description: "convert reads Wally's map answer, the compiler's scan and the pict
 type: refactor
 status: draft
 author: calandria
+links:
+  found-in: [where-mapdata-and-convert-could-be-shorter]
+  relates: [the-emission-reads-the-screens-answer-and-the-battle-model-by-name]
+  part-of: [the-stages-speak-json-nobody-types]
 ---
 
 Seen by Calandria on 2026-11-23, reading `rm2k-snes/convert` at the-advocate

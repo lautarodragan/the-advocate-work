@@ -4,6 +4,8 @@ description: "Nothing ever deletes an entry of the machine's cache: every reinst
 type: refactor
 status: draft
 author: huron
+links:
+  found-in: [a-conversion-cache-shared-by-the-worktrees]
 ---
 
 Seen by Hurón on 2026-11-23, in

@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: carpintero
 agents: [Carpintero, Aguará]
+links:
+  relates: [frozen-world-every-turn-re-uploads-the-battle-screens-audio]
 ---
 
 Seen by Carpintero on 2026-10-15, on the branches `carpintero-rom-code`

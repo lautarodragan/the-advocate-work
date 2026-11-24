@@ -5,6 +5,8 @@ type: bug
 status: todo
 author: chaja
 agents: [Chajá]
+links:
+  found-in: [book-of-three-the-map-item-shows-nothing]
 ---
 
 Seen by Chajá on 2026-10-19, fixing

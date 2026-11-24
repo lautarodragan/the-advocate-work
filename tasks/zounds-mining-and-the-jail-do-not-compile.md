@@ -6,6 +6,9 @@ status: testing
 assignee: taro
 author: taro
 agents: [Calandria, Hurón]
+links:
+  found: [an-input-number-after-a-label-has-no-message]
+  relates: [a-shops-bought-and-did-not-buy-branches]
 ---
 
 taro, on 2026-11-01, in their words, translated, after Hornero listed

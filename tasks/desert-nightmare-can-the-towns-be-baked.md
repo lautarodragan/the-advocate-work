@@ -7,6 +7,8 @@ assignee: taro
 author: taro
 agents: [Cardón]
 game: desert-nightmare
+links:
+  found: [a-call-counts-as-erasing-a-still-event]
 ---
 
 From [`desert-nightmare-what-it-takes-to-be-playable`](desert-nightmare-what-it-takes-to-be-playable.md)

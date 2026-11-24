@@ -4,6 +4,8 @@ description: "rm2k-snes-convert declares its 23 flags with clap's builder API an
 type: refactor
 status: draft
 author: calandria
+links:
+  found-in: [where-mapdata-and-convert-could-be-shorter]
 ---
 
 Seen by Calandria on 2026-11-23, reading `rm2k-snes/convert` at the-advocate

@@ -7,6 +7,8 @@ assignee: taro
 agents: [Aguará, Hornero]
 author: aguara
 game: desert-nightmare
+links:
+  found-in: [desert-nightmare-the-dog-runs-over-the-building]
 ---
 
 Seen by Aguará on 2026-11-21, at the-advocate `b18e4d4f` with the fix of

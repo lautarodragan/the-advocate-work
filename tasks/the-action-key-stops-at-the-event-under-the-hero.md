@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: taro
 agents: [Calandria]
+links:
+  found: [the-action-key-fires-only-the-first-event-of-a-cell]
 ---
 
 taro, on 2026-11-02, in their words, translated:

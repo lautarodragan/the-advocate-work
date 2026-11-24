@@ -4,6 +4,9 @@ description: "Sunset's map 46 stops its two animated events to make room for the
 type: bug
 status: todo
 author: calandria
+links:
+  found-in: [abl-the-sixty-one-torches-of-map-148-stand-still]
+  relates: [rain-drops-cost-a-cache-its-slots]
 ---
 
 Seen by Calandria on 2026-10-16, with the-advocate `8c6a345b` and the
