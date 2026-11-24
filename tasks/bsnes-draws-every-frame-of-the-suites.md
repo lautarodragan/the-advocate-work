@@ -3,8 +3,9 @@ name: "bsnes draws every frame of the suites"
 description: "The harness tells snes9x not to draw the ticks nobody looks at, but bsnes's libretro target does not ask; drawing is 40% of a bsnes frame, and bsnes is most of the emulation in the boot and the test game"
 type: refactor
 status: draft
+assignee: taro
 author: chaja
-agents: [Chajá]
+agents: [Chajá, cardon]
 links:
   found-in: [how-much-of-a-test-is-the-emulator-drawing]
 ---
@@ -39,3 +40,24 @@ What it would take, not measured: the patch beside `bsnes-wram.patch` in
 `test_cores.py` on it. What skipping touches in bsnes's fast PPU: the
 mosaic counter and the sprites' range and time over flags are only kept
 on drawn frames.
+
+## Log
+
+### 2026-11-24, Cardón: a question for taro
+
+Still so at the-advocate `8b069fc2`: `SKIPS_DRAWING = {"Snes9x"}`
+(`rm2k-snes/harness/rm2k_snes_harness/retro.py:91`). Measured gain:
+drawing is ~40% of a bsnes frame, and bsnes is ~750 of the boot's 925 s in
+`retro_run`.
+
+**What to decide**: carrying one more patch to a third-party core (beside
+`bsnes-wram.patch`), with a rebuilt and reinstalled core —a cost in the
+toolchain— against suite time; and skipping touches bsnes's mosaic counter
+and sprites' range/time-over flags, while `test_cores.py` relies on bsnes.
+
+**Options**: (a) `todo`: the patch, `bsnes` in `SKIPS_DRAWING`, the suites
+and `test_cores.py` run on it; (b) cancel.
+
+**Recommendation**: (a): six lines in a core already patched, and the CPU
+is what every agent waits on; the task checks that `test_cores.py` still
+catches uninitialised WRAM with frames skipped.

@@ -2,7 +2,8 @@
 name: "An InputNumber after a label has no message to go into"
 description: "Zounds' dice man (map 156, event 26) asks for the die's number with a ShowMessage, a Label and then the InputNumber: the label sits between them, so the number is a window of its own, which the ROM does not draw, and the page stays out"
 type: bug
-status: draft
+status: todo
+agents: [cardon]
 author: calandria
 links:
   found-in: [zounds-mining-and-the-jail-do-not-compile]
@@ -28,3 +29,14 @@ what the ROM would have to draw then.
 
 **How to reproduce**: `just culprits` in `zounds/` with that compiler;
 map 156, event 26, page 1.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+Still so at the-advocate `8b069fc2`: `number_inputs` in
+`rm2k-snes/events/src/compile.rs:2808` pairs an `InputNumber` only with
+the box right before it (`group_boxes` windows), so a `Label` in between
+leaves it a window with no text. The fix is what RPG_RT does (labels are
+transparent to `CommandShowMessage`, and a number reached alone opens a
+textless box); nothing to choose, and Zounds' map 156 event 26 shows it.
