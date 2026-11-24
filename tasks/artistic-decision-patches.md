@@ -190,7 +190,7 @@ tells apart two battlers with the same drawing.
   non-lossy kind. What would be missing to emit is which graphic was treated that way in each
   map, which is little more than repeating the list.
 
-## Phase 2 against a decision that depends on use (2026-11-24)
+## Phase 2 against a decision that depends on use
 
 A decision is only as editable as its key is true. The colours merged in a
 map's layers are keyed by the map and its ChipSet, and nothing else moves
