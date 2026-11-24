@@ -30,6 +30,29 @@ downwards (`tests/test_layers.py`), and what it does to the stage cache,
 which keys each answer by its binary's hash (`stage.rs` `key`)—, shown to
 taro before the code.
 
+**The first question of the design: whether the stages stay processes.**
+They are separate programs since the converter was Python, from the idea
+of small tools that compose; the stage cache, from `be1f43a5`, keys each
+answer by its binary's hash, which invalidates by construction. If the
+stages became libraries inside `rm2k-snes-convert`, the contracts would be
+plain Rust values passed between functions, and serde would be needed only
+to store an answer in the cache: most of this task would come for free.
+What decides it is whether a per-stage cache key can be as trustworthy as
+the binary's hash —a hash of each crate's sources and its path
+dependencies, computed at build time, misses a dependency and hands back a
+stale answer silently; the converter's binary for every stage is safe but
+throws away what the cache gained—. And the ports' tests call some stages'
+subcommands directly (`rm2k-snes-battle simulate`, `rm2k-snes-screens
+window`, `rm2k-snes-images animations`, `rm2k-snes-mapdata`…): where those
+go. The answer, measured, goes to taro before the types are designed.
+
+> [the processes] I would like to review that. Does rm2k-snes-convert
+> exist only for the cache? Is it a more elaborate `make`?
+
+(taro, 2026-11-23. It is not: of its 17,300 lines, running and caching
+the stages is `stage.rs`'s 544; the rest are the decisions that join the
+domains.)
+
 What Calandria already measured, as drafts that this task takes in:
 
 * [`the-emission-reads-the-screens-answer-and-the-battle-model-by-name`](the-emission-reads-the-screens-answer-and-the-battle-model-by-name.md)
@@ -47,3 +70,7 @@ because both rewrite most of `emit.rs`.
 ### 2026-11-23, Hornero: written, waiting for the emission's writing style
 
 Nothing done yet.
+
+### 2026-11-23, Hornero: whether the stages stay processes comes first
+
+Added to the design, at taro's request.
