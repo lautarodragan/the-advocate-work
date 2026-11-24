@@ -7,7 +7,7 @@ assignee: calandria
 agents: [calandria, aguara, cardon, carpintero, chaja, mulita, tijereta]
 author: taro
 links:
-  found: [the-event-compiler-s-left-out-warning-never-reaches-the-log, fxpak-s-pty-tests-share-ptsname-s-buffer, the-msu-and-the-tracks-are-written-through-a-nuevo-file, the-patches-request-of-release-repeats-five-maps, the-stage-subcommands-only-the-converter-called-have-no-caller]
+  found: [the-event-compiler-s-left-out-warning-never-reaches-the-log, fxpak-s-pty-tests-share-ptsname-s-buffer, the-msu-and-the-tracks-are-written-through-a-nuevo-file, the-patches-request-of-release-repeats-five-maps, the-stage-subcommands-only-the-converter-called-have-no-caller, the-slots-screen-line-counts-no-row-cells]
   relates: [artistic-decision-patches, battle-tests-without-simulate, tests-without-the-stages-subcommands]
   blocked-by: [emit-rs-writes-each-table-through-a-call-rustfmt-spreads-over-seven-lines, picture-tables-and-common-entries-write-the-same-entry-twice, rm2k-snes-mapdata-maps-has-no-caller, small-repeats-inside-emit-rs-s-rest, the-battle-terms-by-name-are-a-42-arm-match]
   blocks: [a-stage-s-cache-key-once-it-is-a-library, one-advocate-command]
@@ -1239,3 +1239,176 @@ cartridge`). Every cartridge is stale once (the fingerprint's list
 changed), and the shared cache stores each stage's answers once more (the
 converter's binary changed), as any new converter does. Phase A is done;
 the task stays in `doing`, for phase B.
+
+### 2026-11-24, Calandria: B0-B3
+
+On the-advocate `calandria-b`, from `cef2cdda`; ports `calandria-b` at
+`4c23c9e`, untouched. The baseline for every step: `NO_CACHE=1 just
+cartridges --force` in the nine games (ABL `--without-tracks`) with the
+global tools of `cef2cdda`.
+
+#### B0
+
+`a63397d4`: the six fallbacks of the
+[draft](the-emission-keeps-fallbacks-for-answers-older-than-its-fixtures.md)
+go (`emit.rs` 28 lines in, 76 out: net -48, against the estimate's -40),
+and the two made-up requests carry the six fields, filled with what each
+fallback gave. The whole `.inc` and notes of both made-up cartridges are
+byte for byte what they were (a throwaway dump from
+`a_bare_cartridge_and_a_whole_one_are_emitted`), so no assert of
+`made_up.rs` moved. The gold window and the arrow's tile past the
+window's stay: they are the made-up window's own shape, not an old
+answer's, and B3 decides whether they become a field the fixtures carry
+(it made the gold window one; the arrow's blank tile stays).
+
+#### B1
+
+`35d5c832`: the converter builds `request::Emit` and hands it to
+`rm2k_snes_mapdata::stage::emit` by value, no JSON between them. Every
+request type derives `Serialize` beside `Deserialize`, the bytes through
+one `#[serde(with = "hex")]` both ways (`hex::each` for lists); the
+scene is typed (`Scene`, `SceneGeometry`, `SceneBackdrop`,
+`SceneBattler`) and mapdata's `scene.rs` reads its fields instead of 21
+accessor calls; `animations::request`, `Screen::request`,
+`scene::request` and `Variant::request` answer the types. The nine
+`request["x"] = json!(…)` patches for `json!`'s recursion limit went.
+
+What other stages still answer as JSON —Wally's sprite, NPCs, posed and
+runs, the pages' numbers and draws, the pictures' images, the big and
+common pictures, the faces, the commons, `parallel_common`'s switches—
+crosses with `emit::typed`, `serde_json::from_value` over the value the
+emission used to read: the same deserializer, so the same answer or the
+same refusal, now in the converter. **For B4, B5 and B6**: those bridges
+are where their typed answers plug in —`map_record`, `page_record` and
+`Variant::request` (B4/B5), `scene::request` and `animations::request`
+(B6)—, and the request types they feed are mapdata's. I tried to tell
+Aguará, Cardón and Chajá with SendMessage; none was reachable by name.
+
+Checked the request itself: a throwaway converter built the old `json!`
+request beside the new one and compared them as the emission sees them
+—the old one deserialized into `Emit`, both serialized back— over the 20
+cartridges of the nine games: all equal. With it, every `.sfc` and file
+of `build/` equal to the baseline's but the cached `.o`.
+
+Lines: 564 in, 410 out, **net +154** against the draft's -60 to -100. A
+struct literal takes a line per field where `json!` took two or three
+keys a line, the scene's types are new, and rustfmt spreads the
+`typed(…)?` calls; what went is the reading by key and the patches.
+
+#### B2
+
+`66dfeb92`: `rm2k-snes-battle`'s `tables` and `model` take and answer
+their types. `Request` derives serde (the tree's nodes stay `Value`s in
+the dump's shape; `put_nodes` puts them into the game) and answers
+`Answer` (`ExperienceAnswer`, `EncountersAnswer`) instead of 40 lines of
+`Request::of` by hand; `model` takes `ModelRequest` and answers `Model`,
+with `TroopReward`, `Texts`, `SkillText`, `Cut` and `PairsAsked`; the
+texts and actions by number are `BTreeMap<i32, _>`. The converter builds
+both requests and reads both answers (`stage::typed`), `rom_scene` takes
+the per-map records, the event compiler (still JSON) gets the troops as
+`json!`, and `cut_report` takes a `Cut`. The emission's `battle_model`
+is a `Model` and `BattleTables::slots` the slots' `Vec<Option<i64>>`
+—the save signature hashes the same JSON—; what read them by name reads
+fields, through one `by_number`. The binaries write the same keys: ABL's
+`model.py` reads what it read.
+
+Lines: 446 in, 299 out, **net +147**, against -50 to -100: the types'
+declarations and their docs are most of it.
+
+#### B3
+
+`6fa77fe7`: `rm2k_snes_screens::answer` declares the `convert` answer
+—`Answer` and a type per screen, `OtherSystem` for `window`'s
+`systems`—, deriving serde on the producer structs that already had the
+shape (`CompactTarget`, `CompactTargetSkill`, `CompactShop`,
+`MenuBlocks`, `Member`, `Ink`, `FontInk`). The screens build it, the keys
+and the bytes' hex are the same, and `rm2k-snes-screens window` writes
+what ABL's tests read. mapdata depends on rm2k-snes-screens;
+`Emit::screens` is an `Answer`, `Emit::window_systems` a list of
+`OtherSystem`; emit.rs, `custom_menu.rs`, `debug_screen.rs`,
+`skills_screen.rs` and `layer_text.rs` read fields, and
+`normalized_windows` pads and renumbers typed windows. The converter
+reads the losses, the says, the sizes and the title's menu by field.
+
+* **The gold window is required**: every real answer carries one, so the
+  made-up window without it went (`window_systems_table`'s nine-pointer
+  case); the fixtures carry a real gold window, and their `.inc` gains
+  exactly `GOLD_*` and `window_gold`. `made_up.rs`' second-System test
+  now asserts ten pointers. The fixtures also gain what the emission read
+  as absent —the shop party's `on`, empty custom menus, no losses, no
+  icons, ink 0— and lose the `prerender`s no type carries.
+* **`json.rs` does not go yet**: it keeps what the troops' pages (JSON
+  until B5) and the geometry lists (by name on purpose) read; `int_at`,
+  `ints_at`, `text_at`, `color`, `colors`, `tile` and `tiles` went (113
+  lines to 76).
+* **One log line kept its number on purpose**: the slots screen's "B of
+  cells" added the rows through `s["rows"][0][0][0]`, a number, so that
+  term was 0 since the Rust port; it is left out and the line prints the
+  same —[draft](the-slots-screen-line-counts-no-row-cells.md)—.
+
+Lines: 1,167 in, 1,101 out, **net +66**, against -100 to -200; without
+`answer.rs` (418 lines, half of them docs and the hex module) it is
+-352. The screens' types are what the draft counted as "perhaps 100".
+
+#### What of the reading by hand went, B0-B3
+
+Accessor calls of `json.rs` in mapdata's sources (a grep of `at(`,
+`int_at(`, `list_at(`, `tiles(`… outside `json.rs`, so a rough count):
+446 at `cef2cdda`, 113 now, most of those the troops' pages and the
+geometry lists. `json!` in the producers touched (screens, battle's
+model and tables, the converter's request builders): 102 to 41. Key reads
+`["x"]` in `convert.rs`: 156 to 92. Net lines of the four steps
+together: **+319**, against the table's -250 to -440: typing costs the
+declarations, and the drafts' estimates counted the reading that goes but
+not the types that come.
+
+#### The builds, byte for byte
+
+`NO_CACHE=1 just cartridges --force` in the nine games (ABL
+`--without-tracks`) with `convert`, `mapdata`, `battle` and `screens` of
+`6fa77fe7` first in the PATH, against the global tools of `cef2cdda`:
+**the 20 `.sfc` equal**, every one of the 19,469 files of the nine
+`build/` equal (raw files included) but `stamp.txt` and the `.o` (each
+under 64 bytes apart, the sources' mtimes), and **the 20 `converter.log`
+equal**. No request or answer JSON lands in `build/` (the emission's
+request never did); the battle's two requests are now built from types,
+in field order, so their cache keys are new —the cache's business only;
+the converter's new binary re-keys every stage anyway—.
+
+Then twice with the shared cache: the first stored 2,702 stage answers
+—the re-key by the new converter, the same count as A9's—, and its
+builds equal the uncached ones, `converter.log` included; the second
+stored nothing, 72 s for the nine, and equals them but for Vampires
+Dawn's `converter.log`, without the left-out warnings a cached compile
+does not print (Cardón's A2).
+
+#### The suites
+
+On `6fa77fe7`, with `convert`, `mapdata`, `battle` and `screens` of the
+branch first in the PATH: `just lint` clean (again after the last two
+commits); the-advocate's `just test` 29 passed; `just rust-test
+--no-fail-fast` 1,246 passed, 0 failed, 3 ignored (the fxpak pty and
+cached-`.dbg` flakes did not show); the test game
+(`SOUNDFONT=FluidR3_GM.sf2`) 231 passed, 6 skipped; the ports' `just
+boot` 218 passed; ABL's `just tests` 1,694 passed, 2 skipped. No golden
+moved: the ports' worktree is clean. `abl.sfc` `3bf35fd7665c`. After
+them, two commits: `c08237dd`, a test that the screens' answer reads back
+as it was written (the flattened and left-out fields are what could
+drift), and `023e5aca`, the READMEs of mapdata, battle and screens.
+
+**Not covered by any build or suite**: the binaries' `tables`, `model`,
+`convert` and `window` are only run by the ABL tests that call `model`
+and `window` (green); the binary's `emit` and `convert`, by nothing (the
+[draft](the-stage-subcommands-only-the-converter-called-have-no-caller.md)).
+One change in what a binary writes: `rm2k-snes-battle model` with a font
+leaves `party_line` out when the line fits, where it wrote `null`; no
+test reads it.
+
+**Install when merging**: `convert`, `mapdata`, `battle` and `screens`
+(`just install convert mapdata battle screens`). The shared cache stores
+every stage's answers once more (the converter's binary changed).
+**For whoever merges B4-B6 after this**: `emit::typed` in the converter
+is the bridge each of them replaces —`map_record`, `page_record`,
+`Variant::request`, `scene::request`, `animations::request`— and
+`stage::typed` reads a typed answer from a stage's files; mapdata's
+request types are the target their answers feed.

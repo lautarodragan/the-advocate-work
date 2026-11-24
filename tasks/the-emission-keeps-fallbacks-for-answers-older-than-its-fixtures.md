@@ -2,10 +2,10 @@
 name: "The emission keeps fallbacks for answers older than its fixtures"
 description: "emit.rs has a branch for each screens field an old answer lacked —slot_names, the screens' advances and reach, screen_letters, renamed, menu_tiles, inks—; the stages are always the same build, so only made_up.rs's two hand-kept requests still reach them"
 type: refactor
-status: doing
-assignee: calandria
+status: testing
+assignee: taro
 author: calandria
-agents: [cardon]
+agents: [cardon, calandria]
 links:
   found-in: [where-mapdata-and-convert-could-be-shorter]
   blocks: [the-emission-reads-the-screens-answer-and-the-battle-model-by-name]
@@ -65,3 +65,14 @@ green with the new fixtures.
 It is step **B0** of the plan in
 [`the-stages-speak-json-nobody-types`](the-stages-speak-json-nobody-types.md)
 (`part-of` it, in `doing`): defined and ordered there.
+
+### 2026-11-24, Calandria: done as B0
+
+the-advocate `a63397d4`, on `calandria-b`: the six branches go
+(`emit.rs` net -48 lines), and `emit-bare.json` and `emit-whole.json`
+carry the six fields, filled with what each fallback gave, so the
+made-up cartridges' `.inc` and notes came out byte for byte the same and
+no assert of `made_up.rs` moved. The gold window, which this draft did
+not list, went in B3 the same way. The nine games' builds with B0-B3, and
+the suites, in the log of
+[`the-stages-speak-json-nobody-types`](the-stages-speak-json-nobody-types.md).
