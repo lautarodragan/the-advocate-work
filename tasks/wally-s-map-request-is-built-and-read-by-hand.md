@@ -2,7 +2,7 @@
 name: "Wally's map request is built and read by hand"
 description: "The converter builds each map's Wally request as a `json!` of some thirty keys, with more inserted by name after it (`maps.rs`, `variants::request`, `OnMap::to_json`, `ForMap::asked`, `Arrivals::json_of`), and Wally reads it back key by key (`MapRequest::from_json`, `LayersRequest::from_json`, `map_pictures::from_json`): the biggest request still JSON between two stages"
 type: refactor
-status: draft
+status: todo
 author: calandria
 links:
   found-in: [the-losses-the-stages-hand-over-are-json-the-converter-reads-by-key]
@@ -46,3 +46,11 @@ struct and read with `serde_json` by the stage and the binary, the
 cache's key reads it, and nothing writes this request beside a
 cartridge—. Checked byte for byte with the nine games; Wally's cached
 answers move once, as with every typed request.
+
+## Log
+
+### 2026-11-24, Hornero: promoted to `todo`
+
+Promoted by Hornero: counted in the merged code, the same rule as the
+rest of phase B —taro asked to finish taking the JSON out—, checked byte
+for byte with nothing seen or heard changing. A step of the stages task.
