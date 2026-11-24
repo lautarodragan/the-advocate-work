@@ -120,3 +120,87 @@ was fixed: nushell's `sort-by --reverse` turns ties around too, so
 The buttons are now in the first paint. What is left of "interactive" is
 the parser going through the 7.3 MB, and at 4x it does so in tasks of up
 to 515 ms, during which a tap waits: a freeze, on a phone.
+
+### 2026-11-24, Hurón: the bodies are HTML only once opened
+
+What was left was the parser: 113,769 elements, nine in ten of them
+inside the tasks' bodies, built in tasks of up to 515 ms at 4x (520 at
+6x) during which nothing answers. Two ways out were measured on a copy
+of the page:
+
+- the bodies in `<template>`: the same 1.3 s to `DOMContentLoaded` and
+  the same 506 ms tasks at 4x, because a template's content is still
+  parsed into elements;
+- the bodies as the text of a `<script type="text/x-task-body">`, which
+  the browser does not run and the tokenizer skims as text: 747 ms, and
+  no task over 60 ms.
+
+The second one went in. The build writes each body there (guarding a
+`<script` or `</script` in it, which cmark-gfm already escapes in what a
+task writes), and the page's script makes it a `<div class="body">` the
+first time the task is opened (`toggle`). The search reads an unopened
+body from that text without its tags and comments, with cmark-gfm's four
+entities decoded.
+
+What this costs, and why it is a commit of its own so it can be dropped:
+
+- **without a script, the page shows every task's summary but no
+  body** (GitHub has the files); until now it read whole;
+- **the browser's own find (Ctrl+F) no longer finds text inside a closed
+  task**: Chromium searched closed `<details>` and opened them; the
+  page's own search box still searches every body.
+
+Checked against the old page —built from the same tasks at `e170752`—
+with the same side-by-side script, now with 42 steps: on top of the
+ones before, 14 searches (`msu`, `code`, `&`, `<`, `"`, `it's`, `href`,
+`class`, `found-in`, `2026-11`, `copy`, `->`, `a b`, `é`), one task
+opened from its summary and 300 opened at once, comparing each open
+body's HTML and text lengths. All the same. The first try was not:
+cmark-gfm writes `<!-- raw HTML omitted -->` where a task wrote
+`<who>`, and guarding `<!--` had made that comment visible text.
+
+#### Before and after
+
+Median of three loads, served gzipped from localhost; "buttons" is when
+the status buttons are painted, "interactive" the end of the last long
+task, "longest" the longest task (what a tap may wait for).
+
+| | before | filtered build | + lazy bodies |
+|---|---|---|---|
+| bytes | 7,292,772 | 7,306,382 | 7,337,013 |
+| gzip -6 | 2,144,901 | 2,146,625 | 2,149,158 |
+| elements | 113,722 | 113,769 | 11,077 |
+| desktop: buttons | 464 ms | 144 ms | 148 ms |
+| desktop: interactive | 435 ms | 407 ms | 223 ms |
+| CPU 4x: buttons | 1728 ms | 212 ms | 224 ms |
+| CPU 4x: interactive | 1642 ms | 1314 ms | 616 ms |
+| CPU 4x: longest task | 513 ms | 515 ms | 58 ms |
+| CPU 4x: to `done` | 334 ms | 79 ms | 7 ms |
+| CPU 4x: to `all` | 448 ms | 12 ms | 15 ms |
+| CPU 4x: first search | 113 ms | 15 ms | 20 ms |
+| CPU 4x: opening the biggest task | 379 ms | — | 33 ms |
+| CPU 6x: buttons | 2812 ms | 252 ms | 240 ms |
+| CPU 6x: interactive | 2692 ms | 1752 ms | 835 ms |
+| CPU 6x: longest task | 519 ms | 520 ms | 76 ms |
+| CPU 4x, 9 Mbps: buttons | 2400 ms | 264 ms | 236 ms |
+| CPU 4x, 9 Mbps: interactive | 2476 ms | 2152 ms | 2141 ms |
+
+What is intrinsic to the number of tasks: the bytes. The tasks' Markdown
+alone is 5.36 MB, 1.96 MB gzipped, against the page's 2.15 MB, so markup
+is not what weighs and trimming it would not show; at 9 Mbps the
+download alone is about two seconds, and "interactive" waits for it
+(the buttons and the default list do not). Brotli, if the host serves
+it, makes it 1.53 MB. On the CPU side, what is left at 4x is the
+tokenizer going through 7.3 MB as text, about 400 ms, in short tasks.
+
+#### What is not done, and when it would be
+
+`done` and `cancelled` as a second file, fetched after the first paint:
+5.3 MB of the 7.3, so the first download would be a quarter. It is not
+needed for the first paint any more —the buttons and the default list
+come in the first bytes— and the long tasks are gone; it would only
+shorten the wait between the first paint and a filter answering, which
+matters on a slow network more than on a slow phone. It is a second
+file to build and publish, and a page that is incomplete until it
+arrives (the search, a `#hash` to a done task, the `done` count's list).
+Worth it only if taro still sees the phone wait after this.

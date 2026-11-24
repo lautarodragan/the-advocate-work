@@ -604,7 +604,8 @@ def last_changes [root: string] {
 
 # A task's body as HTML, with cmark-gfm —GitHub's own Markdown, so the page
 # reads like the file on GitHub—: built here and not in the browser, so the
-# page needs no script to be read. Raw HTML in a task comes out escaped,
+# page carries no Markdown library; its script only puts the HTML in when
+# the task is opened. Raw HTML in a task comes out escaped,
 # cmark-gfm's default. A link to another task —`other.md`, as they are
 # written in the repo— goes to its anchor in the page. An image is shown
 # small and is a link to itself, which opens it whole (a tap, on a phone);
@@ -676,7 +677,8 @@ def escape [] {
 # first—: its anchor is its file name, which never changes, so
 # `#<name>` links it from outside. The summary's button copies that name
 # —what taro pastes into a conversation to point at a task—; it is in the
-# summary so that it works with the task closed.
+# summary so that it works with the task closed. The body is not HTML
+# until the task is opened: see below.
 def task_html [index: record, shown: bool] {
   let t = $in
   let id = $t.file | path parse | get stem
@@ -686,12 +688,22 @@ def task_html [index: record, shown: bool] {
   let changed = if ($t.changed | is-empty) { "" } else { $" · changed <time datetime=\"($t.changed)\">($t.changed | str substring 0..9)</time>" }
   let source = $"https://github.com/lautarodragan/the-advocate-work/blob/main/tasks/($id).md"
   let games = $t.games | each { |g| $"<span class=\"game\" data-game=\"($g | escape)\">($g | game_label | escape)</span>" } | str join ''
+  # The body goes as the text of a script the browser does not run, and
+  # the page's script makes it HTML when the task is opened: as elements
+  # it is nine in ten of the page's nodes, and parsing them held a
+  # phone's main thread for half a second at a time. A `</script` would
+  # end that text, and a `<script` after a `<!--` —cmark-gfm writes
+  # `<!-- raw HTML omitted -->` for a task's raw HTML— would change how it
+  # is read; cmark-gfm escapes the `<` of what the task writes, so this
+  # only guards.
+  let body = $t.body | body_html ($t.links | links_html $index)
+    | str replace --all --regex '(?i)<(/?script)' '&lt;$1'
   [
     $"<details class=\"task\" id=\"($id | escape)\" data-status=\"($t.status | escape)\" data-type=\"($t.task_type | escape)\" data-game=\"($t.games | str join ' ' | escape)\" data-author=\"($t.author | escape)\"(if $shown { '' } else { ' hidden' })>"
     $"<summary><button type=\"button\" class=\"copy\" data-copy=\"($id | escape)\" title=\"Copy the task's file name\">copy</button><button type=\"button\" class=\"pick\" data-id=\"($id | escape)\" aria-pressed=\"false\" title=\"Add the task to the selection, to copy several at once\">select</button><span class=\"type\">($t.task_type | escape)</span>($games)<span class=\"name\">($t.name | escape)</span>"
     $"<span class=\"desc\">($t.description | escape)</span></summary>"
     $"<p class=\"meta\"><a href=\"#($id)\">#</a> · <a href=\"($source)\">($id).md</a>($changed)($author)($assignee)($agents)</p>"
-    $"<div class=\"body\">($t.body | body_html ($t.links | links_html $index))</div>"
+    $"<script type=\"text/x-task-body\" class=\"body\">($body)</script>"
     "</details>"
   ] | str join ''
 }

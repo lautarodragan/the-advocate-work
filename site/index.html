@@ -11,8 +11,10 @@
   section per state, already filtered as with no filter in the URL, and
   writes `_site/index.html`; the workflow in `.github/workflows/pages.yml`
   publishes it. The bodies come already as HTML, rendered by cmark-gfm
-  when the page is built: the script here only filters, and without it the
-  page still reads —every task, by the rule in the noscript—.
+  when the page is built, but as the text of a script tag that the script
+  here makes HTML when a task is opened (see `task_html` in tasks.nu for
+  why). Without a script, every task's summary shows —by the rule in the
+  noscript— but no body: GitHub has the files.
 -->
 <noscript><style>section[hidden], details.task[hidden] { display: block !important; } .filters, #search { display: none; }</style></noscript>
 <style>
@@ -271,7 +273,7 @@
       const ok = (status === 'all' || t.status === status) && (type === 'all' || t.type === type)
         && (game === 'all' || (game === 'none' ? t.games.length === 0 : t.games.includes(game)))
         && (author === 'all' || (t.author || 'none') === author)
-        && (!q || (t.text ??= t.el.textContent.toLowerCase()).includes(q));
+        && (!q || (t.text ??= textOf(t.el)).includes(q));
       // Only what changes is touched: a hidden that is set again still
       // costs the browser a look at the task.
       if (t.el.hidden === ok) t.el.hidden = !ok;
@@ -285,6 +287,31 @@
     game === 'all' ? url.searchParams.delete('game') : url.searchParams.set('game', game);
     author === 'all' ? url.searchParams.delete('author') : url.searchParams.set('author', author);
     history.replaceState(null, '', url);
+  }
+
+  // A task's body comes as the text of a script the browser does not run
+  // —parsing every body as elements is what held the page on a phone—,
+  // and becomes HTML the first time the task is opened.
+  const unopened = el => el.querySelector(':scope > script.body');
+  document.addEventListener('toggle', e => {
+    const b = e.target.open && e.target.matches?.('details.task') && unopened(e.target);
+    if (!b) return;
+    const d = document.createElement('div');
+    d.className = 'body';
+    d.innerHTML = b.textContent;
+    b.replaceWith(d);
+  }, true);
+  // What the search looks in: the task as it reads, its body too. An
+  // unopened body is HTML in a string, so its tags and comments go and its
+  // entities —cmark-gfm writes only these— come back as characters.
+  const entities = {'&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"'};
+  function textOf(el) {
+    const b = unopened(el);
+    if (!b) return el.textContent.toLowerCase();
+    let s = '';
+    for (const n of el.childNodes) if (n !== b) s += n.textContent;
+    s += b.textContent.replace(/<!--[^]*?-->|<[^>]*>/g, '').replace(/&(?:amp|lt|gt|quot);/g, m => entities[m]);
+    return s.toLowerCase();
   }
 
   function openHash() {
