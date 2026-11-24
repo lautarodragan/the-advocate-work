@@ -2,10 +2,10 @@
 name: "The converter reads the stages' answers with Python's truthiness"
 description: "convert reads Wally's map answer, the compiler's scan and the picture keys as serde_json::Value with silent defaults —int(v) = as_i64().unwrap_or(0) in five files, a truthy() that copies Python's—: typed answers would take most of the reading off maps.rs and pictures.rs"
 type: refactor
-status: doing
-assignee: mulita
+status: testing
+assignee: taro
 author: calandria
-agents: [cardon, aguara]
+agents: [cardon, aguara, mulita]
 links:
   found-in: [where-mapdata-and-convert-could-be-shorter]
   relates: [the-emission-reads-the-screens-answer-and-the-battle-model-by-name]
@@ -96,3 +96,29 @@ absence that was real: the nine games convert byte for byte the same.
   compiler's request: the same `Value`.
 
 It stays `doing`, for B5-B7.
+
+### 2026-11-24, Mulita: the last readers, in B7
+
+Done on the-advocate `mulita-b7` (`9d4446b7`), told in
+[the stages task's B7 entry](the-stages-speak-json-nobody-types.md). Of
+the list above:
+
+* **`fn int`**: gone from the four files. `maps.rs`' went in B5 with
+  `pages`; `convert.rs`', `pictures.rs`' and `chipsets.rs`' in B7, with
+  the substitution table typed as Wally's tuples, `[events] counters` as a
+  `Counter`, the scan's zooms as pairs, a shown picture's number and
+  palette kept beside its entry, and a ChipSet's patch read into a typed
+  recipe.
+* **`truthy`**: `pictures.rs`' went in B6 with the picture key;
+  `convert.rs`' closure over the substitution table in B7.
+* **`MapInfo`'s `Value`s that carry Wally's answer on**, the flashes'
+  `m.npcs.as_array()` reader and `panorama_names`: what
+  [`mapinfo-carries-wally-s-answer-as-json-between-two-types`](mapinfo-carries-wally-s-answer-as-json-between-two-types.md)
+  types, not this. The flashes' reader is inlined there until then. The
+  four of them that only the patches read —`colors`, `budget`, the two
+  merges— became one typed `MapDecision` in B7.
+
+The nine games' builds byte for byte with the readers gone, `converter.log`
+included: no default was carrying a real absence. `degradations.rs` keeps
+a local `int` closure that answers an `Option`, over the converter's own
+loss records, which this task did not count.
