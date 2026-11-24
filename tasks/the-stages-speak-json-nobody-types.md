@@ -1785,9 +1785,35 @@ One change in what a binary writes: `rm2k-snes-battle model` with a font
 leaves `party_line` out when the line fits, where it wrote `null`; no
 test reads it.
 
-**Install when merging**: `convert`, `mapdata`, `battle` and `screens`
-(`just install convert mapdata battle screens`). The shared cache stores
-every stage's answers once more (the converter's binary changed).
+#### Main merged: B4, B6 and B5
+
+the-advocate `main` moved under this work twice; `calandria-b` merged it
+twice: first B4 and B6 (`1f33793d`: the converter's
+`serde` line and scene.rs' imports in conflict; the images' typed
+battler and animation palettes, which made three `typed` bridges go),
+then B5 (`5572e9e8`, merge `cf0ea7a8`: `page_record` builds
+`request::Page` from `PageRecord`'s typed fields, the messages, skill
+pairs and parallel commons from `Compiled`'s). With B5, **the emission's
+`troop_pages` is `Option<rm2k_snes_events::answer::TroopPages>`** —mapdata
+depends on rm2k-snes-events— and the troops' pages are read by field: the
+made-up cartridges' `.inc` byte for byte what it was, and `json.rs` keeps
+only the geometry lists' `int`, `ints`, `list`, `text` and `by_key`, 56
+lines of the 113 it had.
+
+**Verified on the merged tree** (`cf0ea7a8`, with `convert`, `mapdata`,
+`battle`, `screens`, `wally`, `images` and `events` installed from it):
+`NO_CACHE=1 just cartridges --force` in the nine games, against the same
+`cef2cdda` baseline: the 20 `.sfc`, the 19,469 files of `build/` and the
+20 `converter.log` equal (aside `stamp.txt`, and the `.o` within the
+sources' mtimes). `just lint` clean; `just test` 29 passed; `just
+rust-test --no-fail-fast` 1,249 passed, 0 failed, 3 ignored; the test game
+231 passed, 6 skipped; `just boot` 218 passed; ABL's `just tests` 1,694
+passed, 2 skipped; no golden moved, `abl.sfc` `3bf35fd7665c`.
+
+**Install when merging**: `convert`, `mapdata`, `battle`, `screens` and
+`events` (`just install convert mapdata battle screens events`; `wally`
+and `images` as main already asks). The shared cache stores every stage's
+answers once more (the converter's binary changed).
 **For whoever merges B4-B6 after this**: `emit::typed` in the converter
 is the bridge each of them replaces —`map_record`, `page_record`,
 `Variant::request`, `scene::request`, `animations::request`— and

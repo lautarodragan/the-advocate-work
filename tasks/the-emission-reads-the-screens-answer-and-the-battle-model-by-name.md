@@ -99,9 +99,9 @@ is `rm2k_snes_battle::model::Model`, `BattleTables::slots` the slots'
 type, `Emit::screens` `rm2k_snes_screens::answer::Answer` and
 `window_systems` a list of `OtherSystem`; mapdata depends on the screens
 crate. Of mapdata's accessor calls, some 446 became 113 —what is left is
-the troops' pages, JSON until B5, and the geometry lists by name, which
-stay maps on purpose—; `json.rs` went from 113 lines to 76, and goes
-whole with B5. Net lines +147 and +66, not the -200 to -300 this draft
+the geometry lists by name, which stay maps on purpose—; with B5 merged,
+the troops' pages are `rm2k_snes_events::answer::TroopPages` too, and
+`json.rs` went from 113 lines to 56, the geometry's readers. Net lines +147 and +66, not the -200 to -300 this draft
 guessed for the reading alone: the types' declarations (`answer.rs` is
 418 lines) are most of it. The details in the log of
 [`the-stages-speak-json-nobody-types`](the-stages-speak-json-nobody-types.md).
