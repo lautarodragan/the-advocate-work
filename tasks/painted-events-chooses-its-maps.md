@@ -6,6 +6,7 @@ status: todo
 author: taro
 links:
   relates: [still-pieces-painted-into-a-painted-map, the-trim-guesses-which-maps-go-painted]
+  blocked-by: [the-trim-guesses-which-maps-go-painted]
 ---
 
 From [`still-pieces-painted-into-a-painted-map`](still-pieces-painted-into-a-painted-map.md):

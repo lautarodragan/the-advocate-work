@@ -7,6 +7,8 @@ assignee: taro
 author: taro
 agents: [Chajá]
 game: zounds
+links:
+  duplicated-by: [changing-the-map-s-tiles-lags]
 ---
 
 taro, on 2026-11-20, translated (15 captures, one a frame, frames 61756
