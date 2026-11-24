@@ -276,7 +276,9 @@ they live inside the tools —see `LAYOUT.md`—:
                        stage answered, the LZ2 streams and the VRAM layouts
       convert/         the converter: it asks each stage, in order, for
                        what the cartridge needs, and gives it what the
-                       others answered
+                       others answered; the stages are libraries it is
+                       compiled with, and their binaries are for the
+                       tests and for a person
 
 The layers only depend downwards —`rm2k-snes/` on the other two, and those
 on nothing of the rest—, and `tests/test_layers.py` guards it. They are
@@ -804,8 +806,10 @@ ports' `machine.just`, `~/.cache/advocate` here, passed to the tools as
 `--cache`. It keeps the stages' answers —Wally, images, screens, events,
 battle—, `ca65`'s objects and the MSU-1 tracks, so a new worktree builds
 in a minute what took ten. Its key carries the content of the inputs **and
-of the binaries that produce what is stored**, so it does not have to be
-deleted when touching code; it rests on a stage reading nothing its
+of the binaries that produce what is stored** —for every stage, the
+converter's, which they are compiled into: any change to any stage throws
+every stage's answer away—, so it does not have to be deleted when
+touching code; it rests on a stage reading nothing its
 request and flags do not name, as `key` in `stage.rs` says. Any change in
 what is cached is verified with `NO_CACHE=1`: the ROMs have to be byte for
 byte equal. It has no eviction yet. Without `--cache` the tools still use
@@ -816,8 +820,8 @@ each game's `build/cache/`. See `cache.rs` in `rm2k-project`. Shared since
 **While the tests are running no source is touched**, not from the other
 repo either. The fingerprint of `rm2k-snes-cartridges` covers all of
 `runtime/` of the checkout the tools were installed from and the binaries
-that build —`ca65`, `ld65`, `rm2k-snes-cartridges` itself and the ones the converter
-runs—: touching any of those while ABL's suite is running, or reinstalling
+that build —`ca65`, `ld65`, `rm2k-snes-cartridges` itself and the
+converter, with every stage compiled into it—: touching any of those while ABL's suite is running, or reinstalling
 one, mixes two versions and the result says nothing.
 
 What **is no longer needed** is isolating oneself in a worktree for that.
@@ -1010,7 +1014,10 @@ What always has to be done:
   (see "Where this runs"). **A Rust project is passed to it only if the
   agent is going to modify it** —`… install-local .local-tools wally`—, or
   the binaries that link it if it is a library: compiling costs, and
-  without names it compiles nothing. And **everything
+  without names it compiles nothing. **A stage is one of those
+  libraries**: what reaches the ROM is the converter it is compiled into,
+  so a change to Wally is `… install-local .local-tools convert wally`
+  —`convert` for the cartridges, `wally` for the binary the tests call—. And **everything
   is run through `just`**: a loose command does not see that `bin/` and
   uses the global one. It is taro's, from 2026-09-29, and it replaced an
   implicit re-exec the scripts did on their own.
@@ -1073,7 +1080,8 @@ So when merging a sub-agent's branch:
   nothing about the merge.
 * **Reinstall into the global one only the Rust the branch touched**:
   `just install wally`, from `~/the-advocate`; for a library, the binaries
-  that link it. A branch that touches
+  that link it —for a stage, `convert` too: `just install convert
+  wally`—. A branch that touches
   `rm2k-project` —`project`— changes all the binaries that compile it in,
   and everything is reinstalled. Until 2026-10-02 there were also Python
   scripts, installed as symlinks, and an `install-scripts` recipe to
