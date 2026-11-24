@@ -1239,3 +1239,117 @@ cartridge`). Every cartridge is stale once (the fingerprint's list
 changed), and the shared cache stores each stage's answers once more (the
 converter's binary changed), as any new converter does. Phase A is done;
 the task stays in `doing`, for phase B.
+
+### 2026-11-24, Aguará: B4, Wally's answer
+
+On the-advocate `aguara-b4`, from `cef2cdda`: `94f3312c`, the typing,
+and `ae968484`, Wally's README. Ports `aguara-b4` at `4c23c9e`,
+untouched.
+
+#### What B4 is
+
+**`wally::answer`**, a new module of Wally: `map.json` is an
+`answer::Map`, `layers.json` an `answer::Layers`, both `Serialize` and
+`Deserialize`, and `Answer::read(&Files)` reads the two back. `map::files`
+and `layers::files` build them where they built `json!`, and serde writes
+them. `sprites::npc::Npc`, `posed::Placed` and `map::SharedObjects` derive
+serde themselves —their fields were already their keys, in order, and
+they say so—; the rest are types of the answer, because what Wally keeps
+inside (bytes, pictures, `BTreeMap`s) is not what it answers. The three
+shapes that are no struct are untagged enums that write the same JSON as
+before: a slot by the one key it has (`{"hero": true}`, `{"event": 3}`,
+`{"charset": …, "index": …, "pose": …}`…), a merge with or without its
+palette first, a route graphic with or without its colours. `Note.kind`
+is an enum (`note`, `discard`, `stop`) inside Wally too.
+
+**The converter**: `maps::wally_answer` reads it, and `map_info` and
+`variants::drawn` work on fields. The background's runs and its colour
+words, which both built the same way, are `maps::runs` and
+`maps::words`. Gone: `maps.rs`' `truthy` and `slot_key` (the slots are
+counted as distinct `Slot`s, which is what the keys were for), and
+`variants.rs`' `fn int`. `maps.rs` keeps its `int`, for `pages`, which
+reads the compiler's records (B5).
+
+**What stays a `Value`**: `MapInfo`'s fields that carry Wally's answer on
+to the emission —`objects`, `npcs`, `movable`, `animates_*`,
+`posed_table`, `panorama`, `runs`, the merges, `panorama_way`— are built
+from the types with `json!` and keep their type, because B1 (Calandria,
+beside this) reads them into mapdata's typed request with `typed(&Value)`.
+They become Wally's types when the emission's request takes them; one
+reader of them by hand is left outside `maps.rs`: `convert.rs`' flashes
+(`m.npcs.as_array()`, about 1383).
+
+#### State, stderr, key order
+
+* **Key order**: the fields are declared in the order `json!` wrote them,
+  and `answer.rs` says why it matters —the converter's serde_json keeps
+  it, and the emission gets these parts as JSON—. In the converter the
+  answer's bytes are the same as before (`json!` there already kept the
+  insertion order). `wally map` and `wally layers` write field order
+  where they wrote sorted keys: nothing calls the first (the
+  [draft](the-stage-subcommands-only-the-converter-called-have-no-caller.md)),
+  and the second is a person's.
+* **The cache** still keeps the stage's files, packed: `map.json` and
+  `layers.json` are bytes among them. A typed answer stored as base64
+  JSON was not needed for Wally —most of its answer is binaries (tiles,
+  blocks, PNGs), which the pack already holds as they are—; that is
+  for whichever step types `stage::call` itself.
+* **Defaults that carried an absence**: none showed. The only one that
+  changed meaning is a map with no objects (`sprite: null`), which used to
+  stop at "wally did not write " and now stops at "wally answered no
+  objects"; no map of the nine has one.
+* **No new state, no new stderr**: nothing in Wally runs differently.
+
+#### The builds
+
+`NO_CACHE=1 just cartridges --force` in the nine games (ABL
+`--without-tracks`), the global tools (`cef2cdda`) against `convert` and
+`wally` from this branch: **the 20 `.sfc` equal**, and every file of the
+nine `build/` (19,469), the 20 `converter.log` included. Aside, as in
+A1-A9: `stamp.txt`, and the `.o`/`.dbg`, the runtime's mtimes from
+another checkout (a `.dbg` compared without them is equal). So no JSON
+on disk moved: the parts of the answer the emission gets come out of the
+types in the order they came out of `json!`.
+
+Then twice with the shared cache: the first stored 4,642 stage answers
+(with three other agents building at once; every stage's, since the
+converter's binary changed), and equals the uncached build; the second
+stored **none**, 92 s for the nine, and equals it but for Vampires Dawn's
+`converter.log`, the 672 lines of "is left out" a cached compile does not
+print (Cardón's A2, as in A9).
+
+#### The tests
+
+`wally::answer`'s two, which pin the JSON of the untagged shapes and of a
+note with and without its loss, and read them back. Wally's
+`tests/halves.rs` caught a doc line of mine on `Npc` that linked
+`crate::answer` from the sprites half (`18aed7f1`).
+
+#### Lines
+
+`94f3312c`: the converter **-138** (242 in, 380 out: `maps.rs` -106,
+`variants.rs` -32), inside the table's -100 to -200. Wally **+457**:
+`answer.rs` is 455 lines, 76 of them its tests and the rest the types,
+their derives and their docs; `map.rs` and `layers.rs` build the types in about the
+lines `json!` took. The whole step is **+320**, with `Cargo.lock`'s
+line: the draft's estimate was the converter's, "less what the types
+cost on Wally's side", and that cost is larger than the saving. What it buys is the point of the task:
+the converter reads no key of Wally's by name.
+
+#### The suites
+
+With `convert` and `wally` from this branch first in the PATH (main had
+not moved): `just lint` clean; the-advocate's `just test` 29 passed;
+`just rust-test --no-fail-fast` 1,247 passed, 1 failed, 3 ignored —the
+failure was `tests/halves.rs` and its fix above, after which Wally's
+tests pass whole—; the test game (`SOUNDFONT=FluidR3_GM.sf2`) 231 passed,
+6 skipped; the ports' `just boot` 218 passed; ABL's `just tests` 1,694
+passed, 2 skipped. No golden moved: the ports' worktree is clean.
+`abl.sfc` `3bf35fd7665c`, as A9's. **Not covered by a test of its own**:
+that `Answer::read` reads every field back as Wally wrote it is shown by
+the nine games' builds, not by a test that writes a whole answer and
+reads it.
+
+**Install when merging**: `convert` and `wally` (`just install convert
+wally`). Wally's stage answers are stored once more, as with any new
+converter.
