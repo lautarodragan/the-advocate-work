@@ -6,7 +6,7 @@ status: todo
 author: taro
 links:
   relates: [artistic-decision-patches, battle-tests-without-simulate, the-volume-ceilings-are-measured-without-a-rom, tests-without-the-stages-subcommands, the-cartridges-fingerprint-hashes-the-path-s-builder]
-  has-part: [cartridges-runs-itself-to-assemble]
+  has-part: [cartridges-runs-itself-to-assemble, the-stage-subcommands-only-the-converter-called-have-no-caller]
   blocked-by: [the-stages-speak-json-nobody-types]
 ---
 

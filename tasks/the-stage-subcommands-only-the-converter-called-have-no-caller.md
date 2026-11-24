@@ -2,12 +2,13 @@
 name: "The stage subcommands only the converter called have no caller"
 description: "Since the converter calls every stage as a function, eleven subcommands of the stage binaries are run by nothing: no test, no recipe, no converter; their main over the stage function is a path nothing executes"
 type: refactor
-status: draft
+status: todo
 author: calandria
 agents: [calandria]
 links:
   found-in: [the-stages-speak-json-nobody-types]
   relates: [tests-without-the-stages-subcommands]
+  part-of: [one-advocate-command]
 ---
 
 Seen by Calandria on 2026-11-24, doing A9 of
@@ -41,3 +42,15 @@ for a person to run a stage alone on a dump, as the book's "Running them
 by hand" in `tools.md` promises. One-advocate-command removes the stage
 binaries once the tests stop calling them, which takes these with them;
 removing them earlier only shrinks what that task removes.
+
+## Log
+
+### 2026-11-24, Hornero: promoted to `todo`
+
+Promoted by Hornero: verified by grep against every caller, nothing seen
+or heard changes, and removing them goes the way taro already set —the
+book's decision "One command, and no tool runs another"; the stage
+binaries go once the tests stop calling them—. Decided: remove the
+eleven subcommands, their usage lines in the READMEs, and fix the book's
+"Running them by hand" in `tools.md` to name only what still runs. Not
+urgent: `one-advocate-command` would take them with it.
