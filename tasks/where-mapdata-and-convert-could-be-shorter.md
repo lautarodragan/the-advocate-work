@@ -5,7 +5,7 @@ type: research
 status: testing
 author: taro
 assignee: taro
-agents: [calandria]
+agents: [Calandria]
 ---
 
 **Why**: after the toolchain cleanup of 2026-11-23 —the binaries nobody

@@ -2,9 +2,9 @@
 name: "Small repeats inside emit.rs's Rest"
 description: "A handful of local repeats in mapdata's emission: five loops that add a text per skill, two identical 16-bit checks for a troop's experience and gold, two lookups of an item's skill, a palette of sixteen built five ways, and segment switches that switch back on the next line"
 type: refactor
-status: doing
-assignee: calandria
-agents: [calandria]
+status: testing
+assignee: taro
+agents: [Calandria]
 author: calandria
 ---
 
@@ -69,3 +69,35 @@ the typed contracts are
 
 With the other four, in one branch, one commit each, every ROM byte for
 byte equal.
+
+### 2026-11-23, Calandria: each repeat once
+
+the-advocate `40353005`.
+
+* **The texts per id**: `Texts::add_each(ids, |id| text)`, through
+  `db_text`, in the order of `ids`. It took the enemies' names too, the
+  same loop over `rom_enemies`; the order of every `add` is the one it
+  was, so every text keeps its number.
+* **A troop's experience and gold**: one loop over `("exp",
+  "experience")` and `("gold", "gold")`, the error texts as they were.
+* **An item's skill as its place**: one closure, `place_of(h, where_)`,
+  with `""` for the battle's and `" on the map"` for the items screen's.
+* **The palette of sixteen**: `palette16`, for the two that cut to
+  sixteen (`picture_entry`, which the previous commit had already made
+  one, and the shop party's closure). The battle animations' and
+  `scene.rs`' battlers' pad to sixteen and never cut, so they stay: with
+  more than fifteen colours they write more, and `palette16` would cut.
+* **Segments**: the three `.segment "TABLES"` followed at once by
+  `.segment "RODATA"` go (`item_switch`/`item_battle`,
+  `item_up`/`item_txt_*`, `crit_table`/`equipment_initial`). The two the
+  draft listed as the reverse, `slot_face_block` and `item_price`, are
+  not empty: each wraps a table that goes in `RODATA` between two
+  `TABLES` stretches, so they stay. The emission's text loses those six
+  lines and nothing else.
+* **The System suffix**: `system_suffix(k)`. **The backdrop**: `Backdrop`,
+  with its bytes, a line's size and how many lines, and `is_one_line`.
+* Every port's ROM byte for byte. The `.inc` the build leaves is the one
+  after the bank packing, which has already taken every `RODATA` stretch
+  into its `BANKxx` segment, so there it differs from the baseline by the
+  three `.segment "TABLES"` lines and a blank one, in each of the 20
+  `mapdata.inc`, and nothing else.
