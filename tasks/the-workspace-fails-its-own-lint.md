@@ -2,7 +2,7 @@
 name: "The workspace fails its own lint"
 description: "`just lint` in the-advocate is red on main: clippy's wrong_self_convention on `from_the_cache` in rm2k-snes-audio, and rustfmt on two files, all from before the five libraries lost their binaries"
 type: bug
-status: draft
+status: done
 author: tijereta
 agents: [Tijereta]
 links:
@@ -35,3 +35,7 @@ Calandria found the same three while working on the emission, and wrote a
 duplicate draft that went in the merge: rustfmt on
 `cartridge/src/assemble.rs` and `wally/src/events.rs`, clippy's
 `wrong_self_convention` on `from_the_cache` in `rm2k-snes-audio/src/tracks.rs`.
+
+### 2026-11-24, Hornero: fixed
+
+the-advocate `508b8c95`: `cargo fmt` on the two files and `from_the_cache` renamed `restore_from_the_cache`. `just lint` passes; CI's rustfmt-and-clippy job had been red since `1240ecc9` (2026-11-23), which taro noticed.
