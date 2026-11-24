@@ -2,9 +2,12 @@
 name: "The tasks page renders filtered, and fast"
 description: "The tasks page is one ~5 MB HTML with every task, and its filter buttons appear only once the script has processed all of them: ~2 s invisible on a PC, longer on a phone, where it sometimes freezes; the first render should come already filtered from the static build, and the page lighter"
 type: optimization
-status: doing
-assignee: huron
+status: testing
+assignee: taro
+agents: [huron]
 author: taro
+links:
+  found: [a-placeholder-in-angle-brackets-vanishes-from-the-page]
 ---
 
 **Why**: `nu tasks/tasks.nu html` builds a single `index.html` from
@@ -204,3 +207,22 @@ matters on a slow network more than on a slow phone. It is a second
 file to build and publish, and a page that is incomplete until it
 arrives (the search, a `#hash` to a done task, the `done` count's list).
 Worth it only if taro still sees the phone wait after this.
+
+### 2026-11-24, Hurón: to testing
+
+For taro: the page as built from this branch is in
+`/shared/captures/2026-11-24-tasks-page/index.html`, with the one from
+before beside it as `before.html` and the tasks' images, to open both on
+the phone from the NAS. What to look at: the buttons and the `doing`
+list in the first paint and nothing moving after; a tap on a filter
+while the page is still loading; opening a task, and a long one; the
+search box. Nothing to install when merging: it is the Pages workflow,
+with the same nushell and cmark-gfm.
+
+Not covered by anything that runs: Safari. Everything was measured in
+headless Chromium with its CPU throttled, which is not an iPhone. The
+newest thing the script uses is `??=`, which Safari has had since
+version 14, in 2020; the `toggle` event and `:scope`, older.
+
+Found and not fixed:
+[a placeholder in angle brackets vanishes from the page](a-placeholder-in-angle-brackets-vanishes-from-the-page.md).
