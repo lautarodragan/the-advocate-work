@@ -7,7 +7,7 @@ assignee: calandria
 agents: [calandria, aguara, cardon, carpintero, chaja, mulita, tijereta]
 author: taro
 links:
-  found: [the-event-compiler-s-left-out-warning-never-reaches-the-log, fxpak-s-pty-tests-share-ptsname-s-buffer, the-msu-and-the-tracks-are-written-through-a-nuevo-file, the-patches-request-of-release-repeats-five-maps, the-stage-subcommands-only-the-converter-called-have-no-caller, the-picture-key-is-declared-twice, the-slots-screen-line-counts-no-row-cells, mapinfo-carries-wally-s-answer-as-json-between-two-types]
+  found: [the-event-compiler-s-left-out-warning-never-reaches-the-log, fxpak-s-pty-tests-share-ptsname-s-buffer, the-msu-and-the-tracks-are-written-through-a-nuevo-file, the-patches-request-of-release-repeats-five-maps, the-stage-subcommands-only-the-converter-called-have-no-caller, the-picture-key-is-declared-twice, the-slots-screen-line-counts-no-row-cells, mapinfo-carries-wally-s-answer-as-json-between-two-types, the-compiler-s-songs-and-the-music-s-losses-cross-the-converter-as-json]
   relates: [artistic-decision-patches, battle-tests-without-simulate, tests-without-the-stages-subcommands]
   blocked-by: [emit-rs-writes-each-table-through-a-call-rustfmt-spreads-over-seven-lines, picture-tables-and-common-entries-write-the-same-entry-twice, rm2k-snes-mapdata-maps-has-no-caller, small-repeats-inside-emit-rs-s-rest, the-battle-terms-by-name-are-a-42-arm-match]
   blocks: [a-stage-s-cache-key-once-it-is-a-library, one-advocate-command]
@@ -1819,3 +1819,135 @@ is the bridge each of them replaces —`map_record`, `page_record`,
 `Variant::request`, `scene::request`, `animations::request`— and
 `stage::typed` reads a typed answer from a stage's files; mapdata's
 request types are the target their answers feed.
+
+### 2026-11-24, Mulita: B7, the audio and patches requests typed
+
+On the-advocate `mulita-b7`, from `bb961337`; ports `mulita-b7` at
+`4c23c9e`, untouched. One commit, `9d4446b7`.
+
+**The music's request is `rm2k_snes_audio::stage::Request`**, in the
+audio crate, `Serialize` and `Deserialize` derived: the converter builds
+it as a struct and `stage::cartridge` takes it; the binary reads it from
+`--request` with serde, from the text so a bad one names its line. Its
+`songs` are `cartridge::Songs`, which derives serde now —a package is its
+index or `"battle"`, by hand, and the per-package maps are `[key, value]`
+lists through a small `by_key` module—, so `Songs::from_json` (118 lines)
+and the request's walk by hand went; the backdrops are bytes, hex in the
+JSON through `hex_pairs`. The crate gained `serde` in its `Cargo.toml`.
+**The patches' `Request`** was already typed on the reading side: it
+derives `Serialize` and `Clone` now, the converter builds it, and the
+`Value` door went —`stage::patches` takes the request, `patches_of` is
+gone—; its test now writes a request as JSON, reads it back and answers
+the same.
+
+**Where the converter's readers went**, file by file —the list of the
+truthiness task's "What remains, for B7"—:
+
+* `convert.rs`: `fn int` and the `truthy` closure. The substitution
+  table is Wally's `(upper, old, new, pairs)` tuples in `MapInfo` and
+  `CompileMap`, made JSON only in `compiler.rs` for the event compiler's
+  request, as `maps.rs` used to; `[events] counters` are a
+  `compiler::Counter`.
+* `pictures.rs`: `fn int` (the `truthy` went in B6). The scan's `zooms`
+  are `(number, zoom)` pairs in the events crate's answer (`Vec<(i32,
+  i32)>`, `zooms_json` gone; the JSON is the same arrays); a `Shown`
+  picture keeps its `number` and `palette` beside its entry instead of
+  reading them back from it.
+* `chipsets.rs`: `fn int`. A ChipSet's patch is a `Fork` with its recipe
+  typed —`Recipe`, `Pose`, `Drawing`, `Recolor`, and a `Cell` that is
+  `[x, y, slot]` or `[x, y, slot, under]`—: every operation read each
+  field with a default of 0 or "" before. It is the project's input and
+  not a stage's answer, but it was the last `fn int`.
+* `maps.rs` (Aguará's, then Calandria's; kept small): `MapInfo`'s
+  `colors`, `budget`, `merges_background`, `merges_above` —read only by
+  the patches request— are one `patches: MapDecision`, built in
+  `map_info` from Wally's types with a `patches_merge`; `panorama_way` is
+  an `Option<String>`, which changed one line of `emit.rs`. The
+  substitution table's two lines.
+* `screens.rs`: `window_losses`, the window's losses for the patches,
+  read from the screens' still untyped window answer through a small
+  `Deserialize`.
+
+**What still reads by key, on purpose**:
+
+* `MapInfo::npcs` in `convert.rs`' flash check: Wally's rows as JSON, which
+  [`mapinfo-carries-wally-s-answer-as-json-between-two-types`](mapinfo-carries-wally-s-answer-as-json-between-two-types.md)
+  (Calandria, beside this) types; inlined there as
+  `npc["index"].as_i64().unwrap_or(0)` so `int` could go, with a comment.
+  Calandria could not be reached to agree on it; the hunk is those lines.
+* The event compiler's `songs`, still a `Value` in `Compiled`, read into
+  the music's type with one `from_value`; and the music's `losses`, read
+  from `audio.json` by key:
+  [draft](the-compiler-s-songs-and-the-music-s-losses-cross-the-converter-as-json.md).
+* A big picture's layer's `tile_count` in `pictures::keep_objects`: the
+  layer is B6's `Value` on purpose, now `expect`ed instead of defaulted.
+* `degradations.rs`' local `int` closure: an `Option` over the converter's
+  own loss records, not a silent default.
+
+**Counted in the converter** (`json!` and `["key"]` reads, by grep):
+199 and 164 at `bb961337`, 182 and 120 after. What is left is mostly the
+event compiler's scan and compile requests, built as `Value` in
+`compiler.rs` (32 `json!`) and read by hand on the events side; `MapInfo`'s
+`Value`s in `maps.rs` (35 `json!`, 19 reads, Calandria's step); B6's big
+picture layers and table entries in `pictures.rs` and
+`common_pictures.rs`; the loss records in `degradations.rs` and their
+filters in `convert.rs`; the screens' untyped `window` answer and
+`layout`; and the forks' JSON in `fork.rs`.
+
+**Net lines**: 531 in, 455 out, **+76** —the table said -30—. The stages
+lost: the audio crate -47, patches -9, events -4. The converter gained
+135, of which the ChipSet recipe's types are +60, the window's losses
++32 and the map decision built from Wally's types +28: typing what was
+read with a default costs more lines than the reads did, and B7's
+estimate did not count the recipe.
+
+#### State, stdout, key order, the binaries
+
+* No new state; nothing new on stderr. The patches and the music stay
+  uncached (`call_uncached`), and the events' scan answer serializes its
+  zooms as the same arrays: no cache value moves.
+* **Key order**: the patches request is no longer JSON on the way in; the
+  music's is not either; the event compiler's compile request writes the
+  substitution table's objects and the counters with the same keys in the
+  same order (`events-request.json` equal in the builds below).
+* **The binaries**: `rm2k-snes-patches` writes the same files;
+  `rm2k-snes-audio cartridge` takes the same JSON, and only its complaints
+  about a bad request are serde's now; `compile` is untouched;
+  `rm2k-snes-events`' scan writes its zooms as the same arrays.
+
+#### The builds, byte for byte
+
+`NO_CACHE=1 just cartridges --force` in the nine games (ABL
+`--without-tracks`) in one ports worktree, the global tools (`bb961337`)
+against `convert`, `rm2k-snes-audio`, `patches` and `events` from this
+branch: **the 20 `.sfc` and the 19,469 files of the nine `build/` equal**,
+the 20 `converter.log`, every `.msu` and every JSON included; aside
+`stamp.txt` and the 40 `.o`/`.dbg`, which differ only in the mtimes
+`ca65` records (checked on every `.dbg` with them stripped). The music
+request's MSU side did not change —the same backdrop bytes—, so no build
+with tracks. No warm-cache round: the two stages are uncached, and the
+scan's cached answer is the same bytes.
+
+#### The suites
+
+On the branch (the-advocate's main had not moved), `convert`,
+`rm2k-snes-audio`, `patches` and `events` first in the PATH: `just lint`
+clean; the-advocate's `just test` 29 passed; `just rust-test
+--no-fail-fast` 1,248 passed, 1 failed, 3 ignored —the failure the known
+cached-`.dbg` flake, `a_cached_object_gives_the_dbg_a_fresh_one_gives`,
+which passed run alone—, and the audio crate's with the Microsoft GS
+SoundFont in `SOUNDFONT`, all passed; the test game
+(`SOUNDFONT=FluidR3_GM.sf2`) 231 passed, 6 skipped; the ports' `just boot`
+218 passed; ABL's `just tests` 1,694 passed, 2 skipped. No golden moved:
+the ports' worktree is clean. `abl.sfc` `3bf35fd7665c`. `cargo fmt` and
+`clippy --all-targets -D warnings` clean on the four crates. **No test
+runs the binary's `cartridge`**, as in A7: the typed request is covered by
+the builds above and the binary's reading of it by nothing; the ChipSet
+recipe's types by `chipsets.rs`' five tests and ABL's four forked
+ChipSets in the builds; `window_losses` by the builds, where six games write window
+patches, the starting System's and the others'.
+
+**Install when merging**: `convert`, `rm2k-snes-audio`, `patches` and
+`events` (`just install convert rm2k-snes-audio patches events`). The
+shared cache stores every stage's answers once more, as any new converter
+does; no value changes.
