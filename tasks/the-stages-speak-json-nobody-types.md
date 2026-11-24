@@ -947,8 +947,9 @@ convert rm2k-snes-audio`).
 
 ### 2026-11-24, Tijereta: A8
 
-On the-advocate `tijereta-a8`, from `8b069fc2` (main had not moved);
-ports `tijereta-a8` at `4c23c9e`, untouched. One commit, `806babc2`, on
+On the-advocate `tijereta-a8`, from `8b069fc2`, with main merged twice
+—`11fcaed9` (A7) in `9e17166a`, `0502be9b` (A6) in `abb98bf2`—; ports
+`tijereta-a8` at `4c23c9e`, untouched. One commit, `806babc2`, on
 the battle's model: `rm2k_snes_patches::stage::patches(request)` answers
 the patches of one build as files named by their path in it
 (`patches/auto/maps/0001.toml`), writing nothing, and
@@ -1004,3 +1005,30 @@ with a private cache (`CACHE=` a scratch directory): the first stored
 left-out warnings, which a cached compile does not print (Cardón's A2).
 ABL's `just patches-check` with these tools: the 303 map, 41 animation, 92
 battler and 0 window patches match the 11 cartridges.
+
+On the tree with A6 and A7 merged (`abb98bf2`), `convert`, `patches`,
+`rm2k-snes-audio` and `mapdata` installed from it, the same cold build
+against the global tools (`8b069fc2`) again: the 20 `.sfc` and every file
+equal —25,785 now, the `.msu`s and what the earlier builds left in the
+worktree's `build/` included—, aside the same `stamp.txt`, `.o`/`.dbg` and
+the one line of ABL `release`'s `converter.log`; then warm, equal to it.
+With A7 and A8 both in, nothing calls `stage::hand_over`: it gets the
+allow `run` has, in the first merge, until A9.
+
+#### The suites
+
+On `abb98bf2`, those four first in the PATH: `just lint` clean; the-advocate's
+`just test` 29 passed; `just rust-test --no-fail-fast` 1,246 passed, 0
+failed, 3 ignored (on the A7 merge the same run had seven of `fxpak`'s pty
+tests red, which passed run alone, the known
+[draft](fxpak-s-pty-tests-share-ptsname-s-buffer.md)); the test game
+(`SOUNDFONT=FluidR3_GM.sf2`) 231 passed, 6 skipped; the ports' `just boot`
+218 passed; ABL's `just tests` 1,694 passed, 2 skipped. No golden moved:
+the ports' worktree is clean. `abl.sfc` `3bf35fd7665c`. `cargo fmt
+--check` and `clippy --all-targets -D warnings` clean on
+`rm2k-snes-patches`, `rm2k-snes-convert` and the two merged crates. The
+binary's `--request` goes through `patches_of` and `put`; the crate's
+`command_line.rs` covers it, and ABL's `test_patches.py` its `--check`.
+
+**Install when merging**: `convert` and `patches` (`just install convert
+patches`).
