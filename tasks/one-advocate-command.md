@@ -55,6 +55,12 @@ beside it.** taro's, 2026-11-24:
 > We go back to really having a statically linked binary, with no
 > dependencies, fully self-contained.
 
+> [musl] Let's ignore this for now. We evaluate it again at the end of
+> everything.
+
+(taro, 2026-11-24: the goal stands, but it is looked at again once the
+rest is done, not along the way.)
+
 What stands in the way today, measured on the-advocate `90d1041d`:
 
 * **The Linux releases are glibc because of one `dlopen`**: the libretro

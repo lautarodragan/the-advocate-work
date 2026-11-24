@@ -338,6 +338,22 @@ for that stage, which is expected and not a failure.
   binary format for the cache; and whether the two test tasks' lists take
   in the converter's queries and the audio's commands.
 
+## taro's answers to the design
+
+> Let's go with your recommendations.
+
+(taro, 2026-11-24, on Hornero's recommendations to the four questions above:)
+
+1. **The types live in the crate that produces them**; the emission
+   depends on screens and events, no `rm2k-snes-contracts`.
+2. **The cache stays JSON, with bytes in base64**; a binary format is
+   decided later, with
+   [`a-stage-s-cache-key-once-it-is-a-library`](a-stage-s-cache-key-once-it-is-a-library.md).
+3. **The two gaps go into**
+   [`tests-without-the-stages-subcommands`](tests-without-the-stages-subcommands.md):
+   the converter's own queries and `rm2k-snes-audio`'s subcommands.
+4. **The single key's cost, as measured, is accepted.**
+
 ## Log
 
 ### 2026-11-23, Hornero: written, waiting for the emission's writing style
@@ -366,3 +382,7 @@ of the stage cache. Grepped the ports' harness, its tests and the-advocate's
 test game for every stage subcommand they call. Found on the way, not
 fixed: the event compiler's left-out warning never reaches the log (draft).
 The task stays in `doing`: the code waits for taro's reading.
+
+### 2026-11-24, Hornero: taro answered; A0 goes to Calandria
+
+As above.

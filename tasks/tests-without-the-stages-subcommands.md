@@ -35,7 +35,16 @@ unless it says otherwise:
   `field-skill`, `lines`, `model`, `layout`;
 * the scans: `rm2k-snes-events scan` (the harness's `game.py`, the ports'
   `tests/games.py`) and `rm2k-snes-convert scan`
-  (`tests/test_frozen_world_cursor.py`).
+  (`tests/test_frozen_world_cursor.py`);
+* **The converter's own queries**, which the design of
+  [`the-stages-speak-json-nobody-types`](the-stages-speak-json-nobody-types.md)
+  found missing from this list: `rm2k-snes-convert leaders`,
+  `map-context`, `boxes` and `compile` besides `scan`, used by 26 files of
+  ABL's tests —through `abl/tests/harness/converter.py`—; once the
+  converter is a library they have nowhere to live;
+* **`rm2k-snes-audio`'s subcommands**: the eight the harness's
+  `music.py` and `test_music_ceilings.py` call (the latter goes with
+  [`the-volume-ceilings-are-measured-without-a-rom`](the-volume-ceilings-are-measured-without-a-rom.md)).
 
 **What is asked**:
 
@@ -69,3 +78,7 @@ which the harness calls too, are the builder's and stay: they are what
 Nothing done yet. The list above comes from a grep of the harnesses on
 2026-11-24 (ports `4c23c9e`, the-advocate `90d1041d`); the classification
 redoes it.
+
+### 2026-11-24, Hornero: two gaps added
+
+Found by Calandria's design; taro agreed to add them.
