@@ -2,7 +2,7 @@
 name: "The tasks page renders filtered, and fast"
 description: "The tasks page is one ~5 MB HTML with every task, and its filter buttons appear only once the script has processed all of them: ~2 s invisible on a PC, longer on a phone, where it sometimes freezes; the first render should come already filtered from the static build, and the page lighter"
 type: optimization
-status: testing
+status: done
 assignee: taro
 agents: [huron]
 author: taro

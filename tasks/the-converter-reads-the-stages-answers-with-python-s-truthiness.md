@@ -3,7 +3,7 @@ name: "The converter reads the stages' answers with Python's truthiness"
 description: "convert reads Wally's map answer, the compiler's scan and the picture keys as serde_json::Value with silent defaults —int(v) = as_i64().unwrap_or(0) in five files, a truthy() that copies Python's—: typed answers would take most of the reading off maps.rs and pictures.rs"
 type: refactor
 status: doing
-assignee: aguara
+assignee: mulita
 author: calandria
 agents: [cardon, aguara]
 links:

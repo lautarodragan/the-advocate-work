@@ -2,7 +2,8 @@
 name: "MapInfo carries Wally's answer as JSON between two types"
 description: "Since B4 and B1, the converter reads Wally's typed answer, turns its sprite, NPCs, posed table, runs and panorama back into `Value` with json! for `MapInfo`, and `emit::map_record` deserializes them into mapdata's request types: a round trip through JSON between two sets of types the compiler could join"
 type: refactor
-status: todo
+status: doing
+assignee: calandria
 author: calandria
 agents: [calandria]
 links:
