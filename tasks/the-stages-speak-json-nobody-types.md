@@ -945,6 +945,99 @@ by nothing. `compile` is covered by the crate's `command_line.rs` and ABL's
 **Install when merging**: `convert` and `rm2k-snes-audio` (`just install
 convert rm2k-snes-audio`).
 
+### 2026-11-24, Calandria: A6
+
+On the-advocate `calandria-a6`, from `8b069fc2` (main had not moved);
+ports `calandria-a6` at `4c23c9e`, untouched. Two commits, on the recipe
+above:
+
+* `3e187e77`: the screens' geometry —the custom menus' `layout` and the
+  debug screen's `geometry`, which the emission writes as equates one
+  after another— in the order of its names, through a new `json::by_key`.
+  The binary saw those keys sorted; in the converter, with
+  `preserve_order`, they would come in the order the screens inserted
+  them, and every game's `.inc` would change (not its ROM: they are
+  equates). Its test, `the_geometry_goes_in_the_order_of_its_names`, was
+  shown red without the sort under `cargo test -p rm2k-snes-mapdata -p
+  rm2k-snes-convert`, where the feature reaches the crate.
+* `0838e6d8`: `rm2k_snes_mapdata::stage::emit` answers `mapdata.inc` and
+  `mapdata.json`, the same bytes the binary wrote into `--out`, and each
+  map's raw data under `raw/` (`stage::RAW`), which the binary wrote into
+  `--raw`. The converter's `emit.rs` calls it through `call_uncached`
+  —uncached as before, now by its choice— and writes `raw/` next to the
+  `.inc` with the same `materials::write_raw`, which still empties the
+  directory first and now takes the files by name from the new
+  `raw_files`. The binary keeps `emit` and `--raw`, a `main` over
+  `emit_of`, which takes the request already read so a bad file still
+  names its path. `run_uncached` is left with no caller but the dead `run`,
+  and its doc says so; both go in A9. No `Cargo.toml` line: the converter
+  already linked mapdata.
+
+#### State, stderr, key order
+
+* **State**: none in the crate —no `static`, `thread_local!`, `OnceLock`
+  or memo—; the dump's database is read on each call.
+* **stderr**: the emission prints nothing while it succeeds (its only
+  `eprintln!` is `main`'s error); its notes go in the answer, and the
+  converter prints them as before. The 20 `converter.log` are byte for
+  byte the global tools'.
+* **Key order**: the request is deserialized into `request::Emit` straight
+  from the converter's `Value` (`Emit::deserialize(&Value)`, no copy), so
+  only its `Value` fields keep the converter's order. Of what the
+  emission iterates as an object, the two geometries reach the `.inc`
+  (above); the slots' `faces` go into a `BTreeMap`, and `battle_audio` is
+  only asked whether it is empty. `mapdata.json` now keeps insertion
+  order; the converter reads it by key.
+
+#### The builds, byte for byte
+
+`NO_CACHE=1 just cartridges --force` in the nine games (ABL
+`--without-tracks`), the global tools (`8b069fc2`) against these: **the 20
+`.sfc` equal**, and the 19,469 files of the nine `build/` too —the 12,624
+raw files included— and the 20 `converter.log`; aside only `stamp.txt` and
+the `.o`/`.dbg`, which differ in the mtimes `ca65` records. Then twice
+with a private cache (`CACHE=` a scratch directory): the first filled it
+(2,702 stage answers; the emission adds none) and its builds equal the
+uncached ones; the second **stored nothing** —the same 8,913 files in the
+cache before and after—, took 83 s for the nine, and its builds equal the
+uncached ones but for Vampires Dawn's `converter.log`, without the 672
+left-out warnings a cached compile does not print (Cardón's, A2).
+
+**The binary's `emit`**, which nothing runs any more (no test calls it):
+El Dorado's emission request, dumped by a throwaway converter, given to
+this branch's binary and to the global one with `--raw`: the same
+`mapdata.inc`, `mapdata.json` and 104 raw files from both, and the raw
+files the same as the converter left in `build/`.
+
+#### The suites
+
+On the branch, `convert` and `mapdata` first in the PATH: `just lint`
+clean; the-advocate's `just test` 29 passed; `just rust-test
+--no-fail-fast` 1,243 passed, 0 failed, 3 ignored (the new test is the
+one more); the test game (`SOUNDFONT=FluidR3_GM.sf2`) 231 passed, 6
+skipped; the ports' `just boot` 218 passed; ABL's `just tests` 1,694
+passed, 2 skipped. No golden moved: the ports' worktree is clean.
+`abl.sfc` `3bf35fd7665c`. `cargo fmt --check` and
+`clippy --all-targets -D warnings` clean on `rm2k-snes-mapdata` and
+`rm2k-snes-convert`. The emission is covered by the builds above and by
+every ROM test; the binary's `emit` only by the hand check.
+
+Then main moved to `11fcaed9` (Mulita's A7) and merged without a
+conflict (`08df82ef`). On that tree, with its `convert`, `mapdata` and
+`rm2k-snes-audio` first: the same cold build against the global tools at
+`8b069fc2`, the 20 `.sfc` and every file the converter writes equal, the
+20 `converter.log` too; `just lint` clean, `just test` 29 passed, `just
+rust-test --no-fail-fast` 1,238 passed, 5 failed, 3 ignored —the five
+pass run again alone: four of `fxpak`'s pty tests
+([draft](fxpak-s-pty-tests-share-ptsname-s-buffer.md)) and
+`a_cached_object_gives_the_dbg_a_fresh_one_gives`
+([draft](the-cached-dbg-test-sees-a-date-move.md))—, the test game 231
+passed, 6 skipped, `just boot` 218 passed, ABL's `just tests` 1,694
+passed, 2 skipped; `abl.sfc` `3bf35fd7665c`, no golden moved.
+
+**Install when merging**: `convert` and `mapdata` (`just install convert
+mapdata`).
+
 ### 2026-11-24, Tijereta: A8
 
 On the-advocate `tijereta-a8`, from `8b069fc2`, with main merged twice
