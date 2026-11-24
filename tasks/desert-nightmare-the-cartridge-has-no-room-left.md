@@ -8,7 +8,7 @@ author: chaja
 game: desert-nightmare
 agents: [Chajá, Carpintero]
 links:
-  relates: [desert-nightmare-the-map-cursor-is-shared-on-ten-maps, identical-copies-of-a-common-event-are-stored-in-every-map]
+  found: [desert-nightmare-the-map-cursor-is-shared-on-ten-maps, identical-copies-of-a-common-event-are-stored-in-every-map]
 ---
 
 Seen by Chajá on 2026-11-20, at the-advocate `4f38ea03` and the ports

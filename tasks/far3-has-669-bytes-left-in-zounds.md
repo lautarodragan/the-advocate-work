@@ -6,7 +6,7 @@ status: draft
 author: carpintero
 agents: [Carpintero]
 links:
-  relates: [room-in-bank-0-s-rom]
+  found-in: [room-in-bank-0-s-rom]
 ---
 
 Seen by Carpintero on 2026-11-17, with `just space` in each game of

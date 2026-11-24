@@ -7,7 +7,7 @@ author: taro
 assignee: taro
 agents: [Calandria]
 links:
-  relates: [emit-rs-writes-each-table-through-a-call-rustfmt-spreads-over-seven-lines, mapdata-packs-tiles-with-its-own-copy-of-voodoo-s-code, picture-tables-and-common-entries-write-the-same-entry-twice, rm2k-snes-mapdata-maps-has-no-caller, six-sweeps-in-scan-rs-are-one-with-another-predicate, small-repeats-inside-emit-rs-s-rest, the-battle-terms-by-name-are-a-42-arm-match, the-converter-reads-the-stages-answers-with-python-s-truthiness, the-converter-s-command-line-is-clap-s-builder-read-back-by-hand, the-converter-writes-the-emission-s-request-by-hand, the-emission-keeps-fallbacks-for-answers-older-than-its-fixtures, the-emission-reads-the-screens-answer-and-the-battle-model-by-name, the-inc-s-constants-are-format-strings-with-their-values-far-below]
+  found: [emit-rs-writes-each-table-through-a-call-rustfmt-spreads-over-seven-lines, mapdata-packs-tiles-with-its-own-copy-of-voodoo-s-code, picture-tables-and-common-entries-write-the-same-entry-twice, rm2k-snes-mapdata-maps-has-no-caller, six-sweeps-in-scan-rs-are-one-with-another-predicate, small-repeats-inside-emit-rs-s-rest, the-battle-terms-by-name-are-a-42-arm-match, the-converter-reads-the-stages-answers-with-python-s-truthiness, the-converter-s-command-line-is-clap-s-builder-read-back-by-hand, the-converter-writes-the-emission-s-request-by-hand, the-emission-keeps-fallbacks-for-answers-older-than-its-fixtures, the-emission-reads-the-screens-answer-and-the-battle-model-by-name, the-inc-s-constants-are-format-strings-with-their-values-far-below]
 ---
 
 **Why**: after the toolchain cleanup of 2026-11-23 —the binaries nobody

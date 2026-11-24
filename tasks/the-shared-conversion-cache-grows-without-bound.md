@@ -5,7 +5,7 @@ type: refactor
 status: draft
 author: huron
 links:
-  relates: [a-conversion-cache-shared-by-the-worktrees]
+  found-in: [a-conversion-cache-shared-by-the-worktrees]
 ---
 
 Seen by Hurón on 2026-11-23, in

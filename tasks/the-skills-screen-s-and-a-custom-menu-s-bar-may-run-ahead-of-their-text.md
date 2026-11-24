@@ -6,7 +6,8 @@ status: draft
 author: aguara
 agents: [Aguará]
 links:
-  relates: [the-items-screen-s-bar-runs-ahead-of-its-text, abl-a-shop-s-screens-show-half-composed-frames]
+  found-in: [abl-a-shop-s-screens-show-half-composed-frames]
+  relates: [the-items-screen-s-bar-runs-ahead-of-its-text]
 ---
 
 Found by Aguará on 2026-11-22, doing

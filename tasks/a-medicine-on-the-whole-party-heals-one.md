@@ -5,7 +5,8 @@ type: bug
 status: draft
 author: chaja
 links:
-  relates: [actor-selection-like-the-original, items-that-cast-a-skill-outside-battle]
+  found-in: [items-that-cast-a-skill-outside-battle]
+  relates: [actor-selection-like-the-original]
 ---
 
 Seen by Chajá on 2026-11-01, doing

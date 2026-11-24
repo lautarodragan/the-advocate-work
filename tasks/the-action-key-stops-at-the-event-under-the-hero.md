@@ -7,7 +7,7 @@ assignee: taro
 author: taro
 agents: [Calandria]
 links:
-  relates: [the-action-key-fires-only-the-first-event-of-a-cell]
+  found: [the-action-key-fires-only-the-first-event-of-a-cell]
 ---
 
 taro, on 2026-11-02, in their words, translated:

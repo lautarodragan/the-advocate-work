@@ -5,7 +5,7 @@ type: feature
 status: draft
 author: aguara
 links:
-  relates: [above-tiles-no-character-can-reach-go-below]
+  found-in: [above-tiles-no-character-can-reach-go-below]
 ---
 
 Seen by Aguará on 2026-11-02, doing

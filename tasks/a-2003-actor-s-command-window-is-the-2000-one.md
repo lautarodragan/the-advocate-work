@@ -5,7 +5,8 @@ type: feature
 status: draft
 author: cardon
 links:
-  relates: [a-2003-game-s-battle-commands-are-its-own, the-2003-battle-commands-callcommonevent-and-forceflee]
+  found-in: [a-2003-game-s-battle-commands-are-its-own]
+  relates: [the-2003-battle-commands-callcommonevent-and-forceflee]
 ---
 
 Seen by Cardón on 2026-10-20, doing

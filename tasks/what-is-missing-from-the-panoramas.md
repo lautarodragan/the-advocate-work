@@ -7,7 +7,7 @@ assignee: taro
 author: cardon
 agents: [Aguará]
 links:
-  relates: [a-changepbg-after-a-teleport-keeps-the-picture, a-painted-map-keeps-its-first-painting, a-panorama-with-pictures-drawn-into-it-is-not-swapped]
+  found: [a-changepbg-after-a-teleport-keeps-the-picture, a-painted-map-keeps-its-first-painting, a-panorama-with-pictures-drawn-into-it-is-not-swapped]
 ---
 
 # What

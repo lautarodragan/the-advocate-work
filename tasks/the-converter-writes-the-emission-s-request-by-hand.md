@@ -5,7 +5,8 @@ type: refactor
 status: draft
 author: calandria
 links:
-  relates: [the-emission-reads-the-screens-answer-and-the-battle-model-by-name, where-mapdata-and-convert-could-be-shorter]
+  found-in: [where-mapdata-and-convert-could-be-shorter]
+  relates: [the-emission-reads-the-screens-answer-and-the-battle-model-by-name]
   part-of: [the-stages-speak-json-nobody-types]
 ---
 

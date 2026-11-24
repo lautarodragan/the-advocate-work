@@ -6,7 +6,8 @@ status: done
 author: tijereta
 agents: [Tijereta]
 links:
-  relates: [a-crate-s-commands-as-subcommands-of-one, cartridges-runs-itself-to-assemble, emit-rs-writes-each-table-through-a-call-rustfmt-spreads-over-seven-lines, the-library-crates-carry-binaries-nobody-runs]
+  found-in: [a-crate-s-commands-as-subcommands-of-one, the-library-crates-carry-binaries-nobody-runs]
+  relates: [cartridges-runs-itself-to-assemble, emit-rs-writes-each-table-through-a-call-rustfmt-spreads-over-seven-lines]
 ---
 
 Seen by Tijereta on 2026-11-23, in the-advocate at `ca74a4d4` (main), while

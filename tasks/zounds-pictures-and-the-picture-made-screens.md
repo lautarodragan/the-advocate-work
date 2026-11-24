@@ -7,7 +7,9 @@ assignee: taro
 author: aguara
 agents: [Aguará, Tijereta, Hurón]
 links:
-  relates: [small-pictures-under-a-big-one-are-hidden, zounds-menu-pictures-on-map-136-need-512-tiles, a-small-picture-s-fifteen-colours-lose-a-whole-hue, pictures-in-common-events-compiled-apart-are-not-shown, port-zounds-an-rpg-maker-2003-game, zounds-the-intro-on-map-106-waits-for-a-key-nobody-reads]
+  found-in: [port-zounds-an-rpg-maker-2003-game]
+  found: [pictures-in-common-events-compiled-apart-are-not-shown, small-pictures-under-a-big-one-are-hidden, zounds-menu-pictures-on-map-136-need-512-tiles]
+  relates: [a-small-picture-s-fifteen-colours-lose-a-whole-hue, zounds-the-intro-on-map-106-waits-for-a-key-nobody-reads]
 ---
 
 Seen by Aguará on 2026-10-15, in the study

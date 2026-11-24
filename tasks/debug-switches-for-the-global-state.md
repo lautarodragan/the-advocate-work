@@ -7,7 +7,7 @@ assignee: taro
 author: taro
 agents: [Tijereta]
 links:
-  relates: [the-far-code-banks-are-nearly-full]
+  found: [the-far-code-banks-are-nearly-full]
 ---
 
 Opened by Hornero on 2026-11-17, at the-advocate `ed8d8590` and the ports

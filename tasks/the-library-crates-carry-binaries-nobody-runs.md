@@ -8,7 +8,7 @@ assignee: taro
 agents: [tijereta]
 links:
   blocks: [a-crate-s-commands-as-subcommands-of-one]
-  relates: [fxpak-s-pty-tests-fail-under-load, the-workspace-fails-its-own-lint]
+  found: [fxpak-s-pty-tests-fail-under-load, the-workspace-fails-its-own-lint]
 ---
 
 **Why**: `voodoo`, `gunter`, `lz2`, `adeleine` and `rm2k-render` became

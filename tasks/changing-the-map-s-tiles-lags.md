@@ -5,7 +5,8 @@ type: bug
 status: draft
 author: taro
 links:
-  relates: [still-events-that-change-pose-painted-into-the-background, zounds-tile-substitutions-that-do-not-compile]
+  found-in: [still-events-that-change-pose-painted-into-the-background]
+  relates: [zounds-tile-substitutions-that-do-not-compile]
 ---
 
 taro, on 2026-11-02, in their words, translated, while Cardón was

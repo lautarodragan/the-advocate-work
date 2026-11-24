@@ -7,7 +7,8 @@ assignee: taro
 agents: [Aguará, Hurón]
 author: aguara
 links:
-  relates: [zounds-condition-messages-are-japanese-defaults, zounds-the-item-target-picker-does-not-fit]
+  found-in: [zounds-the-item-target-picker-does-not-fit]
+  found: [zounds-condition-messages-are-japanese-defaults]
 ---
 
 Seen by Aguará on 2026-11-02, while doing

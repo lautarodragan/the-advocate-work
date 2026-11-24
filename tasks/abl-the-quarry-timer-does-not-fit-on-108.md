@@ -7,7 +7,7 @@ assignee: taro
 author: cardon
 agents: [Chajá, Cardón]
 links:
-  relates: [abl-it-does-not-rain-in-paradise]
+  found: [abl-it-does-not-rain-in-paradise]
   blocks: [abl-release-stops-at-the-first-night]
 ---
 

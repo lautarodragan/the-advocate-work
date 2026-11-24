@@ -6,7 +6,7 @@ status: draft
 author: taro
 agents: [Calandria]
 links:
-  relates: [abl-the-equip-screen-s-cursor-runs-ahead-of-its-lists]
+  found-in: [abl-the-equip-screen-s-cursor-runs-ahead-of-its-lists]
 ---
 
 Measured by Calandria on 2026-11-17, in A Blurred Line, with the-advocate

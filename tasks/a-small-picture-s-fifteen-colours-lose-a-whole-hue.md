@@ -5,7 +5,8 @@ type: bug
 status: draft
 author: calandria
 links:
-  relates: [small-pictures-under-a-big-one-are-hidden, zounds-pictures-and-the-picture-made-screens]
+  found-in: [small-pictures-under-a-big-one-are-hidden]
+  relates: [zounds-pictures-and-the-picture-made-screens]
 ---
 
 Seen by Calandria on 2026-10-20, with the-advocate `3bc68ac4` plus the

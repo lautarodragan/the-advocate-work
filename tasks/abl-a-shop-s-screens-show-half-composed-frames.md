@@ -8,7 +8,8 @@ assignee: taro
 agents: [Hornero, Aguará]
 game: abl
 links:
-  relates: [the-items-screen-s-bar-runs-ahead-of-its-text, the-skills-screen-s-and-a-custom-menu-s-bar-may-run-ahead-of-their-text]
+  found: [the-skills-screen-s-and-a-custom-menu-s-bar-may-run-ahead-of-their-text]
+  relates: [the-items-screen-s-bar-runs-ahead-of-its-text]
 ---
 
 taro, 2026-11-22, frames in

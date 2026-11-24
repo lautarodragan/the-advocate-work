@@ -8,7 +8,9 @@ agents: [Chajá, Carpintero]
 author: aguara
 game: frozen-world
 links:
-  relates: [an-effect-played-while-it-still-waits-is-heard-late, frozen-world-map-1-audio-package-does-not-fit-in-aram, frozen-world-the-battle-maps-lag, frozen-world-s-turn-audio-test-passes-only-with-the-tracks, lashe-city-transitions-lag, the-fades-last-black-tick-uploads-songs-the-map-is-not-playing]
+  found-in: [frozen-world-the-battle-maps-lag]
+  found: [an-effect-played-while-it-still-waits-is-heard-late]
+  relates: [frozen-world-map-1-audio-package-does-not-fit-in-aram, frozen-world-s-turn-audio-test-passes-only-with-the-tracks, lashe-city-transitions-lag, the-fades-last-black-tick-uploads-songs-the-map-is-not-playing]
 ---
 
 Seen by Aguará on 2026-10-17, measuring

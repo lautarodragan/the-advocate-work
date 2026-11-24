@@ -5,7 +5,8 @@ type: bug
 status: todo
 author: aguara
 links:
-  relates: [port-zounds-an-rpg-maker-2003-game, zounds-the-item-target-picker-does-not-fit]
+  found-in: [port-zounds-an-rpg-maker-2003-game]
+  relates: [zounds-the-item-target-picker-does-not-fit]
 ---
 
 Seen by Aguará on 2026-10-15, in the study

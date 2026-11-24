@@ -5,7 +5,7 @@ type: refactor
 status: draft
 author: carpintero
 links:
-  relates: [pictures-in-common-events-compiled-apart-are-not-shown]
+  found-in: [pictures-in-common-events-compiled-apart-are-not-shown]
 ---
 
 Seen by Carpintero on 2026-10-20, with the-advocate's branch

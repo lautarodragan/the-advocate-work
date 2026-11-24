@@ -8,7 +8,7 @@ author: hornero
 agents: [Chajá]
 links:
   blocks: [abl-release-stops-at-the-first-night]
-  relates: [items-past-450-are-silently-left-out]
+  found: [items-past-450-are-silently-left-out]
 ---
 
 ABL's whole `release` carries 264 items; the item tables index with one

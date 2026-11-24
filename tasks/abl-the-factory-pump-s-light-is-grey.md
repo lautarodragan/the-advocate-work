@@ -6,7 +6,8 @@ game: abl
 status: draft
 author: hornero
 links:
-  relates: [abl-forem-left-out-at-the-factory, characters-a-route-dresses-left-out-where-they-cost-the-map]
+  found-in: [characters-a-route-dresses-left-out-where-they-cost-the-map]
+  relates: [abl-forem-left-out-at-the-factory]
 ---
 
 Left in the book's Known issues by

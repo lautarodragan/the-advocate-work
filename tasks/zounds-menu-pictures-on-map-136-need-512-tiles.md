@@ -5,7 +5,8 @@ type: bug
 status: draft
 author: tijereta
 links:
-  relates: [small-pictures-under-a-big-one-are-hidden, zounds-pictures-and-the-picture-made-screens]
+  found-in: [zounds-pictures-and-the-picture-made-screens]
+  relates: [small-pictures-under-a-big-one-are-hidden]
 ---
 
 Seen by Tijereta on 2026-10-16, with the-advocate `9407d385` plus the

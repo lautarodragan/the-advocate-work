@@ -7,7 +7,8 @@ assignee: taro
 agents: [Calandria]
 author: calandria
 links:
-  relates: [emit-rs-writes-each-table-through-a-call-rustfmt-spreads-over-seven-lines, rm2k-snes-mapdata-maps-has-no-caller, small-repeats-inside-emit-rs-s-rest, the-battle-terms-by-name-are-a-42-arm-match, where-mapdata-and-convert-could-be-shorter]
+  found-in: [where-mapdata-and-convert-could-be-shorter]
+  relates: [emit-rs-writes-each-table-through-a-call-rustfmt-spreads-over-seven-lines, rm2k-snes-mapdata-maps-has-no-caller, small-repeats-inside-emit-rs-s-rest, the-battle-terms-by-name-are-a-42-arm-match]
   blocks: [the-stages-speak-json-nobody-types]
 ---
 

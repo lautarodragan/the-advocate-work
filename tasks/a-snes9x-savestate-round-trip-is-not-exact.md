@@ -6,7 +6,7 @@ status: draft
 author: chaja
 agents: [Chajá]
 links:
-  relates: [how-much-of-a-test-is-the-emulator-drawing]
+  found-in: [how-much-of-a-test-is-the-emulator-drawing]
 ---
 
 Seen by Chajá on 2026-11-22, on A Blurred Line's `release`, with the

@@ -7,7 +7,8 @@ assignee: taro
 author: hornero
 agents: [Hurón]
 links:
-  relates: [desert-nightmare-interiors-painted-now-that-the-box-is-a-window, desert-nightmare-map-95-trades-two-events-for-the-map-cursor, desert-nightmare-message-text-cut-by-the-map]
+  found: [desert-nightmare-interiors-painted-now-that-the-box-is-a-window, desert-nightmare-map-95-trades-two-events-for-the-map-cursor]
+  relates: [desert-nightmare-message-text-cut-by-the-map]
 ---
 
 Seen by Calandria on 2026-10-11, in passing

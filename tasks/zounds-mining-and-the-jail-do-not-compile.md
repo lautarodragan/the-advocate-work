@@ -7,7 +7,8 @@ assignee: taro
 author: taro
 agents: [Calandria, Hurón]
 links:
-  relates: [an-input-number-after-a-label-has-no-message, a-shops-bought-and-did-not-buy-branches]
+  found: [an-input-number-after-a-label-has-no-message]
+  relates: [a-shops-bought-and-did-not-buy-branches]
 ---
 
 taro, on 2026-11-01, in their words, translated, after Hornero listed

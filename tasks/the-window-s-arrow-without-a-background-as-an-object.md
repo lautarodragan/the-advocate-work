@@ -7,7 +7,7 @@ assignee: taro
 author: taro
 agents: [Chajá]
 links:
-  relates: [the-bare-window-s-arrow-keeps-its-band-on-maps-with-eight-sprite-palettes]
+  found: [the-bare-window-s-arrow-keeps-its-band-on-maps-with-eight-sprite-palettes]
 ---
 
 taro, on 2026-10-18, looking at the captures of

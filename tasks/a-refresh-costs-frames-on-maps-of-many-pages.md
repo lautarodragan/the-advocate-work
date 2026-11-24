@@ -5,7 +5,8 @@ type: refactor
 status: draft
 author: aguara
 links:
-  relates: [abl-lazer-teeth-s-rock-lags, frozen-world-the-battle-maps-lag]
+  found-in: [frozen-world-the-battle-maps-lag]
+  relates: [abl-lazer-teeth-s-rock-lags]
 ---
 
 Seen by Aguará on 2026-10-17, measuring

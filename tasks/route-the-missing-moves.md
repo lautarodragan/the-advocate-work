@@ -7,7 +7,7 @@ assignee: taro
 author: hornero
 agents: [Hurón]
 links:
-  relates: [moveevent-on-an-event-the-map-does-not-have]
+  found: [moveevent-on-an-event-the-map-does-not-have]
 ---
 
 # What

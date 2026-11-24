@@ -8,7 +8,7 @@ author: taro
 game: desert-nightmare
 agents: [Cardón, Carpintero]
 links:
-  relates: [desert-nightmare-the-warehouse-is-darker, the-test-game-is-red-on-main-at-the-text-layer]
+  found: [desert-nightmare-the-warehouse-is-darker, the-test-game-is-red-on-main-at-the-text-layer]
 ---
 
 taro, on 2026-11-20, playing the build of the-advocate `7951af2a` and the

@@ -6,7 +6,7 @@ status: todo
 author: calandria
 agents: [Calandria]
 links:
-  relates: [characters-a-route-gives-a-graphic-are-not-drawn]
+  found-in: [characters-a-route-gives-a-graphic-are-not-drawn]
 ---
 
 Seen by Calandria on 2026-10-19, reading the code while fixing

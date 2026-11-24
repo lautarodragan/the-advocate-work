@@ -8,7 +8,8 @@ agents: [mulita]
 author: taro
 links:
   part-of: [one-advocate-command]
-  relates: [the-cartridges-fingerprint-hashes-the-path-s-builder, the-workspace-fails-its-own-lint]
+  found: [the-cartridges-fingerprint-hashes-the-path-s-builder]
+  relates: [the-workspace-fails-its-own-lint]
   blocks: [the-volume-ceilings-are-measured-without-a-rom]
 ---
 

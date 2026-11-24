@@ -5,7 +5,7 @@ type: bug
 status: draft
 author: chaja
 links:
-  relates: [zounds-a-map-animation-leaves-the-map-s-colours-wrong]
+  found-in: [zounds-a-map-animation-leaves-the-map-s-colours-wrong]
 ---
 
 Seen by Chajá on 2026-10-19, at the-advocate `54ec3daf` and the ports

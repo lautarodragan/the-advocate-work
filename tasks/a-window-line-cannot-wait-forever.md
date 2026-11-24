@@ -7,7 +7,7 @@ assignee: taro
 author: hornero
 agents: [Aguará]
 links:
-  relates: [a-transparent-window-over-a-flattened-panorama-shows-striped-edges]
+  found: [a-transparent-window-over-a-flattened-panorama-shows-striped-edges]
 ---
 
 Follows [`frozen-world-the-intro-stays-black-after-the-tint`](frozen-world-the-intro-stays-black-after-the-tint.md),

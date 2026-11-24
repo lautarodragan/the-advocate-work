@@ -5,7 +5,8 @@ type: bug
 status: todo
 author: calandria
 links:
-  relates: [abl-the-sixty-one-torches-of-map-148-stand-still, rain-drops-cost-a-cache-its-slots]
+  found-in: [abl-the-sixty-one-torches-of-map-148-stand-still]
+  relates: [rain-drops-cost-a-cache-its-slots]
 ---
 
 Seen by Calandria on 2026-10-16, with the-advocate `8c6a345b` and the

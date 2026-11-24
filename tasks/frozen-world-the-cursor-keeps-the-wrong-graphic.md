@@ -7,7 +7,7 @@ assignee: taro
 author: taro
 agents: [Carpintero]
 links:
-  relates: [a-route-graphic-after-a-picture-is-left-out-of-the-scan, frozen-world-plates-in-the-battle-are-drawn-with-other-colours]
+  found: [a-route-graphic-after-a-picture-is-left-out-of-the-scan, frozen-world-plates-in-the-battle-are-drawn-with-other-colours]
 ---
 
 Seen by taro on 2026-10-19, playing The Frozen World with the ports

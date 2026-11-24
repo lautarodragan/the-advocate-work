@@ -7,7 +7,7 @@ assignee: taro
 author: taro
 agents: [Aguará]
 links:
-  relates: [the-event-s-touch-from-another-layer]
+  found: [the-event-s-touch-from-another-layer]
 ---
 
 taro, on 2026-10-14:

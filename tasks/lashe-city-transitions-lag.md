@@ -8,7 +8,8 @@ assignee: taro
 agents: [Hornero, Chajá, Cardón]
 game: abl
 links:
-  relates: [a-door-decompresses-the-whole-bytecode-of-the-map-it-leaves, a-map-load-still-decompresses-inside-its-tick, an-effect-played-while-it-still-waits-is-heard-late, frozen-world-every-turn-re-uploads-the-battle-screens-audio, the-fades-last-black-tick-uploads-songs-the-map-is-not-playing, maps-uncompressed-in-the-msu]
+  found: [the-fades-last-black-tick-uploads-songs-the-map-is-not-playing]
+  relates: [a-door-decompresses-the-whole-bytecode-of-the-map-it-leaves, a-map-load-still-decompresses-inside-its-tick, an-effect-played-while-it-still-waits-is-heard-late, frozen-world-every-turn-re-uploads-the-battle-screens-audio, maps-uncompressed-in-the-msu]
 ---
 
 > In ABL, in Lashe City, going from one sector to another, or entering and

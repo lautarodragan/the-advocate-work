@@ -7,7 +7,7 @@ assignee: taro
 author: aguara
 agents: [Carpintero]
 links:
-  relates: [zounds-kuak-man-loses-its-coins]
+  found: [zounds-kuak-man-loses-its-coins]
 ---
 
 Seen by Aguará on 2026-10-15, in the study

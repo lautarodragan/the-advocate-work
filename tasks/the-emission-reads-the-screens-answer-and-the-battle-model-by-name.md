@@ -5,7 +5,8 @@ type: refactor
 status: draft
 author: calandria
 links:
-  relates: [the-converter-reads-the-stages-answers-with-python-s-truthiness, the-converter-writes-the-emission-s-request-by-hand, the-inc-s-constants-are-format-strings-with-their-values-far-below, where-mapdata-and-convert-could-be-shorter]
+  found-in: [where-mapdata-and-convert-could-be-shorter]
+  relates: [the-converter-reads-the-stages-answers-with-python-s-truthiness, the-converter-writes-the-emission-s-request-by-hand, the-inc-s-constants-are-format-strings-with-their-values-far-below]
   blocked-by: [the-emission-keeps-fallbacks-for-answers-older-than-its-fixtures]
   part-of: [the-stages-speak-json-nobody-types]
 ---

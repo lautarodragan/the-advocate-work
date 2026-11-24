@@ -8,7 +8,7 @@ assignee: taro
 agents: [Hornero, Tijereta]
 game: test-game
 links:
-  relates: [an-event-with-no-graphic-stops-blocking-the-hero]
+  found: [an-event-with-no-graphic-stops-blocking-the-hero]
 ---
 
 > Could you deliver me a playable build of the test game? If it needs

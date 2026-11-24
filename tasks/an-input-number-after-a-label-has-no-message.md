@@ -5,7 +5,7 @@ type: bug
 status: draft
 author: calandria
 links:
-  relates: [zounds-mining-and-the-jail-do-not-compile]
+  found-in: [zounds-mining-and-the-jail-do-not-compile]
 ---
 
 Seen by Calandria on 2026-11-02, doing

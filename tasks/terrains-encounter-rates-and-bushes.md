@@ -8,7 +8,7 @@ assignee: taro
 author: taro
 agents: [Aguará, Carpintero]
 links:
-  relates: [a-bush-on-a-map-with-more-than-four-character-palettes, an-event-in-a-bush-is-drawn-whole]
+  found: [a-bush-on-a-map-with-more-than-four-character-palettes, an-event-in-a-bush-is-drawn-whole]
   part-of: [terrains-do-what-rm2k-does]
 ---
 

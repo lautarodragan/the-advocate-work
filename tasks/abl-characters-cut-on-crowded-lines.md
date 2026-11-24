@@ -5,7 +5,8 @@ type: bug
 status: todo
 author: mulita
 links:
-  relates: [abl-the-hover-tram-s-crowd-is-cut, maps-with-more-objects-on-a-line-than-the-ppu-draws]
+  found-in: [maps-with-more-objects-on-a-line-than-the-ppu-draws]
+  relates: [abl-the-hover-tram-s-crowd-is-cut]
 ---
 
 Seen by Mulita on 2026-11-17 with the ports' `just objects-per-line`, at

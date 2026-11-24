@@ -5,7 +5,7 @@ type: bug
 status: draft
 author: calandria
 links:
-  relates: [the-action-key-stops-at-the-event-under-the-hero]
+  found-in: [the-action-key-stops-at-the-event-under-the-hero]
 ---
 
 Seen by Calandria on 2026-11-02, reading the code while doing

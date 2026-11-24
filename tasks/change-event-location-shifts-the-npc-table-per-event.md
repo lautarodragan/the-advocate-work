@@ -5,7 +5,7 @@ type: refactor
 status: draft
 author: aguara
 links:
-  relates: [abl-lazer-teeth-s-rock-lags]
+  found-in: [abl-lazer-teeth-s-rock-lags]
 ---
 
 Seen by Aguará on 2026-11-17, measuring

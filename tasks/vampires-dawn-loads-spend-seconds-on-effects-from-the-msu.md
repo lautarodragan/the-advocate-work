@@ -5,7 +5,7 @@ type: refactor
 status: draft
 author: cardon
 links:
-  relates: [maps-load-faster-without-losing-anything]
+  found-in: [maps-load-faster-without-losing-anything]
 ---
 
 Seen by Cardón on 2026-10-18, measuring
