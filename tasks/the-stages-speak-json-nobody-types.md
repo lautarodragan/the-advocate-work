@@ -680,3 +680,71 @@ crate-test convert` (86 passed) were run, not the suites.
 
 **Install when merging**: `convert` and `events` (`just install convert
 events`). The task stays in `doing`.
+
+### 2026-11-24, Aguará: A1
+
+On the-advocate `aguara-a1`, from `394e634a`, main (`508b8c95`) merged;
+ports `4c23c9e`, untouched. Four commits: Wally's reach memos scoped to one
+map's conversion; Wally through `stage::call`; a `cargo fmt` of
+`events.rs` that main's `508b8c95` also made, identical; and the two
+sentences of Wally's README and crate doc that said it writes into a
+directory.
+
+#### What A1 is
+
+`wally::stage::map(dump, search_dirs, request)`, called from
+`maps.rs`' `run_requests` on the same sixteen threads, under `WALLY_MAP`
+and the same `--data`/`--search-dir` flags, built from the same absolute
+paths the closure gets. `layers::write` and `map::write` became
+`layers::files` and `map::files`; the PNGs go through a new
+`voodoo::image::encode`, which `voodoo::image::write` now calls. The
+binary keeps `layers`, `map`, `bakeable` and `split` as a `main` over
+`wally::stage`.
+
+#### State, stderr, key order
+
+* **The memos** (`layers.rs` `below` and `standing`): a `static`, keyed by
+  the dump, the map, the reach and the starts, never the ChipSet. In one
+  converter process a ChipSet variant of a map (same map, reach and
+  starts, other passability, through the request's `chipsets`) would get
+  the map's own cells, or the other way round, whichever thread went
+  first. Now per thread and emptied by `map::convert` on entry: what the
+  process gave. **Measured, the risk did not show**: a converter without
+  the reset built Frozen World and Vampires Dawn, the two games with
+  variants, byte for byte the same as with it. The reset stays: it costs
+  nothing, it is the process's behaviour, and it bounds what the memos
+  hold. Nothing else in Wally or what it links keeps state (ditto's
+  `thread_local!` is scoped).
+* **stderr**: Wally prints only `main`'s error; `converter.log` gains no
+  line (the 20 are byte for byte the same).
+* **Key order**: Wally iterates six request objects (`map_files`,
+  `chipset_files`, `dropped_events`, `walls`, `chipsets`,
+  `palette_weight`), each into a map keyed by number or name, so the
+  order does not matter. Its answers' keys now go in insertion order;
+  the converter reads them by key, and `maps.rs`' one `as_object()`
+  (`shared`) reads by key too.
+
+#### The builds
+
+`NO_CACHE=1 just cartridges --force` in the nine games (ABL
+`--without-tracks`), the global tools (`394e634a`) against these: **the 20
+`.sfc` equal**, and every file of every `build/`, the `converter.log`s
+included; set aside `stamp.txt` and the `.o`/`.dbg` (the sources' mtimes).
+Then twice warm: the first stored new answers (Wally's new key; the count
+is shared with three other agents building at once), the second **stored
+none**, and both are byte for byte the cold build's.
+
+#### The suites
+
+With these tools first, on the merged branch: `just test` 29 passed;
+`just rust-test --no-fail-fast` 1,240 passed, 0 failed, 3 ignored; the
+test game 231 passed, 6 skipped; the ports' `just boot` 218 passed; ABL's
+`just tests` 1,694 passed, 2 skipped. No golden moved. `cargo fmt --check`
+and `clippy --all-targets` clean on `wally`, `voodoo` and
+`rm2k-snes-convert`. No new test: the reset has none of its own, since the
+variants did not show the risk; the ABL tooling tests that call `wally
+bakeable` and `split` cover the binary over `wally::stage`.
+
+**Install when merging**: `convert` and `wally`, and whatever else links
+`voodoo` (`screens`, `images`) only to stay in step: `voodoo::image::write`
+writes the same bytes.
