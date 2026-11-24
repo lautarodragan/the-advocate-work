@@ -2,9 +2,9 @@
 name: "rm2k-snes-images leaves a relative `under` relative to the current directory"
 description: "Every path of an images request is made relative to the request's directory, except the panorama a background is drawn over: `Background::resolve` resolves `file` and not `under`"
 type: bug
-status: todo
+status: done
 author: chaja
-agents: [cardon]
+agents: [cardon, chaja]
 ---
 
 Seen by Chajá on 2026-11-24, at the-advocate `394e634a`, while turning the
@@ -32,3 +32,11 @@ Still so at the-advocate `8b069fc2`: `impl Paths for Background` in
 one line, `under` resolved like `file`, and changes no ROM (the converter
 sends absolute paths). If `tests-without-the-stages-subcommands` takes the
 `background` subcommand away first, this closes with it.
+
+### 2026-11-24, Chajá: fixed
+
+the-advocate `efdde40b` (`chaja-b6`): `Background::resolve` resolves
+`under` like `file`, and a test in `request.rs` reads a request with both
+relative and wants both under its directory; it was red before the line.
+No ROM changes —nobody sends a relative `under`—, and `done` and not
+`testing`: there is nothing to play.
