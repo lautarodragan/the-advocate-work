@@ -1,6 +1,6 @@
 ---
 name: "The emission's request still takes seven pieces through JSON"
-description: "After MapInfo was typed, `emit::typed` —serde_json::from_value of a Value the converter built or a stage answered— still builds seven fields of the emission's and the battle model's requests, besides the battle's audio: the window's other Systems, the faces, the battle terms, the shared common bodies, the big pictures' layers and the item names' width"
+description: "After MapInfo was typed, `emit::typed` —serde_json::from_value of a Value the converter built or a stage answered— still builds seven fields of the emission's and the battle model's requests, besides the battle's audio: the MSU-1 option, the window's other Systems, the faces, the battle terms, the shared common bodies, the big pictures' layers and the item names' width"
 type: refactor
 status: draft
 author: calandria
