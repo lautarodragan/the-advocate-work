@@ -2,11 +2,12 @@
 name: "The emission's answer is read by key"
 description: "rm2k-snes-mapdata's `emit` answers `mapdata.json` as a `json!` of notes, report, frames and losses, and the converter reads each by key with a default (`emit.rs`), its frames and losses staying `Value`s it reads by key again: the last stage answer the converter does not take as a type"
 type: refactor
-status: draft
+status: todo
 author: calandria
 links:
   found-in: [the-emission-s-request-still-takes-seven-pieces-through-json]
   relates: [the-stages-speak-json-nobody-types]
+  part-of: [the-stages-speak-json-nobody-types]
 ---
 
 Seen by Calandria on 2026-11-24, typing the emission's seven pieces
@@ -33,3 +34,11 @@ emission is uncached (`call_uncached`), so no cache value moves, and
 `mapdata.json` is not kept in `build/`. Checked byte for byte with the
 nine games, `converter.log` and the degradations included, which is where
 the losses land.
+
+## Log
+
+### 2026-11-24, Hornero: promoted to `todo`
+
+Promoted by Hornero: counted in the merged code, the same rule as the
+rest of phase B —taro asked to finish taking the JSON out—, checked byte
+for byte with nothing seen or heard changing. A step of the stages task.

@@ -2,11 +2,12 @@
 name: "The event compiler's requests are built and read by hand"
 description: "The converter builds the event compiler's scan and compile requests as a serde_json Map key by key (`compiler.rs`), and the events crate reads them back field by field (`lib.rs`); so `MapInfo` still carries the pictures' table and the big pictures' table as `Value`, the last two between two stages"
 type: refactor
-status: draft
+status: todo
 author: calandria
 links:
   found-in: [the-emission-s-request-still-takes-seven-pieces-through-json]
   relates: [the-stages-speak-json-nobody-types]
+  part-of: [the-stages-speak-json-nobody-types]
 ---
 
 Seen by Calandria on 2026-11-24, typing the emission's seven pieces
@@ -43,3 +44,11 @@ with the nine games, `events-request.json` included —the file the
 converter writes beside the cartridge with the compile request—: the
 keys' order is what the cache key reads, so the fields go in the order
 the `insert`s put them.
+
+## Log
+
+### 2026-11-24, Hornero: promoted to `todo`
+
+Promoted by Hornero: counted in the merged code, the same rule as the
+rest of phase B —taro asked to finish taking the JSON out—, checked byte
+for byte with nothing seen or heard changing. A step of the stages task.
