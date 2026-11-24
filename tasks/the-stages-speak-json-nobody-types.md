@@ -354,6 +354,98 @@ for that stage, which is expected and not a failure.
    the converter's own queries and `rm2k-snes-audio`'s subcommands.
 4. **The single key's cost, as measured, is accepted.**
 
+## How a stage plugs in (A1–A8)
+
+Calandria's, with A0 (the-advocate `calandria-a0`). A0 left `stage.rs` able
+to call a stage as a function and converted the battle to prove it, so
+**A5 is done**: its commit is the model for every other step, and is read
+before starting one.
+
+**The converter side** is one call, in `rm2k-snes/convert/src/stage.rs`:
+
+```rust
+pub type Files = BTreeMap<String, Vec<u8>>;           // name -> bytes, as --out held them
+#[derive(Clone, Copy)] pub struct Stage { pub binary: &'static str, pub command: &'static str }
+
+pub fn call<E: Display>(stage: Stage, request: &Value, flags: &[OsString],
+                        answer: impl FnOnce() -> Result<Files, E>) -> Result<Files>;
+pub fn call_uncached<E: Display>(stage: Stage,
+                                 answer: impl FnOnce() -> Result<Files, E>) -> Result<Files>;
+```
+
+* `request` and `flags` are **what the binary was run with**, the same
+  `Value` and the same `Vec<OsString>` the call site already builds for
+  `stage::run` —without `--request` and `--out`—. They are what the cache
+  key reads (each path in them by its content), so **the closure must read
+  nothing they do not name**: it gets the same paths and the same request,
+  captured from the same variables. Do not build the flags differently:
+  the key then misses what the stage reads.
+* `answer` is the stage crate's function. Its error is anything `Display`,
+  and the converter stops with `"<binary>: <error>"`, which is what every
+  `main` printed (mapdata's prints `bad.message()`: map it in the closure if
+  its `Display` differs). A panic stops the conversion with `"<binary>
+  <command> panicked: …"` instead of taking the converter down.
+* **There is no registry**: a `const` per stage next to the call site
+  (`const BATTLE_TABLES: stage::Stage = …` in `convert.rs`) is the whole
+  registration, so eight agents do not meet in one list.
+* **Uncached where it was uncached**: the emission (`run_uncached` today)
+  goes through `call_uncached`; constants with an empty request
+  (`screens layout`, like the battle's) are a plain call of the crate's
+  function, no `stage::` at all.
+* What reads the answer does not change: `stage::json(&files, "x.json")`,
+  `stage::text(&files, "x.inc")`.
+
+**The stage side**, in the stage's crate:
+
+* a new module **`src/stage.rs`**, `pub mod stage;` in `lib.rs`, with
+  `pub type Files = BTreeMap<String, Vec<u8>>;` and **one `pub fn` per
+  command the converter calls**, named as the command, taking the paths its
+  flags gave (`data: &Path`, …) and `request: &Value`, returning
+  `Result<Files>` with the crate's own error. Each **returns its files and
+  writes nothing**: where `main` or a library `write(dir)` wrote into
+  `--out`, it becomes a function that answers the bytes (the battle's
+  `Tables::write` became `Tables::files`), and the bytes are the same
+  —`to_string_pretty(...) + "\n"` stays exactly as it was—;
+* where a request was read from a file, the reading splits in two: the file
+  into a `Value`, and the `Value` into what the stage uses (the battle's
+  `Request::read` kept its path and calls the new `Request::of`);
+* **`main.rs` keeps every subcommand and flag**: it reads `--request` into a
+  `Value`, calls the `stage::` function, and writes each file into
+  `--out`. The tests call the binaries and must not see a difference.
+
+**One A-step's diff** is then: the crate's new `stage.rs` and its `lib.rs`
+line; its `main.rs` over it; the library function that wrote files now
+answering them; in the converter, the call site from `stage::run(BINARY,
+PROJECT, command, &request, &flags)` to `stage::call(STAGE, &request,
+&flags, || the_crate::stage::command(&path, &request))` and the `const`;
+and, if the crate is not one yet, its line in the converter's
+`Cargo.toml` (wally, mapdata, events and battle already are). `which`,
+`run`, `Scratch` and the `BINARY`/`PROJECT` constants stay until A9, even
+when a step leaves them unused in its file.
+
+**What to check in the step**, besides the byte-for-byte build:
+
+* **State a process got fresh**: `thread_local!`, `static`, memos. The
+  screens' letters (A3) and Wally's memos (A1) are known; grep the crate.
+* **JSON key order.** The converter links `serde_json` with
+  `preserve_order`, and cargo turns the feature on for every crate in the
+  converter's binary: a stage's `json!` objects keep their insertion order
+  there, where its own binary (without the feature) sorted them. The
+  answer's bytes change; what reads it by key does not. **A stage that
+  iterates a JSON object** —the request's or the dump's— sees another order
+  in the converter than in its binary: look for `as_object()` and `for (k,
+  v) in` in the crate. The battle had none on the converter's path.
+* **What it printed to stderr** while succeeding was dropped by `run`; now
+  it reaches `converter.log`. Say which lines are new.
+* The ROMs and every file of `build/<cartridge>/` byte for byte against
+  the tools before the step, with `NO_CACHE=1 just cartridges --force` in
+  the nine games (ABL `--without-tracks`), `converter.log` and
+  `stamp.txt` aside —the stamp carries the tools' fingerprint—; then a
+  warm build, which has to answer from the cache.
+* **Install** the converter and the stage's crate: `just install-local
+  .local-tools convert <crate>` —the converter links the stage now, and
+  the crate's binary is what the tests call—.
+
 ## Log
 
 ### 2026-11-23, Hornero: written, waiting for the emission's writing style
@@ -386,3 +478,68 @@ The task stays in `doing`: the code waits for taro's reading.
 ### 2026-11-24, Hornero: taro answered; A0 goes to Calandria
 
 As above.
+
+### 2026-11-24, Calandria: A0, and the battle through it (A5)
+
+On the-advocate `calandria-a0`, from `0d9f187c`; ports `4c23c9e`, which A0
+does not touch. Three commits: `stage.rs`' plumbing alone; the battle
+converted with it, to prove it end to end —the smallest stage the
+converter already linked, so A5 is done and is the model for the rest—;
+and one sentence of battle's README, the only prose A0 made untrue. How a
+stage plugs in is above, under "How a stage plugs in (A1–A8)".
+
+#### What A0 is
+
+`stage::call(stage, request, flags, || crate::stage::command(..))` and
+`call_uncached`, answering the same `Files` as `stage::run`. The key of a
+function stage is `"stage 2"`, `current_exe` by content and `<binary>
+<command>`; a stage that is still a process keeps its key exactly as it was
+(`"stage 1"`, its own binary), so its answers on disk are still found until
+its step. `pack`/`unpack` unchanged. A panic in a stage is a stop with its
+message (`<binary> <command> panicked: …`); a no is `<binary>: <message>`,
+as each `main` printed it. Three new unit tests in `stage.rs`: two stages
+asked `{}` get different keys and neither is the old process key; a no and
+a panic stop with their messages; a function asked twice is called once.
+
+#### The builds, byte for byte
+
+`NO_CACHE=1 just cartridges --force` in the nine games (ABL
+`--without-tracks`), the global tools (`0d9f187c`) against these: **the 20
+`.sfc` equal**, and every file of every `build/` too —4,531 files in ABL,
+5,313 in Vampires Dawn—, the 20 `converter.log` included. Set aside only
+`stamp.txt`, which carries the tools' fingerprint, and the `.o`/`.dbg`,
+which differ only in the sources' mtimes `ca65` records. Then twice with
+the cache: the first stored **35 new answers** —18 `tables`, 17 `model`,
+nothing else—, because the battle's key is a new one; the second stored
+none and answered everything from the cache —the nine games in 72 s, 73 s
+with the global tools warm—, and its builds are byte for byte the global
+tools' warm builds, `.o` included.
+
+**The old entries**: the 105 battle answers keyed by `rm2k-snes-battle`'s
+binary (54 `tables`, 51 `model`, 1.5 MB) stay on disk. The tools built from
+main before this still hit them; once this is installed nothing asks for
+them, and the cache has no eviction, so they stay until someone cleans it.
+The same will happen with each stage's step.
+
+**JSON key order**: the converter's `serde_json` has `preserve_order`, the
+battle's binary does not, so the in-process answers' bytes are in insertion
+order where the binary's were sorted. Nothing reads them but by key, and
+nothing in the battle iterates an object on the converter's path; the
+builds above confirm it. Written into the recipe for the other stages.
+
+#### The suites
+
+With these tools first in the PATH, on the branch with main merged (main
+had not moved): the-advocate's `just test` 29 passed; `just rust-test
+--no-fail-fast` 1,240 passed, 0 failed, 3 ignored; the test game
+(`SOUNDFONT=FluidR3_GM.sf2 just test-game`) 231 passed, 6 skipped; the
+ports' `just boot` 218 passed; ABL's `just tests` 1,694 passed, 2 skipped.
+No golden moved: the ports' worktree is clean. `cargo fmt --check` and
+`clippy --all-targets` clean on `rm2k-snes-battle` and
+`rm2k-snes-convert`. The battle's subcommands the tests call —`model`,
+`layout`, `simulate`, `lines`, `experience`, `field-skill`— now go through
+the same `stage` functions inside the binary; the 22 files of `model.py`
+and Zounds' two are what covers them.
+
+**Install when merging**: `convert` and `battle` (`just install convert
+battle`). The task stays in `doing`: A1–A4 and A6–A10 are next.
