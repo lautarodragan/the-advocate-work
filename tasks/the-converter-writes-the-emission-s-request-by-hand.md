@@ -2,10 +2,10 @@
 name: "The converter writes the emission's request by hand"
 description: "rm2k-snes-convert links rm2k-snes-mapdata, whose request.rs types the request, and still writes it with json! —a map, a page, the scene—, with workarounds for json!'s recursion limit; deriving Serialize there and building the types would take the mirror away"
 type: refactor
-status: doing
-assignee: calandria
+status: testing
+assignee: taro
 author: calandria
-agents: [cardon]
+agents: [cardon, calandria]
 links:
   found-in: [where-mapdata-and-convert-could-be-shorter]
   relates: [the-emission-reads-the-screens-answer-and-the-battle-model-by-name]
@@ -83,3 +83,15 @@ both sides to the same `Value` (keys may move, values may not).
 It is step **B1** of the plan in
 [`the-stages-speak-json-nobody-types`](the-stages-speak-json-nobody-types.md)
 (`part-of` it, in `doing`): defined and ordered there.
+
+### 2026-11-24, Calandria: done as B1
+
+the-advocate `35d5c832`, on `calandria-b`: the converter builds
+`request::Emit` —maps, pages and the scene included— and hands it to the
+emission by value; mapdata's request types derive `Serialize` with the
+bytes through `#[serde(with = "hex")]`. The nine recursion-limit patches
+and mapdata's 21 reads of the scene by key went. It came out **longer**,
+net +154 lines and not -60 to -100: a struct literal takes a line per
+field. The old and the new request compared equal, as the emission sees
+them, over the 20 cartridges of the nine games; the details in the log
+of [`the-stages-speak-json-nobody-types`](the-stages-speak-json-nobody-types.md).
