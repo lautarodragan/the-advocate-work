@@ -4,6 +4,8 @@ description: "A single cartridge that gets played and runs the suite: what it co
 type: refactor
 status: done
 author: hornero
+links:
+  relates: [the-patches-request-of-release-repeats-five-maps]
 ---
 
 # What

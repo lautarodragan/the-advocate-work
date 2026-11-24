@@ -7,7 +7,7 @@ assignee: calandria
 agents: [calandria, aguara, cardon, carpintero, chaja, mulita, tijereta]
 author: taro
 links:
-  found: [the-event-compiler-s-left-out-warning-never-reaches-the-log, fxpak-s-pty-tests-share-ptsname-s-buffer, the-msu-and-the-tracks-are-written-through-a-nuevo-file]
+  found: [the-event-compiler-s-left-out-warning-never-reaches-the-log, fxpak-s-pty-tests-share-ptsname-s-buffer, the-msu-and-the-tracks-are-written-through-a-nuevo-file, the-patches-request-of-release-repeats-five-maps]
   relates: [artistic-decision-patches, battle-tests-without-simulate, tests-without-the-stages-subcommands]
   blocked-by: [emit-rs-writes-each-table-through-a-call-rustfmt-spreads-over-seven-lines, picture-tables-and-common-entries-write-the-same-entry-twice, rm2k-snes-mapdata-maps-has-no-caller, small-repeats-inside-emit-rs-s-rest, the-battle-terms-by-name-are-a-42-arm-match]
   blocks: [a-stage-s-cache-key-once-it-is-a-library, one-advocate-command]
