@@ -2,8 +2,7 @@
 name: "The fade's last black tick uploads songs the map is not playing"
 description: "Without MSU-1, a teleport's fade forces up on its last black tick every song of the destination's package, not only the one playing: 5 to 16 frames on Lashe City's doors"
 type: optimization
-status: doing
-assignee: cardon
+status: todo
 author: chaja
 game: abl
 agents: [cardon]
