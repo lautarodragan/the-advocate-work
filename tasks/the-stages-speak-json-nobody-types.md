@@ -674,5 +674,9 @@ three known ones). The binary's `scan` and `compile` now go through the
 same `stage` functions; the crate's `command_line.rs` and the harness's
 `scan` calls (the-advocate's `game.py`, the ports' `games.py`) cover them.
 
+Then main moved to `dedf5252` (Chajá's A4) and merged cleanly, the
+`Cargo.toml` line included; on that tree only clippy, fmt and `just
+crate-test convert` (86 passed) were run, not the suites.
+
 **Install when merging**: `convert` and `events` (`just install convert
 events`). The task stays in `doing`.
