@@ -33,7 +33,7 @@ line of zero goes through the same code since 2026-10-20 and is right
 
 **How to see it**: any battle where a party member's attack misses —the
 droid of A Blurred Line's map 2 dodges sometimes—: the line under
-"<who> attacks the enemy" says "Droid avoids taking damage."
+"\<who> attacks the enemy" says "Droid avoids taking damage."
 
 ## Log
 

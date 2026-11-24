@@ -22,7 +22,7 @@ ports `42f70e8` in Mesen2, translated (captures in
 
 > I think it no longer draws garbage in the background. I think the
 > background image is fine! The only thing missing would be showing the
-> images with their <selected> version. Is it possible to just show the
+> images with their \<selected> version. Is it possible to just show the
 > images on that screen? If it's feasible, I think it would simplify
 > things quite a bit and look nicer. [...] Maybe we could get the result
 > just by changing the palette of one of the images. The "selected"

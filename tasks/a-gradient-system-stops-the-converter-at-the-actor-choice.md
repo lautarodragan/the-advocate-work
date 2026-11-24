@@ -41,7 +41,7 @@ with a message that names the symptom.
 
 **Done** means a System with no entry whose windows do not fit their bank
 either gets the average fill on its own, noted as a WARNING, or stops
-naming the knob —"give <System> a `[windows.background]`"—; the agent picks,
+naming the knob —"give \<System> a `[windows.background]`"—; the agent picks,
 with a test in rm2k-snes-screens over a gradient skin. **First step**: the
 check in `checks.rs` and `fit::skin_for`, to see whether the background
 can join the frame's path.

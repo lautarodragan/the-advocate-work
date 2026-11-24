@@ -54,7 +54,7 @@ else: `git diff --numstat` gave 1 and 0 for every file, and every added
 line was `author: <name>`.
 
 How each was decided: 294 opened with taro's words (187 a quote, 107
-"taro, on <date>" or the like at the top), 301 by the trailer of the
+"taro, on \<date>" or the like at the top), 301 by the trailer of the
 commit that created the file —`git log --follow --diff-filter=A`—, 122
 had no trailer and no sign of taro's and went to Hornero, and 74 were
 read and decided by hand. The ones by hand followed two readings:

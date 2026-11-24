@@ -26,7 +26,7 @@ grow as in RM2k, and all of that travels in the saved game.
 What "done means" asks for is there, with cases that run the ROM in
 `tests/rpgmaker/test_experiencia.py`. What was left out:
 
-- **The victory says nothing**: RM2k shows "N EXP received", "<nombre> Level
+- **The victory says nothing**: RM2k shows "N EXP received", "\<nombre> Level
   up!" and what was learned (`PushExperienceGainedMessage`, `ChangeLevel` with
   its `PendingMessage`), and here the battle still says only the victory term.
   The state changes anyway; what is missing is telling it. It moves the

@@ -57,7 +57,7 @@ It is, as above: no option, the default. The captures show three cases
 the port splits: Unamë's "Lo mato. Lo mato. ¿Lo mato?" then
 "Matarlo, destriparlo / Quedarse quietita" (000, 001); "La puerta está
 cerrada con llave." then "Abrirla / Dejarla Así" (002, 003); "Opciones-Pasaje"
-then "Pasar al otro lado / <No hacer nada>" (006, 007). And in 000 and 001,
+then "Pasar al otro lado / \<No hacer nada>" (006, 007). And in 000 and 001,
 with Unamë's face, a dark brown L-shaped block sits at the window's lower
 right, inside it: not seen in the other boxes —look at it too, it may be
 its own bug—.
