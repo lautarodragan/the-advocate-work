@@ -2,9 +2,9 @@
 name: "rm2k-snes-mapdata maps has no caller"
 description: "The mapdata binary's `maps` subcommand writes offsets.inc, maps.inc and tables.inc for a list of maps, and nothing runs it: the converter calls `emit`, the ports' tests `vram`, `compress`, `pages` and `engine`"
 type: refactor
-status: doing
-assignee: calandria
-agents: [calandria]
+status: testing
+assignee: taro
+agents: [Calandria]
 author: calandria
 ---
 
@@ -58,3 +58,20 @@ the typed contracts are
 
 With the other four, in one branch, one commit each, every ROM byte for
 byte equal.
+
+### 2026-11-23, Calandria: the subcommand goes
+
+the-advocate `f7601987`, on `calandria-emit` from `eb22c280`.
+
+* Searched for the subcommand in the four repos and the book —`mapdata
+  maps`, `offsets.inc`, `tables.inc`, `do_maps`, `MapsArgs`—: the only
+  mention left was the crate's README, which listed it; it goes in the
+  same commit. Nothing in the book named it.
+* `Maps(MapsArgs)` and `do_maps` go. `MapsArgs` only lived for `EmitArgs`
+  to flatten it, so its two fields, `plain` and `--raw`, moved into
+  `EmitArgs`: `emit` takes the same flags. `record::maps` stays, for
+  mapdata's own tests.
+* Verified: every port's ROM byte for byte and every `.inc` equal to the
+  baseline (see the log of
+  [`emit-rs-writes-each-table-through-a-call-rustfmt-spreads-over-seven-lines`](emit-rs-writes-each-table-through-a-call-rustfmt-spreads-over-seven-lines.md)
+  for how), which covers `emit` parsing its flags as before.

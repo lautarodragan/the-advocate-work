@@ -2,9 +2,9 @@
 name: "picture_tables and common_entries write the same entry twice"
 description: "mapdata's two writers of picture_data —a map's pictures and the common events' small ones— each carry the same 50 lines: the objects, the palette stored once, the half size and the two offsets of an entry"
 type: refactor
-status: doing
-assignee: calandria
-agents: [calandria]
+status: testing
+assignee: taro
+agents: [Calandria]
 author: calandria
 ---
 
@@ -69,3 +69,21 @@ the typed contracts are
 
 With the other four, in one branch, one commit each, every ROM byte for
 byte equal.
+
+### 2026-11-23, Calandria: `picture_entry`
+
+the-advocate `fdc508a5`.
+
+* One function writes an image's objects, its palette's colours once per
+  `palette_index` and its entry; each caller checks its own palette rule
+  and gives the entry's last four bytes. It returns the whole
+  `PICTURE_ENTRY` bytes, zeros past the fourteenth, which is what the
+  callers' `resize` left there before.
+* The maps' offsets were counted from the map's block and had `start`
+  added back, so they were already indices of the table, like the common
+  ones: the function counts them that way for both. A map's first tile
+  goes through its 16-bit check once per map instead of once per picture.
+* Covered by every game —sixteen cartridges carry common sets, all of
+  them carry maps' pictures— and by `tests/pictures.rs` and
+  `a_common_picture_s_entry_says_its_set`. Every port's ROM byte for byte,
+  `.inc` equal.

@@ -2,9 +2,9 @@
 name: "The battle terms by name are a 42-arm match"
 description: "emit.rs's term() maps each liblcf term name to its field of ditto's Terms with one match arm each; Terms already serializes with liblcf's names, so the lookup can be by name"
 type: refactor
-status: doing
-assignee: calandria
-agents: [calandria]
+status: testing
+assignee: taro
+agents: [Calandria]
 author: calandria
 ---
 
@@ -69,3 +69,21 @@ the typed contracts are
 
 With the other four, in one branch, one commit each, every ROM byte for
 byte equal.
+
+### 2026-11-23, Calandria: by name, in the resolved view
+
+the-advocate `5e810d43`.
+
+* `term` serializes `db.terms` inside `ditto::lcf::as_resolved` and looks
+  the name up in that JSON; the 42 arms go.
+* The new test, `every_term_the_tables_name_is_the_databases`, asks for
+  every name of `BATTLE_TERMS`, `RESULT_TERMS` and `lvl_short` against a
+  default database and the battle crate's test game, that a term the
+  game sets comes back, and that `gold_received_a` —the right spelling of
+  liblcf's misspelled name— is refused. Shown red without
+  `as_resolved`: it fails at `command_attack`, the first one at its
+  default.
+* The terms are serialized per call, some forty times per emission,
+  rather than once: threading the JSON down to `battle_term` costs more
+  reading than it saves.
+* Every port's ROM byte for byte, `.inc` equal.
