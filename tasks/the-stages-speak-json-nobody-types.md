@@ -4,7 +4,7 @@ description: "Each stage builds its answer with json! and whoever reads it walks
 type: refactor
 status: doing
 assignee: calandria
-agents: [calandria]
+agents: [calandria, aguara, cardon, carpintero, chaja]
 author: taro
 ---
 
@@ -543,3 +543,7 @@ and Zounds' two are what covers them.
 
 **Install when merging**: `convert` and `battle` (`just install convert
 battle`). The task stays in `doing`: A1–A4 and A6–A10 are next.
+
+### 2026-11-24, Hornero: A1-A4 to four agents at once
+
+After A0 and A5 merged (the-advocate `394e634a`): Aguará A1 (Wally), Cardón A2 (events), Carpintero A3 (screens), Chajá A4 (images). A6-A8 after them, so that eight suites do not fight for the CPU.
