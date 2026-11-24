@@ -24,3 +24,12 @@ What was seen, standing in the-advocate:
 
 `just lint` is what CI runs before building, so CI on main should be red
 on that step. Reproduce with `just lint` at `ca74a4d4`.
+
+## Log
+
+### 2026-11-24, Hornero: still red at eb22c280
+
+Calandria found the same three while working on the emission, and wrote a
+duplicate draft that went in the merge: rustfmt on
+`cartridge/src/assemble.rs` and `wally/src/events.rs`, clippy's
+`wrong_self_convention` on `from_the_cache` in `rm2k-snes-audio/src/tracks.rs`.

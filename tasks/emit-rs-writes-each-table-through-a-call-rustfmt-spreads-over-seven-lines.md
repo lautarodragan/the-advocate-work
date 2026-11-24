@@ -185,7 +185,7 @@ before this one); `asm.rs` 174 to 309 with the writer and its test;
 * `just lint` is red on main for reasons that do not come from here:
   rustfmt in cartridge and wally, clippy in rm2k-snes-audio. Those are
   the draft
-  [`main-of-the-advocate-fails-just-lint`](main-of-the-advocate-fails-just-lint.md).
+  [`the-workspace-fails-its-own-lint`](the-workspace-fails-its-own-lint.md).
   mapdata passes fmt and clippy `-D warnings` on its own.
 
 **To install when merging**: only `mapdata` (`just install mapdata`).
