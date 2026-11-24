@@ -5,7 +5,7 @@ type: refactor
 status: doing
 assignee: aguara
 author: calandria
-agents: [cardon]
+agents: [cardon, aguara]
 links:
   found-in: [where-mapdata-and-convert-could-be-shorter]
   relates: [the-emission-reads-the-screens-answer-and-the-battle-model-by-name]
@@ -68,3 +68,31 @@ It is step **B4** of the plan in
 [`the-stages-speak-json-nobody-types`](the-stages-speak-json-nobody-types.md)
 (`part-of` it, in `doing`): defined and ordered there. `todo` so that the
 page shows it as a step to take, not as a finding.
+
+### 2026-11-24, Aguará: Wally's part, in B4
+
+Done on the-advocate `aguara-b4` (`94f3312c`), told in
+[the stages task's B4 entry](the-stages-speak-json-nobody-types.md):
+Wally's `map.json` and `layers.json` are `wally::answer::Map` and
+`Layers`, `map_info` and `variants::drawn` read their fields, and these
+went with what read them: **`maps.rs`' `truthy`** (and `slot_key`, the
+only other user) and **`variants.rs`' `fn int`**. Nothing defaulted an
+absence that was real: the nine games convert byte for byte the same.
+
+**What remains, for B7 (with the last reader):**
+
+* **`fn int`** in four files: `convert.rs` (160), `pictures.rs` (170),
+  `chipsets.rs` (286), and `maps.rs` (853), which keeps it for `pages`,
+  the compiler's records (B5).
+* **`truthy`** in `pictures.rs` (283), over the picture keys (B6).
+* **`MapInfo`'s `Value`s that carry Wally's answer on** to the emission
+  —`objects`, `npcs`, `movable`, `animates_*`, `posed_table`, `panorama`,
+  `runs`, the merges—: built from the types now, and left `Value`
+  because B1 reads them into mapdata's typed request; they become
+  Wally's types when the emission's request takes them. One reader by
+  hand of them is left: `convert.rs`' flashes, `m.npcs.as_array()`
+  (about 1383).
+* `maps::panorama_names` reads `MapInfo.panorama` by key, for the event
+  compiler's request: the same `Value`.
+
+It stays `doing`, for B5-B7.
