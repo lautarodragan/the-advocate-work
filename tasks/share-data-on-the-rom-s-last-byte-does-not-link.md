@@ -2,8 +2,7 @@
 name: "share_data on the ROM's last byte does not link"
 description: "When no map shares slots, share_data is one byte, and if the bank packer puts it at $FFFFFF ld65 refuses `lda f:share_data + 4, x` with a range error: a cartridge that fits fails to build"
 type: bug
-status: draft
-assignee: taro
+status: todo
 author: cardon
 agents: [cardon]
 links:
@@ -43,3 +42,15 @@ was wally lending `@tile:ChipSet1:138` a palette on maps 17 and 83.
 whose label is addressed with an offset at the end of the last bank, or
 give `share_data` the five bytes a record's header reads when nothing
 shares, or read `share_data + 4` through a base that cannot overflow.
+
+## Log
+
+### 2026-11-24, Hornero: promoted to `todo`
+
+Promoted by Hornero: reproduced with the linker's error and its line, a
+build that fits must link, and nothing seen or heard changes. Of the three
+fixes, the one that does not depend on this label: whatever the packer
+places, a label read with an offset cannot end a bank —look for the other
+`f:label + n` reads before choosing, since `share_data` is only the one
+that showed it—; four padding bytes for `share_data` alone would leave the
+next one waiting.
