@@ -2,8 +2,8 @@
 name: "The drafts backlog, decided"
 description: "107 drafts, mostly the agents', waited for taro to read them; one pass with AGENTS.md's criteria: each goes to todo, is closed, or carries a question for taro in its own log, assigned to them"
 type: docs
-status: doing
-assignee: cardon
+status: done
+assignee: taro
 agents: [cardon]
 author: taro
 ---
@@ -267,3 +267,7 @@ Each one's log says what to decide, the options and a recommendation.
   * Desert Nightmare's light masks and Frozen World's plates went to
     `todo` because they move towards the original; their entries say the
     trade becomes a question if the fix runs out of tiles or palettes.
+
+### 2026-11-24, Hornero: reviewed, done
+
+Checked the commits and tests the closings cite (`8ba23af2`, `8b2e7b2a`, `7132792b`, `a3a707c6`, `40cbad47`, `96cec117`; `paint_flush` at `vblank.s:142`; the faces test in the ports' `test_zounds_ship_messages.py`, the two cell-events tests). The book's ABL known issue about the pump's grey light went (the-advocate-docs, same day). The 37 questions wait for taro in their own tasks: `nu tasks/tasks.nu ls -s draft -a taro`.
