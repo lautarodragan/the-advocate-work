@@ -6,6 +6,8 @@ status: draft
 author: cardon
 game: desert-nightmare
 agents: [Cardón]
+links:
+  found-in: [desert-nightmare-the-map-draws-over-the-hero-and-white-boxes]
 ---
 
 Seen by Cardón on 2026-11-20, doing

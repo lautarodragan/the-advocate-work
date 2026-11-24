@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: taro
 agents: [Aguará]
+links:
+  relates: [a-torn-save-slot-shows-and-loads-a-new-game, maps-uncompressed-in-the-msu]
 ---
 
 taro, on 2026-11-16, asking whether part of the SRAM could be used as

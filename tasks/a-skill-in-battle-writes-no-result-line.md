@@ -7,6 +7,10 @@ status: testing
 assignee: taro
 author: tijereta
 agents: [Tijereta, Cardón]
+links:
+  found-in: [special-items-cast-their-skill-in-battle]
+  found: [a-skill-rolls-past-where-vexecute-returns, the-attack-says-undamaged-for-a-miss]
+  relates: [battle-offers-skills-that-are-only-for-the-map]
 ---
 
 Seen by Tijereta on 2026-10-19, on the-advocate `54ec3daf`, while making

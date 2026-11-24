@@ -4,6 +4,9 @@ description: "Build what 'The windows, made cheaper' measured: a background of t
 type: feature
 status: todo
 author: taro
+links:
+  has-part: [draw-the-faces, windows-background-setting-and-flat-text-area]
+  relates: [show-window-a-window-command-of-our-own, the-system-cursor-in-the-main-menu-and-the-slots]
 ---
 
 taro, on 2026-10-12: the implementation of the research, which had no task

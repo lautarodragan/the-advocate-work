@@ -4,6 +4,8 @@ description: "A TintScreen with a duration changes the screen at once and waits 
 type: bug
 status: todo
 author: mulita
+links:
+  relates: [tint-does-not-tint-whoever-shares-a-palette-with-the-timer]
 ---
 
 Seen by Mulita on 2026-10-15, comparing The Book of Three with the original

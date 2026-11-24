@@ -4,6 +4,10 @@ description: "emit.rs has a branch for each screens field an old answer lacked â
 type: refactor
 status: draft
 author: calandria
+links:
+  found-in: [where-mapdata-and-convert-could-be-shorter]
+  blocks: [the-emission-reads-the-screens-answer-and-the-battle-model-by-name]
+  part-of: [the-stages-speak-json-nobody-types]
 ---
 
 Seen by Calandria on 2026-11-23, reading `rm2k-snes/mapdata` at the-advocate

@@ -4,6 +4,9 @@ description: "Inside a teleport's fade, the grid, the background, the ChipSet an
 type: refactor
 status: draft
 author: cardon
+links:
+  found-in: [maps-load-faster-without-losing-anything]
+  relates: [lashe-city-transitions-lag]
 ---
 
 Seen by Cardón on 2026-10-18, measuring

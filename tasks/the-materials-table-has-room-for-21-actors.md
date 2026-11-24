@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: cardon
 agents: [Tijereta]
+links:
+  blocks: [abl-release-stops-at-the-first-night]
 ---
 
 Seen by Cardón on 2026-10-14, with the-advocate `a7f278e6` and the ports

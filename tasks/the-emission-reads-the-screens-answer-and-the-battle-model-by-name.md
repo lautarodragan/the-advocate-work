@@ -4,6 +4,11 @@ description: "rm2k-snes-screens and rm2k-snes-battle build their answers with js
 type: refactor
 status: draft
 author: calandria
+links:
+  found-in: [where-mapdata-and-convert-could-be-shorter]
+  relates: [the-converter-reads-the-stages-answers-with-python-s-truthiness, the-converter-writes-the-emission-s-request-by-hand, the-inc-s-constants-are-format-strings-with-their-values-far-below]
+  blocked-by: [the-emission-keeps-fallbacks-for-answers-older-than-its-fixtures]
+  part-of: [the-stages-speak-json-nobody-types]
 ---
 
 Seen by Calandria on 2026-11-23, reading `rm2k-snes/mapdata` at the-advocate

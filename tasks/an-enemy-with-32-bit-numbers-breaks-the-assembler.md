@@ -4,6 +4,8 @@ description: "Zounds' debug troop has 99,999 HP and gives 9,999,999 experience: 
 type: bug
 status: todo
 author: aguara
+links:
+  found-in: [port-zounds-an-rpg-maker-2003-game]
 ---
 
 Seen by Aguará on 2026-10-15, in the study

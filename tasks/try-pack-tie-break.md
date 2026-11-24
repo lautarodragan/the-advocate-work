@@ -4,6 +4,8 @@ description: "That the color distribution not depend on CPython's hash order"
 type: bug
 status: done
 author: hornero
+links:
+  relates: [overload-and-remove-for-try-pack]
 ---
 
 # What

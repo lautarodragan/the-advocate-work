@@ -4,6 +4,8 @@ description: "1 map put more characters on a line than the console draws —nine
 type: bug
 status: draft
 author: mulita
+links:
+  found-in: [maps-with-more-objects-on-a-line-than-the-ppu-draws]
 ---
 
 Seen by Mulita on 2026-11-17 with the ports' `just objects-per-line`, at

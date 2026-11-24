@@ -4,6 +4,8 @@ description: "Nine Vampires Dawn maps —Shannar, Uruya, Melsan, Asran among the
 type: feature
 status: todo
 author: aguara
+links:
+  relates: [poses-only-when-an-event-can-show-them, poses-without-their-empty-tiles]
 ---
 
 What is left out of Vampires Dawn because of VRAM, measured by Aguará on

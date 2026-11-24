@@ -7,6 +7,8 @@ assignee: taro
 author: carpintero
 agents: [Chajá]
 game: desert-nightmare
+links:
+  relates: [desert-nightmare-the-map-cursor-is-shared-on-ten-maps, identical-copies-of-a-common-event-are-stored-in-every-map]
 ---
 
 From Carpintero's study (the book's

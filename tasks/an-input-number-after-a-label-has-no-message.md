@@ -4,6 +4,8 @@ description: "Zounds' dice man (map 156, event 26) asks for the die's number wit
 type: bug
 status: draft
 author: calandria
+links:
+  found-in: [zounds-mining-and-the-jail-do-not-compile]
 ---
 
 Seen by Calandria on 2026-11-02, doing

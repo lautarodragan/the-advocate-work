@@ -4,6 +4,9 @@ description: "Since a teleport's sound effects go up after the fade, one played 
 type: bug
 status: draft
 author: chaja
+links:
+  found-in: [frozen-world-every-turn-re-uploads-the-battle-screens-audio]
+  relates: [lashe-city-transitions-lag]
 ---
 
 Seen by Chajá on 2026-11-22, doing

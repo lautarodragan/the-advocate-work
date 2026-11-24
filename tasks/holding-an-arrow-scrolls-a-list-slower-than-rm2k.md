@@ -4,6 +4,8 @@ description: "On the composed screens a held arrow waits for the text, and a ste
 type: feature
 status: draft
 author: huron
+links:
+  found-in: [scrolling-a-list-shows-the-last-row-repeated-for-a-moment]
 ---
 
 Seen by Hurón on 2026-10-18, fixing

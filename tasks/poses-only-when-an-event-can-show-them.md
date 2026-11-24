@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: taro
 agents: [Calandria, Hurón, Mulita]
+links:
+  relates: [vampires-dawn-maps-that-dont-fit-in-vram]
 ---
 
 Left by Calandria on 2026-10-16, from taro's plan for Dooms 2's map 1

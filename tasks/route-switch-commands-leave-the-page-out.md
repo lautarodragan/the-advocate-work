@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: huron
 agents: [Mulita]
+links:
+  relates: [sunset-nine-pages-still-left-out]
 ---
 
 Seen by Hurón on 2026-10-14, measuring with `just culprits` after

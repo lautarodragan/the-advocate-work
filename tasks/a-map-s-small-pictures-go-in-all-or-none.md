@@ -6,6 +6,9 @@ status: draft
 author: aguara
 agents: [Aguará]
 game: desert-nightmare
+links:
+  found-in: [desert-nightmare-the-screen-goes-black-before-the-first-monster]
+  relates: [an-inventory-of-the-pictures-that-may-be-windows, desert-nightmare-the-warehouse-monster-is-not-drawn]
 ---
 
 Seen by Aguará on 2026-11-21, doing

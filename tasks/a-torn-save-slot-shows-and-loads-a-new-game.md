@@ -4,6 +4,9 @@ description: "A slot whose saved game does not add up to its checksum —half wr
 type: bug
 status: draft
 author: huron
+links:
+  found-in: [a-save-on-the-fx-pak-waits-for-a-silent-seek]
+  relates: [the-sram-as-slow-wram]
 ---
 
 Seen by Hurón on 2026-11-17, reading the runtime for

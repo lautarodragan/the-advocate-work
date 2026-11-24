@@ -4,6 +4,8 @@ description: "The animation_id of skills and weapons, drawn over the scene"
 type: feature
 status: wishlist
 author: hornero
+links:
+  relates: [show-battle-animation-b-in-troop-pages]
 ---
 
 # What

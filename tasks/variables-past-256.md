@@ -4,6 +4,8 @@ description: "Vampires Dawn names 600 variables and the cartridge holds 256 (dup
 type: feature
 status: done
 author: calandria
+links:
+  duplicates: [variables-are-capped-at-256-slots]
 ---
 
 Carpintero declared it on 2026-10-06 as a degradation

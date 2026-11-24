@@ -7,6 +7,8 @@ assignee: taro
 author: huron
 game: desert-nightmare
 agents: [Hurón, Mulita]
+links:
+  found: [desert-nightmare-the-menu-loses-its-face-after-a-note]
 ---
 
 Seen by Hurón on 2026-11-19, at the-advocate `62b6e5cb` and the ports

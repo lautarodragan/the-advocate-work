@@ -7,6 +7,10 @@ status: done
 assignee: taro
 author: tijereta
 agents: [Carpintero]
+links:
+  found-in: [zounds-pictures-and-the-picture-made-screens]
+  found: [common-picture-sets-the-cartridge-carries-for-nothing, zounds-pick-axe-and-notebook-fit-beside-no-map]
+  relates: [book-of-three-the-map-item-shows-nothing]
 ---
 
 Seen by Tijereta on 2026-10-16, with the-advocate `9407d385` plus the

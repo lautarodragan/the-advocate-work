@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: cardon
 agents: [Calandria]
+links:
+  relates: [vampires-dawn-maps-that-dont-fit-in-vram]
 ---
 
 Lossless savings measured in

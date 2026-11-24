@@ -7,6 +7,9 @@ assignee: taro
 author: taro
 agents: [Cardón]
 game: desert-nightmare
+links:
+  found: [desert-nightmare-events-wait-for-a-slot, desert-nightmare-nights-with-a-tint-of-their-own]
+  relates: [a-call-counts-as-erasing-a-still-event, desert-nightmare-interiors-painted-now-that-the-box-is-a-window, painted-events-chooses-its-maps]
 ---
 
 From [`desert-nightmare-can-the-towns-be-baked`](desert-nightmare-can-the-towns-be-baked.md)

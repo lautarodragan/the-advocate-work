@@ -4,6 +4,9 @@ description: "rm2k-snes-events writes \"map N: WARNING, event E is left out\" on
 type: bug
 status: draft
 author: calandria
+links:
+  found-in: [the-stages-speak-json-nobody-types]
+  relates: [variables-are-capped-at-256-slots]
 ---
 
 Seen by Calandria on 2026-11-24, reading the-advocate `0d9f187c` for the

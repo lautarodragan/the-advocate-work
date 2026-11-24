@@ -6,6 +6,9 @@ status: testing
 assignee: taro
 agents: [Hurón]
 author: hornero
+links:
+  found: [try-pack-picks-the-smallest-group]
+  relates: [overload-and-remove-for-try-pack]
 ---
 
 # What

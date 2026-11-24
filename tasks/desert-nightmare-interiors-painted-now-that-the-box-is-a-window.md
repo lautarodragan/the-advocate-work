@@ -7,6 +7,10 @@ assignee: taro
 game: desert-nightmare
 agents: [Hurón]
 author: huron
+links:
+  found-in: [desert-nightmare-own-message-frame]
+  found: [desert-nightmare-the-menu-s-face-is-lost-on-painted-maps]
+  relates: [still-pieces-painted-into-a-painted-map, desert-nightmare-the-warehouse-monster-is-not-drawn]
 ---
 
 Seen by Hurón on 2026-11-21, doing

@@ -4,6 +4,8 @@ description: "On Sunset Over Imdahl's busiest painted maps more events can be on
 type: bug
 status: draft
 author: calandria
+links:
+  found-in: [rain-drops-cost-a-cache-its-slots]
 ---
 
 Seen by Calandria on 2026-10-17, with the-advocate `eb16d48b` (branch

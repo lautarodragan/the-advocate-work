@@ -4,6 +4,8 @@ description: "The next stage of music-loop-like-rm2k: render each song twice so 
 type: feature
 status: draft
 author: hornero
+links:
+  relates: [music-loop-like-rm2k]
 ---
 
 Left open when taro closed [`music-loop-like-rm2k`](music-loop-like-rm2k.md)

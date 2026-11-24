@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: taro
 agents: [Cardón]
+links:
+  found: [a-2003-actor-s-command-window-is-the-2000-one]
 ---
 
 taro, on 2026-10-20, in their words, translated, with two captures

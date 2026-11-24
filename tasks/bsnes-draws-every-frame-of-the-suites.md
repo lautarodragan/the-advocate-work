@@ -5,6 +5,8 @@ type: refactor
 status: draft
 author: chaja
 agents: [Chajá]
+links:
+  found-in: [how-much-of-a-test-is-the-emulator-drawing]
 ---
 
 Measured by Chajá on 2026-11-22, with the-advocate at `96cec117` (branch

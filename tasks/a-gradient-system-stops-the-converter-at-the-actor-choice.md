@@ -4,6 +4,9 @@ description: "Zounds' System has 215 colours under its window frame and no `[win
 type: bug
 status: todo
 author: aguara
+links:
+  found-in: [port-zounds-an-rpg-maker-2003-game]
+  relates: [zounds-the-item-target-picker-does-not-fit]
 ---
 
 Seen by Aguará on 2026-10-15, in the study

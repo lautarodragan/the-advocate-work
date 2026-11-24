@@ -4,6 +4,8 @@ description: "CalculateHPPercents multiplies the HP by 100 and then divides by t
 type: bug
 status: wishlist
 author: tijereta
+links:
+  relates: [controlvars-multiply-and-divide]
 ---
 
 Seen by Tijereta on 2026-10-14, with the-advocate `51f05d7c` plus the branch

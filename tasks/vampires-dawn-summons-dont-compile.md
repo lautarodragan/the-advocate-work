@@ -4,6 +4,9 @@ description: "Parallel common events 1, 2, 5, 6, 8 and 9 (the summons), 30, 48 a
 type: bug
 status: todo
 author: aguara
+links:
+  relates: [controlvars-from-an-item-count, vampires-dawn-transformations-dont-compile]
+  blocked-by: [variables-are-capped-at-256-slots]
 ---
 
 Seen by Aguará on 2026-10-12, with the-advocate `6ed7c4a0` and the ports

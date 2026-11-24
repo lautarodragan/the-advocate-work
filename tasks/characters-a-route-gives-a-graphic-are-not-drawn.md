@@ -6,6 +6,9 @@ status: done
 assignee: taro
 author: mulita
 agents: [Calandria]
+links:
+  found: [a-route-graphic-on-a-paged-row-is-undone-after-a-battle]
+  relates: [order-34-in-a-page-own-route]
 ---
 
 Seen by Mulita on 2026-10-15, comparing The Book of Three with the original

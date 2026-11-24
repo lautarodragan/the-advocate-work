@@ -5,6 +5,9 @@ type: feature
 status: done
 author: taro
 agents: [Mulita]
+links:
+  has-part: [items-that-cast-a-skill-outside-battle, switch-skills-from-the-menu]
+  found: [radin-s-and-sern-s-menus-do-not-compile]
 ---
 
 taro, on 2026-10-12:

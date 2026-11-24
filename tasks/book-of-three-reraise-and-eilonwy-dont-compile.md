@@ -6,6 +6,8 @@ status: testing
 assignee: taro
 author: aguara
 agents: [Calandria, Mulita]
+links:
+  relates: [changeitems-and-changemonsterhp-by-a-variable, controlvars-from-an-item-count]
 ---
 
 Seen by Aguará on 2026-10-12, with the-advocate `6ed7c4a0` and the ports

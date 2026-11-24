@@ -7,6 +7,9 @@ status: testing
 assignee: taro
 author: mulita
 agents: [Cardón]
+links:
+  found: [the-battle-leaves-teleport-and-escape-skills-out-of-the-list, the-celebration-golden-moves-when-a-case-is-added]
+  relates: [a-skill-in-battle-writes-no-result-line]
 ---
 
 Seen by Mulita on 2026-10-12, **reading the code**, with the-advocate

@@ -6,6 +6,12 @@ status: doing
 assignee: calandria
 agents: [calandria, aguara, cardon, carpintero, chaja]
 author: taro
+links:
+  found: [the-event-compiler-s-left-out-warning-never-reaches-the-log]
+  relates: [artistic-decision-patches, battle-tests-without-simulate, tests-without-the-stages-subcommands]
+  blocked-by: [emit-rs-writes-each-table-through-a-call-rustfmt-spreads-over-seven-lines, picture-tables-and-common-entries-write-the-same-entry-twice, rm2k-snes-mapdata-maps-has-no-caller, small-repeats-inside-emit-rs-s-rest, the-battle-terms-by-name-are-a-42-arm-match]
+  blocks: [a-stage-s-cache-key-once-it-is-a-library, one-advocate-command]
+  has-part: [the-converter-reads-the-stages-answers-with-python-s-truthiness, the-converter-writes-the-emission-s-request-by-hand, the-emission-keeps-fallbacks-for-answers-older-than-its-fixtures, the-emission-reads-the-screens-answer-and-the-battle-model-by-name]
 ---
 
 **Why**: the converter's stages —screens, battle, events, images, Wally,
@@ -547,6 +553,72 @@ battle`). The task stays in `doing`: A1–A4 and A6–A10 are next.
 ### 2026-11-24, Hornero: A1-A4 to four agents at once
 
 After A0 and A5 merged (the-advocate `394e634a`): Aguará A1 (Wally), Cardón A2 (events), Carpintero A3 (screens), Chajá A4 (images). A6-A8 after them, so that eight suites do not fight for the CPU.
+
+### 2026-11-24, Chajá: A4, the images
+
+On the-advocate `chaja-a4`, from `394e634a`, with main (`508b8c95`) merged;
+ports `4c23c9e`, which A4 does not touch. One commit, `c2b601cc`, on the
+recipe above: `rm2k_snes_images::stage` answers the six commands the
+converter asks —`fullscreen`, `picture`, `background`, `backdrops`,
+`battlers`, `animations`— as `<command>.json`, the same compact
+`to_string()` with no newline the binary wrote; the converter's `images.rs`
+calls them through `stage::call` with the request and flags it ran the
+binary with (`--data` for `animations`, nothing for the rest), one `const`
+per command. `rm2k-snes-images` joins the converter's `Cargo.toml`.
+
+Each command has two doors: the converter's takes the parsed request
+(`request::of`, a relative path stays relative to the current directory;
+the converter only sends absolute ones), and an `_of` one takes it already
+typed. The binary is a `main` over the `_of` ones and keeps reading its
+file with `request::read`, so its paths stay relative to the request and
+its complaints keep the file's name and line and column.
+
+#### What was checked about the step
+
+* **State**: none in the crate, nor in `rm2k-render`, Adeleine or Voodoo
+  —no `thread_local!`, `static`, `OnceLock` or memo—; `animations`' sheet
+  map lives inside the call.
+* **stderr**: the crate prints nothing while it succeeds (its only
+  `eprintln!` is `main`'s error); the 20 `converter.log` are byte for byte
+  the global tools'.
+* **JSON key order**: the requests are serde structs, so nothing iterates
+  an object; with `preserve_order` only the answers' keys change order,
+  and the converter reads them by name.
+
+#### The builds, byte for byte
+
+`NO_CACHE=1 just cartridges --force` in the nine games (ABL
+`--without-tracks`), the global tools (`394e634a`) against these: **the 20
+`.sfc` equal** and the 19,469 files of the nine `build/` too,
+`converter.log` included; aside only `stamp.txt` and the 40 `.o`/`.dbg`,
+which differ in the mtimes `ca65` records. Then twice with the cache: the
+first stored **1,049 answers** —688 `picture`, 166 `background`, 116
+`animations`, 17 `fullscreen`, 17 `backdrops`, 10 `battlers`, and 18
+`tables` and 17 `model` of the battle, whose key is the converter's binary
+and moved with it—; the second stored none, and its builds equal the
+uncached ones.
+
+Found, not fixed: `Background::resolve` leaves a relative `under` relative
+to the current directory, the binary's only path that does not follow the
+request
+([draft](rm2k-snes-images-leaves-a-relative-under-relative-to-the-current-directory.md));
+nobody sends one.
+
+#### The suites
+
+On the merged branch, its tools first in the PATH: the-advocate's `just
+test` 29 passed; `just rust-test --no-fail-fast` 1,240 passed, 0 failed, 3
+ignored; the test game (`SOUNDFONT=FluidR3_GM.sf2`) 231 passed, 6 skipped;
+the ports' `just boot` 218 passed; ABL's `just tests` 1,694 passed, 2
+skipped. No golden moved. `abl.sfc` `3bf35fd7665c`. `cargo fmt --check` and
+`clippy --all-targets` clean on `rm2k-snes-images` and
+`rm2k-snes-convert`. The tests' calls to `backdrops`, `battlers` and
+`animations` (`image_stage.py`) go through the binary and its `_of`
+functions; `fullscreen`, `picture` and `background` are covered only by
+the builds above.
+
+**Install when merging**: `convert` and `images` (`just install convert
+images`).
 
 ### 2026-11-24, Cardón: A2
 

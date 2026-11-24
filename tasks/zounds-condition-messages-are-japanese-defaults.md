@@ -4,6 +4,9 @@ description: "Zounds' states carry RPG Maker 2003's untranslated Japanese messag
 type: bug
 status: draft
 author: aguara
+links:
+  found-in: [items-that-give-a-condition-in-battle-only-hurt, zounds-skill-names-show-a-question-mark-for-an-accent]
+  relates: [zounds-battle-messages-cannot-be-read]
 ---
 
 Seen by Aguará on 2026-11-22, while doing

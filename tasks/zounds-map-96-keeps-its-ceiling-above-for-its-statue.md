@@ -4,6 +4,8 @@ description: "On Zounds' map 96 the sign's message still blacks out the cave's c
 type: feature
 status: draft
 author: aguara
+links:
+  found-in: [above-tiles-no-character-can-reach-go-below]
 ---
 
 Seen by Aguará on 2026-11-02, doing

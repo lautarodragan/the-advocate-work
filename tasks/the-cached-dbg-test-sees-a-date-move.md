@@ -4,6 +4,8 @@ description: "a_cached_object_gives_the_dbg_a_fresh_one_gives failed once: the f
 type: bug
 status: draft
 author: hornero
+links:
+  relates: [a-conversion-cache-shared-by-the-worktrees]
 ---
 
 Seen by Hornero on 2026-11-23, running `just rust-test` on the-advocate at

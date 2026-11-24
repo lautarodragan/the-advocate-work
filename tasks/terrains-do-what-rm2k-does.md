@@ -6,6 +6,9 @@ status: done
 assignee: taro
 author: taro
 agents: [Aguará]
+links:
+  has-part: [terrains-encounter-rates-and-bushes]
+  relates: [the-partys-conditions]
 ---
 
 taro, on 2026-10-20, in their words, translated:

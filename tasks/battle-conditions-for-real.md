@@ -7,6 +7,8 @@ status: testing
 assignee: taro
 author: taro
 agents: [Chajá, Cardón]
+links:
+  relates: [the-partys-conditions]
 ---
 
 taro, on 2026-10-12: after `monster-conditions-and-flashscreen-in-battle.md`

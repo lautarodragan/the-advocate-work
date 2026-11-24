@@ -5,6 +5,8 @@ type: feature
 status: done
 assignee: taro
 author: taro
+links:
+  part-of: [diff-photos-cropped-and-217-montage-as-in-rm2k]
 ---
 
 From taro, on 2026-10-02 (the game's task is in ABL:

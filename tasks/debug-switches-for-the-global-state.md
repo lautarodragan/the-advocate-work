@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: taro
 agents: [Tijereta]
+links:
+  found: [the-far-code-banks-are-nearly-full]
 ---
 
 Opened by Hornero on 2026-11-17, at the-advocate `ed8d8590` and the ports

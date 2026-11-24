@@ -6,6 +6,8 @@ status: draft
 author: cardon
 game: desert-nightmare
 agents: [Cardón]
+links:
+  found-in: [still-pieces-painted-into-a-painted-map]
 ---
 
 Seen by Cardón on 2026-11-19, at the-advocate `cardon-painted-pieces`

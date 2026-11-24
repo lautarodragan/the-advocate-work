@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: calandria
 agents: [Carpintero]
+links:
+  relates: [vampires-dawn-s-world-grid-does-not-fit-in-wram]
 ---
 
 Two maps, the same limit: the LZ2 reserve of `runtime/far_ram.s`, which

@@ -7,6 +7,8 @@ status: done
 assignee: taro
 author: taro
 agents: [Carpintero]
+links:
+  relates: [zounds-mining-and-the-jail-do-not-compile]
 ---
 
 taro, on 2026-11-01, in their words, translated:

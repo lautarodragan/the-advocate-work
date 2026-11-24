@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: taro
 agents: [Chajá]
+links:
+  found: [the-bare-window-s-arrow-keeps-its-band-on-maps-with-eight-sprite-palettes]
 ---
 
 taro, on 2026-10-18, looking at the captures of

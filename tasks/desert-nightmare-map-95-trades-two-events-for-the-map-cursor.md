@@ -4,6 +4,8 @@ description: "With the message box's pictures gone, the converter draws the menu
 type: bug
 status: todo
 author: huron
+links:
+  found-in: [desert-nightmare-own-message-frame]
 ---
 
 Seen by Hurón on 2026-11-21, doing

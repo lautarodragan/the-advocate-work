@@ -4,6 +4,8 @@ description: "A tool that lists every ShowPicture of a game with its context and
 type: feature
 status: todo
 author: taro
+links:
+  relates: [a-map-s-small-pictures-go-in-all-or-none, show-window-a-window-command-of-our-own]
 ---
 
 taro, on 2026-10-20, in their words, translated:

@@ -4,6 +4,8 @@ description: "119 of the playthrough's shots have no golden (pending.txt, 2026-1
 type: test
 status: todo
 author: irupe
+links:
+  duplicated-by: [goldens-of-the-neon-vipers-playthrough]
 ---
 
 Irupé measured it on 2026-09-29 (`tests-without-silent-holes.md`):

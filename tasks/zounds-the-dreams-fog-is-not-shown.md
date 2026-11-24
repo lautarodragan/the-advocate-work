@@ -5,6 +5,8 @@ type: bug
 status: draft
 author: aguara
 agents: [Aguará]
+links:
+  found-in: [a-200x200-map-does-not-fit-the-cell-stream]
 ---
 
 Seen by Aguará on 2026-10-17, while bringing map 30 into the cartridge

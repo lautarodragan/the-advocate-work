@@ -4,6 +4,8 @@ description: "has_rain, has_sandstorm, teleports_with_a_facing, transparent_mess
 type: refactor
 status: draft
 author: calandria
+links:
+  found-in: [where-mapdata-and-convert-could-be-shorter]
 ---
 
 Seen by Calandria on 2026-11-23, reading `rm2k-snes/convert` at the-advocate

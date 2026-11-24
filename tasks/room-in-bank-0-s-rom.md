@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: taro
 agents: [Carpintero]
+links:
+  found: [far3-has-669-bytes-left-in-zounds]
 ---
 
 Opened by Hornero on 2026-11-17, at the-advocate `fe5529a3` and the ports

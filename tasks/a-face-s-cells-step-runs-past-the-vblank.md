@@ -4,6 +4,8 @@ description: "In bsnes, the vblank that writes a box's face cells (msg_face_vbla
 type: bug
 status: draft
 author: chaja
+links:
+  found-in: [zounds-a-map-animation-leaves-the-map-s-colours-wrong]
 ---
 
 Seen by Chajá on 2026-10-19, at the-advocate `54ec3daf` and the ports

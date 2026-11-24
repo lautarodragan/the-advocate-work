@@ -7,6 +7,9 @@ status: testing
 assignee: taro
 author: mulita
 agents: [Mulita, Cardón]
+links:
+  found-in: [the-partys-conditions]
+  found: [a-revived-actor-keeps-its-conditions-in-battle]
 ---
 
 Seen by Mulita on 2026-11-01, on the-advocate `3071048a` (branch

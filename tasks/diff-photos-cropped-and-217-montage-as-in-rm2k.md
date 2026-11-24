@@ -4,6 +4,9 @@ description: "217's montage as in RM2k: each Diff photo at 50 % over black with 
 type: feature
 status: todo
 author: taro
+links:
+  has-part: [cropping-a-picture-instead-of-scaling-it]
+  relates: [picture-zoom-in-mode-7]
 ---
 
 From taro, on 2026-10-02, looking at the goldens of

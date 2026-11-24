@@ -5,6 +5,9 @@ type: test
 status: draft
 author: tijereta
 game: abl
+links:
+  part-of: [abl-s-test-cartridges-become-test-game-cases]
+  found-in: [eraseevent-no-test-looks-at-what-is-seen]
 ---
 
 Seen by Tijereta on 2026-11-22, doing

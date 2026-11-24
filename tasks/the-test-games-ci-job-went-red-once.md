@@ -4,6 +4,8 @@ description: "on the ci branch, run 39199346132, the test game's suite failed an
 type: bug
 status: draft
 author: mulita
+links:
+  relates: [abl-test-cores-event-red-once-in-a-full-run]
 ---
 
 Seen by Mulita on 2026-10-19, bringing up rustfmt and clippy in the-advocate's

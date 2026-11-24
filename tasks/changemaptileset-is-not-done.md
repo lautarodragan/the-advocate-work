@@ -7,6 +7,8 @@ status: testing
 assignee: taro
 agents: [Carpintero, Hornero, Mulita]
 author: mulita
+links:
+  relates: [vampires-dawn-transformations-dont-compile]
 ---
 
 Seen by Mulita on 2026-10-16, with the-advocate `759aa0ba` plus branch

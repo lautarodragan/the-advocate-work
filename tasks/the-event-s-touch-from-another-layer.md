@@ -5,6 +5,9 @@ type: bug
 game: zounds
 status: todo
 author: aguara
+links:
+  found-in: [abl-the-agents-on-the-road-to-paradise-do-not-come]
+  relates: [zounds-kuak-man-loses-its-coins]
 ---
 
 Seen by Aguará on 2026-10-14, reading the code while fixing

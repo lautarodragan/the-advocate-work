@@ -4,6 +4,8 @@ description: "Each ChangeEventLocation of an event with a graphic re-sorts its r
 type: refactor
 status: draft
 author: aguara
+links:
+  found-in: [abl-lazer-teeth-s-rock-lags]
 ---
 
 Seen by Aguará on 2026-11-17, measuring

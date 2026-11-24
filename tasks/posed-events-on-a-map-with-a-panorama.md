@@ -5,6 +5,8 @@ type: feature
 status: draft
 author: cardon
 agents: [Cardón]
+links:
+  found-in: [abl-still-events-painted-into-the-background]
 ---
 
 Seen by Cardón on 2026-11-16, with the-advocate 7fa94195 plus

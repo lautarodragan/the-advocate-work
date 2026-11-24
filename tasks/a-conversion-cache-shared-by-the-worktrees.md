@@ -6,6 +6,9 @@ status: testing
 assignee: taro
 agents: [Hornero, Hurón]
 author: taro
+links:
+  found: [the-shared-conversion-cache-grows-without-bound, the-tools-checkout-is-searched-for-a-game-s-resources]
+  relates: [the-cached-dbg-test-sees-a-date-move]
 ---
 
 > Add a task to `todo` for the converter cache across worktrees

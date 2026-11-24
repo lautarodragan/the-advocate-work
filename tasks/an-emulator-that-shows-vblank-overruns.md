@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: taro
 agents: [Aguará]
+links:
+  relates: [a-window-that-opens-late-builds-its-tables-past-the-vblank]
 ---
 
 Born from [`a-transparent-message-keeps-the-layer-above`](a-transparent-message-keeps-the-layer-above.md):

@@ -5,6 +5,8 @@ type: bug
 status: done
 assignee: taro
 author: hornero
+links:
+  relates: [tint-screen-snaps-instead-of-fading]
 ---
 
 Found while measuring whether `release` and `test-main` can be merged (see

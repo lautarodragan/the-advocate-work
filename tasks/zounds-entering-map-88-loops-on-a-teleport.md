@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: taro
 agents: [Calandria]
+links:
+  found: [a-parallel-common-events-write-refreshes-pages-a-frame-late]
 ---
 
 taro, on 2026-10-19, playing Zounds (delivery of that day, the-advocate
