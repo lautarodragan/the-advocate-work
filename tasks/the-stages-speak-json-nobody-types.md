@@ -1022,5 +1022,18 @@ passed, 2 skipped. No golden moved: the ports' worktree is clean.
 `rm2k-snes-convert`. The emission is covered by the builds above and by
 every ROM test; the binary's `emit` only by the hand check.
 
+Then main moved to `11fcaed9` (Mulita's A7) and merged without a
+conflict (`08df82ef`). On that tree, with its `convert`, `mapdata` and
+`rm2k-snes-audio` first: the same cold build against the global tools at
+`8b069fc2`, the 20 `.sfc` and every file the converter writes equal, the
+20 `converter.log` too; `just lint` clean, `just test` 29 passed, `just
+rust-test --no-fail-fast` 1,238 passed, 5 failed, 3 ignored —the five
+pass run again alone: four of `fxpak`'s pty tests
+([draft](fxpak-s-pty-tests-share-ptsname-s-buffer.md)) and
+`a_cached_object_gives_the_dbg_a_fresh_one_gives`
+([draft](the-cached-dbg-test-sees-a-date-move.md))—, the test game 231
+passed, 6 skipped, `just boot` 218 passed, ABL's `just tests` 1,694
+passed, 2 skipped; `abl.sfc` `3bf35fd7665c`, no golden moved.
+
 **Install when merging**: `convert` and `mapdata` (`just install convert
 mapdata`).
