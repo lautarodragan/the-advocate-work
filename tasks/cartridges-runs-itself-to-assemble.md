@@ -2,7 +2,9 @@
 name: "cartridges runs itself to assemble"
 description: "rm2k-snes-cartridges builds each cartridge by spawning `rm2k-snes-cartridges assemble`, its own subcommand, as a process: a leftover of when the assembler was a binary of its own; it becomes a function call"
 type: refactor
-status: todo
+status: doing
+assignee: mulita
+agents: [mulita]
 author: taro
 ---
 
@@ -44,3 +46,7 @@ hashes `rm2k-snes-cartridges` itself—; then the usual suites.
 
 Nothing done yet. It waits for Calandria's branch so that no tool is
 reinstalled while their suites run.
+
+### 2026-11-24, Hornero: taken by Mulita
+
+After Calandria's emission work merged (the-advocate `90d1041d`).
