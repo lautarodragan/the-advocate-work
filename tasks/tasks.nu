@@ -72,6 +72,8 @@ const RELATIONS = {
   has-part: part-of
   duplicates: duplicated-by
   duplicated-by: duplicates
+  found-in: found
+  found: found-in
   relates: relates
 }
 
