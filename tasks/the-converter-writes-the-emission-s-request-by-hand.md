@@ -2,7 +2,8 @@
 name: "The converter writes the emission's request by hand"
 description: "rm2k-snes-convert links rm2k-snes-mapdata, whose request.rs types the request, and still writes it with json! —a map, a page, the scene—, with workarounds for json!'s recursion limit; deriving Serialize there and building the types would take the mirror away"
 type: refactor
-status: todo
+status: doing
+assignee: calandria
 author: calandria
 agents: [cardon]
 links:

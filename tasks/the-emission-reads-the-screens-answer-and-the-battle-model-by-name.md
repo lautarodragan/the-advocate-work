@@ -2,7 +2,8 @@
 name: "The emission reads the screens' answer and the battle model by name"
 description: "rm2k-snes-screens and rm2k-snes-battle build their answers with json! and mapdata reads them back as serde_json::Value, key by key, with some 290 accessor calls and the shape checks that come with them: one set of serde types both ends share would take the reading off emit.rs"
 type: refactor
-status: todo
+status: doing
+assignee: calandria
 author: calandria
 agents: [cardon]
 links:
