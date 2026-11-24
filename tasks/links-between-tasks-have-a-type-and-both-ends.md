@@ -2,8 +2,8 @@
 name: "Links between tasks have a type and both ends"
 description: "The 938 links between tasks are prose: nothing checks they resolve, and the other end does not show them. Typed relations in the frontmatter —blocks, part-of, duplicates, relates—, written on both ends and checked by `tasks.nu check`, shown on the page as a list before the log; and `check` catches broken links"
 type: feature
-status: testing
-assignee: taro
+status: doing
+assignee: huron
 agents: [huron]
 author: taro
 ---
@@ -162,3 +162,11 @@ What to look at: the page's "Links" list, in any task of the chain
 —`one-advocate-command` shows "blocked by" the stages task in `doing`,
 "has part" `cartridges-runs-itself-to-assemble` in `testing`, and five
 `relates`—. Nothing to install: this repo only.
+
+### 2026-11-24, Hornero: a `found-in` relation, back to Hurón
+
+> I like it. The tasks themselves are not related, so a "found-in" would
+> be more accurate and would help navigation more.
+
+(taro, 2026-11-24, in their words, translated, on Hurón's note that most
+of the 272 `relates` mean "found while doing X")
