@@ -3,6 +3,8 @@ name: "A torn save slot shows on the slot screen and loads a new game"
 description: "A slot whose saved game does not add up to its checksum —half written when the console lost power, or when the FX Pak took its image— is shown on the slot screen like a good one, and picking it starts a new game without saying why; and the previous save in that slot is gone with it"
 type: bug
 status: draft
+assignee: taro
+agents: [cardon]
 author: huron
 links:
   found-in: [a-save-on-the-fx-pak-waits-for-a-silent-seek]
@@ -51,3 +53,18 @@ power-off inside that ~130 ms leaves the torn one on the card.
   alternately, with a generation byte written last; the load takes the
   newest copy that adds up. It changes the slot's layout, so old saves stop
   loading (they already do on every build that moves `GAME_SIGNATURE`).
+
+## Log
+
+### 2026-11-24, Cardón: a question for taro
+
+Read, not seen; the risk is small (a power cut inside a DMA, or inside
+~130 ms after `msu_save_flush`). Each step has something to choose: what
+the slot screen shows ("damaged" is a new text), a CRC-16 (a little ROM
+and time), and two copies per slot (a new SRAM layout, old saves stop
+loading).
+
+**To decide**: which of the three. **Recommendation**: the first two —the
+slot screen checks the sum and shows the slot as damaged instead of a
+name, and picking it says so instead of starting a new game; CRC-16 for
+the sum— and the two copies only if a torn save is ever seen.

@@ -2,7 +2,8 @@
 name: "A transparent window over a flattened panorama shows striped edges"
 description: "On ABL's map 1 (Night1 panorama, mode 3, flattened) a transparent message in the middle shows a red-and-white striped column at both screen edges on its text lines, where the panorama's night sky is with the window closed"
 type: bug
-status: draft
+status: todo
+agents: [cardon]
 author: aguara
 links:
   found-in: [a-window-line-cannot-wait-forever]
@@ -79,3 +80,13 @@ them—. Left: what that map's window plane holds at those cells, or the
 plane's horizontal scroll on its lines, against the terrace's, whose
 edges are blank. Captures —dry and wet side by side, and the four layer
 switches— in the shared folder, `captures/2026-11-16-terrace-rain/abl/`.
+
+### 2026-11-24, Cardón: to todo
+
+Verified on three cores, and narrowed by Aguará to BG2's tiles —the
+window's own tilemap at the screen's edges, or its scroll— on ABL's map 1
+with a transparent middle box (a stress copy; the terrace of the test game
+does not show it). Stripes are garbage, not a divergence: removing them
+changes nothing that could be argued. The draft says what to look at
+first: the window plane's cells at the edges, and its horizontal scroll,
+against the terrace's.

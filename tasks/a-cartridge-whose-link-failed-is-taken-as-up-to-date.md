@@ -2,9 +2,9 @@
 name: "A cartridge whose link failed is taken as up to date"
 description: "After a build whose link fails, going back to the inputs of the last good build leaves the cartridge's directory mixed —the failed build's mapdata.inc and raw/, the good build's ROM— and rm2k-snes-cartridges does not rebuild it"
 type: bug
-status: draft
+status: todo
 author: mulita
-agents: [Mulita]
+agents: [Mulita, cardon]
 ---
 
 Seen by Mulita on 2026-11-16, in A Blurred Line, with the-advocate at
@@ -26,3 +26,16 @@ How to reproduce: in ABL's `release`, turn on something that converts but
 does not link, `just cartridges`, put it back, `just cartridges`, and
 compare `build/release/raw/` with what the converter writes for the
 inputs.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+Still so at the-advocate `8b069fc2`: `Cartridges::build` in
+`rm2k-snes/cartridge/src/cartridges.rs` (lines 862-871) converts over the
+old directory and writes `stamp.txt` only after success, but never deletes
+the previous good build's stamp first, so a failed link leaves the old
+stamp over the failed build's `raw/` and `mapdata.inc`. The fix is not in
+doubt —remove the stamp before converting— and changes no ROM. It carries
+over to `advocate build`
+([`one-advocate-command`](one-advocate-command.md)).

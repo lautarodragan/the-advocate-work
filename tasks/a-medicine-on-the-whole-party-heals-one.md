@@ -2,7 +2,8 @@
 name: "A medicine on the whole party heals one"
 description: "A medicine marked entire_party opens the actor choice with the bar on one row and heals only that one, where RM2k puts the bar over everyone and heals the whole party"
 type: bug
-status: draft
+status: todo
+agents: [cardon]
 author: chaja
 links:
   found-in: [items-that-cast-a-skill-outside-battle]
@@ -30,3 +31,14 @@ Powder (127), the last one also in battle.
 
 To reproduce: give the Healing Powder in Vampires Dawn with a party of two
 or more, hurt them, and use it from the items screen.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+Still so at `8b069fc2`: `target_scope` in `runtime/actor_choice.s` (the
+`medicine:` path, lines 362-372) answers $FF for any medicine that casts
+no skill, whatever its `entire_party`, and `medicine_use` heals the one
+chosen. easyrpg's `Scene_ActorTarget::Start` and `Game_Party::UseItem` say
+the whole party. Towards RM2k with nothing to choose; five games carry
+such a medicine.

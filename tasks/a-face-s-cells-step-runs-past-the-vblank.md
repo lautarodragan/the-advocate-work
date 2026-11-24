@@ -2,7 +2,8 @@
 name: "A face's cells step runs past the vblank"
 description: "In bsnes, the vblank that writes a box's face cells (msg_face_vblank's second step) ended at line 270, eight lines into the next frame, on Zounds' map 89"
 type: bug
-status: draft
+status: cancelled
+agents: [cardon]
 author: chaja
 links:
   found-in: [zounds-a-map-animation-leaves-the-map-s-colours-wrong]
@@ -41,3 +42,13 @@ Not measured again. Since the draft, `msg_face_vblank` was touched once,
 by the-advocate `d76bb565` (the inn's gold window), which does not shorten
 its steps; so the measure of 2026-10-19 likely holds, and should be
 repeated on today's `main` before anything is decided.
+
+### 2026-11-24, Cardón: cancelled
+
+Fixed by the-advocate `8ba23af2` (2026-11-17, Chajá), "A face's cells go
+up by DMA, composed before the vblank": `msg_face_begin` composes the 36
+cells' words into far RAM when the box opens and the vblank sends them in
+twelve DMAs; `test_the_faces_cells_go_up_inside_the_vblank` in the ports'
+`tests/test_zounds_ship_messages.py` holds it on the audited bsnes, red
+before. The third step (`face_table`) only writes RAM and an idle
+channel's registers, as the draft says.
