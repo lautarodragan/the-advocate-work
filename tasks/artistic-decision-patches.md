@@ -4,6 +4,8 @@ description: "What is lost in the conversion, as versioned files"
 type: feature
 status: todo
 author: taro
+links:
+  relates: [audio-in-two-lossy-steps, one-advocate-command, the-stages-speak-json-nobody-types]
 ---
 
 # What

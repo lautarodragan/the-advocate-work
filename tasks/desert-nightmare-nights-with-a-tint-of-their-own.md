@@ -7,6 +7,8 @@ assignee: taro
 author: taro
 agents: [Hurón, Carpintero]
 game: desert-nightmare
+links:
+  relates: [desert-nightmare-light-masks-placed-by-an-anchor, desert-nightmare-lit-cells-over-a-tinted-night, still-pieces-painted-into-a-painted-map]
 ---
 
 taro, on 2026-11-19, looking at the captures of

@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: taro
 agents: [Aguará]
+links:
+  relates: [a-refresh-costs-frames-on-maps-of-many-pages, build-oam-costs-a-third-of-the-frame-on-busy-maps, change-event-location-shifts-the-npc-table-per-event, the-on-screen-timer-is-expensive-to-draw]
 ---
 
 taro, on 2026-11-17, playing ABL's build on Mesen, translated:

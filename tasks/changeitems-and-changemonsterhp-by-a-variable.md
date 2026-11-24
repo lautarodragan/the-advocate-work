@@ -7,6 +7,8 @@ status: testing
 assignee: taro
 author: calandria
 agents: [Chajá, Mulita]
+links:
+  relates: [book-of-three-reraise-and-eilonwy-dont-compile, changegold-by-a-variable-names-no-slot, show-battle-animation-b-in-troop-pages, controlvars-from-an-item-count]
 ---
 
 Seen by Calandria on 2026-10-14, with the-advocate `14e200fc` and the ports

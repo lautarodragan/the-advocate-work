@@ -4,6 +4,8 @@ description: "In the 'panorama' VRAM layout BG2's base is $4000, where a big pic
 type: bug
 status: wishlist
 author: huron
+links:
+  relates: [book-of-three-the-map-item-shows-nothing]
 ---
 
 Seen by Hurón on 2026-10-12 reading the code while bringing the book's

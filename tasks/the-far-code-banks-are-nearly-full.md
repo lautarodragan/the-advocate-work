@@ -4,6 +4,8 @@ description: "Sunset over Imdahl's FAR2 ($C0) and Zounds' FAR3 ($C1) have about 
 type: chore
 status: draft
 author: tijereta
+links:
+  relates: [debug-switches-for-the-global-state]
 ---
 
 Seen by Tijereta on 2026-11-17, adding the debug screen's state switches

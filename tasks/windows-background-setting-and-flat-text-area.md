@@ -6,6 +6,8 @@ status: done
 agents: [Cardón]
 assignee: taro
 author: taro
+links:
+  part-of: [cheaper-windows]
 ---
 
 taro, on 2026-10-12: the first two steps of `cheaper-windows.md`, the ones

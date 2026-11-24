@@ -5,6 +5,8 @@ type: bug
 status: draft
 author: carpintero
 agents: [Carpintero]
+links:
+  relates: [painted-events-chooses-its-maps, the-converter-s-stages-and-what-each-spends]
 ---
 
 Found by Carpintero on 2026-11-19, reading the code for

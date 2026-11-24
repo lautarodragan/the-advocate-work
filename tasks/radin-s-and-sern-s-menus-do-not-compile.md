@@ -7,6 +7,8 @@ status: testing
 assignee: taro
 author: mulita
 agents: [Mulita, Cardón]
+links:
+  relates: [the-skills-menu, switch-skills-from-the-menu]
 ---
 
 Seen by Mulita on 2026-10-12, at the-advocate's `mulita-skills-screen`

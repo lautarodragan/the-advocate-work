@@ -4,6 +4,8 @@ description: "Map 86's sign, an event drawn with a ChipSet tile on the hero's la
 type: bug
 status: draft
 author: aguara
+links:
+  relates: [a-transparent-message-blacks-out-tiles-on-its-lines]
 ---
 
 Seen by Aguará on 2026-11-02, measuring

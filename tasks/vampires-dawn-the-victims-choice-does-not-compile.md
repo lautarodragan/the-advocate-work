@@ -4,6 +4,8 @@ description: "The choice 'Talk / Suck Blood / Convert / Leave', whose options ca
 type: bug
 status: done
 author: chaja
+links:
+  blocked-by: [variables-are-capped-at-256-slots]
 ---
 
 Seen by Chajá on 2026-10-14, with the-advocate `3438a90c` (branch

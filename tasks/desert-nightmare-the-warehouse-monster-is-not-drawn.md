@@ -6,6 +6,8 @@ status: todo
 author: aguara
 agents: [Aguará]
 game: desert-nightmare
+links:
+  relates: [a-map-s-small-pictures-go-in-all-or-none, desert-nightmare-interiors-painted-now-that-the-box-is-a-window, desert-nightmare-the-screen-goes-black-before-the-first-monster]
 ---
 
 Seen by Aguará on 2026-11-21, closing

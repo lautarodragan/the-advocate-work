@@ -7,6 +7,8 @@ status: testing
 assignee: taro
 author: calandria
 agents: [Tijereta, Mulita]
+links:
+  relates: [book-of-three-reraise-and-eilonwy-dont-compile, changeitems-and-changemonsterhp-by-a-variable, controlvars-multiply-and-divide, vampires-dawn-summons-dont-compile, variables-in-a-choice-option-and-before-an-input-number]
 ---
 
 Seen by Calandria on 2026-10-14, with the-advocate `14e200fc` and the ports

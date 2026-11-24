@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: aguara
 agents: [Aguará]
+links:
+  relates: [a-2003-actor-s-command-window-is-the-2000-one]
 ---
 
 Seen by Aguará on 2026-10-15, in the study

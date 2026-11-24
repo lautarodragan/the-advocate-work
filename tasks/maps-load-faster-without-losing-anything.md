@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: taro
 agents: [Cardón]
+links:
+  relates: [a-door-decompresses-the-whole-bytecode-of-the-map-it-leaves, a-map-load-still-decompresses-inside-its-tick, the-song-a-map-turns-on-goes-up-inside-the-load, vampires-dawn-loads-spend-seconds-on-effects-from-the-msu]
 ---
 
 taro, on 2026-10-18:

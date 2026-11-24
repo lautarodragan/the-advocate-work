@@ -4,6 +4,8 @@ description: "ABL release's slot and menu bank leaves the menu 120 tiles for wha
 type: bug
 status: draft
 author: tijereta
+links:
+  relates: [the-menu-shows-the-partys-conditions]
 ---
 
 Seen by Tijereta on 2026-11-02, measuring

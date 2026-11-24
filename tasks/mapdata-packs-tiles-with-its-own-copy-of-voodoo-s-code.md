@@ -4,6 +4,8 @@ description: "mapdata's snes.rs repeats Voodoo's pack_tile and cgram_word, and e
 type: refactor
 status: draft
 author: calandria
+links:
+  relates: [where-mapdata-and-convert-could-be-shorter]
 ---
 
 Seen by Calandria on 2026-11-23, reading `rm2k-snes/mapdata` at the-advocate

@@ -7,6 +7,8 @@ assignee: taro
 agents: [Aguará]
 author: taro
 game: desert-nightmare
+links:
+  relates: [desert-nightmare-the-hit-dog-lands-beside-the-roof]
 ---
 
 taro, on 2026-11-21, translated (frames in

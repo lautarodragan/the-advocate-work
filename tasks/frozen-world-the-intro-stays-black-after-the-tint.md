@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: taro
 agents: [Aguará]
+links:
+  relates: [a-window-that-opens-late-builds-its-tables-past-the-vblank]
 ---
 
 taro, on 2026-11-16, playing The Frozen World's build of the-advocate

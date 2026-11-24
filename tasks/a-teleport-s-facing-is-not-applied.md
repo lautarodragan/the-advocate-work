@@ -7,6 +7,8 @@ status: testing
 assignee: taro
 author: mulita
 agents: [Mulita, Hurón]
+links:
+  relates: [change-event-location-s-facing-is-not-applied]
 ---
 
 Seen by Mulita on 2026-11-02, with the ports at `3e4e95d` and the tools

@@ -4,6 +4,8 @@ description: "A door in Vampires Dawn adds 78 frames to the fade on average, up 
 type: refactor
 status: draft
 author: cardon
+links:
+  relates: [maps-load-faster-without-losing-anything]
 ---
 
 Seen by Cardón on 2026-10-18, measuring

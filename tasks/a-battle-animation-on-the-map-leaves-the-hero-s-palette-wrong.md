@@ -5,6 +5,8 @@ type: bug
 status: todo
 author: taro
 game: zounds
+links:
+  relates: [flashing-hero-shares-a-palette-with-an-npc]
 ---
 
 taro, on 2026-11-20, translated (66 captures, one a frame, frames 3672 to

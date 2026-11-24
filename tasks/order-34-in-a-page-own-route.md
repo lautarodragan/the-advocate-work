@@ -4,6 +4,8 @@ description: "change_graphic inside a page's own route, which route::own rejects
 type: feature
 status: todo
 author: tijereta
+links:
+  relates: [characters-a-route-gives-a-graphic-are-not-drawn]
 ---
 
 # What

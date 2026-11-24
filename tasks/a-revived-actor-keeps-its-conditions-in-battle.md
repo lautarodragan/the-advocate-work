@@ -4,6 +4,8 @@ description: "An actor that falls in battle keeps its places until the battle en
 type: bug
 status: draft
 author: mulita
+links:
+  relates: [a-medicine-does-not-cure-a-condition]
 ---
 
 Seen by Mulita on 2026-11-01, reading `runtime/battle_states.s` and

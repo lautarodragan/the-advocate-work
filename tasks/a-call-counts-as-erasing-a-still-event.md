@@ -6,6 +6,8 @@ status: todo
 author: cardon
 game: desert-nightmare
 agents: [Cardón]
+links:
+  relates: [desert-nightmare-can-the-towns-be-baked, still-pieces-painted-into-a-painted-map]
 ---
 
 Seen by Cardón on 2026-11-19, at the-advocate `62b6e5cb` and the ports

@@ -6,6 +6,8 @@ status: testing
 assignee: taro
 agents: [Hurón]
 author: huron
+links:
+  relates: [frozen-world-s-turn-audio-test-passes-only-with-the-tracks, overload-and-remove-for-try-pack, superfamiconv-as-an-oracle-for-palette-packing]
 ---
 
 Seen by Hurón on 2026-11-22, doing

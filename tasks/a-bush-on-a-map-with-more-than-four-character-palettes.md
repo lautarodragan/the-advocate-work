@@ -5,6 +5,8 @@ type: bug
 status: draft
 author: aguara
 agents: [Aguará]
+links:
+  relates: [terrains-encounter-rates-and-bushes]
 ---
 
 Found by Aguará on 2026-11-01, doing

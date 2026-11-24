@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: tijereta
 agents: [Tijereta, Hurón]
+links:
+  relates: [map-200-has-no-room-for-the-gold-window]
 ---
 
 Seen by Tijereta on 2026-10-19, at the-advocate `35dcc348` and the ports

@@ -5,6 +5,9 @@ type: bug
 status: todo
 author: aguara
 agents: [Aguará, Carpintero, Hornero]
+links:
+  blocked-by: [desert-nightmare-the-motel-s-other-trash-cans-blink-while-they-open, desert-nightmare-the-scene-after-the-bar-is-black]
+  relates: [desert-nightmare-the-screen-goes-black-before-the-first-monster]
 ---
 
 Seen by taro on 2026-11-21 in Desert Nightmare, map 28, frames 63697 to

@@ -7,6 +7,8 @@ author: taro
 assignee: taro
 agents: [Hornero, Cardón]
 game: desert-nightmare
+links:
+  blocks: [the-map-comes-back-in-pieces-after-a-big-picture]
 ---
 
 taro, 2026-11-22, frames 53717 to 53720 in

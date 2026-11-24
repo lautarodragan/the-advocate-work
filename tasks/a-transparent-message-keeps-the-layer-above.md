@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: taro
 agents: [Aguará]
+links:
+  relates: [a-window-that-opens-late-builds-its-tables-past-the-vblank]
 ---
 
 Asked by taro on 2026-10-19, after

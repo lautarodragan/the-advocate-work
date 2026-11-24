@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: taro
 agents: [Chajá]
+links:
+  relates: [cheaper-windows]
 ---
 
 taro, on 2026-10-16, playing ABL and The Book of Three: the selector in the

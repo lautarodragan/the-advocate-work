@@ -6,6 +6,8 @@ status: testing
 author: taro
 assignee: taro
 agents: [carpintero]
+links:
+  relates: [the-python-parity-left-behind]
 ---
 
 **Why**: after

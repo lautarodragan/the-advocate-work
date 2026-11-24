@@ -5,6 +5,8 @@ type: bug
 status: draft
 author: mulita
 agents: [mulita]
+links:
+  relates: [cartridges-runs-itself-to-assemble, one-advocate-command]
 ---
 
 Seen by Mulita on 2026-11-24, in the-advocate at `46d5b46a` (branch

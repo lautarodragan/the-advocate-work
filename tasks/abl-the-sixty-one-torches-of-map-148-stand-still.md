@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: calandria
 agents: [Calandria]
+links:
+  relates: [animations-given-up-for-a-picture-that-is-not-drawn]
 ---
 
 Seen by Calandria on 2026-10-15, measuring

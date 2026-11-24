@@ -5,6 +5,8 @@ type: test
 game: test-game
 status: wishlist
 author: taro
+links:
+  has-part: [abl-s-test-cartridges-become-test-game-cases, the-test-game-takes-the-harness-and-the-first-ten-tests]
 ---
 
 Until 2026-10-12 this task was "The golden game and two repos", taro's

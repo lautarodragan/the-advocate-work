@@ -5,6 +5,8 @@ type: bug
 status: todo
 author: carpintero
 agents: [Carpintero]
+links:
+  relates: [frozen-world-the-cursor-keeps-the-wrong-graphic]
 ---
 
 Seen by Carpintero on 2026-10-19, with the-advocate

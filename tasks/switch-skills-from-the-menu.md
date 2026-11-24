@@ -7,6 +7,10 @@ status: testing
 assignee: taro
 author: hornero
 agents: [Mulita, Cardón]
+links:
+  blocked-by: [the-skills-screen]
+  part-of: [the-skills-menu]
+  relates: [radin-s-and-sern-s-menus-do-not-compile, switch-skills-from-the-menu-play-no-sound]
 ---
 
 Phase 3.1 of [`the-skills-menu`](the-skills-menu.md), after

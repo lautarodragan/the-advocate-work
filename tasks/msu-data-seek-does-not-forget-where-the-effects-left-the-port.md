@@ -5,6 +5,8 @@ type: bug
 status: draft
 author: chaja
 agents: [Chajá]
+links:
+  relates: [maps-uncompressed-in-the-msu]
 ---
 
 Read by Chajá on 2026-11-23, at the-advocate `75d46e3c`, while bringing

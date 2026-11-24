@@ -4,6 +4,8 @@ description: "The wolf and bat transformations (parallel common events 10, 11 an
 type: bug
 status: todo
 author: aguara
+links:
+  relates: [vampires-dawn-summons-dont-compile, changemaptileset-is-not-done]
 ---
 
 Seen by Aguará on 2026-10-12, with the-advocate `6ed7c4a0` and the ports

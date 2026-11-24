@@ -7,6 +7,8 @@ assignee: taro
 author: taro
 agents: [Aguará]
 game: desert-nightmare
+links:
+  relates: [a-map-s-small-pictures-go-in-all-or-none, desert-nightmare-the-warehouse-monster-is-not-drawn, the-map-comes-back-in-pieces-after-a-big-picture]
 ---
 
 taro, on 2026-11-21, translated (captures one a frame, repeated ones

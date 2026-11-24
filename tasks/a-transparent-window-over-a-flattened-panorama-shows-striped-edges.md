@@ -4,6 +4,8 @@ description: "On ABL's map 1 (Night1 panorama, mode 3, flattened) a transparent 
 type: bug
 status: draft
 author: aguara
+links:
+  relates: [a-window-line-cannot-wait-forever, the-test-game-s-terrace-in-the-rain]
 ---
 
 Seen by Aguará on 2026-11-16, measuring

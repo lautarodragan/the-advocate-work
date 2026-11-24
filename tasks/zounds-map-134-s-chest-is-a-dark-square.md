@@ -5,6 +5,8 @@ type: bug
 status: draft
 author: cardon
 game: zounds
+links:
+  relates: [zounds-some-chests-change-when-opened]
 ---
 
 Seen by Cardón on 2026-11-17, sweeping Zounds' chests for

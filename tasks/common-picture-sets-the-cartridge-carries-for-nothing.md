@@ -4,6 +4,8 @@ description: "The common events' small pictures go in the cartridge by sets sinc
 type: refactor
 status: draft
 author: carpintero
+links:
+  relates: [pictures-in-common-events-compiled-apart-are-not-shown]
 ---
 
 Seen by Carpintero on 2026-10-20, with the-advocate's branch

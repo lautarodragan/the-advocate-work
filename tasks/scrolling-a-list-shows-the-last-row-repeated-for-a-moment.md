@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: taro
 agents: [Hurón]
+links:
+  relates: [holding-an-arrow-scrolls-a-list-slower-than-rm2k]
 ---
 
 taro, on 2026-10-18, an old bug never prioritised: on the screens that

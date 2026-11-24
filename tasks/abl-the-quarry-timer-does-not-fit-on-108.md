@@ -6,6 +6,9 @@ status: testing
 assignee: taro
 author: cardon
 agents: [Chajá, Cardón]
+links:
+  relates: [abl-it-does-not-rain-in-paradise]
+  blocks: [abl-release-stops-at-the-first-night]
 ---
 
 Seen by Cardón on 2026-10-14, with the-advocate `a7f278e6` and the ports

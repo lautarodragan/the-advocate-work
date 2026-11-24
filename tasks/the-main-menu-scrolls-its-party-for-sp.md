@@ -6,6 +6,8 @@ status: done
 assignee: taro
 author: taro
 agents: [Tijereta]
+links:
+  blocks: [the-menu-shows-the-partys-conditions]
 ---
 
 Follows [`sp-in-the-menu-and-the-item-target-picker`](sp-in-the-menu-and-the-item-target-picker.md):

@@ -4,6 +4,8 @@ description: "Vampires Dawn moves events 18 on map 58 and 26, 43 and 44 on map 2
 type: bug
 status: todo
 author: huron
+links:
+  relates: [route-the-missing-moves]
 ---
 
 Seen by Hurón on 2026-10-14, measuring with `just culprits` after

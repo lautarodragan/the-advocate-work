@@ -4,6 +4,8 @@ description: "A face shown as a picture keeps its fifteen most used colours: Una
 type: bug
 status: draft
 author: calandria
+links:
+  relates: [small-pictures-under-a-big-one-are-hidden, zounds-pictures-and-the-picture-made-screens]
 ---
 
 Seen by Calandria on 2026-10-20, with the-advocate `3bc68ac4` plus the

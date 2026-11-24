@@ -7,6 +7,8 @@ assignee: taro
 author: taro
 game: desert-nightmare
 agents: [Aguará, Carpintero]
+links:
+  relates: [desert-nightmare-start-menu-over-garbage, desert-nightmare-the-locks-pictures-are-drawn-into-their-rooms]
 ---
 
 taro, on 2026-11-20, playing the build of the-advocate `7951af2a` and the

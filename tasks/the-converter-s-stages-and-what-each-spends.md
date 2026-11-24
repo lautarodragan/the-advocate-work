@@ -6,6 +6,8 @@ status: testing
 assignee: taro
 author: taro
 agents: [Carpintero, Hurón]
+links:
+  relates: [the-trim-guesses-which-maps-go-painted]
 ---
 
 taro, on 2026-11-19, translated:

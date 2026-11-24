@@ -5,6 +5,8 @@ type: bug
 status: draft
 author: carpintero
 game: vampires-dawn
+links:
+  relates: [vampires-dawn-tradan-hangs-on-arriving-from-the-start]
 ---
 
 Seen by Carpintero on 2026-11-22, taking captures for

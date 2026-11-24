@@ -4,6 +4,8 @@ description: "Since 2026-10-20 a 2003 game's battle commands carry the names of 
 type: feature
 status: draft
 author: cardon
+links:
+  relates: [a-2003-game-s-battle-commands-are-its-own, the-2003-battle-commands-callcommonevent-and-forceflee]
 ---
 
 Seen by Cardón on 2026-10-20, doing
