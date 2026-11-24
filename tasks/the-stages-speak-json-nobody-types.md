@@ -2,7 +2,9 @@
 name: "The stages speak JSON nobody types"
 description: "Each stage builds its answer with json! and whoever reads it walks a serde_json::Value key by key; one set of serde types both ends share makes the contract between stages something the compiler checks"
 type: refactor
-status: todo
+status: doing
+assignee: calandria
+agents: [calandria]
 author: taro
 ---
 
@@ -82,3 +84,7 @@ Added to the design, at taro's request.
 ### 2026-11-23, Hornero: libraries first, the cache later
 
 taro's call; the per-stage key went to its own task.
+
+### 2026-11-24, Hornero: the design taken by Calandria
+
+The design only, for taro, before any code; after Mulita's assemble work merged (the-advocate `0d9f187c`).
