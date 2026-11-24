@@ -2,11 +2,12 @@
 name: "The losses the stages hand over are JSON the converter reads by key"
 description: "`degradations.json`'s entries reach the converter as `serde_json::Value` —the event compiler's `Degradations::losses: Vec<Value>`, the emission's `Vec<Value>`— and the converter keeps them so in `degradations.rs` and filters them by key (`l[\"kind\"] == \"event-left-out\"`, `l[\"map\"].as_i64()`) in four `forget`s of `convert.rs`: one loss type both ends see would make a renamed key fail to compile"
 type: refactor
-status: draft
+status: todo
 author: mulita
 links:
   found-in: [the-compiler-s-songs-and-the-music-s-losses-cross-the-converter-as-json]
   relates: [the-stages-speak-json-nobody-types, the-emission-s-answer-is-read-by-key]
+  part-of: [the-stages-speak-json-nobody-types]
 ---
 
 Seen by Mulita on 2026-11-24, typing the music's losses
@@ -48,3 +49,9 @@ games.
 in the-advocate.
 
 ## Log
+
+### 2026-11-24, Hornero: promoted to `todo`
+
+Promoted by Hornero: counted in the merged code, the same rule as the
+rest of phase B —taro asked to finish taking the JSON out—, checked byte
+for byte with nothing seen or heard changing. A step of the stages task.
