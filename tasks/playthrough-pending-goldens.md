@@ -5,7 +5,7 @@ type: test
 status: todo
 author: irupe
 links:
-  relates: [goldens-of-the-neon-vipers-playthrough]
+  duplicated-by: [goldens-of-the-neon-vipers-playthrough]
 ---
 
 Irupé measured it on 2026-09-29 (`tests-without-silent-holes.md`):

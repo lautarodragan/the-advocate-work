@@ -5,7 +5,7 @@ type: test
 status: done
 author: hornero
 links:
-  relates: [playthrough-pending-goldens]
+  duplicates: [playthrough-pending-goldens]
 ---
 
 `tests/abl/test_playthrough_vipers_golden.py` takes its shots, but none
