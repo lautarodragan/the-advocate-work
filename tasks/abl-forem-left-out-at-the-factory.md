@@ -2,8 +2,8 @@
 name: "ABL: Forem left out at the factory"
 description: "Map 83 leaves out Forem, event 13, whom a route dresses, because with him the rain's colours are lent: the converter says so, as it said of Northern Surl Camp's Paradise and Emily"
 type: bug
-status: draft
-assignee: taro
+status: doing
+assignee: cardon
 agents: [cardon]
 author: tijereta
 links:
@@ -53,3 +53,14 @@ red, as from 2026-10-20 to whenever it went back; (c) Forem in, paying
 with the rain's colours. **Recommendation**: (b): a character missing from
 a scene loses more than a grey light; looked at on screen before choosing.
 Both of ABL's Known issues lines about map 83 become one.
+
+### 2026-11-24, Hornero: taro asks to see b and c
+
+> Could you ask Cardón to add a couple of screenshots, so I get an idea of
+> how options B and C would look? I discard option A. I lean towards B,
+> but I would like to see C too.
+
+(taro, 2026-11-24)
+
+Taken by Cardón only for the captures; it goes back to `draft` with
+`assignee: taro` when they are in `/shared`.

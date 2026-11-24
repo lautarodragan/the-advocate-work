@@ -2,8 +2,7 @@
 name: "The fade's last black tick uploads songs the map is not playing"
 description: "Without MSU-1, a teleport's fade forces up on its last black tick every song of the destination's package, not only the one playing: 5 to 16 frames on Lashe City's doors"
 type: optimization
-status: draft
-assignee: taro
+status: todo
 author: chaja
 game: abl
 agents: [cardon]
@@ -57,3 +56,16 @@ Where the wait goes is a choice:
 
 Recommendation: **b**: most of the time they are up before anyone asks, and
 with the `.msu` none of it happens.
+
+### 2026-11-24, Hornero: taro chose b
+
+> About the-fades-last-black-tick-uploads-songs-the-map-is-not-playing:
+> let's go with option B, the one Cardón suggested.
+
+(taro, 2026-11-24)
+
+To `todo`: the songs the map is not playing wait like the effects and go
+up in the vblanks' free time after the fade; a `PlayBGM` that arrives
+before they are up finishes them then. The door's black should drop by the
+5 to 16 frames measured, without the `.msu`; measure it the same way, and
+the `PlayBGM` that has to finish a song, how long it freezes.
