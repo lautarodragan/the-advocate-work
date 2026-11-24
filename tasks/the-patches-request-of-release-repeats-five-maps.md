@@ -36,3 +36,11 @@ The ROMs and `build/` must stay byte for byte equal.
 Promoted by Hornero to `todo`: verified by capturing the request, the fix
 is not in doubt —a request without repetitions—, and nothing seen or heard
 changes.
+
+### 2026-11-24, Hornero: the events request repeats them too
+
+Calandria met the same five maps twice in ABL release's events request,
+typing it (the stages task, `e1d44127` in the-advocate): the old `Map`
+collapsed them, and her `ByMap::insert` does the same, with a test. So
+the repetition is upstream of both stages —the list of maps the
+converter builds for `release`—, which is where this task's fix goes.
