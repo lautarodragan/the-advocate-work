@@ -6,6 +6,7 @@ status: draft
 author: hornero
 links:
   found-in: [the-library-crates-carry-binaries-nobody-runs]
+  relates: [fxpak-s-pty-tests-share-ptsname-s-buffer]
 ---
 
 Seen by Hornero on 2026-11-23, running `just rust-test` on the-advocate at

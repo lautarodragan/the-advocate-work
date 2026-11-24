@@ -7,7 +7,7 @@ assignee: calandria
 agents: [calandria, aguara, cardon, carpintero, chaja]
 author: taro
 links:
-  found: [the-event-compiler-s-left-out-warning-never-reaches-the-log]
+  found: [the-event-compiler-s-left-out-warning-never-reaches-the-log, fxpak-s-pty-tests-share-ptsname-s-buffer]
   relates: [artistic-decision-patches, battle-tests-without-simulate, tests-without-the-stages-subcommands]
   blocked-by: [emit-rs-writes-each-table-through-a-call-rustfmt-spreads-over-seven-lines, picture-tables-and-common-entries-write-the-same-entry-twice, rm2k-snes-mapdata-maps-has-no-caller, small-repeats-inside-emit-rs-s-rest, the-battle-terms-by-name-are-a-42-arm-match]
   blocks: [a-stage-s-cache-key-once-it-is-a-library, one-advocate-command]
@@ -619,3 +619,106 @@ the builds above.
 
 **Install when merging**: `convert` and `images` (`just install convert
 images`).
+
+### 2026-11-24, Carpintero: A3, the screens
+
+On the-advocate `carpintero-a3`, from `394e634a`, with main (`dedf5252`,
+A4 included) merged; ports `4c23c9e`, which A3 does not touch. Four
+commits on the recipe above:
+
+* `dc0a3292`: a custom menu's `special` values in the order of their keys
+  as text (see "JSON key order" below), with its test; `43764963` renames
+  that test's subject, which `test_no_game_names` caught as ABL's.
+* `6979ca09`: `rm2k_snes_screens::stage::{convert, boxes, faces, window,
+  layout}` answer `<command>.json`, the same one-line `to_string()` with
+  no newline the binary wrote; the converter's `screens.rs` calls them
+  through `stage::call`, one `const` per command, and `layout` is a plain
+  call. `Place` holds what the game flags said (dump, game folder, RTP,
+  System, window background, text ink), and the converter builds it and
+  the flags the key reads in one function, `game_place`, so the two cannot
+  disagree. `render`, `equip` and `refit`, which only the tests call, stay
+  in `main`, over `game_with_font` and `measure_of`, which moved to
+  `stage`. The screens' `BINARY`/`PROJECT` constants in the converter went
+  with their last use. `rm2k-snes-screens` joins the converter's
+  `Cargo.toml`.
+* `012a7dd9`: each of the four has an `_of` door that takes the request
+  read; the binary goes through it, so a bad request file still names its
+  path, as Chajá did for the images.
+
+#### What was checked about the step
+
+* **State**: the screens' letters (`texts.rs`' `thread_local!`, set by
+  `convert` through `carry_letters`). A guard, `stage::Fresh`, empties
+  them when each stage starts and again when it ends, panics included.
+  `no_stage_leaves_letters_for_the_next` was shown red with the two resets
+  commented out: after `convert` with `é` carried (font `low-variable`,
+  which draws it) the letters stayed `['é']`, and `item_text` would write
+  `é` where a fresh thread writes `e`. Today no stage after `convert` on
+  the converter's thread (`faces`) writes through `item_text`, so the leak
+  had no output yet. Nothing else in the crate, nor in `rm2k-snes-text`,
+  Adeleine, Voodoo, `rm2k-render` or `rm2k-rules`; the screens reach
+  Wally only for its sprite layout, not its memos.
+* **JSON key order**: one object the screens iterate reaches the ROM, a
+  custom menu table's `special` (`custom_menu.rs`), pushed in iteration
+  order into the menu's blob. The binary saw the keys sorted as text; in
+  the converter they would come in the project file's order. Sorted
+  explicitly now (`dc0a3292`); its test is red without the sort under
+  `cargo test --workspace`, where the converter's `preserve_order` reaches
+  the crate. No game has more than one special value (ABL's `99`), so no
+  build could show it. The other objects iterated (`by_number`,
+  `lists_by_number`, `files`, `parties`, a menu's `table`) collect into
+  maps or sort. The answers' own keys change order; the converter reads
+  them by name and the emission's binary parses them sorted.
+* **stderr**: the crate prints nothing while it succeeds; the 20
+  `converter.log` are byte for byte the global tools'.
+
+#### The builds, byte for byte
+
+`NO_CACHE=1 just cartridges --force` in the nine games (ABL
+`--without-tracks`), the global tools (`394e634a`) against these (A3 alone,
+before merging main): **the 20 `.sfc` equal**, and the 19,469 files of the
+nine `build/` too, `converter.log` included; aside only the 20 `stamp.txt`
+and the 40 `.o`/`.dbg`, whose only differences are the mtimes `ca65`
+records (checked on every `.dbg` with the mtimes stripped). Then twice with
+the shared cache: the first stored the screens' new answers —19 `convert`,
+10 `window`, 9 `boxes`, 5 `faces`— and 19 `tables` and 18 `model` of the
+battle, whose key moved with the converter; its builds equal the uncached
+ones. The shared cache had other agents storing at the same time, so the
+"stores none" check went to a private one (`CACHE=` a scratch directory):
+a first build filled it with 2,702 stage answers, the second **wrote
+nothing to it** —no file of any category— in 108 s for the nine, and its
+builds equal the uncached ones.
+
+After merging main (`dedf5252`, with A4), the same cold build with these
+tools (`convert`, `screens` and `images` installed from the merged tree)
+against the global tools at `394e634a` again: the 20 `.sfc` and the 19,469
+files equal, aside `stamp.txt` and the `.o`/`.dbg` mtimes.
+
+#### The suites
+
+On the branch with main at `dedf5252` merged, `convert`, `screens` and
+`images` first in the PATH: the-advocate's `just test` 29 passed (the first
+run caught the ABL name in the special values' test, `43764963`); `just
+rust-test --no-fail-fast` 1,234 passed, 8 failed, 3 ignored, and the eight
+pass run again alone: seven of `fxpak`'s pty tests, six of them all naming
+`/dev/pts/1` as another client's
+([draft](fxpak-s-pty-tests-share-ptsname-s-buffer.md): `ptsname`'s static
+buffer shared by parallel threads), and `a_cached_object_gives_the_dbg_a_
+fresh_one_gives`, already a [draft](the-cached-dbg-test-sees-a-date-move.md);
+the test game (`SOUNDFONT=FluidR3_GM.sf2`) 231 passed, 6 skipped; the
+ports' `just boot` 218 passed; ABL's `just tests` 1,694 passed, 2 skipped.
+No golden moved: the ports' worktree is clean. `abl.sfc` `3bf35fd7665c`.
+The tests' calls to `layout`, `window` and `refit` (`screen_stage.py`,
+`screens.py`) go through the binary and its `_of` doors; `convert`,
+`boxes` and `faces` are covered by the builds above.
+
+Then main moved to `f46074d6` (A1 and A2) and was merged too: with the four
+steps in, nothing runs a cached stage as a process, so `stage::run` and
+`Answerer::Process` are dead and the converter warned twice; `ec883b2a`
+gives them an allow until A9. On that tree only `cargo fmt --check`,
+`clippy --all-targets -D warnings` (clean on `rm2k-snes-screens` and
+`rm2k-snes-convert`) and the two crates' tests (129 passed) ran; the
+suites did not.
+
+**Install when merging**: `convert` and `screens` (`just install convert
+screens`).
