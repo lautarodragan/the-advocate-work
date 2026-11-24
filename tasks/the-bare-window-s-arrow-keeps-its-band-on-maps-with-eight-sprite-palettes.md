@@ -3,7 +3,9 @@ name: "The bare window's arrow keeps its band on maps with eight sprite palettes
 description: "Where no sprite palette or no two sprite tiles are free, the arrow of a message without a background stays in the window's cells and its bottom row still hides the layer above: in A Blurred Line, the busy maps, the city of Core and Manta's memory among them"
 type: feature
 status: draft
+assignee: taro
 author: chaja
+agents: [cardon]
 links:
   found-in: [the-window-s-arrow-without-a-background-as-an-object]
   relates: [book-of-three-a-black-block-over-the-window-in-the-lava-tunnels]
@@ -31,3 +33,21 @@ one, for the tiles: its bank fills the layout's 256.
 `tests/abl/test_memory.py`, tick 2985 (map 6): the right-hand pillar,
 which is the layer above, has a black gap on the window's bottom row while
 the message is up.
+
+## Log
+
+### 2026-11-24, Cardón: a question for taro
+
+Still so at the-advocate `8b069fc2`: the
+converter still says "the message arrow stays in the window's cells"
+(`record.rs` 1626) where no sprite palette or two tiles are free. What is
+lost is eight lines of the upper layer under a bare window, for lack of room,
+so it is theirs:
+
+* **a)** a divergence: accept it, a line in the book.
+* **b)** look for another home for the arrow on those maps —share a palette
+  with a character whose colours are close, or the window's own layer drawn
+  without hiding BG2 on that row—: unmeasured, and each costs something.
+
+Recommendation: **a**, and `wishlist` for b; a bare window on a crowded map
+is rare, and only the arrow's row shows it.

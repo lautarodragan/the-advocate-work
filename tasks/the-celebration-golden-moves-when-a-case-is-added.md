@@ -2,11 +2,12 @@
 name: "The celebration's golden moves when a case is added"
 description: "Adding one test case to ABL's test cartridge turns paradise-127-celebration red: two People4 farmers of map 127 come out with other sleeve colours, a palette that depends on the cartridge's layout"
 type: bug
-status: draft
+status: cancelled
 author: cardon
 agents: [Cardón]
 links:
   found-in: [battle-offers-skills-that-are-only-for-the-map]
+  duplicates: [the-farm-s-goldens-move-with-the-bank-packing]
 ---
 
 Seen by Cardón on 2026-10-20, with the-advocate `8f290c39` —the global
@@ -41,3 +42,13 @@ and whether it can be read before it is written —a page refresh, the
 upload queue— in a frame that moves with the layout (the celebration's
 frames have moved before: see the comment of `_walking_pose` in
 `tests/harness/slot_cache.py`).
+
+## Log
+
+### 2026-11-24, Cardón: duplicates the-farm-s-goldens-move-with-the-bank-packing
+
+The same 338 pixels of `paradise-127-celebration`, the same two People4
+farmers, the same cause: anything that moves map 127's data in the banks.
+Tijereta's draft explains it better —the other frame of their idle
+animation, whose sleeves are the other colour— and its goldens were
+re-committed (ports `a67dddf`); that one stays as the task.

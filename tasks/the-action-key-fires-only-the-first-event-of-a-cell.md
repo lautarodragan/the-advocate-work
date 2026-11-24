@@ -2,10 +2,12 @@
 name: "The action key fires only the first event of a cell"
 description: "RPG_RT's CheckEventTriggerHere and CheckEventTriggerThere walk every event on the cell; the runtime's event_in_cell returns the first row it finds, so a second event on the same cell, with its own page, is never fired by the action key or a touch"
 type: bug
-status: draft
+status: cancelled
 author: calandria
+agents: [cardon]
 links:
   found-in: [the-action-key-stops-at-the-event-under-the-hero]
+  duplicates: [a-second-event-on-a-cell-is-never-asked]
 ---
 
 Seen by Calandria on 2026-11-02, reading the code while doing
@@ -24,3 +26,13 @@ only the lower-numbered one fires.
 To see whether it matters: count, per game, the cells that hold two or
 more events whose pages have an action or touch trigger on a compatible
 layer, from each port's `data/maps/*.json`.
+
+## Log
+
+### 2026-11-24, Cardón: duplicates a-second-event-on-a-cell-is-never-asked
+
+Fixed by the-advocate `a3a707c6` ("Every event on the cell fires, not the
+first one standing there", in main): `action_in_cell` walks every row and
+twin; covered by the test game's `test_two_events_on_a_cell.py` and the
+ports' `test_desert_nightmare_cell_events.py`. Found again from Desert
+Nightmare as [that task](a-second-event-on-a-cell-is-never-asked.md), `done`.

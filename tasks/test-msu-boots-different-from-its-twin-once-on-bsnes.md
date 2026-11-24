@@ -2,9 +2,9 @@
 name: "test-msu boots different from its twin, once, on bsnes"
 description: "In a whole run of ABL's suite, test_msu_twins.py's boot case on bsnes was red in 116 of 120 frames from frame 4; five runs of the file alone right after were green"
 type: test
-status: draft
+status: cancelled
 author: huron
-agents: [Hurón]
+agents: [Hurón, cardon]
 ---
 
 Seen by Hurón on 2026-10-20, with the-advocate `07b002f5` (branch
@@ -25,3 +25,13 @@ reads memory nobody wrote; it can also be the harness. Not looked into.
 **How to see it**: `just tests tests/rpgmaker/test_msu_twins.py` in `abl/`,
 several times; the log of the red run is
 `~/scratch/huron/slot-names/logs/suite2.log`.
+
+## Log
+
+### 2026-11-24, Cardón: cancelled
+
+Seen once, on 2026-10-20, and the log it cites is gone
+(`~/scratch/huron/slot-names/` no longer exists); every merge since runs
+ABL's whole suite and no task records it red again. And `test-msu` is one of
+the cartridges `abl-s-test-cartridges-become-test-game-cases` empties, so the
+test changes shape anyway. A ROM reading garbage would show in `test_cores.py`.

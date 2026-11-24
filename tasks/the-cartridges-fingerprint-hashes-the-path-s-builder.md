@@ -2,12 +2,12 @@
 name: "The cartridges' fingerprint hashes the PATH's builder, not the running one"
 description: "Since rm2k-snes-cartridges assembles in-process, the code that packs the banks is the running binary, but the fingerprint still hashes the rm2k-snes-cartridges it finds on the PATH: run from anywhere else, a stamp can name a binary that did not build"
 type: bug
-status: draft
+status: todo
 author: mulita
-agents: [mulita]
+agents: [mulita, cardon]
 links:
   found-in: [cartridges-runs-itself-to-assemble]
-  relates: [one-advocate-command]
+  relates: [one-advocate-command, arrancan-sunset-stale-right-after-built]
 ---
 
 Seen by Mulita on 2026-11-24, in the-advocate at `46d5b46a` (branch
@@ -41,3 +41,11 @@ binaries the fingerprint hashes anyway. A note on the line says it.
 ### 2026-11-24, Mulita: written
 
 Found while folding the assembler into the build; nothing done.
+
+### 2026-11-24, Cardón: to todo
+
+Still so at the-advocate `8b069fc2`: `fingerprint_files` in
+`rm2k-snes/cartridge/src/cartridges.rs` (630-640) hashes the PATH's
+`rm2k-snes-cartridges`, with the note on the line. The fix is not in doubt
+—hash the running binary— and is best done inside `one-advocate-command`,
+which reshapes what the fingerprint hashes.

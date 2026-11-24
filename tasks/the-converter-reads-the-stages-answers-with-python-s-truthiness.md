@@ -2,8 +2,9 @@
 name: "The converter reads the stages' answers with Python's truthiness"
 description: "convert reads Wally's map answer, the compiler's scan and the picture keys as serde_json::Value with silent defaults —int(v) = as_i64().unwrap_or(0) in five files, a truthy() that copies Python's—: typed answers would take most of the reading off maps.rs and pictures.rs"
 type: refactor
-status: draft
+status: todo
 author: calandria
+agents: [cardon]
 links:
   found-in: [where-mapdata-and-convert-could-be-shorter]
   relates: [the-emission-reads-the-screens-answer-and-the-battle-model-by-name]
@@ -57,3 +58,12 @@ own change.
 **How to verify**: every port's ROM byte for byte equal before and after
 (`NO_CACHE=1 just cartridges`, `cmp`), and the converter's printed log
 equal: a default that used to hide a missing key would show there first.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+It is step **B4** of the plan in
+[`the-stages-speak-json-nobody-types`](the-stages-speak-json-nobody-types.md)
+(`part-of` it, in `doing`): defined and ordered there. `todo` so that the
+page shows it as a step to take, not as a finding.

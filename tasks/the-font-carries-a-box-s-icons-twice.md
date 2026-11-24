@@ -4,7 +4,9 @@ description: "An ExFont icon used both by the database and by a message box goes
 type: refactor
 game: zounds
 status: draft
+assignee: taro
 author: aguara
+agents: [cardon]
 links:
   found-in: [the-text-screens-draw-latin-1]
 ---
@@ -28,3 +30,18 @@ from `rm2k-snes-events compile` over its `events-request.json`.
 The other eight games lose nothing: Vampires Dawn's one screen icon
 (`$o`) is not its boxes' (`$s`), and the rest have no icons on their
 screens. Zounds has 51 free data banks.
+
+## Log
+
+### 2026-11-24, Cardón: a question for taro
+
+Measured, and nothing seen changes; what
+is not clear is whether it is worth it: 18,304 bytes of ROM in Zounds alone,
+which has 51 free data banks, at the cost of the boxes' letters looking the
+screens' icons up (the event compiler and the screens stage agreeing on one
+list of icons).
+
+* **a)** do it now; **b)** `wishlist`, until a game's ROM is tight;
+  **c)** cancel.
+
+Recommendation: **b**.
