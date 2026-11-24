@@ -1,6 +1,6 @@
 ---
 name: "The event compiler's left-out warning never reaches the log"
-description: "rm2k-snes-events writes \"map N: WARNING, event E is left out\" on its stderr, and the converter runs it with .output() and drops stderr when it succeeds: the warning has never been in converter.log, where the other left-out warnings are grepped for"
+description: "rm2k-snes-events writes \"map N: WARNING, event E is left out\" on standard error; since A2 of the stages' task it reaches converter.log, but only when the compiler runs: an answer from the cache brings no warning, and each event is told three times, after everything else"
 type: bug
 status: draft
 author: calandria
@@ -13,29 +13,41 @@ design of
 **What**: `rm2k-snes/events/src/pages.rs` 482 (`cab6995d`, 2026-10-19)
 prints `  map {id}: WARNING, event {e} is left out: {why}` with `eprintln!`
 when an event is left out whole and `left_out_why` says to warn. The
-converter runs the compiler through `stage::run_uncached`
-(`rm2k-snes/convert/src/stage.rs`), which calls `.output()` and reads
-stderr only when the stage fails: on success the line goes nowhere. From
-the cache it is not even produced. The other "map N: WARNING" lines are the
-converter's own `println!`s and do reach `converter.log`, which is where
-the drafts for left-out events grep (`grep "map 83: WARNING"
+other "map N: WARNING" lines are the converter's own `println!`s, which is
+where the drafts for left-out events grep (`grep "map 83: WARNING"
 build/release/converter.log`). The loss itself is recorded: it also goes to
 `degradations.json` as `event-left-out`.
 
-**How many it hides**, at ports `4c23c9e` with the global tools, running the
-compiler by hand on each game's `build/release/events-request.json`:
+Until step A2 of the stages' task the converter ran the compiler as a process through
+`stage::run_uncached`, which reads its stderr only when it fails: on
+success the line went nowhere.
 
-* **Vampires Dawn: 448 lines**, all "a page's condition names variable
-  N, which has no slot in far RAM" —the loss of
+Since A2 —the-advocate `cardon-a2`— the compiler is
+a function in the converter's process, and the `eprintln!` lands on the
+converter's stderr, which `rm2k-snes-cartridges` appends to
+`converter.log`. Measured at ports `4c23c9e`, `NO_CACHE=1 just cartridges
+--force` in the nine games, against the tools before the step:
+
+* **Vampires Dawn: 672 new lines** at the end of `converter.log`, **224
+  events in 89 maps, each one three times** —the compiler walks each map's
+  pages once in `scan` and twice in `compile`—, all "a page's condition
+  names variable N, which has no slot in far RAM" (the loss of
   [`variables-are-capped-at-256-slots`](variables-are-capped-at-256-slots.md),
-  known and in its port's page; what is missing is the log saying which
-  events, as it does for the converter's own left-out events—;
+  known and in its port's page);
 * the other eight games: none.
 
-    rm2k-snes-events compile --request build/release/events-request.json \
-        --data data --out /tmp/x 2>&1 >/dev/null | grep 'WARNING, event'
+**What is still wrong**:
 
-**What fixes it**: phase A of the stages' task, which calls the compiler in
-the converter's process: the `eprintln!` then lands in `converter.log` with
-no other change. Until then, a fix in the converter would be printing the
-stage's stderr on success.
+* **an answer from the cache brings no warning**: the stage's answer is
+  `events.json` alone, and the line is printed only while the compiler
+  runs. So whether `converter.log` names the left-out events depends on
+  whether that build found the compiler's answer in the cache, which is
+  the usual case for a second cartridge of the same request or a build
+  after one with the same converter;
+* **they come after everything else** —stderr is appended after stdout—,
+  not next to the map's other warnings;
+* **each event three times**.
+
+To see it: build Vampires Dawn twice with the same tools, the first with
+`NO_CACHE=1`, and compare `grep -c 'WARNING, event' build/release/converter.log`
+after each: 672, then 0.
