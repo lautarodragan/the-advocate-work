@@ -125,6 +125,9 @@ by hand, and the `done` ones were left as they were.
     status: draft | todo | doing | testing | done | wishlist | cancelled
     assignee: taro
     author: taro | hornero | chaja | …
+    links:
+      blocked-by: [other-task]
+      part-of: [a-bigger-task]
     ---
 
 `type` and `status` are always there. **`game` is where it was seen and
@@ -151,6 +154,40 @@ tasks/tasks.nu check` lists those without one. It is taro's, from
 2026-11-20; that day every task got one, by a rule: a task that opens
 with taro's words is theirs, and otherwise its first commit's trailer
 says who opened it.
+
+**`links` says how a task stands with others**: one relation per line,
+each with a list of tasks by file name, and each relation with its
+inverse on the other end:
+
+| relation | inverse | for |
+|---|---|---|
+| `blocks` | `blocked-by` | "it goes after X" |
+| `part-of` | `has-part` | a big task and its steps |
+| `duplicates` | `duplicated-by` | a duplicate kept, instead of deleted without a trace |
+| `relates` | `relates` | related, no order |
+
+Few on purpose; one more is added when one is missing, in `RELATIONS` of
+`tasks/tasks.nu`. **Both ends are written**, and `nu tasks/tasks.nu link
+A <relation> B` writes them —`blocks: [B]` in A, `blocked-by: [A]` in B—
+without touching the rest of either frontmatter. The page shows them as
+a list before the log, each task with its state, so whether what blocks
+a task is done is seen at a glance. The links in the prose stay as they
+are, checked only for existence: they say why, and `links` says what
+one task is to the other. It is taro's, from 2026-11-24; that day the
+open tasks —`draft`, `todo`, `doing`, `testing`— got theirs from what
+their prose said, and the `done` and `cancelled` ones only the inverses
+of those.
+
+**`nu tasks/tasks.nu check` checks the links**, without the network: a
+typed link with an unknown relation, to a task that does not exist or
+without its inverse on the other end, in any task; and, in the prose of
+those not `done` or `cancelled` —those, with `--status`—, a relative link
+to a file that does not exist, a link to a file of this repo on GitHub
+that is not there, and a link to the published book or to its sources on
+GitHub that does not resolve against the book's `src/` in a checkout of
+`the-advocate-docs` next to this repo's —or the one `--docs` names—: the
+book's are skipped, saying so, when there is none. Any other URL is not
+checked: it needs the network and fails at random.
 
 **taro's words go in a quote block**, `> ` at the start of each line,
 and not inline between quotes; in English like the rest of the task, and
