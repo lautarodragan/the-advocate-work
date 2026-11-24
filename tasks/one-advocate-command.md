@@ -19,6 +19,10 @@ one command, named after the project and its `advocate.toml`.
 
 (taro, 2026-11-23)
 
+> [a file in `build/` instead of `rm2k-snes-project`] I like that idea.
+
+(taro, 2026-11-24)
+
 **What is asked**: `rm2k-snes-cartridges` becomes `advocate`, with the
 converter linked in:
 
@@ -29,9 +33,13 @@ converter linked in:
 
 To decide in its design, each with its why:
 
-* **`rm2k-snes-project`**, which tells the ports' tests what the tools
-  know about the project, as `advocate project`: it is about the project,
-  not a domain.
+* **`rm2k-snes-project` goes, instead of becoming `advocate project`**:
+  `advocate build` leaves in `build/` a file with what it prints today,
+  and the ports' tests and recipes read that file. The tests then consume
+  no binary —the book's decision "One command, and no tool of ours runs
+  another"—; `--unpacked` and `--harness`, its other two modes, need a
+  place too.
+
 * **The MSU-1 tracks**, `rm2k-snes-audio msu`: their cache keys on the
   sources they include (`OWN_SOURCES` in `tracks.rs`), not on a binary, so
   being a library costs them nothing.
@@ -54,3 +62,7 @@ is its first step.
 ### 2026-11-23, Hornero: written
 
 Nothing done yet.
+
+### 2026-11-24, Hornero: the project as a file the build leaves
+
+At taro's word; the decision is in the book, `src/decisions/one-command-and-no-tool-runs-another.md`.
