@@ -251,3 +251,30 @@ headless Chromium, all 893 tasks shown, 4x CPU: painting `the` (4,385
 matches) costs ~60 ms, a one-letter search (22,376) ~100 ms; a search's
 filter pass with painting, 25 ms against 18 ms without. Not tried in
 Safari: the API is there since 17.2.
+
+### 2026-11-24, Hornero: the search narrows what it already found
+
+> Can we optimise the incremental filtering? If I add characters to the
+> search, the new results can only be a subset of the current ones. That
+> holds for the Ranges too, to some extent (if they are relative to the
+> parent).
+
+(taro, 2026-11-24)
+
+Done in `site/index.html`: a search that only grows, with the same
+filters, looks only at the tasks the last pass showed; the counts of
+types, games and authors, which depend only on the state, are redone only
+when it changes; and each shown task keeps its matches as text node,
+offset and the node's lowercased text, so a longer search checks the old
+matches —every new one starts where an old one did— and walks no text.
+For that the matches are found overlapping ("aab" in "aaab" starts inside
+the first "aa"); painted, overlapping ranges are one mark. A body opened
+during a search adds its matches to its task's.
+
+Checked in headless Chromium against a fresh page searching the same
+text at once, with a task opened, typing `converter`, `the stage` and
+`aab` key by key with every task shown: the same tasks, the same marks
+and the same counts at all 21 steps. Per key at 4x CPU: the first letter
+140-250 ms (it reads each task's text the first time, as before), then
+`converter` 18, 8, 20, 6, 6, 9, 8, 6 ms; before this, a key with all 893
+tasks shown took 60-75 ms.

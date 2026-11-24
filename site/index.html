@@ -251,11 +251,48 @@
   });
   search.oninput = update;
 
+  // What the last pass chose, and the tasks it showed: a search that only
+  // grows, with the same filters, can only keep some of those —each task
+  // that holds the longer text holds the shorter—, so it looks at them
+  // alone. The counts depend only on the state, and are redone only when
+  // it changes.
+  let last = null, visible = [];
   function apply() {
     const q = search.value.trim().toLowerCase();
+    const was = last;
+    last = {q, status, type, game, author};
+    const narrowing = was && was.q && q.startsWith(was.q) && was.status === status
+      && was.type === type && was.game === game && was.author === author;
     press();
-    // The counts of the types, games and authors, in the chosen state —the
-    // states' own are the totals the build wrote—, in one pass.
+    if (!was || was.status !== status) recount();
+    const candidates = narrowing ? visible : tasks;
+    visible = [];
+    const shown = new Set();
+    for (const t of candidates) {
+      // The text is read the first time it is searched, and kept.
+      const ok = (status === 'all' || t.status === status) && (type === 'all' || t.type === type)
+        && (game === 'all' || (game === 'none' ? t.games.length === 0 : t.games.includes(game)))
+        && (author === 'all' || (t.author || 'none') === author)
+        && (!q || (t.text ??= textOf(t.el)).includes(q));
+      // Only what changes is touched: a hidden that is set again still
+      // costs the browser a look at the task.
+      if (t.el.hidden === ok) t.el.hidden = !ok;
+      if (ok) { shown.add(t.status); visible.push(t); }
+    }
+    for (const s of sections) s.hidden = !shown.has(s.dataset.status);
+    root.classList.remove('pending');
+    const url = new URL(location);
+    status === defaultStatus ? url.searchParams.delete('status') : url.searchParams.set('status', status);
+    type === 'all' ? url.searchParams.delete('type') : url.searchParams.set('type', type);
+    game === 'all' ? url.searchParams.delete('game') : url.searchParams.set('game', game);
+    author === 'all' ? url.searchParams.delete('author') : url.searchParams.set('author', author);
+    history.replaceState(null, '', url);
+    highlight(narrowing ? was.q : '');
+  }
+
+  // The counts of the types, games and authors, in the chosen state —the
+  // states' own are the totals the build wrote—, in one pass.
+  function recount() {
     const n = {type: {all: 0}, game: {all: 0, none: 0}, author: {all: 0, none: 0}};
     const add = (o, k) => o[k] = (o[k] || 0) + 1;
     for (const t of tasks) {
@@ -271,27 +308,6 @@
       b.lastChild.textContent = c;
       b.classList.toggle('empty', c === 0);
     }
-    const shown = new Set();
-    for (const t of tasks) {
-      // The text is read the first time it is searched, and kept.
-      const ok = (status === 'all' || t.status === status) && (type === 'all' || t.type === type)
-        && (game === 'all' || (game === 'none' ? t.games.length === 0 : t.games.includes(game)))
-        && (author === 'all' || (t.author || 'none') === author)
-        && (!q || (t.text ??= textOf(t.el)).includes(q));
-      // Only what changes is touched: a hidden that is set again still
-      // costs the browser a look at the task.
-      if (t.el.hidden === ok) t.el.hidden = !ok;
-      if (ok) shown.add(t.status);
-    }
-    for (const s of sections) s.hidden = !shown.has(s.dataset.status);
-    root.classList.remove('pending');
-    const url = new URL(location);
-    status === defaultStatus ? url.searchParams.delete('status') : url.searchParams.set('status', status);
-    type === 'all' ? url.searchParams.delete('type') : url.searchParams.set('type', type);
-    game === 'all' ? url.searchParams.delete('game') : url.searchParams.set('game', game);
-    author === 'all' ? url.searchParams.delete('author') : url.searchParams.set('author', author);
-    history.replaceState(null, '', url);
-    highlight();
   }
 
   // The search's matches, painted with the CSS Custom Highlight API: a
@@ -302,28 +318,49 @@
   const marks = window.CSS?.highlights && window.Highlight ? new Highlight() : null;
   if (marks) CSS.highlights.set('search', marks);
   const query = () => search.value.trim().toLowerCase();
-  function paint(el, q) {
+  // Each shown task's matches, as [text node, offset, the node's text in
+  // lowercase], kept for the next search: when it only grows, every new
+  // match starts where an old one did, so the old ones are checked and the
+  // text is not walked again. That is why the matches are found
+  // overlapping —"aab" in "aaab" starts inside the first "aa"—; painted,
+  // two overlapping ranges are one mark.
+  let hits = new Map();
+  function find(el, q) {
+    const found = [];
     const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, {
       acceptNode: n => n.parentNode.nodeName === 'SCRIPT' ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT,
     });
     for (let n; (n = w.nextNode());) {
+      const s = n.data.toLowerCase();
+      for (let i = s.indexOf(q); i !== -1; i = s.indexOf(q, i + 1)) found.push([n, i, s]);
+    }
+    return found;
+  }
+  function paint(found, q) {
+    for (const [n, i] of found) {
       // Lowercasing can change a text's length (İ); a match past the
       // node's end is skipped rather than thrown.
-      const s = n.data.toLowerCase();
-      for (let i = s.indexOf(q); i !== -1 && i + q.length <= n.length; i = s.indexOf(q, i + q.length)) {
-        // A StaticRange, not a Range: a Range is live, and the browser
-        // updates every one still alive —painted or waiting for the
-        // collector— on each change to the page; with a search's thousands,
-        // the filters' next pass went from 18 ms to 1.5 s with the CPU at 4x.
-        marks.add(new StaticRange({startContainer: n, startOffset: i, endContainer: n, endOffset: i + q.length}));
-      }
+      if (i + q.length > n.length) continue;
+      // A StaticRange, not a Range: a Range is live, and the browser
+      // updates every one still alive —painted or waiting for the
+      // collector— on each change to the page; with a search's thousands,
+      // the filters' next pass went from 18 ms to 1.5 s with the CPU at 4x.
+      marks.add(new StaticRange({startContainer: n, startOffset: i, endContainer: n, endOffset: i + q.length}));
     }
   }
-  function highlight() {
+  // `from` is the shorter search this one grows from, or empty.
+  function highlight(from) {
     if (!marks || !tasks) return;
     marks.clear();
-    const q = query();
-    if (q) for (const t of tasks) if (!t.el.hidden) paint(t.el, q);
+    const q = query(), old = hits;
+    hits = new Map();
+    if (!q) return;
+    for (const t of visible) {
+      const before = from && old.get(t.el);
+      const found = before ? before.filter(([, i, s]) => s.startsWith(q, i)) : find(t.el, q);
+      hits.set(t.el, found);
+      paint(found, q);
+    }
   }
 
   // A task's body comes as the text of a script the browser does not run
@@ -337,7 +374,12 @@
     d.className = 'body';
     d.innerHTML = b.textContent;
     b.replaceWith(d);
-    if (marks && query()) paint(d, query());
+    const q = marks && query();
+    if (q && hits.has(e.target)) {
+      const found = find(d, q);
+      hits.get(e.target).push(...found);
+      paint(found, q);
+    }
   }, true);
   // What the search looks in: the task as it reads, its body too. An
   // unopened body is HTML in a string, so its tags and comments go and its
