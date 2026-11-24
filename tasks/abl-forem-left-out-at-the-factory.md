@@ -127,3 +127,20 @@ Found on the way and left as a draft:
 `share_data` at `$FFFFFF` and did not link—.
 
 Back to `draft`, `assignee: taro`, for the choice.
+
+### 2026-11-24, Hornero: Forem is Kersh
+
+Event 13 is named `Forem` in the editor, and switches 276
+(`ThreatenedForemDONE`) and 277 (`ForemScared`) use the name too, but the
+route dresses him in Kersh's sprite (`Future1` 5) and Dalia calls him
+"Sir!":
+
+> I think so [that the captain in that scene is Kersh]. It would not make
+> sense to me that the author reused Kersh's graphic, him being a main
+> character and so striking, and especially not for someone in a similar
+> role or title!
+
+(taro, 2026-11-24)
+
+So what (a) leaves out is Kersh, a main character, in a scene where he is
+spoken to.
