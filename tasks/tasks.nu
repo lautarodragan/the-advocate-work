@@ -517,12 +517,19 @@ def "main html" [
   let states = $tasks | get status | uniq
     | sort-by { |s| $order | enumerate | where item == $s | get -o 0.index | default 99 }
 
+  # The page comes already filtered as the script would leave it with no
+  # filter in the URL: the first state with any task, every type, game and
+  # author. The rest is in the page, hidden, for the script to show.
+  let default = $states | get -o 0 | default "all"
   let html = $states | each { |s|
-    let items = $tasks | where status == $s | sort-by name | sort-by --reverse { |t| if ($t.changed | is-empty) { 0 } else { $t.changed | into datetime | into int } } | each { task_html $index } | str join "\n"
-    $"<section data-status=\"($s | escape)\">\n<h2>($s | escape)</h2>\n($items)\n</section>"
+    let shown = $default in [$s all]
+    let items = $tasks | where status == $s | sort-by name | sort-by --reverse { |t| if ($t.changed | is-empty) { 0 } else { $t.changed | into datetime | into int } } | each { task_html $index $shown } | str join "\n"
+    $"<section data-status=\"($s | escape)\"(if $shown { '' } else { ' hidden' })>\n<h2>($s | escape)</h2>\n($items)\n</section>"
   } | str join "\n"
 
-  let page = open --raw ($root | path join site index.html) | str replace '<!-- TASKS -->' $html
+  let page = open --raw ($root | path join site index.html)
+    | str replace '<!-- FILTERS -->' ($tasks | filters_html $states $default)
+    | str replace '<!-- TASKS -->' $html
   mkdir ($root | path join $out)
   $page | save --force ($root | path join $out index.html)
   # The page's icon, which `index.html` names next to it.
@@ -531,6 +538,56 @@ def "main html" [
   # tasks in the repo, so one `images/<task>/x.png` works in both.
   let images = $root | path join tasks images
   if ($images | path exists) { cp -r $images ($root | path join $out) }
+}
+
+# The filter buttons, which the page's script used to make and now finds
+# in the page: one row per state —in the build's order, with their totals,
+# and `all` last—, and one per type, game and author —the most used first
+# over every task, so that the order does not jump when the state changes;
+# counted in the default state, the one the page shows first; `none` last
+# for the tasks that name no game or author—. In the page as it is served,
+# so that they are there on the first paint and nothing moves when the
+# script arrives.
+def filters_html [states: list, default: string] {
+  let tasks = $in
+  let shown = if $default == all { $tasks } else { $tasks | where status == $default }
+  let status = $states | each { |s| filter_button status $s $s ($tasks | where status == $s | length) ($s == $default) false }
+    | append (filter_button status all all ($tasks | length) ($default == all) false)
+  let types = [all] | append ($tasks | get task_type | by_use) | each { |ty|
+    let n = if $ty == all { $shown | length } else { $shown | where task_type == $ty | length }
+    filter_button type $ty $ty $n ($ty == all) true
+  }
+  let games = [all] | append ($tasks | get games | flatten | by_use) | append [none] | each { |g|
+    let n = match $g { all => ($shown | length), none => ($shown | where { $in.games | is-empty } | length), _ => ($shown | where { $g in $in.games } | length) }
+    filter_button game $g ($g | game_label) $n ($g == all) true
+  }
+  let authors = [all] | append ($tasks | get author | where $it != "" | by_use) | append [none] | each { |a|
+    let n = match $a { all => ($shown | length), none => ($shown | where author == "" | length), _ => ($shown | where author == $a | length) }
+    filter_button author $a $a $n ($a == all) true
+  }
+  [
+    (filter_row filters "Filter by status" $status)
+    (filter_row types "Filter by type" $types)
+    (filter_row games "Filter by game" $games)
+    (filter_row authors "Filter by author" $authors)
+  ] | str join "\n"
+}
+
+def filter_row [id: string, label: string, buttons: list] {
+  $"<nav class=\"filters\" id=\"($id)\" aria-label=\"($label)\">($buttons | str join '')</nav>"
+}
+
+# The values most used first, and by name among those used as much.
+def by_use [] {
+  # Not `--reverse`, which turns the ties around too.
+  $in | uniq --count | sort-by value | sort-by { |r| 0 - $r.count } | get value
+}
+
+# One filter button. `empty` dims what has no task in the state shown; the
+# states' own row never says it.
+def filter_button [attr: string, value: string, label: string, count: int, pressed: bool, dim: bool] {
+  let class = if $dim and $count == 0 { ' class="empty"' } else { '' }
+  $"<button type=\"button\"($class) data-($attr)=\"($value | escape)\" aria-pressed=\"($pressed)\">($label | escape)<span class=\"count\">($count)</span></button>"
 }
 
 # When each task last changed, from git: `{<stem>: <ISO date>}`. The page
@@ -615,11 +672,12 @@ def escape [] {
     | str replace --all '>' '&gt;' | str replace --all '"' '&quot;'
 }
 
-# One task, closed: its anchor is its file name, which never changes, so
+# One task, closed, and hidden unless `shown` —in the state the page shows
+# first—: its anchor is its file name, which never changes, so
 # `#<name>` links it from outside. The summary's button copies that name
 # —what taro pastes into a conversation to point at a task—; it is in the
 # summary so that it works with the task closed.
-def task_html [index: record] {
+def task_html [index: record, shown: bool] {
   let t = $in
   let id = $t.file | path parse | get stem
   let agents = if ($t.listed_agents | is-empty) { "" } else { $" · agents: ($t.listed_agents | str join ', ' | escape)" }
@@ -629,7 +687,7 @@ def task_html [index: record] {
   let source = $"https://github.com/lautarodragan/the-advocate-work/blob/main/tasks/($id).md"
   let games = $t.games | each { |g| $"<span class=\"game\" data-game=\"($g | escape)\">($g | game_label | escape)</span>" } | str join ''
   [
-    $"<details class=\"task\" id=\"($id | escape)\" data-status=\"($t.status | escape)\" data-type=\"($t.task_type | escape)\" data-game=\"($t.games | str join ' ' | escape)\" data-author=\"($t.author | escape)\">"
+    $"<details class=\"task\" id=\"($id | escape)\" data-status=\"($t.status | escape)\" data-type=\"($t.task_type | escape)\" data-game=\"($t.games | str join ' ' | escape)\" data-author=\"($t.author | escape)\"(if $shown { '' } else { ' hidden' })>"
     $"<summary><button type=\"button\" class=\"copy\" data-copy=\"($id | escape)\" title=\"Copy the task's file name\">copy</button><button type=\"button\" class=\"pick\" data-id=\"($id | escape)\" aria-pressed=\"false\" title=\"Add the task to the selection, to copy several at once\">select</button><span class=\"type\">($t.task_type | escape)</span>($games)<span class=\"name\">($t.name | escape)</span>"
     $"<span class=\"desc\">($t.description | escape)</span></summary>"
     $"<p class=\"meta\"><a href=\"#($id)\">#</a> · <a href=\"($source)\">($id).md</a>($changed)($author)($assignee)($agents)</p>"

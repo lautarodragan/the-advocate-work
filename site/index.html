@@ -7,11 +7,14 @@
 <link rel="icon" type="image/png" href="favicon.png">
 <!--
   The template of the tasks page. `nu tasks/tasks.nu html` replaces the
-  TASKS marker with one section per state and writes `_site/index.html`;
-  the workflow in `.github/workflows/pages.yml` publishes it. The bodies
-  come already as HTML, rendered by cmark-gfm when the page is built: the
-  script here only filters, and without it the page still reads.
+  FILTERS marker with the filter buttons and the TASKS marker with one
+  section per state, already filtered as with no filter in the URL, and
+  writes `_site/index.html`; the workflow in `.github/workflows/pages.yml`
+  publishes it. The bodies come already as HTML, rendered by cmark-gfm
+  when the page is built: the script here only filters, and without it the
+  page still reads —every task, by the rule in the noscript—.
 -->
+<noscript><style>section[hidden], details.task[hidden] { display: block !important; } .filters, #search { display: none; }</style></noscript>
 <style>
   :root {
     color-scheme: light dark;
@@ -174,6 +177,10 @@
   #selection button.primary { background: var(--accent); border-color: var(--accent); color: var(--bg); }
   body.selecting { padding-bottom: 5rem; }
   [hidden] { display: none !important; }
+  /* The URL asks for another filter than the one the page was built with:
+     the list and the counts that depend on the state wait out of sight
+     for the script, rather than show the default's and then jump. */
+  .pending #tasks, .pending #types .count, .pending #games .count, .pending #authors .count { visibility: hidden; }
 </style>
 </head>
 <body>
@@ -183,15 +190,8 @@
     <a href="https://github.com/lautarodragan/the-advocate-work/tree/main/tasks"><code>tasks/</code></a>.</p>
 </header>
 
-<nav class="filters" id="filters" aria-label="Filter by status"></nav>
-<nav class="filters" id="types" aria-label="Filter by type"></nav>
-<nav class="filters" id="games" aria-label="Filter by game"></nav>
-<nav class="filters" id="authors" aria-label="Filter by author"></nav>
+<!-- FILTERS -->
 <input id="search" type="search" placeholder="Filter by text…" aria-label="Filter by text">
-
-<main id="tasks">
-<!-- TASKS -->
-</main>
 
 <div id="selection" role="region" aria-label="Selected tasks" hidden>
   <span id="selection-count"></span>
@@ -200,112 +200,85 @@
 </div>
 
 <script>
-  const sections = [...document.querySelectorAll('#tasks section')];
-  const tasks = [...document.querySelectorAll('details.task')];
+  // Here and not at the end: the buttons answer from the first paint,
+  // while the tasks are still arriving, and what needs every task waits
+  // for DOMContentLoaded (`ready`). The build already filtered the page as
+  // it is with no filter in the URL, and pressed that filter's buttons.
   const filters = document.getElementById('filters');
   const types = document.getElementById('types');
   const games = document.getElementById('games');
   const authors = document.getElementById('authors');
   const search = document.getElementById('search');
+  const root = document.documentElement;
   const params = new URLSearchParams(location.search);
-  let status = params.get('status');
+  // The default state is the first one with any task —`all` lags, so it
+  // is not the default—, the one the build pressed; the URL leaves it out.
+  const defaultStatus = filters.querySelector('[aria-pressed="true"]').dataset.status;
+  let status = params.get('status') || defaultStatus;
   let type = params.get('type') || 'all';
   let game = params.get('game') || 'all';
   let author = params.get('author') || 'all';
+  const rows = [[filters, 'status'], [types, 'type'], [games, 'game'], [authors, 'author']];
+  const chosen = () => ({status, type, game, author});
 
-  // The counts are counted here, from what the build put in the page.
-  // The states in the build's order —doing, testing, todo…—, and `all` last:
-  // with every task shown the page lags, so it is not the default. The
-  // default is the first state with any task, and it is the one the URL
-  // leaves out.
-  const states = [...sections.map(s => [s.dataset.status, s.querySelectorAll('details.task').length]), ['all', tasks.length]];
-  const defaultStatus = (states.find(([, n]) => n > 0) || ['all'])[0];
-  if (!status) status = defaultStatus;
-  for (const [name, count] of states) {
-    const b = document.createElement('button');
-    b.dataset.status = name;
-    b.innerHTML = `${name}<span class="count">${count}</span>`;
-    b.onclick = () => { status = name; apply(); };
-    filters.append(b);
+  function press() {
+    const c = chosen();
+    for (const [nav, key] of rows) for (const b of nav.children) b.setAttribute('aria-pressed', b.dataset[key] === c[key]);
   }
+  // Any other filter than the build's, or a task in the hash: the list in
+  // the page is not the one to show, so it stays out of sight —and the
+  // counts, which are the default state's— until every task is there and
+  // apply() picks them. With the default, nothing waits.
+  function pending() { press(); root.classList.add('pending'); }
+  if (status !== defaultStatus || type !== 'all' || game !== 'all' || author !== 'all' || location.hash) pending();
 
-  // The types, most used first over every task —an order that does not
-  // jump around when the status changes—; their counts are of the chosen
-  // status, and apply() writes them. The states' counts stay the totals.
-  const byType = {};
-  for (const t of tasks) byType[t.dataset.type] = (byType[t.dataset.type] || 0) + 1;
-  const typeList = [['all', tasks.length], ...Object.entries(byType).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))];
-  for (const [name, count] of typeList) {
-    const b = document.createElement('button');
-    b.dataset.type = name;
-    b.innerHTML = `${name}<span class="count">${count}</span>`;
-    b.onclick = () => { type = name; apply(); };
-    types.append(b);
-  }
-
-  // The games, the same way as the types: most used first, counted for the
-  // chosen status. A task may name several (`data-game` is a space-separated
-  // list) and is counted in each; `none` is those that name none —the
-  // tools' own—. The button shows the game's name, taken from a task's pill.
-  const gamesOf = t => (t.dataset.game || '').split(' ').filter(Boolean);
-  const gameName = {};
-  for (const s of document.querySelectorAll('span.game')) gameName[s.dataset.game] = s.textContent;
-  const byGame = {};
-  for (const t of tasks) for (const g of gamesOf(t)) byGame[g] = (byGame[g] || 0) + 1;
-  const gameList = ['all', ...Object.keys(byGame).sort((a, b) => byGame[b] - byGame[a] || a.localeCompare(b)), 'none'];
-  const inGame = (t, g) => g === 'all' || (g === 'none' ? gamesOf(t).length === 0 : gamesOf(t).includes(g));
-  for (const name of gameList) {
-    const b = document.createElement('button');
-    b.dataset.game = name;
-    b.innerHTML = `${gameName[name] || name}<span class="count"></span>`;
-    b.onclick = () => { game = name; apply(); };
-    games.append(b);
-  }
-
-  // Who each task comes from, its `author` —taro, or the agent that found
-  // it—: the same way as the types, most used first, counted for the
-  // chosen status; `none` is those that do not say.
-  const byAuthor = {};
-  for (const t of tasks) if (t.dataset.author) byAuthor[t.dataset.author] = (byAuthor[t.dataset.author] || 0) + 1;
-  const authorList = ['all', ...Object.keys(byAuthor).sort((a, b) => byAuthor[b] - byAuthor[a] || a.localeCompare(b)), 'none'];
-  const ofAuthor = (t, a) => a === 'all' || (t.dataset.author || 'none') === a;
-  for (const name of authorList) {
-    const b = document.createElement('button');
-    b.dataset.author = name;
-    b.innerHTML = `${name}<span class="count"></span>`;
-    b.onclick = () => { author = name; apply(); };
-    authors.append(b);
-  }
+  let tasks = null, sections = null;
+  const update = () => tasks ? apply() : pending();
+  for (const [nav, key] of rows) nav.addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    if (key === 'status') status = b.dataset.status;
+    else if (key === 'type') type = b.dataset.type;
+    else if (key === 'game') game = b.dataset.game;
+    else author = b.dataset.author;
+    update();
+  });
+  search.oninput = update;
 
   function apply() {
     const q = search.value.trim().toLowerCase();
-    for (const b of filters.children) b.setAttribute('aria-pressed', b.dataset.status === status);
-    for (const b of types.children) b.setAttribute('aria-pressed', b.dataset.type === type);
-    for (const b of games.children) b.setAttribute('aria-pressed', b.dataset.game === game);
-    for (const b of authors.children) b.setAttribute('aria-pressed', b.dataset.author === author);
-    const inStatus = tasks.filter(t => status === 'all' || t.dataset.status === status);
-    for (const b of types.children) {
-      const n = b.dataset.type === 'all' ? inStatus.length : inStatus.filter(t => t.dataset.type === b.dataset.type).length;
-      b.querySelector('.count').textContent = n;
-      b.classList.toggle('empty', n === 0);
-    }
-    for (const b of games.children) {
-      const n = inStatus.filter(t => inGame(t, b.dataset.game)).length;
-      b.querySelector('.count').textContent = n;
-      b.classList.toggle('empty', n === 0);
-    }
-    for (const b of authors.children) {
-      const n = inStatus.filter(t => ofAuthor(t, b.dataset.author)).length;
-      b.querySelector('.count').textContent = n;
-      b.classList.toggle('empty', n === 0);
-    }
+    press();
+    // The counts of the types, games and authors, in the chosen state —the
+    // states' own are the totals the build wrote—, in one pass.
+    const n = {type: {all: 0}, game: {all: 0, none: 0}, author: {all: 0, none: 0}};
+    const add = (o, k) => o[k] = (o[k] || 0) + 1;
     for (const t of tasks) {
-      const okStatus = status === 'all' || t.dataset.status === status;
-      const okType = type === 'all' || t.dataset.type === type;
-      const okText = !q || t.textContent.toLowerCase().includes(q);
-      t.hidden = !(okStatus && okType && inGame(t, game) && ofAuthor(t, author) && okText);
+      if (status !== 'all' && t.status !== status) continue;
+      n.type.all++; n.game.all++; n.author.all++;
+      add(n.type, t.type);
+      if (t.games.length === 0) n.game.none++;
+      for (const g of t.games) add(n.game, g);
+      add(n.author, t.author || 'none');
     }
-    for (const s of sections) s.hidden = !s.querySelector('details.task:not([hidden])');
+    for (const [nav, key] of rows.slice(1)) for (const b of nav.children) {
+      const c = n[key][b.dataset[key]] || 0;
+      b.lastChild.textContent = c;
+      b.classList.toggle('empty', c === 0);
+    }
+    const shown = new Set();
+    for (const t of tasks) {
+      // The text is read the first time it is searched, and kept.
+      const ok = (status === 'all' || t.status === status) && (type === 'all' || t.type === type)
+        && (game === 'all' || (game === 'none' ? t.games.length === 0 : t.games.includes(game)))
+        && (author === 'all' || (t.author || 'none') === author)
+        && (!q || (t.text ??= t.el.textContent.toLowerCase()).includes(q));
+      // Only what changes is touched: a hidden that is set again still
+      // costs the browser a look at the task.
+      if (t.el.hidden === ok) t.el.hidden = !ok;
+      if (ok) shown.add(t.status);
+    }
+    for (const s of sections) s.hidden = !shown.has(s.dataset.status);
+    root.classList.remove('pending');
     const url = new URL(location);
     status === defaultStatus ? url.searchParams.delete('status') : url.searchParams.set('status', status);
     type === 'all' ? url.searchParams.delete('type') : url.searchParams.set('type', type);
@@ -313,14 +286,14 @@
     author === 'all' ? url.searchParams.delete('author') : url.searchParams.set('author', author);
     history.replaceState(null, '', url);
   }
-  search.oninput = apply;
 
   function openHash() {
     const t = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
-    if (!t) return;
+    if (!t || !t.matches('details.task')) return;
     status = t.dataset.status; type = 'all'; game = 'all'; author = 'all'; search.value = ''; apply();
     t.open = true; t.scrollIntoView();
   }
+
   // The selection: the file names of the tasks picked with their select
   // button, in the order they were picked, to copy them at once —one per
   // line, as the copy button gives one—. It is kept in this browser's
@@ -329,17 +302,18 @@
   const STORE = 'tasks-selection';
   let selected = [];
   try { selected = JSON.parse(localStorage.getItem(STORE)) || []; } catch {}
-  const ids = new Set(tasks.map(t => t.id));
-  selected = selected.filter(id => ids.has(id));     // a task renamed or gone
   const bar = document.getElementById('selection');
   const count = document.getElementById('selection-count');
   const copyAll = document.getElementById('copy-all');
+  // The build wrote every select button unpressed: only those of the
+  // selection are touched, not the hundreds of the rest.
+  function mark(id, on) {
+    const b = document.getElementById(id)?.querySelector('button.pick');
+    if (!b) return;
+    b.setAttribute('aria-pressed', on);
+    b.textContent = on ? 'selected' : 'select';
+  }
   function showSelection() {
-    for (const b of document.querySelectorAll('button.pick')) {
-      const on = selected.includes(b.dataset.id);
-      b.setAttribute('aria-pressed', on);
-      b.textContent = on ? 'selected' : 'select';
-    }
     bar.hidden = selected.length === 0;
     document.body.classList.toggle('selecting', selected.length > 0);
     count.textContent = `${selected.length} task${selected.length === 1 ? '' : 's'} selected`;
@@ -355,7 +329,10 @@
     setTimeout(() => { button.textContent = label; button.classList.remove('done'); }, 1200);
   }
   copyAll.onclick = () => copy(copyAll, selected.join('\n'), 'Copy all');
-  document.getElementById('clear-all').onclick = () => { selected = []; showSelection(); };
+  document.getElementById('clear-all').onclick = () => {
+    for (const id of selected) mark(id, false);
+    selected = []; showSelection();
+  };
 
   // The copy and select buttons live inside the summary: preventDefault
   // keeps the click from also opening or closing the task.
@@ -366,13 +343,31 @@
     e.preventDefault();
     if (c) { copy(c, c.dataset.copy, 'copy'); return; }
     const id = p.dataset.id;
-    selected = selected.includes(id) ? selected.filter(x => x !== id) : [...selected, id];
-    showSelection();
+    const on = !selected.includes(id);
+    selected = on ? [...selected, id] : selected.filter(x => x !== id);
+    mark(id, on); showSelection();
   });
-  showSelection();
-  window.addEventListener('hashchange', openHash);
-  apply();
-  openHash();
+
+  document.addEventListener('DOMContentLoaded', () => {
+    sections = [...document.querySelectorAll('#tasks section')];
+    // What the filters ask of each task, read once from its attributes.
+    tasks = [...document.querySelectorAll('details.task')].map(el => ({
+      el, status: el.dataset.status, type: el.dataset.type, author: el.dataset.author,
+      games: (el.dataset.game || '').split(' ').filter(Boolean),
+    }));
+    const ids = new Set(tasks.map(t => t.el.id));
+    selected = selected.filter(id => ids.has(id));     // a task renamed or gone
+    for (const id of selected) mark(id, true);
+    showSelection();
+    // A search the browser restored on a reload counts as one typed.
+    if (root.classList.contains('pending') || search.value.trim()) apply();
+    openHash();
+    window.addEventListener('hashchange', openHash);
+  });
 </script>
+
+<main id="tasks">
+<!-- TASKS -->
+</main>
 </body>
 </html>
