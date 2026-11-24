@@ -1037,3 +1037,91 @@ passed, 2 skipped; `abl.sfc` `3bf35fd7665c`, no golden moved.
 
 **Install when merging**: `convert` and `mapdata` (`just install convert
 mapdata`).
+
+### 2026-11-24, Tijereta: A8
+
+On the-advocate `tijereta-a8`, from `8b069fc2`, with main merged twice
+—`11fcaed9` (A7) in `9e17166a`, `0502be9b` (A6) in `abb98bf2`—; ports
+`tijereta-a8` at `4c23c9e`, untouched. One commit, `806babc2`, on
+the battle's model: `rm2k_snes_patches::stage::patches(request)` answers
+the patches of one build as files named by their path in it
+(`patches/auto/maps/0001.toml`), writing nothing, and
+`rm2k_snes_patches::put` leaves them in the build, emptying each kind's
+folder first as `write` did —so a cartridge that stops carrying a map does
+not keep its old patch—. The converter calls the first through
+`stage::call_uncached` (uncached, as `hand_over` was), the second itself,
+and prints the per-kind lines the binary printed (`report`). The binary
+keeps every flag; `--request` reads its file straight into `Request`, so a
+bad one still names the file, line and column, and goes through
+`patches_of`. `rm2k-snes-patches` joins the converter's `Cargo.toml`, and
+with it the converter links `rm2k-snes-cartridge`, which only `--check`
+uses. Three unit tests in `stage.rs`: the converter's door answers what
+the binary's does for the crate's two fixture requests, and `put` leaves
+exactly those files over a stale one; a bad request is a no; `put`
+refuses a name outside the kinds' folders.
+
+#### State, stderr, key order
+
+* **State**: none in the crate —no `static`, `thread_local!`, `OnceLock`
+  or memo—.
+* **Key order**: the request is a serde type (`deny_unknown_fields`), read
+  with `Request::deserialize`, so nothing iterates an object; the TOML is
+  written by hand (`text.rs`), so the converter's `toml` `preserve_order`
+  does not reach it. The patch files are byte for byte the same.
+* **stderr/stdout**: the binary printed nothing to stderr while it
+  succeeded; its stdout already went into `converter.log`, and the
+  converter prints the same lines. **One line changes, in ABL's `release`
+  only**: `patches of 313 map(s) -> patches/auto/maps (819517 B)` is now
+  `308 map(s) … (812326 B)`. The request lists five maps twice —121, 133,
+  261, 269 and 348, the five test maps `--check` reports as "only for the
+  suite"—, each entry identical to its twin (read from the request the
+  global binary was given); the binary wrote each of those files twice and
+  counted both, and the answer, a map by file name, holds each once. The
+  308 files are the same bytes: the second write always overwrote the
+  first with the same content. The count is now the files left. Why
+  `release`'s request repeats them was not looked at; if two entries of
+  one id ever differed, the last would win, then as now.
+
+#### The builds, byte for byte
+
+`NO_CACHE=1 just cartridges --force` in the nine games (ABL
+`--without-tracks`), the global tools (`8b069fc2`) against these: **the 20
+`.sfc` equal**, and every one of the 19,478 files in the nine `build/`
+—the 2,101 patch files under `patches/auto/` included—, aside `stamp.txt`,
+the 40 `.o`/`.dbg` (only the mtimes `ca65` records: equal with them
+stripped) and ABL `release`'s `converter.log`, the one line above. Then
+warm with the shared cache (new answers, the converter's binary being
+new): equal to the uncached builds, `converter.log` included. Then twice
+with a private cache (`CACHE=` a scratch directory): the first stored
+2,702 stage answers, the second **wrote no file** to it —the nine in
+109 s— and its builds equal the uncached ones but for Vampires Dawn's 672
+left-out warnings, which a cached compile does not print (Cardón's A2).
+ABL's `just patches-check` with these tools: the 303 map, 41 animation, 92
+battler and 0 window patches match the 11 cartridges.
+
+On the tree with A6 and A7 merged (`abb98bf2`), `convert`, `patches`,
+`rm2k-snes-audio` and `mapdata` installed from it, the same cold build
+against the global tools (`8b069fc2`) again: the 20 `.sfc` and every file
+equal —25,785 now, the `.msu`s and what the earlier builds left in the
+worktree's `build/` included—, aside the same `stamp.txt`, `.o`/`.dbg` and
+the one line of ABL `release`'s `converter.log`; then warm, equal to it.
+With A7 and A8 both in, nothing calls `stage::hand_over`: it gets the
+allow `run` has, in the first merge, until A9.
+
+#### The suites
+
+On `abb98bf2`, those four first in the PATH: `just lint` clean; the-advocate's
+`just test` 29 passed; `just rust-test --no-fail-fast` 1,246 passed, 0
+failed, 3 ignored (on the A7 merge the same run had seven of `fxpak`'s pty
+tests red, which passed run alone, the known
+[draft](fxpak-s-pty-tests-share-ptsname-s-buffer.md)); the test game
+(`SOUNDFONT=FluidR3_GM.sf2`) 231 passed, 6 skipped; the ports' `just boot`
+218 passed; ABL's `just tests` 1,694 passed, 2 skipped. No golden moved:
+the ports' worktree is clean. `abl.sfc` `3bf35fd7665c`. `cargo fmt
+--check` and `clippy --all-targets -D warnings` clean on
+`rm2k-snes-patches`, `rm2k-snes-convert` and the two merged crates. The
+binary's `--request` goes through `patches_of` and `put`; the crate's
+`command_line.rs` covers it, and ABL's `test_patches.py` its `--check`.
+
+**Install when merging**: `convert` and `patches` (`just install convert
+patches`).
