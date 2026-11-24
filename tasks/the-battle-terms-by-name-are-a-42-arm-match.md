@@ -2,7 +2,9 @@
 name: "The battle terms by name are a 42-arm match"
 description: "emit.rs's term() maps each liblcf term name to its field of ditto's Terms with one match arm each; Terms already serializes with liblcf's names, so the lookup can be by name"
 type: refactor
-status: draft
+status: doing
+assignee: calandria
+agents: [calandria]
 author: calandria
 ---
 
@@ -47,3 +49,23 @@ misspelled ones, `gold_recieved_a` and `item_recieved`—).
 `RESULT_TERMS` and `"lvl_short"` resolves, against a default `Terms` and a
 game's; and every port's ROM byte for byte equal before and after
 (`NO_CACHE=1 just cartridges`, `cmp`).
+
+> I agree. In none of these cases is it really about reducing code,
+> but improvements. Let's do the four, and then we go for those types /
+> typed contracts between stages.
+
+(taro, 2026-11-23, on this one together with
+[`emit-rs-writes-each-table-through-a-call-rustfmt-spreads-over-seven-lines`](emit-rs-writes-each-table-through-a-call-rustfmt-spreads-over-seven-lines.md),
+[`small-repeats-inside-emit-rs-s-rest`](small-repeats-inside-emit-rs-s-rest.md),
+[`picture-tables-and-common-entries-write-the-same-entry-twice`](picture-tables-and-common-entries-write-the-same-entry-twice.md),
+[`the-battle-terms-by-name-are-a-42-arm-match`](the-battle-terms-by-name-are-a-42-arm-match.md) and
+[`rm2k-snes-mapdata-maps-has-no-caller`](rm2k-snes-mapdata-maps-has-no-caller.md);
+the typed contracts are
+[`the-stages-speak-json-nobody-types`](the-stages-speak-json-nobody-types.md).)
+
+## Log
+
+### 2026-11-23, Hornero: taken by Calandria
+
+With the other four, in one branch, one commit each, every ROM byte for
+byte equal.

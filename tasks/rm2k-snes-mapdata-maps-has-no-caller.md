@@ -2,7 +2,9 @@
 name: "rm2k-snes-mapdata maps has no caller"
 description: "The mapdata binary's `maps` subcommand writes offsets.inc, maps.inc and tables.inc for a list of maps, and nothing runs it: the converter calls `emit`, the ports' tests `vram`, `compress`, `pages` and `engine`"
 type: refactor
-status: draft
+status: doing
+assignee: calandria
+agents: [calandria]
 author: calandria
 ---
 
@@ -36,3 +38,23 @@ which is theirs to say.
 
 **How to verify**: `rm2k-snes-mapdata --help` without it, and every port's
 `just cartridges` and ABL's `tests/tooling` unchanged.
+
+> I agree. In none of these cases is it really about reducing code,
+> but improvements. Let's do the four, and then we go for those types /
+> typed contracts between stages.
+
+(taro, 2026-11-23, on this one together with
+[`emit-rs-writes-each-table-through-a-call-rustfmt-spreads-over-seven-lines`](emit-rs-writes-each-table-through-a-call-rustfmt-spreads-over-seven-lines.md),
+[`small-repeats-inside-emit-rs-s-rest`](small-repeats-inside-emit-rs-s-rest.md),
+[`picture-tables-and-common-entries-write-the-same-entry-twice`](picture-tables-and-common-entries-write-the-same-entry-twice.md),
+[`the-battle-terms-by-name-are-a-42-arm-match`](the-battle-terms-by-name-are-a-42-arm-match.md) and
+[`rm2k-snes-mapdata-maps-has-no-caller`](rm2k-snes-mapdata-maps-has-no-caller.md);
+the typed contracts are
+[`the-stages-speak-json-nobody-types`](the-stages-speak-json-nobody-types.md).)
+
+## Log
+
+### 2026-11-23, Hornero: taken by Calandria
+
+With the other four, in one branch, one commit each, every ROM byte for
+byte equal.
