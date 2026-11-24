@@ -3,7 +3,9 @@ name: "Zounds: map 134's chest is a dark square"
 description: "The chest at (2, 30) of map 134, the cave north of Misërenia, is drawn as a dark brown square on the console, closed and opened; RM2k draws it red"
 type: bug
 status: draft
+assignee: taro
 author: cardon
+agents: [cardon]
 game: zounds
 links:
   found-in: [zounds-some-chests-change-when-opened]
@@ -51,3 +53,20 @@ it, closed, then A, and opened with switch 285 on. EasyRPG's two are the
 first and last frames of Cardón's `easyrpg-map134.png` (the hero below
 the chest), at the 320x240 EasyRPG captures; the ports' dump of map 134
 has no commit since that day.
+
+### 2026-11-24, Cardón: a question for taro
+
+**What to decide**: map 134 has more graphics than sprite palettes, and
+the converter lends the chest (`object1:6`) someone else's: still so in
+the ports' build of 2026-11-24 (`map 134: 10 graphic(s) without a palette
+of their own …, object1:6`). Something on that map has to lose its
+colours.
+
+**Options**: (a) the lending prefers to keep things the player interacts
+with (chests) in their own palette, lending to others instead —a rule for
+every game that moves other maps' colours too—; (b) a Zounds patch for map
+134 only; (c) leave it.
+
+**Recommendation**: (a) if the measurement shows which graphic would take
+the chest's place and it looks better; it changes what is seen on several
+maps, so it is yours.

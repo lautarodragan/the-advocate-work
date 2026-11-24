@@ -2,8 +2,9 @@
 name: "The converter writes the emission's request by hand"
 description: "rm2k-snes-convert links rm2k-snes-mapdata, whose request.rs types the request, and still writes it with json! —a map, a page, the scene—, with workarounds for json!'s recursion limit; deriving Serialize there and building the types would take the mirror away"
 type: refactor
-status: draft
+status: todo
 author: calandria
+agents: [cardon]
 links:
   found-in: [where-mapdata-and-convert-could-be-shorter]
   relates: [the-emission-reads-the-screens-answer-and-the-battle-model-by-name]
@@ -73,3 +74,11 @@ order, which is just as stable.
 **How to verify**: every port's ROM byte for byte equal before and after
 (`NO_CACHE=1 just cartridges`, `cmp`), and the emission's request parsed on
 both sides to the same `Value` (keys may move, values may not).
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+It is step **B1** of the plan in
+[`the-stages-speak-json-nobody-types`](the-stages-speak-json-nobody-types.md)
+(`part-of` it, in `doing`): defined and ordered there.

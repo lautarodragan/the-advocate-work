@@ -2,8 +2,11 @@
 name: "The other games' boot test once found Sunset stale right after building it"
 description: "`just boot` failed once on sunset-over-imdahl with 'recién armado y el que arma lo da por viejo: was built with other sources, other flags or other cases'; the same tools passed it twice after"
 type: bug
-status: draft
+status: todo
+agents: [cardon]
 author: chaja
+links:
+  relates: [the-cartridges-fingerprint-hashes-the-path-s-builder]
 ---
 
 Seen by Chajá on 2026-10-12, with the-advocate `7e3049cd` (branch
@@ -46,3 +49,14 @@ to `emit.rs` alone does not explain it, unless a binary was reinstalled or
 full `just boot` failed the same way on sunset-over-imdahl, and `just boot
 -k sunset` right after passed (2 passed). Other agents were running their
 suites at the same time.
+
+### 2026-11-24, Cardón: to todo
+
+A flaky test, seen twice (Chajá 2026-10-12, Aguará 2026-10-16), both times
+with other agents' suites and installs running; the message is still
+`rm2k-snes/cartridge/src/cartridges.rs:844`. A likely cause is now written
+down:
+[`the-cartridges-fingerprint-hashes-the-path-s-builder`](the-cartridges-fingerprint-hashes-the-path-s-builder.md)
+—the fingerprint hashes the binaries on the PATH, so a global reinstall
+mid-build makes a fresh cartridge stale—. The task is checking that and
+fixing it with it.

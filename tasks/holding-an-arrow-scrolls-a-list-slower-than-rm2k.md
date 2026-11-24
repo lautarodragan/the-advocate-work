@@ -3,6 +3,8 @@ name: "Holding an arrow scrolls a list slower than RM2k"
 description: "On the composed screens a held arrow waits for the text, and a step that scrolls takes 6-12 frames to typeset where RM2k repeats every 4"
 type: feature
 status: draft
+assignee: taro
+agents: [cardon]
 author: huron
 links:
   found-in: [scrolling-a-list-shows-the-last-row-repeated-for-a-moment]
@@ -28,3 +30,21 @@ frames. What it costs now is the description's two lines —some fifty
 letters— and the adoptions of the rows that move (each `tl_adopt` and
 `tl_choose` is tens of lines). Nothing in `tl_pace` counts frames, so a
 faster layer gets RM2k's pace on its own.
+
+## Log
+
+### 2026-11-24, Cardón: a question for taro
+
+**What to decide**: whether to chase RM2k's pace when a held arrow scrolls
+a long list (6-12 frames a step against RM2k's 4). The wait is a written
+divergence in the book ("A held arrow waits for the text"), so this is
+making it smaller, at a cost not measured: a scrolling step typeset in
+under four frames means a faster text layer (`tl_adopt`, `tl_choose`, the
+description's two lines), not a fix to a line.
+
+**Options**: (a) `todo`: measure where a scrolling step's frames go and
+make the layer faster; (b) `wishlist`, the divergence stands.
+
+**Recommendation**: (b): it is felt only holding over thirty items, and
+the font's composers are being rewritten anyway (unrolled per writer, the
+reason for `FAR4`); measure it again after them.

@@ -2,8 +2,9 @@
 name: "Vampires Dawn: characters cut on crowded lines"
 description: "58 maps put more characters on a line than the console draws —nine characters are 36 slivers, past the PPU's 34—, and the ones further back lose columns or vanish"
 type: bug
-status: draft
+status: todo
 author: mulita
+agents: [cardon]
 links:
   found-in: [maps-with-more-objects-on-a-line-than-the-ppu-draws]
 ---
@@ -46,3 +47,16 @@ screen's last page counts the map's frames in `Time over`.
 What the report cannot say: whether a line is one the player sees with
 everyone on it —a page another switch turns off, people a first scene
 sends away—, and what a scene adds later.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+Measured by the sweep (`just objects-per-line`); its siblings went to
+`todo` the same way —[ABL's](abl-characters-cut-on-crowded-lines.md),
+[Book of Three's](book-of-three-characters-cut-on-crowded-lines.md),
+[Desert Nightmare's](desert-nightmare-characters-cut-on-crowded-lines.md)—
+and taro set the way on 2026-11-22: no flicker, the converter's ways first
+(`baked_events`, `painted_events`, the reach), a game's patch only when
+those do not reach, and that patch is their call. The first step is
+re-running the sweep at today's main.

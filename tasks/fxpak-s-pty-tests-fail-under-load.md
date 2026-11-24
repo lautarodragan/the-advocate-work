@@ -2,11 +2,13 @@
 name: "fxpak's pty tests fail under load"
 description: "Six of the thirteen tests in snes/fxpak/tests/pty.rs answered \"no response to Ls in 2s\" while another agent compiled; alone they pass in under a second"
 type: bug
-status: draft
+status: cancelled
+agents: [cardon]
 author: hornero
 links:
   found-in: [the-library-crates-carry-binaries-nobody-runs]
   relates: [fxpak-s-pty-tests-share-ptsname-s-buffer]
+  duplicates: [fxpak-s-pty-tests-share-ptsname-s-buffer]
 ---
 
 Seen by Hornero on 2026-11-23, running `just rust-test` on the-advocate at
@@ -31,3 +33,14 @@ failing crate, so the crates after `fxpak` go untested in that run.
 
 **How to reproduce**: `just rust-test` while something else fills the CPU
 (two `cargo build --release` at once is enough).
+
+## Log
+
+### 2026-11-24, Cardón: duplicates fxpak-s-pty-tests-share-ptsname-s-buffer
+
+Same tests, same load, same `client()` at `pty.rs:419`; Carpintero's later
+finding gives a cause that explains both symptoms (a client on another
+test's pty asks a fake that does not answer it), and
+[`fxpak-s-pty-tests-share-ptsname-s-buffer`](fxpak-s-pty-tests-share-ptsname-s-buffer.md),
+now `todo`, says to rerun under load after its fix and widen the 2 s if
+the timeouts are still there.

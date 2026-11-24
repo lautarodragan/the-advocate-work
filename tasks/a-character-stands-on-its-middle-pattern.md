@@ -2,7 +2,8 @@
 name: "A character stands on its middle pattern"
 description: "RM2k draws an event on its page's pattern only with a fixed graphic or spinning; any other stands on the middle one, and the ROM draws the page's pattern: a step where RM2k shows feet together"
 type: bug
-status: draft
+status: todo
+agents: [cardon]
 author: cardon
 links:
   found-in: [abl-the-hover-tram-s-crowd-is-cut]
@@ -34,3 +35,16 @@ as RPG_RT draws them.
 built before the fork —the five backs at (3,9), (5,9), (11,9), (12,9) and
 (15,9) step in the ROM—. Captures side by side in
 `/shared/captures/2026-11-18-hover-tram-patch/`.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+Still so at the-advocate `8b069fc2`: `page_graphic` in
+`rm2k-snes/convert/src/maps.rs` (line 64) takes `page.pattern` whatever
+the animation type; easyrpg's `Game_Event::SetupFromPage` and RPG_RT under
+Wine (map 13, captures in that draft) both stand non-fixed, non-spinning
+characters on the middle frame. It goes towards RM2k with nothing to
+choose; ABL's goldens with those 78 pages move. `wally/src/events.rs`'s
+`page_graphic` takes a `pose` already made, so the place is the
+converter's. The book's ABL Known issues line goes with the fix.

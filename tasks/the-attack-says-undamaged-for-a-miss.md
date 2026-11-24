@@ -2,7 +2,7 @@
 name: "The attack says undamaged for a miss"
 description: "A missed normal attack writes the target's undamaged line instead of RM2k's dodge one, and a hit of zero writes '0 health lost' instead of the undamaged one"
 type: bug
-status: draft
+status: todo
 author: cardon
 agents: [Cardón]
 links:
@@ -34,3 +34,12 @@ line of zero goes through the same code since 2026-10-20 and is right
 **How to see it**: any battle where a party member's attack misses —the
 droid of A Blurred Line's map 2 dodges sometimes—: the line under
 "<who> attacks the enemy" says "Droid avoids taking damage."
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+Still so at the-advocate `8b069fc2`: `ba_message` in `runtime/battle_message.s`
+(78-118) goes to `failed`, the undamaged line, for `BA_MDMG` $FFFF, and writes
+`<n> health lost` for a zero; `BA_TXT_DODGE` is in the cartridge. A text
+towards RM2k, with RPG_RT's capture already taken: nothing to choose.

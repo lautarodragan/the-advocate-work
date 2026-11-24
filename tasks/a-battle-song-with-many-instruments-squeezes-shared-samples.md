@@ -3,6 +3,8 @@ name: "A battle song with many instruments squeezes the samples it shares"
 description: "Since ChangeSystemBGM is done, each song it names has to fit in the battle's package next to the battle's sound effects; in ABL one of them pulls thirteen shared samples down to ~9.5 kHz for the whole cartridge"
 type: bug
 status: draft
+assignee: taro
+agents: [cardon]
 author: carpintero
 ---
 
@@ -39,3 +41,17 @@ names `T_AVGFighter_KyaraSelect` for drums and melodic keys, now also some
 keys of map 311 alone. Only heard without MSU-1, which is not how ABL is
 played; what to do —let a battle's separate song lose rate alone, or
 accept it— is a call about sound, and stays open.
+
+### 2026-11-24, Cardón: a question for taro
+
+Tijereta found it still so on 2026-10-20 (`bank.limited_by` in ABL's
+`audio.json`). It is about sound —samples heard at a lower rate in every
+song that shares them—, and only without MSU-1.
+
+**To decide**: (a) accept it: ABL is played with MSU-1 and The Book of
+Three's bank does not move; (b) let a `ChangeSystemBGM` battle song be
+limited alone —its own copies of the shared samples, ROM and converter
+complexity—; (c) let the battle's package drop sound effects for that
+song.
+
+**Recommendation**: (a), and cancel, until a game played without MSU-1 hears it.

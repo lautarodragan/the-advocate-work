@@ -2,9 +2,9 @@
 name: "FAR3 has 669 bytes left in Zounds"
 description: "After the screens and the reset's init left bank 0 for FAR3, Zounds' release has 669 B of $C1 left; the next cold code that moves out of bank 0 needs another bank"
 type: feature
-status: draft
+status: cancelled
 author: carpintero
-agents: [Carpintero]
+agents: [Carpintero, cardon]
 links:
   found-in: [room-in-bank-0-s-rom]
 ---
@@ -26,3 +26,13 @@ test-change-system: the map's load —`enter_map_no_events` (409 B),
 init-only routines (`clear_variables`, `initial_equipment_set`,
 `actor_gfx_clear`, the `*_clear`). None of it fits in Zounds' `$C1`
 today, and `FAR2` has 264 B in Sunset over Imdahl.
+
+## Log
+
+### 2026-11-24, Cardón: cancelled
+
+Overtaken: a fifth code bank, `FAR4` in the low half of `$FF`, came on
+2026-11-20 in the-advocate `8b2e7b2a` for the same shortage (FAR3 at 90 B
+in Zounds), so the next cold code has somewhere to go. How much each bank
+has left is not written in a task: `just space` prints it, and `ld65` says
+by how much a link overflows.

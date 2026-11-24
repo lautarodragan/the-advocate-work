@@ -2,8 +2,9 @@
 name: "The emission reads the screens' answer and the battle model by name"
 description: "rm2k-snes-screens and rm2k-snes-battle build their answers with json! and mapdata reads them back as serde_json::Value, key by key, with some 290 accessor calls and the shape checks that come with them: one set of serde types both ends share would take the reading off emit.rs"
 type: refactor
-status: draft
+status: todo
 author: calandria
+agents: [cardon]
 links:
   found-in: [where-mapdata-and-convert-could-be-shorter]
   relates: [the-converter-reads-the-stages-answers-with-python-s-truthiness, the-converter-writes-the-emission-s-request-by-hand, the-inc-s-constants-are-format-strings-with-their-values-far-below]
@@ -80,3 +81,11 @@ which leaves one shape per field to type.
 (`NO_CACHE=1 just cartridges`, `cmp`), the `.inc` text equal, and
 `just crate-test rm2k-snes-mapdata rm2k-snes-screens` with the made-up
 requests regenerated through the new types.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+It is step **B3** —and, with B2, the battle model's half— of the plan in
+[`the-stages-speak-json-nobody-types`](the-stages-speak-json-nobody-types.md)
+(`part-of` it, in `doing`): defined and ordered there.

@@ -2,8 +2,9 @@
 name: "The tools' checkout is searched for a game's resources"
 description: "The converter puts the root of the-advocate's checkout among the folders a resource is looked up in, before the game and the RTP; it has no RM2k folder, so it finds nothing, and nobody says why it is there"
 type: refactor
-status: draft
+status: todo
 author: huron
+agents: [cardon]
 links:
   found-in: [a-conversion-cache-shared-by-the-worktrees]
 ---
@@ -29,3 +30,15 @@ The shared cache had to work around it: a `--search-dir` goes into a
 stage's key by its RM2k folders alone (see `Reads::Resources` in
 `rm2k-snes/convert/src/stage.rs`), or any change to the runtime would have
 expired every Wally answer.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+Still so at `8b069fc2`: `search_dirs` in
+`rm2k-snes/convert/src/convert.rs` (line 2209) puts
+`rm2k_project::suite::root()` first. Code debt with a clear fix: take it
+out, and the ROMs of every game come out byte for byte equal (it finds
+nothing today). It goes the same way as
+[`one-advocate-command`](one-advocate-command.md)'s self-contained binary,
+which cannot count on a checkout.

@@ -7,6 +7,8 @@ assignee: taro
 author: huron
 game: desert-nightmare
 agents: [Hurón, Calandria]
+links:
+  duplicated-by: [the-action-key-fires-only-the-first-event-of-a-cell]
 ---
 
 Seen by Hurón on 2026-11-19, at the-advocate `62b6e5cb` and the ports

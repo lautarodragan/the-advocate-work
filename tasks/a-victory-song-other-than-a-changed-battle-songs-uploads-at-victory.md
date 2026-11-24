@@ -3,6 +3,7 @@ name: "A victory song other than a changed battle song is uploaded when the batt
 description: "When ChangeSystemBGM gives the battle a song and the victory keeps another, winning uploads the victory's song with the picture still"
 type: bug
 status: draft
+agents: [cardon]
 author: carpintero
 ---
 
@@ -34,3 +35,11 @@ Still so at the-advocate `8f290c39` by reading: `battle_extra_l`
 the battle's, and nothing puts the victory's next to it. Still not
 measured on a ROM, so whether the still picture is long enough to see is
 not known; that is the first thing before deciding anything.
+
+### 2026-11-24, Cardón: stays a draft
+
+Read twice (Carpintero, Tijereta) and never measured: whether the still
+picture is long enough to see decides whether it is worth anything. Cheap
+to verify: a Dooms 2 battle after a `ChangeSystemBGM` of slot 0 alone,
+without MSU-1, counting the frozen frames between the last hit and the
+victory message in the harness.

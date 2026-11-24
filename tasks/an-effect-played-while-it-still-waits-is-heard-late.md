@@ -3,6 +3,8 @@ name: "An effect played while it still waits for its upload is heard late"
 description: "Since a teleport's sound effects go up after the fade, one played before its turn goes up in the tick that plays it: the picture freezes while it does, and with the .msu it was heard some thirteen frames after the ROM started it"
 type: bug
 status: draft
+assignee: taro
+agents: [cardon]
 author: chaja
 links:
   found-in: [frozen-world-every-turn-re-uploads-the-battle-screens-audio]
@@ -49,3 +51,19 @@ waiting —likely `Glass` and `Dark1`, 21.6 and 20.2 KB in the `.msu`—;
 without the `.msu`, 249 ticks. No gameplay tick got longer, and on these
 doors no page played an effect in that window, but the HQ's puzzle plays
 those from action pages: at ~1 frame a KB, up to ~21 frames late.
+
+### 2026-11-24, Cardón: a question for taro
+
+**What to decide**: whether this path is worth chasing. Not heard since
+the `.msu`'s effects go up in pieces in the ticks' idle end; the path is
+still there (an effect played before its turn uploads whole inside
+`sound_play`), and Chajá's later measure says Lazer Teeth HQ's action
+pages could play one up to ~21 frames late. Why the sound lags the upload
+is not known, so the task does not say what to do yet.
+
+**Options**: (a) to `todo` as a measurement first —a case that plays a
+waiting effect on purpose, the lag with and without `.msu`— and then a
+fix; (b) `wishlist` until a player hears it; (c) cancel.
+
+**Recommendation**: (b): nobody heard it in a game, and the HQ figure is
+an estimate; if taro hears a late effect on map 11, it becomes (a).

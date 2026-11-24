@@ -2,8 +2,9 @@
 name: "The emission keeps fallbacks for answers older than its fixtures"
 description: "emit.rs has a branch for each screens field an old answer lacked —slot_names, the screens' advances and reach, screen_letters, renamed, menu_tiles, inks—; the stages are always the same build, so only made_up.rs's two hand-kept requests still reach them"
 type: refactor
-status: draft
+status: todo
 author: calandria
+agents: [cardon]
 links:
   found-in: [where-mapdata-and-convert-could-be-shorter]
   blocks: [the-emission-reads-the-screens-answer-and-the-battle-model-by-name]
@@ -55,3 +56,11 @@ be looked at, not blessed.
 **How to verify**: every port's ROM byte for byte equal before and after
 (no game reaches the branches), and `just crate-test rm2k-snes-mapdata`
 green with the new fixtures.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+It is step **B0** of the plan in
+[`the-stages-speak-json-nobody-types`](the-stages-speak-json-nobody-types.md)
+(`part-of` it, in `doing`): defined and ordered there.

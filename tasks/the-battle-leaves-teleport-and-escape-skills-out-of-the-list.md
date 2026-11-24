@@ -2,7 +2,7 @@
 name: "The battle leaves teleport and escape skills out of the list"
 description: "RM2k 2000 lists every skill an actor knows in battle, a teleport or escape one grey; this battle leaves them out, so Zounds' Teleport is not in its party's battle list"
 type: bug
-status: draft
+status: todo
 author: cardon
 agents: [Cardón]
 links:
@@ -37,3 +37,13 @@ teleport skill (7) and an escape one (12), so carrying them changes the
 stage's answer for that game, whose hashes are the deleted Python's
 (`tests/model.rs`): they would be another place where the Python was
 wrong, said there like the critical and like `usable_in_battle`.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+Still so at the-advocate `8b069fc2`: `skill_usable` in
+`rm2k-snes/battle/src/rules.rs` 93 takes only `normal` and `switch`, while
+`usable_in_battle` (104) already answers no for both. Towards RM2k with
+nothing to choose: carry them, greyed, as the draft says; the model tests'
+hashes move, said there.

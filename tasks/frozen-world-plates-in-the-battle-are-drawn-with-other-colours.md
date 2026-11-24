@@ -2,9 +2,9 @@
 name: "Frozen World: plates in the battle are drawn with other colours"
 description: "On the battle screen, map 1, thirteen of the plates —Fire's among them— are drawn with another graphic's palette: on the cursor after picking them in the grid, and on the battle's events that show them; Fire's flame comes out grey instead of orange"
 type: bug
-status: draft
+status: todo
 author: carpintero
-agents: [Carpintero]
+agents: [Carpintero, cardon]
 links:
   found-in: [frozen-world-the-cursor-keeps-the-wrong-graphic]
 ---
@@ -36,3 +36,15 @@ the hero shows.
 ports' `tests/test_frozen_world_cursor.py` gets to the battle, with switch
 92 instead of 6: switches 92 and 171 on, variable 30 at 99, jump to map 3
 at (9,4) and press A.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+A bug against the original with a capture (Fire's flame grey where the
+grid draws it orange), still unexplained: no commit since 2026-10-19 names
+Frozen World's plates or palettes (the-advocate's log). The task is
+finding why those thirteen graphics do not get colours of their own on map
+1 and giving them those; if it turns out map 1's palettes are full and
+another graphic would lose colours instead, that trade is a question for
+taro then.
