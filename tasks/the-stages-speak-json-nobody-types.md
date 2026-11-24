@@ -7,7 +7,7 @@ assignee: calandria
 agents: [calandria, aguara, cardon, carpintero, chaja, mulita, tijereta]
 author: taro
 links:
-  found: [the-event-compiler-s-left-out-warning-never-reaches-the-log, fxpak-s-pty-tests-share-ptsname-s-buffer, the-msu-and-the-tracks-are-written-through-a-nuevo-file, the-patches-request-of-release-repeats-five-maps]
+  found: [the-event-compiler-s-left-out-warning-never-reaches-the-log, fxpak-s-pty-tests-share-ptsname-s-buffer, the-msu-and-the-tracks-are-written-through-a-nuevo-file, the-patches-request-of-release-repeats-five-maps, the-stage-subcommands-only-the-converter-called-have-no-caller]
   relates: [artistic-decision-patches, battle-tests-without-simulate, tests-without-the-stages-subcommands]
   blocked-by: [emit-rs-writes-each-table-through-a-call-rustfmt-spreads-over-seven-lines, picture-tables-and-common-entries-write-the-same-entry-twice, rm2k-snes-mapdata-maps-has-no-caller, small-repeats-inside-emit-rs-s-rest, the-battle-terms-by-name-are-a-42-arm-match]
   blocks: [a-stage-s-cache-key-once-it-is-a-library, one-advocate-command]
@@ -1125,3 +1125,117 @@ binary's `--request` goes through `patches_of` and `put`; the crate's
 
 **Install when merging**: `convert` and `patches` (`just install convert
 patches`).
+
+### 2026-11-24, Calandria: A9 and A10
+
+On the-advocate `calandria-a9`, from `330c99d5`; ports `calandria-a9` at
+`4c23c9e`, untouched; the book `calandria-a10`, from `2eeea48`.
+
+#### A9, the mechanical commit
+
+`9ae5671a`, 39 lines in, 325 out (net -286), in three files:
+
+* `stage.rs` loses `run`, `run_uncached`, `hand_over`, `which`,
+  `write_request`, `Scratch` and `Answerer`, with the two
+  `#[allow(dead_code)]`s that kept them (`ec883b2a`, `9e17166a`) and the
+  `Command`, `Stdio`, `Write` and atomics they used. `key` takes the
+  `Stage` itself; its `"stage 2"` tag stays, so the key moves only by the
+  converter's binary, as any new converter moves it. Its tests key a
+  `Stage` where they keyed a process, and the one that checked a function
+  does not find a process's answer keeps only its first half.
+* `rm2k-snes-cartridges`' fingerprint drops `CONVERTER_TOOLS`: it hashes
+  `ca65`, `ld65`, the converter and itself. The patches' binary was in it
+  because the check reads their files from the build; the converter
+  writes them now. Its test puts only those four on its PATH.
+* **There were no per-stage `BINARY`/`PROJECT` constants left**: A1-A8
+  replaced each with its `Stage` const as they went.
+
+**Whether the converter still needs the stages' binary names**: only as
+labels. `Stage.binary` goes into the key (to tell `rm2k-snes-screens
+layout` from `rm2k-snes-battle layout`, both asked `{}`) and in front of a
+stage's no or panic (`rm2k-snes-battle: …`, as each `main` printed it);
+nothing looks a binary up any more, and no stage crate knows its own
+binary's name. A crate's name would do as well, but changes those
+messages; left as it is.
+
+**What else became dead**: nothing in the converter or the cartridges
+(`clippy --all-targets -D warnings` clean). Outside them, the eleven
+subcommands of the stage binaries only the converter ran —`wally map`,
+`rm2k-snes-events compile`, `rm2k-snes-screens boxes`/`faces`/`convert`,
+`rm2k-snes-images fullscreen`/`picture`/`background`, `rm2k-snes-battle
+tables`, `rm2k-snes-mapdata emit`, `rm2k-snes-audio cartridge`— have no
+caller now:
+[draft](the-stage-subcommands-only-the-converter-called-have-no-caller.md).
+
+#### The builds, byte for byte
+
+`NO_CACHE=1 just cartridges --force` in the nine games (ABL
+`--without-tracks`), the global tools (`330c99d5`) against `convert` and
+`cartridge` from this branch, nothing else of it installed —the stage
+binaries the build used to need came from the global PATH, and none was
+run—: **the 20 `.sfc` equal**, every file of the nine `build/` equal (the
+19,469 of them, raw files included), and the 20 `converter.log`. Aside:
+`stamp.txt`, whose fingerprint changes once because the list of binaries
+changed —every cartridge is stale once after installing this—, and the 20
+`.o`/`.dbg`: the `.dbg` equal without the mtimes; the `.o` differ in 549
+bytes each, every one a source's mtime (checked byte by byte against the
+`.dbg`'s list, the main file's as a varint), because the runtime came from
+another checkout.
+
+Then twice with the shared cache: the first stored **2,702 new stage
+answers** and nothing else —the re-key, by the converter's binary—, and its
+builds equal the uncached ones, `converter.log` included; the second
+stored nothing, 72 s for the nine, and equals them but for Vampires
+Dawn's `converter.log` without the left-out warnings a cached compile does
+not print (Cardón's A2). Their `.o` are another length than a fresh
+assembly's, with the same `.dbg` and `.sfc`: the cached objects of
+`a_cached_object_gives_the_dbg_a_fresh_one_gives`, not this step.
+
+#### The suites
+
+On `9ae5671a` (main had not moved), `convert` and `cartridge` first in
+the PATH: `just lint` clean; the-advocate's `just test` 29 passed; `just
+rust-test --no-fail-fast` 1,246 passed, 0 failed, 3 ignored (the known
+fxpak pty and cached-`.dbg` flakes did not show; the cached-`.dbg` one did
+once in an earlier `cargo test -p rm2k-snes-cartridge`, and passed run
+again); the test game (`SOUNDFONT=FluidR3_GM.sf2`) 231 passed, 6 skipped;
+the ports' `just boot` 218 passed; ABL's `just tests` 1,694 passed, 2
+skipped. No golden moved: the ports' worktree is clean. `abl.sfc`
+`3bf35fd7665c`. `cargo fmt --check` and `clippy --all-targets -D
+warnings` clean on both crates. **Not covered**: that a build runs with
+no stage binary on the PATH at all; the global ones were there, only
+nothing ran them (the fingerprint no longer asks for them, and its test
+puts only the four it hashes on its PATH).
+
+#### A10, the prose
+
+Its own commits, with A9's diff as the list:
+
+* the-advocate `7c52fa6c`: `LAYOUT.md` (the paragraph that said each stage
+  is a process on purpose, and "the converter runs it" per crate), the
+  converter's README, battle's "One stage of a converter", the
+  cartridges' README (the fingerprint's list), and the audio README, whose
+  claim that its binary is the audio stage's cache key had been wrong
+  since A7.
+* the book `d39027e` (`calandria-a10`): `tools.md` (the commands the
+  pipeline runs; "Each stage is a process of its own on purpose" becomes
+  what the single key costs, with a link to
+  [`a-stage-s-cache-key-once-it-is-a-library`](a-stage-s-cache-key-once-it-is-a-library.md);
+  the stages' shape; a line under the road saying the numbered steps are
+  functions named as their binaries' subcommands),
+  `internals/pipeline.md` (the diagram, the fingerprint),
+  `internals/the-converters-stages.md` (calls, not runs; and
+  `maps::run_all`, stale, is `run_requests`), and ABL's `pipeline.md`
+  diagram. Relative links of the four files checked. Research pages and
+  `decisions/one-command-and-no-tool-runs-another.md` (which describes
+  the direction, and when it was decided) left as they are.
+* this repo: `AGENTS.md`, the crate list's `convert/`, the conversion
+  cache (every stage keyed by the converter's binary), the fingerprint's
+  "the ones the converter runs", and the two places that say what to
+  install: a stage change is `convert` plus the stage.
+
+**Install when merging**: `convert` and `cartridge` (`just install convert
+cartridge`). Every cartridge is stale once (the fingerprint's list
+changed), and the shared cache stores each stage's answers once more (the
+converter's binary changed), as any new converter does. Phase A is done;
+the task stays in `doing`, for phase B.
