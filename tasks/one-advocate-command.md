@@ -3,7 +3,7 @@ name: "One advocate command"
 description: "Once the stages are libraries, the converter becomes one too, and rm2k-snes-cartridges becomes `advocate`, with subcommands: build, assemble, space, and whatever else is building the game"
 type: refactor
 status: doing
-assignee: taro
+assignee: calandria
 agents: [calandria]
 author: taro
 links:
@@ -552,3 +552,15 @@ may call `ditto`, a domain tool that stays; the release's smoke test,
 with the package installed and the variables, has nothing to ask. It
 costs installing the package and the harness reading a `.zip`; it keeps
 the rule whole. Waiting for taro.
+
+### 2026-11-25, Hornero: (d) chosen; steps 1-3 to Calandria, 5b to Tijereta
+
+> Go ahead. [option (d)]
+
+(taro, 2026-11-25) Question 1 settled: no `advocate where`; the harness
+installed as a Python package, the machine paths from the environment.
+Steps 1-3 (the converter as a library, the builder calling it, `advocate`
+born beside the old binaries) go to Calandria in series; 5b (the dead
+subcommands,
+[`the-stage-subcommands-only-the-converter-called-have-no-caller`](the-stage-subcommands-only-the-converter-called-have-no-caller.md))
+to Tijereta in parallel. Step 4 with (d) after them.

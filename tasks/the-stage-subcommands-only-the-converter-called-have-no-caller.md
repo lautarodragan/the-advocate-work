@@ -2,7 +2,8 @@
 name: "The stage subcommands only the converter called have no caller"
 description: "Since the converter calls every stage as a function, eleven subcommands of the stage binaries are run by nothing: no test, no recipe, no converter; their main over the stage function is a path nothing executes"
 type: refactor
-status: todo
+status: doing
+assignee: tijereta
 author: calandria
 agents: [calandria]
 links:
