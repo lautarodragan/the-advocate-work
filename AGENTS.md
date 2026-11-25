@@ -247,12 +247,12 @@ they live inside the tools —see `LAYOUT.md`—:
                        like RM2k
     rm2k-snes/   the ones that join both things
       project/         the library: which game, its knobs, the machine's
-                       flags; and `rm2k-snes-project`, which tells it in
-                       JSON to a game's tests
+                       flags, and the project as JSON for the file a
+                       build leaves to a game's tests
       bytecode/        the cartridge's two bytecodes, declared once: the
                        Rust constants and the assembler's `.inc`
-      cartridge/       the cartridges: the split into banks, ca65 + ld65,
-                       the space
+      cartridge/       the cartridges: which ones, the stamp, the split
+                       into banks, ca65 + ld65, the space; a library
       patches/         the patches: what the converter decides to lose, in
                        TOML
       rm2k-snes-audio/ the music: from the MIDI and the SoundFont to
@@ -278,7 +278,13 @@ they live inside the tools —see `LAYOUT.md`—:
                        what the cartridge needs, and gives it what the
                        others answered; the stages are libraries it is
                        compiled with, and their binaries are for the
-                       tests and for a person
+                       tests and for a person; a library, and its binary
+                       is only the questions ABL's tests ask it
+      advocate/        `advocate build`: the one command that builds a
+                       game —its cartridges, their MSU-1 tracks and
+                       `build/advocate.json`, what the tests read—,
+                       calling the converter and the cartridges as
+                       libraries
 
 The layers only depend downwards —`rm2k-snes/` on the other two, and those
 on nothing of the rest—, and `tests/test_layers.py` guards it. They are
@@ -358,7 +364,7 @@ In `rm2k-snes/bytecode/` and nowhere else. There are two declarations,
 each one an invocation of the `bytecode!` macro: `src/events.rs`, the
 bytecode that `run_code` interprets, and `src/music.rs`, the stream that
 `irq_music` reads. The Rust side takes the constants with a `use`, and
-`rm2k-snes-cartridges assemble` writes the 65816 one —`event_opcodes.inc` and
+the assembling, in `advocate build`, writes the 65816 one —`event_opcodes.inc` and
 `music_opcodes.inc`— in the cartridge's directory on each build: there is
 no committed generated file that can go stale. Both land in the same symbol
 space of the assembler, so two opcodes of different bytecodes can share a
@@ -534,13 +540,17 @@ the old copy is still there but **is not used**.
 **The tools are consumed from the PATH**: `just install` installs them,
 from `~/the-advocate`, into `/usr/local/bin`, and from there they belong to
 the system, like `python3` or a libretro core. **The runtime is assembled
-by `rm2k-snes-cartridges` from the checkout it was installed from** —the
+by `advocate` from the checkout it was installed from** —the
 path is compiled into `project`—: reinstalling from another checkout
 changes which runtime goes into the ROM. No script or test of the ports
 calls `cargo` or names the path of `the-advocate`, and
 `tests/tooling/test_abl_side.py` guards it: what the tools know
-about the project —its paths, the `advocate.toml`— the harness asks
-`rm2k-snes-project` (`tests/harness/project.py`).
+about the project —its paths, the `advocate.toml`, the cartridges— the
+harness reads in the `build/advocate.json` every `advocate build` leaves
+(`tests/harness/project.py`), and the generic harness, `rm2k_snes_harness`,
+is a Python package `just install` links beside the tools' `bin/`
+(`lib/advocate/harness`) and puts on Python's path. Until 2026-11-25 the
+harness asked both to `rm2k-snes-project`, a binary.
 
 **To run ABL with the tools of a checkout that changes them** —a worktree
 of `the-advocate` that touches the runtime or the converter—: `just
@@ -771,9 +781,8 @@ data. Until 2026-09-16 the `convert` recipe wrote right there —in
 `rom/src/`, where the runtime lived until 2026-09-29; it was "global
 state", and that is how map 6 ended up being looked at in the belief that
 it was the demo of milestone 12—; today each cartridge writes its own in
-its directory of the project's `build/`, and `rm2k-snes-cartridges
-assemble` refuses
-to build if it finds one in `runtime/`. **ROMs come out of a recipe, not
+its directory of the project's `build/`, and `advocate build` refuses to
+assemble if it finds one in `runtime/`. **ROMs come out of a recipe, not
 of a loose `ca65`.**
 
 **How much bank 0 has left depends on which cartridge is built.** The
@@ -791,10 +800,13 @@ changes, and twice it was written here and went stale: **it is not
 written, it is measured**, and all of them have to be measured: `abl` and
 the ones `cartridges` builds.
 
-**It is measured with `just space`, in `abl/` of the ports**, which runs
-`rm2k-snes-cartridges space` and prints for each cartridge the free data banks and
-the gaps, bank 0, bank 1, `BSS`, `ZEROPAGE` and the text block; with the
-path of a ROM built separately, it measures that one. What counts is **how
+**It is measured with `just space`, in `abl/` of the ports**, which
+prints what `advocate build` measured when it built each cartridge —kept
+in `build/advocate.json`, and beside each ROM in `space.json`—: the free
+data banks and the gaps, bank 0, bank 1, `BSS`, `ZEROPAGE` and the text
+block; with the path of a ROM built separately, the `space.json` beside
+it. `advocate build` also ends with one line per cartridge, its free
+banks and its tightest bank. What counts is **how
 many banks are left**, not a percentage: banks `$7E` and `$7F` are not
 ROM. Until 2026-09-27 it was measured by hand, linking a `.res N` against
 the recipe's `.o`; that still works for the only thing the recipe cannot
@@ -806,9 +818,10 @@ ports' `machine.just`, `~/.cache/advocate` here, passed to the tools as
 `--cache`. It keeps the stages' answers —Wally, images, screens, events,
 battle—, `ca65`'s objects and the MSU-1 tracks, so a new worktree builds
 in a minute what took ten. Its key carries the content of the inputs **and
-of the binaries that produce what is stored** —for every stage, the
-converter's, which they are compiled into: any change to any stage throws
-every stage's answer away—, so it does not have to be deleted when
+of the binaries that produce what is stored** —for every stage, the one
+running the conversion, `advocate`, which they and the builder are
+compiled into: any change to any stage, or to the builder, throws every
+stage's answer away—, so it does not have to be deleted when
 touching code; it rests on a stage reading nothing its
 request and flags do not name, as `key` in `stage.rs` says. Any change in
 what is cached is verified with `NO_CACHE=1`: the ROMs have to be byte for
@@ -818,11 +831,12 @@ each game's `build/cache/`. See `cache.rs` in `rm2k-project`. Shared since
 `build/cache/`, only for the tracks.
 
 **While the tests are running no source is touched**, not from the other
-repo either. The fingerprint of `rm2k-snes-cartridges` covers all of
-`runtime/` of the checkout the tools were installed from and the binaries
-that build —`ca65`, `ld65`, `rm2k-snes-cartridges` itself and the
-converter, with every stage compiled into it—: touching any of those while ABL's suite is running, or reinstalling
-one, mixes two versions and the result says nothing.
+repo either. The fingerprint of `advocate build` covers all of `runtime/`
+of the checkout the tools were installed from and the binaries that build
+—`ca65`, `ld65` and the running `advocate`, with the converter and every
+stage compiled into it—: touching any of those while ABL's suite is
+running, or reinstalling one, mixes two versions and the result says
+nothing.
 
 What **is no longer needed** is isolating oneself in a worktree for that.
 Until 2026-09-16 there was `just hitos-foto`, which took a snapshot of the
@@ -1015,9 +1029,12 @@ What always has to be done:
   agent is going to modify it** —`… install-local .local-tools wally`—, or
   the binaries that link it if it is a library: compiling costs, and
   without names it compiles nothing. **A stage is one of those
-  libraries**: what reaches the ROM is the converter it is compiled into,
-  so a change to Wally is `… install-local .local-tools convert wally`
-  —`convert` for the cartridges, `wally` for the binary the tests call—. And **everything
+  libraries**: what reaches the ROM is `advocate`, which the converter
+  and the stages are compiled into, so a change to Wally is `…
+  install-local .local-tools advocate wally` —`advocate` for the
+  cartridges, `wally` for the binary the tests call—, and `convert` too
+  when the change reaches the questions ABL's tests ask the converter's
+  binary. And **everything
   is run through `just`**: a loose command does not see that `bin/` and
   uses the global one. It is taro's, from 2026-09-29, and it replaced an
   implicit re-exec the scripts did on their own.
@@ -1080,7 +1097,7 @@ So when merging a sub-agent's branch:
   nothing about the merge.
 * **Reinstall into the global one only the Rust the branch touched**:
   `just install wally`, from `~/the-advocate`; for a library, the binaries
-  that link it —for a stage, `convert` too: `just install convert
+  that link it —for a stage, `advocate` too: `just install advocate
   wally`—. A branch that touches
   `rm2k-project` —`project`— changes all the binaries that compile it in,
   and everything is reinstalled. Until 2026-10-02 there were also Python

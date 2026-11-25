@@ -2,8 +2,8 @@
 name: "One advocate command"
 description: "Once the stages are libraries, the converter becomes one too, and rm2k-snes-cartridges becomes `advocate`, with subcommands: build, assemble, space, and whatever else is building the game"
 type: refactor
-status: doing
-assignee: calandria
+status: testing
+assignee: taro
 agents: [calandria]
 author: taro
 links:
@@ -1055,3 +1055,158 @@ release's archive keeps the harness at `rm2k-snes/harness/` and not in
 ### 2026-11-25, Hornero: steps 5-7 to Calandria
 
 taro: "dale". 5 and 7 first, each verified; 6, the prose, last, on its own commits.
+
+### 2026-11-25, Calandria: step 5, the old builder and its questions go
+
+the-advocate `d1ffe356` (branch `calandria-step5`, from `954256bd`). A
+grep of the four repos and `.github/` first: after step 4 nothing called
+`rm2k-snes-cartridges`, `rm2k-snes-project`, `rm2k-snes-patches` or
+`rm2k-snes-audio msu`, and `rm2k-snes-convert` only by its queries
+(ABL's `converter.py`, the ports' `test_frozen_world_cursor.py`). Gone:
+
+* `rm2k-snes-cartridges` with `space` and `assemble` (`--memory-map`,
+  `--sources`), `SUBCOMMANDS`, and `space::show`, which only `space`
+  printed: the cartridge crate is a library.
+* `rm2k-snes-project` and its test; `resolved` stays, for the file.
+* `rm2k-snes-patches`: its binary's tests moved onto `copy` and `check`,
+  what `advocate build` calls; what only the binary did (a directory of
+  cartridges, refusing two builds to copy) went with it.
+* The converter's conversion mode: `rm2k-snes-convert` is its five
+  queries.
+* `rm2k-snes-audio msu`. Its source was in the tracks' cache key
+  (`OWN_SOURCES`), so **every MSU-1 track renders once more** on the next
+  build with tracks.
+
+`release.yml`: the archive carries the harness at `lib/advocate/harness`,
+where `just install` links it, and `suite::harness` looks there first;
+the smoke test makes the test game's dump with the archive's
+`rm2k-sketch` and `ditto` (as `just game` does; no `just` on the
+runners), runs the archive's `advocate build` with the checkout's
+`main.s` moved away, failing stand-ins for `ca65`/`ld65` and no
+SoundFont, and reads `suite.runtime` and `suite.harness` from the
+`build/advocate.json` the failed build leaves. Run here as written
+(extracted from the workflow) against an archive laid out as its Package
+step lays it: both paths the archive's.
+
+**The merge needs**, besides `just install` (the branch touches
+`rm2k-project`), what `just install` does not do:
+
+    cargo uninstall rm2k-project rm2k-snes-cartridge rm2k-snes-patches --root /usr/local
+
+and the same with `--root <worktree>/.local-tools` in any open worktree
+that installed them; the justfile says so where `rust_projects` is.
+
+#### Verified
+
+The nine games through the ports' recipes (`NO_CACHE=1 just cartridges
+--force`, ABL `--without-tracks`), the ports at `67716e6`, with this
+step's `advocate`, `rm2k-snes-convert` and `rm2k-snes-audio` first on the
+PATH and, behind them, stand-ins for `rm2k-snes-cartridges`,
+`rm2k-snes-project` and `rm2k-snes-patches` that fail and log who ran
+them (nobody did, here nor in the suites below), against the same builds
+with `954256bd`'s global tools: of 19,532 files, every one equal but
+`stamp.txt` (the builder's binary), `advocate.json` (the fingerprint and
+its files, by the same reason), and the checkout's paths and the `.dbg`'s
+mtimes (74 files). Then, with the same PATH: `just lint`; `just test`, 29
+passed; `just rust-test --no-fail-fast`, 1,254 passed (the two fewer are
+`rm2k-snes-project`'s binary test and `space::show`'s); `just test-game`,
+231 passed, 6 skipped; the ports' `just boot`, 218 passed; ABL's `just
+tests`, 1,694 passed, 2 skipped. `abl.sfc`:
+`3bf35fd7665c2045e6cd3b8d30471b66abb686d107e52a9ac8da1cdd1d691718`, as
+step 4's.
+
+### 2026-11-25, Calandria: step 7, the build is always `build/`
+
+the-advocate `7a90d76e`, the ports `5be9f85` (branch `calandria-step5`
+in both). `Project::build()` is `build/` beside `advocate.toml` (`BUILD`)
+and cannot fail; a project file that still says `[paths] build` is
+refused, with what to do, rather than ignored —a project that moved its
+build would be built where it does not say—. The nine games' and the test
+game's projects and the tests' fixtures lose the key; `resolved` keeps
+`project.build` in `advocate.json`, so no reader changes. The harnesses
+already looked for `build/advocate.json` beside the project.
+
+#### Verified
+
+The same nine builds with every Rust project of this branch installed
+first on the PATH (the project file's format changed, and any binary that
+reads one has to be this one's) and the same stand-ins: against
+`954256bd`'s, every file equal but `stamp.txt`, the paths and mtimes, and
+`advocate.json`, whose differences are the fingerprint and
+`settings.paths.build`, gone. A project with `build = "out"` is refused by
+`advocate build`. Then the same runs as after step 5, with every binary
+of the branch first on the PATH and the same stand-ins: `just lint`;
+`just test`, 29; `just rust-test --no-fail-fast`, 1,255 (the refusal's
+test is the new one); `just test-game`, 231 passed, 6 skipped; `just
+boot`, 218; ABL's `just tests`, 1,694 passed, 2 skipped.
+
+### 2026-11-25, Calandria: step 6, the prose
+
+Its own commits, with the diffs of 5 and 7 and Tijereta's list as the
+list, and a grep of the four repos after them; what still names an old
+binary does it as history ("until 2026-11-25…").
+
+* **the-advocate** `0b865040`: LAYOUT.md (with an `advocate/` entry it
+  lacked), the crates' READMEs —the cartridge's rewritten as the library
+  it is, the converter's with its stages named by their `stage`
+  functions, since 5b took the subcommands it named them by—, the
+  justfile, the runtime's comments (`main.s`, `header.s`,
+  `interpreter.s`, `message_face.s`) and the converter's. Some of it is
+  text the build writes, so build outputs change but no ROM: the memory
+  map's and the bytecodes' generated headers, the converter's error when
+  the music stage answers no `.msu`, and **every patch file's header**,
+  which named `rm2k-snes-patches` (the patches' tests count the longer
+  header's bytes). `tracks.rs` is among the MSU-1 tracks' own sources,
+  so its comment rides on step 5's re-render: one, not two.
+* **the ports** `2d2dc51`, the prose: ABL's README, its tests' README,
+  its patches' README, `advocate.toml`'s comments, `test_msu.py`'s
+  message, and two rows in `RENAMES.md` (`[paths] build`, the tracks'
+  subcommand). Then `a8b1647`: **ABL's 436 versioned patch files**
+  rewritten by `just cartridges release --write-patches`, the header
+  alone.
+* **the book** `36ac1b8` (branch `calandria-step5`): `tools.md` (the
+  commands, the road's diagram, the table, the cartridge builder, the
+  project, the patches, "Running them by hand"), `internals/pipeline.md`,
+  `the-converters-stages.md`, `audio.md`, `events.md`, `the-msu-file.md`,
+  `the-pause-menu.md`, three decisions that named the old builder, the
+  decision's "It is a direction" paragraph (the build is the state; the
+  tests' binaries and the stage cache key are still a direction),
+  `ports/abl/README.md` and `pipeline.md`, `progress/the-test-game.md`,
+  and two pages that called the project library `rm2k-snes-project`.
+  Research pages untouched. Relative links checked; no environment
+  named.
+* **this repo** `c9e9b5f7`: AGENTS.md —the crate list (`advocate/`),
+  "Where this runs", the opcodes' equates, the generated `.inc`'s
+  refusal, `just space`, the conversion cache's key, the fingerprint, and
+  the sub-agents' `install-local`/`install` advice: a stage change is
+  `advocate <stage>` now, not `convert <stage>`—. The roster names none
+  of them.
+
+#### Verified
+
+The nine games again (`NO_CACHE=1 --force`, the branch's tools): every
+`.sfc` byte for byte as after step 7. ABL's `just tests` after the patch
+rewrite: 1,694 passed, 2 skipped; `abl.sfc`
+`3bf35fd7665c2045e6cd3b8d30471b66abb686d107e52a9ac8da1cdd1d691718`.
+`just lint`, the patches' tests green with the new byte counts (red
+first, which is how they were found). Then `just test`, 29; `just
+rust-test --no-fail-fast`, 1,250 and the five known flakes —four of
+`fxpak`'s pty tests and `a_cached_object_gives_the_dbg_a_fresh_one_gives`—,
+each green run alone; `just test-game`, 231 passed, 6 skipped; the ports'
+`just boot`, 218. No stand-in for an old binary ran in any of it.
+
+**What the suites do not cover**: `release.yml`'s smoke test was run
+here, extracted from the workflow, not on a runner, and not on macOS; the
+refusal of `[paths] build` has its unit test and one run by hand, no
+suite meets it. The MSU-1 tracks were not rendered: every build here was
+without them, so their re-render (their key changes) happens on the
+first build with tracks after the merge.
+
+**Install when merging**: `just install` (all: `rm2k-project` changed,
+and the project file's format with it), and then
+
+    cargo uninstall rm2k-project rm2k-snes-cartridge rm2k-snes-patches --root /usr/local
+
+since `just install` skips what became a library and leaves the old
+binaries answering from an old build. The same in the `.local-tools` of
+any open worktree that has them.
