@@ -750,3 +750,67 @@ the libraries' code did not change, only tests and the `mapdata` binary,
 so the ROMs do not move.
 
 Status stays `doing`: steps 3, 4, 5, 7 and 8 are the task's.
+
+### 2026-11-25, Cardón: step 8, the remainder
+
+From the-advocate `a86c5ceb`, ports `0dd2248`, docs `93df660`; branches
+`cardon-tests-step8` in the three.
+
+#### `convert compile`: the troop triggers from the LDB
+
+`test_troop_events.py`'s two tests that asked it —the agents' liftoff on
+turn 1 alone, the Lazer Teeth's page on turn 1 every 3 with Talan's HP—
+check what the game's LDB says the ROM cases go through, so they read
+**the LDB with RM2k's rule** (`turn_b` is the base, as easyrpg's
+`CheckTurns` takes it), not the ROM's troop table: the header in front of
+each page's code is reached only through the page's pointer, and reading
+it would rebuild the walk the ROM does. Shown red by swapping the two
+fields in the test's reader.
+
+**Stops catching** the compiler carrying the turn the other way round:
+held now by `the_turn_s_base_is_turn_b` in `troops.rs` of
+`rm2k-snes-events`, shown red with the fields swapped in `trigger()`, and
+still by ABL's ROM cases of the liftoff and the Lazer Teeth. Nothing else
+called `rm2k-snes-convert compile`, so it went, with `Compiler::loose`;
+`converter.py` keeps only `boxes()`, and `events.Trigger` went.
+
+#### `prebuild` out of `games.py`
+
+The root's `just boot` depends on a new root recipe, `just cartridges`,
+which builds every game but ABL at the same time —what `deliver` did on
+its own, and now calls with `TRACKS=1`—. The tests build nothing:
+`built()` reads `build/advocate.json`, and a missing or stale cartridge
+is a red that says to run `just boot`. `prebuild`, `needed`, the lock and
+`_just` went; `conftest.py` only imports `games` first, for the import
+path. The eight up to date take 0.2 s, so `just boot -k vampires`
+building them all costs nothing once built.
+
+#### `ditto`'s round trip: the dump checks its own
+
+Both `test_round_trip.py` went. The test game's `just game` packs the
+exact dump again and `cmp`s each RM2k file; each port's `just dump`
+does the same through `rpg_maker_files.py --same`, case-insensitive as
+the test was. Shown red: a byte changed in the test game's `.lmt` copy,
+and a byte appended to Zounds' `RPG_RT.lmt` (a byte changed *inside* a
+field Ditto reads comes back equal, as it should). **Stops catching**: a
+change to Ditto that breaks the originals' round trip shows when a game
+is dumped again, not on `just boot`; Ditto's `round_trip.rs` still
+measures whatever `DITTO_CORPUS` names, and the test game's check runs in
+CI and in `just lint`.
+
+#### Verified
+
+With `convert advocate` installed locally: ABL `release`'s `abl.sfc`
+`3bf35fd7665c2045`, byte for byte the one the globals built; `just lint`
+(FluidR3's `SOUNDFONT`) and `just rust-test --no-fail-fast` green; ports'
+`just boot` 209 passed (218 minus the nine round trips); ABL's `just
+tests` 1668 passed, 2 skipped.
+
+#### Branches, and what to install when merging
+
+the-advocate `e5823e72`, ports `2a80216`, docs `0623fe4`, all
+`cardon-tests-step8`. Install `just install convert advocate`: the
+library lost only dead code, so the ROMs do not move. The events crate
+changed only in a test.
+
+Status stays `doing`: steps 3, 4, 5 and 7 are the task's.
