@@ -2,10 +2,11 @@
 name: "`just culprits` reads the dump without the project's common events"
 description: "The ports' `just culprits` passes the game's data/ to `rm2k-snes-events culprits`, but the converter compiles the dump with the project's own common events forked in, so in a game that brings its own the commons' report is not the cartridge's"
 type: bug
-status: draft
+status: todo
 author: calandria
 links:
   found-in: [one-advocate-command]
+  part-of: [one-advocate-command]
 ---
 
 Seen by Calandria on 2026-11-25, the-advocate `8833c963` (branch
@@ -38,3 +39,10 @@ file is the right one.
 ### 2026-11-25, Calandria: written
 
 Found comparing the build's `culprits.json` against the recipe's.
+
+### 2026-11-25, Hornero: promoted to `todo`
+
+Promoted by Hornero: measured on The Frozen World (22 commands against
+18), the fix is not in doubt —the dump with the project's common events—,
+and nothing seen or heard changes. It goes with step 4 of
+`one-advocate-command`.

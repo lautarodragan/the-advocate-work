@@ -2,13 +2,13 @@
 name: "One advocate command"
 description: "Once the stages are libraries, the converter becomes one too, and rm2k-snes-cartridges becomes `advocate`, with subcommands: build, assemble, space, and whatever else is building the game"
 type: refactor
-status: testing
-assignee: taro
+status: doing
+assignee: calandria
 agents: [calandria]
 author: taro
 links:
   relates: [artistic-decision-patches, battle-tests-without-simulate, the-volume-ceilings-are-measured-without-a-rom, tests-without-the-stages-subcommands, the-cartridges-fingerprint-hashes-the-path-s-builder]
-  has-part: [cartridges-runs-itself-to-assemble, the-stage-subcommands-only-the-converter-called-have-no-caller]
+  has-part: [cartridges-runs-itself-to-assemble, the-stage-subcommands-only-the-converter-called-have-no-caller, just-culprits-reads-the-dump-without-the-project-s-common-events]
   found: [just-culprits-reads-the-dump-without-the-project-s-common-events]
   blocked-by: [the-stages-speak-json-nobody-types]
   blocks: [advocate-init-dump-and-config]
@@ -934,3 +934,7 @@ project has as `build/`.
 
 Found and not fixed:
 [`just-culprits-reads-the-dump-without-the-project-s-common-events`](just-culprits-reads-the-dump-without-the-project-s-common-events.md).
+
+### 2026-11-25, Hornero: back to `doing`
+
+Steps 1-3b merged; 4 to 7 remain, so the task stays `doing`.
