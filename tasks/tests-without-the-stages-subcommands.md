@@ -381,3 +381,9 @@ program's own code; what it needs is a linked ROM, for the `.dbg`.
   cartridges assemble today. Which flags those are is listed in the step
   that does it, against the ten cartridges of ABL's `advocate.toml`.
 * `ditto`'s round trip: as Cardón recommended, the dump checks its own.
+
+### 2026-11-25, Hornero: steps 1, 2 and the lint launched
+
+> Let's go now :D
+
+(taro, 2026-11-25) Step 1 to Cardón; step 2 (Wally's invariants, parallel) to Aguará; Goombario as a lint over the test game with every feature flag on to Chajá, in parallel.
