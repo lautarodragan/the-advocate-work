@@ -626,3 +626,37 @@ and `config` (a machine file under flags and environment variables) are
 `todo`, after this one (taro, 2026-11-25: "dale! directo a `todo`").
 `goombario` folding into `build`, like the patches, is noted there for
 step 4 or `tests-without-the-stages-subcommands`.
+
+### 2026-11-25, Calandria: step 1, the converter a library
+
+the-advocate `d2080587` (branch `calandria-advocate`, from `cd3a40af`).
+`rm2k-snes-convert` gains a `[lib]`, `rm2k_snes_convert`: `convert(argv,
+&Log)` is the conversion as the binary runs it, with what it says in a
+`Log` instead of stdout and stderr. The `Log` is
+`rm2k-snes/project/src/log.rs`: `outln!`/`errln!` write into the log the
+thread converts into, or onto stdout and stderr when there is none —so
+every binary prints as before—, and it keeps two buffers so
+`converter.log` stays stdout first and stderr after. What goes through
+it: the converter's 101 `println!`, the audio stage's six lines and the
+event compiler's one warning (`pages.rs`; the events crate gains
+`rm2k-project` for it). A thread-local and not a parameter: the prints
+sit behind a hundred signatures, and the stages are called through
+functions shaped by their request. The stages' `CACHE` is no longer a
+`OnceLock`: a thread-local set by the conversion with a guard, and both
+it and the log are carried into the conversion's two thread scopes
+(`stage::carried`). A flag the parser refuses no longer exits the
+process (`From<clap::Error> for Stop`); the binary prints it as before.
+
+#### Verified
+
+The nine games with `NO_CACHE=1 just cartridges --force` (ABL
+`--without-tracks`), the global builder of `cd3a40af` with this step's
+`rm2k-snes-convert` first on the PATH, against the same with the global
+tools: every file of each `build/` byte for byte (a script, comparing
+4,476 files of ABL's and 15,000 more), and the only differences are
+`stamp.txt` (the converter's binary is in the fingerprint), the `.o`, the
+`.dbg`'s `mtime`s, and the checkout's path where a file names it —the
+`.dbg`, `converter.log`'s three `->` lines, `events-request.json`'s
+manual maps—. Every `.sfc`, `.msu`, `mapdata.inc`, and `converter.log`
+apart from those paths, equal. `cargo test` of `rm2k-project` and
+`rm2k-snes-convert`, and clippy of the four crates touched, clean.
