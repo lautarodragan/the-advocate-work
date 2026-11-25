@@ -626,3 +626,16 @@ and `config` (a machine file under flags and environment variables) are
 `todo`, after this one (taro, 2026-11-25: "dale! directo a `todo`").
 `goombario` folding into `build`, like the patches, is noted there for
 step 4 or `tests-without-the-stages-subcommands`.
+
+### 2026-11-25, Tijereta: step 5b done
+
+[`the-stage-subcommands-only-the-converter-called-have-no-caller`](the-stage-subcommands-only-the-converter-called-have-no-caller.md)
+is in `testing`: the eleven subcommands and `rm2k-snes-patches --request`
+removed, on the-advocate branch `tijereta-dead-subcommands` (two commits,
+the removal with its tests moved onto the stage functions, then the
+crates' prose), and the book's "Running them by hand" in `tools.md`, on
+the book's branch of the same name. The nine games' ROMs come out byte
+for byte equal. The converter's crate, `runtime/message_face.s`,
+`LAYOUT.md` and the book's road diagram still name the old subcommands as
+the stages' names: that is step 6's prose. `rm2k-snes-audio msu` and the
+converter's conversion mode were not touched, as the design says.

@@ -2,8 +2,8 @@
 name: "The stage subcommands only the converter called have no caller"
 description: "Since the converter calls every stage as a function, eleven subcommands of the stage binaries are run by nothing: no test, no recipe, no converter; their main over the stage function is a path nothing executes"
 type: refactor
-status: doing
-assignee: tijereta
+status: testing
+assignee: taro
 author: calandria
 agents: [calandria, tijereta]
 links:
@@ -135,3 +135,24 @@ binary and function, and say the rest are functions only.
 `internals/the-converters-stages.md` still name the old subcommands as
 the stages' names. The converter is Calandria's while it becomes a
 library, and the runtime is in the fingerprint.
+
+#### Verified
+
+With `just install-local .local-tools convert wally events screens images
+battle mapdata rm2k-snes-audio patches` first in PATH, in a ports worktree
+at `4c23c9e`: `NO_CACHE=1 just cartridges --force` of the nine games (ABL
+`--without-tracks`) gives the 20 `.sfc` —ABL's release and its ten test
+cartridges, Zounds' two, one per other game— **byte for byte equal** to
+the same build with the globals of `cd3a40af`; ABL's `abl.sfc` sha256
+`3bf35fd7…1718`. Then, green: `just lint`, `just test`, `just rust-test
+--no-fail-fast`, `SOUNDFONT=…/FluidR3_GM.sf2 just test-game`, the ports'
+`just boot` and ABL's `just tests`. Only the `.sfc` were compared, not
+every file of `build/`: nothing that writes the others changed, but that
+was not measured.
+
+**What no test covers any more**: the battle binary's exit codes (its
+only test of them was the `tables` one), and the patches binary's refusal
+of a wrong call with `--check`.
+
+**To install when merging**: `just install convert wally events screens
+images battle mapdata rm2k-snes-audio patches`.
