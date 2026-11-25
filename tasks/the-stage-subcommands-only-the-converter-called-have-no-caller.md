@@ -54,3 +54,22 @@ binaries go once the tests stop calling them—. Decided: remove the
 eleven subcommands, their usage lines in the READMEs, and fix the book's
 "Running them by hand" in `tools.md` to name only what still runs. Not
 urgent: `one-advocate-command` would take them with it.
+
+### 2026-11-24, Calandria: one more, and the crate tests that drive them
+
+Seen designing [`one-advocate-command`](one-advocate-command.md), at
+the-advocate `cd3a40af`:
+
+* **`rm2k-snes-patches --request DECISIONS BUILD`** (`main.rs:67`, "the
+  converter: one build's patches") has no caller either: the converter
+  calls `rm2k_snes_patches` as a function since A8, and nothing in the
+  ports or the test game passes `--request` (grep of `4c23c9e`). Its
+  `BUILD` and `--check` modes stay, `test_patches.py` and ABL's
+  `patches-check` run them.
+* **Crate tests run some of the eleven through the binary**: `wally map`
+  in `whole_map.rs`, `decorative.rs`, `fused_tiles.rs`, `shared_slots.rs`
+  and `too_many_npcs.rs`; `rm2k-snes-battle tables` and
+  `rm2k-snes-events compile` in their `command_line.rs`. So "nothing runs
+  them" holds for the ports and the converter, not for `just rust-test`:
+  removing a subcommand moves its tests onto the stage function, and that
+  is most of the step.
