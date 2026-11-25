@@ -10,6 +10,7 @@ links:
   relates: [artistic-decision-patches, battle-tests-without-simulate, the-volume-ceilings-are-measured-without-a-rom, tests-without-the-stages-subcommands, the-cartridges-fingerprint-hashes-the-path-s-builder]
   has-part: [cartridges-runs-itself-to-assemble, the-stage-subcommands-only-the-converter-called-have-no-caller]
   blocked-by: [the-stages-speak-json-nobody-types]
+  blocks: [advocate-init-dump-and-config]
 ---
 
 **Why**: building a game is today a chain of processes —
@@ -616,3 +617,12 @@ stages' answers come from the cache and only the assembly runs.
 (taro, 2026-11-25) So `advocate` builds; whether it keeps subcommands at
 all is being talked over with taro (`ditto` as `advocate dump`, an
 `init`, a machine config file) and will be written here when settled.
+
+### 2026-11-25, Hornero: subcommands stay, the rest is another task
+
+`advocate` keeps subcommands, `build` the main one; `init`, `dump` (Ditto)
+and `config` (a machine file under flags and environment variables) are
+[`advocate-init-dump-and-config`](advocate-init-dump-and-config.md), in
+`todo`, after this one (taro, 2026-11-25: "dale! directo a `todo`").
+`goombario` folding into `build`, like the patches, is noted there for
+step 4 or `tests-without-the-stages-subcommands`.
