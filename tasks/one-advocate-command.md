@@ -938,3 +938,7 @@ Found and not fixed:
 ### 2026-11-25, Hornero: back to `doing`
 
 Steps 1-3b merged; 4 to 7 remain, so the task stays `doing`.
+
+### 2026-11-25, Hornero: step 4 to Calandria
+
+taro: "dale". The ports move to `advocate` with option (d).

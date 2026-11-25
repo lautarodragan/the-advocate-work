@@ -2,7 +2,8 @@
 name: "`just culprits` reads the dump without the project's common events"
 description: "The ports' `just culprits` passes the game's data/ to `rm2k-snes-events culprits`, but the converter compiles the dump with the project's own common events forked in, so in a game that brings its own the commons' report is not the cartridge's"
 type: bug
-status: todo
+status: doing
+assignee: calandria
 author: calandria
 links:
   found-in: [one-advocate-command]
