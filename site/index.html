@@ -42,7 +42,14 @@
   header h1 { font-size: 1.5rem; margin: 0 0 .25rem; }
   header p { margin: 0 0 1.5rem; color: var(--muted); }
   a { color: var(--accent); }
-  .filters { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1rem; }
+  /* Each row of buttons stays on one line and scrolls sideways (taro's,
+     2026-11-25): wrapped, the rows of games and authors grew to several
+     lines and pushed the list down. */
+  .filters {
+    display: flex; flex-wrap: nowrap; gap: .5rem; margin-bottom: .75rem;
+    overflow-x: auto; scrollbar-width: thin; padding-bottom: .25rem;
+  }
+  .filters button { flex: none; white-space: nowrap; }
   .filters button {
     font: inherit; font-size: .9rem; cursor: pointer;
     padding: .3rem .8rem; border-radius: 999px;
@@ -126,6 +133,15 @@
     background: var(--log-bg); border: 1px solid var(--line); border-radius: .4rem;
   }
   .log-body h3 { font-size: 1rem; margin: 1rem 0 .35rem; }
+  /* The button that closes an open task, at its end, on the right: on the
+     line of a folded log's summary, or under an open log. */
+  .fold-row { display: flex; justify-content: flex-end; margin-top: .5rem; }
+  .body > details.log:not([open]) + .fold-row { margin-top: -1.85rem; }
+  .fold-row button {
+    font: inherit; font-size: .85rem; cursor: pointer; color: var(--muted);
+    padding: .1rem .7rem; border-radius: 999px;
+    border: 1px solid var(--line); background: var(--card);
+  }
   .log-body h4 { font-size: .95rem; }
   /* A task's typed links (README, "A task's frontmatter"), before its
      log: the relation on the left, and each task with a pill of its state,
@@ -374,7 +390,7 @@
     if (!b) return;
     const d = document.createElement('div');
     d.className = 'body';
-    d.innerHTML = b.textContent;
+    d.innerHTML = b.textContent + '<div class="fold-row"><button type="button" class="fold" title="Close the task">close</button></div>';
     b.replaceWith(d);
     const q = marks && query();
     if (q && hits.has(e.target)) {
@@ -383,6 +399,15 @@
       paint(found, q);
     }
   }, true);
+  // The close button at a task's end folds it, and brings its summary back
+  // into view if closing left the reader below it.
+  document.addEventListener('click', e => {
+    const b = e.target.closest('button.fold');
+    if (!b) return;
+    const t = b.closest('details.task');
+    t.open = false;
+    if (t.getBoundingClientRect().top < 0) t.scrollIntoView();
+  });
   // What the search looks in: the task as it reads, its body too. An
   // unopened body is HTML in a string, so its tags and comments go and its
   // entities —cmark-gfm writes only these— come back as characters.

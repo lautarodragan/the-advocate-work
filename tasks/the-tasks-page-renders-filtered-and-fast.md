@@ -290,3 +290,19 @@ neither filter nor paint, and the third is the first full pass. The same
 key-by-key check against a fresh page: no difference at any step; per
 key at 4x CPU, `converter` 2, 3, 336 (the first read of every task's
 text, which moved to the third key), then 12, 8, 10, 9, 9, 7 ms.
+
+### 2026-11-25, Hornero: one-line filter rows, and a close button
+
+> Could the lists of buttons stay on one line each, with horizontal
+> scroll? Could you add a little button to close/collapse open tasks, at
+> the end of the task? It would go on the same line as Log, right-aligned,
+> if the log is folded, or below the log's space if it is open. I think I
+> would right-align it in both cases, but I don't know if it will look
+> good. What do you think?
+
+(taro, 2026-11-25) Done in `site/index.html`: each `.filters` row is one
+line that scrolls sideways; at the end of an opened task's body a
+"close" button, right-aligned, on the folded log's summary line or under
+the open log, which folds the task and brings its summary back into view
+if the reader was below it. Right-aligned in both cases reads well: it
+stays where the eye ends. Looked at in headless Chromium at phone width.
