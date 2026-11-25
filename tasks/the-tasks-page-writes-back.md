@@ -144,3 +144,10 @@ made from it lands on `main`.
 ### 2026-11-25, taro: a comment
 
 > Testing a comment :o
+
+### 2026-11-25, Hornero: the first save from the page worked
+
+taro's comment above came in as `c533ad4a`, one commit on `main` from the
+page, through GitHub's real API: the token, the queue and the git data
+API's save worked the first time. The inbox watch woke Hornero with it,
+`tasks.nu inbox` listed it, and `check --strict` stays clean.
