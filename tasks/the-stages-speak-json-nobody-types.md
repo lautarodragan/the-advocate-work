@@ -2,8 +2,8 @@
 name: "The stages speak JSON nobody types"
 description: "Each stage builds its answer with json! and whoever reads it walks a serde_json::Value key by key; one set of serde types both ends share makes the contract between stages something the compiler checks"
 type: refactor
-status: doing
-assignee: calandria
+status: testing
+assignee: taro
 agents: [calandria, aguara, cardon, carpintero, chaja, mulita, tijereta]
 author: taro
 links:
@@ -2108,3 +2108,20 @@ warm twice, the four suites green on the merged tree; the task's log has
 the detail. With Carpintero's screens, the two requests Calandria
 counted as left are typed. **Install when merging**: `convert` and
 `wally`.
+
+### 2026-11-24, Hornero: phase B closed, to `testing`
+
+With Wally's and the screens' requests merged (the-advocate `6edfe5ff`
+and the merge after it), the stages speak types both ways: what JSON is
+left in the converter is the dump and the forks, the project's settings,
+the case files, what is written for people (`uses.json`, the queries,
+`degradations.json`), the cache key, and the tests. Verified on the
+merged tree: `just lint`, `just test`, `just rust-test --no-fail-fast`
+(the flaky `a_cached_object_gives_the_dbg_a_fresh_one_gives` failed once
+under load and passed three times alone), the test game, the ports'
+`boot`, ABL's suite, and the nine games' `release` ROMs equal to the ones
+delivered. Nothing to see or hear: every step was byte for byte.
+
+Next in the queue, from the design's section 7:
+[`one-advocate-command`](one-advocate-command.md), then
+[`a-stage-s-cache-key-once-it-is-a-library`](a-stage-s-cache-key-once-it-is-a-library.md).
