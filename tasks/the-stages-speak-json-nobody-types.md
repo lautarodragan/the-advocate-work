@@ -2093,3 +2093,18 @@ net lines. The nine games byte for byte against `633dcde7`, cold and
 warm twice, the four suites green; the task's log has the detail. Of
 the two requests Calandria counted as left, Wally's is Aguará's.
 **Install when merging**: `convert` and `screens`.
+
+### 2026-11-24, Aguará: Wally's map request typed
+
+[`wally-s-map-request-is-built-and-read-by-hand`](wally-s-map-request-is-built-and-read-by-hand.md),
+in the-advocate `aguara-wally-request` (`f6208d13` over `633dcde7`,
+`main` merged at `ed7898d3`): the request is `wally::request::Asked`
+—`LayersAsked` for `layers`—, built by the converter as a struct and
+read by the stage and its binary with serde; the `from_json`s, the
+`to_json`/`json_of`/`*_json_of` builders and their helpers went. `pages`
+now carry only Wally's `ScannedPage`, not the scan's whole record. −126
+net lines. The nine games byte for byte against `633dcde7`, cold and
+warm twice, the four suites green on the merged tree; the task's log has
+the detail. With Carpintero's screens, the two requests Calandria
+counted as left are typed. **Install when merging**: `convert` and
+`wally`.
