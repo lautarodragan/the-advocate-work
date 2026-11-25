@@ -2,8 +2,9 @@
 name: "The tasks page writes back"
 description: "From the tasks page taro moves a task's state and assignee, comments, asks Hornero something or answers a question's options; each change applies at once and waits in a queue in localStorage behind an 'n pending changes [save] [discard]' bar, and saving is one commit to the repo through GitHub's API, with a token scoped to this repo; GitHub stays the source of truth"
 type: feature
-status: doing
-assignee: huron
+status: testing
+assignee: taro
+agents: [huron]
 author: taro
 links:
   relates: [the-tasks-page-renders-filtered-and-fast]
@@ -60,6 +61,29 @@ answering a question means a chat with Hornero or an edit by hand.
 
 Nothing done yet. To launch when the weekly usage allows it.
 
+### 2026-11-25, Hornero: how Hornero hears it, while working
+
+> Would it make sense for you to have a `git fetch` running in a loop,
+> once every 15 minutes, say, and `git log ..origin/main`, and that this
+> alerts you, with a Claude Code monitor or some custom plugin? It would be
+> good that it does *not* message/wake you if there is nothing to look at.
+
+> And maybe you could start that monitor automatically when a session
+> opens? With a hook?
+
+(taro, 2026-11-25) For Hornero to do when merging Hurón's work, beside
+`tasks.nu inbox`:
+
+* **A Monitor** (Claude Code's tool: it wakes Hornero only when its command
+  prints): every 15 minutes `git fetch`, and the commits on
+  `origin/main -- tasks/` without an agent's `Co-authored-by` trailer —the
+  page's—, printed once each, nothing printed otherwise. Under a
+  `timeout` (24 h), as `.claude/hooks/bounded-waits.py` asks.
+* **A `SessionStart` hook** in this repo's `.claude/settings.json`: `git
+  pull`, `nu tasks/tasks.nu inbox` as context, and a reminder to launch
+  the Monitor —a hook cannot launch it: the tool is Hornero's—; AGENTS.md
+  says so too.
+
 ### 2026-11-25, Hurón: the page writes, against a fake GitHub
 
 * `nu tasks/tasks.nu inbox`: taro's entries (`### <date>, taro: …`)
@@ -104,3 +128,15 @@ Nothing done yet. To launch when the weekly usage allows it.
   exercised**: there is no token here. Load cost within noise, with the
   script and without it: 676 against 630 ms to DOMContentLoaded at CPU
   4x, 3 runs each.
+
+### 2026-11-25, Hurón: to testing
+
+Nothing to install: no Rust, only `tasks/tasks.nu`, `site/index.html` and
+the new `.github/workflows/check.yml`. The page's commits are made with
+taro's token and carry no agent's `Co-authored-by` —their message starts
+"taro, from the tasks page"—, which is what the Monitor planned above
+tells them apart by. Left to taro: the first real save —the token, a
+change, "Save"—, the commit on `main`, and the page carrying it after its
+build. The page built from this branch is in the captures'
+`2026-11-25-tasks-page-writes/`; it saves to the real repo, so a change
+made from it lands on `main`.
