@@ -38,6 +38,18 @@ is built by `nu tasks/tasks.nu html`, which fills the `<!-- TASKS -->` of
 `_site/index.html`; `.github/workflows/pages.yml` publishes it on each
 push. It is taro's, from 2026-10-11.
 
+**The page also writes**, with a fine-grained GitHub token for this repo
+alone that taro pastes once ("write", at the top) and the browser keeps:
+a task's `status` and `assignee`, a comment or a question for Hornero, and
+the answer to a "question for taro" whose options are listed —each as a
+log entry `### <date>, taro: …` with the text as a `> ` quote—. Each
+change shows at once and waits in a queue in the browser; "Save" makes
+the queue one commit on `main`, and a field someone else changed
+meanwhile is flagged instead of saved. `nu tasks/tasks.nu inbox` lists
+what taro wrote that Hornero has not answered, and
+`.github/workflows/check.yml` runs `check --strict` on every push, so a
+commit of the page that breaks a task shows. Since 2026-11-25.
+
 **A task can carry images**: captures of what it is about —the bug as
 it shows, the original next to it—. They go in `tasks/images/<task>/`,
 named after what they show, and the task shows them with a Markdown image

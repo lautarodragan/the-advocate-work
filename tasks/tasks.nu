@@ -574,6 +574,7 @@ def "main html" [
   let page = open --raw ($root | path join site index.html)
     | str replace '<!-- FILTERS -->' ($tasks | filters_html $states $default)
     | str replace '<!-- TASKS -->' $html
+    | str replace '<!-- COMMIT -->' $"<meta name=\"tasks-commit\" content=\"(git -C $root log -1 --format='%H %cI' | str trim)\">"
   mkdir ($root | path join $out)
   $page | save --force ($root | path join $out index.html)
   # The page's icon, which `index.html` names next to it.
@@ -727,7 +728,9 @@ def task_html [index: record, shown: bool] {
   let t = $in
   let id = $t.file | path parse | get stem
   let agents = if ($t.listed_agents | is-empty) { "" } else { $" · agents: ($t.listed_agents | str join ', ' | escape)" }
-  let assignee = if ($t.assignee | is-empty) { "" } else { $" · assignee: ($t.assignee | escape)" }
+  # In a span of its own, which the page's script rewrites when a change
+  # to it waits in the queue (see "Writing back" in `site/index.html`).
+  let assignee = if ($t.assignee | is-empty) { "" } else { $"<span class=\"assignee\"> · assignee: ($t.assignee | escape)</span>" }
   let author = if ($t.author | is-empty) { "" } else { $" · author: ($t.author | escape)" }
   let changed = if ($t.changed | is-empty) { "" } else { $" · changed <time datetime=\"($t.changed)\">($t.changed | str substring 0..9)</time>" }
   let source = $"https://github.com/lautarodragan/the-advocate-work/blob/main/tasks/($id).md"
@@ -743,7 +746,7 @@ def task_html [index: record, shown: bool] {
   let body = $t.body | body_html ($t.links | links_html $index)
     | str replace --all --regex '(?i)<(/?script)' '&lt;$1'
   [
-    $"<details class=\"task\" id=\"($id | escape)\" data-status=\"($t.status | escape)\" data-type=\"($t.task_type | escape)\" data-game=\"($t.games | str join ' ' | escape)\" data-author=\"($t.author | escape)\"(if $shown { '' } else { ' hidden' })>"
+    $"<details class=\"task\" id=\"($id | escape)\" data-status=\"($t.status | escape)\" data-type=\"($t.task_type | escape)\" data-game=\"($t.games | str join ' ' | escape)\" data-author=\"($t.author | escape)\" data-assignee=\"($t.assignee | escape)\"(if $shown { '' } else { ' hidden' })>"
     $"<summary><button type=\"button\" class=\"copy\" data-copy=\"($id | escape)\" title=\"Copy the task's file name\">copy</button><button type=\"button\" class=\"pick\" data-id=\"($id | escape)\" aria-pressed=\"false\" title=\"Add the task to the selection, to copy several at once\">select</button><span class=\"type\">($t.task_type | escape)</span>($games)<span class=\"name\">($t.name | escape)</span>"
     $"<span class=\"desc\">($t.description | escape)</span></summary>"
     $"<p class=\"meta\"><a href=\"#($id)\">#</a> · <a href=\"($source)\">($id).md</a>($changed)($author)($assignee)($agents)</p>"
