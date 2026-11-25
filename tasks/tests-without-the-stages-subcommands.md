@@ -814,3 +814,7 @@ library lost only dead code, so the ROMs do not move. The events crate
 changed only in a test.
 
 Status stays `doing`: steps 3, 4, 5 and 7 are the task's.
+
+### 2026-11-25, Hornero: paused at the weekly limit
+
+Steps 1, 2, 6 and 8 merged, verified and pushed. Left: 4 (images), 5 (audio), 3 (screens), one at a time; 7 with `battle-tests-without-simulate` (which also owns `test_zounds_special_items.py`'s `simulate`). ABL's `test_linter.py` stays held (ports branch `chaja-lint`) until the test game carries the runtime branches.
