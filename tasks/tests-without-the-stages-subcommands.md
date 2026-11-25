@@ -387,3 +387,119 @@ program's own code; what it needs is a linked ROM, for the `.dbg`.
 > Let's go now :D
 
 (taro, 2026-11-25) Step 1 to Cardón; step 2 (Wally's invariants, parallel) to Aguará; Goombario as a lint over the test game with every feature flag on to Chajá, in parallel.
+
+### 2026-11-25, Cardón: step 1, the slots and the numbers the build leaves
+
+Started on the-advocate `e267b6b3`, ports `7403613`, branches
+`cardon-tests-step1` in both.
+
+#### What the build leaves
+
+* **`slots.json`, a file beside each ROM**, not keys in `advocate.json`:
+  the slots are the converter's answer for one cartridge, written where it
+  writes the rest of what it answers for it —`culprits.json`,
+  `degradations.json`, `events-request.json`—, while `advocate.json` is
+  the builder's account of the project, written by another program after
+  the converter has run. Putting them there would make the builder read
+  and copy a converter's file for no reader that does not already know the
+  cartridge's directory. It is `{"variables": [[variable, slot]],
+  "skills": [[actor, skill, bit]]}`, from the compiler's second call, the
+  one the ROM is built with.
+* **Which pages compile** needs no new file: `culprits.json`, beside each
+  ROM since this morning, lists every page of every map of the game that
+  does not, judged the way the first call compiles it.
+* **The equates**, measured against the tests rather than taken from the
+  classification's count: after this step the tests read 13 numbers the
+  `.inc` did not write —`MESSAGES_STEP`; `ITEM_HELP_HEIGHT`,
+  `ITEM_LIST_Y`, `ITEM_NAME_WIDTH`; `BA_MSG_ROW1`, `BA_PAGE_MSG_ROW0`,
+  `BA_PAGE_MSG_COL`, `COMMAND_ATTACK`, `COMMAND_DEFEND`, `COMMAND_ITEM`,
+  `COMMAND_SKILL`, `VICTORY`, `DEFEAT`— plus the `.msu`'s layout
+  (`MSU_SIGNATURE_SIZE`, `MSU_BACKDROPS_START`, `MSU_BACKDROP_SPAN`,
+  `MSU_COLORS_AT`). The classification's "engine 9, screens 5" counted
+  names that are read only by what this step removes
+  (`TRIGGER_TOUCH_HERO`, `TRIGGER_AUTOSTART`, through
+  `test_protocol_against_the_game`), names the ROM already has under
+  another (`KEY_VALUE_DIR` is `KEY_VALUE_UP`…`LEFT`, `ENEMIES_MAX` is
+  `BA_ENEMIES_MAX`), a docstring (`SLOT_Y`) and local constants of a test
+  (`FRAMES_PER_SECOND`, `EQUIPMENT_SLOTS`, `CELL`).
+* **Not all of `engine.rs` and the two layouts as equates**: six names
+  collide with what the `.inc` or the runtime already define in other
+  units —`GRID` is a far RAM label, `EQ_PARAM_ARROW`, `MENU_EXP_Y`,
+  `WINDOW_LINE`, `BA_SKILL_COLUMN_DX`, `RAIN_DROPS` mean something else
+  there—, so the emission writes the list the tests read, in
+  `for_readers`, and a name missing from the `.sym` is an error that says
+  where to add it.
+
+#### What the tests read now
+
+* ABL: `data.variable_slots` and `skill_slots` read the cartridge's
+  `slots.json`; `data.page_of`, which returned a page's code and was only
+  asked "is it not None", is `data.page_compiles`, from `culprits.json`.
+  A new `equates` module points the generic harness's `engine` at
+  `release`'s `.sym`, and `screen_stage.layout()`, `model.arrangement()`
+  and `events.X` are that table. The `.msu`'s offsets and signature size
+  come from it too (`music.msu_backdrop`, `test_msu_data`,
+  `test_msu_effects`); the rest of `rm2k-snes-audio constants` is step 5's.
+* The root: `Cartridge.variable_slots` and The Frozen World cursor's
+  `put_variable` read `slots.json`.
+* The test game and the generic harness: `engine` reads the current
+  game's `.sym`; `Cartridge.variable_slots`, `slots.json`.
+* `test_protocol_against_the_game`'s walk went —its dispatch test stays—;
+  `test_pages.py`'s two page-record tests went to the events crate, over
+  its small game; its slot test looks at `release`'s slots.
+
+`release`'s slots are not the game's alone: two of its cases name
+variables 18 and 69, which the game does not, so the game's from 19 on
+sit two slots further than in a cartridge without those cases. By
+design —the slots go by number over everything the cartridge carries,
+and a save from another build is not kept—, so not a draft; the test's
+docstring says it.
+
+#### The subcommands
+
+Nothing called the five after this, so they went in their own commit:
+`rm2k-snes-events scan`, `rm2k-snes-convert scan`, `rm2k-snes-mapdata
+engine` (with `engine::numbers()`), `rm2k-snes-screens layout`,
+`rm2k-snes-battle layout`. The functions the converter calls stay. The
+events binary is left with `culprits` alone.
+
+#### Measured
+
+* **ROMs**: the twenty `.sfc` of the nine games (eleven of ABL, two of
+  Zounds, one of each other), built in the ports worktree with the
+  recipes, are byte for byte the same with `e267b6b3`'s global tools and
+  with this branch's first in PATH. The `.sym` and `.dbg` gain exactly the
+  seventeen new equates; none moves or goes.
+* **Worker time**: from the classification's trace, the suite stops
+  spending 24.3 s in `rm2k-snes-convert scan` (22 calls), 2.1 s in
+  `rm2k-snes-events scan` (3) and under 0.1 s in each of the other three
+  (8 calls each): ~26 s of ABL's suite and the boot's.
+
+#### Run
+
+With this branch's tools first in PATH: the-advocate's `just lint`,
+`just test` (29 passed) and `just rust-test --no-fail-fast` green;
+`just test-game` with FluidR3, 231 passed and 6 skipped; ABL's `just
+tests`, 1691 passed and 2 skipped —1694 before, less the three tests that
+went—; the root's `just boot`, 218 passed, once The Frozen World's
+`Cartridge.data` was given back (a first run had Zounds' debug-map tests
+red for it). No golden moved. After merging the-advocate's `main`
+—Chajá's lint—: `SOUNDFONT=… just lint` green, Goombario over the test
+game's three cartridges included, and `just test-game` 230 passed and 6
+skipped, its `test_linter.py` gone with that merge.
+
+#### Branches, and what to install when merging
+
+* the-advocate `cardon-tests-step1`: `a2db41ba` (the build leaves the
+  slots and the numbers), `e3c23a83` (the five subcommands go), and main
+  merged in. Install `events mapdata screens battle convert advocate`:
+  `convert` and `advocate` for the ROMs' `slots.json` and equates, the
+  other four because their binaries lost a subcommand.
+* the-advocate-ports `cardon-tests-step1`: `55959d3`. It needs the tools
+  above: with the global ones, `slots.json` is missing and the new
+  equates are not in the `.sym`.
+* the-advocate-docs `cardon-tests-step1`: `4d521a6`, "The tools" page.
+* Aguará's step 2 touches `tools.md` too, the `wally` line of "Running
+  them by hand", next to the lines this one changes.
+
+Status stays `doing`: steps 2 to 8 are the task's.
