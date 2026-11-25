@@ -815,3 +815,50 @@ cartridge—; with `maps/0002.toml` moved away both say the same complaint,
 and `advocate build --write-patches` wrote it back byte for byte. The
 complaint's text still says "run `rm2k-snes-patches`": the patches
 library's message, for step 4 or 6 to change with the ports' side.
+
+### 2026-11-25, Calandria: what the design left unmeasured
+
+On the-advocate `45e3ac57` and then `8833c963`, the nine games built in
+series with the flags their recipes pass, `--force`, ABL without tracks,
+today's chain (the global tools of `cd3a40af`: `rm2k-snes-cartridges`
+running one `rm2k-snes-convert` per cartridge) against `advocate build`;
+the machine otherwise idle. Seconds:
+
+| | cold, chain | cold, `advocate` | warm, chain | warm, `advocate` |
+|---|---|---|---|---|
+| ABL (11 cartridges) | 87.0 | 88.4 | 11.5 | 12.7 |
+| The Book of Three | 13.3 | 14.3 | 3.2 | 3.7 |
+| Desert Nightmare | 44.5 | 45.4 | 6.1 | 6.9 |
+| Dooms 2 | 10.8 | 11.4 | 2.9 | 3.3 |
+| El Dorado | 4.1 | 4.4 | 1.3 | 1.5 |
+| The Frozen World | 46.3 | 53.9 | 4.4 | 4.9 |
+| Sunset Over Imdahl | 95.5 | 99.4 | 3.5 | 4.4 |
+| Vampires Dawn | 126.2 | 128.9 | 13.4 | 14.2 |
+| Zounds | 25.0 | 26.1 | 4.7 | 5.2 |
+| **the nine** | **452.7** | **471.2** | **51.0** | **56.8** |
+
+Cold is an empty cache; warm, the same cache again. `advocate` does more
+than the chain did: it measures every cartridge's space, leaves
+`culprits.json` (which the chain never made), compares the patches and
+writes `advocate.json`; the 4% cold and 11% warm are that, mostly the
+culprits' first time and the space's `.dbg` reading, and The Frozen
+World's culprits are the biggest (4.5 s). With the culprits in the
+builder and uncached (`45e3ac57`) the warm build was 66.6 s, which is why
+they became a cached stage in `8833c963`. In process, without the
+converter's spawns, nothing came out faster: the stages' work dominates.
+
+**Memory**, the peak resident size sampled every 50 ms (MiB): of the
+whole process tree summed, and of its largest process.
+
+| `NO_CACHE=1` | chain, sum | chain, largest | `advocate` |
+|---|---|---|---|
+| ABL, eleven cartridges at once | 3,676 | 1,623 (`release`'s converter) | 3,785 |
+| Vampires Dawn, one | 2,046 | 2,033 | 2,245 |
+| Sunset Over Imdahl, one | 835 | 829 | 1,326 |
+
+With a cold cache, ABL 4,408 against 4,076. So eleven conversions in one
+process weigh what eleven processes weighed, as the design guessed —
+within a few percent either way between runs, since how many overlap
+depends on timing—; a game with one cartridge weighs somewhat more in
+`advocate` (the converter's memory is freed to the allocator and not
+returned while the process lives on to measure, compare and write).
