@@ -1,6 +1,6 @@
 ---
-name: "advocate init, dump and config"
-description: "advocate gets the subcommands of a port's path besides build: init starts a port from a game's .zip, dump is Ditto taking the game to data/, and config shows the machine's settings, kept in ~/.config/advocate/ beneath flags and environment variables"
+name: "advocate init, import and config"
+description: "advocate gets the subcommands of a port's path besides build: init starts a port from a game's .zip, import is Ditto taking the game from RM2k's format to data/, and config shows the machine's settings, kept in ~/.config/advocate/ beneath flags and environment variables"
 type: feature
 status: todo
 author: taro
@@ -37,9 +37,14 @@ subcommands runs nothing.
 
 * **`advocate init <game.zip>`**: starts a port —the minimal
   `advocate.toml` and the first dump—.
-* **`advocate dump`**: what `just dump` does, Ditto taking the game to
-  `data/`. The action, not Ditto's own subcommands: `ditto` stays a
-  library, and its binary as long as something needs it.
+* **`advocate import`** (named `dump` at first): what `just dump` does,
+  Ditto taking the game from RM2k's own format to `data/` —the database
+  and the maps, `.ldb` and `.lmu`, as JSON; the pictures, the MIDIs and
+  the sounds are not imported, the build keeps reading them from the
+  game's untouched `.zip`—. The action, not Ditto's own subcommands:
+  `ditto` stays a library, and its binary as long as something needs it.
+  Its inverse, the round trip back to RM2k's format, would be
+  `advocate export`, if something needs it.
 * **`advocate config`** and `~/.config/advocate/config.toml`: what belongs
   to the machine and not to the game —the RTP, the SoundFont, the cache,
   where `ca65`, `ld65` and the MSU-1 tracks' synthesizer and encoder are,
@@ -66,3 +71,14 @@ It goes after [`one-advocate-command`](one-advocate-command.md).
 ### 2026-11-25, Hornero: written
 
 Nothing done yet.
+
+### 2026-11-25, Hornero: `dump` is `import`
+
+> Could `advocate dump` have another name? Something more explicit, that
+> says "my input is an RPG Maker game in its original format, my output
+> is a game in advocate's format"? (excluding graphics and audio, I
+> suppose)
+
+(taro, 2026-11-25) `import`, the usual verb for bringing something from
+another format into one's own; `export` is left for the way back. The
+file name stays.

@@ -620,7 +620,7 @@ all is being talked over with taro (`ditto` as `advocate dump`, an
 
 ### 2026-11-25, Hornero: subcommands stay, the rest is another task
 
-`advocate` keeps subcommands, `build` the main one; `init`, `dump` (Ditto)
+`advocate` keeps subcommands, `build` the main one; `init`, `import` (Ditto; first called `dump`)
 and `config` (a machine file under flags and environment variables) are
 [`advocate-init-dump-and-config`](advocate-init-dump-and-config.md), in
 `todo`, after this one (taro, 2026-11-25: "dale! directo a `todo`").
