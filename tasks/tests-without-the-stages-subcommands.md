@@ -4,11 +4,12 @@ description: "Besides simulate, the ports' tests ask the stages themselves —sc
 type: refactor
 status: doing
 assignee: cardon
-agents: [cardon]
+agents: [cardon, chaja]
 author: taro
 links:
   blocks: [abl-s-test-cartridges-become-test-game-cases]
   relates: [battle-tests-without-simulate, one-advocate-command, the-stages-speak-json-nobody-types, the-volume-ceilings-are-measured-without-a-rom, the-slot-screens-reference-draws-a-lent-face-with-its-own-palette, the-stage-subcommands-only-the-converter-called-have-no-caller, advocate-init-dump-and-config]
+  found: [the-test-game-lacks-content-abl-s-runtime-branches-need]
 ---
 
 **Why**: the same as
@@ -387,3 +388,100 @@ program's own code; what it needs is a linked ROM, for the `.dbg`.
 > Let's go now :D
 
 (taro, 2026-11-25) Step 1 to Cardón; step 2 (Wally's invariants, parallel) to Aguará; Goombario as a lint over the test game with every feature flag on to Chajá, in parallel.
+
+### 2026-11-25, Chajá: Goombario a lint over the test game
+
+On the-advocate `e267b6b3` and the ports `7403613`. Branches `chaja-lint`
+in both.
+
+#### What changed
+
+* **the-advocate**: `just lint` is `lint-rust` —`cargo fmt` and
+  `clippy`, as before— and `lint-runtime`, which builds the test game with
+  the installed tools and runs Goombario over **every** cartridge of it
+  (`lint` in `test-game/justfile`), checking also that it looked at
+  something, as the test did. `test-game/tests/test_linter.py` goes. CI:
+  the `lint` job runs `lint-rust`, and the test game's job, which has
+  cc65 and the tools, `lint-runtime`. `lint-runtime` refuses when the
+  tools on the PATH were installed from another checkout, since the build
+  assembles that one's runtime and would lint it instead.
+* **The test game's `lint` cartridge**: the whole game with
+  `--title-4bpp --debug-screen --phasing --enemy-hp --msu-everything
+  --vblank-probe`, every converter flag that makes the runtime assemble
+  code. A cartridge apart and not `release`, as the assignment preferred:
+  `--msu-everything` makes a ROM that does not start without its `.msu`,
+  the probe costs every vblank a few lines, and the debug screen's option
+  moves the pause menu's goldens. No test runs it, so **no golden
+  moved**, and `release` and `test-vblank` are byte for byte the same. It
+  needed a title picture (`Title/Title.png`, ours, drawn by a script, in
+  `AUTHORS.md`; only `lint` shows it) and a name for switch 1 and variable
+  1, without which the debug screen does not assemble (`DBG_PAGES > 0`).
+  With `release` and `test-vblank` linted too, both sides of every flag
+  are seen.
+* **The ports**: ABL's `tests/tooling/test_linter.py` goes, in a commit of
+  its own that can wait (below).
+
+#### The runtime's conditionals, against the cartridges
+
+Every `.if`/`.ifdef` of `runtime/` on a symbol, read as each cartridge's
+`.sfc.dbg` defines it —ABL's eleven built at `e267b6b3`, the test game's
+three—. **On a build flag** (the converter's options): `DEBUG_SCREEN`,
+`DEBUG_PHASING`, `VBLANK_PROBE`, `TITLE_BPP`, `SCREEN_TITLE`/`SCREEN_ROW`
+(`--no-title`), `MSU_REQUIRED` (`--msu-everything`), `HERO_SPEED_KEYS`
+(`--no-speed-keys`, whose off side assembles nothing) and `BA_HP_ENEMIES`
+(`--enemy-hp`); `--no-timer`, `--test-encounters`, `--test-events-max`,
+`--test-graphic`, `--hero-above` and `--text-padding` assemble no
+different code, only data. **All covered** by the test game's three
+cartridges together, both sides; `--enemy-hp` beyond what ABL has.
+
+**On the game's content**, which no flag gives: ABL's cartridges assemble
+some 2,000 lines the test game's do not —`layer_text_on` (the box over the
+layer above, 1127 lines), `posed_stills` (472), `WINDOW_SYSTEMS > 1`,
+`GAME_OVER_TILES > 0`, `COMPAR_N > 0`, `PICTURE_SETS > 0`, the custom
+menu, `TEXT_INK_ENTRY = 0`, `WINDOW_BACKDROP_LINES = 1`, `SLOT_MENU_TILES
+<> SLOT_TILES`—. That is game content to write, not a flag to turn on, so
+it is the draft
+[`the-test-game-lacks-content-abl-s-runtime-branches-need`](the-test-game-lacks-content-abl-s-runtime-branches-need.md),
+with the table. Three of them are one side of a pair that cannot be in
+one ROM (`TEXT_INK_ENTRY`, `WINDOW_BACKDROP_LINES`, `WINDOW_SYSTEMS`): the
+test game would need a cartridge with other maps for each. And four that
+nobody linted before either, ABL nor the test game, because only other
+ports assemble them: `paint_table`, `sand_table`, `SHOW_WINDOW_SLOTS`,
+`WIDE_VARIABLES > 0`.
+
+**So removing ABL's `test_linter.py` today loses the lint of those ~2,000
+lines** until the draft is done. Its commit is separate
+(`417e102` in the ports) so that it can wait.
+
+#### Verified
+
+* `just lint` green; and **red** with a `pha`/`pla`/`bne` planted in
+  `msu_required` (`msu1.s`), which only `lint` assembles: Goombario
+  flagged it on `lint` alone, `release` and `test-vblank` green. Thrown
+  away.
+* Time: `lint-runtime` **4.3 s cold** (the test game's `build/` deleted:
+  three cartridges converted and assembled) and **1.0 s warm**; Goombario
+  itself is half a second a cartridge. The whole `just lint` 23 s with
+  clippy's first run in the worktree, **2.8 s warm**.
+* `just test` (29), `just rust-test --no-fail-fast` (green; with
+  `SOUNDFONT` set to FluidR3 `the_synth_bass_releases_as_the_soundfont_says`
+  is red, as it is on `main`: it expects the original game's SoundFont),
+  `SOUNDFONT=…FluidR3_GM.sf2 just test-game` (230 passed, 6 skipped).
+* Ports, with the branch's tools: `just boot` (218 passed), and the eight
+  other games' `release` byte for byte equal to the global build of
+  `e267b6b3`; ABL's `just tests` 1683 passed, 2 skipped —the 1694 of
+  Cardón's trace less the eleven of `test_linter.py`—, and its eleven
+  cartridges byte for byte the same (`abl.sfc` `3bf35fd7665c2045`). In a
+  fresh ports worktree `just tests` stops at `_xdist` until `just
+  cartridges` has run: its check runs pytest, and `conftest.py` refuses
+  without `build/advocate.json` —the known false alarm—.
+
+#### What is left
+
+* **When merging**: nothing to install, no Rust changed. In
+  `~/the-advocate` `just lint` works with the global tools, which are that
+  checkout's; in a worktree it asks for `just install-local .local-tools
+  advocate`.
+* The draft above, and whether ABL's commit waits for it: Hornero's or
+  taro's.
+* The task stays `doing` with Cardón: this is one part of it.
