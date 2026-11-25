@@ -10,6 +10,7 @@ links:
   relates: [artistic-decision-patches, battle-tests-without-simulate, the-volume-ceilings-are-measured-without-a-rom, tests-without-the-stages-subcommands, the-cartridges-fingerprint-hashes-the-path-s-builder]
   has-part: [cartridges-runs-itself-to-assemble, the-stage-subcommands-only-the-converter-called-have-no-caller]
   blocked-by: [the-stages-speak-json-nobody-types]
+  blocks: [advocate-init-dump-and-config]
 ---
 
 **Why**: building a game is today a chain of processes —
@@ -564,3 +565,64 @@ born beside the old binaries) go to Calandria in series; 5b (the dead
 subcommands,
 [`the-stage-subcommands-only-the-converter-called-have-no-caller`](the-stage-subcommands-only-the-converter-called-have-no-caller.md))
 to Tijereta in parallel. Step 4 with (d) after them.
+
+### 2026-11-25, Hornero: no `space` subcommand
+
+> What does the space subcommand do, exactly? Do we really need it, or
+> could it be part of build's output?
+
+(taro, 2026-11-25) It does not need to be a subcommand: `advocate build`
+already computes each cartridge's space when it builds it (section 2) and
+keeps the whole detail in `build/advocate.json`; at the end it prints one
+line per cartridge —free data banks and the tightest bank—. The ports'
+`just space` reads the file (step 4), and a ROM built apart is measured
+by the `advocate.json` its build left beside it. What is lost: measuring a
+loose `.sfc` no build of ours made, which nothing does. taro agreed
+("dale"). So `advocate` is `build` and `assemble`.
+
+### 2026-11-25, Hornero: `patches --check` and `culprits` fold into `build`
+
+> `rm2k-snes-events culprits` and `rm2k-snes-patches --check`: does it
+> make sense that they exist outside the advocate binary? Shouldn't they
+> be subcommands?
+
+> I like your proposal!
+
+(taro, 2026-11-25) Neither stays a command of its own, nor becomes a
+subcommand:
+
+* **The versioned patches**: `advocate build` already makes the decisions
+  `patches/auto/` versions, so it compares them against what is
+  versioned, records what is stale in `advocate.json` and says so when it
+  prints; ABL's `test_patches.py` reads the file instead of running
+  `rm2k-snes-patches --check`. Writing them is a flag,
+  `advocate build --write-patches`, instead of the binary without
+  `--check`.
+* **`culprits`**: a report for people, so `advocate build` leaves
+  `culprits.json` in `build/<cartridge>/` on every build, as it leaves
+  `converter.log`, if it is cheap —to be measured: `--every-map`
+  compiles every map of the game—; if it is not, `advocate culprits`.
+
+`advocate` stays `build` and `assemble`.
+
+### 2026-11-25, Hornero: no `assemble` either
+
+Nothing calls `rm2k-snes-cartridges assemble` —no recipe, test or CI; the
+design's table says "a person"—, and `advocate build` with the cache
+already does what it was for: after a change to `runtime/` alone the
+stages' answers come from the cache and only the assembly runs.
+
+> Go ahead, out it goes.
+
+(taro, 2026-11-25) So `advocate` builds; whether it keeps subcommands at
+all is being talked over with taro (`ditto` as `advocate dump`, an
+`init`, a machine config file) and will be written here when settled.
+
+### 2026-11-25, Hornero: subcommands stay, the rest is another task
+
+`advocate` keeps subcommands, `build` the main one; `init`, `import` (Ditto; first called `dump`)
+and `config` (a machine file under flags and environment variables) are
+[`advocate-init-dump-and-config`](advocate-init-dump-and-config.md), in
+`todo`, after this one (taro, 2026-11-25: "dale! directo a `todo`").
+`goombario` folding into `build`, like the patches, is noted there for
+step 4 or `tests-without-the-stages-subcommands`.
