@@ -4,7 +4,7 @@ description: "Besides simulate, the ports' tests ask the stages themselves —sc
 type: refactor
 status: doing
 assignee: cardon
-agents: [cardon, chaja]
+agents: [cardon, chaja, Aguará]
 author: taro
 links:
   blocks: [abl-s-test-cartridges-become-test-game-cases]
@@ -601,3 +601,96 @@ skipped, its `test_linter.py` gone with that merge.
   them by hand", next to the lines this one changes.
 
 Status stays `doing`: steps 2 to 8 are the task's.
+
+### 2026-11-25, Aguará: step 2, Wally's invariants into Wally
+
+On the-advocate `e267b6b3`, ports `7403613`, docs `69c7c16`; merged with
+main at the-advocate `b39ece00`, ports `5df6a64`, docs `8e18cb6`.
+Branches `aguara-tests-step2` in the three.
+
+#### What changed
+
+* **Two checks in the conversion, at every build of every game**, which
+  stop it when they break —a bug in the rule, not a limit of the game,
+  so there is no loss to declare—: `baking::hold`, right after
+  `bakeable` (each baked tile opaque over its 16x16, tile 0 empty, and
+  the table giving the cell the bits the event's row imposed), and `hold`
+  at the end of `drawable_npcs` in `sprites/split.rs` (nobody but a
+  leader candidate, or a look only the hero shows, in a leader's
+  palette).
+* `test_timer_palette.py` → `every_event_is_drawn_when_the_palettes_fall_short`
+  in wally's `tests/lending.rs`; `test_leaders.py` →
+  `a_map_earlier_in_the_directory_does_not_put_its_leader_in_front` in
+  the converter's `scan.rs`. Both shown red with the lending and the
+  per-map party reset broken.
+* ABL's `test_baked.py`, `test_flash_palette.py`, `test_timer_palette.py`,
+  `test_leaders.py` and `harness/map_stage.py` deleted, and `leaders` and
+  `map_context` out of `harness/converter.py`; `test_fork_maps.py` finds
+  the built ChipSets in `project.path("build")`'s `patches-manual`.
+* The book: the flash divergence and the leaders' decision cite the new
+  guards; the baked events' optimization names `baking::hold`.
+
+**No test or harness calls `wally` or `rm2k-snes-convert leaders` /
+`map-context` any more** —grep of the ports, the-advocate's `tests/`,
+the test game and the harness—. What still names them: their own
+binaries, wally's crate tests that drive the binary
+(`whole_map.rs`, `command_line.rs`), `LAYOUT.md`, the converter's README,
+`queries.rs`'s doc, and the book's `tools.md` "Running them by hand".
+They go with the binaries at the end of the task.
+
+#### Verified
+
+* The nine games' `just cartridges`, on my branch before the merge, with
+  my `advocate` against the globals at `e267b6b3`: every `.sfc`, `.msu`
+  and `.inc` byte for byte equal; `converter.log` equal in eight, and
+  Vampires Dawn's gains only the compiler's 672 left-out warnings because
+  the globals' run took that answer from the cache
+  ([`the-event-compiler-s-left-out-warning-never-reaches-the-log`](the-event-compiler-s-left-out-warning-never-reaches-the-log.md),
+  known); `.dbg`, `stamp.txt` and `advocate.json` differ only in the
+  runtime's path. So every invariant holds today and the log gains no
+  line.
+* Broken on purpose, ABL's `release` stops:
+  * the rule without its opacity filter: "map 11: baking an event broke
+    its rule: event 33 is baked with tile 10033, which has transparent
+    pixels";
+  * the row's bits computed apart from the table (`tile_passability`
+    flipping a bit): "event 36 imposed Some(14) on cell 4817 and, baked,
+    the map's table says 0xf". Two more realistic breaks —the rule
+    baking tiles that go above the hero, or the next tile— found no
+    candidate in any of the nine games, so the passability check guards
+    a regression none of them can trigger through the rule today;
+  * the split letting anyone into a leader's palette: "map 3: the split
+    put @tile:ChipSet1_3:31:0 in palette 1, which is a leader's" —the
+    Emitter Room—.
+* On the merged tree, with `events mapdata screens battle convert
+  advocate wally` installed locally: `just lint` (with `SOUNDFONT`),
+  `just test`, `just rust-test --no-fail-fast` (all green but
+  `the_synth_bass_releases_as_the_soundfont_says`, which wants the
+  Microsoft GS SoundFont and I had given it FluidR3; green with the right
+  one), `just test-game` with FluidR3 (230 passed, 6 skipped), ports'
+  `just boot` (218 passed), ABL's `just tests` (1681 passed, 2 skipped,
+  2 min 30 s of pytest). No golden moved. `abl.sfc` `3bf35fd7665c2045`.
+  `just test` caught Kersh's name in an assertion message of the moved
+  test (`test_no_game_names.py`): fixed.
+
+#### What the tests stop catching
+
+* That the baking rule still reaches some map of ABL: a filter too many
+  bakes nothing and looks the same. Left: the crate's
+  `bakeable_says_what_is_baked_and_why_it_is_safe` and the test game's
+  baked map 15, both of which only fail if they stop baking.
+* A leader that a map splits with its other characters
+  (`shared_leaders`), which ABL's test looked at on maps 1 to 3 with
+  party [10]: the build's check looks only at the leaders' own palettes,
+  which is the split's promise; the rest is `separate_from_hero`'s.
+* The timer and the leaders on ABL's map 2 and opening themselves: the
+  crates check the same mechanism on invented maps.
+
+#### Suite time
+
+The four files, alone, one process, at `7403613` with the globals:
+**197 s** —`test_baked.py`'s three tests 63 s each, the other seven
+1 to 2 s—. What the checks add to the build was not measured apart: they
+read sheets the drawer already drew, once per map.
+
+Status stays `doing`: steps 3 to 8 are the task's.
