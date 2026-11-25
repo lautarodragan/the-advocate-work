@@ -719,3 +719,64 @@ for byte equal. The converter's crate, `runtime/message_face.s`,
 `LAYOUT.md` and the book's road diagram still name the old subcommands as
 the stages' names: that is step 6's prose. `rm2k-snes-audio msu` and the
 converter's conversion mode were not touched, as the design says.
+
+### 2026-11-25, Calandria: step 3, `advocate` beside the old builder
+
+the-advocate `a240f508`, then `15b1178f` merging `main` (Tijereta's 5b:
+no conflicts, the workspace's clippy clean). `rm2k-snes/advocate/`, one
+binary with one subcommand, `build` —no `space`, no `assemble`, per
+taro's answers above—: the names, `--force`, `--without-tracks`, `--list`
+and the machine's flags as `rm2k-snes-cartridges` took them, and `--into
+DIR -- FLAGS` for what was `--convert-into`. A bare `advocate` prints its
+help. `rm2k-snes-cartridges` and `rm2k-snes-project` stay as they were.
+
+What both builders share moved into the cartridge library:
+`build_these` (the threads that build several and the tracks after
+`release`, from the binary's `main`; it now prints every cartridge's line
+and answers the first failure after all are joined), `measure_space`
+into a `space.json` beside each ROM when it is built, `Measure::json`,
+`assemble::memory_map`. And `build` removes the stamp and the space
+before converting: the design's risk of a failed `--force` leaving a
+stamp that still matched.
+
+**`build/advocate.json`**, on every `advocate build` (not `--list`, not
+`--into`), also when nothing was stale and when a cartridge failed,
+written aside and renamed: `project`, `suite`, `settings` (what
+`rm2k-snes-project` printed); `machine`, each value given and the
+directory it is read from (`--unpacked`'s answer, but in the cache the
+build was given and not the project's own: the game with the port's
+files on top is keyed by the unpacked game's path, so its directory's
+name differs from `rm2k-snes-project --unpacked`'s, which unpacks into
+`build/cache/`); `listing`, what `--list --json` printed, with each
+cartridge's `space` (`null` when stale); `memory_map`; `sources`. Step
+4's readers each find their old answer under one key. Where the file is:
+`project.build()`, which every project has as `build/`; step 7 (fixing
+`build/`) is not done. At the end `advocate build` prints one line per
+cartridge: "release: 0 free data banks (0 fast) and 18 halves; the
+tightest, bank 1 with 1099 B left", or why it is stale.
+
+Moved to it: the test game's `just cartridges` and `deliver`, the
+harness's `Game` (reads the file; it no longer takes the machine's
+flags, and `test-game/tests/conftest.py` stopped passing them), and
+`volume-ceilings` (`advocate build --into`; where `release` is, from
+`Environment::cartridge`). `rust_projects` has `advocate`.
+**`release.yml`'s smoke test is not touched**: it asks
+`rm2k-snes-project`, which stays until step 5, and the packaging copies
+every binary, `advocate` included; with (d) it goes with step 5.
+
+#### Verified
+
+The nine games with `advocate build --force --without-tracks` and the
+recipes' flags, `NO_CACHE=1`, against the global tools' builds: every file
+of each `build/` equal but the ones named in step 1, and the new
+`advocate.json` and the twenty `space.json`. `advocate.json` of each game
+checked against the global `cd3a40af` tools (a script): `project`,
+`suite`, `settings` (and its order) equal to `rm2k-snes-project`'s, the
+suite's paths apart from the checkout; `machine.*.read` the same
+directory below each cache, as said above; `listing` equal to
+`rm2k-snes-cartridges --list --json` but `stale`, `fingerprint` and
+`fingerprint_files`, which hash each builder (every cartridge `null` in
+the file, and its `fingerprint_files` name `advocate` and no old binary);
+each cartridge's `space` equal to `space --json` of its ROM;
+`memory_map` and `sources` equal to `assemble --memory-map` and
+`--sources`.
