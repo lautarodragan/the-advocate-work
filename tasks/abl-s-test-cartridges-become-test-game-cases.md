@@ -9,7 +9,7 @@ links:
   has-part: [abl-s-eraseevent-tests-leave-for-the-test-game]
   blocked-by: [battle-tests-without-simulate, tests-without-the-stages-subcommands]
   part-of: [golden-game-and-two-repos]
-  relates: [a-stage-s-cache-key-once-it-is-a-library]
+  relates: [a-stage-s-cache-key-once-it-is-a-library, the-test-game-lacks-content-abl-s-runtime-branches-need]
 ---
 
 **Why**: since 2026-10-02 the engine's ROM tests live in A Blurred Line,
