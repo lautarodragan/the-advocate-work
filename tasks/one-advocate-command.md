@@ -2,13 +2,14 @@
 name: "One advocate command"
 description: "Once the stages are libraries, the converter becomes one too, and rm2k-snes-cartridges becomes `advocate`, with subcommands: build, assemble, space, and whatever else is building the game"
 type: refactor
-status: doing
-assignee: calandria
+status: testing
+assignee: taro
 agents: [calandria]
 author: taro
 links:
   relates: [artistic-decision-patches, battle-tests-without-simulate, the-volume-ceilings-are-measured-without-a-rom, tests-without-the-stages-subcommands, the-cartridges-fingerprint-hashes-the-path-s-builder]
   has-part: [cartridges-runs-itself-to-assemble, the-stage-subcommands-only-the-converter-called-have-no-caller]
+  found: [just-culprits-reads-the-dump-without-the-project-s-common-events]
   blocked-by: [the-stages-speak-json-nobody-types]
   blocks: [advocate-init-dump-and-config]
 ---
@@ -627,6 +628,86 @@ and `config` (a machine file under flags and environment variables) are
 `goombario` folding into `build`, like the patches, is noted there for
 step 4 or `tests-without-the-stages-subcommands`.
 
+### 2026-11-25, Calandria: step 1, the converter a library
+
+the-advocate `d2080587` (branch `calandria-advocate`, from `cd3a40af`).
+`rm2k-snes-convert` gains a `[lib]`, `rm2k_snes_convert`: `convert(argv,
+&Log)` is the conversion as the binary runs it, with what it says in a
+`Log` instead of stdout and stderr. The `Log` is
+`rm2k-snes/project/src/log.rs`: `outln!`/`errln!` write into the log the
+thread converts into, or onto stdout and stderr when there is none —so
+every binary prints as before—, and it keeps two buffers so
+`converter.log` stays stdout first and stderr after. What goes through
+it: the converter's 101 `println!`, the audio stage's six lines and the
+event compiler's one warning (`pages.rs`; the events crate gains
+`rm2k-project` for it). A thread-local and not a parameter: the prints
+sit behind a hundred signatures, and the stages are called through
+functions shaped by their request. The stages' `CACHE` is no longer a
+`OnceLock`: a thread-local set by the conversion with a guard, and both
+it and the log are carried into the conversion's two thread scopes
+(`stage::carried`). A flag the parser refuses no longer exits the
+process (`From<clap::Error> for Stop`); the binary prints it as before.
+
+#### Verified
+
+The nine games with `NO_CACHE=1 just cartridges --force` (ABL
+`--without-tracks`), the global builder of `cd3a40af` with this step's
+`rm2k-snes-convert` first on the PATH, against the same with the global
+tools: every file of each `build/` byte for byte (a script, comparing
+4,476 files of ABL's and 15,000 more), and the only differences are
+`stamp.txt` (the converter's binary is in the fingerprint), the `.o`, the
+`.dbg`'s `mtime`s, and the checkout's path where a file names it —the
+`.dbg`, `converter.log`'s three `->` lines, `events-request.json`'s
+manual maps—. Every `.sfc`, `.msu`, `mapdata.inc`, and `converter.log`
+apart from those paths, equal. `cargo test` of `rm2k-project` and
+`rm2k-snes-convert`, and clippy of the four crates touched, clean.
+
+### 2026-11-25, Calandria: step 2, the builder calls the converter
+
+the-advocate `88b2fc25` and `4e78d1f7`. `Cartridges::convert` calls
+`rm2k_snes_convert::convert` with the flags it passed the binary, the
+cases by their whole path, inside a `catch_unwind` ("`<cartridge>`: the
+converter panicked: …"), and writes the `Log`'s bytes as `converter.log`;
+a panic is said in that log (`log::panics_into_logs`). The MSU-1 tracks
+are `Tracks::build` of `rm2k-snes-audio`, its lines on stdout as they came
+and the summary built by the caller. `fingerprint_files` hashes
+`Cartridges::builder`, the running binary (`current_exe`), and no longer
+`rm2k-snes-convert` nor `rm2k-snes-cartridges` from the PATH: that closes
+[`the-cartridges-fingerprint-hashes-the-path-s-builder`](the-cartridges-fingerprint-hashes-the-path-s-builder.md)
+—its test hands the field a stand-in, and checks that an
+`rm2k-snes-cartridges` on the PATH is not hashed—.
+
+Two things the design did not see:
+
+* **A dependency cycle**: the builder's crate now links the converter,
+  which links the patches, whose binary linked the builder's crate only to
+  know where each cartridge is built for `--check`. That moved into
+  `rm2k-project` as `Environment::cartridge`, with `RELEASE`; the
+  patches' `main.rs` lost the dependency (one hunk; Tijereta's 5b touches
+  the same file).
+* **Temporary names by process id**: in one process two conversions wrote
+  a project ChipSet's image under the same `<name>.png.<pid>.png` and one
+  renamed the other's away; ABL's `test-twins` failed with the PNG not
+  found, on the first full run. The same shape was in the fork's dump with
+  the project's common events, the unpacked `.zip` and the game with the
+  port's own files (process id and nanoseconds); all four take the cache's
+  `aside`, now public, which carries a counter of the process.
+
+#### Verified
+
+The same nine `NO_CACHE=1 --force` builds, with this step's
+`rm2k-snes-cartridges` first on the PATH and, in front of it, a
+`rm2k-snes-convert` and an `rm2k-snes-audio` that fail if run (none was):
+against the global tools' builds, every file equal but the ones named in
+step 1 (`stamp.txt`: the builder's binary changes; `.o`; the `.dbg`'s
+`mtime`s; the checkout's path). And ABL's `release` with its tracks,
+`NO_CACHE=1 --force`, through both: the 106 `.pcm` byte for byte, the
+same 106 track lines and the same summary; what else the run prints is
+fluidsynth's own ALSA and PipeWire noise, interleaved differently each
+time. `cargo test` of `rm2k-snes-cartridge` and `rm2k-snes-patches`, clean
+(`a_cached_object_gives_the_dbg_a_fresh_one_gives` red once, green alone,
+the known flake).
+
 ### 2026-11-25, Tijereta: step 5b done
 
 [`the-stage-subcommands-only-the-converter-called-have-no-caller`](the-stage-subcommands-only-the-converter-called-have-no-caller.md)
@@ -639,3 +720,217 @@ for byte equal. The converter's crate, `runtime/message_face.s`,
 `LAYOUT.md` and the book's road diagram still name the old subcommands as
 the stages' names: that is step 6's prose. `rm2k-snes-audio msu` and the
 converter's conversion mode were not touched, as the design says.
+
+### 2026-11-25, Calandria: step 3, `advocate` beside the old builder
+
+the-advocate `a240f508`, then `15b1178f` merging `main` (Tijereta's 5b:
+no conflicts, the workspace's clippy clean). `rm2k-snes/advocate/`, one
+binary with one subcommand, `build` —no `space`, no `assemble`, per
+taro's answers above—: the names, `--force`, `--without-tracks`, `--list`
+and the machine's flags as `rm2k-snes-cartridges` took them, and `--into
+DIR -- FLAGS` for what was `--convert-into`. A bare `advocate` prints its
+help. `rm2k-snes-cartridges` and `rm2k-snes-project` stay as they were.
+
+What both builders share moved into the cartridge library:
+`build_these` (the threads that build several and the tracks after
+`release`, from the binary's `main`; it now prints every cartridge's line
+and answers the first failure after all are joined), `measure_space`
+into a `space.json` beside each ROM when it is built, `Measure::json`,
+`assemble::memory_map`. And `build` removes the stamp and the space
+before converting: the design's risk of a failed `--force` leaving a
+stamp that still matched.
+
+**`build/advocate.json`**, on every `advocate build` (not `--list`, not
+`--into`), also when nothing was stale and when a cartridge failed,
+written aside and renamed: `project`, `suite`, `settings` (what
+`rm2k-snes-project` printed); `machine`, each value given and the
+directory it is read from (`--unpacked`'s answer, but in the cache the
+build was given and not the project's own: the game with the port's
+files on top is keyed by the unpacked game's path, so its directory's
+name differs from `rm2k-snes-project --unpacked`'s, which unpacks into
+`build/cache/`); `listing`, what `--list --json` printed, with each
+cartridge's `space` (`null` when stale); `memory_map`; `sources`. Step
+4's readers each find their old answer under one key. Where the file is:
+`project.build()`, which every project has as `build/`; step 7 (fixing
+`build/`) is not done. At the end `advocate build` prints one line per
+cartridge: "release: 0 free data banks (0 fast) and 18 halves; the
+tightest, bank 1 with 1099 B left", or why it is stale.
+
+Moved to it: the test game's `just cartridges` and `deliver`, the
+harness's `Game` (reads the file; it no longer takes the machine's
+flags, and `test-game/tests/conftest.py` stopped passing them), and
+`volume-ceilings` (`advocate build --into`; where `release` is, from
+`Environment::cartridge`). `rust_projects` has `advocate`.
+**`release.yml`'s smoke test is not touched**: it asks
+`rm2k-snes-project`, which stays until step 5, and the packaging copies
+every binary, `advocate` included; with (d) it goes with step 5.
+
+#### Verified
+
+The nine games with `advocate build --force --without-tracks` and the
+recipes' flags, `NO_CACHE=1`, against the global tools' builds: every file
+of each `build/` equal but the ones named in step 1, and the new
+`advocate.json` and the twenty `space.json`. `advocate.json` of each game
+checked against the global `cd3a40af` tools (a script): `project`,
+`suite`, `settings` (and its order) equal to `rm2k-snes-project`'s, the
+suite's paths apart from the checkout; `machine.*.read` the same
+directory below each cache, as said above; `listing` equal to
+`rm2k-snes-cartridges --list --json` but `stale`, `fingerprint` and
+`fingerprint_files`, which hash each builder (every cartridge `null` in
+the file, and its `fingerprint_files` name `advocate` and no old binary);
+each cartridge's `space` equal to `space --json` of its ROM;
+`memory_map` and `sources` equal to `assemble --memory-map` and
+`--sources`.
+
+### 2026-11-25, Calandria: step 3b, the patches and the culprits folded in
+
+the-advocate `45e3ac57`, its own commit after step 3, as Hornero's
+message allowed: both fit without touching step 3's verification.
+
+* **The versioned patches**: every `advocate build` compares
+  `patches/auto/` against what its built cartridges decided —the
+  library's `check`, what `rm2k-snes-patches --check` ran—, keeps it in
+  `advocate.json` as `patches: {stale, versioned, own}` (`null` when no
+  cartridge has patches) and prints the stale ones after the cartridges'
+  lines; a stale patch does not fail the build. `--write-patches` writes
+  `release`'s first, what `rm2k-snes-patches build/release` did. The check
+  costs a tenth of a second on ABL.
+* **`culprits.json`**: cheap, so every cartridge the builder builds gets
+  it beside its ROM, as `converter.log` (in the cartridge library's
+  `build`, so `rm2k-snes-cartridges` leaves it too until step 5). Measured
+  with the global `rm2k-snes-events culprits --every-map` on `cd3a40af`,
+  the machine otherwise idle: 0.65 s for ABL's game and 1.1 s for Vampires
+  Dawn's, one thread; in the build it runs in the cartridge's thread. No
+  `advocate culprits`.
+
+#### Verified
+
+ABL's `release` built by `advocate build`: `culprits.json` equal as JSON
+to `rm2k-snes-events culprits --every-map` run on the same
+`events-request.json`, with its keys in the order the report writes them
+(the builder links `serde_json` with `preserve_order`, the events binary
+alone does not), so not byte for byte. `patches` says what `--check`
+says —303 maps, 41 animations, 92 battlers, 0 windows versioned; maps
+121, 133, 261, 269 and 348, `GreenDragon1` and `Royal` only in some
+cartridge—; with `maps/0002.toml` moved away both say the same complaint,
+and `advocate build --write-patches` wrote it back byte for byte. The
+complaint's text still says "run `rm2k-snes-patches`": the patches
+library's message, for step 4 or 6 to change with the ports' side.
+
+### 2026-11-25, Calandria: what the design left unmeasured
+
+On the-advocate `45e3ac57` and then `8833c963`, the nine games built in
+series with the flags their recipes pass, `--force`, ABL without tracks,
+today's chain (the global tools of `cd3a40af`: `rm2k-snes-cartridges`
+running one `rm2k-snes-convert` per cartridge) against `advocate build`;
+the machine otherwise idle. Seconds:
+
+| | cold, chain | cold, `advocate` | warm, chain | warm, `advocate` |
+|---|---|---|---|---|
+| ABL (11 cartridges) | 87.0 | 88.4 | 11.5 | 12.7 |
+| The Book of Three | 13.3 | 14.3 | 3.2 | 3.7 |
+| Desert Nightmare | 44.5 | 45.4 | 6.1 | 6.9 |
+| Dooms 2 | 10.8 | 11.4 | 2.9 | 3.3 |
+| El Dorado | 4.1 | 4.4 | 1.3 | 1.5 |
+| The Frozen World | 46.3 | 53.9 | 4.4 | 4.9 |
+| Sunset Over Imdahl | 95.5 | 99.4 | 3.5 | 4.4 |
+| Vampires Dawn | 126.2 | 128.9 | 13.4 | 14.2 |
+| Zounds | 25.0 | 26.1 | 4.7 | 5.2 |
+| **the nine** | **452.7** | **471.2** | **51.0** | **56.8** |
+
+Cold is an empty cache; warm, the same cache again. `advocate` does more
+than the chain did: it measures every cartridge's space, leaves
+`culprits.json` (which the chain never made), compares the patches and
+writes `advocate.json`; the 4% cold and 11% warm are that, mostly the
+culprits' first time and the space's `.dbg` reading, and The Frozen
+World's culprits are the biggest (4.5 s). With the culprits in the
+builder and uncached (`45e3ac57`) the warm build was 66.6 s, which is why
+they became a cached stage in `8833c963`. In process, without the
+converter's spawns, nothing came out faster: the stages' work dominates.
+
+**Memory**, the peak resident size sampled every 50 ms (MiB): of the
+whole process tree summed, and of its largest process.
+
+| `NO_CACHE=1` | chain, sum | chain, largest | `advocate` |
+|---|---|---|---|
+| ABL, eleven cartridges at once | 3,676 | 1,623 (`release`'s converter) | 3,785 |
+| Vampires Dawn, one | 2,046 | 2,033 | 2,245 |
+| Sunset Over Imdahl, one | 835 | 829 | 1,326 |
+
+With a cold cache, ABL 4,408 against 4,076. So eleven conversions in one
+process weigh what eleven processes weighed, as the design guessed —
+within a few percent either way between runs, since how many overlap
+depends on timing—; a game with one cartridge weighs somewhat more in
+`advocate`, not looked into: the sum includes `ca65` and `ld65`, and a
+guess is that memory the converter frees stays with the process while it
+goes on to assemble, measure and write.
+
+### 2026-11-25, Calandria: the culprits, a stage of the conversion
+
+the-advocate `8833c963`. Measured above: in the builder, uncached, The
+Frozen World's culprits cost 4.5 s on every build, warm or not. They are
+now asked by the converter, beside the request it keeps
+(`Compiler::culprits`, through `stage::call` as `rm2k-snes-events
+culprits`, keyed by the request and the dump), so a warm build takes them
+from the cache; the cartridge crate no longer links the event compiler.
+`rm2k-snes-convert` writes them too.
+
+**They read the dump the conversion compiled**, which in a game whose
+project brings its own common events is the fork with them (`fork.rs`
+in the converter), and not the game's `data/` that `just culprits`
+passes as `--data`: The Frozen World's commons' table has 18 commands in
+the build's `culprits.json` and 22 in the recipe's, ABL's are equal (no
+common events of its own; compared as JSON, the keys' order apart). The
+recipe's is the one that was wrong; it goes with step 4, when the ports
+read the build's file.
+
+### 2026-11-25, Calandria: the whole runs, and steps 1-3 handed back
+
+On the final tree, the-advocate `4c18e020` (branch `calandria-advocate`,
+`main` merged at `0010d275`), with every binary the branch touches
+installed in a `.local-tools` first on the PATH, the ports at `4c23c9e`:
+
+* `just lint`, `just test` (29), `just rust-test --no-fail-fast` (1,256
+  passed): green. The first run had two reds: the known flake
+  `a_cached_object_gives_the_dbg_a_fresh_one_gives` (green alone), and
+  the queries' usage in `queries.rs`, an indented doc comment that became
+  a doctest once the converter is a library (fenced as `text`,
+  `4c18e020`).
+* `SOUNDFONT=…/FluidR3_GM.sf2 just test-game`: 231 passed, 6 skipped. The
+  first run had 47 red: `game.py` had lost its `import subprocess`, which
+  `variable_slots` still uses (`4c18e020`).
+* The ports' `just boot`: 218 passed. ABL's `just tests`: 1,694 passed,
+  2 skipped. Both build through `rm2k-snes-cartridges` —the ports move
+  to `advocate` in step 4—, which is the same library as `advocate` now.
+* The double build: ABL with `advocate build`, warm cache, twice: the
+  first rebuilt the eleven (the stamps were the old builder's), the second
+  said all eleven up to date in a second. `abl.sfc`'s sha256:
+  `3bf35fd7665c2045e6cd3b8d30471b66abb686d107e52a9ac8da1cdd1d691718`.
+
+**What the suites do not cover**: no suite runs `advocate build` but the
+test game's; that it builds the nine games the same is the byte-for-byte
+comparison of step 3, not a test. No test reads `advocate.json` beyond
+the test game's harness (`listing`, `project`); its other keys were
+checked once against the old tools by a script, not by a test. The
+patches' comparison and `--write-patches`, the `space` line and a
+`--force` that fails half-way (the stamp removed first) were run by hand,
+once each, or not at all for the last. `volume-ceilings` was compiled and
+not run.
+
+**Install when merging**: the whole workspace, `just install`: the branch
+touches `rm2k-project`, which every binary compiles in, and adds
+`advocate`. `rm2k-snes-cartridges` and `rm2k-snes-project` stay
+installed and working until step 5.
+
+**For step 4**, what the file gives and what is still to do on the
+ports' side: every old answer under one key (`project`, `suite`,
+`settings`, `machine`, `listing` with `space`, `memory_map`, `sources`,
+and `patches` for `test_patches.py`); `culprits.json` beside each ROM for
+`just culprits`; the patches' complaint still says "run
+`rm2k-snes-patches`" (the patches library's text); `release.yml`'s smoke
+test still asks `rm2k-snes-project`, for step 5 with (d). Step 7 (`[paths]
+build` fixed) is not done: the file goes to `project.build()`, which every
+project has as `build/`.
+
+Found and not fixed:
+[`just-culprits-reads-the-dump-without-the-project-s-common-events`](just-culprits-reads-the-dump-without-the-project-s-common-events.md).
