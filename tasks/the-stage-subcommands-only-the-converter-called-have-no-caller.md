@@ -5,7 +5,7 @@ type: refactor
 status: doing
 assignee: tijereta
 author: calandria
-agents: [calandria]
+agents: [calandria, tijereta]
 links:
   found-in: [the-stages-speak-json-nobody-types]
   relates: [tests-without-the-stages-subcommands]
@@ -74,3 +74,64 @@ the-advocate `cd3a40af`:
   them" holds for the ports and the converter, not for `just rust-test`:
   removing a subcommand moves its tests onto the stage function, and that
   is most of the step.
+
+### 2026-11-25, Tijereta: the twelve removed, their tests on the functions
+
+On the-advocate `cd3a40af` (branch `tijereta-dead-subcommands`), the book
+at `ae2b401` (branch `tijereta-dead-subcommands`), ports `4c23c9e`
+(nothing to change there).
+
+#### Grepped again before removing
+
+The ports' `tests/`, `experiments/`, every `justfile` and `game.just`;
+the-advocate's `test-game/`, `rm2k-snes/harness/`, `tests/`,
+`.github/workflows/`; the book. What the ports' harness asks the stage
+binaries is `wally bakeable`/`split`, the screens' `render`, `refit`,
+`layout`, `equip`, `window`, the images' `backdrops`, `battlers`,
+`animations`, the battle's model questions, the mapdata's `vram`,
+`pages`, `compress`, `engine`, the events' `scan`, and `rm2k-snes-audio`'s
+`compile`, `keys`, `wav`, `find-song`, `volume-ceilings`: none of the
+twelve. The `"compile"` and `"boxes"` in ABL's `converter.py` are
+`rm2k-snes-convert`'s queries, not the stages'.
+
+#### What went, and where its tests went
+
+Lines of `main.rs` removed (added) per binary, `git diff --numstat`:
+
+| Binary | Gone | `main.rs` |
+|---|---|---|
+| `wally` | `map` | -23 (+3) |
+| `rm2k-snes-events` | `compile` | -5 (+2) |
+| `rm2k-snes-screens` | `boxes`, `faces`, `convert` | -62 (+10) |
+| `rm2k-snes-images` | `fullscreen`, `picture`, `background` | -41 (+4) |
+| `rm2k-snes-battle` | `tables` | -41 (+4) |
+| `rm2k-snes-mapdata` | `emit` (and its `--raw`) | -47 (+5) |
+| `rm2k-snes-audio` | `cartridge` | -66 |
+| `rm2k-snes-patches` | `--request` | -30 (+5) |
+
+* Wally's five map tests call `stage::map` —the converter's entry—
+  through `tests/common/mod.rs`, which reads the request file the test
+  wrote, types it and writes the answer where the test reads it;
+  `stage::map_of`, the untyped entry only the binary used, went.
+* The events' three compile tests moved to `tests/compile_stage.rs`, over
+  `stage::compile`; `command_line.rs` keeps the binary's `scan`.
+* The battle's `command_line.rs`, all `tables`, became `tables_stage.rs`
+  over `stage::tables`. **Its exit-code-2 test went**: a function has no
+  request file, and no test is left on that binary's exit codes.
+* The patches' tests write a build as the converter does (`stage::patches`
+  and `put`) and then copy and check it with the binary; the test of
+  `--request`'s own argument checks went with it.
+
+Two commits, the removal with its tests and then the prose (the crates'
+READMEs, the `stage.rs` headers, the mapdata request's comments). The
+book's "Running them by hand" in `tools.md` now lists what each stage
+binary still runs; the road's diagram and table keep naming the steps by
+binary and function, and say the rest are functions only.
+
+**Left for step 6**: the converter's crate (`convert/README.md`, `maps.rs`,
+`emit.rs`, `compiler.rs`, `fullscreen.rs`, `animations.rs`, `scene.rs`,
+`screens.rs`, `Cargo.toml`, `convert.rs`), `runtime/message_face.s`,
+`LAYOUT.md`, and the book's `tools.md` diagram and
+`internals/the-converters-stages.md` still name the old subcommands as
+the stages' names. The converter is Calandria's while it becomes a
+library, and the runtime is in the fingerprint.
