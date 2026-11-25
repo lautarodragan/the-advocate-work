@@ -9,7 +9,7 @@ author: taro
 links:
   relates: [artistic-decision-patches, battle-tests-without-simulate, the-volume-ceilings-are-measured-without-a-rom, tests-without-the-stages-subcommands, the-cartridges-fingerprint-hashes-the-path-s-builder]
   has-part: [cartridges-runs-itself-to-assemble, the-stage-subcommands-only-the-converter-called-have-no-caller, just-culprits-reads-the-dump-without-the-project-s-common-events]
-  found: [just-culprits-reads-the-dump-without-the-project-s-common-events]
+  found: [just-culprits-reads-the-dump-without-the-project-s-common-events, the-xdist-check-hides-why-pytest-failed]
   blocked-by: [the-stages-speak-json-nobody-types]
   blocks: [advocate-init-dump-and-config]
 ---
