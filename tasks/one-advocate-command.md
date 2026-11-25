@@ -564,3 +564,17 @@ born beside the old binaries) go to Calandria in series; 5b (the dead
 subcommands,
 [`the-stage-subcommands-only-the-converter-called-have-no-caller`](the-stage-subcommands-only-the-converter-called-have-no-caller.md))
 to Tijereta in parallel. Step 4 with (d) after them.
+
+### 2026-11-25, Hornero: no `space` subcommand
+
+> What does the space subcommand do, exactly? Do we really need it, or
+> could it be part of build's output?
+
+(taro, 2026-11-25) It does not need to be a subcommand: `advocate build`
+already computes each cartridge's space when it builds it (section 2) and
+keeps the whole detail in `build/advocate.json`; at the end it prints one
+line per cartridge —free data banks and the tightest bank—. The ports'
+`just space` reads the file (step 4), and a ROM built apart is measured
+by the `advocate.json` its build left beside it. What is lost: measuring a
+loose `.sfc` no build of ours made, which nothing does. taro agreed
+("dale"). So `advocate` is `build` and `assemble`.
