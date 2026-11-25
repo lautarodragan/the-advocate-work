@@ -603,3 +603,16 @@ subcommand:
   compiles every map of the game—; if it is not, `advocate culprits`.
 
 `advocate` stays `build` and `assemble`.
+
+### 2026-11-25, Hornero: no `assemble` either
+
+Nothing calls `rm2k-snes-cartridges assemble` —no recipe, test or CI; the
+design's table says "a person"—, and `advocate build` with the cache
+already does what it was for: after a change to `runtime/` alone the
+stages' answers come from the cache and only the assembly runs.
+
+> Go ahead, out it goes.
+
+(taro, 2026-11-25) So `advocate` builds; whether it keeps subcommands at
+all is being talked over with taro (`ditto` as `advocate dump`, an
+`init`, a machine config file) and will be written here when settled.
