@@ -3,11 +3,12 @@ name: "The test game lacks the content some of the runtime's branches need"
 description: "`just lint` runs Goombario over the test game's cartridges only, and the runtime assembles about 2,000 lines on what a game has —a parallel common event, a box without its window over the layer above, still events drawn into the background, a game-over picture, a ChangeSystem, a custom menu…— that ABL's cartridges assemble and the test game's do not; with ABL's `test_linter.py` gone, nothing lints them"
 type: test
 game: test-game
-status: draft
+status: todo
 author: chaja
 links:
   found-in: [tests-without-the-stages-subcommands]
   relates: [abl-s-test-cartridges-become-test-game-cases]
+  part-of: [abl-s-test-cartridges-become-test-game-cases]
 ---
 
 Found by Chajá on 2026-11-25, on the-advocate `e267b6b3` and the ports
@@ -61,3 +62,15 @@ moves anyway —`ChangeSystemGraphics`, the faces—. What is to decide is
 whether ABL's `tests/tooling/test_linter.py` stays until it is done:
 it was removed in the same change, as taro asked, and with it the lint
 of these lines.
+
+## Log
+
+### 2026-11-25, Hornero: promoted to `todo`; ABL's linter test waits for it
+
+Promoted by Hornero: measured from every cartridge's `.dbg`, and it is
+the content [`abl-s-test-cartridges-become-test-game-cases`](abl-s-test-cartridges-become-test-game-cases.md)
+asks the test game to have anyway. Until it is done, ABL's
+`tests/tooling/test_linter.py` stays: Chajá's commit removing it (ports
+`417e102`, branch `chaja-lint`) is held, so those ~2,000 lines keep being
+linted. It is removed in the same change that makes the test game
+assemble them.

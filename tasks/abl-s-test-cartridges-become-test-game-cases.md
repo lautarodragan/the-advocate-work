@@ -6,7 +6,7 @@ game: test-game
 status: todo
 author: taro
 links:
-  has-part: [abl-s-eraseevent-tests-leave-for-the-test-game]
+  has-part: [abl-s-eraseevent-tests-leave-for-the-test-game, the-test-game-lacks-content-abl-s-runtime-branches-need]
   blocked-by: [battle-tests-without-simulate, tests-without-the-stages-subcommands]
   part-of: [golden-game-and-two-repos]
   relates: [a-stage-s-cache-key-once-it-is-a-library, the-test-game-lacks-content-abl-s-runtime-branches-need]
