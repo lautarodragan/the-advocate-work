@@ -863,3 +863,22 @@ depends on timing—; a game with one cartridge weighs somewhat more in
 `advocate`, not looked into: the sum includes `ca65` and `ld65`, and a
 guess is that memory the converter frees stays with the process while it
 goes on to assemble, measure and write.
+
+### 2026-11-25, Calandria: the culprits, a stage of the conversion
+
+the-advocate `8833c963`. Measured above: in the builder, uncached, The
+Frozen World's culprits cost 4.5 s on every build, warm or not. They are
+now asked by the converter, beside the request it keeps
+(`Compiler::culprits`, through `stage::call` as `rm2k-snes-events
+culprits`, keyed by the request and the dump), so a warm build takes them
+from the cache; the cartridge crate no longer links the event compiler.
+`rm2k-snes-convert` writes them too.
+
+**They read the dump the conversion compiled**, which in a game whose
+project brings its own common events is the fork with them (`fork.rs`
+in the converter), and not the game's `data/` that `just culprits`
+passes as `--data`: The Frozen World's commons' table has 18 commands in
+the build's `culprits.json` and 22 in the recipe's, ABL's are equal (no
+common events of its own; compared as JSON, the keys' order apart). The
+recipe's is the one that was wrong; it goes with step 4, when the ports
+read the build's file.
