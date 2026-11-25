@@ -9,8 +9,8 @@ inbox=$(nu tasks/tasks.nu inbox 2>&1)
 python3 - "$inbox" <<'PY'
 import json, sys
 text = ("Tasks inbox (nu tasks/tasks.nu inbox):\n" + sys.argv[1] +
-        "\n\nLaunch the inbox Monitor now: `.claude/hooks/watch-tasks.sh`, "
-        "persistent, as AGENTS.md says.")
+        "\n\nLaunch the inbox watch now: `timeout 24h .claude/hooks/watch-tasks.sh` "
+        "with run_in_background, as AGENTS.md says.")
 print(json.dumps({"hookSpecificOutput": {"hookEventName": "SessionStart",
                                          "additionalContext": text}}))
 PY

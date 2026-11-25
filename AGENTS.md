@@ -92,9 +92,11 @@ pull --rebase=merges`, which only rebases its own commits not yet pushed
 and keeps its merges as merges. A commit of the page that breaks a task is
 shown red by CI's `nu tasks/tasks.nu check --strict`. The `SessionStart`
 hook of `.claude/settings.json` pulls and hands Hornero the inbox; **then
-Hornero launches the inbox Monitor**, `.claude/hooks/watch-tasks.sh`
-under a `timeout`, which wakes it only when a page commit lands —a hook
-cannot start a Monitor—.
+Hornero launches the inbox watch**, `timeout 24h
+.claude/hooks/watch-tasks.sh` with the Bash tool's `run_in_background`,
+which exits —and so wakes it— only when a page commit lands, and is
+launched again after; not Claude Code's Monitor, which expires every 30
+minutes and wakes it for nothing. A hook cannot start either.
 
 **Taking a task is moving it to `doing` with its `assignee`, before
 anything else.** With sub-agents the one launching them does it, on `main`
