@@ -2,6 +2,7 @@
 name: "share_data on the ROM's last byte does not link"
 description: "When no map shares slots, share_data is one byte, and if the bank packer puts it at $FFFFFF ld65 refuses `lda f:share_data + 4, x` with a range error: a cartridge that fits fails to build"
 type: bug
+game: advocate
 status: todo
 author: cardon
 agents: [cardon]

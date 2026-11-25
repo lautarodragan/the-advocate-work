@@ -2,6 +2,7 @@
 name: "fxpak's pty tests fail under load"
 description: "Six of the thirteen tests in snes/fxpak/tests/pty.rs answered \"no response to Ls in 2s\" while another agent compiled; alone they pass in under a second"
 type: bug
+game: advocate
 status: cancelled
 agents: [cardon]
 author: hornero

@@ -2,6 +2,7 @@
 name: "Six sweeps in scan.rs are one with another predicate"
 description: "has_rain, has_sandstorm, teleports_with_a_facing, transparent_messages, types_a_colour and window_slots each walk the maps, the common events and the test pages with their own copy of the loop, and convert.rs passes them the same three arguments six times"
 type: refactor
+game: advocate
 status: todo
 author: calandria
 agents: [cardon]

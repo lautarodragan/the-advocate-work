@@ -2,6 +2,7 @@
 name: "The patches request of release repeats five maps"
 description: "The request the converter hands the patches stage for ABL's release carries maps 121, 133, 261, 269 and 348 twice, with identical entries; until A8 the binary wrote and counted those five files twice, and the converter.log said 313 maps where there are 308"
 type: bug
+game: advocate
 status: todo
 author: tijereta
 links:

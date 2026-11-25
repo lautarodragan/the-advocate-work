@@ -2,6 +2,7 @@
 name: "record, scene and panorama write their tables outside the Inc writer"
 description: "mapdata's emission writes its tables through `Inc` since 2026-11-23, but record.rs, scene.rs, panorama.rs and posed.rs still build their pieces as Vec<String> lines with `format!(\".block {}\")` and `.join`, each table with its own empty case"
 type: refactor
+game: advocate
 status: todo
 author: calandria
 agents: [Calandria, cardon]

@@ -2,6 +2,7 @@
 name: "The converter's command line is clap's builder, read back by hand"
 description: "rm2k-snes-convert declares its 23 flags with clap's builder API and copies each into Options with get_one/get_flag; the derive API, which mapdata already uses, declares and reads them in one place"
 type: refactor
+game: advocate
 status: cancelled
 author: calandria
 agents: [cardon]

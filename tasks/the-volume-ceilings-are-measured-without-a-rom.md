@@ -2,6 +2,7 @@
 name: "The volume ceilings are measured without a ROM"
 description: "Each song's volume ceiling is measured today by hand, building a ROM and playing it in a libretro core; with blargg's S-DSP from snes_spc behind a Rust wrapper, fed the writes stream.rs already decodes, the audio stage can compute the table on every conversion, for every game, and the recipe, the stale-table test and the libretro module go"
 type: refactor
+game: advocate
 status: todo
 author: taro
 links:

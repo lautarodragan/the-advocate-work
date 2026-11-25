@@ -2,6 +2,7 @@
 name: "The cached .dbg test sees a date move"
 description: "a_cached_object_gives_the_dbg_a_fresh_one_gives failed once: the fresh build's .dbg gave mapdata.inc a modification time one second later than the cached one's, though the test writes the file once"
 type: bug
+game: advocate
 status: todo
 author: hornero
 agents: [cardon]

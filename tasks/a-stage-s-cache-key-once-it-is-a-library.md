@@ -2,6 +2,7 @@
 name: "A stage's cache key, once it is a library"
 description: "When the stages live inside rm2k-snes-convert, the cache can no longer key a stage's answer by its own binary's hash; until a per-stage key as trustworthy exists, every answer is keyed by the converter's binary and any change throws them all away"
 type: refactor
+game: advocate
 status: todo
 author: taro
 links:

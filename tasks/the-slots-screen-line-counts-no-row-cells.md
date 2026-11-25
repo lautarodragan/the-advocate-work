@@ -2,6 +2,7 @@
 name: "The slots screen's line counts no row cells"
 description: "The converter's `slots screen: … B of cells` line adds the slots' rows through `s[\"rows\"][0][0][0]`, one index too many since the port from Python: it is a number, so the rows always count 0 and the line says only the headers' bytes"
 type: bug
+game: advocate
 status: todo
 author: calandria
 agents: [calandria]

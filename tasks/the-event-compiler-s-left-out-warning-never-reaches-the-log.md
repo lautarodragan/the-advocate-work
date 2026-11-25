@@ -2,6 +2,7 @@
 name: "The event compiler's left-out warning never reaches the log"
 description: "rm2k-snes-events writes \"map N: WARNING, event E is left out\" on standard error; since A2 of the stages' task it reaches converter.log, but only when the compiler runs: an answer from the cache brings no warning, and each event is told three times, after everything else"
 type: bug
+game: advocate
 status: todo
 author: calandria
 agents: [cardon]

@@ -2,6 +2,7 @@
 name: "Adeleine's grouping settles on its first start"
 description: "reduce_colors refines one starting grouping to its local minimum; on ABL's map 3 that leaves a palette with only white. Other starts, judged by the same cost, halve the error of the mode-1 maps"
 type: research
+game: advocate
 status: draft
 assignee: taro
 author: carpintero

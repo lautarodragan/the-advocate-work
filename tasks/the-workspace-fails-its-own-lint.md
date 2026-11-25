@@ -2,6 +2,7 @@
 name: "The workspace fails its own lint"
 description: "`just lint` in the-advocate is red on main: clippy's wrong_self_convention on `from_the_cache` in rm2k-snes-audio, and rustfmt on two files, all from before the five libraries lost their binaries"
 type: bug
+game: advocate
 status: done
 author: tijereta
 agents: [Tijereta]

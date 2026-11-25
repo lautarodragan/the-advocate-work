@@ -2,6 +2,7 @@
 name: "fxpak's pty tests share ptsname's buffer"
 description: "openpt() in snes/fxpak/tests/pty.rs names each fake FX Pak with ptsname, whose buffer is static: tests running in parallel threads can read each other's name and open the same pty, which the tool then refuses as another client's"
 type: bug
+game: advocate
 status: todo
 agents: [cardon]
 author: carpintero

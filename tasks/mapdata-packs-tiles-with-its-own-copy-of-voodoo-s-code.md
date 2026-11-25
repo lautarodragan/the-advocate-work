@@ -2,6 +2,7 @@
 name: "mapdata packs tiles with its own copy of Voodoo's code"
 description: "mapdata's snes.rs repeats Voodoo's pack_tile and cgram_word, and emit.rs has a third tile packer, pack4, for a flat cell: one tile packer for the workspace would do"
 type: refactor
+game: advocate
 status: todo
 agents: [cardon]
 author: calandria

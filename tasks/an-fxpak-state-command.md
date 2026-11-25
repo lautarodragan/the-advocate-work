@@ -2,6 +2,7 @@
 name: "An fxpak state command"
 description: "Read a running build's state from the console over USB —map, cell, timer, party, items, gold, switches, variables— by its .dbg symbols and its game's dump, for debugging on hardware"
 type: feature
+game: advocate
 status: wishlist
 author: taro
 ---

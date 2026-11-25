@@ -2,6 +2,7 @@
 name: "Tests without the stages' subcommands"
 description: "Besides simulate, the ports' tests ask the stages themselves —screens' window, render, equip, layout and refit, images' backdrops, animations and battlers, Wally, mapdata's vram, engine, pages and compress, battle's experience, field-skill, lines and model, the scans— for what they expect or need; the tests should not depend on the converter's internals, and those subcommands should not be needed"
 type: refactor
+game: advocate
 status: doing
 assignee: cardon
 agents: [cardon, chaja, Aguará]

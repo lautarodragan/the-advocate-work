@@ -2,6 +2,7 @@
 name: "advocate init, import and config"
 description: "advocate gets the subcommands of a port's path besides build: init starts a port from a game's .zip, import is Ditto taking the game from RM2k's format to data/, and config shows the machine's settings, kept in ~/.config/advocate/ beneath flags and environment variables"
 type: feature
+game: advocate
 status: todo
 author: taro
 links:

@@ -2,7 +2,7 @@
 name: "A task's log in its own section"
 description: "The work done on a task goes in a final `## Log` section, one dated entry per step; the page folds it into a scrolled box, closed by default; the tasks not done are moved to it by hand"
 type: feature
-status: testing
+status: done
 assignee: taro
 author: taro
 agents: [Carpintero, Hurón]
@@ -125,3 +125,7 @@ the "Log · N entries" line at its end: closed by default, and opened, a
 box that scrolls inside itself. Try it in dark mode and on the phone,
 which were not looked at here. `nu tasks/tasks.nu check` is the other
 half: it should report nothing on the tasks already migrated.
+
+### 2026-11-25, Hornero: done
+
+Closed by taro, from `testing`.

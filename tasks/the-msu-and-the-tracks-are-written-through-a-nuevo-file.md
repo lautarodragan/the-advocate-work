@@ -2,6 +2,7 @@
 name: "The .msu and the tracks are written through a .nuevo file"
 description: "the converter and rm2k-snes-audio write the .msu, and the tracks' code each .pcm, alongside as <file>.nuevo and rename it: a Spanish name left in the tools after everything went to English"
 type: refactor
+game: advocate
 status: draft
 author: mulita
 links:

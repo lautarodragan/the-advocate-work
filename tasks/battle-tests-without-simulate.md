@@ -2,6 +2,7 @@
 name: "Battle tests without simulate"
 description: "Twenty battle tests ask rm2k-snes-battle simulate, our own model of the battle, for the exact HP the ROM must leave: they test our implementation against itself. They should expect what RM2k's rules say —exact where RM2k is deterministic, a range or an average where it rolls—, computed from RM2k's formulas, and simulate goes"
 type: refactor
+game: advocate
 status: todo
 author: taro
 links:

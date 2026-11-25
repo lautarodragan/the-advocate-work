@@ -2,6 +2,7 @@
 name: "rm2k-snes-images leaves a relative `under` relative to the current directory"
 description: "Every path of an images request is made relative to the request's directory, except the panorama a background is drawn over: `Background::resolve` resolves `file` and not `under`"
 type: bug
+game: advocate
 status: done
 author: chaja
 agents: [cardon, chaja]

@@ -2,6 +2,7 @@
 name: "A tool for the FX Pak over USB"
 description: "Hornero's throwaway usb2snes client made into one of the tools: a small Rust binary in snes/ that talks to the FX Pak —info, peek, put, boot, ls—, finds it by its USB ids, and holds the rules of AGENTS.md (write only under /advocate/) in its code"
 type: feature
+game: advocate
 status: done
 author: taro
 assignee: taro

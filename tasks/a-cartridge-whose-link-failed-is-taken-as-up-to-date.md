@@ -2,6 +2,7 @@
 name: "A cartridge whose link failed is taken as up to date"
 description: "After a build whose link fails, going back to the inputs of the last good build leaves the cartridge's directory mixed —the failed build's mapdata.inc and raw/, the good build's ROM— and rm2k-snes-cartridges does not rebuild it"
 type: bug
+game: advocate
 status: todo
 author: mulita
 agents: [Mulita, cardon]
