@@ -2,7 +2,8 @@
 name: "The tasks page writes back"
 description: "From the tasks page taro moves a task's state and assignee, comments, asks Hornero something or answers a question's options; each change applies at once and waits in a queue in localStorage behind an 'n pending changes [save] [discard]' bar, and saving is one commit to the repo through GitHub's API, with a token scoped to this repo; GitHub stays the source of truth"
 type: feature
-status: todo
+status: doing
+assignee: huron
 author: taro
 links:
   relates: [the-tasks-page-renders-filtered-and-fast]
