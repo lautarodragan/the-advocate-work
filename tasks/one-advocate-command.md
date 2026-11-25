@@ -525,3 +525,30 @@ through the binary.
    [`tests-without-the-stages-subcommands`](tests-without-the-stages-subcommands.md)'s
    classification, where the answer can be "they stay: they test the
    tool, or lint the product".
+
+### 2026-11-25, Hornero: taro's answers
+
+> I agree with points 2, 3 and 4.
+
+(taro, 2026-11-25) So: `[paths] build` goes and `build/` beside
+`advocate.toml` is fixed; "up to date" is what the last build saw, the
+by-hand `pytest` without building accepted; and `goombario`, `ditto` and
+`patches --check` in the tests go to the classification of
+[`tests-without-the-stages-subcommands`](tests-without-the-stages-subcommands.md).
+
+On question 1:
+
+> Hmm, it seems the best decision right now, but in my mind the tests
+> should never call any binary, they should only require the ROM.
+
+(taro, 2026-11-25) Hornero proposed a fourth option, **(d) no `advocate
+where`**: `--harness`, which most of the five callers ask, is where the
+Python package `rm2k_snes_harness` lives —an installation problem, not
+the tests'—, so `just install` installs it too (a `.pth` pointing at the
+checkout is enough) and the tests import it; `GAME_DIR` and `RTP_DIR` are
+already exported by `machine.just` and reach the tests, and Python reads
+a `.zip` with `zipfile`; `just dump` and the round trip are recipes and
+may call `ditto`, a domain tool that stays; the release's smoke test,
+with the package installed and the variables, has nothing to ask. It
+costs installing the package and the harness reading a `.zip`; it keeps
+the rule whole. Waiting for taro.
