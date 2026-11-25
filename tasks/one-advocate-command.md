@@ -2,6 +2,7 @@
 name: "One advocate command"
 description: "Once the stages are libraries, the converter becomes one too, and rm2k-snes-cartridges becomes `advocate`, with subcommands: build, assemble, space, and whatever else is building the game"
 type: refactor
+game: advocate
 status: testing
 assignee: taro
 agents: [calandria]

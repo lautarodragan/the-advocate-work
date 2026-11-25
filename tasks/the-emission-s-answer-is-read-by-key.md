@@ -2,6 +2,7 @@
 name: "The emission's answer is read by key"
 description: "rm2k-snes-mapdata's `emit` answers `mapdata.json` as a `json!` of notes, report, frames and losses, and the converter reads each by key with a default (`emit.rs`), its frames and losses staying `Value`s it reads by key again: the last stage answer the converter does not take as a type"
 type: refactor
+game: advocate
 status: testing
 assignee: taro
 agents: [calandria]

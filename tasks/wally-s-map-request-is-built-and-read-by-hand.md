@@ -2,6 +2,7 @@
 name: "Wally's map request is built and read by hand"
 description: "The converter builds each map's Wally request as a `json!` of some thirty keys, with more inserted by name after it (`maps.rs`, `variants::request`, `OnMap::to_json`, `ForMap::asked`, `Arrivals::json_of`), and Wally reads it back key by key (`MapRequest::from_json`, `LayersRequest::from_json`, `map_pictures::from_json`): the biggest request still JSON between two stages"
 type: refactor
+game: advocate
 status: testing
 assignee: taro
 agents: [aguara]

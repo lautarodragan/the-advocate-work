@@ -2,6 +2,7 @@
 name: "Small repeats inside emit.rs's Rest"
 description: "A handful of local repeats in mapdata's emission: five loops that add a text per skill, two identical 16-bit checks for a troop's experience and gold, two lookups of an item's skill, a palette of sixteen built five ways, and segment switches that switch back on the next line"
 type: refactor
+game: advocate
 status: testing
 assignee: taro
 agents: [Calandria]

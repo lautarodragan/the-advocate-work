@@ -2,6 +2,7 @@
 name: "The losses the stages hand over are JSON the converter reads by key"
 description: "`degradations.json`'s entries reach the converter as `serde_json::Value` —the event compiler's `Degradations::losses: Vec<Value>`, the emission's `Vec<Value>`— and the converter keeps them so in `degradations.rs` and filters them by key (`l[\"kind\"] == \"event-left-out\"`, `l[\"map\"].as_i64()`) in four `forget`s of `convert.rs`: one loss type both ends see would make a renamed key fail to compile"
 type: refactor
+game: advocate
 status: testing
 assignee: taro
 agents: [mulita, calandria]

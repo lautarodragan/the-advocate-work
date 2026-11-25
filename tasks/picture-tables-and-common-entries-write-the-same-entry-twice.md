@@ -2,6 +2,7 @@
 name: "picture_tables and common_entries write the same entry twice"
 description: "mapdata's two writers of picture_data —a map's pictures and the common events' small ones— each carry the same 50 lines: the objects, the palette stored once, the half size and the two offsets of an entry"
 type: refactor
+game: advocate
 status: testing
 assignee: taro
 agents: [Calandria]

@@ -2,6 +2,7 @@
 name: "The converter's stages and what each spends"
 description: "A book page in internals/: the order in which the converter's optimisations run, lossless and lossy, which budget each spends or frees, and which ones compete, so whoever adds one knows where it goes"
 type: docs
+game: advocate
 status: testing
 assignee: taro
 author: taro

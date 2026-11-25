@@ -2,6 +2,7 @@
 name: "The Python parity left behind"
 description: "Twelve test files pin the tools' output to hashes taken from the Python they replaced, and two copies of pyjson write JSON the way Python did; the Python is gone, so both go, keeping only the tests that guard a path nothing else runs"
 type: refactor
+game: advocate
 status: testing
 author: taro
 assignee: taro

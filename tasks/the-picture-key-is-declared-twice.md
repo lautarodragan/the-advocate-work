@@ -2,6 +2,7 @@
 name: "The picture key is declared twice"
 description: "A ShowPicture's key is rm2k-snes-events' PictureKey, written by hand with to_json and read back by hand with picture_key; since B6 the converter reads the same object as its own pictures::Key. One serde type in the events crate, with the converter's four fields beside it, would leave one declaration"
 type: refactor
+game: advocate
 status: testing
 assignee: taro
 agents: [cardon]

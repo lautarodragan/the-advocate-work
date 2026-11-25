@@ -2,6 +2,7 @@
 name: "cartridges runs itself to assemble"
 description: "rm2k-snes-cartridges builds each cartridge by spawning `rm2k-snes-cartridges assemble`, its own subcommand, as a process: a leftover of when the assembler was a binary of its own; it becomes a function call"
 type: refactor
+game: advocate
 status: testing
 assignee: taro
 agents: [mulita]

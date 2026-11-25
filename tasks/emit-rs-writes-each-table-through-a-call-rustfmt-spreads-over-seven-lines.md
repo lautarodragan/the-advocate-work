@@ -2,6 +2,7 @@
 name: "emit.rs writes each table through a call rustfmt spreads over seven lines"
 description: "mapdata's emission writes some 240 tables with bytes_asm/words_asm(out, label, &decimal(…), true) and line(out, &block(…)), and 21 more by hand with format!: a writer with short methods would take some 300 lines off emit.rs"
 type: refactor
+game: advocate
 status: testing
 assignee: taro
 agents: [Calandria]

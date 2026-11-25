@@ -2,6 +2,7 @@
 name: "How much of a test is the emulator drawing"
 description: "Many ROM tests advance hundreds of frames nobody looks at; measure how much of a suite's CPU goes to the core rendering frames, and whether skipping the render of frames no test captures would save it, without changing what the tests see"
 type: research
+game: advocate
 status: testing
 author: taro
 assignee: taro

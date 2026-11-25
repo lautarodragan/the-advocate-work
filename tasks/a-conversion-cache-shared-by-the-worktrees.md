@@ -2,6 +2,7 @@
 name: "A conversion cache shared by the worktrees"
 description: "Every worktree of the ports rebuilds every game's cartridges from nothing, with the same inputs; a cache outside the checkouts —~/.cache/advocate?— keyed by the inputs and the binaries' hashes, extended to Wally, rm2k-snes-audio and whatever else is worth it, would build only what a branch changes"
 type: refactor
+game: advocate
 status: testing
 assignee: taro
 agents: [Hornero, Hurón]

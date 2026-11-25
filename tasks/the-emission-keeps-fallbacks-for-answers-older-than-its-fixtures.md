@@ -2,6 +2,7 @@
 name: "The emission keeps fallbacks for answers older than its fixtures"
 description: "emit.rs has a branch for each screens field an old answer lacked —slot_names, the screens' advances and reach, screen_letters, renamed, menu_tiles, inks—; the stages are always the same build, so only made_up.rs's two hand-kept requests still reach them"
 type: refactor
+game: advocate
 status: testing
 assignee: taro
 author: calandria

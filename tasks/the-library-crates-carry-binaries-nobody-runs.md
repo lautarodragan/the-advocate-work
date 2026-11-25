@@ -2,6 +2,7 @@
 name: "The library crates carry binaries nobody runs"
 description: "Voodoo, Gunter, LZ2, Adeleine and rm2k-render each install a command line the pipeline never calls: they were born when the converter was Python and could only reach Rust through a process. Drop the binaries, keep the libraries"
 type: refactor
+game: advocate
 status: testing
 author: taro
 assignee: taro

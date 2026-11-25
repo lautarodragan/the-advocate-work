@@ -2,6 +2,7 @@
 name: "try_pack picks the smallest group, not the one that grows least"
 description: "try_pack's comment says each tile goes to the group that grows the least, but the code puts it in the group whose union ends smallest; doing what the comment says packs in fewer palettes in most of SuperFamiconv's wins"
 type: bug
+game: advocate
 status: testing
 assignee: taro
 agents: [Hurón]

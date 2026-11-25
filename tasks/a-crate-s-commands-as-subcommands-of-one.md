@@ -2,6 +2,7 @@
 name: "A crate's commands as subcommands of one"
 description: "rm2k-snes-cartridge installs three commands and rm2k-snes-audio three more; each pair of extras becomes a subcommand of the crate's main command, so the PATH has four commands fewer and no boundary moves"
 type: refactor
+game: advocate
 status: testing
 assignee: taro
 agents: [aguara]

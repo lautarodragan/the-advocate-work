@@ -2,6 +2,7 @@
 name: "The ports' boot tests and the delivery take too long"
 description: "`just boot` runs its 183 tests in one process (22 min) while ABL's 1723 take under 5 with xdist; each delivery rewrites ~10 GB of unchanged MSU-1 tracks on the NAS and builds the games one after the other"
 type: feature
+game: advocate
 status: testing
 assignee: taro
 author: taro

@@ -2,6 +2,7 @@
 name: "The battle terms by name are a 42-arm match"
 description: "emit.rs's term() maps each liblcf term name to its field of ditto's Terms with one match arm each; Terms already serializes with liblcf's names, so the lookup can be by name"
 type: refactor
+game: advocate
 status: testing
 assignee: taro
 agents: [Calandria]

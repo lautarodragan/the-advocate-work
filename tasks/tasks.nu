@@ -96,6 +96,7 @@ const GAMES = {
   vampires-dawn: "Vampires Dawn"
   zounds: "Zounds"
   test-game: "The test game"
+  advocate: "Advocate"
 }
 const GAME_PREFIXES = [
   [the-test-game- test-game]

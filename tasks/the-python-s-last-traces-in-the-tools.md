@@ -2,6 +2,7 @@
 name: "The Python's last traces in the tools"
 description: "Code that still imitates how the deleted Python wrote, rounded or formatted —the save signature's JSON, pyfmt, the audio's number helpers and others— goes, even where that changes every ROM"
 type: refactor
+game: advocate
 status: testing
 author: taro
 assignee: taro

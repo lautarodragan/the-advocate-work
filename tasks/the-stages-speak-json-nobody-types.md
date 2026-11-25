@@ -2,6 +2,7 @@
 name: "The stages speak JSON nobody types"
 description: "Each stage builds its answer with json! and whoever reads it walks a serde_json::Value key by key; one set of serde types both ends share makes the contract between stages something the compiler checks"
 type: refactor
+game: advocate
 status: testing
 assignee: taro
 agents: [calandria, aguara, cardon, carpintero, chaja, mulita, tijereta]

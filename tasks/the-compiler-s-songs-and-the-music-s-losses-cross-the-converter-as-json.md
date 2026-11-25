@@ -2,6 +2,7 @@
 name: "The compiler's songs and the music's losses cross the converter as JSON"
 description: "After B7 the music stage's request is typed, but its songs arrive as the event compiler's `Compiled::songs: Value` and are read into `rm2k_snes_audio::cartridge::Songs` with one `from_value`; and the losses the music decides come back in `audio.json`, which the converter reads by key with `unwrap_or` defaults"
 type: refactor
+game: advocate
 status: testing
 assignee: taro
 agents: [mulita]

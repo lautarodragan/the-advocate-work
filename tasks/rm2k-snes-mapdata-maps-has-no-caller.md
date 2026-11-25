@@ -2,6 +2,7 @@
 name: "rm2k-snes-mapdata maps has no caller"
 description: "The mapdata binary's `maps` subcommand writes offsets.inc, maps.inc and tables.inc for a list of maps, and nothing runs it: the converter calls `emit`, the ports' tests `vram`, `compress`, `pages` and `engine`"
 type: refactor
+game: advocate
 status: testing
 assignee: taro
 agents: [Calandria]

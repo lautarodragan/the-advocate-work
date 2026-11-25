@@ -2,6 +2,7 @@
 name: "The cartridges' fingerprint hashes the PATH's builder, not the running one"
 description: "Since rm2k-snes-cartridges assembles in-process, the code that packs the banks is the running binary, but the fingerprint still hashes the rm2k-snes-cartridges it finds on the PATH: run from anywhere else, a stamp can name a binary that did not build"
 type: bug
+game: advocate
 status: testing
 author: mulita
 assignee: taro
