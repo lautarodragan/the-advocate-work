@@ -578,3 +578,28 @@ line per cartridge —free data banks and the tightest bank—. The ports'
 by the `advocate.json` its build left beside it. What is lost: measuring a
 loose `.sfc` no build of ours made, which nothing does. taro agreed
 ("dale"). So `advocate` is `build` and `assemble`.
+
+### 2026-11-25, Hornero: `patches --check` and `culprits` fold into `build`
+
+> `rm2k-snes-events culprits` and `rm2k-snes-patches --check`: does it
+> make sense that they exist outside the advocate binary? Shouldn't they
+> be subcommands?
+
+> I like your proposal!
+
+(taro, 2026-11-25) Neither stays a command of its own, nor becomes a
+subcommand:
+
+* **The versioned patches**: `advocate build` already makes the decisions
+  `patches/auto/` versions, so it compares them against what is
+  versioned, records what is stale in `advocate.json` and says so when it
+  prints; ABL's `test_patches.py` reads the file instead of running
+  `rm2k-snes-patches --check`. Writing them is a flag,
+  `advocate build --write-patches`, instead of the binary without
+  `--check`.
+* **`culprits`**: a report for people, so `advocate build` leaves
+  `culprits.json` in `build/<cartridge>/` on every build, as it leaves
+  `converter.log`, if it is cheap —to be measured: `--every-map`
+  compiles every map of the game—; if it is not, `advocate culprits`.
+
+`advocate` stays `build` and `assemble`.
