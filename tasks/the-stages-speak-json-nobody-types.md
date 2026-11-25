@@ -2077,3 +2077,19 @@ its last steps.
 answers move once —its request's key order changed—; the compile's do
 not.
 
+
+### 2026-11-24, Carpintero: the screens' four requests typed
+
+[`the-screens-requests-are-built-and-read-by-hand`](the-screens-requests-are-built-and-read-by-hand.md),
+in the-advocate `carpintero-screens-request` (`7c862830`, over
+`633dcde7`): `convert`, `boxes`, `window` and `faces` are
+`rm2k_snes_screens::request::{Convert, Boxes, Window, Faces}`, with
+`TextFont` (what `FontChoice::request()` now answers), `Line`,
+`OtherSystem` and `Menu` —its `spec` still the project's table—; the
+converter builds them as structs, the stage functions take them and the
+binary reads its file into them with serde. The `Json` readers for them
+went; `render` and `equip`, the tests' commands, still read by key. −50
+net lines. The nine games byte for byte against `633dcde7`, cold and
+warm twice, the four suites green; the task's log has the detail. Of
+the two requests Calandria counted as left, Wally's is Aguará's.
+**Install when merging**: `convert` and `screens`.
