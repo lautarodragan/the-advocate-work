@@ -698,3 +698,37 @@ Status stays `doing`: steps 3 to 8 are the task's.
 ### 2026-11-25, Hornero: steps 1 and 2 merged; the rest in series
 
 Verified on the merged tree and pushed. taro, at 97% of the weekly limit: the remaining steps go one at a time, smallest first —6, then 8, then 4, 5, 3—, so a cut loses little.
+
+### 2026-11-25, Cardón: step 6, mapdata's own tests to its crate
+
+From the-advocate `67d52e0c`, ports `a09625d`, docs `dcfcdd9`; branches
+`cardon-tests-step6` in the three.
+
+#### What moved
+
+* ABL's `test_the_own_route_points_to_the_block_it_receives` is
+  `the_own_route_points_to_the_block_it_receives` in `record.rs` of
+  `rm2k-snes-mapdata`: the same invented page, through `page_table` as a
+  function; it also checks that both pointers are there. **Stops catching
+  nothing**: the request was already invented.
+* `test_lz2.py`'s round trip is `each_block_comes_back_equal_through_its_streams`
+  in `materials.rs`: two generated maps with all eight kinds —a background
+  of two buffers, a grid with an empty second half, a block shared between
+  maps— through `compress_blocks` and `stream_of`, read back with `lz2`'s
+  decoder. **Stops catching** a block shape only ABL's real maps reach, and
+  a fault `lz2`'s compressor and decoder would share, which the harness's
+  own decoder could see. That decoder, `tests/harness/lz2.py`, went with
+  its only test —the one that read the five commands by hand—: `lz2`'s
+  tests check the encoder's bytes against the format, and the ROM's
+  decompressor reads the real streams in `test_decompressed_load.py`, which
+  stays.
+* Both shown red with a mutation: the route's pointer built from another
+  label, and `stream_of` dropping every part after the first.
+* `test_pages.py` keeps its other two tests —`release`'s slots, the Tram
+  Officer compiles—: they ask no stage, and are ABL's facts.
+
+#### The subcommands
+
+`pages` and `compress` had no other caller and went. `vram` stays: the
+screens' harness (`screen_stage.py`) still asks it, until step 3. The
+book's `tools.md` says so.
