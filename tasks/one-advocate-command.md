@@ -780,3 +780,38 @@ the file, and its `fingerprint_files` name `advocate` and no old binary);
 each cartridge's `space` equal to `space --json` of its ROM;
 `memory_map` and `sources` equal to `assemble --memory-map` and
 `--sources`.
+
+### 2026-11-25, Calandria: step 3b, the patches and the culprits folded in
+
+the-advocate `45e3ac57`, its own commit after step 3, as Hornero's
+message allowed: both fit without touching step 3's verification.
+
+* **The versioned patches**: every `advocate build` compares
+  `patches/auto/` against what its built cartridges decided —the
+  library's `check`, what `rm2k-snes-patches --check` ran—, keeps it in
+  `advocate.json` as `patches: {stale, versioned, own}` (`null` when no
+  cartridge has patches) and prints the stale ones after the cartridges'
+  lines; a stale patch does not fail the build. `--write-patches` writes
+  `release`'s first, what `rm2k-snes-patches build/release` did. The check
+  costs a tenth of a second on ABL.
+* **`culprits.json`**: cheap, so every cartridge the builder builds gets
+  it beside its ROM, as `converter.log` (in the cartridge library's
+  `build`, so `rm2k-snes-cartridges` leaves it too until step 5). Measured
+  with the global `rm2k-snes-events culprits --every-map` on `cd3a40af`,
+  the machine otherwise idle: 0.65 s for ABL's game and 1.1 s for Vampires
+  Dawn's, one thread; in the build it runs in the cartridge's thread. No
+  `advocate culprits`.
+
+#### Verified
+
+ABL's `release` built by `advocate build`: `culprits.json` equal as JSON
+to `rm2k-snes-events culprits --every-map` run on the same
+`events-request.json`, with its keys in the order the report writes them
+(the builder links `serde_json` with `preserve_order`, the events binary
+alone does not), so not byte for byte. `patches` says what `--check`
+says —303 maps, 41 animations, 92 battlers, 0 windows versioned; maps
+121, 133, 261, 269 and 348, `GreenDragon1` and `Royal` only in some
+cartridge—; with `maps/0002.toml` moved away both say the same complaint,
+and `advocate build --write-patches` wrote it back byte for byte. The
+complaint's text still says "run `rm2k-snes-patches`": the patches
+library's message, for step 4 or 6 to change with the ports' side.
