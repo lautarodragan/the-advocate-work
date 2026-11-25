@@ -2,13 +2,14 @@
 name: "One advocate command"
 description: "Once the stages are libraries, the converter becomes one too, and rm2k-snes-cartridges becomes `advocate`, with subcommands: build, assemble, space, and whatever else is building the game"
 type: refactor
-status: doing
-assignee: calandria
+status: testing
+assignee: taro
 agents: [calandria]
 author: taro
 links:
   relates: [artistic-decision-patches, battle-tests-without-simulate, the-volume-ceilings-are-measured-without-a-rom, tests-without-the-stages-subcommands, the-cartridges-fingerprint-hashes-the-path-s-builder]
   has-part: [cartridges-runs-itself-to-assemble, the-stage-subcommands-only-the-converter-called-have-no-caller]
+  found: [just-culprits-reads-the-dump-without-the-project-s-common-events]
   blocked-by: [the-stages-speak-json-nobody-types]
   blocks: [advocate-init-dump-and-config]
 ---
@@ -882,3 +883,54 @@ the build's `culprits.json` and 22 in the recipe's, ABL's are equal (no
 common events of its own; compared as JSON, the keys' order apart). The
 recipe's is the one that was wrong; it goes with step 4, when the ports
 read the build's file.
+
+### 2026-11-25, Calandria: the whole runs, and steps 1-3 handed back
+
+On the final tree, the-advocate `4c18e020` (branch `calandria-advocate`,
+`main` merged at `0010d275`), with every binary the branch touches
+installed in a `.local-tools` first on the PATH, the ports at `4c23c9e`:
+
+* `just lint`, `just test` (29), `just rust-test --no-fail-fast` (1,256
+  passed): green. The first run had two reds: the known flake
+  `a_cached_object_gives_the_dbg_a_fresh_one_gives` (green alone), and
+  the queries' usage in `queries.rs`, an indented doc comment that became
+  a doctest once the converter is a library (fenced as `text`,
+  `4c18e020`).
+* `SOUNDFONT=…/FluidR3_GM.sf2 just test-game`: 231 passed, 6 skipped. The
+  first run had 47 red: `game.py` had lost its `import subprocess`, which
+  `variable_slots` still uses (`4c18e020`).
+* The ports' `just boot`: 218 passed. ABL's `just tests`: 1,694 passed,
+  2 skipped. Both build through `rm2k-snes-cartridges` —the ports move
+  to `advocate` in step 4—, which is the same library as `advocate` now.
+* The double build: ABL with `advocate build`, warm cache, twice: the
+  first rebuilt the eleven (the stamps were the old builder's), the second
+  said all eleven up to date in a second. `abl.sfc`'s sha256:
+  `3bf35fd7665c2045e6cd3b8d30471b66abb686d107e52a9ac8da1cdd1d691718`.
+
+**What the suites do not cover**: no suite runs `advocate build` but the
+test game's; that it builds the nine games the same is the byte-for-byte
+comparison of step 3, not a test. No test reads `advocate.json` beyond
+the test game's harness (`listing`, `project`); its other keys were
+checked once against the old tools by a script, not by a test. The
+patches' comparison and `--write-patches`, the `space` line and a
+`--force` that fails half-way (the stamp removed first) were run by hand,
+once each, or not at all for the last. `volume-ceilings` was compiled and
+not run.
+
+**Install when merging**: the whole workspace, `just install`: the branch
+touches `rm2k-project`, which every binary compiles in, and adds
+`advocate`. `rm2k-snes-cartridges` and `rm2k-snes-project` stay
+installed and working until step 5.
+
+**For step 4**, what the file gives and what is still to do on the
+ports' side: every old answer under one key (`project`, `suite`,
+`settings`, `machine`, `listing` with `space`, `memory_map`, `sources`,
+and `patches` for `test_patches.py`); `culprits.json` beside each ROM for
+`just culprits`; the patches' complaint still says "run
+`rm2k-snes-patches`" (the patches library's text); `release.yml`'s smoke
+test still asks `rm2k-snes-project`, for step 5 with (d). Step 7 (`[paths]
+build` fixed) is not done: the file goes to `project.build()`, which every
+project has as `build/`.
+
+Found and not fixed:
+[`just-culprits-reads-the-dump-without-the-project-s-common-events`](just-culprits-reads-the-dump-without-the-project-s-common-events.md).
