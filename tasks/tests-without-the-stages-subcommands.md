@@ -732,3 +732,20 @@ From the-advocate `67d52e0c`, ports `a09625d`, docs `dcfcdd9`; branches
 `pages` and `compress` had no other caller and went. `vram` stays: the
 screens' harness (`screen_stage.py`) still asks it, until step 3. The
 book's `tools.md` says so.
+
+#### Verified
+
+With `mapdata convert advocate` installed locally from `277e4218`:
+`release`'s `abl.sfc` byte for byte equal to the one `a09625d` built with
+the globals; `just lint` (with FluidR3's `SOUNDFONT`) and `just rust-test
+--no-fail-fast` green; ABL's `just tests` at `76a5f7c`, 1668 passed and 2
+skipped.
+
+#### Branches, and what to install when merging
+
+the-advocate `277e4218`, ports `76a5f7c`, docs `925913d`, all
+`cardon-tests-step6`. Install `just install mapdata convert advocate`:
+the libraries' code did not change, only tests and the `mapdata` binary,
+so the ROMs do not move.
+
+Status stays `doing`: steps 3, 4, 5, 7 and 8 are the task's.
