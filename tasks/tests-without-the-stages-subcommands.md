@@ -2,7 +2,8 @@
 name: "Tests without the stages' subcommands"
 description: "Besides simulate, the ports' tests ask the stages themselves —screens' window, render, equip, layout and refit, images' backdrops, animations and battlers, Wally, mapdata's vram, engine, pages and compress, battle's experience, field-skill, lines and model, the scans— for what they expect or need; the tests should not depend on the converter's internals, and those subcommands should not be needed"
 type: refactor
-status: todo
+status: doing
+assignee: cardon
 author: taro
 links:
   blocks: [abl-s-test-cartridges-become-test-game-cases]
@@ -85,3 +86,16 @@ redoes it.
 ### 2026-11-24, Hornero: two gaps added
 
 Found by Calandria's design; taro agreed to add them.
+
+### 2026-11-25, Hornero: the classification to Cardón
+
+> Let's go with tests-without-the-stages-subcommands.
+
+(taro, 2026-11-25) After
+[`one-advocate-command`](one-advocate-command.md): `rm2k-snes-project`
+and `rm2k-snes-cartridges` are gone —what the harness asked them is in
+`build/advocate.json`, and the harness is an installed package—, so the
+"interface" of point 1 is the ROM, the `.dbg`, the dump and that file.
+taro's answer 4 there adds `goombario` and `ditto` in the tests to this
+classification. Cardón does point 1, the classification, written here
+for taro before anything changes.
