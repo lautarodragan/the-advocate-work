@@ -860,5 +860,6 @@ With a cold cache, ABL 4,408 against 4,076. So eleven conversions in one
 process weigh what eleven processes weighed, as the design guessed —
 within a few percent either way between runs, since how many overlap
 depends on timing—; a game with one cartridge weighs somewhat more in
-`advocate` (the converter's memory is freed to the allocator and not
-returned while the process lives on to measure, compare and write).
+`advocate`, not looked into: the sum includes `ca65` and `ld65`, and a
+guess is that memory the converter frees stays with the process while it
+goes on to assemble, measure and write.
