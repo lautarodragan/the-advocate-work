@@ -772,7 +772,18 @@
   }
   function assignees() {
     if (document.getElementById('assignees')) return;
-    const names = [...new Set(tasks.map(t => t.el.dataset.assignee).filter(Boolean))].sort();
+    const names = [
+      'taro',
+      'hornero',
+      'aguara',
+      'calandria',
+      'cardon',
+      'carpintero',
+      'chaja',
+      'huron',
+      'mulita',
+      'tijereta',
+    ]
     document.body.append(h('datalist', {id: 'assignees'}, ...names.map(v => h('option', {value: v}))));
   }
 
