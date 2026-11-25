@@ -88,9 +88,13 @@ question's options —each a log entry `### <date>, taro: …`—, as commits
 straight to `main` on GitHub. So Hornero, when starting, also reads
 `nu tasks/tasks.nu inbox` —taro's entries that no later Hornero entry
 answers— and answers each in its task; and **pulls before pushing**, `git
-pull --rebase`, which only rebases its own commits not yet pushed. A
-commit of the page that breaks a task is shown red by CI's
-`nu tasks/tasks.nu check --strict`.
+pull --rebase=merges`, which only rebases its own commits not yet pushed
+and keeps its merges as merges. A commit of the page that breaks a task is
+shown red by CI's `nu tasks/tasks.nu check --strict`. The `SessionStart`
+hook of `.claude/settings.json` pulls and hands Hornero the inbox; **then
+Hornero launches the inbox Monitor**, `.claude/hooks/watch-tasks.sh`
+under a `timeout`, which wakes it only when a page commit lands —a hook
+cannot start a Monitor—.
 
 **Taking a task is moving it to `doing` with its `assignee`, before
 anything else.** With sub-agents the one launching them does it, on `main`
