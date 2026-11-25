@@ -82,6 +82,16 @@ is changed. The tasks all live in `tasks/`, and **their file name never
 changes**: it is what links them from the other repos and the book (see
 this repo's README).
 
+**taro writes to the tasks from their page**, since 2026-11-25: a task's
+state and assignee, a comment, a question for Hornero, the answer to a
+question's options —each a log entry `### <date>, taro: …`—, as commits
+straight to `main` on GitHub. So Hornero, when starting, also reads
+`nu tasks/tasks.nu inbox` —taro's entries that no later Hornero entry
+answers— and answers each in its task; and **pulls before pushing**, `git
+pull --rebase`, which only rebases its own commits not yet pushed. A
+commit of the page that breaks a task is shown red by CI's
+`nu tasks/tasks.nu check --strict`.
+
 **Taking a task is moving it to `doing` with its `assignee`, before
 anything else.** With sub-agents the one launching them does it, on `main`
 and before launching them, so the worktree already starts with the task

@@ -179,6 +179,41 @@ def all_tasks [] {
   ls ($env.FILE_PWD | path join '*.md' | into glob) | where type == file | get name | each { parse_file $in }
 }
 
+# What taro wrote from the tasks page —or by hand— that Hornero has not
+# answered yet: every log entry `### <date>, taro: <what>` with no
+# `### <date>, Hornero: …` after it in the same task, whatever the task's
+# state. Hornero reads it at the start of a session, with `doing` and
+# `testing` (AGENTS.md).
+def "main inbox" [] {
+  let found = all_tasks | each { |t|
+    let lines = $t.raw | lines
+    let at = $lines | enumerate | where item == "## Log" | get -o 0.index
+    if $at == null { return [] }
+    mut open = []
+    mut current = {}
+    for l in ($lines | skip ($at + 1)) {
+      let h = $l | parse --regex '^### (?<date>\d{4}-\d{2}-\d{2}), (?<who>[^:]+):\s*(?<what>.*)$'
+      if ($h | is-not-empty) {
+        if ($current | is-not-empty) { $open = $open | append $current }
+        let who = $h.0.who | normalize
+        if $who == "hornero" { $open = [] }
+        $current = if $who == "taro" { {task: $t.id, status: $t.status, date: $h.0.date, what: $h.0.what, text: ""} } else { {} }
+      } else if ($current | is-not-empty) and ($current.text | is-empty) and ($l | str starts-with '>') {
+        $current = $current | update text ($l | str replace --regex '^>\s?' '')
+      }
+    }
+    if ($current | is-not-empty) { $open = $open | append $current }
+    $open
+  } | flatten
+  if ($found | is-empty) { print "Nothing from taro waiting."; return }
+  $found | sort-by date | each { |e|
+    print $"(ansi green)($e.status)(ansi reset) ($e.task).md"
+    print $"  ($e.date): ($e.what)"
+    if ($e.text | is-not-empty) { print $"  (ansi dark_gray)> ($e.text)(ansi reset)" }
+  }
+  print $"($found | length) entries."
+}
+
 # The tasks whose history is not in their `## Log` (README, "A task's
 # log"): a heading above it that reads like a log entry —or a paragraph
 # that opens with one in bold—, or a `## Log` that is not the last `##`
@@ -200,9 +235,15 @@ def all_tasks [] {
 # —see `check_relations`— and the broken links in the prose —see
 # `check_prose_links`—. Without the network, so that it stays fast and
 # does not fail at random.
+#
+# With `--strict` it fails when any of those last three finds something,
+# which is how CI runs it (`.github/workflows/check.yml`): the tasks page
+# commits straight to `main`, and a task it breaks has to show. The
+# log-like headings stay a report there too: they are judged by reading.
 def "main check" [
   --status (-s): string = "*"
   --docs: string    # the-advocate-docs checkout, for the book's links; by default the one next to this repo
+  --strict          # exit 1 when a task has no author, a link does not hold or a link is broken
 ] {
   let agents = ls ($env.FILE_PWD | path dirname | path join .claude agents '*.md' | into glob)
     | get name | each { path parse | get stem } | append hornero
@@ -301,8 +342,8 @@ def "main check" [
     print $"($authorless | length) tasks."
   }
 
-  check_relations $tasks
-  check_prose_links $tasks $status $docs
+  let bad = ($authorless | length) + (check_relations $tasks) + (check_prose_links $tasks $status $docs)
+  if $strict and $bad > 0 { exit 1 }
 }
 
 # The typed links of every task, whatever its state: a relation that is not
@@ -340,6 +381,7 @@ def check_relations [tasks: list] {
     }
     print $"($problems | length) links. `nu tasks/tasks.nu link A <relation> B` writes both ends."
   }
+  $problems | length
 }
 
 # The links in the tasks' prose that lead nowhere, without the network:
@@ -416,6 +458,7 @@ def check_prose_links [tasks: list, status: string, docs?: string] {
     }
     print $"($found | get file | uniq | length) tasks, ($found | length) links."
   }
+  $found | length
 }
 
 # Pick a task with a fuzzy filter and open it in $EDITOR.
