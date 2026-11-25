@@ -1,0 +1,32 @@
+# The tasks' checks on every push to main: the tasks page commits straight
+# to it with taro's token, without passing through `nu tasks/tasks.nu
+# check` anywhere, so a task it breaks shows here, red. `--strict` fails
+# on what check reports as broken —a task without an author, a link that
+# does not hold—, not on the log-like headings, which are judged by
+# reading.
+name: Tasks check
+
+on:
+  push:
+    branches: [main]
+    paths: [tasks/**, .claude/agents/**, .github/workflows/check.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # The book, for the tasks' links to its pages; it is public.
+      - uses: actions/checkout@v4
+        with:
+          repository: lautarodragan/the-advocate-docs
+          path: the-advocate-docs
+      # The same version as in pages.yml, and for the same reason.
+      - uses: hustcer/setup-nu@v3
+        with:
+          version: "0.115.1"
+      - run: nu tasks/tasks.nu check --strict --docs the-advocate-docs

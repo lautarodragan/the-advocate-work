@@ -14,9 +14,12 @@
   when the page is built, but as the text of a script tag that the script
   here makes HTML when a task is opened (see `task_html` in tasks.nu for
   why). Without a script, every task's summary shows —by the rule in the
-  noscript— but no body: GitHub has the files.
+  noscript— but no body: GitHub has the files. The COMMIT marker becomes
+  the commit the page was built from and its date, which tells the queue
+  of changes what the page already carries (see "Writing back" below).
 -->
-<noscript><style>section[hidden], details.task[hidden] { display: block !important; } .filters, #search { display: none; }</style></noscript>
+<!-- COMMIT -->
+<noscript><style>section[hidden], details.task[hidden] { display: block !important; } .filters, #search, #write-key { display: none; }</style></noscript>
 <style>
   :root {
     color-scheme: light dark;
@@ -183,20 +186,59 @@
   }
   .pick:hover { color: var(--fg); }
   .pick[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
-  /* The selection's bar, fixed at the bottom while anything is selected;
-     the body gets room under the last task so the bar never covers it. */
-  #selection {
+  /* The bars, fixed at the bottom: the queue's, while a change waits, and
+     the selection's, while anything is selected; the body gets room under
+     the last task so they never cover it. */
+  #bars {
     position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
-    display: flex; align-items: center; justify-content: center; gap: .75rem;
-    padding: .6rem 1rem; background: var(--card);
-    border-top: 1px solid var(--line); box-shadow: 0 -2px 8px rgba(0, 0, 0, .08);
+    background: var(--card); box-shadow: 0 -2px 8px rgba(0, 0, 0, .08);
   }
-  #selection button {
+  #selection, #queue .row {
+    display: flex; align-items: center; justify-content: center; gap: .75rem;
+    padding: .6rem 1rem; border-top: 1px solid var(--line);
+  }
+  #queue-list {
+    list-style: none; margin: 0 auto; padding: .25rem 1rem .5rem; max-width: 56rem;
+    max-height: 40vh; overflow-y: auto; font-size: .9rem;
+  }
+  #queue-list li { display: flex; gap: .5rem; align-items: baseline; padding: .2rem 0; border-bottom: 1px solid var(--line); }
+  #queue-list li > span { flex: 1; overflow-wrap: anywhere; }
+  #queue-list .flag { color: #b5562b; }
+  #queue-list .saved { color: var(--muted); }
+  #queue-note { margin: 0; padding: 0 1rem .5rem; text-align: center; color: #b5562b; font-size: .9rem; }
+  #queue-count { border: none !important; text-decoration: underline dotted; }
+  #selection button, #queue button, .write button, #key button {
     font: inherit; font-size: .9rem; cursor: pointer;
     padding: .3rem .8rem; border-radius: 999px;
     border: 1px solid var(--line); background: var(--card); color: var(--fg);
   }
-  #selection button.primary { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+  #selection button.primary, #queue button.primary, .write button.primary, #key button.primary { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+  #queue button:disabled { opacity: .5; cursor: default; }
+  #queue-list button, .write .answer button { font-size: .8rem; padding: .05rem .5rem; }
+  /* A task with a change in the queue: a bar of the accent on its left. */
+  details.task.queued { border-left: 3px solid var(--accent); }
+  .queued-entry { opacity: .75; }
+  .queued-entry .q-state { color: var(--muted); font-size: .8rem; margin: .2rem 0 0; }
+  /* The write form at a task's end, and the token's panel: built by the
+     script when needed, never by the build. */
+  .write { margin-top: 1rem; padding-top: .75rem; border-top: 1px dashed var(--line); display: grid; gap: .5rem; }
+  .write .fields { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; font-size: .9rem; }
+  .write select, .write input, .write textarea, #key input {
+    font: inherit; font-size: .9rem; padding: .25rem .5rem; color: var(--fg);
+    background: var(--bg); border: 1px solid var(--line); border-radius: .3rem;
+  }
+  .write textarea { width: 100%; resize: vertical; }
+  .write .acts, .write .answer { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; font-size: .9rem; }
+  #write-key {
+    font: inherit; font-size: .8rem; cursor: pointer; margin-left: .4rem;
+    padding: 0 .5rem; border-radius: 999px; border: 1px solid var(--line);
+    background: var(--card); color: var(--muted);
+  }
+  #write-key[aria-pressed="true"] { color: var(--accent); border-color: var(--accent); }
+  #key { margin: -1rem 0 1.5rem; padding: .75rem; border: 1px solid var(--line); border-radius: .5rem; background: var(--card); font-size: .9rem; }
+  #key p { margin: 0 0 .5rem; }
+  #key .row { display: flex; flex-wrap: wrap; gap: .5rem; }
+  #key input { flex: 1; min-width: 12rem; }
   body.selecting { padding-bottom: 5rem; }
   [hidden] { display: none !important; }
   /* The URL asks for another filter than the one the page was built with:
@@ -209,16 +251,27 @@
 <header>
   <h1>The Advocate — tasks</h1>
   <p>Where the work on <a href="https://github.com/lautarodragan/the-advocate">The Advocate</a> was left, built from
-    <a href="https://github.com/lautarodragan/the-advocate-work/tree/main/tasks"><code>tasks/</code></a>.</p>
+    <a href="https://github.com/lautarodragan/the-advocate-work/tree/main/tasks"><code>tasks/</code></a>.<button type="button" id="write-key" aria-pressed="false" title="Write to the tasks with a GitHub token">write</button></p>
 </header>
 
 <!-- FILTERS -->
 <input id="search" type="search" placeholder="Filter by text…" aria-label="Filter by text">
 
+<div id="bars">
+<div id="queue" role="region" aria-label="Pending changes" hidden>
+  <ul id="queue-list" hidden></ul>
+  <p id="queue-note" hidden></p>
+  <div class="row">
+    <button type="button" id="queue-count" aria-expanded="false" title="List the changes"></button>
+    <button type="button" class="primary" id="queue-save">Save</button>
+    <button type="button" id="queue-discard">Discard</button>
+  </div>
+</div>
 <div id="selection" role="region" aria-label="Selected tasks" hidden>
   <span id="selection-count"></span>
   <button type="button" class="primary" id="copy-all">Copy all</button>
   <button type="button" id="clear-all">Clear</button>
+</div>
 </div>
 
 <script>
@@ -255,11 +308,12 @@
   if (status !== defaultStatus || type !== 'all' || game !== 'all' || author !== 'all' || location.hash) pending();
 
   let tasks = null, sections = null;
+  const byId = new Map();
   const update = () => tasks ? apply() : pending();
   for (const [nav, key] of rows) nav.addEventListener('click', e => {
     const b = e.target.closest('button');
     if (!b) return;
-    if (key === 'status') status = b.dataset.status;
+    if (key === 'status') { status = b.dataset.status; for (const t of tasks || []) t.sticky = false; }
     else if (key === 'type') type = b.dataset.type;
     else if (key === 'game') game = b.dataset.game;
     else author = b.dataset.author;
@@ -286,7 +340,7 @@
     const shown = new Set();
     for (const t of candidates) {
       // The text is read the first time it is searched, and kept.
-      const ok = (status === 'all' || t.status === status) && (type === 'all' || t.type === type)
+      const ok = (status === 'all' || t.status === status || t.sticky) && (type === 'all' || t.type === type)
         && (game === 'all' || (game === 'none' ? t.games.length === 0 : t.games.includes(game)))
         && (author === 'all' || (t.author || 'none') === author)
         && (!q || (t.text ??= textOf(t.el)).includes(q));
@@ -424,7 +478,7 @@
   function openHash() {
     const t = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
     if (!t || !t.matches('details.task')) return;
-    status = t.dataset.status; type = 'all'; game = 'all'; author = 'all'; search.value = ''; apply();
+    status = byId.get(t.id).status; type = 'all'; game = 'all'; author = 'all'; search.value = ''; apply();
     t.open = true; t.scrollIntoView();
   }
 
@@ -439,6 +493,8 @@
   const bar = document.getElementById('selection');
   const count = document.getElementById('selection-count');
   const copyAll = document.getElementById('copy-all');
+  // Room under the last task while either bar shows.
+  const pad = () => document.body.classList.toggle('selecting', !bar.hidden || !document.getElementById('queue').hidden);
   // The build wrote every select button unpressed: only those of the
   // selection are touched, not the hundreds of the rest.
   function mark(id, on) {
@@ -449,7 +505,7 @@
   }
   function showSelection() {
     bar.hidden = selected.length === 0;
-    document.body.classList.toggle('selecting', selected.length > 0);
+    pad();
     count.textContent = `${selected.length} task${selected.length === 1 ? '' : 's'} selected`;
     try { localStorage.setItem(STORE, JSON.stringify(selected)); } catch {}
   }
@@ -489,6 +545,7 @@
       el, status: el.dataset.status, type: el.dataset.type, author: el.dataset.author,
       games: (el.dataset.game || '').split(' ').filter(Boolean),
     }));
+    for (const t of tasks) byId.set(t.el.id, t);
     const ids = new Set(tasks.map(t => t.el.id));
     selected = selected.filter(id => ids.has(id));     // a task renamed or gone
     for (const id of selected) mark(id, true);
@@ -503,5 +560,401 @@
 <main id="tasks">
 <!-- TASKS -->
 </main>
+<script>
+  // Writing back (task `the-tasks-page-writes-back`): with a fine-grained
+  // GitHub token for this repo alone, pasted once, taro changes a task's
+  // state and assignee, comments, asks Hornero or answers a question's
+  // options. Each change shows at once and waits in a queue in
+  // localStorage, over what is published, until "Save" makes them one
+  // commit on main through GitHub's git data API. GitHub stays the source
+  // of truth: a change leaves the queue once the published page carries
+  // it. The token never leaves localStorage except in the Authorization
+  // header to api.github.com. Without it the page reads as before, and
+  // nothing here costs anything per task at load: the forms are built
+  // when a task opens.
+  const REPO = 'lautarodragan/the-advocate-work';
+  const API = `https://api.github.com/repos/${REPO}`;
+  const STATES = ['doing', 'testing', 'todo', 'draft', 'wishlist', 'done', 'cancelled'];
+  const keep = {
+    get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch { return d; } },
+    set(k, v) { try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, JSON.stringify(v)); } catch {} },
+  };
+  let token = keep.get('tasks-token', '');
+  // One change: {n, task, kind: 'status' | 'assignee' | 'entry', value and
+  // base (what it was when queued) for a field, title and text for an
+  // entry, date; `saved` {sha, date} once committed, `conflict` with what
+  // main has when someone else changed the same field}.
+  let queue = keep.get('tasks-queue', []);
+  // The commit this page was built from, and its date.
+  const [, builtAt] = (document.querySelector('meta[name="tasks-commit"]')?.content || '').split(' ');
+  const qbar = document.getElementById('queue'), qcount = document.getElementById('queue-count');
+  const qlist = document.getElementById('queue-list'), qnote = document.getElementById('queue-note');
+  const qsave = document.getElementById('queue-save');
+  const keyButton = document.getElementById('write-key');
+  const today = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
+  const h = (tag, props = {}, ...kids) => { const e = Object.assign(document.createElement(tag), props); e.append(...kids); return e; };
+
+  // What main has, as far as this page knows: the published value, or the
+  // last saved change still waiting for the page to carry it.
+  const published = (t, kind) => kind === 'status' ? t.el.dataset.status : t.el.dataset.assignee;
+  function base(t, kind) {
+    const s = queue.filter(c => c.task === t.el.id && c.kind === kind && c.saved).pop();
+    return s ? s.value : published(t, kind);
+  }
+  function current(t, kind) {
+    const c = queue.filter(c => c.task === t.el.id && c.kind === kind).pop();
+    return c ? c.value : published(t, kind);
+  }
+  function persist() { keep.set('tasks-queue', queue.length ? queue : null); }
+  // A saved change is carried by a page built from a commit as recent as
+  // its own —main only moves forward—, and a field by a page that already
+  // shows its value.
+  function prune() {
+    const built = Date.parse(builtAt || '');
+    queue = queue.filter(c => {
+      if (c.saved && built >= Date.parse(c.saved.date)) return false;
+      const t = byId.get(c.task);
+      if (!t) return false;
+      return c.kind === 'entry' || c.value !== published(t, c.kind) || 'conflict' in c;
+    });
+    persist();
+  }
+
+  function queueField(t, kind, value) {
+    const was = queue.findIndex(c => c.task === t.el.id && c.kind === kind && !c.saved);
+    if (was !== -1) queue.splice(was, 1);
+    const b = base(t, kind);
+    if (value !== b) queue.push({n: Date.now() + Math.random(), task: t.el.id, kind, value, base: b, date: today()});
+    changed(t);
+  }
+  function queueEntry(t, title, text) {
+    queue.push({n: Date.now() + Math.random(), task: t.el.id, kind: 'entry', title, text, date: today()});
+    changed(t);
+    const log = t.el.querySelector('details.log');
+    if (log) log.open = true;
+  }
+  function changed(t) { persist(); render(t); showQueue(); }
+
+  // A task as the queue leaves it: its state —in its state's section—,
+  // its assignee, its pending entries in the log and the mark of a task
+  // with something queued.
+  function sectionFor(s) {
+    let sec = sections.find(x => x.dataset.status === s);
+    if (sec) return sec;
+    sec = h('section', {hidden: true}, h('h2', {textContent: s}));
+    sec.dataset.status = s;
+    const after = sections.find(x => STATES.indexOf(x.dataset.status) > STATES.indexOf(s));
+    document.getElementById('tasks').insertBefore(sec, after || null);
+    sections.push(sec);
+    return sec;
+  }
+  function render(t) {
+    const s = current(t, 'status');
+    if (t.status !== s) {
+      for (const [st, d] of [[t.status, -1], [s, 1]]) {
+        const c = filters.querySelector(`[data-status="${st}"] .count`);
+        if (c) c.textContent = +c.textContent + d;
+      }
+      t.status = s;
+      const sec = sectionFor(s);
+      sec.querySelector('h2').after(t.el);
+    }
+    const a = current(t, 'assignee');
+    let span = t.el.querySelector('.meta .assignee');
+    if (!span && a) {
+      span = h('span', {className: 'assignee'});
+      const meta = t.el.querySelector('.meta');
+      const ag = [...meta.childNodes].find(n => n.nodeType === 3 && n.data.includes(' · agents:'));
+      meta.insertBefore(span, ag || null);
+    }
+    if (span) span.textContent = a ? ` · assignee: ${a}` : '';
+    t.el.classList.toggle('queued', queue.some(c => c.task === t.el.id));
+    decorate(t);
+  }
+  // What only an opened task shows: the queued entries at the end of its
+  // log, and the write form.
+  function decorate(t) {
+    const body = t.el.querySelector(':scope > div.body');
+    if (!body) return;
+    for (const e of body.querySelectorAll('.queued-entry')) e.remove();
+    const entries = queue.filter(c => c.task === t.el.id && c.kind === 'entry');
+    if (entries.length) {
+      let log = body.querySelector('details.log .log-body');
+      if (!log) {
+        const d = h('details', {className: 'log', open: true}, h('summary', {textContent: 'Log'}), log = h('div', {className: 'log-body'}));
+        body.insertBefore(d, body.querySelector('.fold-row'));
+      }
+      for (const c of entries) log.append(h('div', {className: 'queued-entry'},
+        h('h3', {textContent: `${c.date}, taro: ${c.title}`}),
+        h('blockquote', {}, ...c.text.split(/\n{2,}/).map(p => h('p', {textContent: p}))),
+        h('p', {className: 'q-state', textContent: c.saved ? 'saved, waiting for the page to publish it' : 'pending'})));
+    }
+    if (token) form(t, body);
+  }
+
+  // The last "a question for taro" in the published log, if no entry of
+  // taro's follows it, and the options it lists: `(a)`, `a)`, `**a)**`.
+  function question(body) {
+    const hs = [...body.querySelectorAll('.log-body > h3')];
+    const at = hs.findLastIndex(x => /question for taro/i.test(x.textContent));
+    if (at === -1 || hs.slice(at + 1).some(x => /, taro\b/i.test(x.textContent))) return null;
+    let text = '';
+    // A line per paragraph and per list item —textContent, not innerText,
+    // which a closed log does not render—, with the source's soft breaks
+    // made spaces.
+    const flat = e => e.textContent.replace(/\s+/g, ' ');
+    for (let n = hs[at].nextElementSibling; n && n.tagName !== 'H3'; n = n.nextElementSibling) {
+      text += '\n' + (n.matches('ul, ol') ? [...n.children].map(flat).join('\n') : flat(n));
+    }
+    const options = new Map();
+    // An option's text runs to the next option or the end of its line:
+    // several often share a paragraph.
+    for (const m of text.matchAll(/(?:^|[\s*])\(?([a-h])\)\s+((?:(?!\s\(?[a-h]\)\s)[^\n])*)/g)) {
+      // The button says the option's first words, up to its first stop,
+      // and its title the whole option.
+      if (options.has(m[1])) continue;
+      let label = m[2].split(/[.:;—]\s|\s\(/)[0].replace(/[.:;]$/, '');
+      if (label.length > 60) label = label.slice(0, label.lastIndexOf(' ', 58)) + '…';
+      options.set(m[1], [label, m[2].trim()]);
+    }
+    return options.size > 1 ? options : null;
+  }
+
+  function form(t, body) {
+    let f = body.querySelector(':scope > .write');
+    if (!f) {
+      const status = h('select', {}, ...STATES.map(s => h('option', {value: s, textContent: s})));
+      const who = h('input', {size: 10, placeholder: 'nobody', autocomplete: 'off'});
+      who.setAttribute('list', 'assignees');
+      const text = h('textarea', {rows: 3, placeholder: 'A comment, or a question for Hornero'});
+      const comment = h('button', {type: 'button', className: 'primary', textContent: 'Comment'});
+      const ask = h('button', {type: 'button', textContent: 'Ask Hornero'});
+      f = h('div', {className: 'write'},
+        h('div', {className: 'fields'}, h('label', {}, 'status ', status), h('label', {}, 'assignee ', who)),
+        h('div', {className: 'answer', hidden: true}),
+        text, h('div', {className: 'acts'}, comment, ask));
+      // The task stays in view in its new state until the status filter
+      // is clicked, rather than vanish under the reader.
+      status.onchange = () => { t.sticky = true; queueField(t, 'status', status.value); apply(); };
+      who.onchange = () => {
+        const v = who.value.trim();
+        // A bare name: it goes into the frontmatter's YAML as it is.
+        if (!/^[\p{L}\p{N}_-]*$/u.test(v)) { who.setCustomValidity('A name: letters, digits, - and _'); who.reportValidity(); return; }
+        who.setCustomValidity('');
+        queueField(t, 'assignee', v);
+      };
+      const entry = title => { const v = text.value.trim(); if (!v) { text.focus(); return; } queueEntry(t, title, v); text.value = ''; };
+      comment.onclick = () => entry('a comment');
+      ask.onclick = () => entry('a question for Hornero');
+      assignees();
+      body.insertBefore(f, body.querySelector('.fold-row'));
+    }
+    const [status, who] = f.querySelectorAll('select, input');
+    status.value = current(t, 'status');
+    if (document.activeElement !== who) who.value = current(t, 'assignee');
+    const answer = f.querySelector('.answer');
+    const q = !queue.some(c => c.task === t.el.id && c.kind === 'entry' && /^an answer/.test(c.title)) && question(body);
+    answer.hidden = !q;
+    answer.replaceChildren();
+    if (q) {
+      answer.append('Answer: ');
+      for (const [k, [label, whole]] of q) {
+        const b = h('button', {type: 'button', textContent: `(${k}) ${label}`, title: `${whole}\n\nChoose it; the text above goes with it.`});
+        b.onclick = () => {
+          const text = f.querySelector('textarea');
+          const v = text.value.trim();
+          queueEntry(t, `an answer: (${k})`, `(${k})` + (v ? `\n\n${v}` : ''));
+          text.value = '';
+        };
+        answer.append(b);
+      }
+    }
+  }
+  function assignees() {
+    if (document.getElementById('assignees')) return;
+    const names = [...new Set(tasks.map(t => t.el.dataset.assignee).filter(Boolean))].sort();
+    document.body.append(h('datalist', {id: 'assignees'}, ...names.map(v => h('option', {value: v}))));
+  }
+
+  // The bar: "n pending changes [save] [discard]", which opens to the
+  // list, where each change can go alone.
+  const describe = c => c.kind === 'entry' ? `${c.task}: ${c.title}` : `${c.task}: ${c.kind} ${c.base || 'none'} → ${c.value || 'none'}`;
+  function showQueue() {
+    const unsaved = queue.filter(c => !c.saved).length;
+    const saved = queue.length - unsaved;
+    qbar.hidden = queue.length === 0;
+    pad();
+    qcount.textContent = `${unsaved} pending change${unsaved === 1 ? '' : 's'}` + (saved ? ` · ${saved} publishing` : '');
+    qsave.disabled = busy || !queue.some(c => !c.saved && !('conflict' in c));
+    qsave.textContent = busy ? 'Saving…' : token ? 'Save' : 'Save (needs a token)';
+    if (!qlist.hidden) list();
+  }
+  function list() {
+    qlist.replaceChildren(...queue.map(c => {
+      const li = h('li', {}, h('span', {textContent: describe(c)}));
+      if (c.conflict !== undefined) {
+        li.append(h('span', {className: 'flag', textContent: `main has ${c.conflict || 'none'}`}));
+        const mine = h('button', {type: 'button', textContent: 'keep mine'});
+        mine.onclick = () => { c.base = c.conflict; delete c.conflict; persist(); showQueue(); };
+        li.append(mine);
+      } else if (c.saved) li.append(h('span', {className: 'saved', textContent: 'saved'}));
+      const x = h('button', {type: 'button', textContent: '×', title: 'Discard this change'});
+      x.onclick = () => drop([c]);
+      li.append(x);
+      return li;
+    }));
+  }
+  function drop(cs) {
+    queue = queue.filter(c => !cs.includes(c));
+    persist();
+    for (const id of new Set(cs.map(c => c.task))) { const t = byId.get(id); if (t) render(t); }
+    showQueue();
+  }
+  qcount.onclick = () => {
+    qlist.hidden = !qlist.hidden;
+    qcount.setAttribute('aria-expanded', !qlist.hidden);
+    if (!qlist.hidden) list();
+  };
+  document.getElementById('queue-discard').onclick = () => drop(queue.filter(c => !c.saved));
+  qsave.onclick = () => token ? save() : keyPanel(true);
+
+  // The token: asked for once, kept in this browser.
+  function keyPanel(open) {
+    let k = document.getElementById('key');
+    if (!open) { k?.remove(); keyButton.setAttribute('aria-pressed', !!token); return; }
+    if (k) return;
+    const input = h('input', {type: 'password', placeholder: token ? 'A token is kept' : 'github_pat_…', autocomplete: 'off'});
+    const ok = h('button', {type: 'button', className: 'primary', textContent: 'Keep'});
+    const forget = h('button', {type: 'button', textContent: 'Forget'});
+    const close = h('button', {type: 'button', textContent: 'Close'});
+    k = h('div', {id: 'key'},
+      h('p', {}, 'To write, paste a fine-grained GitHub token with access to ', h('code', {textContent: REPO}),
+        ' alone and the permission Contents: Read and write (',
+        h('a', {href: 'https://github.com/settings/personal-access-tokens/new', textContent: 'create one'}),
+        '). It stays in this browser and is sent only to api.github.com.'),
+      h('div', {className: 'row'}, input, ok, forget, close));
+    ok.onclick = () => { const v = input.value.trim(); if (!v) return; token = v; keep.set('tasks-token', v); keyPanel(false); refresh(); };
+    forget.onclick = () => { token = ''; keep.set('tasks-token', null); keyPanel(false); refresh(); };
+    close.onclick = () => keyPanel(false);
+    document.querySelector('header').after(k);
+    input.focus();
+  }
+  keyButton.onclick = () => keyPanel(!document.getElementById('key'));
+  function refresh() {
+    for (const f of document.querySelectorAll('.write')) f.remove();
+    for (const el of document.querySelectorAll('details.task[open]')) decorate(byId.get(el.id));
+    showQueue();
+  }
+
+  // Saving: one commit with every touched task —blobs, a tree over main's,
+  // the commit, main moved to it—, so it is all or nothing. Each task is
+  // read from main as it is now, and the queue applied on top: a field
+  // someone else changed since it was queued is flagged and not saved; if
+  // main moves between the read and the move, it is all read again.
+  let busy = false;
+  async function gh(method, path, body) {
+    const r = await fetch(API + path, {
+      method, cache: 'no-store', body: body && JSON.stringify(body),
+      headers: {Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28',
+        ...(body ? {'Content-Type': 'application/json'} : {})},
+    });
+    if (!r.ok) throw Object.assign(new Error(`${method} ${path}: ${r.status} ${(await r.json().catch(() => ({}))).message || ''}`), {status: r.status});
+    return r.json();
+  }
+  const decode = b64 => new TextDecoder().decode(Uint8Array.from(atob(b64.replace(/\s/g, '')), ch => ch.charCodeAt(0)));
+  const front = text => /^---\n([^]*?)\n---\n/.exec(text);
+  function field(text, k) {
+    const m = front(text), l = m && new RegExp(`^${k}:[ \\t]*(.*)$`, 'm').exec(m[1]);
+    const v = l ? l[1].trim() : '';
+    return /^(["']).*\1$/.test(v) ? v.slice(1, -1) : v;
+  }
+  function setField(text, k, v) {
+    const m = front(text);
+    let y = m[1];
+    const re = new RegExp(`^${k}:.*$`, 'm');
+    if (re.test(y)) y = v ? y.replace(re, () => `${k}: ${v}`) : y.replace(new RegExp(`^${k}:.*\\n?`, 'm'), '');
+    else if (v) y = /^status:.*$/m.test(y) ? y.replace(/^status:.*$/m, s => `${s}\n${k}: ${v}`) : `${y}\n${k}: ${v}`;
+    return `---\n${y.replace(/\n$/, '')}\n---\n${text.slice(m[0].length)}`;
+  }
+  function addEntry(text, c) {
+    let t = text.replace(/\s*$/, '\n');
+    if (!/^## Log$/m.test(t)) t += '\n## Log\n';
+    const quote = c.text.split('\n').map(l => l.trim() ? `> ${l}` : '>').join('\n');
+    return `${t}\n### ${c.date}, taro: ${c.title}\n\n${quote}\n`;
+  }
+  async function save() {
+    busy = true; qnote.hidden = true; showQueue();
+    try {
+      for (let attempt = 0; ; attempt++) {
+        const todo = queue.filter(c => !c.saved && !('conflict' in c));
+        if (!todo.length) break;
+        const head = (await gh('GET', '/git/ref/heads/main')).object.sha;
+        const tree = (await gh('GET', `/git/commits/${head}`)).tree.sha;
+        const files = [], going = [], already = [], flagged = [];
+        for (const id of new Set(todo.map(c => c.task))) {
+          let text;
+          try { text = decode((await gh('GET', `/contents/tasks/${encodeURIComponent(id)}.md?ref=${head}`)).content); }
+          catch (e) { if (e.status !== 404) throw e; for (const c of todo) if (c.task === id) flagged.push([c, 'no such task']); continue; }
+          const was = text;
+          for (const c of todo.filter(c => c.task === id)) {
+            if (c.kind === 'entry') { text = addEntry(text, c); going.push(c); continue; }
+            const now = field(text, c.kind);
+            if (now === c.value) already.push(c);
+            else if (now !== c.base) flagged.push([c, now]);
+            else { text = setField(text, c.kind, c.value); going.push(c); }
+          }
+          if (text !== was) files.push({id, text});
+        }
+        let commit = null;
+        if (files.length) {
+          const blobs = [];
+          for (const f of files) blobs.push((await gh('POST', '/git/blobs', {content: f.text, encoding: 'utf-8'})).sha);
+          const newTree = await gh('POST', '/git/trees', {base_tree: tree,
+            tree: files.map((f, i) => ({path: `tasks/${f.id}.md`, mode: '100644', type: 'blob', sha: blobs[i]}))});
+          const lines = going.map(c => `- ${describe(c)}`);
+          commit = await gh('POST', '/git/commits', {tree: newTree.sha, parents: [head],
+            message: `taro, from the tasks page: ${files.length} task${files.length === 1 ? '' : 's'}\n\n${lines.join('\n')}\n`});
+          try { await gh('PATCH', '/git/refs/heads/main', {sha: commit.sha, force: false}); }
+          catch (e) {
+            // Not a fast-forward: main moved since it was read.
+            if (e.status === 422 && attempt < 3) continue;
+            throw e;
+          }
+        }
+        for (const c of going) c.saved = {sha: commit.sha, date: commit.committer.date};
+        for (const [c, now] of flagged) c.conflict = now;
+        queue = queue.filter(c => !already.includes(c));
+        if (flagged.length) { qnote.textContent = `${flagged.length} change${flagged.length === 1 ? '' : 's'} not saved: main changed ${flagged.length === 1 ? 'that field' : 'those fields'} meanwhile.`; qnote.hidden = false; }
+        break;
+      }
+    } catch (e) {
+      qnote.textContent = e.status === 401 || e.status === 403 ? `GitHub refused the token (${e.status}): nothing was saved.` : `Nothing was saved: ${e.message}`;
+      qnote.hidden = false;
+    } finally {
+      busy = false; persist();
+      for (const id of new Set(queue.map(c => c.task))) if (byId.has(id)) render(byId.get(id));
+      showQueue();
+    }
+  }
+
+  // A body made HTML when its task opens (the toggle above) gets the queued
+  // entries and, with a token, the form.
+  document.addEventListener('toggle', e => {
+    if (e.target.open && e.target.matches?.('details.task')) decorate(byId.get(e.target.id));
+  }, true);
+  document.addEventListener('DOMContentLoaded', () => {
+    keyButton.setAttribute('aria-pressed', !!token);
+    if (!queue.length) return;
+    prune();
+    const moved = new Set();
+    for (const id of new Set(queue.map(c => c.task))) {
+      const t = byId.get(id), was = t.status;
+      render(t);
+      if (t.status !== was) moved.add(t);
+    }
+    if (moved.size) apply();
+    showQueue();
+  });
+</script>
 </body>
 </html>
