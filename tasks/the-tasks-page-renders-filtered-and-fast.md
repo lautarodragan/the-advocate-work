@@ -8,6 +8,7 @@ agents: [huron]
 author: taro
 links:
   found: [a-placeholder-in-angle-brackets-vanishes-from-the-page]
+  relates: [the-tasks-page-writes-back]
 ---
 
 **Why**: `nu tasks/tasks.nu html` builds a single `index.html` from
