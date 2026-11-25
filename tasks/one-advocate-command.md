@@ -660,3 +660,49 @@ tools: every file of each `build/` byte for byte (a script, comparing
 manual maps—. Every `.sfc`, `.msu`, `mapdata.inc`, and `converter.log`
 apart from those paths, equal. `cargo test` of `rm2k-project` and
 `rm2k-snes-convert`, and clippy of the four crates touched, clean.
+
+### 2026-11-25, Calandria: step 2, the builder calls the converter
+
+the-advocate `88b2fc25` and `4e78d1f7`. `Cartridges::convert` calls
+`rm2k_snes_convert::convert` with the flags it passed the binary, the
+cases by their whole path, inside a `catch_unwind` ("`<cartridge>`: the
+converter panicked: …"), and writes the `Log`'s bytes as `converter.log`;
+a panic is said in that log (`log::panics_into_logs`). The MSU-1 tracks
+are `Tracks::build` of `rm2k-snes-audio`, its lines on stdout as they came
+and the summary built by the caller. `fingerprint_files` hashes
+`Cartridges::builder`, the running binary (`current_exe`), and no longer
+`rm2k-snes-convert` nor `rm2k-snes-cartridges` from the PATH: that closes
+[`the-cartridges-fingerprint-hashes-the-path-s-builder`](the-cartridges-fingerprint-hashes-the-path-s-builder.md)
+—its test hands the field a stand-in, and checks that an
+`rm2k-snes-cartridges` on the PATH is not hashed—.
+
+Two things the design did not see:
+
+* **A dependency cycle**: the builder's crate now links the converter,
+  which links the patches, whose binary linked the builder's crate only to
+  know where each cartridge is built for `--check`. That moved into
+  `rm2k-project` as `Environment::cartridge`, with `RELEASE`; the
+  patches' `main.rs` lost the dependency (one hunk; Tijereta's 5b touches
+  the same file).
+* **Temporary names by process id**: in one process two conversions wrote
+  a project ChipSet's image under the same `<name>.png.<pid>.png` and one
+  renamed the other's away; ABL's `test-twins` failed with the PNG not
+  found, on the first full run. The same shape was in the fork's dump with
+  the project's common events, the unpacked `.zip` and the game with the
+  port's own files (process id and nanoseconds); all four take the cache's
+  `aside`, now public, which carries a counter of the process.
+
+#### Verified
+
+The same nine `NO_CACHE=1 --force` builds, with this step's
+`rm2k-snes-cartridges` first on the PATH and, in front of it, a
+`rm2k-snes-convert` and an `rm2k-snes-audio` that fail if run (none was):
+against the global tools' builds, every file equal but the ones named in
+step 1 (`stamp.txt`: the builder's binary changes; `.o`; the `.dbg`'s
+`mtime`s; the checkout's path). And ABL's `release` with its tracks,
+`NO_CACHE=1 --force`, through both: the 106 `.pcm` byte for byte, the
+same 106 track lines and the same summary; what else the run prints is
+fluidsynth's own ALSA and PipeWire noise, interleaved differently each
+time. `cargo test` of `rm2k-snes-cartridge` and `rm2k-snes-patches`, clean
+(`a_cached_object_gives_the_dbg_a_fresh_one_gives` red once, green alone,
+the known flake).
