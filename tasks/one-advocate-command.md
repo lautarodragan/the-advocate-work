@@ -1051,3 +1051,7 @@ the old binaries. For step 5: `release.yml`'s smoke test, and the
 release's archive keeps the harness at `rm2k-snes/harness/` and not in
 `lib/advocate/harness` beside `bin/`, where the ports' tests look first
 (they fall back to the `.pth`, which a release does not write).
+
+### 2026-11-25, Hornero: steps 5-7 to Calandria
+
+taro: "dale". 5 and 7 first, each verified; 6, the prose, last, on its own commits.
