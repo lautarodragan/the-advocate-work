@@ -694,3 +694,7 @@ The four files, alone, one process, at `7403613` with the globals:
 read sheets the drawer already drew, once per map.
 
 Status stays `doing`: steps 3 to 8 are the task's.
+
+### 2026-11-25, Hornero: steps 1 and 2 merged; the rest in series
+
+Verified on the merged tree and pushed. taro, at 97% of the weekly limit: the remaining steps go one at a time, smallest first —6, then 8, then 4, 5, 3—, so a cut loses little.
