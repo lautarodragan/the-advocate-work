@@ -942,3 +942,112 @@ Steps 1-3b merged; 4 to 7 remain, so the task stays `doing`.
 ### 2026-11-25, Hornero: step 4 to Calandria
 
 taro: "dale". The ports move to `advocate` with option (d).
+
+### 2026-11-25, Calandria: step 4 started
+
+Worktrees `~/scratch/calandria/s4-the-advocate` and `s4-ports`, branch
+`calandria-step4` in both, from the-advocate `7e35c0db` and the ports
+`4c23c9e`; the baseline, the nine games built in a third worktree of the
+ports at `4c23c9e` with the global `rm2k-snes-cartridges` of `7e35c0db`,
+`NO_CACHE=1 --force`, ABL without tracks.
+
+How the harness is installed, with (d): `just install` links
+`rm2k-snes/harness` into `<root>/lib/advocate/harness` and writes
+`rm2k_snes_harness.pth` into Python's `site-packages` pointing there;
+`install-local` links the worktree's in its `.local-tools/` the same way.
+Python's path does not follow the PATH, so a worktree's tools would run
+with the global harness: ABL's `places.py` and the ports' `games.py` put
+first the one beside the `advocate` of the PATH, which is what
+`rm2k-snes-project --harness` answered (the checkout the tools came from).
+The experiments, run by hand, import the global one.
+
+### 2026-11-25, Calandria: step 4, the ports on `advocate` and the file
+
+the-advocate `7bb8adb5` and the ports `7b773ca`, branch `calandria-step4`
+in both.
+
+* **Recipes**: `game.just` and ABL's `cartridges` are `advocate build`;
+  `just space` prints each cartridge's `space` from `build/advocate.json`
+  (a ROM built apart, its `space.json`), `just culprits` builds and prints
+  the table of the build's `culprits.json`, ABL's `patches-check` builds
+  every cartridge and prints the file's `patches` —three scripts at the
+  root of the ports, `space.py`, `culprits.py`, `patches.py`, so ABL's
+  justfile names no Python, which `test_abl_side.py` guards—; writing the
+  patches is `just cartridges release --write-patches`. `just dump` reads a
+  `.zip` through `rpg_maker_files.py` (Python's `zipfile`, only the
+  `.ldb`/`.lmt`/`.lmu` Ditto reads). The root's `deliver` checks the tools'
+  checkout after building, from the games' files. The cores' recipes find
+  the harness beside the `advocate` of the PATH.
+* **Harnesses**: ABL's `project.py` reads the file (`project`, `suite`,
+  `settings`, and `machine` for `unpacked`, which refuses if the build was
+  given another `GAME_DIR`); `cartridges.py` reads `listing`, each
+  cartridge's `space`, `memory_map` and `sources` (`sources()` takes no
+  argument now); `test_patches.py` reads `patches`; the multi-game
+  `games.py` reads the game's file after `just cartridges`, and
+  `test_zounds_debug_map.py` too, instead of `--list --json`; the round
+  trip reads a `.zip` like `just dump`; the five experiments import the
+  installed package. `RENAMES.md` has the rows.
+* **the-advocate**: `just install` and `install-local` install the
+  harness (the entry above); the patches' complaints say `advocate build
+  --write-patches`; `advocate.json`'s `patches` gains `compared` (what
+  `--check` printed as "N cartridge(s)"), and is `null` for a game with no
+  `patches/auto/`. That last one is a bug of 3b, seen here: every port but
+  ABL versions no patches, and each build printed all their decisions as
+  stale (166 lines for The Frozen World).
+
+#### Verified
+
+* The nine games through the recipes, `NO_CACHE=1 --force`, ABL without
+  tracks, with this branch's `advocate` first on the PATH, against the
+  baseline: every file of each `build/` byte for byte but `stamp.txt`, the
+  `.o`, the `.dbg`'s mtimes, the checkout's path (`converter.log`,
+  `events-request.json`, `space.json`) and the new `advocate.json`; every
+  `.sfc`, `.msu` and `culprits.json` equal. `abl.sfc`:
+  `3bf35fd7665c2045e6cd3b8d30471b66abb686d107e52a9ac8da1cdd1d691718`.
+* `just space` (ABL, every cartridge; The Frozen World) prints what
+  `rm2k-snes-cartridges space` printed but the ROM's path, which is
+  relative to the tools' checkout; with a ROM's path, the same block.
+  ABL's `patches-check` prints the same seven lines; its failure path was
+  run on a doctored file. `just culprits` prints the same table in ABL
+  and The Frozen World (see the draft for what differs in the JSON). What
+  changed on purpose: `patches-check` takes no build directories and
+  builds first; `culprits` builds first; each prints `advocate build`'s
+  lines before its own.
+* `just dump` of The Frozen World (a `.zip`) and Zounds (a directory)
+  into a scratch directory: equal to the old recipe's dump. (Both differ
+  from the committed `data/` by the 2003 fields Ditto gained in
+  `ditto-does-not-read-the-2003-fields`, which that task left as a diff
+  nothing requires.)
+* The harness the tests import, with the branch's tools first on the
+  PATH, is the worktree's (`.local-tools/lib/advocate/harness`); the
+  `.pth` was checked with `site.addsitedir` on a scratch directory, not
+  installed: the global one is not touched.
+* the-advocate `just lint` and `just test` (29) green. ABL's `just tests`:
+  1,694 passed, 2 skipped; the goldens did not move.
+* the-advocate `just rust-test --no-fail-fast` (1,256 passed) and
+  `SOUNDFONT=…/FluidR3_GM.sf2 just test-game` (231 passed, 6 skipped);
+  the ports' `just boot`: 218 passed.
+* No test or harness module runs `rm2k-snes-project`,
+  `rm2k-snes-cartridges`, `rm2k-snes-patches` or `advocate` (a grep of
+  both repos; what is left names them as history). What the tests still
+  run of ours: the stage subcommands of
+  `tests-without-the-stages-subcommands`, `goombario`, `ditto`, and the
+  multi-game suite's `just cartridges` before its first test, which is the
+  build `prebuild` always ran.
+
+**Install when merging**: `just install advocate` in `~/the-advocate`
+(the patches' text and `advocate.json`'s `patches` changed; nothing else
+links what changed but `rm2k-snes-patches`, whose binary goes in step 5,
+and `rm2k-snes-convert`, which only says the complaint text in a check it
+does not run). **That same `just install` links the harness and writes
+its `.pth`**: until it runs, the ports' tests do not find
+`rm2k_snes_harness` with the global tools, since they no longer ask
+`rm2k-snes-project` for it.
+
+**Not done, for step 6**: the patch files' headers still say
+`rm2k-snes-patches` (rewriting them is a diff of every versioned patch);
+the ports' READMEs, `advocate.toml`'s comments and the book's pages name
+the old binaries. For step 5: `release.yml`'s smoke test, and the
+release's archive keeps the harness at `rm2k-snes/harness/` and not in
+`lib/advocate/harness` beside `bin/`, where the ports' tests look first
+(they fall back to the `.pth`, which a release does not write).
