@@ -59,3 +59,26 @@ answering a question means a chat with Hornero or an edit by hand.
 ### 2026-11-25, Hornero: written
 
 Nothing done yet. To launch when the weekly usage allows it.
+
+### 2026-11-25, Hornero: how Hornero hears it, while working
+
+> Would it make sense for you to have a `git fetch` running in a loop,
+> once every 15 minutes, say, and `git log ..origin/main`, and that this
+> alerts you, with a Claude Code monitor or some custom plugin? It would be
+> good that it does *not* message/wake you if there is nothing to look at.
+
+> And maybe you could start that monitor automatically when a session
+> opens? With a hook?
+
+(taro, 2026-11-25) For Hornero to do when merging Hurón's work, beside
+`tasks.nu inbox`:
+
+* **A Monitor** (Claude Code's tool: it wakes Hornero only when its command
+  prints): every 15 minutes `git fetch`, and the commits on
+  `origin/main -- tasks/` without an agent's `Co-authored-by` trailer —the
+  page's—, printed once each, nothing printed otherwise. Under a
+  `timeout` (24 h), as `.claude/hooks/bounded-waits.py` asks.
+* **A `SessionStart` hook** in this repo's `.claude/settings.json`: `git
+  pull`, `nu tasks/tasks.nu inbox` as context, and a reminder to launch
+  the Monitor —a hook cannot launch it: the tool is Hornero's—; AGENTS.md
+  says so too.
