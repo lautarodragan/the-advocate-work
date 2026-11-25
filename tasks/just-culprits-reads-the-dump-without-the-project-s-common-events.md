@@ -2,8 +2,9 @@
 name: "`just culprits` reads the dump without the project's common events"
 description: "The ports' `just culprits` passes the game's data/ to `rm2k-snes-events culprits`, but the converter compiles the dump with the project's own common events forked in, so in a game that brings its own the commons' report is not the cartridge's"
 type: bug
-status: doing
-assignee: calandria
+status: testing
+assignee: taro
+agents: [calandria]
 author: calandria
 links:
   found-in: [one-advocate-command]
@@ -47,3 +48,19 @@ Promoted by Hornero: measured on The Frozen World (22 commands against
 18), the fix is not in doubt —the dump with the project's common events—,
 and nothing seen or heard changes. It goes with step 4 of
 `one-advocate-command`.
+
+### 2026-11-25, Calandria: fixed with step 4
+
+`just culprits` (`game.just`) no longer runs the event compiler: it builds
+the cartridge if it is stale and prints the table of the `culprits.json`
+the build left beside the ROM —`culprits.py`, at the root of the ports,
+which is the table `rm2k-snes-events culprits` printed—. The build judges
+the dump it compiled, the fork with the project's common events.
+
+Checked on The Frozen World, ports branch `calandria-step4`: the build's
+`culprits.json` has 18 rows in `commands.commons`, and
+`rm2k-snes-events culprits --every-map --data data` over the same request
+22, the four the game's original common events use and the project's
+replace; the printed table is the same for both, since it shows only the
+commands that leave a page out or are skipped, and none of the four does.
+ABL's table, through the new recipe, equal to the old one's.
