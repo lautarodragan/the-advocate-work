@@ -74,12 +74,26 @@
     font-size: .8rem; letter-spacing: .08em; text-transform: uppercase;
     color: var(--muted); margin: 2rem 0 .5rem;
   }
+  /* `clip` and not `hidden`: it clips to the rounded corners without
+     making the card a scroll container, which would keep the open task's
+     header from sticking. */
   details.task {
     background: var(--card); border: 1px solid var(--line);
-    border-radius: .5rem; margin-bottom: .5rem;
+    border-radius: .5rem; margin-bottom: .5rem; overflow: clip;
   }
   details.task > summary {
     cursor: pointer; padding: .6rem .9rem; list-style: none;
+  }
+  /* An open task's header sticks to the top while its body scrolls
+     (taro's, 2026-11-26), so a long task keeps its name in sight. `-1px`
+     so that, stuck, it is a pixel out of view: that is what the script's
+     IntersectionObserver sees to mark it `.stuck` —no CSS selector says
+     "stuck" in every browser yet—, and only then it gets a solid ground
+     and a faint shadow over the text it covers. */
+  details.task[open] > summary { position: sticky; top: -1px; z-index: 1; }
+  details.task > summary.stuck {
+    background: var(--card);
+    box-shadow: 0 1px 0 var(--line), 0 6px 10px -8px rgba(0, 0, 0, .35);
   }
   details.task > summary::-webkit-details-marker { display: none; }
   .type {
@@ -449,6 +463,19 @@
   // —parsing every body as elements is what held the page on a phone—,
   // and becomes HTML the first time the task is opened.
   const unopened = el => el.querySelector(':scope > script.body');
+  // Which open task's header is stuck: observed only while the task is
+  // open, so the observer watches one or two headers, not every task, and
+  // nothing runs on each scroll —the browser calls back when one crosses.
+  const stuck = window.IntersectionObserver && new IntersectionObserver(entries => {
+    for (const e of entries)
+      e.target.classList.toggle('stuck', e.intersectionRatio < 1 && e.boundingClientRect.top < 0);
+  }, {threshold: [1]});
+  document.addEventListener('toggle', e => {
+    if (!stuck || !e.target.matches?.('details.task')) return;
+    const s = e.target.querySelector(':scope > summary');
+    if (e.target.open) stuck.observe(s);
+    else { stuck.unobserve(s); s.classList.remove('stuck'); }
+  }, true);
   document.addEventListener('toggle', e => {
     const b = e.target.open && e.target.matches?.('details.task') && unopened(e.target);
     if (!b) return;
