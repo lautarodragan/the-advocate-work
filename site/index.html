@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>The Advocate — tasks</title>
 <link rel="icon" type="image/png" href="favicon.png">
 <!--
@@ -189,9 +189,19 @@
   /* The bars, fixed at the bottom: the queue's, while a change waits, and
      the selection's, while anything is selected; the body gets room under
      the last task so they never cover it. */
+  /* On a phone the browser's own bar floats over the page's bottom edge
+     (taro's iPhone, 2026-11-25: the list showed between ours and the URL
+     island): `viewport-fit=cover` lets the page reach under it, the
+     safe-area inset keeps the buttons above it, and the card's colour
+     goes on below the bar so nothing of the list shows there. */
   #bars {
     position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
     background: var(--card); box-shadow: 0 -2px 8px rgba(0, 0, 0, .08);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  #bars::after {
+    content: ""; position: absolute; left: 0; right: 0; top: 100%;
+    height: 100vh; background: var(--card);
   }
   #selection, #queue .row {
     display: flex; align-items: center; justify-content: center; gap: .75rem;
