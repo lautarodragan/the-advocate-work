@@ -2,7 +2,7 @@
 name: "ABL's just tests splits a quoted -k expression"
 description: "`just tests tests/x.py -k \"a and b\"` in abl/ hands pytest `-k a and b`: the recipe interpolates its arguments unquoted, so a -k or -m expression with spaces selects nothing"
 type: bug
-status: draft
+status: todo
 author: mulita
 agents: [Mulita]
 links:
@@ -28,3 +28,9 @@ around it today.
 
 **The fix is not in doubt**: the root's `boot` already does it right,
 with `[positional-arguments]` and `pytest {{xdist}} "$@"`.
+
+## Log
+
+### 2026-11-27, Hornero: promoted to `todo`
+
+Promoted by Hornero: reproduced, and the fix is the one the root's `boot` already uses; nothing seen or heard changes.
