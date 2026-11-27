@@ -3,8 +3,8 @@ name: "The screens' reference drawing has no caller"
 description: "With rm2k-snes-screens' binary gone, render.rs's screens drawn as the console has to show them —the menu, the items, the actor choice, the slots, the equipment, the shop, the skills, End Game, the title's menu— are dead code of the crate"
 type: refactor
 game: advocate
-status: todo
-assignee: taro
+status: doing
+assignee: carpintero
 author: carpintero
 agents: [Carpintero]
 links:
@@ -38,3 +38,16 @@ out of step 3 so that the binaries' commit stayed small and checkable.
 ### 2026-11-27, Hornero: promoted to `todo`
 
 Promoted by Hornero: dead code since step 3 removed its last caller; deleting it changes nothing seen or heard.
+
+### 2026-11-27, taro: go
+
+> Can you take this one too? If it is plain dead code, I suppose we can
+> delete it and that is it, and if everything builds and the tests pass,
+> we are fine, right?
+
+### 2026-11-27, Hornero: taken, to Carpintero
+
+Yes: the deletion is mechanical, and its net is the build without
+dead-code warnings, the-advocate's suites and every port's ROMs byte for
+byte equal to `main`'s. With equal ROMs ABL's suite has nothing new to
+say, so it is not run; Cardón is measuring battle suite times meanwhile.
