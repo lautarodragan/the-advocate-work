@@ -3,8 +3,7 @@ name: "What the three gone binaries asked, only their tests ask"
 description: "With rm2k-snes-battle's, wally's and rm2k-snes-events' binaries gone, the functions they were a main over —the battle's JSON questions, Wally's layers, bakeable and split, the culprits table— are reached only by their own crates' tests"
 type: refactor
 game: advocate
-status: draft
-assignee: taro
+status: todo
 agents: [cardon]
 author: cardon
 links:
@@ -39,3 +38,11 @@ It is the same shape as
 whether to take them out with the tests that exercise them, or keep them
 as the crates' way to be asked by hand, is a judgement left out of the
 binaries' commit on purpose. Nothing a ROM carries depends on it.
+
+### 2026-11-27, Hornero: promoted to `todo`
+
+Promoted by Hornero: verified by grep, and the judgement has an answer
+already —taro, the same day, on the screens' dead drawing: "if it is
+plain dead code, we can delete it"—. What only the gone binaries reached
+goes with the tests that exercise only it; a test that covers something
+the converter still calls is retargeted. ROMs byte for byte.

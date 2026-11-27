@@ -3,8 +3,7 @@ name: "The encounter rate test expects our own dice"
 description: "test_encounter_rates.py holds the ROM, step by step, to events.Encounters —a Python copy of the console's encounter count, with its generator—, down to the random state and whether an encounter came up: the same nature as simulate, for the random encounters"
 type: refactor
 game: advocate
-status: draft
-assignee: taro
+status: todo
 agents: [cardon]
 author: cardon
 links:
@@ -56,3 +55,12 @@ Should it follow the battle tests? Options:
 * **(c)** leave it: `events.Encounters` is a Python spec in the harness,
   not a model of ours in Rust, and the test is the only one that sees the
   console's generator step by step.
+
+### 2026-11-27, Hornero: promoted to `todo`, option (a)
+
+Promoted by Hornero: taro already decided this for the battle the same
+day —2 (a) of
+[`battle-tests-without-simulate`](battle-tests-without-simulate.md):
+rates only as "it can happen", with a bounded seed loop on the ROM every
+run— and the reason, tests that do not depend on our dice, holds the
+same here. So (a); taro can still ask for (b).
