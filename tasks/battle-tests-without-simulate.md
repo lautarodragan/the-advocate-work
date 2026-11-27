@@ -4,7 +4,7 @@ description: "Twenty battle tests ask rm2k-snes-battle simulate, our own model o
 type: refactor
 game: advocate
 status: doing
-assignee: taro
+assignee: cardon
 agents: [cardon]
 author: taro
 links:
@@ -471,3 +471,19 @@ critical that can never land).
 passes, as long as the ×3 is right. That is what (b) would add, at some
 20 s of suite per rate; and (c) forces the chance by writing the ROM's
 byte, which skips the real roll.
+
+### 2026-11-27, taro: 2.a
+
+> But is a seed searched once and then the test always runs against one
+> seed, or does the same test have to try several every time it runs?
+
+Hornero: every run, as Cardón proposed; deterministic, so it finds the
+same seed on the same try while the ROM does not change, at the cost of a
+battle or two. A seed written in the test would tie it again to our
+generator and the order of its rolls.
+
+> OK. Let's go with that, then.
+
+### 2026-11-27, Hornero: back to Cardón for phase 2
+
+All three decided: 1 (a), 2 (a), 3 (a). Assignee back to Cardón.
