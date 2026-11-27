@@ -4,7 +4,7 @@ description: "Twenty battle tests ask rm2k-snes-battle simulate, our own model o
 type: refactor
 game: advocate
 status: doing
-assignee: cardon
+assignee: taro
 agents: [cardon]
 author: taro
 links:
@@ -426,3 +426,16 @@ formulas cost nothing. Something like 65 to 70 s.
 * `test_encounter_rates.py` holds the ROM to `events.Encounters`, a
   Python model of the encounter steps with our own generator, step by
   step: the same nature as `simulate`, and not in this task's list.
+
+### 2026-11-27, Hornero: a question for taro
+
+Cardón's classification above is phase 1, and phase 2 waits on taro's
+answers to its three questions: (1) a range per hit plus exact HP
+accounting, an average only where ranges overlap —recommended yes—; (2)
+the rates —crit, loot, the AI's 50/50, BarkWall's release— as only "can
+happen", proved with seeds against the ROM (a, recommended), a binomial
+test each (b, ~20 s each), or forcing the odds in RAM (c); (3) who throws
+the menu's potion, Kersh at level 50 with an average of 5 uses (a,
+recommended) or let it go (b). Assignee to taro while waiting; back to
+Cardón with the answers. The 0-or-1 draft stays a draft until it is seen
+in Wine: it was read in easyrpg's code, not reproduced.
