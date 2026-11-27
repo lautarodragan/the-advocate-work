@@ -2,7 +2,8 @@
 name: "The screens' reference drawing has no caller"
 description: "With rm2k-snes-screens' binary gone, render.rs's screens drawn as the console has to show them —the menu, the items, the actor choice, the slots, the equipment, the shop, the skills, End Game, the title's menu— are dead code of the crate"
 type: refactor
-status: draft
+game: advocate
+status: todo
 assignee: taro
 author: carpintero
 agents: [Carpintero]
@@ -31,3 +32,9 @@ dead-code warnings with the module made `pub(crate)` —mechanical, the
 ROMs byte for byte the same—; the crate's tests that draw a screen
 through it, if any, go with it or move to what the converter calls. Left
 out of step 3 so that the binaries' commit stayed small and checkable.
+
+## Log
+
+### 2026-11-27, Hornero: promoted to `todo`
+
+Promoted by Hornero: dead code since step 3 removed its last caller; deleting it changes nothing seen or heard.
