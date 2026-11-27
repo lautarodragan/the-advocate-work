@@ -1149,3 +1149,13 @@ rm2k-snes-screens --root /usr/local`. `8e421cc2` alone does not compile —the s
 still called `refit_each`—; `83d2b8ad` mends it.
 
 Status stays `doing`: step 7 is the task's.
+
+### 2026-11-27, Cardón: step 7 classified with the battle tests
+
+Step 7's `model` (`items_usable_in_battle`, `troop_gold`), `lines`,
+`experience` and `field-skill`, and `data.maxima()`, which also asks the
+model, are classified with `simulate`'s users in
+[`battle-tests-without-simulate`](battle-tests-without-simulate.md)'s
+log, for taro to see before any test changes. All but `field-skill` are
+deterministic in RM2k and become exact rules in the tests; `field-skill`
+becomes a range.
