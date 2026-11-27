@@ -1049,8 +1049,8 @@ Status stays `doing`: steps 3 and 7 are the task's.
 ### 2026-11-27, Carpintero: step 3, the screens
 
 From the-advocate `2b4f8cf2`, ports `4821050`, docs `c956b2f`; merged
-with main after Chajá's step 4. Branches `carpintero-tests-step3` in the
-three.
+with main after Chajá's step 4 and again after Mulita's step 5. Branches
+`carpintero-tests-step3` in the three.
 
 #### What the tests read now
 
@@ -1124,6 +1124,13 @@ change only the text crate's test and a clippy form):
   passed and 6 skipped.
 * Ports: `just boot` 209 passed; ABL's `just tests` 1664 passed and 2
   skipped, 3 min 53 s with others running.
+* **Again on the tree merged with Mulita's step 5**, with `advocate
+  convert rm2k-snes-audio` installed from it: the twenty `.sfc` the same
+  bytes as above; `just lint`, `just test` (29), `just test-game` (229
+  passed, 6 skipped), `just rust-test --no-fail-fast` green but the
+  known flaky ones —two of fxpak's pty tests and
+  `a_cached_object_gives_the_dbg_a_fresh_one_gives`—; `just boot`
+  209 passed; ABL's `just tests` 1659 passed and 2 skipped.
 
 #### Suite time
 
@@ -1134,10 +1141,11 @@ calls, the 67 `boxes` and the shop's per-frame drawings are what went.
 #### Branches, and what to install when merging
 
 the-advocate `8e421cc2` (the boxes check), `83d2b8ad` (the binaries go),
-`1417075b`, `2e265542`; ports `d7a4978` (the goldens) and `0e664c7` (the
-tests); docs `be71311`. Install `just install advocate` and `cargo
-uninstall rm2k-snes-convert rm2k-snes-mapdata rm2k-snes-screens --root
-/usr/local`. `8e421cc2` alone does not compile —the screens' binary
+`1417075b`, `2e265542`, and the merges; ports `d7a4978` (the goldens)
+and `0e664c7` (the tests); docs `be71311`, and the merges, which joined
+`tools.md`'s paragraphs with Chajá's and Mulita's. Install `just install
+advocate` and `cargo uninstall rm2k-snes-convert rm2k-snes-mapdata
+rm2k-snes-screens --root /usr/local`. `8e421cc2` alone does not compile —the screens' binary
 still called `refit_each`—; `83d2b8ad` mends it.
 
 Status stays `doing`: step 7 is the task's.
