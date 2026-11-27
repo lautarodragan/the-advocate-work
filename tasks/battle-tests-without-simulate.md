@@ -3,7 +3,9 @@ name: "Battle tests without simulate"
 description: "Twenty battle tests ask rm2k-snes-battle simulate, our own model of the battle, for the exact HP the ROM must leave: they test our implementation against itself. They should expect what RM2k's rules say —exact where RM2k is deterministic, a range or an average where it rolls—, computed from RM2k's formulas, and simulate goes"
 type: refactor
 game: advocate
-status: todo
+status: doing
+assignee: cardon
+agents: [cardon]
 author: taro
 links:
   blocks: [abl-s-test-cartridges-become-test-game-cases]
@@ -92,3 +94,15 @@ Nothing done yet.
 
 Born as `battle-tests-expect-rm2k-not-our-dice.md` minutes earlier;
 nothing in the four repos named it yet.
+
+### 2026-11-27, Hornero: taken, to Cardón
+
+> Go!
+
+(taro, 2026-11-27, to doing this task together with step 7 of
+[`tests-without-the-stages-subcommands`](tests-without-the-stages-subcommands.md).)
+
+Cardón does both, in one branch per repo: first this task's
+classification, written here and shown to taro before any test changes;
+then the tests, `simulate` and step 7's `model`, `lines`, `experience` and
+`field-skill`, and the `rm2k-snes-battle` binary goes whole.
