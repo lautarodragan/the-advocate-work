@@ -445,3 +445,29 @@ in Wine: it was read in easyrpg's code, not reproduced.
 > Let's go with the recommendations for 1 and 3. 
 >
 > Can you elaborate 2.a?
+
+### 2026-11-27, Hornero: 1 and 3 decided; 2.a, elaborated
+
+1 and 3 go as recommended. Question 2 stays open; what (a) means:
+
+**Today** a test that needs a rare event —a critical, the loot dropping,
+poison taking hold— asks the model which seed makes it happen: the model
+plays the battle with our generator, seed after seed, up to thousands,
+and the test writes the seed it found to `BA_SEED` and expects the ROM
+to do exactly that. Tied to our dice: change the generator and the
+model's seed no longer gives the event in the ROM.
+
+**With (a)** the model goes and the ROM is the one tried: write 1 to
+`BA_SEED`, play, read the ROM's log; no critical, try 2, 3… up to a
+bound (a few dozen; for the 3 % critical, attacking again within the
+same battle is cheaper). When the event shows, the test checks **what
+it did** with RM2k's rules —the critical is ×3 and in range, the loot
+is an item of that enemy's, the poison takes what it takes per step—.
+Each seed's play is deterministic, so it is never flaky; the bound only
+makes it fail if the event never happens at all, which is a bug (a
+critical that can never land).
+
+**What it does not check**: how often. A critical at 30 % instead of 3 %
+passes, as long as the ×3 is right. That is what (b) would add, at some
+20 s of suite per rate; and (c) forces the chance by writing the ROM's
+byte, which skips the real roll.
