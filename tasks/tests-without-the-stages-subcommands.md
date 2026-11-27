@@ -822,3 +822,118 @@ Steps 1, 2, 6 and 8 merged, verified and pushed. Left: 4 (images), 5 (audio), 3 
 ### 2026-11-27, Hornero: steps 3, 4 and 5 in parallel
 
 The weekly limit reset: screens to Carpintero, images to Chajá, audio to Mulita. Step 7 waits for `battle-tests-without-simulate`.
+
+### 2026-11-27, Chajá: step 4, the images
+
+From the-advocate `2b4f8cf2`, ports `4821050`, docs `c956b2f`; branches
+`chaja-tests-step4` in the three.
+
+#### What the tests look at now
+
+ABL's three test files that asked `rm2k-snes-images` (through
+`harness/image_stage.py`, deleted) hold the ROM against goldens, read from
+the WRAM or the VRAM and coloured with the ROM's own CGRAM tables, and
+against itself where no oracle is needed:
+
+* `test_battle_scene_drawing.py`: the clean backdrops of Sector 27, map
+  60's place battle and the replacement on map 7 are goldens
+  (`scene-backdrop-*`), the backdrop's number still checked against the
+  game's list the harness reads from the LDB; troop 100, whole and with
+  its middle enemy erased, and **every troop of `release`** are goldens of
+  `SCN_SCENE` (`scene-troop-<n>`, 153); the screen is held against the
+  WRAM as before. And every living enemy whose picture the game or the RTP
+  has must show pixels of the palette its place in the troop gives it:
+  the check of the 2026-10-05 Oblings with no drawing, which a golden
+  frozen after the fact would not make.
+* `test_msu_data.py`: with the `.msu`, the clean backdrop in WRAM against
+  **that backdrop's bytes in the `.msu` itself**; without it, against the
+  golden of the light one (Sector 27's, shared with the drawing test, and
+  `msu-world-light`). The screen goldens stay.
+* `test_animation_frames.py`: every frame of every animation, read out of
+  the box in both cores, against one golden per animation
+  (`animation-frames-<n>`, 41, eight frames to a row); the menu test
+  compares the frames after the menu with the ones the ROM drew before
+  it, in the same session. `frame_without_gaps`' round trip, with what
+  `anim_frame_build` does —erase the previous frame's tiles, write this
+  one's—, went to the mapdata crate:
+  `an_animation_frame_comes_back_whole_without_its_gaps`, over generated
+  frames, shown red with the function reading only 31 bytes of a tile.
+  Hornero's brief said the images crate; it went where the function is.
+
+**"The same battle with and without the `.msu` looks the same"**, as the
+classification put it, cannot hold: the ROM's light fallback and the
+`.msu`'s quality backdrop are different on purpose (16 colours at half
+resolution against 96), and the test already asserts they differ. What
+holds the `.msu` path against the ROM itself is the byte check above.
+
+#### What the tests stop catching
+
+* A backdrop, battler or animation frame converted wrong from its first
+  day: it freezes in its golden instead of failing against a second
+  conversion. The goldens were frozen from a ROM that passed the old tests
+  (17 passed, the three files at `4821050`, same cartridges), so today
+  they are exactly what the stage answered: **no ROM capture differed from
+  the stage's answer**.
+* A battler's corner, palette or drawing order that is wrong only for a
+  troop added after the goldens: only its palette showing is checked.
+* The quality backdrop converted wrong: the `.msu` and the ROM would agree
+  on the wrong bytes, and only the `msu-data-msu` and `msu-world-msu`
+  screen goldens hold it.
+* A frame shape only ABL's real animations reach in `frame_without_gaps`'
+  round trip; the goldens see it only if the ROM draws it differently from
+  the day they were frozen.
+
+#### The binary
+
+Nothing calls `rm2k-snes-images` any more —grep of the ports, the
+the-advocate's `tests/`, the test game and the harness—, so its `main`
+went, with what only it used: reading a request from a file and making
+its paths relative to it (`request::read`, `Paths` and its six impls,
+their test) and `clap`. The converter calls the six as functions, as
+before. LAYOUT.md, the crate's README, the justfile's uninstall comment
+and the book's "The tools" say so; the book's `.msu` internals and the
+gapless frames' optimization say what holds them now.
+
+#### Goldens
+
+199 new, none changed, in their own ports commit; contact sheets and a
+README of which test covers which in
+`/shared/captures/2026-11-27-images-goldens/`, for Hornero's review. Both
+cores give the same ones.
+
+#### Verified
+
+* ROMs: the twenty `.sfc` of the nine games, built in the ports worktree
+  with the global tools at `2b4f8cf2` and again with this branch's
+  `advocate convert mapdata` first in PATH, byte for byte the same.
+  `abl.sfc` `3bf35fd7665c2045`.
+* the-advocate, with this branch's tools: `SOUNDFONT=<FluidR3> just lint`
+  green (Goombario over the test game's three cartridges included), `just
+  test` 29 passed, `just rust-test --no-fail-fast` 1261 passed, `just
+  test-game` (FluidR3) 229 passed and 6 skipped.
+* Ports, with them first in PATH: `just boot` 209 passed; ABL's `just
+  tests` 1668 passed and 2 skipped —the same count as before: no test
+  went or came—. No golden moved.
+
+#### Suite time
+
+The three files, one process (`PROCESSES=0`, `--durations=0`), same
+cartridges, with other agents running: **161 s before, 72 s after**.
+Nearly all of it is `test_scene_each_troop_of_the_cartridge_draws_everyone`,
+129 s to 37 s: 153 stage answers for battlers it no longer asks. ABL's
+whole suite took 2 min 53 s of pytest with Carpintero and Mulita running
+beside it: not comparable with an earlier run, so not given as a saving.
+
+#### Branches, and what to install when merging
+
+the-advocate `b5998a70` (the crate test) and `b126642d` (the binary
+goes); ports `44e66b6` (the tests) and `80b50e0` (the goldens); docs
+`8994c9a`; all `chaja-tests-step4`. Install `just install advocate
+convert mapdata` —the libraries lost only the binary's code, so the ROMs
+do not move— and `cargo uninstall rm2k-snes-images --root /usr/local`,
+which installing does not do. Carpintero's step 3 touches `tools.md`'s
+same paragraph and "Running them by hand" list; Mulita's step 5 touches
+`test_msu_data.py` (`msu_index`, `signed_msu`), whose `_fight` now
+returns six values.
+
+Status stays `doing`: steps 3, 5 and 7 are the task's.
