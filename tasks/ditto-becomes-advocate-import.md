@@ -6,7 +6,7 @@ game: advocate
 status: todo
 author: taro
 links:
-  relates: [advocate-init-dump-and-config, one-advocate-command]
+  relates: [advocate-init-dump-and-config, one-advocate-command, rm2k-sketch-becomes-a-library]
 ---
 
 **Why**: once `rm2k-snes-battle`, `wally` and `rm2k-snes-events` go
@@ -59,3 +59,10 @@ whose `init` calls it.
 ### 2026-11-27, Hornero: written
 
 Nothing done yet.
+
+### 2026-11-27, Hornero: `rm2k-sketch` goes with it
+
+> Two separate tasks for tracking, but they can be implemented together.
+
+(taro, 2026-11-27) [`rm2k-sketch-becomes-a-library`](rm2k-sketch-becomes-a-library.md):
+the packing this task gives a home reads the test game's sketches too.
