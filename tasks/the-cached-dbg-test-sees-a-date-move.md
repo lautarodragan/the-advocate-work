@@ -45,3 +45,9 @@ no fixed date (only side one's, 204-214). `retarget_line` in `assemble.rs`
 truncates to seconds as ld65 does, so the two readings differ only if the
 file changed: the task already says how to tell the test's fault from the
 rewrite's.
+
+### 2026-11-27, Hornero: seen again
+
+Red once more verifying Cardón's battle merge (the-advocate `cardon-battle`
+into `e5b3d067`): `mapdata.inc`'s mtime `0x6B0A0746` against `…47`, the
+second ticking between the two builds. Alone, green.
