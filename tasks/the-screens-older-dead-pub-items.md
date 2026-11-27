@@ -3,8 +3,7 @@ name: "The screens keep a few dead pub items from before the binary went"
 description: "rm2k-snes-screens has pub functions, methods and fields that nothing in the workspace reads —convert::hex, message_window's convert, font_bytes and font_reach, a few of custom_menu's and cells'—, invisible to rustc because their modules are pub"
 type: refactor
 game: advocate
-status: draft
-assignee: taro
+status: todo
 agents: [Carpintero]
 author: carpintero
 links:
@@ -57,3 +56,9 @@ purpose —the `is_empty`s— stays. Mechanical, nothing seen or heard
 changes.
 
 ## Log
+
+### 2026-11-27, Hornero: promoted to `todo`
+
+Promoted by Hornero: reproduced with the steps above, dead code is debt
+with no doubt about the fix, nothing seen or heard changes, and the task
+says what to do.
