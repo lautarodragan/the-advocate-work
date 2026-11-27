@@ -3,14 +3,14 @@ name: "Tests without the stages' subcommands"
 description: "Besides simulate, the ports' tests ask the stages themselves —screens' window, render, equip, layout and refit, images' backdrops, animations and battlers, Wally, mapdata's vram, engine, pages and compress, battle's experience, field-skill, lines and model, the scans— for what they expect or need; the tests should not depend on the converter's internals, and those subcommands should not be needed"
 type: refactor
 game: advocate
-status: doing
-assignee: cardon
+status: testing
+assignee: taro
 agents: [cardon, chaja, Aguará, Mulita, Carpintero]
 author: taro
 links:
   blocks: [abl-s-test-cartridges-become-test-game-cases]
   relates: [battle-tests-without-simulate, one-advocate-command, the-stages-speak-json-nobody-types, the-volume-ceilings-are-measured-without-a-rom, the-slot-screens-reference-draws-a-lent-face-with-its-own-palette, the-stage-subcommands-only-the-converter-called-have-no-caller, advocate-init-dump-and-config]
-  found: [the-test-game-lacks-content-abl-s-runtime-branches-need, abl-s-just-tests-splits-a-quoted-k-expression, the-screens-reference-drawing-has-no-caller]
+  found: [the-test-game-lacks-content-abl-s-runtime-branches-need, abl-s-just-tests-splits-a-quoted-k-expression, the-screens-reference-drawing-has-no-caller, what-the-three-gone-binaries-asked-only-their-tests-ask]
 ---
 
 **Why**: the same as
@@ -1159,3 +1159,62 @@ model, are classified with `simulate`'s users in
 log, for taro to see before any test changes. All but `field-skill` are
 deterministic in RM2k and become exact rules in the tests; `field-skill`
 becomes a range.
+
+### 2026-11-27, Cardón: step 7, the battle's questions, and the last binaries
+
+With [`battle-tests-without-simulate`](battle-tests-without-simulate.md)'s
+phase 2, whose log says file by file what the tests read now and what
+they stop catching.
+
+#### The step-3 table's battle rows
+
+* `model`: `items_usable_in_battle` is `rules.item_usable_in_battle` in
+  ABL's harness, `Game_Party::IsItemUsable` in battle with this battle's
+  cut, and `troop_gold` the members' `gold` summed (`rules.troop_gold`).
+* `lines`: `battle.victory_lines` and `level_lines` build RM2k's lines
+  from the LDB's terms (`game_message_terms.cpp`, the 2000 branch), and
+  `says_pages` checks the victory's pages against them: each message from
+  a new page, each line from a new row, its words in order, each row
+  fitting the window. `first_page` went.
+* `experience`: `harness/experience.py`, with `ChangeExp` and
+  `ChangeLevel` written from easyrpg in `test_event_experience.py`.
+* `field-skill`: each heal in `rules.skill_range`, capped, and the SP
+  exact.
+* `data.maxima()`: `rules.maxima`, the curve at the starting level.
+
+#### The binaries
+
+**`rm2k-snes-battle`'s goes whole**, as planned. **`wally`'s and
+`rm2k-snes-events`' go too**: nothing ran them. Wally's `layers`,
+`bakeable` and `split` lost their last test in step 2; the compiler's
+`culprits` was replaced on 2026-11-25 by the `culprits.json` every build
+leaves and the ports' `just culprits`; the book's figures script ran
+`wally layers` and now says which commit had it, as it does for the
+other gone ones. The three crates' command-line tests became tests of the
+same functions —`stage::layers_of`, `bakeable_of`, `split_of`,
+`culprits::judge_game`—; what they stop checking is only what a process
+has, the exit codes, and `Bad::Answer` against `Bad::Usage` still holds.
+The generic harness's `stage.py`, which ran a stage's binary for a test,
+lost its last caller with `model.py` and went. So **only `advocate` and
+`rm2k-snes-audio` are binaries of `rm2k-snes/`**, and a game's tests run
+no binary of ours. What the gone binaries were a `main` over is left to
+their crates' tests:
+[`what-the-three-gone-binaries-asked-only-their-tests-ask`](what-the-three-gone-binaries-asked-only-their-tests-ask.md),
+a draft.
+
+#### Branches, and what to install when merging
+
+the-advocate `cardon-battle`: `3f9a604d` (the binaries go), `ab4becfb`
+(the prose and `stage.py`), `334dda23` (rustfmt). The ports
+`cardon-battle`: `08a95c1`. The book `cardon-battle`: `321a4cf`. Install
+`just install advocate` (the battle crate's manifest changed, the ROM did
+not) and `cargo uninstall rm2k-snes-battle rm2k-snes-events wally --root
+/usr/local`.
+
+#### Verified, and the task
+
+As in [`battle-tests-without-simulate`](battle-tests-without-simulate.md)'s
+log: the-advocate's lint, tests, Rust tests and test game green, ABL's
+suite and the root's boot green, every release ROM the same bytes. With
+step 7 the eight steps are done, and nothing of the task is left: to
+`testing`.

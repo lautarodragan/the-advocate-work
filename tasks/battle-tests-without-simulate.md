@@ -3,14 +3,14 @@ name: "Battle tests without simulate"
 description: "Twenty battle tests ask rm2k-snes-battle simulate, our own model of the battle, for the exact HP the ROM must leave: they test our implementation against itself. They should expect what RM2k's rules say —exact where RM2k is deterministic, a range or an average where it rolls—, computed from RM2k's formulas, and simulate goes"
 type: refactor
 game: advocate
-status: doing
-assignee: cardon
+status: testing
+assignee: taro
 agents: [cardon]
 author: taro
 links:
   blocks: [abl-s-test-cartridges-become-test-game-cases]
   relates: [one-advocate-command, the-stages-speak-json-nobody-types, tests-without-the-stages-subcommands]
-  found: [a-hit-that-does-nothing-does-1-half-the-time-in-rm2k]
+  found: [a-hit-that-does-nothing-does-1-half-the-time-in-rm2k, the-encounter-rate-test-expects-our-own-dice]
 ---
 
 **Why**: the battle tests take their expected values from
@@ -487,3 +487,136 @@ generator and the order of its rolls.
 ### 2026-11-27, Hornero: back to Cardón for phase 2
 
 All three decided: 1 (a), 2 (a), 3 (a). Assignee back to Cardón.
+
+### 2026-11-27, Cardón: phase 2, the tests and `simulate` go
+
+On the-advocate `e5b3d067`, the ports `dd440b5` and the book `7c132c9`,
+as taro answered: 1 (a), 2 (a) —every run—, 3 (a). Step 7 of
+[`tests-without-the-stages-subcommands`](tests-without-the-stages-subcommands.md)
+went with it; its close is in that task.
+
+#### What the tests read now
+
+* **`harness/rules.py`**, new: RM2k's battle rules from easyrpg-player
+  and the dump —the fighters' parameters (curve at the level plus the
+  equipment, clamped), the maxima, the battle's skill list, the critical
+  in float, the weapon's SP, the escape chance, `VarianceAdjustEffect`'s
+  bounds (0 or 1 on a base of 0, so the draft
+  [`a-hit-that-does-nothing-does-1-half-the-time-in-rm2k`](a-hit-that-does-nothing-does-1-half-the-time-in-rm2k.md)
+  does not matter to them), the attack's and a skill's base and range,
+  the attribute rate, a medicine's heal, the battle's item list, a
+  troop's gold and enemies, and the enemy AI's rating rule—.
+  `data.maxima()` reads it too, so its six other users did not change.
+* **`battle.Turn`**, in `harness/battle.py`: `Fight.play_turn`,
+  `messages`, `attack_turn` and `play_out` step the battle message by
+  message and record each as an `Act` —kind, who, target, damage (None
+  a miss), effect, heal, skill, the action's place in the order, who was
+  defending, and every HP before and after—. `Turn.check()` is the
+  bookkeeping: an attack took exactly its damage from its target and
+  nobody else's HP moved; a fallen one does not act. `check_attacks`
+  holds each hit to its range, normal or critical, halved for a defender.
+  A troop page that changes HP between two actions, with no frame in
+  between, is not seen: `test_troop_systems`'s summon turn is checked by
+  hand.
+* **The averages** (answer 1), in `test_battle.py`: Kersh's attack on the
+  droid, thirty hits that are not critical, against the formula's mean
+  within three standard deviations —red with `def / 2`—; and Kersh's
+  Healing Syringe at level 50, thirty heals —red without the spirit term:
+  "average 96.5, and RM2k's is 75.0 ± 4.9"—. Not Fury Punch, as planned:
+  its 500 of power hides the stats' part, and at Kersh's starting level
+  the syringe's spirit part is 6, which a mean of thirty does not tell
+  from nothing (it passed without it). The menu potion's caster (answer
+  3): Kersh at 50, five uses, 72 ± 11 —red pretending the caster is
+  Arden: "a mean of 74.0, and RM2k's is 51.0 ± 8.1"—.
+* **The seed loops** (answer 2), `battle.until_it_happens`: the console
+  serialized at the first request for commands, then `BA_SEED` 1, 2, 3…
+  up to 40, until the ROM's record shows the event: a party critical,
+  Agency Badge's Shock, the loot of one or two of three, the Veneno's
+  poison. Every one is found within the first few seeds.
+
+`model.py` went, and the generic harness's `stage.py` with it in
+the-advocate (it was its last caller); Zounds' two tests no longer run the
+binary, and the binary went (with Wally's and the compiler's, which had no
+caller either: see the other task).
+
+#### What each file stops catching
+
+Updated from the classification; where nothing is said, it is as
+classified.
+
+* `test_battle.py`: the exact number inside a range, how many rolls each
+  action takes and their order —"the critical is rolled even at 0 %", "a
+  switch skill rolls nothing"—, the turn order. The switch skill now
+  checks that no HP moves and the droid is untouched; the elixir, the
+  potion, the ether and the water, the Miracle Drop and Agency Badge's
+  caps are exact.
+* `test_battle_attributes.py`: the exact rounding; the ×2 and ×0.5 still
+  show, the ranges do not overlap.
+* `test_battle_attribute_shift.py`: whether the later barriers roll (the
+  model's `attribute_shift` and phase). The record says which action hit,
+  so the attack and Flame Field are no longer told by size.
+* `test_battle_conditions_golden.py`: on which turn the 50 % release
+  lands and whom the controlled droid picks. BarkWall's 26, 5, 7 and its
+  restoring are exact, the recovery message comes out the turn the
+  condition goes, Control is gone within `hold_turn` + 1; the goldens are
+  unchanged.
+* `test_battle_skill_results.py`: the number's exact rounding; the
+  Cloudy Potion's 39 and Agency Badge's 50, 34, 25 are exact.
+* `test_battle_special_items.py`, `test_battle_weapon_past_255.py`: the
+  exact HP. The gloves' `sp_cost` is 0, so their SP check is weak.
+* `test_ag7_and_the_plant.py`: the AI's exact 50/50 and the order of its
+  rolls. ShortCircuit's range counts AG7's Electric rank; `BA_MEFFECT` is
+  a skill's effect **before** a defender halves it, so `skill_range` no
+  longer takes `defending` and the test checks the HP lost is the half.
+* `test_battle_scene_drawing.py`: nothing.
+* `test_event_experience.py`: a disagreement with `rm2k-rules`' copy,
+  which is no longer compared; `ChangeExp` and `ChangeLevel` are written
+  in the file from easyrpg on top of `harness/experience.py`.
+* `test_experience_drawing.py`, `test_materials.py`,
+  `test_medicine_conditions.py`: nothing.
+* `test_healing_skills.py`: the exact number of a heal; the `-healed`
+  goldens show the rolled numbers, as before.
+* `test_menu_special_items.py`: the exact number.
+* `test_troop_events.py`: the turn order and the exact HP; the rats come
+  out exactly when the ROM's king crosses each page's bound.
+* `test_troop_systems.py`: the exact HP of the later turns.
+* `test_victory.py`: the 35 % itself, and the exact line breaks of the
+  victory term (the pages are checked as RM2k's lines, each from a new
+  row, its words in order, each row fitting the window).
+* The root's `test_zounds_special_items.py`: the exact damage;
+  `test_zounds_veneno.py`: the hold rate and seed 3's phase. The poison's
+  4 a turn is exact.
+
+#### Time, before and after
+
+The same 18 ABL files in one process, `--durations=0`: **79.5 s before,
+75.7 s after**, with 3 more tests (the two averages, 4 s, and the
+caster's mean). `test_battle_scene_drawing` is 40.5 and 44.8 of those,
+nearly all its 153-troop golden, which did not change and moved with the
+machine's load; without it, **39.0 s to 30.9 s**. `test_battle` 16.3 to
+15.0 (11 without the averages), `test_troop_events` 3.4 to 1.7. Zounds'
+two, 0.6 s to 0.44 s.
+
+#### Left as drafts
+
+* [`the-encounter-rate-test-expects-our-own-dice`](the-encounter-rate-test-expects-our-own-dice.md):
+  `test_encounter_rates.py` is the same nature for the encounters; a
+  question for taro in it.
+* The 0-or-1 draft stays a draft.
+
+#### Verified
+
+On the final branches, with `advocate` installed locally from
+the-advocate's `cardon-battle` (`334dda23`) and its harness (no
+`stage.py`), SOUNDFONT unset but where said:
+
+* the-advocate: `SOUNDFONT=…FluidR3_GM.sf2 just lint` green, `just test`
+  29 passed, `just rust-test --no-fail-fast` green, `SOUNDFONT=…FluidR3
+  just test-game` 229 passed and 6 skipped.
+* Ports: ABL's `just tests` 1662 passed and 2 skipped (2 min 41 s);
+  `just boot` at the root 209 passed.
+* Every game's release ROM, built by those runs, byte for byte the same
+  as in `/shared/builds/<game>/`; `abl.sfc` `3bf35fd7665c2045`.
+
+The code repos' mains did not move while this was done, so there was
+nothing to merge.
