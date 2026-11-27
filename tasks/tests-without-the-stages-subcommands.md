@@ -5,7 +5,7 @@ type: refactor
 game: advocate
 status: doing
 assignee: cardon
-agents: [cardon, chaja, Aguará]
+agents: [cardon, chaja, Aguará, Carpintero]
 author: taro
 links:
   blocks: [abl-s-test-cartridges-become-test-game-cases]
