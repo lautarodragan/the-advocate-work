@@ -439,3 +439,9 @@ the menu's potion, Kersh at level 50 with an average of 5 uses (a,
 recommended) or let it go (b). Assignee to taro while waiting; back to
 Cardón with the answers. The 0-or-1 draft stays a draft until it is seen
 in Wine: it was read in easyrpg's code, not reproduced.
+
+### 2026-11-27, taro: a comment
+
+> Let's go with the recommendations for 1 and 3. 
+>
+> Can you elaborate 2.a?
