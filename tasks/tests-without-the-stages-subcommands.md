@@ -5,12 +5,12 @@ type: refactor
 game: advocate
 status: doing
 assignee: cardon
-agents: [cardon, chaja, Aguará, Mulita]
+agents: [cardon, chaja, Aguará, Mulita, Carpintero]
 author: taro
 links:
   blocks: [abl-s-test-cartridges-become-test-game-cases]
   relates: [battle-tests-without-simulate, one-advocate-command, the-stages-speak-json-nobody-types, the-volume-ceilings-are-measured-without-a-rom, the-slot-screens-reference-draws-a-lent-face-with-its-own-palette, the-stage-subcommands-only-the-converter-called-have-no-caller, advocate-init-dump-and-config]
-  found: [the-test-game-lacks-content-abl-s-runtime-branches-need, abl-s-just-tests-splits-a-quoted-k-expression]
+  found: [the-test-game-lacks-content-abl-s-runtime-branches-need, abl-s-just-tests-splits-a-quoted-k-expression, the-screens-reference-drawing-has-no-caller]
 ---
 
 **Why**: the same as
@@ -1045,3 +1045,107 @@ nor `msu-index.json`), `rm2k-snes-audio` because its binary lost nine
 subcommands. The ROMs do not move.
 
 Status stays `doing`: steps 3 and 7 are the task's.
+
+### 2026-11-27, Carpintero: step 3, the screens
+
+From the-advocate `2b4f8cf2`, ports `4821050`, docs `c956b2f`; merged
+with main after Chajá's step 4 and again after Mulita's step 5. Branches
+`carpintero-tests-step3` in the three.
+
+#### What the tests read now
+
+* **`render` → goldens.** `drawing.compare_screen(sess, name, what)`
+  settles the text and holds the screen to a golden of the suite. **90
+  new goldens**, one per compared screen; where a screen already was a
+  golden of the suite (26 of them: `items`, `equipment`, `end`,
+  `skills-talan`, `shop-main`, `title`…) the test uses that one, and no
+  two new ones share their pixels. Each new one was checked, at 15 bits,
+  equal to a ROM capture that matched what `render` drew in a run before
+  the change, so **no capture differed from `render`**; the title's two
+  are whole screens, where the old test compared only the menu. In their
+  own commit, and in `/shared/captures/2026-11-27-screens-goldens/` with
+  contact sheets and which test covers each, for Hornero to look at.
+* **The frame-by-frame tests** (equipment, shop, the party's scroll, the
+  items' scroll) take the screens before and after from the ROM itself
+  —`drawing.transition`: the one up at the press, and the first other one
+  that stays settled—, and the one after is a golden. In the shop the
+  walking members and their arrows are masked: `render` was told each
+  frame's step. Holding an arrow over the long item list compares each
+  frame with the texts the ROM shows walking the cursor one press at a
+  time, down and up, and the same state has to show the same text.
+* **`equip`** is `Game_Actor::ChangeEquipment` written in the test.
+* **`window`** is `CGRAM_BASE` less one, from the `.sym`.
+* **`refit` and `convert boxes`**: the troop messages are checked as the
+  LDB's words in order, the speaker on top of each box, each row within
+  the battle window by the ROM's `font_advance` (`battle.says`). The whole
+  game's boxes are checked by the converter at every build:
+  `refit::holds` in `rm2k-snes-text` —each box fits, refits to itself,
+  and says the same letters— called by `boxes::table`, which stops the
+  build on a no. `test_game_texts.py` goes. Shown red with the speaker
+  check taken out; with these tools the nine games built and passed it.
+* `screen_stage.py`, `screens.py` and `converter.py` go; `model.py` keeps
+  the font and the dump it read through them.
+
+#### What it stops catching
+
+* A birth defect in a new screen, which `render.rs` and the runtime both
+  had to carry to pass; and the controls "the hurt menu draws different"
+  now compare goldens (`menu-hp`, `menu-levels` against
+  `menu-cursor-0`), and "the slot at level 5 draws different" went.
+* A shop member drawn wrong in the middle of a switch.
+* A state of the long item list the ROM gets wrong once settled (no
+  golden of that list shows it either).
+* A reflow that keeps the words but cuts the lines elsewhere.
+
+#### The subcommands
+
+Nothing calls them, so they went: **`rm2k-snes-screens`'s binary whole**
+(`render`, `refit`, `equip`, `window`), **`rm2k-snes-mapdata`'s whole**
+(`vram` was its last) and **`rm2k-snes-convert`'s whole** (`boxes` was
+the last query a test asked; `leaders` and `map-context` had none since
+step 2), with `Compiler::boxes`, `window`, `map_files`, `chipset_files`
+and `refit_each`. The three are libraries. Most of `render.rs` is left
+without a caller: the draft
+[`the-screens-reference-drawing-has-no-caller`](the-screens-reference-drawing-has-no-caller.md).
+The test files keep their `_drawing` names (the README says so); a rename
+to `_golden` is Hornero's or taro's to want.
+
+#### Verified
+
+With `advocate` installed locally from the branch (then two commits that
+change only the text crate's test and a clippy form):
+
+* The twenty `.sfc` of the nine games built in the ports worktree with
+  the global tools and with the branch's, **byte for byte the same**;
+  `abl.sfc` `3bf35fd7665c2045`. That build ran the boxes check over every
+  game.
+* the-advocate: `just lint` (FluidR3's `SOUNDFONT`) green, `just test` 29
+  passed, `just rust-test --no-fail-fast` green, `just test-game` 229
+  passed and 6 skipped.
+* Ports: `just boot` 209 passed; ABL's `just tests` 1664 passed and 2
+  skipped, 3 min 53 s with others running.
+* **Again on the tree merged with Mulita's step 5**, with `advocate
+  convert rm2k-snes-audio` installed from it: the twenty `.sfc` the same
+  bytes as above; `just lint`, `just test` (29), `just test-game` (229
+  passed, 6 skipped), `just rust-test --no-fail-fast` green but the
+  known flaky ones —two of fxpak's pty tests and
+  `a_cached_object_gives_the_dbg_a_fresh_one_gives`—; `just boot`
+  209 passed; ABL's `just tests` 1659 passed and 2 skipped.
+
+#### Suite time
+
+The 25 files the step touches, 8 workers, before and after: **197.5 s of
+worker time to 132.7 s**, 32 s to 26 s of wall clock; the 367 `render`
+calls, the 67 `boxes` and the shop's per-frame drawings are what went.
+
+#### Branches, and what to install when merging
+
+the-advocate `8e421cc2` (the boxes check), `83d2b8ad` (the binaries go),
+`1417075b`, `2e265542`, and the merges; ports `d7a4978` (the goldens)
+and `0e664c7` (the tests); docs `be71311`, and the merges, which joined
+`tools.md`'s paragraphs with Chajá's and Mulita's. Install `just install
+advocate` and `cargo uninstall rm2k-snes-convert rm2k-snes-mapdata
+rm2k-snes-screens --root /usr/local`. `8e421cc2` alone does not compile —the screens' binary
+still called `refit_each`—; `83d2b8ad` mends it.
+
+Status stays `doing`: step 7 is the task's.
