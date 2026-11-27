@@ -5,12 +5,12 @@ type: refactor
 game: advocate
 status: doing
 assignee: cardon
-agents: [cardon, chaja, Aguará, Carpintero]
+agents: [cardon, chaja, Aguará, Mulita, Carpintero]
 author: taro
 links:
   blocks: [abl-s-test-cartridges-become-test-game-cases]
   relates: [battle-tests-without-simulate, one-advocate-command, the-stages-speak-json-nobody-types, the-volume-ceilings-are-measured-without-a-rom, the-slot-screens-reference-draws-a-lent-face-with-its-own-palette, the-stage-subcommands-only-the-converter-called-have-no-caller, advocate-init-dump-and-config]
-  found: [the-test-game-lacks-content-abl-s-runtime-branches-need, the-screens-reference-drawing-has-no-caller]
+  found: [the-test-game-lacks-content-abl-s-runtime-branches-need, abl-s-just-tests-splits-a-quoted-k-expression, the-screens-reference-drawing-has-no-caller]
 ---
 
 **Why**: the same as
@@ -938,6 +938,114 @@ returns six values.
 
 Status stays `doing`: steps 3, 5 and 7 are the task's.
 
+### 2026-11-27, Mulita: step 5, the audio — the writes measured
+
+From the-advocate `2b4f8cf2`, ports `4821050`, docs `c956b2f`; branches
+`mulita-tests-step5` in the three.
+
+**What the writes weigh**, measured on ABL's `release` built at `4821050`,
+decoding each of its 107 songs from the ROM with `rm2k-snes-audio decode`
+as the harness does: **1,893,648 writes**, in 185,992 frames that write
+something; its streams are 1,120,360 bytes of the ROM. As
+`[[frame, register, value]]` JSON that is **25.7 MB** per cartridge, 6.5 MB
+gzipped; a compact binary would be 4.2 MB, 1.3 MB gzipped. The test
+cartridges carry from 1 to 13 songs, a fraction of that.
+
+Judged reasonable **compressed and one file per song**: written with fast
+compression it is **8.6 MB** for `release` (Vampire's Dawn's is 8.2 MB, the
+other games' 1 to 4 MB, ABL's test cartridges under 1.5 MB), beside a
+`.dbg` of 55 MB and an `.o` of 61 MB, and a test that asks for one song
+reads only that one. Not as one plain JSON: 26 MB per
+cartridge, parsed whole by every worker that asks for a single song.
+`flate2` is already in the workspace (the project's `archive.rs`), so
+nothing new comes in.
+
+### 2026-11-27, Mulita: step 5, the audio
+
+#### What the build leaves
+
+* **`music-writes/<song>.json.gz`** beside each ROM, one per song of the
+  cartridge: `{"name", "length", "repeats", "writes"}`, being `writes` the
+  stream with each `OP_REPEAT` unfolded, decoded —checked by the build
+  against the compiler's writes, which follow the jumps as the 65816
+  does—, `length` the stream's bytes and `repeats` each jump. The
+  converter empties the directory before writing it.
+* **`msu-index.json`**: the `.msu`'s `[[where, length]]`.
+
+The 40 `.sfc` and `.msu` of the nine games byte for byte the same as with
+the global tools of `2b4f8cf2`, and no MSU-1 track rebuilt; the 107 files
+of `release` give exactly what `rm2k-snes-audio decode` gave over the ROM.
+
+#### What the tests read now, and what each stops catching
+
+* `test_music_writes.py`, `test_drum_kit_sounds.py`: the writes beside
+  the ROM instead of `decode` over the cartridge's bytes. **Stops catching
+  nothing, and catches one thing more**: a cartridge whose tables point a
+  song at another stream. Shown red flipping one value of
+  `escape_newyork`'s file.
+* `test_msu_data.py`, `test_msu_effects.py`: `msu-index.json` instead of
+  `msu-index`, and the signature by the format's rule in Python instead of
+  `msu-sign`. What `msu-index` checked on each call —the signature is the
+  content's— is now an assertion over every cartridge, with the header's
+  index against the one beside it (shown red hashing one byte short).
+  **Stops catching**: nothing the build does not check; a Python signer
+  that agrees with a wrong format would agree with the ROM's check too, as
+  before with the Rust one.
+* `wav`, `song_file`, `effect_height`: Python's `wave` with the compiler's
+  rule, `resources.find_resource`, the DSP's pitch formula; KON, SRCN, the
+  BRR block's 9 bytes and the directory's 255 entries as the console's
+  literals. **Stops catching**: they are a second reader, so a change in
+  how the compiler reads a WAV or finds a song no longer moves these tests
+  with it.
+* `test_music_allocation.py` (3 tests) and `test_music_package.py`'s two
+  compiling tests went to the crate's `tests/real_shapes.rs`, over MIDIs
+  the test writes —a crowded song with an organ's chords, two basses and
+  five hits per beat, a string chord, two channels that play little; plain
+  songs for the budgets and the copies—, each shown red with a mutation of
+  `frame_order`, of the allocation (one fixed voice per channel) and of
+  the copies. **Stops catching**: an allocation or a budget only ABL's real
+  songs reach.
+
+#### The subcommands
+
+`compile`, `keys`, `decode`, `msu-index`, `msu-sign`, `wav`, `find-song`,
+`pitch` and `constants` went, with `compile`'s `--detail` and
+`msu_data::sign` (now in its tests). **What is left**: `rm2k-snes-audio
+volume-ceilings`, ABL's `just ceilings` and
+[`the-volume-ceilings-are-measured-without-a-rom`](the-volume-ceilings-are-measured-without-a-rom.md)'s.
+`command_line.rs` became `compile.rs`, the same cases through
+`stage::compile`, plus one for the writes left beside the ROM.
+
+#### Suite time
+
+No measurable saving: the audio rows were cheap. Reading every song's
+writes from the files costs about the same CPU as decoding them with the
+binary (0.6 to 1.6 s against 1.4 to 1.8 s for the 107 songs, run twice
+beside other agents' suites), and the five tests that moved took 0.8 s.
+
+#### Verified
+
+On the trees merged with `main` (Chajá's step 4 included), with
+`rm2k-snes-audio convert advocate` installed locally: the 40 `.sfc` and
+`.msu` of the nine games byte for byte those of `2b4f8cf2`'s global tools
+(`release`'s `abl.sfc` `3bf35fd7665c2045`); `SOUNDFONT=FluidR3 just lint`
+green; `just test` 29 passed; `just rust-test --no-fail-fast` 1266 passed;
+`just test-game` 229 passed, 6 skipped; the ports' `just boot` 209
+passed; ABL's `just tests` 1663 passed, 2 skipped, in 4 min 8 s. Merging
+the ports' `main` git took Chajá's new `_in_the_msu` with the old
+`music.msu_index(msu)` silently; fixed in the merge.
+
+#### Branches, and what to install when merging
+
+the-advocate `82976a7b`, ports `71badea`, docs `8c1c220`, all
+`mulita-tests-step5`. Install `just install rm2k-snes-audio convert
+advocate`: `convert` and `advocate` for the files beside the ROM, which
+ABL's harness needs (with the global tools there is no `music-writes/`
+nor `msu-index.json`), `rm2k-snes-audio` because its binary lost nine
+subcommands. The ROMs do not move.
+
+Status stays `doing`: steps 3 and 7 are the task's.
+
 ### 2026-11-27, Carpintero: step 3, the screens
 
 From the-advocate `2b4f8cf2`, ports `4821050`, docs `c956b2f`; merged
@@ -1032,4 +1140,4 @@ uninstall rm2k-snes-convert rm2k-snes-mapdata rm2k-snes-screens --root
 /usr/local`. `8e421cc2` alone does not compile —the screens' binary
 still called `refit_each`—; `83d2b8ad` mends it.
 
-Status stays `doing`: steps 5 and 7 are the task's.
+Status stays `doing`: step 7 is the task's.
