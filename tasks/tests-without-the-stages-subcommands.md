@@ -5,12 +5,12 @@ type: refactor
 game: advocate
 status: doing
 assignee: cardon
-agents: [cardon, chaja, Aguará]
+agents: [cardon, chaja, Aguará, Mulita]
 author: taro
 links:
   blocks: [abl-s-test-cartridges-become-test-game-cases]
   relates: [battle-tests-without-simulate, one-advocate-command, the-stages-speak-json-nobody-types, the-volume-ceilings-are-measured-without-a-rom, the-slot-screens-reference-draws-a-lent-face-with-its-own-palette, the-stage-subcommands-only-the-converter-called-have-no-caller, advocate-init-dump-and-config]
-  found: [the-test-game-lacks-content-abl-s-runtime-branches-need]
+  found: [the-test-game-lacks-content-abl-s-runtime-branches-need, abl-s-just-tests-splits-a-quoted-k-expression]
 ---
 
 **Why**: the same as
@@ -822,3 +822,25 @@ Steps 1, 2, 6 and 8 merged, verified and pushed. Left: 4 (images), 5 (audio), 3 
 ### 2026-11-27, Hornero: steps 3, 4 and 5 in parallel
 
 The weekly limit reset: screens to Carpintero, images to Chajá, audio to Mulita. Step 7 waits for `battle-tests-without-simulate`.
+
+### 2026-11-27, Mulita: step 5, the audio — the writes measured
+
+From the-advocate `2b4f8cf2`, ports `4821050`, docs `c956b2f`; branches
+`mulita-tests-step5` in the three.
+
+**What the writes weigh**, measured on ABL's `release` built at `4821050`,
+decoding each of its 107 songs from the ROM with `rm2k-snes-audio decode`
+as the harness does: **1,893,648 writes**, in 185,992 frames that write
+something; its streams are 1,120,360 bytes of the ROM. As
+`[[frame, register, value]]` JSON that is **25.7 MB** per cartridge, 6.5 MB
+gzipped; a compact binary would be 4.2 MB, 1.3 MB gzipped. The test
+cartridges carry from 1 to 13 songs, a fraction of that.
+
+Judged reasonable **compressed and one file per song**: written with fast
+compression it is **8.6 MB** for `release` (Vampire's Dawn's is 8.2 MB, the
+other games' 1 to 4 MB, ABL's test cartridges under 1.5 MB), beside a
+`.dbg` of 55 MB and an `.o` of 61 MB, and a test that asks for one song
+reads only that one. Not as one plain JSON: 26 MB per
+cartridge, parsed whole by every worker that asks for a single song.
+`flate2` is already in the workspace (the project's `archive.rs`), so
+nothing new comes in.
