@@ -1,13 +1,13 @@
 ---
-name: "advocate init, import and config"
-description: "advocate gets the subcommands of a port's path besides build: init starts a port from a game's .zip, import is Ditto taking the game from RM2k's format to data/, and config shows the machine's settings, kept in ~/.config/advocate/ beneath flags and environment variables"
+name: "advocate init and config"
+description: "advocate gets the subcommands of a port's path besides build: init starts a port from a game's .zip, and config shows the machine's settings, kept in ~/.config/advocate/ beneath flags and environment variables"
 type: feature
 game: advocate
 status: todo
 author: taro
 links:
   blocked-by: [one-advocate-command]
-  relates: [tests-without-the-stages-subcommands]
+  relates: [tests-without-the-stages-subcommands, ditto-becomes-advocate-import]
 ---
 
 **Why**: with [`one-advocate-command`](one-advocate-command.md),
@@ -38,14 +38,9 @@ subcommands runs nothing.
 
 * **`advocate init <game.zip>`**: starts a port —the minimal
   `advocate.toml` and the first dump—.
-* **`advocate import`** (named `dump` at first): what `just dump` does,
-  Ditto taking the game from RM2k's own format to `data/` —the database
-  and the maps, `.ldb` and `.lmu`, as JSON; the pictures, the MIDIs and
-  the sounds are not imported, the build keeps reading them from the
-  game's untouched `.zip`—. The action, not Ditto's own subcommands:
-  `ditto` stays a library, and its binary as long as something needs it.
-  Its inverse, the round trip back to RM2k's format, would be
-  `advocate export`, if something needs it.
+* **`advocate import`** went to its own task,
+  [`ditto-becomes-advocate-import`](ditto-becomes-advocate-import.md);
+  `init` calls it for the first dump.
 * **`advocate config`** and `~/.config/advocate/config.toml`: what belongs
   to the machine and not to the game —the RTP, the SoundFont, the cache,
   where `ca65`, `ld65` and the MSU-1 tracks' synthesizer and encoder are,
@@ -58,12 +53,9 @@ subcommands runs nothing.
 * **`build`** may become what a bare `advocate` does, as `cargo` with
   `build`; to decide in the design.
 
-Not subcommands: `goombario` folds into `build` like the patches (the
-linter checks each ROM, its findings in `advocate.json`, ABL's test reads
-them) —that one belongs with `one-advocate-command`'s step 4 or
-[`tests-without-the-stages-subcommands`](tests-without-the-stages-subcommands.md)—;
-`fxpak` and `rm2k-sketch` are the console's and the test game's, not a
-port's path, and stay on their own.
+Not subcommands: `goombario` is a lint, the-advocate's `just lint`
+(taro's, 2026-11-26); `fxpak` and `rm2k-sketch` are the console's and the
+test game's, not a port's path, and stay on their own.
 
 It goes after [`one-advocate-command`](one-advocate-command.md).
 
@@ -83,3 +75,14 @@ Nothing done yet.
 (taro, 2026-11-25) `import`, the usual verb for bringing something from
 another format into one's own; `export` is left for the way back. The
 file name stays.
+
+### 2026-11-27, Hornero: `import` split out
+
+> Let's separate ditto into its own task. advocate-init-dump-and-config
+> stays for... init and config, precisely, and `ditto -> advocate import`
+> goes to a new task, to `todo`, and we leave it in the queue.
+
+(taro, 2026-11-27) `import` is now
+[`ditto-becomes-advocate-import`](ditto-becomes-advocate-import.md); the
+name drops it, the file name stays. And the line on `goombario` folding
+into `build` was stale: it became a lint.
