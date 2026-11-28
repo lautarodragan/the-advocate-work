@@ -2,13 +2,14 @@
 name: "`rm2k_rules::reach::standing` does not know a scene runs once"
 description: "An autostart scene that turns on the switch of the page above it runs once, from where the hero first arrives; reach takes it as starting wherever a recall can put him, and on ABL's Hover-Tram that keeps four seated people out of the background"
 type: feature
-status: doing
-assignee: tijereta
+status: testing
+assignee: taro
 agents: [cardon, tijereta]
 author: cardon
 game: abl
 links:
   found-in: [abl-the-hover-tram-s-crowd-is-cut]
+  found: [reach-does-not-read-a-route-that-turns-a-switch-off]
 ---
 
 Seen by Cardón on 2026-11-18, in
@@ -156,3 +157,84 @@ before the `any_open` ones are added. Test
 shape (an aisle, seats above, a scene that walks him two right and up
 through them, turns on 69 and leaves), red before (`{12..16}` against
 `{12}`).
+
+### 2026-11-28, Tijereta: the whole game's switches, and the nine builds
+
+The nine games built with the tools of `31853f95` and of `2cba442f`
+(ABL's `release`, the root's `cartridges`, the same ports checkout):
+every ROM byte for byte the same, ABL's included (its map 13 is forked),
+**but Vampires Dawn's**: its map 58 lowered 290 cells instead of 70. Its
+`EV0017` is an autostart scene that turns on switch 17, which its page 2
+asks for, phases the hero and leaves; but **map 69's `EV0001` turns
+switches 1 to 1641 off**, so the scene runs again on a later arrival,
+and the first `once` was wrong: it took "nothing turns it off" from
+`on_arrival`, which looks only at the map's commands. Fixed in
+`a scene runs once only if nothing in the game turns its switch off`:
+the converter's `Arrivals::gather`, which already walks every command of
+the game, gathers the switches they can turn off (any, if one is picked
+by a variable) and hands them through Wally's `Reach::off` to
+`Outside::off`; `None` takes no scene as running once. The unit test
+learns the case, red without it. ABL's switch 69: nothing in the game
+turns it off.
+
+With that, the nine builds again: **every ROM byte for byte the same as
+with `31853f95`'s tools**, Vampires Dawn's included, and ABL's `release`
+with its fork too. So no game moves today: map 13 is forked.
+
+### 2026-11-28, Tijereta: the fork as the reference — it stays
+
+ABL's `release` built with the fix and map 13's fork moved aside by hand
+(`patches/manual/maps/Map0013.json` and `.tiles`; ChipSet 57 left
+unused). The converter's log for map 13:
+
+* `reach` no longer holds any seated person: no seated event is in "someone
+  can stand behind what it draws past its cell" any more, only the
+  thirteen standing ones (10-20, 22, 24), whose heads fall on the aisle.
+* Of the seven still seated people, **two** go into the background,
+  `EV0007` and `EV0008`; `Leave1`, `EV0004`, `EV0005`, `EV0009` and
+  `EV0026` stay objects because "drawn into the background they move its
+  colours or its tiles past the layouts" —the panorama's colours, the
+  second wall Cardón measured in stage 1—. `EV0002`, which the fork bakes,
+  stays an object: "a command moves or flashes it".
+* `patches/auto/maps/0013.toml` goes stale (the panorama keeps 46 colours
+  instead of 15).
+
+The map 13 goldens, run without the fork (`just tests` of
+`test_talk_golden.py`, `test_scenes_golden.py` and `test_debug_map.py`
+with `-k tram`, and `test_panorama_golden.py`): `panorama-13-arrival`
+differs in 3,383 of 57,344 pixels, `tram-900` in 3,857, `tram-trip-10` in
+3,111 —the first red one of each test; the rest pass—. The right of both
+rows is cut again, as before stage 2. Side by side, with the difference at
+15 bits and a README, in `/shared/captures/2026-11-28-hover-tram-without-fork/`.
+
+So **the fork stays**: the converter alone does not draw what it draws.
+What is left between them is not this task's: the colours of the five
+seated people against the panorama's, and the standing row's heads over
+the aisle (stage 2's proposal 1 in
+[`abl-the-hover-tram-s-crowd-is-cut`](abl-the-hover-tram-s-crowd-is-cut.md)).
+The book's decision "The Hover-Tram's crowd is part of the map" says so,
+and the divergence's limit no longer lists "reach does not know a scene
+runs once".
+
+### 2026-11-28, Tijereta: final
+
+the-advocate `tijereta-reach-once` (`17d5bcc4` the constant, `2cba442f`
+the fix, `d643dabb` the whole game's switches, main `6eeba32d` merged);
+the book `tijereta-reach-once` (`cf4cad1` internals and divergence,
+`c4409b7` the Hover-Tram decision); the ports: nothing, the fork stays.
+**To install when merging: advocate** (rules, wally and convert are
+libraries compiled into it).
+
+Verified, with that branch's `advocate` on the PATH: in the-advocate
+`just lint` (SOUNDFONT=FluidR3_GM), `just test`, `env -u SOUNDFONT just
+rust-test`, `just test-game` (SOUNDFONT=FluidR3_GM; without it the recipe
+refuses); in the ports, ABL's `just tests` (1623 passed, 2 skipped) and
+the root's `just boot` (209 passed). The nine games' ROMs byte for byte
+the same as with `31853f95`'s tools; `abl.sfc` sha256 `5973a70f…`.
+
+Not covered by the suite: the build without the fork was by hand, files
+moved aside and back; the goldens behind the first red one of each tram
+test were not run without it.
+
+Found and not fixed: the draft
+[`reach-does-not-read-a-route-that-turns-a-switch-off`](reach-does-not-read-a-route-that-turns-a-switch-off.md).
