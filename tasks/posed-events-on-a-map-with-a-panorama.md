@@ -2,8 +2,7 @@
 name: "Still events into the background on a map with a panorama"
 description: "posed_events skips every map whose panorama is seen —baked, mode 3, flattened, mode 1—; in A Blurred Line that alone keeps 62 candidate events on 13 maps objects, Linkage Block's fading screens among them"
 type: feature
-status: draft
-assignee: taro
+status: todo
 author: cardon
 agents: [Cardón]
 links:
@@ -118,5 +117,41 @@ limit here: a still event in the background saves sprite tiles.
 > But we’ll need to test it either way, so we have to figure out how to free some rom in abl. 
 >
 > I guess the quick snd easy thing to do would be to go back to compressing more maps?
+
+### 2026-11-28, Hornero: room in ABL, the .msu and compressing; to todo
+
+First a correction to my "ROM" answer: it quoted the log of
+`abl-still-events-painted-into-the-background` from before the room was
+made. Since 2026-11-16 ABL has `baked_events = true` on every map without
+a panorama, and it fits. `just space` on ABL's `release`, today (tools
+`71ccb4eb`): 108 of 126 data banks used, **no whole 64 KB bank free but
+18 halves of 32 KB**, and 9,847 B of gaps. So there is still room, some
+590 KB, but not as whole banks; what the panorama maps would add is not
+measured.
+
+On the questions:
+
+- **More to the `.msu`, keeping it optional**: by its rule the `.msu` only
+  replaces what the ROM already has, so it frees ROM only where the ROM
+  keeps a lighter copy, as the battle backdrops do (an eighth of their
+  `.msu` weight). Other things that could go that way —the title and Game
+  Over images, the pictures, the battlers— are not measured.
+- **Compressing more**: the grid, the blocks, the map tiles, the panorama
+  tiles, the bytecode and the page tables already travel as LZ2. What
+  does not is not measured by kind; nothing measures ABL's ROM by kind
+  today.
+
+So, as taro says: to `todo`, as a feature behind a knob.
+
+1. The still events on panorama maps, behind their own key in
+   `advocate.toml`, off by default; flattened and mode 3 first (option
+   (a)'s scope), baked and mode 1 after or as drafts.
+2. Turned on in ABL. If it does not link, the first thing to look at is
+   whether what asks for a whole bank can go in the 18 free halves, before
+   compressing or moving anything to the `.msu`. If more room is needed
+   after that, measure ABL's ROM by kind and bring taro the options with
+   their numbers.
+
+Not started.
 
 ## Log

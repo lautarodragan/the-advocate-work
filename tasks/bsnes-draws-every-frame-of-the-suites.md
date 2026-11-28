@@ -2,8 +2,7 @@
 name: "bsnes draws every frame of the suites"
 description: "The harness tells snes9x not to draw the ticks nobody looks at, but bsnes's libretro target does not ask; drawing is 40% of a bsnes frame, and bsnes is most of the emulation in the boot and the test game"
 type: refactor
-status: draft
-assignee: taro
+status: todo
 author: chaja
 agents: [Chajá, cardon]
 links:
@@ -65,5 +64,9 @@ catches uninitialised WRAM with frames skipped.
 ### 2026-11-28, taro: a comment
 
 > (a)
+
+### 2026-11-28, Hornero: to todo
+
+taro chose (a): to `todo`. The patch to the bsnes core, `bsnes` in `SKIPS_DRAWING`, the suites run on it, and `test_cores.py` shown still catching uninitialised WRAM with frames skipped. Not started.
 
 ## Log
