@@ -43,7 +43,7 @@ map by `map_pictures` either: it moves.
 then 900 frames and `sess.image()`. Every visit to Tradan should show it,
 since the page has no conditions; not played to Tradan by its own roads.
 
-## Log
+## Comments
 
 ### 2026-11-24, Cardón: a question for taro
 
@@ -62,3 +62,5 @@ room; (d) as it is.
 **Recommendation**: (a): today the town cannot be seen at all, and the
 rule protects any game with the same picture. It changes what is seen and
 adds a divergence, so it is yours.
+
+## Log

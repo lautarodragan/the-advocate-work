@@ -29,16 +29,7 @@ tick, where an overrun does not show (`whole_ones`). The slowest maps: 195 (215 
 script described in that task's log, or any door between two maps of the
 list above, counting hardware frames until `fade` goes back to zero.
 
-## Log
-
-### 2026-10-20, Tijereta: checked
-
-Still so at the-advocate `8f290c39`: `whole_ones`
-(`runtime/audio_package.s`) still puts the effects that go up whole on
-the fade's last black tick, and `se_msu_upload` reads each one in one go.
-What to do is open: uploading them from the `.msu` in blocks, as the
-ROM's go, spreads them over the black ticks but does not make them
-fewer bytes, and the fade has a fixed number of black ticks.
+## Comments
 
 ### 2026-11-24, Cardón: a question for taro
 
@@ -58,3 +49,14 @@ it.
 **Recommendation**: (a) measured first, as it changes nothing heard; then
 decide between (b) and (d) by how much is left. Costs and what is heard
 are yours.
+
+## Log
+
+### 2026-10-20, Tijereta: checked
+
+Still so at the-advocate `8f290c39`: `whole_ones`
+(`runtime/audio_package.s`) still puts the effects that go up whole on
+the fade's last black tick, and `se_msu_upload` reads each one in one go.
+What to do is open: uploading them from the `.msu` in blocks, as the
+ROM's go, spreads them over the black ticks but does not make them
+fewer bytes, and the fade has a fixed number of black ticks.

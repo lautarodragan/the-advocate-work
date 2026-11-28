@@ -34,7 +34,7 @@ one, for the tiles: its bank fills the layout's 256.
 which is the layer above, has a black gap on the window's bottom row while
 the message is up.
 
-## Log
+## Comments
 
 ### 2026-11-24, Cardón: a question for taro
 
@@ -51,3 +51,5 @@ so it is theirs:
 
 Recommendation: **a**, and `wishlist` for b; a bare window on a crowded map
 is rare, and only the arrow's row shows it.
+
+## Log

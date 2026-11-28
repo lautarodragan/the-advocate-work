@@ -39,7 +39,7 @@ It trades the door's hitch for one on that `PlayBGM`.
 log says how it runs), or walk from 8's (73,56) right into 9 with
 hzstream playing and count the frames of the fade's tick 43.
 
-## Log
+## Comments
 
 ### 2026-11-24, Cardón: a question for taro
 
@@ -56,6 +56,8 @@ Where the wait goes is a choice:
 
 Recommendation: **b**: most of the time they are up before anyone asks, and
 with the `.msu` none of it happens.
+
+## Log
 
 ### 2026-11-24, Hornero: taro chose b
 

@@ -32,7 +32,7 @@ It can be emptied by hand whenever nothing is building; deleting it while
 something builds can take away a game unpacked from its `.zip` under a
 converter that is reading it.
 
-## Log
+## Comments
 
 ### 2026-11-24, Cardón: a question for taro
 
@@ -50,3 +50,5 @@ touched stamp); (c) a size cap, oldest first; (d) wait for
 **Recommendation**: (b), with N around 14 days, done in `cache.rs` with a
 lock so that nothing reads an entry being deleted; it is toolchain code
 with a cost to choose (disk against rebuilding), so it is yours.
+
+## Log

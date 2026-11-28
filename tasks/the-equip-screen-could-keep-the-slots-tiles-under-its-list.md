@@ -35,7 +35,7 @@ What was measured:
   shown, and whether `back_to_map` restores it after the menu was not
   looked at.
 
-## Log
+## Comments
 
 ### 2026-11-24, Cardón: a question for taro
 
@@ -51,3 +51,5 @@ RAM (565 free in `release` that day) and code in bank 1 (390 B free in
   closed by you, playing, on 2026-11-17.
 
 Recommendation: **b**.
+
+## Log

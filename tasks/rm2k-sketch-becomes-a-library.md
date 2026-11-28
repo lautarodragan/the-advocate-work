@@ -40,11 +40,7 @@ It no longer depends on
 [`ditto-becomes-advocate-import`](ditto-becomes-advocate-import.md): the
 recipe keeps calling `ditto pack` over `src/` as it is.
 
-## Log
-
-### 2026-11-27, Hornero: written
-
-Nothing done yet.
+## Comments
 
 ### 2026-11-27, taro: does sketch earn its place?
 
@@ -99,6 +95,12 @@ its legend names one pattern per character, which is why the test
 game's maps are square fields with objects on them. So what a map
 needs, written by hand or by an AI, is a plan of the cells plus that
 rule, whatever the plan's format.
+
+## Log
+
+### 2026-11-27, Hornero: written
+
+Nothing done yet.
 
 ### 2026-11-27, Hornero: rewritten: sketch goes, autotiles apart
 

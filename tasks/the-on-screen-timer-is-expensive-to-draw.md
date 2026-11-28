@@ -34,16 +34,7 @@ copied otherwise, or written straight to OAM as the raindrops are —see
 "The raindrops go straight to OAM" in the book's "Lossless: CPU time in
 the frame"—. Not measured.
 
-## Log
-
-### 2026-11-24, Cardón: to todo
-
-Measured by Aguará with the line profiler (~18 lines a frame for five
-glyphs), and `timer_oam` in `runtime/timer.s` is unchanged since: at
-`8b069fc2` it still rebuilds the five glyphs' objects every frame (only
-`230325f9`, the debug screen forcing it off, touched it). Lossless CPU
-time, nothing seen changes; the task says the two ways (rebuild when a
-digit or the colon changes, or straight to OAM as the raindrops).
+## Comments
 
 ### 2026-11-27, taro: a comment
 
@@ -63,3 +54,14 @@ entries and the last value, and a few bytes of ROM; nothing on screen
 changes, and the suite's timer goldens hold it. Whoever takes it
 measures the three stones before and after with the same debug-menu
 method, and the timer's cost with the line profiler. Still `todo`.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+Measured by Aguará with the line profiler (~18 lines a frame for five
+glyphs), and `timer_oam` in `runtime/timer.s` is unchanged since: at
+`8b069fc2` it still rebuilds the five glyphs' objects every frame (only
+`230325f9`, the debug screen forcing it off, touched it). Lossless CPU
+time, nothing seen changes; the task says the two ways (rebuild when a
+digit or the colon changes, or straight to OAM as the raindrops).

@@ -35,14 +35,7 @@ line of zero goes through the same code since 2026-10-20 and is right
 droid of A Blurred Line's map 2 dodges sometimes—: the line under
 "\<who> attacks the enemy" says "Droid avoids taking damage."
 
-## Log
-
-### 2026-11-24, Cardón: to todo
-
-Still so at the-advocate `8b069fc2`: `ba_message` in `runtime/battle_message.s`
-(78-118) goes to `failed`, the undamaged line, for `BA_MDMG` $FFFF, and writes
-`<n> health lost` for a zero; `BA_TXT_DODGE` is in the cartridge. A text
-towards RM2k, with RPG_RT's capture already taken: nothing to choose.
+## Comments
 
 ### 2026-11-27, taro: a question for Hornero
 
@@ -58,3 +51,12 @@ undamaged line. Still so on the-advocate `bf18d71e`:
 `runtime/battle_message.s` sends `BA_MDMG` $FFFF to `failed` (lines
 87-98), and `BA_TXT_DODGE` is in the cartridge unused. Skills are right
 since 2026-10-20. Still `todo`, waiting for taro's go.
+
+## Log
+
+### 2026-11-24, Cardón: to todo
+
+Still so at the-advocate `8b069fc2`: `ba_message` in `runtime/battle_message.s`
+(78-118) goes to `failed`, the undamaged line, for `BA_MDMG` $FFFF, and writes
+`<n> health lost` for a zero; `BA_TXT_DODGE` is in the cartridge. A text
+towards RM2k, with RPG_RT's capture already taken: nothing to choose.

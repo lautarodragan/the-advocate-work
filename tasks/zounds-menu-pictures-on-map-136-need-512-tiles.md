@@ -48,7 +48,7 @@ one screen whose pictures are the screen, show its still panorama as a big
 picture —scaled, with the small ones over it, as `BIG_KEEPS` does— and
 not as the map's background.
 
-## Log
+## Comments
 
 ### 2026-11-24, Cardón: a question for taro
 
@@ -66,3 +66,5 @@ the console; (c) leave it, the menu shown ten frames without its pictures.
 **Recommendation**: (b) if the menu is only Zounds': it is one screen and
 a patch is cheaper than a new rule; (a) if another game has picture-made
 screens. Its looks and the cost are yours.
+
+## Log

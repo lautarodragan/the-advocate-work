@@ -85,6 +85,69 @@ The other stages' subcommands the tests call —`rm2k-snes-screens window`,
 per taro, none goes in [`one-advocate-command`](one-advocate-command.md),
 which is only what builds a ROM.
 
+## Comments
+
+### 2026-11-27, Hornero: a question for taro
+
+Cardón's classification above is phase 1, and phase 2 waits on taro's
+answers to its three questions: (1) a range per hit plus exact HP
+accounting, an average only where ranges overlap —recommended yes—; (2)
+the rates —crit, loot, the AI's 50/50, BarkWall's release— as only "can
+happen", proved with seeds against the ROM (a, recommended), a binomial
+test each (b, ~20 s each), or forcing the odds in RAM (c); (3) who throws
+the menu's potion, Kersh at level 50 with an average of 5 uses (a,
+recommended) or let it go (b). Assignee to taro while waiting; back to
+Cardón with the answers. The 0-or-1 draft stays a draft until it is seen
+in Wine: it was read in easyrpg's code, not reproduced.
+
+### 2026-11-27, taro: a comment
+
+> Let's go with the recommendations for 1 and 3. 
+>
+> Can you elaborate 2.a?
+
+### 2026-11-27, Hornero: 1 and 3 decided; 2.a, elaborated
+
+1 and 3 go as recommended. Question 2 stays open; what (a) means:
+
+**Today** a test that needs a rare event —a critical, the loot dropping,
+poison taking hold— asks the model which seed makes it happen: the model
+plays the battle with our generator, seed after seed, up to thousands,
+and the test writes the seed it found to `BA_SEED` and expects the ROM
+to do exactly that. Tied to our dice: change the generator and the
+model's seed no longer gives the event in the ROM.
+
+**With (a)** the model goes and the ROM is the one tried: write 1 to
+`BA_SEED`, play, read the ROM's log; no critical, try 2, 3… up to a
+bound (a few dozen; for the 3 % critical, attacking again within the
+same battle is cheaper). When the event shows, the test checks **what
+it did** with RM2k's rules —the critical is ×3 and in range, the loot
+is an item of that enemy's, the poison takes what it takes per step—.
+Each seed's play is deterministic, so it is never flaky; the bound only
+makes it fail if the event never happens at all, which is a bug (a
+critical that can never land).
+
+**What it does not check**: how often. A critical at 30 % instead of 3 %
+passes, as long as the ×3 is right. That is what (b) would add, at some
+20 s of suite per rate; and (c) forces the chance by writing the ROM's
+byte, which skips the real roll.
+
+### 2026-11-27, taro: 2.a
+
+> But is a seed searched once and then the test always runs against one
+> seed, or does the same test have to try several every time it runs?
+
+Hornero: every run, as Cardón proposed; deterministic, so it finds the
+same seed on the same try while the ROM does not change, at the cost of a
+battle or two. A seed written in the test would tie it again to our
+generator and the order of its rolls.
+
+> OK. Let's go with that, then.
+
+### 2026-11-27, Hornero: back to Cardón for phase 2
+
+All three decided: 1 (a), 2 (a), 3 (a). Assignee back to Cardón.
+
 ## Log
 
 ### 2026-11-24, Hornero: written
@@ -426,67 +489,6 @@ formulas cost nothing. Something like 65 to 70 s.
 * `test_encounter_rates.py` holds the ROM to `events.Encounters`, a
   Python model of the encounter steps with our own generator, step by
   step: the same nature as `simulate`, and not in this task's list.
-
-### 2026-11-27, Hornero: a question for taro
-
-Cardón's classification above is phase 1, and phase 2 waits on taro's
-answers to its three questions: (1) a range per hit plus exact HP
-accounting, an average only where ranges overlap —recommended yes—; (2)
-the rates —crit, loot, the AI's 50/50, BarkWall's release— as only "can
-happen", proved with seeds against the ROM (a, recommended), a binomial
-test each (b, ~20 s each), or forcing the odds in RAM (c); (3) who throws
-the menu's potion, Kersh at level 50 with an average of 5 uses (a,
-recommended) or let it go (b). Assignee to taro while waiting; back to
-Cardón with the answers. The 0-or-1 draft stays a draft until it is seen
-in Wine: it was read in easyrpg's code, not reproduced.
-
-### 2026-11-27, taro: a comment
-
-> Let's go with the recommendations for 1 and 3. 
->
-> Can you elaborate 2.a?
-
-### 2026-11-27, Hornero: 1 and 3 decided; 2.a, elaborated
-
-1 and 3 go as recommended. Question 2 stays open; what (a) means:
-
-**Today** a test that needs a rare event —a critical, the loot dropping,
-poison taking hold— asks the model which seed makes it happen: the model
-plays the battle with our generator, seed after seed, up to thousands,
-and the test writes the seed it found to `BA_SEED` and expects the ROM
-to do exactly that. Tied to our dice: change the generator and the
-model's seed no longer gives the event in the ROM.
-
-**With (a)** the model goes and the ROM is the one tried: write 1 to
-`BA_SEED`, play, read the ROM's log; no critical, try 2, 3… up to a
-bound (a few dozen; for the 3 % critical, attacking again within the
-same battle is cheaper). When the event shows, the test checks **what
-it did** with RM2k's rules —the critical is ×3 and in range, the loot
-is an item of that enemy's, the poison takes what it takes per step—.
-Each seed's play is deterministic, so it is never flaky; the bound only
-makes it fail if the event never happens at all, which is a bug (a
-critical that can never land).
-
-**What it does not check**: how often. A critical at 30 % instead of 3 %
-passes, as long as the ×3 is right. That is what (b) would add, at some
-20 s of suite per rate; and (c) forces the chance by writing the ROM's
-byte, which skips the real roll.
-
-### 2026-11-27, taro: 2.a
-
-> But is a seed searched once and then the test always runs against one
-> seed, or does the same test have to try several every time it runs?
-
-Hornero: every run, as Cardón proposed; deterministic, so it finds the
-same seed on the same try while the ROM does not change, at the cost of a
-battle or two. A seed written in the test would tie it again to our
-generator and the order of its rolls.
-
-> OK. Let's go with that, then.
-
-### 2026-11-27, Hornero: back to Cardón for phase 2
-
-All three decided: 1 (a), 2 (a), 3 (a). Assignee back to Cardón.
 
 ### 2026-11-27, Cardón: phase 2, the tests and `simulate` go
 

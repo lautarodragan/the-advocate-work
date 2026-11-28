@@ -48,7 +48,7 @@ written and measured, and is in Aguará's scratch as
 A better cut may be by what each picture is: the message box ones are a
 window, see [`an-inventory-of-the-pictures-that-may-be-windows`](an-inventory-of-the-pictures-that-may-be-windows.md).
 
-## Log
+## Comments
 
 ### 2026-11-24, Cardón: a question for taro
 
@@ -66,3 +66,5 @@ fit; (c) leave it.
 
 **Recommendation**: (b) first, then (a) only for what still does not fit;
 link this draft as blocked by that inventory.
+
+## Log

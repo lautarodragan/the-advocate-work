@@ -78,6 +78,54 @@ unless it says otherwise:
 which the harness calls too, are the builder's and stay: they are what
 [`one-advocate-command`](one-advocate-command.md) keeps.
 
+## Comments
+
+### 2026-11-25, Cardón: questions for taro
+
+1. **`goombario` and `ditto` in the tests.** Both look at something real
+   —goombario lints the runtime inside the built ROM; the round trip
+   proves Ditto reads what RPG Maker wrote, over nine originals, and what
+   it writes itself, over the test game—, but they run a binary of ours.
+   Options:
+   * **(a) they become checks of what already runs them**: `advocate
+     build` calls Goombario as a library over each cartridge it builds and
+     writes the result in `advocate.json` —as the patches' check moved in
+     on 2026-11-25—, and the dump —`just dump`, later `advocate dump`—
+     checks its own round trip each time it unpacks a game, as the test
+     game's `just game` does after packing. The tests read the result, or
+     go. Cost: ~7 s of CPU per full ABL build, and a build that reports a
+     lint.
+   * (b) they stay, as the rule's stated exception: a tool that tests the
+     product or another tool.
+   * (c) they leave the suites for the crates' tests with a corpus:
+     `DITTO_CORPUS` would take several games and `.zip`s, and Goombario
+     would run over the test game in CI. Until 2026-11-23 the round trip
+     was a recipe nobody ran unless they touched Ditto, which is why it
+     went into the tests.
+
+   **Recommended: (a).** Both nets stay on every build, and no test calls
+   a binary.
+
+2. **The screens' drawings become goldens.** `render` is the biggest
+   oracle: 18 files compare the console against a screen our own stage
+   draws. Options: **(a) one golden per compared screen**, deduplicated
+   (up to ~370, ~4 MB, one review), losing the "drawn twice" check for a
+   new screen; (b) goldens for one state per screen, and the rest asserted
+   on what the ROM shows on its own —the list holds what the database
+   says, the numbers are the RAM's—: fewer goldens, fewer pixels checked;
+   (c) a drawing of the screens in Python in the harness, a second model
+   of ours, which is what the rule wants gone. **Recommended: (a)**: it is
+   the same bargain as every other golden of the suite.
+
+3. **The music's writes.** `test_music_writes` and `test_drum_kit_sounds`
+   hold the 65816 decoder to the compiler's spec of each song. Options:
+   **(a) the build leaves each song's writes beside the ROM** —size not
+   measured; the compiler already computes them—; (b) a decoder in Python
+   in the harness, a second model of ours; (c) the tests go, trusting the
+   compiler's own check at build time, which does not see the 65816.
+   **Recommended: (a)**, if the size is reasonable; measuring it is the
+   first thing step 5 does.
+
 ## Log
 
 ### 2026-11-24, Hornero: written
@@ -296,52 +344,6 @@ test still runs the first two.
   machine, not of a repo.
 * `abl/experiments/fonts/mockups.py` calls `rm2k-render`, which is no
   longer a command; its README already says so and how to run it again.
-
-### 2026-11-25, Cardón: questions for taro
-
-1. **`goombario` and `ditto` in the tests.** Both look at something real
-   —goombario lints the runtime inside the built ROM; the round trip
-   proves Ditto reads what RPG Maker wrote, over nine originals, and what
-   it writes itself, over the test game—, but they run a binary of ours.
-   Options:
-   * **(a) they become checks of what already runs them**: `advocate
-     build` calls Goombario as a library over each cartridge it builds and
-     writes the result in `advocate.json` —as the patches' check moved in
-     on 2026-11-25—, and the dump —`just dump`, later `advocate dump`—
-     checks its own round trip each time it unpacks a game, as the test
-     game's `just game` does after packing. The tests read the result, or
-     go. Cost: ~7 s of CPU per full ABL build, and a build that reports a
-     lint.
-   * (b) they stay, as the rule's stated exception: a tool that tests the
-     product or another tool.
-   * (c) they leave the suites for the crates' tests with a corpus:
-     `DITTO_CORPUS` would take several games and `.zip`s, and Goombario
-     would run over the test game in CI. Until 2026-11-23 the round trip
-     was a recipe nobody ran unless they touched Ditto, which is why it
-     went into the tests.
-
-   **Recommended: (a).** Both nets stay on every build, and no test calls
-   a binary.
-
-2. **The screens' drawings become goldens.** `render` is the biggest
-   oracle: 18 files compare the console against a screen our own stage
-   draws. Options: **(a) one golden per compared screen**, deduplicated
-   (up to ~370, ~4 MB, one review), losing the "drawn twice" check for a
-   new screen; (b) goldens for one state per screen, and the rest asserted
-   on what the ROM shows on its own —the list holds what the database
-   says, the numbers are the RAM's—: fewer goldens, fewer pixels checked;
-   (c) a drawing of the screens in Python in the harness, a second model
-   of ours, which is what the rule wants gone. **Recommended: (a)**: it is
-   the same bargain as every other golden of the suite.
-
-3. **The music's writes.** `test_music_writes` and `test_drum_kit_sounds`
-   hold the 65816 decoder to the compiler's spec of each song. Options:
-   **(a) the build leaves each song's writes beside the ROM** —size not
-   measured; the compiler already computes them—; (b) a decoder in Python
-   in the harness, a second model of ours; (c) the tests go, trusting the
-   compiler's own check at build time, which does not see the 65816.
-   **Recommended: (a)**, if the size is reasonable; measuring it is the
-   first thing step 5 does.
 
 ### 2026-11-25, Hornero: taro's answers
 

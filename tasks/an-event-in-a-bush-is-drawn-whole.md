@@ -28,7 +28,7 @@ two events in two palettes need two copies.
 **Not seen while playing**: it was read in the code, not looked for in a
 game.
 
-## Log
+## Comments
 
 ### 2026-11-24, Cardón: a question for taro
 
@@ -47,3 +47,5 @@ declared divergence until a game shows it.
 **Recommendation**: (c): read in the code, not seen in any port, and it
 competes for the objects and palettes the crowded-lines drafts already
 lack.
+
+## Log

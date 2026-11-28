@@ -54,7 +54,7 @@ power-off inside that ~130 ms leaves the torn one on the card.
   newest copy that adds up. It changes the slot's layout, so old saves stop
   loading (they already do on every build that moves `GAME_SIGNATURE`).
 
-## Log
+## Comments
 
 ### 2026-11-24, Cardón: a question for taro
 
@@ -68,3 +68,5 @@ loading).
 slot screen checks the sum and shows the slot as damaged instead of a
 name, and picking it says so instead of starting a new game; CRC-16 for
 the sum— and the two copies only if a torn save is ever seen.
+
+## Log

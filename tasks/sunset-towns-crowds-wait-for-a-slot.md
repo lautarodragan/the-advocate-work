@@ -44,7 +44,7 @@ is the big one: four blocks that only an animation on the map uses.
 `sunset-over-imdahl/build/release/degradations.json`; in the game,
 maps 3 and 58 when they are full.
 
-## Log
+## Comments
 
 ### 2026-11-24, Cardón: a question for taro
 
@@ -63,3 +63,5 @@ is how much of Sunset's towns is worth paying for, and it is the game's:
 * **c)** leave it, as a Known issue (it is already one).
 
 Recommendation: **a**, tried map by map, and **c** for whatever does not fit.
+
+## Log
