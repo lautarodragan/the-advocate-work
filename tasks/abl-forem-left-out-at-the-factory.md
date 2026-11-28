@@ -2,7 +2,8 @@
 name: "ABL: Forem left out at the factory"
 description: "Map 83 leaves out Forem, event 13, whom a route dresses, because with him the rain's colours are lent: the converter says so, as it said of Northern Surl Camp's Paradise and Emily"
 type: bug
-status: todo
+status: doing
+assignee: tijereta
 agents: [cardon]
 author: tijereta
 links:
