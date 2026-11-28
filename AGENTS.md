@@ -354,7 +354,7 @@ it are skipped with a message; `rm2k-snes/rm2k-snes-audio/` receives the
 SoundFont through `SOUNDFONT`, the same; `snes/goombario/` assembles toy
 programs and needs `ca65` and `ld65` in the PATH, and without them it is
 skipped the same way; and `snes/gunter/`, `snes/voodoo/`, `snes/lz2/`,
-`snes/adeleine/`, `rm2k/rules/`, `rm2k/sketch/`, `rm2k/rm2k-render/`, `rm2k-snes/battle/`,
+`snes/adeleine/`, `rm2k/rules/`, `rm2k/rm2k-render/`, `rm2k-snes/battle/`,
 `rm2k-snes/bytecode/`, `rm2k-snes/events/`, `rm2k-snes/patches/`,
 `rm2k-snes/wally/` and the two of the screens, `rm2k-snes/images/`,
 `rm2k-snes/mapdata/` and `rm2k-snes/convert/` need nothing.
