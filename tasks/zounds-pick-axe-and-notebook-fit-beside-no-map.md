@@ -2,10 +2,10 @@
 name: "Zounds: the pick-axe screen and the notebook fit beside no map"
 description: "The common events' small pictures go up when shown since 2026-10-20, beside the loaded map's characters; Zounds' pick-axe screen (400 object tiles, seven sprite palettes) and notebook (704 tiles) fit on none of its maps, so using the items still shows nothing"
 type: bug
-status: doing
-assignee: mulita
+status: draft
+assignee: taro
 author: carpintero
-agents: [cardon]
+agents: [cardon, mulita]
 links:
   found-in: [pictures-in-common-events-compiled-apart-are-not-shown]
   relates: [small-pictures-under-a-big-one-are-hidden]
@@ -83,4 +83,28 @@ you.
 
 Mulita takes the screenshots: the pick-axe and the notebook screens of the original, under Wine, attached here. The question stays open; the task goes back to taro with them.
 
+### 2026-11-28, Mulita: the original's screens, under Wine
+
+Zounds' own `RPG_RT.exe` (RPG Maker 2003), from the game's `master`, run with Wine under Xvfb; captured at the runtime's 640x480, which is RM2003's 320x240 doubled. Our ROM was not captured: there it shows nothing, as the draft says.
+
+**The pick-axe**, "Hacha de Pico" (item 23, common events 21 and 27), on the first frame after using it: the title bar, the EXP / LVL / NL boxes with their digits, the pick-axe sign at the right and, at the bottom, the blue gradient box, `Zounds_Dialogue_4`, before its first message is written:
+
+![The pick-axe screen just opened over the desert: title bar "Hacha de Pico", EXP, LVL and NL boxes on the left, the pick-axe sign on the right, an empty blue gradient box at the bottom](images/zounds-pick-axe-and-notebook-fit-beside-no-map/original-pick-axe.png)
+
+And with its first message: the text goes over `Zounds_Dialogue_4`, which is what the game uses as its message window here.
+
+![The same screen with the first explanation message written over the blue gradient box](images/zounds-pick-axe-and-notebook-fit-beside-no-map/original-pick-axe-message.png)
+
+**The notebook**, "Cuaderno de Notas" (item 35, common events 29, 30 and 41): the title bar, `Zounds_Notas_Fondo` covering almost the whole map, the count of notes and one line per note, the selector around the first. Three lines and not five because of a mistake in my retouch below (it set only one of switches 83 to 85); the count, 05, is the variable I set.
+
+![The notebook: parchment background over the map, "Tienes 05 Notas en el Cuaderno", three note lines with a selector box around the first](images/zounds-pick-axe-and-notebook-fit-beside-no-map/original-notebook.png)
+
+**What was retouched**, only in a copy of the game in a scratch folder, through `advocate import` / `advocate export`: the party starts on map 34 at (24, 38), in front of the house in the desert, instead of map 183; and the unused common event 69 became a parallel one that, once, gives items 23 and 35, sets variable 30 (notes in total) to 5 and turns on switches 77, 81 and 83 (three of the notes). The rest is the game as it is; the screens were reached from the item menu. The RM2003 runtime asks for its RTP under `HKCU\Software\Enterbrain\RPG2003`; it was given Don Miguel's RTP 2000, which is enough.
+
+Copies in the shared captures folder, `2026-11-28-zounds-pick-axe-notebook`.
+
 ## Log
+
+### 2026-11-28, Mulita: the original's screenshots
+
+The pick-axe and the notebook screens of the original, run with Wine, in the comment above; back to `draft` with `assignee: taro`, since the question in Cardón's comment is still theirs.
