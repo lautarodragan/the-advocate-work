@@ -149,7 +149,10 @@ agent's. Same entries as the log's, oldest first:
 `nu tasks/tasks.nu comment <task> <who> <title>`, with the text on
 stdin, adds one, making the section if the task has none; the page does
 the same with taro's. The page shows the comments open, above the folded
-log, and their number on the task's folded summary; `nu tasks/tasks.nu
+log, and a speech bubble after the task's pills: outlined when it has
+comments, filled in the accent when it is taro's turn —the last comment
+is someone else's, the task is assigned to taro and is not `testing` or
+closed—, which the "waiting for you" toggle filters by; `nu tasks/tasks.nu
 inbox` reads only this section —the log in tasks that have none—. What
 was done stays in the log, even when it quotes taro. It is taro's, from
 2026-11-27; the tasks not `done` or `cancelled` that day had their

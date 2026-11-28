@@ -112,9 +112,14 @@
      goes whole to the next line instead of leaving its first words beside
      them (taro, on a phone). */
   .name { font-weight: 600; display: inline-block; }
-  /* The log's entry count, beside the name, as a small pill. */
-  .entries { display: inline-block; margin-left: .4rem; padding: 0 .45rem; border-radius: 1rem; font-size: .75rem; line-height: 1.3rem; vertical-align: .1rem; background: var(--line); color: var(--muted); font-variant-numeric: tabular-nums; }
-  .entries::before { content: "💬 "; }
+  /* The comments' bubble, after the pills: the pills' grey line when the
+     task has a conversation, filled in the accent when it is taro's turn. */
+  .talk { display: inline-block; margin-right: .4rem; vertical-align: -.15em; color: var(--muted); line-height: 0; }
+  .talk svg path { fill: none; stroke: currentColor; stroke-width: 1.2; stroke-linejoin: round; }
+  .talk.waiting { color: var(--accent); }
+  .talk.waiting svg path { fill: currentColor; }
+  #waiting .talk { margin-right: .35rem; }
+  #waiting[aria-pressed="true"] .talk { color: inherit; }
   .desc { display: block; color: var(--muted); font-size: .9rem; margin-top: .15rem; }
   .meta { color: var(--muted); font-size: .8rem; padding: 0 .9rem; }
   .body { padding: .25rem .9rem .9rem; overflow-wrap: anywhere; }
@@ -320,19 +325,24 @@
   let type = params.get('type') || 'all';
   let game = params.get('game') || 'all';
   let author = params.get('author') || 'all';
+  // Only the tasks waiting for taro, in any state: the toggle beside the
+  // filters, which sets the state to `all` when pressed.
+  const waitingButton = document.getElementById('waiting');
+  let waiting = params.get('waiting') === '1';
   const rows = [[filters, 'status'], [types, 'type'], [games, 'game'], [authors, 'author']];
   const chosen = () => ({status, type, game, author});
 
   function press() {
     const c = chosen();
     for (const [nav, key] of rows) for (const b of nav.children) b.setAttribute('aria-pressed', b.dataset[key] === c[key]);
+    waitingButton.setAttribute('aria-pressed', waiting);
   }
   // Any other filter than the build's, or a task in the hash: the list in
   // the page is not the one to show, so it stays out of sight —and the
   // counts, which are the default state's— until every task is there and
   // apply() picks them. With the default, nothing waits.
   function pending() { press(); root.classList.add('pending'); }
-  if (status !== defaultStatus || type !== 'all' || game !== 'all' || author !== 'all' || location.hash) pending();
+  if (status !== defaultStatus || type !== 'all' || game !== 'all' || author !== 'all' || waiting || location.hash) pending();
 
   let tasks = null, sections = null;
   const byId = new Map();
@@ -346,6 +356,11 @@
     else author = b.dataset.author;
     update();
   });
+  waitingButton.addEventListener('click', () => {
+    waiting = !waiting;
+    if (waiting) status = 'all';
+    update();
+  });
   search.oninput = update;
 
   // What the last pass chose, and the tasks it showed: a search that only
@@ -357,9 +372,9 @@
   function apply() {
     const q = query();
     const was = last;
-    last = {q, status, type, game, author};
+    last = {q, status, type, game, author, waiting};
     const narrowing = was && was.q && q.startsWith(was.q) && was.status === status
-      && was.type === type && was.game === game && was.author === author;
+      && was.type === type && was.game === game && was.author === author && was.waiting === waiting;
     press();
     if (!was || was.status !== status) recount();
     const candidates = narrowing ? visible : tasks;
@@ -370,6 +385,7 @@
       const ok = (status === 'all' || t.status === status || t.sticky) && (type === 'all' || t.type === type)
         && (game === 'all' || (game === 'none' ? t.games.length === 0 : t.games.includes(game)))
         && (author === 'all' || (t.author || 'none') === author)
+        && (!waiting || t.el.hasAttribute('data-waiting'))
         && (!q || (t.text ??= textOf(t.el)).includes(q));
       // Only what changes is touched: a hidden that is set again still
       // costs the browser a look at the task.
@@ -383,6 +399,7 @@
     type === 'all' ? url.searchParams.delete('type') : url.searchParams.set('type', type);
     game === 'all' ? url.searchParams.delete('game') : url.searchParams.set('game', game);
     author === 'all' ? url.searchParams.delete('author') : url.searchParams.set('author', author);
+    waiting ? url.searchParams.set('waiting', '1') : url.searchParams.delete('waiting');
     history.replaceState(null, '', url);
     highlight(narrowing ? was.q : '');
   }
@@ -709,6 +726,11 @@
     }
     if (span) span.textContent = a ? ` · assignee: ${a}` : '';
     t.el.classList.toggle('queued', queue.some(c => c.task === t.el.id));
+    // An entry of taro's queued or saved: their turn is taken.
+    if (queue.some(c => c.task === t.el.id && c.kind === 'entry')) {
+      const talk = t.el.querySelector(':scope > summary .talk');
+      if (talk) { talk.classList.remove('waiting'); talk.title = talk.title.replace(/, waiting for you$/, ''); }
+    }
     decorate(t);
   }
   // What only an opened task shows: the queued entries at the end of its

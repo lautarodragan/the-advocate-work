@@ -261,7 +261,7 @@ def "main check" [
   let tasks = all_tasks
 
   let found = $tasks
-    | where { |t| if $status == "*" { $t.status not-in [done cancelled] } else { $t.status == $status } }
+    | where { |t| if $status == "*" { $t.status not-in [testing done cancelled] } else { $t.status == $status } }
     | each { |t|
       let lines = $t.raw | lines
       mut fence = false
@@ -436,7 +436,7 @@ def check_prose_links [tasks: list, status: string, docs?: string] {
   } else { [] }
 
   let found = $tasks
-    | where { |t| if $status == "*" { $t.status not-in [done cancelled] } else { $t.status == $status } }
+    | where { |t| if $status == "*" { $t.status not-in [testing done cancelled] } else { $t.status == $status } }
     | each { |t|
       let body = $t.raw | str replace --regex '(?s)\A---\n.*?\n---\n' ''
         | str replace --all --regex '(?ms)^[ \t]*```.*?^[ \t]*```' ''
@@ -682,7 +682,18 @@ def filters_html [states: list, default: string] {
     (filter_row types "Filter by type" $types)
     (filter_row games "Filter by game" $games)
     (filter_row authors "Filter by author" $authors)
+    (waiting_html $tasks)
   ] | str join "\n"
+}
+
+# The toggle that shows only the tasks waiting for taro —the filled
+# bubble's—, in any state; its count is theirs over every task.
+def waiting_html [tasks: list] {
+  let n = $tasks | where { |t|
+    let c = $t.body | comments_of
+    $c.count > 0 and ($t.assignee | normalize) == "taro" and $c.last != "taro" and $t.status not-in [testing done cancelled]
+  } | length
+  $"<nav class=\"filters\" id=\"waiting-row\" aria-label=\"Waiting for you\"><button type=\"button\" id=\"waiting\" aria-pressed=\"false\"><span class=\"talk waiting\" aria-hidden=\"true\"><svg viewBox=\"0 0 16 16\" width=\"15\" height=\"15\"><path d=\"M3 2.5h10a1.5 1.5 0 0 1 1.5 1.5v6A1.5 1.5 0 0 1 13 11.5H7.5L4.5 14v-2.5H3A1.5 1.5 0 0 1 1.5 10V4A1.5 1.5 0 0 1 3 2.5z\"/></svg></span>waiting for you<span class=\"count\">($n)</span></button></nav>"
 }
 
 def filter_row [id: string, label: string, buttons: list] {
@@ -729,13 +740,28 @@ def render_body [] {
     | str replace --all --regex '(<a class="shot"[^>]*><img [^>]*>)' '$1</a>'
 }
 
-# The `### ` entries of a task's `## Comments`, the conversation with
-# taro.
-def comment_entries [] {
+# A task's `## Comments`, the conversation with taro: how many entries,
+# and who wrote the last.
+def comments_of [] {
   let lines = $in | lines
   let at = $lines | enumerate | where item == "## Comments" | get -o 0.index
-  if $at == null { return 0 }
-  $lines | skip ($at + 1) | take while { $in != "## Log" } | where { $in | str starts-with "### " } | length
+  if $at == null { return {count: 0, last: ""} }
+  let heads = $lines | skip ($at + 1) | take while { $in != "## Log" }
+    | parse --regex '^### \d{4}-\d{2}-\d{2}, (?<who>[^:]+):'
+  {count: ($heads | length), last: ($heads | get -o who | default [] | last | default "" | normalize)}
+}
+
+# The comments' mark on a task's summary, after its pills: a speech
+# bubble, drawn in the pills' line and colour, filled in the accent when
+# it is taro's turn —the last comment is someone else's, the task is
+# theirs and not yet to test, `testing`, or closed—. A word or a number said too much there (taro,
+# 2026-11-27).
+def talk_html [c: record, waiting: bool] {
+  if $c.count == 0 { return "" }
+  let n = $"($c.count) comment(if $c.count == 1 { '' } else { 's' })"
+  let title = if $waiting { $"($n), waiting for you" } else { $n }
+  let cls = if $waiting { "talk waiting" } else { "talk" }
+  $"<span class=\"($cls)\" title=\"($title)\" role=\"img\" aria-label=\"($title)\"><svg viewBox=\"0 0 16 16\" width=\"15\" height=\"15\" aria-hidden=\"true\"><path d=\"M3 2.5h10a1.5 1.5 0 0 1 1.5 1.5v6A1.5 1.5 0 0 1 13 11.5H7.5L4.5 14v-2.5H3A1.5 1.5 0 0 1 1.5 10V4A1.5 1.5 0 0 1 3 2.5z\"/></svg></span>"
 }
 
 # A task's body, with its comments and its log apart: what comes before
@@ -832,15 +858,14 @@ def task_html [index: record, shown: bool] {
   # `<!-- raw HTML omitted -->` for a task's raw HTML— would change how it
   # is read; cmark-gfm escapes the `<` of what the task writes, so this
   # only guards.
-  # How many comments it has, on the folded summary too, so a task with a
-  # conversation going is seen without opening it.
-  let entries = $t.body | comment_entries
-  let count = if $entries == 0 { "" } else { $"<span class=\"entries\" title=\"($entries) comment(if $entries == 1 { '' } else { 's' })\">($entries)</span>" }
+  let comments = $t.body | comments_of
+  let waiting = $comments.count > 0 and ($t.assignee | normalize) == "taro" and $comments.last != "taro" and $t.status not-in [testing done cancelled]
+  let talk = talk_html $comments $waiting
   let body = $t.body | body_html ($t.links | links_html $index)
     | str replace --all --regex '(?i)<(/?script)' '&lt;$1'
   [
-    $"<details class=\"task\" id=\"($id | escape)\" data-status=\"($t.status | escape)\" data-type=\"($t.task_type | escape)\" data-game=\"($t.games | str join ' ' | escape)\" data-author=\"($t.author | escape)\" data-assignee=\"($t.assignee | escape)\"(if $shown { '' } else { ' hidden' })>"
-    $"<summary><button type=\"button\" class=\"copy\" data-copy=\"($id | escape)\" title=\"Copy the task's file name\">copy</button><button type=\"button\" class=\"pick\" data-id=\"($id | escape)\" aria-pressed=\"false\" title=\"Add the task to the selection, to copy several at once\">select</button><span class=\"type\">($t.task_type | escape)</span>($games)<span class=\"name\">($t.name | escape)</span>($count)"
+    $"<details class=\"task\" id=\"($id | escape)\" data-status=\"($t.status | escape)\" data-type=\"($t.task_type | escape)\" data-game=\"($t.games | str join ' ' | escape)\" data-author=\"($t.author | escape)\" data-assignee=\"($t.assignee | escape)\"(if $waiting { ' data-waiting' } else { '' })(if $shown { '' } else { ' hidden' })>"
+    $"<summary><button type=\"button\" class=\"copy\" data-copy=\"($id | escape)\" title=\"Copy the task's file name\">copy</button><button type=\"button\" class=\"pick\" data-id=\"($id | escape)\" aria-pressed=\"false\" title=\"Add the task to the selection, to copy several at once\">select</button><span class=\"type\">($t.task_type | escape)</span>($games)($talk)<span class=\"name\">($t.name | escape)</span>"
     $"<span class=\"desc\">($t.description | escape)</span></summary>"
     $"<p class=\"meta\"><a href=\"#($id)\">#</a> · <a href=\"($source)\">($id).md</a>($changed)($author)($assignee)($agents)</p>"
     $"<script type=\"text/x-task-body\" class=\"body\">($body)</script>"
