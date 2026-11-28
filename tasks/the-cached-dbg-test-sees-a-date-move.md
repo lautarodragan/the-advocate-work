@@ -51,3 +51,8 @@ rewrite's.
 Red once more verifying Cardón's battle merge (the-advocate `cardon-battle`
 into `e5b3d067`): `mapdata.inc`'s mtime `0x6B0A0746` against `…47`, the
 second ticking between the two builds. Alone, green.
+
+### 2026-11-27, Hornero: and a third time
+
+Red again verifying Calandria's merge (sketch and ditto) on
+the-advocate; alone, green. Three times today.
