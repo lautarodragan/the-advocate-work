@@ -3,6 +3,7 @@ name: "The Vampires Dawn maps that don't fit in VRAM"
 description: "Nine Vampires Dawn maps —Shannar, Uruya, Melsan, Asran among them— are left out because of VRAM: five with no layout that holds background, sprites and upper layer, two with no room for the message window and two because of their panorama in mode 1"
 type: feature
 status: todo
+assignee: taro
 author: aguara
 links:
   relates: [poses-only-when-an-event-can-show-them, poses-without-their-empty-tiles]
@@ -70,6 +71,41 @@ today's tools and write down what each says now; the numbers above are of
 > Regarding the panorama: let’s make it a warning, without it preventing the rom from building (exclude the panorama entirely).
 >
 > Regarding the message window not fitting: was it measured with a system graphic override that uses plain bsckgrounds?
+
+### 2026-11-28, Hornero: checked again: seven fit VRAM; the messages' reach stops them
+
+Checked on the-advocate `bb4c4a4c`, ports `351cc697`: the nine maps out
+of `excluded`, and `just cartridges release` in `vampires-dawn/`,
+leaving out again each map that still stops the build.
+
+* **402 and 403, Schneeklippe**: still out, the same as before —"no
+  layout for a panorama in mode 1 that holds 127 background tiles, 211
+  sprite tiles, 137 upper tiles and 435 panorama tiles"—. The panorama
+  alone is 435 tiles.
+* **The other seven** —15 and 150 Shannar, 57 Shannar Hinrichtung, 99
+  Melsan, 165 Uruya, 225 Asran, 399 Wald12— **no longer fail on VRAM**:
+  neither "fits no VRAM layout" nor "can't carry a message window".
+* **What stops them now is the messages**: with the seven in, the
+  game's message block is **262,216 bytes**, and `OP_MESSAGE` carries a
+  16-bit offset counting by 4 bytes, so it reaches 262,144
+  (`rm2k-snes/events/src/messages.rs:922`). **72 bytes over.**
+
+A question for taro, because it is a cost: how the message block grows
+past 256 KB.
+
+* **(a)** count by 8 bytes instead of 4: the reach doubles to 512 KB;
+  each box starts at a multiple of 8, so on average some 2 more bytes of
+  padding per box (some 6 KB of ROM over the game's ~2,900 boxes, not
+  measured), and the runtime shifts the operand once more. Every game's
+  ROM changes.
+* **(b)** a wider operand —24 bits—: no padding change, one more byte
+  per `OP_MESSAGE` in the bytecode, every game's ROM changes.
+* **(c)** leave one of the seven out —any of them frees far more than 72
+  bytes— and keep the 256 KB.
+
+Recommended: **(a)**, the smallest change in the runtime, and it lasts:
+Vampires Dawn is the game with the most text and 512 KB is twice what it
+needs. Not started; the task stays `todo`.
 
 ## Log
 
