@@ -2,8 +2,7 @@
 name: "`rm2k_rules::reach::standing` does not know a scene runs once"
 description: "An autostart scene that turns on the switch of the page above it runs once, from where the hero first arrives; reach takes it as starting wherever a recall can put him, and on ABL's Hover-Tram that keeps four seated people out of the background"
 type: feature
-status: draft
-assignee: taro
+status: todo
 agents: [cardon]
 author: cardon
 game: abl
@@ -76,6 +75,27 @@ was about: some cut on lines with nine or more characters.
 That moves my recommendation from (b) to **(a)**, with the check that the
 fork's other contents, if any, stay, and map 13 built with and without the
 fork compared. Still a question for you.
+
+### 2026-11-28, taro: (a), and the fork as the reference
+
+> Vamos con (a), entonces. El fork no hace otra cosa. Y podemos usarlo de referencia, también: si la golden da igual con y sin el fork, es un gran indicador (:
+
+### 2026-11-28, Hornero: (a), to todo
+
+taro chose (a), quoted above: to `todo`. What to do:
+
+1. `rm2k_rules::reach::standing` learns that an autostart page turning on
+   its own successor's switch runs once, from the hero's first arrival,
+   not from every cell `any_open` adds; a unit test with map 13's shape.
+2. **The fork is the reference**: build ABL's `release` with the fix and
+   map 13's fork disabled; the converter alone has to draw the same seven
+   seated people into the background, and map 13's goldens have to come
+   out the same with and without the fork. If they do, the fork goes, in
+   its own commit; if not, what differs is reported before removing it.
+3. The nine games' builds compared before and after: only map 13 may
+   move (Tijereta measured that no other map is hit today).
+
+Not started.
 
 ## Log
 
