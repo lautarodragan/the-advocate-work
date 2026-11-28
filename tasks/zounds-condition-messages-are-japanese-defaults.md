@@ -2,9 +2,10 @@
 name: "Zounds: the conditions' battle messages are the editor's Japanese defaults"
 description: "Zounds' states carry RPG Maker 2003's untranslated Japanese messages, read as Windows-1252, and the battle's text block writes them as garbage: the revival line, and what a condition says when it is given, lasts, goes or is already held"
 type: bug
-status: todo
+status: doing
+assignee: huron
 author: aguara
-agents: [cardon]
+agents: [cardon, huron]
 links:
   found-in: [items-that-give-a-condition-in-battle-only-hurt, zounds-skill-names-show-a-question-mark-for-an-accent]
   relates: [zounds-battle-messages-cannot-be-read]
@@ -65,3 +66,9 @@ says: whether RPG Maker 2003's battle shows a state's messages (easyrpg's
 ### 2026-11-27, taro: a comment
 
 > If we can tackle this one cheaply, by modifying Zounds and nothing else, let's do it.
+
+### 2026-11-27, Hornero: taken, to Hurón, Zounds only
+
+Within taro's bound: only `zounds/` in the ports changes —its patches or
+its `advocate.toml`—, no tool. If it cannot be done that way, Hurón stops
+and says what it would take, and it comes back to taro.
