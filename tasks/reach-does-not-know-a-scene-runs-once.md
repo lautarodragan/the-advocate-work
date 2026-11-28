@@ -4,7 +4,7 @@ description: "An autostart scene that turns on the switch of the page above it r
 type: feature
 status: doing
 assignee: tijereta
-agents: [cardon]
+agents: [cardon, tijereta]
 author: cardon
 game: abl
 links:
@@ -131,3 +131,28 @@ map where turning it off changes nothing cannot be touched by it.
 So today it shows in no log or degradation of any game; it would come
 back on a map that has such a scene and is not forked, in a game that
 recalls computed places.
+
+### 2026-11-28, Tijereta: the fix, and a wrong constant on the way
+
+Started from the-advocate `31853f95` and the ports `5b0ecd41`; branches
+`tijereta-reach-once` in both.
+
+`git blame`: `on_arrival` and the `arrival` seed are `c0bde4fd`
+(Cardón, 2026-11-18), the `any_open` cells `b35b4b37`. Reading it,
+**`CONTROL_SWITCHES` was 10110**, ShowMessage's code (liblcf's
+`eventcommand.h`: ControlSwitches = 10210): the switches a command can
+turn off were read from messages, whose parameters are empty, so no
+switch was ever "off" and `on_arrival` trusted pages above that a common
+event can turn off. The test took the code from the same constant, so it
+agreed; it now takes it from Ditto, red before (`{2}` against
+`{2, 3, 4, 5}`). The-advocate `17d5bcc4`.
+
+The fix, `2cba442f`: `Run::once`, a page `on_arrival` takes that turns
+on —by number, at the top level, with no `EndEventProcessing` or
+`JumpToLabel` before— every switch some page above it asks for, that
+page asking for nothing else; it starts from `entered`, the hero's cells
+before the `any_open` ones are added. Test
+`a_scene_that_runs_once_starts_where_the_hero_first_arrives`, map 13's
+shape (an aisle, seats above, a scene that walks him two right and up
+through them, turns on 69 and leaves), red before (`{12..16}` against
+`{12}`).
