@@ -9,6 +9,7 @@ agents: [calandria]
 author: taro
 links:
   relates: [advocate-init-dump-and-config, one-advocate-command, rm2k-sketch-becomes-a-library]
+  found: [the-tools-table-names-the-stages-gone-binaries]
 ---
 
 **Why**: once `rm2k-snes-battle`, `wally` and `rm2k-snes-events` go
@@ -76,3 +77,65 @@ the packing this task gives a home reads the test game's sketches too.
 
 taro's go, the same day, with [`rm2k-sketch-becomes-a-library`](rm2k-sketch-becomes-a-library.md),
 which goes first: it is small and leaves the recipe with `ditto` alone.
+
+### 2026-11-27, Calandria: the design
+
+From the-advocate's `bf18d71e`, on `calandria-ditto` in the three
+repos, after [`rm2k-sketch-becomes-a-library`](rm2k-sketch-becomes-a-library.md),
+which left the test game's recipe with `ditto` alone.
+
+#### `advocate import`
+
+    advocate import --game-dir GAME [--cache DIR] [--data DIR] [--exact DIR]
+
+What `just dump` did, in one subcommand: the game's `.ldb`, `.lmt` and
+`.lmu` —a directory, or a `.zip` unpacked into the cache's `zip/` the
+way `build` unpacks it— to the resolved view in `--data`, by default the
+project's `[paths] data`, and the exact dump in `--exact`, by default
+`build/exact/`; then the exact dump packed again into `<exact>-again`
+and compared, file by file and by name in lowercase, with the game's.
+It fails saying which differ, are missing or extra, and keeps what it
+packed to compare by hand; when they are equal it removes it. The pack
+and the comparison are Ditto's, a new `dump::round_trip`, so whoever
+unpacks a game with the library checks it the same way.
+
+A `.zip` is not unpacked through `Environment::unpack`, which also puts
+the port's own files in front of the game's: what is imported is the
+game as its author left it.
+
+The ports' `rpg_maker_files.py`, which took the RPG Maker files out of
+the `.zip` and compared them, goes. The exact dump moves from
+`build/ditto-exacto/` to `build/exact/`, the test game's place already
+and English; the ports' `RENAMES.md` says so.
+
+#### The test game's way back: `advocate export`
+
+    advocate export EXACT GAME
+
+Ditto's `pack`, nothing else, and it needs no project. The three options
+were:
+
+* **`advocate export`**: the pair of `import`, the name Hornero left for
+  "the way back" in [`advocate-init-dump-and-config`](advocate-init-dump-and-config.md)
+  on 2026-11-25. Thirty lines, and the recipe stays three commands:
+  `export src build/game`, the assets copied beside, `import --game-dir
+  build/game`.
+* **An option of `import`**, `--from-dump` or similar: `import` would
+  then go both ways depending on a flag, and its name would lie for one.
+* **A Rust test instead of a binary**: the recipe would call `cargo`,
+  which no recipe does —the tools come from the PATH—, and the release's
+  smoke test, which makes the test game's dump with the archive's
+  binaries, would have none to call.
+
+So `export`. And the test game's round trip is no longer the recipe's:
+`import` checks it, as for a port, so the recipe lost its `cmp` loop.
+
+#### `ditto`'s binary goes
+
+`src/main.rs` and its `[[bin]]`; `read`, `write`, `unpack`, `pack` and
+`schema` with it. Nothing called `read`, `write` or `schema` —grep of the
+four repos—; the schema as data stays `describe::to_json()`, which
+Ditto's tests check, and the README says so. The workspace's
+`[profile.release.package.ditto] opt-level = "z"` goes too: it was there
+for the binary's size, and as a library it only made `advocate`'s reads
+slower.

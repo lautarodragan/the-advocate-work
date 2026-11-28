@@ -9,7 +9,7 @@ agents: [cardon, chaja, Aguará, Mulita, Carpintero]
 author: taro
 links:
   blocks: [abl-s-test-cartridges-become-test-game-cases]
-  relates: [battle-tests-without-simulate, one-advocate-command, the-stages-speak-json-nobody-types, the-volume-ceilings-are-measured-without-a-rom, the-slot-screens-reference-draws-a-lent-face-with-its-own-palette, the-stage-subcommands-only-the-converter-called-have-no-caller, advocate-init-dump-and-config]
+  relates: [battle-tests-without-simulate, one-advocate-command, the-stages-speak-json-nobody-types, the-volume-ceilings-are-measured-without-a-rom, the-slot-screens-reference-draws-a-lent-face-with-its-own-palette, the-stage-subcommands-only-the-converter-called-have-no-caller, advocate-init-dump-and-config, the-tools-table-names-the-stages-gone-binaries]
   found: [the-test-game-lacks-content-abl-s-runtime-branches-need, abl-s-just-tests-splits-a-quoted-k-expression, the-screens-reference-drawing-has-no-caller, what-the-three-gone-binaries-asked-only-their-tests-ask]
 ---
 

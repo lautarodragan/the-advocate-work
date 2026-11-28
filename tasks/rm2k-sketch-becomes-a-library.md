@@ -133,19 +133,19 @@ every cartridge.
 
 On the-advocate's `calandria-ditto`, three commits:
 
-* `548a8a0b`: the sixteen `MapNNNN.toml` became the `.tiles`
+* `c1fa439f`: the sixteen `MapNNNN.toml` became the `.tiles`
   `rm2k-sketch` wrote of them into `build/text/maps/`, copied as they
   were; `just game` packs `src/` as it is, without the loop nor
   `build/text/`, and so does the release's smoke test; `rm2k/sketch/`
   goes, with its workspace member, its lock entry and its name in
   `rust_projects`.
-* `061f44ce`: what each sketch's opening comment said —what the map is
+* `f2105807`: what each sketch's opening comment said —what the map is
   for, which test reads it— comes back at the top of its `.tiles`,
   where a `#` line is a comment `pack` skips, worded without the
   sketch. The meadow's legend comments become words: the hub's signpost
   at (7, 10) and board at (10, 11), checked against the upper layer.
   Mechanical and judgement apart, as AGENTS.md asks.
-* `fca03ac7`: `LAYOUT.md`, the test game's README and the justfile's
+* `0705a569`: `LAYOUT.md`, the test game's README and the justfile's
   `cargo uninstall` line.
 
 In the book, `7546524`: "The tools" loses the section and keeps the
@@ -155,11 +155,11 @@ AGENTS.md's list of projects.
 
 #### Byte for byte
 
-The test game built from `bf18d71e` (sketches) and from `548a8a0b`
+The test game built from `bf18d71e` (sketches) and from `c1fa439f`
 (`just -f test-game/justfile cartridges`, and again with `--force`):
 the same `build/game/` —every `.ldb`, `.lmt` and `.lmu`—, `build/exact/`
 and `build/data/` (`diff -r`), and the same release, test-vblank and
-lint cartridges (`cmp`). With the comments of `061f44ce`, `just game`
+lint cartridges (`cmp`). With the comments of `f2105807`, `just game`
 gives the same three directories again.
 
 `cargo uninstall rm2k-sketch` is Hornero's after merging.
