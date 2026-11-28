@@ -75,4 +75,8 @@ the pick-axe's tiles; (c) leave both out.
 the notebook, under its own big picture, with (a) only if it matters to
 you.
 
+### 2026-11-28, taro: a comment
+
+> Can you attach a screenshot of the original screen running under wine, here?
+
 ## Log

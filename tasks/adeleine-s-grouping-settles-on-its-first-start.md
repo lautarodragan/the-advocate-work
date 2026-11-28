@@ -42,4 +42,8 @@ call, not measured on the pictures, screens, battle or other games.
 **Recommendation**: yes, as a todo whose first step measures the time cost
 on all nine games and the goldens that move, shown to taro before merging.
 
+### 2026-11-28, taro: a comment
+
+> Yes! And let's tackle this one, next. IIRC we have a fork/patch of the map with Core's blood _just_ for it. I'd keep it (I like our choice of palette for the blood more than the original), but we can temporarily disable it (cheap way, maybe: just rename the file to `.disabled` or something) to see how it affects that scene, among others.
+
 ## Log
