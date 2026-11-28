@@ -662,6 +662,14 @@ def render_body [] {
     | str replace --all --regex '(<a class="shot"[^>]*><img [^>]*>)' '$1</a>'
 }
 
+# The `### ` entries after a task's `## Log` line.
+def log_entries [] {
+  let lines = $in | lines
+  let at = $lines | enumerate | where item == "## Log" | get -o 0.index
+  if $at == null { return 0 }
+  $lines | skip ($at + 1) | where { $in | str starts-with "### " } | length
+}
+
 # A task's body, with its log apart: what comes before the exact line
 # `## Log` defines the task and is rendered as it is; what comes after is
 # its history, one `### <date>, <who>: <what>` entry per step (README, "A
@@ -743,11 +751,15 @@ def task_html [index: record, shown: bool] {
   # `<!-- raw HTML omitted -->` for a task's raw HTML— would change how it
   # is read; cmark-gfm escapes the `<` of what the task writes, so this
   # only guards.
+  # How many entries its log has, on the folded summary too, so a task
+  # someone has been writing in is seen without opening it.
+  let entries = $t.body | log_entries
+  let count = if $entries == 0 { "" } else { $"<span class=\"entries\" title=\"($entries) log entr(if $entries == 1 { 'y' } else { 'ies' })\">($entries)</span>" }
   let body = $t.body | body_html ($t.links | links_html $index)
     | str replace --all --regex '(?i)<(/?script)' '&lt;$1'
   [
     $"<details class=\"task\" id=\"($id | escape)\" data-status=\"($t.status | escape)\" data-type=\"($t.task_type | escape)\" data-game=\"($t.games | str join ' ' | escape)\" data-author=\"($t.author | escape)\" data-assignee=\"($t.assignee | escape)\"(if $shown { '' } else { ' hidden' })>"
-    $"<summary><button type=\"button\" class=\"copy\" data-copy=\"($id | escape)\" title=\"Copy the task's file name\">copy</button><button type=\"button\" class=\"pick\" data-id=\"($id | escape)\" aria-pressed=\"false\" title=\"Add the task to the selection, to copy several at once\">select</button><span class=\"type\">($t.task_type | escape)</span>($games)<span class=\"name\">($t.name | escape)</span>"
+    $"<summary><button type=\"button\" class=\"copy\" data-copy=\"($id | escape)\" title=\"Copy the task's file name\">copy</button><button type=\"button\" class=\"pick\" data-id=\"($id | escape)\" aria-pressed=\"false\" title=\"Add the task to the selection, to copy several at once\">select</button><span class=\"type\">($t.task_type | escape)</span>($games)<span class=\"name\">($t.name | escape)</span>($count)"
     $"<span class=\"desc\">($t.description | escape)</span></summary>"
     $"<p class=\"meta\"><a href=\"#($id)\">#</a> · <a href=\"($source)\">($id).md</a>($changed)($author)($assignee)($agents)</p>"
     $"<script type=\"text/x-task-body\" class=\"body\">($body)</script>"
