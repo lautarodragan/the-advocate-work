@@ -2,8 +2,7 @@
 name: "A door decompresses the whole bytecode of the map it leaves"
 description: "When a page goes on after a Teleport —every door—, code_carry_after decompresses all of the left map's bytecode: Desert Nightmare's maps carry ~14 KB each, some two to five frames per door"
 type: refactor
-status: draft
-assignee: taro
+status: todo
 agents: [cardon]
 author: cardon
 links:
@@ -51,6 +50,14 @@ maps: ROM and converter complexity. (c) Leave it.
 
 **Recommendation**: (a) as a todo, measured on Desert Nightmare; (b) only
 if (a) leaves doors slow.
+
+### 2026-11-28, taro: an answer: (a)
+
+> (a)
+
+### 2026-11-28, Hornero: to todo
+
+taro chose (a): to `todo`. Not carrying when the page's next opcode is its end, measured on Desert Nightmare's doors before and after; (b) only if (a) leaves doors slow. Not started.
 
 ## Log
 

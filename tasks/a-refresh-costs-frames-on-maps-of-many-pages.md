@@ -2,8 +2,7 @@
 name: "A refresh costs frames on maps of many pages"
 description: "Choosing the active pages still walks every page of the map at ~1.85 lines each: a switch that flips on The Frozen World's maps 2 and 3 (~420 pages) costs ~3 frames"
 type: refactor
-status: draft
-assignee: taro
+status: todo
 agents: [cardon]
 author: aguara
 links:
@@ -50,6 +49,14 @@ variable, which events' pages look at it, so a refresh walks only those
 **To decide**: whether it is worth that table. **Recommendation**: yes, as
 a todo whose first step is the design and its ROM measured with `just
 space` on all games: a hitch on every switch flip is felt while playing.
+
+### 2026-11-28, taro: a comment
+
+> Your recommendation sounds good to me.
+
+### 2026-11-28, Hornero: to todo
+
+taro took the recommendation: to `todo`. Its first step is the design of the per-switch and per-variable table, with its ROM measured with `just space` on every game, before any code. Not started.
 
 ## Log
 
