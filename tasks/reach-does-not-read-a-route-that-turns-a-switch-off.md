@@ -2,8 +2,7 @@
 name: "`rm2k_rules::reach` does not read a route that turns a switch off"
 description: "The switches a page above an autostart scene asks for are taken as never going off when no ControlSwitches turns them off; a move route's Switch OFF can, and reach does not look at routes for it"
 type: bug
-status: draft
-assignee: taro
+status: todo
 agents: [tijereta]
 author: tijereta
 links:
@@ -38,3 +37,9 @@ The same holds for the whole game's switches the converter gathers for
 **The fix** would be `decode_route` keeping the operand of codes 32/33
 (it skips them today), and `off` taking the 33s, in both places; or,
 cheaper and coarser, "any switch" as soon as any route has a 33.
+
+## Log
+
+### 2026-11-28, Hornero: promoted to todo
+
+Promoted by Hornero: the gap is verified (neither `reach` nor `Arrivals::gather` reads a route's Switch OFF; 21 in Vampires Dawn's map 163), and the fix is not in doubt: read them where ControlSwitches is read. Whoever does it checks the nine ROMs before and after and says which moved.
