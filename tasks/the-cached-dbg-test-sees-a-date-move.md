@@ -3,8 +3,8 @@ name: "The cached .dbg test sees a date move"
 description: "a_cached_object_gives_the_dbg_a_fresh_one_gives failed once: the fresh build's .dbg gave mapdata.inc a modification time one second later than the cached one's, though the test writes the file once"
 type: bug
 game: advocate
-status: doing
-assignee: hornero
+status: testing
+assignee: taro
 author: hornero
 agents: [cardon]
 links:
@@ -81,3 +81,11 @@ Fixed in the-advocate `hornero-dbg-date` (merged locally as `bb4c4a4c`):
 asserts that the fresh build leaves `mapdata.inc`'s date as it was —red
 before the fix, every run, not one in a few under load—. The crate's
 tests are green; the full verification runs on the merged tree.
+
+### 2026-11-28, Hornero: verified and pushed; to testing
+
+On the merged tree, with `advocate` reinstalled: `just lint` clean,
+`just test` 31, `rust-test` 1259 and no failure, test game 231 (one
+bsnes battle test red once and green in six runs after, a draft of its
+own), `just boot` 209, ABL 1662; the nine release ROMs byte for byte
+equal to `/shared/builds`.
