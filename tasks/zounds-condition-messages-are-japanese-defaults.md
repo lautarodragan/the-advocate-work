@@ -2,8 +2,8 @@
 name: "Zounds: the conditions' battle messages are the editor's Japanese defaults"
 description: "Zounds' states carry RPG Maker 2003's untranslated Japanese messages, read as Windows-1252, and the battle's text block writes them as garbage: the revival line, and what a condition says when it is given, lasts, goes or is already held"
 type: bug
-status: doing
-assignee: huron
+status: testing
+assignee: taro
 author: aguara
 agents: [cardon, huron]
 links:
@@ -157,3 +157,58 @@ show if the author had written it. Once you pick one, it is a short task.
 > Dale!
 
 (taro, 2026-11-27, to option (a): the game's own repo, `~/juegos/zounds`.)
+
+### 2026-11-27, Hurón: written in the game, and dumped
+
+![Before and after: the poison's line under the Veneno, garbage and then "Pez Shark es envenenado."](images/zounds-condition-messages-are-japanese-defaults/before-after.png)
+
+#### The game
+
+In Zounds' repository, branch `huron-states` from `master` `d3e3647`:
+`2853fc8`, the table above written into states 1 to 9 of `RPG_RT.ldb`
+with `ditto read`/`write`, as `7e5c54d` and `dfcbce0` did. The given
+message is the same for actor and enemy except the dead state's (` cae.`
+/ ` es derrotado.`); only the messages that had text got one, so
+Paralizado's five and the others' empty ones stay empty. `ditto write`
+of the unedited file gave it back byte for byte, the edited one read
+back equal to the JSON written, and only `states` changed in it. The
+accents are Windows-1252 in the file (`est\xe1`), like the rest of the
+game's text.
+
+#### The ports
+
+Branch `huron-zounds-states`, from main `60f1d0f`:
+
+* `aa9ab5a`: `just dump` in `zounds/` with `GAME_DIR` on that commit.
+  Only `data/db/states.json` changed, and the dump's round trip held.
+* `8b3c55b`: the README and the `justfile` comment said the clone is on
+  `snes-port`; it is on `master`, where `png-images` and `snes-port` are
+  merged and the game's fixes since 2026-10-19 went.
+
+#### The book
+
+the-advocate-docs, branch `huron-zounds-states` from `40b0a62`:
+`3be81ff` takes the line out of Zounds' "Known issues", says next to
+the battle terms on the port's page that the conditions' messages were
+the same case and were written in the game, and adds to the divergence
+"A 2003 game's battle writes the 2000 lines" that the converter has no
+stand-in for the conditions' messages: a 2003 game writes them in its
+own data.
+
+#### Seen
+
+The case `battle-veneno` with the first seed that poisons as
+`test_zounds_veneno.py` finds it (seed 1), before (ports main) and after,
+global tools: the line under "Kazar Veneno usado." went from `Pez
+Shark'I"A'E-~3'e'1/2?I` to `Pez Shark es envenenado.`. In
+`/shared/captures/2026-11-27-zounds-states/`. Only that line was looked
+at on the screen; the other messages —already held, lasting, gone, the
+revival line— go the same way through the same table, but no capture
+shows them.
+
+#### To install when merging
+
+Nothing: no tool changed. The game's branch goes into `master` of
+`~/juegos/zounds`, which is the `GAME_DIR` the ports build Zounds with;
+the ROM reads the messages from `zounds/data/`, so the ports' branch is
+what changes it.
