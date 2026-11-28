@@ -3,7 +3,9 @@ name: "rm2k-sketch goes"
 description: "rm2k-sketch goes whole, binary and library: it never chose an autotile's pattern either, so the grid buys little over Ditto's aligned .tiles; the test game's maps keep their .tiles in src/ instead of a sketch"
 type: refactor
 game: advocate
-status: todo
+status: doing
+assignee: calandria
+agents: [calandria]
 author: taro
 links:
   relates: [ditto-becomes-advocate-import, advocate-reset-autotiles]
@@ -109,3 +111,12 @@ nothing recalculates by default; a command a person runs on a `.tiles`
 does, [`advocate-reset-autotiles`](advocate-reset-autotiles.md), and
 this task is only sketch going. Name changed from "rm2k-sketch becomes a
 library"; the file name stays.
+
+### 2026-11-27, Hornero: taken, to Calandria
+
+> Let's merge it! And then we can move on with the sketch and ditto
+> tasks, so we get rid of 2 more binaries.
+
+(taro, 2026-11-27, of the forest, merged on the-advocate's `bf18d71e`.)
+Calandria does it with [`ditto-becomes-advocate-import`](ditto-becomes-advocate-import.md):
+both touch the test game's recipe.

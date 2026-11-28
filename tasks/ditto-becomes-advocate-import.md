@@ -3,7 +3,9 @@ name: "ditto becomes advocate import"
 description: "Ditto's binary goes: what a port's just dump asks it —RM2k's .ldb, .lmt and .lmu to the JSON dump in data/— becomes advocate import, and what the test game's recipe asks it —packing its text back to RM2k's format and the round trip— finds a home in advocate too; ditto stays a library"
 type: refactor
 game: advocate
-status: todo
+status: doing
+assignee: calandria
+agents: [calandria]
 author: taro
 links:
   relates: [advocate-init-dump-and-config, one-advocate-command, rm2k-sketch-becomes-a-library]
@@ -69,3 +71,8 @@ Nothing done yet.
 
 (taro, 2026-11-27) [`rm2k-sketch-becomes-a-library`](rm2k-sketch-becomes-a-library.md):
 the packing this task gives a home reads the test game's sketches too.
+
+### 2026-11-27, Hornero: taken, to Calandria
+
+taro's go, the same day, with [`rm2k-sketch-becomes-a-library`](rm2k-sketch-becomes-a-library.md),
+which goes first: it is small and leaves the recipe with `ditto` alone.

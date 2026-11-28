@@ -3,7 +3,9 @@ name: "The volume ceilings are measured without a ROM"
 description: "Each song's volume ceiling is measured today by hand, building a ROM and playing it in a libretro core; with blargg's S-DSP from snes_spc behind a Rust wrapper, fed the writes stream.rs already decodes, the audio stage can compute the table on every conversion, for every game, and the recipe, the stale-table test and the libretro module go"
 type: refactor
 game: advocate
-status: todo
+status: doing
+assignee: mulita
+agents: [mulita]
 author: taro
 links:
   relates: [one-advocate-command, tests-without-the-stages-subcommands]
@@ -79,3 +81,13 @@ It goes after
 ### 2026-11-23, Hornero: written
 
 Nothing done yet.
+
+### 2026-11-27, Hornero: taken, to Mulita
+
+> And let's also move on with the snes-audio one (I had forgotten it!),
+> in parallel or in sequence, as possible.
+
+(taro, 2026-11-27) Its blocker is in `testing`: `rm2k-snes-cartridges`
+is gone, and `volume-ceilings` builds through `advocate`'s libraries now.
+Step 1 first, the experiment, shown to taro with the licence and audit
+questions before step 2.
