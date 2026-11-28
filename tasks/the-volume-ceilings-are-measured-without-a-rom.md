@@ -197,6 +197,26 @@ mirror, because blargg's original zip is gone.
 >
 > Any reason not to go with GPLv3?
 
+### 2026-11-28, Hornero: GPLv3 fits everything
+
+Yes. Checked against the workspace's whole dependency tree
+(`cargo metadata --locked`, 63 third-party crates): all of them are
+MIT, Apache-2.0, BSD, ISC, Zlib, 0BSD or Unlicense —or a choice among
+them—, and every one of those can go into a GPLv3 work (Apache-2.0
+can into v3, not into v2). `snes_spc` is LGPL 2.1 *or later*, and the
+LGPL lets its code be used under the GPL, so vendoring it into a GPLv3
+the-advocate is fine, and its §6 question goes away.
+
+What the licence does not touch: `ca65`/`ld65` (zlib) are run, not
+linked; the test game's pictures keep their CC0 and CC BY 4.0, as
+`test-game/AUTHORS.md` says; and the libretro cores are loaded only by
+`volume-ceilings`, which step 2 removes.
+
+One choice left, and the last before step 2: **GPL-3.0-or-later**
+—the usual, and what lets a future GPL version apply— or
+**GPL-3.0-only**. Recommended: or-later. And question 3, whether the
+audit as written is enough.
+
 ## Log
 
 ### 2026-11-23, Hornero: written
