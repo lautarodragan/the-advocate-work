@@ -44,7 +44,7 @@ read by easyrpg's `Game_Actor::GetBattleCommands`:
 The book's divergence:
 [A 2003 game's battle commands](https://github.com/lautarodragan/the-advocate-docs/blob/main/src/divergences/a-2003-game-s-battle-commands.md).
 
-## Log
+## Comments
 
 ### 2026-11-24, Cardón: a question for taro
 
@@ -68,3 +68,5 @@ is the fifth command" for 2003 games.
 **Recommendation**: (a): it is what RM2k3 does with nothing to choose once
 the scope is set, and Zounds is the only 2003 game; (b) if taro wants
 Escape always there.
+
+## Log

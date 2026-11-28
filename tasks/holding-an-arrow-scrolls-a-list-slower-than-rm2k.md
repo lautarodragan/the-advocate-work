@@ -31,7 +31,7 @@ letters— and the adoptions of the rows that move (each `tl_adopt` and
 `tl_choose` is tens of lines). Nothing in `tl_pace` counts frames, so a
 faster layer gets RM2k's pace on its own.
 
-## Log
+## Comments
 
 ### 2026-11-24, Cardón: a question for taro
 
@@ -48,3 +48,5 @@ make the layer faster; (b) `wishlist`, the divergence stands.
 **Recommendation**: (b): it is felt only holding over thirty items, and
 the font's composers are being rewritten anyway (unrolled per writer, the
 reason for `FAR4`); measure it again after them.
+
+## Log

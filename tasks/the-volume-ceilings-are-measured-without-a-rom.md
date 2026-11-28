@@ -77,6 +77,99 @@ measured with `ffmpeg`: it stays only if something reads it.
 It goes after
 [`cartridges-runs-itself-to-assemble`](cartridges-runs-itself-to-assemble.md).
 
+## Comments
+
+### 2026-11-27, Mulita: a question for taro
+
+Three things to decide before step 2.
+
+**1. The model: how it takes the peak.**
+
+* **A. One run, writes at the start of the frame, margin 0.5 dB.** The
+  simplest and about one CPU-minute per game. 13 of ABL's 102 songs would
+  go up to 0.9 dB past the margin in the ROM.
+* **B. The loudest of six write timings, margin 0.5 dB.** No song goes
+  past the margin in the ROM (the worst is 0.36 dB). Songs come out 0.42
+  dB quieter on average than a ROM measurement makes them. It costs about
+  6.6 CPU-minutes per game, cached per mix.
+* **C. One run with the margin widened to about 1.9 dB.** As simple as A
+  and as safe as B, but every song that reaches its ceiling loses about
+  1.4 dB.
+* **D. Neither: keep the ROM measurement** and fix its level (the draft),
+  so that no C++ and no LGPL code enters the workspace.
+
+I recommend **B**. It is the only one that keeps every song inside today's
+margin and still loses less loudness than C. Its CPU is spent once per mix,
+and the cache keeps it after that.
+
+**2. The licence.** `snes_spc` is LGPL 2.1 or later (the notice at the
+top of each file, and `license.txt`), and the release binaries link
+statically. This is my reading, not a lawyer's:
+
+* **A. Vendor the six files in a crate of the workspace, and comply.**
+  Their notices stay, the LGPL's text goes with the release binaries
+  together with a notice that they contain snes_spc, and its source is
+  in the repo. Static linking is allowed if the user can relink against
+  a modified library, and with the whole of the-advocate public and
+  buildable, they can. The gap is that **the-advocate has no LICENSE**,
+  and §6 of the LGPL asks that the terms of the work that uses the
+  library allow modifying it for one's own use and reverse engineering
+  it. That takes a LICENSE, which taro would choose, or at least a
+  sentence granting that.
+* **B. Port ares's S-DSP to Rust** (`ares/sfc/dsp/`, ISC, about 940
+  lines of C++ tied to ares's framework). No LGPL and no C++ in the
+  workspace, but it is a port to write, and it has to be shown equal to
+  SPC_DSP's output; this experiment's harness can show that. Where ares's
+  DSP came from was not checked: it does not mention blargg.
+* **C. Load it dynamically**: it goes against the static release
+  binaries, so I do not recommend it.
+
+Rewriting SPC_DSP in Rust does not get out of the LGPL: a translation is
+a derived work.
+
+I recommend **A**, with taro choosing a LICENSE for the-advocate, which the
+repo lacks anyway since it went public. B if taro would rather have no
+LGPL and no C++ at all.
+
+**3. The audit**, in the shape of `cc65`'s and SuperFamiconv's in
+AGENTS.md.
+
+*What was checked*:
+
+* The six files carry the snes_spc 0.9.0 header and the LGPL 2.1 notice
+  (Copyright 2007 Shay Green).
+* `SPC_DSP.cpp` differs from the copy in bsnes (`~/ref/bsnes`) only in
+  bsnes's own known changes: the power-on table zeroed, cubic
+  interpolation, a second echo pointer. That is what an untouched 0.9.0
+  would show. Against Mesen-S it differs in 107 lines, and snes9x's copy
+  is reworked.
+* The files include only `assert`, `limits`, `stdint`/`inttypes`,
+  `string`, `stddef`, `stdlib` and `new`. Their only `asm` is
+  PowerPC-only, behind a guard. They have no file, network, process or
+  environment calls.
+* The compiled library leaves undefined only `malloc`, `free`, `memset`
+  and `__stack_chk_fail`.
+* The build is the `cc` crate compiling two files. Nothing is downloaded
+  besides the clone and the crates (`cc`, `flate2` and `serde_json`, all
+  already in the workspace).
+
+*What was not checked*:
+
+* The sources come from a third party's mirror, not from blargg. The
+  original zip could not be found, so there is no hash to compare
+  against.
+* The mirror is not signed, and its first commit is that third party's
+  import.
+* Nobody read the DSP's algorithm line by line. It was only searched for
+  what it calls.
+* The build ran as root.
+
+The defence that does not depend on the audit is this same comparison:
+the model's output against the ROM's, sample for sample, until the first
+write that lands at a different moment inside its frame.
+
+Waiting for taro before step 2.
+
 ## Log
 
 ### 2026-11-23, Hornero: written
@@ -346,94 +439,3 @@ with a `README.txt`. It has `hzstream` at the title's level, as the table
 measures it today; the same song as written, from the ROM and from the
 model, both of which clip; and `arc1_v2`, the song where the model and
 the ROM disagree most, from each of them.
-
-### 2026-11-27, Mulita: a question for taro
-
-Three things to decide before step 2.
-
-**1. The model: how it takes the peak.**
-
-* **A. One run, writes at the start of the frame, margin 0.5 dB.** The
-  simplest and about one CPU-minute per game. 13 of ABL's 102 songs would
-  go up to 0.9 dB past the margin in the ROM.
-* **B. The loudest of six write timings, margin 0.5 dB.** No song goes
-  past the margin in the ROM (the worst is 0.36 dB). Songs come out 0.42
-  dB quieter on average than a ROM measurement makes them. It costs about
-  6.6 CPU-minutes per game, cached per mix.
-* **C. One run with the margin widened to about 1.9 dB.** As simple as A
-  and as safe as B, but every song that reaches its ceiling loses about
-  1.4 dB.
-* **D. Neither: keep the ROM measurement** and fix its level (the draft),
-  so that no C++ and no LGPL code enters the workspace.
-
-I recommend **B**. It is the only one that keeps every song inside today's
-margin and still loses less loudness than C. Its CPU is spent once per mix,
-and the cache keeps it after that.
-
-**2. The licence.** `snes_spc` is LGPL 2.1 or later (the notice at the
-top of each file, and `license.txt`), and the release binaries link
-statically. This is my reading, not a lawyer's:
-
-* **A. Vendor the six files in a crate of the workspace, and comply.**
-  Their notices stay, the LGPL's text goes with the release binaries
-  together with a notice that they contain snes_spc, and its source is
-  in the repo. Static linking is allowed if the user can relink against
-  a modified library, and with the whole of the-advocate public and
-  buildable, they can. The gap is that **the-advocate has no LICENSE**,
-  and §6 of the LGPL asks that the terms of the work that uses the
-  library allow modifying it for one's own use and reverse engineering
-  it. That takes a LICENSE, which taro would choose, or at least a
-  sentence granting that.
-* **B. Port ares's S-DSP to Rust** (`ares/sfc/dsp/`, ISC, about 940
-  lines of C++ tied to ares's framework). No LGPL and no C++ in the
-  workspace, but it is a port to write, and it has to be shown equal to
-  SPC_DSP's output; this experiment's harness can show that. Where ares's
-  DSP came from was not checked: it does not mention blargg.
-* **C. Load it dynamically**: it goes against the static release
-  binaries, so I do not recommend it.
-
-Rewriting SPC_DSP in Rust does not get out of the LGPL: a translation is
-a derived work.
-
-I recommend **A**, with taro choosing a LICENSE for the-advocate, which the
-repo lacks anyway since it went public. B if taro would rather have no
-LGPL and no C++ at all.
-
-**3. The audit**, in the shape of `cc65`'s and SuperFamiconv's in
-AGENTS.md.
-
-*What was checked*:
-
-* The six files carry the snes_spc 0.9.0 header and the LGPL 2.1 notice
-  (Copyright 2007 Shay Green).
-* `SPC_DSP.cpp` differs from the copy in bsnes (`~/ref/bsnes`) only in
-  bsnes's own known changes: the power-on table zeroed, cubic
-  interpolation, a second echo pointer. That is what an untouched 0.9.0
-  would show. Against Mesen-S it differs in 107 lines, and snes9x's copy
-  is reworked.
-* The files include only `assert`, `limits`, `stdint`/`inttypes`,
-  `string`, `stddef`, `stdlib` and `new`. Their only `asm` is
-  PowerPC-only, behind a guard. They have no file, network, process or
-  environment calls.
-* The compiled library leaves undefined only `malloc`, `free`, `memset`
-  and `__stack_chk_fail`.
-* The build is the `cc` crate compiling two files. Nothing is downloaded
-  besides the clone and the crates (`cc`, `flate2` and `serde_json`, all
-  already in the workspace).
-
-*What was not checked*:
-
-* The sources come from a third party's mirror, not from blargg. The
-  original zip could not be found, so there is no hash to compare
-  against.
-* The mirror is not signed, and its first commit is that third party's
-  import.
-* Nobody read the DSP's algorithm line by line. It was only searched for
-  what it calls.
-* The build ran as root.
-
-The defence that does not depend on the audit is this same comparison:
-the model's output against the ROM's, sample for sample, until the first
-write that lands at a different moment inside its frame.
-
-Waiting for taro before step 2.

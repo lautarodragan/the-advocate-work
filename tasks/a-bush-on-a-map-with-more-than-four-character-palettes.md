@@ -36,7 +36,7 @@ the pictures and their color math are. Each has its own cost.
 water; or ABL's `tests/rpgmaker/test_bush.py`, which guards that the feet
 stay whole there.
 
-## Log
+## Comments
 
 ### 2026-11-24, Cardón: a question for taro
 
@@ -50,3 +50,5 @@ where the pictures and their colour math live.
 **Recommendation**: leave it as the written divergence —five maps in three
 games, half-transparent feet— unless taro sees it while playing; if not,
 the window plus HDMA, which touches no palette.
+
+## Log

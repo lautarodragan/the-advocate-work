@@ -68,7 +68,7 @@ has to land before any panorama map is let in.
 And in A Blurred Line none of it can go in until `release` has room:
 see the task above.
 
-## Log
+## Comments
 
 ### 2026-11-24, Cardón: a question for taro
 
@@ -90,3 +90,5 @@ until a game's crowded lines need it.
 **Recommendation**: (c): it is what the crowded-lines and slot drafts
 would reach for, so it is worth doing when one of them asks for it, with
 (a)'s scope.
+
+## Log

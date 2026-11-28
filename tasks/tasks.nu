@@ -187,11 +187,19 @@ def all_tasks [] {
 def "main inbox" [] {
   let found = all_tasks | each { |t|
     let lines = $t.raw | lines
-    let at = $lines | enumerate | where item == "## Log" | get -o 0.index
-    if $at == null { return [] }
+    # The conversation lives in `## Comments`, above the log; a task
+    # without that section —the `done` ones, older than it— has it in its
+    # `## Log`.
+    let c_at = $lines | enumerate | where item == "## Comments" | get -o 0.index
+    let l_at = $lines | enumerate | where item == "## Log" | get -o 0.index
+    let section = if $c_at != null {
+      $lines | skip ($c_at + 1) | take while { $in != "## Log" }
+    } else if $l_at != null {
+      $lines | skip ($l_at + 1)
+    } else { return [] }
     mut open = []
     mut current = {}
-    for l in ($lines | skip ($at + 1)) {
+    for l in $section {
       let h = $l | parse --regex '^### (?<date>\d{4}-\d{2}-\d{2}), (?<who>[^:]+):\s*(?<what>.*)$'
       if ($h | is-not-empty) {
         if ($current | is-not-empty) { $open = $open | append $current }
@@ -258,6 +266,8 @@ def "main check" [
       let lines = $t.raw | lines
       mut fence = false
       mut log_at = -1
+      mut in_comments = false
+      mut comments_seen = false
       mut defined_next = false
       mut problems = []
       for l in ($lines | enumerate) {
@@ -267,6 +277,25 @@ def "main check" [
         if $text == "## Log" {
           if $log_at >= 0 { $problems = $problems | append {line: ($l.index + 1), heading: $text, why: "a second ## Log"} }
           $log_at = $l.index
+          $in_comments = false
+          continue
+        }
+        # `## Comments` goes right above `## Log`, and what is in it is
+        # entries like the log's: the conversation with taro.
+        if $text == "## Comments" {
+          if $log_at >= 0 {
+            $problems = $problems | append {line: ($l.index + 1), heading: $text, why: "## Comments after ## Log"}
+          } else if $comments_seen {
+            $problems = $problems | append {line: ($l.index + 1), heading: $text, why: "a second ## Comments"}
+          }
+          $in_comments = true
+          $comments_seen = true
+          continue
+        }
+        if $in_comments {
+          if ($text | str starts-with '## ') or ($text | str starts-with '# ') {
+            $problems = $problems | append {line: ($l.index + 1), heading: $text, why: "a section between ## Comments and ## Log"}
+          }
           continue
         }
         # A paragraph that opens with a bold entry —`**Checked on
@@ -480,6 +509,44 @@ def "main open" [
 # tasks go by file name, with or without `.md`. Whatever is already in the
 # frontmatter stays as it was, in its order; a link already written is not
 # written twice.
+# Adds an entry to a task's `## Comments` (README, "A task's comments"):
+# `### <today>, <who>: <title>`, then what comes on stdin. The section is
+# made right above `## Log` if the task has none. For Hornero's and the
+# agents' answers and questions; the tasks page writes taro's the same
+# way.
+def "main comment" [
+  task: string   # the task's file name, with or without .md
+  who: string    # who writes it: taro, Hornero, Cardón…
+  title: string  # what the entry is about
+] {
+  # The text comes on stdin, which a script's `main` does not get as `$in`.
+  let text = ^cat | str trim
+  let file = $env.FILE_PWD | path join $"($task | str replace --regex '\.md$' '').md"
+  let raw = open --raw $file
+  let entry = $"### (date now | format date '%Y-%m-%d'), ($who): ($title)\n\n($text)\n"
+  $raw | add_comment $entry | save --raw --force $file
+}
+
+# `text` with `entry` at the end of its `## Comments`, made above `## Log`
+# —or at the end— when missing.
+def add_comment [entry: string] {
+  let lines = $in | str trim --right | lines
+  let c_at = $lines | enumerate | where item == "## Comments" | get -o 0.index
+  let l_at = $lines | enumerate | where item == "## Log" | get -o 0.index
+  let block = $entry | str trim --right | lines
+  if $c_at != null {
+    let end = if $l_at != null and $l_at > $c_at { $l_at } else { $lines | length }
+    let before = $lines | first $end | str join "\n" | str trim --right
+    let after = $lines | skip $end
+    [$before "" ...$block "" ...$after] | str join "\n" | $in + "\n" | str replace --regex '\n+$' "\n"
+  } else if $l_at != null {
+    let before = $lines | first $l_at | str join "\n" | str trim --right
+    [$before "" "## Comments" "" ...$block "" ...($lines | skip $l_at)] | str join "\n" | $in + "\n" | str replace --regex '\n+$' "\n"
+  } else {
+    [($lines | str join "\n") "" "## Comments" "" ...$block] | str join "\n" | $in + "\n"
+  }
+}
+
 def "main link" [
   a: string
   relation: string
@@ -662,32 +729,46 @@ def render_body [] {
     | str replace --all --regex '(<a class="shot"[^>]*><img [^>]*>)' '$1</a>'
 }
 
-# The `### ` entries after a task's `## Log` line.
-def log_entries [] {
+# The `### ` entries of a task's `## Comments`, the conversation with
+# taro.
+def comment_entries [] {
   let lines = $in | lines
-  let at = $lines | enumerate | where item == "## Log" | get -o 0.index
+  let at = $lines | enumerate | where item == "## Comments" | get -o 0.index
   if $at == null { return 0 }
-  $lines | skip ($at + 1) | where { $in | str starts-with "### " } | length
+  $lines | skip ($at + 1) | take while { $in != "## Log" } | where { $in | str starts-with "### " } | length
 }
 
-# A task's body, with its log apart: what comes before the exact line
-# `## Log` defines the task and is rendered as it is; what comes after is
-# its history, one `### <date>, <who>: <what>` entry per step (README, "A
-# task's log"), and goes folded in a box of its own, closed, saying how
-# many entries it has. A task without that line is all definition.
+# A task's body, with its comments and its log apart: what comes before
+# the exact line `## Comments` —or `## Log`, without it— defines the task
+# and is rendered as it is; the comments, the conversation with taro, go
+# in a box of their own, open; the log, its history, one `### <date>,
+# <who>: <what>` entry per step (README, "A task's log"), folded in
+# another, closed, saying how many entries it has. A task without either
+# line is all definition.
 def body_html [links: string] {
   let body = $in
   let lines = $body | lines
   let at = $lines | enumerate | where item == "## Log" | get -o 0.index
-  if $at == null { return ([($body | render_body) $links] | str join '') }
-  let log = $lines | skip ($at + 1)
-  let n = $log | where { $in | str starts-with "### " } | length
-  # Logs older than the convention may have no `### ` entries: just "Log".
-  let label = match $n { 0 => "", 1 => " · 1 entry", _ => $" · ($n) entries" }
+  let c_at = $lines | enumerate | where item == "## Comments" | get -o 0.index
+  let defined_end = if $c_at != null { $c_at } else if $at != null { $at } else { $lines | length }
+  let comments = if $c_at == null { "" } else {
+    let c = $lines | skip ($c_at + 1) | take while { $in != "## Log" }
+    let n = $c | where { $in | str starts-with "### " } | length
+    let label = match $n { 0 => "", 1 => " · 1", _ => $" · ($n)" }
+    $"<details class=\"log comments\" open><summary>Comments($label)</summary><div class=\"log-body\">($c | str join "\n" | render_body)</div></details>"
+  }
+  let log = if $at == null { "" } else {
+    let l = $lines | skip ($at + 1)
+    let n = $l | where { $in | str starts-with "### " } | length
+    # Logs older than the convention may have no `### ` entries: just "Log".
+    let label = match $n { 0 => "", 1 => " · 1 entry", _ => $" · ($n) entries" }
+    $"<details class=\"log\"><summary>Log($label)</summary><div class=\"log-body\">($l | str join "\n" | render_body)</div></details>"
+  }
   [
-    ($lines | first $at | str join "\n" | render_body)
+    ($lines | first $defined_end | str join "\n" | render_body)
     $links
-    $"<details class=\"log\"><summary>Log($label)</summary><div class=\"log-body\">($log | str join "\n" | render_body)</div></details>"
+    $comments
+    $log
   ] | str join ''
 }
 
@@ -751,10 +832,10 @@ def task_html [index: record, shown: bool] {
   # `<!-- raw HTML omitted -->` for a task's raw HTML— would change how it
   # is read; cmark-gfm escapes the `<` of what the task writes, so this
   # only guards.
-  # How many entries its log has, on the folded summary too, so a task
-  # someone has been writing in is seen without opening it.
-  let entries = $t.body | log_entries
-  let count = if $entries == 0 { "" } else { $"<span class=\"entries\" title=\"($entries) log entr(if $entries == 1 { 'y' } else { 'ies' })\">($entries)</span>" }
+  # How many comments it has, on the folded summary too, so a task with a
+  # conversation going is seen without opening it.
+  let entries = $t.body | comment_entries
+  let count = if $entries == 0 { "" } else { $"<span class=\"entries\" title=\"($entries) comment(if $entries == 1 { '' } else { 's' })\">($entries)</span>" }
   let body = $t.body | body_html ($t.links | links_html $index)
     | str replace --all --regex '(?i)<(/?script)' '&lt;$1'
   [

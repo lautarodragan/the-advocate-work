@@ -36,7 +36,7 @@ plays the scene that places him.
 says "events 13 draw nothing on any page and a route dresses them, and
 they aren't drawn: with them the map loses rain-colors-lent".
 
-## Log
+## Comments
 
 ### 2026-11-24, Cardón: a question for taro
 
@@ -53,6 +53,26 @@ red, as from 2026-10-20 to whenever it went back; (c) Forem in, paying
 with the rain's colours. **Recommendation**: (b): a character missing from
 a scene loses more than a grey light; looked at on screen before choosing.
 Both of ABL's Known issues lines about map 83 become one.
+
+### 2026-11-27, taro: a question for Hornero
+
+> > Say whether that is a rule for every map or this map's patch, and check that no other map's choice moves (the nine games' builds, byte for byte except map 83). ABL's Known issues lines about map 83 go in the same change.
+>
+> I can't remember what we talked about this, in the end, but this shouldn't be specific to this map. If it negatively affects other games/maps, I'd like to review it before deciding. (I do remember looking at the screenshots and choosing C, though).
+
+### 2026-11-27, Hornero: a rule for every map
+
+Agreed: a rule in Wally for every map, not a patch for map 83. The rule:
+a lent rain colour (`rain-colors-lent`) costs nothing where no page of
+the game can make it rain on that map, and weighs no more than its
+measured distance where one can —here `(6,6,7)` drawn `(6,6,6)`—; so a
+character a route dresses is not left out for it. Whoever implements it
+builds the nine games and lists every map, of any game, whose choice
+moves besides 83, with a capture of each before and after; if there is
+one, it goes back to taro with those captures before landing. Still
+`todo`.
+
+## Log
 
 ### 2026-11-24, Hornero: taro asks to see b and c
 
@@ -157,21 +177,3 @@ character a route dresses here. Say whether that is a rule for every map
 or this map's patch, and check that no other map's choice moves (the nine
 games' builds, byte for byte except map 83). ABL's Known issues lines
 about map 83 go in the same change.
-
-### 2026-11-27, taro: a question for Hornero
-
-> > Say whether that is a rule for every map or this map's patch, and check that no other map's choice moves (the nine games' builds, byte for byte except map 83). ABL's Known issues lines about map 83 go in the same change.
->
-> I can't remember what we talked about this, in the end, but this shouldn't be specific to this map. If it negatively affects other games/maps, I'd like to review it before deciding. (I do remember looking at the screenshots and choosing C, though).
-
-### 2026-11-27, Hornero: a rule for every map
-
-Agreed: a rule in Wally for every map, not a patch for map 83. The rule:
-a lent rain colour (`rain-colors-lent`) costs nothing where no page of
-the game can make it rain on that map, and weighs no more than its
-measured distance where one can —here `(6,6,7)` drawn `(6,6,6)`—; so a
-character a route dresses is not left out for it. Whoever implements it
-builds the nine games and lists every map, of any game, whose choice
-moves besides 83, with a capture of each before and after; if there is
-one, it goes back to taro with those captures before landing. Still
-`todo`.

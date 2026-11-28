@@ -16,7 +16,7 @@ on 2026-11-16, which moved a map's code to ROM when it does not fit. Its
 "Not done: the grid": the grid is read through `ptr_more`/`ptr_minus`
 across two WRAM halves, so the same trick does not apply as is.
 
-## Log
+## Comments
 
 ### 2026-11-24, Cardón: a question for taro
 
@@ -35,3 +35,5 @@ the world into maps; (d) leave the world out.
 WRAM, and whether map 1 substitutes tiles—, since the ROM has room
 (ExHiROM) and the console's view does not change. It is a new runtime path
 with a cost, so it is yours.
+
+## Log

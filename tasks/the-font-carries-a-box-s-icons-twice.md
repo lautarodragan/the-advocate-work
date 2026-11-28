@@ -31,7 +31,7 @@ The other eight games lose nothing: Vampires Dawn's one screen icon
 (`$o`) is not its boxes' (`$s`), and the rest have no icons on their
 screens. Zounds has 51 free data banks.
 
-## Log
+## Comments
 
 ### 2026-11-24, Cardón: a question for taro
 
@@ -45,3 +45,5 @@ list of icons).
   **c)** cancel.
 
 Recommendation: **b**.
+
+## Log

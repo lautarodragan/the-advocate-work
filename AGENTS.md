@@ -84,10 +84,11 @@ this repo's README).
 
 **taro writes to the tasks from their page**, since 2026-11-25: a task's
 state and assignee, a comment, a question for Hornero, the answer to a
-question's options —each a log entry `### <date>, taro: …`—, as commits
+question's options —each an entry `### <date>, taro: …` of the task's
+`## Comments`, right above its `## Log`—, as commits
 straight to `main` on GitHub. So Hornero, when starting, also reads
 `nu tasks/tasks.nu inbox` —taro's entries that no later Hornero entry
-answers— and answers each in its task; and **pulls before pushing**, `git
+answers— and answers each in its task's comments; and **pulls before pushing**, `git
 pull --rebase=merges`, which only rebases its own commits not yet pushed
 and keeps its merges as merges. A commit of the page that breaks a task is
 shown red by CI's `nu tasks/tasks.nu check --strict`. The `SessionStart`
@@ -129,7 +130,8 @@ cost to choose —ROM, suite time, the toolchain's complexity, or going
 against a direction taro set—, when it is about direction —a new tool, a
 third-party dependency, a decision of the book—, when it is a game's own
 choice, or when it is not clear it is worth doing. **The question lives in
-the task, not in the chat**: a log entry "Hornero: a question for taro"
+the task, not in the chat**: an entry "Hornero: a question for taro" in
+its `## Comments` (`nu tasks/tasks.nu comment`)
 with what there is to decide, the options and the recommendation, and
 `assignee: taro`, which is what the page and `nu tasks/tasks.nu ls -s
 draft -a taro` filter by; taro answers there, when they can, and the

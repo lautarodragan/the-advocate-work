@@ -41,7 +41,7 @@ What it would take, not measured: the patch beside `bsnes-wram.patch` in
 mosaic counter and the sprites' range and time over flags are only kept
 on drawn frames.
 
-## Log
+## Comments
 
 ### 2026-11-24, Cardón: a question for taro
 
@@ -61,3 +61,5 @@ and `test_cores.py` run on it; (b) cancel.
 **Recommendation**: (a): six lines in a core already patched, and the CPU
 is what every agent waits on; the task checks that `test_cores.py` still
 catches uninitialised WRAM with frames skipped.
+
+## Log

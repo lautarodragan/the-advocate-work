@@ -34,11 +34,7 @@ ROMs byte for byte the same—; the crate's tests that draw a screen
 through it, if any, go with it or move to what the converter calls. Left
 out of step 3 so that the binaries' commit stayed small and checkable.
 
-## Log
-
-### 2026-11-27, Hornero: promoted to `todo`
-
-Promoted by Hornero: dead code since step 3 removed its last caller; deleting it changes nothing seen or heard.
+## Comments
 
 ### 2026-11-27, taro: go
 
@@ -52,6 +48,12 @@ Yes: the deletion is mechanical, and its net is the build without
 dead-code warnings, the-advocate's suites and every port's ROMs byte for
 byte equal to `main`'s. With equal ROMs ABL's suite has nothing new to
 say, so it is not run; Cardón is measuring battle suite times meanwhile.
+
+## Log
+
+### 2026-11-27, Hornero: promoted to `todo`
+
+Promoted by Hornero: dead code since step 3 removed its last caller; deleting it changes nothing seen or heard.
 
 ### 2026-11-27, Carpintero: what went, by rustc
 

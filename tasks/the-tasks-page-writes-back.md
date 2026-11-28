@@ -55,6 +55,19 @@ answering a question means a chat with Hornero or an edit by hand.
 * **The checks in CI**: a workflow runs `nu tasks/tasks.nu check` on every
   push to `main`, so a commit from the page that breaks a task shows.
 
+## Comments
+
+### 2026-11-25, taro: a comment
+
+> Testing a comment :o
+
+### 2026-11-25, Hornero: the first save from the page worked
+
+taro's comment above came in as `c533ad4a`, one commit on `main` from the
+page, through GitHub's real API: the token, the queue and the git data
+API's save worked the first time. The inbox watch woke Hornero with it,
+`tasks.nu inbox` listed it, and `check --strict` stays clean.
+
 ## Log
 
 ### 2026-11-25, Hornero: written
@@ -140,14 +153,3 @@ change, "Save"—, the commit on `main`, and the page carrying it after its
 build. The page built from this branch is in the captures'
 `2026-11-25-tasks-page-writes/`; it saves to the real repo, so a change
 made from it lands on `main`.
-
-### 2026-11-25, taro: a comment
-
-> Testing a comment :o
-
-### 2026-11-25, Hornero: the first save from the page worked
-
-taro's comment above came in as `c533ad4a`, one commit on `main` from the
-page, through GitHub's real API: the token, the queue and the git data
-API's save worked the first time. The inbox watch woke Hornero with it,
-`tasks.nu inbox` listed it, and `check --strict` stays clean.

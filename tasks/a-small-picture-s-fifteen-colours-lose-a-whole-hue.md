@@ -35,7 +35,7 @@ the pictures, as the big ones already have.
 How to see it: Zounds' `release`, switch 294 on from anywhere (the skill
 screen's common event), then Down: the face in the right panel.
 
-## Log
+## Comments
 
 ### 2026-11-24, Cardón: a question for taro
 
@@ -51,3 +51,5 @@ stage; (c) leave it.
 
 **Recommendation**: (a): one answer to "which colour was lost", and the
 big pictures already go that way.
+
+## Log

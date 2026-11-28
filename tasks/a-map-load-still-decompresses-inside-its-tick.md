@@ -36,6 +36,24 @@ frames, which does not fit in what a tick has left.
 —`PROBE` marks around `lz2_grid`, `lz2_backdrop`, `lz2_anim` and the
 `lz2_field` of `load_above` and `load_sprite`—.
 
+## Comments
+
+### 2026-11-24, Cardón: a question for taro
+
+Still so (Tijereta 2026-10-20, Chajá 2026-11-22: 16-19 frame load ticks on
+Lashe's sector maps, LZ2 most of it). It is in ABL's Known issues (Lashe's
+doors). Both ways out have a cost to choose:
+
+* (a) a decompressor that can stop and go on in the next tick, inside the
+  19 black ticks: some 400 bytes in a far bank and its state in far RAM,
+  every game gains;
+* (b) the biggest maps' streams stored raw and DMAed: ~206 KB for Lashe's
+  nine maps, a per-map choice, does not scale to every map (~1 MB);
+* (c) leave it.
+
+**Recommendation**: (a): it costs little ROM, helps every game, and is
+what the measuring task already proposed.
+
 ## Log
 
 ### 2026-10-20, Tijereta: checked
@@ -63,19 +81,3 @@ sprites raw are 28 to 30 KB more than their LZ2 per sector map, 206 KB
 for Lashe's nine maps; `just space` leaves 18 halves of 32 KB in
 `release`. All maps' backdrops raw would be ~1 MB more, which does not
 fit, so it would be a per-map choice for the biggest.
-
-### 2026-11-24, Cardón: a question for taro
-
-Still so (Tijereta 2026-10-20, Chajá 2026-11-22: 16-19 frame load ticks on
-Lashe's sector maps, LZ2 most of it). It is in ABL's Known issues (Lashe's
-doors). Both ways out have a cost to choose:
-
-* (a) a decompressor that can stop and go on in the next tick, inside the
-  19 black ticks: some 400 bytes in a far bank and its state in far RAM,
-  every game gains;
-* (b) the biggest maps' streams stored raw and DMAed: ~206 KB for Lashe's
-  nine maps, a per-map choice, does not scale to every map (~1 MB);
-* (c) leave it.
-
-**Recommendation**: (a): it costs little ROM, helps every game, and is
-what the measuring task already proposed.

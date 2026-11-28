@@ -31,7 +31,7 @@ it —the layout choice in `vram.rs` reserving one when a map's pages open
 a gold window, or the window borrowing a character palette on the lines
 it covers—. Either changes how the map's characters are packed.
 
-## Log
+## Comments
 
 ### 2026-11-24, Cardón: a question for taro
 
@@ -52,3 +52,5 @@ without the price on one map.
 **Recommendation**: (a): the general rule is small and the colours a
 shared palette loses are measurable in the build; if map 200's loss shows,
 (c).
+
+## Log
