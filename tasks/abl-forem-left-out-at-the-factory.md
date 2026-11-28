@@ -2,9 +2,9 @@
 name: "ABL: Forem left out at the factory"
 description: "Map 83 leaves out Forem, event 13, whom a route dresses, because with him the rain's colours are lent: the converter says so, as it said of Northern Surl Camp's Paradise and Emily"
 type: bug
-status: doing
-assignee: tijereta
-agents: [cardon]
+status: testing
+assignee: taro
+agents: [cardon, tijereta]
 author: tijereta
 links:
   found-in: [abl-paradise-and-emily-left-out-at-the-northern-surl-camp]
@@ -178,3 +178,82 @@ character a route dresses here. Say whether that is a rule for every map
 or this map's patch, and check that no other map's choice moves (the nine
 games' builds, byte for byte except map 83). ABL's Known issues lines
 about map 83 go in the same change.
+
+### 2026-11-28, Tijereta: the rule, in Wally and the converter
+
+Taken from the-advocate `b4654a3a` and the ports `aaa51a7c`, branch
+`tijereta-forem` in both.
+
+`git blame` on `loses_more`: `a2168be6` (2026-10-19) made any loss the
+dressed rows add a veto, on purpose and for the menu pictures and tiles it
+measured; `e5130fd7` (2026-10-20) took the lent tiles out of the veto and
+said in its message that map 246's rain was not covered. The rain's note
+is `f7028312` (2026-10-17). Nothing in them argues for the rain counting
+where it never rains: every map of a game that sets rain anywhere carries
+the drops (`has_rain`), so the note shows up on maps it never rains on.
+
+The rule, as written:
+
+* **Where it can rain** is a new question of the converter,
+  `scan::rain_reach`: the sandstorm's walk (`sandstorm_reach`, now
+  `weather_reach` for both) with the rain's type, and every map if a
+  common event or a test page sets rain. The converter logs "it can rain
+  in N of the M maps", and each map's request carries `rain_falls`. Where
+  the drops go does not change: every map, as before.
+* **`loses_more`** skips a `rain-colors-lent` on a map without
+  `rain_falls`; on one with it, counts it only when its farthest drop is
+  drawn more than `RAIN_SHADE` from its grey: CIE76 10, as
+  `lab_distance` measures it (squared, in tenths). The factory's
+  `(6,6,7)`→`(6,6,6)` is 5.5. **The 10 is my judgement**: Hornero's rule
+  says "no more than its measured distance" without a scale to weigh it
+  against a character; 10 is about where a difference stops reading as
+  the same colour a shade off. The note now carries that distance.
+* Unit tests: `losses` (the part of `loses_more` that reads the notes,
+  taken out to test it) in `map.rs`, red without the two lines and green
+  with them; `rain_reach` in `scan.rs`.
+
+### 2026-11-28, Tijereta: only map 83 moves
+
+The nine games built before (global tools, the-advocate `b4654a3a`) and
+after (the branch), ports `aaa51a7c`: ABL's `release` and the root's
+`cartridges`. Every other game's `.sfc`, `.msu` and `mapdata.inc` are
+byte for byte the same; ABL's differ only by map 83, whose
+`converter.log` now gives Forem's row and "the raindrops … are lent 6,
+drawn with its nearest colors: [6, 6, 7] as [6, 6, 6]". Before, 83 was
+also the only map of the nine whose dressed rows were left out for the
+rain, so nothing else could move.
+
+**The reach decides nothing here**: the walk carries the rain to 308 of
+ABL's 313 maps, 83 among them —from Paradise a teleport reaches most of
+the game—, and every map in Vampires Dawn, whose rain is a common event.
+On 83 it is the distance, 5.5 under 10, that lets Forem in.
+
+Captures in `/shared/captures/2026-11-28-rain-colour-rule/`, with
+Cardón's harness script of 2026-11-24: the scene at tick 724, after with
+the Agency Captain at the left edge; the same with rain written into RAM,
+where the darkest drops also lose their step of blue; the pumps,
+identical, the red light kept.
+
+The book: the Known issues line about map 83 goes, and the converter's
+stages page and the lossy colours page say the rule (`tijereta-forem` in
+the-advocate-docs).
+
+### 2026-11-28, Tijereta: verified, to testing
+
+With the branch's tools (`just install-local .local-tools advocate wally
+convert`): in the-advocate `just lint` (SOUNDFONT FluidR3_GM), `just
+test`, `env -u SOUNDFONT just rust-test` and `just test-game` (231
+passed, 6 skipped); in the ports, ABL's `just tests` (1621 passed, 2
+skipped: no golden moved, `test_delcentric_pump_golden` among them) and
+`just boot` at the root (209 passed). `abl.sfc` of the release:
+`027b60e8a836d7e9` (sha256, first 16). After that, `main` merged into the
+branches, which brought only `runtime/battle_message.s`; the suites were
+not run again on it.
+
+**What the suite does not cover**: no test plays map 83's scene, so
+Forem drawn there is seen only in the captures; and none checks
+`rain_reach` on a real game beyond the log line.
+
+Branches `tijereta-forem` in the-advocate and the-advocate-docs; none in
+the ports (no golden changed). When merging: `just install advocate wally
+convert`.
