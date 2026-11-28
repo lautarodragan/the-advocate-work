@@ -50,3 +50,16 @@ digit or the colon changes, or straight to OAM as the raindrops).
 > Quick test with the debug menu: 7 frames of lag tracked by Mesen with the timer off, 9 with the timer on, for the first light, 5 and 7 for the PC., 7 and 10 for the second light.
 >
 > Not a huge deal. Do you think we could improve those dropped frame numbers and lose nothing in exchange?
+
+### 2026-11-27, Hornero: yes, losing nothing seen
+
+Yes: the gap taro measured —2 to 3 frames per stone with the timer on—
+is about what `timer_oam`'s ~18 lines a frame add up to over a stone's
+busy frames, and the glyphs change at most once a second. Building
+their five OAM entries only when a digit or the colon changes, and
+copying them otherwise, should bring the timer-on numbers close to the
+timer-off ones. What it costs: some 25 bytes of far RAM for the built
+entries and the last value, and a few bytes of ROM; nothing on screen
+changes, and the suite's timer goldens hold it. Whoever takes it
+measures the three stones before and after with the same debug-menu
+method, and the timer's cost with the line profiler. Still `todo`.
