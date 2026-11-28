@@ -55,3 +55,11 @@ Found during step 1 of
 the model and the ROM differed by a steady 2 dB from the first sample,
 and the cause was the ROM's title level, not the model. Step 2 of that task removes this
 measurement path. Until it lands, the table stays measured this way.
+
+### 2026-11-27, Hornero: stays a draft, for step 2
+
+Step 2 of [`the-volume-ceilings-are-measured-without-a-rom`](the-volume-ceilings-are-measured-without-a-rom.md)
+measures each song as written and removes this path, so it fixes this
+as a side effect; it waits on taro's answers there. If step 2 is not
+taken, this is fixed alone: measuring on the title with its level
+patched to 100/100, as Mulita's `whole.py` does.
