@@ -56,6 +56,27 @@ rule is subtle enough to get wrong without a case that shows it.
 
 > How would this task impact the Hover Tram scene, had it no fork?
 
+### 2026-11-28, Hornero: what it would do to the Hover-Tram without its fork
+
+Without the fork, today's converter keeps four of the Hover-Tram's seated
+people as objects —`Leave1`, `EV0004`, `EV0007` and `EV0026`—, because it
+believes the opening scene could seat the hero beside any of them. With
+(a) the converter would know the scene runs once, from where the hero
+first arrives, and would draw all seven seated still people into the
+background on its own: Cardón saw exactly that by turning `any_open` off
+by hand on map 13 (description above).
+
+So (a) is what would let map 13's hand-made fork go —its stage 2 bakes
+that crowd by hand—, if the fork is there only for that; whether it does
+anything else I would check before removing it. Without the fork and
+without (a), those four people are sprites on the tram's crowded lines,
+which is what [`abl-the-hover-tram-s-crowd-is-cut`](abl-the-hover-tram-s-crowd-is-cut.md)
+was about: some cut on lines with nine or more characters.
+
+That moves my recommendation from (b) to **(a)**, with the check that the
+fork's other contents, if any, stay, and map 13 built with and without the
+fork compared. Still a question for you.
+
 ## Log
 
 ### 2026-11-22, Tijereta: no game hits it today

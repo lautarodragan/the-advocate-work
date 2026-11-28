@@ -2,8 +2,7 @@
 name: "Sunset's towns: part of a crowd waits for a slot"
 description: "On Sunset Over Imdahl's busiest painted maps more events can be on screen than the cache of slots holds, even with no still event animating, so the last drawn appear late"
 type: bug
-status: draft
-assignee: taro
+status: todo
 author: calandria
 agents: [cardon]
 links:
@@ -67,5 +66,9 @@ Recommendation: **a**, tried map by map, and **c** for whatever does not fit.
 ### 2026-11-28, taro: an answer: (a)
 
 > (a)
+
+### 2026-11-28, Hornero: (a), to todo
+
+taro chose (a): to `todo`. `baked_events` tried map by map on Sunset's maps 3, 4, 12, 47, 56 and 58, keeping each only if it fits and `events-wait-for-a-slot` goes or shrinks; what does not fit stays in Known issues, (c). Not started.
 
 ## Log

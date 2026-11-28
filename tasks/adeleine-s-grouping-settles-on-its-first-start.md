@@ -3,8 +3,8 @@ name: "Adeleine's grouping settles on its first start"
 description: "reduce_colors refines one starting grouping to its local minimum; on ABL's map 3 that leaves a palette with only white. Other starts, judged by the same cost, halve the error of the mode-1 maps"
 type: research
 game: advocate
-status: draft
-assignee: taro
+status: doing
+assignee: cardon
 author: carpintero
 agents: [Carpintero, cardon]
 ---
@@ -45,5 +45,9 @@ on all nine games and the goldens that move, shown to taro before merging.
 ### 2026-11-28, taro: a comment
 
 > Yes! And let's tackle this one, next. IIRC we have a fork/patch of the map with Core's blood _just_ for it. I'd keep it (I like our choice of palette for the blood more than the original), but we can temporarily disable it (cheap way, maybe: just rename the file to `.disabled` or something) to see how it affects that scene, among others.
+
+### 2026-11-28, Hornero: yes: to Cardón
+
+taro says yes, and to tackle it next: to `doing`, Cardón. Map 3's fork with Core's blood stays, but is disabled for the measurement —the cheapest way the tools allow— to see what the restarts do to that scene without it. First step as recommended: the time cost on all nine games and every golden that moves, shown to taro before merging.
 
 ## Log

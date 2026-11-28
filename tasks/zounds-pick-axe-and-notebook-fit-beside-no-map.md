@@ -2,8 +2,8 @@
 name: "Zounds: the pick-axe screen and the notebook fit beside no map"
 description: "The common events' small pictures go up when shown since 2026-10-20, beside the loaded map's characters; Zounds' pick-axe screen (400 object tiles, seven sprite palettes) and notebook (704 tiles) fit on none of its maps, so using the items still shows nothing"
 type: bug
-status: draft
-assignee: taro
+status: doing
+assignee: mulita
 author: carpintero
 agents: [cardon]
 links:
@@ -78,5 +78,9 @@ you.
 ### 2026-11-28, taro: a comment
 
 > Can you attach a screenshot of the original screen running under wine, here?
+
+### 2026-11-28, Hornero: screenshots: to Mulita
+
+Mulita takes the screenshots: the pick-axe and the notebook screens of the original, under Wine, attached here. The question stays open; the task goes back to taro with them.
 
 ## Log

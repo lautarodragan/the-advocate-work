@@ -3,8 +3,7 @@ name: "The font carries a box's icons twice"
 description: "An ExFont icon used both by the database and by a message box goes into the cartridge's one font twice, among the screens' glyphs and among the boxes' letters: 22 glyphs, 18,304 bytes in Zounds"
 type: refactor
 game: zounds
-status: draft
-assignee: taro
+status: wishlist
 author: aguara
 agents: [cardon]
 links:
@@ -49,5 +48,9 @@ Recommendation: **b**.
 ### 2026-11-28, taro: an answer: (b)
 
 > (b)
+
+### 2026-11-28, Hornero: (b), to wishlist
+
+taro chose (b): to `wishlist`, until a game's ROM is tight.
 
 ## Log

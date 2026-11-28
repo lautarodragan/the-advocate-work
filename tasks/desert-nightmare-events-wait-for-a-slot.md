@@ -2,8 +2,7 @@
 name: "Desert Nightmare: events wait for a slot"
 description: "With the towns painted, 7 maps still have more events on screen than the sprite cache has slots —doors, lights and people that change look, and the exit's walking crowd—: the ones drawn last are not drawn until a slot frees"
 type: bug
-status: draft
-assignee: taro
+status: todo
 author: cardon
 game: desert-nightmare
 agents: [Cardón]
@@ -61,5 +60,9 @@ one, and (a) to `wishlist` until a second game asks for it.
 ### 2026-11-28, taro: an answer: (a)
 
 > (a)
+
+### 2026-11-28, Hornero: (a), to todo
+
+taro chose (a), against the recommendation: to `todo`. The posed mechanism over a painting —a ring cell rewritten when its event's page changes— as a runtime feature for every game, which the research `ports/desert-nightmare/research/2026-11-19-can-the-towns-be-baked.md` (section 4) says does not exist yet. Its first step is the design, with what it costs in ROM, WRAM and frames measured on Desert Nightmare's 7 maps. Not started.
 
 ## Log
