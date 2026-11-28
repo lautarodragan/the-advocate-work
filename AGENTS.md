@@ -256,8 +256,6 @@ they live inside the tools —see `LAYOUT.md`—:
                        place in Rust that reads the dump
       rules/           rm2k-rules: what the format means —passability,
                        pages, experience—
-      sketch/          rm2k-sketch: a map's tile layers drawn as text,
-                       made into a dump's `.tiles`; the test game's maps
       rm2k-render/     a map's layers, its CharSets, the battle stuff and
                        the faces, windows and signs of the screens, drawn
                        like RM2k

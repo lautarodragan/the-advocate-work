@@ -120,3 +120,46 @@ library"; the file name stays.
 (taro, 2026-11-27, of the forest, merged on the-advocate's `bf18d71e`.)
 Calandria does it with [`ditto-becomes-advocate-import`](ditto-becomes-advocate-import.md):
 both touch the test game's recipe.
+
+### 2026-11-27, Calandria: started
+
+From the-advocate's `bf18d71e`, the ports' `60f1d0f` and the book's
+`40b0a62`, on a `calandria-ditto` branch in each. The reference to
+compare against byte for byte is the test game built from that commit,
+sketches and all: its `build/game/`, `build/exact/`, `build/data/` and
+every cartridge.
+
+### 2026-11-27, Calandria: sketch gone
+
+On the-advocate's `calandria-ditto`, three commits:
+
+* `548a8a0b`: the sixteen `MapNNNN.toml` became the `.tiles`
+  `rm2k-sketch` wrote of them into `build/text/maps/`, copied as they
+  were; `just game` packs `src/` as it is, without the loop nor
+  `build/text/`, and so does the release's smoke test; `rm2k/sketch/`
+  goes, with its workspace member, its lock entry and its name in
+  `rust_projects`.
+* `061f44ce`: what each sketch's opening comment said —what the map is
+  for, which test reads it— comes back at the top of its `.tiles`,
+  where a `#` line is a comment `pack` skips, worded without the
+  sketch. The meadow's legend comments become words: the hub's signpost
+  at (7, 10) and board at (10, 11), checked against the upper layer.
+  Mechanical and judgement apart, as AGENTS.md asks.
+* `fca03ac7`: `LAYOUT.md`, the test game's README and the justfile's
+  `cargo uninstall` line.
+
+In the book, `7546524`: "The tools" loses the section and keeps the
+`.tiles` example in Ditto's, the test game's progress page says what
+the forest showed, and the one-command decision's list drops it. Here,
+AGENTS.md's list of projects.
+
+#### Byte for byte
+
+The test game built from `bf18d71e` (sketches) and from `548a8a0b`
+(`just -f test-game/justfile cartridges`, and again with `--force`):
+the same `build/game/` —every `.ldb`, `.lmt` and `.lmu`—, `build/exact/`
+and `build/data/` (`diff -r`), and the same release, test-vblank and
+lint cartridges (`cmp`). With the comments of `061f44ce`, `just game`
+gives the same three directories again.
+
+`cargo uninstall rm2k-sketch` is Hornero's after merging.
