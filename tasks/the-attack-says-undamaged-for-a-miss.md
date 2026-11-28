@@ -2,7 +2,8 @@
 name: "The attack says undamaged for a miss"
 description: "A missed normal attack writes the target's undamaged line instead of RM2k's dodge one, and a hit of zero writes '0 health lost' instead of the undamaged one"
 type: bug
-status: todo
+status: doing
+assignee: calandria
 author: cardon
 agents: [Cardón]
 links:

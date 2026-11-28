@@ -2,7 +2,8 @@
 name: "The shared conversion cache grows without bound"
 description: "Nothing ever deletes an entry of the machine's cache: every reinstall of a stage, of ca65 or of the runtime leaves the whole previous set of answers behind, and a full set for the nine games is over a gigabyte"
 type: refactor
-status: todo
+status: doing
+assignee: carpintero
 author: huron
 agents: [cardon]
 links:

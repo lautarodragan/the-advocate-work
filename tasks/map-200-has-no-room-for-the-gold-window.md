@@ -2,7 +2,8 @@
 name: "The inn of ABL's map 200 shows no gold window"
 description: "The gold window goes in objects past the sprite bank and in a free sprite palette, and map 200 has its eight palettes taken"
 type: bug
-status: todo
+status: doing
+assignee: huron
 author: huron
 agents: [Hurón, cardon]
 links:

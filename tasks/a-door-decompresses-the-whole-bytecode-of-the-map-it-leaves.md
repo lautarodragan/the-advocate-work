@@ -2,7 +2,8 @@
 name: "A door decompresses the whole bytecode of the map it leaves"
 description: "When a page goes on after a Teleport —every door—, code_carry_after decompresses all of the left map's bytecode: Desert Nightmare's maps carry ~14 KB each, some two to five frames per door"
 type: refactor
-status: todo
+status: doing
+assignee: cardon
 agents: [cardon]
 author: cardon
 links:

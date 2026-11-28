@@ -3,7 +3,8 @@ name: "the-advocate still speaks of the stages' gone binaries"
 description: "LAYOUT.md says rm2k-snes-audio has an `msu` subcommand, gone on 2026-11-25, and several `stage.rs` doc comments still speak of the binary, its flags and its `--help`, which went on 2026-11-27"
 type: docs
 game: advocate
-status: todo
+status: doing
+assignee: chaja
 agents: [chaja]
 author: chaja
 links:
