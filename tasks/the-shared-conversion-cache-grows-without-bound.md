@@ -175,3 +175,10 @@ nothing until 2026-12-07, two weeks after its oldest entry.
 
 **When merging**: `just install advocate` (it compiles in `rm2k-project`
 and `rm2k-snes-audio`); every MSU-1 track renders once more, see above.
+
+### 2026-11-28, Hornero: four days
+
+`UNUSED_FOR` is four days (taro's, in the comments), on the-advocate with
+its comments and the eviction tests' wording; the book's
+`internals/pipeline.md`, the ports' `machine.just` and AGENTS.md say the
+same. The eviction tests pass (3 days stays, 20 goes).
