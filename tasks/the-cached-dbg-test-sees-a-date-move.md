@@ -63,3 +63,21 @@ the-advocate; alone, green. Three times today.
 > Querés encarar la tarea de la fecha de modificación y lo del libro ahora?
 
 (taro, 2026-11-28)
+
+### 2026-11-28, Hornero: the build rewrote the file; it no longer does
+
+The task's first question, answered with the dates in nanoseconds
+around each `assemble` of the test: every build moved `mapdata.inc`'s
+date, the cached one and the fresh one alike. `banks::resolve` writes
+each generated file back after packing it, changed or not (born so,
+`47e9b03d`, 2026-09-29, with nothing saying it had to), and the `.dbg`
+carries the date `ca65` reads. So it was the build's, not the test's:
+two builds of the same sources gave `.dbg`s with different dates
+whenever a second ticked between their rewrites, and a real one served
+from the cache could name a date another build had moved.
+
+Fixed in the-advocate `hornero-dbg-date` (merged locally as `bb4c4a4c`):
+`resolve` writes only what the packing changed. The test now also
+asserts that the fresh build leaves `mapdata.inc`'s date as it was —red
+before the fix, every run, not one in a few under load—. The crate's
+tests are green; the full verification runs on the merged tree.
