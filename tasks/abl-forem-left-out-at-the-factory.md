@@ -157,3 +157,9 @@ character a route dresses here. Say whether that is a rule for every map
 or this map's patch, and check that no other map's choice moves (the nine
 games' builds, byte for byte except map 83). ABL's Known issues lines
 about map 83 go in the same change.
+
+### 2026-11-27, taro: a question for Hornero
+
+> > Say whether that is a rule for every map or this map's patch, and check that no other map's choice moves (the nine games' builds, byte for byte except map 83). ABL's Known issues lines about map 83 go in the same change.
+>
+> I can't remember what we talked about this, in the end, but this shouldn't be specific to this map. If it negatively affects other games/maps, I'd like to review it before deciding. (I do remember looking at the screenshots and choosing C, though).

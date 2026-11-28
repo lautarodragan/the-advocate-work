@@ -61,3 +61,7 @@ for the states: that one's fix —a 2003 database's unshown texts from
 `rm2k-snes/mapdata/src/emit.rs`— is the pattern. First what the draft
 says: whether RPG Maker 2003's battle shows a state's messages (easyrpg's
 2k3 battle); shown or not, garbage goes.
+
+### 2026-11-27, taro: a comment
+
+> If we can tackle this one cheaply, by modifying Zounds and nothing else, let's do it.

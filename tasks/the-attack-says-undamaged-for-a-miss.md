@@ -43,3 +43,7 @@ Still so at the-advocate `8b069fc2`: `ba_message` in `runtime/battle_message.s`
 (78-118) goes to `failed`, the undamaged line, for `BA_MDMG` $FFFF, and writes
 `<n> health lost` for a zero; `BA_TXT_DODGE` is in the cartridge. A text
 towards RM2k, with RPG_RT's capture already taken: nothing to choose.
+
+### 2026-11-27, taro: a question for Hornero
+
+> So we're currently showing "avoids taking damage" in places we should show "maneuvers out of the way" in ABL, for example?
