@@ -3,8 +3,8 @@ name: "rm2k-sketch goes"
 description: "rm2k-sketch goes whole, binary and library: it never chose an autotile's pattern either, so the grid buys little over Ditto's aligned .tiles; the test game's maps keep their .tiles in src/ instead of a sketch"
 type: refactor
 game: advocate
-status: doing
-assignee: calandria
+status: testing
+assignee: taro
 agents: [calandria]
 author: taro
 links:
@@ -122,3 +122,65 @@ library"; the file name stays.
 (taro, 2026-11-27, of the forest, merged on the-advocate's `bf18d71e`.)
 Calandria does it with [`ditto-becomes-advocate-import`](ditto-becomes-advocate-import.md):
 both touch the test game's recipe.
+
+### 2026-11-27, Calandria: started
+
+From the-advocate's `bf18d71e`, the ports' `60f1d0f` and the book's
+`40b0a62`, on a `calandria-ditto` branch in each. The reference to
+compare against byte for byte is the test game built from that commit,
+sketches and all: its `build/game/`, `build/exact/`, `build/data/` and
+every cartridge.
+
+### 2026-11-27, Calandria: sketch gone
+
+On the-advocate's `calandria-ditto`, three commits:
+
+* `c1fa439f`: the sixteen `MapNNNN.toml` became the `.tiles`
+  `rm2k-sketch` wrote of them into `build/text/maps/`, copied as they
+  were; `just game` packs `src/` as it is, without the loop nor
+  `build/text/`, and so does the release's smoke test; `rm2k/sketch/`
+  goes, with its workspace member, its lock entry and its name in
+  `rust_projects`.
+* `f2105807`: what each sketch's opening comment said —what the map is
+  for, which test reads it— comes back at the top of its `.tiles`,
+  where a `#` line is a comment `pack` skips, worded without the
+  sketch. The meadow's legend comments become words: the hub's signpost
+  at (7, 10) and board at (10, 11), checked against the upper layer.
+  Mechanical and judgement apart, as AGENTS.md asks.
+* `0705a569`: `LAYOUT.md`, the test game's README and the justfile's
+  `cargo uninstall` line.
+
+In the book, `7546524`: "The tools" loses the section and keeps the
+`.tiles` example in Ditto's, the test game's progress page says what
+the forest showed, and the one-command decision's list drops it. Here,
+AGENTS.md's list of projects.
+
+#### Byte for byte
+
+The test game built from `bf18d71e` (sketches) and from `c1fa439f`
+(`just -f test-game/justfile cartridges`, and again with `--force`):
+the same `build/game/` —every `.ldb`, `.lmt` and `.lmu`—, `build/exact/`
+and `build/data/` (`diff -r`), and the same release, test-vblank and
+lint cartridges (`cmp`). With the comments of `f2105807`, `just game`
+gives the same three directories again.
+
+`cargo uninstall rm2k-sketch` is Hornero's after merging.
+
+### 2026-11-27, Calandria: done
+
+The branch was rebuilt once before handing back, so the hashes above are
+the final ones. `f2105807` also teaches the-advocate's
+`test_no_game_names.py` that a `.tiles`'s `#` lines are comments: the
+terrace's cites A Blurred Line's map 1, as its sketch did, and the net
+was red on it.
+
+Verified on the final tree, with the rest of
+[`ditto-becomes-advocate-import`](ditto-becomes-advocate-import.md),
+which says what was run: `just lint`, `just test`, `just rust-test`,
+`just test-game`, the test game's dump and cartridges byte for byte
+`bf18d71e`'s, and a stand-in `rm2k-sketch` that fails first in the PATH.
+
+When merging: `cargo uninstall rm2k-sketch` from the global root. Left
+for Hornero, since only the list of projects was mine to edit:
+AGENTS.md's paragraph on the projects' tests still names `rm2k/sketch/`
+among those that need nothing.
