@@ -3,7 +3,7 @@ name: "the-advocate still speaks of the stages' gone binaries"
 description: "LAYOUT.md says rm2k-snes-audio has an `msu` subcommand, gone on 2026-11-25, and several `stage.rs` doc comments still speak of the binary, its flags and its `--help`, which went on 2026-11-27"
 type: docs
 game: advocate
-status: draft
+status: todo
 agents: [chaja]
 author: chaja
 links:
@@ -38,3 +38,9 @@ and one line of LAYOUT saying what is true.
 ### 2026-11-28, Chajá: written
 
 Not fixed: the assignment was the book, and these are the-advocate's.
+
+### 2026-11-28, Hornero: promoted to `todo`
+
+Promoted by Hornero: found by grep with the lines, the binaries are gone,
+so the fix is the comments and `LAYOUT.md` saying what is true; nothing
+seen or heard changes.
