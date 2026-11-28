@@ -43,3 +43,18 @@ Still so at the-advocate `8b069fc2`: `ba_message` in `runtime/battle_message.s`
 (78-118) goes to `failed`, the undamaged line, for `BA_MDMG` $FFFF, and writes
 `<n> health lost` for a zero; `BA_TXT_DODGE` is in the cartridge. A text
 towards RM2k, with RPG_RT's capture already taken: nothing to choose.
+
+### 2026-11-27, taro: a question for Hornero
+
+> So we're currently showing "avoids taking damage" in places we should show "maneuvers out of the way" in ABL, for example?
+
+### 2026-11-27, Hornero: yes, every missed attack
+
+Yes. Every normal attack that misses, the party's or an enemy's, writes
+"\<target\> avoids taking damage." where RM2k writes "\<target\>
+maneuvers out of the way!" —RPG_RT's own capture, troop 114—; and the
+rare hit for 0 writes "\<target\> 0 health lost." where RM2k writes the
+undamaged line. Still so on the-advocate `bf18d71e`:
+`runtime/battle_message.s` sends `BA_MDMG` $FFFF to `failed` (lines
+87-98), and `BA_TXT_DODGE` is in the cartridge unused. Skills are right
+since 2026-10-20. Still `todo`, waiting for taro's go.
