@@ -44,3 +44,9 @@ glyphs), and `timer_oam` in `runtime/timer.s` is unchanged since: at
 `230325f9`, the debug screen forcing it off, touched it). Lossless CPU
 time, nothing seen changes; the task says the two ways (rebuild when a
 digit or the colon changes, or straight to OAM as the raindrops).
+
+### 2026-11-27, taro: a comment
+
+> Quick test with the debug menu: 7 frames of lag tracked by Mesen with the timer off, 9 with the timer on, for the first light, 5 and 7 for the PC., 7 and 10 for the second light.
+>
+> Not a huge deal. Do you think we could improve those dropped frame numbers and lose nothing in exchange?
