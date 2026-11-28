@@ -27,3 +27,11 @@ full suite's; whether bsnes's garbage changes between runs, and how it is
 seeded, is the first thing to find out.
 
 ## Log
+
+### 2026-11-28, Hornero: seen a second time
+
+Hurón, verifying `huron-gold-palette` with main merged:
+`test_screen_letters.py::test_the_battle[bsnes]` failed once with "the
+battle did not reach its commands" and passed rerun alone (`--lf`), with
+the CPU full of seven agents' suites. Same test, same core, same message
+as the first time: it looks like load, not the change.

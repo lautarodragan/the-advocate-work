@@ -3,8 +3,7 @@ name: "The converter leaves an events request nothing reads"
 description: "Every cartridge's build leaves `events-request.json`, for `rm2k-snes-events culprits`, which went on 2026-11-27; `culprits.json` is made in the process from the same request"
 type: refactor
 game: advocate
-status: draft
-assignee: taro
+status: todo
 agents: [chaja]
 author: chaja
 links:
@@ -29,3 +28,7 @@ What to decide: whether the file stays, as something a person opens to see
 what the compiler was asked —the comment in `convert.rs` says that now—,
 or goes, leaving `keep_request` as only the switch for `culprits.json`.
 Nothing seen or heard changes.
+
+### 2026-11-28, Hornero: promoted to todo
+
+Promoted by Hornero: code debt, verified: its only reader, `rm2k-snes-events culprits`, went on 2026-11-27; the fix is not writing it, every ROM the same; nothing seen changes.

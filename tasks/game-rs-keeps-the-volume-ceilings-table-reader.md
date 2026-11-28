@@ -2,7 +2,7 @@
 name: "game.rs keeps the volume ceilings table's reader"
 description: "Game::ceilings, Game::ceilings_path and the free ceilings_path in rm2k-snes-audio's game.rs read patches/auto/music/ceilings.toml, which nothing writes or reads any more; removing them renders every MSU-1 track of every game again, because game.rs is in the tracks' cache key"
 type: refactor
-status: draft
+status: done
 author: mulita
 links:
   found-in: [the-volume-ceilings-are-measured-without-a-rom]
@@ -48,3 +48,11 @@ and left for the same reason —both files are in `OWN_SOURCES`—:
   codes, and the binary went on 2026-11-28—.
 
 Whoever removes the reader fixes these in the same change.
+
+### 2026-11-28, Hornero: done with the cache's eviction
+
+Removed on the-advocate after merging
+[`the-shared-conversion-cache-grows-without-bound`](the-shared-conversion-cache-grows-without-bound.md),
+which touches `tracks.rs` and so renders every track once anyway: the
+reader (`ceilings_path` and `Game::ceilings`) and Chajá's two comments, in
+the same commit, so the tracks render once for all of it.

@@ -3,8 +3,7 @@ name: "The stages' error kinds outlived their exit codes"
 description: "Each stage's `Bad` tells `Answer` from `Usage`, and the converter's `Stop` carries a `code`, for the exit codes their binaries had; the binaries went and nothing reads either but a test"
 type: refactor
 game: advocate
-status: draft
-assignee: taro
+status: todo
 agents: [chaja]
 author: chaja
 links:
@@ -35,3 +34,7 @@ The comments were made to say all this in that branch; the code was not
 touched, being code. What to decide: whether the two kinds and the code
 stay —they cost little, and a kind can still be useful in a message— or
 go. Nothing seen or heard changes either way.
+
+### 2026-11-28, Hornero: promoted to todo
+
+Promoted by Hornero: code debt, verified: the split and `Stop::code` existed for exit codes that went with the binaries, and only a test reads them; whoever does it folds them where nothing tells them apart, every ROM the same.

@@ -3,8 +3,7 @@ name: "The stages go through a Value for their binaries' sorted keys"
 description: "Several stages write their JSON answer through `serde_json::to_value` so that their binary wrote the keys sorted; the binaries went on 2026-11-27, and inside advocate, with preserve_order, the detour looks like a no-op"
 type: refactor
 game: advocate
-status: draft
-assignee: taro
+status: todo
 agents: [chaja]
 author: chaja
 links:
@@ -37,3 +36,7 @@ The sorts that put bytes into the ROM in a fixed order —`json::by_key` in
 mapdata, the special values in `screens/src/custom_menu.rs`— are not
 these and stay: without them the project file's order would reach the
 ROM.
+
+### 2026-11-28, Hornero: promoted to todo
+
+Promoted by Hornero: code debt; the detour served a binary that is gone. The first step is the measurement the draft did not make: drop the detour and check every ROM and every cached stage answer byte for byte; if anything moves, write what and close it instead.
