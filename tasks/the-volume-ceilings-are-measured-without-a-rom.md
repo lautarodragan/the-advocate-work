@@ -174,6 +174,23 @@ Waiting for taro before step 2.
 
 > Let’s do B. I _think_ there’s some clipping going on at some point in the game, so best to be safe.
 
+### 2026-11-28, Hornero: B; the licence still open
+
+Question 1 is B: the loudest of six write timings, 0.5 dB margin.
+
+The clipping taro thinks they hear is likely real and measured:
+[`the-volume-ceilings-are-measured-at-the-title-songs-level`](the-volume-ceilings-are-measured-at-the-title-songs-level.md)
+—today's table is measured at the title's volume 90 and tempo 130, so
+43 of ABL's 102 songs clip when played at 100—. Step 2 fixes it, as
+every song gets measured as written.
+
+Step 2 still waits on question 2, the licence: (A) vendor snes_spc's six
+LGPL files and comply, which needs a LICENSE for the-advocate that taro
+picks; (B) port ares's ISC S-DSP to Rust and show it equal; (C) load it
+dynamically, not recommended. And on question 3, the audit as written
+above being enough: the sources come from a third party's unsigned
+mirror, because blargg's original zip is gone.
+
 ## Log
 
 ### 2026-11-23, Hornero: written
