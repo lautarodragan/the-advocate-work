@@ -2,8 +2,9 @@
 name: "The Vampires Dawn maps that don't fit in VRAM"
 description: "Nine Vampires Dawn maps —Shannar, Uruya, Melsan, Asran among them— are left out because of VRAM: five with no layout that holds background, sprites and upper layer, two with no room for the message window and two because of their panorama in mode 1"
 type: feature
-status: doing
-assignee: tijereta
+status: testing
+assignee: taro
+agents: [tijereta]
 author: aguara
 links:
   relates: [poses-only-when-an-event-can-show-them, poses-without-their-empty-tiles]
@@ -142,3 +143,94 @@ them. Two things above moved:
   `degradations.json`; since `a6a0f639` the box shows over a screen the
   teleport erased—. So these maps cost their own scenes, not the pages
   that lead to them.
+
+### 2026-11-28, Tijereta: `OP_MESSAGE` counts by eight
+
+From the-advocate `71ccb4eb` and the ports `a9b5bc4a`, branches
+`tijereta-messages-by-8` in both.
+
+The step lives in one place, `MESSAGES_STEP` in `engine.rs` of
+rm2k-snes-mapdata: the converter hands it to the event compiler as
+`messages_step`, `emit.rs` writes `MESSAGES_CAP = $10000 * step`, the
+`.dbg` carries it for ABL's harness, and `msg_start` in
+`runtime/messages.s` `.assert`s the cap against its shifts. So the change
+is the constant (4 to 8) and one more `asl`/`rol` in `msg_start`. Why it
+was four is in ABL's `tests/harness/events.py` (from 2026-09-27, when the
+world chapter went past 128 KB): steps 3 and a 24-bit operand had been
+measured and left out then.
+
+The new test, `the_game_s_text_block_reaches_past_256_kb` in
+rm2k-snes-convert, fills a block numbered with `MESSAGES_STEP` with
+distinct boxes up to 300,000 bytes: red with four ("a box past 262161
+bytes does not fit OP_MESSAGE's operand"), green with eight.
+
+Vampires Dawn: maps 15, 150, 57, 99, 165, 225 and 399 out of `excluded`;
+402 and 403 stay, with their measured limit in the comment.
+
+#### The padding, measured
+
+Each game's text block (`texts` in `build/advocate.json`), building the
+same project with the global tools (by four) and with the branch's (by
+eight), Vampires Dawn with its old map list in both:
+
+| cartridge | by four | by eight | more |
+|---|---|---|---|
+| ABL `release` | 211,778 | 221,714 | 9,936 |
+| ABL `test-special` | 69,047 | 69,555 | 508 |
+| ABL's other test cartridges | 3,053 to 15,461 | | 156 to 812 |
+| Book of Three | 68,517 | 71,289 | 2,772 |
+| Desert Nightmare | 48,886 | 51,974 | 3,088 |
+| Dooms2 | 46,793 | 49,633 | 2,840 |
+| El Dorado | 57 | 57 | 0 |
+| Frozen World | 75,368 | 78,756 | 3,388 |
+| Sunset over Imdahl | 47,819 | 50,191 | 2,372 |
+| Vampires Dawn | 255,873 | 268,237 | 12,364 |
+| Zounds | 39,190 | 41,118 | 1,928 |
+
+About four bytes more per box, not the two estimated. Every ROM changes,
+all nineteen cartridges built. ABL's `release` still builds with 0 free
+banks and 18 halves, as before; Vampires Dawn's with 0 and 0, as before.
+
+With the seven maps, Vampires Dawn's `release` builds: its block is
+281,125 bytes of 524,288.
+
+#### Map 455's event 70
+
+Not new: "event 70 is left out: a page's condition names variable 259,
+which has no slot in far RAM" —and events 63 and 68, variables 257 and
+258— are in the `degradations.json` of the build in the main ports
+checkout too, without the seven maps. It is the 256 variables' cap,
+`variables-are-capped-at-256-slots` (`todo`): no new draft.
+
+#### test-special's push
+
+ABL's `test_text[text-crosses]` went red as its own message foresees: the
+box fell 304 bytes past the bank edge (offset 65840). Four fewer push
+boxes put it back across; the three `test_text` cases pass.
+
+#### A second reader of the operand: `show_window`
+
+The ports' `just boot` caught what grepping for `MESSAGES_STEP` did not:
+`OP_SHOW_WINDOW`'s lines carry box offsets too, and `runtime/show_window.s`
+built its own long pointer with two shifts. Desert Nightmare's menu —the
+only game that draws windows from events— showed other boxes' text (five
+boot tests red, 259 to 1,399 pixels). Three shifts and an `.assert`
+against `MESSAGES_CAP` of its own (the-advocate `13416ada`); the five pass.
+Neither ABL's suite nor the test game runs `OP_SHOW_WINDOW`.
+
+#### Verified, and to merge
+
+On the branches (the-advocate `13416ada`, the ports `ecf2b841`), with
+`just install-local .local-tools advocate`: in the-advocate `just lint`
+(SOUNDFONT on FluidR3_GM), `just test`, `env -u SOUNDFONT just
+rust-test`, `just test-game` (SOUNDFONT on FluidR3_GM: without it the
+recipe refuses); in the ports `just boot` at the root, which builds every
+game's `release`, and ABL's `just tests`. All green; no ABL golden moved.
+
+What the suites do not run: no game but Vampires Dawn has a block past
+256 KB, so `msg_start`'s third bit runs only there, and nothing checks
+Vampires Dawn's boxes past 256 KB on screen; its boot test only boots.
+The seven maps were not played.
+
+To merge: `just install advocate` (the runtime, `mapdata`, `events` and
+`convert` are in it).
