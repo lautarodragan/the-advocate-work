@@ -3,7 +3,8 @@ name: "The cached .dbg test sees a date move"
 description: "a_cached_object_gives_the_dbg_a_fresh_one_gives failed once: the fresh build's .dbg gave mapdata.inc a modification time one second later than the cached one's, though the test writes the file once"
 type: bug
 game: advocate
-status: todo
+status: doing
+assignee: hornero
 author: hornero
 agents: [cardon]
 links:
@@ -56,3 +57,9 @@ second ticking between the two builds. Alone, green.
 
 Red again verifying Calandria's merge (sketch and ditto) on
 the-advocate; alone, green. Three times today.
+
+### 2026-11-28, Hornero: taken
+
+> Querés encarar la tarea de la fecha de modificación y lo del libro ahora?
+
+(taro, 2026-11-28)

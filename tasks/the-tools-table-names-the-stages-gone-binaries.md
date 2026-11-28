@@ -3,7 +3,9 @@ name: "\"The tools\" names steps by the stages' gone binaries"
 description: "The book's \"What goes in, what comes out\" table still calls each step by a subcommand of a binary that went on 2026-11-27 —rm2k-snes-events scan, wally map, rm2k-snes-screens window…—, when the stages are libraries advocate build calls"
 type: docs
 game: advocate
-status: todo
+status: doing
+assignee: chaja
+agents: [chaja]
 author: calandria
 links:
   found-in: [ditto-becomes-advocate-import]
@@ -38,3 +40,9 @@ Not fixed: the rows are another task's, and only Ditto's was this one's.
 Promoted by Hornero: the table is in the book, and the binaries it names
 are gone; the fix is the book saying what is true, nothing seen or heard
 changes, and the task says what to do.
+
+### 2026-11-28, Hornero: taken, to Chajá
+
+> Querés encarar la tarea de la fecha de modificación y lo del libro ahora?
+
+(taro, 2026-11-28)
