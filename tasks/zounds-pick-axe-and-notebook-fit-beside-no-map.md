@@ -57,7 +57,7 @@ What it would take, as far as it was looked at —not measured—:
   leave the pick-axe screen some 16 tiles and four or five palettes. A
   decision for taro: it changes how the screen looks.
 
-## Log
+## Comments
 
 ### 2026-11-24, Cardón: a question for taro
 
@@ -74,3 +74,5 @@ the pick-axe's tiles; (c) leave both out.
 **Recommendation**: (b) for the pick-axe, which the game needs to mine;
 the notebook, under its own big picture, with (a) only if it matters to
 you.
+
+## Log

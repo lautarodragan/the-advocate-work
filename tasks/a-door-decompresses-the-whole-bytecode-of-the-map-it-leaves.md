@@ -34,6 +34,24 @@ negligible except for its few big maps.
 its maps; the time is the step from `code_carry_after` in
 `enter_map_no_events`, with the probe described in that task's log.
 
+## Comments
+
+### 2026-11-24, Cardón: a question for taro
+
+Still so at `8b069fc2`: `code_carry_after` (`runtime/decompress.s`)
+decompresses the carried map's whole stream with one `lz2_decompress`
+whenever `CARRY_MAP` is set, which `code_carry_before` does whenever a
+foreground page is active. Measured: 4.8 frames a door in Desert
+Nightmare, 0.6-1.6 in Lashe City.
+
+**To decide**: whether it is worth it. (a) The cheap one: not carrying
+when the page's next opcode is its end —probably every plain door; not
+checked—. (b) A stream per page or per group of pages for big-bytecode
+maps: ROM and converter complexity. (c) Leave it.
+
+**Recommendation**: (a) as a todo, measured on Desert Nightmare; (b) only
+if (a) leaves doors slow.
+
 ## Log
 
 ### 2026-10-20, Tijereta: checked
@@ -54,19 +72,3 @@ Measured in [`lashe-city-transitions-lag`](lashe-city-transitions-lag.md)
 at the-advocate `ec672f4c`: `code_carry_after` is 0.6 frames on Lashe's
 doors and 1.6 leaving the Lazer Teeth HQ (map 11, 7 KB of bytecode).
 Still small next to the load's LZ2.
-
-### 2026-11-24, Cardón: a question for taro
-
-Still so at `8b069fc2`: `code_carry_after` (`runtime/decompress.s`)
-decompresses the carried map's whole stream with one `lz2_decompress`
-whenever `CARRY_MAP` is set, which `code_carry_before` does whenever a
-foreground page is active. Measured: 4.8 frames a door in Desert
-Nightmare, 0.6-1.6 in Lashe City.
-
-**To decide**: whether it is worth it. (a) The cheap one: not carrying
-when the page's next opcode is its end —probably every plain door; not
-checked—. (b) A stream per page or per group of pages for big-bytecode
-maps: ROM and converter complexity. (c) Leave it.
-
-**Recommendation**: (a) as a todo, measured on Desert Nightmare; (b) only
-if (a) leaves doors slow.

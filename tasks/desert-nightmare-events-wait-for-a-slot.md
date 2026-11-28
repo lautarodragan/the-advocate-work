@@ -39,7 +39,7 @@ not exist, and a patch for map 35's crowd. 33, 71 and 18 are left out of
 **To reproduce**: `just cartridges` in `desert-nightmare/` and
 `grep events-wait-for-a-slot build/release/degradations.json`.
 
-## Log
+## Comments
 
 ### 2026-11-24, Cardón: a question for taro
 
@@ -57,3 +57,5 @@ leave it declared in Desert Nightmare's "Known issues".
 
 **Recommendation**: (b) for map 35 now, the cheapest and the most visible
 one, and (a) to `wishlist` until a second game asks for it.
+
+## Log

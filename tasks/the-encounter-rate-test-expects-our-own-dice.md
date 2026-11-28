@@ -36,7 +36,7 @@ first two can be exact, and `ENC_RNG` and `ENC_ASKS` are our dice: a
 change of generator turns the test red with nothing wrong, as the battle
 tests did.
 
-## Log
+## Comments
 
 ### 2026-11-27, Cardón: a question for taro
 
@@ -55,6 +55,8 @@ Should it follow the battle tests? Options:
 * **(c)** leave it: `events.Encounters` is a Python spec in the harness,
   not a model of ours in Rust, and the test is the only one that sees the
   console's generator step by step.
+
+## Log
 
 ### 2026-11-27, Hornero: promoted to `todo`, option (a)
 

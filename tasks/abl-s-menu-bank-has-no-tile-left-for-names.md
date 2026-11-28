@@ -31,17 +31,7 @@ leave faces out, the last actor's first, and say so in that log.
 
 How to see it: `just cartridges release` in `abl/` and the line above.
 
-## Log
-
-### 2026-11-22, Tijereta: still so
-
-Checked on ABL's release build of the ports `89f77b4` (the-advocate
-`0ae40e0a`, global tools, built 2026-11-22): `converter.log` still says,
-word for word, "menu bank: 404 tiles of 448, each screen's text apart; the
-composed names ask for 120 of the 120 the menu leaves and 72 of the 156
-the slot screen does". No face is left out yet: the slot screen's line
-lists the same 17 actors with a face, and nothing in the log says one was
-dropped for room.
+## Comments
 
 ### 2026-11-24, Cardón: a question for taro
 
@@ -56,3 +46,15 @@ menu bank more room now.
 
 **Recommendation**: (a), or (b) if taro wants it loud: (c) spends room
 nothing needs yet.
+
+## Log
+
+### 2026-11-22, Tijereta: still so
+
+Checked on ABL's release build of the ports `89f77b4` (the-advocate
+`0ae40e0a`, global tools, built 2026-11-22): `converter.log` still says,
+word for word, "menu bank: 404 tiles of 448, each screen's text apart; the
+composed names ask for 120 of the 120 the menu leaves and 72 of the 156
+the slot screen does". No face is left out yet: the slot screen's line
+lists the same 17 actors with a face, and nothing in the log says one was
+dropped for room.

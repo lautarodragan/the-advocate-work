@@ -127,6 +127,34 @@ with a `##` section after it: a report to read, not a gate. It is taro's,
 from 2026-11-20; the tasks that were not `done` that day were moved to it
 by hand, and the `done` ones were left as they were.
 
+## A task's comments
+
+**The conversation with taro goes in `## Comments`, right above `##
+Log`**: taro's comments, questions and answers, written from the tasks
+page, and the questions for taro and the answers to them, Hornero's or an
+agent's. Same entries as the log's, oldest first:
+
+    ## Comments
+
+    ### 2026-11-27, Cardón: a question for taro
+
+    What there is to decide, the options and the recommendation.
+
+    ### 2026-11-27, taro: a comment
+
+    > Let's go with B.
+
+    ## Log
+
+`nu tasks/tasks.nu comment <task> <who> <title>`, with the text on
+stdin, adds one, making the section if the task has none; the page does
+the same with taro's. The page shows the comments open, above the folded
+log, and their number on the task's folded summary; `nu tasks/tasks.nu
+inbox` reads only this section —the log in tasks that have none—. What
+was done stays in the log, even when it quotes taro. It is taro's, from
+2026-11-27; the tasks not `done` or `cancelled` that day had their
+conversation moved here, and the others were left as they were.
+
 ## A task's frontmatter
 
     ---

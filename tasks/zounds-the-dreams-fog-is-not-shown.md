@@ -39,6 +39,24 @@ pictures `map_pictures` takes.
 or play `test_the_dream_turns_switch_47_on_and_goes_back_to_the_room` in
 the ports' `tests/test_zounds.py` and look at the screen on map 30.
 
+## Comments
+
+### 2026-11-24, Cardón: a question for taro
+
+**What to decide**: you asked whether the fog could be shown without much
+complexity, and Carpintero's answer (2026-11-22) is no: at 100% it becomes
+a big picture over black, and drawn into map 30 (200x200) it passes 1024
+tiles. Still so (`degradations.json`: `picture 1 "fog2" is not shown
+here`).
+
+**Options**: (a) accept the dream without its fog, as a Known issue; (b) a
+new way to draw a translucent fog over a big map —a tiled layer that
+repeats a small piece of the fog, with its own rule to pick this picture
+and not Zounds' other three—.
+
+**Recommendation**: (a), and cancel this draft: it is a few seconds of one
+scene, and (b) is a new feature for it.
+
 ## Log
 
 ### 2026-11-22, Carpintero: still so, and 100 % alone is not enough
@@ -85,19 +103,3 @@ sign and map 190's skill-screen box, which are pictures today.
 fork; what is missing is a way to show a translucent fog over a big map:
 a rule that takes this one picture and not Zounds' other three, and a
 way to draw it that does not multiply map 30's tiles.
-
-### 2026-11-24, Cardón: a question for taro
-
-**What to decide**: you asked whether the fog could be shown without much
-complexity, and Carpintero's answer (2026-11-22) is no: at 100% it becomes
-a big picture over black, and drawn into map 30 (200x200) it passes 1024
-tiles. Still so (`degradations.json`: `picture 1 "fog2" is not shown
-here`).
-
-**Options**: (a) accept the dream without its fog, as a Known issue; (b) a
-new way to draw a translucent fog over a big map —a tiled layer that
-repeats a small piece of the fog, with its own rule to pick this picture
-and not Zounds' other three—.
-
-**Recommendation**: (a), and cancel this draft: it is a few seconds of one
-scene, and (b) is a new feature for it.

@@ -16,7 +16,7 @@ but cut the tail at the loop. What it takes is written there, under
 "What baking the tail would take (the next stage)", measured with
 fluidsynth 2.6.0.
 
-## Log
+## Comments
 
 ### 2026-11-24, Cardón: a question for taro
 
@@ -34,3 +34,5 @@ CC111's tick; (c) leave it, the cut tail being what is heard today.
 **Recommendation**: (a): it is what RM2k sounds like and the measurement
 is already in that task; (b) only if a game's song is heard cutting. It
 changes what is heard, so it is yours.
+
+## Log

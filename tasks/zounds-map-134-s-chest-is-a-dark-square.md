@@ -40,19 +40,7 @@ harness, or EasyRPG with `--start-map-id 134 --start-position 2 31`.
 Captures of both in `/shared/captures/2026-11-17-zounds-chests/`
 (`console-map134.png`, `easyrpg-map134.png`).
 
-## Log
-
-### 2026-11-22, Carpintero: the captures, in the task
-
-Still so on the-advocate `0ae40e0a` and the ports `89f77b4`: Zounds'
-`build/release/converter.log` still lends `object1:6` a palette on map
-134, in the same line. The console's two captures above are of that
-build, in snes9x from the debug room with the ports' `games.py`
-harness: `go_to_map(134, 3, 30)`, the hero beside the chest and facing
-it, closed, then A, and opened with switch 285 on. EasyRPG's two are the
-first and last frames of Cardón's `easyrpg-map134.png` (the hero below
-the chest), at the 320x240 EasyRPG captures; the ports' dump of map 134
-has no commit since that day.
+## Comments
 
 ### 2026-11-24, Cardón: a question for taro
 
@@ -70,3 +58,17 @@ every game that moves other maps' colours too—; (b) a Zounds patch for map
 **Recommendation**: (a) if the measurement shows which graphic would take
 the chest's place and it looks better; it changes what is seen on several
 maps, so it is yours.
+
+## Log
+
+### 2026-11-22, Carpintero: the captures, in the task
+
+Still so on the-advocate `0ae40e0a` and the ports `89f77b4`: Zounds'
+`build/release/converter.log` still lends `object1:6` a palette on map
+134, in the same line. The console's two captures above are of that
+build, in snes9x from the debug room with the ports' `games.py`
+harness: `go_to_map(134, 3, 30)`, the hero beside the chest and facing
+it, closed, then A, and opened with switch 285 on. EasyRPG's two are the
+first and last frames of Cardón's `easyrpg-map134.png` (the hero below
+the chest), at the 320x240 EasyRPG captures; the ports' dump of map 134
+has no commit since that day.

@@ -33,7 +33,7 @@ map that a touch replaces.
 `map 178: WARNING` in `build/release/converter.log`; on the console, the
 right half of the maze has no coins.
 
-## Log
+## Comments
 
 ### 2026-11-24, Cardón: a question for taro
 
@@ -51,3 +51,5 @@ leave it, the right half of the maze empty.
 108 coins (what its variable asks for); if not, (b), the cheapest; (a)
 only if another game needs the same. It is a game's choice and has a cost,
 so it is yours.
+
+## Log

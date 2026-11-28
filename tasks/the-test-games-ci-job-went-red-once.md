@@ -32,7 +32,7 @@ up once and not again, as in
 or `just test-game -rs` in a loop; the captures that differ are uploaded
 as the `test-game-snapshots` artifact.
 
-## Log
+## Comments
 
 ### 2026-11-24, Cardón: a question for taro
 
@@ -49,3 +49,5 @@ goes red.
 
 **Recommendation**: (a). One red on 2026-10-19, none since, and nothing
 anyone could check today.
+
+## Log

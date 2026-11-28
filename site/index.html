@@ -112,6 +112,9 @@
      goes whole to the next line instead of leaving its first words beside
      them (taro, on a phone). */
   .name { font-weight: 600; display: inline-block; }
+  /* The log's entry count, beside the name, as a small pill. */
+  .entries { display: inline-block; margin-left: .4rem; padding: 0 .45rem; border-radius: 1rem; font-size: .75rem; line-height: 1.3rem; vertical-align: .1rem; background: var(--line); color: var(--muted); font-variant-numeric: tabular-nums; }
+  .entries::before { content: "💬 "; }
   .desc { display: block; color: var(--muted); font-size: .9rem; margin-top: .15rem; }
   .meta { color: var(--muted); font-size: .8rem; padding: 0 .9rem; }
   .body { padding: .25rem .9rem .9rem; overflow-wrap: anywhere; }
@@ -716,10 +719,10 @@
     for (const e of body.querySelectorAll('.queued-entry')) e.remove();
     const entries = queue.filter(c => c.task === t.el.id && c.kind === 'entry');
     if (entries.length) {
-      let log = body.querySelector('details.log .log-body');
+      let log = body.querySelector('details.comments .log-body');
       if (!log) {
-        const d = h('details', {className: 'log', open: true}, h('summary', {textContent: 'Log'}), log = h('div', {className: 'log-body'}));
-        body.insertBefore(d, body.querySelector('.fold-row'));
+        const d = h('details', {className: 'log comments', open: true}, h('summary', {textContent: 'Comments'}), log = h('div', {className: 'log-body'}));
+        body.insertBefore(d, body.querySelector('details.log') || body.querySelector('.fold-row'));
       }
       for (const c of entries) log.append(h('div', {className: 'queued-entry'},
         h('h3', {textContent: `${c.date}, taro: ${c.title}`}),
@@ -924,11 +927,25 @@
     else if (v) y = /^status:.*$/m.test(y) ? y.replace(/^status:.*$/m, s => `${s}\n${k}: ${v}`) : `${y}\n${k}: ${v}`;
     return `---\n${y.replace(/\n$/, '')}\n---\n${text.slice(m[0].length)}`;
   }
+  // taro's entry at the end of the task's `## Comments`, which is made
+  // right above `## Log` —or at the end— when missing: the same as
+  // `nu tasks/tasks.nu comment`.
   function addEntry(text, c) {
-    let t = text.replace(/\s*$/, '\n');
-    if (!/^## Log$/m.test(t)) t += '\n## Log\n';
     const quote = c.text.split('\n').map(l => l.trim() ? `> ${l}` : '>').join('\n');
-    return `${t}\n### ${c.date}, taro: ${c.title}\n\n${quote}\n`;
+    const entry = `### ${c.date}, taro: ${c.title}\n\n${quote}\n`;
+    const lines = text.replace(/\s*$/, '').split('\n');
+    const ci = lines.indexOf('## Comments'), li = lines.indexOf('## Log');
+    const join = (before, after) => {
+      const parts = [before.join('\n').replace(/\s*$/, ''), '', entry];
+      if (after.length) parts.push(after.join('\n'));
+      return parts.join('\n').replace(/\n*$/, '\n');
+    };
+    if (ci >= 0) {
+      const end = li > ci ? li : lines.length;
+      return join(lines.slice(0, end), lines.slice(end));
+    }
+    if (li >= 0) return join([...lines.slice(0, li).join('\n').replace(/\s*$/, '').split('\n'), '', '## Comments'], lines.slice(li));
+    return join([...lines, '', '## Comments'], []);
   }
   async function save() {
     busy = true; qnote.hidden = true; showQueue();

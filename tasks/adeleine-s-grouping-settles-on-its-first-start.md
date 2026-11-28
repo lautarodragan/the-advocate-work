@@ -28,7 +28,7 @@ the same function, and every other game.
 The throwaway code is in the scratch of Carpintero's study
 (`patch_seeds.py` over Adeleine; the harness replays wally's dumps).
 
-## Log
+## Comments
 
 ### 2026-11-24, Cardón: a question for taro
 
@@ -41,3 +41,5 @@ call, not measured on the pictures, screens, battle or other games.
 **To decide**: whether to take the restarts, and how many.
 **Recommendation**: yes, as a todo whose first step measures the time cost
 on all nine games and the goldens that move, shown to taro before merging.
+
+## Log

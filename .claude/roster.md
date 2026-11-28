@@ -66,6 +66,10 @@ same thing before, start from there and do not measure it again.
   at `####`. Above the log stays what defines the task; do not open a
   `## Done` or `## Checked` there. See "A task's log" in this repo's
   README, and `nu tasks/tasks.nu check`.
+* **A question for taro, and the answer to one, go in `## Comments`**,
+  right above the log, not in it: `nu tasks/tasks.nu comment <task>
+  <your name> "a question for taro"` with the text on stdin. See "A
+  task's comments" in the README.
 * What is verifiable and what is a matter of judgement, in separate
   commits; the assignment usually says how to split them.
 * **A new test is shown red** before the fix.
