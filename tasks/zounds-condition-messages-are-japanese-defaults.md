@@ -3,7 +3,7 @@ name: "Zounds: the conditions' battle messages are the editor's Japanese default
 description: "Zounds' states carry RPG Maker 2003's untranslated Japanese messages, read as Windows-1252, and the battle's text block writes them as garbage: the revival line, and what a condition says when it is given, lasts, goes or is already held"
 type: bug
 status: doing
-assignee: taro
+assignee: huron
 author: aguara
 agents: [cardon, huron]
 links:
@@ -151,3 +151,9 @@ write the recovery instead.)
 **Recommendation**: (a). It is your game, it has already been retouched
 this way, and it leaves the cartridge with what 2000's battle would
 show if the author had written it. Once you pick one, it is a short task.
+
+### 2026-11-27, Hornero: (a), back to Hurón
+
+> Dale!
+
+(taro, 2026-11-27, to option (a): the game's own repo, `~/juegos/zounds`.)
