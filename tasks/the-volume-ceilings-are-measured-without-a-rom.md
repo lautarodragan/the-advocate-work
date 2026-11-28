@@ -170,6 +170,10 @@ write that lands at a different moment inside its frame.
 
 Waiting for taro before step 2.
 
+### 2026-11-28, taro: a comment
+
+> Let’s do B. I _think_ there’s some clipping going on at some point in the game, so best to be safe.
+
 ## Log
 
 ### 2026-11-23, Hornero: written
