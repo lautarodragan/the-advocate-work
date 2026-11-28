@@ -106,6 +106,25 @@ Recommended: **(a)**, the smallest change in the runtime, and it lasts:
 Vampires Dawn is the game with the most text and 512 KB is twice what it
 needs. Not started; the task stays `todo`.
 
+### 2026-11-28, taro: (a), counting by 8
+
+> vamos con (a), tu recomendación
+
+### 2026-11-28, Hornero: what (a) means to do
+
+taro answered in the chat, quoted above. What is left to do, in this
+order:
+
+1. `OP_MESSAGE`'s operand counts by 8 bytes instead of 4: the message
+   block is aligned to 8 (`rm2k-snes/events/src/messages.rs:922`, and the
+   runtime's read of the operand), which doubles the reach to 512 KB.
+   It moves every game's ROM —some padding per message—, so ABL's suite
+   and every game's build are run, and the padding is measured, not
+   estimated.
+2. The seven maps that now fit VRAM (15, 150, 57, 99, 165, 225, 399) come
+   back into Vampires Dawn.
+3. 402 and 403 stay out: their panorama alone needs 435 tiles in mode 1.
+
 ## Log
 
 ### 2026-10-20, Chajá: checked
