@@ -191,6 +191,12 @@ dynamically, not recommended. And on question 3, the audit as written
 above being enough: the sources come from a third party's unsigned
 mirror, because blargg's original zip is gone.
 
+### 2026-11-28, taro: a comment
+
+> Ah I forgot about the license! I like GPLv3. It should be compatible with the licenses of the dependencies, right?
+>
+> Any reason not to go with GPLv3?
+
 ## Log
 
 ### 2026-11-23, Hornero: written
