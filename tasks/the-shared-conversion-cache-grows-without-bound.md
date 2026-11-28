@@ -2,8 +2,7 @@
 name: "The shared conversion cache grows without bound"
 description: "Nothing ever deletes an entry of the machine's cache: every reinstall of a stage, of ca65 or of the runtime leaves the whole previous set of answers behind, and a full set for the nine games is over a gigabyte"
 type: refactor
-status: draft
-assignee: taro
+status: todo
 author: huron
 agents: [cardon]
 links:
@@ -50,5 +49,14 @@ touched stamp); (c) a size cap, oldest first; (d) wait for
 **Recommendation**: (b), with N around 14 days, done in `cache.rs` with a
 lock so that nothing reads an entry being deleted; it is toolchain code
 with a cost to choose (disk against rebuilding), so it is yours.
+
+### 2026-11-28, taro: an answer: (b)
+
+> (b)
+
+### 2026-11-28, Hornero: (b), to todo
+
+To `todo` with (b): each build deletes the entries not read in about 14
+days, in `cache.rs`, with a lock so nothing reads an entry being deleted.
 
 ## Log

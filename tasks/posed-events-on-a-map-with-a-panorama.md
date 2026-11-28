@@ -91,4 +91,20 @@ until a game's crowded lines need it.
 would reach for, so it is worth doing when one of them asks for it, with
 (a)'s scope.
 
+### 2026-11-28, taro: a comment
+
+> “has no room” -> rom, wram, vram?
+
+### 2026-11-28, Hornero: ROM
+
+ROM: the cartridge's data banks. With `posed_events = true`, ABL's
+`release` already fails to link —"a piece of 65536 bytes needs a new
+bank, and the 126 banks the cartridge has for data are taken"—: the
+still events painted into the background grow the data by some 38 KB
+(map tiles +32 KB, the posed tables +16 KB, blocks +4.7 KB, against
+sprite tiles −8.5 KB and poses −5 KB), with 302 B of gaps left
+([`abl-still-events-painted-into-the-background`](abl-still-events-painted-into-the-background.md),
+its log). Doing it on panorama maps too adds to that. VRAM is not the
+limit here: a still event in the background saves sprite tiles.
+
 ## Log

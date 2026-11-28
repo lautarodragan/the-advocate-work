@@ -2,13 +2,12 @@
 name: "A torn save slot shows on the slot screen and loads a new game"
 description: "A slot whose saved game does not add up to its checksum —half written when the console lost power, or when the FX Pak took its image— is shown on the slot screen like a good one, and picking it starts a new game without saying why; and the previous save in that slot is gone with it"
 type: bug
-status: draft
-assignee: taro
+status: todo
 agents: [cardon]
 author: huron
 links:
   found-in: [a-save-on-the-fx-pak-waits-for-a-silent-seek]
-  relates: [the-sram-as-slow-wram]
+  relates: [the-sram-as-slow-wram, a-save-slot-kept-twice]
 ---
 
 Seen by Hurón on 2026-11-17, reading the runtime for
@@ -68,5 +67,17 @@ loading).
 slot screen checks the sum and shows the slot as damaged instead of a
 name, and picking it says so instead of starting a new game; CRC-16 for
 the sum— and the two copies only if a torn save is ever seen.
+
+### 2026-11-28, taro: a comment
+
+> let’s go with the recommendation, with save doubling as a new wishlist task.
+
+### 2026-11-28, Hornero: to todo, the two copies a wishlist of their own
+
+To `todo` with the recommendation: a CRC-16 over each slot, and a slot
+whose sum fails shows as damaged on the slot screen —a new text— and
+says so when picked instead of starting a new game. The two copies per
+slot are [`a-save-slot-kept-twice`](a-save-slot-kept-twice.md), in
+`wishlist`.
 
 ## Log
