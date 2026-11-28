@@ -39,6 +39,8 @@ whether to take them out with the tests that exercise them, or keep them
 as the crates' way to be asked by hand, is a judgement left out of the
 binaries' commit on purpose. Nothing a ROM carries depends on it.
 
+## Log
+
 ### 2026-11-27, Hornero: promoted to `todo`
 
 Promoted by Hornero: verified by grep, and the judgement has an answer

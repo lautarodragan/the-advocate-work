@@ -1,53 +1,42 @@
 ---
-name: "rm2k-sketch becomes a library"
-description: "rm2k-sketch's binary goes and its format stays: the test game's maps keep being sketched as a grid of characters and a legend, and whatever packs the test game's text into RM2k's files reads each MapNNNN.toml itself, instead of the recipe calling rm2k-sketch per map"
+name: "rm2k-sketch goes"
+description: "rm2k-sketch goes whole, binary and library: it never chose an autotile's pattern either, so the grid buys little over Ditto's aligned .tiles; the test game's maps keep their .tiles in src/ instead of a sketch"
 type: refactor
 game: advocate
 status: todo
 author: taro
 links:
-  relates: [ditto-becomes-advocate-import]
+  relates: [ditto-becomes-advocate-import, advocate-reset-autotiles]
 ---
 
-**Why**: the format earns its place, the binary does not. A map sketched
-as a grid —the meadow, 20x15, about 150 tokens and a diff that shows
-what moved— against its two layers as 600 tile numbers, some 2,000–2,500
-tokens and a diff nobody reads; and an RPG Maker project as the source
-of truth would be binary files that git cannot diff and an AI cannot
-edit without tools, while the events have to be written as text anyway.
-The binary is only the test game's recipe calling it once per map
-before `ditto pack`.
+**Why**: the format was meant to make maps easy to write by hand or by
+an AI, but what is hard in a map is not its format: it is the autotiles,
+whose id depends on the eight neighbours, and a sketch's legend names one
+pattern per character, so it never solved them. Ditto's `.tiles` is
+already text, aligned and diffable. The forest experiment in the log
+below wrote a map straight as `.tiles`.
 
-> Regarding rm2k-sketch: I have mixed feelings. When I mentioned making
-> our own test game, I did not specify _how_. I think rm2k-sketch comes
-> from there. What I had in mind is that you directly create a project in
-> RPG Maker 2000 format, we keep it as the source of truth, and use ditto
-> to derive it. I now think that did not make much sense. I think sketch
-> helps for generating maps with AI, right? It is much simpler and less
-> token-hungry to build it that way than in another format? I feel maybe
-> we could remove it and save ourselves another binary.
+> Me parece que sí. But they could be two separate tasks, right? If today
+> sketch does not solve autotiles either, then we can remove it and that
+> is it, and leave the new subcommand as a task in todo, right?
 
-> Two separate tasks for tracking, but they can be implemented together.
-
-(taro, 2026-11-27, the second on this task and
-[`ditto-becomes-advocate-import`](ditto-becomes-advocate-import.md))
+(taro, 2026-11-27; the subcommand is
+[`advocate-reset-autotiles`](advocate-reset-autotiles.md).)
 
 **What is asked**:
 
-* `rm2k/sketch/` stays as a library; its `main.rs` goes, and `cargo
-  uninstall rm2k-sketch` where it was installed.
-* The step that packs the test game's text —`ditto pack` today, whatever
-  `ditto-becomes-advocate-import` decides tomorrow— reads a map's
-  `MapNNNN.toml` sketch in place of its `.tiles`, so `test-game/justfile`
-  stops calling a binary per map.
-* The test game's `.lmu` files, its dump and its ROMs byte for byte the
-  same; the README of the test game and of the crate, and the book's
-  "The tools", follow.
+* The test game's sixteen `src/maps/MapNNNN.toml` become the
+  `MapNNNN.tiles` the recipe makes of them today, committed beside each
+  map's JSON; the recipe's sketch loop goes. The `.lmu` files, the dump
+  and the cartridges byte for byte the same.
+* `rm2k/sketch/` goes, binary and library; `cargo uninstall
+  rm2k-sketch` where it was installed; the workspace, `just install`,
+  `LAYOUT.md`, the test game's README, the AGENTS.md list of projects and
+  the book's "The tools" follow.
 
-Implemented together with
-[`ditto-becomes-advocate-import`](ditto-becomes-advocate-import.md),
-which has to decide where the packing lives; kept apart only to track
-it.
+It no longer depends on
+[`ditto-becomes-advocate-import`](ditto-becomes-advocate-import.md): the
+recipe keeps calling `ditto pack` over `src/` as it is.
 
 ## Log
 
@@ -108,3 +97,15 @@ its legend names one pattern per character, which is why the test
 game's maps are square fields with objects on them. So what a map
 needs, written by hand or by an AI, is a plan of the cells plus that
 rule, whatever the plan's format.
+
+### 2026-11-27, Hornero: rewritten: sketch goes, autotiles apart
+
+ABL's maps answered whether the packing could recalculate the autotiles:
+4.5 % of their terrain cells and 1.8 % of their water edges are not what
+the neighbour rule gives —715 inside map 66 alone, a plain interior kept
+beside another terrain on purpose—, compositions by hand in RM2k's
+editor. The rule is the editor's, and RM2k's player never applies it. So
+nothing recalculates by default; a command a person runs on a `.tiles`
+does, [`advocate-reset-autotiles`](advocate-reset-autotiles.md), and
+this task is only sketch going. Name changed from "rm2k-sketch becomes a
+library"; the file name stays.
