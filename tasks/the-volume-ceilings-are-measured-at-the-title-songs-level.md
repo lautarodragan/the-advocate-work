@@ -3,7 +3,7 @@ name: "The volume ceilings are measured at the title song's level"
 description: "volume-ceilings plays each song on the title screen, and since 2026-10-19 the title plays at the database's title_music level (ABL: volume 90, tempo 130), so the table is measured about 1.9 dB quieter than the song as written: at volume 100, 43 of ABL's 102 songs clip with today's table"
 type: bug
 game: abl
-status: draft
+status: done
 author: mulita
 links:
   found-in: [the-volume-ceilings-are-measured-without-a-rom]
@@ -63,3 +63,17 @@ measures each song as written and removes this path, so it fixes this
 as a side effect; it waits on taro's answers there. If step 2 is not
 taken, this is fixed alone: measuring on the title with its level
 patched to 100/100, as Mulita's `whole.py` does.
+
+### 2026-11-28, Mulita: fixed by step 2, closed
+
+Step 2 of [`the-volume-ceilings-are-measured-without-a-rom`](the-volume-ceilings-are-measured-without-a-rom.md)
+(the-advocate, branch `mulita-ceilings`) measures each song's ceiling
+while it compiles, from the writes of the song as written, so the
+title's level no longer comes into it; the ROM path, the table and its
+test went. Checked the way this draft found it: ABL's `release` of the
+branch with its title patched to volume 100 and tempo 100 (`whole.py`),
+every song played whole through the old `volume-ceilings --play`.
+Before, 43 of the 102 clip; after, **none**, and the loudest, `juries`,
+peaks at -0.05 dB. `hzstream`, `Drahkken_Neo_Remix` and `dd2shad2` went
+from 168, 1109 and 1164 samples at the cap to none. Nothing was heard
+on the console.

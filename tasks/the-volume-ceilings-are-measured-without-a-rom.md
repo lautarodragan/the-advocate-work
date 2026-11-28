@@ -3,14 +3,14 @@ name: "The volume ceilings are measured without a ROM"
 description: "Each song's volume ceiling is measured today by hand, building a ROM and playing it in a libretro core; with blargg's S-DSP from snes_spc behind a Rust wrapper, fed the writes stream.rs already decodes, the audio stage can compute the table on every conversion, for every game, and the recipe, the stale-table test and the libretro module go"
 type: refactor
 game: advocate
-status: doing
-assignee: mulita
+status: testing
+assignee: taro
 agents: [mulita]
 author: taro
 links:
   relates: [one-advocate-command, tests-without-the-stages-subcommands]
   blocked-by: [cartridges-runs-itself-to-assemble]
-  found: [the-volume-ceilings-are-measured-at-the-title-songs-level]
+  found: [the-volume-ceilings-are-measured-at-the-title-songs-level, game-rs-keeps-the-volume-ceilings-table-reader]
 ---
 
 **Why**: `rm2k-snes-audio volume-ceilings`
@@ -497,3 +497,181 @@ with a `README.txt`. It has `hzstream` at the title's level, as the table
 measures it today; the same song as written, from the ROM and from the
 model, both of which clip; and `arc1_v2`, the song where the model and
 the ROM disagree most, from each of them.
+
+### 2026-11-28, Mulita: steps 2 and 3, the ceilings measured while the music compiles
+
+Branches `mulita-ceilings` in the-advocate (from `bb4c4a4c`), the ports
+(from `351cc697`) and the docs (from `238f723`).
+
+#### What was done
+
+* **`snes/spc-dsp/`**, a new library of the-advocate: `SPC_DSP.cpp`,
+  `SPC_DSP.h` and the four `blargg_*.h` of snes_spc 0.9.0, byte for byte
+  those of `yupferris/snes_spc` at `8f0ea63`, with its `license.txt`, in
+  `vendor/snes_spc/`; `src/shim.cpp`, four C functions over the class;
+  and `Dsp` in `src/lib.rs`, which guards the three traps: `run(0)` is
+  not called, a NULL from the class's `operator new` panics, and the
+  power-on KON is said in `Dsp::new`'s documentation —the caller writes
+  its boot registers before the first run—. It is compiled with
+  `-std=c++11`, without exceptions or RTTI, `NDEBUG`, `-O2` in every
+  profile, and links no C++ runtime. Its README carries the audit as
+  written in step 1. **A correction to step 1**: `cc` was not in the
+  workspace's `Cargo.lock`; it comes in with `find-msvc-tools` and
+  `shlex`, all three MIT or Apache-2.0, none with a build script.
+* **`ceilings.rs` in `rm2k-snes-audio`**, rewritten: `Song` (a song's
+  writes and the ARAM made from the samples they name), `play` (one run,
+  each write of a frame `per_write` DSP clocks after the last, frame 0
+  before any clock), `loudest` (the six timings, in six threads) and
+  `measure` (in threads, with each song's peak kept per mix in the disk
+  cache, category `ceilings`, and a memo so that cartridges converted at
+  once share a song). The key is the writes, the ARAM and the model's
+  sources —`spc-dsp`'s and `ceilings.rs`—.
+* **`compile::build_per_key`** measures each song at half the headroom,
+  gives it the ceiling that leaves the loudest timing 0.5 dB below the
+  cap, builds it, and plays again with their ceiling the songs that end
+  within 1.5 dB of the cap, lowering one that clips, up to four rounds.
+  **A song that clips at half the headroom is measured again at half
+  that**, up to four times: three songs of two other games clip at 0.25
+  (Doom S2's `Boss theme` and `ss_sg_10`, Frozen World's `base`), and the
+  first version stopped their build. The converter's log says how many
+  plays it made, how many were new, and how long it took.
+* **What went**: `volume-ceilings` and `rm2k-snes-audio`'s binary (it
+  was its last subcommand), `retro.rs`, the ROM path of `ceilings.rs`,
+  the converter's `--measure-headroom` and the request's
+  `measuring_headroom`, the table's headrooms in the cartridge's
+  fingerprint (`cartridges.rs`), each song's mix fingerprint in
+  `music.json` and `audio.json` (only the table was checked against it),
+  and in ABL `patches/auto/music/ceilings.toml`, the `ceilings` recipe
+  and `test_music_ceilings.py`. `Job::measuring_headroom` is
+  `fixed_headroom`: the crate's tests compile with it.
+* **`game.rs` keeps the table's reader, dead.** It is one of the four
+  files of the MSU-1 tracks' cache key, and removing it rendered every
+  track again: ABL's 106, 2.5 GB, on the first build. The change was
+  reverted and those copies deleted from the cache; the draft
+  [`game-rs-keeps-the-volume-ceilings-table-reader`](game-rs-keeps-the-volume-ceilings-table-reader.md)
+  says it.
+* **The licence**: `LICENSE` at the-advocate's root, the GNU text, and
+  `license.workspace = true` in every crate, from `[workspace.package]
+  license = "GPL-3.0-or-later"`; `spc-dsp` says `GPL-3.0-or-later AND
+  LGPL-2.1-or-later`. `release.yml` puts `LICENSE`, `NOTICE` (that the
+  binaries contain snes_spc, under the LGPL, and where its source is) and
+  `LICENSE.snes_spc` at the archive's top; its glibc comment now says
+  that the `dlopen` it was for went, and that it stays glibc until there
+  is a reason to move.
+* **The docs**: `LAYOUT.md`, the-advocate's README (a C++ compiler, and a
+  "Licence" section), `rm2k-snes-audio`'s README, the justfile
+  (`spc-dsp` in `rust_projects`, and `rm2k-snes-audio` in the
+  `cargo uninstall` line); in ABL its `patches/README.md`,
+  `tests/README.md` and `advocate.toml`; in the book `tools.md`,
+  `internals/audio.md` and `reference/sources.md`; and the audit in
+  `AGENTS.md`, here, after SuperFamiconv's.
+* **The draft**
+  [`the-volume-ceilings-are-measured-at-the-title-songs-level`](the-volume-ceilings-are-measured-at-the-title-songs-level.md)
+  is closed as fixed: the songs are measured as written.
+
+#### What is heard, measured
+
+Each game's `release` against main's (the-advocate `bb4c4a4c`, built
+with the global tools before the change: ABL with its table, the others
+with none, so every song at the usual 0.5). **No song got louder**:
+
+| game | songs | moved | down to | mean of those | ROM bytes that differ |
+|---|--:|--:|--:|--:|--:|
+| ABL | 102 | 48 | -3.25 dB | -1.89 dB | 1,084,922 |
+| Book of Three | 43 | 16 | -4.85 dB | -2.30 dB | 479,344 |
+| Desert Nightmare | 1 | 0 | | | 0 |
+| Doom S2 | 51 | 24 | -7.09 dB | -2.85 dB | 835,675 |
+| El Dorado | 3 | 1 | -4.07 dB | -4.07 dB | 72,279 |
+| Frozen World | 32 | 21 | -7.09 dB | -2.85 dB | 556,347 |
+| Sunset over Imdahl | 8 | 5 | -3.53 dB | -2.87 dB | 143,109 |
+| Vampires Dawn | 98 | 44 | -6.30 dB | -3.16 dB | 5,360,682 |
+| Zounds | 40 | 15 | -5.22 dB | -2.11 dB | 437,467 |
+
+The ROMs are the same size; the bytes differ because the streams moved
+everything after them. Desert Nightmare's only song with a MIDI is far
+from the cap, and its ROM is byte for byte main's.
+
+**Against the ROM, in snes9x**, ABL's `release` with its title patched to
+volume 100 and tempo 100, each song played whole through the old
+`volume-ceilings --play` (still installed globally): before, **43** of
+the 102 clip; after, **none**. Seven end above the 0.5 dB margin and
+below the cap, the loudest `juries` at -0.05 dB —0.45 dB above the
+model's loudest timing, more than the 0.36 dB step 1 measured as the
+worst—. What can be listened to is in
+`/shared/audio/2026-11-28-volume-ceilings/`, with a `README.txt`:
+`hzstream`, `Drahkken_Neo_Remix` and `dd2shad2`, which clipped, and
+`lodging` and `cruel`, which did not and got quieter.
+
+#### What it costs
+
+The ceilings' part of each game's `release`, built alone with `--into`
+and the other stages warm, on this machine's sixteen threads: cold (no
+ceiling kept) and warm (all kept, which is the build after any change
+that does not touch a song or the model). The plays include the second
+round of the songs close to the cap.
+
+| game | plays | cold | warm |
+|---|--:|--:|--:|
+| ABL | 162 | 92.1 s | 1.0 s |
+| Book of Three | 66 | 34.9 s | 0.4 s |
+| Desert Nightmare | 1 | 0.2 s | 0.0 s |
+| Doom S2 | 86 | 56.0 s | 0.5 s |
+| El Dorado | 4 | 3.1 s | 0.1 s |
+| Frozen World | 56 | 36.9 s | 0.5 s |
+| Sunset over Imdahl | 13 | 11.2 s | 0.1 s |
+| Vampires Dawn | 153 | 82.0 s | 1.1 s |
+| Zounds | 62 | 26.5 s | 0.3 s |
+
+Cold is about 2.4 times step 1's estimate per play: with every thread
+busy the S-DSP runs at about half the speed of one thread alone, and a
+second round plays about half the songs again. Splitting the six
+timings into threads did not change it (91 s against 92 s): it is CPU,
+not the tail.
+
+#### Verified
+
+On the-advocate `4699587d` (branch `mulita-ceilings`) with its tools
+installed with `just install-local .local-tools advocate`:
+
+* `SOUNDFONT=…/FluidR3_GM.sf2 just lint`: clean.
+* `just test`: 31 passed.
+* `env -u SOUNDFONT just rust-test --no-fail-fast`: 1266 passed, none
+  failed; `crate-test rm2k-snes-audio` with the Microsoft GS SoundFont
+  too.
+* `SOUNDFONT=…/FluidR3_GM.sf2 just test-game`: 231 passed, 6 skipped.
+* The ports (`b5e61557`), SOUNDFONT unset and those tools first in the
+  PATH: `just boot`, 209 passed; ABL's `just tests`, 1621 passed, 2
+  skipped. `abl.sfc` sha256 `287f481f02bbc2ef3fcd1fe785b7e8803f80e36a87a56eca725413f15ae66c0c`.
+* Every game's `release` built again apart with `NO_CACHE=1`, and again
+  with the cache: the `.sfc` and the `.msu` byte for byte the ones in its
+  `build/`, all nine.
+* The two new tests of `rm2k-snes-audio` shown red first: `every_song_gets_the_highest_ceiling_that_does_not_clip`
+  with the ceiling and the second round turned off, and
+  `a_song_that_clips_at_half_the_headroom_is_measured_lower` with no
+  halvings.
+
+ABL delivered with `just deliver` from the branch, to
+`/shared/builds/abl/`.
+
+#### To install when merging
+
+`just install advocate` from the-advocate —`spc-dsp` and
+`rm2k-snes-audio` are libraries compiled into it—, and then `cargo
+uninstall rm2k-snes-audio --root /usr/local`: its binary went. Every
+game's ROM changes, so the ports' cartridges rebuild, and each game plays
+its songs once in the S-DSP on its first build (the table above).
+
+#### What the suite does not cover
+
+No test of the ports plays a song against its ceiling any more:
+`test_music_ceilings.py` went with the table. What holds a ceiling now
+is the crate's `every_song_gets_the_highest_ceiling_that_does_not_clip`
+and `a_song_that_clips_at_half_the_headroom_is_measured_lower`, against
+the model, and the ROM check above, which was run by hand, once. Nothing
+was heard on the console.
+
+Something rebuilt ABL's cartridges in my ports worktree with the global
+tools at 03:27 —`build/advocate.json` named `/usr/local/bin/advocate` and
+`/root/the-advocate`—, between two builds of mine; I could not tell what
+ran it, and the cartridges were built again with the branch's tools
+before anything was measured on them.
