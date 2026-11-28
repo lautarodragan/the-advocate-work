@@ -58,4 +58,8 @@ leave it declared in Desert Nightmare's "Known issues".
 **Recommendation**: (b) for map 35 now, the cheapest and the most visible
 one, and (a) to `wishlist` until a second game asks for it.
 
+### 2026-11-28, taro: an answer: (a)
+
+> (a)
+
 ## Log

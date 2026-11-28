@@ -64,4 +64,8 @@ is how much of Sunset's towns is worth paying for, and it is the game's:
 
 Recommendation: **a**, tried map by map, and **c** for whatever does not fit.
 
+### 2026-11-28, taro: an answer: (a)
+
+> (a)
+
 ## Log

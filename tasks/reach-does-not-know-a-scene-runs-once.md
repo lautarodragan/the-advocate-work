@@ -52,6 +52,10 @@ turning on its own successor's switch runs once, from the first arrival;
 **Recommendation**: (b): the measure says it costs nothing today, and the
 rule is subtle enough to get wrong without a case that shows it.
 
+### 2026-11-28, taro: a comment
+
+> How would this task impact the Hover Tram scene, had it no fork?
+
 ## Log
 
 ### 2026-11-22, Tijereta: no game hits it today

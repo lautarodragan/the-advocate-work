@@ -46,4 +46,8 @@ list of icons).
 
 Recommendation: **b**.
 
+### 2026-11-28, taro: an answer: (b)
+
+> (b)
+
 ## Log
