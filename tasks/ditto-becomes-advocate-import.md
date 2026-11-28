@@ -26,10 +26,12 @@ of 2026-11-25.
 
 **Who calls `ditto` today**:
 
-* each port's `just dump`, in the ports: `ditto unpack` from the game's
-  `.zip` to `data/` —the database and the maps as JSON; pictures, MIDIs
-  and sounds are not imported, the build reads them from the untouched
-  `.zip`—;
+* each port's `just dump`, in the ports' `game.just`: `ditto unpack`
+  from the game's `.zip` to `data/` and the exact dump in
+  `build/ditto-exacto/` —the database and the maps as JSON; pictures,
+  MIDIs and sounds are not imported, the build reads them from the
+  untouched `.zip`—, then `ditto pack` of the exact dump, which has to
+  give back the original `.ldb`, `.lmt` and `.lmu` byte for byte;
 * the test game's `just game`, in the-advocate's `test-game/justfile`:
   `ditto pack` of its text source to RM2k's files, `ditto unpack` of
   those back to the dump the converter reads, and the round trip
@@ -38,8 +40,9 @@ of 2026-11-25.
 
 **What is asked**:
 
-* **`advocate import`**: what `just dump` does, the action and not
-  Ditto's own subcommands; the ports' `just dump` calls it.
+* **`advocate import`**: what `just dump` does, its round-trip check
+  included, the action and not Ditto's own subcommands; the ports'
+  `just dump` calls it.
 * **The test game's way back**: `pack` and the round trip need a home
   —`advocate export`, a flag of `import`, or the test game's recipe
   calling a Rust test instead of a binary—, decided in the design. It
