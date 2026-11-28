@@ -4,7 +4,7 @@ description: "Each song's volume ceiling is measured today by hand, building a R
 type: refactor
 game: advocate
 status: doing
-assignee: taro
+assignee: mulita
 agents: [mulita]
 author: taro
 links:
@@ -220,6 +220,13 @@ audit as written is enough.
 ### 2026-11-28, taro: a comment
 
 > or-later is fine, and so is the audit.
+
+### 2026-11-28, Hornero: all decided; step 2 to Mulita
+
+All three decided: (1) B, the loudest of six write timings with the
+0.5 dB margin; (2) A, snes_spc's files vendored, with the-advocate
+licensed **GPL-3.0-or-later**; (3) the audit as written. Back to Mulita
+for steps 2 and 3.
 
 ## Log
 
