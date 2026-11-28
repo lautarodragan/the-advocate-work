@@ -2,10 +2,10 @@
 name: "The attack says undamaged for a miss"
 description: "A missed normal attack writes the target's undamaged line instead of RM2k's dodge one, and a hit of zero writes '0 health lost' instead of the undamaged one"
 type: bug
-status: doing
-assignee: calandria
+status: testing
+assignee: taro
 author: cardon
-agents: [Cardón]
+agents: [Cardón, Calandria]
 links:
   found-in: [a-skill-in-battle-writes-no-result-line]
 ---
@@ -61,3 +61,60 @@ Still so at the-advocate `8b069fc2`: `ba_message` in `runtime/battle_message.s`
 (78-118) goes to `failed`, the undamaged line, for `BA_MDMG` $FFFF, and writes
 `<n> health lost` for a zero; `BA_TXT_DODGE` is in the cartridge. A text
 towards RM2k, with RPG_RT's capture already taken: nothing to choose.
+
+### 2026-11-28, Calandria: taken, and the fix
+
+From the-advocate `b4654a3a` and the ports `aaa51a7c`, branches
+`calandria-miss-line` in both. `git blame` of the two places: the `cmp
+#$FFFF` / `jmp failed` of `damage` comes from the first battle message
+(`5f395e0c2` only moved it back under its comment), when an attack had
+nothing between a hit and the undamaged line; the `dec a` in `damaged`,
+which turned a skill's zero into $FFFF, is `a2cb6c151` (2026-10-20), which
+reused the attack's miss on purpose, because then the miss *was* the
+undamaged line. Neither is a choice against RM2k.
+
+The change, in `runtime/battle_message.s`: `damage` tells three cases
+apart —$FFFF, the attack's miss, writes `<target><dodge>`
+(`BA_TXT_DODGE`, `GetPhysicalFailureMessage`); 0 writes the undamaged
+line; anything else the damage one— and `damaged` stores a skill's zero
+as zero. `BA_MDMG` at $FFFF still means the attack missed for
+`ba_hit_sound` and the harness's `Act`; a skill never stores $FFFF.
+The-advocate `b640b6e1`.
+
+### 2026-11-28, Calandria: the test, and to testing
+
+#### The test
+
+ABL's `tests/rpgmaker/test_battle_attack_results.py`, the ports
+`2e8747f8` on `calandria-miss-line` (with its line in the tests'
+README): the droid's battle of map 2, every attack message's rows against
+RM2k's lines put together from the terms —`<who><attacking>`, then
+`<target><dodge>`, `<target><x_undamaged>` or `<target> <n><x_damaged>`—,
+what happened read from the ROM's record (`battle.Act`).
+
+* a miss: seeds tried until one attack misses (`until_it_happens`);
+* a hit of zero: the droid's `BA_DEF` and `BA_BDEF` written to 999 in the
+  battle's RAM, as the skill results' test leaves the Junkbot at 1 HP:
+  no hit of zero happens naturally in ABL's early battles.
+
+Red with the global tools (the bug): seed 3, "Kersh avoids taking
+damage." under the drone's miss; seed 1, "Sentry Drone 0 health lost.".
+Green with this branch's.
+
+#### What was run
+
+* the-advocate: `just lint` (SOUNDFONT FluidR3_GM), `just test`, `env -u
+  SOUNDFONT just rust-test`, `just test-game` (with SOUNDFONT): green.
+* ABL, with `advocate` from this branch: the new file, then every
+  `test_battle*`/`test_troop*` (119 passed, no golden moved), then the
+  whole `just tests`: green but for `test_index.py`, which wanted the new
+  file in the README, fixed and rerun.
+* the ports' `just boot`, with this branch's `advocate`: 209 passed.
+
+**No golden moved**: no battle golden of ABL's suite is taken on a miss
+or a hit of zero, so there is nothing in `/shared/captures/`.
+
+The book: the line of ABL's "Known issues" goes, on the docs branch
+`calandria-miss-line` (`91b0aa3`).
+
+To install when merging: `advocate`.
