@@ -253,6 +253,8 @@ they live inside the tools —see `LAYOUT.md`—:
                        grouped into palettes
       voodoo/          Voodoo: from an image to tiles, palettes and tilemap
       lz2/             Nintendo's LC_LZ2, which the maps are compressed with
+      spc-dsp/         the S-DSP on its own, blargg's, vendored C++: what
+                       each song's volume ceiling is measured in
     rm2k/        RPG Maker 2000's, knowing nothing about the console
       ditto/           a library: reads and writes its formats, and the
                        only place in Rust that reads the dump
@@ -353,7 +355,8 @@ corpus through `DITTO_CORPUS`, and without that variable the ones that need
 it are skipped with a message; `rm2k-snes/rm2k-snes-audio/` receives the
 SoundFont through `SOUNDFONT`, the same; `snes/goombario/` assembles toy
 programs and needs `ca65` and `ld65` in the PATH, and without them it is
-skipped the same way; and `snes/gunter/`, `snes/voodoo/`, `snes/lz2/`,
+skipped the same way; `snes/spc-dsp/` needs a C++ compiler, as the build
+does; and `snes/gunter/`, `snes/voodoo/`, `snes/lz2/`,
 `snes/adeleine/`, `rm2k/rules/`, `rm2k/rm2k-render/`, `rm2k-snes/battle/`,
 `rm2k-snes/bytecode/`, `rm2k-snes/events/`, `rm2k-snes/patches/`,
 `rm2k-snes/wally/` and the two of the screens, `rm2k-snes/images/`,
@@ -703,6 +706,32 @@ network or process calls; 57 crates go into the release build, and their
 `OUT_DIR`; the binary imports nothing about network or execution. What was
 **not** checked: the tag is not signed, nobody read the crates beyond their
 build scripts, and the build ran as root. taro's, from 2026-11-22.
+
+**blargg's S-DSP is vendored, and that was a decision too**: the first
+C++ in the workspace and the first third party's code compiled into the
+tools. `snes/spc-dsp/` carries `SPC_DSP`, the accurate S-DSP of snes_spc
+0.9.0 (2007, Shay Green), six files as they came, under the LGPL 2.1 or
+later, behind a Rust wrapper; the music measures each song's volume
+ceiling in it. blargg's site does not answer and the Wayback Machine has
+only 404s for the zip, so the files come from a third party's mirror,
+`yupferris/snes_spc`, cloned in `~/ref/snes_spc`, at its first commit,
+`8f0ea63`. What was checked, on 2026-11-27: the six files carry the 0.9.0
+header and the LGPL notice; `SPC_DSP.cpp` differs from bsnes's copy only
+in bsnes's own known changes, which is what an untouched 0.9.0 would show;
+they include only standard headers, their only `asm` is PowerPC-only
+behind a guard, and they have no file, network, process or environment
+calls; the static library leaves undefined only `malloc`, `free`,
+`memcpy`, `memset` and `__stack_chk_fail`; the build is the `cc` crate
+compiling two files, and the crates it brings —`cc`, `find-msvc-tools` and
+`shlex`, MIT or Apache-2.0— have no build scripts. What was **not**
+checked: there is no original zip to hash the files against, the mirror is
+not signed and its first commit is that third party's import, nobody read
+the DSP's algorithm line by line, and the build ran as root. The defence
+that does not depend on the audit is the comparison the model was taken
+on: its output against the ROM's, sample for sample. With it the-advocate
+took a licence, **GPL-3.0-or-later**, which the LGPL code can go into. Both
+taro's, from 2026-11-28, in
+`tasks/the-volume-ceilings-are-measured-without-a-rom.md`.
 
 **The repos in `~/ref` are cloned inside and are not the host's.** `liblcf`
 is where Ditto's schema comes from —and with it the defaults that a game's
