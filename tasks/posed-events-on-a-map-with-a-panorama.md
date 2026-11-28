@@ -91,4 +91,8 @@ until a game's crowded lines need it.
 would reach for, so it is worth doing when one of them asks for it, with
 (a)'s scope.
 
+### 2026-11-28, taro: a comment
+
+> “has no room” -> rom, wram, vram?
+
 ## Log

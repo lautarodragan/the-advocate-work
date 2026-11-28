@@ -52,4 +52,8 @@ RAM (565 free in `release` that day) and code in bank 1 (390 B free in
 
 Recommendation: **b**.
 
+### 2026-11-28, taro: an answer: (b)
+
+> (b)
+
 ## Log

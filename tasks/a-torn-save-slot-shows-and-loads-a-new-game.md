@@ -69,4 +69,8 @@ slot screen checks the sum and shows the slot as damaged instead of a
 name, and picking it says so instead of starting a new game; CRC-16 for
 the sum— and the two copies only if a torn save is ever seen.
 
+### 2026-11-28, taro: a comment
+
+> let’s go with the recommendation, with save doubling as a new wishlist task.
+
 ## Log

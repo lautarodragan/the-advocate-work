@@ -50,4 +50,8 @@ goes red.
 **Recommendation**: (a). One red on 2026-10-19, none since, and nothing
 anyone could check today.
 
+### 2026-11-28, taro: an answer: (a)
+
+> (a)
+
 ## Log

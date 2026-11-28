@@ -35,4 +35,8 @@ CC111's tick; (c) leave it, the cut tail being what is heard today.
 is already in that task; (b) only if a game's song is heard cutting. It
 changes what is heard, so it is yours.
 
+### 2026-11-28, taro: an answer: (a)
+
+> (a)
+
 ## Log

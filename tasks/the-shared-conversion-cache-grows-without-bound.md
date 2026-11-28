@@ -51,4 +51,8 @@ touched stamp); (c) a size cap, oldest first; (d) wait for
 lock so that nothing reads an entry being deleted; it is toolchain code
 with a cost to choose (disk against rebuilding), so it is yours.
 
+### 2026-11-28, taro: an answer: (b)
+
+> (b)
+
 ## Log

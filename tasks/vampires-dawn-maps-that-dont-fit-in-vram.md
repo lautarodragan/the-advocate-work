@@ -61,6 +61,16 @@ left as the next step. First step: take each map out of `excluded` with
 today's tools and write down what each says now; the numbers above are of
 2026-10-11.
 
+## Comments
+
+### 2026-11-28, taro: a question for Hornero
+
+> Now that the related tasks are `done`, can you check this again?
+>
+> Regarding the panorama: let’s make it a warning, without it preventing the rom from building (exclude the panorama entirely).
+>
+> Regarding the message window not fitting: was it measured with a system graphic override that uses plain bsckgrounds?
+
 ## Log
 
 ### 2026-10-20, Chajá: checked

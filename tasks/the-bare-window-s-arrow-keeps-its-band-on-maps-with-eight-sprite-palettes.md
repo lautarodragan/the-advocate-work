@@ -52,4 +52,8 @@ so it is theirs:
 Recommendation: **a**, and `wishlist` for b; a bare window on a crowded map
 is rare, and only the arrow's row shows it.
 
+### 2026-11-28, taro: a comment
+
+> the arrow must show, so let’s look for another home. picking close colors from another palette should be fine. when no sprite tiles are free… see if any possible solution to that comes up. If there’s no easy fix, create a new, separate task for that, and reduce the scope of this one to just the palette.
+
 ## Log

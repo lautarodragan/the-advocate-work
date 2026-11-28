@@ -53,4 +53,8 @@ without the price on one map.
 shared palette loses are measurable in the build; if map 200's loss shows,
 (c).
 
+### 2026-11-28, taro: an answer: (a)
+
+> (a)
+
 ## Log
