@@ -2,8 +2,7 @@
 name: "The inn of ABL's map 200 shows no gold window"
 description: "The gold window goes in objects past the sprite bank and in a free sprite palette, and map 200 has its eight palettes taken"
 type: bug
-status: draft
-assignee: taro
+status: todo
 author: huron
 agents: [Hurón, cardon]
 links:
@@ -56,5 +55,12 @@ shared palette loses are measurable in the build; if map 200's loss shows,
 ### 2026-11-28, taro: an answer: (a)
 
 > (a)
+
+### 2026-11-28, Hornero: (a), to todo
+
+To `todo` with (a): the VRAM layout reserves a palette on maps whose
+pages open a gold window, and two of map 200's characters share one,
+the colours they lose measured in the build. If the loss shows on
+screen, (c) is still open.
 
 ## Log

@@ -2,8 +2,7 @@
 name: "The equipment screen could keep the slots' tiles under its list"
 description: "taro's idea for going back from the list: the slots' rows kept in VRAM while the list is up, so they come back without typesetting; VRAM has room, far RAM and bank 1 barely"
 type: feature
-status: draft
-assignee: taro
+status: wishlist
 author: taro
 agents: [Calandria, cardon]
 links:
@@ -55,5 +54,9 @@ Recommendation: **b**.
 ### 2026-11-28, taro: an answer: (b)
 
 > (b)
+
+### 2026-11-28, Hornero: (b), to wishlist
+
+To `wishlist`, until far RAM or bank 1 has room to spare.
 
 ## Log

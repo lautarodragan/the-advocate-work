@@ -2,8 +2,7 @@
 name: "The MSU-1 loop bakes the tail"
 description: "The next stage of music-loop-like-rm2k: render each song twice so the first pass's release rings over the loop point, cut at E + D and loop at max(D, S) − S; songs with CC111 need a MIDI rewritten from that tick"
 type: feature
-status: draft
-assignee: taro
+status: todo
 author: hornero
 agents: [cardon]
 links:
@@ -38,5 +37,11 @@ changes what is heard, so it is yours.
 ### 2026-11-28, taro: an answer: (a)
 
 > (a)
+
+### 2026-11-28, Hornero: (a), to todo
+
+To `todo` with (a): songs without CC111 —all of ABL's— get the release
+of their last notes baked over the loop, as RPG_RT plays it; songs with
+CC111 stay as they are until one is heard cutting.
 
 ## Log

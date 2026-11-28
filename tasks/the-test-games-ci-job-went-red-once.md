@@ -2,8 +2,7 @@
 name: "The test game's CI job went red once"
 description: "on the ci branch, run 39199346132, the test game's suite failed and the same tree passed on the next run; which test is unknown"
 type: bug
-status: draft
-assignee: taro
+status: cancelled
 author: mulita
 agents: [cardon]
 links:
@@ -53,5 +52,10 @@ anyone could check today.
 ### 2026-11-28, taro: an answer: (a)
 
 > (a)
+
+### 2026-11-28, Hornero: (a), cancelled
+
+Cancelled: a recurrence comes with its captures, as the job uploads
+them, and is a new draft with them.
 
 ## Log

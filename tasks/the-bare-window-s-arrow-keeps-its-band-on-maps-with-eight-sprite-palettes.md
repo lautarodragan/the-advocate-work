@@ -2,8 +2,7 @@
 name: "The bare window's arrow keeps its band on maps with eight sprite palettes"
 description: "Where no sprite palette or no two sprite tiles are free, the arrow of a message without a background stays in the window's cells and its bottom row still hides the layer above: in A Blurred Line, the busy maps, the city of Core and Manta's memory among them"
 type: feature
-status: draft
-assignee: taro
+status: todo
 author: chaja
 agents: [cardon]
 links:
@@ -55,5 +54,13 @@ is rare, and only the arrow's row shows it.
 ### 2026-11-28, taro: a comment
 
 > the arrow must show, so let’s look for another home. picking close colors from another palette should be fine. when no sprite tiles are free… see if any possible solution to that comes up. If there’s no easy fix, create a new, separate task for that, and reduce the scope of this one to just the palette.
+
+### 2026-11-28, Hornero: to todo, the arrow gets another home
+
+To `todo` with taro's scope: the arrow always shows. Where no sprite
+palette is free, it borrows the palette of the character whose colours
+are closest to its own. Where no sprite tiles are free, the one doing it
+looks for a fix; if there is no easy one, that part becomes a task of
+its own and this one keeps only the palette.
 
 ## Log
