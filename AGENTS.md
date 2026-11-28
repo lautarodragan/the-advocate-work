@@ -252,8 +252,8 @@ they live inside the tools —see `LAYOUT.md`—:
       voodoo/          Voodoo: from an image to tiles, palettes and tilemap
       lz2/             Nintendo's LC_LZ2, which the maps are compressed with
     rm2k/        RPG Maker 2000's, knowing nothing about the console
-      ditto/           reads and writes its formats; as a library, the only
-                       place in Rust that reads the dump
+      ditto/           a library: reads and writes its formats, and the
+                       only place in Rust that reads the dump
       rules/           rm2k-rules: what the format means —passability,
                        pages, experience—
       rm2k-render/     a map's layers, its CharSets, the battle stuff and
@@ -298,7 +298,9 @@ they live inside the tools —see `LAYOUT.md`—:
                        game —its cartridges, their MSU-1 tracks and
                        `build/advocate.json`, what the tests read—,
                        calling the converter and the cartridges as
-                       libraries
+                       libraries; and `advocate import`, a game's RM2k
+                       files into its dump with the round trip checked,
+                       and `advocate export`, back
 
 The layers only depend downwards —`rm2k-snes/` on the other two, and those
 on nothing of the rest—, and `tests/test_layers.py` guards it. They are

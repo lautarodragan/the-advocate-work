@@ -3,8 +3,8 @@ name: "rm2k-sketch goes"
 description: "rm2k-sketch goes whole, binary and library: it never chose an autotile's pattern either, so the grid buys little over Ditto's aligned .tiles; the test game's maps keep their .tiles in src/ instead of a sketch"
 type: refactor
 game: advocate
-status: doing
-assignee: calandria
+status: testing
+assignee: taro
 agents: [calandria]
 author: taro
 links:
@@ -163,3 +163,22 @@ lint cartridges (`cmp`). With the comments of `f2105807`, `just game`
 gives the same three directories again.
 
 `cargo uninstall rm2k-sketch` is Hornero's after merging.
+
+### 2026-11-27, Calandria: done
+
+The branch was rebuilt once before handing back, so the hashes above are
+the final ones. `f2105807` also teaches the-advocate's
+`test_no_game_names.py` that a `.tiles`'s `#` lines are comments: the
+terrace's cites A Blurred Line's map 1, as its sketch did, and the net
+was red on it.
+
+Verified on the final tree, with the rest of
+[`ditto-becomes-advocate-import`](ditto-becomes-advocate-import.md),
+which says what was run: `just lint`, `just test`, `just rust-test`,
+`just test-game`, the test game's dump and cartridges byte for byte
+`bf18d71e`'s, and a stand-in `rm2k-sketch` that fails first in the PATH.
+
+When merging: `cargo uninstall rm2k-sketch` from the global root. Left
+for Hornero, since only the list of projects was mine to edit:
+AGENTS.md's paragraph on the projects' tests still names `rm2k/sketch/`
+among those that need nothing.

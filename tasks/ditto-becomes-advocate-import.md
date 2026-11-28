@@ -3,8 +3,8 @@ name: "ditto becomes advocate import"
 description: "Ditto's binary goes: what a port's just dump asks it —RM2k's .ldb, .lmt and .lmu to the JSON dump in data/— becomes advocate import, and what the test game's recipe asks it —packing its text back to RM2k's format and the round trip— finds a home in advocate too; ditto stays a library"
 type: refactor
 game: advocate
-status: doing
-assignee: calandria
+status: testing
+assignee: taro
 agents: [calandria]
 author: taro
 links:
@@ -139,3 +139,70 @@ Ditto's tests check, and the README says so. The workspace's
 `[profile.release.package.ditto] opt-level = "z"` goes too: it was there
 for the binary's size, and as a library it only made `advocate`'s reads
 slower.
+
+### 2026-11-27, Calandria: done
+
+#### The commits
+
+* the-advocate's `calandria-ditto`: `c33dbe49`, `advocate import` and
+  `export`, `dump::round_trip`, the recipe and the release's smoke test,
+  Ditto's binary gone; `eb3af050`, LAYOUT, Ditto's and the test game's
+  READMEs and the justfile.
+* the ports' `calandria-ditto`: `87ef3c53`, `just dump` as `advocate
+  import`, `rpg_maker_files.py` gone, `build/exact/`, the READMEs and
+  `RENAMES.md`; `34f67392`, `data/` dumped again (below).
+* the book's `calandria-ditto`: `91d7481`.
+* here, AGENTS.md's list of projects: Ditto a library, `advocate` with
+  `import` and `export`.
+
+#### What turned up
+
+**Ditto's dump depended on who linked it.** `serde_json`'s map is a
+`BTreeMap` unless a crate of the same binary turns on `preserve_order`,
+and `advocate` does: the first `advocate import` of the test game wrote
+every file in struct order. Ditto now sorts an object's keys itself
+when it writes (`in_order` in `dump.rs`); the new
+`the_keys_come_out_in_alphabetical_order` was red without it, with
+`cargo test -p ditto --test library -F serde_json/preserve_order`, and
+`just rust-test` runs it with the feature, since the workspace build
+unifies it.
+
+**The eight RPG Maker 2000 ports' `data/` was stale since 2026-10-20.**
+The-advocate's `f818d7e9`, "Ditto reads RPG Maker 2003", gave the
+resolved view the 2003 fields with their defaults —its message says so—
+and nobody dumped again, so main's own `ditto unpack` did not leave an
+empty diff either. What `advocate import` writes is byte for byte what
+main's `ditto unpack` writes, in both views and for the nine games
+(`diff -r` against the global binary, built from Ditto's source as it
+is at `bf18d71e`); the ports' `34f67392` commits it, and the release
+ROMs built before and after it are the same, and the same as
+`/shared/builds/`: the converter reads none of those fields of a 2000
+game. Zounds was already current.
+
+#### Verified, on the final trees
+
+With `advocate` installed from the-advocate's `eb3af050` into its
+`.local-tools/`, and stand-in `ditto` and `rm2k-sketch` that fail first
+in the PATH, so that anything still calling them would be red:
+
+* the-advocate: `SOUNDFONT=FluidR3_GM.sf2 just lint`, `just test` (31),
+  `env -u SOUNDFONT just rust-test --no-fail-fast` (1259 passed, 3
+  ignored) and `SOUNDFONT=FluidR3_GM.sf2 just test-game` (231 passed, 6
+  skipped), all green; the test game's dump and three cartridges byte
+  for byte `bf18d71e`'s.
+* the ports, SOUNDFONT unset: `just dump` in each of the nine games,
+  round trip passed and `data/` with an empty `git diff`; `just boot`
+  (209 passed); ABL's `just tests` (1662 passed, 2 skipped).
+* every game's release ROM byte for byte the one in
+  `/shared/builds/<game>/`; `abl.sfc` is `3bf35fd7665c2045…`.
+
+Not run here: the release's smoke test, which runs only in CI on a
+release; its two lines are the recipe's. The round trip's comparison by
+name in lowercase is run by Sunset, whose files are `RPG_RT.LDB` and
+the like.
+
+#### When merging
+
+`just install advocate`, which Ditto goes into as a library, and `cargo uninstall
+ditto rm2k-sketch` from the global root. The ports' `build/ditto-exacto/`
+can be deleted in each game; `just dump` now writes `build/exact/`.
