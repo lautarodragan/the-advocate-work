@@ -52,6 +52,10 @@ maps: ROM and converter complexity. (c) Leave it.
 **Recommendation**: (a) as a todo, measured on Desert Nightmare; (b) only
 if (a) leaves doors slow.
 
+### 2026-11-28, taro: an answer: (a)
+
+> (a)
+
 ## Log
 
 ### 2026-10-20, Tijereta: checked

@@ -62,4 +62,8 @@ and `test_cores.py` run on it; (b) cancel.
 is what every agent waits on; the task checks that `test_cores.py` still
 catches uninitialised WRAM with frames skipped.
 
+### 2026-11-28, taro: a comment
+
+> (a)
+
 ## Log

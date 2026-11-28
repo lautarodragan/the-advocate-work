@@ -107,4 +107,16 @@ sprite tiles −8.5 KB and poses −5 KB), with 302 B of gaps left
 its log). Doing it on panorama maps too adds to that. VRAM is not the
 limit here: a still event in the background saves sprite tiles.
 
+### 2026-11-28, taro: a comment
+
+> oki. is there more stuff we can move to the msu, while keeping it optional?
+>
+> hmm regarding this task specifically, we should have it as a feature either way, and figure out the rest later.
+>
+> I think, for this task, we can make it an option in the advocate.toml for now. 
+>
+> But we’ll need to test it either way, so we have to figure out how to free some rom in abl. 
+>
+> I guess the quick snd easy thing to do would be to go back to compressing more maps?
+
 ## Log

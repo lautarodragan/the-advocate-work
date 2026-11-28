@@ -51,6 +51,10 @@ variable, which events' pages look at it, so a refresh walks only those
 a todo whose first step is the design and its ROM measured with `just
 space` on all games: a hitch on every switch flip is felt while playing.
 
+### 2026-11-28, taro: a comment
+
+> Your recommendation sounds good to me.
+
 ## Log
 
 ### 2026-11-17, Aguará: seen again
