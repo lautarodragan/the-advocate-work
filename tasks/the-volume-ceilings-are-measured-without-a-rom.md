@@ -217,6 +217,10 @@ One choice left, and the last before step 2: **GPL-3.0-or-later**
 **GPL-3.0-only**. Recommended: or-later. And question 3, whether the
 audit as written is enough.
 
+### 2026-11-28, taro: a comment
+
+> or-later is fine, and so is the audit.
+
 ## Log
 
 ### 2026-11-23, Hornero: written
