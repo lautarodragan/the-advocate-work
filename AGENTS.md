@@ -872,7 +872,13 @@ stage's answer away—, so it does not have to be deleted when
 touching code; it rests on a stage reading nothing its
 request and flags do not name, as `key` in `stage.rs` says. Any change in
 what is cached is verified with `NO_CACHE=1`: the ROMs have to be byte for
-byte equal. It has no eviction yet. Without `--cache` the tools still use
+byte equal. **What nobody used in fourteen days goes**: `advocate build`,
+once a day and before touching the cache, deletes it, and only if no other
+process holds the cache's lock, which every process that uses it holds
+until it exits —see "The conversion cache" in the book's
+`internals/pipeline.md`; taro's, from 2026-11-28, when it had reached
+92 GB in five days—. Emptying it by hand is still safe only when nothing
+builds: the lock keeps out the sweep, not an `rm`. Without `--cache` the tools still use
 each game's `build/cache/`. See `cache.rs` in `rm2k-project`. Shared since
 2026-11-23 (taro's, the day before); until then each checkout had its own
 `build/cache/`, only for the tracks.
