@@ -23,6 +23,8 @@ What to do: delete it. Nothing seen or heard changes; the ROMs come out
 byte for byte the same, which is the check. Its comment was made to say
 it is dead in the branch of the task above, so it is not wrong meanwhile.
 
+## Log
+
 ### 2026-11-28, Hornero: promoted to todo
 
 Promoted by Hornero: code debt, verified by grep (no caller of `Layout::pieces` since its binary went); the fix is removing it, with every ROM byte for byte the same; nothing seen changes.

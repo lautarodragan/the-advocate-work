@@ -77,6 +77,14 @@ decide then.
 **Recommendation**: (b) now, and look again after (c) lands: it is the
 constant `UNUSED_FOR` in `cache.rs`, one line.
 
+### 2026-11-28, taro: 4 days
+
+> Vamos con 4
+
+### 2026-11-28, Hornero: 4 days, after the verification
+
+taro answered in the chat, quoted above: `UNUSED_FOR` goes to 4 days. Hornero changes it once the verification running on main ends (nothing is touched while a suite runs), with the eviction's tests rerun.
+
 ## Log
 
 ### 2026-11-28, Carpintero: taken; the cache measured

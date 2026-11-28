@@ -10,7 +10,7 @@ links:
   found-in: [abl-paradise-and-emily-left-out-at-the-northern-surl-camp]
   relates: [abl-the-factory-pump-s-light-is-grey, characters-a-route-dresses-left-out-where-they-cost-the-map]
   duplicated-by: [abl-the-factory-pump-s-light-is-grey]
-  found: [share-data-on-the-rom-s-last-byte-does-not-link]
+  found: [share-data-on-the-rom-s-last-byte-does-not-link, rain-set-only-by-a-common-event-carries-no-drops]
 ---
 
 Seen by Tijereta on 2026-11-22, grooming

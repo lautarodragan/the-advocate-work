@@ -37,6 +37,8 @@ mapdata, the special values in `screens/src/custom_menu.rs`— are not
 these and stay: without them the project file's order would reach the
 ROM.
 
+## Log
+
 ### 2026-11-28, Hornero: promoted to todo
 
 Promoted by Hornero: code debt; the detour served a binary that is gone. The first step is the measurement the draft did not make: drop the detour and check every ROM and every cached stage answer byte for byte; if anything moves, write what and close it instead.

@@ -35,6 +35,8 @@ touched, being code. What to decide: whether the two kinds and the code
 stay —they cost little, and a kind can still be useful in a message— or
 go. Nothing seen or heard changes either way.
 
+## Log
+
 ### 2026-11-28, Hornero: promoted to todo
 
 Promoted by Hornero: code debt, verified: the split and `Stop::code` existed for exit codes that went with the binaries, and only a test reads them; whoever does it folds them where nothing tells them apart, every ROM the same.

@@ -29,6 +29,8 @@ what the compiler was asked —the comment in `convert.rs` says that now—,
 or goes, leaving `keep_request` as only the switch for `culprits.json`.
 Nothing seen or heard changes.
 
+## Log
+
 ### 2026-11-28, Hornero: promoted to todo
 
 Promoted by Hornero: code debt, verified: its only reader, `rm2k-snes-events culprits`, went on 2026-11-27; the fix is not writing it, every ROM the same; nothing seen changes.
