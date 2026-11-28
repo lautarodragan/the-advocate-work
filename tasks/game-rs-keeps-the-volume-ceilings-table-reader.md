@@ -31,3 +31,20 @@ in the-advocate, and `git grep -n "ceilings()"` finds no caller.
 
 Removing them is free when it goes with another change that has to touch
 `game.rs` anyway, or with one that narrows the tracks' key.
+
+## Log
+
+### 2026-11-28, Chajá: two more comments for the same change
+
+Found doing
+[`the-advocate-still-speaks-of-the-stages-binaries`](the-advocate-still-speaks-of-the-stages-binaries.md),
+and left for the same reason —both files are in `OWN_SOURCES`—:
+
+* `src/tracks.rs`, above `OWN_SOURCES`: "Since the tracks are a
+  subcommand of `rm2k-snes-audio` the executable carries the whole
+  compiler" —they are a call of `advocate`'s since 2026-11-25—.
+* `src/fail.rs`, its header: "a build script wants to tell them apart
+  without reading the message" —the two kinds were the binary's exit
+  codes, and the binary went on 2026-11-28—.
+
+Whoever removes the reader fixes these in the same change.
